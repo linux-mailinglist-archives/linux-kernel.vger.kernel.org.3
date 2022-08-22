@@ -2,152 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E040259BF13
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023A459BF11
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbiHVL7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S234791AbiHVL7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234856AbiHVL7n (ORCPT
+        with ESMTP id S234688AbiHVL7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:59:43 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FC82409B;
-        Mon, 22 Aug 2022 04:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661169559;
-        bh=55muDY/ySML+7EMD98wouKtWDQPnhZsyR2VnvOweULg=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=kE87WRRkeVHJ/AH2I3Pk666R+8W0sNBXS3BfVooHZhCYDobfNDwPCsUUrBqAOHVYd
-         R+Xifr3xdXEG0pDnEOPZ1ElirfGuSx/xneHAhLKpuM7ojInoxTVA8oSW7zHHxy/AhO
-         t7OPT3Y0oblG0PGif40+8B9jvAkP1qOir29LTp/c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MqJmF-1pBmmD1Q5T-00nNJX; Mon, 22
- Aug 2022 13:59:18 +0200
-Message-ID: <a002f2a6-7c5f-c8f1-f331-7f1ca47132f9@gmx.com>
-Date:   Mon, 22 Aug 2022 19:59:14 +0800
+        Mon, 22 Aug 2022 07:59:33 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18EB193F7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:59:32 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id g129so6771700pfb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=P31UUUIF82MqgGzzRYTcT2xG9ydrixuRjNOqAsz74Qs=;
+        b=sQ2pt6h/5gOgoBl+bIMy/RKAZ3gr/k3Q58E9oQs0ghosDwBo7Y4bm4Yb+dpfa1Pzv/
+         6z8Me/NRn1BH0SjOfCNqi3GB06sl8ATi+pp26k9RY51dXIr9OmapDRg/xqS/RtMY54f7
+         Eglye4uibbOKKHBunhWbBCvMaz9wRtBvWqzH5o1zAJAmnQa5Zr0oPoTHV+wq21Tp3sZ5
+         Nc7NaHLHvlaj9pcIZiDv+S9NGBXFEC2ZpDocgaOhbeUW9tcy/8xofLyU/EsKLitvdrHe
+         tr4rp97Qmwb8rrxLFcA+frlz199bfHWToswm0eADP77hdLPp694UDAdvjNVSv/SBpIDy
+         MvNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=P31UUUIF82MqgGzzRYTcT2xG9ydrixuRjNOqAsz74Qs=;
+        b=pt0lVEBPUNhUgEDxRdNtboXcGiKc/GlmcGJrLeZdy27TIwnO9UMHp71/KvvARFAuNb
+         q8U67ZSfn/w/bOnKG3IkhKZzReDYGnjoyaom1Jfu9LTXQYlfBt4xcqdm1qdfiHab3i44
+         QwtFcJaU116YZhU+Nr2wltD5BTD38j4jgswC3Wqbhlb4abX5FxLGMNsf4MWNV5B4tbza
+         Dllgo8AfrpqQEtimYOaIU8mYP3lYbvnnGRxikojgvJApc+wNeCreeF/9s1xFrNez3tNT
+         UNvfFfpI1LyfkSObu6TIBvLwWdMLK/otTnEHcW0eA72/haJ59lbNBICGl2665RkM/9Zw
+         RfOQ==
+X-Gm-Message-State: ACgBeo0jlOuBTjmGu3It8D4bWWVWnTCYCrGhLc0VW5lSAGc5UgD0opw6
+        XVH7QX54ytdoHo0tMi+Kpb9WIQ==
+X-Google-Smtp-Source: AA6agR5m/vYllIKVHdKuQU1vFTHy0Hc9KojXLZoDOv7lM+9yahOy/1hS2CCrMYfRjBHstaT2Btum1g==
+X-Received: by 2002:a05:6a00:198f:b0:536:c49f:898a with SMTP id d15-20020a056a00198f00b00536c49f898amr2448105pfl.47.1661169572038;
+        Mon, 22 Aug 2022 04:59:32 -0700 (PDT)
+Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.227])
+        by smtp.gmail.com with ESMTPSA id d9-20020a17090a2a4900b001f326ead012sm9830875pjg.37.2022.08.22.04.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 04:59:30 -0700 (PDT)
+From:   Jinke Han <hanjinke.666@bytedance.com>
+X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinke Han <hanjinke.666@bytedance.com>
+Subject: [PATCH v2] ext4: do io submit when next to write page not continuous
+Date:   Mon, 22 Aug 2022 19:59:15 +0800
+Message-Id: <20220822115915.88205-1-hanjinke.666@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
- UEFI runtime)
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org
-References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
- <YwMhXX6OhROLZ/LR@kroah.com> <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
- <YwMxRAfrrsPE6sNI@kroah.com> <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
- <20220822080456.GB17080@1wt.eu>
- <4c42af33-dc05-315a-87d9-be0747a74df4@gmx.com>
- <20220822083044.GC17080@1wt.eu>
- <9aa83875-0a05-6b28-b4df-4071ba8ee343@gmx.com>
- <20220822115326.GD17080@1wt.eu>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <20220822115326.GD17080@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:eIlOP7EvzP5ueZ1cEazO+3tjXliFXEve5LYT4WlWFKv2M2wae6i
- KRM34pNWnQM9bJprT4j4WL38c/B/VepQbB2p224NMOiBUeWviuVFjisDSg+PNKOhDgzaX1J
- DhNnEv8kISY/6srMavgVNj/qFe3+By6iKYrZ+BGWksqKoru6FH6T8wCsPQlNn7vNq7waPMb
- ZVbgPgl/rh8hdyhi4OLgw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5WG29oMkM7I=:WgGbrlNFXNhi7sufw9qC9q
- PmFhODQZ65E0Tf8ZaGg7uUKKIDAyiV6NyLTEposwG5JnapLkIkF331q1mCsDBh0DRKgVfRXC8
- 4aoQbbj+5njDFg+PhdC5NfGatOAOQFgeL8zv910jRysthRmGML9e55yBEBF4Vu1yqIuksiMz7
- okDONN3NEIJWfWWzQb4OvBneJJ7kHcUm3BvbEZ1K39+WEC3QC/CkcPXLPRvTivfsZaH+rDCNE
- yObJfJZYCB9j/uuYa0Brla1AjnTp+X6edX/0llJ9LJJ9DwKWuW+82VZOI0OSy9aObw/Pv9GSc
- 2ubhRFHuxp5KJg2kdN3sFLIEtuLfBgBg4O+Yuap25dAbnCi+OUqHyZjW41sJG+B6uCpoWJbGl
- j74+sNdUJABDsZHjXYAFshUWQbJvjm2kL8EKCUPuegmHZHgve4zI1SYHx3XUlXHvtDqYZ6tuL
- xi76jlvLUIsKKIUUWuW12YjDkAXnRwvL/meGJbd7CDOUW0IMjJnPOQ2T4brsDDzuDEl5XnEv8
- tpFZlOOEv30LBQ+21REFdaFrHCZT5Ww2FpLinDqOVT7FmBP/W+BmN89A6UjkQsiPim5IrXrqJ
- +Zfwvqsg5TXKP/jpk04Xc9el+Pyq3VuVa/O7hyrFDSrrNRBTBWAbuFoWP4ufFqY7X8W/vNL14
- vdAMx1fR4G0GZMPsSmDBEmjXbv4OGEbem30bFUqOLgBqXdPtMKeWhmSh9Bx9iuQifQ4KxGm2u
- tGpCMx/FiIhIdx83J4Rdl8tIK2CUa5Jqq+LCpnH714Cq8ktpfKu1CYUKf0IP0qS59XRT1xN0A
- zyJa3RMDKFnjMx/y6a4N8yuPx/XXrIt28MJ+64z2rp+O+Ky7Y5J7ju2pWHHK/sd820yq1UvGx
- DTsQ6ef2e8+ic/C0ovFYGrxxfd+hEh2umWnn0nlbsf5ALkXX23nnXypnGRikqCASPBNhWdEi+
- lanAUoo5R1BT9oKzwx3X50mj/iUDFoVX08LD+ykfDv/pDvKtt/A/jTOPmTGLW8edIdL6HfErZ
- JtyfWE4CvHx84p/hkEf5y4WMzgneVpKNnRw3YYec21ob0UmlnGqZKa+FxPNakfq2gy5oJoDR0
- 1lPN5A5l8QUPi7v97kIgRblibEmaCjgbn39vfUA4IVJevLm7ydIPPCpvg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jinke Han <hanjinke.666@bytedance.com>
 
+In ext4_writepages, sometimes we leave the bio to next-to-write page for
+physic block merge. But if next page no longer continuous, we'd better
+submit it immediately.
 
-On 2022/8/22 19:53, Willy Tarreau wrote:
-> On Mon, Aug 22, 2022 at 07:07:19PM +0800, Qu Wenruo wrote:
->>
->>
->> On 2022/8/22 16:30, Willy Tarreau wrote:
->>> On Mon, Aug 22, 2022 at 04:19:49PM +0800, Qu Wenruo wrote:
->>>>> Regardless, if you need an older compiler, just use these ones:
->>>>>
->>>>>       https://mirrors.edge.kernel.org/pub/tools/crosstool/
->>>>>
->>>>> They go back to 4.9.4 for x86, you'll surely find the right one for =
-your
->>>>> usage. I've long used 4.7.4 for kernels up to 4.9 and 6.5 for 4.19 a=
-nd
->>>>> above, so something within that area will surely match your needs.
->>>>
->>>> BTW, it would be way more awesome if the page can provide some hint o=
-n
->>>> the initial release date of the compilers.
->>>>
->>>> It would help a lot of choose the toolchain then.
->>>
->>> It wouldn't help, if you look closely, you'll notice that in the "othe=
-r
->>> releases" section you have the most recent version of each of them. Th=
-at
->>> does not preclude the existence of the branch earlier. For example gcc=
--9
->>> was released in 2019 and 9.5 was emitted 3 years later. That's quite a=
-n
->>> amplitude that doesn't help.
->>
->> Maybe I'm totally wrong, but if GCC10.1 is released May 2020, and even
->> 10.4 is released 2022, then shouldn't we expect the kernel releases
->> around 2020 can be compiled for all GCC 10.x releases?
->>
->> Thus the initial release date should be a good enough hint for most cas=
-es.
->
-> If you speak about initial release, yes that should generally be a valid
-> assumption.
->
->> If go this method, for v4.14 I guess I should go gcc 7.x, as gcc 7.1 is
->> released May 2017, even the latest 7.5 is released 2019.
->
-> Then it should definitely work. But I think you're spending way too much
-> time comparing dates and discussing on the subject. By the time it took
-> to check these dates, you could already have downloaded one such compile=
-r
-> and built a kernel to verify it did build correctly ;-)
+For extent inode, the chance of physic continuous while logic block not
+continuous is very small. If next to write page not continuous and
+unmapped, we may gather enough pages for extent and then do block
+allocation and mapping for it's extent. Then we try to merge to prev
+bio and get failed. For the prev bio, the waiting time is unnecessary.
 
-That's completely true.
+In that case, we have to flush the prev bio with holding all page locks
+of the extent. The submit_bio may be blocked by wbt or getting request
+which may take a while. Users also may be waiting for these page locks.
 
-Except the fact that, even with time period correct tool chain (gcc
-7.5), the compiled v4.14.x kernel (tried both 4.14.0 and latest
-4.14.290), neither can boot nor cause any early boot message to pop up. :(
+In fast do_map=0 writing mode, we should also end this hopeless waiting
+soonner and submit it without any page lock.
 
-Anyway, thank you very much for the toolchain part, it would definitely
-help for my future adventure related to stable kernels (looking at tons
-of v4.12 related branches with sad face).
+Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
+---
+Changes in v2:
+-fix some spelling errors
 
-Thanks,
-Qu
+ fs/ext4/inode.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
->
-> Willy
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 601214453c3a..ad7139a835a2 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -2608,6 +2608,12 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+ 			if (mpd->map.m_len > 0 && mpd->next_page != page->index)
+ 				goto out;
+ 
++			/* Submit bio when page no longer continus and
++			 * do it before taking other page's lock.
++			 */
++			if (mpd->next_page != page->index && mpd->io_submit.io_bio)
++				ext4_io_submit(&mpd->io_submit);
++
+ 			lock_page(page);
+ 			/*
+ 			 * If the page is no longer dirty, or its mapping no
+-- 
+2.20.1
+

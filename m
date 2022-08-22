@@ -2,132 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDBA59C194
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D32159C195
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbiHVO0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 10:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
+        id S234466AbiHVO0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 10:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235697AbiHVO0C (ORCPT
+        with ESMTP id S234948AbiHVO0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:26:02 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90088.outbound.protection.outlook.com [40.107.9.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E932F39D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:26:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eKN3bK9Ud9ZTlv7EoaDvfQ/3k+2OwMbi7du0QIsU8e9zTfE1EHCwkOrRklwoo/VyraX/wI6Ko1seBnAjoaH5A8Hrw6ptd2GfIw6h3Zu4x61Z2dU09OIN+BYXjTKlt/xOhQkNuD2lZ6I09tiNMrzuy+LsLO02/fOg4ZkyzonxupPg6v0WQum/S6URCtv3hRgF/FBTocK9T6AS1hyWlDW90Aqtv9Rwm0Bi8UXDNLcweAGs3jzNJqQ3I6BJ377Q1PtLxfuFEqu9Opf+Q7Q6J0zd7daFm5+TWbSeEoGy8RYfrnjdRBYr0SMcTgvKaVMWZhAJfQjfO8b0CbIIB5pP7CS8eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jiAOHHQjMvIfXr/ImOEKLjS/QoYi9BdTEQ+aBaF5ihE=;
- b=RxjQZPyX/CXN4qbcn5V2lLyOoL4Gk4wIyURR2E5LSB68n3P6OXvoacxJrkJz/NX0bfQPZgsyZnCBEWVGl7n/1BTb2HlRXuJfPpPhEoBBQ/t2e6O6p/CBTmgKDnAxqwVDhwwukfd1zX/xnPEbub3753OEesnHdP+K2FRJQv0Arw5osq33sS/h0HCh+zhNzqp0dDj6YhTV5vmbzo9s6O+kyKKP8CWu6q1EZ4fvNoHetfIPI8u/KJjzKLmCmMDGL1tGTbVRjoPh1HKPi6YpdnLYa65DTTy2Lo7XeYCqWW5eZdN5o+yzIoTjS/3OJ0mvgCvj/NxLGTOebYzBdqmBmXIzRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jiAOHHQjMvIfXr/ImOEKLjS/QoYi9BdTEQ+aBaF5ihE=;
- b=hQ9BOliUoI7G5Li0pKVWV9msbWeIBXux0seAi2sJZV+38Qb3CD2Vs6hKx4luFRkaH+BN4rv7Z0tv1YhSV7eMA6640kMsyjtlaggvbaTKbE1e1B8uGPvhrRj4yX10et79cad9+dwNFZdy6Cku0OSNHG5xsIcBK5wvfSB+WHGS8jIAuAqlVt12OvHVk0Y6Tsk75B+cHDDkmU+9H7PLPHwdKXKIIPJQefNoQqqYwP6f4ZFrIk6k//rOEA9Mp7lhgE2fjOIpEXCK7oDFf3CODpV8pTrehwl90eA5UY0eRm9Ec0ZQt3mn6BF9QDvFNAcExinJbi4HDsI5b43bozAMwat5BA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB1832.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:e::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Mon, 22 Aug
- 2022 14:25:57 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::888e:a92e:a4ee:ce9e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::888e:a92e:a4ee:ce9e%5]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
- 14:25:57 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Nick Child <nick.child@ibm.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: Add support for early debugging via Serial 16550
- console
-Thread-Topic: [PATCH] powerpc: Add support for early debugging via Serial
- 16550 console
-Thread-Index: AQHYtBCQTPmF1chLTkiejFUksD5Awq26/g6A
-Date:   Mon, 22 Aug 2022 14:25:57 +0000
-Message-ID: <b23ecdd1-fe34-f0f7-be7f-da8624096447@csgroup.eu>
-References: <20220819211254.22192-1-pali@kernel.org>
-In-Reply-To: <20220819211254.22192-1-pali@kernel.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b7d33a76-1816-4964-d985-08da844a3aec
-x-ms-traffictypediagnostic: MRZP264MB1832:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9BhYMQqLeLh59S45BqYXiP05KHf3mD375Nv+bdJJ2io0HYyEhtrheL85Ct8/TBSyZJOeO3o5vyw1oWzQLkewSNvCFW9nMxzBqTdIdQxStpa5z8tNd+iQNLIfSIVrglPOUknapNbAkFb4mEypHOKfadruYiev/gEvmvnWvJquufK878aX45pb9mIGg3zlQntWHblPpR9pW0ZneH2f/3Jda0nqxFKoIXHeMnldXw56G2uilTr0LvpTUmkguGff6jh2hxsUIrwCJTAv1Sqea6igL5U/Eso15S4clWX7soTcy8HNasBwqdkk+sB5+DxsXDTAZVqdhBA23eEjmrUfW5P1pWgJvSY3CFpq1AKT+YxxFOyEH4EP1aqM5iyTm29guYYn+9pWXi501QCHTpp8A9bxuPzJ6yOaROYvp9mEpZhG8k4kmWKToBu49uI0hb1vA/4+4BFEQQGPLoV07BFMV6uuiQN4GIuiiRUPat8bYe6w+LsEwnXHhzPEs3Ajgm1iAuUXk+LIVrrhnDhyPeWRrhFUPJqHuGjmY/Zf0Tx0I1KulNIBSYpQmaU8mS19vlQ6limqBKCUyCtEaB0W5ol+//YgrjonZd++4w8Z8n5m5178AJjDDiPfNGoged2G6qcyOnzbUo5QKF++jH35AzIgfkLmtEm9JRoBwp1d+nHSzKQG78FxsP7RUSkuv7TLt0WpprxMlcfd832R64IzkZ1AqVIj3rJvwH7qdgkN2RL3To23nB5tddB/d4e7Eu2nQ24boTpV9rFltSn8WC+bjrIS1hg0s4yqQ5Six0ZJHr8RRMVVkLz+MKd/Zg1kivHWopl+b0W2N1GJITcWxnCYjgidoGtYW9bbrpIoqYH74Y+4FFcFSYU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39850400004)(396003)(346002)(366004)(136003)(2906002)(86362001)(6506007)(31696002)(26005)(6512007)(6486002)(966005)(44832011)(478600001)(41300700001)(122000001)(8936002)(5660300002)(66574015)(186003)(83380400001)(38070700005)(2616005)(38100700002)(4326008)(316002)(66946007)(66556008)(8676002)(76116006)(36756003)(66446008)(64756008)(66476007)(110136005)(71200400001)(31686004)(54906003)(91956017)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UnNORG5pcm56ck9aelIyT0ZMUHJ4VU1heFdTWCsrR09lVFdXdHJGNGRIbysw?=
- =?utf-8?B?eUxhSldQSkk2am4yZHRNWmp1OWtlZjVWYjlRVkhNVUdlaDhKZ1JDSFVYME9o?=
- =?utf-8?B?TDJCWTZpbEJIOTAxcXpLTGd5RCtXZWk2STI4UHRDYlJUcXB4Y2krdGV0cUpM?=
- =?utf-8?B?R0lwbkhqbkk1TUdtNVpIRWdRclJhUHpQV0pCRVZEdFhuTW40Yi9Palh5QlB2?=
- =?utf-8?B?K3EwMkg1Z1RMM2J3Q3gySmd3dUtoanZENlc0MGlzb3NUckphdHVrTzl4cVp1?=
- =?utf-8?B?ZmQxdURaTnFUNVBVN0NqNDR2TXhSdkltWTkreTdUSko4a2Fhd1FqUFcxWXNT?=
- =?utf-8?B?V1QvWi94OFRwa1dvdVlOY0JEOW43T09teFRPKzkyZWkxQWJubFJNMy9wWlls?=
- =?utf-8?B?Q3J6bUt5ZTZOZSt4Y0Zva0k4WjhVZGlsdWlNV1dMZWdjSjlVcEN5OWtManRh?=
- =?utf-8?B?K2dKNG1INktyeFQ0MlpZOHc2RE1tdlJpOGlLdnAza1lLbFhsQjR1anZxZXBX?=
- =?utf-8?B?Q2VpdGlZV1UvK2FLK0wyREZrZis1UHIvbTZSY0k3YjVDV0Z3VGp6Z3ZBaUVv?=
- =?utf-8?B?NXhUbEJKc2oyRjVSUkNHVUl5ZWEwalFDQ21janFselBSRVFGL1gzNkhQU3ov?=
- =?utf-8?B?UzMvS1ZXb29YNnltZVNmV3kvMFRtaW9Wb3JwNS9zWW9zVC9BVmx5UXlTTmNN?=
- =?utf-8?B?Zzd2NGplYTV6U0FDeERJUzJicmpDR015WkZrS2hWdXRqRmFrajNsTjdnY0ZZ?=
- =?utf-8?B?Rk02czQ3KzdGRlVrRTFEbDV4Q013L0JRNm9YREdoOWYxUXJHOWJOdDVpdlNR?=
- =?utf-8?B?VWYxN21nN1NTM01FNy8zeUgwVktOZjAwVXREaXZYcUwzS09rOEc3RncxN0NQ?=
- =?utf-8?B?ZUhFZEZ0dm8wZlJOdFlTb0d1OXE4R2xTZkwwY0ZUV0tBRHBhSjFpU0pIU3lX?=
- =?utf-8?B?T3VzbU5jdnc1Tnk2OG5rTTloeHJ0SVM4d202N0JhRUcrd2pNM3djZkJzNlBy?=
- =?utf-8?B?Q0Q4WnNFVzIwV2hqdzlZaDFteUk2SktGK05xVmNJamY5WWRkNS8rM1QzR3pQ?=
- =?utf-8?B?TXF5MmVBTzBZS0ttcTlEZWVtS3ZnMmJ0bzdDNkppa0dTakRqQWhsOHlQY0V1?=
- =?utf-8?B?bnVpWGluTFRMU3F0TjJEUm9uUEdQcE5ZTHIra0pDV1NxT2UzNzJDVHB6MC8r?=
- =?utf-8?B?UXRFaVJXTXRkTkd2cWJaMDRjczBudUNZeXRNTVdSMXA4ZkNjV0pDa3Jic0xj?=
- =?utf-8?B?cThaakNjV0JKdG5KZ251RjhFU0RmcVpURXlUbU4yUkM2VlZVOG8vUHRTOHFY?=
- =?utf-8?B?VzZaOFFId1JFU3BqeitZWnlST3B1bzNaYmtNNWZKMEM0MnZjaXBjRGdLeWdI?=
- =?utf-8?B?TldLZWJ2ZUlWYkRUdCsraUpKd2R6YURjdCtmNlhJVVI3aHVONklJWlJERERt?=
- =?utf-8?B?MGhYM200R2pwUGQwMVJ4aXBISDVocWtxTmN2V3d3MWg1T2NDSzkzMXVTTExn?=
- =?utf-8?B?ZDlXbStBaEkvdzBqY0Zxa04rWTQwWHlNc2IzSzVmNkVJR0h2Q1BNZUtqb2Vs?=
- =?utf-8?B?ZEp1TFd1VUtUTU1hRUhhVlZmRjU2K3NxcWM2WDhjaEdRV2laVEdVK1pzOGZX?=
- =?utf-8?B?d3BOUTRmZkR1bDdEOGwwL0hQZDlickZWVVJERkRGbTNLN2dDY1lyck1jaG5m?=
- =?utf-8?B?Qi9qWkNRVHBNM05EZjB2dHpNUzZSdWw0RXJ2K0NvUTZpdjFQazNBR0thaWZl?=
- =?utf-8?B?WklDZVRuTDVQdGVmZVNYbFFtaHE4VTJIUjNPTnl4Nll2bDZLNlhpWWRrcitP?=
- =?utf-8?B?RW5SUjluN3BsYTdNejZudkpVdCtrb3FLclE2SFpMS21mZnhMcEdDL0xueWE1?=
- =?utf-8?B?dTRDaFRkVDZmaHk1cVZpb2tqTTVmYUoxY2MyN3M5TjNKd3RRN0RHdENRaExN?=
- =?utf-8?B?cjZXWlVYNkhxaDVQMEk1UjR2UTR0U3NXbFFjQnl3bnJ6d1pTeVZCTmdsczh6?=
- =?utf-8?B?TjlHNDR0dHlsbkE4NU5QMFJvcDFRQkE5QTc1Wm5lNzN2blBmdlNueXJPK1Qr?=
- =?utf-8?B?LzdGTXJQL2lkUUV0akVyTno5NDFkdXpSWWRReHpoaWR4aE0zaVFtWnpiRTRC?=
- =?utf-8?B?aWJmcll5VWt6a0hsbWZ4ZzhTaWVMckdZMHJtVXhRSW9UTlF6ZEJFZkhvSndx?=
- =?utf-8?Q?fLCp/zKR2W1RAmWccv3LX8Q=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D03A78E7FAEA68459F05E056FB93346A@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 22 Aug 2022 10:26:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61342E6A9;
+        Mon, 22 Aug 2022 07:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661178390; x=1692714390;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=lfQZ8Fx5e1wrffmsI6V8HXxbBTXhtMYllCy72e/dWN8=;
+  b=Yf0JMXWNzIR2/06PJhJOTnGn6MudPusKckEfv0fCX/7puzLA0MgBilNx
+   WZzzL4aFGpoC1VDgLnM3VXmygI2bOhvjx/j9ce9jtc+e28ESPdnkoORA2
+   kAcYOebe8HjoN38OryEpBpGs7vJGoGV0hKImEXge4YV/JIWlCJRq0gETr
+   V4P2WoiCq45gUdvudnz9pdx3R1LGVYpl3FCayp46hi6lVt+Nk2Xm06OsD
+   6YD3WI39/VNJEQnlYGdqrAeKb/+/d7WkPNagtITVJwwxv+jLnvxyMn0m3
+   rs4u1vePduCGbMXtLv9QCQYC/0UGRatJxIgM8kqNpft7A57QRHkfXMhYS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294710756"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="294710756"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 07:26:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="669563881"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.27.97]) ([10.213.27.97])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 07:26:26 -0700
+Message-ID: <cbaff83b-db5e-c41d-ffab-86562ef60e8b@intel.com>
+Date:   Mon, 22 Aug 2022 16:26:24 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7d33a76-1816-4964-d985-08da844a3aec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 14:25:57.7237
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: baIHKjnqBMhQo8K4gR0wqPk+2lTkokWhcNbtHY6uP4n6aDOt+Iwk3YXlMTHZQk2Utf8x1RSZDRxwXv6w8ks1w5ILa2pdcj58ZiD07QngwZI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1832
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.12.0
+Subject: Re: [Intel-gfx] [PATCH v7 1/8] overflow: Move and add few utility
+ macros into overflow
+Content-Language: en-US
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     thomas.hellstrom@linux.intel.com, mchehab@kernel.org,
+        jani.nikula@intel.com, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, nirmoy.das@intel.com,
+        linux-hardening@vger.kernel.org, chris@chris-wilson.co.uk,
+        matthew.auld@intel.com
+References: <20220816093525.184940-1-gwan-gyeong.mun@intel.com>
+ <20220816093525.184940-2-gwan-gyeong.mun@intel.com>
+ <Yv10sQADwdZrIV42@alfio.lan> <202208171657.63AE7AC@keescook>
+ <f3370fb1-5318-c662-294b-2c7fe693efd6@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <f3370fb1-5318-c662-294b-2c7fe693efd6@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,112 +73,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE5LzA4LzIwMjIgw6AgMjM6MTIsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IEN1
-cnJlbnRseSBwb3dlcnBjIGVhcmx5IGRlYnVnZ2luZyBjb250YWlucyBsb3Qgb2YgcGxhdGZvcm0g
-c3BlY2lmaWMNCj4gb3B0aW9ucywgYnV0IGRvZXMgbm90IHN1cHBvcnQgc3RhbmRhcmQgVUFSVCAv
-IHNlcmlhbCAxNjU1MCBjb25zb2xlLg0KPiANCj4gTGF0ZXIgbGVnYWN5X3NlcmlhbC5jIGNvZGUg
-c3VwcG9ydHMgcmVnaXN0ZXJpbmcgVUFSVCBhcyBlYXJseSBkZWJ1ZyBjb25zb2xlDQo+IGZyb20g
-ZGV2aWNlIHRyZWUgYnV0IGl0IGlzIG5vdCBlYXJseSBkdXJpbmcgYm9vdGluZywgYnV0IHJhdGhl
-ciBsYXRlciBhZnRlcg0KPiBtYWNoaW5lIGRlc2NyaXB0aW9uIGNvZGUgZmluaXNoZXMuDQo+IA0K
-PiBTbyBmb3IgcmVhbCBlYXJseSBkZWJ1Z2dpbmcgdmlhIFVBUlQgaXMgY3VycmVudCBjb2RlIHVu
-c3VpdGFibGUuDQo+IA0KPiBBZGQgc3VwcG9ydCBmb3IgbmV3IGVhcmx5IGRlYnVnZ2luZyBvcHRp
-b24gQ09ORklHX1BQQ19FQVJMWV9ERUJVR18xNjU1MA0KPiB3aGljaCBlbmFibGUgU2VyaWFsIDE2
-NTUwIGNvbnNvbGUgb24gYWRkcmVzcyBkZWZpbmVkIGJ5IG5ldyBvcHRpb24NCj4gQ09ORklHX1BQ
-Q19FQVJMWV9ERUJVR18xNjU1MF9QSFlTQUREUiBhbmQgYnkgc3RyaWRlIGJ5IG9wdGlvbg0KPiBD
-T05GSUdfUFBDX0VBUkxZX0RFQlVHXzE2NTUwX1NUUklERS4NCj4gDQo+IFdpdGggdGhpcyBjaGFu
-Z2UgaXQgaXMgcG9zc2libGUgdG8gZGVidWcgcG93ZXJwYyBtYWNoaW5lIGRlc2NyaXB0b3IgY29k
-ZS4NCj4gRm9yIGV4YW1wbGUgdGhpcyBlYXJseSBkZWJ1Z2dpbmcgY29kZSBjYW4gcHJpbnQgb24g
-c2VyaWFsIGNvbnNvbGUgYWxzbw0KPiAiTm8gc3VpdGFibGUgbWFjaGluZSBkZXNjcmlwdGlvbiBm
-b3VuZCIgZXJyb3Igd2hpY2ggaXMgZG9uZSBiZWZvcmUNCj4gbGVnYWN5X3NlcmlhbC5jIGNvZGUu
-DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBQYWxpIFJvaMOhciA8cGFsaUBrZXJuZWwub3JnPg0KPiAt
-LS0NCj4gVGVzdGVkIG9uIFAyMDIwIGJvYXJkLiBJdCBhbGxvd2VkIG1lIGRvIGRlYnVnIGFuZCBp
-bXBsZW1lbnQgdGhpcyBwYXRjaCBzZXJpZXM6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xp
-bnV4cHBjLWRldi8yMDIyMDgxOTE5MTU1Ny4yODExNi0xLXBhbGlAa2VybmVsLm9yZy8NCg0KQnVp
-bGQgZmFpbHVyZSBpZiBJIHNlbGVjdCBpdCBvbiBtcGM4ODVfYWRzX2RlZmNvbmZpZyA6DQoNCiAg
-IExEICAgICAgdm1saW51eC5vDQogICBNT0RQT1NUIHZtbGludXguc3ltdmVycw0KICAgTU9ESU5G
-TyBtb2R1bGVzLmJ1aWx0aW4ubW9kaW5mbw0KICAgR0VOICAgICBtb2R1bGVzLmJ1aWx0aW4NCiAg
-IENDICAgICAgLnZtbGludXguZXhwb3J0Lm8NCiAgIExEICAgICAgLnRtcF92bWxpbnV4LmthbGxz
-eW1zMQ0KcG93ZXJwYzY0LWxpbnV4LWxkOiBhcmNoL3Bvd2VycGMva2VybmVsL3VkYmcubzogaW4g
-ZnVuY3Rpb24gDQpgdWRiZ19lYXJseV9pbml0JzoNCi9ob21lL2NobGVyb3kvbGludXgtcG93ZXJw
-Yy9hcmNoL3Bvd2VycGMva2VybmVsL3VkYmcuYzo3MTogdW5kZWZpbmVkIA0KcmVmZXJlbmNlIHRv
-IGB1ZGJnX2luaXRfZGVidWdfMTY1NTAnDQoNCg0KDQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9L
-Y29uZmlnLmRlYnVnICAgICAgIHwgMTQgKysrKysrKysrKysrKysNCj4gICBhcmNoL3Bvd2VycGMv
-aW5jbHVkZS9hc20vdWRiZy5oICB8ICAxICsNCj4gICBhcmNoL3Bvd2VycGMva2VybmVsL3VkYmcu
-YyAgICAgICB8ICAyICsrDQo+ICAgYXJjaC9wb3dlcnBjL2tlcm5lbC91ZGJnXzE2NTUwLmMgfCAz
-MyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgIDQgZmlsZXMgY2hhbmdlZCwg
-NTAgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9LY29uZmln
-LmRlYnVnIGIvYXJjaC9wb3dlcnBjL0tjb25maWcuZGVidWcNCj4gaW5kZXggOWYzNjNjMTQzZDg2
-Li5hNGU3ZDkwYTQ1ZDIgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9LY29uZmlnLmRlYnVn
-DQo+ICsrKyBiL2FyY2gvcG93ZXJwYy9LY29uZmlnLmRlYnVnDQo+IEBAIC0yNzYsNiArMjc2LDEx
-IEBAIGNvbmZpZyBQUENfRUFSTFlfREVCVUdfT1BBTF9IVlNJDQo+ICAgCSAgU2VsZWN0IHRoaXMg
-dG8gZW5hYmxlIGVhcmx5IGRlYnVnZ2luZyBmb3IgdGhlIFBvd2VyTlYgcGxhdGZvcm0NCj4gICAJ
-ICB1c2luZyBhbiAiaHZzaSIgY29uc29sZQ0KPiAgIA0KPiArY29uZmlnIFBQQ19FQVJMWV9ERUJV
-R18xNjU1MA0KPiArCWJvb2wgIlNlcmlhbCAxNjU1MCINCj4gKwloZWxwDQo+ICsJICBTZWxlY3Qg
-dGhpcyB0byBlbmFibGUgZWFybHkgZGVidWdnaW5nIHZpYSBTZXJpYWwgMTY1NTAgY29uc29sZQ0K
-PiArDQoNClB1dHRpbmcgaXQgYmVmb3JlIEVBUkxZX0RFQlVHX01FTUNPTlMgbWVhbnMgdGhhdCBj
-b25maWdzIHRoYXQgd2VyZSANCnByZXZpb3VzbHkgc2VsZWN0aW9uZyBFQVJMWV9ERUJVR19NRU1D
-T05TIHdpbGwgbm93IHNlbGVjdCANCkVBUkxZX0RFQlVHXzE2NTUwIGluc3RlYWQuDQoNCkFkZCBh
-IGRlcGVuZGVuY3kgdG8gUFBDX1VEQkdfMTY1NTAgdG8gYXZvaWQgdGhlIGJ1aWxkIGZhaWx1cmUg
-SSBtZW50aW9ubmVkID8NCg0KPiAgIGNvbmZpZyBQUENfRUFSTFlfREVCVUdfTUVNQ09OUw0KPiAg
-IAlib29sICJJbiBtZW1vcnkgY29uc29sZSINCj4gICAJaGVscA0KPiBAQCAtMzU1LDYgKzM2MCwx
-NSBAQCBjb25maWcgUFBDX0VBUkxZX0RFQlVHX0NQTV9BRERSDQo+ICAgCSAgcGxhdGZvcm0gcHJv
-YmluZyBpcyBkb25lLCBhbGwgcGxhdGZvcm1zIHNlbGVjdGVkIG11c3QNCj4gICAJICBzaGFyZSB0
-aGUgc2FtZSBhZGRyZXNzLg0KPiAgIA0KPiArY29uZmlnIFBQQ19FQVJMWV9ERUJVR18xNjU1MF9Q
-SFlTQUREUg0KPiArCWhleCAiRWFybHkgZGVidWcgU2VyaWFsIDE2NTUwIHBoeXNpY2FsIGFkZHJl
-c3MiDQo+ICsJZGVwZW5kcyBvbiBQUENfRUFSTFlfREVCVUdfMTY1NTANCg0KQSBkZWZhdWx0IHZh
-bHVlIGlzIG5lY2Vzc2FyeSBoZXJlIHRvIGF2b2lkIHByb21wdHMgZHVyaW5nIGRlZmNvbmZpZyBi
-dWlsZHMuDQoNCj4gKw0KPiArY29uZmlnIFBQQ19FQVJMWV9ERUJVR18xNjU1MF9TVFJJREUNCj4g
-KwlpbnQgIkVhcmx5IGRlYnVnIFNlcmlhbCAxNjU1MCBzdHJpZGUiDQo+ICsJZGVwZW5kcyBvbiBQ
-UENfRUFSTFlfREVCVUdfMTY1NTANCj4gKwlkZWZhdWx0IDENCj4gKw0KPiAgIGNvbmZpZyBGQUlM
-X0lPTU1VDQo+ICAgCWJvb2wgIkZhdWx0LWluamVjdGlvbiBjYXBhYmlsaXR5IGZvciBJT01NVSIN
-Cj4gICAJZGVwZW5kcyBvbiBGQVVMVF9JTkpFQ1RJT04NCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93
-ZXJwYy9pbmNsdWRlL2FzbS91ZGJnLmggYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vdWRiZy5o
-DQo+IGluZGV4IGI0YWEwZDg4Y2UyYy4uMjBiNWEzN2FiNzcyIDEwMDY0NA0KPiAtLS0gYS9hcmNo
-L3Bvd2VycGMvaW5jbHVkZS9hc20vdWRiZy5oDQo+ICsrKyBiL2FyY2gvcG93ZXJwYy9pbmNsdWRl
-L2FzbS91ZGJnLmgNCj4gQEAgLTUzLDYgKzUzLDcgQEAgZXh0ZXJuIHZvaWQgX19pbml0IHVkYmdf
-aW5pdF9laHZfYmModm9pZCk7DQo+ICAgZXh0ZXJuIHZvaWQgX19pbml0IHVkYmdfaW5pdF9wczNn
-ZWxpYyh2b2lkKTsNCj4gICBleHRlcm4gdm9pZCBfX2luaXQgdWRiZ19pbml0X2RlYnVnX29wYWxf
-cmF3KHZvaWQpOw0KPiAgIGV4dGVybiB2b2lkIF9faW5pdCB1ZGJnX2luaXRfZGVidWdfb3BhbF9o
-dnNpKHZvaWQpOw0KPiArZXh0ZXJuIHZvaWQgX19pbml0IHVkYmdfaW5pdF9kZWJ1Z18xNjU1MCh2
-b2lkKTsNCg0KJ2V4dGVybicga2V5d29yayBpcyBwb2ludGxlc3MgYW5kIGRlcHJlY2F0ZWQgZm9y
-IGZ1bmN0aW9uIHByb3RvdHlwZXMsIA0KcGxlYXNlIGRvbid0IGFkZCBuZXcgb25lcy4NCg0KQ2hl
-Y2twYXRjaCByZXBvcnRzOg0KDQpDSEVDSzogZXh0ZXJuIHByb3RvdHlwZXMgc2hvdWxkIGJlIGF2
-b2lkZWQgaW4gLmggZmlsZXMNCiM3NzogRklMRTogYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL3Vk
-YmcuaDo1NjoNCitleHRlcm4gdm9pZCBfX2luaXQgdWRiZ19pbml0X2RlYnVnXzE2NTUwKHZvaWQp
-Ow0KDQoNCj4gICANCj4gICAjZW5kaWYgLyogX19LRVJORUxfXyAqLw0KPiAgICNlbmRpZiAvKiBf
-QVNNX1BPV0VSUENfVURCR19IICovDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMva2VybmVs
-L3VkYmcuYyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvdWRiZy5jDQo+IGluZGV4IGIxNTQ0YjJmNjMy
-MS4uOTJiM2ZjMjU4ZDExIDEwMDY0NA0KPiAtLS0gYS9hcmNoL3Bvd2VycGMva2VybmVsL3VkYmcu
-Yw0KPiArKysgYi9hcmNoL3Bvd2VycGMva2VybmVsL3VkYmcuYw0KPiBAQCAtNjcsNiArNjcsOCBA
-QCB2b2lkIF9faW5pdCB1ZGJnX2Vhcmx5X2luaXQodm9pZCkNCj4gICAJdWRiZ19pbml0X2RlYnVn
-X29wYWxfcmF3KCk7DQo+ICAgI2VsaWYgZGVmaW5lZChDT05GSUdfUFBDX0VBUkxZX0RFQlVHX09Q
-QUxfSFZTSSkNCj4gICAJdWRiZ19pbml0X2RlYnVnX29wYWxfaHZzaSgpOw0KPiArI2VsaWYgZGVm
-aW5lZChDT05GSUdfUFBDX0VBUkxZX0RFQlVHXzE2NTUwKQ0KPiArCXVkYmdfaW5pdF9kZWJ1Z18x
-NjU1MCgpOw0KPiAgICNlbmRpZg0KPiAgIA0KPiAgICNpZmRlZiBDT05GSUdfUFBDX0VBUkxZX0RF
-QlVHDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMva2VybmVsL3VkYmdfMTY1NTAuYyBiL2Fy
-Y2gvcG93ZXJwYy9rZXJuZWwvdWRiZ18xNjU1MC5jDQo+IGluZGV4IGQzOTQyZGUyNTRjNi4uNDZm
-MmQ4MzFkN2M5IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3Bvd2VycGMva2VybmVsL3VkYmdfMTY1NTAu
-Yw0KPiArKysgYi9hcmNoL3Bvd2VycGMva2VybmVsL3VkYmdfMTY1NTAuYw0KPiBAQCAtOCw2ICs4
-LDcgQEANCj4gICAjaW5jbHVkZSA8YXNtL3VkYmcuaD4NCj4gICAjaW5jbHVkZSA8YXNtL2lvLmg+
-DQo+ICAgI2luY2x1ZGUgPGFzbS9yZWdfYTIuaD4NCj4gKyNpbmNsdWRlIDxhc20vZWFybHlfaW9y
-ZW1hcC5oPg0KPiAgIA0KPiAgIGV4dGVybiB1OCByZWFsX3JlYWRiKHZvbGF0aWxlIHU4IF9faW9t
-ZW0gICphZGRyKTsNCj4gICBleHRlcm4gdm9pZCByZWFsX3dyaXRlYih1OCBkYXRhLCB2b2xhdGls
-ZSB1OCBfX2lvbWVtICphZGRyKTsNCj4gQEAgLTMzNSwzICszMzYsMzUgQEAgdm9pZCBfX2luaXQg
-dWRiZ19pbml0X2RlYnVnX21pY3Jvd2F0dCh2b2lkKQ0KPiAgIH0NCj4gICANCj4gICAjZW5kaWYg
-LyogQ09ORklHX1BQQ19FQVJMWV9ERUJVR19NSUNST1dBVFQgKi8NCj4gKw0KPiArI2lmZGVmIENP
-TkZJR19QUENfRUFSTFlfREVCVUdfMTY1NTANCj4gKw0KPiArc3RhdGljIHZvaWQgX19pb21lbSAq
-dWRiZ191YXJ0X2Vhcmx5X2FkZHI7DQo+ICsNCj4gK3ZvaWQgX19pbml0IHVkYmdfaW5pdF9kZWJ1
-Z18xNjU1MCh2b2lkKQ0KPiArew0KPiArCXVkYmdfdWFydF9lYXJseV9hZGRyID0gZWFybHlfaW9y
-ZW1hcChDT05GSUdfUFBDX0VBUkxZX0RFQlVHXzE2NTUwX1BIWVNBRERSLCAweDEwMDApOw0KPiAr
-CXVkYmdfdWFydF9pbml0X21taW8odWRiZ191YXJ0X2Vhcmx5X2FkZHIsIENPTkZJR19QUENfRUFS
-TFlfREVCVUdfMTY1NTBfU1RSSURFKTsNCj4gK30NCj4gKw0KPiArc3RhdGljIGludCBfX2luaXQg
-dWRiZ19pbml0X2RlYnVnXzE2NTUwX2lvcmVtYXAodm9pZCkNCj4gK3sNCj4gKwl2b2lkIF9faW9t
-ZW0gKmFkZHI7DQo+ICsNCj4gKwlpZiAoIXVkYmdfdWFydF9lYXJseV9hZGRyKQ0KPiArCQlyZXR1
-cm4gMDsNCj4gKw0KPiArCWFkZHIgPSBpb3JlbWFwKENPTkZJR19QUENfRUFSTFlfREVCVUdfMTY1
-NTBfUEhZU0FERFIsIDB4MTAwMCk7DQo+ICsJaWYgKFdBUk5fT04oIWFkZHIpKQ0KPiArCQlyZXR1
-cm4gLUVOT01FTTsNCj4gKw0KPiArCXVkYmdfdWFydF9pbml0X21taW8oYWRkciwgQ09ORklHX1BQ
-Q19FQVJMWV9ERUJVR18xNjU1MF9TVFJJREUpOw0KPiArCWVhcmx5X2lvdW5tYXAodWRiZ191YXJ0
-X2Vhcmx5X2FkZHIsIDB4MTAwMCk7DQo+ICsJdWRiZ191YXJ0X2Vhcmx5X2FkZHIgPSBOVUxMOw0K
-PiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4gK2Vhcmx5X2luaXRjYWxsKHVkYmdfaW5p
-dF9kZWJ1Z18xNjU1MF9pb3JlbWFwKTsNCj4gKw0KPiArI2VuZGlmIC8qIENPTkZJR19QUENfRUFS
-TFlfREVCVUdfMTY1NTAgKi8=
+
+
+On 22.08.2022 16:05, Andrzej Hajda wrote:
+> On 18.08.2022 02:12, Kees Cook wrote:
+>> On Thu, Aug 18, 2022 at 01:07:29AM +0200, Andi Shyti wrote:
+>>> Hi Kees,
+>>>
+>>> would you mind taking a look at this patch?
+>>
+>> Hi! Thanks for the heads-up!
+>>
+>>>
+>>> Thanks,
+>>> Andi
+>>>
+>>> On Tue, Aug 16, 2022 at 06:35:18PM +0900, Gwan-gyeong Mun wrote:
+>>>> It moves overflows_type utility macro into overflow header from 
+>>>> i915_utils
+>>>> header. The overflows_type can be used to catch the truncation 
+>>>> between data
+>>>> types. And it adds safe_conversion() macro which performs a type 
+>>>> conversion
+>>>> (cast) of an source value into a new variable, checking that the
+>>>> destination is large enough to hold the source value. And the 
+>>>> functionality
+>>>> of overflows_type has been improved to handle the signbit.
+>>>> The is_unsigned_type macro has been added to check the sign bit of the
+>>>> built-in type.
+>>>>
+>>>> v3: Add is_type_unsigned() macro (Mauro)
+>>>>      Modify overflows_type() macro to consider signed data types 
+>>>> (Mauro)
+>>>>      Fix the problem that safe_conversion() macro always returns true
+>>>> v4: Fix kernel-doc markups
+>>>> v6: Move macro addition location so that it can be used by other 
+>>>> than drm
+>>>>      subsystem (Jani, Mauro, Andi)
+>>>>      Change is_type_unsigned to is_unsigned_type to have the same 
+>>>> name form
+>>>>      as is_signed_type macro
+>>>>
+>>>> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+>>>> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>>>> Cc: Matthew Auld <matthew.auld@intel.com>
+>>>> Cc: Nirmoy Das <nirmoy.das@intel.com>
+>>>> Cc: Jani Nikula <jani.nikula@intel.com>
+>>>> Cc: Andi Shyti <andi.shyti@linux.intel.com>
+>>>> Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org> (v5)
+>>>> ---
+
+(...)
+
+>>>> +
+>>>> +/**
+>>>> + * overflows_type - helper for checking the truncation between data 
+>>>> types
+>>>> + * @x: Source for overflow type comparison
+>>>> + * @T: Destination for overflow type comparison
+>>>> + *
+>>>> + * It compares the values and size of each data type between the 
+>>>> first and
+>>>> + * second argument to check whether truncation can occur when 
+>>>> assigning the
+>>>> + * first argument to the variable of the second argument.
+>>>> + * Source and Destination can be used with or without sign bit.
+>>>> + * Composite data structures such as union and structure are not 
+>>>> considered.
+>>>> + * Enum data types are not considered.
+>>>> + * Floating point data types are not considered.
+>>>> + *
+>>>> + * Returns:
+>>>> + * True if truncation can occur, false otherwise.
+>>>> + */
+>>>> +#define overflows_type(x, T) \
+>>>> +    (is_unsigned_type(x) ? \
+>>>> +        is_unsigned_type(T) ? \
+>>>> +            (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T)) ? 1 
+>>>> : 0 \
+>>>> +            : (sizeof(x) >= sizeof(T) && (x) >> (BITS_PER_TYPE(T) - 
+>>>> 1)) ? 1 : 0 \
+>>>> +    : is_unsigned_type(T) ? \
+>>>> +        ((x) < 0) ? 1 : (sizeof(x) > sizeof(T) && (x) >> 
+>>>> BITS_PER_TYPE(T)) ? 1 : 0 \
+>>>> +        : (sizeof(x) > sizeof(T)) ? \
+>>>> +            ((x) < 0) ? (((x) * -1) >> BITS_PER_TYPE(T)) ? 1 : 0 \
+>>>> +                : ((x) >> BITS_PER_TYPE(T)) ? 1 : 0 \
+>>>> +            : 0)
+>>
+>> Like the other, I'd much rather this was rephrased in terms of the
+>> existing macros (e.g. type_min()/type_max().)
+> 
+> 
+> I am not sure how it could be rephrased with type_(min|max), but I guess 
+> the shortest could be sth like:
+> 
+> #define overflows_type(x, T) __builtin_add_overflow_p(x, (typeof(T))0, 
+> (typeof(T))0)
+
+Except this macro is available since gcc 7, but apparently 
+__builtin_add_overflow is supported since gcc 5, which should be OK:
+#define overflows_type(x, T) ({ typeof(T) r = 0; 
+__builtin_add_overflow_p((x), r, r); })
+
+Regards
+Andrzej
+
+> 
+> Regards
+> Andrzej
+> 
+> 
+>>
+>>>> +
+>>>> +/**
+>>>> + * safe_conversion - perform a type conversion (cast) of an source 
+>>>> value into
+>>>> + * a new variable, checking that the destination is large enough to 
+>>>> hold the
+>>>> + * source value.
+>>>> + * @ptr: Destination pointer address
+>>>> + * @value: Source value
+>>>> + *
+>>>> + * Returns:
+>>>> + * If the value would overflow the destination, it returns false.
+>>>> + */
+>>>> +#define safe_conversion(ptr, value) ({ \
+>>>> +    typeof(value) __v = (value); \
+>>>> +    typeof(ptr) __ptr = (ptr); \
+>>>> +    overflows_type(__v, *__ptr) ? 0 : ((*__ptr = 
+>>>> (typeof(*__ptr))__v), 1); \
+>>>> +})
+>>
+>> I try to avoid "safe" as an adjective for interface names, since it
+>> doesn't really answer "safe from what?" This looks more like "assign, but
+>> zero when out of bounds". And it can be built from existing macros here:
+>>
+>>     if (check_add_overflow(0, value, ptr))
+>>         *ptr = 0;
+>>
+>> I actually want to push back on this a bit, because there can still be
+>> logic bugs built around this kind of primitive. Shouldn't out-of-bounds
+>> assignments be seen as a direct failure? I would think this would be
+>> sufficient:
+>>
+>> #define check_assign(value, ptr)    check_add_overflow(0, value, ptr)
+>>
+>> And callers would do:
+>>
+>>     if (check_assign(value, &var))
+>>         return -EINVAL;
+>>
+>> etc.
+>>
+>>
+> 

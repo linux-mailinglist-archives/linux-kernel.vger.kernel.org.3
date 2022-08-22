@@ -2,213 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D2C59C520
+	by mail.lfdr.de (Postfix) with ESMTP id 80D7C59C521
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236642AbiHVRjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236608AbiHVRjj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236586AbiHVRjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 22 Aug 2022 13:39:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96553F332
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:37 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z2so14913454edc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:37 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234096AbiHVRjg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 22 Aug 2022 13:39:36 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F11F3F332
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:35 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id j5so13045268oih.6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=YETYSBdZGbHL0Tg4tG/TWQHUhawdSjZCU30HLw/bqZQ=;
-        b=fulab83oMTsxW7dccBev0p+7W/JBtblNus6/b6WUjgoN5VyafMscsPXwGVYeMsounJ
-         lEFO63eSxG8frytNPBzG4RgXoD/rrgVP5ESe2yR8VUYSaht5/TKg5qfWl14CgWTAO4iC
-         giT/EN094TdnbvBlJOLD83hL2ktihC1451bGE=
+        bh=PlnhdG09sWsWaCHIcZfuaDthGF5DP+s6ro2Ew62531E=;
+        b=CEOmaDwqpMPDkudRa/LpIU4ti4DWbT1aKW49rfuHxqa4Nretc72RJKN0SXsdmixuwj
+         JMyQMoREo94NLa9XS0uArMQv57UglileRYYvjL8MlDEIkmgIMJldbT1KX09wO90d4TSR
+         eXlxq9MRKlZ5bYj2vY0imyIKP1fsRr8s69TJcKpQ4h59MNzyoAtP2Prv2YWdVV//fJBp
+         P9rJqYK+XCvavk6PwviokzI58p3sVHZj4+HGQP5HMKFy9rLVXc0kj0UndAvJEV/SglgX
+         ON/yfkTdXihlsQLr7UDLsaIePuechRateD4rSuIUyLuw78MMa9z+yUBmlpX1T4ugdiNc
+         LtlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=YETYSBdZGbHL0Tg4tG/TWQHUhawdSjZCU30HLw/bqZQ=;
-        b=dzoap8eORU4EQG28fLdQfZVWAmoQSC8KcsID8uV2+hWyPamkTR+56p7UavWutRFHh5
-         zigbjww+CbetEwillBPZ/IZjWnJq0Cw7HbBnwyBTpbzBupAKgabtSF6O/nCU5yEHD0yG
-         Ok/dSGHOY3eqa9212S0gQUIxW/Q7e4NjBYuMRaZd4NQzTue6OWvsh6Rg7Athr43PikLs
-         42pNhZ2DahIplGW0WT2J9L4q1nUiZGAq9AnhSW+KmIQucY37ajIPpuSjT1AbNOKkncjy
-         hYlhOcuSuSaGzdw0SBkf/8rrjvGL4iBe1ZJZkjcukzItif7IIEUc0a6VPxXFYDuMZHHa
-         Aavg==
-X-Gm-Message-State: ACgBeo3Yvh5v6PL10zAzd3041AFF7l6ufXTazPwKToq8Tjl1oKs5gQDN
-        h3fLEshJpAIFROp+AfgryKaoWNDF+E9WaaPB
-X-Google-Smtp-Source: AA6agR7BEf9SRjM50m0v7mBcIWs1LVvRNgiyn3Lli598YGUFty42UvuBISWrCr5iP9miBOrRaPFEeQ==
-X-Received: by 2002:a05:6402:350b:b0:43e:f4be:c447 with SMTP id b11-20020a056402350b00b0043ef4bec447mr197663edd.427.1661189976517;
-        Mon, 22 Aug 2022 10:39:36 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id bv19-20020a170906b1d300b0073923a68974sm6409941ejb.206.2022.08.22.10.39.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 10:39:35 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id r16so14123958wrm.6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:34 -0700 (PDT)
-X-Received: by 2002:adf:e843:0:b0:225:221f:262 with SMTP id
- d3-20020adfe843000000b00225221f0262mr11599499wrn.193.1661189974089; Mon, 22
+        bh=PlnhdG09sWsWaCHIcZfuaDthGF5DP+s6ro2Ew62531E=;
+        b=IkeiGWsx9euKK1mymOiIJsknhtp09VdRt0m72i4ycWxKDMNvfhx08DtuWmTpZdulKY
+         Txj5Oodw94BoJ80UdZhOQPlA0fc1hvhiwuIwwA4o5VLdSjU+yk3cAsY/IwpB7qH7YO6J
+         FKbxBOs5Iv+DXaOL9SFxJ5LjPRfUebx8oYFUrYllwOeX14kyocabsOSLDvlk65P+Pxvk
+         I2MXxy30NxvZSYiFZByhEuY6nmCJ6HlLvOm7YDROjyJVbBbtdIPcpwyRJlgDwSKlixBc
+         goygKQLpYTehtcl5jvoTbN7NhptnNxCbr8EbRIeZ1zEYEXvuxtrh02U0zN/+OKeJe27t
+         nz2w==
+X-Gm-Message-State: ACgBeo2BrRTwhlsVPCtbiAHWeSHm+ZqJDuxHhhS9pw+ilmrkXhVRJWqY
+        9yo8qIZDL/U3Wpd3uCFkjOAS34WISnglISQvN0V0
+X-Google-Smtp-Source: AA6agR73YM2LwSgi0JPEGQZhgQugEyBXB1eQ2HCQeJeNbG9N9P/M5lTR/pG7BqBF9qghB+kE4INOOf9XhZWq/VUkmPE=
+X-Received: by 2002:a05:6808:3a9:b0:343:4b14:ccce with SMTP id
+ n9-20020a05680803a900b003434b14cccemr11766466oie.41.1661189974627; Mon, 22
  Aug 2022 10:39:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 Aug 2022 10:39:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
-Message-ID: <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: multipart/mixed; boundary="0000000000004fa1b205e6d7ee0b"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220822022905.1949007-1-cuigaosheng1@huawei.com>
+ <20220822085050.hxj6qmgj2x2tj6uv@quack3> <CAHC9VhSw0zJWQEm-GCzQy_-4-X-yVuzvX1wBFcYMkG1mOXy+BA@mail.gmail.com>
+ <20220822152055.hitwrvi3lmldhcgx@quack3>
+In-Reply-To: <20220822152055.hitwrvi3lmldhcgx@quack3>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 22 Aug 2022 13:39:23 -0400
+Message-ID: <CAHC9VhQoTHZ4SFz2k7=2OLKFdrpmxq8ei-sNDNfV0MFtJsqpFg@mail.gmail.com>
+Subject: Re: [PATCH next] audit: fix potential double free on error path from fsnotify_add_inode_mark
+To:     Jan Kara <jack@suse.cz>
+Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>, eparis@redhat.com,
+        mszeredi@redhat.com, amir73il@gmail.com, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004fa1b205e6d7ee0b
-Content-Type: text/plain; charset="UTF-8"
-
-On Mon, Aug 22, 2022 at 10:08 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon, Aug 22, 2022 at 11:20 AM Jan Kara <jack@suse.cz> wrote:
+> On Mon 22-08-22 10:34:15, Paul Moore wrote:
+> > On Mon, Aug 22, 2022 at 4:50 AM Jan Kara <jack@suse.cz> wrote:
+> > > On Mon 22-08-22 10:29:05, Gaosheng Cui wrote:
+> > > > Audit_alloc_mark() assign pathname to audit_mark->path, on error path
+> > > > from fsnotify_add_inode_mark(), fsnotify_put_mark will free memory
+> > > > of audit_mark->path, but the caller of audit_alloc_mark will free
+> > > > the pathname again, so there will be double free problem.
+> > > >
+> > > > Fix this by resetting audit_mark->path to NULL pointer on error path
+> > > > from fsnotify_add_inode_mark().
+> > > >
+> > > > Fixes: 7b1293234084d ("fsnotify: Add group pointer in fsnotify_init_mark()")
+> > > > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> > >
+> > > Good spotting! The patch looks good to me. Feel free to add:
+> > >
+> > > Reviewed-by: Jan Kara <jack@suse.cz>
+> > >
+> > > > ---
+> > > >  kernel/audit_fsnotify.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/kernel/audit_fsnotify.c b/kernel/audit_fsnotify.c
+> > > > index 6432a37ac1c9..c565fbf66ac8 100644
+> > > > --- a/kernel/audit_fsnotify.c
+> > > > +++ b/kernel/audit_fsnotify.c
+> > > > @@ -102,6 +102,7 @@ struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pa
+> > > >
+> > > >       ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, 0);
+> > > >       if (ret < 0) {
+> > > > +             audit_mark->path = NULL;
+> > > >               fsnotify_put_mark(&audit_mark->mark);
+> >
+> > As I'm tracing the code path from audit through fsnotify, and back
+> > into audit, I'm wondering if we still have a problem.  When
+> > fsnotify_add_inode_mark() fails it will end up freeing not just
+> > audit_mark->path, but audit_mark itself via audit_fsnotify_mark_free()
+> > (via a call into fsnotify_put_mark()), yes?
 >
-> So why don't we just create a "test_bit_acquire()" and be done with
-> it? We literally created clear_bit_unlock() for the opposite reason,
-> and your comments about the new barrier hack even point to it.
+> I don't think so. fsnotify_add_mark_locked() will call fsnotify_put_mark()
+> but that is just a counter part to fsnotify_get_mark() a few lines above.
+> The caller of fsnotify_add_inode_mark() still holds its own mark reference
+> which prevents mark from being freed.
 
-Here's a patch that is
+Okay, that sounds reasonable, but I'm still looking for a code path
+that only frees audit_mark:path and not the audit_mark itself.  What
+am I not seeing?
 
- (a) almost entirely untested (I checked that one single case builds
-and seems to generate the expected code)
-
- (b) needs some more loving
-
-but seems to superficially work.
-
-At a minimum this needs to be split into two (so the bitop and the
-wait_on_bit parts split up), and that whole placement of
-<asm/barrier.h> and generic_bit_test_acquire() need at least some
-thinking about, but on the whole it seems reasonable.
-
-For example, it would make more sense to have this in
-<asm-generic/bitops/lock.h>, but not all architectures include that,
-and some do their own version. I didn't want to mess with
-architecture-specific headers, so this illogically just uses
-generic-non-atomic.h.
-
-Maybe just put it in <linux/bitops.h> directly?
-
-So I'm not at all claiming that this is a great patch. It definitely
-needs more work, and a lot more testing.
-
-But I think this is at least the right _direction_ to take here.
-
-And yes, I think it also would have been better if
-"clear_bit_unlock()" would have been called "clear_bit_release()", and
-we'd have more consistent naming with our ordered atomics. But it's
-probably not worth changing.
-
-               Linus
-
---0000000000004fa1b205e6d7ee0b
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l751lwl30>
-X-Attachment-Id: f_l751lwl30
-
-IGluY2x1ZGUvYXNtLWdlbmVyaWMvYml0b3BzL2dlbmVyaWMtbm9uLWF0b21pYy5oIHwgOSArKysr
-KysrKysKIGluY2x1ZGUvYXNtLWdlbmVyaWMvYml0b3BzL25vbi1hdG9taWMuaCAgICAgICAgIHwg
-MSArCiBpbmNsdWRlL2xpbnV4L2JpdG9wcy5oICAgICAgICAgICAgICAgICAgICAgICAgICB8IDIg
-Ky0KIGluY2x1ZGUvbGludXgvd2FpdF9iaXQuaCAgICAgICAgICAgICAgICAgICAgICAgIHwgOCAr
-KysrLS0tLQoga2VybmVsL3NjaGVkL3dhaXRfYml0LmMgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAyICstCiA1IGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0p
-CgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9iaXRvcHMvZ2VuZXJpYy1ub24tYXRv
-bWljLmggYi9pbmNsdWRlL2FzbS1nZW5lcmljL2JpdG9wcy9nZW5lcmljLW5vbi1hdG9taWMuaApp
-bmRleCAzZDVlYmQyNDY1MmIuLmY1NmEyNTJkYjllOCAxMDA2NDQKLS0tIGEvaW5jbHVkZS9hc20t
-Z2VuZXJpYy9iaXRvcHMvZ2VuZXJpYy1ub24tYXRvbWljLmgKKysrIGIvaW5jbHVkZS9hc20tZ2Vu
-ZXJpYy9iaXRvcHMvZ2VuZXJpYy1ub24tYXRvbWljLmgKQEAgLTQsNiArNCw3IEBACiAjZGVmaW5l
-IF9fQVNNX0dFTkVSSUNfQklUT1BTX0dFTkVSSUNfTk9OX0FUT01JQ19ICiAKICNpbmNsdWRlIDxs
-aW51eC9iaXRzLmg+CisjaW5jbHVkZSA8YXNtL2JhcnJpZXIuaD4KIAogI2lmbmRlZiBfTElOVVhf
-QklUT1BTX0gKICNlcnJvciBvbmx5IDxsaW51eC9iaXRvcHMuaD4gY2FuIGJlIGluY2x1ZGVkIGRp
-cmVjdGx5CkBAIC0xNTgsNCArMTU5LDEyIEBAIGNvbnN0X3Rlc3RfYml0KHVuc2lnbmVkIGxvbmcg
-bnIsIGNvbnN0IHZvbGF0aWxlIHVuc2lnbmVkIGxvbmcgKmFkZHIpCiAJcmV0dXJuICEhKHZhbCAm
-IG1hc2spOwogfQogCitzdGF0aWMgX19hbHdheXNfaW5saW5lIGJvb2wKK2dlbmVyaWNfdGVzdF9i
-aXRfYWNxdWlyZSh1bnNpZ25lZCBsb25nIG5yLCBjb25zdCB2b2xhdGlsZSB1bnNpZ25lZCBsb25n
-ICphZGRyKQoreworCXVuc2lnbmVkIGxvbmcgbWFzayA9IEJJVF9NQVNLKG5yKTsKKwl1bnNpZ25l
-ZCBsb25nICpwID0gKCh1bnNpZ25lZCBsb25nICopYWRkcikgKyBCSVRfV09SRChucik7CisJcmV0
-dXJuIHNtcF9sb2FkX2FjcXVpcmUocCkgJiBtYXNrOworfQorCiAjZW5kaWYgLyogX19BU01fR0VO
-RVJJQ19CSVRPUFNfR0VORVJJQ19OT05fQVRPTUlDX0ggKi8KZGlmZiAtLWdpdCBhL2luY2x1ZGUv
-YXNtLWdlbmVyaWMvYml0b3BzL25vbi1hdG9taWMuaCBiL2luY2x1ZGUvYXNtLWdlbmVyaWMvYml0
-b3BzL25vbi1hdG9taWMuaAppbmRleCA1YzM3Y2VkMzQzYWUuLjcxZjhkNTRhNTE5NSAxMDA2NDQK
-LS0tIGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9iaXRvcHMvbm9uLWF0b21pYy5oCisrKyBiL2luY2x1
-ZGUvYXNtLWdlbmVyaWMvYml0b3BzL25vbi1hdG9taWMuaApAQCAtMTMsNiArMTMsNyBAQAogI2Rl
-ZmluZSBhcmNoX19fdGVzdF9hbmRfY2hhbmdlX2JpdCBnZW5lcmljX19fdGVzdF9hbmRfY2hhbmdl
-X2JpdAogCiAjZGVmaW5lIGFyY2hfdGVzdF9iaXQgZ2VuZXJpY190ZXN0X2JpdAorI2RlZmluZSBh
-cmNoX3Rlc3RfYml0X2FjcXVpcmUgZ2VuZXJpY190ZXN0X2JpdF9hY3F1aXJlCiAKICNpbmNsdWRl
-IDxhc20tZ2VuZXJpYy9iaXRvcHMvbm9uLWluc3RydW1lbnRlZC1ub24tYXRvbWljLmg+CiAKZGlm
-ZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvYml0b3BzLmggYi9pbmNsdWRlL2xpbnV4L2JpdG9wcy5o
-CmluZGV4IGNmOWJmNjUwMzlmMi4uMjJhZGY3NGQ1YzI1IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xp
-bnV4L2JpdG9wcy5oCisrKyBiL2luY2x1ZGUvbGludXgvYml0b3BzLmgKQEAgLTU5LDcgKzU5LDcg
-QEAgZXh0ZXJuIHVuc2lnbmVkIGxvbmcgX19zd19od2VpZ2h0NjQoX191NjQgdyk7CiAjZGVmaW5l
-IF9fdGVzdF9hbmRfY2xlYXJfYml0KG5yLCBhZGRyKQliaXRvcChfX190ZXN0X2FuZF9jbGVhcl9i
-aXQsIG5yLCBhZGRyKQogI2RlZmluZSBfX3Rlc3RfYW5kX2NoYW5nZV9iaXQobnIsIGFkZHIpCWJp
-dG9wKF9fX3Rlc3RfYW5kX2NoYW5nZV9iaXQsIG5yLCBhZGRyKQogI2RlZmluZSB0ZXN0X2JpdChu
-ciwgYWRkcikJCWJpdG9wKF90ZXN0X2JpdCwgbnIsIGFkZHIpCi0KKyNkZWZpbmUgdGVzdF9iaXRf
-YWNxdWlyZShuciwgYWRkcikJZ2VuZXJpY190ZXN0X2JpdF9hY3F1aXJlKG5yLCBhZGRyKQogLyoK
-ICAqIEluY2x1ZGUgdGhpcyBoZXJlIGJlY2F1c2Ugc29tZSBhcmNoaXRlY3R1cmVzIG5lZWQgZ2Vu
-ZXJpY19mZnMvZmxzIGluCiAgKiBzY29wZQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC93YWl0
-X2JpdC5oIGIvaW5jbHVkZS9saW51eC93YWl0X2JpdC5oCmluZGV4IDdkZWMzNmFlY2JkOS4uNzcy
-NWI3NTc5Yjc4IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L3dhaXRfYml0LmgKKysrIGIvaW5j
-bHVkZS9saW51eC93YWl0X2JpdC5oCkBAIC03MSw3ICs3MSw3IEBAIHN0YXRpYyBpbmxpbmUgaW50
-CiB3YWl0X29uX2JpdCh1bnNpZ25lZCBsb25nICp3b3JkLCBpbnQgYml0LCB1bnNpZ25lZCBtb2Rl
-KQogewogCW1pZ2h0X3NsZWVwKCk7Ci0JaWYgKCF0ZXN0X2JpdChiaXQsIHdvcmQpKQorCWlmICgh
-dGVzdF9iaXRfYWNxdWlyZShiaXQsIHdvcmQpKQogCQlyZXR1cm4gMDsKIAlyZXR1cm4gb3V0X29m
-X2xpbmVfd2FpdF9vbl9iaXQod29yZCwgYml0LAogCQkJCSAgICAgICBiaXRfd2FpdCwKQEAgLTk2
-LDcgKzk2LDcgQEAgc3RhdGljIGlubGluZSBpbnQKIHdhaXRfb25fYml0X2lvKHVuc2lnbmVkIGxv
-bmcgKndvcmQsIGludCBiaXQsIHVuc2lnbmVkIG1vZGUpCiB7CiAJbWlnaHRfc2xlZXAoKTsKLQlp
-ZiAoIXRlc3RfYml0KGJpdCwgd29yZCkpCisJaWYgKCF0ZXN0X2JpdF9hY3F1aXJlKGJpdCwgd29y
-ZCkpCiAJCXJldHVybiAwOwogCXJldHVybiBvdXRfb2ZfbGluZV93YWl0X29uX2JpdCh3b3JkLCBi
-aXQsCiAJCQkJICAgICAgIGJpdF93YWl0X2lvLApAQCAtMTIzLDcgKzEyMyw3IEBAIHdhaXRfb25f
-Yml0X3RpbWVvdXQodW5zaWduZWQgbG9uZyAqd29yZCwgaW50IGJpdCwgdW5zaWduZWQgbW9kZSwK
-IAkJICAgIHVuc2lnbmVkIGxvbmcgdGltZW91dCkKIHsKIAltaWdodF9zbGVlcCgpOwotCWlmICgh
-dGVzdF9iaXQoYml0LCB3b3JkKSkKKwlpZiAoIXRlc3RfYml0X2FjcXVpcmUoYml0LCB3b3JkKSkK
-IAkJcmV0dXJuIDA7CiAJcmV0dXJuIG91dF9vZl9saW5lX3dhaXRfb25fYml0X3RpbWVvdXQod29y
-ZCwgYml0LAogCQkJCQkgICAgICAgYml0X3dhaXRfdGltZW91dCwKQEAgLTE1MSw3ICsxNTEsNyBA
-QCB3YWl0X29uX2JpdF9hY3Rpb24odW5zaWduZWQgbG9uZyAqd29yZCwgaW50IGJpdCwgd2FpdF9i
-aXRfYWN0aW9uX2YgKmFjdGlvbiwKIAkJICAgdW5zaWduZWQgbW9kZSkKIHsKIAltaWdodF9zbGVl
-cCgpOwotCWlmICghdGVzdF9iaXQoYml0LCB3b3JkKSkKKwlpZiAoIXRlc3RfYml0X2FjcXVpcmUo
-Yml0LCB3b3JkKSkKIAkJcmV0dXJuIDA7CiAJcmV0dXJuIG91dF9vZl9saW5lX3dhaXRfb25fYml0
-KHdvcmQsIGJpdCwgYWN0aW9uLCBtb2RlKTsKIH0KZGlmZiAtLWdpdCBhL2tlcm5lbC9zY2hlZC93
-YWl0X2JpdC5jIGIva2VybmVsL3NjaGVkL3dhaXRfYml0LmMKaW5kZXggZDQ3ODhmODEwYjU1Li4w
-YjFjZDk4NWRjMjcgMTAwNjQ0Ci0tLSBhL2tlcm5lbC9zY2hlZC93YWl0X2JpdC5jCisrKyBiL2tl
-cm5lbC9zY2hlZC93YWl0X2JpdC5jCkBAIC00Nyw3ICs0Nyw3IEBAIF9fd2FpdF9vbl9iaXQoc3Ry
-dWN0IHdhaXRfcXVldWVfaGVhZCAqd3FfaGVhZCwgc3RydWN0IHdhaXRfYml0X3F1ZXVlX2VudHJ5
-ICp3YnFfCiAJCXByZXBhcmVfdG9fd2FpdCh3cV9oZWFkLCAmd2JxX2VudHJ5LT53cV9lbnRyeSwg
-bW9kZSk7CiAJCWlmICh0ZXN0X2JpdCh3YnFfZW50cnktPmtleS5iaXRfbnIsIHdicV9lbnRyeS0+
-a2V5LmZsYWdzKSkKIAkJCXJldCA9ICgqYWN0aW9uKSgmd2JxX2VudHJ5LT5rZXksIG1vZGUpOwot
-CX0gd2hpbGUgKHRlc3RfYml0KHdicV9lbnRyeS0+a2V5LmJpdF9uciwgd2JxX2VudHJ5LT5rZXku
-ZmxhZ3MpICYmICFyZXQpOworCX0gd2hpbGUgKHRlc3RfYml0X2FjcXVpcmUod2JxX2VudHJ5LT5r
-ZXkuYml0X25yLCB3YnFfZW50cnktPmtleS5mbGFncykgJiYgIXJldCk7CiAKIAlmaW5pc2hfd2Fp
-dCh3cV9oZWFkLCAmd2JxX2VudHJ5LT53cV9lbnRyeSk7CiAK
---0000000000004fa1b205e6d7ee0b--
+-- 
+paul-moore.com

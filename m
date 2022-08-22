@@ -2,259 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D925859C4BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32CB59C4BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236896AbiHVRKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S235807AbiHVRKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236446AbiHVRJy (ORCPT
+        with ESMTP id S237175AbiHVRKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:09:54 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83457CE3E;
-        Mon, 22 Aug 2022 10:09:17 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MBJfC2B57z67xMh;
-        Tue, 23 Aug 2022 01:05:55 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 22 Aug 2022 19:09:14 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 22 Aug
- 2022 18:09:14 +0100
-Date:   Mon, 22 Aug 2022 18:09:12 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     <linuxarm@huawei.com>, <linux-cxl@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     <john.garry@huawei.com>, Peter Zijlstra <peterz@infradead.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Alison Schofield" <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [RFC PATCH 2/4] cxl/pci: Find and register CXL PMU devices
-Message-ID: <20220822180852.000002f9@huawei.com>
-In-Reply-To: <20220812151214.2025-3-Jonathan.Cameron@huawei.com>
-References: <20220812151214.2025-1-Jonathan.Cameron@huawei.com>
-        <20220812151214.2025-3-Jonathan.Cameron@huawei.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 22 Aug 2022 13:10:05 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D578D12080;
+        Mon, 22 Aug 2022 10:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=GfKp3f5Ymjt+SyhQzhhn3iVb0y52yLjbBLoTgaA5xs4=; b=uLIU1bPiItlu2CDatqKOvToPOH
+        nbgk39pNb19R5/5maF372B1mztcC+7Mjyx0KZysUxfFVvNDJz+zvwWox+cpv1B/5LWeghFG8BX2DV
+        PpbEGAbKGfRcfx7aN2glwSt4K+8/tJoZOxsThRjcPJ/AurT2ZEU3tTYeOUsQzTm7OmKU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oQAvV-00EFF2-Gk; Mon, 22 Aug 2022 19:09:25 +0200
+Date:   Mon, 22 Aug 2022 19:09:25 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net] net: phy: Warn if phy is attached when removing
+Message-ID: <YwO4RdY2HT2nYXBf@lunn.ch>
+References: <20220816163701.1578850-1-sean.anderson@seco.com>
+ <20220819164519.2c71823e@kernel.org>
+ <YwAo42QkTgD0kOqz@shell.armlinux.org.uk>
+ <b476d7b1-1221-2275-e445-6a70b3a31fe6@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b476d7b1-1221-2275-e445-6a70b3a31fe6@seco.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Aug 2022 16:12:12 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
-
-> CXL PMU devices can be found from entries in the Register
-> Locator DVSEC.
+> In the last thread I posted this snippet:
 > 
-> In order to register the minimum number of IRQ vectors necessary
-> to support all CPMUs found, separate the registration into two
-> steps.  First find the devices, and query the IRQs used and then
-> register the devices. Between these two steps, request the
-> IRQ vectors necessary and enable bus master support.
-> 
-> Future IRQ users for CXL type 3 devices (e.g. DOEs) will need to
-> follow a similar pattern the number of vectors necessary is known
-> before any parts of the driver stack rely on their availability.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-A few bugs in here that the kernel test robot found.
-
-I'll send a v2 shortly with those tidied up.
-
-One observation is that cxl/core/core.h dereferences
-a struct cxl_memdev element which means we have a header ordering
-dependency between that and cxl/cxlmem.h which we should find a clean
-way to fix.
- 
-> 
-> ---
-> 
-> Open questions
-> 1) Is this IRQ vector 'count' / request then use approach flexible
->    enough for other interrupt users on these devices.
-> 2) Does hanging the CPMU off the PCI device make sense. These can
->    occur in Switch upstream ports as well.
-> 3) Naming.  It would be nice if the device naming indicated which
->    EP these were associated with, but that wouldn't be inline
->    with the rest of the CXL bus device naming.  What is best
->    option here?
-> ---
->  drivers/cxl/core/Makefile |  1 +
->  drivers/cxl/core/core.h   |  3 ++
->  drivers/cxl/core/cpmu.c   | 67 ++++++++++++++++++++++++++++++++++
->  drivers/cxl/core/port.c   |  2 ++
->  drivers/cxl/core/regs.c   | 29 +++++++++++++++
->  drivers/cxl/cpmu.h        | 54 ++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h         | 15 ++++++++
->  drivers/cxl/cxlpci.h      |  1 +
->  drivers/cxl/pci.c         | 76 ++++++++++++++++++++++++++++++++++++++-
->  9 files changed, 247 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cxl/core/Makefile b/drivers/cxl/core/Makefile
-> index 79c7257f4107..1318e8a6830f 100644
-> --- a/drivers/cxl/core/Makefile
-> +++ b/drivers/cxl/core/Makefile
-> @@ -10,4 +10,5 @@ cxl_core-y += memdev.o
->  cxl_core-y += mbox.o
->  cxl_core-y += pci.o
->  cxl_core-y += hdm.o
-> +cxl_core-y += cpmu.o
->  cxl_core-$(CONFIG_CXL_REGION) += region.o
-> diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
-> index 1d8f87be283f..d2b12cdfd61f 100644
-> --- a/drivers/cxl/core/core.h
-> +++ b/drivers/cxl/core/core.h
-> @@ -14,12 +14,14 @@ extern struct device_attribute dev_attr_create_pmem_region;
->  extern struct device_attribute dev_attr_delete_region;
->  extern struct device_attribute dev_attr_region;
->  extern const struct device_type cxl_pmem_region_type;
-> +extern const struct device_type cxl_cpmu_type;
->  extern const struct device_type cxl_region_type;
->  void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled);
->  #define CXL_REGION_ATTR(x) (&dev_attr_##x.attr)
->  #define CXL_REGION_TYPE(x) (&cxl_region_type)
->  #define SET_CXL_REGION_ATTR(x) (&dev_attr_##x.attr),
->  #define CXL_PMEM_REGION_TYPE(x) (&cxl_pmem_region_type)
-> +#define CXL_CPMU_TYPE(x) (&cxl_cpmu_region_type)
->  int cxl_region_init(void);
->  void cxl_region_exit(void);
->  #else
-> @@ -37,6 +39,7 @@ static inline void cxl_region_exit(void)
->  #define CXL_REGION_TYPE(x) NULL
->  #define SET_CXL_REGION_ATTR(x)
->  #define CXL_PMEM_REGION_TYPE(x) NULL
-> +#define CXL_CPMU_TYPE(x) NULL
->  #endif
+> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+> index a74b320f5b27..05894e1c3e59 100644
+> --- a/drivers/net/phy/phy_device.c
+> +++ b/drivers/net/phy/phy_device.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/phy.h>
+>  #include <linux/phy_led_triggers.h>
+>  #include <linux/property.h>
+> +#include <linux/rtnetlink.h>
+>  #include <linux/sfp.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/slab.h>
+> @@ -3111,6 +3112,13 @@ static int phy_remove(struct device *dev)
+>  {
+>         struct phy_device *phydev = to_phy_device(dev);
 >  
+> +	// I'm pretty sure this races with multiple unbinds...
+> +       rtnl_lock();
+> +       device_unlock(dev);
+> +       dev_close(phydev->attached_dev);
+> +       device_lock(dev);
+> +       rtnl_unlock();
+> +       WARN_ON(phydev->attached_dev);
+> +
+>         cancel_delayed_work_sync(&phydev->state_queue);
+>  
+>         mutex_lock(&phydev->lock);
+> ---
+> 
+> Would this be acceptable? Can the locking be fixed?
 
-Side note, the presence of 
-cxl_ep_load() in here means anything including this header needs to include
-cxlmem.h which seems a bit of a violation of layering between the core
-headers and more driver specific ones.
+Code like this should not be hidden in the PHY layer. If we decide to
+go down this path it probably should be in net/core/dev.c.
 
+I suggest you talk to the maintainers of that file, probably Eric
+Dumazet, give him a clear explanation of the problem, and see what he
+suggests.
 
->  struct cxl_send_command;
-> diff --git a/drivers/cxl/core/cpmu.c b/drivers/cxl/core/cpmu.c
-> new file mode 100644
-> index 000000000000..2d17d4083c8f
-> --- /dev/null
-> +++ b/drivers/cxl/core/cpmu.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright(c) 2022 Huawei. All rights reserved. */
-> +
-> +#include <linux/device.h>
-> +#include <linux/slab.h>
-> +#include <linux/idr.h>
-> +#include <cpmu.h>
-> +#include <cxl.h>
-> +
-> +static DEFINE_IDA(cpmu_ida);
-> +
-> +static void cxl_cpmu_release(struct device *dev)
-> +{
-> +	struct cxl_cpmu *cpmu = container_of(dev, struct cxl_cpmu, dev);
-> +
-> +	ida_free(&cpmu_ida, cpmu->id);
-> +	kfree(cpmu);
-> +}
-> +
-> +const struct device_type cxl_cpmu_type = {
-
-Should include core/core.h to avoid a should this be static warning.
-
-> +	.name = "cxl_cpmu",
-> +	.release = cxl_cpmu_release,
-> +};
-> +
-> +static void remove_dev(void *dev)
-> +{
-> +	device_del(dev);
-> +}
-> +
-
-
-> diff --git a/drivers/cxl/cpmu.h b/drivers/cxl/cpmu.h
-> new file mode 100644
-> index 000000000000..880077bf0b9f
-> --- /dev/null
-> +++ b/drivers/cxl/cpmu.h
-> @@ -0,0 +1,54 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright(c) 2022 Huawei
-> + * CXL Specification rev 3.0 Setion 8.2.7 (CPMU Register Interface)
-> + */
-> +#ifndef CXL_CPMU_H
-> +#define CXL_CPMU_H
-> +
-> +#define CPMU_CAP_REG			0x0
-> +#define   CPMU_CAP_NUM_COUNTERS_MSK		GENMASK_ULL(4, 0)
-> +#define   CPMU_CAP_COUNTER_WIDTH_MSK		GENMASK_ULL(15, 8)
-> +#define   CPMU_CAP_NUM_EVN_CAP_REG_SUP_MSK	GENMASK_ULL(24, 20)
-> +#define   CPMU_CAP_FILTERS_SUP_MSK		GENMASK_ULL(39, 32)
-> +#define   CPMU_CAP_MSI_N_MSK			GENMASK_ULL(47, 44)
-> +#define   CPMU_CAP_WRITEABLE_WHEN_FROZEN	BIT(48)
-> +#define   CPMU_CAP_FREEZE			BIT(49)
-> +#define   CPMU_CAP_INT				BIT(50)
-BIT_ULL() needed for these.
-
-> +#define   CPMU_CAP_VERSION_MSK			GENMASK_ULL(63, 60)
-> +
-> +#define CPMU_OVERFLOW_REG		0x10
-> +#define CPMU_FREEZE_REG			0x18
-> +#define CPMU_EVENT_CAP_REG(n)		(0x100 + 8 * (n))
-> +#define   CPMU_EVENT_CAP_SUPPORTED_EVENTS_MSK	GENMASK_ULL(31, 0)
-> +#define   CPMU_EVENT_CAP_GROUP_ID_MSK		GENMASK_ULL(47, 32)
-> +#define   CPMU_EVENT_CAP_VENDOR_ID_MSK		GENMASK_ULL(63, 48)
-> +
-> +#define CPMU_COUNTER_CFG_REG(n)		(0x200 + 8 * (n))
-> +#define   CPMU_COUNTER_CFG_TYPE_MSK		GENMASK_ULL(1, 0)
-> +#define     CPMU_COUNTER_CFG_TYPE_FREE_RUN	0
-> +#define     CPMU_COUNTER_CFG_TYPE_FIXED_FUN	1
-> +#define     CPMU_COUNTER_CFG_TYPE_CONFIGURABLE	2
-> +#define   CPMU_COUNTER_CFG_ENABLE		BIT(8)
-> +#define   CPMU_COUNTER_CFG_INT_ON_OVRFLW	BIT(9)
-> +#define   CPMU_COUNTER_CFG_FREEZE_ON_OVRFLW	BIT(10)
-> +#define   CPMU_COUNTER_CFG_EDGE			BIT(11)
-> +#define   CPMU_COUNTER_CFG_INVERT		BIT(12)
-> +#define   CPMU_COUNTER_CFG_THRESHOLD_MSK	GENMASK_ULL(23, 16)
-> +#define   CPMU_COUNTER_CFG_EVENTS_MSK		GENMASK_ULL(55, 24)
-> +#define   CPMU_COUNTER_CFG_EVENT_GRP_ID_IDX_MSK	GENMASK_ULL(63, 59)
-> +
-> +#define CPMU_FILTER_CFG_REG(n, f)	(0x400 + 4 * ((f) + (n) * 8))
-> +#define   CPMU_FILTER_CFG_VALUE_MSK		GENMASK(15, 0)
-> +
-> +#define CPMU_COUNTER_REG(n)			(0xc00 + 8 * (n))
-> +
-> +#define CPMU_REGMAP_SIZE 0xe00 /* Table 8-32 CXL 3.0 specification */
-> +struct cxl_cpmu {
-> +	struct device dev;
-> +	void __iomem *base;
-> +	int id;
-> +};
-> +
-> +#define to_cxl_cpmu(dev) container_of(dev, struct cxl_cpmu, dev)
-> +#endif
+	Andrew

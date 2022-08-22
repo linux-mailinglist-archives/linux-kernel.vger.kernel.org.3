@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D750159C4E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EEC59C4F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237221AbiHVRTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S236397AbiHVRWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237216AbiHVRS7 (ORCPT
+        with ESMTP id S235261AbiHVRWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:18:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326261928D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661188739; x=1692724739;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/Em9cfDMY2xjSlozQXtkKt2ZS9oCG79hCZIZM1AL1X4=;
-  b=iUH4nsNbpK71vfegAJmi2Q+IbFZIlhAzQ6bJKGGQT4FRVlLDg9omublu
-   N5nXtQYMSRKDC0+hyrGK0LK+NzZPiXLFknSPa9Zjh5K4XDrohN26TUYix
-   QgWhs80fS9PzL91xZs0SK89ni/2xM4IXad9/iMSdpmIQ3Ifj7id49gEZk
-   IuwjcYawyGJGmNyYtS5bf5pFCGIgvWC5WaZ5vx89u+VIzFGQwcMjRllOS
-   aWX6xMJXNvTInZw3Hh9cLp+1MIEpTK+TOXkCgPNxHa8wEzhqebbRTTTaL
-   9sJ+xNDqGg8MkEhqNrvNp7sFAFbRYrSgiwINdOtNxUN7TQ5RHrpnmadxq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="293470446"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="293470446"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 10:18:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="735176964"
-Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Aug 2022 10:18:56 -0700
-Received: from kbuild by dd9b29378baa with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQB4h-0000Vv-1P;
-        Mon, 22 Aug 2022 17:18:55 +0000
-Date:   Tue, 23 Aug 2022 01:18:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: [ammarfaizi2-block:tiwai/sound/for-next 4/13]
- sound/soc/intel/skylake/skl.c:729:25: warning: unused variable 'skl'
-Message-ID: <202208230107.aJwMhDQM-lkp@intel.com>
+        Mon, 22 Aug 2022 13:22:36 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429AF31DF4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:22:35 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ca13so11327430ejb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VdTg/4wdB+0zmdu98+VeMVY0CWPWYaa4I1fhQHMo8eo=;
+        b=Zsg6h2upZ8zQKvB6ah1XxaGzM3rhYdKj2dfZP9rrHmItYctG+AGdCqgbAVOKebPUTw
+         5FMsd1V0Qc6FOPdxKbCKliKZ06RJS/OLrX8L5dLjB78MX1nxikMn8hiK69Jb7h3FTxFY
+         Pa3bEYeVHt6L5f95ShUcJ5q0ABh7vI8CUSeRyZOb2nEU502tZ8qklPsplhq3dPTJnSCL
+         T6LcRlqrSeDSU3WU0W3tfgksoKncqQlD7438YexT9jprFXNMP4+X9eZ4G9nNhQHU60cR
+         bVAPw9hkgpuGcndqjIRjCW2QA7LaoFVlzlvjIU3z2UqH1iqhuEVWIsx91mLg9Q0WPxK0
+         /wbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VdTg/4wdB+0zmdu98+VeMVY0CWPWYaa4I1fhQHMo8eo=;
+        b=d087ZDaFkHWH6TXv/0wshpkJgXoI7SO/owOW6WG/3VhRdmhkp1oHL9x9W30E5DOW2E
+         4I0MtiapMv5lOZ9T+e0tkWrT0MYRmMbONlhPs8K1Pe3ML4K4enA31LcnxAv6sqbZF2dX
+         0LwAOYkNc2FqDIxlZGTa2/Il0zVzzD26CrH1ygHtzNVWeUYan+S5W8Ihp5167AFUVX3k
+         Tr4GWsGQgHhkwluQLIxHbqJK5ZJ3uZi7EBSmGPBYJ/GQiJZAcDFJXgKz7oV75ksv9nLs
+         xIaduEtvrRqgWRwKAV4eA3om1LiRkDFyIebh85AzcuZroofqIEz+An7OIizLkGJ0aiM/
+         RyQA==
+X-Gm-Message-State: ACgBeo3T5GA5z5SKFSSG/SgBEfb/mQCXwbX+hHElH5tASCyGKKqXvfky
+        C0pekbp9J8X25PDx7tiPxYy4cIXPsqn1zaVMhLjJ5A==
+X-Google-Smtp-Source: AA6agR6SpIhcY+9ozhUOGM1USr4oViHAl1oB/o7jHRziPRrYtk2y4HZwvtHfZi28FNbwyScUV+4Jo6wub+NwhZRAZNQ=
+X-Received: by 2002:a17:907:6e9f:b0:73d:8c60:9ec5 with SMTP id
+ sh31-20020a1709076e9f00b0073d8c609ec5mr2082684ejc.542.1661188953663; Mon, 22
+ Aug 2022 10:22:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220821150147.277753-1-sander@svanheule.net>
+In-Reply-To: <20220821150147.277753-1-sander@svanheule.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 22 Aug 2022 10:22:22 -0700
+Message-ID: <CAGS_qxqkFTn+1EtPt_tQjAJszocTv97aTcimVdo_QzCMOqDOZg@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: fix assert_type for comparison macros
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tiwai/sound/for-next
-head:   1cda83e42bf66beb06bf61c7a78951ec0c028898
-commit: 3fd63658caed9494cca1d4789a66d3d2def2a0ab [4/13] ASoC: Intel: Drop hdac_ext usage for codec device creation
-config: x86_64-randconfig-a002-20211028 (https://download.01.org/0day-ci/archive/20220823/202208230107.aJwMhDQM-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/3fd63658caed9494cca1d4789a66d3d2def2a0ab
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tiwai/sound/for-next
-        git checkout 3fd63658caed9494cca1d4789a66d3d2def2a0ab
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/intel/skylake/
+On Sun, Aug 21, 2022 at 8:02 AM Sander Vanheule <sander@svanheule.net> wrote:
+>
+> When replacing KUNIT_BINARY_*_MSG_ASSERTION() macros with
+> KUNIT_BINARY_INT_ASSERTION(), the assert_type parameter was not always
+> correctly transferred.  Specifically, the following errors were
+> introduced:
+>   - KUNIT_EXPECT_LE_MSG() uses KUNIT_ASSERTION
+>   - KUNIT_ASSERT_LT_MSG() uses KUNIT_EXPECTATION
+>   - KUNIT_ASSERT_GT_MSG() uses KUNIT_EXPECTATION
+>
+> A failing KUNIT_EXPECT_LE_MSG() test thus prevents further tests from
+> running, while failing KUNIT_ASSERT_{LT,GT}_MSG() tests do not prevent
+> further tests from running.  This is contrary to the documentation,
+> which states that failing KUNIT_EXPECT_* macros allow further tests to
+> run, while failing KUNIT_ASSERT_* macros should prevent this.
+>
+> Revert the KUNIT_{ASSERTION,EXPECTATION} switches to fix the behaviour
+> for the affected macros.
+>
+> Fixes: 40f39777ce4f ("kunit: decrease macro layering for integer asserts")
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for catching this!
+I scanned over the file again looking for other errors. I think this
+patch fixes all of them.
 
-All warnings (new ones prefixed by >>):
-
-   sound/soc/intel/skylake/skl.c: In function 'probe_codec':
->> sound/soc/intel/skylake/skl.c:729:25: warning: unused variable 'skl' [-Wunused-variable]
-     729 |         struct skl_dev *skl = bus_to_skl(bus);
-         |                         ^~~
-
-
-vim +/skl +729 sound/soc/intel/skylake/skl.c
-
-e4746d94d00c529 Cezary Rojewski      2022-08-16  720  
-d8c2dab8381d583 Jeeja KP             2015-07-09  721  /*
-d8c2dab8381d583 Jeeja KP             2015-07-09  722   * Probe the given codec address
-d8c2dab8381d583 Jeeja KP             2015-07-09  723   */
-76f56fae1cf9040 Rakesh Ughreja       2018-06-01  724  static int probe_codec(struct hdac_bus *bus, int addr)
-d8c2dab8381d583 Jeeja KP             2015-07-09  725  {
-d8c2dab8381d583 Jeeja KP             2015-07-09  726  	unsigned int cmd = (addr << 28) | (AC_NODE_ROOT << 20) |
-d8c2dab8381d583 Jeeja KP             2015-07-09  727  		(AC_VERB_PARAMETERS << 8) | AC_PAR_VENDOR_ID;
-e6a33532affd14c Dan Carpenter        2017-04-20  728  	unsigned int res = -1;
-bcc2a2dc3ba8c3a Cezary Rojewski      2019-07-23 @729  	struct skl_dev *skl = bus_to_skl(bus);
-8c4e7c2ee8096b5 Pierre-Louis Bossart 2018-11-18  730  #if IS_ENABLED(CONFIG_SND_SOC_INTEL_SKYLAKE_HDAUDIO_CODEC)
-6bae5ea94989264 Rakesh Ughreja       2018-08-22  731  	struct hdac_hda_priv *hda_codec;
-8c4e7c2ee8096b5 Pierre-Louis Bossart 2018-11-18  732  #endif
-3fd63658caed949 Cezary Rojewski      2022-08-16  733  	struct hda_codec *codec;
-d8c2dab8381d583 Jeeja KP             2015-07-09  734  
-d8c2dab8381d583 Jeeja KP             2015-07-09  735  	mutex_lock(&bus->cmd_mutex);
-d8c2dab8381d583 Jeeja KP             2015-07-09  736  	snd_hdac_bus_send_cmd(bus, cmd);
-d8c2dab8381d583 Jeeja KP             2015-07-09  737  	snd_hdac_bus_get_response(bus, addr, &res);
-d8c2dab8381d583 Jeeja KP             2015-07-09  738  	mutex_unlock(&bus->cmd_mutex);
-d8c2dab8381d583 Jeeja KP             2015-07-09  739  	if (res == -1)
-d8c2dab8381d583 Jeeja KP             2015-07-09  740  		return -EIO;
-00deadb5d86a3c1 Rakesh Ughreja       2018-08-22  741  	dev_dbg(bus->dev, "codec #%d probed OK: %x\n", addr, res);
-d8c2dab8381d583 Jeeja KP             2015-07-09  742  
-
-:::::: The code at line 729 was first introduced by commit
-:::::: bcc2a2dc3ba8c3a7aed856f840afa6a47e3cb8e0 ASoC: Intel: Skylake: Merge skl_sst and skl into skl_dev struct
-
-:::::: TO: Cezary Rojewski <cezary.rojewski@intel.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Daniel Latypov <dlatypov@google.com>

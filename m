@@ -2,170 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7C159C52B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AE759C527
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237064AbiHVRkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
+        id S236484AbiHVRkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235360AbiHVRkA (ORCPT
+        with ESMTP id S237048AbiHVRjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:40:00 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815B73F332;
-        Mon, 22 Aug 2022 10:39:59 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MGBj1W017156;
-        Mon, 22 Aug 2022 17:39:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=LLQbnt0q20UFDDZ3yGUxRCh9F6rYZEakZkSemAYNDz0=;
- b=l4O2LQ4b+48Y2b5DbW1GS09Ly8JzaBLZaS0gBXC3VkjUvj/hldFY/Qgn/oEPAkVT931f
- 0FtS6g4/KYfkctQgTvxXRaWg2HEovJYovqd2qKF0VsL+H/7qHI2yyqi1ba3gQD1KOpFe
- IOrL04i+ZG/G6CAwfz/CXa1uqK5mZ1sBUmzXSb8oxyLdL1M+T9heR6Z1QjnvQj/lr1+u
- EdD7vu8CTN/RxHtMHgQB/P8OwRhpQlKZ6dNxJHoxvvvgtDXA7mYNruOMLf9cgJAa/ICs
- N4gM94Kcgpb7wf4gtC65YOsHEdOwp3DT4z1GVvjDSgqOp+iuGVNfB8znjSezdAu5USsO tg== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4d3w2gax-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 17:39:51 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27MHLM14021957;
-        Mon, 22 Aug 2022 17:39:48 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3j2q88tqnt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 17:39:48 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27MHe62F33751454
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 17:40:06 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 78A05A404D;
-        Mon, 22 Aug 2022 17:39:46 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CADB0A4040;
-        Mon, 22 Aug 2022 17:39:43 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.20.129])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Aug 2022 17:39:43 +0000 (GMT)
-Message-ID: <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jeff Layton <jlayton@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Dave Chinner <david@fromorbit.com>
-Date:   Mon, 22 Aug 2022 13:39:42 -0400
-In-Reply-To: <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-References: <20220822133309.86005-1-jlayton@kernel.org>
-         <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
-         <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: DPsvjf5TeA-4Aml2sZxqU_iiU1YlCmIP
-X-Proofpoint-ORIG-GUID: DPsvjf5TeA-4Aml2sZxqU_iiU1YlCmIP
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 22 Aug 2022 13:39:53 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE46A40BD8
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:50 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id z25so16323405lfr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=oZtQ/WFsgMHD1ADUx1lXU0GWvfCZk4DciPrC4xHBmeo=;
+        b=ESNJlDwwLUrymdH68KLBiBoUbRDrU0LvEqC6sPEtHnwPtcOtngzkU78N0rz0NnYLij
+         lsPZW+Z4Nq4PIUjlI6KYg6hG1Jg642JCGKGd4w8KCTiPq0cZl7NcIdxleU9M/fl7R5Aa
+         0l53PozQ0tmUIUrN/lVXWv9O6JpyWDm1U5C12Pwe2ZtbUbvZVODgdxmfV3hxS0qNlDtQ
+         2PiGETBptGNU2UUYw44vyFYRcwSmdRtMgRhK4gV8fWMicIqX9o5swC6ZG7dY50a6qzpb
+         LhAyGA21Bze3OjYjn9NTddMLRPxDTM3Zv7YTrqhh3TqvEIAx25Sf8hJm4fN2BZCvGH0o
+         poLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=oZtQ/WFsgMHD1ADUx1lXU0GWvfCZk4DciPrC4xHBmeo=;
+        b=10eh8/5fmccHpzNIGhYgg3Iuk5bFxvkuhiUO9Et7eTpQsFXB2kjtxUsfByd72fkx4T
+         AxbtTrZ2YRDK/efTaCCIR3qb9azyi0ClkgYl6ZMhPaXEjGRU9Q/zjA0WqL6tvjAnLwNX
+         ONp17RS9M0BxAVQWnQQWliTHnxCWx0jAVfp1QA/7spMn6V2z1zVimfNG5Vma/U/RiScR
+         v9asstUDHBVl+pd6PzmFfbBsYWb5pDvVnTtQMKgbZLop+OXyB+j311CxRXFkXCj5jPIm
+         ht4oa2c+17rDIDhUihQ90Tw9U+cTA2Wi9gz8Cykw8UOxFTUIvVBsQWvmBJqDK3NZNbLf
+         H16w==
+X-Gm-Message-State: ACgBeo1PbGjsDhAYNb4XEZoQUIvFDOgKmCv0yFn2uRWs7qAEtOcWdomG
+        SQNFmH3pY2O03tf/rWbLj8VGsA==
+X-Google-Smtp-Source: AA6agR4htFOFSAWl6c7BpunUIKLnmTFNLNG3Fia/CHZbF7Xxnrp6rEzVwwgfC7JJMb7eNB1tHyPLMQ==
+X-Received: by 2002:ac2:4e6a:0:b0:492:f027:218e with SMTP id y10-20020ac24e6a000000b00492f027218emr763637lfs.676.1661189989298;
+        Mon, 22 Aug 2022 10:39:49 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id p5-20020a05651238c500b0048a83336343sm2020168lft.252.2022.08.22.10.39.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 10:39:48 -0700 (PDT)
+Message-ID: <d8db1648-edcd-3580-60d3-96ef91d6bbed@linaro.org>
+Date:   Mon, 22 Aug 2022 20:39:47 +0300
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 spamscore=0 clxscore=1015
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208220073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH 1/4] dt-bindings: net: can: add STM32 bxcan DT
+ bindings
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Dario Binacchi <dariobin@libero.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
+ <20220817143529.257908-2-dario.binacchi@amarulasolutions.com>
+ <b851147b-6453-c19e-7c31-a9cf8f87c1a4@linaro.org>
+ <CABGWkvomGpo9zWi59YNYfRfzAZZ90D9_HaiVV3Gs_x_eQ59e5A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CABGWkvomGpo9zWi59YNYfRfzAZZ90D9_HaiVV3Gs_x_eQ59e5A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-22 at 12:22 -0400, Jeff Layton wrote:
-> On Mon, 2022-08-22 at 11:40 -0400, Mimi Zohar wrote:
-> > On Mon, 2022-08-22 at 09:33 -0400, Jeff Layton wrote:
-> > > Add an explicit paragraph codifying that atime updates due to reads
-> > > should not be counted against the i_version counter. None of the
-> > > existing subsystems that use the i_version want those counted, and
-> > > there is an easy workaround for those that do.
-> > > 
-> > > Cc: NeilBrown <neilb@suse.de>
-> > > Cc: Trond Myklebust <trondmy@hammerspace.com>
-> > > Cc: Dave Chinner <david@fromorbit.com>
-> > > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326033@noble.neil.brown.name/#t
-> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > ---
-> > >  include/linux/iversion.h | 10 ++++++++--
-> > >  1 file changed, 8 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> > > index 3bfebde5a1a6..da6cc1cc520a 100644
-> > > --- a/include/linux/iversion.h
-> > > +++ b/include/linux/iversion.h
-> > > @@ -9,8 +9,8 @@
-> > >   * ---------------------------
-> > >   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
-> > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_version must
-> > > - * appear different to observers if there was a change to the inode's data or
-> > > - * metadata since it was last queried.
-> > > + * appear different to observers if there was an explicit change to the inode's
-> > > + * data or metadata since it was last queried.
-> > >   *
-> > >   * Observers see the i_version as a 64-bit number that never decreases. If it
-> > >   * remains the same since it was last checked, then nothing has changed in the
-> > > @@ -18,6 +18,12 @@
-> > >   * anything about the nature or magnitude of the changes from the value, only
-> > >   * that the inode has changed in some fashion.
-> > >   *
-> > > + * Note that atime updates due to reads or similar activity do _not_ represent
-> > > + * an explicit change to the inode. If the only change is to the atime and it
-> > 
-> > Thanks, Jeff.  The ext4 patch increments i_version on file metadata
-> > changes.  Could the wording here be more explicit to reflect changes
-> > based on either inode data or metadata changes?b
-> > 
-> > 
+On 20/08/2022 11:08, Dario Binacchi wrote:
+> Hi Krzysztof,
 > 
-> Thanks Mimi,
+> On Thu, Aug 18, 2022 at 10:22 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 17/08/2022 17:35, Dario Binacchi wrote:
+>>> Add documentation of device tree bindings for the STM32 basic extended
+>>> CAN (bxcan) controller.
+>>>
+>>> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+>>> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>>
+>> You do not need two SoBs. Keep only one, matching the From field.
 > 
-> Care to suggest some wording?
-> 
-> The main issue we have is that ext4 and xfs both increment i_version on
-> atime updates due to reads. I have patches in flight to fix those, but
-> going forward, we want to ensure that i_version gets incremented on all
-> changes _except_ for atime updates.
-> 
-> The best wording we have at the moment is what Trond suggested, which is
-> to classify the changes to the inode as "explicit" (someone or something
-> made a deliberate change to the inode) and "implicit" (the change to the
-> inode was due to activity such as reads that don't actually change
-> anything).
-> 
-> Is there a better way to describe this?
+> I started implementing this driver in my spare time, so my intention
+> was to keep track of it.
 
-"explicit change to the inode" probably implies both the inode file
-data and metadata, but let's call it out by saying "an explicit change
-to either the inode data or metadata".
+SoB is not related to copyrights. Keep personal copyrights (with/next to
+work ones), but SoB is coming from a person and that's only one. Choose
+one "person".
 
 > 
-> > > + * wasn't set via utimes() or a similar mechanism, then i_version should not be
-> > > + * incremented. If an observer cares about atime updates, it should plan to
-> > > + * fetch and store them in conjunction with the i_version.
-> > > + *
-> > >   * Not all filesystems properly implement the i_version counter. Subsystems that
-> > >   * want to use i_version field on an inode should first check whether the
-> > >   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION macro).
-> > 
-> > 
+>>
+>>> ---
+>>>
+>>>  .../devicetree/bindings/net/can/st,bxcan.yaml | 139 ++++++++++++++++++
+>>>  1 file changed, 139 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/can/st,bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+>>> new file mode 100644
+>>> index 000000000000..f4cfd26e4785
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+>>
+>> File name like compatible, so st,stm32-bxcan-core.yaml (or some other
+>> name, see comment later)
 > 
+>>
+>>> @@ -0,0 +1,139 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/net/can/st,bxcan.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: STMicroelectronics bxCAN controller Device Tree Bindings
+>>
+>> s/Device Tree Bindings//
+> 
+>>
+>>> +
+>>> +description: STMicroelectronics BxCAN controller for CAN bus
+>>> +
+>>> +maintainers:
+>>> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>>> +
+>>> +allOf:
+>>> +  - $ref: can-controller.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - st,stm32-bxcan-core
+>>
+>> compatibles are supposed to be specific. If this is some type of
+>> micro-SoC, then it should have its name/number. If it is dedicated
+>> device, is the final name bxcan core? Google says  the first is true, so
+>> you miss specific device part.
+> 
+> I don't know if I understand correctly, I hope the change in version 2
+> is what you requested.
+
+What is the name of the SoC, where this is in?
+
+> 
+>>
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  resets:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    description:
+>>> +      Input clock for registers access
+>>> +    maxItems: 1
+>>> +
+>>> +  '#address-cells':
+>>> +    const: 1
+>>> +
+>>> +  '#size-cells':
+>>> +    const: 0
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - resets
+>>> +  - clocks
+>>> +  - '#address-cells'
+>>> +  - '#size-cells'
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +patternProperties:
+>>
+>> This goes after "properties: in top level (before "required").
+>>
+>>> +  "^can@[0-9]+$":
+>>> +    type: object
+>>> +    description:
+>>> +      A CAN block node contains two subnodes, representing each one a CAN
+>>> +      instance available on the machine.
+>>> +
+>>> +    properties:
+>>> +      compatible:
+>>> +        enum:
+>>> +          - st,stm32-bxcan
+>>
+>> Why exactly do you need compatible for the child? Is it an entierly
+>> separate device?
+> 
+> I took inspiration from other drivers for ST microcontroller
+> peripherals (e. g. drivers/iio/adc/stm32-adc-core.c,
+> drivers/iio/adc/stm32-adc.c) where
+> some resources are shared between the peripheral instances. In the
+> case of CAN, master (CAN1) and slave (CAN2) share the registers for
+> configuring the filters and the clock.
+> In the core module you can find the functions about the shared
+> resources, while the childrens implement the driver.
+
+In both cases you refer to the driver, but we talk here about bindings
+which are rather not related. So I repeat the question - is the child
+entirely separate device which can be used in other devices?
 
 
+Best regards,
+Krzysztof

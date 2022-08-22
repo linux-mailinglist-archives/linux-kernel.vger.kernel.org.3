@@ -2,129 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59FA459C595
+	by mail.lfdr.de (Postfix) with ESMTP id 0CABA59C594
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237359AbiHVR7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S237362AbiHVR7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237348AbiHVR7D (ORCPT
+        with ESMTP id S235409AbiHVR7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:59:03 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB1F11449
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:59:02 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r16so14180822wrm.6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=EUyd4jlEPdu2E04TX94+ZqkeQ1RHJEM/l4894KX+1RI=;
-        b=MeWyHm0q0Pn5H7jy3Gnse1nLhND4hl4mLyG7HzOw33K2kgaEiF8NFPb4tdyrUGTPuB
-         0ew++X1twb4M/yOw47i6pw+OKz4cNvoTkP5zqO3SxAsn5xaxWVJzERksDO32BESSvS8a
-         zozxotAm4ztumR6A272Go9EwjmWuiHP7Nrb8X8vbVFQJk7yo4qYTCZIiBxGHb704g+uR
-         9v8rgOGwVs2Naen2wB3HwNbatttZMVpTQtpnT8M2gC/vi+LAQx/jr1dMU6wY4BDEnE0C
-         cM+/aL9QFt9HeMR9pHeHa7aCtJHMw+gp2vIlR9Ta0HQidUxNZ/xr9TcTEU+sLluXiKnR
-         xd7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=EUyd4jlEPdu2E04TX94+ZqkeQ1RHJEM/l4894KX+1RI=;
-        b=Zul5IHJSnKnyXPv9SWGSJbTOpYqWtjf5o6pwhN8dTIOkkb1RKwufwLOACe7+2bXcYX
-         JF4oei1dKRt0sfLVhmopGWm5sfmBjrXyGJ1zvX915RxApFsS+PGM2P4wB6NT02JsCj38
-         Ru5MSwpGk9lHLI6yWtKCucINRdfL8rZgQf4QauheINoyKsk7vdAB4NM3TUZTwMoEj73r
-         bxXJXCDJ1FSUzfKxFaHoSGVlqKyb2gVKwR8r5GP7+fxK610eVg614x0GBbYTmOZHZPtJ
-         Ke3swWjBAJbvfj9bE/C7w5fAGcHs71uPodW0/Db5Dr6Z3mnjc1nei6VET6zeAYeqjX08
-         mGSQ==
-X-Gm-Message-State: ACgBeo3dn3OtbNe8VmxkmnOTOp/XdRttcVgXzLyf23KqLh/tKtzCdE0p
-        ygfI5RN+BngSCE79K9Q4Bpg=
-X-Google-Smtp-Source: AA6agR7oJPpSKqwQuz0jGvu+7KlQp7PRBXZYYJHNo0GN3dN0Nfsaf3r1bbt9xIdZgxuxWh/O1d1VUg==
-X-Received: by 2002:adf:f982:0:b0:225:2dad:3ee8 with SMTP id f2-20020adff982000000b002252dad3ee8mr11252602wrr.226.1661191141086;
-        Mon, 22 Aug 2022 10:59:01 -0700 (PDT)
-Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id h5-20020a05600c350500b003a6125562e1sm15377071wmq.46.2022.08.22.10.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 10:58:59 -0700 (PDT)
-Message-ID: <76b7bb06-8eae-4340-4cf3-d4b39e366307@gmail.com>
-Date:   Mon, 22 Aug 2022 19:58:55 +0200
+        Mon, 22 Aug 2022 13:59:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAC711456
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:59:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6827A33E3F;
+        Mon, 22 Aug 2022 17:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661191148; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1/zTUhQrbC/7qpGA30WfWqlePGy+CwLE43bs3sA5UyA=;
+        b=amZwreonC27XDSyxh75t6Ubc3eutJmy2ZZgLLmxnrco9X1BUnpCQFEzqcGVJd2OyUllNWS
+        RXKBlYnBgeoHBB6QnHBxtr6kbprucvlKlUcmJaCVG3gDtDUF14Aomh+ipwAnRgMoDSZvyY
+        nhnG6zpw+I2OBPVA4ix7sCKY8lUNYJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661191148;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1/zTUhQrbC/7qpGA30WfWqlePGy+CwLE43bs3sA5UyA=;
+        b=VD1bsxjtFktzBe4Oo6yoNqpQCOUP5QpUlmNp3v/fXKqF1I6qSoO1s2w8KXNTVJk+aetFdd
+        +c3qv5gT1DstUhCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 409DD1332D;
+        Mon, 22 Aug 2022 17:59:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vz+6D+zDA2P2TwAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 22 Aug 2022 17:59:08 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 5835DA066F; Mon, 22 Aug 2022 19:59:07 +0200 (CEST)
+Date:   Mon, 22 Aug 2022 19:59:07 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Jan Kara <jack@suse.cz>, Gaosheng Cui <cuigaosheng1@huawei.com>,
+        eparis@redhat.com, mszeredi@redhat.com, amir73il@gmail.com,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] audit: fix potential double free on error path from
+ fsnotify_add_inode_mark
+Message-ID: <20220822175907.q35mhoqdtdqxture@quack3>
+References: <20220822022905.1949007-1-cuigaosheng1@huawei.com>
+ <20220822085050.hxj6qmgj2x2tj6uv@quack3>
+ <CAHC9VhSw0zJWQEm-GCzQy_-4-X-yVuzvX1wBFcYMkG1mOXy+BA@mail.gmail.com>
+ <20220822152055.hitwrvi3lmldhcgx@quack3>
+ <CAHC9VhQoTHZ4SFz2k7=2OLKFdrpmxq8ei-sNDNfV0MFtJsqpFg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 00/19] staging: r8188eu: migrate os_dep/xmit_linux.c
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220820181623.12497-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220820181623.12497-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhQoTHZ4SFz2k7=2OLKFdrpmxq8ei-sNDNfV0MFtJsqpFg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/20/22 20:16, Michael Straube wrote:
-> This series moves the functions, or their functionality, from
-> os_dep/xmit_linux.c to the core/* part of the driver and finally
-> removes os_dep/xmit_linux.c and the xmit_osdep.h header.
+On Mon 22-08-22 13:39:23, Paul Moore wrote:
+> On Mon, Aug 22, 2022 at 11:20 AM Jan Kara <jack@suse.cz> wrote:
+> > On Mon 22-08-22 10:34:15, Paul Moore wrote:
+> > > On Mon, Aug 22, 2022 at 4:50 AM Jan Kara <jack@suse.cz> wrote:
+> > > > On Mon 22-08-22 10:29:05, Gaosheng Cui wrote:
+> > > > > Audit_alloc_mark() assign pathname to audit_mark->path, on error path
+> > > > > from fsnotify_add_inode_mark(), fsnotify_put_mark will free memory
+> > > > > of audit_mark->path, but the caller of audit_alloc_mark will free
+> > > > > the pathname again, so there will be double free problem.
+> > > > >
+> > > > > Fix this by resetting audit_mark->path to NULL pointer on error path
+> > > > > from fsnotify_add_inode_mark().
+> > > > >
+> > > > > Fixes: 7b1293234084d ("fsnotify: Add group pointer in fsnotify_init_mark()")
+> > > > > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> > > >
+> > > > Good spotting! The patch looks good to me. Feel free to add:
+> > > >
+> > > > Reviewed-by: Jan Kara <jack@suse.cz>
+> > > >
+> > > > > ---
+> > > > >  kernel/audit_fsnotify.c | 1 +
+> > > > >  1 file changed, 1 insertion(+)
+> > > > >
+> > > > > diff --git a/kernel/audit_fsnotify.c b/kernel/audit_fsnotify.c
+> > > > > index 6432a37ac1c9..c565fbf66ac8 100644
+> > > > > --- a/kernel/audit_fsnotify.c
+> > > > > +++ b/kernel/audit_fsnotify.c
+> > > > > @@ -102,6 +102,7 @@ struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pa
+> > > > >
+> > > > >       ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, 0);
+> > > > >       if (ret < 0) {
+> > > > > +             audit_mark->path = NULL;
+> > > > >               fsnotify_put_mark(&audit_mark->mark);
+> > >
+> > > As I'm tracing the code path from audit through fsnotify, and back
+> > > into audit, I'm wondering if we still have a problem.  When
+> > > fsnotify_add_inode_mark() fails it will end up freeing not just
+> > > audit_mark->path, but audit_mark itself via audit_fsnotify_mark_free()
+> > > (via a call into fsnotify_put_mark()), yes?
+> >
+> > I don't think so. fsnotify_add_mark_locked() will call fsnotify_put_mark()
+> > but that is just a counter part to fsnotify_get_mark() a few lines above.
+> > The caller of fsnotify_add_inode_mark() still holds its own mark reference
+> > which prevents mark from being freed.
 > 
-> Tested on x86_64 with Inter-Tech DMG-02.
-> 
-> Please apply this on top of:
-> [PATCH] staging: r8188eu: remove rtw_endofpktfile()
-> 
-> Thanks,
-> Michael
-> 
-> Michael Straube (19):
->    staging: r8188eu: make rtw_remainder_len() static
->    staging: r8188eu: make rtw_os_xmit_schedule() static
->    staging: r8188eu: rename rtw_os_xmit_schedule()
->    staging: r8188eu: make rtw_os_xmit_resource_alloc() static
->    staging: r8188eu: rename rtw_os_xmit_resource_alloc()
->    staging: r8188eu: make rtw_os_xmit_resource_free() static
->    staging: r8188eu: rename rtw_os_xmit_resource_free()
->    staging: r8188eu: make _rtw_open_pktfile() static
->    staging: r8188eu: rename _rtw_open_pktfile()
->    staging: r8188eu: make _rtw_pktfile_read() static
->    staging: r8188eu: rename _rtw_pktfile_read()
->    staging: r8188eu: remove unnecessary initialization to zero
->    staging: r8188eu: move struct pkt_file to rtw_xmit.h
->    staging: r8188eu: move rtw_os_xmit_complete() to rtw_xmit.c
->    staging: r8188eu: rename rtw_os_xmit_complete()
->    staging: r8188eu: make rtw_os_pkt_complete() static
->    staging: r8188eu: rename rtw_os_pkt_complete()
->    staging: r8188eu: remove os_dep/xmit_linux.c
->    staging: r8188eu: remove xmit_osdep.h
-> 
->   drivers/staging/r8188eu/Makefile             |   1 -
->   drivers/staging/r8188eu/core/rtw_mlme.c      |  23 +-
->   drivers/staging/r8188eu/core/rtw_mlme_ext.c  |   2 +-
->   drivers/staging/r8188eu/core/rtw_sta_mgt.c   |   1 -
->   drivers/staging/r8188eu/core/rtw_xmit.c      | 232 +++++++++++++++++--
->   drivers/staging/r8188eu/hal/rtl8188eu_xmit.c |   4 +-
->   drivers/staging/r8188eu/include/rtw_xmit.h   |  16 +-
->   drivers/staging/r8188eu/include/xmit_osdep.h |  48 ----
->   drivers/staging/r8188eu/os_dep/os_intfs.c    |   7 +-
->   drivers/staging/r8188eu/os_dep/usb_intf.c    |   1 -
->   drivers/staging/r8188eu/os_dep/xmit_linux.c  | 226 ------------------
->   11 files changed, 251 insertions(+), 310 deletions(-)
->   delete mode 100644 drivers/staging/r8188eu/include/xmit_osdep.h
->   delete mode 100644 drivers/staging/r8188eu/os_dep/xmit_linux.c
-> 
+> Okay, that sounds reasonable, but I'm still looking for a code path
+> that only frees audit_mark:path and not the audit_mark itself.  What
+> am I not seeing?
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+The callers of audit_alloc_mark() call kfree(path) if audit_alloc_mark()
+returns error (which is a sensible thing because in some cases path indeed
+needs freeing).
 
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

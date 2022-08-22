@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E4C59C3D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CD959C3D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbiHVQNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S235914AbiHVQO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236682AbiHVQNX (ORCPT
+        with ESMTP id S235004AbiHVQOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:13:23 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89511E0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:13:20 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso14460729pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=UvJx9+FEYI5OIrLAKKjR26v13dLPxbliBeR/lXbsskg=;
-        b=DNpb3tFZCML7MqYbpRmaxEdD+a52S8g/qpeXjiKWkZLUrtrh4A6rseWJ0IIDGmbl2a
-         sFdNSXz4liV6aRpQP2daQXAoZG3fHTHJWJ86CcWSanH/lD28ibkbSJTJ/85BfeKVh9wa
-         /iWoYBBtT/X/Q6awAfhOldx8FwIsFEhJJroD0rjdScBX+C1SA+jubGHvoVY5F17KINRK
-         urXSFuDh6YKiFbAq4R7u0gPBVVtAFygkaM4ouIOyIjdBIHfntIbbEeZdVahUd2l/1oyK
-         D3L5DKjSpdhUbV5R8Qacb7bX4enX/2gMlyPM9N7CJx1MyDkpRJLBXryHCHc+kCDzPUqd
-         3jfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=UvJx9+FEYI5OIrLAKKjR26v13dLPxbliBeR/lXbsskg=;
-        b=EmHz7sHfBCYI46bjQCHa5F1O3M4rR4aCvW6gFKQn62fFCpX3SE7cjKTDczAtXjqrH9
-         VGQMKJ8718JfZQxwtX1WzScFREo1f3Xld8O//9fyJUqicgKtczhDjpTP4SukRvKVb+BX
-         W4fyS+eoeVSWFm3vNQ2CK0y4ul+HpmUb+O/OoQG5g+mVIXt1qwaKAsGYwWh+VxoViRLW
-         31C205CP7HowAhkO8KDiDoSzVFBIlgcivimli5zS0OLL6HE8sOwE+L4kTbB/CABoTY6L
-         JB5JhC+zQrZXjn1fAQjh2VNdR3RI6sxuVRH3mSZRTeg9yOxyDwLhQX7Bm/1qGo+nMQ4W
-         Uxzg==
-X-Gm-Message-State: ACgBeo3dIzbYf1z5bjUvkWRvu2d0dExpvko+2UN8uKL4T/EsL0VJsNKI
-        tlayBqH4WLN6VJBE/WxF/AWvmQ==
-X-Google-Smtp-Source: AA6agR5O3f2KBXdwaPcI9TqoK/2TMHHcLKZEqJUKozItOTNCtDb1pJs78mwUAlxyD8P7U4366S1lPw==
-X-Received: by 2002:a17:90a:ab14:b0:1fa:b97f:c28b with SMTP id m20-20020a17090aab1400b001fab97fc28bmr23897669pjq.71.1661184800329;
-        Mon, 22 Aug 2022 09:13:20 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902bccc00b0016db7f49cc2sm8540708pls.115.2022.08.22.09.13.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:13:19 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 16:13:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct hv_enlightened_vmcs'
- definition
-Message-ID: <YwOrG3W3zAZ7VNJu@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-4-vkuznets@redhat.com>
- <Yv5ZFgztDHzzIQJ+@google.com>
- <875yiptvsc.fsf@redhat.com>
- <Yv59dZwP6rNUtsrn@google.com>
- <87czcsskkj.fsf@redhat.com>
+        Mon, 22 Aug 2022 12:14:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2C32C10B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:14:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC1DF611D7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D95C433C1;
+        Mon, 22 Aug 2022 16:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661184862;
+        bh=VfxwmQyY1k2NzPt+1UZYvEgGjJI2gAhCSwC0aBuS5l0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e1NwVfeJ9Ad/qSBNDH68vNs1WvlmFEYBCjEdHHePKRbkFqng4aiLqjPoiRXO0Wx1e
+         IA5FZYoULIcx3QO5frlh9X197PP8TtK++mizaMp+FfrnqNoNzITLLz1oS0TDp9+JA6
+         0yRVMQSS7zG9T6Teuc8ubsI/mGd/GKIXFPcLULQKsKhpDn1QGJSUaGcBOJL3v9EQbM
+         FMlCJI7iqDMCi0X9vLxRSeA8R14dwZ4+DDiWIIYEvH2t0cLSLw90ESOTdgu58oExJL
+         5WMcHbb2KLtCP/Z8sdP1n0FBT9z01iJmqeoMKSSr8JZlGwsI7z1UrZRRtuTFaQLuD3
+         yBdeuNX22JvGQ==
+Date:   Mon, 22 Aug 2022 17:14:17 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: dapm: Export new 'graph.dot' file in debugfs
+Message-ID: <YwOrWf3+9c3o5FPO@sirena.org.uk>
+References: <20220822095242.3779-1-povik+lin@cutebit.org>
+ <YwN2Pd4Ez08yDFno@sirena.org.uk>
+ <3234D74E-0DFF-4BB5-87ED-6135BAC1F31D@cutebit.org>
+ <19b60ea9-6bee-1cc9-5384-89231fce3a99@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/lY9LArAiCvVh4P1"
 Content-Disposition: inline
-In-Reply-To: <87czcsskkj.fsf@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <19b60ea9-6bee-1cc9-5384-89231fce3a99@linux.intel.com>
+X-Cookie: Do not write in this space.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
-> So I reached out to Microsoft and their answer was that for all these new
-> eVMCS fields (including *PerfGlobalCtrl) observing architectural VMX
-> MSRs should be enough. *PerfGlobalCtrl case is special because of Win11
-> bug (if we expose the feature in VMX feature MSRs but don't set
-> CPUID.0x4000000A.EBX BIT(0) it just doesn't boot).
 
-Does this mean that KVM-on-HyperV needs to avoid using the PERF_GLOBAL_CTRL fields
-when the bit is not set?
+--/lY9LArAiCvVh4P1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Aug 22, 2022 at 03:06:03PM +0200, Pierre-Louis Bossart wrote:
+
+> The Chrome folks used an 'asoc_dapm_graph' python script since 2014
+> according to the copyright information. IIRC it was python2 so might
+> need a bit of work.
+
+> https://chromium.googlesource.com/chromiumos/third_party/adhd/+/refs/heads/master/scripts/asoc_dapm_graph
+
+That's a different tool but also interesting - doesn't look like it's
+too advanced Python wise so should be fairly easy to update for any
+Python 3 incompatibilities.
+
+--/lY9LArAiCvVh4P1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDq1kACgkQJNaLcl1U
+h9CgJQf/T/noyjLy9gGJUSy87tOqoWe7zUNpA0QTr56GbMNO9ICucL8cwYYuoqkL
+JH7Fi++XqbeFFCSsfC13R4cwaJgYCRAshf2Za/IsSn9TTT8InHl6n4OHXo2hV/4E
+4VB7dDPi5pfG2qZXLcJmDMKXekSmUAwPhso0+F/1Yvo6sruKwtYb6DPthKKpadJF
+tXWrYhxxt7/LmDL62PBqUEUV9y7rWj7Hc6tI2Rtba4HGlra+jdQNbMOZDo+3ipkL
+FY8A6RqLDI7J02C8OUEkO77u8jYs3mBlmfiPzZE9EcXhqXlYiWpS7EvPXhL4i0DT
+/L/N6X2H/jfMtn3ywl7/oGFBAjRNfQ==
+=0/Pw
+-----END PGP SIGNATURE-----
+
+--/lY9LArAiCvVh4P1--

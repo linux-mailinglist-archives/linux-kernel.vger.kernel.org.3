@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3372E59BD9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAFF59BD9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiHVKbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S234101AbiHVKcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiHVKbm (ORCPT
+        with ESMTP id S233296AbiHVKbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:31:42 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E5C2F3A7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:31:41 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id l64so9016372pge.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:31:41 -0700 (PDT)
+        Mon, 22 Aug 2022 06:31:53 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57562F645
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:31:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id gt3so7803906ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:31:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=KvLVHIy7zFmD92aZ72OpIyLKeAlx3Wy2AZD7ansT0hI=;
-        b=uRjb+mCzNE70MMOwkG1xm8XLINlTbDkVtFqyTMQP45dT6ADUDma5G/UjvHJapmVm3e
-         Yd0J94dERpRzHrFPIGIXL16T63choHaKDPsZpuMB9ruiATjU1SOMK+mUfsV2bEx9GPVc
-         PHbZhc6tXUD/L6m7nlBT8jfNRsqInjSDtRccPdG6QIq1gGAHlJgeYyT/ABdPVC1llSXh
-         ZJqBi/ieOvLak0ErKyhg+IX6a90rtonqtdOva+e3O53ser83AcWhhLNDbx+KJZgak0gV
-         OSHQFIOE8q9AxVHsadaoONziCY7jXocYXYe3gvAl90uOl7wMBmPbj7PrAUCxPXcfObWE
-         Ziig==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=UEn91Kh68Jon3KjovjIqpiYSJJBvwvMM4suWzr1io5I=;
+        b=gfpJdUoIAslNoiUavsi9lHP9QxRxwRzXeFaLgFyGL+CdRrW0NY9FQCPlBrljMmbJ/k
+         7DqKUOpnbzQY+SNiWdWLUS8GCvpBkcQyUlrZtTi1aBRaj8IWMJritckXZelkrFmjuKH+
+         P4X/NaQqsHehmdGbYvduzo6LvQBE6vSbTC0o0lzjLd6jw0yIcEGTND5RzkPPJ/Kbfsml
+         Q0a3hCm8tnwrkBlbmFxYAPS3106IuKcxDu9EtuDYkWmLIKurQHyHbTts1ICQb87/xmcf
+         sXcrVGOJK6Tz8l3dvDloBJ6kmnMkVp4P3Uw0rUij2hfdLkC0birOrNiwnnPvRf+R5yDG
+         rIgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=KvLVHIy7zFmD92aZ72OpIyLKeAlx3Wy2AZD7ansT0hI=;
-        b=hQ6v3oFOQU6UJCIUDe4uw25CdkIyB3k6tUfZfxwzzLuqFLEFLE3h2c5R7sO4bb6jXg
-         cobP7l9OrJ7HV8yTn84fllyWRNG60uc5VwsbNnq36qhDewdp+JpL0f2n9ehUuobOcVAw
-         ygvB1uy+zFPRlRwZAJ1JEXlScompnVJyunOzsN1cgLRVTne5hFDulOnBEyPp/MSGMaT8
-         hlO5dJmfO7J/yNx7GnW/zFLjEk62FVzkb6Ptiu/NQtgnIp0yWahJK0mX18/eNAzUA99y
-         8LF6iFA+AS+/bhMyuOhs1esHPT0jwfksOZ1xbdXNQe+S5WNJJLiqcdjkXLkQnNfM32/f
-         scgQ==
-X-Gm-Message-State: ACgBeo1UCDJNcpSzPhsRIBFuvZDM1GBjUR7iZ1V2yiz906Alsa77JqWL
-        UvW/rExKVWoGCaBjJEoV92We2dGASHdG0zq5i+9Tcw==
-X-Google-Smtp-Source: AA6agR5XofIXPXZ4LEElDr9w/G89kUmRcY6qMj6MV1zWn56gcU6Qdn13Sw7kEPRLbozr1pg3nNWrORVLo40ygh5EkAU=
-X-Received: by 2002:a63:2c6:0:b0:41d:9a04:c227 with SMTP id
- 189-20020a6302c6000000b0041d9a04c227mr16202348pgc.167.1661164301179; Mon, 22
- Aug 2022 03:31:41 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UEn91Kh68Jon3KjovjIqpiYSJJBvwvMM4suWzr1io5I=;
+        b=X7B1OrCidj/xLun4jig1d0B+0njL0aZwK8g5KJotV2VB6HuMCa291edXp6sR/ULnfe
+         AkLhob9DamjqF2iZPcerIv7shn0Lpp7+DvpvQY74dYLre/NzJWqID+n1cz8YBXZ9sHR2
+         1WY58NtwSh1eRvxL245tx1j8+qtVfs+mEKlRzhNQSOeHAfhsVMzh6SeSNt7+zc+71zeB
+         izJu2ptAMo3QRvm9M8ZS0SEPhH3HH/gasexqPMEloeTgbO/JXtPc7IymC0vs6mNGuncZ
+         Y/PVQegTuIsIXsJB0nKaX/cPmcY8R+jgYp2EGy2xi1g5gCqNYEGk0rVhTBV1aEv8qdJJ
+         oAQw==
+X-Gm-Message-State: ACgBeo0DQHg1xY6JZVV1gvLEWqtnPyCWzxgCj5c2agtink1YnkFCkUWh
+        C8injVbfAldbmHE4FGKm1goIgmiZxBplI06T/GAebA==
+X-Google-Smtp-Source: AA6agR4fRoH9cmiSek3SYhtT4L3f0Sg4GbSLSShgBnbG4vvbFm4Y7uVPGkauBJx7LyH/93yfYIf7UxaJ/rZU/ZTOtik=
+X-Received: by 2002:a17:907:2cd1:b0:730:a980:d593 with SMTP id
+ hg17-20020a1709072cd100b00730a980d593mr12309967ejc.48.1661164310135; Mon, 22
+ Aug 2022 03:31:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220812071526.414285-1-jsd@semihalf.com> <a6e5b123-91da-b32d-be40-d88a82e4374e@linux.intel.com>
-In-Reply-To: <a6e5b123-91da-b32d-be40-d88a82e4374e@linux.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Mon, 22 Aug 2022 12:31:30 +0200
-Message-ID: <CAOtMz3Nt15089MrvKAzgoviY1P4B=5v08c5-8qt3=f7RhPb8BA@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: designware: Introduce semaphore reservation timer
- to AMDPSP driver
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        rrangel@chromium.org, mw@semihalf.com, upstream@semihalf.com
+References: <20220820182309.607584465@linuxfoundation.org>
+In-Reply-To: <20220820182309.607584465@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 22 Aug 2022 16:01:37 +0530
+Message-ID: <CA+G9fYverjZAJnBCYL1sKgrHYS1q=xj2L5hbPxoP+O5xDxkwpg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/10] 5.15.62-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +70,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pon., 15 sie 2022 o 13:17 Jarkko Nikula
-<jarkko.nikula@linux.intel.com> napisa=C5=82(a):
+On Sun, 21 Aug 2022 at 12:30, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On 8/12/22 10:15, Jan Dabros wrote:
-> > In order to optimize performance, limit amount of back and forth
-> > transactions between x86 and PSP. This is done by introduction of
-> > semaphore reservation period - that is window in which x86 isn't
-> > releasing the bus immediately after each I2C transaction.
-> >
-> > In order to protect PSP from being starved while waiting for
-> > arbitration, after a programmed time bus is automatically released by a
-> > deferred function.
-> >
-> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > ---
-> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 68 +++++++++++++++++----=
--
-> >   1 file changed, 53 insertions(+), 15 deletions(-)
-> >
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> This is the start of the stable review cycle for the 5.15.62 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Mon, 22 Aug 2022 18:23:01 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.62-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Thanks!
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Best Regards,
-Jan
+## Build
+* kernel: 5.15.62-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: decfb75fa34c3fc79f494f44b36d56d1d744edd5
+* git describe: v5.15.61-11-gdecfb75fa34c
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.61-11-gdecfb75fa34c
+
+## No test Regressions (compared to v5.15.61)
+
+## No metric Regressions (compared to v5.15.61)
+
+## No test Fixes (compared to v5.15.61)
+
+## No metric Fixes (compared to v5.15.61)
+
+## Test result summary
+total: 140302, pass: 123315, fail: 681, skip: 15459, xfail: 847
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 301 total, 301 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 22 total, 22 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 53 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

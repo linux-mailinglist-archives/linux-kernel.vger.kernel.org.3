@@ -2,154 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC4F59C522
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7C159C52B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235271AbiHVRkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S237064AbiHVRkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236971AbiHVRjx (ORCPT
+        with ESMTP id S235360AbiHVRkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:39:53 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA7140BDB
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:52 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id a15so8424986qko.4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Uv1Q+ndEBe3HTyOw38AbCJJcJ5R32I7V4kRhxrLgtqM=;
-        b=aaVljnny2CijbJQw8Eo8kTx5IQbRbBQye01zHb5XIHtWzHfRS3girC4c2pTvy8BKSd
-         W/FWga+mevsxN6httb8QvZSqcH2ltMkEzQuJs2DCoaad/UHlhta9hSAa+JgoqonuHvyM
-         DLnOEUsJTfLpFQkaxlD07AUwYUWfjWuDlbazo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Uv1Q+ndEBe3HTyOw38AbCJJcJ5R32I7V4kRhxrLgtqM=;
-        b=Sf0NDBOBq+zMP2YcKT6rE+kGzFlfkRlYSDDrxz1QwUUXFuF2+YG4nBStUREmlC7U51
-         Ruwp83oC/dsQhKpYwoV3kbnGRZW3gGgxGaHnXq8uO3EXL6ovQ46m8GdUPLM+UBlw//6w
-         GkQR9t6LrKKCtpEUp9gl49vIk7lIbNLJvtSWLQlNH4QVZpBGIVQxamwb1kQBdNvdCXwa
-         xHzHvHprlVqU4mKw0sctaYa4NbJOnTBUdH3+xe3vsHG2bCAZ8dbBd4IKZF5NgEh4E1SV
-         Gj5UlH3iXG4pMAHovaWYhaHtPgF1AH1UZotKIwm6o2ZLDgN3TzhDjd8ekHlY5cyXJcNN
-         1UoQ==
-X-Gm-Message-State: ACgBeo0l+Qg3ywP/9THKBQ/E6NWCVScNPwJ47XedAQS0QjVLU7OJbHQT
-        ybceqoV8cx/bGX7lryaImZjXw8kSLyPsAw==
-X-Google-Smtp-Source: AA6agR54KoS9uL3g93esKZvxeoC2phfMKBajreNUbjKcgFaitrxFdQj5JPJPSF3A2ayQHCCG7rYQ7Q==
-X-Received: by 2002:a05:620a:4f2:b0:6bb:5a52:6df6 with SMTP id b18-20020a05620a04f200b006bb5a526df6mr13237218qkh.715.1661189991520;
-        Mon, 22 Aug 2022 10:39:51 -0700 (PDT)
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com. [209.85.222.171])
-        by smtp.gmail.com with ESMTPSA id r17-20020ac85e91000000b00344c29bc045sm2147439qtx.25.2022.08.22.10.39.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 10:39:51 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id h27so8414572qkk.9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:51 -0700 (PDT)
-X-Received: by 2002:a05:620a:ecf:b0:6bb:a38:43cb with SMTP id
- x15-20020a05620a0ecf00b006bb0a3843cbmr13064469qkm.742.1661189990763; Mon, 22
- Aug 2022 10:39:50 -0700 (PDT)
+        Mon, 22 Aug 2022 13:40:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815B73F332;
+        Mon, 22 Aug 2022 10:39:59 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MGBj1W017156;
+        Mon, 22 Aug 2022 17:39:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=LLQbnt0q20UFDDZ3yGUxRCh9F6rYZEakZkSemAYNDz0=;
+ b=l4O2LQ4b+48Y2b5DbW1GS09Ly8JzaBLZaS0gBXC3VkjUvj/hldFY/Qgn/oEPAkVT931f
+ 0FtS6g4/KYfkctQgTvxXRaWg2HEovJYovqd2qKF0VsL+H/7qHI2yyqi1ba3gQD1KOpFe
+ IOrL04i+ZG/G6CAwfz/CXa1uqK5mZ1sBUmzXSb8oxyLdL1M+T9heR6Z1QjnvQj/lr1+u
+ EdD7vu8CTN/RxHtMHgQB/P8OwRhpQlKZ6dNxJHoxvvvgtDXA7mYNruOMLf9cgJAa/ICs
+ N4gM94Kcgpb7wf4gtC65YOsHEdOwp3DT4z1GVvjDSgqOp+iuGVNfB8znjSezdAu5USsO tg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4d3w2gax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 17:39:51 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27MHLM14021957;
+        Mon, 22 Aug 2022 17:39:48 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3j2q88tqnt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 17:39:48 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27MHe62F33751454
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Aug 2022 17:40:06 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 78A05A404D;
+        Mon, 22 Aug 2022 17:39:46 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CADB0A4040;
+        Mon, 22 Aug 2022 17:39:43 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.20.129])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 22 Aug 2022 17:39:43 +0000 (GMT)
+Message-ID: <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
+Subject: Re: [PATCH] iversion: update comments with info about atime updates
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jeff Layton <jlayton@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Dave Chinner <david@fromorbit.com>
+Date:   Mon, 22 Aug 2022 13:39:42 -0400
+In-Reply-To: <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
+References: <20220822133309.86005-1-jlayton@kernel.org>
+         <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
+         <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DPsvjf5TeA-4Aml2sZxqU_iiU1YlCmIP
+X-Proofpoint-ORIG-GUID: DPsvjf5TeA-4Aml2sZxqU_iiU1YlCmIP
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220822112832.v6.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
-In-Reply-To: <20220822112832.v6.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Mon, 22 Aug 2022 11:39:40 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30C=djXVvBt9kftvwDVrBQ2CBukO10aCh1keRZ2fGYtsEw@mail.gmail.com>
-Message-ID: <CAHQZ30C=djXVvBt9kftvwDVrBQ2CBukO10aCh1keRZ2fGYtsEw@mail.gmail.com>
-Subject: Re: [PATCH v6] platform/chrome: cros_ec_lpc: Move host event to prepare/complete
-To:     Tim Van Patten <timvp@google.com>
-Cc:     Rob Barnes <robbarnes@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 impostorscore=0
+ mlxlogscore=999 mlxscore=0 phishscore=0 spamscore=0 clxscore=1015
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208220073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the double email, I forgot to set my original reply to plain text.
+On Mon, 2022-08-22 at 12:22 -0400, Jeff Layton wrote:
+> On Mon, 2022-08-22 at 11:40 -0400, Mimi Zohar wrote:
+> > On Mon, 2022-08-22 at 09:33 -0400, Jeff Layton wrote:
+> > > Add an explicit paragraph codifying that atime updates due to reads
+> > > should not be counted against the i_version counter. None of the
+> > > existing subsystems that use the i_version want those counted, and
+> > > there is an easy workaround for those that do.
+> > > 
+> > > Cc: NeilBrown <neilb@suse.de>
+> > > Cc: Trond Myklebust <trondmy@hammerspace.com>
+> > > Cc: Dave Chinner <david@fromorbit.com>
+> > > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326033@noble.neil.brown.name/#t
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  include/linux/iversion.h | 10 ++++++++--
+> > >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> > > index 3bfebde5a1a6..da6cc1cc520a 100644
+> > > --- a/include/linux/iversion.h
+> > > +++ b/include/linux/iversion.h
+> > > @@ -9,8 +9,8 @@
+> > >   * ---------------------------
+> > >   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
+> > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_version must
+> > > - * appear different to observers if there was a change to the inode's data or
+> > > - * metadata since it was last queried.
+> > > + * appear different to observers if there was an explicit change to the inode's
+> > > + * data or metadata since it was last queried.
+> > >   *
+> > >   * Observers see the i_version as a 64-bit number that never decreases. If it
+> > >   * remains the same since it was last checked, then nothing has changed in the
+> > > @@ -18,6 +18,12 @@
+> > >   * anything about the nature or magnitude of the changes from the value, only
+> > >   * that the inode has changed in some fashion.
+> > >   *
+> > > + * Note that atime updates due to reads or similar activity do _not_ represent
+> > > + * an explicit change to the inode. If the only change is to the atime and it
+> > 
+> > Thanks, Jeff.  The ext4 patch increments i_version on file metadata
+> > changes.  Could the wording here be more explicit to reflect changes
+> > based on either inode data or metadata changes?b
+> > 
+> > 
+> 
+> Thanks Mimi,
+> 
+> Care to suggest some wording?
+> 
+> The main issue we have is that ext4 and xfs both increment i_version on
+> atime updates due to reads. I have patches in flight to fix those, but
+> going forward, we want to ensure that i_version gets incremented on all
+> changes _except_ for atime updates.
+> 
+> The best wording we have at the moment is what Trond suggested, which is
+> to classify the changes to the inode as "explicit" (someone or something
+> made a deliberate change to the inode) and "implicit" (the change to the
+> inode was due to activity such as reads that don't actually change
+> anything).
+> 
+> Is there a better way to describe this?
 
-On Mon, Aug 22, 2022 at 11:28 AM Tim Van Patten <timvp@google.com> wrote:
->
-> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
-> .prepare() and cros_ec_lpc_complete() during .complete(). This moves the
-> host event that the AP sends and allows the EC to log entry/exit of AP's
-> suspend/resume more accurately.
->
-> Signed-off-by: Tim Van Patten <timvp@google.com>
-> ---
->
-> Changes in v6:
-> - Fully restore fixes from v3.
->
-> Changes in v5:
-> - Restore fixes from v3.
->
-> Changes in v4:
-> - Update title and description.
->
-> Changes in v3:
-> - Update cros_ec_lpc_suspend() to cros_ec_lpc_prepare()
-> - Update cros_ec_lpc_resume() to cros_ec_lpc_complete()
->
-> Changes in v2:
-> - Include cros_ec_resume() return value in dev_info() output.
-> - Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
->
->  drivers/platform/chrome/cros_ec_lpc.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-> index 7677ab3c0ead..4158bdeee197 100644
-> --- a/drivers/platform/chrome/cros_ec_lpc.c
-> +++ b/drivers/platform/chrome/cros_ec_lpc.c
-> @@ -530,23 +530,31 @@ static const struct dmi_system_id cros_ec_lpc_dmi_table[] __initconst = {
->  MODULE_DEVICE_TABLE(dmi, cros_ec_lpc_dmi_table);
->
->  #ifdef CONFIG_PM_SLEEP
-> -static int cros_ec_lpc_suspend(struct device *dev)
-> +static int cros_ec_lpc_prepare(struct device *dev)
->  {
->         struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
->
-> +       dev_info(dev, "Prepare EC suspend\n");
-> +
->         return cros_ec_suspend(ec_dev);
->  }
->
-> -static int cros_ec_lpc_resume(struct device *dev)
-> +static void cros_ec_lpc_complete(struct device *dev)
->  {
->         struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
-> +       int ret;
-> +
-> +       ret = cros_ec_resume(ec_dev);
->
-> -       return cros_ec_resume(ec_dev);
-> +       dev_info(dev, "EC resume completed: ret = %d\n", ret);
->  }
->  #endif
->
->  static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
-> -       SET_LATE_SYSTEM_SLEEP_PM_OPS(cros_ec_lpc_suspend, cros_ec_lpc_resume)
-> +#ifdef CONFIG_PM_SLEEP
-> +       .prepare = cros_ec_lpc_prepare,
-> +       .complete = cros_ec_lpc_complete
-> +#endif
->  };
->
->  static struct platform_driver cros_ec_lpc_driver = {
-> --
-> 2.37.2.609.g9ff673ca1a-goog
->
+"explicit change to the inode" probably implies both the inode file
+data and metadata, but let's call it out by saying "an explicit change
+to either the inode data or metadata".
 
-Reviewed-by: Raul E Rangel <rrangel@chromium.org>
+> 
+> > > + * wasn't set via utimes() or a similar mechanism, then i_version should not be
+> > > + * incremented. If an observer cares about atime updates, it should plan to
+> > > + * fetch and store them in conjunction with the i_version.
+> > > + *
+> > >   * Not all filesystems properly implement the i_version counter. Subsystems that
+> > >   * want to use i_version field on an inode should first check whether the
+> > >   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION macro).
+> > 
+> > 
+> 
+
+

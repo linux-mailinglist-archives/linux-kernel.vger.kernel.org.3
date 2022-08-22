@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A9F59CBD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 01:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4F259CBDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 01:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238510AbiHVXAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 19:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S238483AbiHVXDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 19:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238358AbiHVXAI (ORCPT
+        with ESMTP id S232271AbiHVXDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 19:00:08 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2724F64A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:00:06 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id l7so12538169vsc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:00:06 -0700 (PDT)
+        Mon, 22 Aug 2022 19:03:11 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5574F64B;
+        Mon, 22 Aug 2022 16:03:11 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id q16so6537415ile.1;
+        Mon, 22 Aug 2022 16:03:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=CM+r2jDGi3Z1TY+2nDEEa9bz6Cg3yXP3SO7YhqCHkfo=;
-        b=Fr4ZUOwdWXPMWZ0VIHwPHNgnoI5vRT/AKqrE1La5ulyUniUsetq7t6w4qi4Tj30KgQ
-         aujMKcxmiWsb3YvpamUxbl8zMbQJJbv1lsgsyWYXtBqwUGVgpV2Ydzp1NdfAUnMkovb2
-         lIG66WjOS9iJKkXJLidAFbWQthLLWYlTUg7QI0vTlpePU0jcFWQoI3qBJiKJxSBBKJzI
-         /TSaEZxLBRFc7HzsZro7nHfqq5FJdPwiaZFUIvnj9rKwwXaqHHfg2ewEb3/+WyJThfJ5
-         YlW5CrXOD4oDXH94xu4+GKkDslxcKAjdavOsENDv+vxICJgtGpTqmDNJuttyCBg7if6i
-         A/8w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=VlbNwukBUIpEPmPt9v+G7N0f5B1QXw5dPmpD9c3YmBM=;
+        b=D2M288oKVQ1NZeC0p+D2eKZTveU75MQ5Bo13o94hLarlQzbhFpm1qBNE1DY8il14kH
+         OfXKN50oQ4sf2BpxnErkCexmaOVTg0ssUPXj6WX7xSP89c3LcYMyJBK4H8iCm3RL7p+k
+         iuAkORBSTHoMv3u5j4/Tw2SCjeU0wT4IBm/B/GpY+Uf0Zjqd6+s6pYK33eVa8GguxKAu
+         6NjSpq0DSiyn8aDuvchZNUHYdtkh6WM+W12LbQxirNSGVDh/JwH8pup8Cl3U/9rvVY20
+         Ho1HYRibRxTjWEA6exzlRJb5XrPxW/RrmYkAXgw10UTJCCEbcwBfiwz6C+X9bZXIk974
+         HoBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=CM+r2jDGi3Z1TY+2nDEEa9bz6Cg3yXP3SO7YhqCHkfo=;
-        b=oe+Ir8OE6PFcAF36LvkOPtkZ2JWX5CPtOTsQb0lPrl7Ge98Wqdt24q36e2/5N7ZZ6F
-         9v5v71iC+ehFuMLX87YwCihQr16TiIYg4czym03znf00hl6YlrBik5OGQHAqpN+alhk6
-         k+Bj+ZJVvoXdFgcfmRMlcKKda26m4iv+b9/HxF41YqKWqHrVeY00SMsnhgMOhDJpX+Kh
-         HPV3z4xTctTpaNrQhq0tpK2ej7O0ZqVgzgDYOu+sDjjgBFuwlqxXy04VGQMbBoHcdGbw
-         ZkmmWLnbcbVKEkJ1JycD6USRm2eMCbTKtCpMhEoiwnewu1de6wg1LSl1kL76bOLdCsKM
-         NvHQ==
-X-Gm-Message-State: ACgBeo0F5OKiMzDkGZBYaEEYMXtAI/wkThP96AYKLBjFAWEhzy4xo/5M
-        UscEWj5BA1+paNvmoRTkzXQPR9rBzUd4Wf6z6QZ+Ow==
-X-Google-Smtp-Source: AA6agR4ntjaDOEyCR2SDMeJVOZxMHCydD8GIIAaP1VehTb6mhepvnStH8hXJl00Zruvm8pbCQA7Bu0zLne8+bUujE48=
-X-Received: by 2002:a67:b009:0:b0:38a:e0f2:4108 with SMTP id
- z9-20020a67b009000000b0038ae0f24108mr8469258vse.9.1661209205446; Mon, 22 Aug
- 2022 16:00:05 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=VlbNwukBUIpEPmPt9v+G7N0f5B1QXw5dPmpD9c3YmBM=;
+        b=EHyR8YV2gTg32z3ffeepQLr2l1sNOh/Sc/2wuE2qiuDenfcuQg7JdS4os4YllgNPvL
+         sPIUwghO45fN20fQYY4TiiLrHzv5p2pYWrraf6hpZ0ezxEcoIrfDWwNdUyZH1Qu8ioOC
+         FMUyrnK42Qvg59Bnzt6OBYdYHlUlKd7lxnJn2cgk0DgBhj+ib/CRDaDsk743PtsOUcpS
+         NtNfUJSe4wns63r3zCW2tOlfMHOb0n6nww2LOm3n4vdCkOri6Qt9iLvc3qaBtWfu4RuU
+         5ulppfH14fJhDSsE29VWByJ0QY7mj+B7Dcse/W4y2aXngwMOEVk1ljmM15ZustK15MG5
+         nHEg==
+X-Gm-Message-State: ACgBeo2cTEdaxYnR/AKDXtn8UGbsqF0Jw5OPlZQ4urWeKmHU3rbldp6C
+        8Hcewe9+YKQPz3m2NTYbh6I=
+X-Google-Smtp-Source: AA6agR41PXs5JDyrmEDwM1pxT209xB+GjpwRj+UXccQwgQbTdudDVkNfL3J+IBH4kqlOw+QzKQviCA==
+X-Received: by 2002:a92:130f:0:b0:2e4:22c9:7721 with SMTP id 15-20020a92130f000000b002e422c97721mr11522530ilt.34.1661209390685;
+        Mon, 22 Aug 2022 16:03:10 -0700 (PDT)
+Received: from hestia.gfnd.rcn-ee.org (208-107-176-7-dynamic.midco.net. [208.107.176.7])
+        by smtp.gmail.com with ESMTPSA id o16-20020a02b810000000b0033f043929fbsm5609396jam.107.2022.08.22.16.03.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 16:03:10 -0700 (PDT)
+From:   Robert Nelson <robertcnelson@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Robert Nelson <robertcnelson@gmail.com>,
+        Rob Herring <robh@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Jason Kridner <jkridner@beagleboard.org>,
+        Drew Fustini <drew@beagleboard.org>
+Subject: [PATCH v2 1/2] dt-bindings: arm: ti: Add bindings for BeagleBone AI-64
+Date:   Mon, 22 Aug 2022 18:03:03 -0500
+Message-Id: <20220822230304.2284952-1-robertcnelson@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220531223100.510392-1-surenb@google.com> <20220531223100.510392-2-surenb@google.com>
- <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
- <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com> <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
-In-Reply-To: <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 22 Aug 2022 16:59:29 -0600
-Message-ID: <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,70 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 4:48 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Mon, 22 Aug 2022 16:33:51 -0600 Yu Zhao <yuzhao@google.com> wrote:
->
-> > > --- a/mm/vmscan.c~mm-delete-unused-mmf_oom_victim-flag-fix
-> > > +++ a/mm/vmscan.c
-> > > @@ -3429,9 +3429,6 @@ static bool should_skip_mm(struct mm_str
-> > >         if (size < MIN_LRU_BATCH)
-> > >                 return true;
-> > >
-> > > -       if (mm_is_oom_victim(mm))
-> > > -               return true;
-> > > -
-> > >         return !mmget_not_zero(mm);
-> > >  }
-> > >
-> > > @@ -4127,9 +4124,6 @@ restart:
-> > >
-> > >                 walk_pmd_range(&val, addr, next, args);
-> > >
-> > > -               if (mm_is_oom_victim(args->mm))
-> > > -                       return 1;
-> > > -
-> > >                 /* a racy check to curtail the waiting time */
-> > >                 if (wq_has_sleeper(&walk->lruvec->mm_state.wait))
-> > >                         return 1;
-> > > _
-> > >
-> > > Please confirm?
-> >
-> > LGTM.  The deleted checks are not about correctness.
->
-> OK, for now.
->
-> > I've queued
-> >
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -3402,7 +3402,7 @@ static bool should_skip_mm(struct mm_struct *mm,
-> > struct lru_gen_mm_walk *walk)
-> >         if (size < MIN_LRU_BATCH)
-> >                 return true;
-> >
-> > -       if (mm_is_oom_victim(mm))
-> > +       if (test_bit(MMF_OOM_REAP_QUEUED, &mm->flags))
-> >                 return true;
-> >
-> >         return !mmget_not_zero(mm);
-> > @@ -4109,7 +4109,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned
-> > long start, unsigned long end,
-> >
-> >                 walk_pmd_range(&val, addr, next, args);
-> >
-> > -               if (mm_is_oom_victim(args->mm))
-> > +               if (test_bit(MMF_OOM_REAP_QUEUED, &args->mm->flags))
-> >                         return 1;
-> >
-> >                 /* a racy check to curtail the waiting time */
->
-> Oh.  Why?  What does this change do?
+This board is based on the ti,j721e
 
-The MMF_OOM_REAP_QUEUED flag is similar to the deleted MMF_OOM_VICTIM
-flag, but it's set at a later stage during an OOM kill.
+https://beagleboard.org/ai-64
+https://git.beagleboard.org/beagleboard/beaglebone-ai-64
 
-When either is set, the OOM reaper is probably already freeing the
-memory of this mm_struct, or at least it's going to. So there is no
-need to dwell on it in the reclaim path, hence not about correctness.
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+CC: Rob Herring <robh@kernel.org>
+CC: Nishanth Menon <nm@ti.com>
+CC: Jason Kridner <jkridner@beagleboard.org>
+CC: Drew Fustini <drew@beagleboard.org>
+---
+Changes since v1:
+ - added documenation links
+ - add board in alphabetical order
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index 61c6ab4f52e2..ff3af46d1dc8 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -34,6 +34,7 @@ properties:
+           - const: ti,j721e
+           - items:
+               - enum:
++                  - beagle,j721e-beagleboneai64
+                   - ti,j721e-evm
+                   - ti,j721e-sk
+               - const: ti,j721e
+-- 
+2.30.2
+

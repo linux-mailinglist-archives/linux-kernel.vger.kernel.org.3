@@ -2,86 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E70659C080
+	by mail.lfdr.de (Postfix) with ESMTP id D670C59C081
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbiHVN1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
+        id S234991AbiHVN1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbiHVN1P (ORCPT
+        with ESMTP id S234839AbiHVN1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:27:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5064C31236;
-        Mon, 22 Aug 2022 06:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hYtojPMz9irO+oG6WMN7GeV1hjHjMbyrt3xn3Ye5F4M=; b=telDdeV9S/RPd/vQa3QCYA2EwV
-        j7J6BAXROQxnM4A4VHodLqpzMKA7Gn8pDpgRD56fXBFHitsCJp22Pjy2lxhAtsrBna7V8xBWLMQQ4
-        Z8JH13HSrZ3qniUGmv+qpaN3GNlB+c+SxdhRu3RYkU9Wxr82pj8DnoRN0g4nS3i4ndyrxYYxo2MQq
-        oxQvQnn9+u2U2EYfBHefvA2K8e6R7jYe2SGBQ0c0MQznxWg0hS5MQi5iehENj4vttg8g198ciacrK
-        jINTr2LdNmF2lkzywXX3/kSlVPB52vOAicpy5sP3W68MZW10l5+Oag8FPttaNJYeQf7TxMvS5JOgE
-        u0YWhiNg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQ7SF-00EJDr-FL; Mon, 22 Aug 2022 13:26:59 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D50709804A3; Mon, 22 Aug 2022 15:26:56 +0200 (CEST)
-Date:   Mon, 22 Aug 2022 15:26:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, bp@alien8.de, acme@kernel.org, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        dave.hansen@linux.intel.com, like.xu.linux@gmail.com,
-        Stephane Eranian <eranian@google.com>, ananth.narayan@amd.com,
-        ravi.bangoria@amd.com, santosh.shukla@amd.com
-Subject: Re: [PATCH 04/13] x86/cpufeatures: Add LbrExtV2 feature bit
-Message-ID: <YwOEIESeDSuekmf8@worktop.programming.kicks-ass.net>
-References: <cover.1660211399.git.sandipan.das@amd.com>
- <172d2b0df39306ed77221c45ee1aa62e8ae0548d.1660211399.git.sandipan.das@amd.com>
- <YvotoHMaLE1XawiO@worktop.programming.kicks-ass.net>
- <CABPqkBQ1YLAu+sJC_U4QsQuo3PuzUwRDrNm9KcrUAEUxeBaYbg@mail.gmail.com>
- <YwNG1XzcyR5ys+rA@worktop.programming.kicks-ass.net>
- <06e9a357-422d-1870-ae72-18e74964caf3@amd.com>
+        Mon, 22 Aug 2022 09:27:07 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B8131352;
+        Mon, 22 Aug 2022 06:27:05 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MBCln0byczGpch;
+        Mon, 22 Aug 2022 21:25:25 +0800 (CST)
+Received: from [10.174.178.165] (10.174.178.165) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 21:27:02 +0800
+Subject: Re: [PATCH -next] gpio: mockup: remove gpio debugfs when remove
+ device
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+CC:     Bamvor Jian Zhang <bamv2005@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220816145225.84283-1-weiyongjun1@huawei.com>
+ <CAMRc=McG5Pf4b5HymV1iaFAGqMMEtyYSQi23z9LmjvzmbF4rYg@mail.gmail.com>
+From:   "weiyongjun (A)" <weiyongjun1@huawei.com>
+Message-ID: <7d1b0bb8-838e-1a1e-886f-507b75066df1@huawei.com>
+Date:   Mon, 22 Aug 2022 21:27:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06e9a357-422d-1870-ae72-18e74964caf3@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAMRc=McG5Pf4b5HymV1iaFAGqMMEtyYSQi23z9LmjvzmbF4rYg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.165]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 06:22:25PM +0530, Sandipan Das wrote:
-> AMD LbrExtV2 is similar to Intel LBR. Unlike BRS, LbrExtV2 does not rely on
+Hi Bart,
 
-LbrExtV2 must be the most terrible name ever, please stop using it. Heck
-your own code calls it lbr_v2 wherever it can.
+On 2022/8/19 20:49, Bartosz Golaszewski wrote:
+> On Tue, Aug 16, 2022 at 4:34 PM Wei Yongjun <weiyongjun1@huawei.com> wrote:
+>>
+>> GPIO mockup debugfs is created in gpio_mockup_probe() but
+>> forgot to remove when remove device. This patch add a devm
+>> managed callback for removing them.
+>>
+> 
+> The tag -next is for patches that address issues that are in next but
+> not yet in master.
+>>
 
-So can we please just kill that name entirely?
 
-$ quilt diff --combine - | grep -i lbrext_v2
-+       if (x86_pmu.version < 2 || !boot_cpu_has(X86_FEATURE_LBREXT_V2))
-+#define X86_FEATURE_LBREXT_V2          ( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
-+       { X86_FEATURE_LBREXT_V2,        CPUID_EAX,  1, 0x80000022, 0 },
+> 
+> This isn't very relevant as the module needs to be unloaded anyway in
+> order to reconfigure the simulated device but I'll apply it as it's
+> technically correct. Did you see we have a new one - gpio-sim - that
+> uses configfs?
+> 
+> Bart
+> 
 
-Is the complete usage of this silly name.
 
-> interrupt holding. The branch records are "frozen" at the time of counter
-> overflow.
+I am using gpio-mockup as a interrupt-controller with the change[1],
+it works will with overfs dts[2], and can success mockup device and 
+trigger the irq. But when switch to gpio-sim, device can not be created 
+by dts[3]. Not sure what's wrong with it. Any suggestion?
 
-Yes, I get all that. It is also significantly different from Intel LBR
-in all details and shares not a single line of code, so also calling it
-LBR is confusing at best.
 
-The MSRs are called AMD_SAMPL_BR, so why not call the thing BRS_V2 ?
+---------------[1]--------------------------
+diff --git a/drivers/gpio/gpio-mockup.c b/drivers/gpio/gpio-mockup.c
+index a2e505a7545c..2b103861fa06 100644
+--- a/drivers/gpio/gpio-mockup.c
++++ b/drivers/gpio/gpio-mockup.c
+@@ -447,7 +451,7 @@ static int gpio_mockup_probe(struct platform_device 
+*pdev)
+  	for (i = 0; i < gc->ngpio; i++)
+  		chip->lines[i].dir = GPIO_LINE_DIRECTION_IN;
+
+-	chip->irq_sim_domain = devm_irq_domain_create_sim(dev, NULL,
++	chip->irq_sim_domain = devm_irq_domain_create_sim(dev, dev->fwnode,
+  							  gc->ngpio);
+  	if (IS_ERR(chip->irq_sim_domain))
+  		return PTR_ERR(chip->irq_sim_domain);
+diff --git a/kernel/irq/irq_sim.c b/kernel/irq/irq_sim.c
+index dd76323ea3fd..e8f71f806a85 100644
+--- a/kernel/irq/irq_sim.c
++++ b/kernel/irq/irq_sim.c
+@@ -149,6 +153,7 @@ static void irq_sim_domain_unmap(struct irq_domain 
+*domain, unsigned int virq)
+  static const struct irq_domain_ops irq_sim_domain_ops = {
+  	.map		= irq_sim_domain_map,
+  	.unmap		= irq_sim_domain_unmap,
++	.xlate		= irq_domain_xlate_twocell,
+  };
+
+--------------------------------------------
+
+---------------[2]--------------------------
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&{/} {
+	clk24m: clk24m {
+		compatible = "fixed-clock";
+		clock-output-names = "clk24m";
+		clock-frequency = <24000000>;
+		#clock-cells = <0>;
+	};
+
+	gpio: gpio {
+		compatible = "gpio-mockup";
+
+		gpio-base = <0>;
+		nr-gpios = <0x200000>;
+
+		gpio-controller;
+		#gpio-cells = <2>;
+
+		interrupt-controller;
+		#interrupt-cells = <2>;
+
+		line_b-hog {
+			gpio-hog;
+			gpios = <0 1>;
+			input;
+			line-name = "irq-sim";
+		};
+	};
+};
+
+&{/spi} {
+	can0: can@1 {
+		compatible = "microchip,mcp2515";
+		reg = <1>;
+		clocks = <&clk24m>;
+		interrupts-extended = <&gpio 0 IRQ_TYPE_EDGE_BOTH>;
+	};
+};
+
+-------------------------------------------
+
+
+---------------[3]--------------------------
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&{/} {
+	clk24m: clk24m {
+		compatible = "fixed-clock";
+		clock-output-names = "clk24m";
+		clock-frequency = <24000000>;
+		#clock-cells = <0>;
+	};
+
+	gpio-sim {
+		compatible = "gpio-simulator";
+
+		bank0: bank0 {
+			gpio-controller;
+			#gpio-cells = <2>;
+			ngpios = <16>;
+
+			interrupt-controller;
+			#interrupt-cells = <1>;
+		};
+	};
+};
+
+&{/spi} {
+	can0: can@1 {
+		compatible = "microchip,mcp2515";
+		reg = <1>;
+		clocks = <&clk24m>;
+		interrupts-extended = <&bank0 0 IRQ_TYPE_EDGE_BOTH>;
+	};
+};
+
+-------------------------------------------

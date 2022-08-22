@@ -2,84 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3DA59C1F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B326759C1EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235601AbiHVOwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 10:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
+        id S235511AbiHVOw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 10:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235556AbiHVOwj (ORCPT
+        with ESMTP id S231508AbiHVOw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:52:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEF737FBA;
-        Mon, 22 Aug 2022 07:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=q5YRa5+mq/HwCfXcY5+pkEQiG+nbfa6Rah54AG40jI4=; b=stK85MZ2ZxRVqduD/jsKgbVjWq
-        fxMI/8GkUln+m14de7UQl6oqrfyJlcAbjEBU+Ju5VOzsMUAFKdFU+o/OCf8xV5pG7f0gi4e6AKFbu
-        fLngfUjXEEadukEUN6o25JzDGxhapPVbWcOkBC1XafjYjesERaDmOEDN9s8PIwc4vVuA25DiW2NMF
-        i70XuESPmNsqviWsqxnjtiSjnLl/wpg3rO/kudU/n4GVcV1Ry30WsLsOYr9NuJBW7d3LKPbAAgtRi
-        BhhkPorelqKALGQ2pALVgEwTWVwkFe/23vbOJqj6U4SNgd7UKyEs62d8LxCNcZSxkkZbj4/86avey
-        1J2sLZ5A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQ8n2-00EN3D-GF; Mon, 22 Aug 2022 14:52:32 +0000
-Date:   Mon, 22 Aug 2022 15:52:32 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     david <david@fromorbit.com>, djwong <djwong@kernel.org>,
-        fgheet255t <fgheet255t@gmail.com>, hch <hch@infradead.org>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        riteshh <riteshh@linux.ibm.com>,
-        syzbot+a8e049cd3abd342936b6 
-        <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] WARNING in iomap_iter
-Message-ID: <YwOYMJrvBuoVye7R@casper.infradead.org>
-References: <182c028abf0.2dc6f7c973088.2963173753499991828@siddh.me>
- <20220821114816.24193-1-code@siddh.me>
- <YwOWiDKhVxm7m0fa@casper.infradead.org>
- <182c607e79a.820e4a7012709.6365464609772129416@siddh.me>
+        Mon, 22 Aug 2022 10:52:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2B237FB3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:52:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2730860BCB
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2061FC433D7;
+        Mon, 22 Aug 2022 14:52:24 +0000 (UTC)
+Date:   Mon, 22 Aug 2022 10:52:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2 0/3] Adding support for trace events to habanalabs
+Message-ID: <20220822105240.3cb3002c@gandalf.local.home>
+In-Reply-To: <20220821080608.27486-1-ogabbay@kernel.org>
+References: <20220821080608.27486-1-ogabbay@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <182c607e79a.820e4a7012709.6365464609772129416@siddh.me>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 08:19:43PM +0530, Siddh Raman Pant wrote:
-> On Mon, 22 Aug 2022 20:15:28 +0530  Matthew Wilcox  wrote:
-> > On Sun, Aug 21, 2022 at 05:18:16PM +0530, Siddh Raman Pant wrote:
-> > > @@ -979,9 +979,15 @@ loop_set_status_from_info(struct loop_device *lo,
-> > >  
-> > >       lo->lo_offset = info->lo_offset;
-> > >       lo->lo_sizelimit = info->lo_sizelimit;
-> > > +     lo->lo_flags = info->lo_flags;
-> > > +
-> > > +     /* loff_t/int vars are assigned __u64/__u32 vars (respectively) */
-> > > +     if (lo->lo_offset < 0 || lo->lo_sizelimit < 0 || lo->lo_flags < 0)
-> > > +             return -EOVERFLOW;
-> > 
-> > Why would you check lo_flags?  That really, really should be an unsigned
-> > type.
-> 
-> I agree, but the loop_device struct has (see line 54 of loop.c):
->         int             lo_flags;
-> 
-> Thus, I checked for it, as we are not changing any types.
+On Sun, 21 Aug 2022 11:06:05 +0300
+Oded Gabbay <ogabbay@kernel.org> wrote:
 
-But it's not an integer.  It's a bitfield.  Nobody checks lo_flags for
-"is it less than zero".  That makes it very different from lo_offset.
+> Thanks for your comments. We have fixed the patches according to them.
+> 
+> You wrote the first patch is r-b, but I took the liberty to add your r-b to
+> all three patches, I hope you don't object.
+
+I usually only add the r-b to the patches that add TRACE_EVENT(), and
+sometimes to those that modify them. Because that's what I know best. The
+usage of the trace events is usually subsystem specific and I tend not to
+add a r-b for them because people might think I understand how they are
+being used ;-)
+
+But in this case, since I did recommend some tricks in those extra patches,
+you can keep the tag for them.
+
+Here's my disclaimer for all these patches:
+
+***
+
+Reviewed only from the tracing point of view, I have no idea if the content
+held in the trace is correct or not.
+
+***
+
+;-)
+
+-- Steve

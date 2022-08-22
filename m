@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C5859BECC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E9759BECE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbiHVLse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S234792AbiHVLsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbiHVLsO (ORCPT
+        with ESMTP id S234747AbiHVLsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 Aug 2022 07:48:14 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8142DB;
-        Mon, 22 Aug 2022 04:48:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123B320E;
+        Mon, 22 Aug 2022 04:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=knAjhsG/6jthQQWVo2QqXwIZ8VPSdd1nuBR6NhivhIM=; b=jTXfHl5rGNr1GZo5Hw1OkcgndP
-        LcklSXEiRRjACSZWWyXodFfcZp/VY/WB3qm0SLO8NCmc0IvAMwq8DqHBte8v9/auhMpExkZG+rECZ
-        IpicUshoT8R/h/ey5JX4tqgZKn3KK0s/Tp7/HalmRwcYQ/9lsljjwBALDtHJrdBT5iupn8cpSM/Gc
-        /Tw3e3gJAfIFab228UkSe8QiHLQ0ci1Xg3ShkZW5GIvgMohGP/2I/q+4s/FYDc8FOVUiQVtsILPyu
-        miBFNTPGUtx/79IxXpLrE6l4iOn7u9lDDGDx6v5OWmrdoJOrRvb1iIIMZfVd7Ne+8mkJTYVxYCX6t
-        T127jj8g==;
+        bh=YcH+L5yEug/0XCeHzWALjCRJa/mQAgz+/LGeuzUWwe4=; b=v9y7DX7/djXOtzPPySn/LRZ83a
+        g1Wa0P4etH9Eg6J8m/I+dZdutFhV8+ozo6vzHim+GKFY1Vki5AzjL3nhRYcFwmfuYK2qTVRk3Lz7e
+        qf/3IlriN18KOdMfHzjiuUukBk4/OkIk8N056XOT4HjgX9/+N4DrUYRqG+gC+AFxQcexRMdykQ+Nb
+        sXWX/y5I0VRwmL7o4f40Cm8yJBVrInf8ZwhE/QGziT3gmgykqI51NkptyZGfcTpvgdZ7OUblCP55p
+        dHNYo4iVwBMVhvLKxJPYTm8qFFtjHklz/HG8mHRpGrn+gaeacYPZAbq18W9eJEZtd0jE80B3XvTXM
+        uEtBXQSw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQ5uM-00EEet-1H; Mon, 22 Aug 2022 11:47:54 +0000
+        id 1oQ5uM-00EEes-0o; Mon, 22 Aug 2022 11:47:54 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B7B97300326;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BD55E300859;
         Mon, 22 Aug 2022 13:47:50 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 8C20320187A6F; Mon, 22 Aug 2022 13:47:50 +0200 (CEST)
-Message-ID: <20220822114648.791019324@infradead.org>
+        id 9268E20187A65; Mon, 22 Aug 2022 13:47:50 +0200 (CEST)
+Message-ID: <20220822114648.856734578@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 22 Aug 2022 13:18:18 +0200
+Date:   Mon, 22 Aug 2022 13:18:19 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
@@ -46,7 +46,7 @@ To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
         bigeasy@linutronix.de, Will Deacon <will@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, tj@kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v3 2/6] freezer,umh: Clean up freezer/initrd interaction
+Subject: [PATCH v3 3/6] sched: Change wait_task_inactive()s match_state
 References: <20220822111816.760285417@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,91 +60,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-handle_initrd() marks itself as PF_FREEZER_SKIP in order to ensure
-that the UMH, which is going to freeze the system, doesn't
-indefinitely wait for it's caller.
+Make wait_task_inactive()'s @match_state work like ttwu()'s @state.
 
-Rework things by adding UMH_FREEZABLE to indicate the completion is
-freezable.
+That is, instead of an equal comparison, use it as a mask. This allows
+matching multiple block conditions.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/umh.h     |    9 +++++----
- init/do_mounts_initrd.c |   10 +---------
- kernel/umh.c            |    8 ++++++++
- 3 files changed, 14 insertions(+), 13 deletions(-)
+ kernel/sched/core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/include/linux/umh.h
-+++ b/include/linux/umh.h
-@@ -11,10 +11,11 @@
- struct cred;
- struct file;
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3295,7 +3295,7 @@ unsigned long wait_task_inactive(struct
+ 		 * is actually now running somewhere else!
+ 		 */
+ 		while (task_running(rq, p)) {
+-			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
++			if (match_state && !(READ_ONCE(p->__state) & match_state))
+ 				return 0;
+ 			cpu_relax();
+ 		}
+@@ -3310,7 +3310,7 @@ unsigned long wait_task_inactive(struct
+ 		running = task_running(rq, p);
+ 		queued = task_on_rq_queued(p);
+ 		ncsw = 0;
+-		if (!match_state || READ_ONCE(p->__state) == match_state)
++		if (!match_state || (READ_ONCE(p->__state) & match_state))
+ 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
+ 		task_rq_unlock(rq, p, &rf);
  
--#define UMH_NO_WAIT	0	/* don't wait at all */
--#define UMH_WAIT_EXEC	1	/* wait for the exec, but not the process */
--#define UMH_WAIT_PROC	2	/* wait for the process to complete */
--#define UMH_KILLABLE	4	/* wait for EXEC/PROC killable */
-+#define UMH_NO_WAIT	0x00	/* don't wait at all */
-+#define UMH_WAIT_EXEC	0x01	/* wait for the exec, but not the process */
-+#define UMH_WAIT_PROC	0x02	/* wait for the process to complete */
-+#define UMH_KILLABLE	0x04	/* wait for EXEC/PROC killable */
-+#define UMH_FREEZABLE	0x08	/* wait for EXEC/PROC freezable */
- 
- struct subprocess_info {
- 	struct work_struct work;
---- a/init/do_mounts_initrd.c
-+++ b/init/do_mounts_initrd.c
-@@ -79,19 +79,11 @@ static void __init handle_initrd(void)
- 	init_mkdir("/old", 0700);
- 	init_chdir("/old");
- 
--	/*
--	 * In case that a resume from disk is carried out by linuxrc or one of
--	 * its children, we need to tell the freezer not to wait for us.
--	 */
--	current->flags |= PF_FREEZER_SKIP;
--
- 	info = call_usermodehelper_setup("/linuxrc", argv, envp_init,
- 					 GFP_KERNEL, init_linuxrc, NULL, NULL);
- 	if (!info)
- 		return;
--	call_usermodehelper_exec(info, UMH_WAIT_PROC);
--
--	current->flags &= ~PF_FREEZER_SKIP;
-+	call_usermodehelper_exec(info, UMH_WAIT_PROC|UMH_FREEZABLE);
- 
- 	/* move initrd to rootfs' /old */
- 	init_mount("..", ".", NULL, MS_MOVE, NULL);
---- a/kernel/umh.c
-+++ b/kernel/umh.c
-@@ -28,6 +28,7 @@
- #include <linux/async.h>
- #include <linux/uaccess.h>
- #include <linux/initrd.h>
-+#include <linux/freezer.h>
- 
- #include <trace/events/module.h>
- 
-@@ -436,6 +437,9 @@ int call_usermodehelper_exec(struct subp
- 	if (wait == UMH_NO_WAIT)	/* task has freed sub_info */
- 		goto unlock;
- 
-+	if (wait & UMH_FREEZABLE)
-+		freezer_do_not_count();
-+
- 	if (wait & UMH_KILLABLE) {
- 		retval = wait_for_completion_killable(&done);
- 		if (!retval)
-@@ -448,6 +452,10 @@ int call_usermodehelper_exec(struct subp
- 	}
- 
- 	wait_for_completion(&done);
-+
-+	if (wait & UMH_FREEZABLE)
-+		freezer_count();
-+
- wait_done:
- 	retval = sub_info->retval;
- out:
 
 

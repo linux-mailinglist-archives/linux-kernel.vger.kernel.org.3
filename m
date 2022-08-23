@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB9959D7A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF6459D6F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344266AbiHWJzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S243977AbiHWJsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244585AbiHWJyB (ORCPT
+        with ESMTP id S1352128AbiHWJp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:54:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA989F768;
-        Tue, 23 Aug 2022 01:46:24 -0700 (PDT)
+        Tue, 23 Aug 2022 05:45:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C6343E71;
+        Tue, 23 Aug 2022 01:43:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA3A9B81C3A;
-        Tue, 23 Aug 2022 08:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC362C433D6;
-        Tue, 23 Aug 2022 08:46:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D89466153A;
+        Tue, 23 Aug 2022 08:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB05DC433C1;
+        Tue, 23 Aug 2022 08:43:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244366;
-        bh=d2C7zI3JOKJ5MqjkH9tUElWe9uYNhh5//9mKAug5n1Q=;
+        s=korg; t=1661244196;
+        bh=nBECbFiTYqDWMZnWshLEHrVJOnspAGOnYPScHv5uORA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RNlkxITg5y66poxcGI3QO3IbDRQ93/3HTwzrdF+kL1bAGfCAi+SCDWvxYi+PfQaH5
-         zEmeRzbxUq9QxfVSQa+EwP9S61DmYEargZ/DcjXXDk+TIiI+uXXQ3/IHkUdzDBx9bz
-         4M57Uy6MKuyCl/BKwuHtYrkngNTbC/qrGBKx5mdY=
+        b=TDuL+OvOtzGIkc5IuOXl9p+1TsISBmgxdz75d499W9UerZjssb5Kj3rqZMLLCB/Kw
+         lZ9LdacHZMHu6kWhJdE71oD4Q+F0rz3DYUP2c/ZlVQpwu8wlvgk4QGqQye6GvdN10Z
+         PDEunl9F4x2uUCgyo2NhcJFF49zlh08eIE+7KUpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 099/229] usb: host: Fix refcount leak in ehci_hcd_ppc_of_probe
-Date:   Tue, 23 Aug 2022 10:24:20 +0200
-Message-Id: <20220823080057.231944046@linuxfoundation.org>
+Subject: [PATCH 4.14 101/229] misc: rtsx: Fix an error handling path in rtsx_pci_probe()
+Date:   Tue, 23 Aug 2022 10:24:22 +0200
+Message-Id: <20220823080057.306630618@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,36 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit b5c5b13cb45e2c88181308186b0001992cb41954 ]
+[ Upstream commit 44fd1917314e9d4f53dd95dd65df1c152f503d3a ]
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+If an error occurs after a successful idr_alloc() call, the corresponding
+resource must be released with idr_remove() as already done in the .remove
+function.
 
-Fixes: 796bcae7361c ("USB: powerpc: Workaround for the PPC440EPX USBH_23 errata [take 3]")
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220602110849.58549-1-linmq006@gmail.com
+Update the error handling path to add the missing idr_remove() call.
+
+Fixes: ada8a8a13b13 ("mfd: Add realtek pcie card reader driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/e8dc41716cbf52fb37a12e70d8972848e69df6d6.1655271216.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ehci-ppc-of.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mfd/rtsx_pcr.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ehci-ppc-of.c b/drivers/usb/host/ehci-ppc-of.c
-index 1a10c8d542ca..d36aa2c29d39 100644
---- a/drivers/usb/host/ehci-ppc-of.c
-+++ b/drivers/usb/host/ehci-ppc-of.c
-@@ -147,6 +147,7 @@ static int ehci_hcd_ppc_of_probe(struct platform_device *op)
- 		} else {
- 			ehci->has_amcc_usb23 = 1;
- 		}
-+		of_node_put(np);
+diff --git a/drivers/mfd/rtsx_pcr.c b/drivers/mfd/rtsx_pcr.c
+index c9e45b6befac..1c7afd9a14e3 100644
+--- a/drivers/mfd/rtsx_pcr.c
++++ b/drivers/mfd/rtsx_pcr.c
+@@ -1223,7 +1223,7 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+ 	pcr->remap_addr = ioremap_nocache(base, len);
+ 	if (!pcr->remap_addr) {
+ 		ret = -ENOMEM;
+-		goto free_handle;
++		goto free_idr;
  	}
  
- 	if (of_get_property(dn, "big-endian", NULL)) {
+ 	pcr->rtsx_resv_buf = dma_alloc_coherent(&(pcidev->dev),
+@@ -1285,6 +1285,10 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+ 			pcr->rtsx_resv_buf, pcr->rtsx_resv_buf_addr);
+ unmap:
+ 	iounmap(pcr->remap_addr);
++free_idr:
++	spin_lock(&rtsx_pci_lock);
++	idr_remove(&rtsx_pci_idr, pcr->id);
++	spin_unlock(&rtsx_pci_lock);
+ free_handle:
+ 	kfree(handle);
+ free_pcr:
 -- 
 2.35.1
 

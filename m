@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4957959E31C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6276B59E21A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356150AbiHWKld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S1352826AbiHWKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354859AbiHWK0g (ORCPT
+        with ESMTP id S1352637AbiHWKCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:26:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D6183F2D;
-        Tue, 23 Aug 2022 02:05:51 -0700 (PDT)
+        Tue, 23 Aug 2022 06:02:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF62A223C;
+        Tue, 23 Aug 2022 01:50:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 134D5B81C53;
-        Tue, 23 Aug 2022 09:05:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FBAC433C1;
-        Tue, 23 Aug 2022 09:05:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 901E66122F;
+        Tue, 23 Aug 2022 08:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8174CC433D6;
+        Tue, 23 Aug 2022 08:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245548;
-        bh=gXJeB+CKeDu7TiKFHWZPHO1BsLZegk9X3IBL5reKvkk=;
+        s=korg; t=1661244620;
+        bh=PHEOO4VX3NtboMTjBW2N8IPFgmpRi7rwB6g2Y1tQN/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ML0v913R0zmyW9YZ/KLVBqzMqdDKuC3EFnDwz37x/NVatVOVDZsi+tzEqDN048dYU
-         VdyAGgRdAjIwVJ2mGL91UfEqpDKpPQltAzcc0zhOFzGso8JE8Qz/eJIoq70fcHoeDB
-         45N/4d6OxylNo84njDuF6yAJKUv5P2KQzbjnAGko=
+        b=E5mbqSfXh9uTl8Eem5S7VdahUEp2u4B0KSnSP5s94qCaX1UkPXlZmUy1trEDBc9cx
+         YR/uz2DssCaf/QZdeAVVhv6mpUTxSc9q3TVr5oXSi1Im5IHvXF5d7RKfjmlP5r+XYp
+         dvp0uL20WVQqjq+xHTbxsRRDyltG08zZveRoclY4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 114/287] mtd: maps: Fix refcount leak in of_flash_probe_versatile
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH 5.15 124/244] fs/ntfs3: uninitialized variable in ntfs_set_acl_ex()
 Date:   Tue, 23 Aug 2022 10:24:43 +0200
-Message-Id: <20220823080104.218462230@linuxfoundation.org>
+Message-Id: <20220823080103.212067936@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 33ec82a6d2b119938f26e5c8040ed5d92378eb54 ]
+commit d4073595d0c61463ec3a87411b19e2a90f76d3f8 upstream.
 
-of_find_matching_node_and_match() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+The goto out calls kfree(value) on an uninitialized pointer.  Just
+return directly as the other error paths do.
 
-Fixes: b0afd44bc192 ("mtd: physmap_of: add a hook for Versatile write protection")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220523140205.48625-1-linmq006@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 460bbf2990b3 ("fs/ntfs3: Do not change mode if ntfs_set_ea failed")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/maps/physmap_of_versatile.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ntfs3/xattr.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/maps/physmap_of_versatile.c b/drivers/mtd/maps/physmap_of_versatile.c
-index 03f2b6e7bc7e..961704228dd2 100644
---- a/drivers/mtd/maps/physmap_of_versatile.c
-+++ b/drivers/mtd/maps/physmap_of_versatile.c
-@@ -221,6 +221,7 @@ int of_flash_probe_versatile(struct platform_device *pdev,
- 
- 		versatile_flashprot = (enum versatile_flashprot)devid->data;
- 		rmap = syscon_node_to_regmap(sysnp);
-+		of_node_put(sysnp);
- 		if (IS_ERR(rmap))
- 			return PTR_ERR(rmap);
- 
--- 
-2.35.1
-
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -561,7 +561,7 @@ static noinline int ntfs_set_acl_ex(stru
+ 			err = posix_acl_update_mode(mnt_userns, inode, &mode,
+ 						    &acl);
+ 			if (err)
+-				goto out;
++				return err;
+ 		}
+ 		name = XATTR_NAME_POSIX_ACL_ACCESS;
+ 		name_len = sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1;
 
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE3159DD51
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375ED59E2D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358381AbiHWLyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S1356326AbiHWKyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358913AbiHWLvQ (ORCPT
+        with ESMTP id S1355971AbiHWKqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:51:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23829D34EE;
-        Tue, 23 Aug 2022 02:32:05 -0700 (PDT)
+        Tue, 23 Aug 2022 06:46:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D82374CFE;
+        Tue, 23 Aug 2022 02:11:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9405B81C85;
-        Tue, 23 Aug 2022 09:31:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A656C433B5;
-        Tue, 23 Aug 2022 09:31:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A5D86069D;
+        Tue, 23 Aug 2022 09:11:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E584C433D6;
+        Tue, 23 Aug 2022 09:11:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247118;
-        bh=pq5jl0liAQqHiKcuVEOGf6QiN0IET6PLiMh34kv50FY=;
+        s=korg; t=1661245890;
+        bh=9nPrtpR65w8b56LwHzABe1G5wYv2w6YiwZOjMphzI00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rZmSovFUNT9xQdWMycF0Vk8EOW3J4trYqICTfIzWSVLV9E45f63EDoazIrEoV0nCA
-         WA5HmbpuP1xWJU4eJfDdsrE4jy/qPM0/oonJ0ZIanChQ7gGIDgCwcSdhklJ/IVTGxs
-         8PLXfPl6rKleamRYcBAZZnRbngTU7HmuLkHK2xZM=
+        b=XiY8tuiyZDvt+3eQafZzh1rEa4gCV7BG5hOnleA8Y0ZeZp2Ic3HZP+KADFWDq2J7V
+         ByrTK758H0hR7rFQKrIu+IBw5r+TUdxZbrE8I+1JQvN9rAMQU9KNXVDMKmyZdH8Fz8
+         kFIxpbEbjEyQi11phyXYvnygHeUH/seI8cvz8kN8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 5.4 296/389] apparmor: Fix failed mount permission check error message
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Ghinea <stefan.ghinea@windriver.com>
+Subject: [PATCH 4.19 205/287] KVM: x86: Avoid theoretical NULL pointer dereference in kvm_irq_delivery_to_apic_fast()
 Date:   Tue, 23 Aug 2022 10:26:14 +0200
-Message-Id: <20220823080127.922632657@linuxfoundation.org>
+Message-Id: <20220823080107.801921160@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,45 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Johansen <john.johansen@canonical.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-commit ec240b5905bbb09a03dccffee03062cf39e38dc2 upstream.
+commit 00b5f37189d24ac3ed46cb7f11742094778c46ce upstream
 
-When the mount check fails due to a permission check failure instead
-of explicitly at one of the subcomponent checks, AppArmor is reporting
-a failure in the flags match. However this is not true and AppArmor
-can not attribute the error at this point to any particular component,
-and should only indicate the mount failed due to missing permissions.
+When kvm_irq_delivery_to_apic_fast() is called with APIC_DEST_SELF
+shorthand, 'src' must not be NULL. Crash the VM with KVM_BUG_ON()
+instead of crashing the host.
 
-Fixes: 2ea3ffb7782a ("apparmor: add mount mediation")
-Signed-off-by: John Johansen <john.johansen@canonical.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220325132140.25650-3-vkuznets@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/apparmor/mount.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ arch/x86/kvm/lapic.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/security/apparmor/mount.c
-+++ b/security/apparmor/mount.c
-@@ -229,7 +229,8 @@ static const char * const mnt_info_table
- 	"failed srcname match",
- 	"failed type match",
- 	"failed flags match",
--	"failed data match"
-+	"failed data match",
-+	"failed perms check"
- };
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -961,6 +961,10 @@ bool kvm_irq_delivery_to_apic_fast(struc
+ 	*r = -1;
  
- /*
-@@ -284,8 +285,8 @@ static int do_match_mnt(struct aa_dfa *d
- 			return 0;
+ 	if (irq->shorthand == APIC_DEST_SELF) {
++		if (KVM_BUG_ON(!src, kvm)) {
++			*r = 0;
++			return true;
++		}
+ 		*r = kvm_apic_set_irq(src->vcpu, irq, dest_map);
+ 		return true;
  	}
- 
--	/* failed at end of flags match */
--	return 4;
-+	/* failed at perms check, don't confuse with flags match */
-+	return 6;
- }
- 
- 
 
 

@@ -2,118 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EC459D257
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A882859D262
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240593AbiHWHgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S240809AbiHWHhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238745AbiHWHgI (ORCPT
+        with ESMTP id S239875AbiHWHhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:36:08 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B78D63F3A
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:36:07 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q18so11700342ljg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=1WnyUrxG3+0D+bkCR+RrfEDpgP7RPyFSX27GTaFeZvk=;
-        b=J8QF/2ADbBqtCL//z4PO+FlWzzjjCC3uog8Q0A/NRZElFKcSmcg60oaMNCIyZlgWok
-         5jZ+pFWF+HntgNVLAfIgZFZA/2bdla1bKjncJDycPiF1BSyFVNOdQGQWuhXMBGdYn+jG
-         UoCzokxv3mCqZO9byqaSLH0JDzacuQ2E6WIbHIHv6v+3iHszy7afLGT4wn0mq/w0sO17
-         lJP6A4wY86VXBPCG+ucGCaJUCCCVpntwjhZK1rEZjINCgFM0RB5VesC3LdLTHcrf+ff7
-         cpzF0S+SA6k2rCbjnWMU4C/4PG1NNrKnaxHH0dcT2ce68VFkbM0rVg32q+TdjBlKZ1CC
-         /BGA==
+        Tue, 23 Aug 2022 03:37:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B61642ED
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661240222;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HohlDOM1an5R3Aeg0WJ6GQRtA32+l/PSRz3n64TVcFI=;
+        b=QoG+AdmEJFhLTazALmYxXOH4iLtqDgwci802sX/4jdTKKs4NhjaLT9ue+8poTKZKPJXvue
+        nmFmdOgkspSXedAXE3I5BMh6OLPQRUNlV1ya9JXx0gqdD0KegS/uqTRaEsMtd4r2rdDQv8
+        MdDUr0stYsbatJPckuknEUldl2YOEEU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-221-YQmzAfsJPKuFADT1i5Loeg-1; Tue, 23 Aug 2022 03:37:01 -0400
+X-MC-Unique: YQmzAfsJPKuFADT1i5Loeg-1
+Received: by mail-wr1-f72.google.com with SMTP id l25-20020adfa399000000b002252058bad2so2061372wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:37:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=1WnyUrxG3+0D+bkCR+RrfEDpgP7RPyFSX27GTaFeZvk=;
-        b=F15ltCSp+uAlb+DiOFoXwrPM3L3XrzoLGRcZjvHJZmbgiYm1wfakGB9tTWf157R+2e
-         i2jDybjEMdDOMquBv3dX+JLXmwuxyH/sIvebi4vzwoDP7GpyYix0/uWQpvDSX++wQMKo
-         jxkqM8zwppFPs2pUNRvbNFXjxFSgLhgGPZOt9E9nlqQTJdsGErYeZhuIPzW8BDV3EpR1
-         LX8HImdO68TH0gNbxbU1fSgr2EvdzEaL1f29dCtiADAQbAMQdNeRSgS5oFYSSVN/lUCc
-         pR4/fb1LwQoLaBmWrryZV4omcKKMgMKAHTRrarxnTtMDqO0OYWED5ocHCrGuqbCVb/pX
-         xWfA==
-X-Gm-Message-State: ACgBeo3Zm90+dQFEaa4rYb3zC37SJSHTXbpfDIhoFR5za2RuK8CZRB5R
-        0LJ9Sw8vKG7P3PMGosfvEhqAEw==
-X-Google-Smtp-Source: AA6agR4dszY23uh+Budd60dsBsxWTmMmGjIGTRp7z+9LCFbLyuA24rj7/BK9THdfr4Z8DZFjD6Ajfw==
-X-Received: by 2002:a05:651c:a04:b0:25e:7523:20b2 with SMTP id k4-20020a05651c0a0400b0025e752320b2mr6290283ljq.424.1661240165622;
-        Tue, 23 Aug 2022 00:36:05 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id d13-20020a05651c01cd00b0025e6e1c836dsm2210966ljn.126.2022.08.23.00.36.03
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=HohlDOM1an5R3Aeg0WJ6GQRtA32+l/PSRz3n64TVcFI=;
+        b=L/orD7mmR4EOJCKl28SgJhvkVmSdATc6tm4bJE8MzeXSMrIc4go+9dddG0Tcz1ABiZ
+         i/QYOTA7ZpsaThQRvqeAe0+EeeJaH2+TgVBLGqNiUIAdKaxG9EtRLI9Ul9rmN4WixJGQ
+         bjAiajmjPR0ni28voa+wwmC6Gfeg5QsgPyBAcH0vIAOk7gYaihxprXeAYKKSU8jIp+7I
+         3RU+ltlDyGNloanz0GKaKP0W4Rn0C5vQutwdfOipj0oI2UK+AbuFs0NAS6b3oSVFOHet
+         vcmRqBd67oLRFJl73b7TqmgrTVIAQ/UoSQNAIoovoxkKDYDzfGbtzl25g26Lnu97K4a8
+         jmRg==
+X-Gm-Message-State: ACgBeo3mHM5vEaPS+x/PwqZaXGyR6MGJ05FwzuivvzXMiOZVq6ELK/sL
+        DQAkQLdrNRXS9FQgWRU5M55OUa8NRve8cx1eMYf9dsTscYTrUOqHu5ezgn13y7b7qyxS1Vu6Kh7
+        UrjsyVtu5Ad38RiWYsm3stTNh
+X-Received: by 2002:a05:600c:4e04:b0:3a5:a34e:ae81 with SMTP id b4-20020a05600c4e0400b003a5a34eae81mr1210668wmq.147.1661240219941;
+        Tue, 23 Aug 2022 00:36:59 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4NUFG4IFicJqv+j50eM5lq6Rzd1ri/9X+RKdy6Bv7oWpP5THIKdol8DYBnS2vZ39y/40KufQ==
+X-Received: by 2002:a05:600c:4e04:b0:3a5:a34e:ae81 with SMTP id b4-20020a05600c4e0400b003a5a34eae81mr1210635wmq.147.1661240219655;
+        Tue, 23 Aug 2022 00:36:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:1600:c48b:1fab:a330:5182? (p200300cbc70b1600c48b1faba3305182.dip0.t-ipconnect.de. [2003:cb:c70b:1600:c48b:1fab:a330:5182])
+        by smtp.gmail.com with ESMTPSA id u18-20020adfdb92000000b0021eaf4138aesm16379582wri.108.2022.08.23.00.36.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 00:36:04 -0700 (PDT)
-Message-ID: <6b5730d7-997e-518b-e0dd-2a20045242c1@linaro.org>
-Date:   Tue, 23 Aug 2022 10:36:03 +0300
+        Tue, 23 Aug 2022 00:36:59 -0700 (PDT)
+Message-ID: <8f6f428b-85e6-a188-7f32-512b6aae0abf@redhat.com>
+Date:   Tue, 23 Aug 2022 09:36:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] clk: samsung: MAINTAINERS: add Krzysztof Kozlowski
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
 Content-Language: en-US
-To:     Chanho Park <chanho61.park@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-References: <20220823073154.359090-1-krzysztof.kozlowski@linaro.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220823073154.359090-1-krzysztof.kozlowski@linaro.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
+ <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+ <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+ <20220817234120.mw2j3cgshmuyo2vw@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220817234120.mw2j3cgshmuyo2vw@box.shutemov.name>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 10:31, Krzysztof Kozlowski wrote:
-> Add Krzysztof Kozlowski (already Samsung SoC maintainer) as Samsung SoC
-> clock maintainer to handle the patches.
+On 18.08.22 01:41, Kirill A. Shutemov wrote:
+> On Fri, Aug 05, 2022 at 07:55:38PM +0200, Paolo Bonzini wrote:
+>> On 7/21/22 11:44, David Hildenbrand wrote:
+>>>
+>>> Also, I*think*  you can place pages via userfaultfd into shmem. Not
+>>> sure if that would count "auto alloc", but it would certainly bypass
+>>> fallocate().
+>>
+>> Yeah, userfaultfd_register would probably have to forbid this for
+>> F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for this,
+>> adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then userfault_register
+>> would do something like memfile_node_get_flags(vma->vm_file) and check the
+>> result.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> I donno, memory allocation with userfaultfd looks pretty intentional to
+> me. Why would F_SEAL_AUTO_ALLOCATE prevent it?
 > 
-> ---
+
+Can't we say the same about a write()?
+
+> Maybe we would need it in the future for post-copy migration or something?
 > 
-> Agreed with Sylwester who is recently busy. Let me handle some patches
-> as I already handle rest of Samsung SoC.
+> Or existing practises around userfaultfd touch memory randomly and
+> therefore incompatible with F_SEAL_AUTO_ALLOCATE intent?
 > 
-> I plan to send pulls the same way Sylwester did - to Stephen.
+> Note, that userfaultfd is only relevant for shared memory as it requires
+> VMA which we don't have for MFD_INACCESSIBLE.
 
+This feature (F_SEAL_AUTO_ALLOCATE) is independent of all the lovely
+encrypted VM stuff, so it doesn't matter how it relates to MFD_INACCESSIBLE.
 
-Hi Sam and Chanho,
+-- 
+Thanks,
 
-Please accept our apologies for any delays in handling the patches.
+David / dhildenb
 
-I went through archives and grabbed few remaining Samsung clk patchsets:
-1. bindings:
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-v6.0/samsung-clk-dt-bindings
-
-2. clk:
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=next/clk
-
-3. and DTS via my regular branches.
-
-Everything should pop-up in next linux-next.
-
-If something is still missing/pending/lost, please kindly resend.
-
-Also thanks for your upstream Samsung contributions!
-
-Best regards,
-Krzysztof

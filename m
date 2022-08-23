@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82A559EFCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0C259EFD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiHWXmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 19:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S232254AbiHWXnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 19:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHWXma (ORCPT
+        with ESMTP id S229732AbiHWXnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 19:42:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8368512D09;
-        Tue, 23 Aug 2022 16:42:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4E1C522DEE;
-        Tue, 23 Aug 2022 23:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661298147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mf7FYVg+p3n1ZzY3dE3fTI4r38K9m9zJQ3Gw2K+VYH4=;
-        b=wBkZNzNScsOzP10MLgrykcXVKvQlPGQm0X1gzLLlQJH5oBuIA/9UEqOtnpPdvCIvaCsNin
-        Yr4JqjyFuqjlNh3c1DKDfNWfOoZcU7d7ALuG/+41ULFflSlUEuH3BUIBp3idw2GqQ0whih
-        iteMF7eWMMj/wCLwIpdTaeTiHb7DYWw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661298147;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mf7FYVg+p3n1ZzY3dE3fTI4r38K9m9zJQ3Gw2K+VYH4=;
-        b=5Ou6IYEXHZV+8gZL4+aWoPqmV6ShSBFcp5ZtcC1seUWaW4pxLyruGtX89xHRAyyb4P/9nO
-        7ugKlTr/CzaAs5BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A060813AB7;
-        Tue, 23 Aug 2022 23:42:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZNKLF99lBWN9PQAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 23 Aug 2022 23:42:23 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 23 Aug 2022 19:43:14 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B88895E9;
+        Tue, 23 Aug 2022 16:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661298194; x=1692834194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nVmxykiA0uq+h7e/PcBCUGhl/NChr999fUIhLiACrHQ=;
+  b=Bt9mP7LPKokL7Kb32eeVhBc95ZcPrv/h+ihpnJOy0kjLnhW6SahVnxh+
+   spgIiB0VuMtw120pWVmXoAd7BeDDuvwUuUmGrn09B59vM5OVZdelX/blb
+   2z3qBL45gZZBBjManrSlC3ZZnoICre8v+I8jkCVorU5VYeY2LzIVg0o+9
+   Zd6noUVEK71JitAwXIIMkuAEu4T8b3RVkjxzxaoq2umoeD5Z5cVpzsVhB
+   Rvel40j5N6J20UeXaqwZiPT2xad4bnlx12MJvBycxYkf077UvsmuwXufh
+   BjEbsOMvIpjCJDbyRj3ODR4WhBY/El30hcjbKMeyAUSK6DHIyf/WzVHYn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="274208749"
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="274208749"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 16:43:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="698852680"
+Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Aug 2022 16:43:11 -0700
+Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQdY6-0000id-1b;
+        Tue, 23 Aug 2022 23:43:10 +0000
+Date:   Wed, 24 Aug 2022 07:42:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 07/23] ata: libahci_platform: Convert to using devm
+ bulk clocks API
+Message-ID: <202208240749.UcN8Fuu0-lkp@intel.com>
+References: <20220822183728.24434-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Dave Chinner" <david@fromorbit.com>
-Cc:     "Jeff Layton" <jlayton@kernel.org>,
-        "Mimi Zohar" <zohar@linux.ibm.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org,
-        "Trond Myklebust" <trondmy@hammerspace.com>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-In-reply-to: <20220823232832.GQ3600936@dread.disaster.area>
-References: <20220822133309.86005-1-jlayton@kernel.org>,
- <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>,
- <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>,
- <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>,
- <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>,
- <20220822233231.GJ3600936@dread.disaster.area>,
- <6cbcb33d33613f50dd5e485ecbf6ce7e305f3d6f.camel@kernel.org>,
- <166125468756.23264.2859374883806269821@noble.neil.brown.name>,
- <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>,
- <166129348704.23264.10381335282721356873@noble.neil.brown.name>,
- <20220823232832.GQ3600936@dread.disaster.area>
-Date:   Wed, 24 Aug 2022 09:42:18 +1000
-Message-id: <166129813890.23264.7939069509747685028@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822183728.24434-8-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022, Dave Chinner wrote:
-> On Wed, Aug 24, 2022 at 08:24:47AM +1000, NeilBrown wrote:
-> > On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > > On Tue, 2022-08-23 at 21:38 +1000, NeilBrown wrote:
-> > > > On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > > > > So, we can refer to that and simply say:
-> > > > >=20
-> > > > > "If the function updates the mtime or ctime on the inode, then the
-> > > > > i_version should be incremented. If only the atime is being updated,
-> > > > > then the i_version should not be incremented. The exception to this=
- rule
-> > > > > is explicit atime updates via utimes() or similar mechanism, which
-> > > > > should result in the i_version being incremented."
-> > > >=20
-> > > > Is that exception needed?  utimes() updates ctime.
-> > > >=20
-> > > > https://man7.org/linux/man-pages/man2/utimes.2.html
-> > > >=20
-> > > > doesn't say that, but
-> > > >=20
-> > > > https://pubs.opengroup.org/onlinepubs/007904875/functions/utimes.html
-> > > >=20
-> > > > does, as does the code.
-> > > >=20
-> > >=20
-> > > Oh, good point! I think we can leave that out. Even better!
-> >=20
-> > Further, implicit mtime updates (file_update_time()) also update ctime.
-> > So all you need is
-> >    If the function updates the ctime, then i_version should be
-> >    incremented.
-> >=20
-> > and I have to ask - why not just use the ctime?  Why have another number
-> > that is parallel?
-> >=20
-> > Timestamps are updated at HZ (ktime_get_course) which is at most every
-> > millisecond.
->=20
-> Kernel time, and therefore timestamps, can go backwards.
+Hi Serge,
 
-Yes, and when that happens you get to keep both halves...
+I love your patch! Yet something to improve:
 
-For NFSv4 I really don't think that matters.  If it happened every day,
-that might be a problem.  Even if it happens as a consequence of normal
-operations it might be a problem.  But it can only happen if something
-goes wrong.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on axboe-block/for-next linus/master v6.0-rc2 next-20220823]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Mostly, NFSv4 only needs to changeid to change.  If the kernel time goes
-backwards it is possible that a changeid will repeat, though unlikely.
-It is even possible that a client will see the first and second
-instances of that repeat, and assume there is no change in between - but
-that is astronomically unlikely.  "touch"ing the file or remounting will
-fix that.
+url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220823-024133
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: hexagon-randconfig-r041-20220821 (https://download.01.org/0day-ci/archive/20220824/202208240749.UcN8Fuu0-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/fbc177b5ec3bf29261813907b13ab93865211e6e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220823-024133
+        git checkout fbc177b5ec3bf29261813907b13ab93865211e6e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-When a write delegation is in force (which Linux doesn't currently offer
-and no-one seems to care about, but maybe one day), the client is
-allowed to update the changeid, and when the delegation is returned, the
-server is supposed to ensure the new changeid is at least the last one
-assigned by the client.  This is the only reason that it is defined as
-being monotonic (rather than just "non-repeating") - so the client and
-server can change it in the same way.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-So while kernel time going backwards is theoretically less than ideal,
-it is not practically a problem.
+All errors (new ones prefixed by >>):
 
-NeilBrown
+>> ld.lld: error: undefined symbol: __clk_get_name
+   >>> referenced by libahci_platform.c
+   >>>               ata/libahci_platform.o:(ahci_platform_get_resources) in archive drivers/built-in.a
+   >>> referenced by libahci_platform.c
+   >>>               ata/libahci_platform.o:(ahci_platform_get_resources) in archive drivers/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

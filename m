@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBA659D2BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79F659D2B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241376AbiHWHxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
+        id S241313AbiHWHyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241390AbiHWHxm (ORCPT
+        with ESMTP id S241373AbiHWHye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:53:42 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9038011819
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:53:40 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso13722697pjh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:53:40 -0700 (PDT)
+        Tue, 23 Aug 2022 03:54:34 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905BB3C8E3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:54:33 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 83so7009963pfw.6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=nEf9h9B8XFcsw7F7FHaP4rxVimh4AhqGZN0e/h8tVmE=;
-        b=H6eHdQC9nfpqxyFvScDKeIUMxPQixxwngCfLH06PzVsCieuC0wFtRfbviaHQJOZ2no
-         KCFxhv8QDvdg2lmpGanCvawqQssmfLAG/0dof0Milu2TexViPWyQPk7YGFVyCzEYdlt6
-         mmjUQqBLQRHNtzu0ceLLg4CKTcLb4WV/i7RWRuJ89FQHYSg1I3Tp8wP/alrEx2Vu3lzG
-         MuOiBfI2cgWGEeDFOQg/DxB0fMAMDQpn7qndnPxjbPRKmEawHG+E/cf1iq4ONtmvZZBt
-         SbM+vuVZbcUIpHNYo+NvsSPo/mCThabsQNYNurxvrvdB+wNJRtPH2tBuP4K/KXk4VDw3
-         hyxA==
+        bh=Fhc6O7Qq+zYM2J7HupUPMiHA1uhYp0JcTthm4gtLpMk=;
+        b=eKLCQCWAmjeNQY1OQRr7S08CWDNeiCLxDDFGvLNINXnWtOrZLASoZsSQ0Ph+3K3QQZ
+         frwmfig0WFOxAq9gk5JssTOTZ6LtS/+sOxKh930lF4P8GDaRREGt/kcoQ3v2O0NCvR38
+         El1vo57dLAvErllDwVCFVn6a4f7mvlsCi2LRw4k711w/QpulUYNP1Kmcxfb1EGt8nwBN
+         o7hGrwKezS1mSIQqhzkQeWDpmP+ai8w/XBjjYVIjTPEiitPxesfd3I/0VlALCJ4LYQbV
+         jfhBsVKzE0N/WqlTt6sRwlR7egUpqKo1JWwmEPHggFYCn9DAvwqMS88BNSpoXhorShDE
+         +GAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=nEf9h9B8XFcsw7F7FHaP4rxVimh4AhqGZN0e/h8tVmE=;
-        b=qJACfZnQQqkc7Q9ZsG5TcO516/k8BVve6mrHpTVW0GdItVtAolMH67U41tx0AibWdm
-         q3eZVDYG4js8fjR0NJu1YeXtqiiXYIbsmsFC/r7/5cHgnMRcWyZSXs/nokPmbRhrWp2I
-         31zKyGEcZvcj0mv50fTOpqc401e177pngCBBHdKDKmuuNVU6uwVM51yZzfAy/Ogfpaqd
-         opkoifY/5Nm3LI2yfV0jht63ui+adHTyeiLlvDgWZgRC1aLQZM9i+zJP0QldbKBPJbpR
-         9betv3IWjaW/PDvBOHf7z+565dXR9DNsN5BLc6BzgstNW62TDLbzPEY+Gm4mycCQg9PX
-         FG0A==
-X-Gm-Message-State: ACgBeo2bbxhUA6LoG0ZdKhqBm1es/XbDtG8nafYx6pgAGVS9mZJaNRje
-        RY14l2Z8MImzmt0/7VZdwms=
-X-Google-Smtp-Source: AA6agR5PV7F4Fv1F70NJL2LVcXFE9N4pQkIOk+6vloijP9gA6TFUajv72QAWRFmdHKbokWoX6ssYYg==
-X-Received: by 2002:a17:90b:4c08:b0:1fb:66d3:79c with SMTP id na8-20020a17090b4c0800b001fb66d3079cmr1269718pjb.121.1661241220134;
-        Tue, 23 Aug 2022 00:53:40 -0700 (PDT)
+        bh=Fhc6O7Qq+zYM2J7HupUPMiHA1uhYp0JcTthm4gtLpMk=;
+        b=4QG2QGSHK6QIoVWIneRTmJ2o0OzPRVZhl9P/0YkhovKU6gg1zKoFR7qtXI0QnDIQM/
+         E/9pkVjVHXu+kUcZRQM0o5DPr2mAEjWIKqCTYjRwGMFwnN+Lu5jn8AzR7OS7RNNQ/l4z
+         C3SQ84jyYywcwIR6uua0n3T0bzphnE++DsvYI+SdOV+c911ZyrYNv6jnq0D8CStLnOvZ
+         AMsqhUYugMiflcgO/LH/HtIR287/5Yp8Fvyjt9SPX0zKVY1glcdbfX/Lta0wKqscICgu
+         0L/2TKO/w/ch1oYPI0fqIodlrxlx5yW7YvPygzjHs4CL1pdfmLafDeJVkGn2tzyXMVYP
+         uGSw==
+X-Gm-Message-State: ACgBeo1B0RV8Vqq8jK/EQYffpItbJ1mlwZMyi3wV8py48K263vm2dD2y
+        e9tLF0dllToXJs6Pg88qZVg=
+X-Google-Smtp-Source: AA6agR42r5dO1/gViA+AZieihQ4hhf5LzL7oacVP6Vd1GQ+y1OSyfKOBE2bT0T+YxAX1ZqxCr6apSQ==
+X-Received: by 2002:a05:6a00:1410:b0:528:5a5a:d846 with SMTP id l16-20020a056a00141000b005285a5ad846mr24614330pfu.9.1661241272696;
+        Tue, 23 Aug 2022 00:54:32 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902dacc00b0017269cc60d7sm9737931plx.214.2022.08.23.00.53.37
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902d38c00b001636d95fe59sm4284033pld.172.2022.08.23.00.54.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 00:53:39 -0700 (PDT)
+        Tue, 23 Aug 2022 00:54:32 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     broonie@kernel.org, linux-kernel@vger.kernel.org
-Cc:     codrin.ciubotariu@microchip.com, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+To:     agruenba@redhat.com, linux-kernel@vger.kernel.org
+Cc:     rpeterso@redhat.com, cluster-devel@redhat.com,
         ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] ASoC: atmel_ssc_dai: Remove the unneeded result variable
-Date:   Tue, 23 Aug 2022 07:53:35 +0000
-Message-Id: <20220823075335.209072-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] gfs2: Remove the unneeded result variable
+Date:   Tue, 23 Aug 2022 07:54:29 +0000
+Message-Id: <20220823075429.209135-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,37 +72,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Return the value from asoc_ssc_init() directly instead of storing it
+Return the value from gfs2_iomap_get() directly instead of storing it
 in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- sound/soc/atmel/atmel_ssc_dai.c | 5 +----
+ fs/gfs2/bmap.c | 5 +----
  1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/sound/soc/atmel/atmel_ssc_dai.c b/sound/soc/atmel/atmel_ssc_dai.c
-index e868b7e028d6..3763454436c1 100644
---- a/sound/soc/atmel/atmel_ssc_dai.c
-+++ b/sound/soc/atmel/atmel_ssc_dai.c
-@@ -891,7 +891,6 @@ static int asoc_ssc_init(struct device *dev)
- int atmel_ssc_set_audio(int ssc_id)
+diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
+index 3bdb2c668a71..977d53db2994 100644
+--- a/fs/gfs2/bmap.c
++++ b/fs/gfs2/bmap.c
+@@ -2462,8 +2462,6 @@ int __gfs2_punch_hole(struct file *file, loff_t offset, loff_t length)
+ static int gfs2_map_blocks(struct iomap_writepage_ctx *wpc, struct inode *inode,
+ 		loff_t offset)
  {
- 	struct ssc_device *ssc;
 -	int ret;
- 
- 	/* If we can grab the SSC briefly to parent the DAI device off it */
- 	ssc = ssc_request(ssc_id);
-@@ -903,9 +902,7 @@ int atmel_ssc_set_audio(int ssc_id)
- 		ssc_info[ssc_id].ssc = ssc;
- 	}
- 
--	ret = asoc_ssc_init(&ssc->pdev->dev);
 -
--	return ret;
-+	return asoc_ssc_init(&ssc->pdev->dev);
- }
- EXPORT_SYMBOL_GPL(atmel_ssc_set_audio);
+ 	if (WARN_ON_ONCE(gfs2_is_stuffed(GFS2_I(inode))))
+ 		return -EIO;
  
+@@ -2472,8 +2470,7 @@ static int gfs2_map_blocks(struct iomap_writepage_ctx *wpc, struct inode *inode,
+ 		return 0;
+ 
+ 	memset(&wpc->iomap, 0, sizeof(wpc->iomap));
+-	ret = gfs2_iomap_get(inode, offset, INT_MAX, &wpc->iomap);
+-	return ret;
++	return gfs2_iomap_get(inode, offset, INT_MAX, &wpc->iomap);
+ }
+ 
+ const struct iomap_writeback_ops gfs2_writeback_ops = {
 -- 
 2.25.1

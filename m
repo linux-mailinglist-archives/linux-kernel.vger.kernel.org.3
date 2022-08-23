@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BEB59E46C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A162D59E472
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241798AbiHWNU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 09:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S241639AbiHWNUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 09:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241767AbiHWNUT (ORCPT
+        with ESMTP id S240087AbiHWNUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 09:20:19 -0400
+        Tue, 23 Aug 2022 09:20:17 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA32140C97
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:19:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA1B140CBF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661249948; x=1692785948;
+  t=1661249952; x=1692785952;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fusilmdSQD+FIBKYeUukiHJrxKRQ3B5pPSTTQeO8rTk=;
-  b=XphxZ09yA08rZUFMPA1jd9zWhL9eRh/sEeaJuMUk7kCC2G1f+Ug9vKBJ
-   AePNu/cn2lF+tU6SlBgE1uFCkg7IAp+DFZrl9dS/Za2r4Ifgti8p/z3j+
-   lQGh3jNCa9yKbNEyIj/RyyX9r48zCt0eoUWjgJpVWGUoDm21ywoveOp4Q
-   SzbXNItgON+Qapcghut4AAuduVlheKOGSGlyYKtWFPEJ3NqD7JYeX219z
-   f9iEALvHMyRtbj6L7frQt71J2mw3ROU2xCryIUB+2lBVRuiGaE6DHjPtM
-   Q//CdYCD81LIsjf3MJKIOdzyn23PgGiVTB3VnyzTj02L49Z5THfFfgwnz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="291206644"
+  bh=xXWYIOHPKolHy/g3/53FzAfI4f56T3QhlqwnvSbksEw=;
+  b=n+iiFlmpkT3Tk30H/HDhMGigHp4ki3vBGCaxCQOyaazxzvn9dng2+oFf
+   JBuFK49Ei2EVWt709eb6uIGPxyJC39+e3PVaeaWECW17cP/cxk+SS5wg0
+   dXC0khTXyeUy++Fv6yBCRwbUftsdQz8gWnaFKEc/jxC34CdGWN3K4xcaJ
+   mcw7/iqPNDQzPpMKUSinF4be9W4zV9+CSE8ab5xwAst9SQxGHoGX1mcv7
+   lOXNUuSjsk2pvyuhssCXYQSrUaITXoEL9jSeFGRAO2mnkq5Fhvp2/j2Nj
+   kT7OY4kJx3hFJu722ewV9jeUg1LQ7jy9C568EFAjqtrFE+1umJYiiON9/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="291206661"
 X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="291206644"
+   d="scan'208";a="291206661"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 03:18:18 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 03:18:22 -0700
 X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="751639982"
+   d="scan'208";a="751639998"
 Received: from jabish-mobl2.amr.corp.intel.com (HELO paris.amr.corp.intel.com) ([10.254.9.209])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 03:18:13 -0700
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 03:18:18 -0700
 From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
 To:     intel-gfx@lists.freedesktop.org
 Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -47,9 +47,9 @@ Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         andrzej.hajda@intel.com, keescook@chromium.org,
         mauro.chehab@linux.intel.com,
         intel-gfx-trybot@lists.freedesktop.org
-Subject: [PATCH v8 6/8] drm/i915: Check if the size is too big while creating shmem file
-Date:   Tue, 23 Aug 2022 19:17:27 +0900
-Message-Id: <20220823101729.2098841-7-gwan-gyeong.mun@intel.com>
+Subject: [PATCH v8 7/8] drm/i915: Use error code as -E2BIG when the size of gem ttm object is too large
+Date:   Tue, 23 Aug 2022 19:17:28 +0900
+Message-Id: <20220823101729.2098841-8-gwan-gyeong.mun@intel.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220823101729.2098841-1-gwan-gyeong.mun@intel.com>
 References: <20220823101729.2098841-1-gwan-gyeong.mun@intel.com>
@@ -66,13 +66,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The __shmem_file_setup() function returns -EINVAL if size is greater than
-MAX_LFS_FILESIZE. To handle the same error as other code that returns
--E2BIG when the size is too large, it add a code that returns -E2BIG when
-the size is larger than the size that can be handled.
-
-v4: If BITS_PER_LONG is 32, size > MAX_LFS_FILESIZE is always false, so it
-    checks only when BITS_PER_LONG is 64.
+The ttm_bo_init_reserved() functions returns -ENOSPC if the size is too big
+to add vma. The direct function that returns -ENOSPC is drm_mm_insert_node_in_range().
+To handle the same error as other code returning -E2BIG when the size is
+too large, it converts return value to -E2BIG.
 
 Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
 Cc: Chris Wilson <chris@chris-wilson.co.uk>
@@ -80,37 +77,33 @@ Cc: Matthew Auld <matthew.auld@intel.com>
 Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
 Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reported-by: kernel test robot <lkp@intel.com>
 Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_shmem.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-index 339b0a9cf2d0..ca30060e34ab 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-@@ -541,6 +541,20 @@ static int __create_shmem(struct drm_i915_private *i915,
- 
- 	drm_gem_private_object_init(&i915->drm, obj, size);
- 
-+	/* XXX: The __shmem_file_setup() function returns -EINVAL if size is
-+	 * greater than MAX_LFS_FILESIZE.
-+	 * To handle the same error as other code that returns -E2BIG when
-+	 * the size is too large, we add a code that returns -E2BIG when the
-+	 * size is larger than the size that can be handled.
-+	 * If BITS_PER_LONG is 32, size > MAX_LFS_FILESIZE is always false,
-+	 * so we only needs to check when BITS_PER_LONG is 64.
-+	 * If BITS_PER_LONG is 32, E2BIG checks are processed when
-+	 * i915_gem_object_size_2big() is called before init_object() callback
-+	 * is called.
-+	 */
-+	if (BITS_PER_LONG == 64 && size > MAX_LFS_FILESIZE)
-+		return -E2BIG;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+index 615541b650fa..e3046e02b47a 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -1210,6 +1210,17 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
+ 	ret = ttm_bo_init_reserved(&i915->bdev, i915_gem_to_ttm(obj), bo_type,
+ 				   &i915_sys_placement, page_size >> PAGE_SHIFT,
+ 				   &ctx, NULL, NULL, i915_ttm_bo_destroy);
 +
- 	if (i915->mm.gemfs)
- 		filp = shmem_file_setup_with_mnt(i915->mm.gemfs, "i915", size,
- 						 flags);
++	/*
++	 * XXX: The ttm_bo_init_reserved() functions returns -ENOSPC if the size
++	 * is too big to add vma. The direct function that returns -ENOSPC is
++	 * drm_mm_insert_node_in_range(). To handle the same error as other code
++	 * that returns -E2BIG when the size is too large, it converts -ENOSPC to
++	 * -E2BIG.
++	 */
++	if (size >> PAGE_SHIFT > INT_MAX && ret == -ENOSPC)
++		ret = -E2BIG;
++
+ 	if (ret)
+ 		return i915_ttm_err_to_gem(ret);
+ 
 -- 
 2.37.1
 

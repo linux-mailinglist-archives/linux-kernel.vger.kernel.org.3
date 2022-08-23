@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4EB059DD90
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BAD59DF7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352170AbiHWMD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S1359786AbiHWMGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359380AbiHWMBX (ORCPT
+        with ESMTP id S1359436AbiHWMBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:01:23 -0400
+        Tue, 23 Aug 2022 08:01:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A7F78599;
-        Tue, 23 Aug 2022 02:35:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16AED9E87;
+        Tue, 23 Aug 2022 02:35:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17C6E61494;
-        Tue, 23 Aug 2022 09:35:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C104C433D6;
-        Tue, 23 Aug 2022 09:35:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F079061484;
+        Tue, 23 Aug 2022 09:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E67DFC433D6;
+        Tue, 23 Aug 2022 09:35:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247334;
-        bh=VkRn4+8ydRrl8kgh6G1pqsFQTBK7tf6FFq8d3e6si44=;
+        s=korg; t=1661247337;
+        bh=EYVjw1q+dpeO/mjOC3orZPoHYiNWoXIRtQLqP1kf+8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=12Pcr+qL9iUELLx2xYcIXEaFj9eupoElua7gShLAnT0tpsqdAckclsSwdXpaUYGWX
-         OIrZVfTo7O9PoTAtprjm5D9mv62PYxx/z+n39fDIHAfhQOdUCWgl+5NpGSGgdLFsWt
-         9BrHrVvndmlCEp1SmbtkMuDBPMxeID6HyvcnZ0Mk=
+        b=fDB5FNBWqqZSUbzW0CmVlx1OPoG13sbT2lZNxj4LLtX/zBm04ztyBphDr3cLGTkAV
+         lly3+FL+YXt1yhpPziErwniaisFIvOTU1019njlQo/2Hlg7qZ3UOr9LsrJXz0/rUHF
+         e0jPGXWWVgc4tPRMtLdwHnfshu2pxLIDMx1cDZg4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 364/389] dmaengine: sprd: Cleanup in .remove() after pm_runtime_get_sync() failed
-Date:   Tue, 23 Aug 2022 10:27:22 +0200
-Message-Id: <20220823080130.752756708@linuxfoundation.org>
+        stable@vger.kernel.org, Yi Zhang <yi.zhang@redhat.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 365/389] nvmet-tcp: fix lockdep complaint on nvmet_tcp_wq flush during queue teardown
+Date:   Tue, 23 Aug 2022 10:27:23 +0200
+Message-Id: <20220823080130.791698452@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -57,45 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Sagi Grimberg <sagi@grimberg.me>
 
-[ Upstream commit 1e42f82cbec7b2cc4873751e7791e6611901c5fc ]
+[ Upstream commit 533d2e8b4d5e4c89772a0adce913525fb86cbbee ]
 
-It's not allowed to quit remove early without cleaning up completely.
-Otherwise this results in resource leaks that probably yield graver
-problems later. Here for example some tasklets might survive the lifetime
-of the sprd-dma device and access sdev which is freed after .remove()
-returns.
+We probably need nvmet_tcp_wq to have MEM_RECLAIM as we are
+sending/receiving for the socket from works on this workqueue.
+Also this eliminates lockdep complaints:
+--
+[ 6174.010200] workqueue: WQ_MEM_RECLAIM
+nvmet-wq:nvmet_tcp_release_queue_work [nvmet_tcp] is flushing
+!WQ_MEM_RECLAIM nvmet_tcp_wq:nvmet_tcp_io_work [nvmet_tcp]
+[ 6174.010216] WARNING: CPU: 20 PID: 14456 at kernel/workqueue.c:2628
+check_flush_dependency+0x110/0x14c
 
-As none of the device freeing requires an active device, just ignore the
-return value of pm_runtime_get_sync().
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
-Link: https://lore.kernel.org/r/20220721204054.323602-1-u.kleine-koenig@pengutronix.de
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Reported-by: Yi Zhang <yi.zhang@redhat.com>
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/sprd-dma.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/nvme/target/tcp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
-index b966115bfad1..4f0c50106321 100644
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -1201,11 +1201,8 @@ static int sprd_dma_remove(struct platform_device *pdev)
+diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
+index 4341c7244662..e9512d077b8a 100644
+--- a/drivers/nvme/target/tcp.c
++++ b/drivers/nvme/target/tcp.c
+@@ -1762,7 +1762,8 @@ static int __init nvmet_tcp_init(void)
  {
- 	struct sprd_dma_dev *sdev = platform_get_drvdata(pdev);
- 	struct sprd_dma_chn *c, *cn;
--	int ret;
+ 	int ret;
  
--	ret = pm_runtime_get_sync(&pdev->dev);
--	if (ret < 0)
--		return ret;
-+	pm_runtime_get_sync(&pdev->dev);
+-	nvmet_tcp_wq = alloc_workqueue("nvmet_tcp_wq", WQ_HIGHPRI, 0);
++	nvmet_tcp_wq = alloc_workqueue("nvmet_tcp_wq",
++				WQ_MEM_RECLAIM | WQ_HIGHPRI, 0);
+ 	if (!nvmet_tcp_wq)
+ 		return -ENOMEM;
  
- 	/* explicitly free the irq */
- 	if (sdev->irq > 0)
 -- 
 2.35.1
 

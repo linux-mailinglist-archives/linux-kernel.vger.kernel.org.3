@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9750F59EE10
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3591159EE12
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiHWVT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S230225AbiHWVUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiHWVT0 (ORCPT
+        with ESMTP id S229533AbiHWVUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:19:26 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC0A53026;
-        Tue, 23 Aug 2022 14:19:25 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id pm13so6226673pjb.5;
-        Tue, 23 Aug 2022 14:19:25 -0700 (PDT)
+        Tue, 23 Aug 2022 17:20:06 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44F53026
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:20:04 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33931a5c133so173568467b3.17
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:20:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=6FcH65dwxjDDW9xxK+2OOSLy68w1K9vVVP0/tjz9RF8=;
-        b=IAVOQuapNQPJQ59AIbaoGUkcSZFYF/y5+kot9p+eIripq+MY7xg2Lu8k0RuEodO7aU
-         z99I+tsZWI9+3KdjE8rCDvLy9iyJiuzeX5ilrN68VfMkWht89neduS1pCtOw+nRILhYb
-         0z/sU7rzDT3F2G2lrocF3CguXbJlITiI56IR2mhWrVqFJz2M/J6SHPofIPKY1lonm5pR
-         K4JTInp4pSfNi47VeTuJfMhFo3PtYd8mDKiGc5jmzUqPXqNfHlVOvmCgyPp6noCYmL3V
-         Id6VnPsYkngimTQvxgElhJOV5RR0f/YAmplFHXOl7AkakT2roDgWIgShd983PPyL4L2P
-         Eekg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=8VeZYoidRbxCrAGHLIxsjoWrKlcdP3ygGRJKvTGM14s=;
+        b=sUPIwT+TKjogJoBV6i+R1coppPbUF2jIqnYJesgbisbTP/7RulqcH/pADy3obDIwqn
+         V3qaBMquKA1unRavnFfL+bDjWHEmPa0njGLkzXOkZis6LmBig4WeqzX+4EE7rMXT90NV
+         NdLg+cLKCLuT9McTFZPW0hfo5LT3pf11SzNHeUw+e3Jm34tiDHL90ra/kV+xHP0j/ZyK
+         9+MFtYY7hOnhrhLtvYQkhrq5iWy5bAuaqauIq3xLvcPxCbl1eU9/IicO6UYeEBT1FC4c
+         CJj6znhOj5GOFovB3NWxHB51Jd9lWYsk2wF+fAUm8SjgqVx8u7KMhlZQZn8KFJpqw6YF
+         +EgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=6FcH65dwxjDDW9xxK+2OOSLy68w1K9vVVP0/tjz9RF8=;
-        b=2dMBMU+nO55uuGESJbB9s0re/VDWz23U8Gth8DV55xggq8xfvTgjmNf7ZG+jmhEFyR
-         7+iyPXZRdq1zupWkhC4Xczrdgu7o20nyy61ySj/DDuQJ7JneiOTN9lYhlhqqAOyp6gsF
-         RGUculFaucO0jDQ0XcDO4h9/IeI0FAF0WjXU4I1RWjS4g4qVIqNxEd56IVe3jxVXEXuw
-         7YwTJvs3NN1FVTc4mFu+IAblfH6wnpQI66SSPKGMFROq/5QnzfsMKpz6J8FBsPTScAff
-         M9qTDfiIBak1hpntiKHywJIO21eOqgPpFXO4vp+uVZ87ZZ5KOfmjeKd35zewGtdltQN2
-         TmZg==
-X-Gm-Message-State: ACgBeo1O0udvcCBfKrcrcsYaHlR4Bh6qgB5tQ+N8GdKe8eXoccbfG/3t
-        94ABRuLiKNJloLJQe1AfLDw=
-X-Google-Smtp-Source: AA6agR527M4GYWYSvAkg6sy0AkBvZXPetuAXHNyFwaK0gDZoxrwrsHsYzy9A9dit6owqfPuT5G6L2g==
-X-Received: by 2002:a17:90b:4f49:b0:1f5:c7c:b565 with SMTP id pj9-20020a17090b4f4900b001f50c7cb565mr5176084pjb.32.1661289564909;
-        Tue, 23 Aug 2022 14:19:24 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b125-20020a62cf83000000b0053653c6b9f9sm7298146pfg.204.2022.08.23.14.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:19:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 Aug 2022 14:19:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/244] 5.15.63-rc1 review
-Message-ID: <20220823211923.GB2439282@roeck-us.net>
-References: <20220823080059.091088642@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=8VeZYoidRbxCrAGHLIxsjoWrKlcdP3ygGRJKvTGM14s=;
+        b=fYG8aCHi0W8AnmQ/lqRLKH3El1mzW24B3SY9pp2yDpsBPF1cPxOrMvF7EsA/dv6vvH
+         oagPzrUJPGUmGSfwFazlDmwxr9o1H6mI9Ur7NRTYHWSzwK3qWLGBOEO5ZkTc2lFuZzb/
+         pYQSgOSOC9nmorMk1HeGUhkBAvzZNsyCiU2UPj55784yYmycwIXHFWlHxtVb7+7GuoEA
+         tD80hvb11xRysdYJJEwGLBPm0dM5xWzbW2Ld2/i074hGailp9g/c4Apx0M2LTtEnCGzd
+         yz39IM8wo4Y3ZMDqDnyK/G6NDPVmh0VRqMXmEF16CT77uItWRVGhWUMZg0OYhYabNw5Q
+         cAGQ==
+X-Gm-Message-State: ACgBeo38FbUhkOxUZRHU0ZnU1g0CsmvjFbFntOfK+UOzfvdukfDAWJaq
+        ITDMn4K+N+cK8aCKH5O/dvy0UxBHxA==
+X-Google-Smtp-Source: AA6agR7dXbMe2QWC6NUqnUS2IDe3BcZnRXK37GUPMMJMhxQYn1ivPx7YVvo/EvE/LSCwIqKikSxMB896Ow==
+X-Received: from adelg-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:d1f])
+ (user=adelg job=sendgmr) by 2002:a0d:f9c1:0:b0:33b:65f4:9506 with SMTP id
+ j184-20020a0df9c1000000b0033b65f49506mr13422629ywf.227.1661289604176; Tue, 23
+ Aug 2022 14:20:04 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 21:19:58 +0000
+Message-Id: <20220823211958.2519055-1-adelg@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH] selftests: Add a taint selftest
+From:   Andrew Delgadilo <adelg@google.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        dylanbhatch@google.com, sashalevin@google.com, gthelen@google.com,
+        adelg@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:22:39AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.63 release.
-> There are 244 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> Anything received after that time might be too late.
-> 
+From: Andrew Delgadillo <adelg@google.com>
 
-Build results:
-	total: 159 pass: 158 fail: 1
-Failed builds:
-	um:defconfig
-Qemu test results:
-	total: 485 pass: 485 fail: 0
+When testing a kernel, one of the earliest signals one can get is if a
+kernel has become tainted. For example, an organization might be
+interested in mass testing commits on their hardware. An obvious first
+step would be to make sure every commit boots, and a next step would be
+to make sure there are no warnings/crashes/lockups, hence the utility of
+a taint test.
 
-arch/um/kernel/um_arch.c:440:6: error: redefinition of 'apply_returns'
+Signed-off-by: Andrew Delgadillo <adelg@google.com>
+---
+ tools/testing/selftests/core/Makefile |  1 +
+ tools/testing/selftests/core/taint.sh | 28 +++++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+)
+ create mode 100755 tools/testing/selftests/core/taint.sh
 
-Guenter
+diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
+index f6f2d6f473c6a..695bdbfb02f90 100644
+--- a/tools/testing/selftests/core/Makefile
++++ b/tools/testing/selftests/core/Makefile
+@@ -2,6 +2,7 @@
+ CFLAGS += -g -I../../../../usr/include/
+ 
+ TEST_GEN_PROGS := close_range_test
++TEST_PROGS := taint.sh
+ 
+ include ../lib.mk
+ 
+diff --git a/tools/testing/selftests/core/taint.sh b/tools/testing/selftests/core/taint.sh
+new file mode 100755
+index 0000000000000..661c2cb8cd9bf
+--- /dev/null
++++ b/tools/testing/selftests/core/taint.sh
+@@ -0,0 +1,28 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++set -oue pipefail
++
++# By default, we only want to check if our system has:
++# - seen an oops or bug
++# - a warning occurred
++# - a lockup occurred
++# The bit values for these, and more, can be found at
++# Documentation/admin-guide/tainted-kernels.html
++# This value can be overridden by passing a mask as the
++# first positional argument.
++taint_bitmask=$(( 128 + 512 + 16384 ))
++
++# If we have a positional argument, then override our
++# default bitmask.
++if [[ -n "${1-}" ]]; then
++	taint_bitmask=$1
++fi
++
++taint_bits=$(cat /proc/sys/kernel/tainted)
++
++result=$(( taint_bitmask & taint_bits ))
++if [[ "$result" -ne 0 ]]; then
++	exit 1
++fi
++
++exit 0
+-- 
+2.37.1.595.g718a3a8f04-goog
+

@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A6D59E819
+	by mail.lfdr.de (Postfix) with ESMTP id 9A04A59E818
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245457AbiHWQyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S245529AbiHWQ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245360AbiHWQya (ORCPT
+        with ESMTP id S245668AbiHWQzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:54:30 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D89E1367DF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:23:43 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso17249240pjk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=zqgEOt/TK3wL9wlmq1dIyUheKT1/TvyscS8U/UOxg50=;
-        b=WVljkVoKoCDGdZ3EvIR47a3FVfptjEqMh75J0HuMzDu97524zwum4RT7h+6tmgAh/5
-         sp69YR7PZ8RZx1/++gzHoNClG4UGCeURKfpEN5gnLI4iuf33zgW84boywVDt/ncFS2XH
-         XyGOA7txzhB3ypg+1QudaN1n9h5k/Fx9LYcE3eFehu1yzjpIe75IjDUSkVALJQF+QVuw
-         Ob7Iw9FicJShOGP0kS3g5nTvhMAXx2dHyJruNa9TZXudZvDAKUEFbcJz+ir7EA5EryKR
-         WpxppYfqCNumpRXJms3lQHQ1mfgeFtktuAZhM2sUQ7IxNhaVSIiKYXU15jro3mYVl5Zh
-         NDCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=zqgEOt/TK3wL9wlmq1dIyUheKT1/TvyscS8U/UOxg50=;
-        b=GJGtNFpnnUSBARzUQEKljo4O5T5Oe88wbSRdJ0wpqi6n4bCg6vX7bWWkyALjCaKiVo
-         +dIy4IYwhOQ+w/ttCaIAKD/vucyWWF3G/543swvMxtsRgpoHHZb8RGjRlry6vLfo6kGK
-         OSulAQ+Eqp9a7yPGSMcMNdZDt40+AUoDujZp5vZEWF8e3fRPkk8NgTO+VEeUCx7Zcw7J
-         7+0czorbFSfeeF/fF6TVjLuCUSe6bUSHKyqhVebPoN5vg9g+0M8rgqndTWTbjfAH+2Ak
-         88uCtcYmTrIzbQljHNan8TRxSkuv6KEl72S4S0fVRO9LXIbehKDdGSidHCbe22gzKjPJ
-         MqVQ==
-X-Gm-Message-State: ACgBeo3tQB2pXxdfMNbpuPXuTbxdz+TIY/+Mkfe2y3fmEHppLudYJXWM
-        RCzSk0ErG873GQW/Mx4i6Mu6qA==
-X-Google-Smtp-Source: AA6agR7WdzCoE1JL+CoVyUMNuw7bM5L56qez9WvHY4et7Hh19jpwj5T6mv6ii+vELcSSSw647qnKDQ==
-X-Received: by 2002:a17:90b:2644:b0:1fa:e0be:4dcb with SMTP id pa4-20020a17090b264400b001fae0be4dcbmr3202423pjb.85.1661261022785;
-        Tue, 23 Aug 2022 06:23:42 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d22-20020a63fd16000000b0042ae03134a0sm2037708pgh.48.2022.08.23.06.23.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 06:23:41 -0700 (PDT)
-Message-ID: <63368ff3-d78a-5be3-2d38-5a9ff3cf7805@kernel.dk>
-Date:   Tue, 23 Aug 2022 07:23:40 -0600
+        Tue, 23 Aug 2022 12:55:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B040E13AE1D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:25:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CCDD61527
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 13:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84CF6C433C1;
+        Tue, 23 Aug 2022 13:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661261140;
+        bh=/4xhD7ELNjBZtgpSSVaLsvo9d58ZYqtV6ReDGw96m5w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D3MRIp0X5ItLOQUwiZtdhZ0TmB2kzlIWU3Kw/M0a9bICSUz4b5UJFQb0AFkU0Msbc
+         2/jzI9dCTmVTL8M2tVkQ/Jr2EZ2FloyBnnuYVEffahexXdYyEkw4v74RY5xmZdIuPk
+         4+ROMQHgrVVABkvkS6/oX7NTbYbPTur0KJa4TqdmfFgo+o0LrsMjrI1ZyCoeFVJhB+
+         HLzbn0pU8+B64MQIOsX2gCN8ROURcpP9kLwsO875FlgnQ+73SAb9O9QYPQa8O9fuWM
+         LypSYds//Lc99u3jTSHur4c6XLqnHAh5+xDwJQSV+bFon1kOGBTLJlRtKXo5HhFIQ/
+         qfG/6ezFh0Vjg==
+Date:   Tue, 23 Aug 2022 16:25:24 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rebecca Mckeever <remckee0@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Shaoqin Huang <shaoqin.huang@intel.com>
+Subject: Re: [PATCH v2 1/8] memblock tests: update tests to check if
+ memblock_alloc zeroed memory
+Message-ID: <YwTVRHXslU4aW52G@kernel.org>
+References: <cover.1660897732.git.remckee0@gmail.com>
+ <669782f4f508c3dd60c5efd6d130d12a77573448.1660897732.git.remckee0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH liburing 0/2] liburing uapi and manpage update
-Content-Language: en-US
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Dylan Yudaken <dylany@fb.com>,
-        Facebook Kernel Team <kernel-team@fb.com>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>
-References: <20220823114813.2865890-1-ammar.faizi@intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220823114813.2865890-1-ammar.faizi@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <669782f4f508c3dd60c5efd6d130d12a77573448.1660897732.git.remckee0@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 5:52 AM, Ammar Faizi wrote:
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Fri, Aug 19, 2022 at 01:34:49AM -0700, Rebecca Mckeever wrote:
+> Add an assert in memblock_alloc() tests where allocation is expected to
+> occur. The assert checks whether the entire chunk of allocated memory is
+> cleared.
 > 
-> Hi Jens,
+> The current memblock_alloc() tests do not check whether the allocated
+> memory was zeroed. memblock_alloc() should zero the allocated memory since
+> it is a wrapper for memblock_alloc_try_nid().
 > 
-> There are two patches in this series.
+> Reviewed-by: Shaoqin Huang <shaoqin.huang@intel.com>
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> ---
+>  tools/testing/memblock/tests/alloc_api.c | 23 +++++++++++++++++++++++
+>  tools/testing/memblock/tests/common.c    |  7 +++++++
+>  tools/testing/memblock/tests/common.h    | 12 ++++++++++++
+>  3 files changed, 42 insertions(+)
 > 
-> 1) Sync the argument data type with `man 2 renameat`.
-> 
-> 2) On top of io_uring series I just sent, copy uapi io_uring.h to
->    liburing. Sync with the kernel.
+> diff --git a/tools/testing/memblock/tests/alloc_api.c b/tools/testing/memblock/tests/alloc_api.c
+> index a14f38eb8a89..aefb67557de9 100644
+> --- a/tools/testing/memblock/tests/alloc_api.c
+> +++ b/tools/testing/memblock/tests/alloc_api.c
+> @@ -22,6 +22,8 @@ static int alloc_top_down_simple_check(void)
+>  	allocated_ptr = memblock_alloc(size, SMP_CACHE_BYTES);
+>  
+>  	ASSERT_NE(allocated_ptr, NULL);
+> +	ASSERT_MEM_EQ((char *)allocated_ptr, 0, size);
+> +
 
-Applied, thanks.
+Can we please hide the casting inside ASSERT_MEM_EQ()?
+
+Like if ASSERT_MEM_EQ() were a function its declaration would be
+
+bool ASSERT_MEM_EQ(void *mem, char val, size_t size);
+
+>  	ASSERT_EQ(rgn->size, size);
+>  	ASSERT_EQ(rgn->base, expected_start);
+>  
 
 -- 
-Jens Axboe
-
-
+Sincerely yours,
+Mike.

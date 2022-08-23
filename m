@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D0859E036
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5610359DBEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353367AbiHWKPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S1356399AbiHWKmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352809AbiHWKGS (ORCPT
+        with ESMTP id S1354826AbiHWK3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E387027166;
-        Tue, 23 Aug 2022 01:53:07 -0700 (PDT)
+        Tue, 23 Aug 2022 06:29:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADF3A50C8;
+        Tue, 23 Aug 2022 02:06:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76FE461377;
-        Tue, 23 Aug 2022 08:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76AC6C433D6;
-        Tue, 23 Aug 2022 08:53:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 269E7B81C65;
+        Tue, 23 Aug 2022 09:06:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5193AC43470;
+        Tue, 23 Aug 2022 09:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244786;
-        bh=UlzcKidXqLG4HmGSEd5gPKAWOKksFX8ym+DBmzhofjk=;
+        s=korg; t=1661245576;
+        bh=lAUp43C3JTUgYhZPYiP1jP9u7t9uEzm6x8sRKe7/Weg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DGY3A5P+4Z+2xhE9/2R04DPXjp+R0wuoSJfGe6hEO2GQsBlX9iBFaQYbL3518zUPJ
-         JK8Z47fVyvcGM3EBGaxrcJU9eA36kiHgED3HyzYZgxF+tkGn+BcvFJMgBXxMjHSuvf
-         /sjj9mA3m5pFmVYTiS8qBJyp8+aAKZVY47Fxeomk=
+        b=ZjUQYCAPB2lyPjC/1BEFyIcLcjlZ+slzRrl8fhYPSyi7fQnSzsdW3fVw/4tB/q9R2
+         1l/HtpydPUM3Ftom4vAYj+OquVdUDHsbfQs0YkybBtdSdyOvTciz9M60ylOImlpV9J
+         s03PxFGocCugL44xzENwwxeIx7xSn0eE1zaOpufU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.15 114/244] nios2: add force_successful_syscall_return()
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 104/287] Bluetooth: hci_intel: Add check for platform_driver_register
 Date:   Tue, 23 Aug 2022 10:24:33 +0200
-Message-Id: <20220823080102.823419744@linuxfoundation.org>
+Message-Id: <20220823080103.882935359@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit fd0c153daad135d0ec1a53c5dbe6936a724d6ae1 upstream.
+[ Upstream commit ab2d2a982ff721f4b029282d9a40602ea46a745e ]
 
-If we use the ancient SysV syscall ABI, we'd better have tell the
-kernel how to claim that a negative return value is a success.
-Use ->orig_r2 for that - it's inaccessible via ptrace, so it's
-a fair game for changes and it's normally[*] non-negative on return
-from syscall.  Set to -1; syscall is not going to be restart-worthy
-by definition, so we won't interfere with that use either.
+As platform_driver_register() could fail, it should be better
+to deal with the return value in order to maintain the code
+consisitency.
 
-[*] the only exception is rt_sigreturn(), where we skip the entire
-messing with r1/r2 anyway.
-
-Fixes: 82ed08dd1b0e ("nios2: Exception handling")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1ab1f239bf17 ("Bluetooth: hci_intel: Add support for platform driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/nios2/include/asm/ptrace.h |    2 ++
- arch/nios2/kernel/entry.S       |    6 ++++++
- 2 files changed, 8 insertions(+)
+ drivers/bluetooth/hci_intel.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/arch/nios2/include/asm/ptrace.h
-+++ b/arch/nios2/include/asm/ptrace.h
-@@ -74,6 +74,8 @@ extern void show_regs(struct pt_regs *);
- 	((struct pt_regs *)((unsigned long)current_thread_info() + THREAD_SIZE)\
- 		- 1)
+diff --git a/drivers/bluetooth/hci_intel.c b/drivers/bluetooth/hci_intel.c
+index e9228520e4c7..727fa4347b1e 100644
+--- a/drivers/bluetooth/hci_intel.c
++++ b/drivers/bluetooth/hci_intel.c
+@@ -1253,7 +1253,11 @@ static struct platform_driver intel_driver = {
  
-+#define force_successful_syscall_return() (current_pt_regs()->orig_r2 = -1)
+ int __init intel_init(void)
+ {
+-	platform_driver_register(&intel_driver);
++	int err;
 +
- int do_syscall_trace_enter(void);
- void do_syscall_trace_exit(void);
- #endif /* __ASSEMBLY__ */
---- a/arch/nios2/kernel/entry.S
-+++ b/arch/nios2/kernel/entry.S
-@@ -213,6 +213,9 @@ local_restart:
- translate_rc_and_ret:
- 	movi	r1, 0
- 	bge	r2, zero, 3f
-+	ldw	r1, PT_ORIG_R2(sp)
-+	addi	r1, r1, 1
-+	beq	r1, zero, 3f
- 	sub	r2, zero, r2
- 	movi	r1, 1
- 3:
-@@ -276,6 +279,9 @@ traced_system_call:
- translate_rc_and_ret2:
- 	movi	r1, 0
- 	bge	r2, zero, 4f
-+	ldw	r1, PT_ORIG_R2(sp)
-+	addi	r1, r1, 1
-+	beq	r1, zero, 4f
- 	sub	r2, zero, r2
- 	movi	r1, 1
- 4:
++	err = platform_driver_register(&intel_driver);
++	if (err)
++		return err;
+ 
+ 	return hci_uart_register_proto(&intel_proto);
+ }
+-- 
+2.35.1
+
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E347459DC52
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF3D59E278
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356217AbiHWKt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
+        id S1359216AbiHWMHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356550AbiHWKme (ORCPT
+        with ESMTP id S1358941AbiHWMDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:42:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD58672E;
-        Tue, 23 Aug 2022 02:10:03 -0700 (PDT)
+        Tue, 23 Aug 2022 08:03:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BD8DC5E9;
+        Tue, 23 Aug 2022 02:37:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 77C12CE1B40;
-        Tue, 23 Aug 2022 09:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F26C433C1;
-        Tue, 23 Aug 2022 09:09:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8A08613CA;
+        Tue, 23 Aug 2022 09:37:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2A2C433C1;
+        Tue, 23 Aug 2022 09:36:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245799;
-        bh=oBWPVa+/s0Zsff8K0UJpXwNYvvBDOEBsVZDbzO/5imw=;
+        s=korg; t=1661247420;
+        bh=bzyo+BAZUaNzG/Esy2DXbEuHJ1wI5aKBPt+mEZCgAv8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QgMBLFMhRbePs72q98Gr36FUPfpBi8ecNKhmXzKrMGbMEBTAl69XQ28to/XDrhwg8
-         dGtayjfWs8hqwd6Izb1UO5YEI/AIWnzbUhpMSNvPzuSYD0QTdwL3i8+ANxKr1cDIpw
-         fzh/XkCekQ5uIQEVUmj8+n/MAfSbgHH1v/HMvCqI=
+        b=LI2qC+j0iYrHWOSSJjntxnQB9ZhQ3bVHrDfNnFqyHpBeXmKv3j8lEc+IxOFCaF9k+
+         LpxJA69+WaUN7rgYW2TSRvZGC4DGIixpfVbThWd+VWMO7MnSZ5QOLLFxEr5tI/WxCw
+         GIA/qtUVvgI+J5B875/8+0sAegpAoZ17T6P1MVuM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Baokun Li <libaokun1@huawei.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.19 193/287] ext4: correct the misjudgment in ext4_iget_extra_inode
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.10 030/158] bpf: Acquire map uref in .init_seq_private for sock{map,hash} iterator
 Date:   Tue, 23 Aug 2022 10:26:02 +0200
-Message-Id: <20220823080107.338891250@linuxfoundation.org>
+Message-Id: <20220823080047.305143400@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +54,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Hou Tao <houtao1@huawei.com>
 
-commit fd7e672ea98b95b9d4c9dae316639f03c16a749d upstream.
+commit f0d2b2716d71778d0b0c8eaa433c073287d69d93 upstream.
 
-Use the EXT4_INODE_HAS_XATTR_SPACE macro to more accurately
-determine whether the inode have xattr space.
+sock_map_iter_attach_target() acquires a map uref, and the uref may be
+released before or in the middle of iterating map elements. For example,
+the uref could be released in sock_map_iter_detach_target() as part of
+bpf_link_release(), or could be released in bpf_map_put_with_uref() as
+part of bpf_map_release().
 
-Cc: stable@kernel.org
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220616021358.2504451-5-libaokun1@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixing it by acquiring an extra map uref in .init_seq_private and
+releasing it in .fini_seq_private.
+
+Fixes: 0365351524d7 ("net: Allow iterating sockmap and sockhash")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20220810080538.1845898-5-houtao@huaweicloud.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inode.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/core/sock_map.c |   20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -4844,8 +4844,7 @@ static inline int ext4_iget_extra_inode(
- 	__le32 *magic = (void *)raw_inode +
- 			EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize;
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -815,13 +815,22 @@ static int sock_map_init_seq_private(voi
+ {
+ 	struct sock_map_seq_info *info = priv_data;
  
--	if (EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize + sizeof(__le32) <=
--	    EXT4_INODE_SIZE(inode->i_sb) &&
-+	if (EXT4_INODE_HAS_XATTR_SPACE(inode)  &&
- 	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
- 		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
- 		return ext4_find_inline_data_nolock(inode);
++	bpf_map_inc_with_uref(aux->map);
+ 	info->map = aux->map;
+ 	return 0;
+ }
+ 
++static void sock_map_fini_seq_private(void *priv_data)
++{
++	struct sock_map_seq_info *info = priv_data;
++
++	bpf_map_put_with_uref(info->map);
++}
++
+ static const struct bpf_iter_seq_info sock_map_iter_seq_info = {
+ 	.seq_ops		= &sock_map_seq_ops,
+ 	.init_seq_private	= sock_map_init_seq_private,
++	.fini_seq_private	= sock_map_fini_seq_private,
+ 	.seq_priv_size		= sizeof(struct sock_map_seq_info),
+ };
+ 
+@@ -1422,18 +1431,27 @@ static const struct seq_operations sock_
+ };
+ 
+ static int sock_hash_init_seq_private(void *priv_data,
+-				     struct bpf_iter_aux_info *aux)
++				      struct bpf_iter_aux_info *aux)
+ {
+ 	struct sock_hash_seq_info *info = priv_data;
+ 
++	bpf_map_inc_with_uref(aux->map);
+ 	info->map = aux->map;
+ 	info->htab = container_of(aux->map, struct bpf_shtab, map);
+ 	return 0;
+ }
+ 
++static void sock_hash_fini_seq_private(void *priv_data)
++{
++	struct sock_hash_seq_info *info = priv_data;
++
++	bpf_map_put_with_uref(info->map);
++}
++
+ static const struct bpf_iter_seq_info sock_hash_iter_seq_info = {
+ 	.seq_ops		= &sock_hash_seq_ops,
+ 	.init_seq_private	= sock_hash_init_seq_private,
++	.fini_seq_private	= sock_hash_fini_seq_private,
+ 	.seq_priv_size		= sizeof(struct sock_hash_seq_info),
+ };
+ 
 
 

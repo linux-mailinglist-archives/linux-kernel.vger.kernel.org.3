@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E16359E1FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764BB59DECC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353130AbiHWKNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S1355814AbiHWKop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352745AbiHWKGN (ORCPT
+        with ESMTP id S1355641AbiHWKgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FE37D1DF;
-        Tue, 23 Aug 2022 01:52:45 -0700 (PDT)
+        Tue, 23 Aug 2022 06:36:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9347A61E1;
+        Tue, 23 Aug 2022 02:07:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D59F1B81C3B;
-        Tue, 23 Aug 2022 08:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DB5C433C1;
-        Tue, 23 Aug 2022 08:52:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73EBA6158F;
+        Tue, 23 Aug 2022 09:07:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6635CC433C1;
+        Tue, 23 Aug 2022 09:07:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244762;
-        bh=mTvSXMU+FqVYUEjrCpZyNd5/4xWQ8kzPmC4oXbY4SGQ=;
+        s=korg; t=1661245634;
+        bh=1+IUZhHuzUKYewP4UBn01S5+ePsHSJ5sNU45ZneqJnI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AGJ+Ukm9luCKS1uMs/PnUY6PGIt27cY1BaMktiMYQYqLOd2SdLQr7iwb+qWczQMmp
-         QqbDt2OmX9mBAUO/9RbbJj5vTWAXaK/KAwIQOiqs50XVw8VlQ1MMDlsHceeZfySN1v
-         x/du1tquA4keQBo9YEC0ZmkvzvphhJQhejgYYMR0=
+        b=UFYi7mpSUqQnq9di6GotWcuQ1R1SMHGgqM3e2IynI8p69bxaj2UG7OaJiwQvXGz8H
+         F0eNVLX6mxcfYPRpz/NTl/4Wu5VozCP3uKCzbJSts+OAnYbLR2ELUAnvfSkEk/VImF
+         qPe0DiaIwghIDpQ40o5Uo1eB2hF9pkIFryAAURQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 118/244] ASoC: tas2770: Set correct FSYNC polarity
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 108/287] wifi: libertas: Fix possible refcount leak in if_usb_probe()
 Date:   Tue, 23 Aug 2022 10:24:37 +0200
-Message-Id: <20220823080102.960633658@linuxfoundation.org>
+Message-Id: <20220823080104.010816510@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,96 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit e9ac31f0a5d0e246b046c20348954519f91a297f upstream.
+[ Upstream commit 6fd57e1d120bf13d4dc6c200a7cf914e6347a316 ]
 
-Fix setting of FSYNC polarity for DAI formats other than I2S. Also
-add support for polarity inversion.
+usb_get_dev will be called before lbs_get_firmware_async which means that
+usb_put_dev need to be called when lbs_get_firmware_async fails.
 
-Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220808141246.5749-2-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ce84bb69f50e ("libertas USB: convert to asynchronous firmware loading")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220620092350.39960-1-hbh25y@gmail.com
+Link: https://lore.kernel.org/r/20220622113402.16969-1-colin.i.king@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tas2770.c |   20 +++++++++++++++++++-
- sound/soc/codecs/tas2770.h |    3 +++
- 2 files changed, 22 insertions(+), 1 deletion(-)
+ drivers/net/wireless/marvell/libertas/if_usb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -337,7 +337,7 @@ static int tas2770_set_fmt(struct snd_so
- 	struct snd_soc_component *component = dai->component;
- 	struct tas2770_priv *tas2770 =
- 			snd_soc_component_get_drvdata(component);
--	u8 tdm_rx_start_slot = 0, asi_cfg_1 = 0;
-+	u8 tdm_rx_start_slot = 0, invert_fpol = 0, fpol_preinv = 0, asi_cfg_1 = 0;
- 	int ret;
- 
- 	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
-@@ -349,9 +349,15 @@ static int tas2770_set_fmt(struct snd_so
- 	}
- 
- 	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
-+	case SND_SOC_DAIFMT_NB_IF:
-+		invert_fpol = 1;
-+		fallthrough;
- 	case SND_SOC_DAIFMT_NB_NF:
- 		asi_cfg_1 |= TAS2770_TDM_CFG_REG1_RX_RSING;
- 		break;
-+	case SND_SOC_DAIFMT_IB_IF:
-+		invert_fpol = 1;
-+		fallthrough;
- 	case SND_SOC_DAIFMT_IB_NF:
- 		asi_cfg_1 |= TAS2770_TDM_CFG_REG1_RX_FALING;
- 		break;
-@@ -369,15 +375,19 @@ static int tas2770_set_fmt(struct snd_so
- 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
- 	case SND_SOC_DAIFMT_I2S:
- 		tdm_rx_start_slot = 1;
-+		fpol_preinv = 0;
- 		break;
- 	case SND_SOC_DAIFMT_DSP_A:
- 		tdm_rx_start_slot = 0;
-+		fpol_preinv = 1;
- 		break;
- 	case SND_SOC_DAIFMT_DSP_B:
- 		tdm_rx_start_slot = 1;
-+		fpol_preinv = 1;
- 		break;
- 	case SND_SOC_DAIFMT_LEFT_J:
- 		tdm_rx_start_slot = 0;
-+		fpol_preinv = 1;
- 		break;
- 	default:
- 		dev_err(tas2770->dev,
-@@ -391,6 +401,14 @@ static int tas2770_set_fmt(struct snd_so
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = snd_soc_component_update_bits(component, TAS2770_TDM_CFG_REG0,
-+					    TAS2770_TDM_CFG_REG0_FPOL_MASK,
-+					    (fpol_preinv ^ invert_fpol)
-+					     ? TAS2770_TDM_CFG_REG0_FPOL_RSING
-+					     : TAS2770_TDM_CFG_REG0_FPOL_FALING);
-+	if (ret < 0)
-+		return ret;
-+
+diff --git a/drivers/net/wireless/marvell/libertas/if_usb.c b/drivers/net/wireless/marvell/libertas/if_usb.c
+index f29a154d995c..d75763410cdc 100644
+--- a/drivers/net/wireless/marvell/libertas/if_usb.c
++++ b/drivers/net/wireless/marvell/libertas/if_usb.c
+@@ -283,6 +283,7 @@ static int if_usb_probe(struct usb_interface *intf,
  	return 0;
- }
  
---- a/sound/soc/codecs/tas2770.h
-+++ b/sound/soc/codecs/tas2770.h
-@@ -41,6 +41,9 @@
- #define TAS2770_TDM_CFG_REG0_31_44_1_48KHZ  0x6
- #define TAS2770_TDM_CFG_REG0_31_88_2_96KHZ  0x8
- #define TAS2770_TDM_CFG_REG0_31_176_4_192KHZ  0xa
-+#define TAS2770_TDM_CFG_REG0_FPOL_MASK  BIT(0)
-+#define TAS2770_TDM_CFG_REG0_FPOL_RSING  0
-+#define TAS2770_TDM_CFG_REG0_FPOL_FALING  1
-     /* TDM Configuration Reg1 */
- #define TAS2770_TDM_CFG_REG1  TAS2770_REG(0X0, 0x0B)
- #define TAS2770_TDM_CFG_REG1_MASK	GENMASK(5, 1)
+ err_get_fw:
++	usb_put_dev(udev);
+ 	lbs_remove_card(priv);
+ err_add_card:
+ 	if_usb_reset_device(cardp);
+-- 
+2.35.1
+
 
 

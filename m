@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2F259D79D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692DD59D7BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350000AbiHWJbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
+        id S1350524AbiHWJeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349953AbiHWJ3e (ORCPT
+        with ESMTP id S1350825AbiHWJcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:29:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4339923DF;
-        Tue, 23 Aug 2022 01:37:35 -0700 (PDT)
+        Tue, 23 Aug 2022 05:32:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DA07B1FE;
+        Tue, 23 Aug 2022 01:38:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0A603CE1B49;
-        Tue, 23 Aug 2022 08:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2C4C433D6;
-        Tue, 23 Aug 2022 08:37:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B21AE61446;
+        Tue, 23 Aug 2022 08:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72825C433D7;
+        Tue, 23 Aug 2022 08:37:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243853;
-        bh=Xz5hcmM4qCkmNj4cQMqcWYCdPA3cuKankeknCXY9KUs=;
+        s=korg; t=1661243863;
+        bh=YtjYNrgY2aCbWqM67G8OxeniAR3dUoUmn0JshvL67Sg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IjkXt9Y/jJkMExQQtTihIXY7LahNtZ5Re71jtt0GCFhQZ+f8m1JZ9dhDRsWt8be3D
-         AQcAeAkzqJazu/PyFcycSfgQMvCGYIjSBkc1WQI9xJBz3DMsZKG8BCLDsOQlG9KzFX
-         qcH/62wI9E7jYSXRnfLngBJ8j9nALfWQCc2SSiSM=
+        b=b8VojThlw9yWwsOYXuZDvq6xkVIs5Pn5+1E/o8tlmzl1Oe2A1khmGJv8m0aW5RLb2
+         QDou+peHP52SenV3fkEBaZy12A9Jjhi86Ly5FTGZZHc1VmLjkwYyn2F0P4KEdXeK5w
+         4tjOugH24wWBuWxw8igAPfcarh5KkRPl/ACoz4qg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, huhai <huhai@kylinos.cn>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 043/229] ARM: dts: imx6ul: fix qspi node compatible
-Date:   Tue, 23 Aug 2022 10:23:24 +0200
-Message-Id: <20220823080055.145148391@linuxfoundation.org>
+Subject: [PATCH 4.14 046/229] ACPI: LPSS: Fix missing check in register_device_clock()
+Date:   Tue, 23 Aug 2022 10:23:27 +0200
+Message-Id: <20220823080055.305291010@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -56,40 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: huhai <huhai@kylinos.cn>
 
-[ Upstream commit 0c6cf86e1ab433b2d421880fdd9c6e954f404948 ]
+[ Upstream commit b4f1f61ed5928b1128e60e38d0dffa16966f06dc ]
 
-imx6ul is not compatible to imx6sx, both have different erratas.
-Fixes the dt_binding_check warning:
-spi@21e0000: compatible: 'oneOf' conditional failed, one must be fixed:
-['fsl,imx6ul-qspi', 'fsl,imx6sx-qspi'] is too long
-Additional items are not allowed ('fsl,imx6sx-qspi' was unexpected)
-'fsl,imx6ul-qspi' is not one of ['fsl,ls1043a-qspi']
-'fsl,imx6ul-qspi' is not one of ['fsl,imx8mq-qspi']
-'fsl,ls1021a-qspi' was expected
-'fsl,imx7d-qspi' was expected
+register_device_clock() misses a check for platform_device_register_simple().
+Add a check to fix it.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: huhai <huhai@kylinos.cn>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6ul.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/acpi_lpss.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
-index d544015d10e5..e4006bd47440 100644
---- a/arch/arm/boot/dts/imx6ul.dtsi
-+++ b/arch/arm/boot/dts/imx6ul.dtsi
-@@ -883,7 +883,7 @@ lcdif: lcdif@021c8000 {
- 			qspi: qspi@021e0000 {
- 				#address-cells = <1>;
- 				#size-cells = <0>;
--				compatible = "fsl,imx6ul-qspi", "fsl,imx6sx-qspi";
-+				compatible = "fsl,imx6ul-qspi";
- 				reg = <0x021e0000 0x4000>, <0x60000000 0x10000000>;
- 				reg-names = "QuadSPI", "QuadSPI-memory";
- 				interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
+index 84b1d30f699c..faa83ff03674 100644
+--- a/drivers/acpi/acpi_lpss.c
++++ b/drivers/acpi/acpi_lpss.c
+@@ -396,6 +396,9 @@ static int register_device_clock(struct acpi_device *adev,
+ 	if (!lpss_clk_dev)
+ 		lpt_register_clock_device();
+ 
++	if (IS_ERR(lpss_clk_dev))
++		return PTR_ERR(lpss_clk_dev);
++
+ 	clk_data = platform_get_drvdata(lpss_clk_dev);
+ 	if (!clk_data)
+ 		return -ENODEV;
 -- 
 2.35.1
 

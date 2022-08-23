@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD859D4EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9149359D581
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346182AbiHWIis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S1345167AbiHWIrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343969AbiHWIhM (ORCPT
+        with ESMTP id S1348405AbiHWIq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:37:12 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174FC77E86
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:56 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id z6so18634490lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=9OqpWtEeuh8ypX1cXc7uAcrCW4m6r/tanmkI11A3Ifk=;
-        b=eTFAgLCB/8cpoPAhYcbVqIDJ2pl/IkkvWPYmcey5kKfMuCCk0rGizy9SyweRQyHtHl
-         WI5+Zy6cGOh/076pcrjt4lRApsuZLiwfqc8b0BBKrHceyBIeTQtrd5DooiBwhCozMI1z
-         +K58OvvT8GV8rPsenMeI2YUun/SFPmcjq31yfu6XKtvJ3U99AXwDZg2uoTyInitkHNLT
-         9ZksMgIJGPUHGoJ6vYxJk8KK4+nmKbPiOp34Y52JdEeN/18JcIS9CvFWXiEXCPo86W9/
-         sqkYy610lz1XikvfXKtzIpU1RfwKLioMZ0hyKegAHDfT3X2aIxP+gQiXMuiOfvF2+wWo
-         pzWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=9OqpWtEeuh8ypX1cXc7uAcrCW4m6r/tanmkI11A3Ifk=;
-        b=w4vHpzsl587xLEK4PxI/DIsabhi7kA7EBDZOERSyGuCJ/HtaIBZZ3lq41iisg0yVCA
-         3lHmgH17C8ZfXZWa7PnQ5NFVBKuT0DcRWFfjyWz9k0iRuJ4xBThE4ehnH72e8biXTcUl
-         NAvBMnJHRiQgeIfNGNMU3MJ47WHWUX1JEjQFxFgTr3BoygTKMD4n3ejkHvsFRwfIFh7f
-         0/6jAiu/DTuy9kUm7LnWNlajksheg1cxxqq5f3gehcRev4Kvad/8IbLLx/64yteaqsyJ
-         XcaOmNULewO76IuAAGtysFp4rgFapZ/iRM9+YHtZ6RUOnMIQLIomoWVJlNdfI8CmHUED
-         uX0g==
-X-Gm-Message-State: ACgBeo2ycmYhgrdAcrz4v2uvzFKpEAUJ7vGxa15H9qRM2n2fm7eyd4f2
-        fu1Ehq504hT9Kl5/kSxEY++1Wg==
-X-Google-Smtp-Source: AA6agR53e29e30P7d7REqgiaaLN5FMBaCGv2iuqS7/6pzPEEi/wAmrdSXEzVfrevBl6W4oRZ5Y2p5g==
-X-Received: by 2002:a05:6512:3b8e:b0:492:f799:76b9 with SMTP id g14-20020a0565123b8e00b00492f79976b9mr544446lfv.207.1661242645734;
-        Tue, 23 Aug 2022 01:17:25 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id s8-20020a19ad48000000b0048ae316caf0sm2379428lfd.18.2022.08.23.01.17.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 01:17:24 -0700 (PDT)
-Message-ID: <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
-Date:   Tue, 23 Aug 2022 11:17:23 +0300
+        Tue, 23 Aug 2022 04:46:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAB46EF27;
+        Tue, 23 Aug 2022 01:21:33 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MBhtG2Cq6zlW6Y;
+        Tue, 23 Aug 2022 16:17:42 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 16:20:54 +0800
+Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
+ (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 23 Aug
+ 2022 16:20:54 +0800
+Subject: Re: [PATCH net-next 0/2] net: ethtool add VxLAN to the NFC API
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <idosch@nvidia.com>,
+        <linux@rempel-privat.de>, <mkubecek@suse.cz>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <shenjian15@huawei.com>
+References: <20220817143538.43717-1-huangguangbin2@huawei.com>
+ <20220817111656.7f4afaf3@kernel.org>
+ <5062c7ae-3415-adf6-6488-f9a05177d2c2@huawei.com>
+ <20220822095327.00b4ebd5@kernel.org>
+From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
+Message-ID: <1371811b-2dca-7e99-6076-8090ee93616e@huawei.com>
+Date:   Tue, 23 Aug 2022 16:20:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
- controller support
-Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
- <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220822095327.00b4ebd5@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.67]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/08/2022 22:07, Serge Semin wrote:
-> The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
-> the CSRs layout is absolutely different and it doesn't has IRQ unlike DW
-> uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there is
-> no any reason to have these controllers described by the same bindings.
-> Thus let's split them up.
+
+
+On 2022/8/23 0:53, Jakub Kicinski wrote:
+> On Mon, 22 Aug 2022 22:46:14 +0800 huangguangbin (A) wrote:
+>> 1. I check the manual and implement of TC flower, it doesn't seems
+>>      to support configuring flows steering to a specific queue.
 > 
-> While at it rename the original Synopsys uMCTL2 DT-schema file to a more
-> descriptive - snps,dw-umctl2-ddrc.yaml and add a more detailed title and
-> description of the device bindings.
-
-Filename should be based on compatible, so if renaming then
-snps,ddrc-3.80a.yaml or snps,ddrc.yaml... which leads to original
-filename anyway. Therefore nack for rename.
-
-BTW, if you perform renames, generate patches with proper -M/-C/-B
-arguments so this is detected.
-
-
+> We got an answer from Sridhar on that one (thanks!)
+> I know it was discussed so it's a SMOC.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> --->  .../snps,dw-umctl2-ddrc.yaml                  | 51 +++++++++++++
-
-This is a mess. I did not get any cover letters, any other patches any
-description of relation between this and your other one.
-
-It seems you make independent and conflicting changes to the same file,
-so this has to be properly organized.
-
-Send entire patchset with cover letter with description of all
-dependencies to all maintainers.
-
-This is unreviewable now, so a no.
-
-Best regards,
-Krzysztof
+>> 2. Our hns3 driver has supported configuring some type of flows
+>>      steering to a specific queue by ethtool -U command, many users
+>>      have already use ethtool way.
+>> 3. In addition, if our driver supports TC flower to configure flows
+>>      steering to a specific queue, can we allow user to simultaneously
+>>      use TC flower and ethtool to configure flow rules? Could the rules
+>>      configured by TC flower be queried by ethtool -u?
+>>      If two ways can be existing, I think it is more complicated for
+>>      driver to manage flow rules.
+> 
+> I understand your motivation and these are very valid points.
+> However, we have to draw the line somewhere. We have at least
+> three ways of configuring flow offloads (ethtool, nft, tc).
+> Supporting all of them is a lot of work for the drivers, leading
+> to a situation where there's no "standard Linux API" because each
+> vendor picks a slightly different approach :(
+> TC seems the most popular because of the OVS offload, so my preference
+> is to pick it over the other APIs.
+> .
+> 
+Ok.

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E95759E1DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E77F59DE4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355818AbiHWKuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S242925AbiHWLo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356003AbiHWKlQ (ORCPT
+        with ESMTP id S1358071AbiHWLkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:41:16 -0400
+        Tue, 23 Aug 2022 07:40:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466877A513;
-        Tue, 23 Aug 2022 02:08:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6817969B;
+        Tue, 23 Aug 2022 02:28:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB8E96159A;
-        Tue, 23 Aug 2022 09:08:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2866C43470;
-        Tue, 23 Aug 2022 09:08:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA95361330;
+        Tue, 23 Aug 2022 09:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC43C433D6;
+        Tue, 23 Aug 2022 09:28:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245719;
-        bh=CmcPK2lc47Okxh9b7fsrFvpDKb/n652OLhI6HxQ2s24=;
+        s=korg; t=1661246924;
+        bh=YYKqtCLix3sh2n+eNYIcMsNafWZ6asrVCqB5FDnPqiQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eumgf7y4u1pluaQWB3qc5k18+mWgyN4xHBsrLQkSpMvgAA/WLV6AP+h5uwklQ9kZB
-         8w/5UHQyVlY4GChXITlZ3BAR85KasnqJTfM4ag0btnGJ9bQigua7o/+D//SjSaifhu
-         bVHl8W+/Ok9b3Io4hwSgiMBMYNQYanhU6grWiaMI=
+        b=VtmLcAHANTQLU15+6N9ZMC70CZ+GKdRp0DHxSPhHCug8VKmlGXRoIKGyAMEB9fQLo
+         z/AbdxrMtWQUJjQgi99shiFq1svfd4aFp8j9LmaF2md0NWO1MPoJJSKfoyVm8qypDE
+         QkVYKzIv/lZt7RUa+InTsZf/TBQOV+x/YmRsBWH8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 140/287] platform/olpc: Fix uninitialized data in debugfs write
-Date:   Tue, 23 Aug 2022 10:25:09 +0200
-Message-Id: <20220823080105.210845527@linuxfoundation.org>
+Subject: [PATCH 5.4 232/389] powerpc/32: Do not allow selection of e5500 or e6500 CPUs on PPC32
+Date:   Tue, 23 Aug 2022 10:25:10 +0200
+Message-Id: <20220823080125.281832481@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit 40ec787e1adf302c11668d4cc69838f4d584187d ]
+[ Upstream commit 9be013b2a9ecb29b5168e4b9db0e48ed53acf37c ]
 
-The call to:
+Commit 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
+enlarged the CPU selection logic to PPC32 by removing depend to
+PPC64, and failed to restrict that depend to E5500_CPU and E6500_CPU.
+Fortunately that got unnoticed because -mcpu=8540 will override the
+-mcpu=e500mc64 or -mpcu=e6500 as they are ealier, but that's
+fragile and may no be right in the future.
 
-	size = simple_write_to_buffer(cmdbuf, sizeof(cmdbuf), ppos, buf, size);
+Add back the depend PPC64 on E5500_CPU and E6500_CPU.
 
-will succeed if at least one byte is written to the "cmdbuf" buffer.
-The "*ppos" value controls which byte is written.  Another problem is
-that this code does not check for errors so it's possible for the entire
-buffer to be uninitialized.
-
-Inintialize the struct to zero to prevent reading uninitialized stack
-data.
-
-Debugfs is normally only writable by root so the impact of this bug is
-very minimal.
-
-Fixes: 6cca83d498bd ("Platform: OLPC: move debugfs support from x86 EC driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YthIKn+TfZSZMEcM@kili
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Fixes: 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/olpc/olpc-ec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/platforms/Kconfig.cputype | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/platform/olpc/olpc-ec.c b/drivers/platform/olpc/olpc-ec.c
-index 374a8028fec7..b36a000ed969 100644
---- a/drivers/platform/olpc/olpc-ec.c
-+++ b/drivers/platform/olpc/olpc-ec.c
-@@ -170,7 +170,7 @@ static ssize_t ec_dbgfs_cmd_write(struct file *file, const char __user *buf,
- 	int i, m;
- 	unsigned char ec_cmd[EC_MAX_CMD_ARGS];
- 	unsigned int ec_cmd_int[EC_MAX_CMD_ARGS];
--	char cmdbuf[64];
-+	char cmdbuf[64] = "";
- 	int ec_cmd_bytes;
+diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+index f0330ce498d1..a9b20aa1dfd4 100644
+--- a/arch/powerpc/platforms/Kconfig.cputype
++++ b/arch/powerpc/platforms/Kconfig.cputype
+@@ -151,11 +151,11 @@ config POWER9_CPU
  
- 	mutex_lock(&ec_dbgfs_lock);
+ config E5500_CPU
+ 	bool "Freescale e5500"
+-	depends on E500
++	depends on PPC64 && E500
+ 
+ config E6500_CPU
+ 	bool "Freescale e6500"
+-	depends on E500
++	depends on PPC64 && E500
+ 
+ config 860_CPU
+ 	bool "8xx family"
 -- 
 2.35.1
 

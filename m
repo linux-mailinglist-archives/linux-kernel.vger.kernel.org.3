@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036FE59E03F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AF559DCFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356372AbiHWKrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S1354660AbiHWKV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355963AbiHWKlL (ORCPT
+        with ESMTP id S1352929AbiHWKJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:41:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27646580B;
-        Tue, 23 Aug 2022 02:08:36 -0700 (PDT)
+        Tue, 23 Aug 2022 06:09:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD84C7DF69;
+        Tue, 23 Aug 2022 01:55:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EDD66156F;
-        Tue, 23 Aug 2022 09:08:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAF4C433D6;
-        Tue, 23 Aug 2022 09:08:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D6ABB81C3B;
+        Tue, 23 Aug 2022 08:55:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02C5C433D7;
+        Tue, 23 Aug 2022 08:55:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245715;
-        bh=M8ZpMxABeDnxEiGfzWmkt39Q5w0XsLcGayuTXLXz9zc=;
+        s=korg; t=1661244945;
+        bh=FieQMfNxzXPSEp5kaQfeG0576MsAbAodd6WqEw1eqxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dx2B62944E8OBdJ88oguqhh0WwZ0ax8wVDUFBbJznnJv72x4dp6bfu+QPiEDCRpAP
-         1hk4/z4HihTv404vnTZmBAzhlQWqOeHyClfFvOvMLPWMBOm4BK0XElX6eSen/a8M5m
-         MtE0BQJvfIC7vjNwKl1OjbDJkXceTCwyFXWW4X1g=
+        b=VvLWGc129qyQDlCgbrMVufxbAfpNjBdOCqbVwvwvtaDk5QOWW11b9+z0/MOa+t0U+
+         CvP+Du8UnPpIxVZX/rmXa4TUgdU3cLvm/SAt2aQUt4wVEqfPm8jkb89XPTt5IldQb5
+         12xRJyxjAMhhPMjwm2p7n9Zy3jIBb1hlkQP4gQJA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Minas Harutyunyan <hminas@synopsys.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 166/287] ASoC: qcom: q6dsp: Fix an off-by-one in q6adm_alloc_copp()
+Subject: [PATCH 5.15 176/244] usb: dwc2: gadget: remove D+ pull-up while no vbus with usb-role-switch
 Date:   Tue, 23 Aug 2022 10:25:35 +0200
-Message-Id: <20220823080106.332907599@linuxfoundation.org>
+Message-Id: <20220823080105.159639234@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-[ Upstream commit 673f58f62ca6fc98979d1cf3fe89c3ff33f29b2e ]
+[ Upstream commit db638c6500abaffb8f7770b2a69c40d003d54ae1 ]
 
-find_first_zero_bit() returns MAX_COPPS_PER_PORT at max here.
-So 'idx' should be tested with ">=" or the test can't match.
+When using usb-role-switch, D+ pull-up is set as soon as DTCL_SFTDISCON is
+cleared, whatever the vbus valid signal state is. The pull-up should not
+be set when vbus isn't present (this is determined by the drd controller).
 
-Fixes: 7b20b2be51e1 ("ASoC: qdsp6: q6adm: Add q6adm driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/0fca3271649736053eb9649d87e1ca01b056be40.1658394124.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This patch ensures that B-Session (so Peripheral role + vbus valid signal)
+is valid before clearing the DCTL_SFTDISCON bit when role switch is used.
+Keep original behavior when usb-role-switch isn't used.
+
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Link: https://lore.kernel.org/r/20220622160717.314580-1-fabrice.gasnier@foss.st.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/qcom/qdsp6/q6adm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc2/gadget.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6adm.c b/sound/soc/qcom/qdsp6/q6adm.c
-index 932c3ebfd252..01f9127daf5c 100644
---- a/sound/soc/qcom/qdsp6/q6adm.c
-+++ b/sound/soc/qcom/qdsp6/q6adm.c
-@@ -218,7 +218,7 @@ static struct q6copp *q6adm_alloc_copp(struct q6adm *adm, int port_idx)
- 	idx = find_first_zero_bit(&adm->copp_bitmap[port_idx],
- 				  MAX_COPPS_PER_PORT);
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index e1cebf581a4a..519bb82b00e8 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3594,7 +3594,8 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
+ void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
+ {
+ 	/* remove the soft-disconnect and let's go */
+-	dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
++	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD))
++		dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
+ }
  
--	if (idx > MAX_COPPS_PER_PORT)
-+	if (idx >= MAX_COPPS_PER_PORT)
- 		return ERR_PTR(-EBUSY);
- 
- 	c = kzalloc(sizeof(*c), GFP_ATOMIC);
+ /**
 -- 
 2.35.1
 

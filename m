@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5341759DFFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF2859DDC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356679AbiHWLDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
+        id S1359083AbiHWL4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357167AbiHWLBd (ORCPT
+        with ESMTP id S1358642AbiHWLwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:01:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E2BAF0C5;
-        Tue, 23 Aug 2022 02:14:29 -0700 (PDT)
+        Tue, 23 Aug 2022 07:52:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BAED5980;
+        Tue, 23 Aug 2022 02:32:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F3BAB81C86;
-        Tue, 23 Aug 2022 09:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8635C433D7;
-        Tue, 23 Aug 2022 09:14:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92FC9B8105C;
+        Tue, 23 Aug 2022 09:32:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC60DC433D6;
+        Tue, 23 Aug 2022 09:32:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246060;
-        bh=ZhkPRONPRsdklvEmDO5ZqnezVhTgjCAugxYUuo/Z7Lg=;
+        s=korg; t=1661247158;
+        bh=+dGsXXUzWfY49oCGU7uvrd9pRam1ngxeyH+kljj5MNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TOwedi38gOiukjScUoGb4UbgepABaSstzM5bK6HTiRLBn/KV4ydU+z4LfLY8T24qe
-         /M00rXIbkokS4s2kZIs7v3boTb2GvNoQle1in8rROjEER0EeoIFf74XMf4WkJdeeoe
-         3w+4/YAYNteASgScvf4UvNH3wvJrFywtLa5Ki51g=
+        b=0rIvDi114LHl+W9DriSHMHiZWB/1f/QalfsE4MDbUIz/qWIIxhbKG0PvboCutSE2v
+         5+bzGqEIx/JOvHtvzFqmwuiJILGpo9HIPJ8D6Ibvb6VwzC6UFGtHhSWbmb08ke5n0r
+         SB05+1/1pL9/Db/YtTn8qXOxkzu2jrFwWPgSjtuE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 4.19 245/287] nios2: dont leave NULLs in sys_call_table[]
-Date:   Tue, 23 Aug 2022 10:26:54 +0200
-Message-Id: <20220823080109.378442317@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.4 337/389] netfilter: nf_tables: really skip inactive sets when allocating name
+Date:   Tue, 23 Aug 2022 10:26:55 +0200
+Message-Id: <20220823080129.597683392@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 45ec746c65097c25e77d24eae8fee0def5b6cc5d upstream.
+commit 271c5ca826e0c3c53e0eb4032f8eaedea1ee391c upstream.
 
-fill the gaps in there with sys_ni_syscall, as everyone does...
+While looping to build the bitmap of used anonymous set names, check the
+current set in the iteration, instead of the one that is being created.
 
-Fixes: 82ed08dd1b0e ("nios2: Exception handling")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Fixes: 37a9cc525525 ("netfilter: nf_tables: add generation mask to sets")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/kernel/entry.S         |    1 -
- arch/nios2/kernel/syscall_table.c |    1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nf_tables_api.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/nios2/kernel/entry.S
-+++ b/arch/nios2/kernel/entry.S
-@@ -193,7 +193,6 @@ local_restart:
- 	movhi	r11, %hiadj(sys_call_table)
- 	add	r1, r1, r11
- 	ldw	r1, %lo(sys_call_table)(r1)
--	beq	r1, r0, ret_invsyscall
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -3253,7 +3253,7 @@ cont:
+ 		list_for_each_entry(i, &ctx->table->sets, list) {
+ 			int tmp;
  
- 	/* Check if we are being traced */
- 	GET_THREAD_INFO r11
---- a/arch/nios2/kernel/syscall_table.c
-+++ b/arch/nios2/kernel/syscall_table.c
-@@ -25,5 +25,6 @@
- #define __SYSCALL(nr, call) [nr] = (call),
- 
- void *sys_call_table[__NR_syscalls] = {
-+	[0 ... __NR_syscalls-1] = sys_ni_syscall,
- #include <asm/unistd.h>
- };
+-			if (!nft_is_active_next(ctx->net, set))
++			if (!nft_is_active_next(ctx->net, i))
+ 				continue;
+ 			if (!sscanf(i->name, name, &tmp))
+ 				continue;
 
 

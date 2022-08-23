@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3312B59DE06
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6677C59E2E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355671AbiHWKr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S1353743AbiHWKPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356215AbiHWKll (ORCPT
+        with ESMTP id S1352884AbiHWKG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:41:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C67A8CDB;
-        Tue, 23 Aug 2022 02:09:13 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D036565;
+        Tue, 23 Aug 2022 01:53:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3606159A;
-        Tue, 23 Aug 2022 09:09:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2EBC433D7;
-        Tue, 23 Aug 2022 09:09:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 718ACB8105C;
+        Tue, 23 Aug 2022 08:53:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88E9C433D7;
+        Tue, 23 Aug 2022 08:53:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245743;
-        bh=O1AHWe9ej/LRXF3l1hBY6FusMS69Q/xUlmEa+cpUKkA=;
+        s=korg; t=1661244806;
+        bh=ZJFE01siZK/UrXYJb26H6em5oEOiOk7q98WghNaIuhA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=plzkIfNmWFPsoY0a4qJPo4U/37p+7B9n6pul2xmAPlfrjYpiuKzFiPezQPb4Zx0r9
-         7cxsfqXF20CuwZuodn4hX1oTEwypisdVq88RJRd5cqUjGs5V9q1z83S66Nb1opy4GG
-         n1M1YwSf9GGQwEdIAImCn+FPQOLBWVxtpl9m8w5c=
+        b=QJxzjGTtSpMlNNkW+2E+7u5N8UMKfrCvdJg4Hn+ae9sUPOh+y7pmEovTy740VPctY
+         mCUDeiLwaUTLjxMmdDlIs/jcchPkBuT35H2AXSzxlL+DBWwvxPgIbtAFcTZR7let1d
+         Hzl4vGaBEZGMGXofFdRzXzlM3zTcUZFe9CaaRvGo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 145/287] jbd2: fix assertion jh->b_frozen_data == NULL failure when journal aborted
+        stable@vger.kernel.org,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 155/244] ASoC: SOF: Intel: hda: Define rom_status_reg in sof_intel_dsp_desc
 Date:   Tue, 23 Aug 2022 10:25:14 +0200
-Message-Id: <20220823080105.431732416@linuxfoundation.org>
+Message-Id: <20220823080104.370217616@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,107 +58,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 
-[ Upstream commit 4a734f0869f970b8a9b65062ea40b09a5da9dba8 ]
+[ Upstream commit 71778f7940f0b496aa1ca1134f3b70b425a59bab ]
 
-Following process will fail assertion 'jh->b_frozen_data == NULL' in
-jbd2_journal_dirty_metadata():
+Add the rom_status_reg field to struct sof_intel_dsp_desc and define
+it for HDA platforms. This will be used to check the ROM status during
+FW boot.
 
-                   jbd2_journal_commit_transaction
-unlink(dir/a)
- jh->b_transaction = trans1
- jh->b_jlist = BJ_Metadata
-                    journal->j_running_transaction = NULL
-                    trans1->t_state = T_COMMIT
-unlink(dir/b)
- handle->h_trans = trans2
- do_get_write_access
-  jh->b_modified = 0
-  jh->b_frozen_data = frozen_buffer
-  jh->b_next_transaction = trans2
- jbd2_journal_dirty_metadata
-  is_handle_aborted
-   is_journal_aborted // return false
-
-           --> jbd2 abort <--
-
-                     while (commit_transaction->t_buffers)
-                      if (is_journal_aborted)
-                       jbd2_journal_refile_buffer
-                        __jbd2_journal_refile_buffer
-                         WRITE_ONCE(jh->b_transaction,
-						jh->b_next_transaction)
-                         WRITE_ONCE(jh->b_next_transaction, NULL)
-                         __jbd2_journal_file_buffer(jh, BJ_Reserved)
-        J_ASSERT_JH(jh, jh->b_frozen_data == NULL) // assertion failure !
-
-The reproducer (See detail in [Link]) reports:
- ------------[ cut here ]------------
- kernel BUG at fs/jbd2/transaction.c:1629!
- invalid opcode: 0000 [#1] PREEMPT SMP
- CPU: 2 PID: 584 Comm: unlink Tainted: G        W
- 5.19.0-rc6-00115-g4a57a8400075-dirty #697
- RIP: 0010:jbd2_journal_dirty_metadata+0x3c5/0x470
- RSP: 0018:ffffc90000be7ce0 EFLAGS: 00010202
- Call Trace:
-  <TASK>
-  __ext4_handle_dirty_metadata+0xa0/0x290
-  ext4_handle_dirty_dirblock+0x10c/0x1d0
-  ext4_delete_entry+0x104/0x200
-  __ext4_unlink+0x22b/0x360
-  ext4_unlink+0x275/0x390
-  vfs_unlink+0x20b/0x4c0
-  do_unlinkat+0x42f/0x4c0
-  __x64_sys_unlink+0x37/0x50
-  do_syscall_64+0x35/0x80
-
-After journal aborting, __jbd2_journal_refile_buffer() is executed with
-holding @jh->b_state_lock, we can fix it by moving 'is_handle_aborted()'
-into the area protected by @jh->b_state_lock.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216251
-Fixes: 470decc613ab20 ("[PATCH] jbd2: initial copy of files from jbd")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Link: https://lore.kernel.org/r/20220715125152.4022726-1-chengzhihao1@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Link: https://lore.kernel.org/r/20220414184817.362215-14-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jbd2/transaction.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ sound/soc/sof/intel/apl.c        |  1 +
+ sound/soc/sof/intel/cnl.c        |  2 ++
+ sound/soc/sof/intel/hda-loader.c | 14 ++++++++------
+ sound/soc/sof/intel/hda.c        |  8 ++++++--
+ sound/soc/sof/intel/icl.c        |  1 +
+ sound/soc/sof/intel/shim.h       |  1 +
+ sound/soc/sof/intel/tgl.c        |  4 ++++
+ 7 files changed, 23 insertions(+), 8 deletions(-)
 
-diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
-index 8c305593fb51..dbad00c20aa1 100644
---- a/fs/jbd2/transaction.c
-+++ b/fs/jbd2/transaction.c
-@@ -1339,8 +1339,6 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
- 	struct journal_head *jh;
- 	int ret = 0;
+diff --git a/sound/soc/sof/intel/apl.c b/sound/soc/sof/intel/apl.c
+index c7ed2b3d6abc..0a42034c4655 100644
+--- a/sound/soc/sof/intel/apl.c
++++ b/sound/soc/sof/intel/apl.c
+@@ -139,6 +139,7 @@ const struct sof_intel_dsp_desc apl_chip_info = {
+ 	.ipc_ack = HDA_DSP_REG_HIPCIE,
+ 	.ipc_ack_mask = HDA_DSP_REG_HIPCIE_DONE,
+ 	.ipc_ctl = HDA_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 150,
+ 	.ssp_count = APL_SSP_COUNT,
+ 	.ssp_base_offset = APL_SSP_BASE_OFFSET,
+diff --git a/sound/soc/sof/intel/cnl.c b/sound/soc/sof/intel/cnl.c
+index e115e12a856f..a63b235763ed 100644
+--- a/sound/soc/sof/intel/cnl.c
++++ b/sound/soc/sof/intel/cnl.c
+@@ -344,6 +344,7 @@ const struct sof_intel_dsp_desc cnl_chip_info = {
+ 	.ipc_ack = CNL_DSP_REG_HIPCIDA,
+ 	.ipc_ack_mask = CNL_DSP_REG_HIPCIDA_DONE,
+ 	.ipc_ctl = CNL_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 300,
+ 	.ssp_count = CNL_SSP_COUNT,
+ 	.ssp_base_offset = CNL_SSP_BASE_OFFSET,
+@@ -363,6 +364,7 @@ const struct sof_intel_dsp_desc jsl_chip_info = {
+ 	.ipc_ack = CNL_DSP_REG_HIPCIDA,
+ 	.ipc_ack_mask = CNL_DSP_REG_HIPCIDA_DONE,
+ 	.ipc_ctl = CNL_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 300,
+ 	.ssp_count = ICL_SSP_COUNT,
+ 	.ssp_base_offset = CNL_SSP_BASE_OFFSET,
+diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
+index ee09393d42cb..439cb33d2a71 100644
+--- a/sound/soc/sof/intel/hda-loader.c
++++ b/sound/soc/sof/intel/hda-loader.c
+@@ -163,7 +163,7 @@ static int cl_dsp_init(struct snd_sof_dev *sdev, int stream_tag)
  
--	if (is_handle_aborted(handle))
--		return -EROFS;
- 	if (!buffer_jbd(bh))
- 		return -EUCLEAN;
+ 	/* step 7: wait for ROM init */
+ 	ret = snd_sof_dsp_read_poll_timeout(sdev, HDA_DSP_BAR,
+-					HDA_DSP_SRAM_REG_ROM_STATUS, status,
++					chip->rom_status_reg, status,
+ 					((status & HDA_DSP_ROM_STS_MASK)
+ 						== HDA_DSP_ROM_INIT),
+ 					HDA_DSP_REG_POLL_INTERVAL_US,
+@@ -174,8 +174,8 @@ static int cl_dsp_init(struct snd_sof_dev *sdev, int stream_tag)
  
-@@ -1387,6 +1385,18 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
- 	journal = transaction->t_journal;
- 	jbd_lock_bh_state(bh);
+ 	if (hda->boot_iteration == HDA_FW_BOOT_ATTEMPTS)
+ 		dev_err(sdev->dev,
+-			"error: %s: timeout HDA_DSP_SRAM_REG_ROM_STATUS read\n",
+-			__func__);
++			"%s: timeout with rom_status_reg (%#x) read\n",
++			__func__, chip->rom_status_reg);
  
-+	if (is_handle_aborted(handle)) {
-+		/*
-+		 * Check journal aborting with @jh->b_state_lock locked,
-+		 * since 'jh->b_transaction' could be replaced with
-+		 * 'jh->b_next_transaction' during old transaction
-+		 * committing if journal aborted, which may fail
-+		 * assertion on 'jh->b_frozen_data == NULL'.
-+		 */
-+		ret = -EROFS;
-+		goto out_unlock_bh;
-+	}
-+
- 	if (jh->b_modified == 0) {
- 		/*
- 		 * This buffer's got modified and becoming part
+ err:
+ 	flags = SOF_DBG_DUMP_REGS | SOF_DBG_DUMP_PCI | SOF_DBG_DUMP_MBOX;
+@@ -251,6 +251,8 @@ static int cl_cleanup(struct snd_sof_dev *sdev, struct snd_dma_buffer *dmab,
+ 
+ static int cl_copy_fw(struct snd_sof_dev *sdev, struct hdac_ext_stream *stream)
+ {
++	struct sof_intel_hda_dev *hda = sdev->pdata->hw_pdata;
++	const struct sof_intel_dsp_desc *chip = hda->desc;
+ 	unsigned int reg;
+ 	int ret, status;
+ 
+@@ -261,7 +263,7 @@ static int cl_copy_fw(struct snd_sof_dev *sdev, struct hdac_ext_stream *stream)
+ 	}
+ 
+ 	status = snd_sof_dsp_read_poll_timeout(sdev, HDA_DSP_BAR,
+-					HDA_DSP_SRAM_REG_ROM_STATUS, reg,
++					chip->rom_status_reg, reg,
+ 					((reg & HDA_DSP_ROM_STS_MASK)
+ 						== HDA_DSP_ROM_FW_ENTERED),
+ 					HDA_DSP_REG_POLL_INTERVAL_US,
+@@ -274,8 +276,8 @@ static int cl_copy_fw(struct snd_sof_dev *sdev, struct hdac_ext_stream *stream)
+ 
+ 	if (status < 0) {
+ 		dev_err(sdev->dev,
+-			"error: %s: timeout HDA_DSP_SRAM_REG_ROM_STATUS read\n",
+-			__func__);
++			"%s: timeout with rom_status_reg (%#x) read\n",
++			__func__, chip->rom_status_reg);
+ 	}
+ 
+ 	ret = cl_trigger(sdev, stream, SNDRV_PCM_TRIGGER_STOP);
+diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
+index ddf70902e53c..e733c401562f 100644
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -353,11 +353,13 @@ static const struct hda_dsp_msg_code hda_dsp_rom_msg[] = {
+ 
+ static void hda_dsp_get_status(struct snd_sof_dev *sdev)
+ {
++	const struct sof_intel_dsp_desc *chip;
+ 	u32 status;
+ 	int i;
+ 
++	chip = get_chip_info(sdev->pdata);
+ 	status = snd_sof_dsp_read(sdev, HDA_DSP_BAR,
+-				  HDA_DSP_SRAM_REG_ROM_STATUS);
++				  chip->rom_status_reg);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(hda_dsp_rom_msg); i++) {
+ 		if (status == hda_dsp_rom_msg[i].code) {
+@@ -402,13 +404,15 @@ static void hda_dsp_get_registers(struct snd_sof_dev *sdev,
+ /* dump the first 8 dwords representing the extended ROM status */
+ static void hda_dsp_dump_ext_rom_status(struct snd_sof_dev *sdev, u32 flags)
+ {
++	const struct sof_intel_dsp_desc *chip;
+ 	char msg[128];
+ 	int len = 0;
+ 	u32 value;
+ 	int i;
+ 
++	chip = get_chip_info(sdev->pdata);
+ 	for (i = 0; i < HDA_EXT_ROM_STATUS_SIZE; i++) {
+-		value = snd_sof_dsp_read(sdev, HDA_DSP_BAR, HDA_DSP_SRAM_REG_ROM_STATUS + i * 0x4);
++		value = snd_sof_dsp_read(sdev, HDA_DSP_BAR, chip->rom_status_reg + i * 0x4);
+ 		len += snprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
+ 	}
+ 
+diff --git a/sound/soc/sof/intel/icl.c b/sound/soc/sof/intel/icl.c
+index ee095b8f2d01..4065c4d3912a 100644
+--- a/sound/soc/sof/intel/icl.c
++++ b/sound/soc/sof/intel/icl.c
+@@ -139,6 +139,7 @@ const struct sof_intel_dsp_desc icl_chip_info = {
+ 	.ipc_ack = CNL_DSP_REG_HIPCIDA,
+ 	.ipc_ack_mask = CNL_DSP_REG_HIPCIDA_DONE,
+ 	.ipc_ctl = CNL_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 300,
+ 	.ssp_count = ICL_SSP_COUNT,
+ 	.ssp_base_offset = CNL_SSP_BASE_OFFSET,
+diff --git a/sound/soc/sof/intel/shim.h b/sound/soc/sof/intel/shim.h
+index e9f7d4d7fcce..96707758ebc5 100644
+--- a/sound/soc/sof/intel/shim.h
++++ b/sound/soc/sof/intel/shim.h
+@@ -161,6 +161,7 @@ struct sof_intel_dsp_desc {
+ 	int ipc_ack;
+ 	int ipc_ack_mask;
+ 	int ipc_ctl;
++	int rom_status_reg;
+ 	int rom_init_timeout;
+ 	int ssp_count;			/* ssp count of the platform */
+ 	int ssp_base_offset;		/* base address of the SSPs */
+diff --git a/sound/soc/sof/intel/tgl.c b/sound/soc/sof/intel/tgl.c
+index 199d41a7dc9b..aba52d8628aa 100644
+--- a/sound/soc/sof/intel/tgl.c
++++ b/sound/soc/sof/intel/tgl.c
+@@ -134,6 +134,7 @@ const struct sof_intel_dsp_desc tgl_chip_info = {
+ 	.ipc_ack = CNL_DSP_REG_HIPCIDA,
+ 	.ipc_ack_mask = CNL_DSP_REG_HIPCIDA_DONE,
+ 	.ipc_ctl = CNL_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 300,
+ 	.ssp_count = ICL_SSP_COUNT,
+ 	.ssp_base_offset = CNL_SSP_BASE_OFFSET,
+@@ -153,6 +154,7 @@ const struct sof_intel_dsp_desc tglh_chip_info = {
+ 	.ipc_ack = CNL_DSP_REG_HIPCIDA,
+ 	.ipc_ack_mask = CNL_DSP_REG_HIPCIDA_DONE,
+ 	.ipc_ctl = CNL_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 300,
+ 	.ssp_count = ICL_SSP_COUNT,
+ 	.ssp_base_offset = CNL_SSP_BASE_OFFSET,
+@@ -172,6 +174,7 @@ const struct sof_intel_dsp_desc ehl_chip_info = {
+ 	.ipc_ack = CNL_DSP_REG_HIPCIDA,
+ 	.ipc_ack_mask = CNL_DSP_REG_HIPCIDA_DONE,
+ 	.ipc_ctl = CNL_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 300,
+ 	.ssp_count = ICL_SSP_COUNT,
+ 	.ssp_base_offset = CNL_SSP_BASE_OFFSET,
+@@ -191,6 +194,7 @@ const struct sof_intel_dsp_desc adls_chip_info = {
+ 	.ipc_ack = CNL_DSP_REG_HIPCIDA,
+ 	.ipc_ack_mask = CNL_DSP_REG_HIPCIDA_DONE,
+ 	.ipc_ctl = CNL_DSP_REG_HIPCCTL,
++	.rom_status_reg = HDA_DSP_SRAM_REG_ROM_STATUS,
+ 	.rom_init_timeout	= 300,
+ 	.ssp_count = ICL_SSP_COUNT,
+ 	.ssp_base_offset = CNL_SSP_BASE_OFFSET,
 -- 
 2.35.1
 

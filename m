@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3A959DC77
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0430B59DE91
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357966AbiHWLV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S1357995AbiHWLVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357459AbiHWLRf (ORCPT
+        with ESMTP id S1357463AbiHWLRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:17:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D400789805;
-        Tue, 23 Aug 2022 02:20:57 -0700 (PDT)
+        Tue, 23 Aug 2022 07:17:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599477FE79;
+        Tue, 23 Aug 2022 02:20:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EF1FB81C63;
-        Tue, 23 Aug 2022 09:20:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2278C433D7;
-        Tue, 23 Aug 2022 09:20:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5E57608D5;
+        Tue, 23 Aug 2022 09:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4E93C433D7;
+        Tue, 23 Aug 2022 09:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246455;
-        bh=rtyC8TSFqyWOCi2oMAoUTVzznfmn4eslyFZqWLXOZ9I=;
+        s=korg; t=1661246458;
+        bh=xhWZwq/HUtoLagsr8FhoEe1WFz99DlirWBij+9n3rrw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Tx0PTdHjmRjBLwtkPeOGvNw5HzGSqy/J4aR+MmwZxyRLudQpH9q1gJOPQuxvQes+
-         4a5zI6Qn2IE4p5/lcb2TgYhSwiAQIPTwJKDO1mKBGTIuP6tH5NWYzL+ArVEaBc0Mj6
-         LhdTYx4hsV2OVAkAzYvTAPm2snQWAoKsyb+Zf8U8=
+        b=EExflo9u+7BXW/Lha0FaP05UuW1XnYcsVYG4cwk87ocZ/idxBnQqU9SqTovayZNSb
+         B5xEX8WeAVyNeexNKJzh+ZBiuzhHOaIWKOdYPJNWEM8Dd6N/nk+b0SDlWdVwJM+cY5
+         Htqap8d0vBb24LUcJCJpbh/yE7j1N7/jK7Z11chY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Ranquet <granquet@baylibre.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 115/389] drm/mediatek: dpi: Only enable dpi after the bridge is enabled
-Date:   Tue, 23 Aug 2022 10:23:13 +0200
-Message-Id: <20220823080120.426632009@linuxfoundation.org>
+Subject: [PATCH 5.4 116/389] drm: bridge: sii8620: fix possible off-by-one
+Date:   Tue, 23 Aug 2022 10:23:14 +0200
+Message-Id: <20220823080120.461751167@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -58,46 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Ranquet <granquet@baylibre.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit aed61ef6beb911cc043af0f2f291167663995065 ]
+[ Upstream commit 21779cc21c732c5eff8ea1624be6590450baa30f ]
 
-Enabling the dpi too early causes glitches on screen.
+The next call to sii8620_burst_get_tx_buf will result in off-by-one
+When ctx->burst.tx_count + size == ARRAY_SIZE(ctx->burst.tx_buf). The same
+thing happens in sii8620_burst_get_rx_buf.
 
-Move the call to mtk_dpi_enable() at the end of the bridge_enable
-callback to ensure everything is setup properly before enabling dpi.
+This patch also change tx_count and tx_buf to rx_count and rx_buf in
+sii8620_burst_get_rx_buf. It is unreasonable to check tx_buf's size and
+use rx_buf.
 
-Fixes: 9e629c17aa8d ("drm/mediatek: Add DPI sub driver")
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220701035845.16458-16-rex-bc.chen@mediatek.com/
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Fixes: e19e9c692f81 ("drm/bridge/sii8620: add support for burst eMSC transmissions")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220518065856.18936-1-hbh25y@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/sil-sii8620.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 8f4a9f245a9a..4a64d8aed9da 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -394,7 +394,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
- 	if (dpi->pinctrl && dpi->pins_dpi)
- 		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
+diff --git a/drivers/gpu/drm/bridge/sil-sii8620.c b/drivers/gpu/drm/bridge/sil-sii8620.c
+index fb0b64c965b7..970bc00d2aaf 100644
+--- a/drivers/gpu/drm/bridge/sil-sii8620.c
++++ b/drivers/gpu/drm/bridge/sil-sii8620.c
+@@ -604,7 +604,7 @@ static void *sii8620_burst_get_tx_buf(struct sii8620 *ctx, int len)
+ 	u8 *buf = &ctx->burst.tx_buf[ctx->burst.tx_count];
+ 	int size = len + 2;
  
--	mtk_dpi_enable(dpi);
- 	return 0;
+-	if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
++	if (ctx->burst.tx_count + size >= ARRAY_SIZE(ctx->burst.tx_buf)) {
+ 		dev_err(ctx->dev, "TX-BLK buffer exhausted\n");
+ 		ctx->error = -EINVAL;
+ 		return NULL;
+@@ -621,7 +621,7 @@ static u8 *sii8620_burst_get_rx_buf(struct sii8620 *ctx, int len)
+ 	u8 *buf = &ctx->burst.rx_buf[ctx->burst.rx_count];
+ 	int size = len + 1;
  
- err_pixel:
-@@ -538,6 +537,7 @@ static void mtk_dpi_encoder_enable(struct drm_encoder *encoder)
- 
- 	mtk_dpi_power_on(dpi);
- 	mtk_dpi_set_display_mode(dpi, &dpi->mode);
-+	mtk_dpi_enable(dpi);
- }
- 
- static int mtk_dpi_atomic_check(struct drm_encoder *encoder,
+-	if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
++	if (ctx->burst.rx_count + size >= ARRAY_SIZE(ctx->burst.rx_buf)) {
+ 		dev_err(ctx->dev, "RX-BLK buffer exhausted\n");
+ 		ctx->error = -EINVAL;
+ 		return NULL;
 -- 
 2.35.1
 

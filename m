@@ -2,104 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90F159EFB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9699659EFBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiHWX2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 19:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S231411AbiHWXdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 19:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiHWX2f (ORCPT
+        with ESMTP id S229539AbiHWXd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 19:28:35 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAAE98A1CA;
-        Tue, 23 Aug 2022 16:28:34 -0700 (PDT)
-Received: from dread.disaster.area (pa49-195-4-169.pa.nsw.optusnet.com.au [49.195.4.169])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id E209010E8C98;
-        Wed, 24 Aug 2022 09:28:33 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oQdJw-00Gk9U-Qx; Wed, 24 Aug 2022 09:28:32 +1000
-Date:   Wed, 24 Aug 2022 09:28:32 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Jeff Layton <jlayton@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Trond Myklebust <trondmy@hammerspace.com>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-Message-ID: <20220823232832.GQ3600936@dread.disaster.area>
-References: <20220822133309.86005-1-jlayton@kernel.org>
- <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
- <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
- <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
- <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>
- <20220822233231.GJ3600936@dread.disaster.area>
- <6cbcb33d33613f50dd5e485ecbf6ce7e305f3d6f.camel@kernel.org>
- <166125468756.23264.2859374883806269821@noble.neil.brown.name>
- <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>
- <166129348704.23264.10381335282721356873@noble.neil.brown.name>
+        Tue, 23 Aug 2022 19:33:29 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46B686FC3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZpgOnfoB3G+8B3GPX7SSqWvigoev/1tx1b5/Xxi/HEg=; b=bftmL1ilNDBTxY0TLs2/XjHJOi
+        62QLnNu13X7qG7JoV6DxrNDx6qdbL+OPIOMaiesR3MQfzjO7bGK93fiFd5RcbEQnZISN8999jAwEJ
+        yVMKEW+r5ylYM3u46HAyjk+IidRRhyNqUOM0Npg5/3TPI5YY3EW2hC0liR14M6EN3VmFYmRoz7OCL
+        7D6PX6AGLWMOzVAtZHQ1GNU83Xp1ng21/BBCbSikZyppheIR4zbwVQW4ItqcKrVG2AxrKT/5heBf6
+        HR/XR8odIyoS2/q9tnw7U2i0EOQ/9VXE65Qtde1vRpRCK0ZbKW5zMN8GCor5AmWy+Yksnbnr3rm/P
+        +FcIZl9w==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oQdO9-007aKM-Hn;
+        Tue, 23 Aug 2022 23:32:53 +0000
+Date:   Wed, 24 Aug 2022 00:32:53 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        James Smart <james.smart@broadcom.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v3 1/1] nvmet-tcp: Don't kmap() pages which can't come
+ from HIGHMEM
+Message-ID: <YwVjpTW6vWvdVQTK@ZenIV>
+References: <20220822142438.5954-1-fmdefrancesco@gmail.com>
+ <20220822142438.5954-2-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <166129348704.23264.10381335282721356873@noble.neil.brown.name>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=630562a2
-        a=FOdsZBbW/tHyAhIVFJ0pRA==:117 a=FOdsZBbW/tHyAhIVFJ0pRA==:17
-        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=GcyzOjIWAAAA:8 a=uZvujYp8AAAA:8
-        a=7-415B0cAAAA:8 a=P-QfJufZ_sklkARv_-sA:9 a=CjuIK1q_8ugA:10
-        a=RWIgqKacCvQA:10 a=6xFH9qvm82wA:10 a=hQL3dl6oAZ8NdCsdz28n:22
-        a=SLzB8X_8jTLwj6mN0q5r:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220822142438.5954-2-fmdefrancesco@gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 08:24:47AM +1000, NeilBrown wrote:
-> On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > On Tue, 2022-08-23 at 21:38 +1000, NeilBrown wrote:
-> > > On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > > > So, we can refer to that and simply say:
-> > > > 
-> > > > "If the function updates the mtime or ctime on the inode, then the
-> > > > i_version should be incremented. If only the atime is being updated,
-> > > > then the i_version should not be incremented. The exception to this rule
-> > > > is explicit atime updates via utimes() or similar mechanism, which
-> > > > should result in the i_version being incremented."
-> > > 
-> > > Is that exception needed?  utimes() updates ctime.
-> > > 
-> > > https://man7.org/linux/man-pages/man2/utimes.2.html
-> > > 
-> > > doesn't say that, but
-> > > 
-> > > https://pubs.opengroup.org/onlinepubs/007904875/functions/utimes.html
-> > > 
-> > > does, as does the code.
-> > > 
-> > 
-> > Oh, good point! I think we can leave that out. Even better!
-> 
-> Further, implicit mtime updates (file_update_time()) also update ctime.
-> So all you need is
->    If the function updates the ctime, then i_version should be
->    incremented.
-> 
-> and I have to ask - why not just use the ctime?  Why have another number
-> that is parallel?
-> 
-> Timestamps are updated at HZ (ktime_get_course) which is at most every
-> millisecond.
+On Mon, Aug 22, 2022 at 04:24:38PM +0200, Fabio M. De Francesco wrote:
 
-Kernel time, and therefore timestamps, can go backwards.
+> Therefore, replace the kmap() of sg_page(sg) with a page_address() and
+> delete the "nr_mapped" field from "nvmet_tcp_cmd" and instead pass a
+> local variable to iov_iter_kvec() from the call site in
+> nvmet_tcp_map_pdu_iovec().
 
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+I'd suggest looking into switching to ITER_BVEC...

@@ -2,301 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B3659CEEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 04:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1171E59CEF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239543AbiHWC7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 22:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S239299AbiHWDBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 23:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239152AbiHWC7c (ORCPT
+        with ESMTP id S239482AbiHWDAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 22:59:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ED64D177
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 19:59:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 748FB6125D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:59:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0670C433C1;
-        Tue, 23 Aug 2022 02:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661223569;
-        bh=v/o3RMdeh/rms3+V7rhneJHZCHFD4q9Q0g7WV2Lo9Qs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oJKbg4hp8ovVNHo7gx8+nVQkcs10mLT+liWzLyKK1sDAK214ff1rBoWj9sS+bzhwF
-         6Eiko/wOvdjWnWGowua63dbya7MuLgFHD5WVvEIcWUyYmN4BJeZ8LM0MYVODH2SO3+
-         y0BXQUJtxag5SDkHPqnz9QlZVXksSq2VLY2HiOeBUmlFyh8YuPRVio0JkebdoYxUPt
-         be04HtpALly9SVjsV/NBCFCspqevI+RnlRmTpfNprHK/aAUz1JwfEjNnbctD/RQar0
-         2wfkf6ec5O2Gi1z+lYVJ9bQp7R2bNBofuM6VcBgj+EFetugxSEGooiaAPVWzgkYMcM
-         +PmzxhqnqlLZQ==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] tracing: Add .graph suffix option to histogram value
-Date:   Tue, 23 Aug 2022 11:59:26 +0900
-Message-Id: <166122356631.94548.12762281844637796375.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <166122353724.94548.7395770385598120122.stgit@devnote2>
-References: <166122353724.94548.7395770385598120122.stgit@devnote2>
-User-Agent: StGit/0.19
+        Mon, 22 Aug 2022 23:00:31 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA17E5A834;
+        Mon, 22 Aug 2022 20:00:29 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MNxDQ8012127;
+        Tue, 23 Aug 2022 02:59:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=G6QoP39N9AU163l8+TbSQIhaYItMK38g6W1guDgoOR8=;
+ b=J641maHPjNLN05seURnVXrz7yp85m2adVKEUDhZJw9vfP3zK+3b8+6QckqpoRX62lngR
+ uRQ4QibenXGmBdgk+XbZtWjcUIpDPGZXkJJyrMRQNmOwB5tRb4E3y3jJ7y9wBkH3U+0o
+ 8aHhsY+Y3TfUXJyuTKOxTJrv0JdblJ0lgxZOjQzxbiMmPgLA/tkXthsBdZj6h4EnBoZ9
+ GXtcWPTFeNKp5JlSx9NAhyBGFP7UoN7FvdwtWpL1JqO1xmCScmJPtxhQAiAW+HdsHdc4
+ lbyxIuTZhC+wlsvSwFJNKYbSWi9NUlhl3n52LtULeIACfbdEN5BV+JechwmAh85hoVXc kQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4e8crxxy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 02:59:48 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27N16YJY037826;
+        Tue, 23 Aug 2022 02:59:47 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2042.outbound.protection.outlook.com [104.47.73.42])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mkgncnh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 02:59:47 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b+XVi06j8mloulHuzOUet+Od7vRUFTBbCFal6PIPBuzVE5MV8g0niwrQA/d16wd7Xy88MpeXLO4SL5e6jT7atnnY11hH3gTf3Dc9RP3wVS/qKU3hsIWHrVX5fT5n1S0IaTPHndP5jlGJWrUiEfClxigUD5USE9NhUKSXbonex5JDH64QxdkQOdXdPmXpXF9ZU0/8GsYsh8EBCDigEnNLXlObV+sYbVtMKwi/Ly8DsZHG0usBIjqfzJABrEkUttaweOlrvajumjQq2dnZ/ghhUNJY99xHc4o6Y6XqVmncvJP9wWnn6M1V+YV+GGKuKGGZcupkL8pmx5tTHzGZQHoYVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G6QoP39N9AU163l8+TbSQIhaYItMK38g6W1guDgoOR8=;
+ b=iE0fpnXo3NbBrobsa66MxDP+ngXRaYIti1BMoxYfuCDtSw3AsmR0f6QbuPp/dq13PmoSYTlDmkjtLDGJpA6hYWTJLODXe1L0FU8sybDKUyio15EFKthQk32JaUGOq77Kjw6ScrrfhRJZIv07tY0tEAZn4uai7vP9XQbqVlFpZTXc8BQSSc5o1L3uS/hYNKCYMsUH32ImQutZDkUZCKR1DW85ZG+6G572shIYB537Znm5KEsy1IvqwbOvLa034DtmvvKxxt28tOSDI4lbZsf6hMsbSk03tpqFCfBxyq6AbktYu3uVKutSYAsiqE5Rk8n7BZDEL6ILWDc5CmeYCQUagw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G6QoP39N9AU163l8+TbSQIhaYItMK38g6W1guDgoOR8=;
+ b=VWsT7QI6pVgcv0/YR/L/WXDxY8BanFgZijMLp3y4uB7ccBpOkyGtOcJzUWqyIVHd732+Co9+6IwaC4uakb3uEiH8VnK3Sc9kNEN/hV2xc5nEIP+i8imECMl3Bf+asxjoZmKHOK+X0koxfQdhT4xskAytURvqno+te6+hcyAg6k8=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DM5PR10MB1372.namprd10.prod.outlook.com (2603:10b6:3:10::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5546.18; Tue, 23 Aug 2022 02:59:44 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::89a7:ad8f:3077:f3c0]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::89a7:ad8f:3077:f3c0%8]) with mapi id 15.20.5546.023; Tue, 23 Aug 2022
+ 02:59:44 +0000
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
+        <powen.kao@mediatek.com>, <mason.zhang@mediatek.com>,
+        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+        <eddie.huang@mediatek.com>, <tun-yu.yu@mediatek.com>,
+        <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <jiajie.hao@mediatek.com>
+Subject: Re: [PATCH v5 0/5] scsi: ufs-mediatek: Provide features and fixes
+ in MediaTek platforms
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq15yijbr72.fsf@ca-mkp.ca.oracle.com>
+References: <20220802235437.4547-1-stanley.chu@mediatek.com>
+Date:   Mon, 22 Aug 2022 22:59:41 -0400
+In-Reply-To: <20220802235437.4547-1-stanley.chu@mediatek.com> (Stanley Chu's
+        message of "Wed, 3 Aug 2022 07:54:32 +0800")
+Content-Type: text/plain
+X-ClientProxiedBy: SN4PR0501CA0130.namprd05.prod.outlook.com
+ (2603:10b6:803:42::47) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3f41a037-b260-4c4f-ec1c-08da84b3883a
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1372:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gowL9FS0RRXWVkWI41BjmkHF34cqhXOtoAf8fCxn6NL4JU6yr+8g1+asa0DU14qwdwCFdTSqYdQkmQQtmtNNygU45WwEo818QJqQ0h6BQQWlsEBtb6GYA0bn1BVNdK8+Ht7GWrsk482dof4XeEJR6Rdg+c/UaJzQ/PaY2g7s8vqZpnJ48BKyggrRZZeGkBp+x/3mwSBJSF2A582VhGKug+YhtfQrmevwQSn59ZFy5gnb5kDgmb6v8GMZLEitUUdeFbyHBmGM9DGeF+zIa67WlBeAP+eOn+WZvkplzB/OeT7xKFjYOS5EP2jbQMnEcQlGCB7ysy9B8Pto4WrRm35wEhPNF5y8TikvwQYka/4aFWwxI0Zr15hIHHLvp40hzLXOGiFZ/6Ao+UsaZ7cyxRq6Gi2mfLjfGqCfvbKa3bpkXoJr3d+FpR9YJ3ldVJgqrWRUhVLE8fDVwUvTcZ5XQXQBZWTYBScV6xaXu0qpYfH7/6MC7fqM5BW1uQhdkQMGCMck5VNT3/2+MGF8gGEkGCUZHQhcQRuKeTSjsc+XXhllfmvq3byr/JIR8k4hFJiCc+NP54WkcSTlj2jBIRgEY1WMDlXNGUDyfTL0SBCa3YUxOVCqc29bZ40gLqqhNtdykrUIFMcqKYy6H+CVKDntuA7qp9UZgAfOpf5l1xtDVPC45BmR0eaArQoi31KvV/sIkvYVS+5dKLsSqeP1Hm5MYE50xG4rmYK3aY7OYwaDV9GHFjPBfiTgFJFZm2kNJCM7v4NDau3FkPhv5h+0+JlANxbYAQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(396003)(376002)(346002)(136003)(36916002)(6506007)(6666004)(6486002)(478600001)(41300700001)(52116002)(186003)(6512007)(26005)(2906002)(8936002)(7416002)(5660300002)(316002)(54906003)(6916009)(66556008)(4326008)(8676002)(66946007)(558084003)(38350700002)(38100700002)(86362001)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wIsY6S1LZjo1w1ymDDqNuzcZKW/5ALnIKUWRnEdJlD4v5DNA6n97w2+DCrr3?=
+ =?us-ascii?Q?Po88ZltcVvC4kAfK+7ha+5iwie/Nsxy/3KqN7OGc9xrC6ma/4IommaiMUyd3?=
+ =?us-ascii?Q?8qYOUtB3pfDMCA7yGE/F+9DMuCWRT8F+xxgQVamBAVvQLMBNHfc748a1eLEt?=
+ =?us-ascii?Q?h7sVtWm0KqzsXh1NoFJ6wlPCubd2rpFRouGn37uCsoawuJCLMsIcm2RJaBZf?=
+ =?us-ascii?Q?bFAkuqIBcsJDqinUOTYRbFiMamFzoMgHvF5/NG+M4YkTlG6ZRuvFqDNtHibr?=
+ =?us-ascii?Q?+E18T26uLCySU/Zdhe0AnTV5ZtLzio+v4RnldXj8A1kS4BCCdsronuExIFmB?=
+ =?us-ascii?Q?IeH7b71975FxAXQMZbYeTyXY0VCn4oC9sOe/dWTTflBGXeEfsqIrPhyH2B9P?=
+ =?us-ascii?Q?kEg//HCjtUZ7OA6rBKxg25NIakosOARLMjVTL/QvbDHcs1KUD9TuCyBx+J7k?=
+ =?us-ascii?Q?+MXkRCh9vAcI5l5Y1fSFws5tkoEl+8EasYbm0po06tAJBNODvy1v2uawqYCU?=
+ =?us-ascii?Q?hYXPAPhCbbzXzuOMLR6oLqGS8I7t/OD7bNl5RWHQiBzR4Jx8Ggkt3tv1gM8c?=
+ =?us-ascii?Q?qtqhbIsFsF6k/yyXXJw2p0lA8WWZWZU94UNp9VAIr/2TivftbpWt5/iU5E+O?=
+ =?us-ascii?Q?RuiRaKqZ922MJAviLrE0edYLcWAsPE2AfUydYZHqWBjp01mnsL6X0k2lZwMT?=
+ =?us-ascii?Q?cw22xr6nRGmLXHX86tRWQTeYlyLSSuIMutv+4SqdK3Dd61ft3A9uWSA9xj0p?=
+ =?us-ascii?Q?z2fDFXRtS8vtGzVRrb0uFZ25G9roLoM40igj6fyh1RdJQ7m7VgF+sTVNEB+e?=
+ =?us-ascii?Q?u5Bj5hlyotAaFIFljHoxsHURjg18nB7IuF+rIR43Qngi+GYii5IY1WyLKstF?=
+ =?us-ascii?Q?RS5OVtrEq7MJ9uBfjTZdpltp5qsYzE0SxE61SlF8mcLGjtIDYkkh5dBZZiVH?=
+ =?us-ascii?Q?HLIdrRzWhvZ1XWyO1L+g70JodPMcZMo/ajuYRX645Y9sHLGEp0H7T+E7NOL4?=
+ =?us-ascii?Q?ScGSxAmtNcZAyvTU/0QYfzM/92S/FhyoM8D7zUudJYqd3Q7+Xx5NlM9G5eQb?=
+ =?us-ascii?Q?QNMr8Kt8B9q8AcqiFGXb0YN41ltyHE9N4GQJSRbGemtEoZ1dfQ9wi2nBr36z?=
+ =?us-ascii?Q?WkjwC7zawfO6+l9WI6a3kMJmNw0SpRNW1Vo8nDsQ7xZFxznDOVDE5dkQRpk4?=
+ =?us-ascii?Q?NNAn5qIUo4QUvj/MN2YSCAl0/fZgAWOPxA0WZOgeXomNgd/aDiid9Q8fjLIh?=
+ =?us-ascii?Q?jEjvJKZbjrgzrQPQ7erudsRWIpuXqeqdBd3lommjuGeyN+WZ/1WlvpErR99d?=
+ =?us-ascii?Q?OQ9Etw0jiPYzBJ0b51nhLJHB0RFZv7W/uDWPmPSLJeTWuS7KA0wD9xn53bPH?=
+ =?us-ascii?Q?nuk+GBktcSecW8NsBvfuaVyK+x4EzgUbOw1g5qOr+xf6HUos6WQxCjS91ikK?=
+ =?us-ascii?Q?hkoNhY0NaDJu2dJ8+kNW1NdWOCe28jyhhFiCYpZIYmvvCgNogxnwufxjiLwn?=
+ =?us-ascii?Q?gIr3+2E/xgFzk0L7MsqDTaO7KF7SkH0Drb6B1KGErrdhf3YtINsRUcy4HWX5?=
+ =?us-ascii?Q?DRo/rjtjXMheJK9H3ZQ07chQ9K6sIpby1xLnCGY1I+97XlvUD5oplXQuFs/r?=
+ =?us-ascii?Q?6Q=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f41a037-b260-4c4f-ec1c-08da84b3883a
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 02:59:44.7796
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: toPGfAOw/2uI8snFgTSeGs2Urws+OD0BT0dInjZKVne+0U5dkDMf6EB6cz6D4Xz+3zS67Xg/eXwRZPy6wksJ4et5Y14Alwr4qt+v98YegNg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1372
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_16,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=767 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208230010
+X-Proofpoint-GUID: swMvlV4-mau6dcEBMTB0Ir6H_0veb2fX
+X-Proofpoint-ORIG-GUID: swMvlV4-mau6dcEBMTB0Ir6H_0veb2fX
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Add the .graph suffix which shows the bar graph of the histogram value.
+Stanley,
 
-For example, the below example shows that the bar graph
-of the histogram of the runtime for each tasks.
+> This series provides some features and fixes in MediaTek UFS
+> platforms.
 
-------
-  # cd /sys/kernel/debug/tracing/
-  # echo hist:keys=pid:vals=runtime.graph:sort=pid > \
-   events/sched/sched_stat_runtime/trigger
-  # sleep 10
-  # cat events/sched/sched_stat_runtime/hist
- # event histogram
- #
- # trigger info: hist:keys=pid:vals=hitcount,runtime.graph:sort=pid:size=2048 [active]
- #
+Applied to 6.1/scsi-staging, thanks!
 
- { pid:         14 } hitcount:          2  runtime:
- { pid:         16 } hitcount:          8  runtime:
- { pid:         26 } hitcount:          1  runtime:
- { pid:         57 } hitcount:          3  runtime:
- { pid:         61 } hitcount:         20  runtime: ###
- { pid:         66 } hitcount:          2  runtime:
- { pid:         70 } hitcount:          3  runtime:
- { pid:         72 } hitcount:          2  runtime:
- { pid:        145 } hitcount:         14  runtime: ####################
- { pid:        152 } hitcount:          5  runtime: #######
- { pid:        153 } hitcount:          2  runtime: ####
-
- Totals:
-     Hits: 62
-     Entries: 11
-     Dropped: 0
--------
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v3:
-  - Show hitcount.graph in trigger info correctly.
-  - Show both hitcount.percent and hitcount.graph on the same histogram.
- Changes in v2:
-  - Show an error when failing to calculate the percentage.
----
- kernel/trace/trace_events_hist.c |   87 +++++++++++++++++++++++++++++++-------
- 1 file changed, 70 insertions(+), 17 deletions(-)
-
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index d285a2d55f88..e3d2a623e6bd 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -478,6 +478,7 @@ enum hist_field_flags {
- 	HIST_FIELD_FL_BUCKET		= 1 << 17,
- 	HIST_FIELD_FL_CONST		= 1 << 18,
- 	HIST_FIELD_FL_PERCENT		= 1 << 19,
-+	HIST_FIELD_FL_GRAPH		= 1 << 20,
- };
- 
- struct var_defs {
-@@ -1685,6 +1686,8 @@ static const char *get_hist_field_flags(struct hist_field *hist_field)
- 		flags_str = "usecs";
- 	else if (hist_field->flags & HIST_FIELD_FL_PERCENT)
- 		flags_str = "percent";
-+	else if (hist_field->flags & HIST_FIELD_FL_GRAPH)
-+		flags_str = "graph";
- 
- 	return flags_str;
- }
-@@ -2297,6 +2300,10 @@ parse_field(struct hist_trigger_data *hist_data, struct trace_event_file *file,
- 			if (*flags & (HIST_FIELD_FL_VAR | HIST_FIELD_FL_KEY))
- 				goto error;
- 			*flags |= HIST_FIELD_FL_PERCENT;
-+		} else if (strncmp(modifier, "graph", 5) == 0) {
-+			if (*flags & (HIST_FIELD_FL_VAR | HIST_FIELD_FL_KEY))
-+				goto error;
-+			*flags |= HIST_FIELD_FL_GRAPH;
- 		} else {
-  error:
- 			hist_err(tr, HIST_ERR_BAD_FIELD_MODIFIER, errpos(modifier));
-@@ -4266,6 +4273,9 @@ static int create_val_fields(struct hist_trigger_data *hist_data,
- 			if (strncmp(field_str + 8, ".percent", 8) == 0)
- 				hist_data->fields[HITCOUNT_IDX]->flags |=
- 					HIST_FIELD_FL_PERCENT;
-+			if (strncmp(field_str + 8, ".graph", 8) == 0)
-+				hist_data->fields[HITCOUNT_IDX]->flags |=
-+					HIST_FIELD_FL_GRAPH;
- 			continue;
- 		}
- 
-@@ -5220,20 +5230,52 @@ static inline unsigned int __get_percentage(u64 val, u64 total)
- 	return val ? UINT_MAX : 0;
- }
- 
-+#define BAR_CHAR '#'
-+
-+static inline const char *__fill_bar_str(char *buf, int size, u64 val, u64 max)
-+{
-+	unsigned int len = __get_percentage(val, max);
-+	int i;
-+
-+	if (len == UINT_MAX) {
-+		snprintf(buf, size, "[ERROR]");
-+		return buf;
-+	}
-+
-+	len = len * size / 10000;
-+	for (i = 0; i < len && i < size; i++)
-+		buf[i] = BAR_CHAR;
-+	while (i < size)
-+		buf[i++] = ' ';
-+	buf[size] = '\0';
-+
-+	return buf;
-+}
-+
-+struct hist_val_stat {
-+	u64 max;
-+	u64 total;
-+};
-+
- static void hist_trigger_print_val(struct seq_file *m, unsigned int idx,
- 				   const char *field_name, unsigned long flags,
--				   u64 *totals, struct tracing_map_elt *elt)
-+				   struct hist_val_stat *stats,
-+				   struct tracing_map_elt *elt)
- {
- 	u64 val = tracing_map_read_sum(elt, idx);
- 	unsigned int pc;
-+	char bar[21];
- 
- 	if (flags & HIST_FIELD_FL_PERCENT) {
--		pc = __get_percentage(val, totals[idx]);
-+		pc = __get_percentage(val, stats[idx].total);
- 		if (pc == UINT_MAX)
- 			seq_printf(m, " %s (%%):[ERROR]", field_name);
- 		else
- 			seq_printf(m, " %s (%%): %3u.%02u", field_name,
- 					pc / 100, pc % 100);
-+	} else if (flags & HIST_FIELD_FL_GRAPH) {
-+		seq_printf(m, " %s: %20s", field_name,
-+			   __fill_bar_str(bar, 20, val, stats[idx].max));
- 	} else if (flags & HIST_FIELD_FL_HEX) {
- 		seq_printf(m, " %s: %10llx", field_name, val);
- 	} else {
-@@ -5243,7 +5285,7 @@ static void hist_trigger_print_val(struct seq_file *m, unsigned int idx,
- 
- static void hist_trigger_entry_print(struct seq_file *m,
- 				     struct hist_trigger_data *hist_data,
--				     u64 *totals,
-+				     struct hist_val_stat *stats,
- 				     void *key,
- 				     struct tracing_map_elt *elt)
- {
-@@ -5253,12 +5295,15 @@ static void hist_trigger_entry_print(struct seq_file *m,
- 
- 	hist_trigger_print_key(m, hist_data, key, elt);
- 
--	hist_trigger_print_val(m, i, "hitcount", 0, totals, elt);
-+	hist_trigger_print_val(m, i, "hitcount", 0, stats, elt);
- 
- 	flags = hist_data->fields[i]->flags;
- 	if (flags & HIST_FIELD_FL_PERCENT)
- 		hist_trigger_print_val(m, i, " hitcount",
--				HIST_FIELD_FL_PERCENT, totals, elt);
-+				HIST_FIELD_FL_PERCENT, stats, elt);
-+	if (flags & HIST_FIELD_FL_GRAPH)
-+		hist_trigger_print_val(m, i, " hitcount",
-+				HIST_FIELD_FL_GRAPH, stats, elt);
- 
- 	for (i = 1; i < hist_data->n_vals; i++) {
- 		field_name = hist_field_name(hist_data->fields[i], 0);
-@@ -5268,7 +5313,7 @@ static void hist_trigger_entry_print(struct seq_file *m,
- 			continue;
- 
- 		seq_puts(m, " ");
--		hist_trigger_print_val(m, i, field_name, flags, totals, elt);
-+		hist_trigger_print_val(m, i, field_name, flags, stats, elt);
- 	}
- 
- 	print_actions(m, hist_data, elt);
-@@ -5282,7 +5327,8 @@ static int print_entries(struct seq_file *m,
- 	struct tracing_map_sort_entry **sort_entries = NULL;
- 	struct tracing_map *map = hist_data->map;
- 	int i, j, n_entries;
--	u64 *totals = NULL;
-+	struct hist_val_stat *stats = NULL;
-+	u64 val;
- 
- 	n_entries = tracing_map_sort_entries(map, hist_data->sort_keys,
- 					     hist_data->n_sort_keys,
-@@ -5290,28 +5336,33 @@ static int print_entries(struct seq_file *m,
- 	if (n_entries < 0)
- 		return n_entries;
- 
-+	/* Calculate the max and the total for each field if needed. */
- 	for (j = 0; j < hist_data->n_vals; j++) {
--		if (!(hist_data->fields[j]->flags & HIST_FIELD_FL_PERCENT))
-+		if (!(hist_data->fields[j]->flags &
-+			(HIST_FIELD_FL_PERCENT | HIST_FIELD_FL_GRAPH)))
- 			continue;
--		if (!totals) {
--			totals = kcalloc(hist_data->n_vals, sizeof(u64),
--					 GFP_KERNEL);
--			if (!totals) {
-+		if (!stats) {
-+			stats = kcalloc(hist_data->n_vals, sizeof(*stats),
-+				       GFP_KERNEL);
-+			if (!stats) {
- 				n_entries = -ENOMEM;
- 				goto out;
- 			}
- 		}
--		for (i = 0; i < n_entries; i++)
--			totals[j] += tracing_map_read_sum(
--					sort_entries[i]->elt, j);
-+		for (i = 0; i < n_entries; i++) {
-+			val = tracing_map_read_sum(sort_entries[i]->elt, j);
-+			stats[j].total += val;
-+			if (stats[j].max < val)
-+				stats[j].max = val;
-+		}
- 	}
- 
- 	for (i = 0; i < n_entries; i++)
--		hist_trigger_entry_print(m, hist_data, totals,
-+		hist_trigger_entry_print(m, hist_data, stats,
- 					 sort_entries[i]->key,
- 					 sort_entries[i]->elt);
- 
--	kfree(totals);
-+	kfree(stats);
- out:
- 	tracing_map_destroy_sort_entries(sort_entries, n_entries);
- 
-@@ -5736,6 +5787,8 @@ static int event_hist_trigger_print(struct seq_file *m,
- 			seq_puts(m, "hitcount");
- 			if (field->flags & HIST_FIELD_FL_PERCENT)
- 				seq_puts(m, ",hitcount.percent");
-+			if (field->flags & HIST_FIELD_FL_GRAPH)
-+				seq_puts(m, ",hitcount.graph");
- 		} else {
- 			seq_puts(m, ",");
- 			hist_field_print(m, field);
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering

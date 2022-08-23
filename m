@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A5D59D803
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3D559D54C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351191AbiHWJgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
+        id S1346910AbiHWImz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351335AbiHWJf2 (ORCPT
+        with ESMTP id S1347783AbiHWIlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:35:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9214396FD3;
-        Tue, 23 Aug 2022 01:39:42 -0700 (PDT)
+        Tue, 23 Aug 2022 04:41:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD6B792E6;
+        Tue, 23 Aug 2022 01:19:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B16DB81C4A;
-        Tue, 23 Aug 2022 08:18:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C612C433C1;
-        Tue, 23 Aug 2022 08:18:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40619B81C4D;
+        Tue, 23 Aug 2022 08:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE52C433C1;
+        Tue, 23 Aug 2022 08:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242703;
-        bh=F5vRVgkLbGhcuVsIbIHpjZEGgUqsHRcnYDVsI2aUkUQ=;
+        s=korg; t=1661242707;
+        bh=xd9pSX2o4PEovPzwScjsz4aIA2Eq9p7JoyzIc20i9rQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tZQ/5Ii0FmXIEJizZO4nlwuzh8ioD6ekmYI5Yy6mfGfdW5HOSFQM0tktgvgfezXt8
-         +vHa96L1jRLNq5PGR1s7feiqIRtBD/kPrvGpMjMm4bh2xibMqy0tOJSGR1WfJb2auZ
-         nDrhfVovMiC4sASDwoKK90ESorpf5swfC+Ds6Vus=
+        b=qF4ZO91nB18E9CbYLnipxMoJ3hSZzVMJwT+HjqIVrHiD3D6IKq2mHEQwrY9loB0Xe
+         xOAHGVd1c0yiHeR2EwmXM4LiGvLZJ/Y5QNXhZNbQ24UqbBrXAPFTXO4gy17hRS92ST
+         BKPrd/IjmeK65XWsLKgsDaA2j3qEffop3CHyGcIo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
-        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-        Marek Szlosek <marek.szlosek@intel.com>,
+        stable@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.19 174/365] iavf: Fix reset error handling
-Date:   Tue, 23 Aug 2022 10:01:15 +0200
-Message-Id: <20220823080125.488748567@linuxfoundation.org>
+Subject: [PATCH 5.19 175/365] iavf: Fix deadlock in initialization
+Date:   Tue, 23 Aug 2022 10:01:16 +0200
+Message-Id: <20220823080125.533399037@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -49,7 +47,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_PORT autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,101 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+From: Ivan Vecera <ivecera@redhat.com>
 
-commit 31071173771e079f7bc08dacd61e0db913262fbf upstream.
+commit cbe9e51126305832cf407ee6bb556ce831488ffe upstream.
 
-Do not call iavf_close in iavf_reset_task error handling. Doing so can
-lead to double call of napi_disable, which can lead to deadlock there.
-Removing VF would lead to iavf_remove task being stuck, because it
-requires crit_lock, which is held by iavf_close.
-Call iavf_disable_vf if reset fail, so that driver will clean up
-remaining invalid resources.
-During rapid VF resets, HW can fail to setup VF mailbox. Wrong
-error handling can lead to iavf_remove being stuck with:
-[ 5218.999087] iavf 0000:82:01.0: Failed to init adminq: -53
+Fix deadlock that occurs when iavf interface is a part of failover
+configuration.
+
+1. Mutex crit_lock is taken at the beginning of iavf_watchdog_task()
+2. Function iavf_init_config_adapter() is called when adapter
+   state is __IAVF_INIT_CONFIG_ADAPTER
+3. iavf_init_config_adapter() calls register_netdevice() that emits
+   NETDEV_REGISTER event
+4. Notifier function failover_event() then calls
+   net_failover_slave_register() that calls dev_open()
+5. dev_open() calls iavf_open() that tries to take crit_lock in
+   end-less loop
+
+Stack trace:
 ...
-[ 5267.189211] INFO: task repro.sh:11219 blocked for more than 30 seconds.
-[ 5267.189520]       Tainted: G S          E     5.18.0-04958-ga54ce3703613-dirty #1
-[ 5267.189764] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[ 5267.190062] task:repro.sh        state:D stack:    0 pid:11219 ppid:  8162 flags:0x00000000
-[ 5267.190347] Call Trace:
-[ 5267.190647]  <TASK>
-[ 5267.190927]  __schedule+0x460/0x9f0
-[ 5267.191264]  schedule+0x44/0xb0
-[ 5267.191563]  schedule_preempt_disabled+0x14/0x20
-[ 5267.191890]  __mutex_lock.isra.12+0x6e3/0xac0
-[ 5267.192237]  ? iavf_remove+0xf9/0x6c0 [iavf]
-[ 5267.192565]  iavf_remove+0x12a/0x6c0 [iavf]
-[ 5267.192911]  ? _raw_spin_unlock_irqrestore+0x1e/0x40
-[ 5267.193285]  pci_device_remove+0x36/0xb0
-[ 5267.193619]  device_release_driver_internal+0xc1/0x150
-[ 5267.193974]  pci_stop_bus_device+0x69/0x90
-[ 5267.194361]  pci_stop_and_remove_bus_device+0xe/0x20
-[ 5267.194735]  pci_iov_remove_virtfn+0xba/0x120
-[ 5267.195130]  sriov_disable+0x2f/0xe0
-[ 5267.195506]  ice_free_vfs+0x7d/0x2f0 [ice]
-[ 5267.196056]  ? pci_get_device+0x4f/0x70
-[ 5267.196496]  ice_sriov_configure+0x78/0x1a0 [ice]
-[ 5267.196995]  sriov_numvfs_store+0xfe/0x140
-[ 5267.197466]  kernfs_fop_write_iter+0x12e/0x1c0
-[ 5267.197918]  new_sync_write+0x10c/0x190
-[ 5267.198404]  vfs_write+0x24e/0x2d0
-[ 5267.198886]  ksys_write+0x5c/0xd0
-[ 5267.199367]  do_syscall_64+0x3a/0x80
-[ 5267.199827]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-[ 5267.200317] RIP: 0033:0x7f5b381205c8
-[ 5267.200814] RSP: 002b:00007fff8c7e8c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-[ 5267.201981] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f5b381205c8
-[ 5267.202620] RDX: 0000000000000002 RSI: 00005569420ee900 RDI: 0000000000000001
-[ 5267.203426] RBP: 00005569420ee900 R08: 000000000000000a R09: 00007f5b38180820
-[ 5267.204327] R10: 000000000000000a R11: 0000000000000246 R12: 00007f5b383c06e0
-[ 5267.205193] R13: 0000000000000002 R14: 00007f5b383bb880 R15: 0000000000000002
-[ 5267.206041]  </TASK>
-[ 5267.206970] Kernel panic - not syncing: hung_task: blocked tasks
-[ 5267.207809] CPU: 48 PID: 551 Comm: khungtaskd Kdump: loaded Tainted: G S          E     5.18.0-04958-ga54ce3703613-dirty #1
-[ 5267.208726] Hardware name: Dell Inc. PowerEdge R730/0WCJNT, BIOS 2.11.0 11/02/2019
-[ 5267.209623] Call Trace:
-[ 5267.210569]  <TASK>
-[ 5267.211480]  dump_stack_lvl+0x33/0x42
-[ 5267.212472]  panic+0x107/0x294
-[ 5267.213467]  watchdog.cold.8+0xc/0xbb
-[ 5267.214413]  ? proc_dohung_task_timeout_secs+0x30/0x30
-[ 5267.215511]  kthread+0xf4/0x120
-[ 5267.216459]  ? kthread_complete_and_exit+0x20/0x20
-[ 5267.217505]  ret_from_fork+0x22/0x30
-[ 5267.218459]  </TASK>
+[  790.251876]  usleep_range_state+0x5b/0x80
+[  790.252547]  iavf_open+0x37/0x1d0 [iavf]
+[  790.253139]  __dev_open+0xcd/0x160
+[  790.253699]  dev_open+0x47/0x90
+[  790.254323]  net_failover_slave_register+0x122/0x220 [net_failover]
+[  790.255213]  failover_slave_register.part.7+0xd2/0x180 [failover]
+[  790.256050]  failover_event+0x122/0x1ab [failover]
+[  790.256821]  notifier_call_chain+0x47/0x70
+[  790.257510]  register_netdevice+0x20f/0x550
+[  790.258263]  iavf_watchdog_task+0x7c8/0xea0 [iavf]
+[  790.259009]  process_one_work+0x1a7/0x360
+[  790.259705]  worker_thread+0x30/0x390
 
-Fixes: f0db78928783 ("i40evf: use netdev variable in reset task")
-Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
-Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
-Tested-by: Marek Szlosek <marek.szlosek@intel.com>
+To fix the situation we should check the current adapter state after
+first unsuccessful mutex_trylock() and return with -EBUSY if it is
+__IAVF_INIT_CONFIG_ADAPTER.
+
+Fixes: 226d528512cf ("iavf: fix locking of critical sections")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_main.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 --- a/drivers/net/ethernet/intel/iavf/iavf_main.c
 +++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2998,12 +2998,15 @@ continue_reset:
+@@ -3989,8 +3989,17 @@ static int iavf_open(struct net_device *
+ 		return -EIO;
+ 	}
  
- 	return;
- reset_err:
-+	if (running) {
-+		set_bit(__IAVF_VSI_DOWN, adapter->vsi.state);
-+		iavf_free_traffic_irqs(adapter);
-+	}
-+	iavf_disable_vf(adapter);
+-	while (!mutex_trylock(&adapter->crit_lock))
++	while (!mutex_trylock(&adapter->crit_lock)) {
++		/* If we are in __IAVF_INIT_CONFIG_ADAPTER state the crit_lock
++		 * is already taken and iavf_open is called from an upper
++		 * device's notifier reacting on NETDEV_REGISTER event.
++		 * We have to leave here to avoid dead lock.
++		 */
++		if (adapter->state == __IAVF_INIT_CONFIG_ADAPTER)
++			return -EBUSY;
 +
- 	mutex_unlock(&adapter->client_lock);
- 	mutex_unlock(&adapter->crit_lock);
--	if (running)
--		iavf_change_state(adapter, __IAVF_RUNNING);
- 	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
--	iavf_close(netdev);
- }
+ 		usleep_range(500, 1000);
++	}
  
- /**
+ 	if (adapter->state != __IAVF_DOWN) {
+ 		err = -EBUSY;
 
 

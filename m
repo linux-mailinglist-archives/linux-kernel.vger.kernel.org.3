@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF26659EA24
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FDA59EA25
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbiHWRrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S230411AbiHWRsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbiHWRql (ORCPT
+        with ESMTP id S233142AbiHWRrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:46:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED2AAD9BE;
-        Tue, 23 Aug 2022 08:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3KC+y7shGXfeXR6lfiy6v4DMA4hsK0wDHXXQ2rqtmzE=; b=RgjB6Fu6K+t8NIO2AEpqYam85Q
-        y0FUgg0QZg9krQv1A24ct2FhPIXLHILmDAHektLa+qxQEWNuPyOU6HubTTzk07YXry1hsk5y1myrV
-        Xqw+ND2XRUsA8izEoKizya6ZlmBl4nuRaRhCjhG+OAaRpocWvhxr3zNH8NooQS/DjreVhGsfuxKFP
-        FOAho2rqgrSWmT3Q0w0FsH2hrbGe6hPI7GdePrYk7KU8B+vdkEt2uSBOkbHzZ/iFCrUchmzcunsWF
-        uJKC87/w4IUKGS5ixkly/7EkD2REGVNKiJw59uKXM3Criso4Yhzd1BSP5myede87xAdRuMcpXeRfE
-        Syrjdeow==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQW2d-00FP8U-Rf; Tue, 23 Aug 2022 15:42:11 +0000
-Date:   Tue, 23 Aug 2022 16:42:11 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     david@fromorbit.com, djwong@kernel.org, fgheet255t@gmail.com,
-        hch@infradead.org, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, riteshh@linux.ibm.com,
-        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in iomap_iter
-Message-ID: <YwT1U18DuzmEaLAL@casper.infradead.org>
-References: <YwTyO0yZmUT1MVZW@casper.infradead.org>
- <20220823153542.177799-1-code@siddh.me>
+        Tue, 23 Aug 2022 13:47:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAC09E0C6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:43:59 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c2so13180302plo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=WdZUWMe+w6NdkvEjJaHucwMuy21ym8cPJg6eP925ZQ0=;
+        b=UhhdlLKQ2gDM2vQTqxNR3H3P54QELCmTYoRtFWOv3E2w4om1CvRbYVwedRQTd+Afao
+         0qpcZIs3VEdxcpn3t4fBlWL3FsZsdeDru+azac3lUBr84uuKZTZ3mlZIQxwNYTEZ0+C3
+         8myH9iaSwznHp48212VmuEt2w9h9vxetHBO1SHhA4XfmymVTL5vD34Si4OZGaZxmyCXq
+         JZG25rmhvCeKVbiXdYQMg17r6Lw9PzEXpisKPi4dfNc9NyP3gXR5ayybTb+TbfD2MB3B
+         gYFlnt6Ovve7/HS9Ci6ZQe4S/dcIGq/iyuwy9Rlll8tcHQ8vwDqGYJC8Fdolad+HrDWr
+         CHFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=WdZUWMe+w6NdkvEjJaHucwMuy21ym8cPJg6eP925ZQ0=;
+        b=wNwVUYDh/w2lajh1BCxhipIGwnEJlNcFl1QnOafULir0jUI3U/MQeJK/3vg03/Lnqt
+         0/2Etqx9Jw9iAuos8aIu+hW+wMghLydL2iEa+NbnPzWxbz8hK0/SYrEiEdZp992i9nHC
+         j3OhRM2TYRbdLZGFS5noLayt4cJKUaEDavitkJKMEqfC/BWzroU9iIW1NcVcRjQ/zjbP
+         R48tjNpjWnItalPDQWWm2K9rVdrCD2Ps5tzxa7Oci6rm1o6pQ7S0iCrt7TsEmMSo+Qc1
+         +r6UcuTIxW+VS/Dy0diw58knXbV9JW5qPX6uMERZyEAkUr/vCPlblXvTXQGGHBqLcE/W
+         mgCA==
+X-Gm-Message-State: ACgBeo0tM5DbDB4LR6nE3G7Y8TU0WAS9ImpyO+i9rMDmVqcaxg28Or2i
+        B7p65HeIE0ThfGZr0nulqrYnwg==
+X-Google-Smtp-Source: AA6agR7OpXoJDkm2+4ZBvbYX/W5se8d30EMUB4Q5KliLBfi18pBw/Gf4DLXJmE2fUpqYnxLetm9FLg==
+X-Received: by 2002:a17:903:258f:b0:172:a6ac:1504 with SMTP id jb15-20020a170903258f00b00172a6ac1504mr24930414plb.60.1661269439249;
+        Tue, 23 Aug 2022 08:43:59 -0700 (PDT)
+Received: from [10.4.208.12] ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id h16-20020a170902f55000b00172ad292b6bsm2148581plf.116.2022.08.23.08.43.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 08:43:58 -0700 (PDT)
+Message-ID: <a562ede6-262c-b31b-4c96-75a69c265c41@bytedance.com>
+Date:   Tue, 23 Aug 2022 23:43:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823153542.177799-1-code@siddh.me>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
+ disable/re-enable interface
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>, corbet@lwn.net, surenb@google.com,
+        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220808110341.15799-10-zhouchengming@bytedance.com>
+ <YvKd6dezPM6UxfD/@slm.duckdns.org>
+ <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
+ <b89155d3-9315-fefc-408b-4cf538360a1c@bytedance.com>
+ <YvPN07UlaPFAdlet@cmpxchg.org> <20220815132343.GA22640@blackbody.suse.cz>
+ <9d1997a4-9278-07bd-7f57-952306b28b14@bytedance.com>
+ <YwTz32VWuZeLHOHe@cmpxchg.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YwTz32VWuZeLHOHe@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 09:05:42PM +0530, Siddh Raman Pant wrote:
-> Oof, I didn't mean it to be there. That would actually be wrong anyways.
+On 2022/8/23 23:35, Johannes Weiner wrote:
+> On Tue, Aug 23, 2022 at 02:18:21PM +0800, Chengming Zhou wrote:
+>> On 2022/8/15 21:23, Michal Koutný wrote:
+>>> On Wed, Aug 10, 2022 at 11:25:07AM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
+>>>> cgroup.pressure.enable sounds good to me too. Or, because it's
+>>>> default-enabled and that likely won't change, cgroup.pressure.disable.
+>>>
+>>> Will it not change?
+>>>
+>>> I'd say that user would be interested in particular level or even just
+>>> level in subtree for PSI, so the opt-out may result in lots of explicit
+>>> disablements (or even watch for cgroups created and disable PSI there)
+>>> to get some performance back.
+>>>
+>>> I have two suggestions based on the above:
+>>> 1) Make the default globally configurable (mount option?)
+>>> 2) Allow implicit enablement upon trigger creation
+>>>
+>>
+>> I think suggestion 1) make sense in some use case, like make per-cgroup
+>> PSI disabled by default using a mount option, then enable using the
+>> "cgroup.pressure" interface.
+>>
+>> But suggestion 2) auto enable upon trigger creation, if we hide the
+>> {cpu,memory,io}.pressure files when disabled, how can we create trigger?
+>>
+>> Want to see what do Johannes and Tejun think about these suggestions?
 > 
-> Extremely sorry for the avoidable oversight,
-> Siddh
+> Re 1: I agree. If desired in the future we can make the default
+> configurable. Kconfig, mount option, what have you. cgroup.pressure
+> will work fine as a name regardless of what the default is.
 > 
-> #syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> Re 2: Not all consumers of the pressure metrics create trigger. I
+> would argue that few do. So it isn't the best signal to decide on
+> whether aggregation should occur. And yes, it's further complicated by
+> the triggers being written to the very pressure files. If we don't
+> hide them, we have to come up with another way to mark them as stale,
+> lest they confuse the heck out of users. Without breaking format...
+> 
+> So IMO, default-enable, "cgroup.pressure" as a name, and hiding the
+> pressure files should be good for now while allowing to make the
+> default configurable down the line.
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Agree, it's what we want for now. Thanks for your reply!
 
-> ---
->  drivers/block/loop.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-> index e3c0ba93c1a3..e1fe8eda020f 100644
-> --- a/drivers/block/loop.c
-> +++ b/drivers/block/loop.c
-> @@ -979,6 +979,11 @@ loop_set_status_from_info(struct loop_device *lo,
->  
->  	lo->lo_offset = info->lo_offset;
->  	lo->lo_sizelimit = info->lo_sizelimit;
-> +
-> +	/* loff_t vars have been assigned __u64 */
-> +	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
-> +		return -EOVERFLOW;
-> +
->  	memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
->  	lo->lo_file_name[LO_NAME_SIZE-1] = 0;
->  	lo->lo_flags = info->lo_flags;
-> -- 
-> 2.35.1
-> 
-> 
+

@@ -2,256 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AC759EB55
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611BE59EB59
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233946AbiHWSq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S234042AbiHWSrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233225AbiHWSq1 (ORCPT
+        with ESMTP id S229727AbiHWSqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:46:27 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136D211946D;
-        Tue, 23 Aug 2022 10:10:23 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3246910dac3so395988207b3.12;
-        Tue, 23 Aug 2022 10:10:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=aYLKVpg5yVDWtotHGoWYBt4fEQDgWxmuqw+G5UwcEAU=;
-        b=nYn82dPrJhTaWUpVyQircDfW/m2zwBvuB0FDdHdQJduX4KIwQw/tPzrkSTXVOQvvyc
-         wGNc/IeuskeKgUYWg9T9nwNW72NVoUbq5aHuzAuWSYIs6K2oCCysodtBDoghYOwkEfCV
-         9YPHhyCbgtWyjhe6ewdOSTypt9OEYizY6IRjwpVXhQ0dth/rmbe77Fvqi8Uz4OdF2qBZ
-         o9JooW3xxzpIjdNQ5mUckjykbS6BltIdpaBeO9dDCdWiDboAGWS0hur7Nvc5GO92du3G
-         FJ6haAbRJJ0mcCv6ZKjTdZbKSyr5gbt4DIU8v9QkcA5WDOH1J4apilA7pkybprb0ZeWT
-         7oRA==
-X-Gm-Message-State: ACgBeo1bO62KgdQZGdPThF3A+rAJK/XzeyWv3dtfI4g2D+FWaeaC7vjy
-        RhHG3tTnU3qxqAp1NL+Kjg7A5TeGX1KYwCYbbhY=
-X-Google-Smtp-Source: AA6agR44AtVGf3gmCvfccYN9fpIOVwfitY+Itybpcu+4MROlyuIqQd/ktBqJ6LrK7SdQu2x2pGJ8bnQ/1AFeeUQgnDg=
-X-Received: by 2002:a25:8d84:0:b0:695:836a:fcaf with SMTP id
- o4-20020a258d84000000b00695836afcafmr14329754ybl.633.1661274623018; Tue, 23
- Aug 2022 10:10:23 -0700 (PDT)
+        Tue, 23 Aug 2022 14:46:32 -0400
+X-Greylist: delayed 72186 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 10:10:57 PDT
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [45.157.188.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D475885A94
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:10:55 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MBwjV0d9zzMpvs1;
+        Tue, 23 Aug 2022 19:10:54 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MBwjS5SGBzlh8TF;
+        Tue, 23 Aug 2022 19:10:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1661274654;
+        bh=ngBbph48Cc2OEBE2YRaI2w0GxYjvGMB00XD5rFqgT34=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=1vIMqY/6ru8pRh2onGMbx+M+qxNCH0xPAC8stGGto7p4q2CeBxlyW1mdEQdVrHWh2
+         2o/vaNUxQGjcOzf61M5VaWeSAyiGP9CDsgAWcG4m0f4DWlVl9tdBAEn8euJHSyPpsL
+         FCveDDc1bTzU8TM25gG3qgQLJrlXaEdWbJYu/wd0=
+Message-ID: <c369c45d-5aa8-3e39-c7d6-b08b165495fd@digikod.net>
+Date:   Tue, 23 Aug 2022 19:10:52 +0200
 MIME-Version: 1.0
-References: <20220818211619.4193362-1-jeremy.linton@arm.com> <20220818211619.4193362-2-jeremy.linton@arm.com>
-In-Reply-To: <20220818211619.4193362-2-jeremy.linton@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 19:10:12 +0200
-Message-ID: <CAJZ5v0h7s0WnyBtwuQbTZXwq+jmYDF74gjc9-c-=Krt23KgF1w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] ACPI: CPPC: Disable FIE if registers in PCC regions
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.or>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Punit Agrawal <punit.agrawal@bytedance.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        corbet@lwn.net, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <YwPWN/d15S24PuLS@nuc>
+ <39df1a34-51dc-da55-ff1c-59cab896c8a0@schaufler-ca.com>
+ <YwPyuX7oao6EqTvJ@nuc> <72ca592e-ff1b-120e-3d00-5c79aefbc247@digikod.net>
+ <b1d69dfa-6d93-2034-7854-e2bc4017d20e@schaufler-ca.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH -next 0/5] landlock: add chmod and chown support
+In-Reply-To: <b1d69dfa-6d93-2034-7854-e2bc4017d20e@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:24 PM Jeremy Linton <jeremy.linton@arm.com> wrote:
->
-> PCC regions utilize a mailbox to set/retrieve register values used by
-> the CPPC code. This is fine as long as the operations are
-> infrequent. With the FIE code enabled though the overhead can range
-> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-> based machines.
->
-> So, before enabling FIE assure none of the registers used by
-> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-> enable a module parameter which can also disable it at boot or module
-> reload.
->
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> ---
->  drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->  drivers/cpufreq/cppc_cpufreq.c | 31 +++++++++++++++++++++----
->  include/acpi/cppc_acpi.h       |  5 +++++
->  3 files changed, 73 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 1e15a9f25ae9..c840bf606b30 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1240,6 +1240,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
->  }
->  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->
-> +/**
-> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
-> + *
-> + * CPPC has flexibility about how counters describing CPU perf are delivered.
 
-"CPU performance counters are accessed"
+On 22/08/2022 23:53, Casey Schaufler wrote:
+> On 8/22/2022 2:21 PM, Mickaël Salaün wrote:
+>>
+>>
+>> On 22/08/2022 23:18, Günther Noack wrote:
+>>> On Mon, Aug 22, 2022 at 12:35:18PM -0700, Casey Schaufler wrote:
+>>>> On 8/22/2022 12:17 PM, Günther Noack wrote:
+>>>>> Hi!
+>>>>>
+>>>>> Very exciting to see! Thank you for sending this! :)
+>>>>>
+>>>>> I'm just throwing in some comments based on the very similar truncate
+>>>>> patch set, in the hope that it helps. (But obviously, Mickaël Salaün
+>>>>> has the last word on this code.)
+>>>>>
+>>>>> Slightly higher level question: Should we start to group the
+>>>>> functionality of multiple LSM hooks under one Landlock flag? (Will it
+>>>>> be harder to change the LSM hook interface in the future if we
+>>>>> continue to add one flag per hook? Or is this structure already
+>>>>> exposed to userspace by other LSMs?)
+>>>>
+>>>> I'm not a landlock expert. The question is nonsensical, yet somewhat
+>>>> frightening nonetheless. Could you put just a touch more context into
+>>>> what you're asking for?
+>>>
+>>> By "Landlock flags", I meant the integer that Landlock uses to
+>>> represent the set of possible operations on a file hierarchy:
+>>>
+>>> Landlock's file system access rights (access_mode_t on the kernel
+>>> side) are defined with an integer with flags (LANDLOCK_ACCESS_FS_*)
+>>> for different operations that one might do with files. They get used
+>>> from userspace to control what is permitted on which parts of the file
+>>> system. (Docs: https://docs.kernel.org/userspace-api/landlock.html)
+>>>
+>>> Currently most of the available Landlock flags map pretty closely to
+>>> one of the file- and path-related LSM hooks. (See various hook
+>>> implementations in security/landlock/fs.c)
+>>>
+>>> The file system operations that Landlock doesn't cover yet (as of
+>>> kernel 5.19) are listed below, and there are potentially a few more
+>>> that might be missing. I suspect/hope that there will be more patches
+>>> in the style of the truncate/chmod/chown patches, which will add that
+>>> coverage.
+>>>
+>>> The question is basically:
+>>> When these patches get added, how should the userspace-exposed
+>>> Landlock file system access rights map to the LSM hooks for these
+>>> upcoming Landlock features? Should each of the newly covered
+>>> operations have its own flag, or is it better to group them?
+>>>
+>>> (It's well possible that the right answer is "one flag per feature",
+>>> but I feel it still makes sense to ask this before all these patches
+>>> get written?)
+>>
+>> Landlock is not strictly tied to the current LSM hooks, but they fit
+>> well (because they are designed to be flexible enough to be use by
+>> multiple access control systems). In fact, Landlock already uses
+>> orthogonal access rights such as LANDLOCK_ACCESS_FS_REFER (using the
+>> path_link or path_rename hooks), LANDLOCK_ACCESS_FS_MAKE_* (using the
+>> path_mknod and path_mkdir hooks)…
+>>
+>> Anyway, the LSM framework is evolving, we can add new hooks and modify
+>> others (e.g. see the security_path_rename hook modification for
+>> FS_REFER) as long as mainline access control systems don't break and
+>> subsystem maintainers are OK with such changes. Like any kernel API,
+>> the LSM API is not stable, but this is not an issue for mainline code.
+>>
+>> Landlock's goal is to find the sweet spot between flexibility for
+>> different sandboxing use cases and an understandable/simple-enough
+>> access control system. The access rights should then be meaningful for
+>> users, which are already familiar with the UAPI/syscalls, hence the
+>> current Landlock access rights (which are not very original, and that
+>> is a good thing). This is why I'm wondering if it is worth it to
+>> differentiate between chmod and chgrp (and add a dedicated access
+>> right per action or only one for both).
+> 
+> The lesson from capabilities is that differentiating between chmod, chown and chgrp is
+> pointless, and CAP_DAC_CHMOD, CAP_DAC_CHOWN and CAP_DAC_CHGRP should have just been
+> CAP_DAC_OVERRIDE. On the other hand, those who argue that SELinux proves the value of
+> fine granularity would likely have you go with separate rights. What's important is
+> that you don't tie your rights too tightly to the underlying implementation. That has
+> the potential to expose details of how the code work that user-space has no business
+> basing decisions on.
 
+Indeed, for a sandboxing feature like Landlock, it may not be useful to 
+duplicate other access rights. From a user point of view, I think it 
+would make sense to split the file metadata modification into 
+potentially-security related or not. That would means three access rights:
+- modify user/informative metadata (e.g. dates, user.* xattr);
+- modify security-related metadata (e.g. chown, chmod, chgrp, any other 
+xattr);
+- read any metadata.
 
-> + * One of the choices is PCC regions, which can have a high access latency. This
-> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
-> + *
-> + * Return: true if any of the counters are in PCC regions, false otherwise
-> + */
-> +bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +       int cpu;
-> +
-> +       for_each_present_cpu(cpu) {
-> +               struct cpc_register_resource *ref_perf_reg;
-> +               struct cpc_desc *cpc_desc;
-> +
-> +               cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +
-> +               if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +                   CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +                   CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> +                       return true;
-> +
-> +
-> +               ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +
-> +               /*
-> +                * If reference perf register is not supported then we should
-> +                * use the nominal perf value
-> +                */
-> +               if (!CPC_SUPPORTED(ref_perf_reg))
-> +                       ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +
-> +               if (CPC_IN_PCC(ref_perf_reg))
-> +                       return true;
-> +       }
-> +       return false;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-> +
->  /**
->   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->   * @cpunum: CPU from which to read counters.
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 24eaf0ec344d..32fcb0bf74a4 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
->
->  static struct cpufreq_driver cppc_cpufreq_driver;
->
-> +static enum {
-> +       FIE_UNSET = -1,
-> +       FIE_ENABLED,
-> +       FIE_DISABLED
-> +} fie_disabled = FIE_UNSET;
-> +
->  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> +module_param(fie_disabled, int, 0444);
-> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
->
->  /* Frequency invariance support */
->  struct cppc_freq_invariance {
-> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->         struct cppc_freq_invariance *cppc_fi;
->         int cpu, ret;
->
-> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +       if (fie_disabled)
->                 return;
->
->         for_each_cpu(cpu, policy->cpus) {
-> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
->         struct cppc_freq_invariance *cppc_fi;
->         int cpu;
->
-> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +       if (fie_disabled)
->                 return;
->
->         /* policy->cpus will be empty here, use related_cpus instead */
-> @@ -229,7 +237,21 @@ static void __init cppc_freq_invariance_init(void)
->         };
->         int ret;
->
-> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +       switch (fie_disabled) {
-> +       /* honor user request */
-> +       case FIE_DISABLED:
-> +       case FIE_ENABLED:
-> +               break;
-> +       case FIE_UNSET:
-> +       default:
-
-Would be more straightforward to do
-
-if (fie_disabled == FIE_UNSET) {
-
-here.
-
-> +               fie_disabled = FIE_ENABLED;
-> +               if (cppc_perf_ctrs_in_pcc()) {
-> +                       pr_info("FIE not enabled on systems with registers in PCC\n");
-> +                       fie_disabled = FIE_DISABLED;
-> +               }
-> +               break;
-> +       }
-> +       if (fie_disabled)
->                 return;
->
->         kworker_fie = kthread_create_worker(0, "cppc_fie");
-> @@ -247,7 +269,7 @@ static void __init cppc_freq_invariance_init(void)
->
->  static void cppc_freq_invariance_exit(void)
->  {
-> -       if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +       if (fie_disabled)
->                 return;
->
->         kthread_destroy_worker(kworker_fie);
-> @@ -936,6 +958,7 @@ static void cppc_check_hisi_workaround(void)
->                     wa_info[i].oem_revision == tbl->oem_revision) {
->                         /* Overwrite the get() callback */
->                         cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
-> +                       fie_disabled = FIE_DISABLED;
->                         break;
->                 }
->         }
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index f73d357ecdf5..c5614444031f 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_set_enable(int cpu, bool enable);
->  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> +extern bool cppc_perf_ctrs_in_pcc(void);
->  extern bool acpi_cpc_valid(void);
->  extern bool cppc_allow_fast_switch(void);
->  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
->  {
->         return -ENOTSUPP;
->  }
-> +static inline bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +       return false;
-> +}
->  static inline bool acpi_cpc_valid(void)
->  {
->         return false;
-> --
-
-Apart from the above it looks fine to me, but I would like to get an
-ACK from Viresh on the second patch.
-
-Thanks!
+This require some LSM hook changes to handle paths instead of inodes 
+(e.g. security_inode_setattr, security_inode_setxattr…).

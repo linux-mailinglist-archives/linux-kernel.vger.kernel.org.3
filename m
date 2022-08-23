@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8429959E904
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27E659E943
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbiHWRWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
+        id S233780AbiHWRXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240032AbiHWRVL (ORCPT
+        with ESMTP id S239257AbiHWRVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:21:11 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C787C529;
-        Tue, 23 Aug 2022 07:57:17 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so9929370otd.12;
-        Tue, 23 Aug 2022 07:57:17 -0700 (PDT)
+        Tue, 23 Aug 2022 13:21:06 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFD3CE481;
+        Tue, 23 Aug 2022 07:57:20 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id s199so16320310oie.3;
+        Tue, 23 Aug 2022 07:57:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=32fb+kP/GNTtD4yV9TOnD2b7RZ03KBwBx6+ibrPD+y8=;
-        b=YoKL8784sOKdLGvnkA2TH2RNCwV3bfT8AD1iJP3C9tqeIA/iSuJSEJhdymVWtgAEmn
-         x+yKWkkb/xnGSwa46aYI1x6YjUYo3vauOpH0S0geFzSWm3KqrYpkrC4kAxD3kDEmwTqd
-         3gJJ+YL6YSl8g0vONsduCPwFeG0xYRuYMLoiMaiCrslfB2jb+7A4xJEoSbClHiJv52Ia
-         glNiJ3vy+9wuCDtGtpvHP1kjgSxDJ5c3pxM6+GBJSKAV9+7zphdD/BaoZspk/Z9/XoUS
-         iCkC30zz4WuicUvSWOYqM6Kq5xTx8Hk/L8y4pFTx22B07eyZv+lNP5QDQ6I9HEtSUtWj
-         57JA==
-X-Gm-Message-State: ACgBeo2hfJgWlyBWGGG40rBKOHIEM00NR/Tb2pV7teIOT/LEU7ub2QSy
-        3javVQQcVamBGSYAu794hA==
-X-Google-Smtp-Source: AA6agR5gTDVPXYx4XrmwbScdPsvRYbDyHtuAdNcSHU1Fwpadq2Y01zAfG/CkPYSQeOvRnZjzCO7kHw==
-X-Received: by 2002:a05:6830:2498:b0:638:9325:3370 with SMTP id u24-20020a056830249800b0063893253370mr9666966ots.228.1661266636988;
-        Tue, 23 Aug 2022 07:57:16 -0700 (PDT)
+        bh=h0CnVKrOjJedjISgP9+nhkN7E189WcSV8KiZ+ezPrBE=;
+        b=Hj6YOfcwMIipZypYQRxbGh8/KWopFRMDiU4nOJYryQLL8PkwRSedtDDZ51lSb9tWUt
+         PkgEfsDEo4XNQHtB+Pgf0+9y0gA7qgeVF0Q0cldC7gNc/q6PyKOTZ4SGsXSgel/y0QTZ
+         LdR6iLdyJKT3hQuI4bnVjGXAxz946W1VLikufYnKzhPz55fykFYpuTOr4x8UVH81VUTQ
+         UyW9/BMwWW5euMZtBxmBhYJVtX1rA7Q/pmVsafdeprhRTGVzDLiEyvwlqgbC08pyQCSw
+         zOauHE3bKx+uPXc3gDkqPBrK07nQ0wMMjwVH9X8sA5EMF4NDE5d50TgJ1YEz1sHoBTBR
+         vwTQ==
+X-Gm-Message-State: ACgBeo3FqBygZ0OCoKY1EYFMt9raSuzW8FxdEFGgrbxd1BR6CVda64X+
+        wmBDvKpWvPN/o2zz3ri9iw==
+X-Google-Smtp-Source: AA6agR5OARvxdnc8BmaUXFTmBiSwYZaPHP9yws/NVD55WI4mBLuEUcY0qCEgGgE0JHMJhoGGEYBTzg==
+X-Received: by 2002:aca:f054:0:b0:345:7285:1147 with SMTP id o81-20020acaf054000000b0034572851147mr1505615oih.108.1661266640082;
+        Tue, 23 Aug 2022 07:57:20 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.15
+        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 07:57:16 -0700 (PDT)
+        Tue, 23 Aug 2022 07:57:19 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Sekhar Nori <nsekhar@ti.com>
-Cc:     linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: net: Add missing (unevaluated|additional)Properties on child nodes
-Date:   Tue, 23 Aug 2022 09:56:36 -0500
-Message-Id: <20220823145649.3118479-5-robh@kernel.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH] dt-bindings: pinctrl: Add missing (unevaluated|additional)Properties on child nodes
+Date:   Tue, 23 Aug 2022 09:56:37 -0500
+Message-Id: <20220823145649.3118479-6-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,77 +86,146 @@ must have unevaluatedProperties or additionalProperties set to false
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/net/cortina,gemini-ethernet.yaml      | 1 +
- Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml     | 4 ++++
- .../devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 1 +
- Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml   | 1 +
- 4 files changed, 7 insertions(+)
+ .../devicetree/bindings/pinctrl/brcm,bcm4908-pinctrl.yaml      | 1 +
+ .../devicetree/bindings/pinctrl/intel,pinctrl-keembay.yaml     | 1 +
+ .../devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml  | 1 +
+ .../devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml       | 1 +
+ .../devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml   | 2 ++
+ .../devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml   | 1 +
+ .../devicetree/bindings/pinctrl/renesas,rza1-ports.yaml        | 1 +
+ Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml | 3 +++
+ .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml          | 3 +++
+ .../devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml  | 1 +
+ 10 files changed, 15 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml b/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
-index cc01b9b5752a..253b5d1407ee 100644
---- a/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
-+++ b/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
-@@ -37,6 +37,7 @@ properties:
- patternProperties:
-   "^ethernet-port@[0-9]+$":
+diff --git a/Documentation/devicetree/bindings/pinctrl/brcm,bcm4908-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/brcm,bcm4908-pinctrl.yaml
+index 175a992f15e1..8a9fb9b433ca 100644
+--- a/Documentation/devicetree/bindings/pinctrl/brcm,bcm4908-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/brcm,bcm4908-pinctrl.yaml
+@@ -23,6 +23,7 @@ patternProperties:
+   '-pins$':
      type: object
-+    unevaluatedProperties: false
-     description: contains the resources for ethernet port
-     allOf:
-       - $ref: ethernet-controller.yaml#
-diff --git a/Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml b/Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml
-index 31bf825c6598..46e330f45768 100644
---- a/Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml
-@@ -77,6 +77,8 @@ properties:
+     $ref: pinmux-node.yaml#
++    additionalProperties: false
  
-   ethernet-ports:
+     properties:
+       function:
+diff --git a/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-keembay.yaml b/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-keembay.yaml
+index 5e99d79499b4..846651ff77c9 100644
+--- a/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-keembay.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-keembay.yaml
+@@ -44,6 +44,7 @@ properties:
+ patternProperties:
+   '^gpio@[0-9a-f]*$':
+     type: object
++    additionalProperties: false
+ 
+     description:
+       Child nodes can be specified to contain pin configuration information,
+diff --git a/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml b/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml
+index 0ec476248f21..6f30b5337ca2 100644
+--- a/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml
+@@ -42,6 +42,7 @@ properties:
+ patternProperties:
+   '^gpio@[0-9a-f]*$':
+     type: object
++    additionalProperties: false
+ 
+     description:
+       Child nodes can be specified to contain pin configuration information,
+diff --git a/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+index a651b2744caf..491f67e7cc4f 100644
+--- a/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+@@ -24,6 +24,7 @@ patternProperties:
+   '-pins$':
+     type: object
+     $ref: pinmux-node.yaml#
++    additionalProperties: false
+ 
+     properties:
+       marvell,function:
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+index e7601c0f5a69..840f649e36ce 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+@@ -76,6 +76,8 @@ required:
+ patternProperties:
+   '-[0-9]*$':
      type: object
 +    additionalProperties: false
 +
-     properties:
-       '#address-cells':
-         const: 1
-@@ -89,6 +91,7 @@ properties:
-         description: CPSW external ports
+     patternProperties:
+       '-pins*$':
+         type: object
+diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+index 7a11beb8f222..7b7f840ffc4c 100644
+--- a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+@@ -30,6 +30,7 @@ patternProperties:
  
-         $ref: ethernet-controller.yaml#
-+        unevaluatedProperties: false
- 
-         properties:
-           reg:
-@@ -117,6 +120,7 @@ properties:
- 
-   cpts:
-     type: object
-+    unevaluatedProperties: false
-     description:
-       The Common Platform Time Sync (CPTS) module
- 
-diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-index b8281d8be940..fb61a2ce0ea8 100644
---- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-@@ -115,6 +115,7 @@ properties:
-         description: CPSWxG NUSS external ports
- 
-         $ref: ethernet-controller.yaml#
-+        unevaluatedProperties: false
- 
-         properties:
-           reg:
-diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
-index b783ad0d1f53..e9f78cef6b7f 100644
---- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
-@@ -95,6 +95,7 @@ properties:
- 
-   refclk-mux:
+   "^gpio@[0-7]$":
      type: object
 +    additionalProperties: false
-     description: CPTS reference clock multiplexer clock
+ 
+     description:
+       Eight GPIO banks (gpio@0 to gpio@7), that each contain between 14 and 18
+diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
+index 8ed4b98a1628..9083040c996a 100644
+--- a/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/renesas,rza1-ports.yaml
+@@ -41,6 +41,7 @@ required:
+ patternProperties:
+   "^gpio-[0-9]*$":
+     type: object
++    additionalProperties: false
+ 
+     description:
+       Each port of the r7s72100 pin controller hardware is itself a GPIO
+diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
+index 3a65c66ca71d..d006a940c7c6 100644
+--- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
+@@ -97,6 +97,9 @@ patternProperties:
+         additionalProperties: false
+ 
+   "^(initial|sleep)-state$":
++    type: object
++    additionalProperties: false
++
+     patternProperties:
+       "^(pin-[a-z0-9-]+|[a-z0-9-]+-pin)$":
+         $ref: samsung,pinctrl-pins-cfg.yaml
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+index d35dcc4f0242..53c952d93ea2 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+@@ -115,9 +115,12 @@ patternProperties:
+ 
+   '-[0-9]*$':
+     type: object
++    additionalProperties: false
++
+     patternProperties:
+       '^pins':
+         type: object
++        additionalProperties: false
+         description: |
+           A pinctrl node should contain at least one subnode representing the
+           pinctrl group available on the machine. Each subnode will list the
+diff --git a/Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
+index 306524885a2b..98b4663f9766 100644
+--- a/Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
+@@ -36,6 +36,7 @@ patternProperties:
+       pins it needs, and how they should be configured, with regard to muxer
+       configuration, pullups, drive strength.
+     $ref: "pinmux-node.yaml"
++    additionalProperties: false
+ 
      properties:
-       '#clock-cells':
+       function:
 -- 
 2.34.1
 

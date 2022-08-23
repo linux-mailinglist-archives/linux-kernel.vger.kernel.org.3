@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6F259DBE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D4859DD36
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353262AbiHWKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S1356363AbiHWKmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348369AbiHWKDM (ORCPT
+        with ESMTP id S1354779AbiHWK3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:03:12 -0400
+        Tue, 23 Aug 2022 06:29:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805CC7C531;
-        Tue, 23 Aug 2022 01:51:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394B8844EE;
+        Tue, 23 Aug 2022 02:06:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A221EB81B90;
-        Tue, 23 Aug 2022 08:51:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9518C433D6;
-        Tue, 23 Aug 2022 08:51:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 721E3B81C86;
+        Tue, 23 Aug 2022 09:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7B1C433C1;
+        Tue, 23 Aug 2022 09:06:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244669;
-        bh=rkS/6bBSHpcEQLoJ0IzZ7yYlpoy/SAcnwtpgo7NGrQ8=;
+        s=korg; t=1661245573;
+        bh=JE7U2DwI2Vi5ZdWxe9WFbt81QvbcBOFm9AeVIF6LAMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VWeeT8w3ZghT/5FnsGOhpkJE7zMaG7nvdjDDYBtjweZGYFT6zhchpFpVJPP91s7Ky
-         OD+p8Irz2e2mL6/aswG9j/KMjXjt0c+GYsH/ZKZeDm0jRTdnF1lCiynsUTRpSqxZOo
-         sfw4mTARYvEDiV44QzbgR9862GodpG1MfcoqV++w=
+        b=pFTfJYABQwe/+V60Ca/W68PFqSexp7HHap07P0fvb/C/4t09sZoGZS48sh7QidgRw
+         /d8E1y26S0iLzjX4Q9zIGun/66Jaq3/lP4V4Nt8Xz0JkxUdlVuOz4qxQbYMYOEyz3+
+         XwvxyxTXfc0MEZG2bXfp8vYhUTggnlo/VGDDQXS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.15 131/244] netfilter: nf_tables: check NFT_SET_CONCAT flag if field_count is specified
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 121/287] usb: ohci-nxp: Fix refcount leak in ohci_hcd_nxp_probe
 Date:   Tue, 23 Aug 2022 10:24:50 +0200
-Message-Id: <20220823080103.481844592@linuxfoundation.org>
+Message-Id: <20220823080104.469135781@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 1b6345d4160ecd3d04bd8cd75df90c67811e8cc9 upstream.
+[ Upstream commit 302970b4cad3ebfda2c05ce06c322ccdc447d17e ]
 
-Since f3a2181e16f1 ("netfilter: nf_tables: Support for sets with
-multiple ranged fields"), it possible to combine intervals and
-concatenations. Later on, ef516e8625dd ("netfilter: nf_tables:
-reintroduce the NFT_SET_CONCAT flag") provides the NFT_SET_CONCAT flag
-for userspace to report that the set stores a concatenation.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Make sure NFT_SET_CONCAT is set on if field_count is specified for
-consistency. Otherwise, if NFT_SET_CONCAT is specified with no
-field_count, bail out with EINVAL.
-
-Fixes: ef516e8625dd ("netfilter: nf_tables: reintroduce the NFT_SET_CONCAT flag")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220603141231.979-1-linmq006@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/usb/host/ohci-nxp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -4354,6 +4354,11 @@ static int nf_tables_newset(struct sk_bu
- 		err = nf_tables_set_desc_parse(&desc, nla[NFTA_SET_DESC]);
- 		if (err < 0)
- 			return err;
-+
-+		if (desc.field_count > 1 && !(flags & NFT_SET_CONCAT))
-+			return -EINVAL;
-+	} else if (flags & NFT_SET_CONCAT) {
-+		return -EINVAL;
+diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
+index f5f532601092..a964a93ff35b 100644
+--- a/drivers/usb/host/ohci-nxp.c
++++ b/drivers/usb/host/ohci-nxp.c
+@@ -153,6 +153,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
  	}
  
- 	if (nla[NFTA_SET_EXPR] || nla[NFTA_SET_EXPRESSIONS])
+ 	isp1301_i2c_client = isp1301_get_client(isp1301_node);
++	of_node_put(isp1301_node);
+ 	if (!isp1301_i2c_client)
+ 		return -EPROBE_DEFER;
+ 
+-- 
+2.35.1
+
 
 

@@ -2,214 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B7D59CC96
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 01:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3605959CCAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238480AbiHVX4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 19:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S238364AbiHWABK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 20:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiHVX4h (ORCPT
+        with ESMTP id S229778AbiHWABF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 19:56:37 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BBA5142D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:56:36 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27MNuGWA101777;
-        Mon, 22 Aug 2022 18:56:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661212576;
-        bh=uRSflq3dI94CdsfcAqGZMQZPBgEhNCjV5o0i5fgeBdM=;
-        h=From:To:CC:Subject:Date;
-        b=ptH+8UbUYITe1Esjb7G/5an2OYxTFgGGcAosFSRSn2uvhutiCLPBag9rWnxKriy5l
-         z266kpXtOUo4Gl+7k3VAsSdUgp/PtbzIjNoNvBDUQcrqTovT6kRdPXGANgYmGSoTIw
-         EcD2hfN/4f+Cmm5oF5lmawYbjxy7WrGRsJpxWksw=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27MNuGYd027535
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 Aug 2022 18:56:16 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 22
- Aug 2022 18:56:16 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 22 Aug 2022 18:56:16 -0500
-Received: from ula0226330.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27MNuFhr037995;
-        Mon, 22 Aug 2022 18:56:16 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Andrew Davis <afd@ti.com>
-Subject: [PATCH] ARM: keystone: Replace platform SMP with PSCI
-Date:   Mon, 22 Aug 2022 18:56:15 -0500
-Message-ID: <20220822235615.7788-1-afd@ti.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 22 Aug 2022 20:01:05 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CAE4F6BE
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661212864; x=1692748864;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ytl9LcAEMMGeKBrWeDNoe+fwsZtNZXDjTlB4EanrOUc=;
+  b=at3vKJKx8gXEXaeeXmcky9tZtdIMbJLys1n7XMa58qWK4mr7ZZg5nKnK
+   ium0JI4q0hUrivhe4UE/Jn78+KbtdM0EvexM22oTFrT85FDGvkEjS1YWa
+   g0c8Oouq3uxAdd9vy4YGnXU39ji1JRYgHaNuP6V+a6lpvIC9QL9gUqR6M
+   s=;
+X-IronPort-AV: E=Sophos;i="5.93,255,1654560000"; 
+   d="scan'208";a="1047105320"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:00:49 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com (Postfix) with ESMTPS id 3178A98B8D;
+        Tue, 23 Aug 2022 00:00:46 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 23 Aug 2022 00:00:45 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.191) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 23 Aug 2022 00:00:43 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <keescook@chromium.org>
+CC:     <ayudutta@amazon.com>, <brauner@kernel.org>, <kuni1840@gmail.com>,
+        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
+        <luto@amacapital.net>,
+        <syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com>,
+        <wad@chromium.org>
+Subject: Re: [PATCH v1] seccomp: Release filter when copy_process() fails.
+Date:   Mon, 22 Aug 2022 17:00:35 -0700
+Message-ID: <20220823000035.35716-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <202208221636.1DE3D674@keescook>
+References: <202208221636.1DE3D674@keescook>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.43.160.191]
+X-ClientProxiedBy: EX13D22UWB001.ant.amazon.com (10.43.161.198) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The KS2 boot monitor supports PSCI commands. These are already defined
-in DT for KS2. We can drop this platform override and remove related
-code without changing SMP. Do this here.
+From:   Kees Cook <keescook@chromium.org>
+Date:   Mon, 22 Aug 2022 16:38:07 -0700
+> On Mon, Aug 22, 2022 at 02:49:35PM -0700, Kuniyuki Iwashima wrote:
+> > From:   Kees Cook <keescook@chromium.org>
+> > Date:   Mon, 22 Aug 2022 14:16:03 -0700
+> > > On Mon, Aug 22, 2022 at 01:44:36PM -0700, Kuniyuki Iwashima wrote:
+> > > > Our syzbot instance reported memory leaks in do_seccomp() [0], similar
+> > > > to the report [1].  It shows that we miss freeing struct seccomp_filter
+> > > > and some objects included in it.
+> > > > 
+> > > > We can reproduce the issue with the program below [2] which calls one
+> > > > seccomp() and two clone() syscalls.
+> > > > 
+> > > > The first clone()d child exits earlier than its parent and sends a
+> > > > signal to kill it during the second clone(), more precisely before the
+> > > > fatal_signal_pending() test in copy_process().  When the parent receives
+> > > > the signal, it has to destroy the embryonic process and return -EINTR to
+> > > > user space.  In the failure path, we have to call seccomp_filter_release()
+> > > > to decrement the filter's ref count.
+> > > > 
+> > > > Initially, we called it in free_task() called from the failure path, but
+> > > > the commit 3a15fb6ed92c ("seccomp: release filter after task is fully
+> > > > dead") moved it to release_task() to notify user space as early as possible
+> > > > that the filter is no longer used.
+> > > > 
+> > > > To keep the change, let's call seccomp_filter_release() in copy_process()
+> > > > and add a WARN_ON_ONCE() in free_task() for future debugging.
+> > > 
+> > > Thanks for tracking this down! I think I'd prefer to avoid changing the
+> > > semantics around the existing seccomp refcount lifetime, so what about
+> > > just moving copy_seccomp() below the last possible error path?
+> > 
+> > Actually, I also thought of it but avoid it because it means we move the
+> > signal check relatively earlier than before, so would-be-killed processes
+> > could consume more resouces.
+> > 
+> > What do you think about this?
+> 
+> There's no allocation happening in copy_seccomp(), just reference
+> counts being added. Given the lock that is held, the ordering here
+> doesn't matter as far as I can tell, except for the fact that
+> copy_seccomp() expects to go through full thread death if something goes
+> wrong. So, simply moving it later should do the trick here.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- arch/arm/mach-keystone/Makefile   |  4 +--
- arch/arm/mach-keystone/keystone.c |  2 --
- arch/arm/mach-keystone/keystone.h |  5 ----
- arch/arm/mach-keystone/platsmp.c  | 41 -------------------------------
- arch/arm/mach-keystone/smc.S      | 26 --------------------
- 5 files changed, 1 insertion(+), 77 deletions(-)
- delete mode 100644 arch/arm/mach-keystone/platsmp.c
- delete mode 100644 arch/arm/mach-keystone/smc.S
+Ok, I'm fine with that change.
+I'll test it again and post v2 with WARN_ON_ONCE().
+Thank you!
 
-diff --git a/arch/arm/mach-keystone/Makefile b/arch/arm/mach-keystone/Makefile
-index 739b38be5696..0c1d54aec60f 100644
---- a/arch/arm/mach-keystone/Makefile
-+++ b/arch/arm/mach-keystone/Makefile
-@@ -1,7 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--obj-y					:= keystone.o smc.o
--
--obj-$(CONFIG_SMP)			+= platsmp.o
-+obj-y					:= keystone.o
- 
- # PM domain driver for Keystone SOCs
- obj-$(CONFIG_ARCH_KEYSTONE)		+= pm_domain.o
-diff --git a/arch/arm/mach-keystone/keystone.c b/arch/arm/mach-keystone/keystone.c
-index 2c647bdf8d25..aa352c2de313 100644
---- a/arch/arm/mach-keystone/keystone.c
-+++ b/arch/arm/mach-keystone/keystone.c
-@@ -18,7 +18,6 @@
- #include <asm/mach/map.h>
- #include <asm/mach/arch.h>
- #include <asm/mach/time.h>
--#include <asm/smp_plat.h>
- #include <asm/memory.h>
- 
- #include "memory.h"
-@@ -103,7 +102,6 @@ DT_MACHINE_START(KEYSTONE, "Keystone")
- #if defined(CONFIG_ZONE_DMA) && defined(CONFIG_ARM_LPAE)
- 	.dma_zone_size	= SZ_2G,
- #endif
--	.smp		= smp_ops(keystone_smp_ops),
- 	.init_machine	= keystone_init,
- 	.dt_compat	= keystone_match,
- 	.pv_fixup	= keystone_pv_fixup,
-diff --git a/arch/arm/mach-keystone/keystone.h b/arch/arm/mach-keystone/keystone.h
-index 438e531cc007..71ff8cd2ee4a 100644
---- a/arch/arm/mach-keystone/keystone.h
-+++ b/arch/arm/mach-keystone/keystone.h
-@@ -8,13 +8,8 @@
- #ifndef __KEYSTONE_H__
- #define __KEYSTONE_H__
- 
--#define KEYSTONE_MON_CPU_UP_IDX		0x00
--
- #ifndef __ASSEMBLER__
- 
--extern const struct smp_operations keystone_smp_ops;
--extern void secondary_startup(void);
--extern u32 keystone_cpu_smc(u32 command, u32 cpu, u32 addr);
- extern int keystone_pm_runtime_init(void);
- 
- #endif /* __ASSEMBLER__ */
-diff --git a/arch/arm/mach-keystone/platsmp.c b/arch/arm/mach-keystone/platsmp.c
-deleted file mode 100644
-index 673fcf3b34b1..000000000000
---- a/arch/arm/mach-keystone/platsmp.c
-+++ /dev/null
-@@ -1,41 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Keystone SOC SMP platform code
-- *
-- * Copyright 2013 Texas Instruments, Inc.
-- *	Cyril Chemparathy <cyril@ti.com>
-- *	Santosh Shilimkar <santosh.shillimkar@ti.com>
-- *
-- * Based on platsmp.c, Copyright (C) 2002 ARM Ltd.
-- */
--
--#include <linux/init.h>
--#include <linux/smp.h>
--#include <linux/io.h>
--#include <linux/pgtable.h>
--
--#include <asm/smp_plat.h>
--#include <asm/prom.h>
--#include <asm/tlbflush.h>
--
--#include "keystone.h"
--
--static int keystone_smp_boot_secondary(unsigned int cpu,
--						struct task_struct *idle)
--{
--	unsigned long start = virt_to_idmap(&secondary_startup);
--	int error;
--
--	pr_debug("keystone-smp: booting cpu %d, vector %08lx\n",
--		 cpu, start);
--
--	error = keystone_cpu_smc(KEYSTONE_MON_CPU_UP_IDX, cpu, start);
--	if (error)
--		pr_err("CPU %d bringup failed with %d\n", cpu, error);
--
--	return error;
--}
--
--const struct smp_operations keystone_smp_ops __initconst = {
--	.smp_boot_secondary	= keystone_smp_boot_secondary,
--};
-diff --git a/arch/arm/mach-keystone/smc.S b/arch/arm/mach-keystone/smc.S
-deleted file mode 100644
-index 21ef75cf5370..000000000000
---- a/arch/arm/mach-keystone/smc.S
-+++ /dev/null
-@@ -1,26 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Keystone Secure APIs
-- *
-- * Copyright (C) 2013 Texas Instruments, Inc.
-- * 	Santosh Shilimkar <santosh.shilimkar@ti.com>
-- */
--
--#include <linux/linkage.h>
--
--/**
-- * u32 keystone_cpu_smc(u32 command, u32 cpu, u32 addr)
-- *
-- * Low level CPU monitor API
-- * @command:	Monitor command.
-- * @cpu:	CPU Number
-- * @addr:	Kernel jump address for boot CPU
-- *
-- * Return: Non zero value on failure
-- */
--	.arch_extension sec
--ENTRY(keystone_cpu_smc)
--	stmfd   sp!, {r4-r11, lr}
--	smc	#0
--	ldmfd   sp!, {r4-r11, pc}
--ENDPROC(keystone_cpu_smc)
--- 
-2.36.1
 
+> 
+> -Kees
+> 
+> > 
+> > > 
+> > > 
+> > > diff --git a/kernel/fork.c b/kernel/fork.c
+> > > index 90c85b17bf69..e7f4e7f1e01e 100644
+> > > --- a/kernel/fork.c
+> > > +++ b/kernel/fork.c
+> > > @@ -2409,12 +2409,6 @@ static __latent_entropy struct task_struct *copy_process(
+> > >  
+> > >  	spin_lock(&current->sighand->siglock);
+> > >  
+> > > -	/*
+> > > -	 * Copy seccomp details explicitly here, in case they were changed
+> > > -	 * before holding sighand lock.
+> > > -	 */
+> > > -	copy_seccomp(p);
+> > > -
+> > >  	rv_task_fork(p);
+> > >  
+> > >  	rseq_fork(p, clone_flags);
+> > > @@ -2431,6 +2425,14 @@ static __latent_entropy struct task_struct *copy_process(
+> > >  		goto bad_fork_cancel_cgroup;
+> > >  	}
+> > >  
+> > > +	/* No more failures paths after this point. */
+> > > +
+> > > +	/*
+> > > +	 * Copy seccomp details explicitly here, in case they were changed
+> > > +	 * before holding sighand lock.
+> > > +	 */
+> > > +	copy_seccomp(p);
+> > > +
+> > >  	init_task_pid_links(p);
+> > >  	if (likely(p->pid)) {
+> > >  		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
+> > > 
+> > > 
+> > > Totally untested, but I think it would fix this?
+> > > 
+> > > -Kees
+> > > 
+> > > -- 
+> > > Kees Cook
+> 
+> -- 
+> Kees Cook

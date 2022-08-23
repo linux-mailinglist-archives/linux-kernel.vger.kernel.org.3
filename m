@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1A559DBF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE18859DE37
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359126AbiHWL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
+        id S1356368AbiHWLC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359315AbiHWL4g (ORCPT
+        with ESMTP id S1357201AbiHWLBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:56:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AAB857E4;
-        Tue, 23 Aug 2022 02:34:08 -0700 (PDT)
+        Tue, 23 Aug 2022 07:01:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6150BAF483;
+        Tue, 23 Aug 2022 02:14:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17632612D6;
-        Tue, 23 Aug 2022 09:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069DFC433D6;
-        Tue, 23 Aug 2022 09:34:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47600B81C94;
+        Tue, 23 Aug 2022 09:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E892C433D6;
+        Tue, 23 Aug 2022 09:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247247;
-        bh=UlzcKidXqLG4HmGSEd5gPKAWOKksFX8ym+DBmzhofjk=;
+        s=korg; t=1661246057;
+        bh=FiKJFq3p3hNMNAz/G+j1Jr63XmO/Uxj1ECLA2jSv+YM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zt+M1/kKLzuGgz2VlKJf1CiEKPDWN5HwKUm/nMAtvU9P0k6CKmGEO5rdM2qunj3ag
-         ZlfpbVKLsOXEouj5+rSiFp9oS2tlfF7U9/GIzzNTVlGokCrO3S3B0kv54Vqx3ibrm7
-         yj+A76RJhFJh8l58WE9sw1c0S7HAqr0SNpK2wvY0=
+        b=X1TEIBBjukxFzehGnV+ep5dE6UbzxhhB8cyvktweSzGXTGfHfrHjZJjOXWMAlSU/8
+         XljGV2r38bFUWnlrJCaTm4dE55AHyCSJuyaEXf1HFrngqfrNenBmteIYkiV19EWbWd
+         ob60WF9TH7GoG9MMQgmiBut8ETyEC9dZN5tneMHA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
         Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.4 334/389] nios2: add force_successful_syscall_return()
-Date:   Tue, 23 Aug 2022 10:26:52 +0200
-Message-Id: <20220823080129.465760193@linuxfoundation.org>
+Subject: [PATCH 4.19 244/287] nios2: page fault et.al. are *not* restartable syscalls...
+Date:   Tue, 23 Aug 2022 10:26:53 +0200
+Message-Id: <20220823080109.339451222@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_ABUSE_SURBL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,59 +56,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit fd0c153daad135d0ec1a53c5dbe6936a724d6ae1 upstream.
+commit 8535c239ac674f7ead0f2652932d35c52c4123b2 upstream.
 
-If we use the ancient SysV syscall ABI, we'd better have tell the
-kernel how to claim that a negative return value is a success.
-Use ->orig_r2 for that - it's inaccessible via ptrace, so it's
-a fair game for changes and it's normally[*] non-negative on return
-from syscall.  Set to -1; syscall is not going to be restart-worthy
-by definition, so we won't interfere with that use either.
-
-[*] the only exception is rt_sigreturn(), where we skip the entire
-messing with r1/r2 anyway.
+make sure that ->orig_r2 is negative for everything except
+the syscalls.
 
 Fixes: 82ed08dd1b0e ("nios2: Exception handling")
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/include/asm/ptrace.h |    2 ++
- arch/nios2/kernel/entry.S       |    6 ++++++
- 2 files changed, 8 insertions(+)
+ arch/nios2/include/asm/entry.h |    3 ++-
+ arch/nios2/kernel/entry.S      |    4 +---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
---- a/arch/nios2/include/asm/ptrace.h
-+++ b/arch/nios2/include/asm/ptrace.h
-@@ -74,6 +74,8 @@ extern void show_regs(struct pt_regs *);
- 	((struct pt_regs *)((unsigned long)current_thread_info() + THREAD_SIZE)\
- 		- 1)
+--- a/arch/nios2/include/asm/entry.h
++++ b/arch/nios2/include/asm/entry.h
+@@ -50,7 +50,8 @@
+ 	stw	r13, PT_R13(sp)
+ 	stw	r14, PT_R14(sp)
+ 	stw	r15, PT_R15(sp)
+-	stw	r2, PT_ORIG_R2(sp)
++	movi	r24, -1
++	stw	r24, PT_ORIG_R2(sp)
+ 	stw	r7, PT_ORIG_R7(sp)
  
-+#define force_successful_syscall_return() (current_pt_regs()->orig_r2 = -1)
-+
- int do_syscall_trace_enter(void);
- void do_syscall_trace_exit(void);
- #endif /* __ASSEMBLY__ */
+ 	stw	ra, PT_RA(sp)
 --- a/arch/nios2/kernel/entry.S
 +++ b/arch/nios2/kernel/entry.S
-@@ -213,6 +213,9 @@ local_restart:
- translate_rc_and_ret:
- 	movi	r1, 0
- 	bge	r2, zero, 3f
-+	ldw	r1, PT_ORIG_R2(sp)
-+	addi	r1, r1, 1
-+	beq	r1, zero, 3f
- 	sub	r2, zero, r2
- 	movi	r1, 1
- 3:
-@@ -276,6 +279,9 @@ traced_system_call:
- translate_rc_and_ret2:
- 	movi	r1, 0
- 	bge	r2, zero, 4f
-+	ldw	r1, PT_ORIG_R2(sp)
-+	addi	r1, r1, 1
-+	beq	r1, zero, 4f
- 	sub	r2, zero, r2
- 	movi	r1, 1
- 4:
+@@ -185,6 +185,7 @@ ENTRY(handle_system_call)
+ 	ldw	r5, PT_R5(sp)
+ 
+ local_restart:
++	stw	r2, PT_ORIG_R2(sp)
+ 	/* Check that the requested system call is within limits */
+ 	movui	r1, __NR_syscalls
+ 	bgeu	r2, r1, ret_invsyscall
+@@ -336,9 +337,6 @@ external_interrupt:
+ 	/* skip if no interrupt is pending */
+ 	beq	r12, r0, ret_from_interrupt
+ 
+-	movi	r24, -1
+-	stw	r24, PT_ORIG_R2(sp)
+-
+ 	/*
+ 	 * Process an external hardware interrupt.
+ 	 */
 
 

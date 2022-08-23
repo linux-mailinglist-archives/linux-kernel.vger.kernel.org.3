@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29AE59DB3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C4F59DC7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353999AbiHWKQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        id S1359385AbiHWMH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351945AbiHWKGl (ORCPT
+        with ESMTP id S1359325AbiHWMDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:41 -0400
+        Tue, 23 Aug 2022 08:03:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B73B963;
-        Tue, 23 Aug 2022 01:53:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C9DDAA06;
+        Tue, 23 Aug 2022 02:37:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F48CB81C3B;
-        Tue, 23 Aug 2022 08:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F385C433C1;
-        Tue, 23 Aug 2022 08:53:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF6EAB81C63;
+        Tue, 23 Aug 2022 09:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5773DC433D6;
+        Tue, 23 Aug 2022 09:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244830;
-        bh=ZhkPRONPRsdklvEmDO5ZqnezVhTgjCAugxYUuo/Z7Lg=;
+        s=korg; t=1661247410;
+        bh=DaQnnVDgFwZPMMhgq8n/IGkxtk0uMZiqPrINJIhDaIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oz4GWj0q2h25/wJGgiHghE+UUVrWL9EqPVfkUcP0wTl82W8J2gGF3zPIW2E+2We0K
-         yB2O3qnRkhMqf4lbP1G4Ns3BL7UEuruNF/JCPf3lRX6TkPzH0Gh1KCRcvSgJ+LmDru
-         TXYEITS2A/OtVBixMva97IgNHRMDdCqcWxFRtBP4=
+        b=BQZY+ntb6cqozSNkj/wUKoIIKSgJ0MooxDK6YtysKaA6ETc/tks3v6cXTMYhcBQcG
+         RhVvoBOXJL8wjN2N6CC7rhltxArjQjmPxeJA26WbEVlmOmTzBno4Brbv8IpPSC0NBf
+         VI2bcM70kOp4LqEaXbwIq2Vm1FxZa+l2JexwpKh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 4.14 198/229] nios2: dont leave NULLs in sys_call_table[]
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.10 027/158] bpf: Acquire map uref in .init_seq_private for array map iterator
 Date:   Tue, 23 Aug 2022 10:25:59 +0200
-Message-Id: <20220823080100.713752961@linuxfoundation.org>
+Message-Id: <20220823080047.190919503@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Hou Tao <houtao1@huawei.com>
 
-commit 45ec746c65097c25e77d24eae8fee0def5b6cc5d upstream.
+commit f76fa6b338055054f80c72b29c97fb95c1becadc upstream.
 
-fill the gaps in there with sys_ni_syscall, as everyone does...
+bpf_iter_attach_map() acquires a map uref, and the uref may be released
+before or in the middle of iterating map elements. For example, the uref
+could be released in bpf_iter_detach_map() as part of
+bpf_link_release(), or could be released in bpf_map_put_with_uref() as
+part of bpf_map_release().
 
-Fixes: 82ed08dd1b0e ("nios2: Exception handling")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Alternative fix is acquiring an extra bpf_link reference just like
+a pinned map iterator does, but it introduces unnecessary dependency
+on bpf_link instead of bpf_map.
+
+So choose another fix: acquiring an extra map uref in .init_seq_private
+for array map iterator.
+
+Fixes: d3cc2ab546ad ("bpf: Implement bpf iterator for array maps")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20220810080538.1845898-2-houtao@huaweicloud.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/kernel/entry.S         |    1 -
- arch/nios2/kernel/syscall_table.c |    1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/arraymap.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/arch/nios2/kernel/entry.S
-+++ b/arch/nios2/kernel/entry.S
-@@ -193,7 +193,6 @@ local_restart:
- 	movhi	r11, %hiadj(sys_call_table)
- 	add	r1, r1, r11
- 	ldw	r1, %lo(sys_call_table)(r1)
--	beq	r1, r0, ret_invsyscall
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -616,6 +616,11 @@ static int bpf_iter_init_array_map(void
+ 		seq_info->percpu_value_buf = value_buf;
+ 	}
  
- 	/* Check if we are being traced */
- 	GET_THREAD_INFO r11
---- a/arch/nios2/kernel/syscall_table.c
-+++ b/arch/nios2/kernel/syscall_table.c
-@@ -25,5 +25,6 @@
- #define __SYSCALL(nr, call) [nr] = (call),
++	/* bpf_iter_attach_map() acquires a map uref, and the uref may be
++	 * released before or in the middle of iterating map elements, so
++	 * acquire an extra map uref for iterator.
++	 */
++	bpf_map_inc_with_uref(map);
+ 	seq_info->map = map;
+ 	return 0;
+ }
+@@ -624,6 +629,7 @@ static void bpf_iter_fini_array_map(void
+ {
+ 	struct bpf_iter_seq_array_map_info *seq_info = priv_data;
  
- void *sys_call_table[__NR_syscalls] = {
-+	[0 ... __NR_syscalls-1] = sys_ni_syscall,
- #include <asm/unistd.h>
- };
++	bpf_map_put_with_uref(seq_info->map);
+ 	kfree(seq_info->percpu_value_buf);
+ }
+ 
 
 

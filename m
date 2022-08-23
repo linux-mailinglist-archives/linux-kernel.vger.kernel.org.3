@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D2859E24D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98E459DC6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355713AbiHWKg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S1357964AbiHWL1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354691AbiHWKWA (ORCPT
+        with ESMTP id S1357958AbiHWLV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:22:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3546140;
-        Tue, 23 Aug 2022 02:03:24 -0700 (PDT)
+        Tue, 23 Aug 2022 07:21:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A202615;
+        Tue, 23 Aug 2022 02:23:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 806E1B81C53;
-        Tue, 23 Aug 2022 09:03:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B1CC433D6;
-        Tue, 23 Aug 2022 09:03:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D93D8612DC;
+        Tue, 23 Aug 2022 09:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49DCC433C1;
+        Tue, 23 Aug 2022 09:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245402;
-        bh=xrT7sCDqJzbwaabInFSOooM42pz6YylOw5GrLACf6Gk=;
+        s=korg; t=1661246596;
+        bh=j2GtI424F0IpXJ7BTSozzvlq9NUAJXxztm02mXYMtiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P2TBSylCESE11zt+nS1HEoul/g7IBImdu7V8ysLYKX4MRuc3Ul67t4f9wiLdtDW1i
-         ch8FriSa9n9bu0J5XEcCAlqJgvOmr/JBb48ltkKLeEBhAnz7eUp8qOfeOGGRX+crPY
-         EY+ZXQDPoIF6v1SDR6qXVRE3jLcefQ2M/8Zdgp6M=
+        b=s71+wNIATXS+Ze3/+XODF8AO26c4k62eXTkAnb+57ZJzOHAWVReOoT8poeDMhD5pM
+         3mobC++MA6KsH6trah8TVidVURFb630vgvkLMPA4hjUE2dBncb+/XBQiO5tBdK1BuG
+         8QJzZvN33vAXdumAWsIF3S7D6ua9CHsqZbF2zMO8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= 
-        <alejandro.gonzalez.correo@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 066/287] thermal/tools/tmon: Include pthread and time headers in tmon.h
-Date:   Tue, 23 Aug 2022 10:23:55 +0200
-Message-Id: <20220823080102.455071090@linuxfoundation.org>
+Subject: [PATCH 5.4 158/389] mtd: sm_ftl: Fix deadlock caused by cancel_work_sync in sm_release
+Date:   Tue, 23 Aug 2022 10:23:56 +0200
+Message-Id: <20220823080122.200503930@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,57 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markus Mayer <mmayer@broadcom.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 0cf51bfe999524377fbb71becb583b4ca6d07cfc ]
+[ Upstream commit a61528d997619a518ee8c51cf0ef0513021afaff ]
 
-Include sys/time.h and pthread.h in tmon.h, so that types
-"pthread_mutex_t" and "struct timeval tv" are known when tmon.h
-references them.
+There is a deadlock between sm_release and sm_cache_flush_work
+which is a work item. The cancel_work_sync in sm_release will
+not return until sm_cache_flush_work is finished. If we hold
+mutex_lock and use cancel_work_sync to wait the work item to
+finish, the work item also requires mutex_lock. As a result,
+the sm_release will be blocked forever. The race condition is
+shown below:
 
-Without these headers, compiling tmon against musl-libc will fail with
-these errors:
+    (Thread 1)             |   (Thread 2)
+sm_release                 |
+  mutex_lock(&ftl->mutex)  | sm_cache_flush_work
+                           |   mutex_lock(&ftl->mutex)
+  cancel_work_sync         |   ...
 
-In file included from sysfs.c:31:0:
-tmon.h:47:8: error: unknown type name 'pthread_mutex_t'
- extern pthread_mutex_t input_lock;
-        ^~~~~~~~~~~~~~~
-make[3]: *** [<builtin>: sysfs.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-In file included from tui.c:31:0:
-tmon.h:54:17: error: field 'tv' has incomplete type
-  struct timeval tv;
-                 ^~
-make[3]: *** [<builtin>: tui.o] Error 1
-make[2]: *** [Makefile:83: tmon] Error 2
+This patch moves del_timer_sync and cancel_work_sync out of
+mutex_lock in order to mitigate deadlock.
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Acked-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
-Tested-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
-Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal  subsystem")
-Link: https://lore.kernel.org/r/20220718031040.44714-1-f.fainelli@gmail.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Fixes: 7d17c02a01a1 ("mtd: Add new SmartMedia/xD FTL")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220524044841.10517-1-duoming@zju.edu.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/thermal/tmon/tmon.h | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/mtd/sm_ftl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/thermal/tmon/tmon.h b/tools/thermal/tmon/tmon.h
-index 9e3c49c547ac..7b090a6c95b6 100644
---- a/tools/thermal/tmon/tmon.h
-+++ b/tools/thermal/tmon/tmon.h
-@@ -36,6 +36,9 @@
- #define NR_LINES_TZDATA 1
- #define TMON_LOG_FILE "/var/tmp/tmon.log"
+diff --git a/drivers/mtd/sm_ftl.c b/drivers/mtd/sm_ftl.c
+index 4744bf94ad9a..d4e72fd5e5b3 100644
+--- a/drivers/mtd/sm_ftl.c
++++ b/drivers/mtd/sm_ftl.c
+@@ -1097,9 +1097,9 @@ static void sm_release(struct mtd_blktrans_dev *dev)
+ {
+ 	struct sm_ftl *ftl = dev->priv;
  
-+#include <sys/time.h>
-+#include <pthread.h>
-+
- extern unsigned long ticktime;
- extern double time_elapsed;
- extern unsigned long target_temp_user;
+-	mutex_lock(&ftl->mutex);
+ 	del_timer_sync(&ftl->timer);
+ 	cancel_work_sync(&ftl->flush_work);
++	mutex_lock(&ftl->mutex);
+ 	sm_cache_flush(ftl);
+ 	mutex_unlock(&ftl->mutex);
+ }
 -- 
 2.35.1
 

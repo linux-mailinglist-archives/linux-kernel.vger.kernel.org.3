@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D221F59DCD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368C859DBE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354806AbiHWKWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S1355782AbiHWKrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352642AbiHWKJp (ORCPT
+        with ESMTP id S1356131AbiHWKlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:09:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3057E013;
-        Tue, 23 Aug 2022 01:55:58 -0700 (PDT)
+        Tue, 23 Aug 2022 06:41:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EB6A832A;
+        Tue, 23 Aug 2022 02:09:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BC97614E7;
-        Tue, 23 Aug 2022 08:55:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38F9C433D6;
-        Tue, 23 Aug 2022 08:55:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 43263CE1B5E;
+        Tue, 23 Aug 2022 09:08:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C1AC433C1;
+        Tue, 23 Aug 2022 09:08:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244957;
-        bh=zWkpsM+SDxRe9i4P1nc7g3lxW/BQ0Z1ag1r4NHSl9aI=;
+        s=korg; t=1661245734;
+        bh=BFHdUfVLvuzmPj3StTaNGcKfMuD3Bv/9nflGru3EY54=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iaSCFF7hnYrLMSi+jXXASnWBNgphoDFYH0jRETMfJTc0894A3XTYGvyamT3EKTmw7
-         ffClKEmeQ6BmnKadqOtT+YdFfCjTyN7JYa9ukXrTzW/Ol9R0Vjbu2HVqiUWSrLFmkG
-         howf+YaLrrWRqwbaMebmfnfK91zhQhVhi6HNaDvA=
+        b=Wg7qGXIVXBgusr0fH4BIsD1QgsDYTFKZZW8hpZTXn9CTgAoA0C6sWkUA38lXpWgSQ
+         TdK/qIxk4HiyS4VyiOTDV5ta1cBgR9+ColSJ98pzVgy+DCifC8WDP3pYyEZchEnlsk
+         gqRIJEmLUuteEfSTKBZEJJMAIiqRGFgcqU+foupM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 5.15 151/244] kbuild: fix the modules order between drivers and libs
-Date:   Tue, 23 Aug 2022 10:25:10 +0200
-Message-Id: <20220823080104.219938671@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com,
+        Zhu Yanjun <yanjun.zhu@linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 142/287] RDMA/rxe: Fix error unwind in rxe_create_qp()
+Date:   Tue, 23 Aug 2022 10:25:11 +0200
+Message-Id: <20220823080105.292434955@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,48 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
 
-commit 113147510b48e764e624e3d0e6707a1e48bc05a9 upstream.
+[ Upstream commit fd5382c5805c4bcb50fd25b7246247d3f7114733 ]
 
-Commit b2c885549122 ("kbuild: update modules.order only when contained
-modules are updated") accidentally changed the modules order.
+In the function rxe_create_qp(), rxe_qp_from_init() is called to
+initialize qp, internally things like the spin locks are not setup until
+rxe_qp_init_req().
 
-Prior to that commit, the modules order was determined based on
-vmlinux-dirs, which lists core-y/m, drivers-y/m, libs-y/m, in this order.
+If an error occures before this point then the unwind will call
+rxe_cleanup() and eventually to rxe_qp_do_cleanup()/rxe_cleanup_task()
+which will oops when trying to access the uninitialized spinlock.
 
-Now, subdir-modorder lists them in a different order: core-y/m, libs-y/m,
-drivers-y/m.
+Move the spinlock initializations earlier before any failures.
 
-Presumably, there was no practical issue because the modules in drivers
-and libs are orthogonal, but there is no reason to have this distortion.
-
-Get back to the original order.
-
-Fixes: b2c885549122 ("kbuild: update modules.order only when contained modules are updated")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8700e3e7c485 ("Soft RoCE driver")
+Link: https://lore.kernel.org/r/20220731063621.298405-1-yanjun.zhu@linux.dev
+Reported-by: syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Makefile |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/infiniband/sw/rxe/rxe_qp.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/Makefile
-+++ b/Makefile
-@@ -1155,13 +1155,11 @@ vmlinux-alldirs	:= $(sort $(vmlinux-dirs
- 		     $(patsubst %/,%,$(filter %/, $(core-) \
- 			$(drivers-) $(libs-))))
+diff --git a/drivers/infiniband/sw/rxe/rxe_qp.c b/drivers/infiniband/sw/rxe/rxe_qp.c
+index 4798b718b085..a4b5374deac8 100644
+--- a/drivers/infiniband/sw/rxe/rxe_qp.c
++++ b/drivers/infiniband/sw/rxe/rxe_qp.c
+@@ -210,6 +210,14 @@ static void rxe_qp_init_misc(struct rxe_dev *rxe, struct rxe_qp *qp,
+ 	spin_lock_init(&qp->grp_lock);
+ 	spin_lock_init(&qp->state_lock);
  
--subdir-modorder := $(addsuffix modules.order,$(filter %/, \
--			$(core-y) $(core-m) $(libs-y) $(libs-m) \
--			$(drivers-y) $(drivers-m)))
--
- build-dirs	:= $(vmlinux-dirs)
- clean-dirs	:= $(vmlinux-alldirs)
- 
-+subdir-modorder := $(addsuffix /modules.order, $(build-dirs))
++	spin_lock_init(&qp->req.task.state_lock);
++	spin_lock_init(&qp->resp.task.state_lock);
++	spin_lock_init(&qp->comp.task.state_lock);
 +
- # Externally visible symbols (used by link-vmlinux.sh)
- KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
- KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
++	spin_lock_init(&qp->sq.sq_lock);
++	spin_lock_init(&qp->rq.producer_lock);
++	spin_lock_init(&qp->rq.consumer_lock);
++
+ 	atomic_set(&qp->ssn, 0);
+ 	atomic_set(&qp->skb_out, 0);
+ }
+@@ -258,7 +266,6 @@ static int rxe_qp_init_req(struct rxe_dev *rxe, struct rxe_qp *qp,
+ 	qp->req.opcode		= -1;
+ 	qp->comp.opcode		= -1;
+ 
+-	spin_lock_init(&qp->sq.sq_lock);
+ 	skb_queue_head_init(&qp->req_pkts);
+ 
+ 	rxe_init_task(rxe, &qp->req.task, qp,
+@@ -308,9 +315,6 @@ static int rxe_qp_init_resp(struct rxe_dev *rxe, struct rxe_qp *qp,
+ 		}
+ 	}
+ 
+-	spin_lock_init(&qp->rq.producer_lock);
+-	spin_lock_init(&qp->rq.consumer_lock);
+-
+ 	skb_queue_head_init(&qp->resp_pkts);
+ 
+ 	rxe_init_task(rxe, &qp->resp.task, qp,
+-- 
+2.35.1
+
 
 

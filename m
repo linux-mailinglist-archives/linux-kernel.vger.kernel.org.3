@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3581959D7EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C74859D3A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350292AbiHWJQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S243073AbiHWIU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348371AbiHWJMu (ORCPT
+        with ESMTP id S242896AbiHWIQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:12:50 -0400
+        Tue, 23 Aug 2022 04:16:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6082786FE3;
-        Tue, 23 Aug 2022 01:31:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C736DF84;
+        Tue, 23 Aug 2022 01:10:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5961661326;
-        Tue, 23 Aug 2022 08:31:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49ACBC433C1;
-        Tue, 23 Aug 2022 08:31:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CD116123D;
+        Tue, 23 Aug 2022 08:10:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C632C433D6;
+        Tue, 23 Aug 2022 08:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243488;
-        bh=qt61o7YewrXnnLL9ocm5HDs/bnCH6kg7cv3t1Ds3lw8=;
+        s=korg; t=1661242240;
+        bh=Im3HBT1P0qQtoTxutY2VSJuAcACWfwsb36WFZEL1AcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eADwtF/8Y3SzTRsvsabIRkRDcFXDvTppzb3BEolvMOt1xSOx+tY0NCF4RiGR2ayPo
-         N3Kr3+vPHRl/n3n4su7wZFK4htMzvDlhopbOdKbdaN423ppTNUVM3LXfNGp2hd0Op9
-         9lAX3SkksxOy8iBZmTxqyJ9TTBxfkltYDC/R5l0k=
+        b=lcAyzliBANqfmzcYxMUAvjM7SIA5WTZU36Hp1dF3ZFW3AUbvwHwpSr8cgSaGPG+CV
+         w50pl6Qtvb7KCoAiFrGDlJtozWIsZPQRZTiI4GLAYOwelQk0ZwX4JTjfiuwyrt6z7n
+         v5zwi1MEfHIGm9by/iVFnkXSwefmv2b+SSsrbGGg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 293/365] scsi: ufs: ufs-exynos: Change ufs phy control sequence
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.9 041/101] PCI: Add defines for normal and subtractive PCI bridges
 Date:   Tue, 23 Aug 2022 10:03:14 +0200
-Message-Id: <20220823080130.466427548@linuxfoundation.org>
+Message-Id: <20220823080036.120136049@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,84 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chanho Park <chanho61.park@samsung.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 3d73b200f9893d8f5ba5d105e8b69c8d16744fa2 ]
+commit 904b10fb189cc15376e9bfce1ef0282e68b0b004 upstream.
 
-Since commit 1599069a62c6 ("phy: core: Warn when phy_power_on is called
-before phy_init"), the following warning has been reported:
+Add these PCI class codes to pci_ids.h:
 
-	phy_power_on was called before phy_init
+  PCI_CLASS_BRIDGE_PCI_NORMAL
+  PCI_CLASS_BRIDGE_PCI_SUBTRACTIVE
 
-To address this, we need to remove phy_power_on from exynos_ufs_phy_init()
-and move it after phy_init. phy_power_off and phy_exit are also necessary
-in exynos_ufs_remove().
+Use these defines in all kernel code for describing PCI class codes for
+normal and subtractive PCI bridges.
 
-Link: https://lore.kernel.org/r/20220706020255.151177-4-chanho61.park@samsung.com
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Chanho Park <chanho61.park@samsung.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[bhelgaas: similar change in pci-mvebu.c]
+Link: https://lore.kernel.org/r/20220214114109.26809-1-pali@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Guenter Roeck <linux@roeck-us.net>a
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+[ gregkh - take only the pci_ids.h portion for stable backports ]
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ufs/host/ufs-exynos.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ include/linux/pci_ids.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
-index a81d8cbd542f..25995667c832 100644
---- a/drivers/ufs/host/ufs-exynos.c
-+++ b/drivers/ufs/host/ufs-exynos.c
-@@ -910,9 +910,13 @@ static int exynos_ufs_phy_init(struct exynos_ufs *ufs)
- 	if (ret) {
- 		dev_err(hba->dev, "%s: phy init failed, ret = %d\n",
- 			__func__, ret);
--		goto out_exit_phy;
-+		return ret;
- 	}
- 
-+	ret = phy_power_on(generic_phy);
-+	if (ret)
-+		goto out_exit_phy;
-+
- 	return 0;
- 
- out_exit_phy:
-@@ -1174,10 +1178,6 @@ static int exynos_ufs_init(struct ufs_hba *hba)
- 		goto out;
- 	}
- 
--	ret = phy_power_on(ufs->phy);
--	if (ret)
--		goto phy_off;
--
- 	exynos_ufs_priv_init(hba, ufs);
- 
- 	if (ufs->drv_data->drv_init) {
-@@ -1195,8 +1195,6 @@ static int exynos_ufs_init(struct ufs_hba *hba)
- 	exynos_ufs_config_smu(ufs);
- 	return 0;
- 
--phy_off:
--	phy_power_off(ufs->phy);
- out:
- 	hba->priv = NULL;
- 	return ret;
-@@ -1514,9 +1512,14 @@ static int exynos_ufs_probe(struct platform_device *pdev)
- static int exynos_ufs_remove(struct platform_device *pdev)
- {
- 	struct ufs_hba *hba =  platform_get_drvdata(pdev);
-+	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
- 
- 	pm_runtime_get_sync(&(pdev)->dev);
- 	ufshcd_remove(hba);
-+
-+	phy_power_off(ufs->phy);
-+	phy_exit(ufs->phy);
-+
- 	return 0;
- }
- 
--- 
-2.35.1
-
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -55,6 +55,8 @@
+ #define PCI_CLASS_BRIDGE_EISA		0x0602
+ #define PCI_CLASS_BRIDGE_MC		0x0603
+ #define PCI_CLASS_BRIDGE_PCI		0x0604
++#define PCI_CLASS_BRIDGE_PCI_NORMAL		0x060400
++#define PCI_CLASS_BRIDGE_PCI_SUBTRACTIVE	0x060401
+ #define PCI_CLASS_BRIDGE_PCMCIA		0x0605
+ #define PCI_CLASS_BRIDGE_NUBUS		0x0606
+ #define PCI_CLASS_BRIDGE_CARDBUS	0x0607
 
 

@@ -2,102 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B2759E417
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78D659E44D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241734AbiHWM5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S243005AbiHWM63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240762AbiHWM47 (ORCPT
+        with ESMTP id S241652AbiHWM6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:56:59 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8644D1232C6;
-        Tue, 23 Aug 2022 03:01:42 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id r4so17335279edi.8;
-        Tue, 23 Aug 2022 03:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=PUA2nr1wioVzDta9NpRPg2RNm4EXbTJFLkDHu1Yc67I=;
-        b=RzCIb3fC9rUen/D1vmmMtmBfn7tnb3I6i96gMc17FaP25sM1SPevjN8+ALMtmleeQd
-         KDJ7c9FHmvtExIEV88nYFCoUz+7lmYOx6Q5PBAK2JxopOZ/UuX/flPl2VsgVyo8BRS1N
-         c6lRfMcTeBKqlVrEuXPQN6G3d8B55D3Bq9CPE/GRCAn1qdny6TDPYunYwawt5OlNV1i5
-         xFqtbha8jWjcHLh0NQoCE1hu5HXE0avTduoUTU4P7qfxOhvuALOcQeif1r/MzWYQSGfg
-         OjaMQa/TToqTHy5jecXHAvaSs1ls+IQWnbmXznL508j+47EWZOZPn4xrsUlZSekBzrcT
-         xRCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=PUA2nr1wioVzDta9NpRPg2RNm4EXbTJFLkDHu1Yc67I=;
-        b=LESNy2a4jyS97rc7MQDTSgdysMUd0tUsP0YbG6JdUH58zK0s9cvsImKJGjmg9Hr7L3
-         XtTQsW6nEwmi+LfGYJ3akTfG1cwqq80LejXry8BGAkvpFqt1U3+DHWkCythEzHE+vGKZ
-         p5/D9D1BHUT5EEKzm87II0Q2pHgGH17FieuO0fArR5UT9PtYZqr25lTmLZVS3f+zNqE/
-         ij1YaH7f163Ek89U15KDwceWIrNerx48+MnzV25+BHv68E415Tb4Zrq45CaE4nS3clni
-         tlHRWNs65wHwtRkDgdZsVCZyg5pFlvqyhJOwvw054aCZNnQtqYUkmfjTbclue9rt+8hC
-         4N5Q==
-X-Gm-Message-State: ACgBeo1zy59nhVKuj4xVbMrFU8LrKBS878uP9hvHt39lvG8Y7lm7p1cj
-        u47alLOMZ4bxcuzN1iEayzU=
-X-Google-Smtp-Source: AA6agR6VgNqPndRYRwLHtUJsMNlHsCu3V4eKUsxekz1ZbevLr3JDMUTpWtKAYsm/CRJbKE3ITlHyqA==
-X-Received: by 2002:a05:6402:4021:b0:447:29f9:a881 with SMTP id d33-20020a056402402100b0044729f9a881mr1031970eda.391.1661248895466;
-        Tue, 23 Aug 2022 03:01:35 -0700 (PDT)
-Received: from [192.168.178.21] (p4fc20ad4.dip0.t-ipconnect.de. [79.194.10.212])
-        by smtp.gmail.com with ESMTPSA id p16-20020a056402501000b0044625884285sm1184942eda.49.2022.08.23.03.01.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 03:01:34 -0700 (PDT)
-Message-ID: <5988bf07-dd2e-a7ad-1ed9-831a402c3c5d@gmail.com>
-Date:   Tue, 23 Aug 2022 12:01:33 +0200
+        Tue, 23 Aug 2022 08:58:02 -0400
+Received: from out199-2.us.a.mail.aliyun.com (out199-2.us.a.mail.aliyun.com [47.90.199.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3887196FF0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:02:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VN1UsyU_1661248924;
+Received: from 30.97.48.53(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VN1UsyU_1661248924)
+          by smtp.aliyun-inc.com;
+          Tue, 23 Aug 2022 18:02:05 +0800
+Message-ID: <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
+Date:   Tue, 23 Aug 2022 18:02:16 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
- <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
- <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
- <YvOav/vF2awVWIu0@phenom.ffwll.local>
- <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
- <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
- <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
- <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
- <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
- <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com>
- <CAF6AEGuR1cRQYaQBYGnMBzy=XJUcN2o2gzabZaGO2Dj62Uq1DA@mail.gmail.com>
- <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
- <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com>
- <2ce5ff0a-9ab2-d146-04db-487a64714fce@gmail.com>
- <cf8cd8da-08d2-5e70-a239-2a67da37c9ea@collabora.com>
- <e9bde303-6474-aa0b-7880-cf7d8b163983@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <e9bde303-6474-aa0b-7880-cf7d8b163983@collabora.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
+ size hugetlb page
+To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, mike.kravetz@oracle.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
+ <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
+ <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,109 +46,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 22.08.22 um 19:26 schrieb Dmitry Osipenko:
-> On 8/16/22 22:55, Dmitry Osipenko wrote:
->> On 8/16/22 15:03, Christian König wrote:
->>> Am 16.08.22 um 13:44 schrieb Dmitry Osipenko:
->>>> [SNIP]
->>>>> The other complication I noticed is that we don't seem to keep around
->>>>> the fd after importing to a GEM handle.  And I could imagine that
->>>>> doing so could cause issues with too many fd's.  So I guess the best
->>>>> thing is to keep the status quo and let drivers that cannot mmap
->>>>> imported buffers just fail mmap?
->>>> That actually should be all the drivers excluding those that use
->>>> DRM-SHMEM because only DRM-SHMEM uses dma_buf_mmap(), that's why it
->>>> works for Panfrost. I'm pretty sure mmaping of imported GEMs doesn't
->>>> work for the MSM driver, isn't it?
->>>>
->>>> Intel and AMD drivers don't allow to map the imported dma-bufs. Both
->>>> refuse to do the mapping.
->>>>
->>>> Although, AMDGPU "succeeds" to do the mapping using
->>>> AMDGPU_GEM_DOMAIN_GTT, but then touching the mapping causes bus fault,
->>>> hence mapping actually fails. I think it might be the AMDGPU
->>>> driver/libdrm bug, haven't checked yet.
->>> That's then certainly broken somehow. Amdgpu should nerve ever have
->>> allowed to mmap() imported DMA-bufs and the last time I check it didn't.
->> I'll take a closer look. So far I can only tell that it's a kernel
->> driver issue because once I re-applied this "Don't map imported GEMs"
->> patch, AMDGPU began to refuse mapping AMDGPU_GEM_DOMAIN_GTT.
+
+
+On 8/23/2022 4:29 PM, David Hildenbrand wrote:
+> On 23.08.22 09:50, Baolin Wang wrote:
+>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>> hugetlb, which means it can support not only PMD/PUD size hugetlb
+>> (2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
+>> specified.
 >>
->>>> So we're back to the point that neither of DRM drivers need to map
->>>> imported dma-bufs and this was never tested. In this case this patch is
->>>> valid, IMO.
->> Actually, I'm now looking at Etnaviv and Nouveau and seems they should
->> map imported dma-buf properly. I know that people ran Android on
->> Etnaviv. So maybe devices with a separated GPU/display need to map
->> imported display BO for Android support. Wish somebody who ran Android
->> on one of these devices using upstream drivers could give a definitive
->> answer. I may try to test Nouveau later on.
+>> So when looking up a CONT-PTE size hugetlb page by follow_page(), it
+>> will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
+>> size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
+>> for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
+>> get the correct lock, which is mm->page_table_lock.
 >>
-> Nouveau+Intel combo doesn't work because of [1] that says:
->
-> "Refuse to fault imported pages. This should be handled (if at all) by
-> redirecting mmap to the exporter."
->
-> [1]
-> https://elixir.bootlin.com/linux/v5.19/source/drivers/gpu/drm/ttm/ttm_bo_vm.c#L154
->
-> Interestingly, I noticed that there are IGT tests which check prime
-> mmaping of Nouveau+Intel [2] (added 9 years ago), but they fail as well,
-> as expected. The fact that IGT has such tests is interesting because it
-> suggests that the mapping worked in the past. It's also surprising that
-> nobody cared to fix the failing tests. For the reference, I checked
-> v5.18 and today's linux-next.
->
-> [2]
-> https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/prime_nv_test.c#L132
->
-> Starting subtest: nv_write_i915_cpu_mmap_read
-> Received signal SIGBUS.
-> Stack trace:
->   #0 [fatal_sig_handler+0x163]
->   #1 [__sigaction+0x50]
->   #2 [__igt_unique____real_main354+0x406]
->   #3 [main+0x23]
->   #4 [__libc_start_call_main+0x80]
->   #5 [__libc_start_main+0x89]
->   #6 [_start+0x25]
-> Subtest nv_write_i915_cpu_mmap_read: CRASH (0,005s)
->
-> Starting subtest: nv_write_i915_gtt_mmap_read
-> Received signal SIGBUS.
-> Stack trace:
->   #0 [fatal_sig_handler+0x163]
->   #1 [__sigaction+0x50]
->   #2 [__igt_unique____real_main354+0x33d]
->   #3 [main+0x23]
->   #4 [__libc_start_call_main+0x80]
->   #5 [__libc_start_main+0x89]
->   #6 [_start+0x25]
-> Subtest nv_write_i915_gtt_mmap_read: CRASH (0,004s)
->
-> I'm curious about the Etnaviv driver because it uses own shmem
-> implementation and maybe it has a working mmaping of imported GEMs since
-> it imports the dma-buf pages into Entaviv BO. Although, it should be
-> risking to map pages using a different caching attributes (WC) from the
-> exporter, which is prohibited on ARM ad then one may try to map imported
-> udmabuf.
->
-> Apparently, the Intel DG TTM driver should be able to map imported
-> dma-buf because it sets TTM_TT_FLAG_EXTERNAL_MAPPABLE.
+>> That means the pte entry of the CONT-PTE size hugetlb under current
+>> pte lock is unstable in follow_page_pte(), we can continue to migrate
+>> or poison the pte entry of the CONT-PTE size hugetlb, which can cause
+>> some potential race issues, and following pte_xxx() validation is also
+>> unstable in follow_page_pte(), even though they are under the 'pte lock'.
+>>
+>> Moreover we should use huge_ptep_get() to get the pte entry value of
+>> the CONT-PTE size hugetlb, which already takes into account the subpages'
+>> dirty or young bits in case we missed the dirty or young state of the
+>> CONT-PTE size hugetlb.
+>>
+>> To fix above issues, introducing a new helper follow_huge_pte() to look
+>> up a CONT-PTE size hugetlb page, which uses huge_pte_lock() to get the
+>> correct pte entry lock to make the pte entry stable, as well as
+>> supporting non-present pte handling.
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   include/linux/hugetlb.h |  8 ++++++++
+>>   mm/gup.c                | 11 ++++++++++
+>>   mm/hugetlb.c            | 53 +++++++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 72 insertions(+)
+>>
+>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+>> index 3ec981a..d491138 100644
+>> --- a/include/linux/hugetlb.h
+>> +++ b/include/linux/hugetlb.h
+>> @@ -207,6 +207,8 @@ struct page *follow_huge_addr(struct mm_struct *mm, unsigned long address,
+>>   struct page *follow_huge_pd(struct vm_area_struct *vma,
+>>   			    unsigned long address, hugepd_t hpd,
+>>   			    int flags, int pdshift);
+>> +struct page *follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
+>> +			     pmd_t *pmd, int flags);
+>>   struct page *follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+>>   				pmd_t *pmd, int flags);
+>>   struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
+>> @@ -312,6 +314,12 @@ static inline struct page *follow_huge_pd(struct vm_area_struct *vma,
+>>   	return NULL;
+>>   }
+>>   
+>> +static inline struct page *follow_huge_pte(struct vm_area_struct *vma,
+>> +				unsigned long address, pmd_t *pmd, int flags)
+>> +{
+>> +	return NULL;
+>> +}
+>> +
+>>   static inline struct page *follow_huge_pmd(struct mm_struct *mm,
+>>   				unsigned long address, pmd_t *pmd, int flags)
+>>   {
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 3b656b7..87a94f5 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -534,6 +534,17 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+>>   	if (unlikely(pmd_bad(*pmd)))
+>>   		return no_page_table(vma, flags);
+>>   
+>> +	/*
+>> +	 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
+>> +	 * ARM64 architecture.
+>> +	 */
+>> +	if (is_vm_hugetlb_page(vma)) {
+>> +		page = follow_huge_pte(vma, address, pmd, flags);
+>> +		if (page)
+>> +			return page;
+>> +		return no_page_table(vma, flags);
+>> +	}
+>> +
+>>   	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
+>>   	pte = *ptep;
+>>   	if (!pte_present(pte)) {
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index 6c00ba1..cf742d1 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -6981,6 +6981,59 @@ struct page * __weak
+>>   	return NULL;
+>>   }
+>>   
+>> +/* Support looking up a CONT-PTE size hugetlb page. */
+>> +struct page * __weak
+>> +follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
+>> +		pmd_t *pmd, int flags)
+>> +{
+>> +	struct mm_struct *mm = vma->vm_mm;
+>> +	struct hstate *hstate = hstate_vma(vma);
+>> +	unsigned long size = huge_page_size(hstate);
+>> +	struct page *page = NULL;
+>> +	spinlock_t *ptl;
+>> +	pte_t *ptep, pte;
+>> +
+>> +	/*
+>> +	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+>> +	 * follow_hugetlb_page().
+>> +	 */
+>> +	if (WARN_ON_ONCE(flags & FOLL_PIN))
+>> +		return NULL;
+>> +
+>> +	ptep = huge_pte_offset(mm, address, size);
+>> +	if (!ptep)
+>> +		return NULL;
+>> +
+>> +retry:
+>> +	ptl = huge_pte_lock(hstate, mm, ptep);
+>> +	pte = huge_ptep_get(ptep);
+>> +	if (pte_present(pte)) {
+>> +		page = pte_page(pte);
+>> +		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+>> +			page = NULL;
+>> +			goto out;
+>> +		}
+>> +	} else {
+>> +		if (!(flags & FOLL_MIGRATION)) {
+>> +			page = NULL;
+>> +			goto out;
+>> +		}
+>> +
+>> +		if (is_hugetlb_entry_migration(pte)) {
+>> +			spin_unlock(ptl);
+>> +			__migration_entry_wait_huge(ptep, ptl);
+>> +			goto retry;
+>> +		}
+>> +		/*
+>> +		 * hwpoisoned entry is treated as no_page_table in
+>> +		 * follow_page_mask().
+>> +		 */
+>> +	}
+>> +out:
+>> +	spin_unlock(ptl);
+>> +	return page;
+>> +}
+>> +
+>>   struct page * __weak
+>>   follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+>>   		pmd_t *pmd, int flags)
+> 
+> 
+> Can someone explain why:
+> * follow_page() goes via follow_page_mask() for hugetlb
+> * __get_user_pages() goes via follow_hugetlb_page() and never via
+>    follow_page_mask() for hugetlb?
+> 
+> IOW, why can't we make follow_page_mask() just not handle hugetlb and
+> route everything via follow_hugetlb_page() -- we primarily only have to
+> teach it to not trigger faults.
 
-Even with that flag set it is illegal to map the pages directly by an 
-importer.
+IMHO, these follow_huge_xxx() functions are arch-specified at first and 
+were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm: 
+hugetlb: Copy general hugetlb code from x86 to mm"), and now there are 
+still some arch-specified follow_huge_xxx() definition, for example:
+ia64: follow_huge_addr
+powerpc: follow_huge_pd
+s390: follow_huge_pud
 
-If that ever worked then the only real solution is to redirect mmap() 
-calls on importer BOs to dma_buf_mmap().
+What I mean is that follow_hugetlb_page() is a common and 
+not-arch-specified function, is it suitable to change it to be 
+arch-specified?
+And thinking more, can we rename follow_hugetlb_page() as 
+hugetlb_page_faultin() and simplify it to only handle the page faults of 
+hugetlb like the faultin_page() for normal page? That means we can make 
+sure only follow_page_mask() can handle hugetlb.
 
-Regards,
-Christian.
+Mike, Muchun, please correct me if I missed something. Thanks.
 
->
-> Overall, it still questionable to me whether it's worthwhile to allow
-> the mmaping of imported GEMs since only Panfrost/Lima can do it out of
-> all drivers and h/w that I tested. Feels like drivers that can do the
-> mapping have it just because they can and not because they need.
->
-
+> What's the reason that this hugetlb code has to be overly complicated?

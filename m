@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A6359DD16
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3182B59DDAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357532AbiHWLfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S1353106AbiHWKKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357644AbiHWLbq (ORCPT
+        with ESMTP id S1352777AbiHWKC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:31:46 -0400
+        Tue, 23 Aug 2022 06:02:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032A975FD2;
-        Tue, 23 Aug 2022 02:25:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA557CA81;
+        Tue, 23 Aug 2022 01:50:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30E3C61316;
-        Tue, 23 Aug 2022 09:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C57C433B5;
-        Tue, 23 Aug 2022 09:25:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 832A261386;
+        Tue, 23 Aug 2022 08:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B80C433C1;
+        Tue, 23 Aug 2022 08:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246752;
-        bh=sMFG5ij3FDeMSFUJdSZ/My1tY6qlSvxy3Vk74Zdkcjc=;
+        s=korg; t=1661244653;
+        bh=ucounPu0KryIe7wNIefBEZb4RTNpVTXgbubzAfyvxXs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y6l7ekF/NNp1delZW/kirUAvVbwsDymAU/s+rNewuGIOUiWOBG/r8G5tMagw0Ke9/
-         NyDS0I+8hmqS/mAfo4SWjHF2K2+I4O58iWS3c2msOp2qGTLl6pjW+ylH7pffCuCmsN
-         rZdSKy+6izr9ISVObMFxDVahtn95N5of/vkggDhI=
+        b=MsKhDv3AUzB1DWvrfZPUaVCB5FfB0MNn1sGl7c2ucABHUYWAUe2EmPsniAyTqW+S1
+         meVYiQalvTMN8CMKABnFjCQ1ab2xaJIGt/loomXd+xowu/1NQvI3QxPZfIMu5u7F2b
+         eB81xdIhQAAwWrapVKZLSxsoeJiKhtutMtQA2X7Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 209/389] ASoC: codecs: wcd9335: move gains from SX_TLV to S8_TLV
-Date:   Tue, 23 Aug 2022 10:24:47 +0200
-Message-Id: <20220823080124.366667528@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.15 129/244] netfilter: nf_tables: NFTA_SET_ELEM_KEY_END requires concat and interval flags
+Date:   Tue, 23 Aug 2022 10:24:48 +0200
+Message-Id: <20220823080103.408525094@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,118 +53,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 2fbe0953732e06b471cdedbf6f615b84235580d8 ]
+commit 88cccd908d51397f9754f89a937cd13fa59dee37 upstream.
 
-move all the digital gains form using SX_TLV to S8_TLV, these gains are
-actually 8 bit gains with 7th signed bit and ranges from -84dB to +40dB
+If the NFT_SET_CONCAT|NFT_SET_INTERVAL flags are set on, then the
+netlink attribute NFTA_SET_ELEM_KEY_END must be specified. Otherwise,
+NFTA_SET_ELEM_KEY_END should not be present.
 
-rest of the Qualcomm wcd codecs uses these properly.
+For catch-all element, NFTA_SET_ELEM_KEY_END should not be present.
+The NFT_SET_ELEM_INTERVAL_END is never used with this set flags
+combination.
 
-Fixes: 8c4f021d806a ("ASoC: wcd9335: add basic controls")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220609111901.318047-3-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 7b225d0b5c6d ("netfilter: nf_tables: add NFTA_SET_ELEM_KEY_END attribute")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wcd9335.c | 81 +++++++++++++++++---------------------
- 1 file changed, 36 insertions(+), 45 deletions(-)
+ net/netfilter/nf_tables_api.c |   24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
-index 016aff97e2fb..c01c69613f63 100644
---- a/sound/soc/codecs/wcd9335.c
-+++ b/sound/soc/codecs/wcd9335.c
-@@ -2252,51 +2252,42 @@ static int wcd9335_rx_hph_mode_put(struct snd_kcontrol *kc,
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -5711,6 +5711,24 @@ static void nft_setelem_remove(const str
+ 		set->ops->remove(net, set, elem);
+ }
  
- static const struct snd_kcontrol_new wcd9335_snd_controls[] = {
- 	/* -84dB min - 40dB max */
--	SOC_SINGLE_SX_TLV("RX0 Digital Volume", WCD9335_CDC_RX0_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX1 Digital Volume", WCD9335_CDC_RX1_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX2 Digital Volume", WCD9335_CDC_RX2_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX3 Digital Volume", WCD9335_CDC_RX3_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX4 Digital Volume", WCD9335_CDC_RX4_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX5 Digital Volume", WCD9335_CDC_RX5_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX6 Digital Volume", WCD9335_CDC_RX6_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX7 Digital Volume", WCD9335_CDC_RX7_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX8 Digital Volume", WCD9335_CDC_RX8_RX_VOL_CTL,
--		0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX0 Mix Digital Volume",
--			  WCD9335_CDC_RX0_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX1 Mix Digital Volume",
--			  WCD9335_CDC_RX1_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX2 Mix Digital Volume",
--			  WCD9335_CDC_RX2_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX3 Mix Digital Volume",
--			  WCD9335_CDC_RX3_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX4 Mix Digital Volume",
--			  WCD9335_CDC_RX4_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX5 Mix Digital Volume",
--			  WCD9335_CDC_RX5_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX6 Mix Digital Volume",
--			  WCD9335_CDC_RX6_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX7 Mix Digital Volume",
--			  WCD9335_CDC_RX7_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
--	SOC_SINGLE_SX_TLV("RX8 Mix Digital Volume",
--			  WCD9335_CDC_RX8_RX_VOL_MIX_CTL,
--			  0, -84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX0 Digital Volume", WCD9335_CDC_RX0_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX1 Digital Volume", WCD9335_CDC_RX1_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX2 Digital Volume", WCD9335_CDC_RX2_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX3 Digital Volume", WCD9335_CDC_RX3_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX4 Digital Volume", WCD9335_CDC_RX4_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX5 Digital Volume", WCD9335_CDC_RX5_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX6 Digital Volume", WCD9335_CDC_RX6_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX7 Digital Volume", WCD9335_CDC_RX7_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX8 Digital Volume", WCD9335_CDC_RX8_RX_VOL_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX0 Mix Digital Volume", WCD9335_CDC_RX0_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX1 Mix Digital Volume", WCD9335_CDC_RX1_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX2 Mix Digital Volume", WCD9335_CDC_RX2_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX3 Mix Digital Volume", WCD9335_CDC_RX3_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX4 Mix Digital Volume", WCD9335_CDC_RX4_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX5 Mix Digital Volume", WCD9335_CDC_RX5_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX6 Mix Digital Volume", WCD9335_CDC_RX6_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX7 Mix Digital Volume", WCD9335_CDC_RX7_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
-+	SOC_SINGLE_S8_TLV("RX8 Mix Digital Volume", WCD9335_CDC_RX8_RX_VOL_MIX_CTL,
-+			-84, 40, digital_gain),
- 	SOC_ENUM("RX INT0_1 HPF cut off", cf_int0_1_enum),
- 	SOC_ENUM("RX INT0_2 HPF cut off", cf_int0_2_enum),
- 	SOC_ENUM("RX INT1_1 HPF cut off", cf_int1_1_enum),
--- 
-2.35.1
-
++static bool nft_setelem_valid_key_end(const struct nft_set *set,
++				      struct nlattr **nla, u32 flags)
++{
++	if ((set->flags & (NFT_SET_CONCAT | NFT_SET_INTERVAL)) ==
++			  (NFT_SET_CONCAT | NFT_SET_INTERVAL)) {
++		if (flags & NFT_SET_ELEM_INTERVAL_END)
++			return false;
++		if (!nla[NFTA_SET_ELEM_KEY_END] &&
++		    !(flags & NFT_SET_ELEM_CATCHALL))
++			return false;
++	} else {
++		if (nla[NFTA_SET_ELEM_KEY_END])
++			return false;
++	}
++
++	return true;
++}
++
+ static int nft_add_set_elem(struct nft_ctx *ctx, struct nft_set *set,
+ 			    const struct nlattr *attr, u32 nlmsg_flags)
+ {
+@@ -5770,6 +5788,9 @@ static int nft_add_set_elem(struct nft_c
+ 			return -EINVAL;
+ 	}
+ 
++	if (!nft_setelem_valid_key_end(set, nla, flags))
++		return -EINVAL;
++
+ 	if ((flags & NFT_SET_ELEM_INTERVAL_END) &&
+ 	     (nla[NFTA_SET_ELEM_DATA] ||
+ 	      nla[NFTA_SET_ELEM_OBJREF] ||
+@@ -6192,6 +6213,9 @@ static int nft_del_setelem(struct nft_ct
+ 	if (!nla[NFTA_SET_ELEM_KEY] && !(flags & NFT_SET_ELEM_CATCHALL))
+ 		return -EINVAL;
+ 
++	if (!nft_setelem_valid_key_end(set, nla, flags))
++		return -EINVAL;
++
+ 	nft_set_ext_prepare(&tmpl);
+ 
+ 	if (flags != 0) {
 
 

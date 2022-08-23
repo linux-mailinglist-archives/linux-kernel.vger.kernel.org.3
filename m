@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334EF59DA5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5F559D9A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352334AbiHWKH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
+        id S1346072AbiHWJ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352419AbiHWKBx (ORCPT
+        with ESMTP id S243444AbiHWJzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:01:53 -0400
+        Tue, 23 Aug 2022 05:55:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803518689D;
-        Tue, 23 Aug 2022 01:49:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561B59FAB4;
+        Tue, 23 Aug 2022 01:46:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89FC361377;
-        Tue, 23 Aug 2022 08:49:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C835C433C1;
-        Tue, 23 Aug 2022 08:49:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 676176123D;
+        Tue, 23 Aug 2022 08:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635A0C433D6;
+        Tue, 23 Aug 2022 08:46:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244581;
-        bh=qg+/edhD8Dj7xYw7+5T+IE/jl2tVylbiDANkfdB+QyI=;
+        s=korg; t=1661244395;
+        bh=Wzr+JB/02qNfpc37gBcPQ8swNJmNAsWFgLjpwRHAugI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XWActTxssoXAYItvce5FDiHp084N0SO/fLQzjev1KwE4YE3bBvfQ6BD/Uv31Toyss
-         Mj3EvA1JMi0oFP+t4CtLMYreIyyPINwR8McAmpz3swzIhmtbLvhX8hbpdqDy6B0C9j
-         Hjv2ovIn0XNsvsfky/UOLDfuPmA2vIZH2Qp9J42g=
+        b=rgHnh8ppKdG/z3celZZ/uCVA5qzIH7VZQwIyaUReawTdK/p+rV9DHvx9lRiVyt67K
+         sawSj0aBtPHjHSPYrcVPb8pkuRw4k83iePLwPRhmEEzkRb0+KRIUECMDyl55Z9rs8z
+         cej/w6LUVfHxFSL6jjdqLA1PAezHaCh5dHskA1jw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Stefani Seibold <stefani@seibold.net>,
-        Randy Dunlap <randy.dunlap@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 130/229] kfifo: fix kfifo_to_user() return type
-Date:   Tue, 23 Aug 2022 10:24:51 +0200
-Message-Id: <20220823080058.362416018@linuxfoundation.org>
+Subject: [PATCH 4.14 131/229] mfd: t7l66xb: Drop platform disable callback
+Date:   Tue, 23 Aug 2022 10:24:52 +0200
+Message-Id: <20220823080058.392543628@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -57,42 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 045ed31e23aea840648c290dbde04797064960db ]
+[ Upstream commit 128ac294e1b437cb8a7f2ff8ede1cde9082bddbe ]
 
-The kfifo_to_user() macro is supposed to return zero for success or
-negative error codes.  Unfortunately, there is a signedness bug so it
-returns unsigned int.  This only affects callers which try to save the
-result in ssize_t and as far as I can see the only place which does that
-is line6_hwdep_read().
+None of the in-tree instantiations of struct t7l66xb_platform_data
+provides a disable callback. So better don't dereference this function
+pointer unconditionally. As there is no user, drop it completely instead
+of calling it conditional.
 
-TL;DR: s/_uint/_int/.
+This is a preparation for making platform remove callbacks return void.
 
-Link: https://lkml.kernel.org/r/YrVL3OJVLlNhIMFs@kili
-Fixes: 144ecf310eb5 ("kfifo: fix kfifo_alloc() to return a signed int value")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Stefani Seibold <stefani@seibold.net>
-Cc: Randy Dunlap <randy.dunlap@oracle.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 1f192015ca5b ("mfd: driver for the T7L66XB TMIO SoC")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20220530192430.2108217-3-u.kleine-koenig@pengutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/kfifo.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mfd/t7l66xb.c       | 6 +-----
+ include/linux/mfd/t7l66xb.h | 1 -
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/include/linux/kfifo.h b/include/linux/kfifo.h
-index 86b5fb08e96c..d1781f35dea4 100644
---- a/include/linux/kfifo.h
-+++ b/include/linux/kfifo.h
-@@ -629,7 +629,7 @@ __kfifo_uint_must_check_helper( \
-  * writer, you don't need extra locking to use these macro.
-  */
- #define	kfifo_to_user(fifo, to, len, copied) \
--__kfifo_uint_must_check_helper( \
-+__kfifo_int_must_check_helper( \
- ({ \
- 	typeof((fifo) + 1) __tmp = (fifo); \
- 	void __user *__to = (to); \
+diff --git a/drivers/mfd/t7l66xb.c b/drivers/mfd/t7l66xb.c
+index 43d8683266de..caa61649fe79 100644
+--- a/drivers/mfd/t7l66xb.c
++++ b/drivers/mfd/t7l66xb.c
+@@ -412,11 +412,8 @@ static int t7l66xb_probe(struct platform_device *dev)
+ 
+ static int t7l66xb_remove(struct platform_device *dev)
+ {
+-	struct t7l66xb_platform_data *pdata = dev_get_platdata(&dev->dev);
+ 	struct t7l66xb *t7l66xb = platform_get_drvdata(dev);
+-	int ret;
+ 
+-	ret = pdata->disable(dev);
+ 	clk_disable_unprepare(t7l66xb->clk48m);
+ 	clk_put(t7l66xb->clk48m);
+ 	clk_disable_unprepare(t7l66xb->clk32k);
+@@ -427,8 +424,7 @@ static int t7l66xb_remove(struct platform_device *dev)
+ 	mfd_remove_devices(&dev->dev);
+ 	kfree(t7l66xb);
+ 
+-	return ret;
+-
++	return 0;
+ }
+ 
+ static struct platform_driver t7l66xb_platform_driver = {
+diff --git a/include/linux/mfd/t7l66xb.h b/include/linux/mfd/t7l66xb.h
+index b4629818aea5..d4e7f0453c91 100644
+--- a/include/linux/mfd/t7l66xb.h
++++ b/include/linux/mfd/t7l66xb.h
+@@ -16,7 +16,6 @@
+ 
+ struct t7l66xb_platform_data {
+ 	int (*enable)(struct platform_device *dev);
+-	int (*disable)(struct platform_device *dev);
+ 	int (*suspend)(struct platform_device *dev);
+ 	int (*resume)(struct platform_device *dev);
+ 
 -- 
 2.35.1
 

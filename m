@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3571F59E139
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CED959DB7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358860AbiHWLzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S1354259AbiHWK1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359138AbiHWLvu (ORCPT
+        with ESMTP id S1353912AbiHWKMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:51:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD6214038;
-        Tue, 23 Aug 2022 02:32:29 -0700 (PDT)
+        Tue, 23 Aug 2022 06:12:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516312C675;
+        Tue, 23 Aug 2022 01:58:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 840CC612D8;
-        Tue, 23 Aug 2022 09:32:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C14DC433C1;
-        Tue, 23 Aug 2022 09:32:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE267B81C3B;
+        Tue, 23 Aug 2022 08:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39AD1C433C1;
+        Tue, 23 Aug 2022 08:58:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247145;
-        bh=bf3ZD9frY4GoYPiarVVKdEvqceAeI8cdWcW5itv8Yk8=;
+        s=korg; t=1661245114;
+        bh=W5thjdNhmcdbfx2aKtOkCtX5IKQ/BpSrlifsGJ0KU9k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0w1XZyU2spaK/IznFBJLvCBwL6H6iPMZTWkSvvwNVqtaXspird7/4qo2McnX0fMmi
-         KldT0PDAwxUKO56fCihl6bPrduXe0vUfKnvJ2BRwlZw2w3FlBNuEydJn4sdYG668sq
-         QIUQWmSrkBA9EoIAeK7mDcqYa49vjiLfP5pJ0xnk=
+        b=u8APzQHeirtONSv95I8CZhDSWDjYMt0i+LyKHxePdQzC5jVAhWOUR+udZqxsyylwz
+         U6DsjV/Rvag+jguZUw/fmT3FINfOU7oY42VrKTwOM76po6VNK2i63Sv/TVrq5NsJ0n
+         NoZAa41j5X4SJ3pyV3xWbAy69y1aiqe/Cgi1SSjk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.4 302/389] NFSv4.1: Dont decrease the value of seq_nr_highest_sent
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 219/229] ext4: avoid remove directory when directory is corrupted
 Date:   Tue, 23 Aug 2022 10:26:20 +0200
-Message-Id: <20220823080128.188093466@linuxfoundation.org>
+Message-Id: <20220823080101.469565686@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Ye Bin <yebin10@huawei.com>
 
-commit f07a5d2427fc113dc50c5c818eba8929bc27b8ca upstream.
+[ Upstream commit b24e77ef1c6d4dbf42749ad4903c97539cc9755a ]
 
-When we're trying to figure out what the server may or may not have seen
-in terms of request numbers, do not assume that requests with a larger
-number were missed, just because we saw a reply to a request with a
-smaller number.
+Now if check directoy entry is corrupted, ext4_empty_dir may return true
+then directory will be removed when file system mounted with "errors=continue".
+In order not to make things worse just return false when directory is corrupted.
 
-Fixes: 3453d5708b33 ("NFSv4.1: Avoid false retries when RPC calls are interrupted")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220622090223.682234-1-yebin10@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs4proc.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ fs/ext4/namei.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -779,10 +779,9 @@ static void nfs4_slot_sequence_record_se
- 	if ((s32)(seqnr - slot->seq_nr_highest_sent) > 0)
- 		slot->seq_nr_highest_sent = seqnr;
- }
--static void nfs4_slot_sequence_acked(struct nfs4_slot *slot,
--		u32 seqnr)
-+static void nfs4_slot_sequence_acked(struct nfs4_slot *slot, u32 seqnr)
- {
--	slot->seq_nr_highest_sent = seqnr;
-+	nfs4_slot_sequence_record_sent(slot, seqnr);
- 	slot->seq_nr_last_acked = seqnr;
- }
- 
+diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+index 4b78fa4dbcc1..e1cade9dbd30 100644
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -2820,11 +2820,8 @@ bool ext4_empty_dir(struct inode *inode)
+ 		de = (struct ext4_dir_entry_2 *) (bh->b_data +
+ 					(offset & (sb->s_blocksize - 1)));
+ 		if (ext4_check_dir_entry(inode, NULL, de, bh,
+-					 bh->b_data, bh->b_size, offset)) {
+-			offset = (offset | (sb->s_blocksize - 1)) + 1;
+-			continue;
+-		}
+-		if (le32_to_cpu(de->inode)) {
++					 bh->b_data, bh->b_size, offset) ||
++		    le32_to_cpu(de->inode)) {
+ 			brelse(bh);
+ 			return false;
+ 		}
+-- 
+2.35.1
+
 
 

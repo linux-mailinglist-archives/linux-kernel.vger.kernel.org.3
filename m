@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E5559DA29
+	by mail.lfdr.de (Postfix) with ESMTP id AD4E459DA2A
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352650AbiHWKGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S1352737AbiHWKGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352204AbiHWKBW (ORCPT
+        with ESMTP id S1352210AbiHWKBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 06:01:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB65C4AD59;
-        Tue, 23 Aug 2022 01:48:56 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56210491EF;
+        Tue, 23 Aug 2022 01:49:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46C13B81BF8;
-        Tue, 23 Aug 2022 08:48:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A05C433D6;
-        Tue, 23 Aug 2022 08:48:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E57A861386;
+        Tue, 23 Aug 2022 08:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16E5C433D6;
+        Tue, 23 Aug 2022 08:48:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244534;
-        bh=SmZYZEpOelWUIJG7oTgTHs2s9xh0YRCxcCr5ctiy6do=;
+        s=korg; t=1661244540;
+        bh=xwMDHTFnMLKH4+U7KF18c69Qbn3zdxCc6asbHfolpLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CYpoE2KamfcVHSsCAzlDap3rg3SkmLu0/GLxYvm5kWPBP+ge5jFMCJEyJ74c8KyIG
-         7u6TMoAstAiHhBh+AwhlYjKTWnatjQja72jlBKrcJkKt7A/TVJ3elshfg4BBVarbq0
-         uZWUn+7gC+M8nExOxsv+FWspo7SU1xeN20urebAw=
+        b=L+O1h4soKm8xnkdjVbxazgIsv7qfOe8CKsElg++CN70Ck0lzi+laQyxlvC9uRIc9+
+         p8bj7fGN9CB87IH6+oRyn3GWz22IUALZqxpRq50BK0xetVpqG+mCgmdydMAHwPESt8
+         qxTlVJNNB+oks0FFZUTEi17uCmkqd5gTi6iVvEFM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        David Collins <quic_collinsd@quicinc.com>
-Subject: [PATCH 4.14 151/229] spmi: trace: fix stack-out-of-bound access in SPMI tracing functions
-Date:   Tue, 23 Aug 2022 10:25:12 +0200
-Message-Id: <20220823080059.066422030@linuxfoundation.org>
+        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Jan Kara <jack@suse.cz>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 4.14 152/229] ext4: add EXT4_INODE_HAS_XATTR_SPACE macro in xattr.h
+Date:   Tue, 23 Aug 2022 10:25:13 +0200
+Message-Id: <20220823080059.101216471@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,110 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Collins <quic_collinsd@quicinc.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-commit 2af28b241eea816e6f7668d1954f15894b45d7e3 upstream.
+commit 179b14152dcb6a24c3415200603aebca70ff13af upstream.
 
-trace_spmi_write_begin() and trace_spmi_read_end() both call
-memcpy() with a length of "len + 1".  This leads to one extra
-byte being read beyond the end of the specified buffer.  Fix
-this out-of-bound memory access by using a length of "len"
-instead.
+When adding an xattr to an inode, we must ensure that the inode_size is
+not less than EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad. Otherwise,
+the end position may be greater than the start position, resulting in UAF.
 
-Here is a KASAN log showing the issue:
-
-BUG: KASAN: stack-out-of-bounds in trace_event_raw_event_spmi_read_end+0x1d0/0x234
-Read of size 2 at addr ffffffc0265b7540 by task thermal@2.0-ser/1314
-...
-Call trace:
- dump_backtrace+0x0/0x3e8
- show_stack+0x2c/0x3c
- dump_stack_lvl+0xdc/0x11c
- print_address_description+0x74/0x384
- kasan_report+0x188/0x268
- kasan_check_range+0x270/0x2b0
- memcpy+0x90/0xe8
- trace_event_raw_event_spmi_read_end+0x1d0/0x234
- spmi_read_cmd+0x294/0x3ac
- spmi_ext_register_readl+0x84/0x9c
- regmap_spmi_ext_read+0x144/0x1b0 [regmap_spmi]
- _regmap_raw_read+0x40c/0x754
- regmap_raw_read+0x3a0/0x514
- regmap_bulk_read+0x418/0x494
- adc5_gen3_poll_wait_hs+0xe8/0x1e0 [qcom_spmi_adc5_gen3]
- ...
- __arm64_sys_read+0x4c/0x60
- invoke_syscall+0x80/0x218
- el0_svc_common+0xec/0x1c8
- ...
-
-addr ffffffc0265b7540 is located in stack of task thermal@2.0-ser/1314 at offset 32 in frame:
- adc5_gen3_poll_wait_hs+0x0/0x1e0 [qcom_spmi_adc5_gen3]
-
-this frame has 1 object:
- [32, 33) 'status'
-
-Memory state around the buggy address:
- ffffffc0265b7400: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
- ffffffc0265b7480: 04 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
->ffffffc0265b7500: 00 00 00 00 f1 f1 f1 f1 01 f3 f3 f3 00 00 00 00
-                                           ^
- ffffffc0265b7580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffffc0265b7600: f1 f1 f1 f1 01 f2 07 f2 f2 f2 01 f3 00 00 00 00
-==================================================================
-
-Fixes: a9fce374815d ("spmi: add command tracepoints for SPMI")
-Cc: stable@vger.kernel.org
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-Link: https://lore.kernel.org/r/20220627235512.2272783-1-quic_collinsd@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Link: https://lore.kernel.org/r/20220616021358.2504451-2-libaokun1@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/trace/events/spmi.h |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ fs/ext4/xattr.h |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/include/trace/events/spmi.h
-+++ b/include/trace/events/spmi.h
-@@ -21,15 +21,15 @@ TRACE_EVENT(spmi_write_begin,
- 		__field		( u8,         sid       )
- 		__field		( u16,        addr      )
- 		__field		( u8,         len       )
--		__dynamic_array	( u8,   buf,  len + 1   )
-+		__dynamic_array	( u8,   buf,  len       )
- 	),
+--- a/fs/ext4/xattr.h
++++ b/fs/ext4/xattr.h
+@@ -95,6 +95,19 @@ struct ext4_xattr_entry {
  
- 	TP_fast_assign(
- 		__entry->opcode = opcode;
- 		__entry->sid    = sid;
- 		__entry->addr   = addr;
--		__entry->len    = len + 1;
--		memcpy(__get_dynamic_array(buf), buf, len + 1);
-+		__entry->len    = len;
-+		memcpy(__get_dynamic_array(buf), buf, len);
- 	),
+ #define EXT4_ZERO_XATTR_VALUE ((void *)-1)
  
- 	TP_printk("opc=%d sid=%02d addr=0x%04x len=%d buf=0x[%*phD]",
-@@ -92,7 +92,7 @@ TRACE_EVENT(spmi_read_end,
- 		__field		( u16,        addr      )
- 		__field		( int,        ret       )
- 		__field		( u8,         len       )
--		__dynamic_array	( u8,   buf,  len + 1   )
-+		__dynamic_array	( u8,   buf,  len       )
- 	),
- 
- 	TP_fast_assign(
-@@ -100,8 +100,8 @@ TRACE_EVENT(spmi_read_end,
- 		__entry->sid    = sid;
- 		__entry->addr   = addr;
- 		__entry->ret    = ret;
--		__entry->len    = len + 1;
--		memcpy(__get_dynamic_array(buf), buf, len + 1);
-+		__entry->len    = len;
-+		memcpy(__get_dynamic_array(buf), buf, len);
- 	),
- 
- 	TP_printk("opc=%d sid=%02d addr=0x%04x ret=%d len=%02d buf=0x[%*phD]",
++/*
++ * If we want to add an xattr to the inode, we should make sure that
++ * i_extra_isize is not 0 and that the inode size is not less than
++ * EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad.
++ *   EXT4_GOOD_OLD_INODE_SIZE   extra_isize header   entry   pad  data
++ * |--------------------------|------------|------|---------|---|-------|
++ */
++#define EXT4_INODE_HAS_XATTR_SPACE(inode)				\
++	((EXT4_I(inode)->i_extra_isize != 0) &&				\
++	 (EXT4_GOOD_OLD_INODE_SIZE + EXT4_I(inode)->i_extra_isize +	\
++	  sizeof(struct ext4_xattr_ibody_header) + EXT4_XATTR_PAD <=	\
++	  EXT4_INODE_SIZE((inode)->i_sb)))
++
+ struct ext4_xattr_info {
+ 	const char *name;
+ 	const void *value;
 
 

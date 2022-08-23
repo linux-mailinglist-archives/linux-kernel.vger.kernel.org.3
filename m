@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C07459E8EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB9059E902
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238716AbiHWRRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S229801AbiHWRUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiHWRQ6 (ORCPT
+        with ESMTP id S231295AbiHWRTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:16:58 -0400
+        Tue, 23 Aug 2022 13:19:52 -0400
 Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE93A4B31
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:41:52 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id d8so7349165lfq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:41:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A790AE852
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:43:17 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m3so14060002lfg.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=94ObA0sxNMfnUjuPe8k5nNJuRKk7+0BvBgJlyDjNB6U=;
-        b=MDkEhUd3g66BHtv8ayb5PFnYCSFsUOgMs1J3OFRtFIDpx5xhG7xgYbSmjimRv6ufky
-         0wfiKTXYXbklnpVEt8tDV6m2bVs5LPglAFfaoUDTPIGO+GoX/RuIhFzfuv6ktR2mq6Bm
-         XslsG1lxC6yywPsVcLVlAjbeWcpCz2+qrLnSTa7/rLHuRufNM/MTRldUkatcSxYQuae7
-         4G8OafImliELiwM/yF4BMHPZa6QWfkELACZZ74akC/cKMfVHwJ1t5R4ZXZDHXtC3EhHW
-         DMI7bWkl64txNuxh2FKPvy0o+5mFvYDc7zCn7cjkMOtZFrBAJALhoUCrkv9loDPHUF1f
-         8SkA==
+        bh=h32xyk5qVyHWCWQbdLOYmYDB3SfGv1Ihtw0UlxutFSs=;
+        b=j7WUm0iTG96tPDzGkHP6hVuPCpr84UKH3TJFLWMgVEmePKBlnIJ84/ybGASHI/Mra0
+         RWoBVYr8ozv7fj7kVw9sz/+jeSaeJmZhqxjpClB6Y4Pc+TyxU6fwxL69LB6ZsgZVRpt4
+         +67/Na/EvQDPdnAMEKtFkqfBZswAXsGGgVkMUrh3xQhkqgayWbeoGv4EiDoKTDvt+g8m
+         7hnjfSGwI1hsTBEgbKg1rbjlb+j9eohQ8kbCn3L4Yx3sUt5sRi6aT75MLtTIBbihnk1+
+         mBcHTr2H03kYnjC9aBF8s/sJoqSZF4kD1p4pgs+Euu2pRgwNJ8d/HJ5bsCMgn8mWlLbR
+         +QmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=94ObA0sxNMfnUjuPe8k5nNJuRKk7+0BvBgJlyDjNB6U=;
-        b=tpqKhPDqYztBXb1+XmPVfIpXjDOC0126k46RZ/AZfb4B56c/03dIwqLznxsJnrqPKI
-         BRi2Jy6OW+U8IdJCr7Tt44CRG1dM4AxHpOQNZjDDpzJeQGwlz1alBBcmzdGRVOB/95uC
-         kT1a07mW6ClP82nVOV5enzUcCh8Od7P0HsHZqwjBkPjhxmJtZEr9IK+f0x6zu97mMiEq
-         4U8j6aXOBPSiOth3KOpRdae03hM8PMy9afnz/UjKyJbEq+FEBWHdQDqH8AeV2jcKdkN9
-         abLXh6Zgqmao7BjJR0gDsY1PmKFVbhI0+kX8u8RktlQZHFwUPQGfhOngiBv0FA94kUE6
-         u8PQ==
-X-Gm-Message-State: ACgBeo0WgwlsOj87zVr9VtxLbedKN8AvcocsBu0n9bvcFWWFPFcbsPoF
-        iEXMvxl+xV6p/HM17y5CIVSKzw==
-X-Google-Smtp-Source: AA6agR54aEjYHox84XnSc1aRIIM9Si6SlFqPQS60naXJqyyEDfTdI9sa1/BQZa7FkPZn6RojlDJEQQ==
-X-Received: by 2002:a05:6512:39d3:b0:492:e172:e313 with SMTP id k19-20020a05651239d300b00492e172e313mr3623919lfu.628.1661262111019;
-        Tue, 23 Aug 2022 06:41:51 -0700 (PDT)
+        bh=h32xyk5qVyHWCWQbdLOYmYDB3SfGv1Ihtw0UlxutFSs=;
+        b=zKQqtVSzkENgcIcG8gj+jSC/TKIzNrQQyLMfSetTX3Cq7ozUtT62fS4TvevHV53xRU
+         GAMMuiH1bEho7pr0PxLqotVQhgA2CMi1x/uf44VssKrwOlgRkXB4FkOt0xN4GYUXNJOM
+         ojMIcjSKnlem1ski8yNEfpSlroGEA+cBatvgq73pSbAKF5TRtqNVLr/pWlUysbaQFMx2
+         nwwnbbBdiPiRYV4SpRnlCVXzo1IcvtbzhdGJsOotn2zPgdw4OVPNWug9eY9i3UEVUYWe
+         DzEjPeSDUvAOlL7jbWvCe7m9ciBrEspWHy8PFtjd7bebrt2a4mKMhTEWZZL06ZYJMOeP
+         E1Ng==
+X-Gm-Message-State: ACgBeo2X6Me7kSjmO5QoMZP+qSxAPX6JSq9mnrZXOtAqljuFa7Tu2u9I
+        Tht5DOtCrK42YLZ7H5OxxhnNVg==
+X-Google-Smtp-Source: AA6agR5RZdIPZVcwdu1iI8zwdbElK6Q10jk3CELdg44yE6uN2YcKJda0sTTtvNcx5OKPyyPxtJP3ow==
+X-Received: by 2002:ac2:5097:0:b0:493:109:f190 with SMTP id f23-20020ac25097000000b004930109f190mr355159lfm.180.1661262195492;
+        Tue, 23 Aug 2022 06:43:15 -0700 (PDT)
 Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id p16-20020ac24ed0000000b0048b1b2233ddsm1493031lfr.120.2022.08.23.06.41.46
+        by smtp.gmail.com with ESMTPSA id f1-20020a056512360100b00493014c3d7csm107114lfs.309.2022.08.23.06.43.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 06:41:49 -0700 (PDT)
-Message-ID: <fe2041cc-dd8b-6695-1fc8-6c1c49dd7220@linaro.org>
-Date:   Tue, 23 Aug 2022 16:41:44 +0300
+        Tue, 23 Aug 2022 06:43:14 -0700 (PDT)
+Message-ID: <c74b4464-ec28-eff6-86e2-2b0e5e9e992b@linaro.org>
+Date:   Tue, 23 Aug 2022 16:43:13 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [RFC PATCH v2 1/4] dt-bindings: net: can: add STM32 bxcan DT
- bindings
+Subject: Re: [RFC PATCH v2 3/4] ARM: dts: stm32: add pin map for CAN
+ controller on stm32f4
 Content-Language: en-US
 To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         linux-kernel@vger.kernel.org
@@ -64,21 +64,15 @@ Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
 References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com>
- <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+ <20220820082936.686924-4-dario.binacchi@amarulasolutions.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20220820082936.686924-4-dario.binacchi@amarulasolutions.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,97 +86,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 20/08/2022 11:29, Dario Binacchi wrote:
-> Add documentation of device tree bindings for the STM32 basic extended
-> CAN (bxcan) controller.
+> Add pin configurations for using CAN controller on stm32f469-disco
+> board. They are located on the Arduino compatible connector CN5 (CAN1)
+> and on the extension connector CN12 (CAN2).
 > 
 > Signed-off-by: Dario Binacchi <dariobin@libero.it>
 > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> 
-> ---
-> 
-> Changes in v2:
-> - Change the file name into 'st,stm32-bxcan-core.yaml'.
-> - Rename compatibles:
->   - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
->   - st,stm32-bxcan -> st,stm32f4-bxcan
-> - Rename master property to st,can-master.
-> - Remove the status property from the example.
-> - Put the node child properties as required.
-> 
->  .../bindings/net/can/st,stm32-bxcan.yaml      | 136 ++++++++++++++++++
->  1 file changed, 136 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
-> new file mode 100644
-> index 000000000000..288631b5556d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
-> @@ -0,0 +1,136 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/can/st,stm32-bxcan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectronics bxCAN controller
-> +
-> +description: STMicroelectronics BxCAN controller for CAN bus
-> +
-> +maintainers:
-> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> +
-> +allOf:
-> +  - $ref: can-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - st,stm32f4-bxcan-core
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      Input clock for registers access
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - resets
-> +  - clocks
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +
-> +patternProperties:
 
-No improvements here, so my comment stay. Please fix it.
+Do not ignore review. This is not correct. You are mixing copyright with
+SoC...
+
+> 
 
 
-> +  "^can@[0-9]+$":
-> +    type: object
-> +    description:
-> +      A CAN block node contains two subnodes, representing each one a CAN
-> +      instance available on the machine.
+> +			can2_pins_b: can2-1 {
+> +				pins1 {
+> +					pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
+> +				};
+> +				pins2 {
+> +					pinmux = <STM32_PINMUX('B', 12, AF9)>; /* CAN2_RX */
+> +					bias-pull-up;
+> +				};
+> +			};
+> +
 
-I still do not understand why you need children. You did not CC me on
-driver change, so difficult to say. You did not describe the parent
-device - there is no description. Why do you need parent device at all?
-This looks like some driver-driven-bindings instead of just real
-hardware description.
+Don't ignore review.
+
+That's second one, so that's a no.. :(
 
 Best regards,
 Krzysztof

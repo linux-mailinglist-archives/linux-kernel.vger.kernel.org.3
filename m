@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90CC59E984
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7B559E965
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiHWRY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S230195AbiHWRYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243788AbiHWRVq (ORCPT
+        with ESMTP id S243847AbiHWRVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:21:46 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1EF237F8;
-        Tue, 23 Aug 2022 07:57:43 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso9970477otv.1;
-        Tue, 23 Aug 2022 07:57:43 -0700 (PDT)
+        Tue, 23 Aug 2022 13:21:48 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B60AC25E;
+        Tue, 23 Aug 2022 07:57:45 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id v12-20020a9d7d0c000000b00638e210c995so9924421otn.13;
+        Tue, 23 Aug 2022 07:57:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=xXlClLOBLqfBa2Nm9PNs15DRgZ9VUL5nc8REUjtlTJo=;
-        b=Jn9jtJ4XHWrqlIV2NiVCiSxumXOxHTge6pBUZtMw3raFlDsSTcACOzKZo7FaI+cIiK
-         p6MXMXNrVzP5rqVj0pAaCLvvHINVGtTu111G1jxZwYhznfELYytvE9tkflCZi/eiiNJW
-         OaA7Y0xs/WIClLuSx7d6462FaJ5uLT+mDW6YvnQCcbo7tdjnNnvv4O54oPjzR7UNWHOY
-         LUbX2sdW+dDMeW8UJ3BDLxEEY9XMtdnEUASigY+t66CNSTQyz7WVgA0Fc0Dq77uyh8Rx
-         K1JVHlo2e7HJxp4sYnVWkzYaVf7T7T+HWcFL54pYmwBtouq0hWaNu3YXHhmv3oipCuy8
-         F+0A==
-X-Gm-Message-State: ACgBeo0qwf7RsF+xJAl3yB5h1f2dECHo+8WTrPzwC/E5zS3mMVBEer/B
-        iM/24zaYFqMZe7S71c1x+Q==
-X-Google-Smtp-Source: AA6agR5M8KPfP6Ja+OU+O5Ju+w3SnKym3mCHnwpgwKy9HL8bYAteZbk4AfULp1ObktfogdNOKzTmgw==
-X-Received: by 2002:a05:6830:1bfa:b0:637:1491:2ac7 with SMTP id k26-20020a0568301bfa00b0063714912ac7mr9416645otb.9.1661266662630;
-        Tue, 23 Aug 2022 07:57:42 -0700 (PDT)
+        bh=KlgGuD4Ropt00q+3PBD1uO0vFomMoCDePQdd5wGHVIY=;
+        b=ccCtbFfrJgeLnsDaEbi64bsmbwbDc/eGm4MT7R2HiXoUXAWnJma4wYJibCuoAqj81u
+         qyNKRFNTC+liOX/5Ju9QfWBW7ST/DisTH809V05gYezRA55nK9JutVksxtpRlNkKiyiV
+         ynhZWc4+VJdLv0BVa7cebvf+q+xz+YRAWCucdjs1nxwYnAgK0O/WLMMUOWthXEdlg+S6
+         05EZ4TbAUWbsIsSgl/qtJkK0c9U0iE1KEmX5CRZVSKzVkyXVUpCdKEzImo6DT4MC00Ol
+         hra7C+avAhmVhKQpE/dYd4HoHlMiJ0AwmNPSDf6morZS948iD8F3icK5aCT4A11UeKQx
+         j0vw==
+X-Gm-Message-State: ACgBeo2rgapze7Nwy+l2RDYM1wfJp5/qQjJsLpLm6z42iIrqKs9Yr4jR
+        NP4FY7oCMet0uJ9ZXXjtqQ==
+X-Google-Smtp-Source: AA6agR674PIV086rHGCdQdraD7gGhkGpmf9VvJELSNqfoV3WZUxBi5lkBuO7P2w4Ehae1rDXBZan0g==
+X-Received: by 2002:a9d:5508:0:b0:636:ee02:ff7c with SMTP id l8-20020a9d5508000000b00636ee02ff7cmr9920439oth.249.1661266664456;
+        Tue, 23 Aug 2022 07:57:44 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.41
+        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 07:57:42 -0700 (PDT)
+        Tue, 23 Aug 2022 07:57:43 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Ilia Lin <ilia.lin@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: timer: Add missing (unevaluated|additional)Properties on child nodes
-Date:   Tue, 23 Aug 2022 09:56:47 -0500
-Message-Id: <20220823145649.3118479-16-robh@kernel.org>
+        Niklas Cassel <nks@flawful.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: opp: Add missing (unevaluated|additional)Properties on child nodes
+Date:   Tue, 23 Aug 2022 09:56:48 -0500
+Message-Id: <20220823145649.3118479-17-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,44 +67,34 @@ must have unevaluatedProperties or additionalProperties set to false
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml        | 1 +
- Documentation/devicetree/bindings/timer/ingenic,tcu.yaml      | 4 ++++
- 2 files changed, 5 insertions(+)
+ Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 1 +
+ Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-index cd2176cad53a..f6efa48c4256 100644
---- a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-+++ b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-@@ -62,6 +62,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+index 59663e897dae..a202b6c6561d 100644
+--- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
++++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+@@ -40,6 +40,7 @@ properties:
  patternProperties:
-   '^frame@[0-9a-z]*$':
+   '^opp-?[0-9]+$':
      type: object
 +    additionalProperties: false
-     description: A timer node has up to 8 frame sub-nodes, each with the following properties.
+ 
      properties:
-       frame-number:
-diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-index 0a01e4f5eddb..a84fef0fe628 100644
---- a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-+++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-@@ -114,6 +114,8 @@ patternProperties:
-   "^watchdog@[a-f0-9]+$":
+       opp-hz: true
+diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+index 14a7a689ad6d..df8442fb11f0 100644
+--- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
++++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+@@ -19,6 +19,7 @@ properties:
+ patternProperties:
+   '^opp-?[0-9]+$':
      type: object
-     $ref: /schemas/watchdog/watchdog.yaml#
-+    unevaluatedProperties: false
-+
++    additionalProperties: false
+ 
      properties:
-       compatible:
-         oneOf:
-@@ -146,6 +148,8 @@ patternProperties:
-   "^pwm@[a-f0-9]+$":
-     type: object
-     $ref: /schemas/pwm/pwm.yaml#
-+    unevaluatedProperties: false
-+
-     properties:
-       compatible:
-         oneOf:
+       opp-level: true
 -- 
 2.34.1
 

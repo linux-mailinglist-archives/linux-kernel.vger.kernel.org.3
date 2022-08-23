@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C4F59DC7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CB859E224
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359385AbiHWMH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
+        id S1356138AbiHWKt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359325AbiHWMDl (ORCPT
+        with ESMTP id S1356485AbiHWKmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:03:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C9DDAA06;
-        Tue, 23 Aug 2022 02:37:13 -0700 (PDT)
+        Tue, 23 Aug 2022 06:42:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8789CA99C0;
+        Tue, 23 Aug 2022 02:09:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF6EAB81C63;
-        Tue, 23 Aug 2022 09:36:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5773DC433D6;
-        Tue, 23 Aug 2022 09:36:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2172D6092E;
+        Tue, 23 Aug 2022 09:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1132EC433C1;
+        Tue, 23 Aug 2022 09:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247410;
-        bh=DaQnnVDgFwZPMMhgq8n/IGkxtk0uMZiqPrINJIhDaIk=;
+        s=korg; t=1661245790;
+        bh=ueeu1O7WxTB5W7eT1aqQvjP1jaD0aS1iXFRsRpMLeAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BQZY+ntb6cqozSNkj/wUKoIIKSgJ0MooxDK6YtysKaA6ETc/tks3v6cXTMYhcBQcG
-         RhVvoBOXJL8wjN2N6CC7rhltxArjQjmPxeJA26WbEVlmOmTzBno4Brbv8IpPSC0NBf
-         VI2bcM70kOp4LqEaXbwIq2Vm1FxZa+l2JexwpKh0=
+        b=i8Eb69Ikdeit69U/bGdwIAfb1r6sQrpwqWon8t5g1LNk1kSBFvPs66DX9NAN/MIY0
+         rbUfa8651ExyUZjSU5V93YFu2SqozH8KutlbJTNQw6FhWuNtksucjFbEntBAXA5j71
+         2tg6K5uhsVubA84gEkc80uu9XZWG5NBYHBD6vbj8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
-        Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.10 027/158] bpf: Acquire map uref in .init_seq_private for array map iterator
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org, Andreas Dilger <adilger@dilger.ca>
+Subject: [PATCH 4.19 190/287] ext4: update s_overhead_clusters in the superblock during an on-line resize
 Date:   Tue, 23 Aug 2022 10:25:59 +0200
-Message-Id: <20220823080047.190919503@linuxfoundation.org>
+Message-Id: <20220823080107.211177549@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+From: Theodore Ts'o <tytso@mit.edu>
 
-commit f76fa6b338055054f80c72b29c97fb95c1becadc upstream.
+commit de394a86658ffe4e89e5328fd4993abfe41b7435 upstream.
 
-bpf_iter_attach_map() acquires a map uref, and the uref may be released
-before or in the middle of iterating map elements. For example, the uref
-could be released in bpf_iter_detach_map() as part of
-bpf_link_release(), or could be released in bpf_map_put_with_uref() as
-part of bpf_map_release().
+When doing an online resize, the on-disk superblock on-disk wasn't
+updated.  This means that when the file system is unmounted and
+remounted, and the on-disk overhead value is non-zero, this would
+result in the results of statfs(2) to be incorrect.
 
-Alternative fix is acquiring an extra bpf_link reference just like
-a pinned map iterator does, but it introduces unnecessary dependency
-on bpf_link instead of bpf_map.
+This was partially fixed by Commits 10b01ee92df5 ("ext4: fix overhead
+calculation to account for the reserved gdt blocks"), 85d825dbf489
+("ext4: force overhead calculation if the s_overhead_cluster makes no
+sense"), and eb7054212eac ("ext4: update the cached overhead value in
+the superblock").
 
-So choose another fix: acquiring an extra map uref in .init_seq_private
-for array map iterator.
+However, since it was too expensive to forcibly recalculate the
+overhead for bigalloc file systems at every mount, this didn't fix the
+problem for bigalloc file systems.  This commit should address the
+problem when resizing file systems with the bigalloc feature enabled.
 
-Fixes: d3cc2ab546ad ("bpf: Implement bpf iterator for array maps")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/r/20220810080538.1845898-2-houtao@huaweicloud.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Reviewed-by: Andreas Dilger <adilger@dilger.ca>
+Link: https://lore.kernel.org/r/20220629040026.112371-1-tytso@mit.edu
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/arraymap.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/ext4/resize.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -616,6 +616,11 @@ static int bpf_iter_init_array_map(void
- 		seq_info->percpu_value_buf = value_buf;
- 	}
+--- a/fs/ext4/resize.c
++++ b/fs/ext4/resize.c
+@@ -1483,6 +1483,7 @@ static void ext4_update_super(struct sup
+ 	 * Update the fs overhead information
+ 	 */
+ 	ext4_calculate_overhead(sb);
++	es->s_overhead_clusters = cpu_to_le32(sbi->s_overhead);
  
-+	/* bpf_iter_attach_map() acquires a map uref, and the uref may be
-+	 * released before or in the middle of iterating map elements, so
-+	 * acquire an extra map uref for iterator.
-+	 */
-+	bpf_map_inc_with_uref(map);
- 	seq_info->map = map;
- 	return 0;
- }
-@@ -624,6 +629,7 @@ static void bpf_iter_fini_array_map(void
- {
- 	struct bpf_iter_seq_array_map_info *seq_info = priv_data;
- 
-+	bpf_map_put_with_uref(seq_info->map);
- 	kfree(seq_info->percpu_value_buf);
- }
- 
+ 	if (test_opt(sb, DEBUG))
+ 		printk(KERN_DEBUG "EXT4-fs: added group %u:"
 
 

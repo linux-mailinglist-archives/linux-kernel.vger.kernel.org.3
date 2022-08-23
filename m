@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5218F59D9A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7029B59D9C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346279AbiHWJ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S1352838AbiHWKCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242278AbiHWJyZ (ORCPT
+        with ESMTP id S1351975AbiHWJ4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:54:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D5F6E8AF;
-        Tue, 23 Aug 2022 01:46:34 -0700 (PDT)
+        Tue, 23 Aug 2022 05:56:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A92A0259;
+        Tue, 23 Aug 2022 01:47:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9CB3B81C28;
-        Tue, 23 Aug 2022 08:46:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA33BC433D6;
-        Tue, 23 Aug 2022 08:46:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D3C61499;
+        Tue, 23 Aug 2022 08:47:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9332AC433C1;
+        Tue, 23 Aug 2022 08:47:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244392;
-        bh=Lk/EXHs1Brib0yccLyg9YlZB8T5oBa6kIQL19U+DNds=;
+        s=korg; t=1661244427;
+        bh=WK+iLOfAkg4qoR51CflwzR1X5RRiADyEICS3AZD9u4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iwSoppF7NTUZKo1wZpUuOEB0riZTqAekgHIRrLUOvrutZklkwXX6VjtDa9nlW2Ysr
-         2Dl4JZeWK7xFcgI4dGXozwH854cvGkl6grb+BZzjgwabok13xZlUYHdEwldT1haMMU
-         Yv0k7xNWhFKv/N/vCJe2PCw8hYTEXiz4A9E5CV50=
+        b=H9RfKtw9As3/wVpeHRhrNoBvdhzldtWe2yTKzsVOoUXmfk/KLXtFTmjj1JlMxqFgQ
+         G+pFwKzi68XU3JgtuKs6qVFBSMkiqjpquzDn8RmY8+7+iWXl0i+ZJg5e8bbKlObgTc
+         AtMHUqO3Fyj3DWx0gShvqOnnBYkCT9P5ySrNPMxk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>,
-        Michal Simek <michal.simek@amd.com>
-Subject: [PATCH 5.15 082/244] dt-bindings: gpio: zynq: Add missing compatible strings
-Date:   Tue, 23 Aug 2022 10:24:01 +0200
-Message-Id: <20220823080101.784043325@linuxfoundation.org>
+        Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.15 083/244] dt-bindings: arm: qcom: fix Longcheer L8150 compatibles
+Date:   Tue, 23 Aug 2022 10:24:02 +0200
+Message-Id: <20220823080101.814727880@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -56,44 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Simek <michal.simek@xilinx.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 7668048e5c697a9493ffc0e6001c322b2efe90ae upstream.
+commit 25d203d0751ca191301bc578ba5d59fa401f1fbf upstream.
 
-"xlnx,zynqmp-gpio-1.0", "xlnx,versal-gpio-1.0" and "xlnx,pmc-gpio-1.0"
-compatible strings were not moved to yaml format. But they were in origin
-text file.
+The MSM8916 Longcheer L8150 uses a fallback in compatible:
 
-Fixes: 45ca16072b70 ("dt-bindings: gpio: zynq: convert bindings to YAML")
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+  msm8916-longcheer-l8150.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
+    ['longcheer,l8150', 'qcom,msm8916-v1-qrd/9-v1', 'qcom,msm8916'] is too long
+
+Fixes: b72160fa886d ("dt-bindings: qcom: Document bindings for new MSM8916 devices")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/72c973da5670b5ae81d050c582948894ee4174f8.1634206453.git.michal.simek@xilinx.com
-Signed-off-by: Michal Simek <michal.simek@amd.com>
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+Link: https://lore.kernel.org/r/20220520123252.365762-2-krzysztof.kozlowski@linaro.org
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/gpio/gpio-zynq.yaml | 6 +++++-
+ Documentation/devicetree/bindings/arm/qcom.yaml |    6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml b/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
-index 378da2649e66..980f92ad9eba 100644
---- a/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
-+++ b/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
-@@ -11,7 +11,11 @@ maintainers:
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -142,12 +142,16 @@ properties:
+       - items:
+           - enum:
+               - alcatel,idol347
+-              - longcheer,l8150
+               - samsung,a3u-eur
+               - samsung,a5u-eur
+           - const: qcom,msm8916
  
- properties:
-   compatible:
--    const: xlnx,zynq-gpio-1.0
-+    enum:
-+      - xlnx,zynq-gpio-1.0
-+      - xlnx,zynqmp-gpio-1.0
-+      - xlnx,versal-gpio-1.0
-+      - xlnx,pmc-gpio-1.0
- 
-   reg:
-     maxItems: 1
--- 
-2.37.2
-
+       - items:
++          - const: longcheer,l8150
++          - const: qcom,msm8916-v1-qrd/9-v1
++          - const: qcom,msm8916
++
++      - items:
+           - enum:
+               - sony,karin_windy
+               - sony,karin-row
 
 

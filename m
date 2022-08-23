@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D697459E1D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC5059DDD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353335AbiHWKLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S1358101AbiHWLnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348491AbiHWKDM (ORCPT
+        with ESMTP id S1352185AbiHWLi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:03:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874387CA8E;
-        Tue, 23 Aug 2022 01:51:13 -0700 (PDT)
+        Tue, 23 Aug 2022 07:38:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C58AE5D;
+        Tue, 23 Aug 2022 02:28:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCDF6614E7;
-        Tue, 23 Aug 2022 08:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED8B4C433D6;
-        Tue, 23 Aug 2022 08:51:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E85C5B81C97;
+        Tue, 23 Aug 2022 09:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245F6C433C1;
+        Tue, 23 Aug 2022 09:28:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244672;
-        bh=JzZG4pcuoEvTsta1MebeIACcpqiLUb2VanMsjFEAJdI=;
+        s=korg; t=1661246902;
+        bh=K+xC2B7yXHKQSBu1Ps72dpcme431uHzv0qF71KFVKdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y04HyKlwpv5oSvMxWQVhmY1JcAT6tKwoa2KwLkBxQ8rmGolhCSqYWyxrWaOPb2xUe
-         l0fcKcj4QRzTLs4yGjnVEckGnGq6Mt+QCgLMd8d8Rm/m9J/1FHJXp4UZlH8pnjazyy
-         Iggd6ZkUOuTgKRTBct5KijFniSnIZsS5Gdex7KvY=
+        b=pMU4OTsTQyv2UGvuvhdPEF7+BUmWBlVnXcYdxZ+wRAiLeaUt5F4Wt07YkP3f8WQQO
+         smc/5u7uC7Sy6edzG7hKrugAlGFnxIXyARz2w2Blov12j2cM98zNR7x8ajX25VkdAt
+         8lZDPVpe9pKAs0vf5++5Ip09BzKuZi6C1OnvOXGg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Subject: [PATCH 4.14 173/229] net/9p: Initialize the iounit field during fid creation
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.4 256/389] btrfs: reset block group chunk force if we have to wait
 Date:   Tue, 23 Aug 2022 10:25:34 +0200
-Message-Id: <20220823080059.804303496@linuxfoundation.org>
+Message-Id: <20220823080126.299999279@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyler Hicks <tyhicks@linux.microsoft.com>
+From: Josef Bacik <josef@toxicpanda.com>
 
-commit aa7aeee169480e98cf41d83c01290a37e569be6d upstream.
+commit 1314ca78b2c35d3e7d0f097268a2ee6dc0d369ef upstream.
 
-Ensure that the fid's iounit field is set to zero when a new fid is
-created. Certain 9P operations, such as OPEN and CREATE, allow the
-server to reply with an iounit size which the client code assigns to the
-p9_fid struct shortly after the fid is created by p9_fid_create(). On
-the other hand, an XATTRWALK operation doesn't allow for the server to
-specify an iounit value. The iounit field of the newly allocated p9_fid
-struct remained uninitialized in that case. Depending on allocation
-patterns, the iounit value could have been something reasonable that was
-carried over from previously freed fids or, in the worst case, could
-have been arbitrary values from non-fid related usages of the memory
-location.
+If you try to force a chunk allocation, but you race with another chunk
+allocation, you will end up waiting on the chunk allocation that just
+occurred and then allocate another chunk.  If you have many threads all
+doing this at once you can way over-allocate chunks.
 
-The bug was detected in the Windows Subsystem for Linux 2 (WSL2) kernel
-after the uninitialized iounit field resulted in the typical sequence of
-two getxattr(2) syscalls, one to get the size of an xattr and another
-after allocating a sufficiently sized buffer to fit the xattr value, to
-hit an unexpected ERANGE error in the second call to getxattr(2). An
-uninitialized iounit field would sometimes force rsize to be smaller
-than the xattr value size in p9_client_read_once() and the 9P server in
-WSL refused to chunk up the READ on the attr_fid and, instead, returned
-ERANGE to the client. The virtfs server in QEMU seems happy to chunk up
-the READ and this problem goes undetected there.
+Fix this by resetting force to NO_FORCE, that way if we think we need to
+allocate we can, otherwise we don't force another chunk allocation if
+one is already happening.
 
-Link: https://lkml.kernel.org/r/20220710141402.803295-1-tyhicks@linux.microsoft.com
-Fixes: ebf46264a004 ("fs/9p: Add support user. xattr")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-[tyhicks: Adjusted context due to:
- - Lack of fid refcounting introduced in v5.11 commit 6636b6dcc3db ("9p:
-   add refcount to p9_fid struct")
- - Difference in how buffer sizes are specified v5.16 commit
-   6e195b0f7c8e ("9p: fix a bunch of checkpatch warnings")
- - Reimplementation of the fidlist as an IDR in v4.19 commit
-   f28cdf0430fc ("9p: Replace the fidlist with an IDR")]
-Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+CC: stable@vger.kernel.org # 5.4+
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/9p/client.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ fs/btrfs/block-group.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -915,7 +915,7 @@ static struct p9_fid *p9_fid_create(stru
- 	unsigned long flags;
- 
- 	p9_debug(P9_DEBUG_FID, "clnt %p\n", clnt);
--	fid = kmalloc(sizeof(struct p9_fid), GFP_KERNEL);
-+	fid = kzalloc(sizeof(struct p9_fid), GFP_KERNEL);
- 	if (!fid)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -926,11 +926,9 @@ static struct p9_fid *p9_fid_create(stru
- 	}
- 	fid->fid = ret;
- 
--	memset(&fid->qid, 0, sizeof(struct p9_qid));
- 	fid->mode = -1;
- 	fid->uid = current_fsuid();
- 	fid->clnt = clnt;
--	fid->rdir = NULL;
- 	spin_lock_irqsave(&clnt->lock, flags);
- 	list_add(&fid->flist, &clnt->fidlist);
- 	spin_unlock_irqrestore(&clnt->lock, flags);
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -2938,6 +2938,7 @@ int btrfs_chunk_alloc(struct btrfs_trans
+ 			 * attempt.
+ 			 */
+ 			wait_for_alloc = true;
++			force = CHUNK_ALLOC_NO_FORCE;
+ 			spin_unlock(&space_info->lock);
+ 			mutex_lock(&fs_info->chunk_mutex);
+ 			mutex_unlock(&fs_info->chunk_mutex);
 
 

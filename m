@@ -2,143 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F53059E7D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D0B59E7C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244573AbiHWQrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S245352AbiHWQon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245632AbiHWQpm (ORCPT
+        with ESMTP id S244078AbiHWQoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:45:42 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6C9D074F;
-        Tue, 23 Aug 2022 07:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=oSSJjh3lqiw7ATgiat2qlcw21F100TaF8UUg9/PhsKM=; b=PLCMBUpUhdUUFIYhkO2W9sm7+e
-        M+IV4bx/t0DfCBog+Z5tVzN4UfGPBhSt5ftrDZk0UJIaf7unNoeLc7cRSX8DQTIeL59Xyfy4jAmau
-        SoJrmYAANwp6SKzxqpaYvTOawwtanYpM/Cth/5bwsDMSohHaXGrHNnWAqDEDPWOXg2Ms=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oQUxu-00EMFN-Mx; Tue, 23 Aug 2022 16:33:14 +0200
-Date:   Tue, 23 Aug 2022 16:33:14 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arun.Ramadoss@microchip.com
-Cc:     olteanv@gmail.com, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
-        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
-        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        Woojung.Huh@microchip.com, davem@davemloft.net
-Subject: Re: [RFC Patch net-next v2] net: dsa: microchip: lan937x: enable
- interrupt for internal phy link detection
-Message-ID: <YwTlKnpgMRp2Nugm@lunn.ch>
-References: <20220822092017.5671-1-arun.ramadoss@microchip.com>
- <YwOAxh7Bc12OornD@lunn.ch>
- <b1e66b49e8006bd7dcb3fd74d5185db807e5a9f6.camel@microchip.com>
+        Tue, 23 Aug 2022 12:44:21 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD199924D;
+        Tue, 23 Aug 2022 07:35:31 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1661265306tcjl87k1
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 23 Aug 2022 22:35:05 +0800 (CST)
+X-QQ-SSF: 0100000000200040B000B00A0000000
+X-QQ-FEAT: CR3LFp2JE4lsMi4y5SOOx7rBpqqJUbpxns7R41MYtoWzw4TkT6PbPgcsIBUjE
+        O8TFio6RF7CKukJ84ap9pCXYJY5T8cG4gl7EK2h2E8eCXnSy/qwHuqTNfGXxXoF68etUjIJ
+        eQLCETxxepsdSTYVMHKgc3RL7PFpXGVtTy4xCENlLdXNkG1G3k4jJ4CEyGq7xEvFYprp1NI
+        Ex9/SJrJGyhsVv8VUSUyi5jFhUOPMvAYVJaNb/a2m7BExWZvFId7SlBH+q7FG8uli+vGCE0
+        ozgy0Nyxswm0sD/mGYfodwQvGnomdcmDttJ3YPorprWx7pU2pS45mTC/IR2JtEYnbCFaET3
+        iX8Lihr7CIHZSs5lEgj84gAul56251ozxOUoxzv7+r+Tkwv1cSt6buVFUmW4g==
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] mmc/host: fix repeated words in comments
+Date:   Tue, 23 Aug 2022 22:34:59 +0800
+Message-Id: <20220823143459.27942-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1e66b49e8006bd7dcb3fd74d5185db807e5a9f6.camel@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I used the same gpio line number of switch as the interrupt for
-> internal phy. And when phy link up/down happens, it triggers both the
-> switch and phy interrupt routine.
+Delete the redundant word 'the'.
 
-Ah, shared interrupt. O.K.
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/mmc/host/sdhci-acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I have not used irq_domain before. Can you please brief on how phy
-> interrupt handler is called from chip.c & global2.
+diff --git a/drivers/mmc/host/sdhci-acpi.c b/drivers/mmc/host/sdhci-acpi.c
+index c0350e9c03f3..93fe6e5a5f9f 100644
+--- a/drivers/mmc/host/sdhci-acpi.c
++++ b/drivers/mmc/host/sdhci-acpi.c
+@@ -648,7 +648,7 @@ static int sdhci_acpi_emmc_amd_probe_slot(struct platform_device *pdev,
+ 	 *       in reading a garbage value and using the wrong presets.
+ 	 *
+ 	 *       Since HS400 and HS200 presets must be identical, we could
+-	 *       instead use the the SDR104 preset register.
++	 *       instead use the SDR104 preset register.
+ 	 *
+ 	 *    If the above issues are resolved we could remove this quirk for
+ 	 *    firmware that that has valid presets (i.e., SDR12 <= 12 MHz).
+-- 
+2.36.1
 
-There are two different ways this can all be glued together.
-
-Using irq_domain, each interrupt source becomes a full interrupt in
-Linux. You can see these individual interrupt sources in
-/proc/interrupts. You can use request_threaded_irq() on it. The
-mv88e6xxx driver is also an interrupt controller as well as an
-Ethernet switch.
-
-> The dts file I used for testing,
-> spi1: spi@f8008000 {
-> 	cs-gpios = <0>, <0>, <0>, <&pioC 28 0>;
-> 	id = <1>;
-> 	status = "okay";
-> 	
-> 	lan9370: lan9370@3 {
-> 		compatible = "microchip,lan9370";
-> 		reg = <3>;
-> 		spi-max-frequency = <44000000>;
-> 		interrupt-parent = <&pioB>;
-> 		interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
-> 		interrupt-controller;
-> 		status = "okay";
-> 		ports {
-> 			#address-cells = <1>;
-> 			#size-cells = <0>;
-> 			port@0 {
-> 				reg = <0x0>;
-> 				phy-handle = <&t1phy0>;
-> 				phy-mode = "internal";
-> 				label = "lan1";
-> 			};
-> 			port@1 {
-> 				reg = <0x1>;
-> 				phy-handle = <&t1phy1>;
-> 				phy-mode = "internal";
-> 				label = "lan2";
-> 			};
-> 		}
-> 	}
-> 
-> 	mdio {
-> 		#address-cells = <1>;
-> 		#size-cells = <0>;
-> 		compatible = "microchip,lan937x-mdio";
-> 		
-> 		t1phy0: ethernet-phy@0{
-> 			interrupt-parent = <&lan9370>;
-> 			interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
-
-So here you would use the interrupt number within the domain. Ideally
-you want port 0 to use interrupt 0.
-
-
-> 			reg = <0x0>;
-> 		};
-> 		t1phy1: ethernet-phy@1{
-> 			interrupt-parent = <&lan9370>;
-> 			interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
-
-and here port 1 uses interrupt 1.
-
-> 			reg = <0x1>;
-> 		};
-> 	}
-> }
- 
-You can see this for an Marvell switch here:
-
-https://elixir.bootlin.com/linux/latest/source/arch/arm/boot/dts/vf610-zii-dev-rev-b.dts#L93
-
-Doing it this way is however very verbose. I later discovered a short
-cut:
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/dsa/mv88e6xxx/global2.c#L1164
-
-by setting mdiobus->irq[] to the interrupt number, phylib will
-automatically use the correct interrupt without needing an DT.
-
-	Andrew

@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AB759EBD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92A759EC29
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiHWTIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
+        id S232697AbiHWTWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiHWTIJ (ORCPT
+        with ESMTP id S229547AbiHWTWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:08:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F0C13492A;
-        Tue, 23 Aug 2022 10:46:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 23 Aug 2022 15:22:03 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123671322F4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:03:02 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 5EB662A12D4;
+        Tue, 23 Aug 2022 18:03:01 +0000 (UTC)
+Received: from pdx1-sub0-mail-a212.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 30D362A1E7B;
+        Tue, 23 Aug 2022 18:02:59 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661277779; a=rsa-sha256;
+        cv=none;
+        b=1w1EdcQ371jtiZE5ssyXEy5vEAlE0ICcJTJV8VbDpfNJYJzTcpuKB3jYeINBGpjf0H+JwG
+        XK1lFBjmR5b2nGYq7CIL/qYlgIeQbNgXLs/jMToRKx4qSExoUbO4lAhMLOq7Ovfrnnh8Tq
+        vr/L4LKDjc+HM+Rv5O1M/gbeqSIuTh452Q+gXERoOOoQ2bXrCJU1i7Lec1rF1Dm37EzOXY
+        rV3V4liTFNjJ1KRMOLmFF0eEow8hn5jDwkj0Wchfo3nderlTGdK7QBW2nx9sc4pUpHppbk
+        XmBcehPbertTRB/z7MOda0G1aQnQt5hQ892i0KIxozOJ8ZZWZEtIFBoYrnwVwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661277779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=3YD8UxhoVF/0CdPFuuWxAVwema5lF831lGxRQpQLviU=;
+        b=slTNJFpEAUiEk5ksFEmllc9CiE+1z+ivdSgvW8/pWGv48GmPBdC+A/gzzTYicRchzTDI1t
+        8wiJoCsJQsket7hotSaTY0lHvJV6nWT+suHUPquY/pRY5S+uk/Fz02MMFcHikrY2Q91e8U
+        zpdLITawLPIsyi7ha/FMFWmCwH5Kulg1B7O1ReH8C5LF52qexAvTlSmcfK5YC6lqW/qIqR
+        RT5L/sDILAIwedeAKohmbR5aILSDrQGoQC6j+xnua6a8yIliJFs/noy2U0d1vw5RaSqZSm
+        4Ex4E5bfehNfChhAAea9/hGdTLqhZy0HIGUJTjJ6w6pSMY7EbqRd4ioovTZagA==
+ARC-Authentication-Results: i=1;
+        rspamd-79945fd77c-6r7td;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Trail-Rock: 109bada36d217795_1661277779684_1833396601
+X-MC-Loop-Signature: 1661277779684:3521180439
+X-MC-Ingress-Time: 1661277779683
+Received: from pdx1-sub0-mail-a212.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.120.38.149 (trex/6.7.1);
+        Tue, 23 Aug 2022 18:02:59 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 680B26160B;
-        Tue, 23 Aug 2022 17:44:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A80C433D7;
-        Tue, 23 Aug 2022 17:44:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661276661;
-        bh=Ul5bZ380er40qNxMbPejlJJeqU3zD3OVNwa3ZFt/HIo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C9zBoc5PKmp58NcyygnC6xcVGC6VM2MA3uszmJexg+uHCcrbJ0MX1lMzFwmLesHlz
-         FyEHsjikk6au2Q51Ryztu++WlzbTLWFOQttW01f5sdl4u/w6qhKnP37jnTixRrp9FL
-         zlq6bnHQk34Qgdy37OdQ2jU+xBnqn11n9AE4Gda2LQWQ+OWI/yOQntH6CxrgHvYo29
-         eF24dMainibdHMsjSWGg2yLcrDh2Th11zIOur+y7mpvgEm5aPFCPppIsgcelHHE1Kw
-         KaPt9GTdxxXJp6kjj4bwGYco5nwDZXlWK+ftIpqXKpQy+GcyhRDCpxBQmjl7OmtQUE
-         yzhWCDDAbKSaw==
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-33387bf0c4aso398390557b3.11;
-        Tue, 23 Aug 2022 10:44:21 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0SAp8HRqPvHP51DW/A8/QZsbSioXKA6PT4PMd34X3/PeIpSjTu
-        /Yx0FVBYNfx0s2aLXoZ3wSHXfLaufIT/aIEGJkA=
-X-Google-Smtp-Source: AA6agR79RaYtkRmNjikCF3kqnEzKZQ6FfCWzj8r6LytYF5P1bOwtbDnte6PXDP5blgsV1thflnHhQEUQ8ZFu0DZWeiA=
-X-Received: by 2002:a81:63c3:0:b0:323:ce27:4e4d with SMTP id
- x186-20020a8163c3000000b00323ce274e4dmr27052114ywb.472.1661276660744; Tue, 23
- Aug 2022 10:44:20 -0700 (PDT)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a212.dreamhost.com (Postfix) with ESMTPSA id 4MBxsV208vz1PZ;
+        Tue, 23 Aug 2022 11:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661277774;
+        bh=3YD8UxhoVF/0CdPFuuWxAVwema5lF831lGxRQpQLviU=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=dm4tTMhqjgm+Qp5pgxAZLTdXJKdLu6mY8mIPx+RBSiU1bEPQlqeLkHoiYcM8df0a0
+         OlIzzNOdxe2ZhZVEgkjcWJDHqv28283A8/VwJ/KUBTz8qE2MiHFGUiUaFJSbe129Qf
+         bYSR3OfjP/kUi53ck3AEf0DuTvxgB6B47x1E8l8UYnqdt9mk1+DA1m716YnEU9dypN
+         4W18xAMKwPQV9tV/Kq223SqH2RRD4AlXt+m1NphwDdDceUeWu07GVMLsf0a6rXpCi7
+         48tD/1LBlhPhOkrPCT0xTaxsruFL9RbDDmbm/6tDYAB0gBgpkq87j6ffRC/N48PdLh
+         KBTDFLjqkq89g==
+Date:   Tue, 23 Aug 2022 10:44:51 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v13 47/70] perf: use VMA iterator
+Message-ID: <20220823174451.lgdxhow6fkrdorva@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-48-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-References: <20220817092140.4252-1-xupengfei@nfschina.com>
-In-Reply-To: <20220817092140.4252-1-xupengfei@nfschina.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 23 Aug 2022 10:44:09 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW51y6dEVPs_WatXvXNnELk5UvvKkk8_kLrySUDP_OSUBA@mail.gmail.com>
-Message-ID: <CAPhsuW51y6dEVPs_WatXvXNnELk5UvvKkk8_kLrySUDP_OSUBA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] md/raid5: Fix spelling mistakes in comments
-To:     XU pengfei <xupengfei@nfschina.com>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220822150128.1562046-48-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 2:21 AM XU pengfei <xupengfei@nfschina.com> wrote:
->
-> Fix spelling of 'waitting' in comments.
->
-> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-Applied to md-next.
-
-Thanks,
-Song
-
-> ---
->  drivers/md/raid5-cache.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 >
-> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-> index f4e1cc1ece43..058d82e7fa13 100644
-> --- a/drivers/md/raid5-cache.c
-> +++ b/drivers/md/raid5-cache.c
-> @@ -1327,9 +1327,9 @@ static void r5l_write_super_and_discard_space(struct r5l_log *log,
->          * superblock is updated to new log tail. Updating superblock (either
->          * directly call md_update_sb() or depend on md thread) must hold
->          * reconfig mutex. On the other hand, raid5_quiesce is called with
-> -        * reconfig_mutex hold. The first step of raid5_quiesce() is waitting
-> -        * for all IO finish, hence waitting for reclaim thread, while reclaim
-> -        * thread is calling this function and waitting for reconfig mutex. So
-> +        * reconfig_mutex hold. The first step of raid5_quiesce() is waiting
-> +        * for all IO finish, hence waiting for reclaim thread, while reclaim
-> +        * thread is calling this function and waiting for reconfig mutex. So
->          * there is a deadlock. We workaround this issue with a trylock.
->          * FIXME: we could miss discard if we can't take reconfig mutex
->          */
-> --
-> 2.18.2
+>The VMA iterator is faster than the linked list and removing the linked
+>list will shrink the vm_area_struct.
 >
+>Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

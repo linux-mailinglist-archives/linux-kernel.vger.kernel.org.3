@@ -2,51 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893C459E452
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E2D59E414
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241747AbiHWM40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
+        id S242432AbiHWM4m convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 23 Aug 2022 08:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243434AbiHWMzy (ORCPT
+        with ESMTP id S241404AbiHWM4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:55:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7591123C86;
-        Tue, 23 Aug 2022 03:01:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D41C2B81B1F;
-        Tue, 23 Aug 2022 10:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC76C433D6;
-        Tue, 23 Aug 2022 10:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661248821;
-        bh=Fz6T4pAKdcT/lUNu0ZLLTw5HZ9Pw1Ljb7l2xDS0PqDs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZvWRv9ElvPtUtONa6pCmqOoCPE5jxjCqodHw6pYyZ3g7qngvm1rsmwpnMUjAQBrsQ
-         lEbe9GRcM+CbH9tn1nUD3Kj8iWgiWuy5qCOy4Yce5ir/PDJxfX8ltoInsqPR4R7cyT
-         NwkngEMtP45fGNVYG4Ii5iNBOw6Ety04hgHA4YfaCpqkx7pepE129QJH4tmK0iQMz4
-         5X0wGhILhQ4ofg1BZ4Bh/WuEmoY9C6Hq2rIezpPtYWSYQVd5aYWPycKg2vR+Cu4JcP
-         Z1QrrHyD8MwP1jdA9PeGYGe4rf8FvUjykrTpSfoKAX4kKpmBPyFWOvHKXrEqNVPR0a
-         aGoHFS71+difg==
-Date:   Tue, 23 Aug 2022 11:00:18 +0100
-From:   Filipe Manana <fdmanana@kernel.org>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] btrfs: fix use-after-free in btrfs_get_global_root
-Message-ID: <20220823100018.GA3180928@falcondesktop>
-References: <20220823015931.421355-1-yebin10@huawei.com>
+        Tue, 23 Aug 2022 08:56:12 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29846F57D;
+        Tue, 23 Aug 2022 03:01:10 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oQQi4-0003tG-BS; Tue, 23 Aug 2022 12:00:36 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     =?ISO-8859-1?Q?Jo=E3o_H=2E?= Spies <jhlspies@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: rockchip: Enhance support for IRQ_TYPE_EDGE_BOTH
+Date:   Tue, 23 Aug 2022 12:00:34 +0200
+Message-ID: <4242490.iIbC2pHGDl@diego>
+In-Reply-To: <CACRpkda6VoNjJfKY3+oCvdB+V6O_4cumKpjVSdBb9e8mEmHF6g@mail.gmail.com>
+References: <20220808025121.110223-1-jhlspies@gmail.com> <CACRpkda6VoNjJfKY3+oCvdB+V6O_4cumKpjVSdBb9e8mEmHF6g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823015931.421355-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,207 +45,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 09:59:31AM +0800, Ye Bin wrote:
-> Syzkaller reported UAF as follows:
-> ==================================================================
-> BUG: KASAN: use-after-free in btrfs_get_global_root+0x663/0xa10
-> Read of size 4 at addr ffff88811ddbb3c0 by task kworker/u16:1/11
+Am Montag, 22. August 2022, 11:03:08 CEST schrieb Linus Walleij:
+> On Mon, Aug 8, 2022 at 4:53 AM João H. Spies <jhlspies@gmail.com> wrote:
 > 
-> CPU: 4 PID: 11 Comm: kworker/u16:1 Not tainted 6.0.0-rc1-next-20220822+ #2
-> Workqueue: btrfs-qgroup-rescan btrfs_work_helper
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x6e/0x91
->  print_report.cold+0xb2/0x6bb
->  kasan_report+0xa8/0x130
->  kasan_check_range+0x13f/0x1d0
->  btrfs_get_global_root+0x663/0xa10
->  btrfs_get_fs_root_commit_root+0xa5/0x150
->  find_parent_nodes+0x92f/0x2990
->  btrfs_find_all_roots_safe+0x12d/0x220
->  btrfs_find_all_roots+0xbb/0xd0
->  btrfs_qgroup_rescan_worker+0x600/0xc30
->  btrfs_work_helper+0xff/0x750
->  process_one_work+0x52c/0x930
->  worker_thread+0x352/0x8c0
->  kthread+0x1b9/0x200
->  ret_from_fork+0x22/0x30
->  </TASK>
+> > Switching between falling/rising edges for IRQ_TYPE_EDGE_BOTH on pins that
+> > require debounce can cause the device to lose events due to a desync
+> > between pin state and irq type.
+> >
+> > This problem is resolved by switching between IRQ_TYPE_LEVEL_LOW and
+> > IRQ_TYPE_LEVEL_HIGH instead.
+> >
+> > Fixes: 936ee26 ("gpio/rockchip: add driver for rockchip gpio")
+> > Signed-off-by: João H. Spies <jhlspies@gmail.com>
 > 
-> Allocated by task 1895:
->  kasan_save_stack+0x1e/0x40
->  __kasan_kmalloc+0xa9/0xe0
->  btrfs_alloc_root+0x40/0x820
->  btrfs_create_tree+0xf8/0x500
->  btrfs_quota_enable+0x30a/0x1120
->  btrfs_ioctl+0x50a3/0x59f0
->  __x64_sys_ioctl+0x130/0x170
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Freed by task 1895:
->  kasan_save_stack+0x1e/0x40
->  kasan_set_track+0x21/0x30
->  kasan_set_free_info+0x20/0x40
->  __kasan_slab_free+0x127/0x1c0
->  kfree+0xa8/0x2d0
->  btrfs_put_root+0x1ca/0x230
->  btrfs_quota_enable+0x87c/0x1120
->  btrfs_ioctl+0x50a3/0x59f0
->  __x64_sys_ioctl+0x130/0x170
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> ==================================================================
-> 
-> Above issue may happens as follows:
->           p1                                  p2
-> btrfs_quota_enable
->   spin_lock(&fs_info->qgroup_lock);
->   fs_info->quota_root = quota_root;
->   spin_unlock(&fs_info->qgroup_lock);
-> 
->   ret = qgroup_rescan_init -> return error
->   if (ret)
->     btrfs_put_root(quota_root);
->      kfree(root);
-> 
->   if (ret) {
->    ulist_free(fs_info->qgroup_ulist);
->    fs_info->qgroup_ulist = NULL;
->    btrfs_sysfs_del_qgroups(fs_info);
->   }                                btrfs_qgroup_rescan_worker
->                                      btrfs_find_all_roots
-> 				       btrfs_find_all_roots_safe
-> 				         find_parent_nodes
-> 					   btrfs_get_fs_root_commit_root
-> 					     btrfs_grab_root(fs_info->quota_root)
-> 	                                  -> quota_root already freed
-> 
-> Syzkaller also reported another issue:
-> ==================================================================
-> BUG: KASAN: use-after-free in ulist_release+0x30/0xb3
-> Read of size 8 at addr ffff88811413d048 by task rep/2921
-> 
-> CPU: 3 PID: 2921 Comm: rep Not tainted 6.0.0-rc1-next-20220822+ #3
-> rep[2921] cmdline: ./rep
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x6e/0x91
->  print_report.cold+0xb2/0x6bb
->  kasan_report+0xa8/0x130
->  ulist_release+0x30/0xb3
->  ulist_reinit+0x16/0x56
->  btrfs_qgroup_free_refroot+0x288/0x3f0
->  btrfs_qgroup_free_meta_all_pertrans+0xed/0x1e0
->  commit_fs_roots+0x28c/0x430
->  btrfs_commit_transaction+0x9a6/0x1b40
->  btrfs_qgroup_rescan+0x7e/0x130
->  btrfs_ioctl+0x48ed/0x59f0
->  __x64_sys_ioctl+0x130/0x170
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  </TASK>
-> 
-> Allocated by task 2900:
->  kasan_save_stack+0x1e/0x40
->  __kasan_kmalloc+0xa9/0xe0
->  ulist_alloc+0x5c/0xe0
->  btrfs_quota_enable+0x1b2/0x1160
->  btrfs_ioctl+0x50a3/0x59f0
->  __x64_sys_ioctl+0x130/0x170
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Freed by task 2900:
->  kasan_save_stack+0x1e/0x40
->  kasan_set_track+0x21/0x30
->  kasan_set_free_info+0x20/0x40
->  __kasan_slab_free+0x127/0x1c0
->  kfree+0xa8/0x2d0
->  ulist_free.cold+0x15/0x1a
->  btrfs_quota_enable+0x8bf/0x1160
->  btrfs_ioctl+0x50a3/0x59f0
->  __x64_sys_ioctl+0x130/0x170
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> ==================================================================
-> 
-> To solve above issues just set 'fs_info->quota_root' after qgroup_rescan_init
-> return success.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/btrfs/qgroup.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
-> index db723c0026bd..16f0b038295a 100644
-> --- a/fs/btrfs/qgroup.c
-> +++ b/fs/btrfs/qgroup.c
-> @@ -1158,18 +1158,18 @@ int btrfs_quota_enable(struct btrfs_fs_info *fs_info)
->  	if (ret)
->  		goto out_free_path;
->  
-> -	/*
-> -	 * Set quota enabled flag after committing the transaction, to avoid
-> -	 * deadlocks on fs_info->qgroup_ioctl_lock with concurrent snapshot
-> -	 * creation.
-> -	 */
-> -	spin_lock(&fs_info->qgroup_lock);
-> -	fs_info->quota_root = quota_root;
-> -	set_bit(BTRFS_FS_QUOTA_ENABLED, &fs_info->flags);
-> -	spin_unlock(&fs_info->qgroup_lock);
-> -
->  	ret = qgroup_rescan_init(fs_info, 0, 1);
+> No reaction from maintainers so I'm just gonna assume this fix is
+> correct and applied for fixes.
 
-In addition to what I mentioned in the previous mail, this is also not
-correct because the qgroup_rescan_init() call will always fail if
-BTRFS_FS_QUOTA_ENABLED is not set (with an -EBUSY error).
+This plays with behavioral peculiarities of the gpio controller
+(using the level setting to hopefully prevent missing edge irqs),
+so doesn't follow
 
-Have you tested this at all? Every attempt to enable quotas will result
-in a -EBUSY being returned from the ioctl.
+So I guess it really is more of a wait-and-see. And I guess as João
+seems to have experienced that issue, that will hopefully work
+for others too.
 
-All we need is:
-
-diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
-index db723c0026bd..67818b2f316f 100644
---- a/fs/btrfs/qgroup.c
-+++ b/fs/btrfs/qgroup.c
-@@ -1174,6 +1174,17 @@ int btrfs_quota_enable(struct btrfs_fs_info *fs_info)
-                fs_info->qgroup_rescan_running = true;
-                btrfs_queue_work(fs_info->qgroup_rescan_workers,
-                                 &fs_info->qgroup_rescan_work);
-+       } else {
-+               /*
-+                * We have set both BTRFS_FS_QUOTA_ENABLED and
-+                * BTRFS_QGROUP_STATUS_FLAG_ON, so we can only fail with
-+                * -EINPROGRESS because someone started the rescan worker with
-+                * the ioctl before we attempted to initialize it.
-+                * Ignore such error, and any other error would need to undo
-+                * everything we did in the transaction we just committed.
-+                */
-+               ASSERT(ret == -EINPROGRESS);
-+               ret = 0;
-        }
- 
- out_free_path:
+Heiko
 
 
-
->  	if (!ret) {
-> +		/*
-> +		 * Set quota enabled flag after committing the transaction, to
-> +		 * avoid deadlocks on fs_info->qgroup_ioctl_lock with concurrent
-> +		 * snapshot creation.
-> +		 */
-> +		spin_lock(&fs_info->qgroup_lock);
-> +		fs_info->quota_root = quota_root;
-> +		set_bit(BTRFS_FS_QUOTA_ENABLED, &fs_info->flags);
-> +		spin_unlock(&fs_info->qgroup_lock);
-> +
->  	        qgroup_rescan_zero_tracking(fs_info);
->  		fs_info->qgroup_rescan_running = true;
->  	        btrfs_queue_work(fs_info->qgroup_rescan_workers,
-> -- 
-> 2.31.1
-> 

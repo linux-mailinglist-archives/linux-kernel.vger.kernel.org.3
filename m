@@ -2,230 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A5859E745
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECBC59E6E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244610AbiHWQ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S244234AbiHWQUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244584AbiHWQ24 (ORCPT
+        with ESMTP id S244396AbiHWQUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:28:56 -0400
-Received: from syslogsrv (unknown [217.20.186.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FBB11D50C;
-        Tue, 23 Aug 2022 05:56:17 -0700 (PDT)
-Received: from fg200.ow.s ([172.20.254.44] helo=localhost.localdomain)
-        by syslogsrv with esmtp (Exim 4.90_1)
-        (envelope-from <maksym.glubokiy@plvision.eu>)
-        id 1oQSGX-000FXN-SF; Tue, 23 Aug 2022 14:40:18 +0300
-From:   Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-To:     Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Serhiy Boiko <serhiy.boiko@plvision.eu>,
-        Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/3] net: prestera: add support for egress traffic mirroring
-Date:   Tue, 23 Aug 2022 14:39:57 +0300
-Message-Id: <20220823113958.2061401-3-maksym.glubokiy@plvision.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220823113958.2061401-1-maksym.glubokiy@plvision.eu>
-References: <20220823113958.2061401-1-maksym.glubokiy@plvision.eu>
+        Tue, 23 Aug 2022 12:20:11 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3711226F4E7;
+        Tue, 23 Aug 2022 05:40:15 -0700 (PDT)
+Received: from localhost.localdomain (unknown [125.160.110.187])
+        by gnuweeb.org (Postfix) with ESMTPSA id 6F285809CD;
+        Tue, 23 Aug 2022 11:46:06 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1661255169;
+        bh=iXY58qpE+3plE5TT69M+Y8nbwlXotZalLJMbvYrNNig=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Qv3cHjGppNT7LSVrgcgrEMrs1TOsZ1zxM8GN2ji1GFAB/JboqoWlDxamZe1dx+hgv
+         MyOqLlH3aGT9x/EPJgGc+FgYGjqoc6Fmei9YfT6HrSLvjV8KEbIIHX01eEE1zGgBSZ
+         psVPmFTKBJEmvf0Biii9zWL+rsTzP47KBAcvFupPQeqaKIKITTk1p3apO/0pgqTkJZ
+         V2I/zxmWWMadLnTiCobrbe0FZb4s3zYPxldxhDMW0M46usa3U35NoMaQKt/Zmqlxo2
+         tUBMvAwCb8L3twq+nXiMhLmR52ek+D4VFxy1+Cp7D/3jCA69foyN2LCwf+cSVr5ArN
+         /CBHxpqrtwukA==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Dylan Yudaken <dylany@fb.com>,
+        Facebook Kernel Team <kernel-team@fb.com>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>
+Subject: [PATCH 0/2] Maintainer and uapi header update
+Date:   Tue, 23 Aug 2022 18:45:47 +0700
+Message-Id: <20220823114337.2858669-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
-        HELO_NO_DOMAIN,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Serhiy Boiko <serhiy.boiko@plvision.eu>
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-This enables adding matchall rules for egress:
+Hi Jens,
 
-  tc filter add .. egress .. matchall skip_sw \
-    action mirred egress mirror dev ..
+There are two patches in this series.
 
-Signed-off-by: Serhiy Boiko <serhiy.boiko@plvision.eu>
-Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+1) MAINTAINERS: Add `include/linux/io_uring_types.h`.
+
+File include/linux/io_uring_types.h doesn't have a maintainer, add it
+to the io_uring section.
+
+2) io_uring: uapi: Add `extern "C"` in io_uring.h for liburing.
+
+On Tue, 28 Jun 2022 10:12:27 -0600, Jens Axboe wrote:
+> On 6/28/22 10:10 AM, Ammar Faizi wrote:
+>> Or better add that to the kernel tree as well, it won't break
+>> the kernel because we have a __cplusplus guard here.
+>> 
+>> Jens what do you think?
+>
+> It'd be nice to keep them fully in sync. If I recall correctly, the only
+> differences right now is that clause, and the change to not using a zero
+> sized array at the end of a struct (which is slated for the kernel too).
+
+^ Do that.
+
+Ref: https://lore.kernel.org/io-uring/f1feef16-6ea2-0653-238f-4aaee35060b6@kernel.dk
+
+Make it easy for liburing to integrate uapi header with the kernel.
+Previously, when this header changes, the liburing side can't directly
+copy this header file due to some small differences. Sync them.
+
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Dylan Yudaken <dylany@fb.com>
+Cc: Facebook Kernel Team <kernel-team@fb.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- .../ethernet/marvell/prestera/prestera_hw.c   | 30 ++++++++++++++-----
- .../ethernet/marvell/prestera/prestera_hw.h   |  5 ++--
- .../marvell/prestera/prestera_matchall.c      |  7 +++--
- .../ethernet/marvell/prestera/prestera_span.c | 10 ++++---
- .../ethernet/marvell/prestera/prestera_span.h |  6 ++--
- 5 files changed, 39 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_hw.c b/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-index e0e9ae34ceea..8430db3384f9 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-@@ -78,9 +78,11 @@ enum prestera_cmd_type_t {
- 	PRESTERA_CMD_TYPE_STP_PORT_SET = 0x1000,
- 
- 	PRESTERA_CMD_TYPE_SPAN_GET = 0x1100,
--	PRESTERA_CMD_TYPE_SPAN_BIND = 0x1101,
--	PRESTERA_CMD_TYPE_SPAN_UNBIND = 0x1102,
-+	PRESTERA_CMD_TYPE_SPAN_INGRESS_BIND = 0x1101,
-+	PRESTERA_CMD_TYPE_SPAN_INGRESS_UNBIND = 0x1102,
- 	PRESTERA_CMD_TYPE_SPAN_RELEASE = 0x1103,
-+	PRESTERA_CMD_TYPE_SPAN_EGRESS_BIND = 0x1104,
-+	PRESTERA_CMD_TYPE_SPAN_EGRESS_UNBIND = 0x1105,
- 
- 	PRESTERA_CMD_TYPE_POLICER_CREATE = 0x1500,
- 	PRESTERA_CMD_TYPE_POLICER_RELEASE = 0x1501,
-@@ -1432,27 +1434,39 @@ int prestera_hw_span_get(const struct prestera_port *port, u8 *span_id)
- 	return 0;
- }
- 
--int prestera_hw_span_bind(const struct prestera_port *port, u8 span_id)
-+int prestera_hw_span_bind(const struct prestera_port *port, u8 span_id,
-+			  bool ingress)
- {
- 	struct prestera_msg_span_req req = {
- 		.port = __cpu_to_le32(port->hw_id),
- 		.dev = __cpu_to_le32(port->dev_id),
- 		.id = span_id,
- 	};
-+	enum prestera_cmd_type_t cmd_type;
-+
-+	if (ingress)
-+		cmd_type = PRESTERA_CMD_TYPE_SPAN_INGRESS_BIND;
-+	else
-+		cmd_type = PRESTERA_CMD_TYPE_SPAN_EGRESS_BIND;
-+
-+	return prestera_cmd(port->sw, cmd_type, &req.cmd, sizeof(req));
- 
--	return prestera_cmd(port->sw, PRESTERA_CMD_TYPE_SPAN_BIND,
--			    &req.cmd, sizeof(req));
- }
- 
--int prestera_hw_span_unbind(const struct prestera_port *port)
-+int prestera_hw_span_unbind(const struct prestera_port *port, bool ingress)
- {
- 	struct prestera_msg_span_req req = {
- 		.port = __cpu_to_le32(port->hw_id),
- 		.dev = __cpu_to_le32(port->dev_id),
- 	};
-+	enum prestera_cmd_type_t cmd_type;
- 
--	return prestera_cmd(port->sw, PRESTERA_CMD_TYPE_SPAN_UNBIND,
--			    &req.cmd, sizeof(req));
-+	if (ingress)
-+		cmd_type = PRESTERA_CMD_TYPE_SPAN_INGRESS_UNBIND;
-+	else
-+		cmd_type = PRESTERA_CMD_TYPE_SPAN_EGRESS_UNBIND;
-+
-+	return prestera_cmd(port->sw, cmd_type, &req.cmd, sizeof(req));
- }
- 
- int prestera_hw_span_release(struct prestera_switch *sw, u8 span_id)
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_hw.h b/drivers/net/ethernet/marvell/prestera/prestera_hw.h
-index 56e043146dd2..a589450e9f27 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_hw.h
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_hw.h
-@@ -243,8 +243,9 @@ int prestera_hw_counter_clear(struct prestera_switch *sw, u32 block_id,
- 
- /* SPAN API */
- int prestera_hw_span_get(const struct prestera_port *port, u8 *span_id);
--int prestera_hw_span_bind(const struct prestera_port *port, u8 span_id);
--int prestera_hw_span_unbind(const struct prestera_port *port);
-+int prestera_hw_span_bind(const struct prestera_port *port, u8 span_id,
-+			  bool ingress);
-+int prestera_hw_span_unbind(const struct prestera_port *port, bool ingress);
- int prestera_hw_span_release(struct prestera_switch *sw, u8 span_id);
- 
- /* Router API */
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_matchall.c b/drivers/net/ethernet/marvell/prestera/prestera_matchall.c
-index 54573c6a6fe2..3fc13176e046 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_matchall.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_matchall.c
-@@ -43,7 +43,7 @@ int prestera_mall_replace(struct prestera_flow_block *block,
- 	port = netdev_priv(act->dev);
- 
- 	list_for_each_entry(binding, &block->binding_list, list) {
--		err = prestera_span_rule_add(binding, port);
-+		err = prestera_span_rule_add(binding, port, block->ingress);
- 		if (err)
- 			goto rollback;
- 	}
-@@ -53,7 +53,7 @@ int prestera_mall_replace(struct prestera_flow_block *block,
- rollback:
- 	list_for_each_entry_continue_reverse(binding,
- 					     &block->binding_list, list)
--		prestera_span_rule_del(binding);
-+		prestera_span_rule_del(binding, block->ingress);
- 	return err;
- }
- 
-@@ -62,5 +62,6 @@ void prestera_mall_destroy(struct prestera_flow_block *block)
- 	struct prestera_flow_block_binding *binding;
- 
- 	list_for_each_entry(binding, &block->binding_list, list)
--		prestera_span_rule_del(binding);
-+		prestera_span_rule_del(binding, block->ingress);
-+
- }
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_span.c b/drivers/net/ethernet/marvell/prestera/prestera_span.c
-index 766413b9ba1b..f0e9d6ea88c5 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_span.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_span.c
-@@ -121,7 +121,8 @@ static int prestera_span_put(struct prestera_switch *sw, u8 span_id)
- }
- 
- int prestera_span_rule_add(struct prestera_flow_block_binding *binding,
--			   struct prestera_port *to_port)
-+			   struct prestera_port *to_port,
-+			   bool ingress)
- {
- 	struct prestera_switch *sw = binding->port->sw;
- 	u8 span_id;
-@@ -135,7 +136,7 @@ int prestera_span_rule_add(struct prestera_flow_block_binding *binding,
- 	if (err)
- 		return err;
- 
--	err = prestera_hw_span_bind(binding->port, span_id);
-+	err = prestera_hw_span_bind(binding->port, span_id, ingress);
- 	if (err) {
- 		prestera_span_put(sw, span_id);
- 		return err;
-@@ -145,11 +146,12 @@ int prestera_span_rule_add(struct prestera_flow_block_binding *binding,
- 	return 0;
- }
- 
--int prestera_span_rule_del(struct prestera_flow_block_binding *binding)
-+int prestera_span_rule_del(struct prestera_flow_block_binding *binding,
-+			   bool ingress)
- {
- 	int err;
- 
--	err = prestera_hw_span_unbind(binding->port);
-+	err = prestera_hw_span_unbind(binding->port, ingress);
- 	if (err)
- 		return err;
- 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_span.h b/drivers/net/ethernet/marvell/prestera/prestera_span.h
-index 4958ce820b52..493b68524bcb 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_span.h
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_span.h
-@@ -16,7 +16,9 @@ int prestera_span_init(struct prestera_switch *sw);
- void prestera_span_fini(struct prestera_switch *sw);
- 
- int prestera_span_rule_add(struct prestera_flow_block_binding *binding,
--			   struct prestera_port *to_port);
--int prestera_span_rule_del(struct prestera_flow_block_binding *binding);
-+			   struct prestera_port *to_port,
-+			   bool ingress);
-+int prestera_span_rule_del(struct prestera_flow_block_binding *binding,
-+			   bool ingress);
- 
- #endif /* _PRESTERA_SPAN_H_ */
+Ammar Faizi (2):
+  MAINTAINERS: Add `include/linux/io_uring_types.h`
+  io_uring: uapi: Add `extern "C"` in io_uring.h for liburing
+
+ MAINTAINERS                   | 1 +
+ include/uapi/linux/io_uring.h | 8 ++++++++
+ 2 files changed, 9 insertions(+)
+
+
+base-commit: 3f743e9bbb8fe20f4c477e4bf6341c4187a4a264
 -- 
-2.25.1
+Ammar Faizi
 

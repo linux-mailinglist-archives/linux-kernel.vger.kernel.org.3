@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC7259DB56
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8A759DF41
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244015AbiHWL3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S1354762AbiHWKfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243051AbiHWLXV (ORCPT
+        with ESMTP id S1354176AbiHWKUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:23:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C676C101;
-        Tue, 23 Aug 2022 02:23:42 -0700 (PDT)
+        Tue, 23 Aug 2022 06:20:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58888AA;
+        Tue, 23 Aug 2022 02:02:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AED6C60F91;
-        Tue, 23 Aug 2022 09:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C1FC433C1;
-        Tue, 23 Aug 2022 09:23:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 025A0B81C52;
+        Tue, 23 Aug 2022 09:02:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51914C433D6;
+        Tue, 23 Aug 2022 09:02:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246621;
-        bh=GqRCdQk5gcrQtkUm0Jh9s9TsuaLzbGufsrzGeFlIiVM=;
+        s=korg; t=1661245332;
+        bh=2Q6uC91jPhXMNwvXTNlweCMJW7/Dv/kBwANwkf/4XXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o8zMx/iyUrjOAxJuqK9hYuxIwlwT4ncOd/9CFOBfUUrGWyHiRJMJYza2ODo3u6WVB
-         1V+Gl3KdpPLb6/QRiiZ5FISieLGSTi0XxWvsk6Kijj289GtebGDlNIfuDTOXjBfEnO
-         b1lghVpRGyAbF2hEn10/+NW/4CvTlvwyIliRsU0s=
+        b=bTju2G0HjjItM0Z01s9hb9DdRUOaQJb54GEL71ggj7UXipY5Uby3QUto6V0W2xa2K
+         qw+ItT3qg5k6aAaAhhmjEXjkSzlwMf0rBH0T7nciISerTXonw57fBtzV2lFeuJ0Szv
+         w1cm0Nu6jRYSG72NF/76jgpNx+YQ14NYBniF8kVc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 137/389] can: kvaser_usb_leaf: do not report txerr and rxerr during bus-off
+Subject: [PATCH 4.19 046/287] ARM: OMAP2+: display: Fix refcount leak bug
 Date:   Tue, 23 Aug 2022 10:23:35 +0200
-Message-Id: <20220823080121.328868318@linuxfoundation.org>
+Message-Id: <20220823080101.800771065@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit a57732084e06791d37ea1ea447cca46220737abd ]
+[ Upstream commit 50b87a32a79bca6e275918a711fb8cc55e16d739 ]
 
-During bus off, the error count is greater than 255 and can not fit in
-a u8.
+In omapdss_init_fbdev(), of_find_node_by_name() will return a node
+pointer with refcount incremented. We should use of_node_put() when
+it is not used anymore.
 
-Fixes: 7259124eac7d1 ("can: kvaser_usb: Split driver into kvaser_usb_core.c and kvaser_usb_leaf.c")
-Link: https://lore.kernel.org/all/20220719143550.3681-9-mailhol.vincent@wanadoo.fr
-CC: Jimmy Assarsson <extja@kvaser.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Liang He <windhl@126.com>
+Message-Id: <20220617145803.4050918-1-windhl@126.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm/mach-omap2/display.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index 0e0403dd0550..5e281249ad5f 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -857,8 +857,10 @@ static void kvaser_usb_leaf_rx_error(const struct kvaser_usb *dev,
- 		break;
- 	}
+diff --git a/arch/arm/mach-omap2/display.c b/arch/arm/mach-omap2/display.c
+index 5d73f2c0b117..dd2ff10790ab 100644
+--- a/arch/arm/mach-omap2/display.c
++++ b/arch/arm/mach-omap2/display.c
+@@ -211,6 +211,7 @@ static int __init omapdss_init_fbdev(void)
+ 	node = of_find_node_by_name(NULL, "omap4_padconf_global");
+ 	if (node)
+ 		omap4_dsi_mux_syscon = syscon_node_to_regmap(node);
++	of_node_put(node);
  
--	cf->data[6] = es->txerr;
--	cf->data[7] = es->rxerr;
-+	if (new_state != CAN_STATE_BUS_OFF) {
-+		cf->data[6] = es->txerr;
-+		cf->data[7] = es->rxerr;
-+	}
- 
- 	stats->rx_packets++;
- 	stats->rx_bytes += cf->can_dlc;
+ 	return 0;
+ }
 -- 
 2.35.1
 

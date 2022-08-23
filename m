@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00EE59E0F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E4459DF98
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358273AbiHWLrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S1353780AbiHWKPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358529AbiHWLmA (ORCPT
+        with ESMTP id S1352893AbiHWKG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:42:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E336CE32C;
-        Tue, 23 Aug 2022 02:29:35 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37928A460;
+        Tue, 23 Aug 2022 01:53:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3D3BB81C8B;
-        Tue, 23 Aug 2022 09:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D8AC433D6;
-        Tue, 23 Aug 2022 09:29:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93ACB611DD;
+        Tue, 23 Aug 2022 08:53:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FCBCC433D6;
+        Tue, 23 Aug 2022 08:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246972;
-        bh=UzHrVfXis4IWjX5ArX2hRghplCJ80F/NMD75HVyyG8w=;
+        s=korg; t=1661244809;
+        bh=WZrmzVPJBdBpw6UfrkbPuq4sZK3uUvd+tAu+0nNF+wo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fsOUmgTGJAkraYb2OjSNTzDiXXkZwRx1034q3MzRi6Ng8RUpL08/dFBOVFVLpgUIQ
-         hGSfdnUrBLAIaMbraO619BQxHGjzQuR4o7eB2ZnrmjjD3LZfI8+e3j840Ym9zyyYc6
-         SG5jHgzC/lCvOE1DxwXsn9om6WVLgH8+BKd2BsSY=
+        b=TkjziN5ReaDaR45VxPUrCgobgl2VmDvTnjNNpj4KGTpJpPomhkDqjd1A3irXPMUXB
+         QWRTQiBO7giSMftLoX+TQcukGJea6TbV4LqAv62sTLamss4oIOT9ArsEUHe039mHmh
+         rkJxwv/9mtreEt48XlBzKW7W1vjBvnQWrKjRAsYM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Ghinea <stefan.ghinea@windriver.com>
-Subject: [PATCH 5.4 278/389] KVM: x86: Check lapic_in_kernel() before attempting to set a SynIC irq
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 4.14 195/229] xen/xenbus: fix return type in xenbus_file_read()
 Date:   Tue, 23 Aug 2022 10:25:56 +0200
-Message-Id: <20220823080127.144141719@linuxfoundation.org>
+Message-Id: <20220823080100.609879614@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 7ec37d1cbe17d8189d9562178d8b29167fe1c31a upstream
+commit 32ad11127b95236dfc52375f3707853194a7f4b4 upstream.
 
-When KVM_CAP_HYPERV_SYNIC{,2} is activated, KVM already checks for
-irqchip_in_kernel() so normally SynIC irqs should never be set. It is,
-however,  possible for a misbehaving VMM to write to SYNIC/STIMER MSRs
-causing erroneous behavior.
+This code tries to store -EFAULT in an unsigned int.  The
+xenbus_file_read() function returns type ssize_t so the negative value
+is returned as a positive value to the user.
 
-The immediate issue being fixed is that kvm_irq_delivery_to_apic()
-(kvm_irq_delivery_to_apic_fast()) crashes when called with
-'irq.shorthand = APIC_DEST_SELF' and 'src == NULL'.
+This change forces another change to the min() macro.  Originally, the
+min() macro used "unsigned" type which checkpatch complains about.  Also
+unsigned type would break if "len" were not capped at MAX_RW_COUNT.  Use
+size_t for the min().  (No effect on runtime for the min_t() change).
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220325132140.25650-2-vkuznets@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
+Fixes: 2fb3683e7b16 ("xen: Add xenbus device driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Link: https://lore.kernel.org/r/YutxJUaUYRG/VLVc@kili
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/hyperv.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/xen/xenbus/xenbus_dev_frontend.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -309,6 +309,9 @@ static int synic_set_irq(struct kvm_vcpu
- 	struct kvm_lapic_irq irq;
- 	int ret, vector;
+--- a/drivers/xen/xenbus/xenbus_dev_frontend.c
++++ b/drivers/xen/xenbus/xenbus_dev_frontend.c
+@@ -125,7 +125,7 @@ static ssize_t xenbus_file_read(struct f
+ {
+ 	struct xenbus_file_priv *u = filp->private_data;
+ 	struct read_buffer *rb;
+-	unsigned i;
++	ssize_t i;
+ 	int ret;
  
-+	if (KVM_BUG_ON(!lapic_in_kernel(vcpu), vcpu->kvm))
-+		return -EINVAL;
-+
- 	if (sint >= ARRAY_SIZE(synic->sint))
- 		return -EINVAL;
+ 	mutex_lock(&u->reply_mutex);
+@@ -145,7 +145,7 @@ again:
+ 	rb = list_entry(u->read_buffers.next, struct read_buffer, list);
+ 	i = 0;
+ 	while (i < len) {
+-		unsigned sz = min((unsigned)len - i, rb->len - rb->cons);
++		size_t sz = min_t(size_t, len - i, rb->len - rb->cons);
+ 
+ 		ret = copy_to_user(ubuf + i, &rb->msg[rb->cons], sz);
  
 
 

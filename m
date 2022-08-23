@@ -2,116 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBDE59E5EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C6359E5E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241826AbiHWPXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S239673AbiHWPWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 11:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244744AbiHWPQP (ORCPT
+        with ESMTP id S235962AbiHWPVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:16:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2523B1D0D85
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:34:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661250772;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/7B7tsXp66/9aCmeuLAxDC7tXxat0QsJzIWKfv9VwQc=;
-        b=hopomMNDlOL4WxzqAhtFz8/GuK/d8Dxnt21+F4E3ZZZA2yWtB7jOkM8/udgVuHg8KNhMIi
-        nI/Vp+JnCoPE459Tu9bUvOO4JcX+G2K2B4NaaDa2yxfxEZFFQQxsdi9+GblsR5ffGO60yX
-        Lp10dLXTPVLNSyVa3CQMJfd4VLmTGmA=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-500-5K4sABfaORqWDyxRGvgR1g-1; Tue, 23 Aug 2022 06:32:51 -0400
-X-MC-Unique: 5K4sABfaORqWDyxRGvgR1g-1
-Received: by mail-pl1-f198.google.com with SMTP id x7-20020a170902ec8700b00172eaf25822so3511115plg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:32:51 -0700 (PDT)
+        Tue, 23 Aug 2022 11:21:34 -0400
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4803F1F762E
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:46:59 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id l1so18556665lfk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=CSfrhxT9VAnyJPjGSsK9FNWQxpzeB1/ysg0wyIKwNbo=;
+        b=o+1s4+z44hI/KKr1Dk4qJ+cnrbPWDs8HpV/rQFs3+CacWfFtNXfe9dRvuqwkZRw1kc
+         TbHlDRTcqTMkXvetmyrOJRl2dnEHtlVHiI/uo/qjVW9u8NexN9+2pO3bWk35B/ENgxbW
+         PuyaXqnI/SSRC6U+OAa0UKqeKmsWjGhgBlaDxpIAzd/pNZtq0pWCHTY3lRym0DhiuZcU
+         MEzvyxnEMTVFLDatcNczSPVgp6fbw7xKUfEq4R66aCk71Wu3cONBdxp6IuyaqMrlJ5T6
+         67b0sOLDYkPeo95GXojgq758B2zAOnGyFmq/dkizAnzzjanAQ7dUQPg0y9qY9CULa868
+         WH7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=/7B7tsXp66/9aCmeuLAxDC7tXxat0QsJzIWKfv9VwQc=;
-        b=xkzQFunCfxSzsQdW2H3bt42F/tbsLY9UGp/xSk8fYcjJ7LeMA3nc/sIJEwqxIyFluZ
-         oYp5j2yj0dy36tr1HyycHG48lchCoktiKcwFaZxHdq/WLRHSo7zj0w6iXK8GXpQY14Z5
-         CApENeCZX/3xYkf8FT2uSKw0E2joO1QuWsFAReVb1VfkTvw4G6sbbyubdRnVPFpg7YcB
-         1S6EacZ3Bt7hV0Juj589Z3OkLfa28ynGMbB/nTRYtHK3U2kK4DrVCY5wHPjstAxWktuv
-         SW6HiSmPey/fsXvxf303F54qIzzwyFq352dVVMNcTNN/w+rdnHT8JFjctAtkqV2vcNL1
-         HOLg==
-X-Gm-Message-State: ACgBeo2cv7vcv5+ZRkl0fVraBycmw6AT0KQy1cwqYUDFJW/ncEkaNWll
-        h+HfeEWnzfSpNlvWNf97GqSCtNQXDkc/kvS7tD64ISBXUgBVSU31WBARHBqBAW9Iug6sOW8KPqG
-        PzvTjR55GzpWrN4gMDfQ3xojb
-X-Received: by 2002:a17:90b:388e:b0:1fb:62c1:9cb7 with SMTP id mu14-20020a17090b388e00b001fb62c19cb7mr2376264pjb.207.1661250770091;
-        Tue, 23 Aug 2022 03:32:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6iUm2WmP1VFW5pKsIifzT1lsCFYmGmekjg+OIP+inBS9uOxw2yUraGZCxAbxxhzTwSWAiNsA==
-X-Received: by 2002:a17:90b:388e:b0:1fb:62c1:9cb7 with SMTP id mu14-20020a17090b388e00b001fb62c19cb7mr2376248pjb.207.1661250769833;
-        Tue, 23 Aug 2022 03:32:49 -0700 (PDT)
-Received: from xps13.. ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
-        by smtp.gmail.com with ESMTPSA id u6-20020a170902e5c600b0016d88dc7745sm10128914plf.259.2022.08.23.03.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 03:32:49 -0700 (PDT)
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     almaz.alexandrovich@paragon-software.com
-Cc:     ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Shigeru Yoshida <syoshida@redhat.com>,
-        syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
-Subject: [PATCH] fs/ntfs3: Fix memory leak on ntfs_fill_super() error path
-Date:   Tue, 23 Aug 2022 19:32:05 +0900
-Message-Id: <20220823103205.1380235-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CSfrhxT9VAnyJPjGSsK9FNWQxpzeB1/ysg0wyIKwNbo=;
+        b=RjDGlDPqbYxmNxHe5z1pSDClPewFblZ8caSnIk05vLdJFkIDYo77seUZwCR+Lh+S18
+         xjXQdKpRM+vPf4mCiV1lwVhC+CPP4KhN8Dz58ZnZSJTHUKr8C/oKRVrkH/h70E+zAhG3
+         Vd2Xl/euZdBAonMTs46RIIEeHvxrzRVVjBTfj9viOHqvzPmN3UqFwG+egOyck+VTNmTy
+         Q0A2vCIbhccYUluaw2C8KJWjCNTu69hpTZl9eD5IZdNsw3XbF/EVX/Qn61VDcevV0uws
+         ePeNtwdKKN3DhbWDAAOiWISP6ETszOTksm7m3kBOrT6X5dnh64QyNUZgtWHGWZU84OFK
+         NM8Q==
+X-Gm-Message-State: ACgBeo2PJIwqT/KiJ9MHkOnnkWyOYJlsnjFvTXOUfVeySfZUx3InJUTT
+        0kiHJGBfKBkgcj+5Vy7WIYOycg==
+X-Google-Smtp-Source: AA6agR4oA347epn9X35znOZfjzfSU5oXZ19wKjNx051aYhSs5BsqebDkkBZnPa3Fk9VNmwyv6D3b3w==
+X-Received: by 2002:a05:6512:1322:b0:492:de5b:dc3c with SMTP id x34-20020a056512132200b00492de5bdc3cmr3880326lfu.503.1661251242988;
+        Tue, 23 Aug 2022 03:40:42 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id t20-20020a2e8e74000000b0025e1ec74e25sm2300758ljk.43.2022.08.23.03.40.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 03:40:42 -0700 (PDT)
+Message-ID: <70ae25b9-0500-7539-d71f-52c685783554@linaro.org>
+Date:   Tue, 23 Aug 2022 13:40:40 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 1/6] dt-bindings: net: dsa: mediatek,mt7530: make
+ trivial changes
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <20220820080758.9829-1-arinc.unal@arinc9.com>
+ <20220820080758.9829-2-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220820080758.9829-2-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reported kmemleak as below:
+On 20/08/2022 11:07, Arınç ÜNAL wrote:
+> Make trivial changes on the binding.
+> 
+> - Update title to include MT7531 switch.
+> - Add me as a maintainer. List maintainers in alphabetical order by first
+> name.
+> - Add description to compatible strings.
+> - Stretch descriptions up to the 80 character limit.
+> - Remove quotes from $ref: "dsa.yaml#".
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 36 ++++++++++++-------
+>  1 file changed, 24 insertions(+), 12 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index 17ab6c69ecc7..edf48e917173 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -4,12 +4,13 @@
+>  $id: http://devicetree.org/schemas/net/dsa/mediatek,mt7530.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Mediatek MT7530 Ethernet switch
+> +title: Mediatek MT7530 and MT7531 Ethernet Switches
+>  
+>  maintainers:
+> -  - Sean Wang <sean.wang@mediatek.com>
+> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+>    - Landen Chao <Landen.Chao@mediatek.com>
+>    - DENG Qingfang <dqfext@gmail.com>
+> +  - Sean Wang <sean.wang@mediatek.com>
+>  
+>  description: |
+>    Port 5 of mt7530 and mt7621 switch is muxed between:
+> @@ -61,10 +62,21 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - mediatek,mt7530
+> -      - mediatek,mt7531
+> -      - mediatek,mt7621
+> +    oneOf:
+> +      - description:
+> +          Standalone MT7530 and multi-chip module MT7530 in MT7623AI SoC
+> +        items:
 
-BUG: memory leak
-unreferenced object 0xffff8880122f1540 (size 32):
-  comm "a.out", pid 6664, jiffies 4294939771 (age 25.500s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 ed ff ed ff 00 00 00 00  ................
-  backtrace:
-    [<ffffffff81b16052>] ntfs_init_fs_context+0x22/0x1c0
-    [<ffffffff8164aaa7>] alloc_fs_context+0x217/0x430
-    [<ffffffff81626dd4>] path_mount+0x704/0x1080
-    [<ffffffff81627e7c>] __x64_sys_mount+0x18c/0x1d0
-    [<ffffffff84593e14>] do_syscall_64+0x34/0xb0
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+You have one item, so don't make it a list. Just const:xxxxx
 
-This patch fixes this issue by freeing mount options on error path of
-ntfs_fill_super().
+Same in other places.
 
-Reported-by: syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- fs/ntfs3/super.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 47012c9bf505..c0e45f170701 100644
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -1281,6 +1281,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 	 * Free resources here.
- 	 * ntfs_fs_free will be called with fc->s_fs_info = NULL
- 	 */
-+	put_mount_options(sbi->options);
- 	put_ntfs(sbi);
- 	sb->s_fs_info = NULL;
- 
--- 
-2.37.2
-
+Best regards,
+Krzysztof

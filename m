@@ -2,110 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24E059EAFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBD859EAF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiHWS10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
+        id S231741AbiHWS12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiHWS1E (ORCPT
+        with ESMTP id S231446AbiHWS1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:27:04 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D018D3C8D5;
-        Tue, 23 Aug 2022 09:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661273180; x=1692809180;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dUi+7JqD+p5hV/9OPEqX43GBsNQ+YwFNKuWsnUPogWE=;
-  b=Cr8FcDMNZf0ZTbPp8fkFZC3IGufFEvOPJ5mU9by7AZzuRGZzZ27cL3O+
-   6HOIXGCelNZyG12bwIBOMW7ooezynAFZVRJ1spOGXk7WCnvFe4XjIakyu
-   e39LVu2CvfwDZoimrZjCy1FfvHxuCERTUeRvKzcO0+QAsb3V+ZtN5nYq3
-   xbXiVnDN1tg9UK8wPm1CPUI6PeBR4sj5Vq6L44S4pUhjmlY/8E4nGdDOh
-   Ln9kEGtle3Eve/ZbAEWWZZJI7+/gr+qskmNZotEzYbo4nEiSkRrP/29HV
-   u9ym5wZS1aIgahbrO+yD8RhwFhAMq1V9Q8UdSkTVTGudjZO7AoWk2KLY8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="280712546"
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="280712546"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 09:46:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="612470634"
-Received: from tdrohan-mobl1.amr.corp.intel.com (HELO [10.212.86.80]) ([10.212.86.80])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 09:46:19 -0700
-Message-ID: <905d3feb-f75b-e91c-f3de-b69718aa5c69@intel.com>
-Date:   Tue, 23 Aug 2022 09:46:19 -0700
+        Tue, 23 Aug 2022 14:27:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882B94CA13
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:47:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFFA3616EC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE086C43470;
+        Tue, 23 Aug 2022 16:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661273233;
+        bh=RIh85e4avEVrE67f7p7cpqft653q9Drb4EcgsFrnCKw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=TyTL6TuxDzfJTwlzoBVdx1ND/a+jcTAvLz79f/1sbW9v4k4BsNT5VApe1zQua9lPB
+         tmkDcEWXTjQ58liHeUf7VMoK4rqd+lUCcGN9kA750Gak6lvDGfZgP//TxmjOncRy4/
+         2OfXSCc23Nx/o7pLd1Mu5qokBF+467aFsis/56Ki+js1HGZvAohJhc/PcaNdWPICZQ
+         c50K08dAsryvbm0r54JuOxMRWDYphBtXpTjT6oHwVS0eKHpdvMK47nTrv3q/0cRWx3
+         bJkYpSpmjXuGdT5SgGpHdZWC1MDLj1uPgCEbpOopMACRB0tmne1Y4VjMNSO2K0pil/
+         x0QPRq2WBZndQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        andy.shevchenko@gmail.com, rafael@kernel.org, jic23@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     kernel <kernel@sberdevices.ru>, linux-kernel@vger.kernel.org
+In-Reply-To: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk operations
+Message-Id: <166127323148.445898.2568312423434118605.b4-ty@kernel.org>
+Date:   Tue, 23 Aug 2022 17:47:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.12.0
-Subject: Re: [PATCH v2] dmaengine: idxd: avoid deadlock in
- process_misc_interrupts()
-Content-Language: en-US
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org
-References: <20220823162435.2099389-1-jsnitsel@redhat.com>
- <20220823163709.2102468-1-jsnitsel@redhat.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220823163709.2102468-1-jsnitsel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-0c1df
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 16 Aug 2022 18:14:48 +0000, Dmitry Rokosov wrote:
+> Currently, only one-register io operations support tracepoints with
+> value logging. For the regmap bulk operations developer can view
+> hw_start/hw_done tracepoints with starting reg number and registers
+> count to be reading or writing. This patch injects tracepoints with
+> dumping registers values in the hex format to regmap bulk reading
+> and writing.
+> 
+> [...]
 
-On 8/23/2022 9:37 AM, Jerry Snitselaar wrote:
-> idxd_device_clear_state() now grabs the idxd->dev_lock
-> itself, so don't grab the lock prior to calling it.
->
-> This was seen in testing after dmar fault occurred on system,
-> resulting in lockup stack traces.
->
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: dmaengine@vger.kernel.org
-> Fixes: cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on device driver removal")
-> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Applied to
 
-Thanks Jerry!
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Thanks!
 
-> ---
-> v2: add Fixes tag, and add subsystem to summary
->
->   drivers/dma/idxd/irq.c | 2 --
->   1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
-> index 743ead5ebc57..5b9921475be6 100644
-> --- a/drivers/dma/idxd/irq.c
-> +++ b/drivers/dma/idxd/irq.c
-> @@ -324,13 +324,11 @@ static int process_misc_interrupts(struct idxd_device *idxd, u32 cause)
->   			idxd->state = IDXD_DEV_HALTED;
->   			idxd_wqs_quiesce(idxd);
->   			idxd_wqs_unmap_portal(idxd);
-> -			spin_lock(&idxd->dev_lock);
->   			idxd_device_clear_state(idxd);
->   			dev_err(&idxd->pdev->dev,
->   				"idxd halted, need %s.\n",
->   				gensts.reset_type == IDXD_DEVICE_RESET_FLR ?
->   				"FLR" : "system reset");
-> -			spin_unlock(&idxd->dev_lock);
->   			return -ENXIO;
->   		}
->   	}
+[1/1] regmap: introduce value tracing for regmap bulk operations
+      commit: 026c99b508f060d3c85fda06b21e010683ef5590
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

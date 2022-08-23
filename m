@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA7E59D779
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D218559D72E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351385AbiHWJjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S243363AbiHWJlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351346AbiHWJie (ORCPT
+        with ESMTP id S242879AbiHWJj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:38:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CF05E314;
-        Tue, 23 Aug 2022 01:40:54 -0700 (PDT)
+        Tue, 23 Aug 2022 05:39:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC23322BC2;
+        Tue, 23 Aug 2022 01:41:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A95F5B81C6F;
-        Tue, 23 Aug 2022 08:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0410BC433C1;
-        Tue, 23 Aug 2022 08:40:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B57E614E7;
+        Tue, 23 Aug 2022 08:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3EEC433C1;
+        Tue, 23 Aug 2022 08:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244005;
-        bh=iEBNwJXJZXuq4CJ5XN0UuXtBxokmOgf2OI7wZs/yPh0=;
+        s=korg; t=1661244017;
+        bh=791j+2hWy8TOd/D1gDSC01GR07M5nk56qoSUdhg5FAU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WgD3iZcBL56SbHwBFWqaXL8O6y3MdQEKO9kebGEqVbT0P3dUeyK6Q8ClTKfAlG+q4
-         jO3yfErGSKCp89ywNzQVyDtlkCY+9e3Ivdx3/Otem8mBQK7sKTFC+9NFGYTrm07kHT
-         PC4wpBwuE1V3Oc5n9yjxOF3NEHbvaB8EEofzx89I=
+        b=VIh6GOuSr/7lKgPKH3szZshSvRy3n0eQBEBGdRimYKCEvF4bYP8NrlrzKgWNShkXK
+         T0dFkQ2OTaKe8FVejq0FzxP9uqJhpPEQrcuXZip7ijxrUChUhRGOse3hRfYTppco4E
+         aEmnBAGZ2TH+NmRdEF389Tdv4unUilRMQDoCm3uk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        John Stultz <jstultz@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 071/229] media: platform: mtk-mdp: Fix mdp_ipi_comm structure alignment
-Date:   Tue, 23 Aug 2022 10:23:52 +0200
-Message-Id: <20220823080056.265603348@linuxfoundation.org>
+Subject: [PATCH 4.14 073/229] selftests: timers: valid-adjtimex: build fix for newer toolchains
+Date:   Tue, 23 Aug 2022 10:23:54 +0200
+Message-Id: <20220823080056.336287734@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -60,55 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[ Upstream commit ab14c99c035da7156a3b66fa171171295bc4b89a ]
+[ Upstream commit 9a162977d20436be5678a8e21a8e58eb4616d86a ]
 
-The mdp_ipi_comm structure defines a command that is either
-PROCESS (start processing) or DEINIT (destroy instance); we
-are using this one to send PROCESS or DEINIT commands from Linux
-to an MDP instance through a VPU write but, while the first wants
-us to stay 4-bytes aligned, the VPU instead requires an 8-bytes
-data alignment.
+Toolchains with an include file 'sys/timex.h' based on 3.18 will have a
+'clock_adjtime' definition added, so it can't be static in the code:
 
-Keeping in mind that these commands are executed immediately
-after sending them (hence not chained with others before the
-VPU/MDP "actually" start executing), it is fine to simply add
-a padding of 4 bytes to this structure: this keeps the same
-performance as before, as we're still stack-allocating it,
-while avoiding hackery inside of mtk-vpu to ensure alignment
-bringing a definitely bigger performance impact.
+valid-adjtimex.c:43:12: error: static declaration of ‘clock_adjtime’ follows non-static declaration
 
-Fixes: c8eb2d7e8202 ("[media] media: Add Mediatek MDP Driver")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
-Reviewed-by: Irui Wang <irui.wang@mediatek.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: e03a58c320e1 ("kselftests: timers: Add adjtimex SETOFFSET validity tests")
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: John Stultz <jstultz@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/timers/valid-adjtimex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h b/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h
-index 78e2cc0dead1..4f4a51dd48e1 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h
-@@ -48,12 +48,14 @@ struct mdp_ipi_init {
-  * @ipi_id        : IPI_MDP
-  * @ap_inst       : AP mtk_mdp_vpu address
-  * @vpu_inst_addr : VPU MDP instance address
-+ * @padding       : Alignment padding
-  */
- struct mdp_ipi_comm {
- 	uint32_t msg_id;
- 	uint32_t ipi_id;
- 	uint64_t ap_inst;
- 	uint32_t vpu_inst_addr;
-+	uint32_t padding;
- };
+diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
+index 5397de708d3c..48b9a803235a 100644
+--- a/tools/testing/selftests/timers/valid-adjtimex.c
++++ b/tools/testing/selftests/timers/valid-adjtimex.c
+@@ -40,7 +40,7 @@
+ #define ADJ_SETOFFSET 0x0100
  
- /**
+ #include <sys/syscall.h>
+-static int clock_adjtime(clockid_t id, struct timex *tx)
++int clock_adjtime(clockid_t id, struct timex *tx)
+ {
+ 	return syscall(__NR_clock_adjtime, id, tx);
+ }
 -- 
 2.35.1
 

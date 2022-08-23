@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27A259CFCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 06:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BA559CFCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 06:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiHWEJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 00:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        id S234590AbiHWELc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 00:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiHWEJg (ORCPT
+        with ESMTP id S229767AbiHWELa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 00:09:36 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF6258094;
-        Mon, 22 Aug 2022 21:09:35 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 94B285C0182;
-        Tue, 23 Aug 2022 00:09:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 23 Aug 2022 00:09:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1661227772; x=
-        1661314172; bh=3iYVwXs2ZaQeRDzt5GIWfO2EwoODMlIdh2IIQdfaJPA=; b=d
-        Chl1V6zNcUEdRSQa5E4Po55JmarqA/l3c4yUWqFWXjK44UbNLJKlgtXXtuTfc2q1
-        Ot/wExRoHlGzQjIAn5PTa5OapTYw9fUznjrbgsRcZZg+1S5BjXXN/4+ZeWdd3ha8
-        qHvDIyC/zCJNOENzzw2ccJefs935uwYfwthi5+ij1V8XZ3Yu/Njv1CmqImaLlMco
-        u6iN9jhZU0GM7L4NXuVwJN1EigfNyrXnOpwCnEtLiZEwGtNZqnSv3Jmp5PfmbtHr
-        yus5W/sH0Le+edoJWcRQIberIyI8RAsN8xpMijIk/a7VV69mxNHu1KKQd6w2aqPs
-        ZmDvUgUu2PG4+CJ7eQ4Mg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661227772; x=
-        1661314172; bh=3iYVwXs2ZaQeRDzt5GIWfO2EwoODMlIdh2IIQdfaJPA=; b=p
-        HQ6XEhfoZYGjGcXcLtZPLwMOjESOaSSD3oCFXmqgZRGd/7PlV4WZjgGbA3hbXRN3
-        LOXQ1LyXTdOtKY7O/6Va3L/A1PM1Rkn8Qd1mZ9mcelqDSJJzBnkw0a0X6uNKTSvN
-        vPVwbdLgOBScw43jHjP2y4ajcJJtNb51K6Jh2236ox88qOnP9TEb/JXN5MOJIxLq
-        8ZY96c9IgC9tGZAMABzv6Xz/SagTml+8RLZeu08QhN/XUlufvSN5nZYH2f6Y95pG
-        K4jpRFRAnt80iKz0rZlpqVbkuaDB580NdsNUd1FO5HhgUlO6MWNqxReVoEFmEbOZ
-        zRpkYp99+48r2+Mg5X8FA==
-X-ME-Sender: <xms:-1IEYySi-ZnrFDFViivbgcDFKv6n__zU952PfXKSEpoGipUcusVvVQ>
-    <xme:-1IEY3x9HNA8rTJjV-PYLI6uDqvtozR9iuZpOglWFSKBalbHbMdOiUORpkiS_pAPL
-    Aw7rGC9Ie5mURPsHg>
-X-ME-Received: <xmr:-1IEY_0tj2L6z2w57R01YjyPpdayRPzC8HNVv3cq14hU6jnCwEhUgKWF9aBpToC7Wnhewn76STk8JlwMlM4JEJK0tkOtcOSVZ-qpwjpS_9rhV6rHfdsr_MVTBw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeikedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:-1IEY-BOZ6oik9UxcOXs0_qRl8psZq-1Mvoxxse2dklCUkisUOTL0Q>
-    <xmx:-1IEY7iZnZES6vbs5SSNo-K-q-1_Q0RNJV5wUjRxKlyW1qTGkeBqNQ>
-    <xmx:-1IEY6pfvF5CfvMs9lVMAljOX3Wz9rVlAAI3BSV5BJXWVGyBz1UMUw>
-    <xmx:_FIEY7he0F4Llmvb7iB1iJxbfeh2Ol7DtVOOV0onKbq-2ZPoTqYltw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 23 Aug 2022 00:09:31 -0400 (EDT)
-Subject: Re: [PATCH] pinctrl: sunxi: Fix name for A100 R_PIO
-To:     Michael Wu <michael@allwinnertech.com>, linus.walleij@linaro.org,
-        wens@csie.org, jernej.skrabec@gmail.com, mripard@kernel.org
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220819024541.74191-1-michael@allwinnertech.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <9d389ff6-5601-7a7b-3341-eb624d624ff9@sholland.org>
-Date:   Mon, 22 Aug 2022 23:09:30 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 23 Aug 2022 00:11:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5504458537
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 21:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661227889; x=1692763889;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kIniq2gMsd4t/dzZOBa0ZSAI/IfeA9ECNffGoHZEh+U=;
+  b=FoSq0LgJvkmmsCA1QdJvjc1ltR96mVvWVZJK71lmpnN/al6hDSk6zPWH
+   f5JuSDbOUG5lu/epD1iy2nudETnZjH2qbYreFYG3ZGEzwyXkd24HgWgFT
+   W0dys1YWhwOX2fi42Uc2BjhLMKpu9gEmS8Q/elgP2JSRbYLKUPHB6suaM
+   23k+xc/LT9eHvFnR9+VUqfBC9ofqj50JZLmSX3qBzxZGB+pA36Fh6CEa+
+   TwByz2+VDhkWzEAYS2tgPf9FJp+GHzP31Yd5UAWBj8XzP4b8o9vU4tk49
+   RFGDptxN08QFVBUfkDPfp4qtal/0lR+CgZdbC4rOtUuh24kkRNjVEcFVZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="292327538"
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="292327538"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 21:11:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="638488195"
+Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Aug 2022 21:11:28 -0700
+Received: from kbuild by dd9b29378baa with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQLGB-00019r-1B;
+        Tue, 23 Aug 2022 04:11:27 +0000
+Date:   Tue, 23 Aug 2022 12:10:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:pr/46 28/34] sound/soc/codecs/tas2764.c:647:34: warning:
+ array 'tas2764_of_match' assumed to have one element
+Message-ID: <202208231248.bx78rX6E-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220819024541.74191-1-michael@allwinnertech.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 9:45 PM, Michael Wu wrote:
-> The name of A100 R_PIO driver should be sun50i-a100-r-pinctrl,
-> not sun50iw10p1-r-pinctrl.
-> 
-> Fixes: 473436e7647d6 ("pinctrl: sunxi: add support for the Allwinner A100 pin controller")
-> 
-> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+tree:   https://github.com/AsahiLinux/linux pr/46
+head:   5952de58993c87e5e5797ac37ef4f7364ac5ef37
+commit: a29452b8c6f8d669e74cb8ae15d77d1a9a4bb261 [28/34] ASoC: tas2764: Extend driver to SN012776
+config: ia64-randconfig-r016-20220821 (https://download.01.org/0day-ci/archive/20220823/202208231248.bx78rX6E-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/a29452b8c6f8d669e74cb8ae15d77d1a9a4bb261
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux pr/46
+        git checkout a29452b8c6f8d669e74cb8ae15d77d1a9a4bb261
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash sound/soc/codecs/
 
-Acked-by: Samuel Holland <samuel@sholland.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/tas2764.c:647:34: warning: array 'tas2764_of_match' assumed to have one element
+     647 | static const struct of_device_id tas2764_of_match[];
+         |                                  ^~~~~~~~~~~~~~~~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+   Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
+   Selected by [y]:
+   - QCOM_RPMPD [=y] && PM [=y] && QCOM_SMD_RPM [=y]
+
+
+vim +/tas2764_of_match +647 sound/soc/codecs/tas2764.c
+
+   646	
+ > 647	static const struct of_device_id tas2764_of_match[];
+   648	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

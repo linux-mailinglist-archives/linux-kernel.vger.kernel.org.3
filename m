@@ -2,218 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7020A59D222
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31ED59D18E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240944AbiHWH3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
+        id S240375AbiHWGzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 02:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240747AbiHWH3L (ORCPT
+        with ESMTP id S231491AbiHWGzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:29:11 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630DBF7F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:29:10 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso13751883pjo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=6rjKjGvWfH7qaw/ThpAgdUKhPt+rDOn01TCeIlQWtMc=;
-        b=igzpi2isTqn0rnLieyXZehZ9y9gWabYQpEXz/VME7rt6M9Upzet8DvOxHa+/y3tN1Q
-         VtbtWpC02+1jMXLZwsEThVobeCOo+nH+jFW6xlyVm6AUgiEqCcB/FQ2JZwiuEPXhNYIK
-         6m13CW79f7kYvP7gZMLIJOegwKvu93/97B4ZQ26ZR4afr18/a183hYFCmtsupE8InmUX
-         IscICRzaDAYREWw18jTlvShCQXN7iSc1eJcd6DCcqU4SGt4yOmYwZ2MdEWhWI1mHXB4r
-         r9j+Hu//FFIhRBdypWnY8XB2vNkmw1ZYj56tBgNA8iCaOrSiLlLBr4wTKTv1hDItpMBQ
-         3WNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=6rjKjGvWfH7qaw/ThpAgdUKhPt+rDOn01TCeIlQWtMc=;
-        b=DQgI9CYgTAmxaKKPCvu4ieTN4FOiuXe2L4KyK7bbj9/HYQC7h6sFiErzBQH5BPVu/t
-         ae0ORbH+IMlemgllpgJcMGhaP0NqJUHln7uRoNM/zpAcD2oc+8+3ibNc3SV9B+uZrD4Y
-         XBpNORjyEmzEzFvEZh+fan2KxYSh2uDZc6z3Fb9q8CW0vM51cdCm3A1XUVCRo0qdaqN/
-         SXAb27szs7Auxw5nLixm4jF69m6WbEILVUzdOSMT+165/pa5oc6FFn8stBONo5UxsA6z
-         hLuFmXLdBKx4UlBnQXQ8bgk4agH6auiL/LYs8sF9HWRzs/guYIay/kHe9Cbu/8A/vXIF
-         Ki4A==
-X-Gm-Message-State: ACgBeo1N75rILSy+KvW+RU++0QGrUx69oiFIkHY//gzBrPI5o57rP13i
-        FRQKjrd8jG2Rqmwtr6xIeyJ0bn+DNA==
-X-Google-Smtp-Source: AA6agR6sZGbcyq2RGcimTyVnDjXZPFOs//AbCSv0fe5nKjuBhCK9Q7MfHhtJfYI8o6wz19AjBO+Ltw==
-X-Received: by 2002:a17:902:c40e:b0:172:dee4:882e with SMTP id k14-20020a170902c40e00b00172dee4882emr10868781plk.11.1661239749861;
-        Tue, 23 Aug 2022 00:29:09 -0700 (PDT)
-Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b0016be527753bsm1728502plg.264.2022.08.23.00.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 00:29:09 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 15:29:01 +0800
-From:   Pingfan Liu <kernelfans@gmail.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Price <steven.price@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [RFC 07/10] lib/cpumask: Introduce cpumask_not_dying_but()
-Message-ID: <YwSBvQtxjy8I7bp9@piliu.users.ipa.redhat.com>
-References: <20220822021520.6996-1-kernelfans@gmail.com>
- <20220822021520.6996-8-kernelfans@gmail.com>
- <YwOPkc1cpoD/hs2D@yury-laptop>
+        Tue, 23 Aug 2022 02:55:01 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E771C939
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:54:59 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MBg065l5lznTmP;
+        Tue, 23 Aug 2022 14:52:38 +0800 (CST)
+Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 14:54:38 +0800
+Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
+ (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 23 Aug
+ 2022 14:54:37 +0800
+From:   shangxiaojing <shangxiaojing@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>, <cj.chengjian@huawei.com>
+Subject: [PATCH -next] sched: Add dequeue_and_put_task and enqueue_and_set_task helper
+Date:   Tue, 23 Aug 2022 15:29:47 +0800
+Message-ID: <20220823072947.16720-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwOPkc1cpoD/hs2D@yury-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600008.china.huawei.com (7.193.23.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 07:15:45AM -0700, Yury Norov wrote:
-> On Mon, Aug 22, 2022 at 10:15:17AM +0800, Pingfan Liu wrote:
-> > During cpu hot-removing, the dying cpus are still in cpu_online_mask.
-> > On the other hand, A subsystem will migrate its broker from the dying
-> > cpu to a online cpu in its teardown cpuhp_step.
-> > 
-> > After enabling the teardown of cpus in parallel, cpu_online_mask can not
-> > tell those dying from the real online.
-> > 
-> > Introducing a function cpumask_not_dying_but() to pick a real online
-> > cpu.
-> > 
-> > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> > Cc: Yury Norov <yury.norov@gmail.com>
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Steven Price <steven.price@arm.com>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> > Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> > To: linux-kernel@vger.kernel.org
-> > ---
-> >  include/linux/cpumask.h |  3 +++
-> >  kernel/cpu.c            |  3 +++
-> >  lib/cpumask.c           | 18 ++++++++++++++++++
-> >  3 files changed, 24 insertions(+)
-> > 
-> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > index 0d435d0edbcb..d2033a239a07 100644
-> > --- a/include/linux/cpumask.h
-> > +++ b/include/linux/cpumask.h
-> > @@ -317,6 +317,9 @@ unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
-> >  	return i;
-> >  }
-> >  
-> > +/* for parallel kexec reboot */
-> > +int cpumask_not_dying_but(const struct cpumask *mask, unsigned int cpu);
-> > +
-> >  #define CPU_BITS_NONE						\
-> >  {								\
-> >  	[0 ... BITS_TO_LONGS(NR_CPUS)-1] = 0UL			\
-> > diff --git a/kernel/cpu.c b/kernel/cpu.c
-> > index 90debbe28e85..771e344f8ff9 100644
-> > --- a/kernel/cpu.c
-> > +++ b/kernel/cpu.c
-> > @@ -1282,6 +1282,9 @@ static void cpus_down_no_rollback(struct cpumask *cpus)
-> >  	struct cpuhp_cpu_state *st;
-> >  	unsigned int cpu;
-> >  
-> > +	for_each_cpu(cpu, cpus)
-> > +		set_cpu_dying(cpu, true);
-> > +
-> >  	/* launch ap work one by one, but not wait for completion */
-> >  	for_each_cpu(cpu, cpus) {
-> >  		st = per_cpu_ptr(&cpuhp_state, cpu);
-> > diff --git a/lib/cpumask.c b/lib/cpumask.c
-> > index 8baeb37e23d3..6474f07ed87a 100644
-> > --- a/lib/cpumask.c
-> > +++ b/lib/cpumask.c
-> > @@ -7,6 +7,24 @@
-> >  #include <linux/memblock.h>
-> >  #include <linux/numa.h>
-> >  
-> > +/* Used in parallel kexec-reboot cpuhp callbacks */
-> > +int cpumask_not_dying_but(const struct cpumask *mask,
-> > +					   unsigned int cpu)
-> > +{
-> > +	unsigned int i;
-> > +
-> > +	if (CONFIG_SHUTDOWN_NONBOOT_CPUS) {
-> 
-> Hmm... Would it even work? Anyways, the documentation says:
-> Within code, where possible, use the IS_ENABLED macro to convert a Kconfig
-> symbol into a C boolean expression, and use it in a normal C conditional:
-> 
-> .. code-block:: c
-> 
->         if (IS_ENABLED(CONFIG_SOMETHING)) {
->                 ...
->         }
-> 
+Wrap repeated code in helper functions dequeue_and_put_task and
+enqueue_and_set_task, note that dequeue_and_put_task is not
+applyed in __do_set_cpus_allowed cause the lock assert.
 
-Yes, it shall be like you pointed out.
+Signed-off-by: shangxiaojing <shangxiaojing@huawei.com>
+---
+ kernel/sched/core.c | 103 ++++++++++++++++++--------------------------
+ 1 file changed, 42 insertions(+), 61 deletions(-)
 
-I changed the code from "#ifdef" style to "if (IS_ENABLED()" style just
-before sending out the series. Sorry for the haste without compiling
-check again.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 61436b8e0337..46d6ba551e04 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2540,6 +2540,28 @@ void set_cpus_allowed_common(struct task_struct *p, const struct cpumask *new_ma
+ 	p->nr_cpus_allowed = cpumask_weight(new_mask);
+ }
+ 
++static __always_inline
++void dequeue_and_put_task(struct rq *rq, struct task_struct *p, int flags,
++			  bool *queued, bool *running)
++{
++	*queued = task_on_rq_queued(p);
++	*running = task_current(rq, p);
++	if (*queued)
++		dequeue_task(rq, p, flags);
++	if (*running)
++		put_prev_task(rq, p);
++}
++
++static __always_inline
++void enqueue_and_set_task(struct rq *rq, struct task_struct *p, int flags,
++			  bool queued, bool running)
++{
++	if (queued)
++		enqueue_task(rq, p, flags);
++	if (running)
++		set_next_task(rq, p);
++}
++
+ static void
+ __do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask, u32 flags)
+ {
+@@ -2579,10 +2601,7 @@ __do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask, u32
+ 
+ 	p->sched_class->set_cpus_allowed(p, new_mask, flags);
+ 
+-	if (queued)
+-		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
+-	if (running)
+-		set_next_task(rq, p);
++	enqueue_and_set_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK, queued, running);
+ }
+ 
+ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+@@ -6876,8 +6895,9 @@ static inline int rt_effective_prio(struct task_struct *p, int prio)
+  */
+ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+ {
+-	int prio, oldprio, queued, running, queue_flag =
++	int prio, oldprio, queue_flag =
+ 		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
++	bool queued, running;
+ 	const struct sched_class *prev_class;
+ 	struct rq_flags rf;
+ 	struct rq *rq;
+@@ -6936,12 +6956,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+ 		queue_flag &= ~DEQUEUE_MOVE;
+ 
+ 	prev_class = p->sched_class;
+-	queued = task_on_rq_queued(p);
+-	running = task_current(rq, p);
+-	if (queued)
+-		dequeue_task(rq, p, queue_flag);
+-	if (running)
+-		put_prev_task(rq, p);
++	dequeue_and_put_task(rq, p, queue_flag, &queued, &running);
+ 
+ 	/*
+ 	 * Boosting condition are:
+@@ -6975,10 +6990,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+ 
+ 	__setscheduler_prio(p, prio);
+ 
+-	if (queued)
+-		enqueue_task(rq, p, queue_flag);
+-	if (running)
+-		set_next_task(rq, p);
++	enqueue_and_set_task(rq, p, queue_flag, queued, running);
+ 
+ 	check_class_changed(rq, p, prev_class, oldprio);
+ out_unlock:
+@@ -7024,22 +7036,14 @@ void set_user_nice(struct task_struct *p, long nice)
+ 		p->static_prio = NICE_TO_PRIO(nice);
+ 		goto out_unlock;
+ 	}
+-	queued = task_on_rq_queued(p);
+-	running = task_current(rq, p);
+-	if (queued)
+-		dequeue_task(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK);
+-	if (running)
+-		put_prev_task(rq, p);
++	dequeue_and_put_task(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK, &queued, &running);
+ 
+ 	p->static_prio = NICE_TO_PRIO(nice);
+ 	set_load_weight(p, true);
+ 	old_prio = p->prio;
+ 	p->prio = effective_prio(p);
+ 
+-	if (queued)
+-		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
+-	if (running)
+-		set_next_task(rq, p);
++	enqueue_and_set_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK, queued, running);
+ 
+ 	/*
+ 	 * If the task increased its priority or is running and
+@@ -7423,7 +7427,8 @@ static int __sched_setscheduler(struct task_struct *p,
+ 				bool user, bool pi)
+ {
+ 	int oldpolicy = -1, policy = attr->sched_policy;
+-	int retval, oldprio, newprio, queued, running;
++	int retval, oldprio, newprio;
++	bool queued, running;
+ 	const struct sched_class *prev_class;
+ 	struct callback_head *head;
+ 	struct rq_flags rf;
+@@ -7588,12 +7593,7 @@ static int __sched_setscheduler(struct task_struct *p,
+ 			queue_flags &= ~DEQUEUE_MOVE;
+ 	}
+ 
+-	queued = task_on_rq_queued(p);
+-	running = task_current(rq, p);
+-	if (queued)
+-		dequeue_task(rq, p, queue_flags);
+-	if (running)
+-		put_prev_task(rq, p);
++	dequeue_and_put_task(rq, p, queue_flags, &queued, &running);
+ 
+ 	prev_class = p->sched_class;
+ 
+@@ -7603,18 +7603,15 @@ static int __sched_setscheduler(struct task_struct *p,
+ 	}
+ 	__setscheduler_uclamp(p, attr);
+ 
+-	if (queued) {
++	if (queued & (oldprio < p->prio)) {
+ 		/*
+ 		 * We enqueue to tail when the priority of a task is
+ 		 * increased (user space view).
+ 		 */
+-		if (oldprio < p->prio)
+-			queue_flags |= ENQUEUE_HEAD;
+-
+-		enqueue_task(rq, p, queue_flags);
++		queue_flags |= ENQUEUE_HEAD;
+ 	}
+-	if (running)
+-		set_next_task(rq, p);
++
++	enqueue_and_set_task(rq, p, queue_flags, queued, running);
+ 
+ 	check_class_changed(rq, p, prev_class, oldprio);
+ 
+@@ -9094,20 +9091,12 @@ void sched_setnuma(struct task_struct *p, int nid)
+ 	struct rq *rq;
+ 
+ 	rq = task_rq_lock(p, &rf);
+-	queued = task_on_rq_queued(p);
+-	running = task_current(rq, p);
+ 
+-	if (queued)
+-		dequeue_task(rq, p, DEQUEUE_SAVE);
+-	if (running)
+-		put_prev_task(rq, p);
++	dequeue_and_put_task(rq, p, DEQUEUE_SAVE, &queued, &running);
+ 
+ 	p->numa_preferred_nid = nid;
+ 
+-	if (queued)
+-		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
+-	if (running)
+-		set_next_task(rq, p);
++	enqueue_and_set_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK, queued, running);
+ 	task_rq_unlock(rq, p, &rf);
+ }
+ #endif /* CONFIG_NUMA_BALANCING */
+@@ -10198,28 +10187,20 @@ static void sched_change_group(struct task_struct *tsk, int type)
+  */
+ void sched_move_task(struct task_struct *tsk)
+ {
+-	int queued, running, queue_flags =
+-		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
++	int queue_flags = DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
++	bool queued, running;
+ 	struct rq_flags rf;
+ 	struct rq *rq;
+ 
+ 	rq = task_rq_lock(tsk, &rf);
+ 	update_rq_clock(rq);
+ 
+-	running = task_current(rq, tsk);
+-	queued = task_on_rq_queued(tsk);
+-
+-	if (queued)
+-		dequeue_task(rq, tsk, queue_flags);
+-	if (running)
+-		put_prev_task(rq, tsk);
++	dequeue_and_put_task(rq, tsk, queue_flags, &queued, &running);
+ 
+ 	sched_change_group(tsk, TASK_MOVE_GROUP);
+ 
+-	if (queued)
+-		enqueue_task(rq, tsk, queue_flags);
++	enqueue_and_set_task(rq, tsk, queue_flags, queued, running);
+ 	if (running) {
+-		set_next_task(rq, tsk);
+ 		/*
+ 		 * After changing group, the running task may have joined a
+ 		 * throttled one but it's still the running task. Trigger a
+-- 
+2.17.1
 
-> 
-> > +		cpumask_check(cpu);
-> > +		for_each_cpu(i, mask)
-> > +			if (i != cpu && !cpumask_test_cpu(i, cpu_dying_mask))
-> > +				break;
-> > +		return i;
-> > +	} else {
-> > +		return cpumask_any_but(mask, cpu);
-> > +	}
-> > +}
-> > +EXPORT_SYMBOL(cpumask_not_dying_but);
-> 
-> I don't like how you create a dedicated function for a random
-> mask. Dying mask is nothing special, right? What you really
-
-Yes, I agree.
-
-> need is probably this:
->         cpumask_andnot_any_but(mask, cpu_dying_mask, cpu);
-> 
-
-That is it.
-
-> Now, if you still think it's worth that, you can add a trivial wrapper
-> for cpu_dying_mask. (But please pick some other name, because
-> 'not dying but' sounds like a hangover description. :) )
-> 
-
-I think that since even if !IS_ENABLED(CONFIG_SHUTDOWN_NONBOOT_CPUS),
-cpumask_andnot_any_but(mask, cpu_dying_mask, cpu) can work properly,
-so replacing the callsite with "cpumask_andnot() + cpumask_any_but()"
-will be a choice.
-
-Appreciate for your help.
-
-
-Thanks,
-
-	Pingfan
-
-> Thanks,
-> Yury
-> 
-> > +
-> >  /**
-> >   * cpumask_next_wrap - helper to implement for_each_cpu_wrap
-> >   * @n: the cpu prior to the place to search
-> > -- 
-> > 2.31.1

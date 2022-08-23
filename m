@@ -2,46 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006BB59DF70
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BD959DE95
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358337AbiHWLrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S1353711AbiHWKPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358558AbiHWLmD (ORCPT
+        with ESMTP id S1352867AbiHWKGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:42:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB10CE306;
-        Tue, 23 Aug 2022 02:29:32 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB856408;
+        Tue, 23 Aug 2022 01:53:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1294B81C88;
-        Tue, 23 Aug 2022 09:29:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319F0C433D6;
-        Tue, 23 Aug 2022 09:29:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90C76B81BF8;
+        Tue, 23 Aug 2022 08:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C022BC433C1;
+        Tue, 23 Aug 2022 08:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246969;
-        bh=IiRNgsOl4SR4he6fNK0dXwJacturBpAe3dSd1Kqadjw=;
+        s=korg; t=1661244803;
+        bh=69ovCRcumfGslh/oGLivZ4DIr8oJgQGwFuXGEqHGW5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vR++nK2SIfQLozUK6uYmDZFBPHJ+av82+e70xoWxq0ZzBHNCxtSWaZ2FcGNuClWFp
-         kH9N4HL5CezUUG2FJh/iMbsPaKRFdqkz/OsLMlQGTTwADS+xlpUZFLPlhqJk81aesS
-         gtgPMZlJt2p8GlNyhUhxe+QDlpM5aZBJ3AjbfZKo=
+        b=BFGcUPhy3FdlJSs4xPaJ6Isyeg9C7IGbrGfh01GoRRPeTMr2xXjgGHHYvg2ih2GyQ
+         jlBFXGAln7J1kUeFcuOc/a91Uqn+LtrSqUBOGyk1o017DjQ3O6Vr7D4nNBldzZEIPi
+         7f6I4SVPUjKg4eT0rCUGVeXftPNCTixV0LlMi/mI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Ghinea <stefan.ghinea@windriver.com>
-Subject: [PATCH 5.4 277/389] KVM: Add infrastructure and macro to mark VM as bugged
+        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, llvm@lists.linux.dev,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 4.14 194/229] tools build: Switch to new openssl API for test-libcrypto
 Date:   Tue, 23 Aug 2022 10:25:55 +0200
-Message-Id: <20220823080127.101686577@linuxfoundation.org>
+Message-Id: <20220823080100.563952280@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,127 +68,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <sean.j.christopherson@intel.com>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-commit 0b8f11737cffc1a406d1134b58687abc29d76b52 upstream
+commit 5b245985a6de5ac18b5088c37068816d413fb8ed upstream.
 
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-Message-Id: <3a0998645c328bf0895f1290e61821b70f048549.1625186503.git.isaku.yamahata@intel.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[SG: Adjusted context for kernel version 5.4]
-Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
+Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
+error when it encounters the deprecated function MD5_Init() and the others.
+
+The error would be interpreted as missing libcrypto, while in reality it is
+not.
+
+Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd variations")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: llvm@lists.linux.dev
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nick Terrell <terrelln@fb.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Quentin Monnet <quentin@isovalent.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/r/20220719170555.2576993-4-roberto.sassu@huawei.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/kvm_host.h |   28 +++++++++++++++++++++++++++-
- virt/kvm/kvm_main.c      |   10 +++++-----
- 2 files changed, 32 insertions(+), 6 deletions(-)
+ tools/build/feature/test-libcrypto.c |   15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -146,6 +146,7 @@ static inline bool is_error_page(struct
- #define KVM_REQ_MMU_RELOAD        (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_PENDING_TIMER     2
- #define KVM_REQ_UNHALT            3
-+#define KVM_REQ_VM_BUGGED         (4 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQUEST_ARCH_BASE     8
+--- a/tools/build/feature/test-libcrypto.c
++++ b/tools/build/feature/test-libcrypto.c
+@@ -1,16 +1,23 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include <openssl/evp.h>
+ #include <openssl/sha.h>
+ #include <openssl/md5.h>
  
- #define KVM_ARCH_REQ_FLAGS(nr, flags) ({ \
-@@ -502,6 +503,7 @@ struct kvm {
- 	struct srcu_struct srcu;
- 	struct srcu_struct irq_srcu;
- 	pid_t userspace_pid;
-+	bool vm_bugged;
- };
- 
- #define kvm_err(fmt, ...) \
-@@ -530,6 +532,31 @@ struct kvm {
- #define vcpu_err(vcpu, fmt, ...)					\
- 	kvm_err("vcpu%i " fmt, (vcpu)->vcpu_id, ## __VA_ARGS__)
- 
-+bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
-+static inline void kvm_vm_bugged(struct kvm *kvm)
-+{
-+	kvm->vm_bugged = true;
-+	kvm_make_all_cpus_request(kvm, KVM_REQ_VM_BUGGED);
-+}
-+
-+#define KVM_BUG(cond, kvm, fmt...)				\
-+({								\
-+	int __ret = (cond);					\
-+								\
-+	if (WARN_ONCE(__ret && !(kvm)->vm_bugged, fmt))		\
-+		kvm_vm_bugged(kvm);				\
-+	unlikely(__ret);					\
-+})
-+
-+#define KVM_BUG_ON(cond, kvm)					\
-+({								\
-+	int __ret = (cond);					\
-+								\
-+	if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))		\
-+		kvm_vm_bugged(kvm);				\
-+	unlikely(__ret);					\
-+})
-+
- static inline struct kvm_io_bus *kvm_get_bus(struct kvm *kvm, enum kvm_bus idx)
+ int main(void)
  {
- 	return srcu_dereference_check(kvm->buses[idx], &kvm->srcu,
-@@ -790,7 +817,6 @@ void kvm_reload_remote_mmus(struct kvm *
+-	MD5_CTX context;
++	EVP_MD_CTX *mdctx;
+ 	unsigned char md[MD5_DIGEST_LENGTH + SHA_DIGEST_LENGTH];
+ 	unsigned char dat[] = "12345";
++	unsigned int digest_len;
  
- bool kvm_make_vcpus_request_mask(struct kvm *kvm, unsigned int req,
- 				 unsigned long *vcpu_bitmap, cpumask_var_t tmp);
--bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
+-	MD5_Init(&context);
+-	MD5_Update(&context, &dat[0], sizeof(dat));
+-	MD5_Final(&md[0], &context);
++	mdctx = EVP_MD_CTX_new();
++	if (!mdctx)
++		return 0;
++
++	EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
++	EVP_DigestUpdate(mdctx, &dat[0], sizeof(dat));
++	EVP_DigestFinal_ex(mdctx, &md[0], &digest_len);
++	EVP_MD_CTX_free(mdctx);
  
- long kvm_arch_dev_ioctl(struct file *filp,
- 			unsigned int ioctl, unsigned long arg);
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -2937,7 +2937,7 @@ static long kvm_vcpu_ioctl(struct file *
- 	struct kvm_fpu *fpu = NULL;
- 	struct kvm_sregs *kvm_sregs = NULL;
+ 	SHA1(&dat[0], sizeof(dat), &md[0]);
  
--	if (vcpu->kvm->mm != current->mm)
-+	if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_bugged)
- 		return -EIO;
- 
- 	if (unlikely(_IOC_TYPE(ioctl) != KVMIO))
-@@ -3144,7 +3144,7 @@ static long kvm_vcpu_compat_ioctl(struct
- 	void __user *argp = compat_ptr(arg);
- 	int r;
- 
--	if (vcpu->kvm->mm != current->mm)
-+	if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_bugged)
- 		return -EIO;
- 
- 	switch (ioctl) {
-@@ -3209,7 +3209,7 @@ static long kvm_device_ioctl(struct file
- {
- 	struct kvm_device *dev = filp->private_data;
- 
--	if (dev->kvm->mm != current->mm)
-+	if (dev->kvm->mm != current->mm || dev->kvm->vm_bugged)
- 		return -EIO;
- 
- 	switch (ioctl) {
-@@ -3413,7 +3413,7 @@ static long kvm_vm_ioctl(struct file *fi
- 	void __user *argp = (void __user *)arg;
- 	int r;
- 
--	if (kvm->mm != current->mm)
-+	if (kvm->mm != current->mm || kvm->vm_bugged)
- 		return -EIO;
- 	switch (ioctl) {
- 	case KVM_CREATE_VCPU:
-@@ -3621,7 +3621,7 @@ static long kvm_vm_compat_ioctl(struct f
- 	struct kvm *kvm = filp->private_data;
- 	int r;
- 
--	if (kvm->mm != current->mm)
-+	if (kvm->mm != current->mm || kvm->vm_bugged)
- 		return -EIO;
- 	switch (ioctl) {
- #ifdef CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT
 
 

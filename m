@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CEB59EBD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F30E59EC07
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiHWTK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
+        id S233754AbiHWTQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiHWTJh (ORCPT
+        with ESMTP id S233637AbiHWTQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:09:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E8379636
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661276772;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jbhMYli+PbpL5j/G83ITSKK3U1H2INgAMQzOK2lNHlQ=;
-        b=N+Zryk9jVJtswiF9rQ03lmMnQ9P/c3IBxIvf0LN8i1V8MrE1xQk+oHsxKCbMG26oG/PC4+
-        rhgK1S1kpNj9fRhvYOFPP7MEhMjhMM4hkKfNvcYwTtju8fqQh6UaCH/On3D2g8Pv4A7yBk
-        BiewZm9pkGQl5MnGRGPFDae29iMp3nY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-182--kuNe3SOMi6HTrJp48Ta4g-1; Tue, 23 Aug 2022 13:42:57 -0400
-X-MC-Unique: -kuNe3SOMi6HTrJp48Ta4g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 637463C0D1B4;
-        Tue, 23 Aug 2022 17:42:57 +0000 (UTC)
-Received: from cmirabil.redhat.com (unknown [10.22.33.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EA62714152E0;
-        Tue, 23 Aug 2022 17:42:56 +0000 (UTC)
-From:   Charles Mirabile <cmirabil@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Charles Mirabile <cmirabil@redhat.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Serge Schneider <serge@raspberrypi.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Nicolas Saenz Julienne <nicolassaenzj@gmail.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, rh-kdlp@googlegroups.com,
-        Joel Savitz <jsavitz@redhat.com>
-Subject: [PATCH 5/5] DO NOT MERGE: full sensehat device tree overlay for raspberry pi 4
-Date:   Tue, 23 Aug 2022 13:41:58 -0400
-Message-Id: <20220823174158.45579-6-cmirabil@redhat.com>
-In-Reply-To: <20220823174158.45579-1-cmirabil@redhat.com>
-References: <20220823174158.45579-1-cmirabil@redhat.com>
+        Tue, 23 Aug 2022 15:16:17 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4524583F14
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:53:20 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id n24so12184258ljc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=sDBaSDMG+UDgCifIbR0AL6vcpXr497JaPO6dIyVU0V8=;
+        b=cOtt44z0CW7ImM4UGItCd0A/tffXqphjetu1mC4+/9A3wkWlIVtFs3gUJ6pHNA6bQL
+         1ulcES3mGiIX6weI5XktG9SCa9bJZiYVc+zqV4xH1Aza8ad1Yr+nFT6VJupWVgmeQddx
+         E/LgKQCCo0TOWwGqMmCai5rKflV231vDSRPJw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=sDBaSDMG+UDgCifIbR0AL6vcpXr497JaPO6dIyVU0V8=;
+        b=c0idmcvsT24x749hxoPcjkrb1RrVWTyP8XW2tNnMDKwtlig5ezav68xndjNq1BRJcW
+         i0WHqhwPQ1na7UgE6pJg5LJWLnNhVZKoWeJYbE07S5AlrCGqVJv6JaYTWK/pIHvH5l7H
+         vOCAJp5jSrBgVtVhPFUZqZCvHp84fyqS1MRsiAHBmyPMNMFEn+SAWMCgjsZpI47fdh/d
+         IqGwu8DEj+0aDgMv05/LdGZ19Clnz6eRLKH/ofdE1L9m436KN1k3cB26w9dQ4ZIQStHM
+         D1rzsS+J8B7bhQY2tN8sBGrXTF2JQXqh/L6ursPMYjLonvDhZU6uHsMAOQX2zTyZ2gQz
+         eE/w==
+X-Gm-Message-State: ACgBeo01jdysXsZBmMKBOaJTYndJBPKlrpt8m86rmJPzzNXIM+DaXiwC
+        IEbeA9ntv3CxX/9yMzGTr0Uf+IJ993+dHw==
+X-Google-Smtp-Source: AA6agR6AC9qvPpVh8ikeSZzI7M8wWx7sWIn+kkW4Gdr7Uch+tdArCg472GbKPuyDQfEjNxvARvYAbw==
+X-Received: by 2002:a05:6402:5203:b0:446:a378:54a5 with SMTP id s3-20020a056402520300b00446a37854a5mr4438303edd.321.1661276616038;
+        Tue, 23 Aug 2022 10:43:36 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-57-252.cust.vodafonedsl.it. [188.217.57.252])
+        by smtp.gmail.com with ESMTPSA id t26-20020a50c25a000000b0043bbc9503ddsm1789775edf.76.2022.08.23.10.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 10:43:35 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 19:43:33 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     awalls@md.metrocast.net, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pci/ivtv: fix repeated words in comments
+Message-ID: <20220823174333.GA1277033@tom-ThinkPad-T14s-Gen-2i>
+References: <20220823145530.45102-1-wangjianli@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823145530.45102-1-wangjianli@cdjrlc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,84 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch shold not be merged - dtbs files are not stored in the
-kernel tree. We just provide this file so the code can be tested.
+On Tue, Aug 23, 2022 at 10:55:30PM +0800, wangjianli wrote:
+> Delete the redundant word 'the'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/media/pci/ivtv/ivtv-yuv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
+> index e79e8a5a744a..4ba10c34a16a 100644
+> --- a/drivers/media/pci/ivtv/ivtv-yuv.c
+> +++ b/drivers/media/pci/ivtv/ivtv-yuv.c
+> @@ -538,7 +538,7 @@ static void ivtv_yuv_handle_vertical(struct ivtv *itv, struct yuv_frame_info *f)
+>  	reg_2964 = (reg_2964 << 16) + reg_2964 + (reg_2964 * 46 / 94);
+>  
+>  	/* Okay, we've wasted time working out the correct value,
+> -	   but if we use it, it fouls the the window alignment.
+> +	   but if we use it, it fouls the window alignment.
+>  	   Fudge it to what we want... */
+>  	reg_2964 = 0x00010001 + ((reg_2964 & 0x0000FFFF) - (reg_2964 >> 16));
+>  	reg_2968 = 0x00010001 + ((reg_2968 & 0x0000FFFF) - (reg_2968 >> 16));
+> -- 
+> 2.36.1
+> 
 
-This overlay is suitable for testing the driver, it can be compiled with
-dtc and put in the /boot/overlays/ folder then specified in config.txt
-by putting the lines:
+Hi,
+Looks good to me.
 
-dtoverlay=		#suppress loading of default overlay for HAT
-dtoverlay=sensehat	#load custom overlay
+Tommaso
 
-at the beginning before any other lines in config.txt
-
-Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
----
- sensehat.dtbs | 52 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 sensehat.dtbs
-
-diff --git a/sensehat.dtbs b/sensehat.dtbs
-new file mode 100644
-index 000000000000..9e5a6d9229b1
---- /dev/null
-+++ b/sensehat.dtbs
-@@ -0,0 +1,52 @@
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	compatible = "brcm,bcm2835";
-+};
-+
-+&i2c1 {
-+	#address-cells = <0x01>;
-+	#size-cells = <0x00>;
-+	status = "okay";
-+
-+	sensehat@46 {
-+		compatible = "raspberrypi,sensehat";
-+		reg = <0x46>;
-+		interrupt-parent = <&gpio>;
-+		status = "okay";
-+		display {
-+			compatible = "raspberrypi,sensehat-display";
-+			status = "okay";
-+		};
-+		joystick {
-+			compatible = "raspberrypi,sensehat-joystick";
-+			interrupts = <23 1>;
-+			status = "okay";
-+		};
-+	};
-+
-+	lsm9ds1-magn@1c {
-+		compatible = "st,lsm9ds1-magn";
-+		reg = <0x1c>;
-+		status = "okay";
-+	};
-+
-+	lsm9ds1-accel@6a {
-+		compatible = "st,lsm9ds1-accel";
-+		reg = <0x6a>;
-+		status = "okay";
-+	};
-+
-+	lps25h-press@5c {
-+		compatible = "st,lps25h-press";
-+		reg = <0x5c>;
-+		status = "okay";
-+	};
-+
-+	hts221-humid@5f {
-+		compatible = "st,hts221-humid\0st,hts221";
-+		reg = <0x5f>;
-+		status = "okay";
-+	};
-+};
 -- 
-2.31.1
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

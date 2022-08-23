@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8A759DF41
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7733A59DDDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354762AbiHWKfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S1355218AbiHWKfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354176AbiHWKUk (ORCPT
+        with ESMTP id S1354192AbiHWKUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:20:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58888AA;
-        Tue, 23 Aug 2022 02:02:15 -0700 (PDT)
+        Tue, 23 Aug 2022 06:20:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAFAAD;
+        Tue, 23 Aug 2022 02:02:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 025A0B81C52;
-        Tue, 23 Aug 2022 09:02:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51914C433D6;
-        Tue, 23 Aug 2022 09:02:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C862E61579;
+        Tue, 23 Aug 2022 09:02:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B26BC433C1;
+        Tue, 23 Aug 2022 09:02:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245332;
-        bh=2Q6uC91jPhXMNwvXTNlweCMJW7/Dv/kBwANwkf/4XXw=;
+        s=korg; t=1661245336;
+        bh=B+3p/GQqQOtvQA60D7Hg3pIgqOkJKFL3MaPiyOP8loE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bTju2G0HjjItM0Z01s9hb9DdRUOaQJb54GEL71ggj7UXipY5Uby3QUto6V0W2xa2K
-         qw+ItT3qg5k6aAaAhhmjEXjkSzlwMf0rBH0T7nciISerTXonw57fBtzV2lFeuJ0Szv
-         w1cm0Nu6jRYSG72NF/76jgpNx+YQ14NYBniF8kVc=
+        b=kNN63geELsPNlG9YOK6/u5UmBGmGtVW/n1lcSHvjncTwECpSDo0Muom3f8quqJNWs
+         CiC/DFIorbdCJBRpNboA0laNdTR3PsZ1aMqnI7odBDeF+wbxvn7Bil1bPSKRHE4kQ2
+         xjq4ihtgjmx3XR9GTdQV9rV4XfzuR8TRVVT9KfL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Tony Lindgren <tony@atomide.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 046/287] ARM: OMAP2+: display: Fix refcount leak bug
-Date:   Tue, 23 Aug 2022 10:23:35 +0200
-Message-Id: <20220823080101.800771065@linuxfoundation.org>
+Subject: [PATCH 4.19 047/287] ACPI: EC: Remove duplicate ThinkPad X1 Carbon 6th entry from DMI quirks
+Date:   Tue, 23 Aug 2022 10:23:36 +0200
+Message-Id: <20220823080101.840676854@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -55,34 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 50b87a32a79bca6e275918a711fb8cc55e16d739 ]
+[ Upstream commit 0dd6db359e5f206cbf1dd1fd40dd211588cd2725 ]
 
-In omapdss_init_fbdev(), of_find_node_by_name() will return a node
-pointer with refcount incremented. We should use of_node_put() when
-it is not used anymore.
+Somehow the "ThinkPad X1 Carbon 6th" entry ended up twice in the
+struct dmi_system_id acpi_ec_no_wakeup[] array. Remove one of
+the entries.
 
-Signed-off-by: Liang He <windhl@126.com>
-Message-Id: <20220617145803.4050918-1-windhl@126.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-omap2/display.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/acpi/ec.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/arch/arm/mach-omap2/display.c b/arch/arm/mach-omap2/display.c
-index 5d73f2c0b117..dd2ff10790ab 100644
---- a/arch/arm/mach-omap2/display.c
-+++ b/arch/arm/mach-omap2/display.c
-@@ -211,6 +211,7 @@ static int __init omapdss_init_fbdev(void)
- 	node = of_find_node_by_name(NULL, "omap4_padconf_global");
- 	if (node)
- 		omap4_dsi_mux_syscon = syscon_node_to_regmap(node);
-+	of_node_put(node);
- 
- 	return 0;
- }
+diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+index e3df3dda0332..3394ec64fe95 100644
+--- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -2118,13 +2118,6 @@ static const struct dmi_system_id acpi_ec_no_wakeup[] = {
+ 			DMI_MATCH(DMI_PRODUCT_FAMILY, "Thinkpad X1 Carbon 6th"),
+ 		},
+ 	},
+-	{
+-		.ident = "ThinkPad X1 Carbon 6th",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+-			DMI_MATCH(DMI_PRODUCT_FAMILY, "ThinkPad X1 Carbon 6th"),
+-		},
+-	},
+ 	{
+ 		.ident = "ThinkPad X1 Yoga 3rd",
+ 		.matches = {
 -- 
 2.35.1
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C1059DDA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A71759E1EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356481AbiHWKrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
+        id S1353762AbiHWKME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356136AbiHWKlc (ORCPT
+        with ESMTP id S241953AbiHWKEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:41:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F567A7A98;
-        Tue, 23 Aug 2022 02:08:52 -0700 (PDT)
+        Tue, 23 Aug 2022 06:04:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D976FA0B;
+        Tue, 23 Aug 2022 01:51:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3460B81C65;
-        Tue, 23 Aug 2022 09:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0030AC433C1;
-        Tue, 23 Aug 2022 09:08:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F9336123D;
+        Tue, 23 Aug 2022 08:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02754C433D6;
+        Tue, 23 Aug 2022 08:51:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245728;
-        bh=800Ti04Gr9T0VEvRB2LDK0haSnicZUITX9uNJeI3KT0=;
+        s=korg; t=1661244700;
+        bh=eQhmZHt5ptWLP7a417Uv9ecOnBX2k8sOFo408lcOWcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sSz8nVNihSBqIx/iseZgc3Uh/pQ6S6wWHUpVwsAnWqEU1tSWrCsfuCpYTFPcY6oIt
-         Fz4I6LGBohd2/2dIZQTcKeTzcJXK6yW8CAb+160TzhyWhvdkm3zT4j8cDKJbcXvHs7
-         ShVt116BtkkNujkgoGJp4Ygk2gT/aY08p1kNDquo=
+        b=yHqV+wTBNT+HGKhqVm+lJF/8nOyxwA8ScEf0ldJjB8Wv3V3LD7LSIaHv8jnUlARi5
+         j9PPl9edrJDuPKU5h3VX07Fc7elS8YnG/CBjpuPZmRhL3PnEEbrdxZZbsxIybTDEWx
+         aDFJFAH2XwvIYqZamq8ESRN5KopgIglnBdFZbsoM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 169/287] powerpc/32: Do not allow selection of e5500 or e6500 CPUs on PPC32
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 177/229] rds: add missing barrier to release_refill
 Date:   Tue, 23 Aug 2022 10:25:38 +0200
-Message-Id: <20220823080106.452222920@linuxfoundation.org>
+Message-Id: <20220823080059.937304247@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-[ Upstream commit 9be013b2a9ecb29b5168e4b9db0e48ed53acf37c ]
+commit 9f414eb409daf4f778f011cf8266d36896bb930b upstream.
 
-Commit 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
-enlarged the CPU selection logic to PPC32 by removing depend to
-PPC64, and failed to restrict that depend to E5500_CPU and E6500_CPU.
-Fortunately that got unnoticed because -mcpu=8540 will override the
--mcpu=e500mc64 or -mpcu=e6500 as they are ealier, but that's
-fragile and may no be right in the future.
+The functions clear_bit and set_bit do not imply a memory barrier, thus it
+may be possible that the waitqueue_active function (which does not take
+any locks) is moved before clear_bit and it could miss a wakeup event.
 
-Add back the depend PPC64 on E5500_CPU and E6500_CPU.
+Fix this bug by adding a memory barrier after clear_bit.
 
-Fixes: 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/Kconfig.cputype | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/rds/ib_recv.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
-index ad0216c41d2c..67ad128a9a3d 100644
---- a/arch/powerpc/platforms/Kconfig.cputype
-+++ b/arch/powerpc/platforms/Kconfig.cputype
-@@ -134,11 +134,11 @@ config POWER9_CPU
+--- a/net/rds/ib_recv.c
++++ b/net/rds/ib_recv.c
+@@ -362,6 +362,7 @@ static int acquire_refill(struct rds_con
+ static void release_refill(struct rds_connection *conn)
+ {
+ 	clear_bit(RDS_RECV_REFILL, &conn->c_flags);
++	smp_mb__after_atomic();
  
- config E5500_CPU
- 	bool "Freescale e5500"
--	depends on E500
-+	depends on PPC64 && E500
- 
- config E6500_CPU
- 	bool "Freescale e6500"
--	depends on E500
-+	depends on PPC64 && E500
- 
- config 860_CPU
- 	bool "8xx family"
--- 
-2.35.1
-
+ 	/* We don't use wait_on_bit()/wake_up_bit() because our waking is in a
+ 	 * hot path and finding waiters is very rare.  We don't want to walk
 
 

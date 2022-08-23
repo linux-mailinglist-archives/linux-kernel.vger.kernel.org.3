@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AB059D6E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E11459D71E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243821AbiHWJkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S1350052AbiHWJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243334AbiHWJjV (ORCPT
+        with ESMTP id S1349494AbiHWJWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:39:21 -0400
+        Tue, 23 Aug 2022 05:22:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A837859E;
-        Tue, 23 Aug 2022 01:41:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8318F944;
+        Tue, 23 Aug 2022 01:35:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB2AB61499;
-        Tue, 23 Aug 2022 08:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1EE3C433D6;
-        Tue, 23 Aug 2022 08:35:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF6761475;
+        Tue, 23 Aug 2022 08:35:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBACBC433D7;
+        Tue, 23 Aug 2022 08:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243709;
-        bh=qwM3ShvFVEwOhnb4lNkJcm+UOiGSvKD2PWo6NN8Oelg=;
+        s=korg; t=1661243733;
+        bh=Z6tw5p3I/8qPJhg9+be/JmAilsolo8TLCG5ED0j4UIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X9AE7zOFs+IX5JWJ3dn55yWwWX4Fzh0E+LUkEfXD39DN/6TncGfWmykWjfmIOm/Ct
-         mVDxsn0eCnveapeHwohKdGHekSNKX4+oNidEHYqbQgOUO85Rldx35+ryBvPr1hBahc
-         RvUyoPG8XnSTSXdhfeKm4OEoAdp2rkoGXRFIg3So=
+        b=t/JrvDdHy/jPK5GoEXk+UnVn1Qvzb799BM8J7kIwZ6nbLooNpK2a+zEWdaaFuLTMx
+         yo1g5FEfFa7D+hre/8SwBv95PqfZZTaPv9IpukZ2qniXhbE3R3jMAh4zWyWfNdWZLA
+         yWKOEQdoB1kTF6ivDFp/26gSrnOIp318YsZyxoWU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daeho Jeong <daehojeong@google.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 362/365] f2fs: revive F2FS_IOC_ABORT_VOLATILE_WRITE
-Date:   Tue, 23 Aug 2022 10:04:23 +0200
-Message-Id: <20220823080133.443422112@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.19 364/365] scsi: ufs: ufs-mediatek: Fix build error and type mismatch
+Date:   Tue, 23 Aug 2022 10:04:25 +0200
+Message-Id: <20220823080133.542900028@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -55,96 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+From: Ren Zhijie <renzhijie2@huawei.com>
 
-[ Upstream commit 23339e5752d01a4b5e122759b002cf896d26f6c1 ]
+commit f54912b228a8df6c0133e31bc75628677bb8c6e5 upstream.
 
-F2FS_IOC_ABORT_VOLATILE_WRITE was used to abort a atomic write before.
-However it was removed accidentally. So revive it by changing the name,
-since volatile write had gone.
+If CONFIG_PM_SLEEP is not set.
 
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
-Fiexes: 7bc155fec5b3("f2fs: kill volatile write support")
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will fail:
+
+drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_vreg_fix_vcc’:
+drivers/ufs/host/ufs-mediatek.c:688:46: warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
+    snprintf(vcc_name, MAX_VCC_NAME, "vcc-opt%u", res.a1);
+                                             ~^   ~~~~~~
+                                             %lu
+drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_system_suspend’:
+drivers/ufs/host/ufs-mediatek.c:1371:8: error: implicit declaration of function ‘ufshcd_system_suspend’; did you mean ‘ufs_mtk_system_suspend’? [-Werror=implicit-function-declaration]
+  ret = ufshcd_system_suspend(dev);
+        ^~~~~~~~~~~~~~~~~~~~~
+        ufs_mtk_system_suspend
+drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_system_resume’:
+drivers/ufs/host/ufs-mediatek.c:1386:9: error: implicit declaration of function ‘ufshcd_system_resume’; did you mean ‘ufs_mtk_system_resume’? [-Werror=implicit-function-declaration]
+  return ufshcd_system_resume(dev);
+         ^~~~~~~~~~~~~~~~~~~~
+         ufs_mtk_system_resume
+cc1: some warnings being treated as errors
+
+The declaration of func "ufshcd_system_suspend()" depends on
+CONFIG_PM_SLEEP, so the function wrapper ufs_mtk_system_suspend() should
+wrapped by CONFIG_PM_SLEEP too.
+
+Link: https://lore.kernel.org/r/20220619115432.205504-1-renzhijie2@huawei.com
+Fixes: 3fd23b8dfb54 ("scsi: ufs: ufs-mediatek: Fix the timing of configuring device regulators")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+[only take the suspend/resume portion of the commit - gregkh]
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/file.c            | 30 ++++++++++++++++++++++++++++--
- include/uapi/linux/f2fs.h |  2 +-
- 2 files changed, 29 insertions(+), 3 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index fc0f30738b21..41547604f192 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -2108,6 +2108,31 @@ static int f2fs_ioc_commit_atomic_write(struct file *filp)
- 	return ret;
+--- a/drivers/ufs/host/ufs-mediatek.c
++++ b/drivers/ufs/host/ufs-mediatek.c
+@@ -1220,6 +1220,7 @@ static int ufs_mtk_remove(struct platfor
+ 	return 0;
  }
  
-+static int f2fs_ioc_abort_atomic_write(struct file *filp)
-+{
-+	struct inode *inode = file_inode(filp);
-+	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
-+	int ret;
-+
-+	if (!inode_owner_or_capable(mnt_userns, inode))
-+		return -EACCES;
-+
-+	ret = mnt_want_write_file(filp);
-+	if (ret)
-+		return ret;
-+
-+	inode_lock(inode);
-+
-+	if (f2fs_is_atomic_file(inode))
-+		f2fs_abort_atomic_write(inode, true);
-+
-+	inode_unlock(inode);
-+
-+	mnt_drop_write_file(filp);
-+	f2fs_update_time(F2FS_I_SB(inode), REQ_TIME);
-+	return ret;
-+}
-+
- static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
++#ifdef CONFIG_PM_SLEEP
+ int ufs_mtk_system_suspend(struct device *dev)
  {
- 	struct inode *inode = file_inode(filp);
-@@ -4063,9 +4088,10 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 		return f2fs_ioc_start_atomic_write(filp);
- 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
- 		return f2fs_ioc_commit_atomic_write(filp);
-+	case F2FS_IOC_ABORT_ATOMIC_WRITE:
-+		return f2fs_ioc_abort_atomic_write(filp);
- 	case F2FS_IOC_START_VOLATILE_WRITE:
- 	case F2FS_IOC_RELEASE_VOLATILE_WRITE:
--	case F2FS_IOC_ABORT_VOLATILE_WRITE:
- 		return -EOPNOTSUPP;
- 	case F2FS_IOC_SHUTDOWN:
- 		return f2fs_ioc_shutdown(filp, arg);
-@@ -4734,7 +4760,7 @@ long f2fs_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
- 	case F2FS_IOC_START_VOLATILE_WRITE:
- 	case F2FS_IOC_RELEASE_VOLATILE_WRITE:
--	case F2FS_IOC_ABORT_VOLATILE_WRITE:
-+	case F2FS_IOC_ABORT_ATOMIC_WRITE:
- 	case F2FS_IOC_SHUTDOWN:
- 	case FITRIM:
- 	case FS_IOC_SET_ENCRYPTION_POLICY:
-diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
-index 352a822d4370..3121d127d5aa 100644
---- a/include/uapi/linux/f2fs.h
-+++ b/include/uapi/linux/f2fs.h
-@@ -13,7 +13,7 @@
- #define F2FS_IOC_COMMIT_ATOMIC_WRITE	_IO(F2FS_IOCTL_MAGIC, 2)
- #define F2FS_IOC_START_VOLATILE_WRITE	_IO(F2FS_IOCTL_MAGIC, 3)
- #define F2FS_IOC_RELEASE_VOLATILE_WRITE	_IO(F2FS_IOCTL_MAGIC, 4)
--#define F2FS_IOC_ABORT_VOLATILE_WRITE	_IO(F2FS_IOCTL_MAGIC, 5)
-+#define F2FS_IOC_ABORT_ATOMIC_WRITE	_IO(F2FS_IOCTL_MAGIC, 5)
- #define F2FS_IOC_GARBAGE_COLLECT	_IOW(F2FS_IOCTL_MAGIC, 6, __u32)
- #define F2FS_IOC_WRITE_CHECKPOINT	_IO(F2FS_IOCTL_MAGIC, 7)
- #define F2FS_IOC_DEFRAGMENT		_IOWR(F2FS_IOCTL_MAGIC, 8,	\
--- 
-2.35.1
-
+ 	struct ufs_hba *hba = dev_get_drvdata(dev);
+@@ -1242,6 +1243,7 @@ int ufs_mtk_system_resume(struct device
+ 
+ 	return ufshcd_system_resume(dev);
+ }
++#endif
+ 
+ int ufs_mtk_runtime_suspend(struct device *dev)
+ {
 
 

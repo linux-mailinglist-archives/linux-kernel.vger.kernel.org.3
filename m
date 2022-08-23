@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E78959D785
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F121159D52F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351200AbiHWJez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S243770AbiHWI3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351080AbiHWJeC (ORCPT
+        with ESMTP id S243790AbiHWIZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:34:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C154B9569F;
-        Tue, 23 Aug 2022 01:39:17 -0700 (PDT)
+        Tue, 23 Aug 2022 04:25:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D4172878;
+        Tue, 23 Aug 2022 01:14:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7A10ACE1B43;
-        Tue, 23 Aug 2022 08:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75193C433C1;
-        Tue, 23 Aug 2022 08:33:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C60B761242;
+        Tue, 23 Aug 2022 08:14:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD5E6C433D6;
+        Tue, 23 Aug 2022 08:14:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243585;
-        bh=G31bJPoYMv94cqbiSEOGE7aQCgluitafdoR37mIssKs=;
+        s=korg; t=1661242441;
+        bh=OQlvZM+K22KXk20z/y80Vu43gP5UH4g2hFg4EP4s7Wc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lrfVhkwuadyjGKnT11ymvY5AR3jWk9ruXQXij0foTGjgQ6dyTFEc16IscIgIyEF45
-         iMUdU0UksZRvJW7s9TFccCOeYx6TsYgCq2Jm+AlGFbZIHCYWBkfCvoLTGcu1QOzP6P
-         ldib5cLz8WSAR+/nHepKBmwbQAIJoAK9yhVj/m88=
+        b=tTyhsHBKDp9sX+/UYMQV2jNXjYU+NRIwRXGRevcCEFCbORHJlubPs5dblOTHwyf7c
+         eQ8P4V8p8UdxfFp2jBD4P55VjfbK9vzbtQCqVespyfwKx5kZseH60h0IUxIBbnJbpz
+         kpiF9mKeVIZhdPQdq3hVzk3F/NfAy2GErvf5LppI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 323/365] mips: cavium-octeon: Fix missing of_node_put() in octeon2_usb_clocks_start
-Date:   Tue, 23 Aug 2022 10:03:44 +0200
-Message-Id: <20220823080131.692729369@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.9 072/101] SUNRPC: Reinitialise the backchannel request buffers before reuse
+Date:   Tue, 23 Aug 2022 10:03:45 +0200
+Message-Id: <20220823080037.304300421@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 7a9f743ceead60ed454c46fbc3085ee9a79cbebb ]
+commit 6622e3a73112fc336c1c2c582428fb5ef18e456a upstream.
 
-We should call of_node_put() for the reference 'uctl_node' returned by
-of_get_parent() which will increase the refcount. Otherwise, there will
-be a refcount leak bug.
+When we're reusing the backchannel requests instead of freeing them,
+then we should reinitialise any values of the send/receive xdr_bufs so
+that they reflect the available space.
 
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 0d2a970d0ae5 ("SUNRPC: Fix a backchannel race")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/cavium-octeon/octeon-platform.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/sunrpc/backchannel_rqst.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-index a994022e32c9..ce05c0dd3acd 100644
---- a/arch/mips/cavium-octeon/octeon-platform.c
-+++ b/arch/mips/cavium-octeon/octeon-platform.c
-@@ -86,11 +86,12 @@ static void octeon2_usb_clocks_start(struct device *dev)
- 					 "refclk-frequency", &clock_rate);
- 		if (i) {
- 			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
-+			of_node_put(uctl_node);
- 			goto exit;
- 		}
- 		i = of_property_read_string(uctl_node,
- 					    "refclk-type", &clock_type);
--
-+		of_node_put(uctl_node);
- 		if (!i && strcmp("crystal", clock_type) == 0)
- 			is_crystal_clock = true;
- 	}
--- 
-2.35.1
-
+--- a/net/sunrpc/backchannel_rqst.c
++++ b/net/sunrpc/backchannel_rqst.c
+@@ -69,6 +69,17 @@ static void xprt_free_allocation(struct
+ 	kfree(req);
+ }
+ 
++static void xprt_bc_reinit_xdr_buf(struct xdr_buf *buf)
++{
++	buf->head[0].iov_len = PAGE_SIZE;
++	buf->tail[0].iov_len = 0;
++	buf->pages = NULL;
++	buf->page_len = 0;
++	buf->flags = 0;
++	buf->len = 0;
++	buf->buflen = PAGE_SIZE;
++}
++
+ static int xprt_alloc_xdr_buf(struct xdr_buf *buf, gfp_t gfp_flags)
+ {
+ 	struct page *page;
+@@ -291,6 +302,9 @@ void xprt_free_bc_rqst(struct rpc_rqst *
+ 	 */
+ 	spin_lock_bh(&xprt->bc_pa_lock);
+ 	if (xprt_need_to_requeue(xprt)) {
++		xprt_bc_reinit_xdr_buf(&req->rq_snd_buf);
++		xprt_bc_reinit_xdr_buf(&req->rq_rcv_buf);
++		req->rq_rcv_buf.len = PAGE_SIZE;
+ 		list_add_tail(&req->rq_bc_pa_list, &xprt->bc_pa_list);
+ 		xprt->bc_alloc_count++;
+ 		req = NULL;
 
 

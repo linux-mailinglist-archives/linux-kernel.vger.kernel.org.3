@@ -2,137 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFA659CF36
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC7E59CF2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239818AbiHWDJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 23:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S240001AbiHWDIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 23:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbiHWDIq (ORCPT
+        with ESMTP id S239970AbiHWDHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 23:08:46 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B4413DC2;
-        Mon, 22 Aug 2022 20:07:17 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2E2C65C0130;
-        Mon, 22 Aug 2022 23:07:14 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 22 Aug 2022 23:07:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1661224034; x=
-        1661310434; bh=LGz61TGMJw4eB4K1edx3Y0jE6fpIOCMFMqzcbFbb+4s=; b=0
-        3GRcXBcM6whAkg4wrC6xHUSAX5fzIWR4YLs6tDxiZ4NKmvHC8EeKxJd92UxYgzGm
-        HBvDD5idFIcyyrSAc/Rh+i2YmheOpqmFWao26W4/7GsUrdoqANuN1xEUFOfsggBP
-        uHBiZ/kS9W8qARau8tyJlEYqeD1m6hBMbAA7Dtc56sh/kwNTkFiFkQkaQnZLBjaJ
-        Mi7oP5UTIUVcl+fbg6VxiPGCrOia9/utO3cJ26XU5+NnYLG7iiT768jwXEXplpop
-        U84ceKp5mf43inu6lSYOhHusI1uWbd0i3AqL5NbRnufAEs+IIfV+J3GUdSXHX9t9
-        emXmQ11SnJjucdAEd1tMA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661224034; x=
-        1661310434; bh=LGz61TGMJw4eB4K1edx3Y0jE6fpIOCMFMqzcbFbb+4s=; b=y
-        NZGT1yP4oTwzsKphPMf8kLo3Nh5wWmYuA4BXo3p65RQuAEkkiXA5fuhyPdbuoTFE
-        1l55jlMun1Rr7hBuCtT+xktw+uDfZrYvxCmG9qXFk5kwvJ6mVN84HipEh/S+UAw9
-        w+WPTXircOp6k2M8Uc55cAcDiDywyTBOzgE3yO886KOGN9purztsqIUg+cUnBzha
-        RajOFVRm/Cs0BrXY5syeon+Wa5DbfZoxOftBCy7bzpRhx3rn7TOeEjMuNC9YHfPq
-        ORDLSzZBADgQq0D6tmFW4fg5kEx1ipeRoUjaGVVCNjo29hTRySC6Nz17wiEbU0dR
-        dMZ+KGWp3grEaS3J38mCw==
-X-ME-Sender: <xms:YUQEY86ajBIkBtX2kcxoyZ9J8ZNU2lBtvnNWAi5EMMOOPG9A3PCflw>
-    <xme:YUQEY94Z0dr54yhZqEMUfz0zj_d10-xsYxQ4XqKROy6DvG0sluSW2fL-MEzI4M601
-    Xko6GVwE-bV1ZBYgg>
-X-ME-Received: <xmr:YUQEY7fPTVxuMj5mVfXhktBftqCZY5qXLpdm1uRlflgIjDNQjebkwoFCgoRPj4SaPhU4oR2jHEfkug5sutbKNK2wXXN_ZNEFWXcQVRK_-oK_kWY6cv5UZmeiQg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeikedgieekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedtvefhheehgfdvkeetffeludeuudehudeuvddtveelleekvedv
-    uedviefhkeeuheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:YUQEYxJHV6kWpE6Z9A-DqsMoaevhrVFsEwXjiI5AV4UPHcjEgSZ49Q>
-    <xmx:YUQEYwIz3-BmWn_uibdL40Sa8dtCpDIBhu3H6aRSTW-ObOTcgRygRQ>
-    <xmx:YUQEYywgm4lmPS8SWjGimxIs7A0ITKBqj4KW_utJA0OSsiqjsrg_Xw>
-    <xmx:YkQEY5rXTBxSXpWS_WFJGmYR_NCzAynSp-eHOhNKlnj-WHCynfDzLw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 22 Aug 2022 23:07:13 -0400 (EDT)
-Subject: Re: [PATCH v2 4/4] arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
-To:     =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220821173051.155038-1-peron.clem@gmail.com>
- <20220821173051.155038-5-peron.clem@gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <0c028109-bb50-fbaa-de18-9876706a7477@sholland.org>
-Date:   Mon, 22 Aug 2022 22:07:12 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 22 Aug 2022 23:07:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4425FAD9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 20:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661223925; x=1692759925;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dFchl2bmcRn49wmin1I4Kwm9RG7Qfuh91pAl14MRq5w=;
+  b=bZbTXW3A20brAiUHp9Qwimx1esKPNDq0b+TgBDXHQJ4VcNxDDCjJv7gr
+   3cFAJUS1xv7vJAq9qOFYp9z5H7YVm7YWfm1lXm8/qDkq/GUJwNQbp/SPH
+   I6ezWb8wGPpgxmSBePNmeD8xNsv83aQIP/SgF4NQ4N9SEcz8btXSpLgec
+   imL9oTREXrRZL8jqdw8Sc1GGtcKghyHHUr+figW++HUFMqJ9Yg9LQVOUB
+   LsJs9hXe87knpNV0fQ9g3/JIqEGBc+yhNP9FrR8yqJc+dvMJ3jA6JNvdm
+   QZSD45buA5xie9QzkKZja5TOxpRYMYuvE1CnMgIDpIMlJcd/zWe3dxB2f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="273962555"
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="273962555"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 20:05:24 -0700
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="638470575"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 20:05:22 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH] soundwire: dmi-quirks: add remapping for HP Omen 16-k0005TX
+Date:   Tue, 23 Aug 2022 11:09:19 +0800
+Message-Id: <20220823030919.2346629-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220821173051.155038-5-peron.clem@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/21/22 12:30 PM, Clément Péron wrote:
-> Enable GPU OPP table for Beelink GS1
-> 
-> Signed-off-by: Clément Péron <peron.clem@gmail.com>
-> ---
->  arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-> index 6249e9e02928..20fc0584d1c6 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-> @@ -5,6 +5,7 @@
->  
->  #include "sun50i-h6.dtsi"
->  #include "sun50i-h6-cpu-opp.dtsi"
-> +#include "sun50i-h6-gpu-opp.dtsi"
->  
->  #include <dt-bindings/gpio/gpio.h>
->  
-> @@ -261,6 +262,7 @@ reg_dcdca: dcdca {
->  			};
->  
->  			reg_dcdcc: dcdcc {
-> +				regulator-always-on;
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Why is this necessary? This file already has:
+The DSDT for this device has a number of problems:
+a) it lists rt711 on link0 and link1, but link1 is disabled
+b) the rt711 entry on link0 uses the wrong v2 instead of v3 (SDCA)
+c) the rt1316 amplifier on link3 is not listed.
 
-&gpu {
-	mali-supply = <&reg_dcdcc>;
-	status = "okay";
-};
+Add a remapping table to work-around these BIOS shenanigans.
 
-So there is a consumer for this regulator.
+BugLink: https://github.com/thesofproject/sof/issues/5955
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+---
+ drivers/soundwire/dmi-quirks.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Regards,
-Samuel
-
->  				regulator-enable-ramp-delay = <32000>;
->  				regulator-min-microvolt = <810000>;
->  				regulator-max-microvolt = <1080000>;
-> 
+diff --git a/drivers/soundwire/dmi-quirks.c b/drivers/soundwire/dmi-quirks.c
+index 747983743a14..f81cdd83ec26 100644
+--- a/drivers/soundwire/dmi-quirks.c
++++ b/drivers/soundwire/dmi-quirks.c
+@@ -55,7 +55,26 @@ static const struct adr_remap dell_sku_0A3E[] = {
+ 	{}
+ };
+ 
++/*
++ * The HP Omen 16-k0005TX does not expose the correct version of RT711 on link0
++ * and does not expose a RT1316 on link3
++ */
++static const struct adr_remap hp_omen_16[] = {
++	/* rt711-sdca on link0 */
++	{
++		0x000020025d071100ull,
++		0x000030025d071101ull
++	},
++	/* rt1316-sdca on link3 */
++	{
++		0x000120025d071100ull,
++		0x000330025d131601ull
++	},
++	{}
++};
++
+ static const struct dmi_system_id adr_remap_quirk_table[] = {
++	/* TGL devices */
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
+@@ -78,6 +97,14 @@ static const struct dmi_system_id adr_remap_quirk_table[] = {
+ 		},
+ 		.driver_data = (void *)dell_sku_0A3E,
+ 	},
++	/* ADL devices */
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "OMEN by HP Gaming Laptop 16-k0xxx"),
++		},
++		.driver_data = (void *)hp_omen_16,
++	},
+ 	{}
+ };
+ 
+-- 
+2.25.1
 

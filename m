@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072EE59D6F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D0359D713
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348790AbiHWJOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S1348943AbiHWJRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243264AbiHWJLs (ORCPT
+        with ESMTP id S1349099AbiHWJOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:11:48 -0400
+        Tue, 23 Aug 2022 05:14:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00646D546;
-        Tue, 23 Aug 2022 01:31:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F30186C2E;
+        Tue, 23 Aug 2022 01:32:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69F1C61446;
-        Tue, 23 Aug 2022 08:31:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73115C433D7;
-        Tue, 23 Aug 2022 08:31:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE23614C5;
+        Tue, 23 Aug 2022 08:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AAA7C433C1;
+        Tue, 23 Aug 2022 08:31:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243491;
-        bh=5GyLM1CyVv10Ove+YIIf3oMlmnKfA55OKySxx0jDfxA=;
+        s=korg; t=1661243505;
+        bh=wvUJ88hrV5QL9tWRPmCuYWJ//YbsY8jZCc5Y1rHvmxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2e5dBniPRzaeLNIQZWm4IECGo5A6fHMoL6FniSrwqIN8V6lrDJwxcDChr9zjWV6sz
-         3HHtHUSFrZfX9/WEjWO82lY/ZDuWoRWGpeBpmTTXMdGJRzukcnKYMpBEu/BOoiziPV
-         8Jxhkgss2QpRcdkEqJ71Wv+/BJQ8xGYV6e0JWFWU=
+        b=tNGxalzqUB7ASopjNxrQs/EkO/F01E5MlaGZQ8YavBMbVNPelC1J6aRYzzRBHA/xZ
+         KX1+IPhYVvkqYDgBIE7iiMg8tYHOoi6UgsXMyfB/3Y5WYq8O/r4AoN4WipkhZwOfSr
+         0FN7ScaNm/tD6/mZ7in95PJyv5RdpqHo10REkkcU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 267/365] PCI: aardvark: Fix reporting Slot capabilities on emulated bridge
-Date:   Tue, 23 Aug 2022 10:02:48 +0200
-Message-Id: <20220823080129.356964313@linuxfoundation.org>
+Subject: [PATCH 5.19 268/365] scsi: ufs: core: Add UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS
+Date:   Tue, 23 Aug 2022 10:02:49 +0200
+Message-Id: <20220823080129.392779806@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -57,97 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-[ Upstream commit bcdb6fd4f3e9ac1097698c8d8f56b70853b49873 ]
+[ Upstream commit 6554400d6f66b9494a0c0f07712ab0a9d307eb01 ]
 
-Slot capabilities are currently not reported because emulated bridge does
-not report the PCI_EXP_FLAGS_SLOT flag.
+Add UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS for host controllers which do not
+support 64-bit addressing.
 
-Set PCI_EXP_FLAGS_SLOT to let the kernel know that PCI_EXP_SLT* registers
-are supported.
-
-Move setting of PCI_EXP_SLTCTL register from "dynamic" pcie_conf_read
-function to static buffer as it is only statically filled the
-PCI_EXP_SLTSTA_PDS flag and dynamic read callback is not needed for this
-register.
-
-Set Presence State Bit to 1 since there is no support for unplugging the
-card and there is currently no platform able to detect presence of a card -
-in such a case the bit needs to be set to 1.
-
-Finally correctly set Physical Slot Number to 1 since there is only one
-port and zero value is reserved for ports within the same silicon as Root
-Port which is not our case for Aardvark HW.
-
-Link: https://lore.kernel.org/r/20220524132827.8837-3-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://lore.kernel.org/r/20220603110524.1997825-3-yoshihiro.shimoda.uh@renesas.com
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c | 33 +++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 9 deletions(-)
+ drivers/ufs/core/ufshcd.c | 2 ++
+ include/ufs/ufshcd.h      | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index ffec82c8a523..62db476a8651 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -8,6 +8,7 @@
-  * Author: Hezi Shahmoon <hezi.shahmoon@marvell.com>
-  */
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 8d91be0fd1a4..141fff01a662 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2227,6 +2227,8 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+ 	int err;
  
-+#include <linux/bitfield.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/interrupt.h>
-@@ -857,14 +858,11 @@ advk_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
+ 	hba->capabilities = ufshcd_readl(hba, REG_CONTROLLER_CAPABILITIES);
++	if (hba->quirks & UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS)
++		hba->capabilities &= ~MASK_64_ADDRESSING_SUPPORT;
  
- 
- 	switch (reg) {
--	case PCI_EXP_SLTCTL:
--		*value = PCI_EXP_SLTSTA_PDS << 16;
--		return PCI_BRIDGE_EMUL_HANDLED;
--
- 	/*
--	 * PCI_EXP_RTCTL and PCI_EXP_RTSTA are also supported, but do not need
--	 * to be handled here, because their values are stored in emulated
--	 * config space buffer, and we read them from there when needed.
-+	 * PCI_EXP_SLTCAP, PCI_EXP_SLTCTL, PCI_EXP_RTCTL and PCI_EXP_RTSTA are
-+	 * also supported, but do not need to be handled here, because their
-+	 * values are stored in emulated config space buffer, and we read them
-+	 * from there when needed.
+ 	/* nutrs and nutmrs are 0 based values */
+ 	hba->nutrs = (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS) + 1;
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index a92271421718..795c8951341d 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -577,6 +577,12 @@ enum ufshcd_quirks {
+ 	 * support physical host configuration.
  	 */
- 
- 	case PCI_EXP_LNKCAP: {
-@@ -977,8 +975,25 @@ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
- 	/* Support interrupt A for MSI feature */
- 	bridge->conf.intpin = PCI_INTERRUPT_INTA;
- 
--	/* Aardvark HW provides PCIe Capability structure in version 2 */
--	bridge->pcie_conf.cap = cpu_to_le16(2);
-+	/*
-+	 * Aardvark HW provides PCIe Capability structure in version 2 and
-+	 * indicate slot support, which is emulated.
-+	 */
-+	bridge->pcie_conf.cap = cpu_to_le16(2 | PCI_EXP_FLAGS_SLOT);
+ 	UFSHCD_QUIRK_SKIP_PH_CONFIGURATION		= 1 << 16,
 +
 +	/*
-+	 * Set Presence Detect State bit permanently since there is no support
-+	 * for unplugging the card nor detecting whether it is plugged. (If a
-+	 * platform exists in the future that supports it, via a GPIO for
-+	 * example, it should be implemented via this bit.)
-+	 *
-+	 * Set physical slot number to 1 since there is only one port and zero
-+	 * value is reserved for ports within the same silicon as Root Port
-+	 * which is not our case.
++	 * This quirk needs to be enabled if the host controller has
++	 * 64-bit addressing supported capability but it doesn't work.
 +	 */
-+	bridge->pcie_conf.slotcap = cpu_to_le32(FIELD_PREP(PCI_EXP_SLTCAP_PSN,
-+							   1));
-+	bridge->pcie_conf.slotsta = cpu_to_le16(PCI_EXP_SLTSTA_PDS);
++	UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS		= 1 << 17,
+ };
  
- 	/* Indicates supports for Completion Retry Status */
- 	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
+ enum ufshcd_caps {
 -- 
 2.35.1
 

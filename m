@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DCC59E12E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D33859E0D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353683AbiHWKTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S1359443AbiHWMIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352649AbiHWKIY (ORCPT
+        with ESMTP id S1359410AbiHWMDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:08:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B94859269;
-        Tue, 23 Aug 2022 01:54:36 -0700 (PDT)
+        Tue, 23 Aug 2022 08:03:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A209CDABB8;
+        Tue, 23 Aug 2022 02:37:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7E66614E7;
-        Tue, 23 Aug 2022 08:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FDAC433D6;
-        Tue, 23 Aug 2022 08:54:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8299613CA;
+        Tue, 23 Aug 2022 09:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7DFC433D6;
+        Tue, 23 Aug 2022 09:37:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244875;
-        bh=4Us83UT6ZbV3aktWVPiRZSjSNlBE3K0H6ZYvOyN1SBU=;
+        s=korg; t=1661247435;
+        bh=qbghJcHm0gVRjNPJv+owcXxInm53demoP6ZbyBNgN08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x57DpT2Mu5Y4ELKQYuU9qHURxjNRLJUEFRxHOxKITRYRxvRwR3RtBR8e752dfASYI
-         xZsmjFPnkhUlQDelJnSJ1hNdyi/D3Ydhas0hiVgawzt2yJNjE14BOUjmA+SIBfiTpn
-         v/KL5CZvukn3tXUjFJgMuOZJrTKE6o2QDT4Z+rmg=
+        b=DoG/ccEIzpgpjQ+uQ5JBjVcidzNxbZfHiw675DfgPvujLiOQo8HS6z0QWjHPXaCfA
+         8M7Mj8vK99Q/kY/fOtrXP6Gtg0ohgTfx/mUNEaLH917j/aC0cqeJ2/ytUt/w8nmG1/
+         xygImtOKucm4DfN6ZDAbWba+xS4Oma5U8TDoLuXc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Brady <alan.brady@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 4.14 205/229] i40e: Fix to stop tx_timeout recovery if GLOBR fails
+        stable@vger.kernel.org, Dan Aloni <dan.aloni@vastdata.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.10 034/158] sunrpc: fix expiry of auth creds
 Date:   Tue, 23 Aug 2022 10:26:06 +0200
-Message-Id: <20220823080100.981537291@linuxfoundation.org>
+Message-Id: <20220823080047.454420066@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Brady <alan.brady@intel.com>
+From: Dan Aloni <dan.aloni@vastdata.com>
 
-commit 57c942bc3bef0970f0b21f8e0998e76a900ea80d upstream.
+commit f1bafa7375c01ff71fb7cb97c06caadfcfe815f3 upstream.
 
-When a tx_timeout fires, the PF attempts to recover by incrementally
-resetting.  First we try a PFR, then CORER and finally a GLOBR.  If the
-GLOBR fails, then we keep hitting the tx_timeout and incrementing the
-recovery level and issuing dmesgs, which is both annoying to the user
-and accomplishes nothing.
+Before this commit, with a large enough LRU of expired items (100), the
+loop skipped all the expired items and was entirely ineffectual in
+trimming the LRU list.
 
-If the GLOBR fails, then we're pretty much totally hosed, and there's
-not much else we can do to recover, so this makes it such that we just
-kill the VSI and stop hitting the tx_timeout in such a case.
-
-Fixes: 41c445ff0f48 ("i40e: main driver core")
-Signed-off-by: Alan Brady <alan.brady@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: 95cd623250ad ('SUNRPC: Clean up the AUTH cache code')
+Signed-off-by: Dan Aloni <dan.aloni@vastdata.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/sunrpc/auth.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -405,7 +405,9 @@ static void i40e_tx_timeout(struct net_d
- 		set_bit(__I40E_GLOBAL_RESET_REQUESTED, pf->state);
- 		break;
- 	default:
--		netdev_err(netdev, "tx_timeout recovery unsuccessful\n");
-+		netdev_err(netdev, "tx_timeout recovery unsuccessful, device is in non-recoverable state.\n");
-+		set_bit(__I40E_DOWN_REQUESTED, pf->state);
-+		set_bit(__I40E_VSI_DOWN_REQUESTED, vsi->state);
- 		break;
- 	}
- 
+--- a/net/sunrpc/auth.c
++++ b/net/sunrpc/auth.c
+@@ -445,7 +445,7 @@ rpcauth_prune_expired(struct list_head *
+ 		 * Enforce a 60 second garbage collection moratorium
+ 		 * Note that the cred_unused list must be time-ordered.
+ 		 */
+-		if (!time_in_range(cred->cr_expire, expired, jiffies))
++		if (time_in_range(cred->cr_expire, expired, jiffies))
+ 			continue;
+ 		if (!rpcauth_unhash_cred(cred))
+ 			continue;
 
 

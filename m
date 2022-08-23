@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48F759E094
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5598D59E2A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354929AbiHWKW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S1353664AbiHWKP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353208AbiHWKLD (ORCPT
+        with ESMTP id S1352825AbiHWKGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:03 -0400
+        Tue, 23 Aug 2022 06:06:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C743F7E330;
-        Tue, 23 Aug 2022 01:56:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69D4319;
+        Tue, 23 Aug 2022 01:53:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABF34614E7;
-        Tue, 23 Aug 2022 08:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCA7C433C1;
-        Tue, 23 Aug 2022 08:56:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6779E6150F;
+        Tue, 23 Aug 2022 08:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C99C433C1;
+        Tue, 23 Aug 2022 08:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244972;
-        bh=kGnKy4ot8MT8zCT9ellggAB0zIaX/bDGSKngr+K3OEw=;
+        s=korg; t=1661244793;
+        bh=JJQsM5JWENzuqdyo+/3XXUqAE06ZPzjerTGhvXhu4zE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HAHpxZ4yp9vXmGp+3I4b3o7MTsI0nQfY0M5IsP5An2cdAJOBRjfaXS97S37nP0sSk
-         3i8TkIFQBEbgiylTUHqtZdZseytkY7sSFnn1jF7RTPybYN95ad5i3vRJHMNST+G83y
-         aBfDki3hR3ge7qmDH7wIfqDrAaPwvlvmKydJqZmk=
+        b=FzewZks/I2xr6oI7vB/N/h7vl5+nBNFIMYzRDFDolsSvZ0vDtP3xzTjzwejQ4O359
+         +nFBQX375SvKGs0+iMn5bVz7jrEhpkjIbEr16XU366I8ZgD+GLiC0BLI0GDNRy/nK5
+         tYrzeuXcDk8o62bvZGKfrCKKUogEYOImDxY0Z/9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-        Erhard Furtner <erhard_f@mailbox.org>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.15 152/244] gcc-plugins: Undefine LATENT_ENTROPY_PLUGIN when plugin disabled for a file
-Date:   Tue, 23 Aug 2022 10:25:11 +0200
-Message-Id: <20220823080104.259578002@linuxfoundation.org>
+        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.15 153/244] tracing/eprobes: Fix reading of string fields
+Date:   Tue, 23 Aug 2022 10:25:12 +0200
+Message-Id: <20220823080104.290604565@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -56,73 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Donnellan <ajd@linux.ibm.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit 012e8d2034f1bda8863435cd589636e618d6a659 upstream.
+commit f04dec93466a0481763f3b56cdadf8076e28bfbf upstream.
 
-Commit 36d4b36b6959 ("lib/nodemask: inline next_node_in() and
-node_random()") refactored some code by moving node_random() from
-lib/nodemask.c to include/linux/nodemask.h, thus requiring nodemask.h to
-include random.h, which conditionally defines add_latent_entropy()
-depending on whether the macro LATENT_ENTROPY_PLUGIN is defined.
+Currently when an event probe (eprobe) hooks to a string field, it does
+not display it as a string, but instead as a number. This makes the field
+rather useless. Handle the different kinds of strings, dynamic, static,
+relational/dynamic etc.
 
-This broke the build on powerpc, where nodemask.h is indirectly included
-in arch/powerpc/kernel/prom_init.c, part of the early boot machinery that
-is excluded from the latent entropy plugin using
-DISABLE_LATENT_ENTROPY_PLUGIN. It turns out that while we add a gcc flag
-to disable the actual plugin, we don't undefine LATENT_ENTROPY_PLUGIN.
+Now when a string field is used, the ":string" type can be used to display
+it:
 
-This leads to the following:
+  echo "e:sw sched/sched_switch comm=$next_comm:string" > dynamic_events
 
-    CC      arch/powerpc/kernel/prom_init.o
-  In file included from ./include/linux/nodemask.h:97,
-                   from ./include/linux/mmzone.h:17,
-                   from ./include/linux/gfp.h:7,
-                   from ./include/linux/xarray.h:15,
-                   from ./include/linux/radix-tree.h:21,
-                   from ./include/linux/idr.h:15,
-                   from ./include/linux/kernfs.h:12,
-                   from ./include/linux/sysfs.h:16,
-                   from ./include/linux/kobject.h:20,
-                   from ./include/linux/pci.h:35,
-                   from arch/powerpc/kernel/prom_init.c:24:
-  ./include/linux/random.h: In function 'add_latent_entropy':
-  ./include/linux/random.h:25:46: error: 'latent_entropy' undeclared (first use in this function); did you mean 'add_latent_entropy'?
-     25 |         add_device_randomness((const void *)&latent_entropy, sizeof(latent_entropy));
-        |                                              ^~~~~~~~~~~~~~
-        |                                              add_latent_entropy
-  ./include/linux/random.h:25:46: note: each undeclared identifier is reported only once for each function it appears in
-  make[2]: *** [scripts/Makefile.build:249: arch/powerpc/kernel/prom_init.o] Fehler 1
-  make[1]: *** [scripts/Makefile.build:465: arch/powerpc/kernel] Fehler 2
-  make: *** [Makefile:1855: arch/powerpc] Error 2
+Link: https://lkml.kernel.org/r/20220820134400.959640191@goodmis.org
 
-Change the DISABLE_LATENT_ENTROPY_PLUGIN flags to undefine
-LATENT_ENTROPY_PLUGIN for files where the plugin is disabled.
-
-Cc: Yury Norov <yury.norov@gmail.com>
-Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216367
-Link: https://lore.kernel.org/linuxppc-dev/alpine.DEB.2.22.394.2208152006320.289321@ramsan.of.borg/
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-Reviewed-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220816051720.44108-1-ajd@linux.ibm.com
+Cc: stable@vger.kernel.org
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/Makefile.gcc-plugins |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_eprobe.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
---- a/scripts/Makefile.gcc-plugins
-+++ b/scripts/Makefile.gcc-plugins
-@@ -6,7 +6,7 @@ gcc-plugin-$(CONFIG_GCC_PLUGIN_LATENT_EN
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_LATENT_ENTROPY)		\
- 		+= -DLATENT_ENTROPY_PLUGIN
- ifdef CONFIG_GCC_PLUGIN_LATENT_ENTROPY
--    DISABLE_LATENT_ENTROPY_PLUGIN += -fplugin-arg-latent_entropy_plugin-disable
-+    DISABLE_LATENT_ENTROPY_PLUGIN += -fplugin-arg-latent_entropy_plugin-disable -ULATENT_ENTROPY_PLUGIN
- endif
- export DISABLE_LATENT_ENTROPY_PLUGIN
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -320,6 +320,24 @@ static unsigned long get_event_field(str
  
+ 	addr = rec + field->offset;
+ 
++	if (is_string_field(field)) {
++		switch (field->filter_type) {
++		case FILTER_DYN_STRING:
++			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
++			break;
++		case FILTER_STATIC_STRING:
++			val = (unsigned long)addr;
++			break;
++		case FILTER_PTR_STRING:
++			val = (unsigned long)(*(char *)addr);
++			break;
++		default:
++			WARN_ON_ONCE(1);
++			return 0;
++		}
++		return val;
++	}
++
+ 	switch (field->size) {
+ 	case 1:
+ 		if (field->is_signed)
 
 

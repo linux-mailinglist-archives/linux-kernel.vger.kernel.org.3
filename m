@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0BF59E0F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E95759E1DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350273AbiHWLoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S1355818AbiHWKuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358001AbiHWLkS (ORCPT
+        with ESMTP id S1356003AbiHWKlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:40:18 -0400
+        Tue, 23 Aug 2022 06:41:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B421779632;
-        Tue, 23 Aug 2022 02:28:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466877A513;
+        Tue, 23 Aug 2022 02:08:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B061F61174;
-        Tue, 23 Aug 2022 09:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A74ABC433D6;
-        Tue, 23 Aug 2022 09:28:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB8E96159A;
+        Tue, 23 Aug 2022 09:08:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2866C43470;
+        Tue, 23 Aug 2022 09:08:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246921;
-        bh=2gIMAlHBijR6NYq4wraQ4wNTunf1yxbOHYK0ZS1AzLE=;
+        s=korg; t=1661245719;
+        bh=CmcPK2lc47Okxh9b7fsrFvpDKb/n652OLhI6HxQ2s24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m1paBw7J5Jk+9Mh7aL7kSQXFf12i20hK8/yMs4ydGY8AyXvKlNhenojj0ZtXuVnqp
-         JfWXGjK47GNzHJLi417Mzq4M8jVZrytO02KM6CT7hyQHvOV4/TWcLfETMnmdFWBSBc
-         D3bnQ0BSGsdWb+9S4vDAal02mWoQkNkLW7prWUP4=
+        b=Eumgf7y4u1pluaQWB3qc5k18+mWgyN4xHBsrLQkSpMvgAA/WLV6AP+h5uwklQ9kZB
+         8w/5UHQyVlY4GChXITlZ3BAR85KasnqJTfM4ag0btnGJ9bQigua7o/+D//SjSaifhu
+         bVHl8W+/Ok9b3Io4hwSgiMBMYNQYanhU6grWiaMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Rustam Subkhankulov <subkhankulov@ispras.ru>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 231/389] video: fbdev: sis: fix typos in SiS_GetModeID()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 140/287] platform/olpc: Fix uninitialized data in debugfs write
 Date:   Tue, 23 Aug 2022 10:25:09 +0200
-Message-Id: <20220823080125.248033246@linuxfoundation.org>
+Message-Id: <20220823080105.210845527@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rustam Subkhankulov <subkhankulov@ispras.ru>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 3eb8fccc244bfb41a7961969e4db280d44911226 ]
+[ Upstream commit 40ec787e1adf302c11668d4cc69838f4d584187d ]
 
-The second operand of a '&&' operator has no impact on expression
-result for cases 400 and 512 in SiS_GetModeID().
+The call to:
 
-Judging by the logic and the names of the variables, in both cases a
-typo was made.
+	size = simple_write_to_buffer(cmdbuf, sizeof(cmdbuf), ppos, buf, size);
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+will succeed if at least one byte is written to the "cmdbuf" buffer.
+The "*ppos" value controls which byte is written.  Another problem is
+that this code does not check for errors so it's possible for the entire
+buffer to be uninitialized.
 
-Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Helge Deller <deller@gmx.de>
+Inintialize the struct to zero to prevent reading uninitialized stack
+data.
+
+Debugfs is normally only writable by root so the impact of this bug is
+very minimal.
+
+Fixes: 6cca83d498bd ("Platform: OLPC: move debugfs support from x86 EC driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YthIKn+TfZSZMEcM@kili
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/sis/init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/platform/olpc/olpc-ec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/sis/init.c b/drivers/video/fbdev/sis/init.c
-index fde27feae5d0..d6b2ce95a859 100644
---- a/drivers/video/fbdev/sis/init.c
-+++ b/drivers/video/fbdev/sis/init.c
-@@ -355,12 +355,12 @@ SiS_GetModeID(int VGAEngine, unsigned int VBFlags, int HDisplay, int VDisplay,
- 		}
- 		break;
- 	case 400:
--		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 800) && (LCDwidth >= 600))) {
-+		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 800) && (LCDheight >= 600))) {
- 			if(VDisplay == 300) ModeIndex = ModeIndex_400x300[Depth];
- 		}
- 		break;
- 	case 512:
--		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 1024) && (LCDwidth >= 768))) {
-+		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 1024) && (LCDheight >= 768))) {
- 			if(VDisplay == 384) ModeIndex = ModeIndex_512x384[Depth];
- 		}
- 		break;
+diff --git a/drivers/platform/olpc/olpc-ec.c b/drivers/platform/olpc/olpc-ec.c
+index 374a8028fec7..b36a000ed969 100644
+--- a/drivers/platform/olpc/olpc-ec.c
++++ b/drivers/platform/olpc/olpc-ec.c
+@@ -170,7 +170,7 @@ static ssize_t ec_dbgfs_cmd_write(struct file *file, const char __user *buf,
+ 	int i, m;
+ 	unsigned char ec_cmd[EC_MAX_CMD_ARGS];
+ 	unsigned int ec_cmd_int[EC_MAX_CMD_ARGS];
+-	char cmdbuf[64];
++	char cmdbuf[64] = "";
+ 	int ec_cmd_bytes;
+ 
+ 	mutex_lock(&ec_dbgfs_lock);
 -- 
 2.35.1
 

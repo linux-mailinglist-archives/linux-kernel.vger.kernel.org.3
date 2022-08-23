@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9966759D892
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D872E59D846
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348378AbiHWJzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S241712AbiHWJlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245474AbiHWJyC (ORCPT
+        with ESMTP id S242766AbiHWJj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:54:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E119C9F75C;
-        Tue, 23 Aug 2022 01:46:18 -0700 (PDT)
+        Tue, 23 Aug 2022 05:39:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016FA78BDF;
+        Tue, 23 Aug 2022 01:41:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 560606153D;
-        Tue, 23 Aug 2022 08:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433BAC433D6;
-        Tue, 23 Aug 2022 08:45:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 205E7B81C4A;
+        Tue, 23 Aug 2022 08:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628CBC433C1;
+        Tue, 23 Aug 2022 08:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244344;
-        bh=8Ft3YJB8yFl83F7dr3vrx+/dK8rUaSG7Bm+tACWwROM=;
+        s=korg; t=1661244023;
+        bh=/bz97d8eC9tLEAccbjF2RV+Ifl5jlUarddDXwnlxLb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ex8P9ayz0PndKMI4W4aEdMsdQKPtTZHoKGoOFZPYVIby0uJKeoUMloxEH7ppagl9p
-         V2pUrRDBqNONrMp5Gq1RnhvYV0vXdIgi16180FZfdEfSoUigSPiQWoPBH9Qpd5iJgg
-         KNbZQz+BmQHzYbhny7XzUEMRAJu4tyLRDREa0Mz8=
+        b=L4W68bxRP3FofIL6/LDNVmDyopE3TdZhUc8xtI0NkNpc7MhglzpBfPPVg7hDodT0K
+         N0AGaq4IC4+mUlArXxqMROv+k/ikHoFCaWQtnJoBa6Uwkf9Ao1yFGuo1GMDVYI1hv5
+         leVIxLAjv7Zm5HYLd7Bwg8JGA9IdM5HCVHuu2qhg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Matthias May <matthias.may@westermo.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 076/244] geneve: do not use RT_TOS for IPv6 flowlabel
+        stable@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        John Stultz <jstultz@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 074/229] selftests: timers: clocksource-switch: fix passing errors from child
 Date:   Tue, 23 Aug 2022 10:23:55 +0200
-Message-Id: <20220823080101.594502305@linuxfoundation.org>
+Message-Id: <20220823080056.367643955@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias May <matthias.may@westermo.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-commit ca2bb69514a8bc7f83914122f0d596371352416c upstream.
+[ Upstream commit 4d8f52ac5fa9eede7b7aa2f2d67c841d9eeb655f ]
 
-According to Guillaume Nault RT_TOS should never be used for IPv6.
+The return value from system() is a waitpid-style integer. Do not return
+it directly because with the implicit masking in exit() it will always
+return 0. Access it with appropriate macros to really pass on errors.
 
-Quote:
-RT_TOS() is an old macro used to interprete IPv4 TOS as described in
-the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
-code, although, given the current state of the code, most of the
-existing calls have no consequence.
-
-But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
-field to be interpreted the RFC 1349 way. There's no historical
-compatibility to worry about.
-
-Fixes: 3a56f86f1be6 ("geneve: handle ipv6 priority like ipv4 tos")
-Acked-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: Matthias May <matthias.may@westermo.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7290ce1423c3 ("selftests/timers: Add clocksource-switch test from timetest suite")
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: John Stultz <jstultz@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/geneve.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/testing/selftests/timers/clocksource-switch.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/geneve.c
-+++ b/drivers/net/geneve.c
-@@ -852,8 +852,7 @@ static struct dst_entry *geneve_get_v6_d
- 		use_cache = false;
- 	}
+diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+index bfc974b4572d..c18313a5f357 100644
+--- a/tools/testing/selftests/timers/clocksource-switch.c
++++ b/tools/testing/selftests/timers/clocksource-switch.c
+@@ -110,10 +110,10 @@ int run_tests(int secs)
  
--	fl6->flowlabel = ip6_make_flowinfo(RT_TOS(prio),
--					   info->key.label);
-+	fl6->flowlabel = ip6_make_flowinfo(prio, info->key.label);
- 	dst_cache = (struct dst_cache *)&info->dst_cache;
- 	if (use_cache) {
- 		dst = dst_cache_get_ip6(dst_cache, &fl6->saddr);
+ 	sprintf(buf, "./inconsistency-check -t %i", secs);
+ 	ret = system(buf);
+-	if (ret)
+-		return ret;
++	if (WIFEXITED(ret) && WEXITSTATUS(ret))
++		return WEXITSTATUS(ret);
+ 	ret = system("./nanosleep");
+-	return ret;
++	return WIFEXITED(ret) ? WEXITSTATUS(ret) : 0;
+ }
+ 
+ 
+-- 
+2.35.1
+
 
 

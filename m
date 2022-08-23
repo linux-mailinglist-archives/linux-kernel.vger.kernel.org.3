@@ -2,83 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9EB59E594
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD95159E5AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242049AbiHWPEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S239780AbiHWPHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 11:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240361AbiHWPD6 (ORCPT
+        with ESMTP id S243824AbiHWPFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:03:58 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FD5F47FB;
-        Tue, 23 Aug 2022 05:28:46 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MBpLF6v8JzXdcn;
-        Tue, 23 Aug 2022 20:23:49 +0800 (CST)
-Received: from dggpeml500019.china.huawei.com (7.185.36.137) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 20:28:07 +0800
-Received: from [10.174.179.189] (10.174.179.189) by
- dggpeml500019.china.huawei.com (7.185.36.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 20:28:06 +0800
-Message-ID: <d99ae719-f47d-e9fe-a8b4-cd77b4ea3503@huawei.com>
-Date:   Tue, 23 Aug 2022 20:27:50 +0800
+        Tue, 23 Aug 2022 11:05:34 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E281CB0B2C;
+        Tue, 23 Aug 2022 05:30:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1661257780; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=BHewm+fuQ2Jf8TbBMMRrHkgSf/h9nL8rxUYMqJDedMX48rIwap7RN+nwf8/cNAC0oaECy2kWWsFo/0pmGOeJQlcHCTkJZyw/IY07hfcXGwejLajOsvh8YOr5x3OQR9s9hBl63K83rEpzkqGxGnmZmMtKyNzr1IAhpr88Jea/OZ0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1661257780; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=bI65T5U8WH6MLxwESf8Rca3+EFGUoI0wB+6IEaK+vu4=; 
+        b=ELe8V/Ak74tD+q3G3PkU15CL4JUbrOcB9vzt8z2zpmeHYOijt1UAkbxVHSX0JfHXNII1rskrVaHV8mJFZP6U9DZ8EBz12V3j1lETe9BgS832qLKULacUwamJirI17W7+VSJbKAZ19Tp6VdPgIrlPEu4FG+In4QeM0sme/BAjFT0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661257780;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=bI65T5U8WH6MLxwESf8Rca3+EFGUoI0wB+6IEaK+vu4=;
+        b=d7qh/3Wo7S+Hw9J27o+zWgrWr/yDw1rjCO9ug3viaq2SJBRSFt3PPDNw/xlKMjls
+        yOIBHuTdAGH0SsrygsW669k93CzeIAN/Smh6336qBBuTkBoa61AtwSR4WdIv7FZoXz9
+        f6kidcMsKHx1C0SzlKRmYaFjgK2xkhNqBLJgSAxA=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1661257778178567.9273906517832; Tue, 23 Aug 2022 05:29:38 -0700 (PDT)
+Message-ID: <ea3ceeab-d92b-6ce5-8ea9-aebb3eaa0a91@arinc9.com>
+Date:   Tue, 23 Aug 2022 15:29:27 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] scsi: increase scsi device's iodone_cnt in scsi_timeout()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 4/6] dt-bindings: net: dsa: mediatek,mt7530: define
+ port binding per switch
 Content-Language: en-US
-To:     Wenchao Hao <haowenchao22@gmail.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Wenchao Hao <haowenchao@huawei.com>
-References: <20220815164324.645550-1-haowenchao@huawei.com>
-From:   Wu Bo <wubo40@huawei.com>
-In-Reply-To: <20220815164324.645550-1-haowenchao@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.189]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500019.china.huawei.com (7.185.36.137)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220820080758.9829-1-arinc.unal@arinc9.com>
+ <20220820080758.9829-5-arinc.unal@arinc9.com>
+ <c24da513-e015-8bc6-8874-ba63c22be5d6@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <c24da513-e015-8bc6-8874-ba63c22be5d6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/16 0:43, Wenchao Hao wrote:
-> The iodone_cnt might be less than iorequest_cnt because
-> we did not increase the iodone_cnt when a command is done
-> from timeout.
-> 
-> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
-> ---
->   drivers/scsi/scsi_error.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-> index 448748e3fba5..d21ae0090166 100644
-> --- a/drivers/scsi/scsi_error.c
-> +++ b/drivers/scsi/scsi_error.c
-> @@ -355,6 +355,7 @@ enum blk_eh_timer_return scsi_timeout(struct request *req)
->   		 */
->   		if (test_and_set_bit(SCMD_STATE_COMPLETE, &scmd->state))
->   			return BLK_EH_RESET_TIMER;
-> +		atomic_inc(&scmd->device->iodone_cnt);
->   		if (scsi_abort_command(scmd) != SUCCESS) {
->   			set_host_byte(scmd, DID_TIME_OUT);
->   			scsi_eh_scmd_add(scmd);
 
-Reviewed-by: Wu Bo <wubo40@huawei.com>
--- 
-Wu Bo
+
+On 23.08.2022 13:47, Krzysztof Kozlowski wrote:
+> On 20/08/2022 11:07, Arınç ÜNAL wrote:
+>> Define DSA port binding per switch model as each switch model requires
+>> different values for certain properties.
+>>
+>> Define reg property on $defs as it's the same for all switch models.
+>>
+>> Remove unnecessary lines as they are already included from the referred
+>> dsa.yaml.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 56 +++++++++++--------
+>>   1 file changed, 34 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> index 657e162a1c01..7c4374e16f96 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> @@ -130,38 +130,47 @@ properties:
+>>         ethsys.
+>>       maxItems: 1
+>>   
+>> -patternProperties:
+>> -  "^(ethernet-)?ports$":
+>> -    type: object
+>> -
+>> -    patternProperties:
+>> -      "^(ethernet-)?port@[0-9]+$":
+>> -        type: object
+>> -        description: Ethernet switch ports
+> 
+> Again, I don't understand why do you remove definitions of these nodes
+> from top-level properties. I explained what I expect in previous
+> discussion and I am confused to hear "this cannot be done".
+
+I agree it can be done, but the binding is done with less lines the 
+current way.
+
+I would need to add more lines than just for creating the node structure 
+since dsa.yaml is not referred.
+
+Then, I would have to create the node structure again for the dsa-port 
+checks.
+
+Arınç

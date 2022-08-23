@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D22B59DCBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC0A59DD33
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358695AbiHWLxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S1355332AbiHWKXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358630AbiHWLu3 (ORCPT
+        with ESMTP id S1353458AbiHWKLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:50:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FE677EAD;
-        Tue, 23 Aug 2022 02:31:22 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC429B1CB;
+        Tue, 23 Aug 2022 01:56:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B98A61381;
-        Tue, 23 Aug 2022 09:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC7EC433D7;
-        Tue, 23 Aug 2022 09:31:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4273C61377;
+        Tue, 23 Aug 2022 08:56:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5181CC433D6;
+        Tue, 23 Aug 2022 08:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247081;
-        bh=GP7gmRHQuHjUHcEaZL42Q5Iqqab1OgWQDLMASb+3ke8=;
+        s=korg; t=1661245008;
+        bh=NQE+D1YIAmhEbIgHZMr35QDB/H8Pj1G4SuYfoV8s4vQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h2Ul+q91qWn+FYBPifcCOsgNtg1TOL2muoue2MY1bZ0LMguFJrkxESZeSZASw8j2/
-         AtUJh4ys5RfGTiuvPQ3JTllIaCPuqW/wrvjVsLbtIMm1N/idanwcPYq+FsEtysKcPH
-         o64yaz0yaFivWr1Iq2lxRj9gIT7F76PgasHV4CV0=
+        b=gAG7lYrZE7p1flRzjjlnwzSvv9gL+JB6XUJzlcOqIz43eCT/KxXS28YSvSZng3u0I
+         b2IQGB2zh61b/FAnYm18F0PcQS+JJZv13ibMTdf8Bbbdq2uK4o3PNOFi6gfQqsP+Hs
+         1oWz9mtdHBeSW7tJV4WO0cc6+ulyo++sNjNgqNHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.4 312/389] pinctrl: nomadik: Fix refcount leak in nmk_pinctrl_dt_subnode_to_map
+        stable@vger.kernel.org,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 229/229] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
 Date:   Tue, 23 Aug 2022 10:26:30 +0200
-Message-Id: <20220823080128.603567365@linuxfoundation.org>
+Message-Id: <20220823080101.806263541@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit 4b32e054335ea0ce50967f63a7bfd4db058b14b9 upstream.
+[ Upstream commit 74de14fe05dd6b151d73cb0c73c8ec874cbdcde6 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak."
+When CONFIG_XPA is enabled, Clang warns:
 
-Fixes: c2f6d059abfc ("pinctrl: nomadik: refactor DT parser to take two paths")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220607111602.57355-1-linmq006@gmail.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  arch/mips/mm/tlbex.c:629:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
+                              ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  arch/mips/mm/tlbex.c:2568:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
+                                ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  2 errors generated.
+
+_PAGE_NO_EXEC can be '0' or '1 << _PAGE_NO_EXEC_SHIFT' depending on the
+build and runtime configuration, which is what the negation operators
+are trying to convey. To silence the warning, explicitly compare against
+0 so the result of the '<<' operator is not implicitly converted to a
+boolean.
+
+According to its documentation, GCC enables -Wint-in-bool-context with
+-Wall but this warning is not visible when building the same
+configuration with GCC. It appears GCC only warns when compiling C++,
+not C, although the documentation makes no note of this:
+https://godbolt.org/z/x39q3brxf
+
+Reported-by: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/nomadik/pinctrl-nomadik.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/mips/mm/tlbex.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-+++ b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-@@ -1461,8 +1461,10 @@ static int nmk_pinctrl_dt_subnode_to_map
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index b55c74a7f7a4..82cd14e7b20d 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -634,7 +634,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
+ 		return;
+ 	}
  
- 	has_config = nmk_pinctrl_dt_get_config(np, &configs);
- 	np_config = of_parse_phandle(np, "ste,config", 0);
--	if (np_config)
-+	if (np_config) {
- 		has_config |= nmk_pinctrl_dt_get_config(np_config, &configs);
-+		of_node_put(np_config);
-+	}
- 	if (has_config) {
- 		const char *gpio_name;
- 		const char *pin;
+-	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
++	if (cpu_has_rixi && _PAGE_NO_EXEC != 0) {
+ 		if (fill_includes_sw_bits) {
+ 			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
+ 		} else {
+@@ -2577,7 +2577,7 @@ static void check_pabits(void)
+ 	unsigned long entry;
+ 	unsigned pabits, fillbits;
+ 
+-	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
++	if (!cpu_has_rixi || _PAGE_NO_EXEC == 0) {
+ 		/*
+ 		 * We'll only be making use of the fact that we can rotate bits
+ 		 * into the fill if the CPU supports RIXI, so don't bother
+-- 
+2.35.1
+
 
 

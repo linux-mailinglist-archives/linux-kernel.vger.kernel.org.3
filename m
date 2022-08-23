@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E97559DA61
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD5559D8EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352410AbiHWKHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S1350178AbiHWJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352428AbiHWKBx (ORCPT
+        with ESMTP id S1350408AbiHWJZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:01:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9254C9753D;
-        Tue, 23 Aug 2022 01:49:43 -0700 (PDT)
+        Tue, 23 Aug 2022 05:25:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1148176771;
+        Tue, 23 Aug 2022 01:36:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BE39B81C4E;
-        Tue, 23 Aug 2022 08:34:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68159C4314B;
-        Tue, 23 Aug 2022 08:34:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92267B81C59;
+        Tue, 23 Aug 2022 08:35:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0444C433D7;
+        Tue, 23 Aug 2022 08:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243662;
-        bh=HsE6Hc1g0L5kt8Rb3CEnOB/34WTJkVgtm0Yx9+swGaY=;
+        s=korg; t=1661243721;
+        bh=ZvgNG1eC9iccsixk7C5q3yyyNPKNAPFVwtvxIcix/aA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lccaubqsTk8obb6MKEW1x12wA2929Y7jpQvg7LrxB05169ouXwlgYoNegwXyIXf2R
-         ZMO4olhQMRnUlB17to1/YLXtiY2MsDRDTz20bLD9B5qYkSuYFUmNzzgRI8qKwXSLXJ
-         leUAhIoiv7U4bUFQeRoCc5Tuf8ZuiqGRg3rQ3k+Q=
+        b=ZQWl6apKiXthWG134NyIRClul97N0SXtG0XfNLtk/VNzutZCTo82wWhzqrFWCwJvN
+         7ocQL5/rfddbU2tcu4TKM5tbzCKVur2aU0xB3J500EUUL/AulQ5tj2a7Zk8/jjPbtf
+         G7eJFOnvAH845VZAC/7cRYBmFr+FCWiuxGAjZaZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>,
-        Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, xctan <xc-tan@outlook.com>,
+        dram <dramforever@live.com>, Ruizhe Pan <c141028@gmail.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 331/365] ASoC: rsnd: care default case on rsnd_ssiu_busif_err_irq_ctrl()
-Date:   Tue, 23 Aug 2022 10:03:52 +0200
-Message-Id: <20220823080132.062538913@linuxfoundation.org>
+Subject: [PATCH 5.19 336/365] riscv: mmap with PROT_WRITE but no PROT_READ is invalid
+Date:   Tue, 23 Aug 2022 10:03:57 +0200
+Message-Id: <20220823080132.268502471@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -58,40 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+From: Celeste Liu <coelacanthus@outlook.com>
 
-[ Upstream commit ef30911d3c39fd57884c348c29b9cbff88def155 ]
+[ Upstream commit 2139619bcad7ac44cc8f6f749089120594056613 ]
 
-Before, ssiu.c didn't care SSI5-8, thus,
-commit b1384d4c95088d0 ("ASoC: rsnd: care default case on
-rsnd_ssiu_busif_err_status_clear()") cares it for status clear.
+As mentioned in Table 4.5 in RISC-V spec Volume 2 Section 4.3, write
+but not read is "Reserved for future use.". For now, they are not valid.
+In the current code, -wx is marked as invalid, but -w- is not marked
+as invalid.
+This patch refines that judgment.
 
-But we should care it for error irq handling, too.
-This patch cares it.
-
-Reported-by: Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>
-Reported-by: Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>
-Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Link: https://lore.kernel.org/r/871quocio1.wl-kuninori.morimoto.gx@renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: xctan <xc-tan@outlook.com>
+Co-developed-by: dram <dramforever@live.com>
+Signed-off-by: dram <dramforever@live.com>
+Co-developed-by: Ruizhe Pan <c141028@gmail.com>
+Signed-off-by: Ruizhe Pan <c141028@gmail.com>
+Signed-off-by: Celeste Liu <coelacanthus@outlook.com>
+Link: https://lore.kernel.org/r/PH7PR14MB559464DBDD310E755F5B21E8CEDC9@PH7PR14MB5594.namprd14.prod.outlook.com
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sh/rcar/ssiu.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/riscv/kernel/sys_riscv.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/sh/rcar/ssiu.c b/sound/soc/sh/rcar/ssiu.c
-index 4b8a63e336c7..d7f4646ee029 100644
---- a/sound/soc/sh/rcar/ssiu.c
-+++ b/sound/soc/sh/rcar/ssiu.c
-@@ -67,6 +67,8 @@ static void rsnd_ssiu_busif_err_irq_ctrl(struct rsnd_mod *mod, int enable)
- 		shift  = 1;
- 		offset = 1;
- 		break;
-+	default:
-+		return;
- 	}
+diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
+index 9c0194f176fc..571556bb9261 100644
+--- a/arch/riscv/kernel/sys_riscv.c
++++ b/arch/riscv/kernel/sys_riscv.c
+@@ -18,9 +18,8 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
+ 	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
+ 		return -EINVAL;
  
- 	for (i = 0; i < 4; i++) {
+-	if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
+-		if (unlikely(!(prot & PROT_READ)))
+-			return -EINVAL;
++	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
++		return -EINVAL;
+ 
+ 	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
+ 			       offset >> (PAGE_SHIFT - page_shift_offset));
 -- 
 2.35.1
 

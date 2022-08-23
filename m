@@ -2,104 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F19959EF5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9E259EF6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiHWWpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S232119AbiHWWrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiHWWpg (ORCPT
+        with ESMTP id S229825AbiHWWrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:45:36 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40B57FFAB;
-        Tue, 23 Aug 2022 15:45:35 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id o184so17688494oif.13;
-        Tue, 23 Aug 2022 15:45:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=oHodqhGQVJUpYZFLY/dKxJcLvNCw1wll2BgbUR8IyRA=;
-        b=ur63j5doB31+aKQ7n01E5tE7nrAOum/teo2y5QRmkBIkaZaVUiI8sfPftA2VGQZf6F
-         zHlrQlU8jd7TyK6neOoN0YlsOOWsXR32tuSbmhHaCpFPNk9+0kSItUsuK/NKDqCPJvND
-         EAmyJ8rqx0ikle4TSHPW95/bDJzXWMHBSzmF92VO+8toqUk08vqNy2S/WNtVDcpemwyk
-         pXYasoEFBEvnvd16gZH3CkL5O0lv9D8YHPf/yubXmP8ZQ+E8ruVBbZHye28aSlqCDMau
-         5gtMCM/NXYdG90hagbaF0sunDOd5sXHve1idMJcM2EALMmHOCG+/UXcq9rpE6S636sdc
-         Hcgw==
-X-Gm-Message-State: ACgBeo1ysCiuXaxdRFmHpKjy65StvjUsvyy5iF8if1dGvm+DI1PS+niP
-        QK7go8jo01XYCpiR+ALQBqfcptjg6Hp0NVtuXYQ=
-X-Google-Smtp-Source: AA6agR5QGf6/wKMX1dkxJ79qzB3ojAV6RPDLxuvjeqQBBJ/Ty7vG4R/UxIh9oGZT7FjwvgGXaOFAFRvaVAbsYftkFSE=
-X-Received: by 2002:aca:ba86:0:b0:33a:c6f7:3001 with SMTP id
- k128-20020acaba86000000b0033ac6f73001mr2215025oif.5.1661294735248; Tue, 23
- Aug 2022 15:45:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220823210354.1407473-1-namhyung@kernel.org> <95708205-66EA-4622-A580-FD234E6CE2DA@fb.com>
-In-Reply-To: <95708205-66EA-4622-A580-FD234E6CE2DA@fb.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 23 Aug 2022 15:45:24 -0700
-Message-ID: <CAM9d7cgxP6+R2BkVZfRAVvFUaJcknu8wAvKa_b1TBnTdKKiQvw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 18:47:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E8C883F4;
+        Tue, 23 Aug 2022 15:47:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F02E61701;
+        Tue, 23 Aug 2022 22:47:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC92C433D6;
+        Tue, 23 Aug 2022 22:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661294825;
+        bh=mIdkXaJU12XPc/v1eI1SmEBn2eXK40Tc2GKZ2bh56IQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PvKWuYH7LzURRWG2uBfTZoqdR2VuQQqVwYk91ZT4xs+pNAX8p0ZPGebqwKGcGvWsw
+         GoUsisFbfXbphw/ArYdEGhpuApqBSfKBE1hCpdK0MtV5idNvsmpHu4izogGKT4agwJ
+         didDFhjjvxPLmLCTKMkhCG7QeQTsf7RLoFgcC6e5tFw4gcSQJDZ6CVaAGQOa6SApau
+         zFP5jzetWE1fQW5n6Ts6y7cE8gcK3rMH6LJsw1t4kBC1LzIOyRQ1weWVya8eBlE6j8
+         sGSESGojwA+XkGsawcc45JFYMZnl9aP7YRxwddrD68qtzwFb8Eq2/hEwVZR9SjbKfY
+         nxiP9lu/ioTug==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oQcfn-005JQ9-Di;
+        Tue, 23 Aug 2022 23:47:03 +0100
+Date:   Tue, 23 Aug 2022 23:47:03 +0100
+Message-ID: <878rnewpaw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, dmatlack@google.com, bgardon@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
+In-Reply-To: <YwVEoM1pj2MPCELp@xz-m1.local>
+References: <20220819005601.198436-1-gshan@redhat.com>
+        <20220819005601.198436-2-gshan@redhat.com>
+        <87lerkwtm5.wl-maz@kernel.org>
+        <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+        <87fshovtu0.wl-maz@kernel.org>
+        <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+        <YwTc++Lz6lh3aR4F@xz-m1.local>
+        <87bksawz0w.wl-maz@kernel.org>
+        <YwVEoM1pj2MPCELp@xz-m1.local>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: peterx@redhat.com, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+On Tue, 23 Aug 2022 22:20:32 +0100,
+Peter Xu <peterx@redhat.com> wrote:
+> 
+> On Tue, Aug 23, 2022 at 08:17:03PM +0100, Marc Zyngier wrote:
+> > I don't think we really need this check on the hot path. All we need
+> > is to make the request sticky until userspace gets their act together
+> > and consumes elements in the ring. Something like:
+> > 
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 986cee6fbc7f..e8ed5e1af159 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -747,6 +747,14 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
+> >  
+> >  		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
+> >  			return kvm_vcpu_suspend(vcpu);
+> > +
+> > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
+> > +		    kvm_dirty_ring_soft_full(vcpu)) {
+> > +			kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
+> > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+> > +			trace_kvm_dirty_ring_exit(vcpu);
+> > +			return 0;
+> > +		}
+> >  	}
+> >  
+> >  	return 1;
+> 
+> Right, this seems working.  We can also use kvm_test_request() here.
+> 
+> > 
+> > 
+> > However, I'm a bit concerned by the reset side of things. It iterates
+> > over the vcpus and expects the view of each ring to be consistent,
+> > even if userspace is hacking at it from another CPU. For example, I
+> > can't see what guarantees that the kernel observes the writes from
+> > userspace in the order they are being performed (the documentation
+> > provides no requirements other than "it must collect the dirty GFNs in
+> > sequence", which doesn't mean much from an ordering perspective).
+> > 
+> > I can see that working on a strongly ordered architecture, but on
+> > something as relaxed as ARM, the CPUs may^Wwill aggressively reorder
+> > stuff that isn't explicitly ordered. I have the feeling that a CAS
+> > operation on both sides would be enough, but someone who actually
+> > understands how this works should have a look...
+> 
+> I definitely don't think I 100% understand all the ordering things since
+> they're complicated.. but my understanding is that the reset procedure
+> didn't need memory barrier (unlike pushing, where we have explicit wmb),
+> because we assumed the userapp is not hostile so logically it should only
+> modify the flags which is a 32bit field, assuming atomicity guaranteed.
 
-On Tue, Aug 23, 2022 at 3:19 PM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Aug 23, 2022, at 2:03 PM, Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > The helper is for BPF programs attached to perf_event in order to read
-> > event-specific raw data.  I followed the convention of the
-> > bpf_read_branch_records() helper so that it can tell the size of
-> > record using BPF_F_GET_RAW_RECORD flag.
-> >
-> > The use case is to filter perf event samples based on the HW provided
-> > data which have more detailed information about the sample.
-> >
-> > Note that it only reads the first fragment of the raw record.  But it
-> > seems mostly ok since all the existing PMU raw data have only single
-> > fragment and the multi-fragment records are only for BPF output attached
-> > to sockets.  So unless it's used with such an extreme case, it'd work
-> > for most of tracing use cases.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> > I don't know how to test this.  As the raw data is available on some
-> > hardware PMU only (e.g. AMD IBS).  I tried a tracepoint event but it was
-> > rejected by the verifier.  Actually it needs a bpf_perf_event_data
-> > context so that's not an option IIUC.
->
-> Can we add a software event that generates raw data for testing?
+Atomicity doesn't guarantee ordering, unfortunately. Take the
+following example: CPU0 is changing a bunch of flags for GFNs A, B, C,
+D that exist in the ring in that order, and CPU1 performs an ioctl to
+reset the page state.
 
-Ok, now I think that I can use a bpf-output sw event.  It would need
-another BPF program to write data to the event and the test program
-can read it from BPF using this helper. :)
+CPU0:
+    write_flag(A, KVM_DIRTY_GFN_F_RESET)
+    write_flag(B, KVM_DIRTY_GFN_F_RESET)
+    write_flag(C, KVM_DIRTY_GFN_F_RESET)
+    write_flag(D, KVM_DIRTY_GFN_F_RESET)
+    [...]
+
+CPU1:
+   ioctl(KVM_RESET_DIRTY_RINGS)
+
+Since CPU0 writes do not have any ordering, CPU1 can observe the
+writes in a sequence that have nothing to do with program order, and
+could for example observe that GFN A and D have been reset, but not B
+and C. This in turn breaks the logic in the reset code (B, C, and D
+don't get reset), despite userspace having followed the spec to the
+letter. If each was a store-release (which is the case on x86), it
+wouldn't be a problem, but nothing calls it in the documentation.
+
+Maybe that's not a big deal if it is expected that each CPU will issue
+a KVM_RESET_DIRTY_RINGS itself, ensuring that it observe its own
+writes. But expecting this to work across CPUs without any barrier is
+wishful thinking.
+
+> IIRC we used to discuss similar questions on "what if the user is hostile
+> and wants to hack the process by messing up with the ring", and our
+> conclusion was as long as the process wouldn't mess up anything outside
+> itself it should be okay. E.g. It should not be able to either cause the
+> host to misfunction, or trigger kernel warnings in dmesg, etc..
+
+I'm not even discussing safety here. I'm purely discussing the
+interactions between userspace and kernel based on the documentation
+and the existing kernel code.
 
 Thanks,
-Namhyung
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

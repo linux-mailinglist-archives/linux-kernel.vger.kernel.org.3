@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495AE59EB64
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8976D59EB7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbiHWSuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S234038AbiHWSv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbiHWStj (ORCPT
+        with ESMTP id S233607AbiHWSvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:49:39 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366D01EEE9;
-        Tue, 23 Aug 2022 10:13:13 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-335624d1e26so397289407b3.4;
-        Tue, 23 Aug 2022 10:13:13 -0700 (PDT)
+        Tue, 23 Aug 2022 14:51:04 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080D0C877A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:14:26 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id x5so10871718qtv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Jl7QpGWs3fSIOiwFofszvrGHHvncc4MbU/7u4S5E9/8=;
+        b=TVRjqNKTkcZsOWoJUtNkKqkrqnNgsUcxZ3iU7mf9gQMukXt6eadTKffbXPftXiPSw7
+         pbFdaX/XvKcKsmy0y0iOhL+TWd/nqVt6EKTwiGap0p7R7LfDX5ARSpal7E01PxEC7fyi
+         osQ34y+6+VdnAkdUziRNLHbQag8PfiJU9szmI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=xjbcbO8Zt7nAdCqR/OOnim/u0BKXicwexFKdBPWF5UA=;
-        b=K3WqMYvzn1TgadkS8a65O4uKsU2lxS8SuFBx1/uKMIc8Hjhhx+CRE0XSdHZftZuL3C
-         G9KBEl3Uic3YqgGVN5Yr/H+hlUjC1S3w0rHjWSamVnaaK92RoI/UuJxgRfDLbnanFYJ9
-         lx8K3gdbpj9ylPDp8ksMjCilu5ZvqWRAfhMW1vLWx4RPFdhcXCjqRFMceiaSQ9odHNIu
-         BOvcXju69WY00uFHAvdJQFy/3x5wbxRZwnR91avjygtxquk1Fru+HnZSau59Y63E5bFv
-         aHeiWipX8ErnSVUkqoWkdTrbMMSqcwCO4D5mKoB7tLsB6QqzPJ/RKnjgidcRsyJJPKWD
-         +Whg==
-X-Gm-Message-State: ACgBeo32GJTAvGrlsQ/ReLKM6Fqw3CgsJlK3tCudhMkeIddPg0QrAtmc
-        9nd39b49i2flBl8g+NCYHZMycpe+EWsFleWDB0A=
-X-Google-Smtp-Source: AA6agR5RwwEAYHTEyDT9M8GfloXYOsPsrh7q7Mo2LXQKsUHGZLrxmsJXZfYn8sTtMQ3Ac2o8Z2P/Avkd9oxF2VclUyw=
-X-Received: by 2002:a81:104e:0:b0:336:37f1:9686 with SMTP id
- 75-20020a81104e000000b0033637f19686mr27748007ywq.149.1661274782976; Tue, 23
- Aug 2022 10:13:02 -0700 (PDT)
+        bh=Jl7QpGWs3fSIOiwFofszvrGHHvncc4MbU/7u4S5E9/8=;
+        b=WF/xR6ZL8l3fo5Uvk33L5AvZsgh60TEn+xoPBJDRqg1gWULMYsUD3hAaAnFzFRKj0O
+         wy1gqj6dAiNAE2zILej3Utw6D7iFlnS8Vda+i9SN0hNYhLXzNIBNCg+3lSdNuuLEynx+
+         8e/ihsZbM8qtSseY1pa2vTRyEG/GfV+zWJ01hetX2GH70LIki1bpxCqZ1lBBLYpaR8IG
+         S6VJtI/q+LV24cH3flW8W6Rr2h2I1QiuyGNM9jGmkVh7LTAu+Hp2quA9YAMSDBZeGQcs
+         nZ+UgrKt2Sn/yo1S4xjEod2abE6y+baECk1Kn684aWYHLP4+CQkGLJc4GW81LtYkR6oV
+         fKIA==
+X-Gm-Message-State: ACgBeo3JGabpbe/aMY+Bt52g1gR6OevR9XusISA3ndiKN9464h0F/j+f
+        jbulCE2K0C+0ABLv1UVJ9RD1tBsjHn4K5exL4zrH0Q==
+X-Google-Smtp-Source: AA6agR7yZgIhhbEKYBINUBSQ28jS9HzTWpx//defT/uB39yIdcraprXQFrAHtvaBYb93jBLIeUBHy3EZq6WbpST8MqA=
+X-Received: by 2002:ac8:5ad2:0:b0:344:90e7:410f with SMTP id
+ d18-20020ac85ad2000000b0034490e7410fmr20659384qtd.625.1661274865816; Tue, 23
+ Aug 2022 10:14:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220822062420.4815-1-chuanjian@nfschina.com>
-In-Reply-To: <20220822062420.4815-1-chuanjian@nfschina.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 19:12:52 +0200
-Message-ID: <CAJZ5v0iQsmPS2F-hTKhhHho2+=UgAfag6jNs=m-WQY0CL6t=Lw@mail.gmail.com>
-Subject: Re: [PATCH] tools/power/acpi/os_specific/service_layers/osunixxf.c:remove
- unnecessary (void*) conversions
-To:     Dong Chuanjian <chuanjian@nfschina.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220819190807.1275937-1-pmalani@chromium.org>
+ <20220819190807.1275937-3-pmalani@chromium.org> <YwSMYb67PMAEkv8f@kuha.fi.intel.com>
+In-Reply-To: <YwSMYb67PMAEkv8f@kuha.fi.intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 23 Aug 2022 10:14:14 -0700
+Message-ID: <CACeCKadLYXPLSLzgv5YbBLjb3Tc73-_qiTM_HBDq4CXbAw+8Yw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] platform/chrome: cros_ec_typec: Correct alt mode index
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 8:24 AM Dong Chuanjian <chuanjian@nfschina.com> wrote:
->
-> remove unnecessary void* type casting
->
-> Signed-off-by: Dong Chuanjian <chuanjian@nfschina.com>
+Hi Heikki,
 
-This is ACPICA code, so please submit changes against it to the
-upstream ACPICA project on GitHub.  Thanks!
+Thanks for the review.
 
-> diff --git a/tools/power/acpi/os_specific/service_layers/osunixxf.c b/tools/power/acpi/os_specific/service_layers/osunixxf.c
-> index b3651a04d68c..a7e65fb95caf 100644
-> --- a/tools/power/acpi/os_specific/service_layers/osunixxf.c
-> +++ b/tools/power/acpi/os_specific/service_layers/osunixxf.c
-> @@ -679,7 +679,7 @@ acpi_os_create_semaphore(u32 max_units,
+On Tue, Aug 23, 2022 at 1:14 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
 >
->  acpi_status acpi_os_delete_semaphore(acpi_handle handle)
->  {
-> -       sem_t *sem = (sem_t *) handle;
-> +       sem_t *sem = handle;
+> Hi,
 >
->         if (!sem) {
->                 return (AE_BAD_PARAMETER);
-> @@ -715,7 +715,7 @@ acpi_status
->  acpi_os_wait_semaphore(acpi_handle handle, u32 units, u16 msec_timeout)
->  {
->         acpi_status status = AE_OK;
-> -       sem_t *sem = (sem_t *) handle;
-> +       sem_t *sem = handle;
->         int ret_val;
->  #ifndef ACPI_USE_ALTERNATE_TIMEOUT
->         struct timespec time;
-> @@ -832,7 +832,7 @@ acpi_os_wait_semaphore(acpi_handle handle, u32 units, u16 msec_timeout)
+> On Fri, Aug 19, 2022 at 07:08:03PM +0000, Prashant Malani wrote:
+> > Alt mode indices used by USB PD (Power Delivery) start with 1, not 0.
+> >
+> > Update the alt mdoe registration code to factor this in to the alt mode
+> > descriptor.
+> >
+> > Fixes: de0f49487db3 ("platform/chrome: cros_ec_typec: Register partner altmodes")
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
 >
->  acpi_status acpi_os_signal_semaphore(acpi_handle handle, u32 units)
->  {
-> -       sem_t *sem = (sem_t *) handle;
-> +       sem_t *sem = handle;
+> Shouldn't this be applied also to the stable kernels?
+
+We're not planning on backporting alt mode driver stuff to older
+kernels, so probably not necessary
+(aside from where it gets auto-magically picked).
+Userspace currently doesn't use the mode index for anything.
+
+Please LMK if you still feel it should go to stable.
+
 >
->         if (!sem) {
->                 return (AE_BAD_PARAMETER);
-> --
-> 2.18.2
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 >

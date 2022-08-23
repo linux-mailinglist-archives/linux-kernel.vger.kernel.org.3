@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F6C59E096
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5341759DFFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359258AbiHWL43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
+        id S1356679AbiHWLDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358720AbiHWLxS (ORCPT
+        with ESMTP id S1357167AbiHWLBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:53:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4BFD5711;
-        Tue, 23 Aug 2022 02:32:54 -0700 (PDT)
+        Tue, 23 Aug 2022 07:01:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E2BAF0C5;
+        Tue, 23 Aug 2022 02:14:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A1C60F50;
-        Tue, 23 Aug 2022 09:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F9DC433C1;
-        Tue, 23 Aug 2022 09:32:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F3BAB81C86;
+        Tue, 23 Aug 2022 09:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8635C433D7;
+        Tue, 23 Aug 2022 09:14:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247155;
-        bh=hH9EABSe28KlyoKoCa/fmsYDX15i5Xi3gViSaf2aJNc=;
+        s=korg; t=1661246060;
+        bh=ZhkPRONPRsdklvEmDO5ZqnezVhTgjCAugxYUuo/Z7Lg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C11U5nzjgSRslYmWcuVrRFMymdebMbP6mAuVuK74rdbwS5+YBceEVTGTeH2KqH6VL
-         uKFcNM8ShACV+hcEIOnnWPlvRklz9gijH4uxatfoadvPHGu/YdMSvlLZsUwDO/jU93
-         gOVTIxFi1G3iEJbuYRgGAayMFKpkRp0NZIf0TgLw=
+        b=TOwedi38gOiukjScUoGb4UbgepABaSstzM5bK6HTiRLBn/KV4ydU+z4LfLY8T24qe
+         /M00rXIbkokS4s2kZIs7v3boTb2GvNoQle1in8rROjEER0EeoIFf74XMf4WkJdeeoe
+         3w+4/YAYNteASgScvf4UvNH3wvJrFywtLa5Ki51g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Bee <knaerzche@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Alexander Kochetkov <al.kochet@gmail.com>
-Subject: [PATCH 5.4 336/389] clk: rockchip: add sclk_mac_lbtest to rk3188_critical_clocks
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 4.19 245/287] nios2: dont leave NULLs in sys_call_table[]
 Date:   Tue, 23 Aug 2022 10:26:54 +0200
-Message-Id: <20220823080129.556787490@linuxfoundation.org>
+Message-Id: <20220823080109.378442317@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Bee <knaerzche@gmail.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit ef990bcad58cf1d13c5a49191a2c2342eb8d6709 upstream.
+commit 45ec746c65097c25e77d24eae8fee0def5b6cc5d upstream.
 
-Since the loopbacktest clock is not exported and is not touched in the
-driver, it has to be added to rk3188_critical_clocks to be protected from
-being disabled and in order to get the emac working.
+fill the gaps in there with sys_ni_syscall, as everyone does...
 
-Signed-off-by: Alex Bee <knaerzche@gmail.com>
-Link: https://lore.kernel.org/r/20200722161820.5316-1-knaerzche@gmail.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Alexander Kochetkov <al.kochet@gmail.com>
+Fixes: 82ed08dd1b0e ("nios2: Exception handling")
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/rockchip/clk-rk3188.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/nios2/kernel/entry.S         |    1 -
+ arch/nios2/kernel/syscall_table.c |    1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/clk/rockchip/clk-rk3188.c
-+++ b/drivers/clk/rockchip/clk-rk3188.c
-@@ -751,6 +751,7 @@ static const char *const rk3188_critical
- 	"pclk_peri",
- 	"hclk_cpubus",
- 	"hclk_vio_bus",
-+	"sclk_mac_lbtest",
- };
+--- a/arch/nios2/kernel/entry.S
++++ b/arch/nios2/kernel/entry.S
+@@ -193,7 +193,6 @@ local_restart:
+ 	movhi	r11, %hiadj(sys_call_table)
+ 	add	r1, r1, r11
+ 	ldw	r1, %lo(sys_call_table)(r1)
+-	beq	r1, r0, ret_invsyscall
  
- static struct rockchip_clk_provider *__init rk3188_common_clk_init(struct device_node *np)
+ 	/* Check if we are being traced */
+ 	GET_THREAD_INFO r11
+--- a/arch/nios2/kernel/syscall_table.c
++++ b/arch/nios2/kernel/syscall_table.c
+@@ -25,5 +25,6 @@
+ #define __SYSCALL(nr, call) [nr] = (call),
+ 
+ void *sys_call_table[__NR_syscalls] = {
++	[0 ... __NR_syscalls-1] = sys_ni_syscall,
+ #include <asm/unistd.h>
+ };
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADE259E010
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBDF59E0E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241491AbiHWL3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
+        id S1355688AbiHWKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347826AbiHWLXx (ORCPT
+        with ESMTP id S1354438AbiHWKZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:23:53 -0400
+        Tue, 23 Aug 2022 06:25:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8496726B3;
-        Tue, 23 Aug 2022 02:23:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD790A4054;
+        Tue, 23 Aug 2022 02:05:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 128DD61224;
-        Tue, 23 Aug 2022 09:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A7AC433C1;
-        Tue, 23 Aug 2022 09:23:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A1036158C;
+        Tue, 23 Aug 2022 09:05:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B71C433C1;
+        Tue, 23 Aug 2022 09:05:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246627;
-        bh=0e2tt6DrrV1ZWC1oY7l9p4t3b8AMy0FXCj2qQ2cAlz0=;
+        s=korg; t=1661245501;
+        bh=vtRXCHze60S9N+iuu3PGeK93PaQSS+De1RgKrNFEUBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D0S8SVaQQzpo9d/Z6osiUXQsQIE7NB6YHHKZFbbkA2h7Su8iuTBTwY5r9SCUiWGB5
-         LFWu27mt09LzOBSpdD6GIJgUEKCAxy/bbMd/MJ2RoNqVdKjgWCjmYWj/68DgDHN5QK
-         z7/5U5Sgd1YWEqQehj74Bkeh/zuO6sKj9+rQHu8w=
+        b=x/HusN+Ae4yvwFpTWZuoSp8NF+IdXf3jdljKxbIObVjXBR32RTZF/J+k8sylpzyL9
+         bRtVwwC5Q8HBRDal8z3o/58hy+V8GwZfPs5XV3f3f5ba95YQzwy9tyzllpCuScw4De
+         Dij1n70jq4XObPXF5pofkigM2RUlTxaKUwCQzPiw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Jitao Shi <jitao.shi@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 162/389] usb: host: Fix refcount leak in ehci_hcd_ppc_of_probe
+Subject: [PATCH 4.19 071/287] drm/mediatek: Add pull-down MIPI operation in mtk_dsi_poweroff function
 Date:   Tue, 23 Aug 2022 10:24:00 +0200
-Message-Id: <20220823080122.386827512@linuxfoundation.org>
+Message-Id: <20220823080102.623144799@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-[ Upstream commit b5c5b13cb45e2c88181308186b0001992cb41954 ]
+[ Upstream commit fa5d0a0205c34734c5b8daa77e39ac2817f63a10 ]
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+In the dsi_enable function, mtk_dsi_rxtx_control is to
+pull up the MIPI signal operation. Before dsi_disable,
+MIPI should also be pulled down by writing a register
+instead of disabling dsi.
 
-Fixes: 796bcae7361c ("USB: powerpc: Workaround for the PPC440EPX USBH_23 errata [take 3]")
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220602110849.58549-1-linmq006@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If disable dsi without pulling the mipi signal low, the value of
+the register will still maintain the setting of the mipi signal being
+pulled high.
+After resume, even if the mipi signal is not pulled high, it will still
+be in the high state.
+
+Fixes: 2e54c14e310f ("drm/mediatek: Add DSI sub driver")
+
+Link: https://patchwork.kernel.org/project/linux-mediatek/patch/1653012007-11854-5-git-send-email-xinlei.lee@mediatek.com/
+Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ehci-ppc-of.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/mediatek/mtk_dsi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/host/ehci-ppc-of.c b/drivers/usb/host/ehci-ppc-of.c
-index 6bbaee74f7e7..28a19693c19f 100644
---- a/drivers/usb/host/ehci-ppc-of.c
-+++ b/drivers/usb/host/ehci-ppc-of.c
-@@ -148,6 +148,7 @@ static int ehci_hcd_ppc_of_probe(struct platform_device *op)
- 		} else {
- 			ehci->has_amcc_usb23 = 1;
- 		}
-+		of_node_put(np);
- 	}
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index 0dd317ac5fe5..a629a69c2756 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -651,6 +651,8 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
+ 	mtk_dsi_reset_engine(dsi);
+ 	mtk_dsi_lane0_ulp_mode_enter(dsi);
+ 	mtk_dsi_clk_ulp_mode_enter(dsi);
++	/* set the lane number as 0 to pull down mipi */
++	writel(0, dsi->regs + DSI_TXRX_CTRL);
  
- 	if (of_get_property(dn, "big-endian", NULL)) {
+ 	mtk_dsi_disable(dsi);
+ 
 -- 
 2.35.1
 

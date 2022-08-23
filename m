@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1FB59E234
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3A959DCBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359229AbiHWMFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        id S1355245AbiHWKXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359508AbiHWMBs (ORCPT
+        with ESMTP id S1353402AbiHWKL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:01:48 -0400
+        Tue, 23 Aug 2022 06:11:26 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A259D9EB3;
-        Tue, 23 Aug 2022 02:36:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E387F094;
+        Tue, 23 Aug 2022 01:56:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDC4AB81C89;
-        Tue, 23 Aug 2022 09:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F621C433C1;
-        Tue, 23 Aug 2022 09:36:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C4FEB81C3E;
+        Tue, 23 Aug 2022 08:56:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F00CC433D6;
+        Tue, 23 Aug 2022 08:56:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247361;
-        bh=t5e8m7zUSZLlKDZ0aO+vYJnddTUtFWDaqH96W3GXM0M=;
+        s=korg; t=1661244999;
+        bh=Qv6ZPkimk60J/z99QV34gPcNVKVWvbzTNrs91mDfqTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+W40H6L8IJJS/fsuZ5KyUSl6wL7u1eSeurYunTmOp2ZaxA1As3NDo/l6DE6AFNxx
-         +THEsCrHMPQBlBgcgsp7c/yL2olG4ETAg1Bbnxzx8CvV3MXSoJ6O9T51lK0hTs17Dv
-         vlptXb1WLrS9oqwHWRpbMn6pesn5K96iIQ1dObOY=
+        b=ITZ5Agz8P9NiqzZ9GZBfO01aYHqx8fHjuUyUFEAy5prxYVBF8FrGPmFCqIKkRgeGe
+         /fR7Ge4vLtQIOur2xbjvSBx5hJ1DNSm+pakQ7F5HiToC+92q0FVb4MlKhpy6NpGF93
+         MZqoIAtXnoRBwb3b5IkrYN61d1rPEmMDb4wHwJg4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.10 012/158] can: ems_usb: fix clangs -Wunaligned-access warning
-Date:   Tue, 23 Aug 2022 10:25:44 +0200
-Message-Id: <20220823080046.564352370@linuxfoundation.org>
+        stable@vger.kernel.org, Ofir Bitton <obitton@habana.ai>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 186/244] habanalabs/gaudi: fix shift out of bounds
+Date:   Tue, 23 Aug 2022 10:25:45 +0200
+Message-Id: <20220823080105.561121637@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Ofir Bitton <obitton@habana.ai>
 
-commit a4cb6e62ea4d36e53fb3c0f18ea4503d7b76674f upstream.
+[ Upstream commit 01622098aeb05a5efbb727199bbc2a4653393255 ]
 
-clang emits a -Wunaligned-access warning on struct __packed
-ems_cpc_msg.
+When validating NIC queues, queue offset calculation must be
+performed only for NIC queues.
 
-The reason is that the anonymous union msg (not declared as packed) is
-being packed right after some non naturally aligned variables (3*8
-bits + 2*32) inside a packed struct:
-
-| struct __packed ems_cpc_msg {
-| 	u8 type;	/* type of message */
-| 	u8 length;	/* length of data within union 'msg' */
-| 	u8 msgid;	/* confirmation handle */
-| 	__le32 ts_sec;	/* timestamp in seconds */
-| 	__le32 ts_nsec;	/* timestamp in nano seconds */
-|	/* ^ not naturally aligned */
-|
-| 	union {
-| 	/* ^ not declared as packed */
-| 		u8 generic[64];
-| 		struct cpc_can_msg can_msg;
-| 		struct cpc_can_params can_params;
-| 		struct cpc_confirm confirmation;
-| 		struct cpc_overrun overrun;
-| 		struct cpc_can_error error;
-| 		struct cpc_can_err_counter err_counter;
-| 		u8 can_state;
-| 	} msg;
-| };
-
-Starting from LLVM 14, having an unpacked struct nested in a packed
-struct triggers a warning. c.f. [1].
-
-Fix the warning by marking the anonymous union as packed.
-
-[1] https://github.com/llvm/llvm-project/issues/55520
-
-Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB interface")
-Link: https://lore.kernel.org/all/20220802094021.959858-1-mkl@pengutronix.de
-Cc: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Cc: Sebastian Haas <haas@ems-wuensche.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/ems_usb.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/habanalabs/gaudi/gaudi.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
---- a/drivers/net/can/usb/ems_usb.c
-+++ b/drivers/net/can/usb/ems_usb.c
-@@ -194,7 +194,7 @@ struct __packed ems_cpc_msg {
- 	__le32 ts_sec;	/* timestamp in seconds */
- 	__le32 ts_nsec;	/* timestamp in nano seconds */
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index 14da87b38e83..801acab048eb 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -5744,15 +5744,17 @@ static int gaudi_parse_cb_no_ext_queue(struct hl_device *hdev,
+ {
+ 	struct asic_fixed_properties *asic_prop = &hdev->asic_prop;
+ 	struct gaudi_device *gaudi = hdev->asic_specific;
+-	u32 nic_mask_q_id = 1 << (HW_CAP_NIC_SHIFT +
+-		((parser->hw_queue_id - GAUDI_QUEUE_ID_NIC_0_0) >> 2));
++	u32 nic_queue_offset, nic_mask_q_id;
  
--	union {
-+	union __packed {
- 		u8 generic[64];
- 		struct cpc_can_msg can_msg;
- 		struct cpc_can_params can_params;
+ 	if ((parser->hw_queue_id >= GAUDI_QUEUE_ID_NIC_0_0) &&
+-			(parser->hw_queue_id <= GAUDI_QUEUE_ID_NIC_9_3) &&
+-			(!(gaudi->hw_cap_initialized & nic_mask_q_id))) {
+-		dev_err(hdev->dev, "h/w queue %d is disabled\n",
+-				parser->hw_queue_id);
+-		return -EINVAL;
++			(parser->hw_queue_id <= GAUDI_QUEUE_ID_NIC_9_3)) {
++		nic_queue_offset = parser->hw_queue_id - GAUDI_QUEUE_ID_NIC_0_0;
++		nic_mask_q_id = 1 << (HW_CAP_NIC_SHIFT + (nic_queue_offset >> 2));
++
++		if (!(gaudi->hw_cap_initialized & nic_mask_q_id)) {
++			dev_err(hdev->dev, "h/w queue %d is disabled\n", parser->hw_queue_id);
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	/* For internal queue jobs just check if CB address is valid */
+-- 
+2.35.1
+
 
 

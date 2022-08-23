@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1653359D9BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F2659D8CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351999AbiHWKBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S243614AbiHWJr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352369AbiHWJ4u (ORCPT
+        with ESMTP id S1351930AbiHWJpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:56:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABE0A1A52;
-        Tue, 23 Aug 2022 01:47:32 -0700 (PDT)
+        Tue, 23 Aug 2022 05:45:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3C32AE03;
+        Tue, 23 Aug 2022 01:43:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BC9E6153C;
-        Tue, 23 Aug 2022 08:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34327C433D7;
-        Tue, 23 Aug 2022 08:47:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 102CD61538;
+        Tue, 23 Aug 2022 08:42:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09457C433C1;
+        Tue, 23 Aug 2022 08:42:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244447;
-        bh=eZGbWIQ2aOVW6x2f3lasoFB+MV6rwSXUOguTXwzahKY=;
+        s=korg; t=1661244149;
+        bh=6bjpeb1yXqMnkg9+2/fYr7o7Pa+WhVmDu5sIiWvdvEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rpCsSr2NY6dxciOW01oD4qwzhNHJL3q4DWiH8aCwLrHUS7rdhe7q0sP+icb5bHqUG
-         EcK6uDJkxSR3LDcl2Qgmlo+paA3PTkLijbtFS912a2PCefkUFYa+YW/UFhEe9Fz05H
-         ff6EHlymqAD3XfwKIFBC7mhDM8pIIH6L2knklaT0=
+        b=HHxHIztraFrj8Ir6NBhJq4+GkpWrEZ/89Nxa1ZUVsdP0G1lwfDPUzMp1Lt7JeD+zY
+         htX/J0qwEcdywRvwLoiZI6w/zDmiwQiEQ2drQm4kZj3khbVS33AYsKIjc2QZxPL4Bu
+         cfNtWFWd94L5JJ/eCq9pCzluhVWgGl4tZtHwOPQY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Louis Peens <louis.peens@corigine.com>,
-        Yu Xiao <yu.xiao@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 095/244] nfp: ethtool: fix the display error of `ethtool -m DEVNAME`
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 093/229] dccp: put dccp_qpolicy_full() and dccp_qpolicy_push() in the same lock
 Date:   Tue, 23 Aug 2022 10:24:14 +0200
-Message-Id: <20220823080102.187733538@linuxfoundation.org>
+Message-Id: <20220823080057.037313606@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Xiao <yu.xiao@corigine.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 4ae97cae07e15d41e5c0ebabba64c6eefdeb0bbe upstream.
+[ Upstream commit a41b17ff9dacd22f5f118ee53d82da0f3e52d5e3 ]
 
-The port flag isn't set to `NFP_PORT_CHANGED` when using
-`ethtool -m DEVNAME` before, so the port state (e.g. interface)
-cannot be updated. Therefore, it caused that `ethtool -m DEVNAME`
-sometimes cannot read the correct information.
+In the case of sk->dccps_qpolicy == DCCPQ_POLICY_PRIO, dccp_qpolicy_full
+will drop a skb when qpolicy is full. And the lock in dccp_sendmsg is
+released before sock_alloc_send_skb and then relocked after
+sock_alloc_send_skb. The following conditions may lead dccp_qpolicy_push
+to add skb to an already full sk_write_queue:
 
-E.g. `ethtool -m DEVNAME` cannot work when load driver before plug
-in optical module, as the port interface is still NONE without port
-update.
+thread1--->lock
+thread1--->dccp_qpolicy_full: queue is full. drop a skb
+thread1--->unlock
+thread2--->lock
+thread2--->dccp_qpolicy_full: queue is not full. no need to drop.
+thread2--->unlock
+thread1--->lock
+thread1--->dccp_qpolicy_push: add a skb. queue is full.
+thread1--->unlock
+thread2--->lock
+thread2--->dccp_qpolicy_push: add a skb!
+thread2--->unlock
 
-Now update the port state before sending info to NIC to ensure that
-port interface is correct (latest state).
+Fix this by moving dccp_qpolicy_full.
 
-Fixes: 61f7c6f44870 ("nfp: implement ethtool get module EEPROM")
-Reviewed-by: Louis Peens <louis.peens@corigine.com>
-Signed-off-by: Yu Xiao <yu.xiao@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Link: https://lore.kernel.org/r/20220802093355.69065-1-simon.horman@corigine.com
+Fixes: b1308dc015eb ("[DCCP]: Set TX Queue Length Bounds via Sysctl")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20220729110027.40569-1-hbh25y@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c |    2 ++
- 1 file changed, 2 insertions(+)
+ net/dccp/proto.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c
-@@ -1219,6 +1219,8 @@ nfp_port_get_module_info(struct net_devi
- 	u8 data;
+diff --git a/net/dccp/proto.c b/net/dccp/proto.c
+index 936dab12f99f..e552009b6cc5 100644
+--- a/net/dccp/proto.c
++++ b/net/dccp/proto.c
+@@ -764,11 +764,6 @@ int dccp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
  
- 	port = nfp_port_from_netdev(netdev);
-+	/* update port state to get latest interface */
-+	set_bit(NFP_PORT_CHANGED, &port->flags);
- 	eth_port = nfp_port_get_eth_port(port);
- 	if (!eth_port)
- 		return -EOPNOTSUPP;
+ 	lock_sock(sk);
+ 
+-	if (dccp_qpolicy_full(sk)) {
+-		rc = -EAGAIN;
+-		goto out_release;
+-	}
+-
+ 	timeo = sock_sndtimeo(sk, noblock);
+ 
+ 	/*
+@@ -787,6 +782,11 @@ int dccp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 	if (skb == NULL)
+ 		goto out_release;
+ 
++	if (dccp_qpolicy_full(sk)) {
++		rc = -EAGAIN;
++		goto out_discard;
++	}
++
+ 	if (sk->sk_state == DCCP_CLOSED) {
+ 		rc = -ENOTCONN;
+ 		goto out_discard;
+-- 
+2.35.1
+
 
 

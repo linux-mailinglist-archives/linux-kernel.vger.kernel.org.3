@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FA859E8C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8F559E8CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344248AbiHWRMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S243507AbiHWRM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344523AbiHWRK7 (ORCPT
+        with ESMTP id S1344245AbiHWRKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:10:59 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC3CB4433;
-        Tue, 23 Aug 2022 07:00:32 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 23 Aug 2022 13:10:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A2E753A2;
+        Tue, 23 Aug 2022 07:01:47 -0700 (PDT)
+Received: from pan.home (unknown [IPv6:2a00:23c6:c311:3401:60d6:460b:e0dc:41ba])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id BA0E761EA192D;
-        Tue, 23 Aug 2022 16:00:30 +0200 (CEST)
-Message-ID: <466c8661-4d5b-ba05-328d-6772804169d3@molgen.mpg.de>
-Date:   Tue, 23 Aug 2022 16:00:30 +0200
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 74C2C6601DD8;
+        Tue, 23 Aug 2022 15:01:46 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661263306;
+        bh=U+314oct9Zu4v5I9Z6fQHhGgVdlqQID9qINoCymOG0M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KEI3ObSfikbPPBkGQYCr5s/5lOkKmCmaxjj23ydmdZPlPwTLqbG7dVtgbBhkjbQDD
+         UiCBq/F8LGpY0IKeWUsKVhC0pGGv26nhnJnr8cP9sa1bEhJrfIB05/vBLPVFLxiLEL
+         s+Tc6rWA65OFDt6oxEHqpONlDZT567Ka9hyu7Y4w6ZYDwkYjjUN6pGVwAmurlF+0xj
+         qzuBDnrhS180VCqyMjNgCJ8C8fGpWV5svGZ2cnYpQPEcZk4Vhxj3at75j/fiLoEF/U
+         bNKkyY4GM47RHpXEdJZiR1DRQEu0yT72/t1N2Or7JzkY2GRFXlH6Lwmsyv9Q0K+GuP
+         9RQ4qg6YW5+Lw==
+From:   Martyn Welch <martyn.welch@collabora.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
+Cc:     kernel@collabora.com, Martyn Welch <martyn.welch@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 1/2] dt-bindings: arm: fsl: Add MSC SM2S-IMX8PLUS SoM and SM2-MB-EP1 Carrier
+Date:   Tue, 23 Aug 2022 15:01:21 +0100
+Message-Id: <20220823140124.1469989-1-martyn.welch@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Dell XPS 13 9370: thermal thermal_zone10: failed to read out thermal
- zone (-61)
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux folks,
+Add DT compatible strings for a combination of the 14N0600E variant of
+the Avnet (MSC branded) SM2S-IMX8PLUS SoM on it's own and in combination
+with the SM2-MB-EP1 carrier board.
 
+Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-On the Dell XPS 13 9370 with Debian sid/unstable, Linux warns about a 
-thermal related issue:
+Changes in v2:
+  - New addition
 
-     [    0.000000] Linux version 5.18.0-4-amd64 
-(debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU 
-ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC 
-Debian 5.18.16-1 (2022-08-10)
-     […]
-     [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 
-07/06/2022
-     […]
-     [   15.722394] thermal thermal_zone10: failed to read out thermal 
-zone (-61)
+Changes in v3:
+  - Switch to avnet vendor
+  - Shortened descriptive comment
 
-Can that warning be addressed?
+Changes in v4:
+  - No changes
 
+Changes in v5:
+  - No changes
 
-Kind regards,
+Changes in v6:
+  - No changes
 
-Paul
+Changes in v7:
+  - No changes
 
+ Documentation/devicetree/bindings/arm/fsl.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-PS: There are twelve thermal zones:
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 7431579ab0e8..81d90dc83385 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -936,6 +936,13 @@ properties:
+               - toradex,verdin-imx8mp-wifi  # Verdin iMX8M Plus Wi-Fi / BT Modules
+           - const: fsl,imx8mp
+ 
++      - description: Avnet (MSC Branded) Boards with SM2S i.MX8M Plus Modules
++        items:
++          - const: avnet,sm2s-imx8mp-14N0600E-ep1 # SM2S-IMX8PLUS-14N0600E on SM2-MB-EP1 Carrier Board
++          - const: avnet,sm2s-imx8mp-14N0600E     # 14N0600E variant of SM2S-IMX8PLUS SoM
++          - const: avnet,sm2s-imx8mp              # SM2S-IMX8PLUS SoM
++          - const: fsl,imx8mp
++
+       - description: Engicam i.Core MX8M Plus SoM based boards
+         items:
+           - enum:
+-- 
+2.35.1
 
-```
-$ ls -l /sys/devices/virtual/thermal/
-total 0
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device0
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device1
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device2
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device3
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device4
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device5
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device6
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device7
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device8
-drwxr-xr-x 4 root root 0 Aug 23 14:24 cooling_device9
-drwxr-xr-x 4 root root 0 Aug 23 14:24 thermal_zone0
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone1
-drwxr-xr-x 4 root root 0 Aug 23 14:24 thermal_zone10
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone11
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone2
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone3
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone4
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone5
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone6
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone7
-drwxr-xr-x 4 root root 0 Aug 23 14:24 thermal_zone8
-drwxr-xr-x 3 root root 0 Aug 23 14:24 thermal_zone9
-$ ls -l /sys/devices/virtual/thermal/thermal_zone10/
-total 0
--r--r--r-- 1 root root 4096 Aug 23 16:00 available_policies
-drwxr-xr-x 3 root root    0 Aug 23 14:24 hwmon6
--rw-r--r-- 1 root root 4096 Aug 23 16:00 integral_cutoff
--rw-r--r-- 1 root root 4096 Aug 23 16:00 k_d
--rw-r--r-- 1 root root 4096 Aug 23 16:00 k_i
--rw-r--r-- 1 root root 4096 Aug 23 16:00 k_po
--rw-r--r-- 1 root root 4096 Aug 23 16:00 k_pu
--rw-r--r-- 1 root root 4096 Aug 23 16:00 mode
--rw-r--r-- 1 root root 4096 Aug 23 16:00 offset
--rw-r--r-- 1 root root 4096 Aug 23 16:00 policy
-drwxr-xr-x 2 root root    0 Aug 23 15:33 power
--rw-r--r-- 1 root root 4096 Aug 23 16:00 slope
-lrwxrwxrwx 1 root root    0 Aug 23 14:24 subsystem -> 
-../../../../class/thermal
--rw-r--r-- 1 root root 4096 Aug 23 16:00 sustainable_power
--r--r--r-- 1 root root 4096 Aug 23 16:00 temp
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_0_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_0_type
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_1_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_1_type
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_2_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_2_type
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_3_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_3_type
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_4_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_4_type
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_5_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_5_type
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_6_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_6_type
--rw-r--r-- 1 root root 4096 Aug 23 16:00 trip_point_7_temp
--r--r--r-- 1 root root 4096 Aug 23 16:00 trip_point_7_type
--r--r--r-- 1 root root 4096 Aug 23 16:00 type
--rw-r--r-- 1 root root 4096 Aug 23 14:24 uevent
-```

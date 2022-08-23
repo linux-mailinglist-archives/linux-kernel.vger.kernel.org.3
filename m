@@ -2,132 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3591159EE12
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FAC59EE15
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiHWVUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S230444AbiHWVUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiHWVUG (ORCPT
+        with ESMTP id S230425AbiHWVUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:20:06 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44F53026
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:20:04 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33931a5c133so173568467b3.17
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=8VeZYoidRbxCrAGHLIxsjoWrKlcdP3ygGRJKvTGM14s=;
-        b=sUPIwT+TKjogJoBV6i+R1coppPbUF2jIqnYJesgbisbTP/7RulqcH/pADy3obDIwqn
-         V3qaBMquKA1unRavnFfL+bDjWHEmPa0njGLkzXOkZis6LmBig4WeqzX+4EE7rMXT90NV
-         NdLg+cLKCLuT9McTFZPW0hfo5LT3pf11SzNHeUw+e3Jm34tiDHL90ra/kV+xHP0j/ZyK
-         9+MFtYY7hOnhrhLtvYQkhrq5iWy5bAuaqauIq3xLvcPxCbl1eU9/IicO6UYeEBT1FC4c
-         CJj6znhOj5GOFovB3NWxHB51Jd9lWYsk2wF+fAUm8SjgqVx8u7KMhlZQZn8KFJpqw6YF
-         +EgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=8VeZYoidRbxCrAGHLIxsjoWrKlcdP3ygGRJKvTGM14s=;
-        b=fYG8aCHi0W8AnmQ/lqRLKH3El1mzW24B3SY9pp2yDpsBPF1cPxOrMvF7EsA/dv6vvH
-         oagPzrUJPGUmGSfwFazlDmwxr9o1H6mI9Ur7NRTYHWSzwK3qWLGBOEO5ZkTc2lFuZzb/
-         pYQSgOSOC9nmorMk1HeGUhkBAvzZNsyCiU2UPj55784yYmycwIXHFWlHxtVb7+7GuoEA
-         tD80hvb11xRysdYJJEwGLBPm0dM5xWzbW2Ld2/i074hGailp9g/c4Apx0M2LTtEnCGzd
-         yz39IM8wo4Y3ZMDqDnyK/G6NDPVmh0VRqMXmEF16CT77uItWRVGhWUMZg0OYhYabNw5Q
-         cAGQ==
-X-Gm-Message-State: ACgBeo38FbUhkOxUZRHU0ZnU1g0CsmvjFbFntOfK+UOzfvdukfDAWJaq
-        ITDMn4K+N+cK8aCKH5O/dvy0UxBHxA==
-X-Google-Smtp-Source: AA6agR7dXbMe2QWC6NUqnUS2IDe3BcZnRXK37GUPMMJMhxQYn1ivPx7YVvo/EvE/LSCwIqKikSxMB896Ow==
-X-Received: from adelg-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:d1f])
- (user=adelg job=sendgmr) by 2002:a0d:f9c1:0:b0:33b:65f4:9506 with SMTP id
- j184-20020a0df9c1000000b0033b65f49506mr13422629ywf.227.1661289604176; Tue, 23
- Aug 2022 14:20:04 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 21:19:58 +0000
-Message-Id: <20220823211958.2519055-1-adelg@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] selftests: Add a taint selftest
-From:   Andrew Delgadilo <adelg@google.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        dylanbhatch@google.com, sashalevin@google.com, gthelen@google.com,
-        adelg@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 17:20:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB467CAA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B3B561543
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 73DF1C433D7;
+        Tue, 23 Aug 2022 21:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661289616;
+        bh=0IEc3dJSCMwcJNTuPCY1LvpVZl6Rhk1s3mH6EWq+tvU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KYmR+ZVi/eIs1SzyCHqtP0DfoyR0fK9xJwingAB0zwOQ2kl6kkgPiVhKiBke/rlw1
+         HFlaLm+3DdLhcyc+wMVGQav4dAsa5XdNaSYHhnifQn1SSICuZJnD0hDEEDpQ0p3PSq
+         FfpQnHmeo5OIMZH9nwCI2VXiV/CzbR3KxNlydC9CWsQy/QAfb9qDgsPgDB9q2Hp6nB
+         mBt/t+ks4ojhMAkwsYq8cFiLEpWwICSFed5GG1urdyvTZToYUZBvxxhWOY8YwKf+u8
+         oDPL3h9RVWUZtuH54IvNKrWQxo091AIG38Vn4RriKDcyk8cmdesqB0QdgkJb++TCyd
+         y0QSM3XXHY5NQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C464E1CF31;
+        Tue, 23 Aug 2022 21:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 0/7] platform/chrome: Type-C switch driver
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <166128961630.1235.10498223435613947270.git-patchwork-notify@kernel.org>
+Date:   Tue, 23 Aug 2022 21:20:16 +0000
+References: <20220816214857.2088914-1-pmalani@chromium.org>
+In-Reply-To: <20220816214857.2088914-1-pmalani@chromium.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org, dnojiri@chromium.org, dustin@howett.net,
+        gregkh@linuxfoundation.org, groeck@chromium.org,
+        gustavoars@kernel.org, keescook@chromium.org,
+        tinghan.shen@mediatek.com, tzungbi@kernel.org, wangxiang@cdjrlc.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Delgadillo <adelg@google.com>
+Hello:
 
-When testing a kernel, one of the earliest signals one can get is if a
-kernel has become tainted. For example, an organization might be
-interested in mass testing commits on their hardware. An obvious first
-step would be to make sure every commit boots, and a next step would be
-to make sure there are no warnings/crashes/lockups, hence the utility of
-a taint test.
+This series was applied to chrome-platform/linux.git (for-next)
+by Prashant Malani <pmalani@chromium.org>:
 
-Signed-off-by: Andrew Delgadillo <adelg@google.com>
----
- tools/testing/selftests/core/Makefile |  1 +
- tools/testing/selftests/core/taint.sh | 28 +++++++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
- create mode 100755 tools/testing/selftests/core/taint.sh
+On Tue, 16 Aug 2022 21:48:28 +0000 you wrote:
+> v4 of this series was originally merged to the USB maintainer tree, but
+> there were dependencies from the chrome-platform tree which caused
+> conflicts in the merge tree, so the chrome specific parts were
+> reverted [1].
+> 
+> v5 is a resubmission of the series with the Chrome-only parts (since the
+> USB framework parts were merged successfully).
+> 
+> [...]
 
-diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
-index f6f2d6f473c6a..695bdbfb02f90 100644
---- a/tools/testing/selftests/core/Makefile
-+++ b/tools/testing/selftests/core/Makefile
-@@ -2,6 +2,7 @@
- CFLAGS += -g -I../../../../usr/include/
- 
- TEST_GEN_PROGS := close_range_test
-+TEST_PROGS := taint.sh
- 
- include ../lib.mk
- 
-diff --git a/tools/testing/selftests/core/taint.sh b/tools/testing/selftests/core/taint.sh
-new file mode 100755
-index 0000000000000..661c2cb8cd9bf
---- /dev/null
-+++ b/tools/testing/selftests/core/taint.sh
-@@ -0,0 +1,28 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+set -oue pipefail
-+
-+# By default, we only want to check if our system has:
-+# - seen an oops or bug
-+# - a warning occurred
-+# - a lockup occurred
-+# The bit values for these, and more, can be found at
-+# Documentation/admin-guide/tainted-kernels.html
-+# This value can be overridden by passing a mask as the
-+# first positional argument.
-+taint_bitmask=$(( 128 + 512 + 16384 ))
-+
-+# If we have a positional argument, then override our
-+# default bitmask.
-+if [[ -n "${1-}" ]]; then
-+	taint_bitmask=$1
-+fi
-+
-+taint_bits=$(cat /proc/sys/kernel/tainted)
-+
-+result=$(( taint_bitmask & taint_bits ))
-+if [[ "$result" -ne 0 ]]; then
-+	exit 1
-+fi
-+
-+exit 0
+Here is the summary with links:
+  - [v6,1/7] platform/chrome: Add Type-C mux set command definitions
+    https://git.kernel.org/chrome-platform/c/77947238dad3
+  - [v6,2/7] platform/chrome: cros_typec_switch: Add switch driver
+    https://git.kernel.org/chrome-platform/c/affc804c44c8
+  - [v6,3/7] platform/chrome: cros_typec_switch: Set EC retimer
+    https://git.kernel.org/chrome-platform/c/d4536a216c3f
+  - [v6,4/7] platform/chrome: cros_typec_switch: Add event check
+    https://git.kernel.org/chrome-platform/c/cf6c767244ed
+  - [v6,5/7] platform/chrome: cros_typec_switch: Register mode switches
+    https://git.kernel.org/chrome-platform/c/9e6e05169980
+  - [v6,6/7] platform/chrome: cros_ec_typec: Cleanup switch handle return paths
+    https://git.kernel.org/chrome-platform/c/d5f66527db9e
+  - [v6,7/7] platform/chrome: cros_ec_typec: Get retimer handle
+    https://git.kernel.org/chrome-platform/c/1a8912caba02
+
+You are awesome, thank you!
 -- 
-2.37.1.595.g718a3a8f04-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

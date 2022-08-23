@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BF259D33E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6475259D73D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242126AbiHWIMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S1348437AbiHWJMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240165AbiHWIJs (ORCPT
+        with ESMTP id S1348267AbiHWJKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:09:48 -0400
+        Tue, 23 Aug 2022 05:10:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00EA67CBA;
-        Tue, 23 Aug 2022 01:06:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC7D6CF44;
+        Tue, 23 Aug 2022 01:30:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B43A8611A8;
-        Tue, 23 Aug 2022 08:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B950BC433D6;
-        Tue, 23 Aug 2022 08:06:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D358F614D3;
+        Tue, 23 Aug 2022 08:29:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BFBC433D7;
+        Tue, 23 Aug 2022 08:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661241991;
-        bh=iulYAl+pYZdrIyCxSiw/cLHIeTOyzhJvoonrV7c/uLI=;
+        s=korg; t=1661243373;
+        bh=g/+coOW5lUeirePAEayAtHU5SKrm1HBE7FI5NENdJmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZsptSfGiBpNTHL58WPGHGXLBiqiof8mfXEaQZwEm2ECopsyNsJzjSt4SFDSwx6G+M
-         4Xrii4wlfq0lDW77V6R3AjQGDKDsHZ0VqLYFKgiNSil55AqzQGzJh9zZ6S4iv4u9/o
-         H0Gt789eJ3Mw7vkhyIpWFjxKuHdZgdHe9E+ZnLok=
+        b=bZF5FqSXLCedANdPfH/PPxNcspqY3s4+xYRiUAOHx48f+Ip04H5UrPs01FmcntBNy
+         WPznE1aUKmLGygBgAtiW0C4qoGiRqOzt/xkj0pu7ewcFkVvFHzn4u0kxkTWOtXhSqB
+         OeRGaWYZ0n9Clw1lpkxKwYf0UHdJwNSCC5m3y2Cg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Liang He <windhl@126.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.9 003/101] scsi: ufs: host: Hold reference returned by of_parse_phandle()
-Date:   Tue, 23 Aug 2022 10:02:36 +0200
-Message-Id: <20220823080034.726420269@linuxfoundation.org>
+        stable@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH 5.19 256/365] x86/kvm: Fix "missing ENDBR" BUG for fastop functions
+Date:   Tue, 23 Aug 2022 10:02:37 +0200
+Message-Id: <20220823080128.907850538@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-commit a3435afba87dc6cd83f5595e7607f3c40f93ef01 upstream.
+[ Upstream commit 3d9606b0e0f3aed4dfb61d0853ebf432fead7bba ]
 
-In ufshcd_populate_vreg(), we should hold the reference returned by
-of_parse_phandle() and then use it to call of_node_put() for refcount
-balance.
+The following BUG was reported:
 
-Link: https://lore.kernel.org/r/20220719071529.1081166-1-windhl@126.com
-Fixes: aa4976130934 ("ufs: Add regulator enable support")
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  traps: Missing ENDBR: andw_ax_dx+0x0/0x10 [kvm]
+  ------------[ cut here ]------------
+  kernel BUG at arch/x86/kernel/traps.c:253!
+  invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+   <TASK>
+   asm_exc_control_protection+0x2b/0x30
+  RIP: 0010:andw_ax_dx+0x0/0x10 [kvm]
+  Code: c3 cc cc cc cc 0f 1f 44 00 00 66 0f 1f 00 48 19 d0 c3 cc cc cc
+        cc 0f 1f 40 00 f3 0f 1e fa 20 d0 c3 cc cc cc cc 0f 1f 44 00 00
+        <66> 0f 1f 00 66 21 d0 c3 cc cc cc cc 0f 1f 40 00 66 0f 1f 00 21
+        d0
+
+   ? andb_al_dl+0x10/0x10 [kvm]
+   ? fastop+0x5d/0xa0 [kvm]
+   x86_emulate_insn+0x822/0x1060 [kvm]
+   x86_emulate_instruction+0x46f/0x750 [kvm]
+   complete_emulated_mmio+0x216/0x2c0 [kvm]
+   kvm_arch_vcpu_ioctl_run+0x604/0x650 [kvm]
+   kvm_vcpu_ioctl+0x2f4/0x6b0 [kvm]
+   ? wake_up_q+0xa0/0xa0
+
+The BUG occurred because the ENDBR in the andw_ax_dx() fastop function
+had been incorrectly "sealed" (converted to a NOP) by apply_ibt_endbr().
+
+Objtool marked it to be sealed because KVM has no compile-time
+references to the function.  Instead KVM calculates its address at
+runtime.
+
+Prevent objtool from annotating fastop functions as sealable by creating
+throwaway dummy compile-time references to the functions.
+
+Fixes: 6649fa876da4 ("x86/ibt,kvm: Add ENDBR to fastops")
+Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+Debugged-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Message-Id: <0d4116f90e9d0c1b754bb90c585e6f0415a1c508.1660837839.git.jpoimboe@kernel.org>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd-pltfrm.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ arch/x86/kvm/emulate.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -126,9 +126,20 @@ out:
- 	return ret;
- }
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index aa907cec0918..09fa8a94807b 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -316,7 +316,8 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	".align " __stringify(FASTOP_SIZE) " \n\t" \
+ 	".type " name ", @function \n\t" \
+ 	name ":\n\t" \
+-	ASM_ENDBR
++	ASM_ENDBR \
++	IBT_NOSEAL(name)
  
-+static bool phandle_exists(const struct device_node *np,
-+			   const char *phandle_name, int index)
-+{
-+	struct device_node *parse_np = of_parse_phandle(np, phandle_name, index);
-+
-+	if (parse_np)
-+		of_node_put(parse_np);
-+
-+	return parse_np != NULL;
-+}
-+
- #define MAX_PROP_SIZE 32
- static int ufshcd_populate_vreg(struct device *dev, const char *name,
--		struct ufs_vreg **out_vreg)
-+				struct ufs_vreg **out_vreg)
- {
- 	int ret = 0;
- 	char prop_name[MAX_PROP_SIZE];
-@@ -141,7 +152,7 @@ static int ufshcd_populate_vreg(struct d
- 	}
- 
- 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", name);
--	if (!of_parse_phandle(np, prop_name, 0)) {
-+	if (!phandle_exists(np, prop_name, 0)) {
- 		dev_info(dev, "%s: Unable to find %s regulator, assuming enabled\n",
- 				__func__, prop_name);
- 		goto out;
+ #define FOP_FUNC(name) \
+ 	__FOP_FUNC(#name)
+-- 
+2.35.1
+
 
 

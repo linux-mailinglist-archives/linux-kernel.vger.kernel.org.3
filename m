@@ -2,103 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F196359EE67
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCC059EE71
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbiHWVqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S229511AbiHWVvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiHWVqG (ORCPT
+        with ESMTP id S231625AbiHWVvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:46:06 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF4D5B05C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:46:05 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id v125so17608342oie.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=LewCaPyJI9P19qoX2T8Kq55PTU9SlmcYgInl9k2Dz6A=;
-        b=FGaYaFonhdWRVSSWqOPCtTAEYXefho6W1zMIlqnYW/u4WvAU9QqXe/LPDw6q/MTaag
-         tyqJ+IKQKx9gWxqL+kRDrQZ/FCNJc7A/7tB+IIlrLkXPCEhAwJZWsaO7uCE6g9vupHKs
-         hPN/vD9Xyniq0n3xfn1lhgpvxbc2eRzorx1tA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=LewCaPyJI9P19qoX2T8Kq55PTU9SlmcYgInl9k2Dz6A=;
-        b=t59hp0t/wvK4FdrgN6VA8N33rYXv06nvJ4+7GLXxbmwKJqBBqBm/CtH8dktH1F5Ehr
-         snM+44nM3m98DIir3J3qcFtBr2qJIYj4QtIitFiIw77KB2m5vZoWhj71UNB4pG71qfi/
-         to8vSbgiT28zy7cWzBImm+Nq2bTcvmLmDa5qYfKPWQNE4qX9w/IxS+8JJOP6KPTSUIkR
-         kqDPWapaU9Vx8qdgOdhZ6y8W9fp9NwCl85IdN3KJJ5PYN2ge81LnLc02Pm5p4EdAMkLp
-         I2yaMdKNMFt6NwgunoFt+vw8tpNuFG/8klgzfarNOBL98MAoVh1KOyYdaAoM6mFSpAYW
-         9t6g==
-X-Gm-Message-State: ACgBeo2/+J63KdGit0VTITfF9anMb1ubdJxCtjF9K53UmatvJ6jzaZbX
-        4cIAfQ2f7jk1PtQUrJmk/B7Bpg==
-X-Google-Smtp-Source: AA6agR4g/YuLrYSyqg8DTPckNgcDMaPWiVU+upi7EOPWjX5lrVS7EDCX114PWkjhfSW3Vv9lF/gQIw==
-X-Received: by 2002:a05:6808:1b20:b0:343:678c:451b with SMTP id bx32-20020a0568081b2000b00343678c451bmr2112495oib.171.1661291164766;
-        Tue, 23 Aug 2022 14:46:04 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f36-20020a056871072400b0011382da43aesm4184347oap.16.2022.08.23.14.46.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 14:46:04 -0700 (PDT)
-Subject: Re: [PATCH 5.15 000/244] 5.15.63-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <c663d37d-2005-7be5-fecf-ca71d640981f@linuxfoundation.org>
-Date:   Tue, 23 Aug 2022 15:46:03 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 17:51:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BA53DBC1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:51:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16B06615C6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7855FC433D6;
+        Tue, 23 Aug 2022 21:51:20 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1oQboB-009zst-17;
+        Tue, 23 Aug 2022 17:51:39 -0400
+Message-ID: <20220823214606.344269352@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 23 Aug 2022 17:46:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [PATCH 0/4] tracing: Have filters and histograms use a call table instead of pointers
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 2:22 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.63 release.
-> There are 244 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.63-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+While looking at the histogram and filter code, I realized that it's filled
+with function pointers. With retpolines causing a big slowdown, I thought
+that was problematic. Thus, I decided to see what would happen if I changed
+the function pointers into enums, and instead called a single function
+that did a switch on those enums and called the necessary functions
+directly. The results were pretty clear.
 
-Compiled and booted on my test system. No dmesg regressions.
+The first patch was to update the trace event benchmark event to include
+a integer value "delta" of the delta that it took to complete
+(it currently only shows the delta as part of a string). By doing
+so, I could benchmark the histogram and filter logic with it.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Before this series, the histogram with a single filter (to ignore the
+first event, which has a delta of zero), had:
 
-thanks,
--- Shuah
+# event histogram
+#
+# trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
+#
+
+{ delta:        129 } hitcount:       2213
+{ delta:        130 } hitcount:     285965
+{ delta:        131 } hitcount:    1146545
+{ delta:        132 } hitcount:    5185432
+{ delta:        133 } hitcount:   19896215
+{ delta:        134 } hitcount:   53118616
+{ delta:        135 } hitcount:   83816709
+{ delta:        136 } hitcount:   68329562
+{ delta:        137 } hitcount:   41859349
+{ delta:        138 } hitcount:   46257797
+{ delta:        139 } hitcount:   54400831
+{ delta:        140 } hitcount:   72875007
+{ delta:        141 } hitcount:   76193272
+{ delta:        142 } hitcount:   49504263
+{ delta:        143 } hitcount:   38821072
+{ delta:        144 } hitcount:   47702679
+{ delta:        145 } hitcount:   41357297
+{ delta:        146 } hitcount:   22058238
+{ delta:        147 } hitcount:    9720002
+{ delta:        148 } hitcount:    3193542
+{ delta:        149 } hitcount:     927030
+{ delta:        150 } hitcount:     850772
+{ delta:        151 } hitcount:    1477380
+{ delta:        152 } hitcount:    2687977
+{ delta:        153 } hitcount:    2865985
+{ delta:        154 } hitcount:    1977492
+{ delta:        155 } hitcount:    2475607
+{ delta:        156 } hitcount:    3403612
+{ delta:        157 } hitcount:    2264011
+{ delta:        158 } hitcount:    1096214
+{ delta:        159 } hitcount:     504653
+{ delta:        160 } hitcount:     218869
+{ delta:        161 } hitcount:     103246
+[..]
+
+Where the bulk was around 142ns, and the fastest time was 129ns.
+
+After this series:
+
+# event histogram
+#
+# trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
+#
+
+{ delta:        103 } hitcount:         60
+{ delta:        104 } hitcount:      16966
+{ delta:        105 } hitcount:     396625
+{ delta:        106 } hitcount:    3223400
+{ delta:        107 } hitcount:   12053754
+{ delta:        108 } hitcount:   20241711
+{ delta:        109 } hitcount:   14850200
+{ delta:        110 } hitcount:    4946599
+{ delta:        111 } hitcount:    3479315
+{ delta:        112 } hitcount:   18698299
+{ delta:        113 } hitcount:   62388733
+{ delta:        114 } hitcount:   95803834
+{ delta:        115 } hitcount:   58278130
+{ delta:        116 } hitcount:   15364800
+{ delta:        117 } hitcount:    5586866
+{ delta:        118 } hitcount:    2346880
+{ delta:        119 } hitcount:    1131091
+{ delta:        120 } hitcount:     620896
+{ delta:        121 } hitcount:     236652
+{ delta:        122 } hitcount:     105957
+{ delta:        123 } hitcount:     119107
+{ delta:        124 } hitcount:      54494
+{ delta:        125 } hitcount:      63856
+{ delta:        126 } hitcount:      64454
+{ delta:        127 } hitcount:      34818
+{ delta:        128 } hitcount:      41446
+{ delta:        129 } hitcount:      51242
+{ delta:        130 } hitcount:      28361
+{ delta:        131 } hitcount:      23926
+{ delta:        132 } hitcount:      22253
+{ delta:        133 } hitcount:      16994
+{ delta:        134 } hitcount:      14970
+{ delta:        135 } hitcount:      13464
+{ delta:        136 } hitcount:      11452
+{ delta:        137 } hitcount:      12212
+{ delta:        138 } hitcount:      12280
+{ delta:        139 } hitcount:       9127
+{ delta:        140 } hitcount:       9553
+
+Where the bulk was around 114ns and the fast time was 103ns.
+
+That's almost a 20% speedup!!!
+
+
+Steven Rostedt (Google) (4):
+      tracing: Add numeric delta time to the trace event benchmark
+      tracing/hist: Call hist functions directly via a switch statement
+      tracing: Move struct filter_pred into trace_events_filter.c
+      tracing/filter: Call filter predicate functions directly via a switch statement
+
+----
+ kernel/trace/trace.h               |  13 --
+ kernel/trace/trace_benchmark.c     |   2 +-
+ kernel/trace/trace_benchmark.h     |   8 +-
+ kernel/trace/trace_events_filter.c | 239 +++++++++++++++++++++++++-----------
+ kernel/trace/trace_events_hist.c   | 244 +++++++++++++++++++++++++------------
+ 5 files changed, 342 insertions(+), 164 deletions(-)

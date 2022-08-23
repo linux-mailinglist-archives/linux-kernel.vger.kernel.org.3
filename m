@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BBB59D827
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C0459D913
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348548AbiHWJNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S1348118AbiHWJMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348541AbiHWJKb (ORCPT
+        with ESMTP id S1348481AbiHWJKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:10:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3322A86B50;
-        Tue, 23 Aug 2022 01:31:10 -0700 (PDT)
+        Tue, 23 Aug 2022 05:10:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8648671C;
+        Tue, 23 Aug 2022 01:31:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5A2461360;
-        Tue, 23 Aug 2022 08:29:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA772C433D6;
-        Tue, 23 Aug 2022 08:29:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90E0BB81C51;
+        Tue, 23 Aug 2022 08:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4695C433C1;
+        Tue, 23 Aug 2022 08:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243370;
-        bh=1BYEHRjVREcdMBhA1wsIgbziwPW+7xcj9xwgN5GfgxI=;
+        s=korg; t=1661243379;
+        bh=opRpwBXuIqKfJEKdV/gdL/Q2qqUENx7dxO38eYQHJZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yh2VrytR7Rzph++QiFko1yOytd48rk6zxHoA2xATrelJZ4qg/ARrFsXEHSPym9PVX
-         tcVdBd5UUH8G57DPRpYgvMTAKWoePrxBuFlbBkoDNZ92EFA/IMrSE2oUj6AEtsINKD
-         yOCAxjcLdSsJhBr/Hgv2YcJbJeSrpfk3mJlnjEP8=
+        b=bIi76YAUa3T+ZwIGlHjnA080NTSGyRaQL2dJ3dMKIH7CBTeQaTI+VtrPZ+sr1FhO6
+         AAdgWCs+5pNc2vaIJfqY7t82sQL3P0rp4y2SlLuRyYEksdD18HIaAO3ayOjAhUjWDT
+         5aTV3jQiWq50sYMNT6zljO3FaV0/1sFy0Efg8dTM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 255/365] x86/ibt, objtool: Add IBT_NOSEAL()
-Date:   Tue, 23 Aug 2022 10:02:36 +0200
-Message-Id: <20220823080128.867380224@linuxfoundation.org>
+        stable@vger.kernel.org, Tao Jin <tao-j@outlook.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 258/365] HID: multitouch: new device class fix Lenovo X12 trackpad sticky
+Date:   Tue, 23 Aug 2022 10:02:39 +0200
+Message-Id: <20220823080128.992617054@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -55,65 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Tao Jin <tao-j@outlook.com>
 
-[ Upstream commit e27e5bea956ce4d3eb15112de5fa5a3b77c2f488 ]
+[ Upstream commit 54eed5c7b938dc4ef6b14d4ee048bbdafdbce352 ]
 
-Add a macro which prevents a function from getting sealed if there are
-no compile-time references to it.
+The trackpad of the given device sends continuous report of pointers
+status as per wxn8 spec. However, the spec did not clarify when the
+fingers are lifted so fast that between the interval of two report
+frames fingers on pad reduced from >=2 to 0. The second last report
+contains >=2 fingers with tip state 1 and the last report contains only
+1 finger with tip state 0. Although this can happen unfrequently, a
+  quick fix will be improve the consistency to 100%. A quick fix is to
+disable MT_QUIRK_ALWAYS_VALID and enable MT_QUIRK_NOT_SEEN_MEANS_UP.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Message-Id: <20220818213927.e44fmxkoq4yj6ybn@treble>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Test for hid-tools is added in [1]
+
+In addition to this, I2C device 04CA:00B1 may also need similar class
+but with MT_QUIRK_FORCE_MULTI_INPUT disabled (but it does not harm to
+ enable it on non-multi-input device either). The respective owner has
+been notified and a patch may coming soon after test.
+
+[1]: https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/130
+
+Signed-off-by: Tao Jin <tao-j@outlook.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/ibt.h | 11 +++++++++++
- tools/objtool/check.c      |  3 ++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ drivers/hid/hid-multitouch.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/ibt.h b/arch/x86/include/asm/ibt.h
-index 689880eca9ba..9b08082a5d9f 100644
---- a/arch/x86/include/asm/ibt.h
-+++ b/arch/x86/include/asm/ibt.h
-@@ -31,6 +31,16 @@
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 6bb3890b0f2c..2e72922e36f5 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -194,6 +194,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
+ #define MT_CLS_WIN_8_FORCE_MULTI_INPUT		0x0015
+ #define MT_CLS_WIN_8_DISABLE_WAKEUP		0x0016
+ #define MT_CLS_WIN_8_NO_STICKY_FINGERS		0x0017
++#define MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU	0x0018
  
- #define __noendbr	__attribute__((nocf_check))
+ /* vendor specific classes */
+ #define MT_CLS_3M				0x0101
+@@ -286,6 +287,15 @@ static const struct mt_class mt_classes[] = {
+ 			MT_QUIRK_WIN8_PTP_BUTTONS |
+ 			MT_QUIRK_FORCE_MULTI_INPUT,
+ 		.export_all_inputs = true },
++	{ .name = MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU,
++		.quirks = MT_QUIRK_IGNORE_DUPLICATES |
++			MT_QUIRK_HOVERING |
++			MT_QUIRK_CONTACT_CNT_ACCURATE |
++			MT_QUIRK_STICKY_FINGERS |
++			MT_QUIRK_WIN8_PTP_BUTTONS |
++			MT_QUIRK_FORCE_MULTI_INPUT |
++			MT_QUIRK_NOT_SEEN_MEANS_UP,
++		.export_all_inputs = true },
+ 	{ .name = MT_CLS_WIN_8_DISABLE_WAKEUP,
+ 		.quirks = MT_QUIRK_ALWAYS_VALID |
+ 			MT_QUIRK_IGNORE_DUPLICATES |
+@@ -783,6 +793,7 @@ static int mt_touch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+ 		case HID_DG_CONFIDENCE:
+ 			if ((cls->name == MT_CLS_WIN_8 ||
+ 			     cls->name == MT_CLS_WIN_8_FORCE_MULTI_INPUT ||
++			     cls->name == MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU ||
+ 			     cls->name == MT_CLS_WIN_8_DISABLE_WAKEUP) &&
+ 				(field->application == HID_DG_TOUCHPAD ||
+ 				 field->application == HID_DG_TOUCHSCREEN))
+@@ -2035,7 +2046,7 @@ static const struct hid_device_id mt_devices[] = {
+ 			   USB_DEVICE_ID_LENOVO_X1_TAB3) },
  
-+/*
-+ * Create a dummy function pointer reference to prevent objtool from marking
-+ * the function as needing to be "sealed" (i.e. ENDBR converted to NOP by
-+ * apply_ibt_endbr()).
-+ */
-+#define IBT_NOSEAL(fname)				\
-+	".pushsection .discard.ibt_endbr_noseal\n\t"	\
-+	_ASM_PTR fname "\n\t"				\
-+	".popsection\n\t"
-+
- static inline __attribute_const__ u32 gen_endbr(void)
- {
- 	u32 endbr;
-@@ -84,6 +94,7 @@ extern __noendbr void ibt_restore(u64 save);
- #ifndef __ASSEMBLY__
- 
- #define ASM_ENDBR
-+#define IBT_NOSEAL(name)
- 
- #define __noendbr
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index b341f8a8c7c5..31c719f99f66 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4096,7 +4096,8 @@ static int validate_ibt(struct objtool_file *file)
- 		 * These sections can reference text addresses, but not with
- 		 * the intent to indirect branch to them.
- 		 */
--		if (!strncmp(sec->name, ".discard", 8)			||
-+		if ((!strncmp(sec->name, ".discard", 8) &&
-+		     strcmp(sec->name, ".discard.ibt_endbr_noseal"))	||
- 		    !strncmp(sec->name, ".debug", 6)			||
- 		    !strcmp(sec->name, ".altinstructions")		||
- 		    !strcmp(sec->name, ".ibt_endbr_seal")		||
+ 	/* Lenovo X12 TAB Gen 1 */
+-	{ .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT,
++	{ .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT_NSMU,
+ 		HID_DEVICE(BUS_USB, HID_GROUP_MULTITOUCH_WIN_8,
+ 			   USB_VENDOR_ID_LENOVO,
+ 			   USB_DEVICE_ID_LENOVO_X12_TAB) },
 -- 
 2.35.1
 

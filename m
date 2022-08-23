@@ -2,95 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BFC59E5F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B07859E4E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241796AbiHWP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S241025AbiHWOGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 10:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244130AbiHWPZd (ORCPT
+        with ESMTP id S242977AbiHWODn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:25:33 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBA8135B3A
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:02:18 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id h22so16394334ejk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=NPkz8CIReFRkXXNi+9wXJA08oHYjzaiWMjPixEXkoww=;
-        b=iigcejhnAnjVrYq+8ynJNXJJa0Vfsj8KP5tp65+xPF/AC9cPRgUrB26NE3gtauWUwx
-         qQD9jaFSKTuo5y6taEgj4zT5WglBx2XFrToeNbs7P2yVO/qXm550HoYgwANo/8U3l2X/
-         qD6uIGFVGhfDTFVBzn0eLuBTuJDoRlIwZQ+IIvjVqLH3q805BXxLnwm4kY/v8HsVVfbb
-         a8o8/TZEs0PF91gyok9kM1GOBPuEXGkN/kg9f0C7mM/4R2yBD7QZXsKgCsCNKc0P0EIV
-         jbxzrxOeX0LPVaXkLwbTQ/iqDPUtOab3XBE2USm0iPAzVuHlVxBxdzZJjjqrjHU3TtnO
-         r1pQ==
+        Tue, 23 Aug 2022 10:03:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658DD2481A3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661253081;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nch+IXHIDBrWVkXtWbywK+c3Bny+KWw7qcMu+C2LRF0=;
+        b=WwZN3r7MK7L1Kisqzq0j+sQBV515gwgV+cEedIRLhjuQfHQvIS0Gf6hVhxhTQKtO6Ytq2S
+        VxKKO8V0wLUOCCx6ZpRy1CCjkZWickBIIy4IcA+yY4dsunNibfXqMuXpNAvYiIvWD7bFmO
+        BWYasm7tAn9bwx+pq0LNvfOzvoRT/QM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-465-DlMrPFDXPUCW7iF2eEeOXg-1; Tue, 23 Aug 2022 06:58:05 -0400
+X-MC-Unique: DlMrPFDXPUCW7iF2eEeOXg-1
+Received: by mail-wm1-f71.google.com with SMTP id i7-20020a1c3b07000000b003a534ec2570so8577212wma.7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:58:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=NPkz8CIReFRkXXNi+9wXJA08oHYjzaiWMjPixEXkoww=;
-        b=wRdNn6PTdBEsB169i2aHUH4Gzy6q7lfm4Mfb67KFodihQ9XsdvAsH05np2pplO0aAP
-         DgRqXzrnDMTTaLfSwQbPW0w53qrhDwBvtmi1uZkSIUvq8c+XpTD6Hj92WtufzB4HAU0n
-         EEBvzEmX/yI9RxnuNdTNBI3cWbjlP0hhWvmObaZjzDJC3aIwDFloPNqE8iVsPs0M8v+j
-         fCIlT5+Iq6i4SanAY3VCStTxX0Th/gIUchDDCoOryjuZeNXbIcFMdlP35yfffmmeUmhQ
-         9EXselym2goQQH5dBOR3ghZNDXMO4PxxMhxoG4gPgeLIdsMXY+AsXwoe8Ao8I4yRzWbr
-         hwtw==
-X-Gm-Message-State: ACgBeo3zuw69uCiZWMrd3cIcfKySkVpwkyNgEFY8LGBmkE9WV1SLQQA1
-        8hhj7O6eK87Vz7XxlNNX0rLkg4ZcpyVzZFPx
-X-Google-Smtp-Source: AA6agR7u26JTojsyB4JuWJX8y8BItLKRip4aR1+/399iD/iKWu9l7BTdi42s42J+uuQrVDAiJBBmGQ==
-X-Received: by 2002:a05:6512:c10:b0:492:d263:f918 with SMTP id z16-20020a0565120c1000b00492d263f918mr5533940lfu.501.1661251676796;
-        Tue, 23 Aug 2022 03:47:56 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id x16-20020a056512131000b00489e812f05asm2441697lfu.21.2022.08.23.03.47.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 03:47:56 -0700 (PDT)
-Message-ID: <c24da513-e015-8bc6-8874-ba63c22be5d6@linaro.org>
-Date:   Tue, 23 Aug 2022 13:47:54 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 4/6] dt-bindings: net: dsa: mediatek,mt7530: define
- port binding per switch
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=Nch+IXHIDBrWVkXtWbywK+c3Bny+KWw7qcMu+C2LRF0=;
+        b=NPVTjw4DOF+FslMUGa6Hfz7xoWi2E++0XghFt32eZwsOvlJjISFntg2WwDCAZLH//q
+         7IubQWqm2Do6p0a8EC24Oto0OhXmN+ByH41PEXfXHwMEBCymlpokscPD4tRMun9ito7r
+         xO8fp22kB+N/u9wHQ9l5l+WBVQd791JzJsF7xwE4wv0k+Mr5X8SzM+HCmGnIN4cR/Ima
+         YdcqyKU9fHkDZeAwgif5nAoscBmzkU1wn6XqQifNCzpywmLBJLDKH/zndxdjOLIqrdhN
+         PDNwY7ow7LYiofcbOqie5BJeV/ncCWLytjpZt61b0rPH0pxhgR4bVcH5flr/9wIIdp3A
+         gofQ==
+X-Gm-Message-State: ACgBeo3tslJHmgaMYsrX8FUU14NcpgGZ+IAzYSGfMolSLsIEwd6vSi3a
+        xpOA13elWbbEgSYYwZUa9ou/SkOvteyZ9zhOuwjbW2orD+KUVPbGoDa713+2hillQcHLgH9ICUK
+        eJHXm/YwnX9G5IAJPpeaBZbt8
+X-Received: by 2002:a05:600c:3d91:b0:3a5:4132:b6a0 with SMTP id bi17-20020a05600c3d9100b003a54132b6a0mr1691422wmb.126.1661252284494;
+        Tue, 23 Aug 2022 03:58:04 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6bDQBAoacU9DIFFDvh3Vtxv7kMelU00DA0jkotOluxkAmKaIuNvBHrTwg5CLgfPziqdhVLQA==
+X-Received: by 2002:a05:600c:3d91:b0:3a5:4132:b6a0 with SMTP id bi17-20020a05600c3d9100b003a54132b6a0mr1691414wmb.126.1661252284292;
+        Tue, 23 Aug 2022 03:58:04 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-97-176.dyn.eolo.it. [146.241.97.176])
+        by smtp.gmail.com with ESMTPSA id j18-20020a05600c191200b003a5c1e916c8sm2680414wmq.1.2022.08.23.03.58.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 03:58:03 -0700 (PDT)
+Message-ID: <110a99aba78eb62daa5653104e5ef4e53dc92c74.camel@redhat.com>
+Subject: Re: [PATCH 1/2] net: mt7531: only do PLL once after the reset
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Alexander Couzens <lynxis@fe80.eu>,
         Sean Wang <sean.wang@mediatek.com>,
         Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        DENG Qingfang <dqfext@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220820080758.9829-1-arinc.unal@arinc9.com>
- <20220820080758.9829-5-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220820080758.9829-5-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Date:   Tue, 23 Aug 2022 12:58:02 +0200
+In-Reply-To: <20220820213707.46138-1-lynxis@fe80.eu>
+References: <20220820213707.46138-1-lynxis@fe80.eu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,40 +84,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/08/2022 11:07, Arınç ÜNAL wrote:
-> Define DSA port binding per switch model as each switch model requires
-> different values for certain properties.
+On Sat, 2022-08-20 at 23:37 +0200, Alexander Couzens wrote:
+> Move the PLL init of the switch out of the pad configuration of the port
+> 6 (usally cpu port).
 > 
-> Define reg property on $defs as it's the same for all switch models.
+> Fix a unidirectional 100 mbit limitation on 1 gbit or 2.5 gbit links for
+> outbound traffic on port 5 or port 6.
 > 
-> Remove unnecessary lines as they are already included from the referred
-> dsa.yaml.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../bindings/net/dsa/mediatek,mt7530.yaml     | 56 +++++++++++--------
->  1 file changed, 34 insertions(+), 22 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> index 657e162a1c01..7c4374e16f96 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> @@ -130,38 +130,47 @@ properties:
->        ethsys.
->      maxItems: 1
->  
-> -patternProperties:
-> -  "^(ethernet-)?ports$":
-> -    type: object
-> -
-> -    patternProperties:
-> -      "^(ethernet-)?port@[0-9]+$":
-> -        type: object
-> -        description: Ethernet switch ports
+> Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
 
-Again, I don't understand why do you remove definitions of these nodes
-from top-level properties. I explained what I expect in previous
-discussion and I am confused to hear "this cannot be done".
+This (and the next patch) looks like a fix suitable for -net. Could you
+please re-post, targeting the appropriate tree and more importantly
+including a 'Fixes' tag in the commit message of each patch?
 
-Best regards,
-Krzysztof
+Thanks!
+
+Paolo
+

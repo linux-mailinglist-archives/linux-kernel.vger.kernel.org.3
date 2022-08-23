@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53D559E8DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842B459E8F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344218AbiHWRMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S1344727AbiHWRQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344850AbiHWRLT (ORCPT
+        with ESMTP id S244541AbiHWROx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:11:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D5F15CE0F;
-        Tue, 23 Aug 2022 06:38:32 -0700 (PDT)
+        Tue, 23 Aug 2022 13:14:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E9D100977;
+        Tue, 23 Aug 2022 06:40:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D4BCB81B79;
-        Tue, 23 Aug 2022 13:38:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEFBCC433D6;
-        Tue, 23 Aug 2022 13:38:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F8386154C;
+        Tue, 23 Aug 2022 13:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BCBC433C1;
+        Tue, 23 Aug 2022 13:40:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661261910;
-        bh=gNcuBVbZTH11tEmptRdziv6KZ2nBwZGGtxerR4UZk/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lBQychxuVnBlnwSnKFGZWdNCjgjLWOAryCTjnRu4zWVeSrahmp7Wc8utuIPFoIcEP
-         wvFhJ6MhioFh/5SUZNfTBLF9mdcClxrVs5kt07KMbMMyON8DOaw2Omgml9SR34NBbJ
-         /DK80a6BsDsuHV/fIO6F2SgQsC2NLJIj1EY0PzC1gnM0GkSBWLrqsf7Lz6q5SwsRr0
-         qN8hJM8r5RG5Wzr0HkUPAoNOXpDr+hVGkbNI0pEOHHtzGQW85b89sJ/9tftvDd3+Ig
-         K5CUuedm5DLqUN7w2Vxt+4Qlll8YZGWhLIfN5x7NJcSpxZ4CHKZ4rH0Hol12uJGXfx
-         Mfb/pxzHV3DSA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 11832404A1; Tue, 23 Aug 2022 10:38:27 -0300 (-03)
-Date:   Tue, 23 Aug 2022 10:38:27 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com
-Subject: Re: [PATCH v2] perf list: Add PMU pai_crypto event description for
- IBM z16
-Message-ID: <YwTYU+xXZJr0kH5u@kernel.org>
-References: <20220804075221.1132849-1-tmricht@linux.ibm.com>
- <YvOq3B02x8GqkVPA@kernel.org>
- <YwSdWUt02SFzrMUm@osiris>
+        s=k20201202; t=1661262023;
+        bh=2+G8RngWyxAqke4bxt5usQSl46UvUFATARmSK6gRm08=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UR4Yhx5x3P7UUehzGuqNuzCVIf2gG92TqIHiUZCgn2xLTwYRb2BVaZrDxywPFMTuS
+         DfZsw9vCLLbY7N/bQZC23Zkjy41FwvdEeo5Tun5uOeKnzCyF74pyaeEisT3P6+PjEs
+         BsgOioP5FYI114KFoLroQy1P5Lnh4LYS0nwkjlMLhNMEg8PJQXqgj+lwFwiN+c9KN8
+         8lYKt4V/iCZLVw0/KJPCUfWw+PNu4zvZrY0ehvbtPOVGWPXckhaBR3eX9u+geCzmem
+         W4PXWcPnwonjUG5yfZfHDDOds0GFC5E483C5vp3iorMnxsgwARYXAeEgllZNj0blXb
+         AiehE9Npm4yuQ==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        Rex-BC.Chen@mediatek.com, Liju-clr.Chen@mediatek.com,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jian.Yang@mediatek.com, TingHan.Shen@mediatek.com
+Subject: Re: [PATCH v4] dt-bindings: PCI: mediatek-gen3: Add support for MT8188 and MT8195
+Date:   Tue, 23 Aug 2022 15:40:15 +0200
+Message-Id: <166126199986.63298.9651112044432926221.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220802120624.19258-1-jianjun.wang@mediatek.com>
+References: <20220802120624.19258-1-jianjun.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YwSdWUt02SFzrMUm@osiris>
-X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,53 +63,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Aug 23, 2022 at 11:26:49AM +0200, Heiko Carstens escreveu:
-> On Wed, Aug 10, 2022 at 09:55:56AM -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Thu, Aug 04, 2022 at 09:52:21AM +0200, Thomas Richter escreveu:
-> > > Add the event description for the IBM z16 pai_crypto PMU released with
-> > > commit 1bf54f32f525 ("s390/pai: Add support for cryptography counters")
-> > 
-> > What tree is this? I tried on torvalds/master:
-> > 
-> > ⬢[acme@toolbox perf]$ git remote update torvalds
-> > Fetching torvalds
-> > ⬢[acme@toolbox perf]$ git log --oneline -1 torvalds/master
-> > d4252071b97d2027 (torvalds/master) add barriers to buffer_uptodate and set_buffer_uptodate
-> > ⬢[acme@toolbox perf]$ git show torvalds/master d4252071b97d2027 | head -5
-> > commit d4252071b97d2027d246f6a82cbee4d52f618b47
-> > Author: Mikulas Patocka <mpatocka@redhat.com>
-> > Date:   Tue Aug 9 14:32:13 2022 -0400
-> > 
-> >     add barriers to buffer_uptodate and set_buffer_uptodate
-> > ⬢[acme@toolbox perf]$ git show torvalds/master 1bf54f32f525 | head -5
-> > fatal: ambiguous argument '1bf54f32f525': unknown revision or path not in the working tree.
-> > Use '--' to separate paths from revisions, like this:
-> > 'git <command> [<revision>...] -- [<file>...]'
-> > ⬢[acme@toolbox perf]$ git log --oneline torvalds/master | grep "pai: Add support for cryptography counters"
-> > ⬢[acme@toolbox perf]$
-> > ⬢[acme@toolbox perf]$ git show torvalds/master d4252071b97d2027 | head -4
-> > commit d4252071b97d2027d246f6a82cbee4d52f618b47
-> > Author: Mikulas Patocka <mpatocka@redhat.com>
-> > Date:   Tue Aug 9 14:32:13 2022 -0400
-> > 
-> > I'm applying it locally so that it gets included in testing, but please
-> > clarify where is that 1bf54f32f525 cset.
+On Tue, 2 Aug 2022 20:06:24 +0800, Jianjun Wang wrote:
+> MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as MT8192.
 > 
-> Thomas mixed up our non public development tree and Linus' tree.
-> Correct commit id + subject are:
+> Also add new clock name "peri_mem" since the MT8188 and MT8195 use clock
+> "peri_mem" instead of "top_133m".
 > 
-> 39d62336f5c1 ("s390/pai: add support for cryptography counters")
+> 
 
-Ok, this is already upstream, with this note:
+Applied to pci/dt, thanks!
 
-----
-    Committer notes:
+[1/1] dt-bindings: PCI: mediatek-gen3: Add support for MT8188 and MT8195
+      https://git.kernel.org/lpieralisi/pci/c/7f08e806a03e
 
-    Couldn't find 1bf54f32f525 ("s390/pai: Add support for cryptography
-    counters") in torvalds/master, in what tree is that cset?
-----
-
-Not a biggie, the description was added, which is what really matters,
-right? :)
-
-- Arnaldo
+Thanks,
+Lorenzo

@@ -2,59 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDCE59E628
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E1F59E517
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242637AbiHWPj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S242453AbiHWO0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 10:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241871AbiHWPjd (ORCPT
+        with ESMTP id S240664AbiHWOZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:39:33 -0400
-X-Greylist: delayed 5721 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 04:31:57 PDT
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D102EFC13E;
-        Tue, 23 Aug 2022 04:31:55 -0700 (PDT)
-Received: from relay6-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::226])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 87DF1C0732;
-        Tue, 23 Aug 2022 08:35:26 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5F52DC000A;
-        Tue, 23 Aug 2022 08:34:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661243643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D9E0UhmB4IGyBAfhDmQBffQboxHt0fdw9tb81qz3IyY=;
-        b=UVo6Te/TryI77O+Fu64mjRwl4J2NAo4CVfBGyEo4QUjsSfIyBqMxbsvA81U32afl6dNXqX
-        9gPvL1gV2eieNePOw6aTlla1OiNLarx93c4O5uCiUNPA6TzvtW2HqDdokl5ybT3MztAoq2
-        Y+Juy4Zd3CXQgg0gbeY6Rf+NpJPAzB3Bm3T1PbxuLa0/542BuX00uRxgut3EYHmRMDWOJb
-        PcEyj0kh/L+BnAqhCivkdpiz9K19fXV3yEWaruuKUlXxqSKOd5X4PBmyLvtA3CLEaR6pQC
-        XtGKJer+LaiDa26+PV693oDzU3eSQOXgOSYyxRQbsSinZQv3I5TJy77+F+D1Ew==
-Date:   Tue, 23 Aug 2022 10:33:59 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] docs: i2c: i2c-topology: fix typo
-Message-ID: <20220823103359.1462755e@booty>
-In-Reply-To: <78a90d0a-e0ba-0189-aa84-4ce2952e33f3@gmail.com>
-References: <20220822091050.47099-1-luca.ceresoli@bootlin.com>
-        <20220822091050.47099-4-luca.ceresoli@bootlin.com>
-        <78a90d0a-e0ba-0189-aa84-4ce2952e33f3@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 23 Aug 2022 10:25:50 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB852956C0;
+        Tue, 23 Aug 2022 04:40:01 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id D265A1C0005; Tue, 23 Aug 2022 12:09:41 +0200 (CEST)
+Date:   Tue, 23 Aug 2022 12:09:41 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 000/287] 4.19.256-rc1 review
+Message-ID: <20220823100941.GB10005@duo.ucw.cz>
+References: <20220823080100.268827165@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="TRYliJ5NKNqkz5bu"
+Content-Disposition: inline
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,29 +44,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
 
-On Mon, 22 Aug 2022 20:40:56 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+--TRYliJ5NKNqkz5bu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On 8/22/22 16:10, luca.ceresoli@bootlin.com wrote:
-> > From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > 
-> > "intension" should have probably been "intention", however "intent" seems
-> > even better.
-> > 
-> > Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> >   
-> 
-> The typo error is introduced in [2/3], so it makes sense to squash this
-> to the errored patch.
+Hi!
 
-Patch 2 just reformats the text. "intension" was there before patch 2
-and got unmodified. But if it is useful I can send a v3 with the typo
-fix in patch 1 and the other two patches following.
+> This is the start of the stable review cycle for the 4.19.256 release.
+> There are 287 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
+> Anything received after that time might be too late.
+>=20
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.25=
+6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git=
+ linux-4.19.y
+> and the diffstat can be found below.
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.19.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--TRYliJ5NKNqkz5bu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYwSnZQAKCRAw5/Bqldv6
+8ttOAJ9/kGjiLtmwHK7CpW2h2nwdxvTCNACfd8Le9RQQ1rwDnk0ux7USQHAjADI=
+=XjZx
+-----END PGP SIGNATURE-----
+
+--TRYliJ5NKNqkz5bu--

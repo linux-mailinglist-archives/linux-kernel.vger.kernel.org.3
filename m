@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E35559D782
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F9059D379
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243709AbiHWJP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S239496AbiHWIUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348506AbiHWJMs (ORCPT
+        with ESMTP id S242746AbiHWIPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:12:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EAD86C33;
-        Tue, 23 Aug 2022 01:31:36 -0700 (PDT)
+        Tue, 23 Aug 2022 04:15:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCFF6DAD8;
+        Tue, 23 Aug 2022 01:10:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF1E0614BC;
-        Tue, 23 Aug 2022 08:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE261C433D6;
-        Tue, 23 Aug 2022 08:31:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EF65B81C26;
+        Tue, 23 Aug 2022 08:10:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640A9C433D6;
+        Tue, 23 Aug 2022 08:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243479;
-        bh=epSUldJ7qZaSa/KN4cH2lvf0JxykKV7qMCXgRU+QuaQ=;
+        s=korg; t=1661242222;
+        bh=gl2ec1/9WIGA+Cbo3C9Q12gKyFZ9vUECTlF+qnQ3z+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z0l7i63AkSN42453pTLeDfJFTBngHltKBNV9+I9omEU4VpmjsA+QyuVpCYhvSQ7hL
-         gDuo2R1lcZHhZDF9EIvQtPK67cxvGPoK168beIlCOvRX6zmWW/Bh64lSdpiL+36zi7
-         ZcftaY1vLSXDaJnxeCtQsJ3fTq63MAvhR2OEJ8kw=
+        b=uU+ybIjSYGpI064SIikmBvCp+h+rrUIVYn/8hoRibGV5BJrEjLS8dhHvDGn770nHL
+         APn8N/w77wTousdPb5xjcEKblpEeNHhAyCVyyba3sXnZQyAlTGcHO+DZq/FQWUtV1Z
+         DzRFREs6Vziq3zJ6qKssCNzK2auPqgrcAuKxa2IY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ofir Bitton <obitton@habana.ai>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 290/365] habanalabs/gaudi: fix shift out of bounds
+        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>
+Subject: [PATCH 4.9 038/101] fuse: limit nsec
 Date:   Tue, 23 Aug 2022 10:03:11 +0200
-Message-Id: <20220823080130.342666788@linuxfoundation.org>
+Message-Id: <20220823080036.019985254@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-[ Upstream commit 01622098aeb05a5efbb727199bbc2a4653393255 ]
+commit 47912eaa061a6a81e4aa790591a1874c650733c0 upstream.
 
-When validating NIC queues, queue offset calculation must be
-performed only for NIC queues.
+Limit nanoseconds to 0..999999999.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d8a5ba45457e ("[PATCH] FUSE - core")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ fs/fuse/inode.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index e6bfaf55c6b6..3fb221f2e393 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -5654,15 +5654,17 @@ static int gaudi_parse_cb_no_ext_queue(struct hl_device *hdev,
- {
- 	struct asic_fixed_properties *asic_prop = &hdev->asic_prop;
- 	struct gaudi_device *gaudi = hdev->asic_specific;
--	u32 nic_mask_q_id = 1 << (HW_CAP_NIC_SHIFT +
--		((parser->hw_queue_id - GAUDI_QUEUE_ID_NIC_0_0) >> 2));
-+	u32 nic_queue_offset, nic_mask_q_id;
- 
- 	if ((parser->hw_queue_id >= GAUDI_QUEUE_ID_NIC_0_0) &&
--			(parser->hw_queue_id <= GAUDI_QUEUE_ID_NIC_9_3) &&
--			(!(gaudi->hw_cap_initialized & nic_mask_q_id))) {
--		dev_err(hdev->dev, "h/w queue %d is disabled\n",
--				parser->hw_queue_id);
--		return -EINVAL;
-+			(parser->hw_queue_id <= GAUDI_QUEUE_ID_NIC_9_3)) {
-+		nic_queue_offset = parser->hw_queue_id - GAUDI_QUEUE_ID_NIC_0_0;
-+		nic_mask_q_id = 1 << (HW_CAP_NIC_SHIFT + (nic_queue_offset >> 2));
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -173,6 +173,12 @@ void fuse_change_attributes_common(struc
+ 	inode->i_uid     = make_kuid(&init_user_ns, attr->uid);
+ 	inode->i_gid     = make_kgid(&init_user_ns, attr->gid);
+ 	inode->i_blocks  = attr->blocks;
 +
-+		if (!(gaudi->hw_cap_initialized & nic_mask_q_id)) {
-+			dev_err(hdev->dev, "h/w queue %d is disabled\n", parser->hw_queue_id);
-+			return -EINVAL;
-+		}
- 	}
- 
- 	/* For internal queue jobs just check if CB address is valid */
--- 
-2.35.1
-
++	/* Sanitize nsecs */
++	attr->atimensec = min_t(u32, attr->atimensec, NSEC_PER_SEC - 1);
++	attr->mtimensec = min_t(u32, attr->mtimensec, NSEC_PER_SEC - 1);
++	attr->ctimensec = min_t(u32, attr->ctimensec, NSEC_PER_SEC - 1);
++
+ 	inode->i_atime.tv_sec   = attr->atime;
+ 	inode->i_atime.tv_nsec  = attr->atimensec;
+ 	/* mtime from server may be stale due to local buffered write */
 
 

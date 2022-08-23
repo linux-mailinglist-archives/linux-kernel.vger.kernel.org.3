@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDC459D0B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 07:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE3159D0AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 07:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239945AbiHWFpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 01:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S240132AbiHWFqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 01:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbiHWFpl (ORCPT
+        with ESMTP id S237040AbiHWFq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 01:45:41 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0BF5E657;
-        Mon, 22 Aug 2022 22:45:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id f21so13069096pjt.2;
-        Mon, 22 Aug 2022 22:45:40 -0700 (PDT)
+        Tue, 23 Aug 2022 01:46:29 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE7B5E66D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:46:28 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h24so15654654wrb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:46:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=DMv/Cp6g1Wy/prezT31JZh8OxuEc+Ivqj+KzocFCZYY=;
-        b=DNBi6FtDqClEC5JnQyd52gjLDmwAhRsbvMrhwP2jkwDQ1ymOxytnWJX2bR8+UkLiIO
-         iApuSYPB0R/yqZwVqtydvb89K60E+wqjgab9sB3leMDv53DvRWgzEyfTdv4+gt34KbAu
-         4yACiCMBfVGr5ticbwTggPwJidSP8UT96kiqXtNSSnkAxf5F3wIVJJoCrfE5dYxtnfQQ
-         y8bzq255SOlmJSHe8dS8o9a/PA4aeUYuQsTQvBpbAvGgpt8Mlu3CG3fybayGTRNMubdu
-         y7Q0CmUVy0+tlIayEZY3YPKROCmyb2B6v2j0bPXfhN35RivMtIf5e2C8k4XGDPyGOkvx
-         wc5Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=S3hadl3hnB3ja/rLFfnUVQHzIaI1Bjt1VSUaqwXqPhw=;
+        b=PkDs6E9tNKB8nTGQHP7GsuewTj8vV23xYK6woP4pI4q7HWlzbAtjhfdZ/tleOYQfvM
+         0nSEcNlZfPn55lmg2+A2oT1rMntPZSA3T3aN1LM0tlcC/JHy9ltqgH1AwkRDmN8VBHB/
+         NHfDFWYxMaILhxpy5zAxdXET6ss6ymDpRo8eoTRPNApSECXxJMKcYROA8qfDDaPqbgtK
+         0bA3DU4B5D61uXpiwf2ZwNdxFtccLdtmF0HyohZX05u0npzSo0gfWfPrOgRdE9370sCc
+         qP0utuGqJxL6uxsK9fdrxtN+FDUp/zlo/C8HcbGMwQQLEtUVShCa7AmWwJHP7qYizkZP
+         uzjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=DMv/Cp6g1Wy/prezT31JZh8OxuEc+Ivqj+KzocFCZYY=;
-        b=hG8NChBsOgF6RswZeAgrTu8mY10jY1sVGMWg9USKRIx4OEkrSUamsaOyvtsCslECzP
-         PTPldHnCpbQTDujFaNbvgozCE64qDYBq6/LvgLEqHGLF/I/68k6iq2vQaC3YOPRCyj6h
-         32EtM7jcoR/JRgTPVeYN0iTR8RHXUH8TrAPahmsipJ+5cFmKhpjzh6QYSz+naDFc1u93
-         oTTfS9yC5CgQpt2vboSMH1mUz4LXgaRQpk6AtF376+J5LiYXmV1qqZ0E9ejzfDAObom2
-         gvLLCcxoPZbpY23IMC8gA1vLKchBT9cp2r+qnei2BHb/mT1NrJyiORpY/fkOWQI9IkfA
-         +IAA==
-X-Gm-Message-State: ACgBeo0nA9sLuln/+R7RkZHCVpQL98rKqq0rf1LlzbixGBLlGZelVxe4
-        8dolh2/QHe6/bg44C2fgKYbNRxLtxNVJ8g==
-X-Google-Smtp-Source: AA6agR7KWb5gnSOZSG0SFpfLEp7o40V9MQXVwJD1Ze0ELTyL6/XvzeaxmE5GSGqYAdxdWfsdONHOFw==
-X-Received: by 2002:a17:90a:b302:b0:1fa:ee2f:23a1 with SMTP id d2-20020a17090ab30200b001faee2f23a1mr1755379pjr.81.1661233540068;
-        Mon, 22 Aug 2022 22:45:40 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a17090a0e8900b001f56315f9efsm10933519pjx.32.2022.08.22.22.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 22:45:39 -0700 (PDT)
-From:   lily <floridsleeves@gmail.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, asml.silence@gmail.com, imagedong@tencent.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au, lily <floridsleeves@gmail.com>
-Subject: [PATCH v1] net/core/skbuff: Check the return value of skb_copy_bits()
-Date:   Mon, 22 Aug 2022 22:44:11 -0700
-Message-Id: <20220823054411.1447432-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=S3hadl3hnB3ja/rLFfnUVQHzIaI1Bjt1VSUaqwXqPhw=;
+        b=fvX4wO+HkJm+5KgysK3YYEY+vTfgRlefVv8gcz5tXoEkbuQYaCNxGcwZLG+4enaDyZ
+         lNmDrGwTzaVbiVgrlts18vU9fFhCJG0kqAStkAzSL9YHelUpm0SRHEso2aKRxuddNeIy
+         j1dj3fS6Ml4O6iGXxq9oY1FPcEQ+nyIk2Z4lATV/3A28dcqRSjWH81EdsGot+rn6MFVZ
+         CawzA/74CSA5QRcgZjxDgH0JLMR3+q8j1uV2n6y9idunyVCeq6fTOanv45rGwQXqDdPu
+         i283GQnHnjj7e9O4qCJ7CQJYaQLQUS6SgwXLDNRuiLXqoIa08Mckw16ik438FY2Gy+77
+         WBGg==
+X-Gm-Message-State: ACgBeo1r7/fYZhh01oaHKNSXhzK0Z83KVk45WkYWz7Bxy/U9BMtzQdLz
+        5uoTC8KrMwQX9fBYSLgJidy1SoWBbEUZbfIn2NwVDIXLfs+/pByt
+X-Google-Smtp-Source: AA6agR5pMCqhK5pkzZWg3wHSwh51C+FFrKVW4WSn7T110jcqvDraHFfd8D25wI1nho4Hd4/IVeYi2xD86Yb7G0qV+Q4=
+X-Received: by 2002:a05:6000:1acb:b0:223:5de3:f8bf with SMTP id
+ i11-20020a0560001acb00b002235de3f8bfmr12219378wry.691.1661233586555; Mon, 22
+ Aug 2022 22:46:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220822103219.3985075-1-pgwipeout@gmail.com> <717fe4e0-ef9c-edef-80d1-caeeae1319b9@sholland.org>
+In-Reply-To: <717fe4e0-ef9c-edef-80d1-caeeae1319b9@sholland.org>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Tue, 23 Aug 2022 07:46:16 +0200
+Message-ID: <CAMdYzYqMN93tgGmgQyHFZVw7nuru_tc=D26rKEuzmXgApwiFOQ@mail.gmail.com>
+Subject: Re: [PATCH] phy: rockchip-inno-usb2: Return zero after otg sync
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,30 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-skb_copy_bits() could fail, which requires a check on the return
-value.
+On Tue, Aug 23, 2022 at 5:41 AM Samuel Holland <samuel@sholland.org> wrote:
+>
+> On 8/22/22 5:32 AM, Peter Geis wrote:
+> > The otg sync state patch reuses the ret variable, but fails to set it to
+> > zero after use. This leads to a situation when the otg port is in
+> > peripheral mode where the otg phy aborts halfway through setup. Fix this
+> > by setting ret to zero after use.
+> >
+> > Fixes: 8dc60f8da22f ("phy: rockchip-inno-usb2: Sync initial otg state")
+> >
+> > Reported-by: Markus Reichl <m.reichl@fivetechno.de>
+> > Reported-by: Michael Riesch <michael.riesch@wolfvision.net>
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
+> > Tested-by: Markus Reichl <m.reichl@fivetechno.de>
+> > ---
+> >  drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> > index 0b1e9337ee8e..5fc7c374a6b4 100644
+> > --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> > +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> > @@ -1169,6 +1169,7 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
+> >                       /* do initial sync of usb state */
+> >                       ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
+> >                       extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
+> > +                     ret = 0;
+>
+> The bug was caused by the unexpected consequence of (mis|re)using the "ret"
+> variable for a temporary value. Please introduce a new variable here, else the
+> use of "ret" is even more confusing. This code also wipes out any error returned
+> by devm_extcon_register_notifier().
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- net/core/skbuff.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+I see your point here, I also need to skip this if
+devm_extcon_register_notifier() fails as well. I'll spin up a v2.
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 974bbbbe7138..5ea1d074a920 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -4205,9 +4205,8 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
- 				SKB_GSO_CB(nskb)->csum_start =
- 					skb_headroom(nskb) + doffset;
- 			} else {
--				skb_copy_bits(head_skb, offset,
--					      skb_put(nskb, len),
--					      len);
-+				if (skb_copy_bits(head_skb, offset, skb_put(nskb, len), len))
-+					goto err;
- 			}
- 			continue;
- 		}
--- 
-2.25.1
+Thanks for catching that!
 
+>
+> Regards,
+> Samuel

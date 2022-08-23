@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF8659D760
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9A159D7C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350303AbiHWJ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S1347212AbiHWJiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350940AbiHWJ0a (ORCPT
+        with ESMTP id S1352016AbiHWJgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:26:30 -0400
+        Tue, 23 Aug 2022 05:36:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A5D915C8;
-        Tue, 23 Aug 2022 01:37:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13E597528;
+        Tue, 23 Aug 2022 01:40:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68AE461485;
-        Tue, 23 Aug 2022 08:36:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565D3C433D6;
-        Tue, 23 Aug 2022 08:36:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1001E61446;
+        Tue, 23 Aug 2022 08:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170D2C433D6;
+        Tue, 23 Aug 2022 08:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243763;
-        bh=ck+41J0w7dpuISrQ+RvTbUpIJtkyd4sm1/cjAbIqIzM=;
+        s=korg; t=1661243970;
+        bh=zF3lbwdRFjkPdQLRg6YZteuGFMB18IPyypAQdqBb32c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tUHsanMLZ0YxmTNXYRGU27h3296HHt3qAFADfwT8dCpM8qJj2SMoqlzH0/2tcPlHx
-         gqSZhqH3Vc1uZ7bEnU2A5JZ45M1lt5+WdDDsE5kSvYTY6amwUyYIr+MNd9GYFytVEQ
-         um9cvJq/8GuCJRA3DH4/IHRiQXbghZpugULlzbjI=
+        b=ZWIrrD7iU7zL4JDs6CRfaAmlqUOcw2yTt/aVHdQXTaUb1PHJpqktc4nHLACZADfk0
+         1D/13DZN/HieIq8BDj7OvrXrCZ50NkoHMJe5luU1+XuxOvIWWqsbP/m8FwlCSvZHLw
+         hIVheyUaPYIVPYEeOfcEHNMkWxGF0miG33pDDgIc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.14 014/229] x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 016/244] btrfs: fix lost error handling when looking up extended ref on log replay
 Date:   Tue, 23 Aug 2022 10:22:55 +0200
-Message-Id: <20220823080053.915124858@linuxfoundation.org>
+Message-Id: <20220823080059.620568051@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+From: Filipe Manana <fdmanana@suse.com>
 
-commit ffcf9c5700e49c0aee42dcba9a12ba21338e8136 upstream.
+commit 7a6b75b79902e47f46328b57733f2604774fa2d9 upstream.
 
-Users of GNU ld (BFD) from binutils 2.39+ will observe multiple
-instances of a new warning when linking kernels in the form:
+During log replay, when processing inode references, if we get an error
+when looking up for an extended reference at __add_inode_ref(), we ignore
+it and proceed, returning success (0) if no other error happens after the
+lookup. This is obviously wrong because in case an extended reference
+exists and it encodes some name not in the log, we need to unlink it,
+otherwise the filesystem state will not match the state it had after the
+last fsync.
 
-  ld: warning: arch/x86/boot/pmjump.o: missing .note.GNU-stack section implies executable stack
-  ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-  ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
+So just make __add_inode_ref() return an error it gets from the extended
+reference lookup.
 
-Generally, we would like to avoid the stack being executable.  Because
-there could be a need for the stack to be executable, assembler sources
-have to opt-in to this security feature via explicit creation of the
-.note.GNU-stack feature (which compilers create by default) or command
-line flag --noexecstack.  Or we can simply tell the linker the
-production of such sections is irrelevant and to link the stack as
---noexecstack.
-
-LLVM's LLD linker defaults to -z noexecstack, so this flag isn't
-strictly necessary when linking with LLD, only BFD, but it doesn't hurt
-to be explicit here for all linkers IMO.  --no-warn-rwx-segments is
-currently BFD specific and only available in the current latest release,
-so it's wrapped in an ld-option check.
-
-While the kernel makes extensive usage of ELF sections, it doesn't use
-permissions from ELF segments.
-
-Link: https://lore.kernel.org/linux-block/3af4127a-f453-4cf7-f133-a181cce06f73@kernel.dk/
-Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-Link: https://github.com/llvm/llvm-project/issues/57009
-Reported-and-tested-by: Jens Axboe <axboe@kernel.dk>
-Suggested-by: Fangrui Song <maskray@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: f186373fef005c ("btrfs: extended inode refs")
+CC: stable@vger.kernel.org # 4.9+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/boot/Makefile            |    2 +-
- arch/x86/boot/compressed/Makefile |    4 ++++
- arch/x86/entry/vdso/Makefile      |    2 +-
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ fs/btrfs/tree-log.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/x86/boot/Makefile
-+++ b/arch/x86/boot/Makefile
-@@ -100,7 +100,7 @@ $(obj)/zoffset.h: $(obj)/compressed/vmli
- AFLAGS_header.o += -I$(objtree)/$(obj)
- $(obj)/header.o: $(obj)/zoffset.h
- 
--LDFLAGS_setup.elf	:= -m elf_i386 -T
-+LDFLAGS_setup.elf	:= -m elf_i386 -z noexecstack -T
- $(obj)/setup.elf: $(src)/setup.ld $(SETUP_OBJS) FORCE
- 	$(call if_changed,ld)
- 
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -55,6 +55,10 @@ else
- LDFLAGS += $(shell $(LD) --help 2>&1 | grep -q "\-z noreloc-overflow" \
- 	&& echo "-z noreloc-overflow -pie --no-dynamic-linker")
- endif
-+
-+LDFLAGS += -z noexecstack
-+LDFLAGS += $(call ld-option,--no-warn-rwx-segments)
-+
- LDFLAGS_vmlinux := -T
- 
- hostprogs-y	:= mkpiggy
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -183,7 +183,7 @@ quiet_cmd_vdso = VDSO    $@
- 
- VDSO_LDFLAGS = -shared $(call ld-option, --hash-style=both) \
- 	$(call ld-option, --build-id) $(call ld-option, --eh-frame-hdr) \
--	-Bsymbolic
-+	-Bsymbolic -z noexecstack
- GCOV_PROFILE := n
- 
- #
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -1119,7 +1119,9 @@ again:
+ 	extref = btrfs_lookup_inode_extref(NULL, root, path, name, namelen,
+ 					   inode_objectid, parent_objectid, 0,
+ 					   0);
+-	if (!IS_ERR_OR_NULL(extref)) {
++	if (IS_ERR(extref)) {
++		return PTR_ERR(extref);
++	} else if (extref) {
+ 		u32 item_size;
+ 		u32 cur_offset = 0;
+ 		unsigned long base;
 
 

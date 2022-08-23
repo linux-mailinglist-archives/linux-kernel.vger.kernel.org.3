@@ -2,81 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E2159EA11
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6C059E9F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbiHWRnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S229629AbiHWRoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiHWRmv (ORCPT
+        with ESMTP id S230396AbiHWRmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:42:51 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06298BE09;
-        Tue, 23 Aug 2022 08:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661268677;
-        bh=6y871TwjlGWu4Hn5isuPKP7hEDPU3mcdk7uvzqUMGlc=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=dElczNUP7M43ZNpUb5kqCWNp15vxyrnsfHh1zMwiDbRDOXuGZcwAs6oQ19mQwQHRY
-         Q9wzGqOhtn8u+TF8mF+uD2zqPSFvKlxPXHXVELq51tpLoCrEch0imuesUmW9yhiyE+
-         dYhk/OKH4mJL/6FXL0XJOMSQm/SBXH30/HiqZU0Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.34.177]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbzuH-1p1VeN3gGV-00dV1S; Tue, 23
- Aug 2022 17:31:16 +0200
-Message-ID: <41808495-4002-9dc9-8143-bdc6fb7f4394@gmx.de>
-Date:   Tue, 23 Aug 2022 17:31:16 +0200
+        Tue, 23 Aug 2022 13:42:54 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9514E4F1AB
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:31:31 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id p18so13129069plr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=rPJEhUskbEuhZn5UA0VRxGqCt2ycgFbaFmo1YwbQDCs=;
+        b=DOyuZ2DfDHo6PdftwMOSLANQo+RXcgn8aKot/yQS4w0BpH/12ThLtf/aUdXHWx2ykL
+         Oee+34wOXm90is6sA3C1KZgU8QGqujMVxtqyexAurhJ43I5qY0TTSQ2PUyRfCkbRlI3t
+         lrD83eW8bdfgcBoYlYp1J5U3lzxlwJ+Tx0eJp0+QQaUEMqm5NPKz33TPNaFd5FoYqqmS
+         6BG2yWKzNDCVpb09Ny2BVvbukaEnA+gjzKQWPUJm16wKJIIRFP2v6ztboSDTGLoK6gWw
+         weVusjX6vrC7oND5KRgWOxPjiE62/5/8eJULKkKNr86FTehQz7c54cM5SwQ6uxWOrKZ8
+         +dIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=rPJEhUskbEuhZn5UA0VRxGqCt2ycgFbaFmo1YwbQDCs=;
+        b=Fczx2vIcwFk2PJfJ1WEPir8X/oabzNjf6hrF6RTEwlwlXm8zmfQ2KFgntEdbynFkF1
+         /QSl70JwnRTkL7sBm5xu36O7tDlYCmJhFX8npScIhceo80zwN84Mwz6eeaN0Jh9L9QHa
+         suBPL8+Dh5E7Sm+nvy1VhXT+4W0Ov3IcKcAzOIj9LR0VBhF9rUG4dCso7jWU5xUD/a3p
+         oJyhnB1qmcH2EFtfa7VkMBTxhoE+bJRTVFfvnE+x4t/av/oinkwZr2aXfx2f+KTI+RZH
+         5SVR2AB0+c5v1lP2LQ4B5THUr40kBWxvgDJwnWyIiXfs7Nbvrzm8qhmJavNOTycjaKI3
+         R5Og==
+X-Gm-Message-State: ACgBeo1zf1rFt6xlJB/wh2oCxB3ErdL8cWIgggs5sckiSmC43N28GLQJ
+        9N6FWYLI7nmtuy6R0tj6PRz2Qg==
+X-Google-Smtp-Source: AA6agR4teugBk55hCVUg1jS+OSM50LM+YswrnzcEa3qGxXrae3Vo99tlJTyAYNu2PU1z50tnAONynQ==
+X-Received: by 2002:a17:90b:4c08:b0:1fb:66d3:79c with SMTP id na8-20020a17090b4c0800b001fb66d3079cmr2934289pjb.121.1661268690966;
+        Tue, 23 Aug 2022 08:31:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b0016892555955sm10738749plr.179.2022.08.23.08.31.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 08:31:30 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 15:31:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct hv_enlightened_vmcs'
+ definition
+Message-ID: <YwTyzk2TiC226n33@google.com>
+References: <875yiptvsc.fsf@redhat.com>
+ <Yv59dZwP6rNUtsrn@google.com>
+ <87czcsskkj.fsf@redhat.com>
+ <YwOm7Ph54vIYAllm@google.com>
+ <87edx8xn8h.fsf@redhat.com>
+ <YwO2fSCGXnE/9mc2@google.com>
+ <878rngxjb7.fsf@redhat.com>
+ <YwPLt2e7CuqMzjt1@google.com>
+ <87wnazwh1r.fsf@redhat.com>
+ <YwTrlgeqoAqyH0KF@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.19 000/365] 5.19.4-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:OToLyasaT6alezisQuuvDFUZbsCpq4mPTtNw9MmXeW0G+HRIgpO
- vz9zt0i2PABQWZARfnQNqujE/2LYIS8DJUhsUQuQFjbz6njQoq5GPNi3EpX+mN2z50v8Rkb
- jBftcioU/pqGATgAIQtjphGrlOfUcWc1NwywzPr4CmytgFHtKhc6WaFgxA9wNKbuWEgRPMJ
- n8YeJHDAzrhse3LqKXEyA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PjpAwpzMs2w=:iCr72FgZzSXb6wZ4MpggmI
- qGe0NyxnoaP9faSdSGke6hhxnBZBP/LYvb4nAOWB1A1gq35TmT4UfaEctYQiRnUeeXPv+jodO
- ySWVwkxwlar1JUA+ijeoSiRrMRVCUlmm6tlbvyhM35cIYop7nGsVBWnuYXUOSt6159uq4KzYf
- EtLwG/TkVNvRHsSR6YhegzsLL3iWFb8/jzQkhlef+DnaQaewZrEeq8+B/gLiWbHAp++FshGAl
- RzC04Oumpem1goy4sCtKfQLlyNS6rpuCaanUYbWfr3fik8FTi0lwZfqcfhK49W5YpbsDL0rC+
- QZaedtNytL/s24v/Fmo7LFcBogU94zQr+M1m5TaKmB3FoAv5GLYGCtc1NbSXtWt5VLFag8ZdK
- dygtKKlwKYdwJ+0U5M+tc9sS3+WiWbUCO+1Lh2nZs5f5YhhY+1XzV0S0CzQKGDyxaVIvrCNvI
- u17JMAMQkVX71j9Notc+8+z29q9VB79fkekq1AjUfLxD4ZMoUmJ8RML+wN7s+9JThPfvoVI7J
- DO1h5/k4kjDWaJwpqGzKCHJABVRYpb6aI/6BEoidDxkchaMxfu18+7zz/ElBfSFQqCYYaSzYi
- RfPs0WYmmSEEQ2Tv0btkqPW8x5G+si0M8B00l2z38beRtRi4rO/dtIk7MupW66/yxfzQdZkU/
- yc1HP8D5ok2qDMRjMcLh1yyu85rEcN6RdCTsbDLi+c4GFkvfisFVxrOXMqoc8Tn4kwgAVi7SK
- U/u+B/7wxDxg9hWwzTpkdlUVjr9TfuE4PHpp6i/hZdwJOEABaBO+8a0YmpYTflFb0U7VxwjMh
- MNm3AxeYxvLyGxBcwrSMdH7qDZ47J7GA/11r6on3U4k3nX0315T6A8yKarGlTNSDqUWadTFYo
- Ma4CwXlggrPFBsOhYUqQoCpkRNYzx3w4Xknf5plME5xl1jmI9rXG5lFtU0AadLLdWLZBgGiJx
- 5lAN7Ku28mPrzzF039VSjj0dDRPQdlZjdBF9OXDttXbGcLfXjiL8QiuN/ZhN0LdC0QrKS6VOi
- ZcGSC+rEZ9hwsXrVzRooT32JM9s9J0jMxRgmSSupaD0NY0S3pNkHzIo+OXUtVn1S3St5Wbd14
- Ar/+iyW4WmXH1UQoHBzyb4/pWxn6JfEwIn7uzzXFUNUkpEmPiNkqgip+w==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwTrlgeqoAqyH0KF@google.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+On Tue, Aug 23, 2022, Sean Christopherson wrote:
+> On Tue, Aug 23, 2022, Vitaly Kuznetsov wrote:
+> > >> In any case, what we need, is an option for VMM (read: QEMU) to create
+> > >> the configuration with 'TscScaling' filtered out even KVM supports the
+> > >> bit in eVMCS. This way the guest will be able to migrate backwards to an
+> > >> older KVM which doesn't support it, i.e.
+> > >> 
+> > >> '-cpu CascadeLake-Sever,hv-evmcs'
+> > >>  creates the 'origin' eVMCS configuration, no TscScaling
+> > >> 
+> > >> '-cpu CascadeLake-Sever,hv-evmcs,hv-evmcs-2022' creates the updated one.
+> 
+> Ah, I see what you're worried about.  Your concern is that QEMU will add a VMX
+> feature to a predefined CPU model, but only later gain eVMCS support, and so
+> "CascadeLake-Server,hv-evmcs" will do different things depending on the KVM
+> version.
+> 
+> But again, that's already reality.  Run "-cpu CascadeLake-Server" against a KVM
+> from before commits:
+> 
+>   28c1c9fabf48 ("KVM/VMX: Emulate MSR_IA32_ARCH_CAPABILITIES")
+>   1eaafe91a0df ("kvm: x86: IA32_ARCH_CAPABILITIES is always supported")
+> 
+> and it will fail.  There are undoubtedly many other features that are similarly
+> affected, just go back far enough in KVM time.
 
-5.19.4-rc1
+The one potential issue I see is that KVM currently silently hides TSC_SCALING
+and PERF_GLOBAL_CTRL, i.e. migrating from new KVM to old KVM may "succeed" and
+then later fail a nested VM-Entry.
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 36)
+PERF_GLOBAL_CTRL is solved because Microsoft has conveniently provided a CPUID
+bit.
 
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+TSC_SCALING is unlikely to be a problem since it's so new, but if we're worried
+about someone doing e.g. "-cpu CascadeLake-Server,hv-evmcs,+vmx-tsc-scaling", then
+we can add a KVM quirk to silently hide TSC_SCALING from the guest when eVMCS is
+enabled.

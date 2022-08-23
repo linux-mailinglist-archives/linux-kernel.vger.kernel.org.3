@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A471259D2A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBA659D2BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241348AbiHWHwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        id S241376AbiHWHxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241260AbiHWHws (ORCPT
+        with ESMTP id S241390AbiHWHxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:52:48 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A5665544
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:52:46 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 202so11576390pgc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:52:46 -0700 (PDT)
+        Tue, 23 Aug 2022 03:53:42 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9038011819
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:53:40 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso13722697pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=MgN+KREEFxa4xm6tdK3/YoM4YbnrbMSDZ+9EuL3RHVM=;
-        b=dEqbckJOMJZcX6/v3PLFyyPYN2v2QaTFyFRXKUoMvhiNvJRYqWL/OUvflzM+bwV7ZW
-         aU8/3/w2QO70sc2k+D89CQScTDJ8TcqH0xrxT6bGN/zI6TloQZsOWPwIgPA2MsXWg4q2
-         ELZOXOlB+5fE8kBSgbF1+c6ocYcf18YzVj0pjG/y2Xbyw5nUHfET9TQysbdYFnrqbDBB
-         dlX05q1p9zkwTQlcw9PLEhTV3qlhDowyM7ZdlKHLzSOVDADUpzmyQjOQ3+FkcMdYL//x
-         bh/mdZfSIISUTADk6wwlImvTZVQF/zU+5Wow5c0zklytq/mUKHRtauza2wPk/ps2mBmm
-         rixA==
+        bh=nEf9h9B8XFcsw7F7FHaP4rxVimh4AhqGZN0e/h8tVmE=;
+        b=H6eHdQC9nfpqxyFvScDKeIUMxPQixxwngCfLH06PzVsCieuC0wFtRfbviaHQJOZ2no
+         KCFxhv8QDvdg2lmpGanCvawqQssmfLAG/0dof0Milu2TexViPWyQPk7YGFVyCzEYdlt6
+         mmjUQqBLQRHNtzu0ceLLg4CKTcLb4WV/i7RWRuJ89FQHYSg1I3Tp8wP/alrEx2Vu3lzG
+         MuOiBfI2cgWGEeDFOQg/DxB0fMAMDQpn7qndnPxjbPRKmEawHG+E/cf1iq4ONtmvZZBt
+         SbM+vuVZbcUIpHNYo+NvsSPo/mCThabsQNYNurxvrvdB+wNJRtPH2tBuP4K/KXk4VDw3
+         hyxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=MgN+KREEFxa4xm6tdK3/YoM4YbnrbMSDZ+9EuL3RHVM=;
-        b=cYK6A14OaMLBUQ8rXRLHlVAEFy4iV6bvpfm0MzgmRl/uWLxY69KPlY2SX+rr1WAgaS
-         xky37wJW7TZcbj3smO3LqXK7U24LWQNrbUnkBsqPimhWhUJFlGnLQrKVXFa97AKMdaZB
-         yZaIkGJHTCMHzXBVsJOpqtrUtdlpJkdD+Od59mtIwA2fKPCmMGVgOa1S2pbReuzrIpbY
-         kxe3A1/lEmD+rmeIf18olzrcKHlUDy/VgbCEGEwJANhMxOyitXojlYiBeyWBO/aN8Jq2
-         PxbjeyK6nTGqitOuXdIoK1rvJ5GwlcEyROuZ/54lHnXLJARQW+7MXUIwRsADyA2vLQEI
-         rqzQ==
-X-Gm-Message-State: ACgBeo1wig80d71q/sA1eXGMUjcyRTTrloOrk/dR2bPqHsJCZoFOkP7K
-        WH+4hxmVvlXjq+tF6qn6RS4=
-X-Google-Smtp-Source: AA6agR6tK9o+kL139TUNt9pXwhRG3QQMgJm5L6Ql0waoJDaieYwaBti0inwQ3JasWVBnO6YijcZErQ==
-X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr24305446pfi.84.1661241166130;
-        Tue, 23 Aug 2022 00:52:46 -0700 (PDT)
+        bh=nEf9h9B8XFcsw7F7FHaP4rxVimh4AhqGZN0e/h8tVmE=;
+        b=qJACfZnQQqkc7Q9ZsG5TcO516/k8BVve6mrHpTVW0GdItVtAolMH67U41tx0AibWdm
+         q3eZVDYG4js8fjR0NJu1YeXtqiiXYIbsmsFC/r7/5cHgnMRcWyZSXs/nokPmbRhrWp2I
+         31zKyGEcZvcj0mv50fTOpqc401e177pngCBBHdKDKmuuNVU6uwVM51yZzfAy/Ogfpaqd
+         opkoifY/5Nm3LI2yfV0jht63ui+adHTyeiLlvDgWZgRC1aLQZM9i+zJP0QldbKBPJbpR
+         9betv3IWjaW/PDvBOHf7z+565dXR9DNsN5BLc6BzgstNW62TDLbzPEY+Gm4mycCQg9PX
+         FG0A==
+X-Gm-Message-State: ACgBeo2bbxhUA6LoG0ZdKhqBm1es/XbDtG8nafYx6pgAGVS9mZJaNRje
+        RY14l2Z8MImzmt0/7VZdwms=
+X-Google-Smtp-Source: AA6agR5PV7F4Fv1F70NJL2LVcXFE9N4pQkIOk+6vloijP9gA6TFUajv72QAWRFmdHKbokWoX6ssYYg==
+X-Received: by 2002:a17:90b:4c08:b0:1fb:66d3:79c with SMTP id na8-20020a17090b4c0800b001fb66d3079cmr1269718pjb.121.1661241220134;
+        Tue, 23 Aug 2022 00:53:40 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id bn20-20020a056a02031400b00419ab8f8d2csm8604216pgb.20.2022.08.23.00.52.44
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902dacc00b0017269cc60d7sm9737931plx.214.2022.08.23.00.53.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 00:52:45 -0700 (PDT)
+        Tue, 23 Aug 2022 00:53:39 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     42.hyeyoo@gmail.com
-Cc:     cl@linux.com, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        vbabka@suse.cz, roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+To:     broonie@kernel.org, linux-kernel@vger.kernel.org
+Cc:     codrin.ciubotariu@microchip.com, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] mm/slab_common: Remove the unneeded result variable
-Date:   Tue, 23 Aug 2022 07:52:41 +0000
-Message-Id: <20220823075241.209009-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] ASoC: atmel_ssc_dai: Remove the unneeded result variable
+Date:   Tue, 23 Aug 2022 07:53:35 +0000
+Message-Id: <20220823075335.209072-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,33 +75,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Return the value from __kmem_cache_shrink() directly instead of storing it
- in another redundant variable.
+Return the value from asoc_ssc_init() directly instead of storing it
+in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- mm/slab_common.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ sound/soc/atmel/atmel_ssc_dai.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 17996649cfe3..0dfa3cfb6be5 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -495,13 +495,9 @@ EXPORT_SYMBOL(kmem_cache_destroy);
-  */
- int kmem_cache_shrink(struct kmem_cache *cachep)
+diff --git a/sound/soc/atmel/atmel_ssc_dai.c b/sound/soc/atmel/atmel_ssc_dai.c
+index e868b7e028d6..3763454436c1 100644
+--- a/sound/soc/atmel/atmel_ssc_dai.c
++++ b/sound/soc/atmel/atmel_ssc_dai.c
+@@ -891,7 +891,6 @@ static int asoc_ssc_init(struct device *dev)
+ int atmel_ssc_set_audio(int ssc_id)
  {
+ 	struct ssc_device *ssc;
 -	int ret;
--
--
- 	kasan_cache_shrink(cachep);
--	ret = __kmem_cache_shrink(cachep);
  
+ 	/* If we can grab the SSC briefly to parent the DAI device off it */
+ 	ssc = ssc_request(ssc_id);
+@@ -903,9 +902,7 @@ int atmel_ssc_set_audio(int ssc_id)
+ 		ssc_info[ssc_id].ssc = ssc;
+ 	}
+ 
+-	ret = asoc_ssc_init(&ssc->pdev->dev);
+-
 -	return ret;
-+	return __kmem_cache_shrink(cachep);
++	return asoc_ssc_init(&ssc->pdev->dev);
  }
- EXPORT_SYMBOL(kmem_cache_shrink);
+ EXPORT_SYMBOL_GPL(atmel_ssc_set_audio);
  
 -- 
 2.25.1

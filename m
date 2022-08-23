@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B85659D618
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035CD59D4DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245139AbiHWIhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S245566AbiHWIiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245483AbiHWIec (ORCPT
+        with ESMTP id S1347670AbiHWIgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:34:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D7375CE1;
-        Tue, 23 Aug 2022 01:16:44 -0700 (PDT)
+        Tue, 23 Aug 2022 04:36:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7D37755D;
+        Tue, 23 Aug 2022 01:17:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0576612DA;
-        Tue, 23 Aug 2022 08:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED507C433D6;
-        Tue, 23 Aug 2022 08:16:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0472361360;
+        Tue, 23 Aug 2022 08:16:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CDCC433D7;
+        Tue, 23 Aug 2022 08:16:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242603;
-        bh=rlRyGuTULygd8M/Co4edd8lZ8zKBvxFllGezVHX8gSk=;
+        s=korg; t=1661242612;
+        bh=Ozh6pKstKR8EmXCauJAdcp4MKdVlb4V3CinW1snpBUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jfuYlvMfcPmkV4eSC3E2RkJw9KlBei1BRvJGN1Fq4H4lltZ3WZUvpcHHyjBDsiFFe
-         4MY6vxvHmmi7Zvi2NTekv020AWnFioGgtJ1fwGFpPfr3vHq9qitYqCqHK2/dpfPpnW
-         L6pBb9dCE/kTVXjS+8Qk4SDfEWP+YHqwNA63+tAU=
+        b=lzB3Fm1adfy3ydhIlNKcNJhJytGvlNfTB1UOuVN9RmygEMZmQyA0m9tjjKnRBcp+X
+         LKo4LU3Vj2hh38DEeYntle5rxB/Ghb6PfmvunyWcxiD7Ficn+NC4/oibEE1LXmKWZS
+         XM8Jz4Fqdy86d1G01IVoh78FkvfTT4x2nIE74Tuo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+1ee0910eca9c94f71f25@syzkaller.appspotmail.com,
-        syzbot+49b10793b867871ee26f@syzkaller.appspotmail.com,
-        syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 098/101] ALSA: timer: Use deferred fasync helper
-Date:   Tue, 23 Aug 2022 10:04:11 +0200
-Message-Id: <20220823080038.296659025@linuxfoundation.org>
+        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 099/101] powerpc/64: Init jump labels before parse_early_param()
+Date:   Tue, 23 Aug 2022 10:04:12 +0200
+Message-Id: <20220823080038.336486008@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
 References: <20220823080034.579196046@linuxfoundation.org>
@@ -57,81 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Zhouyi Zhou <zhouzhouyi@gmail.com>
 
-[ Upstream commit 95cc637c1afd83fb7dd3d7c8a53710488f4caf9c ]
+[ Upstream commit ca829e05d3d4f728810cc5e4b468d9ebc7745eb3 ]
 
-For avoiding the potential deadlock via kill_fasync() call, use the
-new fasync helpers to defer the invocation from PCI API.  Note that
-it's merely a workaround.
+On 64-bit, calling jump_label_init() in setup_feature_keys() is too
+late because static keys may be used in subroutines of
+parse_early_param() which is again subroutine of early_init_devtree().
 
-Reported-by: syzbot+1ee0910eca9c94f71f25@syzkaller.appspotmail.com
-Reported-by: syzbot+49b10793b867871ee26f@syzkaller.appspotmail.com
-Reported-by: syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/20220728125945.29533-3-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+For example booting with "threadirqs":
+
+  static_key_enable_cpuslocked(): static key '0xc000000002953260' used before call to jump_label_init()
+  WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xfc/0x120
+  ...
+  NIP static_key_enable_cpuslocked+0xfc/0x120
+  LR  static_key_enable_cpuslocked+0xf8/0x120
+  Call Trace:
+    static_key_enable_cpuslocked+0xf8/0x120 (unreliable)
+    static_key_enable+0x30/0x50
+    setup_forced_irqthreads+0x28/0x40
+    do_early_param+0xa0/0x108
+    parse_args+0x290/0x4e0
+    parse_early_options+0x48/0x5c
+    parse_early_param+0x58/0x84
+    early_init_devtree+0xd4/0x518
+    early_setup+0xb4/0x214
+
+So call jump_label_init() just before parse_early_param() in
+early_init_devtree().
+
+Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+[mpe: Add call trace to change log and minor wording edits.]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220726015747.11754-1-zhouzhouyi@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/timer.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ arch/powerpc/kernel/prom.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/sound/core/timer.c b/sound/core/timer.c
-index 596ba572d6c4..1f5f05e76e59 100644
---- a/sound/core/timer.c
-+++ b/sound/core/timer.c
-@@ -74,7 +74,7 @@ struct snd_timer_user {
- 	unsigned int filter;
- 	struct timespec tstamp;		/* trigger tstamp */
- 	wait_queue_head_t qchange_sleep;
--	struct fasync_struct *fasync;
-+	struct snd_fasync *fasync;
- 	struct mutex ioctl_lock;
- };
+diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+index 11b4ecec04ee..1413d72689d2 100644
+--- a/arch/powerpc/kernel/prom.c
++++ b/arch/powerpc/kernel/prom.c
+@@ -682,6 +682,13 @@ void __init early_init_devtree(void *params)
+ 	of_scan_flat_dt(early_init_dt_scan_root, NULL);
+ 	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
  
-@@ -1293,7 +1293,7 @@ static void snd_timer_user_interrupt(struct snd_timer_instance *timeri,
- 	}
-       __wake:
- 	spin_unlock(&tu->qlock);
--	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
-+	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
- 	wake_up(&tu->qchange_sleep);
- }
++	/*
++	 * As generic code authors expect to be able to use static keys
++	 * in early_param() handlers, we initialize the static keys just
++	 * before parsing early params (it's fine to call jump_label_init()
++	 * more than once).
++	 */
++	jump_label_init();
+ 	parse_early_param();
  
-@@ -1330,7 +1330,7 @@ static void snd_timer_user_ccallback(struct snd_timer_instance *timeri,
- 	spin_lock_irqsave(&tu->qlock, flags);
- 	snd_timer_user_append_to_tqueue(tu, &r1);
- 	spin_unlock_irqrestore(&tu->qlock, flags);
--	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
-+	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
- 	wake_up(&tu->qchange_sleep);
- }
- 
-@@ -1397,7 +1397,7 @@ static void snd_timer_user_tinterrupt(struct snd_timer_instance *timeri,
- 	spin_unlock(&tu->qlock);
- 	if (append == 0)
- 		return;
--	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
-+	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
- 	wake_up(&tu->qchange_sleep);
- }
- 
-@@ -1439,6 +1439,7 @@ static int snd_timer_user_release(struct inode *inode, struct file *file)
- 		if (tu->timeri)
- 			snd_timer_close(tu->timeri);
- 		mutex_unlock(&tu->ioctl_lock);
-+		snd_fasync_free(tu->fasync);
- 		kfree(tu->queue);
- 		kfree(tu->tqueue);
- 		kfree(tu);
-@@ -2026,7 +2027,7 @@ static int snd_timer_user_fasync(int fd, struct file * file, int on)
- 	struct snd_timer_user *tu;
- 
- 	tu = file->private_data;
--	return fasync_helper(fd, file, on, &tu->fasync);
-+	return snd_fasync_helper(fd, file, on, &tu->fasync);
- }
- 
- static ssize_t snd_timer_user_read(struct file *file, char __user *buffer,
+ 	/* make sure we've parsed cmdline for mem= before this */
 -- 
 2.35.1
 

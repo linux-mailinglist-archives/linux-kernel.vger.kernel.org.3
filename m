@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F6659EF4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E89C59EF50
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbiHWWdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S230035AbiHWWiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbiHWWdN (ORCPT
+        with ESMTP id S229707AbiHWWiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:33:13 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FE012D33;
-        Tue, 23 Aug 2022 15:33:10 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aec8f.dynamic.kabel-deutschland.de [95.90.236.143])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7B9D961EA192D;
-        Wed, 24 Aug 2022 00:33:08 +0200 (CEST)
-Message-ID: <33c2a495-13ad-97ac-f2c2-4096cf8f5b58@molgen.mpg.de>
-Date:   Wed, 24 Aug 2022 00:33:07 +0200
+        Tue, 23 Aug 2022 18:38:52 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0BE5E647
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:38:47 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso16106613pjr.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=5DFJelRh8hAibdIhoMcbXDL+2DULmlurhTcXUJAe61U=;
+        b=Gh592xm6YznjkVATkRVypJ58c4FBvmtNYI3K1Mp2jR37aBg+Zy/ni4ikRiA1J5KaqZ
+         sPgxur3Fi3Fj4pUcvG8gg0wzv6WqgTRQqABErIyEWt5SnktfAnKGXgCesXyu2/7AVfPK
+         icQvq5ZmHdieE8yqh2FfprkQdYJcxbzCSNNng=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=5DFJelRh8hAibdIhoMcbXDL+2DULmlurhTcXUJAe61U=;
+        b=fxlQrsUivwefM85c0B3b/clXR9sUQQsY9gYeV+h70cJsO1B641DTxe60yjYrwcJA+v
+         zPoBHRg18KrxC0YHXPYfrwuWUi9vAwsV/Vygo6KWIM3vJIhvjSehmiPV53XBY4EfW4mK
+         ynJbRzIsaJoosQib3/9HrE4rvt2FHx8Ls7VlrwhQEvK+kSzTH0BBgLoyauJNt1+nY26Q
+         W/zwNo6b1gjrJAlHuYNy2pm3UG/gIgEQRAOTHrFnBP/DYTaqTWih+mCOSnxzn/7I3xMm
+         EftnaXimkF2JLaSFkGgXHdanKTUJGEXMrp0DpVuhfQvQQTMC8yni8KHUtXq5TJevRR8e
+         +dvg==
+X-Gm-Message-State: ACgBeo0lbJbD62HGfqi3YlHUDWl4NK3z6ydrVHtasN6BCuVZX02EQpoC
+        CAgpiq99AB8fkAIUg71bofJ4+g==
+X-Google-Smtp-Source: AA6agR7m/Kqo8Gdqd6vut3JCmGoK/kH1SvTx0YpevY8mgORzyC0lEpa+RAj0K31TJNZ4f/r/8gWj8w==
+X-Received: by 2002:a17:902:c102:b0:172:ce4b:870c with SMTP id 2-20020a170902c10200b00172ce4b870cmr18016683pli.155.1661294326737;
+        Tue, 23 Aug 2022 15:38:46 -0700 (PDT)
+Received: from b09580aaaea0 ([203.220.223.63])
+        by smtp.gmail.com with ESMTPSA id q4-20020a17090311c400b0016bc947c5b7sm11046533plh.38.2022.08.23.15.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 15:38:46 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 22:38:38 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/365] 5.19.4-rc1 review
+Message-ID: <20220823223838.GA345371@b09580aaaea0>
+References: <20220823080118.128342613@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
- ksgxd+0x1b7/0x1d0
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
- <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
- <46e3483b-a5ab-2a05-8a28-f9ea87e881c3@intel.com>
- <04c9d5fa-5861-bbc3-3e2f-e18a73866645@molgen.mpg.de>
- <63a60042-4a4a-3bc3-5fa1-4495d80cc06c@molgen.mpg.de>
- <beabe16c-b28b-cd65-f6b6-4242bc74926d@intel.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <beabe16c-b28b-cd65-f6b6-4242bc74926d@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Dave,
-
-
-Thank you for your reply.
-
-Am 23.08.22 um 18:32 schrieb Dave Hansen:
-> On 8/23/22 06:48, Paul Menzel wrote:
->>>> I'm suspecting either a BIOS problem.  Reinette (cc'd) also thought this
->>>> might be a case of the SGX initialization getting a bit too far along
->>>> when it should have been disabled.
->>>>
->>>> We had some bugs where we didn't stop fast enough after spitting out the
->>>> "SGX Launch Control is locked..." errors.
->>
->> Let’s hope it’s something known to you.
+On Tue, Aug 23, 2022 at 09:58:21AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.4 release.
+> There are 365 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Thanks for the extra debug info.  Unfortunately, nothing is really
-> sticking out as an obvious problem.
-> 
-> The EREMOVE return codes would be interesting to know, as well as an
-> idea what the physical addresses are that fail and the _counts_ of how
-> many pages get sanitized versus fail.
+> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
+> Anything received after that time might be too late.
 
-Is there a knob to print out this information? Or way to get this 
-information using ftrace? I’d like to avoid rebuilding the Linux kernel.
+Hi Greg,
 
-> But, I don't really have a theory about what could be going on yet.
+5.19.4-rc1 tested.
 
-Kind regards,
+Run tested on:
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-Paul
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

@@ -2,247 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59B059EAD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7196A59EADA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbiHWSUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S233590AbiHWSWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiHWSTs (ORCPT
+        with ESMTP id S232023AbiHWSWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:19:48 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BBB6F256;
-        Tue, 23 Aug 2022 09:36:38 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id x15so13078832pfp.4;
-        Tue, 23 Aug 2022 09:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=sHsd8UJitkSZ/06E7cs7tNROVB1mkQZCDyvY2Jg+ha4=;
-        b=aDMSJsZdOLMIfhq9hMqJAJGsCd2NG9uT7Y87j/3NTRbwig6fxwUaQVn+X/Yz0CDKJB
-         bEueKTMN8ePgcFtiE0TkJ3RgNGIKPrPNUb/hriBZapkE9Qg09s9eMAJG3ACX5r08v6ux
-         yXassIf7+70ZKOzp0auTd4ckd6uiq9UGCl+Hb/iN016WIBvS8/kQLv7ruJlQBlDXyIam
-         ejoInBmZl1XEMRYKva0VPunKa0CJNeOXmsSU6PczsHjHydTEPwIjEise5QJqj1IAxEhw
-         LHLCrFQE/U8eax8b2ZXQOuEKtW/vJRzPQvsj4AjvQivb9aLhbjwEJk7kJ9O73+zNERIz
-         AzUw==
+        Tue, 23 Aug 2022 14:22:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABC74D4E9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661272738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xe29dpH/lEwoUgqXwXUV/OMUbK9mfNYESN56Bn6Kzu4=;
+        b=h8i3ZF1w8xZH7LSICIqdhLRhzQiS4uFZLtvu4bUrXEP6o8H/6Kfapxjlo66MF2QcR5GtMv
+        9UXi1pKD2reSsrnXUyW43bDpc9p33+/LYQr/mFzBFlwc930ESJamJxJ11W4KHfJcAvE9Zc
+        rUcwNTxi6Xwi2baKeXUAHRUA7g1odgQ=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-195-joQNCANQNbuH5uDalBXHew-1; Tue, 23 Aug 2022 12:38:17 -0400
+X-MC-Unique: joQNCANQNbuH5uDalBXHew-1
+Received: by mail-qt1-f198.google.com with SMTP id fv24-20020a05622a4a1800b003445e593889so10901025qtb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:38:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=sHsd8UJitkSZ/06E7cs7tNROVB1mkQZCDyvY2Jg+ha4=;
-        b=qrSE9RGk9wS/9HIuSbtMNqRRXk/vtRoMaRGb1YMbUIDDZG+yM0PfE35JXNpJv2SMOJ
-         0WaypZT88mjZ5bwIqOFhGIJqCo7kK4wFwija/esdnH4BIpnpYoztlJyTUp/VQih2G6JC
-         +ZAE9sIoyVuP9nCxGzSJhQf9HrcqMM7YpxyhXxNWbp58dqRR4RwxT4438CPHrxgyAVCf
-         LvkSdGHh+EvbrAfZjKho/aQCZ0CHTYgw763QxiF13ry9v8quxz28jaSRGQwl+JuQRVaW
-         iDqNj5N9KSaLRdGRkirss9MAggRYnj6gOy4h9qTzk4eM3VwBd+AXsas2DTJSIuGR4MYq
-         9+tw==
-X-Gm-Message-State: ACgBeo2SJ0ukDNMx4PwhzZqAcbGZ3QQkWASTwiuYm6tNyMR13KS0I0ES
-        XT02cKqt4FdnsQdloQYN1Ns=
-X-Google-Smtp-Source: AA6agR7qTRzNhhRnEQPc//A/W8Gaflk+Qm332922fuNeVJHFKAc+LSxR8+zjVo5aYzlLh8KUGiX4kg==
-X-Received: by 2002:a63:69c7:0:b0:41c:590a:62dc with SMTP id e190-20020a6369c7000000b0041c590a62dcmr20512812pgc.388.1661272597844;
-        Tue, 23 Aug 2022 09:36:37 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id d9-20020a170902cec900b00172973d3cd9sm10853077plg.55.2022.08.23.09.36.36
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=xe29dpH/lEwoUgqXwXUV/OMUbK9mfNYESN56Bn6Kzu4=;
+        b=dmNAVsLs854rXYQHjcFPVj3mxlWs9KwmkcSX4nTxe7WDAyLqYdblC1lc7XuEvEAalN
+         5ime52YkMbv1dzaQabNO4ubOKB4ly32FDV0ieC8WxpNxGXJwoYbiPsbZ4Y73YpsuuhQ+
+         SZmwgU8N2ck18MZna+wII7DuZWCUCImSTGqMTVkFbNS3PZrqlkkCR/n3uYnEvV/ZMrtZ
+         lOxXp7ADbsDN1XM3JFKCEjCQXUgA/83hHx/D4hRlnVqRR0CGKV+/V5j7M2PYA/+19Om6
+         C57yQvNZVVKmFl1SZGHznqqdNRec5+EL7luxBA8SZCS+7DwwHZPWKnzyxzeKLWP3h15U
+         nfBw==
+X-Gm-Message-State: ACgBeo0FXFoBGiZ4UvTQIYnGDSnKW5IEKzgjuvTHv203iTwu3yePmQ5N
+        iJ25EYo6Ay2sE0G9jXRC4oC8GYgWc/JSRm60o8qIN7YVZIk2BQzwIBf9SALw6DNlV88Vo+AT/PD
+        DkrFFI06Wecbrp4T8MGdSIqQc
+X-Received: by 2002:ad4:5aae:0:b0:496:dd09:9cc6 with SMTP id u14-20020ad45aae000000b00496dd099cc6mr10131378qvg.130.1661272685342;
+        Tue, 23 Aug 2022 09:38:05 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7hiUx6KqHne7ie641hJobc8RQc2G0WUgp2XEXEJJ0nVJG12HNX/e7DZI8cUcUAGpyGHTvJlQ==
+X-Received: by 2002:ad4:5aae:0:b0:496:dd09:9cc6 with SMTP id u14-20020ad45aae000000b00496dd099cc6mr10131352qvg.130.1661272685049;
+        Tue, 23 Aug 2022 09:38:05 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-97-176.dyn.eolo.it. [146.241.97.176])
+        by smtp.gmail.com with ESMTPSA id q9-20020a05620a0d8900b006bc0c544d01sm6580768qkl.131.2022.08.23.09.38.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 09:36:37 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] drm/msm/iommu: optimize map/unmap
-Date:   Tue, 23 Aug 2022 09:37:19 -0700
-Message-Id: <20220823163719.90399-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 23 Aug 2022 09:38:04 -0700 (PDT)
+Message-ID: <d6cfce0d7210762bf0c4130ea4d59470cbabfb56.camel@redhat.com>
+Subject: Re: [PATCH 2/4] net: mediatek: sgmii: ensure the SGMII PHY is
+ powered down on configuration
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Alexander 'lynxis' Couzens <lynxis@fe80.eu>
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Daniel Golle <daniel@makrotopia.org>
+Date:   Tue, 23 Aug 2022 18:38:00 +0200
+In-Reply-To: <20220823161712.2cafa970@javelin>
+References: <20220820224538.59489-1-lynxis@fe80.eu>
+         <20220820224538.59489-3-lynxis@fe80.eu>
+         <efd1c89e3bbd7364ef381292c9ceff430cbeda8d.camel@redhat.com>
+         <20220823161712.2cafa970@javelin>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Tue, 2022-08-23 at 16:17 +0200, Alexander 'lynxis' Couzens wrote:
+> On Tue, 23 Aug 2022 15:18:31 +0200
+> Paolo Abeni <pabeni@redhat.com> wrote:
+> 
+> > On Sun, 2022-08-21 at 00:45 +0200, Alexander Couzens wrote:
+> > > The code expect the PHY to be in power down which is only true
+> > > after reset. Allow changes of the SGMII parameters more than once.
+> > > 
+> > > Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
+> > > ---
+> > >  drivers/net/ethernet/mediatek/mtk_sgmii.c | 16 +++++++++++++++-
+> > >  1 file changed, 15 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c
+> > > b/drivers/net/ethernet/mediatek/mtk_sgmii.c index
+> > > a01bb20ea957..782812434367 100644 ---
+> > > a/drivers/net/ethernet/mediatek/mtk_sgmii.c +++
+> > > b/drivers/net/ethernet/mediatek/mtk_sgmii.c @@ -7,6 +7,7 @@
+> > >   *
+> > >   */
+> > >  
+> > > +#include <linux/delay.h>
+> > >  #include <linux/mfd/syscon.h>
+> > >  #include <linux/of.h>
+> > >  #include <linux/phylink.h>
+> > > @@ -24,6 +25,9 @@ static int mtk_pcs_setup_mode_an(struct mtk_pcs
+> > > *mpcs) {
+> > >  	unsigned int val;
+> > >  
+> > > +	/* PHYA power down */
+> > > +	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
+> > > SGMII_PHYA_PWD);  
+> > 
+> > in mtk_pcs_setup_mode_an() and in mtk_pcs_setup_mode_force() the code
+> > carefully flips only the SGMII_PHYA_PWD bit. Is it safe to overwrite
+> > the full register contents?
+> 
+> I've read out the register without my patch and it's 0x0. The old driver
+> worked as long the engine came out of reset.
+> When writing the single bit SGMII_PHYA_PWD (0x10), the register might
+> end up containing 0x19 and as long 0x9 is in the register the link
+> doesn't work.
+> 
+> I've tested the driver with a mt7622 and Daniel Golle tested it with a
+> mt7986.
+> 
+> 
+> > 
+> > > +
+> > >  	/* Setup the link timer and QPHY power up inside SGMIISYS
+> > > */ regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER,
+> > >  		     SGMII_LINK_TIMER_DEFAULT);
+> > > @@ -36,6 +40,10 @@ static int mtk_pcs_setup_mode_an(struct mtk_pcs
+> > > *mpcs) val |= SGMII_AN_RESTART;
+> > >  	regmap_write(mpcs->regmap, SGMSYS_PCS_CONTROL_1, val);
+> > >  
+> > > +	/* Release PHYA power down state
+> > > +	 * unknown how much the QPHY needs but it is racy without
+> > > a sleep
+> > > +	 */
+> > > +	usleep_range(50, 100);  
+> > 
+> > Ouch, this looks fragile, without any related H/W specification. 
+> 
+> The datasheet [1] doesn't say anything about it. I'ven't found a
+> mediatek SDK which adds a usleep(). It seems they always expect the
+> SGMII came out of reset and don't change after initial configured.
+> But without it, it's racy.
+> 
+> [1] MT7622 Reference Manual, v1.0, 2018-12-19, 1972 pages
 
-Using map_pages/unmap_pages cuts down on the # of pgtable walks needed
-in the process of finding where to insert/remove an entry.  The end
-result is ~5-10x faster than mapping a single page at a time.
+I see. 
 
-v2: Rename iommu_pgsize(), drop obsolete comments, fix error handling
-    in msm_iommu_pagetable_map()
+Since it looks like a new revision of this patchset will be needed - as
+per Russell comments - I suggest to extend/replace the comments with
+something more alike this longer description, it will make the future
+mainteinance simpler.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_iommu.c | 101 +++++++++++++++++++++++++++-----
- 1 file changed, 86 insertions(+), 15 deletions(-)
+Thanks,
 
-diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
-index a54ed354578b..5577cea7c009 100644
---- a/drivers/gpu/drm/msm/msm_iommu.c
-+++ b/drivers/gpu/drm/msm/msm_iommu.c
-@@ -21,6 +21,7 @@ struct msm_iommu_pagetable {
- 	struct msm_mmu base;
- 	struct msm_mmu *parent;
- 	struct io_pgtable_ops *pgtbl_ops;
-+	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
- 	phys_addr_t ttbr;
- 	u32 asid;
- };
-@@ -29,23 +30,84 @@ static struct msm_iommu_pagetable *to_pagetable(struct msm_mmu *mmu)
- 	return container_of(mmu, struct msm_iommu_pagetable, base);
- }
- 
-+/* based on iommu_pgsize() in iommu.c: */
-+static size_t calc_pgsize(struct msm_iommu_pagetable *pagetable,
-+			   unsigned long iova, phys_addr_t paddr,
-+			   size_t size, size_t *count)
-+{
-+	unsigned int pgsize_idx, pgsize_idx_next;
-+	unsigned long pgsizes;
-+	size_t offset, pgsize, pgsize_next;
-+	unsigned long addr_merge = paddr | iova;
-+
-+	/* Page sizes supported by the hardware and small enough for @size */
-+	pgsizes = pagetable->pgsize_bitmap & GENMASK(__fls(size), 0);
-+
-+	/* Constrain the page sizes further based on the maximum alignment */
-+	if (likely(addr_merge))
-+		pgsizes &= GENMASK(__ffs(addr_merge), 0);
-+
-+	/* Make sure we have at least one suitable page size */
-+	BUG_ON(!pgsizes);
-+
-+	/* Pick the biggest page size remaining */
-+	pgsize_idx = __fls(pgsizes);
-+	pgsize = BIT(pgsize_idx);
-+	if (!count)
-+		return pgsize;
-+
-+	/* Find the next biggest support page size, if it exists */
-+	pgsizes = pagetable->pgsize_bitmap & ~GENMASK(pgsize_idx, 0);
-+	if (!pgsizes)
-+		goto out_set_count;
-+
-+	pgsize_idx_next = __ffs(pgsizes);
-+	pgsize_next = BIT(pgsize_idx_next);
-+
-+	/*
-+	 * There's no point trying a bigger page size unless the virtual
-+	 * and physical addresses are similarly offset within the larger page.
-+	 */
-+	if ((iova ^ paddr) & (pgsize_next - 1))
-+		goto out_set_count;
-+
-+	/* Calculate the offset to the next page size alignment boundary */
-+	offset = pgsize_next - (addr_merge & (pgsize_next - 1));
-+
-+	/*
-+	 * If size is big enough to accommodate the larger page, reduce
-+	 * the number of smaller pages.
-+	 */
-+	if (offset + pgsize_next <= size)
-+		size = offset;
-+
-+out_set_count:
-+	*count = size >> pgsize_idx;
-+	return pgsize;
-+}
-+
- static int msm_iommu_pagetable_unmap(struct msm_mmu *mmu, u64 iova,
- 		size_t size)
- {
- 	struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
- 	struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
--	size_t unmapped = 0;
- 
--	/* Unmap the block one page at a time */
- 	while (size) {
--		unmapped += ops->unmap(ops, iova, 4096, NULL);
--		iova += 4096;
--		size -= 4096;
-+		size_t unmapped, pgsize, count;
-+
-+		pgsize = calc_pgsize(pagetable, iova, iova, size, &count);
-+
-+		unmapped = ops->unmap_pages(ops, iova, pgsize, count, NULL);
-+		if (!unmapped)
-+			break;
-+
-+		iova += unmapped;
-+		size -= unmapped;
- 	}
- 
- 	iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
- 
--	return (unmapped == size) ? 0 : -EINVAL;
-+	return (size == 0) ? 0 : -EINVAL;
- }
- 
- static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
-@@ -54,7 +116,6 @@ static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
- 	struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
- 	struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
- 	struct scatterlist *sg;
--	size_t mapped = 0;
- 	u64 addr = iova;
- 	unsigned int i;
- 
-@@ -62,17 +123,26 @@ static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
- 		size_t size = sg->length;
- 		phys_addr_t phys = sg_phys(sg);
- 
--		/* Map the block one page at a time */
- 		while (size) {
--			if (ops->map(ops, addr, phys, 4096, prot, GFP_KERNEL)) {
--				msm_iommu_pagetable_unmap(mmu, iova, mapped);
-+			size_t pgsize, count, mapped = 0;
-+			int ret;
-+
-+			pgsize = calc_pgsize(pagetable, addr, phys, size, &count);
-+
-+			ret = ops->map_pages(ops, addr, phys, pgsize, count,
-+					     prot, GFP_KERNEL, &mapped);
-+
-+			/* map_pages could fail after mapping some of the pages,
-+			 * so update the counters before error handling.
-+			 */
-+			phys += mapped;
-+			addr += mapped;
-+			size -= mapped;
-+
-+			if (ret) {
-+				msm_iommu_pagetable_unmap(mmu, iova, addr - iova);
- 				return -EINVAL;
- 			}
--
--			phys += 4096;
--			addr += 4096;
--			size -= 4096;
--			mapped += 4096;
- 		}
- 	}
- 
-@@ -207,6 +277,7 @@ struct msm_mmu *msm_iommu_pagetable_create(struct msm_mmu *parent)
- 
- 	/* Needed later for TLB flush */
- 	pagetable->parent = parent;
-+	pagetable->pgsize_bitmap = ttbr0_cfg.pgsize_bitmap;
- 	pagetable->ttbr = ttbr0_cfg.arm_lpae_s1_cfg.ttbr;
- 
- 	/*
--- 
-2.37.2
+Paolo
 

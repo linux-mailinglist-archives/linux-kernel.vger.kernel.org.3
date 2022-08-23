@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C0059E451
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0807559E435
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241244AbiHWM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
+        id S242038AbiHWMqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241876AbiHWM47 (ORCPT
+        with ESMTP id S241529AbiHWMqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:56:59 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEA1A1D67;
-        Tue, 23 Aug 2022 03:01:39 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27N9VFKn025088;
-        Tue, 23 Aug 2022 09:53:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=oEb0ieXm7fGIofO+eA4A2nQzfMfdeD785gWKknA8rZE=;
- b=JowQnbgz6XpHKTvQ1Z6HtUSW1EWBdnk1JS2TdE3DZJUYNaXVUrWlPOvWI+OsC3M1fNwd
- B7hn/IOJQGgNklt3ysccQLS2xPCV/2nbTpIyM+O8pZV9Jf8wx4htWLpN6jVV7rMfatlQ
- il+cVt4YVGTsdhb16q/z0WqPBxd5dqaZQtO65rwe8TltRMRLBtyQ6c4X9NM1k63h4Zdo
- M5rEsT1q6HUZaj18LwGibxO53Js4KfQYdf+IY7mnSiKFYSjuVWmVwx7hI91lkpmAKrHl
- hshm2t9DzgVhzIvRen5y1hu09dFiJIgvbm23BhxSAE/KY1ibzLa3/pFxlTg6p/EAeMwT dA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4vaygk62-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 09:53:07 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27N9p4NC027851;
-        Tue, 23 Aug 2022 09:53:05 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3j2pvj3k4d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 09:53:05 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27N9o33D33489338
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 Aug 2022 09:50:04 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 168754C040;
-        Tue, 23 Aug 2022 09:53:02 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32C714C044;
-        Tue, 23 Aug 2022 09:53:01 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.17.18])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 23 Aug 2022 09:53:01 +0000 (GMT)
-Date:   Tue, 23 Aug 2022 11:52:59 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] s390: move from strlcpy with unused retval to strscpy
-Message-ID: <YwSjew42Iryps1ag@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20220818210102.7301-1-wsa+renesas@sang-engineering.com>
- <YwM4y78boN4s1VNo@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <YwNAW2Zp6o7Z//Y2@shikoro>
- <YwNtJAQlJVycijou@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        Tue, 23 Aug 2022 08:46:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D929D8CD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:53:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCB89B81C29
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:53:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB3CC433C1;
+        Tue, 23 Aug 2022 09:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661248431;
+        bh=Q5FEnebqitjiFea4DJafW7oybDFur+9NDnzsl+DMiHk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cydQGhX2IUbSZYu1cl7DoVMMqZ1FJcefxzn+x7FoMB12ErNrwU5STC1eR1t0oaFPt
+         zLvgDlHO/JCzUwufwHkULnGbWxTxlNy0E2+s/KHzkgPuRCftqXz+M5xYJBr/6M6Mh6
+         kQ6HNLH7XfoHB3aPrUfYN0G6pxHB+Hh5KmweXVEo7v0sk05lh+8zIvxsXYtiGwnZzC
+         OVlx6KjKpN9yopLER+FhOKnTn9+/4D4ERyXxD8+vIdobobhiNOzazah7gvqwUplwnR
+         2WDyFNsEY7W0kM6FsxSV2k7JKxekWgCw3oIPVRlhz9zpze7rJ5qQTObFtr738c/RT6
+         yDhTXblnLbRmQ==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Todd Kjos <tkjos@android.com>, linux-kernel@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>
+Subject: [PATCH v2] binderfs: rework superblock destruction
+Date:   Tue, 23 Aug 2022 11:53:39 +0200
+Message-Id: <20220823095339.853371-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwNtJAQlJVycijou@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: smCgthl38UYQ0TQDujEZdzz3DlyQeg-d
-X-Proofpoint-ORIG-GUID: smCgthl38UYQ0TQDujEZdzz3DlyQeg-d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-23_04,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- malwarescore=0 mlxlogscore=725 suspectscore=0 adultscore=0 mlxscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208230036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2417; i=brauner@kernel.org; h=from:subject; bh=2fbddUWii2vIogxqCBndRUeMJ0elbAaMYulczrf2jOY=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSSzLJ6k+8fEN1FLU2vPlswFL2uEtquq/ra9OeOFGUdA17LP l3pFOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACbiGcXI0FwQ8DBFXXHBLgXr/FCupv aFnJOLAyN1T8W3Ta7fWHyWkZFhUdyJVxv21QlrdWZu49gS1xj0NOLuuo7rx4TtpOcrChzmBQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 01:48:54PM +0200, Alexander Gordeev wrote:
-> I guess, you also wanted a fix for arch/s390/kvm/tests/instr_icpt/main.c
-> in this series.
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-Please, ignore this one.
+So far we relied on
+.put_super = binderfs_put_super()
+to destroy info we stashed in sb->s_fs_info. This gave us the required ordering
+between ->evict_inode() and sb->s_fs_info destruction.
 
-Thanks!
+But the current implementation of binderfs_fill_super() has a memory leak in
+the rare circumstance that d_make_root() fails because ->put_super() is only
+called when sb->s_root is initialized. Fix this by removing ->put_super() and
+simply do all that work in binderfs_kill_super().
+
+Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+---
+ drivers/android/binderfs.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+index 588d753a7a19..927776fdeb1a 100644
+--- a/drivers/android/binderfs.c
++++ b/drivers/android/binderfs.c
+@@ -340,22 +340,10 @@ static int binderfs_show_options(struct seq_file *seq, struct dentry *root)
+ 	return 0;
+ }
+ 
+-static void binderfs_put_super(struct super_block *sb)
+-{
+-	struct binderfs_info *info = sb->s_fs_info;
+-
+-	if (info && info->ipc_ns)
+-		put_ipc_ns(info->ipc_ns);
+-
+-	kfree(info);
+-	sb->s_fs_info = NULL;
+-}
+-
+ static const struct super_operations binderfs_super_ops = {
+ 	.evict_inode    = binderfs_evict_inode,
+ 	.show_options	= binderfs_show_options,
+ 	.statfs         = simple_statfs,
+-	.put_super	= binderfs_put_super,
+ };
+ 
+ static inline bool is_binderfs_control_device(const struct dentry *dentry)
+@@ -785,11 +773,27 @@ static int binderfs_init_fs_context(struct fs_context *fc)
+ 	return 0;
+ }
+ 
++static void binderfs_kill_super(struct super_block *sb)
++{
++	struct binderfs_info *info = sb->s_fs_info;
++
++	/*
++	 * During inode eviction struct binderfs_info is needed.
++	 * So first wipe the super_block then free struct binderfs_info.
++	 */
++	kill_litter_super(sb);
++
++	if (info && info->ipc_ns)
++		put_ipc_ns(info->ipc_ns);
++
++	kfree(info);
++}
++
+ static struct file_system_type binder_fs_type = {
+ 	.name			= "binder",
+ 	.init_fs_context	= binderfs_init_fs_context,
+ 	.parameters		= binderfs_fs_parameters,
+-	.kill_sb		= kill_litter_super,
++	.kill_sb		= binderfs_kill_super,
+ 	.fs_flags		= FS_USERNS_MOUNT,
+ };
+ 
+
+base-commit: 1c23f9e627a7b412978b4e852793c5e3c3efc555
+-- 
+2.34.1
+

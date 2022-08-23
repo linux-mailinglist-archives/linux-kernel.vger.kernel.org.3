@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A84459E16B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBB659E088
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358006AbiHWLcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S240668AbiHWLck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358124AbiHWL1X (ORCPT
+        with ESMTP id S1358157AbiHWL11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:27:23 -0400
+        Tue, 23 Aug 2022 07:27:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197932BC9;
-        Tue, 23 Aug 2022 02:25:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF44C2FA5;
+        Tue, 23 Aug 2022 02:25:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36B6361321;
-        Tue, 23 Aug 2022 09:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4AFC433D6;
-        Tue, 23 Aug 2022 09:25:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE9786126A;
+        Tue, 23 Aug 2022 09:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C68B9C433D6;
+        Tue, 23 Aug 2022 09:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246702;
-        bh=GfzdxVCertLB2uPJqZ9KQxIPR8FwJWUnAX9p0S7Y20Q=;
+        s=korg; t=1661246706;
+        bh=aDWqqDfIAPgO/MDEsSzaILBj/gXz8ijHp85fjIpAPOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zfa2IF2odq3ct1QBWEYH50UuLi+UYABJ/4Bb1Z2accExD137P59Lv/lDpU/EKCvQt
-         ny3rNcRgXRIY4ZdFbutS628EEExyrI+Yc0Uc/oKMppcZ8iN9k7+QLi8fcGJlzFeiEq
-         pZUkeT8TPsfWM4Hxa6QTXBG5hzyz+X7XmENqUx/E=
+        b=iB3rwKVQmYcQU7Btn+6n9DjkiRVd/SI9sOk6o9AYPZlLwLkEGm5npWzLsxBnZkpDQ
+         Lv9J8khPQbF/+q8JWRRkX/7ZqdZBIYFc91UaxqoborIX9VtC3eYmgtu7/cAPy5nOaI
+         Kog2Nf4E4+T7Sz68WD/5EPy8J6DeZSOlcBSxBmcs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Artem Borisov <dedsa2002@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 191/389] HID: alps: Declare U1_UNICORN_LEGACY support
-Date:   Tue, 23 Aug 2022 10:24:29 +0200
-Message-Id: <20220823080123.601191906@linuxfoundation.org>
+        stable@vger.kernel.org, Vidya Sagar <vidyas@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 192/389] PCI: tegra194: Fix Root Port interrupt handling
+Date:   Tue, 23 Aug 2022 10:24:30 +0200
+Message-Id: <20220823080123.647759724@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -54,34 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Artem Borisov <dedsa2002@gmail.com>
+From: Vidya Sagar <vidyas@nvidia.com>
 
-[ Upstream commit 1117d182c5d72abd7eb8b7d5e7b8c3373181c3ab ]
+[ Upstream commit 6646e99bcec627e866bc84365af37942c72b4b76 ]
 
-U1_UNICORN_LEGACY id was added to the driver, but was not declared
-in the device id table, making it impossible to use.
+As part of Root Port interrupt handling, level-0 register is read first and
+based on the bits set in that, corresponding level-1 registers are read for
+further interrupt processing. Since both these values are currently read
+into the same 'val' variable, checking level-0 bits the second time around
+is happening on the 'val' variable value of level-1 register contents
+instead of freshly reading the level-0 value again.
 
-Fixes: 640e403 ("HID: alps: Add AUI1657 device ID")
-Signed-off-by: Artem Borisov <dedsa2002@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fix by using different variables to store level-0 and level-1 registers
+contents.
+
+Link: https://lore.kernel.org/r/20220721142052.25971-11-vidyas@nvidia.com
+Fixes: 56e15a238d92 ("PCI: tegra: Add Tegra194 PCIe support")
+Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-alps.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pci/controller/dwc/pcie-tegra194.c | 46 +++++++++++-----------
+ 1 file changed, 22 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/hid/hid-alps.c b/drivers/hid/hid-alps.c
-index 2477b2a3f7c3..464a48906d01 100644
---- a/drivers/hid/hid-alps.c
-+++ b/drivers/hid/hid-alps.c
-@@ -831,6 +831,8 @@ static const struct hid_device_id alps_id[] = {
- 		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1_DUAL) },
- 	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
- 		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1) },
-+	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
-+		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1_UNICORN_LEGACY) },
- 	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
- 		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_T4_BTNLESS) },
- 	{ }
+diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+index c06b05ab9f78..c7ac61a6080b 100644
+--- a/drivers/pci/controller/dwc/pcie-tegra194.c
++++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+@@ -345,15 +345,14 @@ static irqreturn_t tegra_pcie_rp_irq_handler(struct tegra_pcie_dw *pcie)
+ {
+ 	struct dw_pcie *pci = &pcie->pci;
+ 	struct pcie_port *pp = &pci->pp;
+-	u32 val, tmp;
++	u32 val, status_l0, status_l1;
+ 	u16 val_w;
+ 
+-	val = appl_readl(pcie, APPL_INTR_STATUS_L0);
+-	if (val & APPL_INTR_STATUS_L0_LINK_STATE_INT) {
+-		val = appl_readl(pcie, APPL_INTR_STATUS_L1_0_0);
+-		if (val & APPL_INTR_STATUS_L1_0_0_LINK_REQ_RST_NOT_CHGED) {
+-			appl_writel(pcie, val, APPL_INTR_STATUS_L1_0_0);
+-
++	status_l0 = appl_readl(pcie, APPL_INTR_STATUS_L0);
++	if (status_l0 & APPL_INTR_STATUS_L0_LINK_STATE_INT) {
++		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_0_0);
++		appl_writel(pcie, status_l1, APPL_INTR_STATUS_L1_0_0);
++		if (status_l1 & APPL_INTR_STATUS_L1_0_0_LINK_REQ_RST_NOT_CHGED) {
+ 			/* SBR & Surprise Link Down WAR */
+ 			val = appl_readl(pcie, APPL_CAR_RESET_OVRD);
+ 			val &= ~APPL_CAR_RESET_OVRD_CYA_OVERRIDE_CORE_RST_N;
+@@ -369,15 +368,15 @@ static irqreturn_t tegra_pcie_rp_irq_handler(struct tegra_pcie_dw *pcie)
+ 		}
+ 	}
+ 
+-	if (val & APPL_INTR_STATUS_L0_INT_INT) {
+-		val = appl_readl(pcie, APPL_INTR_STATUS_L1_8_0);
+-		if (val & APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS) {
++	if (status_l0 & APPL_INTR_STATUS_L0_INT_INT) {
++		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_8_0);
++		if (status_l1 & APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS) {
+ 			appl_writel(pcie,
+ 				    APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS,
+ 				    APPL_INTR_STATUS_L1_8_0);
+ 			apply_bad_link_workaround(pp);
+ 		}
+-		if (val & APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS) {
++		if (status_l1 & APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS) {
+ 			appl_writel(pcie,
+ 				    APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS,
+ 				    APPL_INTR_STATUS_L1_8_0);
+@@ -389,25 +388,24 @@ static irqreturn_t tegra_pcie_rp_irq_handler(struct tegra_pcie_dw *pcie)
+ 		}
+ 	}
+ 
+-	val = appl_readl(pcie, APPL_INTR_STATUS_L0);
+-	if (val & APPL_INTR_STATUS_L0_CDM_REG_CHK_INT) {
+-		val = appl_readl(pcie, APPL_INTR_STATUS_L1_18);
+-		tmp = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
+-		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMPLT) {
++	if (status_l0 & APPL_INTR_STATUS_L0_CDM_REG_CHK_INT) {
++		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_18);
++		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
++		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMPLT) {
+ 			dev_info(pci->dev, "CDM check complete\n");
+-			tmp |= PCIE_PL_CHK_REG_CHK_REG_COMPLETE;
++			val |= PCIE_PL_CHK_REG_CHK_REG_COMPLETE;
+ 		}
+-		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMP_ERR) {
++		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMP_ERR) {
+ 			dev_err(pci->dev, "CDM comparison mismatch\n");
+-			tmp |= PCIE_PL_CHK_REG_CHK_REG_COMPARISON_ERROR;
++			val |= PCIE_PL_CHK_REG_CHK_REG_COMPARISON_ERROR;
+ 		}
+-		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_LOGIC_ERR) {
++		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_LOGIC_ERR) {
+ 			dev_err(pci->dev, "CDM Logic error\n");
+-			tmp |= PCIE_PL_CHK_REG_CHK_REG_LOGIC_ERROR;
++			val |= PCIE_PL_CHK_REG_CHK_REG_LOGIC_ERROR;
+ 		}
+-		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, tmp);
+-		tmp = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_ERR_ADDR);
+-		dev_err(pci->dev, "CDM Error Address Offset = 0x%08X\n", tmp);
++		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
++		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_ERR_ADDR);
++		dev_err(pci->dev, "CDM Error Address Offset = 0x%08X\n", val);
+ 	}
+ 
+ 	return IRQ_HANDLED;
 -- 
 2.35.1
 

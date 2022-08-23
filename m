@@ -2,93 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FBE59E763
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2667959E766
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242123AbiHWQdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S244892AbiHWQeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242776AbiHWQdL (ORCPT
+        with ESMTP id S244724AbiHWQdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:33:11 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09617B78F;
-        Tue, 23 Aug 2022 07:51:35 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C95A061EA192D;
-        Tue, 23 Aug 2022 16:51:33 +0200 (CEST)
-Message-ID: <6d6b6bcf-cab8-695b-568a-c1372ac531ee@molgen.mpg.de>
-Date:   Tue, 23 Aug 2022 16:51:33 +0200
+        Tue, 23 Aug 2022 12:33:31 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C309A9F4;
+        Tue, 23 Aug 2022 07:52:31 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1661266342t2f59wqq
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 23 Aug 2022 22:52:20 +0800 (CST)
+X-QQ-SSF: 0100000000200040B000B00A0000000
+X-QQ-FEAT: R3vftN8GVq8iVDHEowFNDn44iKc9ithiTLDgcDSRx4e896Gtxp4doItLko+3n
+        wffvr2SNTopOWndq8NuUv1jgbGjcy+QSIlGEC5pdKCfBb0XefvDbol9lIZR4UjYo3F8vZlk
+        KbjjWIS5CllFdazq4TsojFvirDviUvgCfajYa4FbYcEcC93LltyRdmzMAivJ9kpMKb8CDdU
+        FezeVNEX7KWUvoc8K9GoqiZwQJk1SfJFpaNcACzHT7sDcE0e2RTZfYx4n5kxeaD+zVYmHWk
+        FG29k5FyXa5i9vNL4pkVRDYji00FmmT9En3PBmn8f9OeSWnFz6KUquSLiOQMa0Jb1pHEl7I
+        nKrvEyIOtp693oR11qbebXRj2Z/imLAg4YYG1uTZ77ekuHGL4uCCUlEPCxFHshz+G06lz6A
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     jacopo@jmondi.org, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] media/i2c: fix repeated words in comments
+Date:   Tue, 23 Aug 2022 22:52:14 +0800
+Message-Id: <20220823145214.43383-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Content-Language: en-US
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-To:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: kdf108_init() takes over 250 ms
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Stephan,
+Delete the redundant word 'the'.
 
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/media/i2c/mt9v111.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On the Dell XPS 13 9370 with Debian sid/unstable, I noticed with Linux 
-5.18.16, that  `crypto_kdf108_init()` takes 263 ms to run even with 
-disabled self-tests:
+diff --git a/drivers/media/i2c/mt9v111.c b/drivers/media/i2c/mt9v111.c
+index 2dc4a0f24ce8..7beca0b70b72 100644
+--- a/drivers/media/i2c/mt9v111.c
++++ b/drivers/media/i2c/mt9v111.c
+@@ -633,7 +633,7 @@ static int mt9v111_hw_config(struct mt9v111_dev *mt9v111)
+ 
+ 	/*
+ 	 * Set pixel integration time to the whole frame time.
+-	 * This value controls the the shutter delay when running with AE
++	 * This value controls the shutter delay when running with AE
+ 	 * disabled. If longer than frame time, it affects the output
+ 	 * frame rate.
+ 	 */
+-- 
+2.36.1
 
-```
-[    0.000000] Linux version 5.18.0-4-amd64 
-(debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU 
-ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC 
-Debian 5.18.16-1 (2022-08-10)
-[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64 
-root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet 
-module_blacklist=psmouse initcall_debug log_buf_len=4M cryptomgr.notests
-[…]
-[    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
-[…]
-[    0.272123] calling  x509_key_init+0x0/0x11 @ 1
-[    0.272125] Asymmetric key parser 'x509' registered
-[    0.272126] initcall x509_key_init+0x0/0x11 returned 0 after 1 usecs
-[    0.272127] calling  crypto_kdf108_init+0x0/0x149 @ 1
-[    0.530787] Freeing initrd memory: 39332K
-[    0.534667] alg: self-tests disabled
-[    0.534701] alg: self-tests for CTR-KDF (hmac(sha256)) passed
-[    0.534703] initcall crypto_kdf108_init+0x0/0x149 returned 0 after 
-262573 usecs
-[    0.534708] calling  blkdev_init+0x0/0x20 @ 1
-[    0.534716] initcall blkdev_init+0x0/0x20 returned 0 after 5 usecs
-[    0.534718] calling  proc_genhd_init+0x0/0x46 @ 1
-[    0.534723] initcall proc_genhd_init+0x0/0x46 returned 0 after 3 usecs
-```
-
-With self-tests enabled it’s only less than a millisecond longer.
-
-```
-[    0.282389] calling  crypto_kdf108_init+0x0/0x149 @ 1
-[    0.541096] Freeing initrd memory: 39332K
-[    0.545674] alg: self-tests for CTR-KDF (hmac(sha256)) passed
-[    0.545676] initcall crypto_kdf108_init+0x0/0x149 returned 0 after 
-263284 usecs
-```
-
-
-Kind regards,
-
-Paul

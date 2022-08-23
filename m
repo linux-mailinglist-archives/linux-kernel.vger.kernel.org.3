@@ -2,198 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A4159E8D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6D959E8CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343726AbiHWRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S1343854AbiHWRLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344937AbiHWRL3 (ORCPT
+        with ESMTP id S1344853AbiHWRLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:11:29 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633C150173
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661263112; x=1692799112;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4Pu50YmzN3N8F0nGXEPtFaQtALXj/wKmJ3as5yUVNsM=;
-  b=Cg2mWjGDiDzLLB0dsiSgaCLxU6sC9HoY+NyEG8KV5K10Vkhedq/zW+NH
-   0/vKhvIZ8ER55gJcuAQ4OW2hnZMtOcWz6M9PkJ8yCiO5SHgJ8ksEIdQlz
-   a9FP9uIwQ9InLHVMnBQBosgrgNp2yHoI8uammwi6v3dVLKp8p2S8GU5Zw
-   4X0tpbbqE3S2CkC4wvNQPlGGPlFHVX2Xrd6SkjTD7Xc75Pnp3+NzumOIf
-   vKJdB2UIdu4RCHgLvqbYGkwyPxQox4uYFwmL8l0siAwx8ojq8+nGAh2V2
-   +hYe3798iyLVGBcf7swFqUOSc6hdF4RmL33WkDw3CTrAbB3I2PWLbFWLR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="357669589"
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="357669589"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 06:58:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="638663381"
-Received: from sse-cse-haiyue-nuc.sh.intel.com ([10.239.241.114])
-  by orsmga008.jf.intel.com with ESMTP; 23 Aug 2022 06:58:29 -0700
-From:   Haiyue Wang <haiyue.wang@intel.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, david@redhat.com, apopple@nvidia.com,
-        linmiaohe@huawei.com, ying.huang@intel.com,
-        songmuchun@bytedance.com, naoya.horiguchi@linux.dev,
-        alex.sierra@amd.com, mike.kravetz@oracle.com,
-        gerald.schaefer@linux.ibm.com, Haiyue Wang <haiyue.wang@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>
-Subject: [PATCH v7 2/2] mm: fix the handling Non-LRU pages returned by follow_page
-Date:   Tue, 23 Aug 2022 21:58:41 +0800
-Message-Id: <20220823135841.934465-3-haiyue.wang@intel.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823135841.934465-1-haiyue.wang@intel.com>
-References: <20220823135841.934465-1-haiyue.wang@intel.com>
+        Tue, 23 Aug 2022 13:11:20 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C51AF49B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:59:05 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1661263139t8xkl00a
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 23 Aug 2022 21:58:58 +0800 (CST)
+X-QQ-SSF: 0100000000200040B000B00A0000000
+X-QQ-FEAT: ILHsT53NKPjHCKbWdw2Ev+HCg+vtubMSNDB/HPDggiCua6mrLbeUNr8v4XjlD
+        oem9LYvH8Jd4Lx9A//IVc4PlLmS/c8yxJlFbYMXP5/MvLw2pGiNhBKLLgQLiXA2b0JGCcHj
+        ONWfs/aZExtbUFyjQzyHfnDPkaXaIXNK18h/2Akd6vVfojWzPm8o84bFbHHeGiqOM7stfwW
+        yLBVuuUDQiPJNgISJDJlq3GyTKxJF+D5fb4cKu3EJ16sMmtNh4jWkUmj19pGnAcvselem0T
+        7J3QFYQrp4eyhshPziKr0c3j6hVEhhZJK+Wzm0H52o3dHOPrss3XgdQnAssF4A+EFqwvQjP
+        V3ildHuaY8zkC5dheZp+MuMP0XUZEVdKB9DfYSct05D03SQiXQGTwGKpS5YsZdjXJVedV5x
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] drivers/cpuidle: fix repeated words in comments
+Date:   Tue, 23 Aug 2022 21:58:52 +0800
+Message-Id: <20220823135852.1625-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The handling Non-LRU pages returned by follow_page() jumps directly, it
-doesn't call put_page() to handle the reference count, since 'FOLL_GET'
-flag for follow_page() has get_page() called. Fix the zone device page
-check by handling the page reference count correctly before returning.
+Delete the redundant word 'are'.
 
-And as David reviewed, "device pages are never PageKsm pages". Drop this
-zone device page check for break_ksm().
-
-Since the zone device page can't be a transparent huge page, so drop the
-redundant zone device page check for split_huge_pages_pid(). (by Miaohe)
-
-Fixes: 3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_pages")
-Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- mm/huge_memory.c |  2 +-
- mm/ksm.c         | 12 +++++++++---
- mm/migrate.c     | 19 ++++++++++++-------
- 3 files changed, 22 insertions(+), 11 deletions(-)
+ drivers/cpuidle/coupled.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 8a7c1b344abe..2ee6d38a1426 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2963,7 +2963,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 		/* FOLL_DUMP to ignore special (like zero) pages */
- 		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
- 
--		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
-+		if (IS_ERR_OR_NULL(page))
- 			continue;
- 
- 		if (!is_transparent_hugepage(page))
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 42ab153335a2..e26f57fc1f0e 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -475,7 +475,7 @@ static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
- 		cond_resched();
- 		page = follow_page(vma, addr,
- 				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
--		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
-+		if (IS_ERR_OR_NULL(page))
- 			break;
- 		if (PageKsm(page))
- 			ret = handle_mm_fault(vma, addr,
-@@ -560,12 +560,15 @@ static struct page *get_mergeable_page(struct rmap_item *rmap_item)
- 		goto out;
- 
- 	page = follow_page(vma, addr, FOLL_GET);
--	if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
-+	if (IS_ERR_OR_NULL(page))
- 		goto out;
-+	if (is_zone_device_page(page))
-+		goto out_putpage;
- 	if (PageAnon(page)) {
- 		flush_anon_page(vma, page, addr);
- 		flush_dcache_page(page);
- 	} else {
-+out_putpage:
- 		put_page(page);
- out:
- 		page = NULL;
-@@ -2308,11 +2311,13 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 			if (ksm_test_exit(mm))
- 				break;
- 			*page = follow_page(vma, ksm_scan.address, FOLL_GET);
--			if (IS_ERR_OR_NULL(*page) || is_zone_device_page(*page)) {
-+			if (IS_ERR_OR_NULL(*page)) {
- 				ksm_scan.address += PAGE_SIZE;
- 				cond_resched();
- 				continue;
- 			}
-+			if (is_zone_device_page(*page))
-+				goto next_page;
- 			if (PageAnon(*page)) {
- 				flush_anon_page(vma, *page, ksm_scan.address);
- 				flush_dcache_page(*page);
-@@ -2327,6 +2332,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 				mmap_read_unlock(mm);
- 				return rmap_item;
- 			}
-+next_page:
- 			put_page(*page);
- 			ksm_scan.address += PAGE_SIZE;
- 			cond_resched();
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 581dfaad9257..44e05ce41d49 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1672,9 +1672,12 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
- 		goto out;
- 
- 	err = -ENOENT;
--	if (!page || is_zone_device_page(page))
-+	if (!page)
- 		goto out;
- 
-+	if (is_zone_device_page(page))
-+		goto out_putpage;
-+
- 	err = 0;
- 	if (page_to_nid(page) == node)
- 		goto out_putpage;
-@@ -1868,13 +1871,15 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
- 		if (IS_ERR(page))
- 			goto set_status;
- 
--		if (page && !is_zone_device_page(page)) {
-+		err = -ENOENT;
-+		if (!page)
-+			goto set_status;
-+
-+		if (!is_zone_device_page(page))
- 			err = page_to_nid(page);
--			if (foll_flags & FOLL_GET)
--				put_page(page);
--		} else {
--			err = -ENOENT;
--		}
-+
-+		if (foll_flags & FOLL_GET)
-+			put_page(page);
- set_status:
- 		*status = err;
- 
+diff --git a/drivers/cpuidle/coupled.c b/drivers/cpuidle/coupled.c
+index 74068742cef3..9acde71558d5 100644
+--- a/drivers/cpuidle/coupled.c
++++ b/drivers/cpuidle/coupled.c
+@@ -54,7 +54,7 @@
+  * variable is not locked.  It is only written from the cpu that
+  * it stores (or by the on/offlining cpu if that cpu is offline),
+  * and only read after all the cpus are ready for the coupled idle
+- * state are are no longer updating it.
++ * state are no longer updating it.
+  *
+  * Three atomic counters are used.  alive_count tracks the number
+  * of cpus in the coupled set that are currently or soon will be
 -- 
-2.37.2
+2.36.1
 

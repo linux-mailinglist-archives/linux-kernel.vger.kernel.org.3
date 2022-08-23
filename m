@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F8559D670
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074EC59D318
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348254AbiHWJIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S241576AbiHWIDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240955AbiHWJHZ (ORCPT
+        with ESMTP id S241490AbiHWICw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:07:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04E0861CF;
-        Tue, 23 Aug 2022 01:30:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8113B81C57;
-        Tue, 23 Aug 2022 08:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2347DC433B5;
-        Tue, 23 Aug 2022 08:28:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243335;
-        bh=HoReviJIiaDBHeMOZIQuLCNx7ec42U1K2fgXMEpQAJo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U2DlweHaW+6laPOoM5SRVZ4xH8IjS2KR4jVjN/UbHgk/6sez4XrxCeO5S8Y7DaVD+
-         78tDeGJKbwQVJTRyaVQcTtbSFN7RWxHRPfmo19kl+f6IFnL+neZsMXFafF45FDNdmO
-         dT0A7yQDX+tqYNI5smt2bwNDjGXNSbbXZS9cqa5k=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lijo Lazar <lijo.lazar@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 245/365] drm/amdgpu: Avoid another list of reset devices
-Date:   Tue, 23 Aug 2022 10:02:26 +0200
-Message-Id: <20220823080128.470688262@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 23 Aug 2022 04:02:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909B2659D0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:51 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrt-0002vz-O0; Tue, 23 Aug 2022 10:02:37 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrs-001Sva-AW; Tue, 23 Aug 2022 10:02:36 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrp-00ALZW-8n; Tue, 23 Aug 2022 10:02:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v3 13/17] net: dsa: microchip: ksz9477: use internal_phy instead of phy_port_cnt
+Date:   Tue, 23 Aug 2022 10:02:27 +0200
+Message-Id: <20220823080231.2466017-14-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,157 +60,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lijo Lazar <lijo.lazar@amd.com>
+With code refactoring was introduced new variable internal_phy. Let's
+use it.
 
-[ Upstream commit 0a83bb35d8a6ff3d18c2772afe616780c23293a6 ]
-
-A list of devices to be reset is already created in
-amdgpu_device_gpu_recover function. Creating another list with the
-same nodes is incorrect and not supported in list_head. Instead, pass
-the device list as part of reset context.
-
-Fixes: 9e08564727fc (drm/amdgpu: Refactor mode2 reset logic for v13.0.2)
-Signed-off-by: Lijo Lazar <lijo.lazar@amd.com>
-Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/gpu/drm/amd/amdgpu/aldebaran.c     | 45 +++++++---------------
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  2 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_reset.h  |  1 +
- 3 files changed, 17 insertions(+), 31 deletions(-)
+ drivers/net/dsa/microchip/ksz9477.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/aldebaran.c b/drivers/gpu/drm/amd/amdgpu/aldebaran.c
-index c6cc493a5486..2b97b8a96fb4 100644
---- a/drivers/gpu/drm/amd/amdgpu/aldebaran.c
-+++ b/drivers/gpu/drm/amd/amdgpu/aldebaran.c
-@@ -148,30 +148,22 @@ aldebaran_mode2_perform_reset(struct amdgpu_reset_control *reset_ctl,
- 			      struct amdgpu_reset_context *reset_context)
- {
- 	struct amdgpu_device *adev = (struct amdgpu_device *)reset_ctl->handle;
-+	struct list_head *reset_device_list = reset_context->reset_device_list;
- 	struct amdgpu_device *tmp_adev = NULL;
--	struct list_head reset_device_list;
- 	int r = 0;
- 
- 	dev_dbg(adev->dev, "aldebaran perform hw reset\n");
-+
-+	if (reset_device_list == NULL)
-+		return -EINVAL;
-+
- 	if (adev->ip_versions[MP1_HWIP][0] == IP_VERSION(13, 0, 2) &&
- 	    reset_context->hive == NULL) {
- 		/* Wrong context, return error */
- 		return -EINVAL;
- 	}
- 
--	INIT_LIST_HEAD(&reset_device_list);
--	if (reset_context->hive) {
--		list_for_each_entry (tmp_adev,
--				     &reset_context->hive->device_list,
--				     gmc.xgmi.head)
--			list_add_tail(&tmp_adev->reset_list,
--				      &reset_device_list);
--	} else {
--		list_add_tail(&reset_context->reset_req_dev->reset_list,
--			      &reset_device_list);
--	}
--
--	list_for_each_entry (tmp_adev, &reset_device_list, reset_list) {
-+	list_for_each_entry(tmp_adev, reset_device_list, reset_list) {
- 		mutex_lock(&tmp_adev->reset_cntl->reset_lock);
- 		tmp_adev->reset_cntl->active_reset = AMD_RESET_METHOD_MODE2;
- 	}
-@@ -179,7 +171,7 @@ aldebaran_mode2_perform_reset(struct amdgpu_reset_control *reset_ctl,
- 	 * Mode2 reset doesn't need any sync between nodes in XGMI hive, instead launch
- 	 * them together so that they can be completed asynchronously on multiple nodes
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index cb5bd0ceb8df4..2982c8cb0983c 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -291,7 +291,7 @@ int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
+ 	 * For RGMII PHY there is no way to access it so the fixed PHY should
+ 	 * be used.  For SGMII PHY the supporting code will be added later.
  	 */
--	list_for_each_entry (tmp_adev, &reset_device_list, reset_list) {
-+	list_for_each_entry(tmp_adev, reset_device_list, reset_list) {
- 		/* For XGMI run all resets in parallel to speed up the process */
- 		if (tmp_adev->gmc.xgmi.num_physical_nodes > 1) {
- 			if (!queue_work(system_unbound_wq,
-@@ -197,7 +189,7 @@ aldebaran_mode2_perform_reset(struct amdgpu_reset_control *reset_ctl,
+-	if (addr >= dev->phy_port_cnt) {
++	if (!dev->info->internal_phy[addr]) {
+ 		struct ksz_port *p = &dev->ports[addr];
  
- 	/* For XGMI wait for all resets to complete before proceed */
- 	if (!r) {
--		list_for_each_entry (tmp_adev, &reset_device_list, reset_list) {
-+		list_for_each_entry(tmp_adev, reset_device_list, reset_list) {
- 			if (tmp_adev->gmc.xgmi.num_physical_nodes > 1) {
- 				flush_work(&tmp_adev->reset_cntl->reset_work);
- 				r = tmp_adev->asic_reset_res;
-@@ -207,7 +199,7 @@ aldebaran_mode2_perform_reset(struct amdgpu_reset_control *reset_ctl,
- 		}
- 	}
- 
--	list_for_each_entry (tmp_adev, &reset_device_list, reset_list) {
-+	list_for_each_entry(tmp_adev, reset_device_list, reset_list) {
- 		mutex_unlock(&tmp_adev->reset_cntl->reset_lock);
- 		tmp_adev->reset_cntl->active_reset = AMD_RESET_METHOD_NONE;
- 	}
-@@ -339,10 +331,13 @@ static int
- aldebaran_mode2_restore_hwcontext(struct amdgpu_reset_control *reset_ctl,
- 				  struct amdgpu_reset_context *reset_context)
+ 		switch (reg) {
+@@ -339,7 +339,7 @@ int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
+ int ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
  {
-+	struct list_head *reset_device_list = reset_context->reset_device_list;
- 	struct amdgpu_device *tmp_adev = NULL;
--	struct list_head reset_device_list;
- 	int r;
+ 	/* No real PHY after this. */
+-	if (addr >= dev->phy_port_cnt)
++	if (!dev->info->internal_phy[addr])
+ 		return 0;
  
-+	if (reset_device_list == NULL)
-+		return -EINVAL;
-+
- 	if (reset_context->reset_req_dev->ip_versions[MP1_HWIP][0] ==
- 		    IP_VERSION(13, 0, 2) &&
- 	    reset_context->hive == NULL) {
-@@ -350,19 +345,7 @@ aldebaran_mode2_restore_hwcontext(struct amdgpu_reset_control *reset_ctl,
- 		return -EINVAL;
- 	}
+ 	return ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
+@@ -888,7 +888,7 @@ static phy_interface_t ksz9477_get_interface(struct ksz_device *dev, int port)
+ 	phy_interface_t interface;
+ 	bool gbit;
  
--	INIT_LIST_HEAD(&reset_device_list);
--	if (reset_context->hive) {
--		list_for_each_entry (tmp_adev,
--				     &reset_context->hive->device_list,
--				     gmc.xgmi.head)
--			list_add_tail(&tmp_adev->reset_list,
--				      &reset_device_list);
--	} else {
--		list_add_tail(&reset_context->reset_req_dev->reset_list,
--			      &reset_device_list);
+-	if (port < dev->phy_port_cnt)
++	if (dev->info->internal_phy[port])
+ 		return PHY_INTERFACE_MODE_NA;
+ 
+ 	gbit = ksz_get_gbit(dev, port);
+@@ -995,7 +995,7 @@ void ksz9477_port_setup(struct ksz_device *dev, int port, bool cpu_port)
+ 	/* enable 802.1p priority */
+ 	ksz_port_cfg(dev, port, P_PRIO_CTRL, PORT_802_1P_PRIO_ENABLE, true);
+ 
+-	if (port < dev->phy_port_cnt) {
++	if (dev->info->internal_phy[port]) {
+ 		/* do not force flow control */
+ 		ksz_port_cfg(dev, port, REG_PORT_CTRL_0,
+ 			     PORT_FORCE_TX_FLOW_CTRL | PORT_FORCE_RX_FLOW_CTRL,
+@@ -1018,7 +1018,7 @@ void ksz9477_port_setup(struct ksz_device *dev, int port, bool cpu_port)
+ 	ksz9477_cfg_port_member(dev, port, member);
+ 
+ 	/* clear pending interrupts */
+-	if (port < dev->phy_port_cnt)
++	if (dev->info->internal_phy[port])
+ 		ksz_pread16(dev, port, REG_PORT_PHY_INT_ENABLE, &data16);
+ }
+ 
+@@ -1081,7 +1081,7 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
+ 
+ 		ksz_port_stp_state_set(ds, i, BR_STATE_DISABLED);
+ 		p->on = 1;
+-		if (i < dev->phy_port_cnt)
++		if (dev->info->internal_phy[i])
+ 			p->phy = 1;
+ 		if (dev->chip_id == 0x00947700 && i == 6) {
+ 			p->sgmii = 1;
+@@ -1177,15 +1177,9 @@ int ksz9477_switch_init(struct ksz_device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Number of ports can be reduced depending on chip. */
+-	dev->phy_port_cnt = 5;
+-
+-	if (dev->chip_id == KSZ9893_CHIP_ID) {
++	if (dev->chip_id == KSZ9893_CHIP_ID)
+ 		dev->features |= IS_9893;
+ 
+-		dev->phy_port_cnt = 2;
 -	}
 -
--	list_for_each_entry (tmp_adev, &reset_device_list, reset_list) {
-+	list_for_each_entry(tmp_adev, reset_device_list, reset_list) {
- 		dev_info(tmp_adev->dev,
- 			 "GPU reset succeeded, trying to resume\n");
- 		r = aldebaran_mode2_restore_ip(tmp_adev);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 58df107e3beb..3adebb63680e 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -4746,6 +4746,8 @@ int amdgpu_do_asic_reset(struct list_head *device_list_handle,
- 	tmp_adev = list_first_entry(device_list_handle, struct amdgpu_device,
- 				    reset_list);
- 	amdgpu_reset_reg_dumps(tmp_adev);
-+
-+	reset_context->reset_device_list = device_list_handle;
- 	r = amdgpu_reset_perform_reset(tmp_adev, reset_context);
- 	/* If reset handler not implemented, continue; otherwise return */
- 	if (r == -ENOSYS)
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_reset.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_reset.h
-index 1949dbe28a86..0c3ad85d84a4 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_reset.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_reset.h
-@@ -37,6 +37,7 @@ struct amdgpu_reset_context {
- 	struct amdgpu_device *reset_req_dev;
- 	struct amdgpu_job *job;
- 	struct amdgpu_hive_info *hive;
-+	struct list_head *reset_device_list;
- 	unsigned long flags;
- };
+ 	return 0;
+ }
  
 -- 
-2.35.1
-
-
+2.30.2
 

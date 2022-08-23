@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BB159E008
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD9659DCD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355524AbiHWKi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S1349203AbiHWLai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355249AbiHWKXW (ORCPT
+        with ESMTP id S1357619AbiHWL0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:23:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535929BB50;
-        Tue, 23 Aug 2022 02:04:20 -0700 (PDT)
+        Tue, 23 Aug 2022 07:26:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB00BE4D6;
+        Tue, 23 Aug 2022 02:24:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B38A1B81C53;
-        Tue, 23 Aug 2022 09:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E8FCC433D7;
-        Tue, 23 Aug 2022 09:04:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D4D2B81C66;
+        Tue, 23 Aug 2022 09:24:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77FDBC433D6;
+        Tue, 23 Aug 2022 09:24:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245457;
-        bh=C+xVUrKAbI48SofDpEDFTkF7+biqsKNrNaN/gh1hoQc=;
+        s=korg; t=1661246649;
+        bh=28Uj1pz2wv0sJBienNbuzVHt1ORzGBQoYdH6V0l/0lc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0HplqmVhL0t585CKXFkwjcN0Bs/zJ008zhfkiJATppZwZE5I8FhJJAcVjT538/e1e
-         rE5RrwtWds4xWr2GC/UNNfYF+veYgzA2X13wn9F7SEsi0Mpaj8lRMCPC3ACy3LkyMN
-         2LE0mxBAFmAwOY0eeCqgKgChmlJqoqZwPUob3jIk=
+        b=UjN9A2GQ4M9kk2unohgoHjbzoAcHA0/WeV5w44zHQfJxTYxaEQ7VaNIxIwPGtVNVP
+         ghzTdWjNgcSmimh+VtRIqls1S6h7VILWC3i0lZmaMNGlW+KHHeGfNgNZXrrP02VIZ0
+         NhOiVnc6rvpP1Bvl1SxqxR1++55vpKWR0AWqUJHE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 085/287] mediatek: mt76: mac80211: Fix missing of_node_put() in mt76_led_init()
-Date:   Tue, 23 Aug 2022 10:24:14 +0200
-Message-Id: <20220823080103.154616692@linuxfoundation.org>
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 177/389] staging: rtl8192u: Fix sleep in atomic context bug in dm_fsync_timer_callback
+Date:   Tue, 23 Aug 2022 10:24:15 +0200
+Message-Id: <20220823080123.037967159@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +54,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 0a14c1d0113f121151edf34333cdf212dd209190 ]
+[ Upstream commit 6a0c054930d554ad8f8044ef1fc856d9da391c81 ]
 
-We should use of_node_put() for the reference 'np' returned by
-of_get_child_by_name() which will increase the refcount.
+There are sleep in atomic context bugs when dm_fsync_timer_callback is
+executing. The root cause is that the memory allocation functions with
+GFP_KERNEL or GFP_NOIO parameters are called in dm_fsync_timer_callback
+which is a timer handler. The call paths that could trigger bugs are
+shown below:
 
-Fixes: 17f1de56df05 ("mt76: add common code shared between multiple chipsets")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+    (interrupt context)
+dm_fsync_timer_callback
+  write_nic_byte
+    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
+    usb_control_msg
+      kmalloc(.., GFP_NOIO); //may sleep
+  write_nic_dword
+    kzalloc(sizeof(data), GFP_KERNEL); //may sleep
+    usb_control_msg
+      kmalloc(.., GFP_NOIO); //may sleep
+
+This patch uses delayed work to replace timer and moves the operations
+that may sleep into the delayed work in order to mitigate bugs.
+
+Fixes: 8fc8598e61f6 ("Staging: Added Realtek rtl8192u driver to staging")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220710103002.63283-1-duoming@zju.edu.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mac80211.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/rtl8192u/r8192U.h    |  2 +-
+ drivers/staging/rtl8192u/r8192U_dm.c | 38 +++++++++++++---------------
+ drivers/staging/rtl8192u/r8192U_dm.h |  2 +-
+ 3 files changed, 20 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mac80211.c b/drivers/net/wireless/mediatek/mt76/mac80211.c
-index 1b5abd4816ed..203b888f38d8 100644
---- a/drivers/net/wireless/mediatek/mt76/mac80211.c
-+++ b/drivers/net/wireless/mediatek/mt76/mac80211.c
-@@ -114,6 +114,7 @@ static int mt76_led_init(struct mt76_dev *dev)
- 		if (!of_property_read_u32(np, "led-sources", &led_pin))
- 			dev->led_pin = led_pin;
- 		dev->led_al = of_property_read_bool(np, "led-active-low");
-+		of_node_put(np);
- 	}
+diff --git a/drivers/staging/rtl8192u/r8192U.h b/drivers/staging/rtl8192u/r8192U.h
+index ec33fb9122e9..57badc1e91e3 100644
+--- a/drivers/staging/rtl8192u/r8192U.h
++++ b/drivers/staging/rtl8192u/r8192U.h
+@@ -1013,7 +1013,7 @@ typedef struct r8192_priv {
+ 	bool		bis_any_nonbepkts;
+ 	bool		bcurrent_turbo_EDCA;
+ 	bool		bis_cur_rdlstate;
+-	struct timer_list fsync_timer;
++	struct delayed_work fsync_work;
+ 	bool bfsync_processing;	/* 500ms Fsync timer is active or not */
+ 	u32	rate_record;
+ 	u32	rateCountDiffRecord;
+diff --git a/drivers/staging/rtl8192u/r8192U_dm.c b/drivers/staging/rtl8192u/r8192U_dm.c
+index c23e43b095d9..30b272da36f5 100644
+--- a/drivers/staging/rtl8192u/r8192U_dm.c
++++ b/drivers/staging/rtl8192u/r8192U_dm.c
+@@ -2585,19 +2585,20 @@ static void dm_init_fsync(struct net_device *dev)
+ 	priv->ieee80211->fsync_seconddiff_ratethreshold = 200;
+ 	priv->ieee80211->fsync_state = Default_Fsync;
+ 	priv->framesyncMonitor = 1;	/* current default 0xc38 monitor on */
+-	timer_setup(&priv->fsync_timer, dm_fsync_timer_callback, 0);
++	INIT_DELAYED_WORK(&priv->fsync_work, dm_fsync_work_callback);
+ }
  
- 	return devm_led_classdev_register(dev->dev, &dev->led_cdev);
+ static void dm_deInit_fsync(struct net_device *dev)
+ {
+ 	struct r8192_priv *priv = ieee80211_priv(dev);
+ 
+-	del_timer_sync(&priv->fsync_timer);
++	cancel_delayed_work_sync(&priv->fsync_work);
+ }
+ 
+-void dm_fsync_timer_callback(struct timer_list *t)
++void dm_fsync_work_callback(struct work_struct *work)
+ {
+-	struct r8192_priv *priv = from_timer(priv, t, fsync_timer);
++	struct r8192_priv *priv =
++	    container_of(work, struct r8192_priv, fsync_work.work);
+ 	struct net_device *dev = priv->ieee80211->dev;
+ 	u32 rate_index, rate_count = 0, rate_count_diff = 0;
+ 	bool		bSwitchFromCountDiff = false;
+@@ -2664,17 +2665,16 @@ void dm_fsync_timer_callback(struct timer_list *t)
+ 			}
+ 		}
+ 		if (bDoubleTimeInterval) {
+-			if (timer_pending(&priv->fsync_timer))
+-				del_timer_sync(&priv->fsync_timer);
+-			priv->fsync_timer.expires = jiffies +
+-				msecs_to_jiffies(priv->ieee80211->fsync_time_interval*priv->ieee80211->fsync_multiple_timeinterval);
+-			add_timer(&priv->fsync_timer);
++			cancel_delayed_work_sync(&priv->fsync_work);
++			schedule_delayed_work(&priv->fsync_work,
++					      msecs_to_jiffies(priv
++					      ->ieee80211->fsync_time_interval *
++					      priv->ieee80211->fsync_multiple_timeinterval));
+ 		} else {
+-			if (timer_pending(&priv->fsync_timer))
+-				del_timer_sync(&priv->fsync_timer);
+-			priv->fsync_timer.expires = jiffies +
+-				msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
+-			add_timer(&priv->fsync_timer);
++			cancel_delayed_work_sync(&priv->fsync_work);
++			schedule_delayed_work(&priv->fsync_work,
++					      msecs_to_jiffies(priv
++					      ->ieee80211->fsync_time_interval));
+ 		}
+ 	} else {
+ 		/* Let Register return to default value; */
+@@ -2702,7 +2702,7 @@ static void dm_EndSWFsync(struct net_device *dev)
+ 	struct r8192_priv *priv = ieee80211_priv(dev);
+ 
+ 	RT_TRACE(COMP_HALDM, "%s\n", __func__);
+-	del_timer_sync(&(priv->fsync_timer));
++	cancel_delayed_work_sync(&priv->fsync_work);
+ 
+ 	/* Let Register return to default value; */
+ 	if (priv->bswitch_fsync) {
+@@ -2744,11 +2744,9 @@ static void dm_StartSWFsync(struct net_device *dev)
+ 		if (priv->ieee80211->fsync_rate_bitmap &  rateBitmap)
+ 			priv->rate_record += priv->stats.received_rate_histogram[1][rateIndex];
+ 	}
+-	if (timer_pending(&priv->fsync_timer))
+-		del_timer_sync(&priv->fsync_timer);
+-	priv->fsync_timer.expires = jiffies +
+-			msecs_to_jiffies(priv->ieee80211->fsync_time_interval);
+-	add_timer(&priv->fsync_timer);
++	cancel_delayed_work_sync(&priv->fsync_work);
++	schedule_delayed_work(&priv->fsync_work,
++			      msecs_to_jiffies(priv->ieee80211->fsync_time_interval));
+ 
+ 	write_nic_dword(dev, rOFDM0_RxDetector2, 0x465c12cd);
+ 
+diff --git a/drivers/staging/rtl8192u/r8192U_dm.h b/drivers/staging/rtl8192u/r8192U_dm.h
+index 0b2a1c688597..2159018b4e38 100644
+--- a/drivers/staging/rtl8192u/r8192U_dm.h
++++ b/drivers/staging/rtl8192u/r8192U_dm.h
+@@ -166,7 +166,7 @@ void dm_force_tx_fw_info(struct net_device *dev,
+ void dm_init_edca_turbo(struct net_device *dev);
+ void dm_rf_operation_test_callback(unsigned long data);
+ void dm_rf_pathcheck_workitemcallback(struct work_struct *work);
+-void dm_fsync_timer_callback(struct timer_list *t);
++void dm_fsync_work_callback(struct work_struct *work);
+ void dm_cck_txpower_adjust(struct net_device *dev, bool  binch14);
+ void dm_shadow_init(struct net_device *dev);
+ void dm_initialize_txpower_tracking(struct net_device *dev);
 -- 
 2.35.1
 

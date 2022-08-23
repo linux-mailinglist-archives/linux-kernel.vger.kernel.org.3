@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C48459DF1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D804059E017
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244090AbiHWLaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S244419AbiHWLac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351614AbiHWLZp (ORCPT
+        with ESMTP id S1356311AbiHWLZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:25:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60994B089C;
-        Tue, 23 Aug 2022 02:24:06 -0700 (PDT)
+        Tue, 23 Aug 2022 07:25:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E35B2846;
+        Tue, 23 Aug 2022 02:24:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7C07B81B1F;
-        Tue, 23 Aug 2022 09:24:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 119E9C433C1;
-        Tue, 23 Aug 2022 09:24:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D0CB612B5;
+        Tue, 23 Aug 2022 09:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C9BC433C1;
+        Tue, 23 Aug 2022 09:24:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246643;
-        bh=Vi5nOn57Hq/yjy93n2CxGZ9yBwsNUVNFG9Sh/CociKg=;
+        s=korg; t=1661246646;
+        bh=bEUsYd6wc+ozBQ9Hz5f85QXJZqk+pUMxGOXwNgpWbN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=piRW6RXEEFG8vEkI9oSgaF8yDc9L8OQgwfP5f0skutdaNs9Otde9J8MK5UjT9iDbh
-         gmNjAl6/pbGhAdbm/SuD0CthdU04t58BrAjj5hsQvmilozsQKMMejBwOU4MUDjMc50
-         rsAt111Ub3Fv5PubD+CdJ7thMxgxbu4SVPVxk47E=
+        b=EJceEUwK3BPLgEQz9aZYDE7fwYK1WpgC6zjPQ7hjBtDMAKMEdm51kpn7FgrKDo8Yi
+         VgFcHzjCHrHpA1f6KQq516HY3HfdI4S9HuQu0CGN6ltVOlw+JnxV7jQXg90jMqD5LK
+         mCnpKOyjOlpBHG1oqdWvXWKmgA/lDInGduTRhwvU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 175/389] intel_th: msu-sink: Potential dereference of null pointer
-Date:   Tue, 23 Aug 2022 10:24:13 +0200
-Message-Id: <20220823080122.954653463@linuxfoundation.org>
+Subject: [PATCH 5.4 176/389] intel_th: msu: Fix vmalloced buffers
+Date:   Tue, 23 Aug 2022 10:24:14 +0200
+Message-Id: <20220823080122.990782804@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -57,39 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 
-[ Upstream commit 82f76a4a720791d889de775b5f7541d601efc8bd ]
+[ Upstream commit ac12ad3ccf6d386e64a9d6a890595a2509d24edd ]
 
-The return value of dma_alloc_coherent() needs to be checked.
-To avoid use of null pointer in sg_set_buf() in case of the failure of
-alloc.
+After commit f5ff79fddf0e ("dma-mapping: remove CONFIG_DMA_REMAP") there's
+a chance of DMA buffer getting allocated via vmalloc(), which messes up
+the mmapping code:
 
-Fixes: f220df66f676 ("intel_th: msu-sink: An example msu buffer "sink"")
+> RIP: msc_mmap_fault [intel_th_msu]
+> Call Trace:
+>  <TASK>
+>  __do_fault
+>  do_fault
+...
+
+Fix this by accounting for vmalloc possibility.
+
+Fixes: ba39bd830605 ("intel_th: msu: Switch over to scatterlist")
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Link: https://lore.kernel.org/r/20220705082637.59979-3-alexander.shishkin@linux.intel.com
+Link: https://lore.kernel.org/r/20220705082637.59979-4-alexander.shishkin@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwtracing/intel_th/msu-sink.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwtracing/intel_th/msu.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwtracing/intel_th/msu-sink.c b/drivers/hwtracing/intel_th/msu-sink.c
-index 2c7f5116be12..891b28ea25fe 100644
---- a/drivers/hwtracing/intel_th/msu-sink.c
-+++ b/drivers/hwtracing/intel_th/msu-sink.c
-@@ -71,6 +71,9 @@ static int msu_sink_alloc_window(void *data, struct sg_table **sgt, size_t size)
- 		block = dma_alloc_coherent(priv->dev->parent->parent,
- 					   PAGE_SIZE, &sg_dma_address(sg_ptr),
- 					   GFP_KERNEL);
-+		if (!block)
-+			return -ENOMEM;
-+
- 		sg_set_buf(sg_ptr, block, PAGE_SIZE);
- 	}
+diff --git a/drivers/hwtracing/intel_th/msu.c b/drivers/hwtracing/intel_th/msu.c
+index 3cd2489d398c..640b0aae7eb4 100644
+--- a/drivers/hwtracing/intel_th/msu.c
++++ b/drivers/hwtracing/intel_th/msu.c
+@@ -1050,6 +1050,16 @@ msc_buffer_set_uc(struct msc_window *win, unsigned int nr_segs) {}
+ static inline void msc_buffer_set_wb(struct msc_window *win) {}
+ #endif /* CONFIG_X86 */
  
++static struct page *msc_sg_page(struct scatterlist *sg)
++{
++	void *addr = sg_virt(sg);
++
++	if (is_vmalloc_addr(addr))
++		return vmalloc_to_page(addr);
++
++	return sg_page(sg);
++}
++
+ /**
+  * msc_buffer_win_alloc() - alloc a window for a multiblock mode
+  * @msc:	MSC device
+@@ -1122,7 +1132,7 @@ static void __msc_buffer_win_free(struct msc *msc, struct msc_window *win)
+ 	int i;
+ 
+ 	for_each_sg(win->sgt->sgl, sg, win->nr_segs, i) {
+-		struct page *page = sg_page(sg);
++		struct page *page = msc_sg_page(sg);
+ 
+ 		page->mapping = NULL;
+ 		dma_free_coherent(msc_dev(win->msc)->parent->parent, PAGE_SIZE,
+@@ -1384,7 +1394,7 @@ static struct page *msc_buffer_get_page(struct msc *msc, unsigned long pgoff)
+ 	pgoff -= win->pgoff;
+ 
+ 	for_each_sg(win->sgt->sgl, sg, win->nr_segs, blk) {
+-		struct page *page = sg_page(sg);
++		struct page *page = msc_sg_page(sg);
+ 		size_t pgsz = PFN_DOWN(sg->length);
+ 
+ 		if (pgoff < pgsz)
 -- 
 2.35.1
 

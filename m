@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E11459D71E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F5559D3EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350052AbiHWJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S241898AbiHWILy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349494AbiHWJWu (ORCPT
+        with ESMTP id S241520AbiHWIJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:22:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8318F944;
-        Tue, 23 Aug 2022 01:35:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF6761475;
-        Tue, 23 Aug 2022 08:35:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBACBC433D7;
-        Tue, 23 Aug 2022 08:35:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243733;
-        bh=Z6tw5p3I/8qPJhg9+be/JmAilsolo8TLCG5ED0j4UIM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t/JrvDdHy/jPK5GoEXk+UnVn1Qvzb799BM8J7kIwZ6nbLooNpK2a+zEWdaaFuLTMx
-         yo1g5FEfFa7D+hre/8SwBv95PqfZZTaPv9IpukZ2qniXhbE3R3jMAh4zWyWfNdWZLA
-         yWKOEQdoB1kTF6ivDFp/26gSrnOIp318YsZyxoWU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.19 364/365] scsi: ufs: ufs-mediatek: Fix build error and type mismatch
-Date:   Tue, 23 Aug 2022 10:04:25 +0200
-Message-Id: <20220823080133.542900028@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 23 Aug 2022 04:09:29 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CDD6744A;
+        Tue, 23 Aug 2022 01:06:20 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11cab7d7e0fso14731655fac.6;
+        Tue, 23 Aug 2022 01:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3DUNim7WTmzHmRObYLAWDZd3QPXFrzWMAVJ6u950fVw=;
+        b=PEfKzVZ9zdDK7xpYNrTaOE8LDRrYuccID4DJC18ZZ1dOGcM/PFel+HYpWII3aKbIeF
+         DWC52FU81Nk6KSpVp4uhLoJusR/zqCu0JxHLuRXzPlJVYhVVh7+wgUCecv/5N6zsniIx
+         QvDxhVIuMs/EghKCfi/T39Sz+o9TQQaQXXA9k7Mo5jS0wfJcezhj4E8fkG3R75mS/MOr
+         n1ULmf4rkLai8G/6SCv55h0BGAWvJH87B0IvIdLCJ0EyM22FH8AIfJndotB+YyGD0hRS
+         K9As7UA+MPl9h+9Fa89Ygw7FFNqg7YRIl6gspf3za/PHuxAI/xFLO81HxY/QSBj4UIEM
+         Wz0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3DUNim7WTmzHmRObYLAWDZd3QPXFrzWMAVJ6u950fVw=;
+        b=DslT6HfCfSaOk48qI7tcWj4PNM9/7IgIoeeO/qb6lNZJ+ebQYIWpUfPCRvez5SmBXb
+         7gr3sLdyTh8NI4ZPw1BzOqAWv3pfuvkMBu+ydXvcB1v1zcy/7afK+iudz6xeIBOeLEDW
+         m+f5C76bj4UxuDBo8pawGIzBVhrjclvLHZQWlXJ54rbV2JvTdr7LsMZcuGEHqtcF/Zz6
+         6pcHAj2ev+VcK/SvCopjWqjpLsf4GvIp7HVgE/rLOEQj1tfLJQSwpyMeB8jidKYCii3e
+         j8Lm4Uj46Hs7dCA75eCOS23RuOQAYRyj+SJP/fxY6EnyruCQyf1cL+kCev/7fkEVNo9u
+         k9tg==
+X-Gm-Message-State: ACgBeo1HSHF2dhSfK8T4F0yjlEpuWuoZH0So18F5GAHpoKr+lBjGeHsd
+        X0Sh4gKlbWJP68+v30CU6F0LuAAplLNcreI4GL+lVlv7
+X-Google-Smtp-Source: AA6agR7u0uAvaNIkWvMT1B9z9RQ3S+vI04sURkMJs02g+rhl0HQ6KWE6yptMMcC6zUNNTZ6gciyBV1GEw8LrC624xeM=
+X-Received: by 2002:a05:6870:8912:b0:11b:a59c:f533 with SMTP id
+ i18-20020a056870891200b0011ba59cf533mr894982oao.220.1661241979113; Tue, 23
+ Aug 2022 01:06:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202208221854.8ASrzjKa-lkp@intel.com> <20220823030056.123709-1-bagasdotme@gmail.com>
+In-Reply-To: <20220823030056.123709-1-bagasdotme@gmail.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Tue, 23 Aug 2022 11:06:08 +0300
+Message-ID: <CAHNKnsRUJzRGJ+muGfYAW-5EM91_j9AK-WTeV9pBZeXjH6L_6g@mail.gmail.com>
+Subject: Re: [PATCH] mips: pci: remove extraneous asterisk from top level
+ comment of ar2315 PCI driver
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ren Zhijie <renzhijie2@huawei.com>
+On Tue, Aug 23, 2022 at 6:01 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> kernel test robot reported kernel-doc warning:
+>
+> arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>     * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
+>
+> The warning above is caused by an extraneous asterisk on the top level
+> (description) comment of pci-ar2315.c, for which the comment is confused as
+> kernel-doc comment instead.
+>
+> Remove the asterisk.
+>
+> Link: https://lore.kernel.org/linux-doc/202208221854.8ASrzjKa-lkp@intel.com/
+> Fixes: 3ed7a2a702dc0f ("MIPS: ath25: add AR2315 PCI host controller driver")
+> Fixes: 3e58e839150db0 ("scripts: kernel-doc: add warning for comment not following kernel-doc syntax")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: stable@vger.kernel.org # v5.15, v5.19
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-commit f54912b228a8df6c0133e31bc75628677bb8c6e5 upstream.
-
-If CONFIG_PM_SLEEP is not set.
-
-make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will fail:
-
-drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_vreg_fix_vcc’:
-drivers/ufs/host/ufs-mediatek.c:688:46: warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
-    snprintf(vcc_name, MAX_VCC_NAME, "vcc-opt%u", res.a1);
-                                             ~^   ~~~~~~
-                                             %lu
-drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_system_suspend’:
-drivers/ufs/host/ufs-mediatek.c:1371:8: error: implicit declaration of function ‘ufshcd_system_suspend’; did you mean ‘ufs_mtk_system_suspend’? [-Werror=implicit-function-declaration]
-  ret = ufshcd_system_suspend(dev);
-        ^~~~~~~~~~~~~~~~~~~~~
-        ufs_mtk_system_suspend
-drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_system_resume’:
-drivers/ufs/host/ufs-mediatek.c:1386:9: error: implicit declaration of function ‘ufshcd_system_resume’; did you mean ‘ufs_mtk_system_resume’? [-Werror=implicit-function-declaration]
-  return ufshcd_system_resume(dev);
-         ^~~~~~~~~~~~~~~~~~~~
-         ufs_mtk_system_resume
-cc1: some warnings being treated as errors
-
-The declaration of func "ufshcd_system_suspend()" depends on
-CONFIG_PM_SLEEP, so the function wrapper ufs_mtk_system_suspend() should
-wrapped by CONFIG_PM_SLEEP too.
-
-Link: https://lore.kernel.org/r/20220619115432.205504-1-renzhijie2@huawei.com
-Fixes: 3fd23b8dfb54 ("scsi: ufs: ufs-mediatek: Fix the timing of configuring device regulators")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-[only take the suspend/resume portion of the commit - gregkh]
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/ufs/host/ufs-mediatek.c |    2 ++
- 1 file changed, 2 insertions(+)
-
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1220,6 +1220,7 @@ static int ufs_mtk_remove(struct platfor
- 	return 0;
- }
- 
-+#ifdef CONFIG_PM_SLEEP
- int ufs_mtk_system_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -1242,6 +1243,7 @@ int ufs_mtk_system_resume(struct device
- 
- 	return ufshcd_system_resume(dev);
- }
-+#endif
- 
- int ufs_mtk_runtime_suspend(struct device *dev)
- {
-
-
+Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>

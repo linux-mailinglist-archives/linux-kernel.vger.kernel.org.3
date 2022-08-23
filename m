@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B852C59DCE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D46E59DFAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354836AbiHWK3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        id S1356597AbiHWKyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353297AbiHWKNR (ORCPT
+        with ESMTP id S1356303AbiHWKq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:13:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC1379A69;
-        Tue, 23 Aug 2022 01:59:21 -0700 (PDT)
+        Tue, 23 Aug 2022 06:46:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC7186B51;
+        Tue, 23 Aug 2022 02:11:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D23B86150F;
-        Tue, 23 Aug 2022 08:59:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19E6C433D6;
-        Tue, 23 Aug 2022 08:59:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC0E3B81C66;
+        Tue, 23 Aug 2022 09:11:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C9DAC433D7;
+        Tue, 23 Aug 2022 09:11:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245160;
-        bh=vSnIrq1986sz3UNgOR5G90aHMhrk+yu+kQpcWOG0tsk=;
+        s=korg; t=1661245900;
+        bh=3snwoiy4cWBHxDU94g4Zjmdhsk/Y6rI8r/5Xx86zFWk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K14HfQVuULUhoH6FOXHjjIp7fpRRDeFjVhsssYPuB7/Cu78AXEEnk6MJE88mmJ24k
-         MJUHCpA4Ao2t/e/2Pl5Uc3k7H2K2MmAsxA9t5OPG77m6Y8uGV0qws++Ccj9f/BMxVK
-         Fk4p0ciZCEYZHwnoiicDHNj61HY+JdpLkQVfaqw0=
+        b=TNp8oYI3yx6FF2A5d+kSN8lHBsc2wWuIq7B8O+6w8SAQB9xvVNJHxk63agtTxwDgQ
+         3Q4E1EQpPb6zlWcKRI5qcaI6bq72AL9mkATRIbjgy87Mpl948GTy9Q0NcJ2LnKqV+G
+         GZoq7Y7kdXmccIinfNs+BP2KYYvNJXw5kiSL7R5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 235/244] scsi: ufs: ufs-mediatek: Fix build error and type mismatch
+        stable@vger.kernel.org, John Johansen <john.johansen@canonical.com>
+Subject: [PATCH 4.19 225/287] apparmor: Fix failed mount permission check error message
 Date:   Tue, 23 Aug 2022 10:26:34 +0200
-Message-Id: <20220823080107.412466756@linuxfoundation.org>
+Message-Id: <20220823080108.572386086@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ren Zhijie <renzhijie2@huawei.com>
+From: John Johansen <john.johansen@canonical.com>
 
-commit f54912b228a8df6c0133e31bc75628677bb8c6e5 upstream.
+commit ec240b5905bbb09a03dccffee03062cf39e38dc2 upstream.
 
-If CONFIG_PM_SLEEP is not set.
+When the mount check fails due to a permission check failure instead
+of explicitly at one of the subcomponent checks, AppArmor is reporting
+a failure in the flags match. However this is not true and AppArmor
+can not attribute the error at this point to any particular component,
+and should only indicate the mount failed due to missing permissions.
 
-make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will fail:
-
-drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_vreg_fix_vcc’:
-drivers/ufs/host/ufs-mediatek.c:688:46: warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Wformat=]
-    snprintf(vcc_name, MAX_VCC_NAME, "vcc-opt%u", res.a1);
-                                             ~^   ~~~~~~
-                                             %lu
-drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_system_suspend’:
-drivers/ufs/host/ufs-mediatek.c:1371:8: error: implicit declaration of function ‘ufshcd_system_suspend’; did you mean ‘ufs_mtk_system_suspend’? [-Werror=implicit-function-declaration]
-  ret = ufshcd_system_suspend(dev);
-        ^~~~~~~~~~~~~~~~~~~~~
-        ufs_mtk_system_suspend
-drivers/ufs/host/ufs-mediatek.c: In function ‘ufs_mtk_system_resume’:
-drivers/ufs/host/ufs-mediatek.c:1386:9: error: implicit declaration of function ‘ufshcd_system_resume’; did you mean ‘ufs_mtk_system_resume’? [-Werror=implicit-function-declaration]
-  return ufshcd_system_resume(dev);
-         ^~~~~~~~~~~~~~~~~~~~
-         ufs_mtk_system_resume
-cc1: some warnings being treated as errors
-
-The declaration of func "ufshcd_system_suspend()" depends on
-CONFIG_PM_SLEEP, so the function wrapper ufs_mtk_system_suspend() should
-wrapped by CONFIG_PM_SLEEP too.
-
-Link: https://lore.kernel.org/r/20220619115432.205504-1-renzhijie2@huawei.com
-Fixes: 3fd23b8dfb54 ("scsi: ufs: ufs-mediatek: Fix the timing of configuring device regulators")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-[only take the suspend/resume portion of the commit - gregkh]
+Fixes: 2ea3ffb7782a ("apparmor: add mount mediation")
+Signed-off-by: John Johansen <john.johansen@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ufs/ufs-mediatek.c |    2 ++
- 1 file changed, 2 insertions(+)
+ security/apparmor/mount.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -1139,6 +1139,7 @@ static int ufs_mtk_remove(struct platfor
- 	return 0;
+--- a/security/apparmor/mount.c
++++ b/security/apparmor/mount.c
+@@ -232,7 +232,8 @@ static const char * const mnt_info_table
+ 	"failed srcname match",
+ 	"failed type match",
+ 	"failed flags match",
+-	"failed data match"
++	"failed data match",
++	"failed perms check"
+ };
+ 
+ /*
+@@ -287,8 +288,8 @@ static int do_match_mnt(struct aa_dfa *d
+ 			return 0;
+ 	}
+ 
+-	/* failed at end of flags match */
+-	return 4;
++	/* failed at perms check, don't confuse with flags match */
++	return 6;
  }
  
-+#ifdef CONFIG_PM_SLEEP
- int ufs_mtk_system_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -1161,6 +1162,7 @@ int ufs_mtk_system_resume(struct device
  
- 	return ufshcd_system_resume(dev);
- }
-+#endif
- 
- int ufs_mtk_runtime_suspend(struct device *dev)
- {
 
 

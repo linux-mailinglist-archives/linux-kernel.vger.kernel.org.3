@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634D359DD09
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C132259E1A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353302AbiHWKLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
+        id S239891AbiHWLTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348401AbiHWKDM (ORCPT
+        with ESMTP id S1357704AbiHWLQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:03:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8292F7C75B;
-        Tue, 23 Aug 2022 01:51:14 -0700 (PDT)
+        Tue, 23 Aug 2022 07:16:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278FC1AD91;
+        Tue, 23 Aug 2022 02:20:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F173C61524;
-        Tue, 23 Aug 2022 08:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4ADC433D6;
-        Tue, 23 Aug 2022 08:38:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED366122D;
+        Tue, 23 Aug 2022 09:19:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12246C433D6;
+        Tue, 23 Aug 2022 09:19:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243890;
-        bh=mo4pZi3hofheKli2BHAplF58RB11yRXOjPYawuE3wUs=;
+        s=korg; t=1661246366;
+        bh=16N7gqoDhgtgU26/uFo+Xnm3wcLCzPvXEWtJM8/2n9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zAONnbskTZWbdZNZtSSYtWLITsKfvs245HHvFUhukvjk/cufYyLITVUGPP8CnurrF
-         BstRlm1+ZvuASK0aSK2pfyYWQdJzYW7UHCp8VA4logps8nra+gMsLi3f+mqsmWOaT8
-         sv8Lx0yPbCmIRenZfSy/oluMlv9Uz40aLroptafM=
+        b=gr8qq7d5YgiHFmyYmLA6V9bRRuH1lAsVakLfKm7AB55wwhCFrNjeWTc9mPOdYHRfA
+         N2OqzG1mgzAxWXjO/cmRvjrOgXrl80rmKqDnDsEpT5Hll4+kq8690uxxKJkOW0T5sc
+         f2TOdSWEBN5/4L0sGTPwhdWWHjmwLnGMn4gnjXJw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
-        stable@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 004/244] x86/mm: Use proper mask when setting PUD mapping
-Date:   Tue, 23 Aug 2022 10:22:43 +0200
-Message-Id: <20220823080059.236036421@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 086/389] ARM: dts: qcom: pm8841: add required thermal-sensor-cells
+Date:   Tue, 23 Aug 2022 10:22:44 +0200
+Message-Id: <20220823080119.235827764@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aaron Lu <aaron.lu@intel.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 88e0a74902f894fbbc55ad3ad2cb23b4bfba555c upstream.
+[ Upstream commit e2759fa0676c9a32bbddb9aff955b54bb35066ad ]
 
-Commit c164fbb40c43f("x86/mm: thread pgprot_t through
-init_memory_mapping()") mistakenly used __pgprot() which doesn't respect
-__default_kernel_pte_mask when setting PUD mapping.
+The PM8841 temperature sensor has to define thermal-sensor-cells.
 
-Fix it by only setting the one bit we actually need (PSE) and leaving
-the other bits (that have been properly masked) alone.
-
-Fixes: c164fbb40c43 ("x86/mm: thread pgprot_t through init_memory_mapping()")
-Signed-off-by: Aaron Lu <aaron.lu@intel.com>
-Cc: stable@kernel.org
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: dab8134ca072 ("ARM: dts: qcom: Add PM8841 functions device nodes")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220608112702.80873-2-krzysztof.kozlowski@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/mm/init_64.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/qcom-pm8841.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -646,7 +646,7 @@ phys_pud_init(pud_t *pud_page, unsigned
- 			pages++;
- 			spin_lock(&init_mm.page_table_lock);
+diff --git a/arch/arm/boot/dts/qcom-pm8841.dtsi b/arch/arm/boot/dts/qcom-pm8841.dtsi
+index 2fd59c440903..c73e5b149ac5 100644
+--- a/arch/arm/boot/dts/qcom-pm8841.dtsi
++++ b/arch/arm/boot/dts/qcom-pm8841.dtsi
+@@ -25,6 +25,7 @@ temp-alarm@2400 {
+ 			compatible = "qcom,spmi-temp-alarm";
+ 			reg = <0x2400>;
+ 			interrupts = <4 0x24 0 IRQ_TYPE_EDGE_RISING>;
++			#thermal-sensor-cells = <0>;
+ 		};
+ 	};
  
--			prot = __pgprot(pgprot_val(prot) | __PAGE_KERNEL_LARGE);
-+			prot = __pgprot(pgprot_val(prot) | _PAGE_PSE);
- 
- 			set_pte_init((pte_t *)pud,
- 				     pfn_pte((paddr & PUD_MASK) >> PAGE_SHIFT,
+-- 
+2.35.1
+
 
 

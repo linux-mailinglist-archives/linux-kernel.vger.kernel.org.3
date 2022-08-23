@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B5959E20E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B35F59E072
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353188AbiHWKO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
+        id S1358057AbiHWLkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352775AbiHWKGQ (ORCPT
+        with ESMTP id S1350510AbiHWLew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2AA54CB1;
-        Tue, 23 Aug 2022 01:52:52 -0700 (PDT)
+        Tue, 23 Aug 2022 07:34:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13CE910AE;
+        Tue, 23 Aug 2022 02:27:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3C59611DD;
-        Tue, 23 Aug 2022 08:52:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03699C433D7;
-        Tue, 23 Aug 2022 08:52:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD16B81B1F;
+        Tue, 23 Aug 2022 09:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E7A9C433D6;
+        Tue, 23 Aug 2022 09:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244771;
-        bh=vYopN2OvdoOaGtVHd9gj1WN5klnOVbI44044XMYR80o=;
+        s=korg; t=1661246836;
+        bh=PiAYzXHGfc/+OGeL048E+MAGO3HB2dyAx+psoKblKFM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qh5HBMDmuUMzU2Er8b4XKEAiOuF6J0WjWw0eeNPe/xPqRff64YLjE3WbVCh67/LiK
-         lWIbmD9wl86DIoitZ4/Vg4yRSDEhChqBPcEDsQi15WH6NLza/6sxEyCCwOGRVQVOA6
-         xa+uKxoSPnkwfpMJSFABkX8++83pX0dOFiFUZNq0=
+        b=1EzGu3PW2ZpoQdHzHx7shkXxvtTnkDxp3nPvuMn0bsI8cQYOSjElQwukMEntE5hiA
+         zZHHVR4iMA6bFTom17in7xP6u8DecZhl65c7AAIerCsxN8h/XerAPI6rsRsiXwoCPq
+         J0GGWJ25YvmGgKB30zuS3udTbTUEAmu1Y04V1Lgk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>
-Subject: [PATCH 5.15 146/244] regulator: pca9450: Remove restrictions for regulator-name
-Date:   Tue, 23 Aug 2022 10:25:05 +0200
-Message-Id: <20220823080104.052218001@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 228/389] ASoC: audio-graph-card: Add of_node_put() in fail path
+Date:   Tue, 23 Aug 2022 10:25:06 +0200
+Message-Id: <20220823080125.127020091@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+From: Liang He <windhl@126.com>
 
-commit b0de7fa706506bf0591037908376351beda8c5d6 upstream.
+[ Upstream commit 65fb8e2ef3531a6e950060fca6e551c923fb0f0e ]
 
-The device bindings shouldn't put any constraints on the regulator-name
-property specified in the generic bindings. This allows using arbitrary
-and descriptive names for the regulators.
+In asoc_simple_parse_dai(), we should call of_node_put() for the
+reference returned by of_graph_get_port_parent() in fail path.
 
-Suggested-by: Mark Brown <broonie@kernel.org>
-Fixes: 7ae9e3a6bf3f ("dt-bindings: regulator: add pca9450 regulator yaml")
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-Link: https://lore.kernel.org/r/20220802064335.8481-1-frieder@fris.de
+Fixes: ae30a694da4c ("ASoC: simple-card-utils: add asoc_simple_card_parse_dai()")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220721144308.1301587-1-windhl@126.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml |   11 ----------
- 1 file changed, 11 deletions(-)
+ sound/soc/generic/audio-graph-card.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-@@ -47,12 +47,6 @@ properties:
-         description:
-           Properties for single LDO regulator.
+diff --git a/sound/soc/generic/audio-graph-card.c b/sound/soc/generic/audio-graph-card.c
+index 1bc498124689..96aa2c015572 100644
+--- a/sound/soc/generic/audio-graph-card.c
++++ b/sound/soc/generic/audio-graph-card.c
+@@ -149,8 +149,10 @@ static int asoc_simple_parse_dai(struct device_node *ep,
+ 	 *    if he unbinded CPU or Codec.
+ 	 */
+ 	ret = snd_soc_get_dai_name(&args, &dlc->dai_name);
+-	if (ret < 0)
++	if (ret < 0) {
++		of_node_put(node);
+ 		return ret;
++	}
  
--        properties:
--          regulator-name:
--            pattern: "^LDO[1-5]$"
--            description:
--              should be "LDO1", ..., "LDO5"
--
-         unevaluatedProperties: false
+ 	dlc->of_node = node;
  
-       "^BUCK[1-6]$":
-@@ -62,11 +56,6 @@ properties:
-           Properties for single BUCK regulator.
- 
-         properties:
--          regulator-name:
--            pattern: "^BUCK[1-6]$"
--            description:
--              should be "BUCK1", ..., "BUCK6"
--
-           nxp,dvs-run-voltage:
-             $ref: "/schemas/types.yaml#/definitions/uint32"
-             minimum: 600000
+-- 
+2.35.1
+
 
 

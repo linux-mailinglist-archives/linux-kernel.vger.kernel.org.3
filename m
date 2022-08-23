@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D5D59E092
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED51B59E25D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354681AbiHWKhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
+        id S242068AbiHWL3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354995AbiHWKWl (ORCPT
+        with ESMTP id S242451AbiHWLXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:22:41 -0400
+        Tue, 23 Aug 2022 07:23:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941A225E9C;
-        Tue, 23 Aug 2022 02:03:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23C36BD76;
+        Tue, 23 Aug 2022 02:23:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43824B81C87;
-        Tue, 23 Aug 2022 09:03:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86658C433D6;
-        Tue, 23 Aug 2022 09:03:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51146B81C53;
+        Tue, 23 Aug 2022 09:23:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88256C433C1;
+        Tue, 23 Aug 2022 09:23:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245425;
-        bh=BXQ5aCUQqtecM1N9HQfZDNeTuSJ9kCL43SMoe39647E=;
+        s=korg; t=1661246618;
+        bh=yO/+0w+QZpL9FyWrE4hrpJ2hjLScgiQtI3GR94o+23I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nANktytsvDREIDCdmjMGa0YgQY1IAZBZ/UVOySubd4keM7xBpLIyU7acZSEJt7mfp
-         OIUX09rEVg19k4gc+RQ8Dd8qiWRO/3Nkh+vmInlGtKV0oVUvfZqxWJU2kxfGfhXdWv
-         L1q4TuyZWQVaETjAI3eqMxrjWhhwPCx/MrmNFuec=
+        b=eWygxrdFfmMY+nFtn5mZSCA0A4yWyfNlLHz4w5zfKeLfhPyIYtmPgeq3YXFlIFema
+         IrPkLpvRBOevnlVGFHUeUDsXX20TtY6aq8LiBzmMzOO25DEoPWNPPfmFla1f1uUnQS
+         18+RqjHZzqT2vxklm6GWQpnR5HqLtOoQywO8w+js=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 044/287] ARM: dts: imx6ul: fix lcdif node compatible
-Date:   Tue, 23 Aug 2022 10:23:33 +0200
-Message-Id: <20220823080101.741727860@linuxfoundation.org>
+Subject: [PATCH 5.4 136/389] can: kvaser_usb_hydra: do not report txerr and rxerr during bus-off
+Date:   Tue, 23 Aug 2022 10:23:34 +0200
+Message-Id: <20220823080121.297047011@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-[ Upstream commit 1a884d17ca324531634cce82e9f64c0302bdf7de ]
+[ Upstream commit 936e90595376e64b6247c72d3ea8b8b164b7ac96 ]
 
-In yaml binding "fsl,imx6ul-lcdif" is listed as compatible to imx6sx-lcdif,
-but not imx28-lcdif. Change the list accordingly. Fixes the
-dt_binding_check warning:
-lcdif@21c8000: compatible: 'oneOf' conditional failed, one must be fixed:
-['fsl,imx6ul-lcdif', 'fsl,imx28-lcdif'] is too long
-Additional items are not allowed ('fsl,imx28-lcdif' was unexpected)
-'fsl,imx6ul-lcdif' is not one of ['fsl,imx23-lcdif', 'fsl,imx28-lcdif',
-'fsl,imx6sx-lcdif']
-'fsl,imx6sx-lcdif' was expected
+During bus off, the error count is greater than 255 and can not fit in
+a u8.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: aec5fb2268b7 ("can: kvaser_usb: Add support for Kvaser USB hydra family")
+Link: https://lore.kernel.org/all/20220719143550.3681-8-mailhol.vincent@wanadoo.fr
+CC: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6ul.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
-index 605792fa67b2..d91baa74e608 100644
---- a/arch/arm/boot/dts/imx6ul.dtsi
-+++ b/arch/arm/boot/dts/imx6ul.dtsi
-@@ -940,7 +940,7 @@ cpu_speed_grade: speed-grade@10 {
- 			};
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+index a7c408acb0c0..01d4a731b579 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+@@ -890,8 +890,10 @@ static void kvaser_usb_hydra_update_state(struct kvaser_usb_net_priv *priv,
+ 	    new_state < CAN_STATE_BUS_OFF)
+ 		priv->can.can_stats.restarts++;
  
- 			lcdif: lcdif@21c8000 {
--				compatible = "fsl,imx6ul-lcdif", "fsl,imx28-lcdif";
-+				compatible = "fsl,imx6ul-lcdif", "fsl,imx6sx-lcdif";
- 				reg = <0x021c8000 0x4000>;
- 				interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&clks IMX6UL_CLK_LCDIF_PIX>,
+-	cf->data[6] = bec->txerr;
+-	cf->data[7] = bec->rxerr;
++	if (new_state != CAN_STATE_BUS_OFF) {
++		cf->data[6] = bec->txerr;
++		cf->data[7] = bec->rxerr;
++	}
+ 
+ 	stats = &netdev->stats;
+ 	stats->rx_packets++;
+@@ -1045,8 +1047,10 @@ kvaser_usb_hydra_error_frame(struct kvaser_usb_net_priv *priv,
+ 	shhwtstamps->hwtstamp = hwtstamp;
+ 
+ 	cf->can_id |= CAN_ERR_BUSERROR;
+-	cf->data[6] = bec.txerr;
+-	cf->data[7] = bec.rxerr;
++	if (new_state != CAN_STATE_BUS_OFF) {
++		cf->data[6] = bec.txerr;
++		cf->data[7] = bec.rxerr;
++	}
+ 
+ 	stats->rx_packets++;
+ 	stats->rx_bytes += cf->can_dlc;
 -- 
 2.35.1
 

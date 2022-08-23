@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE09359DC54
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8921759E11B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356268AbiHWKqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S1353040AbiHWKKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355799AbiHWKku (ORCPT
+        with ESMTP id S1352749AbiHWKC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:40:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EE8B485;
-        Tue, 23 Aug 2022 02:08:21 -0700 (PDT)
+        Tue, 23 Aug 2022 06:02:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804907C748;
+        Tue, 23 Aug 2022 01:50:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA9656158D;
-        Tue, 23 Aug 2022 09:08:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E611C43142;
-        Tue, 23 Aug 2022 09:08:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F05E8B8105C;
+        Tue, 23 Aug 2022 08:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB8AC433D6;
+        Tue, 23 Aug 2022 08:50:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245700;
-        bh=8QuRDi3pGDUwwFEAvbsCLBcEvdvVknUNER2anh/yK68=;
+        s=korg; t=1661244644;
+        bh=MJ9PmoMD6d/lpjd/2z9GkI5gkqaZpktyZICEJxlwDDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O8irY0TJc/h4iC8Xk5prMEd31kT465pEL7rAA10/JDZA11Ng1W/1HlGcBJf0YI9E9
-         Us4DkKxCrKPepmJ1QAOdOxIeLp/BbQdrW0Mx75tI79ljr6cr/N3I37nTwuQslNvQw4
-         IUm8lINfKxLDCB+n99ClQmQrjlBc3eF0bxe5pfHQ=
+        b=ImyXeCIhxzUKEjemGlRiPqOwF/W59dv9lJXIc+6wa5+9IX1/qy+gaa+L2jbLIXi5x
+         ydxRRxVRbonMN73+WRth9kSkmGvsNZIFq+B3UZELfR7G6x6NYHmBi9YOIf0CTHFIkf
+         PjFg08r5tTVt3M4oVDgeKgJv0jfmKs9/OFlZz01M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 161/287] rpmsg: qcom_smd: Fix refcount leak in qcom_smd_parse_edge
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Wei Wang <weiwan@google.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 169/229] tcp: fix over estimation in sk_forced_mem_schedule()
 Date:   Tue, 23 Aug 2022 10:25:30 +0200
-Message-Id: <20220823080106.132962314@linuxfoundation.org>
+Message-Id: <20220823080059.684450676@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 65382585f067d4256ba087934f30f85c9b6984de ]
+commit c4ee118561a0f74442439b7b5b486db1ac1ddfeb upstream.
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+sk_forced_mem_schedule() has a bug similar to ones fixed
+in commit 7c80b038d23e ("net: fix sk_wmem_schedule() and
+sk_rmem_schedule() errors")
 
-Fixes: 53e2822e56c7 ("rpmsg: Introduce Qualcomm SMD backend")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220511120737.57374-1-linmq006@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+While this bug has little chance to trigger in old kernels,
+we need to fix it before the following patch.
+
+Fixes: d83769a580f1 ("tcp: fix possible deadlock in tcp_send_fin()")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Reviewed-by: Wei Wang <weiwan@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rpmsg/qcom_smd.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/ipv4/tcp_output.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-index f23f10887d93..f4f950c231d6 100644
---- a/drivers/rpmsg/qcom_smd.c
-+++ b/drivers/rpmsg/qcom_smd.c
-@@ -1364,6 +1364,7 @@ static int qcom_smd_parse_edge(struct device *dev,
- 		}
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3086,11 +3086,12 @@ void tcp_xmit_retransmit_queue(struct so
+  */
+ void sk_forced_mem_schedule(struct sock *sk, int size)
+ {
+-	int amt;
++	int delta, amt;
  
- 		edge->ipc_regmap = syscon_node_to_regmap(syscon_np);
-+		of_node_put(syscon_np);
- 		if (IS_ERR(edge->ipc_regmap)) {
- 			ret = PTR_ERR(edge->ipc_regmap);
- 			goto put_node;
--- 
-2.35.1
-
+-	if (size <= sk->sk_forward_alloc)
++	delta = size - sk->sk_forward_alloc;
++	if (delta <= 0)
+ 		return;
+-	amt = sk_mem_pages(size);
++	amt = sk_mem_pages(delta);
+ 	sk->sk_forward_alloc += amt * SK_MEM_QUANTUM;
+ 	sk_memory_allocated_add(sk, amt);
+ 
 
 

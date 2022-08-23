@@ -2,147 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A807259E77F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A69F59E9A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244836AbiHWQgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S233237AbiHWRZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244852AbiHWQfM (ORCPT
+        with ESMTP id S232540AbiHWRWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:35:12 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98575F9BC;
-        Tue, 23 Aug 2022 07:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661266188; x=1692802188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nVvnzp2ylVv0Zwij6Km7MPEjpSV2LnhJfonpoK0PZHE=;
-  b=CKJRpDESGlujIXKgkcvlKAY4YbxGaoDb7q/Ne/Ku9oElrH2HYfft9rjT
-   GinAz2BjMOjQdpbThJx+uXT7MeuJP0SvFAh3W5jpwxJcThHKUfVl0Ql3y
-   untXqmvSNmmfoIRWEyQvYoJCANe159OM5K9U79PFLgNPYjQmSSyfVTVJ/
-   iVLtA9DAo6nbBsvPp+gANPVGtM/ul/vJvt695mUQPC2pN/lrUq+q0NDUb
-   ICmBj4vgrmcBWlOFe2WYLZBeqJDLRqPY2rGJODOmUoOdDzuMKx8pgJ0+c
-   MeUMpS/scGGNL1pYQd+Wu+fFbODtLpTODNtY6FuR+62uDhJT++D+xcj+/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293705486"
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="293705486"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:49:48 -0700
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="638682397"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:49:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oQVDp-002Tzk-1e;
-        Tue, 23 Aug 2022 17:49:41 +0300
-Date:   Tue, 23 Aug 2022 17:49:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Lee Jones <lee@kernel.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        simon.guinot@sequanux.org
-Subject: Re: [PATCH v4 0/5] add support for another simatic board
-Message-ID: <YwTpBRHaihXsd2n4@smile.fi.intel.com>
-References: <20220823102344.17624-1-henning.schild@siemens.com>
+        Tue, 23 Aug 2022 13:22:37 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAFD98C8F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:58:42 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id sd33so6632957ejc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5HbW8uko2vZ7AfwOU8eshl0aSQHKvNNaKtmoLv6rUEM=;
+        b=JVJ/J+80rmibqknLI2dl4D/IfJ9EQwbBZSfvxG712BBjzT3yS+x3AVpptqWtAIaoP5
+         6AoLaaLRByrmJMtY636D5RKtuqEryU2Ox4VkD9HvYVOmuivp45RYryYXmKDqEJApQVWi
+         nDj+k2TQWI9jk0P895iLQrG5xjpJylgYK15ms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5HbW8uko2vZ7AfwOU8eshl0aSQHKvNNaKtmoLv6rUEM=;
+        b=lPvMp9TMnIFrB51zRiktyfXSZBQVKH/oOA0e/SdS17gVeRdxkGPdHBmBfQK1KiUDKQ
+         EmpYAha6YrZmVqzHYB3q/KQ7gr5Zga9QE2kP504g5rKBNidI/KjMjkYWz2+osfYDR7wo
+         nZZJYbi/ZxakQgJvHw6REe0CJH2X+9QCh0mdYsuup8zT5sSb+0jBWDeyjWWsP1fY8W3u
+         f/U+QnCPoY8qoBt5x1uufozjsJNOjFj4dxGP7xWxQYL9HyZ6Y+PBOyvxYHgpa4Kj3pAo
+         0FyITfKkHFJjWOgcqVArwHhkRis2s4tfnKhQ0RoNfQHpFtaFX5yfx2ytRIbw3QqJOQLb
+         dtVw==
+X-Gm-Message-State: ACgBeo3TTAvsf/DbhLiIjvFO1jqJ3WRC5oEGiiThNmxN/zB2IXKQKMaG
+        328yzqErYsiPJW/lSHLaQJsFd85PFhDpTJrEceg=
+X-Google-Smtp-Source: AA6agR6NYtdIj7miEyj/bGL6mK1rAekDsIcC9ESGpcAbw68MqC8vV7qXX9H3RMQ6cKswrRXnMWk0jA==
+X-Received: by 2002:a17:907:2e01:b0:730:9ecc:cd28 with SMTP id ig1-20020a1709072e0100b007309ecccd28mr9543ejc.360.1661266721292;
+        Tue, 23 Aug 2022 07:58:41 -0700 (PDT)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
+        by smtp.gmail.com with ESMTPSA id l5-20020a170906a40500b0073100dfa7b0sm5999ejz.8.2022.08.23.07.58.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 07:58:41 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id h22so17710711ejk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:58:41 -0700 (PDT)
+X-Received: by 2002:a5d:6881:0:b0:225:28cb:332f with SMTP id
+ h1-20020a5d6881000000b0022528cb332fmr13686062wru.405.1661266236928; Tue, 23
+ Aug 2022 07:50:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823102344.17624-1-henning.schild@siemens.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220726173824.1166873-1-dianders@chromium.org>
+ <20220726103631.v2.4.Ie85f68215ada39f502a96dcb8a1f3ad977e3f68a@changeid>
+ <CAMSo37XsawRxTnJriLUAwJAj0+ZzpACtMiR_3V7H1H9WXg3T_Q@mail.gmail.com>
+ <CAD=FV=V5c0bCOCBvdnqVJ6Sa1XKeg+d7kTEL2Okh4GAL66MGiw@mail.gmail.com>
+ <CAMSo37Uve4qrAA81zrO9eOGc4y7vjg-OZ9L7m9xWM7UkQ6PzmQ@mail.gmail.com> <CAMSo37U1uxUFkn4Jda5E+nDiz0wp8_ERbNa9BUgWttZ6dEssAg@mail.gmail.com>
+In-Reply-To: <CAMSo37U1uxUFkn4Jda5E+nDiz0wp8_ERbNa9BUgWttZ6dEssAg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 23 Aug 2022 07:50:23 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WNNAYtdoocp_ShyNBOBmqSSr79=x_2UKq+yfA+HiOo9w@mail.gmail.com>
+Message-ID: <CAD=FV=WNNAYtdoocp_ShyNBOBmqSSr79=x_2UKq+yfA+HiOo9w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] regulator: core: Allow specifying an initial load
+ w/ the bulk API
+To:     Yongqin Liu <yongqin.liu@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <jstultz@google.com>,
+        Alistair Delva <alistair.delva@linaro.org>,
+        Todd Kjos <tkjos@google.com>, Steve Muckle <smuckle@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 12:23:39PM +0200, Henning Schild wrote:
-> changes since v3:
->   - update Kconfig as well
->   - drop chip names from comment in driver header
->   - add manufacturer check for Fintek again, Nuvoton not possible
->   - drop revision printing for Nuvoton
->   - restructure defines again
->   - add new model 427G
-> 
-> changes since v2: (p1 only)
->   - rename macros that change behavior
->   - use chip type not device id in the macros
->   - reorder defines a bit
-> 
-> changes since v1:
->   - remove unused define
->   - fix bug where (base + 2) was used as second data bit
->   - add macros for "inverted" and "single data bit"
+Hi,
 
-For the non-commented patches:
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, Aug 22, 2022 at 11:23 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
+>
+> Hi, Douglas
+>
+> Just an update on the fix you pointed out previously here:
+> > > [1] https://lore.kernel.org/r/20220809142738.1.I91625242f137c707bb345c51c80c5ecee02eeff3@changeid
+>
+> With it I could boot the hikey960 build to the home screen if it does
+> not use the GKI kernel.
+> but the problem will be reproduced if it uses the GKI kernel.
+>
+> And if this change is reverted, then it could boot with the GKI kernel as well.
+>
+> I am not sure what's the reason there, but there seems to be some
+> difference with the fix above and the workaround of revert.
+> Not sure if you have any idea about that.
+>
+> Regarding the GKI kernel(Android Generic Kernel Image)[2], it's built
+> from the android-mainline tree(f51334eac4de) without any workaround.
+> (Neither the revert, nor the fix applied), and the regulator modules
+> used for the hikey960 build are hi6421v530-regulator.ko and
+> hi655x-regulator.ko
+>
+> I am still not sure if it would work with the GKI kernel that has the
+> fix that you pointed out in. the case that both the GKI kernel and
+> vendor tree have the fix.
+> Will update here when I have some results.
+>
+> [2]: https://source.android.com/docs/core/architecture/kernel/generic-kernel-image?hl=en
 
-> This series first enables a SuperIO GPIO driver to support a chip from
-> the vendor Nuvoton, the driver is for Fintek devices but those just are
-> very similar. And in watchdog and hwmon subsystems these SuperIO drivers
-> also share code and are sometimes called a family.
-> 
-> In another step the individual banks receive a label to tell them apart,
-> a step which potentially changes an interface to legacy users that might
-> rely on all banks having the same label, or an exact label. But since a
-> later patch wants to use GPIO_LOOKUP unique labels are needed and i
-> decided to assign them for all supported chips.
-> 
-> In a following patch the Simatic GPIO LED driver is extended to provide
-> LEDs in case that SuperIO GPIO driver can be loaded.
-> 
-> Last but not least the watchdog module of that same SuperIO gets loaded
-> on a best effort basis.
-> 
-> Note similar patches have appreared before as
->   "[PATCH v3 0/1] add device driver for Nuvoton SIO gpio function"
-> The main difference here is that i added chip support to an existing
-> driver instead of creating a new one. And that i actually propose all
-> patches and do not just have the LED patch for Simatic as an example.
+That's not too surprising. The broken patch is in the core kernel so
+you need the fix in the core kernel. I think that means you'll have to
+wait until `android-mainline` gets the fix. I don't work on Android,
+so if there's some other route to get an expedited fix into
+android-mainline I'm not aware of it.
 
-> Also note that the patches are based on
->   "[PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper"
+-Doug
 
-No need, it's upstream (v6.0-rc1 onwards).
-
-> Henning Schild (5):
->   gpio-f7188x: Add GPIO support for Nuvoton NCT6116
->   gpio-f7188x: use unique labels for banks/chips
->   leds: simatic-ipc-leds-gpio: add new model 227G
->   platform/x86: simatic-ipc: enable watchdog for 227G
->   platform/x86: simatic-ipc: add new model 427G
-> 
->  drivers/gpio/Kconfig                          |   3 +-
->  drivers/gpio/gpio-f7188x.c                    | 229 +++++++++++-------
->  drivers/leds/simple/simatic-ipc-leds-gpio.c   |  42 +++-
->  drivers/platform/x86/simatic-ipc.c            |  10 +-
->  .../platform_data/x86/simatic-ipc-base.h      |   1 +
->  include/linux/platform_data/x86/simatic-ipc.h |   2 +
->  6 files changed, 194 insertions(+), 93 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+-Doug

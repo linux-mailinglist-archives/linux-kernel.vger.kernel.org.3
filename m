@@ -2,344 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B8959D069
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 07:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9215359D06E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 07:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbiHWFWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 01:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S239980AbiHWFYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 01:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiHWFWf (ORCPT
+        with ESMTP id S231547AbiHWFYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 01:22:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C24520A7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661232153;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dkIc8ViuUrab+AWM98YBTkyQZVuljcSqeeePZihec1I=;
-        b=CeZXvtVS4p+CBjfR6VDnwRWrpinN5Jc98E8Pms2rBjaETnyquKXuXpzgNONNxxSaB5yNvM
-        Y+VY/aID2AUZ5xvq2GtqvuVISBnUfiEdWtZUnmfNT9qDvvReCT5m0fasQCO1RXbaA4Lbov
-        3IVdWxVm+A/zEgzt2wg3N0K1HPwJHnI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-531-a2IubJ-xMtOP_V01WhvxAQ-1; Tue, 23 Aug 2022 01:22:30 -0400
-X-MC-Unique: a2IubJ-xMtOP_V01WhvxAQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B7E6101A596;
-        Tue, 23 Aug 2022 05:22:29 +0000 (UTC)
-Received: from [10.64.54.16] (vpn2-54-16.bne.redhat.com [10.64.54.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1DB621415125;
-        Tue, 23 Aug 2022 05:22:19 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
-        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com> <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
-Date:   Tue, 23 Aug 2022 15:22:17 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
-MIME-Version: 1.0
-In-Reply-To: <87fshovtu0.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 23 Aug 2022 01:24:21 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120087.outbound.protection.outlook.com [40.107.12.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167DB5C977
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:24:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k8ihUL6DCUUKh+N1OEkp8fcPnZg+HfZph2t4ZzcYtZHc+rmA2MJOzFQZQQT3m4RhAFn6jvx10A+C6Fm1ZPNKtr4WclmiUzkPTpZiwklFwpRZthnmvG58pMvY0qLteN8VIJWtgqYVIh/BVm3Cg8JyNXYPODEoMrr2jekWbcdyNzHUXdMwML7iW+H9q4Sz7FdVLeXxU2OI7D97mSYNzAazUgX7FJq++OV3TLCKk0o7TCiZ3d91s5KKgBcQNWUoQf3hQ1wOJucQEsiPH5ecBgufP1RlVxwcIyNpsOIniuPu8aZi3wtmqIgEPndbg15A4C7rTUkHmmIKjHb1dZLx1Hy9ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dZSKUUGc0047HsYG64zP81otPpYpCP2QWoGuX21dBWU=;
+ b=XOAtGr6L5LlbkXsv6VTNCC0ddDQWzR2EOn35J4pEEWIDjWMb/2WDrU52j07As2wqxzKJRAjSF3GHmZYqUbfdjs4kJkQ8264w7a8jQ26x1CHmzoYXrPhc4vfUFNySnp1QoXvB9FuFeGlBnPfCwIv07Nyk1P8mvX2PhJC6hKr9nIeCtZCtmQ+m1as6nTEvKX7iuSbYdfN51aRWmFldeeEktOvdnxVsSRBqNIWGOnlgJZWKRsULAii3A8/yWKNZZqr9XXu87wbEGu9dfgn6O7G4JVqVMjLV8WRPKYR14SlG5UGrW35/XOdsFOaEuCvODUM2ZW9RYBnU+VpZ6vlHkmRHsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dZSKUUGc0047HsYG64zP81otPpYpCP2QWoGuX21dBWU=;
+ b=th7QPG2Xoh+dPs9SWaDYbCBEO2LJw4xkD4yzlG+Ui1CdF4fUghcbcnp3wG+okCvvcoS7uxeq2Xb9pGoEEs4z8vEuM9x1W3AUwj+OVclKFBzAf4xfzw23GNxrYZYXO14drKjIij7psk8lHjVvnCTWTSz2OTonWeMHZs3QeE8zgw+d+8aUKyS3Vzt/WWY7yKz2keFTl0RRnWGaBIbqXYpBScNikxiuwyIHIE/6f2hJv92QFTi811nUrkxMtciXW9/+Pd/uuE9Vo8afJm9OVyG3a+xUx23iY/ee6zeFTkvozqZDAJxvb95QRVM7DrhzzIqwdCSploygkOxq8+xEVIkCLw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB4163.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:25::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Tue, 23 Aug
+ 2022 05:24:14 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::888e:a92e:a4ee:ce9e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::888e:a92e:a4ee:ce9e%5]) with mapi id 15.20.5546.024; Tue, 23 Aug 2022
+ 05:24:14 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Baoquan He <bhe@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 01/11] mm/ioremap: change the return value of
+ io[re|un]map_allowed and rename
+Thread-Topic: [PATCH v2 01/11] mm/ioremap: change the return value of
+ io[re|un]map_allowed and rename
+Thread-Index: AQHYtCxluEXLt15y9kSkQpSsai/RVK26d60AgAEsPgCAAFTlgA==
+Date:   Tue, 23 Aug 2022 05:24:14 +0000
+Message-ID: <a4a9ba6f-9891-cc4c-e512-d221141d998f@csgroup.eu>
+References: <20220820003125.353570-1-bhe@redhat.com>
+ <20220820003125.353570-2-bhe@redhat.com>
+ <d5272f42-f3e3-b2a8-428e-bd7815cf7518@csgroup.eu>
+ <YwQdRg/IS0+3tbNu@MiWiFi-R3L-srv>
+In-Reply-To: <YwQdRg/IS0+3tbNu@MiWiFi-R3L-srv>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6a756073-6912-4e1e-b1db-08da84c7b826
+x-ms-traffictypediagnostic: MR1P264MB4163:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bJXdA98c92gHcWJQFTxroxClNRpWtCX/gdPlx9kGjVnb+PPXEwP/CkxlzzbhlmZTKFRvdlCb1GHdXspeBMT7qmOW7KxmYn1i5pr0mB9a3YL5fjvw/jFNMqhZAXpwie1ys16e5LLzDoWWo4ajKnSIEyMMGCZthT8vzU0EKkzjscEXxAs6YMkyL9xXVWKjkV9t0p/jGy7rDI+qSJIJby9x+eJ5Mt+E0tWcdWoHzf6ieVFCxQF6who2PQxbuEqkgWCq0sG/ClvqvU/byHb8L+rDLBwoFEepe1/3POzAn16iSVJ2SMgBgsrIhRNfGG6NdKMr+7owl3hAXHItAQ9jfgQ4fGH28oQdp8jxgB859QvvuT/O49532nZ/tCPwZPckDEaj+OMaDbtlPAJyF0WC+0530b5hdJM7RI31t8VnPrEHQLfERpTeF2JyIIp9zNh/kkLRVq9Erj2ZfXH/psiMo25w/NN2azLizkaUHOQxNJP/GtBHLx+aBv5LtpvIZ7sQzoq1XEzuEWPSXn9KyznzIkbnnW521CCwE2yV4KDIrgKSN87qT163Tu+957lFpyOK7MKimWRfyizUJCR7rlTs++bedQicBS7LOtz3GmqhC5etVd+fanfjl6+6e7UrOvO9yn0XHk2EBPR8Cdld79EuaobwdGTvHEDfqFFeB6erUY46OnRMULxmkTsci4YXQ1CCH86lBvQg7bQ0m8vo5K1YkIxi0DtBJ2GvtFgZZnxDnZkg5A9EZl3yqxQ8DqcGi0dI8dw6UiKb2D1IbOFkCbBU0zSriye2qMfItLD+vI7DIDnQQmoOy6kWT0Kej8VtBAFTSxUW73/TE9CwGE7ikiTyTxQ905Wf0GtLgtxKxAFPf2ez5qA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(366004)(136003)(39850400004)(83380400001)(38070700005)(5660300002)(54906003)(2616005)(66574015)(186003)(4326008)(6916009)(66476007)(66446008)(316002)(66556008)(8676002)(66946007)(8936002)(76116006)(91956017)(36756003)(64756008)(44832011)(31686004)(41300700001)(26005)(6506007)(478600001)(71200400001)(31696002)(6486002)(966005)(2906002)(86362001)(38100700002)(6512007)(122000001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UUFyZC96dVRQYTUrTXZaSXh3U1QzYnA5YW4wYXBlMDNYdm9nS0w0R3k4bTND?=
+ =?utf-8?B?UnFvOERjWU9MRDFVUXpqdUxWcThTaUUxNFppbUlTUnNhNWFxYjkzZGNSb1g2?=
+ =?utf-8?B?NlJ2dExtWDNwQ1hPUm14a2pzalVZZFNaYmZiWTZoR05CbGRQUi9zK2E0WERJ?=
+ =?utf-8?B?YnpkUW9WR09mWFpsY05jakZvNnhtZlYwWXZmLy9jd1BnQUlCV1czMGtERm85?=
+ =?utf-8?B?enRtRXJaUTZGVDRMU2JJamlzQ2FOZU5KVXpFWk0ycDFHTmI0dTVyM09VQ1hE?=
+ =?utf-8?B?MDFLUkNvQkVZMll3VVdqY1NidHVaMXMyUWxkblZ2Zyt1N0wvamlyTGRkVEYz?=
+ =?utf-8?B?V1ZNQkt4YWtDNUdrVWdqNWIzNHd6NXJxMjlzYi9HSFhXckVDZDI2TE9ncnVq?=
+ =?utf-8?B?Nm9LRUw1WUR0Q2ljL1hlYVUvOFVwbTg0UDMvYWJobCtteXYrdm9jOXh5NjNR?=
+ =?utf-8?B?dEJtZC9DbEYyZHdWcklNc2wvNGs3U09BUWlPZE1BT3MwQmpqK0ZUNXdOejJz?=
+ =?utf-8?B?NWtsSU5xbTNLVHlYTW9lL0Y1RTZxRTVJVXltQWZ6cmF1UlhkZmVIRkw0a0Jz?=
+ =?utf-8?B?eVgrYmFad0ZvVDVzSjNBak5WWDRGWGtvMzREWFJZODJFUnJJWGg3b1EvNitn?=
+ =?utf-8?B?NmJycjd3dzIwSzJzcFVnaWNDeE9KZXNQQU1RVm9tZXQvamJ2UVlxSmlzaEdN?=
+ =?utf-8?B?aHhjQVpvZmY1YUQvTHFBWGhHaDlHOU1KWVpSeTFjak5tcXNRdjN0SzY3WWUx?=
+ =?utf-8?B?RkJ2NnNqNE0xclRGVW5kT3hXUkk5YnRFSGdwSWliaFkza0I5OVNlNWx5YTFQ?=
+ =?utf-8?B?NG14bVJnYVMwc2pxdk11aUFxd2RMUnBOV2dudFlZWjRMQVpGVy9Nc3JnbndV?=
+ =?utf-8?B?b3Q4aVpLZmpPWXA4YkVmSkpCQ0hucDdZbmk0NEZVaUhvVXJXVG5PQXQzVmlp?=
+ =?utf-8?B?djBob2ZjanFjdjVxYTRlZzl6RE9UdTIycStQSG5nRGR5TWNwNEdybm0vSERr?=
+ =?utf-8?B?NWUycldFa0gvbXhlU2RuWXF3T2c5bG83QjBKQkg0cDZHUHNCQmhWYXBjVXFv?=
+ =?utf-8?B?bXM3ajlVSTk3TlVNeTdxcGFudWhWS0RrYStSUjdnN1dLQzFjRENQd0hoWTdZ?=
+ =?utf-8?B?YXk0WS9CMVRiUUVDNy8xVFZwUjNlWWJ6WUZGekFQQXlIZk4xbnBQR3Q2ZjZ5?=
+ =?utf-8?B?Y3BEUTg2cEY1TklXVFJ6Z0xlS3FrZHN4cndyaW5kbHkvZWxmN3FyMWJ0N0Ja?=
+ =?utf-8?B?OFdZdEh0QXRJamRkNmlpazYyK28zbHlURWpIZWo0cWRaRG5EdVRVZ2VtWmpt?=
+ =?utf-8?B?UmpQck83cjlDZ3BMSWJSd1hPeDNjRmdKRnhKSlo2bmxRU05jaEZmWGpQSWxT?=
+ =?utf-8?B?aTJiMGJjTWFwQzZ4dWt6dW1EK3dkalFNNWVrekFiNDFDNHM4bmpFTTlyalJ2?=
+ =?utf-8?B?WFpsaWZoWWpQT1hPKzRWMnZYT2JINi9tRlhZQWVUTVR4WXpXUytQcVhXTEZX?=
+ =?utf-8?B?ZnpxejE4aStqOGs2aXdHWkhhK3JoekhXZVExRG5VQk5MbHk0QVJHZExoOFU5?=
+ =?utf-8?B?b091N0VlMmdQdFpoS3BXNSs3VXdQQ1VnaE5SOWpldStjZGV6bW9lZlB1UHJ6?=
+ =?utf-8?B?VHlQSTc5VkVCVEQxZlVZTklSRE9DY1F3ZWtuZ1ExRlRuNlQzVkVSOXdjWity?=
+ =?utf-8?B?YzFxYitMWFRUL09MY2FFRGxQOURhT0VyVngwd01Pd2pIMC9YNWZXTW1XWHlP?=
+ =?utf-8?B?RGQ4a1l1V0pYbVIyYW11SmhQZTM4MzZ6Rkd5bzVLRllwdFhRc0FkN0hSMnhJ?=
+ =?utf-8?B?cVB1U3VLbGZMVDUrOU5pMVNta2ZzRE5RclU1bmMzQ3RVL0pJeTE0NitIUlI2?=
+ =?utf-8?B?VTBmaTY0SWdVbndWVURValdrVzNoMEVTc1FtbHZLTHZ2SHRDQmZ2OENxZGRI?=
+ =?utf-8?B?cFNDU2pvdUR3M1pnZjEvTnU1Z0lmcExJWGVnbXR5WUhGclVFNUkyZXYvUlN5?=
+ =?utf-8?B?emQyZEhxbUFybmJZdXdmUnJmZjRYd1k1dk01V1JBVCtlRHpMcmY4eW9hdVRP?=
+ =?utf-8?B?Ny9zeFU5eVFZdElhUHdNbUR4K214REZrN21waDZXNkdTTGl1OThSVkNyZVMv?=
+ =?utf-8?B?Z0xEcEVObDFzUHFpekFHZmJmMkFPN3ZJTzd1UTRMOG94YUgvNGxIdE9peW1U?=
+ =?utf-8?B?L1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6FB29EECF5978E44AB3EFE98C56B1314@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a756073-6912-4e1e-b1db-08da84c7b826
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2022 05:24:14.8623
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jX7WS2Md1nGpS+MJ5ZFCxci1Uu5WCGPw+kR59A4+7ONlkMh1LRWGbOxkZ/vwKXqbLDZ0mw3z+uqkK+hjK2VeBWio6WYGAbBh1Vx6E8ib6wk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB4163
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
-
-On 8/23/22 7:42 AM, Marc Zyngier wrote:
-> On Mon, 22 Aug 2022 02:58:20 +0100,
-> Gavin Shan <gshan@redhat.com> wrote:
->> On 8/19/22 6:00 PM, Marc Zyngier wrote:
->>> On Fri, 19 Aug 2022 01:55:57 +0100,
->>> Gavin Shan <gshan@redhat.com> wrote:
->>>>
->>>> The ring-based dirty memory tracking has been available and enabled
->>>> on x86 for a while. The feature is beneficial when the number of
->>>> dirty pages is small in a checkpointing system or live migration
->>>> scenario. More details can be found from fb04a1eddb1a ("KVM: X86:
->>>> Implement ring-based dirty memory tracking").
->>>>
->>>> This enables the ring-based dirty memory tracking on ARM64. It's
->>>> notable that no extra reserved ring entries are needed on ARM64
->>>> because the huge pages are always split into base pages when page
->>>> dirty tracking is enabled.
->>>
->>> Can you please elaborate on this? Adding a per-CPU ring of course
->>> results in extra memory allocation, so there must be a subtle
->>> x86-specific detail that I'm not aware of...
->>>
->>
->> Sure. I guess it's helpful to explain how it works in next revision.
->> Something like below:
->>
->> This enables the ring-based dirty memory tracking on ARM64. The feature
->> is enabled by CONFIG_HAVE_KVM_DIRTY_RING, detected and enabled by
->> CONFIG_HAVE_KVM_DIRTY_RING. A ring buffer is created on every vcpu and
->> each entry is described by 'struct kvm_dirty_gfn'. The ring buffer is
->> pushed by host when page becomes dirty and pulled by userspace. A vcpu
->> exit is forced when the ring buffer becomes full. The ring buffers on
->> all vcpus can be reset by ioctl command KVM_RESET_DIRTY_RINGS.
->>
->> Yes, I think so. Adding a per-CPU ring results in extra memory allocation.
->> However, it's avoiding synchronization among multiple vcpus when dirty
->> pages happen on multiple vcpus. More discussion can be found from [1]
-> 
-> Oh, I totally buy the relaxation of the synchronisation (though I
-> doubt this will have any visible effect until we have something like
-> Oliver's patches to allow parallel faulting).
-> 
-> But it is the "no extra reserved ring entries are needed on ARM64"
-> argument that I don't get yet.
-> 
-
-Ok. The extra reserved ring entries are x86 specific. When x86's PML
-(Page Modification Logging) hardware capability is enabled, the vcpu
-exits due to full PML buffer, which is 512 entries. All the information
-in PML buffer is pushed to the dirty ring buffer in one shoot. To
-avoid overrunning the dirty ring buffer, there are 512 entries are
-reserved.
-
-   === include/linux/kvm_host.h
-
-   #define KVM_DIRTY_RING_RSVD_ENTRIES    64     // fixed and reserved ring entries
-
-   === virt/kvm/dirty_ring.c
-
-   int __weak kvm_cpu_dirty_log_size(void)
-   {
-         return 0;
-   }
-
-   u32 kvm_dirty_ring_get_rsvd_entries(void)
-   {
-         return KVM_DIRTY_RING_RSVD_ENTRIES + kvm_cpu_dirty_log_size();
-   }
-
-   === arch/x86/kvm/mmu/mmu.c
-
-   int kvm_cpu_dirty_log_size(void)
-   {
-         return kvm_x86_ops.cpu_dirty_log_size;    // Set to 512 when PML is enabled
-   }
-
-
-kvm_cpu_dirty_log_size() isn't be overrided by ARM64, meaning it returns
-zero on ARM64. On x86, it returns 512 when PML is enabled.
-
->>
->> [1] https://patchwork.kernel.org/project/kvm/patch/BL2PR08MB4812F929A2760BC40EA757CF0630@BL2PR08MB481.namprd08.prod.outlook.com/
->> (comment#8 from Radim Krčmář on May 3, 2016, 2:11 p.m. UTC)
->>
->>
->>>>
->>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>>> ---
->>>>    Documentation/virt/kvm/api.rst    | 2 +-
->>>>    arch/arm64/include/uapi/asm/kvm.h | 1 +
->>>>    arch/arm64/kvm/Kconfig            | 1 +
->>>>    arch/arm64/kvm/arm.c              | 8 ++++++++
->>>>    4 files changed, 11 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->>>> index abd7c32126ce..19fa1ac017ed 100644
->>>> --- a/Documentation/virt/kvm/api.rst
->>>> +++ b/Documentation/virt/kvm/api.rst
->>>> @@ -8022,7 +8022,7 @@ regardless of what has actually been exposed through the CPUID leaf.
->>>>    8.29 KVM_CAP_DIRTY_LOG_RING
->>>>    ---------------------------
->>>>    -:Architectures: x86
->>>> +:Architectures: x86, arm64
->>>>    :Parameters: args[0] - size of the dirty log ring
->>>>      KVM is capable of tracking dirty memory using ring buffers that
->>>> are
->>>> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
->>>> index 3bb134355874..7e04b0b8d2b2 100644
->>>> --- a/arch/arm64/include/uapi/asm/kvm.h
->>>> +++ b/arch/arm64/include/uapi/asm/kvm.h
->>>> @@ -43,6 +43,7 @@
->>>>    #define __KVM_HAVE_VCPU_EVENTS
->>>>      #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
->>>> +#define KVM_DIRTY_LOG_PAGE_OFFSET 64
->>>
->>> For context, the documentation says:
->>>
->>> <quote>
->>> - if KVM_CAP_DIRTY_LOG_RING is available, a number of pages at
->>>     KVM_DIRTY_LOG_PAGE_OFFSET * PAGE_SIZE. [...]
->>> </quote>
->>>
->>> What is the reason for picking this particular value?
->>>
->>
->> It's inherited from x86. I don't think it has to be this particular
->> value.  The value is used to distinguish the region's owners like
->> kvm_run, KVM_PIO_PAGE_OFFSET, KVM_COALESCED_MMIO_PAGE_OFFSET, and
->> KVM_DIRTY_LOG_PAGE_OFFSET.
->>
->> How about to have 2 for KVM_DIRTY_LOG_PAGE_OFFSET in next revision?
->> The virtual area is cheap, I guess it's also nice to use x86's
->> pattern to have 64 for KVM_DIRTY_LOG_PAGE_OFFSET.
->>
->>      #define KVM_COALESCED_MMIO_PAGE_OFFSET   1
->>      #define KVM_DIRTY_LOG_PAGE_OFFSET        2
-> 
-> Given that this is just an offset in the vcpu "file", I don't think it
-> matters that much. 64 definitely allows for some struct vcpu growth,
-> and it doesn't hurt to be compatible with x86 (for once...).
-> 
-
-Sure, thanks. I think it'd better to have same pattern as x86 either.
-
->>
->>>>      #define KVM_REG_SIZE(id)
->>>> \
->>>>    	(1U << (((id) & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT))
->>>> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
->>>> index 815cc118c675..0309b2d0f2da 100644
->>>> --- a/arch/arm64/kvm/Kconfig
->>>> +++ b/arch/arm64/kvm/Kconfig
->>>> @@ -32,6 +32,7 @@ menuconfig KVM
->>>>    	select KVM_VFIO
->>>>    	select HAVE_KVM_EVENTFD
->>>>    	select HAVE_KVM_IRQFD
->>>> +	select HAVE_KVM_DIRTY_RING
->>>>    	select HAVE_KVM_MSI
->>>>    	select HAVE_KVM_IRQCHIP
->>>>    	select HAVE_KVM_IRQ_ROUTING
->>>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->>>> index 986cee6fbc7f..3de6b9b39db7 100644
->>>> --- a/arch/arm64/kvm/arm.c
->>>> +++ b/arch/arm64/kvm/arm.c
->>>> @@ -866,6 +866,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->>>>    		if (!ret)
->>>>    			ret = 1;
->>>>    +		/* Force vcpu exit if its dirty ring is soft-full */
->>>> +		if (unlikely(vcpu->kvm->dirty_ring_size &&
->>>> +			     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
->>>> +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
->>>> +			trace_kvm_dirty_ring_exit(vcpu);
->>>> +			ret = 0;
->>>> +		}
->>>> +
->>>
->>> Why can't this be moved to kvm_vcpu_exit_request() instead? I would
->>> also very much like the check to be made a common helper with x86.
->>>
->>> A seemingly approach would be to make this a request on dirty log
->>> insertion, and avoid the whole "check the log size" on every run,
->>> which adds pointless overhead to unsuspecting users (aka everyone).
->>>
->>
->> I though of having the check in kvm_vcpu_exit_request(). The various
->> exit reasons are prioritized. x86 gives KVM_EXIT_DIRTY_RING_FULL the
->> highest priority and ARM64 is just to follow. I don't think it really
->> matters. I will improve it accordingly in next revision:
->>
->> - Change kvm_dirty_ring_soft_full() to something as below in dirty_ring.c
->>
->>    bool kvm_dirty_ring_soft_full(struct kvm_vcpu *vcpu)
->>    {
->>         struct kvm *kvm = vcpu->vcpu;
->>         struct kvm_dirty_ring *ring = &vcpu->dirty_ring;
->>
->>         if (unlikely(kvm->dirty_ring_size &&
->>                      kvm_dirty_ring_used(ring) >= ring->soft_limit)) {
->>             vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
->>             trace_kvm_dirty_ring_exit(vcpu);
->>             return true;
->>         }
->>
->>         return false;
->>    }
->>
->> - Use the modified kvm_dirty_ring_soft_full() in kvm_vcpu_exit_request().
->>
->> Userspace needs KVM_EXIT_DIRTY_RING_FULL to collect the dirty log in time.
->> Otherwise, the dirty log in the ring buffer will be overwritten. I'm not
->> sure if anything else I missed?
-> 
-> I'm fine with the above, but what I really wanted is a request from
-> the dirty-ring insertion, instead of a check in kvm_vpcu_exit_request.
-> Something like this (which obviously doesn't compile, but you'll get
-> the idea):
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 986cee6fbc7f..0b41feb6fb7d 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -747,6 +747,12 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
->   
->   		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
->   			return kvm_vcpu_suspend(vcpu);
-> +
-> +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu)) {
-> +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
-> +			trace_kvm_dirty_ring_exit(vcpu);
-> +			return 0;
-> +		}
->   	}
->   
->   	return 1;
-> diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-> index f4c2a6eb1666..08b2f01164fa 100644
-> --- a/virt/kvm/dirty_ring.c
-> +++ b/virt/kvm/dirty_ring.c
-> @@ -149,6 +149,7 @@ int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
->   
->   void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
->   {
-> +	struct kvm_vcpu *vcpu = container_of(ring, struct kvm_vcpu, dirty_ring);
->   	struct kvm_dirty_gfn *entry;
->   
->   	/* It should never get full */
-> @@ -166,6 +167,9 @@ void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
->   	kvm_dirty_gfn_set_dirtied(entry);
->   	ring->dirty_index++;
->   	trace_kvm_dirty_ring_push(ring, slot, offset);
-> +
-> +	if (kvm_dirty_ring_soft_full(vcpu))
-> +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
->   }
->   
->   struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring, u32 offset)
-> 
-
-Ok, thanks for the details, Marc. I will adopt your code in next revision :)
-
-Thanks,
-Gavin
-
+DQoNCkxlIDIzLzA4LzIwMjIgw6AgMDI6MjAsIEJhb3F1YW4gSGUgYSDDqWNyaXTCoDoNCj4gT24g
+MDgvMjIvMjIgYXQgMDY6MjVhbSwgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+DQo+Pg0KPj4g
+TGUgMjAvMDgvMjAyMiDDoCAwMjozMSwgQmFvcXVhbiBIZSBhIMOpY3JpdMKgOg0KPj4+IEluIHNv
+bWUgYXJjaGl0ZWN0dXJlcywgdGhlcmUgYXJlIEFSQ0ggc3BlY2lmaWNpIGlvIGFkZHJlc3MgbWFw
+cGluZw0KPj4+IGhhbmRsaW5nIHdoZW4gY2FsbGluZyBpb3JlbWFwKCkgb3IgaW9yZW1hcF9wcm90
+KCksIGUuZywgYXJjLCBpYTY0LA0KPj4+IG9wZW5yaXNjLCBzMzkwLCBzaC4NCj4+Pg0KPj4+IElu
+IG9kZXIgdG8gY29udmVydCB0aGVtIHRvIHRha2UgR0VORVJJQ19JT1JFTUFQIG1ldGhvZCwgd2Ug
+bmVlZCBjaGFuZ2UNCj4+PiB0aGUgcmV0dXJuIHZhbHVlIG9mIGhvb2sgaW9yZW1hcF9hbGxvd2Vk
+KCkgYW5kIGlvdW5tYXBfYWxsb3dlZCgpLg0KPj4+IE1lYW53aGlsZSwgcmVuYW1lIHRoZW0gdG8g
+YXJjaF9pb3JlbWFwKCkgYW5kIGFyY2hfaW91bm1hcCgpIHRvIHJlZmxlY3QNCj4+PiB0aGVpciBj
+dXJyZW50IGJlaGF2aW91ci4NCj4gDQo+IFRoYW5rcyBmb3IgcmV2aWV3aW5nLg0KPiANCj4+DQo+
+PiBQbGVhc2UgZG9uJ3QganVzdCBzYXkgeW91IG5lZWQgdG8gY2hhbmdlIHRoZSByZXR1cm4gdmFs
+dWUuIEV4cGxhaW4gd2h5Lg0KPiANCj4gVGhlIDFzdCBwYXJhZ3JhcGggYW5kIHRoZSBzZW50ZW5j
+ZSAnSW4gb2RlciB0byBjb252ZXJ0IHRoZW0gdG8gdGFrZQ0KPiBHRU5FUklDX0lPUkVNQVAgbWV0
+aG9kJyB0ZWxsIHRoZSByZWFzb24sIG5vPw0KDQpXaGF0IEkgd291bGQgbGlrZSB0byByZWFkIGlz
+IF93aHlfIHlvdSBuZWVkIHRvIGNoYW5nZSB0aGUgcmV0dXJuIHZhbHVlIA0KaW4gb3JkZXIgdG8g
+Y29udmVydCB0byBHRU5FUklDX0lPUkVNQVANCg0KPiANCj4gDQo+Pg0KPj4gQW5kIHdoeSBkb2Vz
+IGl0IG5lZWQgYSBuYW1lIGNoYW5nZSA/IFRoZSBuZXcgbmFtZSBzdWdnZXN0cyB0aGF0IHdoYXQg
+d2FzDQo+PiBzaW1wbHkgYSBjaGVjayBmdW5jdGlvbiBiZWNvbWVzIG5vdyBhIGZ1bmN0aW9uIGRv
+aW5nIHRoZSBqb2IuIElzIHRoYXQNCj4+IHRoZSBpbnRlbnRpb24gPw0KPiANCj4gWWVzLCBpdCdz
+IG5vdCBhIHNpbXBsZSBjaGVja2luZyBhbnkgbW9yZS4gSXQgY291bGQgZG8gaW8gYWRkcmVzcyBt
+YXBwaW5nDQo+IGluc2lkZSBhcmNoX2lvcmVtYXAoKSwgYW5kIGNvdWxkIG1vZGlmeSB0aGUgcGFz
+c2VkIGluICdwaHlzX2FkZHInIGFuZA0KPiAncHJvdCcgaW4gcGF0Y2ggMi4gVGhlIGlvcmVtYXBf
+YWxsb3dlZCgpIGlzbid0IGFwcHJvcHJpYXRlIHRvIHJlZmxlY3QNCj4gdGhvc2UuDQoNCkZhaXIg
+ZW5vdWdoLCB0aGVuIGFsbCB0aGlzIG5lZWRzIHRvIGJlIGV4cGxhaW5lZCBpbiB0aGUgY29tbWl0
+IG1lc3NhZ2UuDQoNCj4gDQo+Pg0KPj4NCj4+Pg0KPj4+ID09PQ0KPj4+ICAgIGFyY2hfaW9yZW1h
+cCgpIHJldHVybiBhIGJvb2wsDQo+Pg0KPj4gSXQgaXMgbm90IGEgYm9vbC4gQSBib29sIGlzIGVp
+dGhlciB0cnVlIG9yIGZhbHNlLg0KPiANCj4gVGhhbmtzLCBJIGZvcmdvdCB0byB1cGRhdGUgdGhp
+cyBhY2NvcmRpbmdseS4NCj4gDQo+Pg0KPj4+ICAgICAgLSBJU19FUlIgbWVhbnMgcmV0dXJuIGFu
+IGVycm9yDQo+Pj4gICAgICAtIE5VTEwgbWVhbnMgY29udGludWUgdG8gcmVtYXANCj4+PiAgICAg
+IC0gYSBub24tTlVMTCwgbm9uLUlTX0VSUiBwb2ludGVyIGlzIHJldHVybmVkIGRpcmVjdGx5DQo+
+Pj4gICAgYXJjaF9pb3VubWFwKCkgcmV0dXJuIGEgYm9vbCwNCj4+DQo+PiBTYW1lIGhlcmUsIG5v
+dCBhIGJvb2wgZWl0aGVyLg0KPiANCj4gQW5kIHRoaXMgcGxhY2UuDQo+Pg0KPj4+ICAgICAgLSAw
+IG1lYW5zIGNvbnRpbnVlIHRvIHZ1bm1hcA0KPj4+ICAgICAgLSBlcnJvciBjb2RlIG1lYW5zIHNr
+aXAgdnVubWFwIGFuZCByZXR1cm4gZGlyZWN0bHkNCj4+Pg0KPj4+IFRoaXMgaXMgdGFrZW4gZnJv
+bSBLZWZlbmcncyBiZWxvdyBvbGQgcGF0Y2guIENocmlzdG9waCBzdWdnZXN0ZWQgdGhlDQo+Pj4g
+cmV0dXJuIHZhbHVlIGJlY2F1c2UgaGUgZm9yZXNhdyB0aGUgZG9hYmxpdHkgb2YgY29udmVydGlu
+ZyB0byB0YWtlDQo+Pj4gR0VORVJJQ19JT1JFTUFQIG9uIG1vcmUgYXJjaGl0ZWN0dXJlcy4NCj4+
+PiAgICAtIFtQQVRDSCB2MyA0LzZdIG1tOiBpb3JlbWFwOiBBZGQgYXJjaF9pb3JlbWFwL2lvdW5t
+YXAoKQ0KPj4+ICAgIC0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjIwNTE5MDgyNTUy
+LjExNzczNi01LXdhbmdrZWZlbmcud2FuZ0BodWF3ZWkuY29tL1QvI3UNCj4+Pg0KPj4+IFdoaWxl
+IGF0IGl0LCB0aGUgaW52b2NhdGlvbiBvZiBhcmNoX2lvcmVtYXAoKSBuZWVkIGJlIG1vdmVkIHRv
+IHRoZQ0KPj4+IGJlZ2lubmluZyBvZiBpb3JlbWFwX3Byb3QoKSBiZWNhdXNlIGFyY2hpdGVjdHVy
+ZXMgbGlrZSBzaCwgb3BlbnJpc2MsDQo+Pj4gaWE2NCwgbmVlZCBkbyB0aGUgQVJDSCBzcGVjaWZp
+YyBpbyBhZGRyZXNzIG1hcHBpbmcgb24gdGhlIG9yaWdpbmFsDQo+Pj4gcGh5c2ljYWwgYWRkcmVz
+cy4gQW5kIGluIHRoZSBsYXRlciBwYXRjaCwgdGhlIGFkZHJlc3MgZml4IHVwIGNvZGUNCj4+PiBp
+biBhcmNoX2lvcmVtYXAoKSBhbHNvIG5lZWQgYmUgZG9uZSBvbiB0aGUgb3JpZ2luYWwgYWRkcmUg
+b24gc29tZQ0KPj4+IGFyY2hpdGVjdHVyZXMuDQo+Pj4NCj4+PiBUaGlzIGlzIHByZXBhcmF0aW9u
+IGZvciBsYXRlciBwYXRjaCwgbm8gZnVuY3Rpb25hbGl0eSBjaGFuZ2UuDQo+Pg0KPj4gTm8gZnVu
+Y3Rpb25uYWwgY2hhbmdlLCByZWFsbHkgPw0KPiANCj4gWW91IG1lYW4gdGhlIG5ldyBhcmNoX2lv
+cmVtYXAoKSBvd25pbmcgZGlmZmVyZW50IGRlZmluaXRpb24gb3IgdGhlDQo+IGludm9jYXRpb24g
+b2YgYXJjaF9pb3JlbWFwKCkgbW92ZWQgdXAgaXMgZnVuY3Rpb25hbCBjaGFuZ2U/IE5vdyBJIGFt
+DQo+IG5vdCBzdXJlIGFib3V0IHRoZSBsYXR0ZXIgb25lLCBtYXkgbmVlZCB1cGRhdGUgbXkga25v
+d2xlZGdlIGJhc2UuDQoNCkJvdGggaW5kZWVkLiBJIHVuZGVyc3RhbmQgdGhhdCB0aGlzIGZpcnN0
+IHN0ZXAgaXMgbm90IGNoYW5naW5nIG11Y2ggdG8gDQp0aGUgbG9naWMsIGJ1dCBJIHRoaW5rIHRo
+ZSBzaW1wbGUgZmFjdCB0byBjaGFuZ2UgdGhlIGFyZ3VtZW50cyBhbmQgbmFtZSANCmFyZSBzb21l
+IGhvdyBhIGZ1bmN0aW9ubmFsIGNoYW5nZS4NCg0KPiANCj4gVGhhbmtzDQo+IEJhb3F1YW4NCj4g

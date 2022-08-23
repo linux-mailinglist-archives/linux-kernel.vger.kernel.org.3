@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D4459E046
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C4159E20D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356800AbiHWLD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S1358855AbiHWL5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357217AbiHWLBn (ORCPT
+        with ESMTP id S1358776AbiHWLyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:01:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F63AF4A1;
-        Tue, 23 Aug 2022 02:14:27 -0700 (PDT)
+        Tue, 23 Aug 2022 07:54:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9017BD5DEC;
+        Tue, 23 Aug 2022 02:33:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D95B66113E;
-        Tue, 23 Aug 2022 09:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5CFAC433C1;
-        Tue, 23 Aug 2022 09:14:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEA41B81C4B;
+        Tue, 23 Aug 2022 09:33:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31023C433D6;
+        Tue, 23 Aug 2022 09:33:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246066;
-        bh=ajC9fmuZ+CPDrrB+BCdmcpwg5awUxWuQoxY0RGRfBJw=;
+        s=korg; t=1661247186;
+        bh=vxz0XatBq9pQ2L23H7ry7CKtCaMUuGXXCzKN3n+RX8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x74m5uFGudiM/dZAwb3itbsHcgxdDeT9fPOQh5XRwnvckcQcsWoebX+sKMzMSqtV/
-         Y9PDRPKIh79TIXkH4mt8AXCSFvvnw/kJGJEhwyModoK+2N0ezo9GLg0AnO0nP0eFP8
-         ypwGub+0E5lvvrdh+FUtR9ZAAC9Ivi8LNUEVsVdY=
+        b=FQKOoAkn3EWiweN2JYCTohLMKAI9SYgraJVtrUnNG/SDKZv9IBZMc8/WwiIQehckv
+         Z+v3HFJcH7dAiWcMzpPRNw83vWEkOfG37S4UR0tdOXS5uP/aEHAXLlqMI1RLKWB4P9
+         EiuW/Q5SvLuQ3qNrLUrbntLfNaZsdOkjcUOvgqOA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Matthias May <matthias.may@westermo.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 237/287] geneve: do not use RT_TOS for IPv6 flowlabel
+        stable@vger.kernel.org, Nimish Mishra <neelam.nimish@gmail.com>,
+        Anirban Chakraborty <ch.anirban00727@gmail.com>,
+        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
+        Jerome Forissier <jerome.forissier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.4 328/389] tee: add overflow check in register_shm_helper()
 Date:   Tue, 23 Aug 2022 10:26:46 +0200
-Message-Id: <20220823080109.030375355@linuxfoundation.org>
+Message-Id: <20220823080129.221336436@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias May <matthias.may@westermo.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
 
-commit ca2bb69514a8bc7f83914122f0d596371352416c upstream.
+commit 573ae4f13f630d6660008f1974c0a8a29c30e18a upstream.
 
-According to Guillaume Nault RT_TOS should never be used for IPv6.
+With special lengths supplied by user space, register_shm_helper() has
+an integer overflow when calculating the number of pages covered by a
+supplied user space memory region.
 
-Quote:
-RT_TOS() is an old macro used to interprete IPv4 TOS as described in
-the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
-code, although, given the current state of the code, most of the
-existing calls have no consequence.
+This causes internal_get_user_pages_fast() a helper function of
+pin_user_pages_fast() to do a NULL pointer dereference:
 
-But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
-field to be interpreted the RFC 1349 way. There's no historical
-compatibility to worry about.
+  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+  Modules linked in:
+  CPU: 1 PID: 173 Comm: optee_example_a Not tainted 5.19.0 #11
+  Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
+  pc : internal_get_user_pages_fast+0x474/0xa80
+  Call trace:
+   internal_get_user_pages_fast+0x474/0xa80
+   pin_user_pages_fast+0x24/0x4c
+   register_shm_helper+0x194/0x330
+   tee_shm_register_user_buf+0x78/0x120
+   tee_ioctl+0xd0/0x11a0
+   __arm64_sys_ioctl+0xa8/0xec
+   invoke_syscall+0x48/0x114
 
-Fixes: 3a56f86f1be6 ("geneve: handle ipv6 priority like ipv4 tos")
-Acked-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: Matthias May <matthias.may@westermo.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fix this by adding an an explicit call to access_ok() in
+tee_shm_register_user_buf() to catch an invalid user space address
+early.
+
+Fixes: 033ddf12bcf5 ("tee: add register user memory")
+Cc: stable@vger.kernel.org
+Reported-by: Nimish Mishra <neelam.nimish@gmail.com>
+Reported-by: Anirban Chakraborty <ch.anirban00727@gmail.com>
+Reported-by: Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>
+Suggested-by: Jerome Forissier <jerome.forissier@linaro.org>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+[JW: backport to stable-5.4 + update commit message]
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/geneve.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/tee/tee_core.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/geneve.c
-+++ b/drivers/net/geneve.c
-@@ -799,8 +799,7 @@ static struct dst_entry *geneve_get_v6_d
- 		use_cache = false;
- 	}
+--- a/drivers/tee/tee_core.c
++++ b/drivers/tee/tee_core.c
+@@ -182,6 +182,9 @@ tee_ioctl_shm_register(struct tee_contex
+ 	if (data.flags)
+ 		return -EINVAL;
  
--	fl6->flowlabel = ip6_make_flowinfo(RT_TOS(prio),
--					   info->key.label);
-+	fl6->flowlabel = ip6_make_flowinfo(prio, info->key.label);
- 	dst_cache = (struct dst_cache *)&info->dst_cache;
- 	if (use_cache) {
- 		dst = dst_cache_get_ip6(dst_cache, &fl6->saddr);
++	if (!access_ok((void __user *)(unsigned long)data.addr, data.length))
++		return -EFAULT;
++
+ 	shm = tee_shm_register(ctx, data.addr, data.length,
+ 			       TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
+ 	if (IS_ERR(shm))
 
 

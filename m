@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3C159DBBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FBD59E34C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358877AbiHWL7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S244537AbiHWMSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359293AbiHWL4e (ORCPT
+        with ESMTP id S1354348AbiHWMP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:56:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4FAD6BAD;
-        Tue, 23 Aug 2022 02:34:16 -0700 (PDT)
+        Tue, 23 Aug 2022 08:15:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379C7E9939;
+        Tue, 23 Aug 2022 02:40:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7B30B81C89;
-        Tue, 23 Aug 2022 09:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADA9C433C1;
-        Tue, 23 Aug 2022 09:34:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C64B2614D1;
+        Tue, 23 Aug 2022 09:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F19C433D6;
+        Tue, 23 Aug 2022 09:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247250;
-        bh=X6jgYWZ4Mu4BRn1XVD+JQfc78HmS4SDy8hx0sB+nn/s=;
+        s=korg; t=1661247585;
+        bh=G4vUUcbTC3wk22PLjx9tPddjoJp2bdeLQwk8tm6Cz14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lwKcA03ErS6NUopAAOpxPiVc4xCzX+H+dcyQsSvtjBCDzu54Crf+8ifhLYduqPXiI
-         0ia16yBFIiozkJR3qFvzCyndgyfer57RgUkK/s86FhlxNArGnT3PfKO0ThW1JoulxA
-         nYec0ntzDhbwyCBAcHoEBWGLyxObr2gzwvzpexZI=
+        b=RqI7uecwimR1wRrSo7WgoSHjzMvzuM5XarbYHTtxH6SeOWiR7ddxXft8H3pVTUzRt
+         LdIU9/FJCNYtwW5FTRdIzEHeOz2pPBwLuSbIYe2P38DKuR4Tu3MmOOU70blvY7HIhp
+         CkxTbw5GSjs9v199vv+E+cN2DCy7OmhMtJCOIR7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
-        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-        Marek Szlosek <marek.szlosek@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.4 335/389] iavf: Fix adminq error handling
-Date:   Tue, 23 Aug 2022 10:26:53 +0200
-Message-Id: <20220823080129.510039394@linuxfoundation.org>
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 082/158] net: dsa: microchip: ksz9477: fix fdb_dump last invalid entry
+Date:   Tue, 23 Aug 2022 10:26:54 +0200
+Message-Id: <20220823080049.363280513@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,82 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+From: Arun Ramadoss <arun.ramadoss@microchip.com>
 
-commit 419831617ed349992c84344dbd9e627f9e68f842 upstream.
+commit 36c0d935015766bf20d621c18313f17691bda5e3 upstream.
 
-iavf_alloc_asq_bufs/iavf_alloc_arq_bufs allocates with dma_alloc_coherent
-memory for VF mailbox.
-Free DMA regions for both ASQ and ARQ in case error happens during
-configuration of ASQ/ARQ registers.
-Without this change it is possible to see when unloading interface:
-74626.583369: dma_debug_device_change: device driver has pending DMA allocations while released from device [count=32]
-One of leaked entries details: [device address=0x0000000b27ff9000] [size=4096 bytes] [mapped with DMA_BIDIRECTIONAL] [mapped as coherent]
+In the ksz9477_fdb_dump function it reads the ALU control register and
+exit from the timeout loop if there is valid entry or search is
+complete. After exiting the loop, it reads the alu entry and report to
+the user space irrespective of entry is valid. It works till the valid
+entry. If the loop exited when search is complete, it reads the alu
+table. The table returns all ones and it is reported to user space. So
+bridge fdb show gives ff:ff:ff:ff:ff:ff as last entry for every port.
+To fix it, after exiting the loop the entry is reported only if it is
+valid one.
 
-Fixes: d358aa9a7a2d ("i40evf: init code and hardware support")
-Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
-Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
-Tested-by: Marek Szlosek <marek.szlosek@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Link: https://lore.kernel.org/r/20220816105516.18350-1-arun.ramadoss@microchip.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_adminq.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/net/dsa/microchip/ksz9477.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/ethernet/intel/iavf/iavf_adminq.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_adminq.c
-@@ -324,6 +324,7 @@ static enum iavf_status iavf_config_arq_
- static enum iavf_status iavf_init_asq(struct iavf_hw *hw)
- {
- 	enum iavf_status ret_code = 0;
-+	int i;
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -762,6 +762,9 @@ static int ksz9477_port_fdb_dump(struct
+ 			goto exit;
+ 		}
  
- 	if (hw->aq.asq.count > 0) {
- 		/* queue already initialized */
-@@ -354,12 +355,17 @@ static enum iavf_status iavf_init_asq(st
- 	/* initialize base registers */
- 	ret_code = iavf_config_asq_regs(hw);
- 	if (ret_code)
--		goto init_adminq_free_rings;
-+		goto init_free_asq_bufs;
- 
- 	/* success! */
- 	hw->aq.asq.count = hw->aq.num_asq_entries;
- 	goto init_adminq_exit;
- 
-+init_free_asq_bufs:
-+	for (i = 0; i < hw->aq.num_asq_entries; i++)
-+		iavf_free_dma_mem(hw, &hw->aq.asq.r.asq_bi[i]);
-+	iavf_free_virt_mem(hw, &hw->aq.asq.dma_head);
++		if (!(ksz_data & ALU_VALID))
++			continue;
 +
- init_adminq_free_rings:
- 	iavf_free_adminq_asq(hw);
- 
-@@ -383,6 +389,7 @@ init_adminq_exit:
- static enum iavf_status iavf_init_arq(struct iavf_hw *hw)
- {
- 	enum iavf_status ret_code = 0;
-+	int i;
- 
- 	if (hw->aq.arq.count > 0) {
- 		/* queue already initialized */
-@@ -413,12 +420,16 @@ static enum iavf_status iavf_init_arq(st
- 	/* initialize base registers */
- 	ret_code = iavf_config_arq_regs(hw);
- 	if (ret_code)
--		goto init_adminq_free_rings;
-+		goto init_free_arq_bufs;
- 
- 	/* success! */
- 	hw->aq.arq.count = hw->aq.num_arq_entries;
- 	goto init_adminq_exit;
- 
-+init_free_arq_bufs:
-+	for (i = 0; i < hw->aq.num_arq_entries; i++)
-+		iavf_free_dma_mem(hw, &hw->aq.arq.r.arq_bi[i]);
-+	iavf_free_virt_mem(hw, &hw->aq.arq.dma_head);
- init_adminq_free_rings:
- 	iavf_free_adminq_arq(hw);
+ 		/* read ALU table */
+ 		ksz9477_read_table(dev, alu_table);
  
 
 

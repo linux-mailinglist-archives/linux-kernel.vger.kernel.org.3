@@ -2,166 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6529959E503
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6DB59E62B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242020AbiHWOQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 10:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S241752AbiHWPkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 11:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242898AbiHWOP2 (ORCPT
+        with ESMTP id S239278AbiHWPjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 10:15:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3ED2270B17;
-        Tue, 23 Aug 2022 04:28:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEBC7113E;
-        Tue, 23 Aug 2022 04:28:04 -0700 (PDT)
-Received: from [10.57.15.51] (unknown [10.57.15.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D9293F70D;
-        Tue, 23 Aug 2022 04:27:59 -0700 (PDT)
-Message-ID: <1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com>
-Date:   Tue, 23 Aug 2022 12:27:53 +0100
+        Tue, 23 Aug 2022 11:39:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E46C6966;
+        Tue, 23 Aug 2022 04:32:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EAE3613C5;
+        Tue, 23 Aug 2022 11:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BC2C433D6;
+        Tue, 23 Aug 2022 11:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661254298;
+        bh=HMMDK4yYSV9hm8Y33k5jiYF0HqGibjiYVN4UI5136Ok=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eSG6RpwdXQVjXqGGUGSzBgYYSjjWgqK6gbvzkYRyVINwqKx29HDxHMkUtsepj0ygb
+         3yft+3n5uIaY8Y5eeUicqzMTKjtQcK7bRHoIPBupQLfMnxrnPiIyBu9OX/UlhF8PUk
+         JEHGI4X+MfTcUjKGsdVdfhdBsWhqH2LFtgIHK+5AO7nO3ShU043O+AGhLEFMhf6Aru
+         4LB2YHR6z3H4fpx5j1KJY81JhWuBMDNIviXWyyOi/ZsWvjBFECr0Z81DeqkdBmajhF
+         KqGRo+AqloYIYMiEjXdSP9F2ovz5OC1MFpuf1v+Rss1/N6/WeaIQ2PesRpejZ0gcTa
+         ouQUX241mStIQ==
+Date:   Tue, 23 Aug 2022 12:31:32 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] ASoC: apple: mca: Start new platform driver
+Message-ID: <YwS6lHeGH0BZKHeB@sirena.org.uk>
+References: <20220819125430.4920-1-povik+lin@cutebit.org>
+ <20220819125430.4920-4-povik+lin@cutebit.org>
+ <YwO/aqs7eqZx07kS@sirena.org.uk>
+ <24C0ABFA-BF71-4492-8A6A-E9BE1462B403@cutebit.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v4 2/2] PCI: dwc: Add support for 64-bit MSI target
- address
-Content-Language: en-GB
-To:     Will McVicker <willmcvicker@google.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20220812000327.3154251-1-willmcvicker@google.com>
- <20220812000327.3154251-3-willmcvicker@google.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220812000327.3154251-3-willmcvicker@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NBQO/q/cbDr7E10q"
+Content-Disposition: inline
+In-Reply-To: <24C0ABFA-BF71-4492-8A6A-E9BE1462B403@cutebit.org>
+X-Cookie: You can't take damsel here now.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-12 01:03, Will McVicker wrote:
-> Since not all devices require a 32-bit MSI address, add support to the
-> PCIe host driver to allow setting the DMA mask to 64-bits. This allows
-> kernels to disable ZONE_DMA32 and bounce buffering (swiotlb) without
-> risking not being able to get a 32-bit address during DMA allocation.
-> Basically, in the slim chance that there are no 32-bit allocations
-> available, the current PCIe host driver will fail to allocate the
-> msi_msg page due to a DMA address overflow (seen in [1]). With this
-> patch, the PCIe device can advertise 64-bit support via its MSI
-> capabilities to hint to the PCIe host driver to set the DMA mask to
-> 64-bits.
 
-It doesn't matter so much what the host's own capabilities are, though, 
-what matters is that if you configure the MSI doorbell to decode some 
-64-bit address because you can, and later an endpoint shows up whose DMA 
-mask doesn't reach that address, you've broken MSIs for that endpoint. 
-While the host is probing, it cannot possibly know what future endpoint 
-drivers may or may not do.
+--NBQO/q/cbDr7E10q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Now, in the case where no ZONE_DMA{32} is configured, there's a fair 
-likelihood that addressing-constrained endpoints are probably going to 
-be broken in general, so that should not be fatal for the host. So *if* 
-we fail to allocate a 32-bit MSI address, *then* we should fall back to 
-a 64-bit one (when the host supports it), but to preserve compatibility 
-we still must always attempt the 32-bit allocation first (oh, if there 
-isn't a theme emerging here...)
+On Tue, Aug 23, 2022 at 09:33:36AM +0200, Martin Povi=C5=A1er wrote:
+> > On 22. 8. 2022, at 19:39, Mark Brown <broonie@kernel.org> wrote:
+> > On Fri, Aug 19, 2022 at 02:54:29PM +0200, Martin Povi=C5=A1er wrote:
 
-TBH this has come up enough times, and has enough subtle complexity, 
-that I think it's high time to factor this all out into a helper between 
-the PCI core code and the DMA API for "please give me a bus address 
-that's guaranteed not to conflict with any valid DMA address".
+> >> +// SPDX-License-Identifier: GPL-2.0-only
+> >> +/*
+> >> + * Apple SoCs MCA driver
+> >> + *
+> >> + * Copyright (C) The Asahi Linux Contributors
+> >> + *
+> >> + * The MCA peripheral is made up of a number of identical units calle=
+d clusters.
 
-Thanks,
-Robin.
+> > Please make the entire comment block a C++ one so things look more
+> > intentional.
 
-> [1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->   drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++++++--
->   drivers/pci/controller/dwc/pcie-designware.c      |  8 ++++++++
->   drivers/pci/controller/dwc/pcie-designware.h      |  1 +
->   3 files changed, 21 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 39f3b37d4033..d7831040791b 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -330,6 +330,8 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
->   	u64 *msi_vaddr;
->   	int ret;
->   	u32 ctrl, num_ctrls;
-> +	bool msi_64bit = false;
-> +	u16 msi_capabilities;
->   
->   	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
->   		pp->irq_mask[ctrl] = ~0;
-> @@ -367,9 +369,17 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
->   						    dw_chained_msi_isr, pp);
->   	}
->   
-> -	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> +	msi_capabilities = dw_pcie_msi_capabilities(pci);
-> +	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
-> +		msi_64bit = msi_capabilities & PCI_MSI_FLAGS_64BIT;
-> +
-> +	dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
-> +		msi_64bit ? "64" : "32");
-> +	ret = dma_set_mask_and_coherent(dev, msi_64bit ?
-> +					DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
->   	if (ret)
-> -		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
-> +		dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
-> +			 msi_64bit ? "64" : "32");
->   
->   	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
->   					GFP_KERNEL);
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index c6725c519a47..650a7f22f9d0 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -82,6 +82,14 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
->   }
->   EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
->   
-> +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-> +{
-> +	u8 offset;
-> +
-> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> +	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-> +}
-> +
->   static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
->   					    u8 cap)
->   {
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> index a871ae7eb59e..45fcdfc8c035 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.h
-> +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> @@ -332,6 +332,7 @@ void dw_pcie_version_detect(struct dw_pcie *pci);
->   
->   u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
->   u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
-> +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
->   
->   int dw_pcie_read(void __iomem *addr, int size, u32 *val);
->   int dw_pcie_write(void __iomem *addr, int size, u32 val);
+> Is this so that it does not look like the SPDX header was added
+> mechanically? I will do it, just curious what the reasoning is.
+
+Yes, broadly.
+
+> >> +	/*
+> >> +	 * We can't power up the device earlier than this because
+> >> +	 * the power state driver would error out on seeing the device
+> >> +	 * as clock-gated.
+> >> +	 */
+> >> +	cl->pd_link =3D device_link_add(mca->dev, cl->pd_dev,
+> >> +				      DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME |
+> >> +					      DL_FLAG_RPM_ACTIVE);
+
+> > I'm not clear on this dynamically adding and removing device links stuff
+> > - it looks like the main (only?) purpose is to take a runtime PM
+> > reference to the target device which is fine but it's not clear why
+> > device links are involved given that the links are created and destroyed
+> > every time the DAI is used, AFAICT always in the same fixed
+> > relationship.  It's not a problem, it's just unclear.
+
+> Indeed the only purpose is powering up the cluster=E2=80=99s power domain=
+ (there=E2=80=99s
+> one domain for each cluster). Adding the links is the only way I know to
+> do it. They need to be added dynamically (as opposed to statically linkin=
+g,
+> say, the DAI=E2=80=99s ->dev to the cluster=E2=80=99s ->pd_dev, which I g=
+uess may do
+> something similar), because we need to sequence the power-up/power-down
+> with the enablement of the clocks.
+
+You could also just do the underlying runtime power management
+operations directly couldn't you?  It's not clear what the device link
+stuff is adding.
+
+--NBQO/q/cbDr7E10q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMEupQACgkQJNaLcl1U
+h9DK1wf+JNGwnyOsdkMz+Zc28n5YvfvcyoQByI5EreszsWd//Rg/MxJpVjsrCXpo
+JkHBVOL9QMhZ8SBrmK3cZ80OpwHBZ1HnME6vXezsk0QzgH7jWXLvYZmEMcXSP/zJ
+8rGk+8LdxeZMvYEbi4xL1/gOSRgOEKO8GOtIQuRsGAiit8bCFL2ukdG+PUji4pim
+ZuNY1Hsh+hSHSG4jJDA0QaYqRBMcbMgZW8RTNkWIr02A12ZEDDs4ESd4ckDoYumX
+tdl+LCIGBJDYc9A0RIvRUfCTgEqKqyWHQvGtlN1Ia5Nyg7BCynhMJx9oGt2HDxVk
+Uvg0e3pz0L9taZVPcOrYU5p07Q8omQ==
+=8Yqm
+-----END PGP SIGNATURE-----
+
+--NBQO/q/cbDr7E10q--

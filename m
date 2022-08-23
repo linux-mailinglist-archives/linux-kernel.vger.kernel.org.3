@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2F559DD87
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD5959E27D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357068AbiHWKw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S1359489AbiHWML4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354826AbiHWKpU (ORCPT
+        with ESMTP id S1359739AbiHWMLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:45:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6F727CD3;
-        Tue, 23 Aug 2022 02:10:59 -0700 (PDT)
+        Tue, 23 Aug 2022 08:11:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D73C7F92;
+        Tue, 23 Aug 2022 02:38:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07AB060DB4;
-        Tue, 23 Aug 2022 09:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E003C433D6;
-        Tue, 23 Aug 2022 09:10:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81FFAB81C97;
+        Tue, 23 Aug 2022 09:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE943C433C1;
+        Tue, 23 Aug 2022 09:37:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245858;
-        bh=DbugGScHIkvIP6Pd4hT6Ur37vKutWJFJ6tLVmCrkrCs=;
+        s=korg; t=1661247478;
+        bh=AjRQHlxk2wBIgYkQ7J3Gw7hX5PZJd+nwnR53i7RFcK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UTd+VMp21Tf9tsI7FW9OGqi93UkB6qfIQ0cr9X3+IdmO9P8ugc0DyQXCNnyx4YYUb
-         Vd9Gue25bE3T8pkaSBtYkVf0pRJafjdin6azq8c/p4V+Xo3e6rkI7KXPP6mF7joa3Y
-         EjZNsOTuwp0e5dszlypwz4YZyrmXYKXtcRnEGNtg=
+        b=CZyn+Pmsp2Rv3ZwizuVMjbqNy1jxkw/hOK/b/7wVZ89OhtsBdMzjDjgV92ZOPLn0F
+         0f0AVnnkPjNslmnUawi2zBBfqBtpUMynK6+ATMIJztFRn9jfgkrzgXkW0CpWqU9XSL
+         k/Ezt3awmj0md1LJU0STvoAGTB//bxkvfwq5DvqU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.19 213/287] powerpc/mm: Split dump_pagelinuxtables flag_array table
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.10 050/158] dt-bindings: arm: qcom: fix MSM8916 MTP compatibles
 Date:   Tue, 23 Aug 2022 10:26:22 +0200
-Message-Id: <20220823080108.114894774@linuxfoundation.org>
+Message-Id: <20220823080048.113954231@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,526 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@c-s.fr>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 97026b5a5ac26541b3d294146f5c941491a9e609 upstream.
+commit bb35fe1efbae4114bd288fae0f56070f563adcfc upstream.
 
-To reduce the complexity of flag_array, and allow the removal of
-default 0 value of non existing flags, lets have one flag_array
-table for each platform family with only the really existing flags.
+The order of compatibles for MSM8916 MTP board is different:
 
-Reviewed-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+  msm8916-mtp.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
+    ['qcom,msm8916-mtp', 'qcom,msm8916-mtp/1', 'qcom,msm8916'] is too long
+
+Fixes: 9d3ef77fe568 ("dt-bindings: arm: Convert QCom board/soc bindings to json-schema")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220520123252.365762-3-krzysztof.kozlowski@linaro.org
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/mm/Makefile                        |    7 +
- arch/powerpc/mm/dump_linuxpagetables-8xx.c      |   82 ++++++++++++
- arch/powerpc/mm/dump_linuxpagetables-book3s64.c |  115 +++++++++++++++++
- arch/powerpc/mm/dump_linuxpagetables-generic.c  |   82 ++++++++++++
- arch/powerpc/mm/dump_linuxpagetables.c          |  155 ------------------------
- arch/powerpc/mm/dump_linuxpagetables.h          |   19 ++
- 6 files changed, 307 insertions(+), 153 deletions(-)
- create mode 100644 arch/powerpc/mm/dump_linuxpagetables-8xx.c
- create mode 100644 arch/powerpc/mm/dump_linuxpagetables-book3s64.c
- create mode 100644 arch/powerpc/mm/dump_linuxpagetables-generic.c
- create mode 100644 arch/powerpc/mm/dump_linuxpagetables.h
+ Documentation/devicetree/bindings/arm/qcom.yaml |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/powerpc/mm/Makefile
-+++ b/arch/powerpc/mm/Makefile
-@@ -43,5 +43,12 @@ obj-$(CONFIG_HIGHMEM)		+= highmem.o
- obj-$(CONFIG_PPC_COPRO_BASE)	+= copro_fault.o
- obj-$(CONFIG_SPAPR_TCE_IOMMU)	+= mmu_context_iommu.o
- obj-$(CONFIG_PPC_PTDUMP)	+= dump_linuxpagetables.o
-+ifdef CONFIG_PPC_PTDUMP
-+obj-$(CONFIG_4xx)		+= dump_linuxpagetables-generic.o
-+obj-$(CONFIG_PPC_8xx)		+= dump_linuxpagetables-8xx.o
-+obj-$(CONFIG_PPC_BOOK3E_MMU)	+= dump_linuxpagetables-generic.o
-+obj-$(CONFIG_PPC_BOOK3S_32)	+= dump_linuxpagetables-generic.o
-+obj-$(CONFIG_PPC_BOOK3S_64)	+= dump_linuxpagetables-book3s64.o
-+endif
- obj-$(CONFIG_PPC_HTDUMP)	+= dump_hashpagetable.o
- obj-$(CONFIG_PPC_MEM_KEYS)	+= pkeys.o
---- /dev/null
-+++ b/arch/powerpc/mm/dump_linuxpagetables-8xx.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * From split of dump_linuxpagetables.c
-+ * Copyright 2016, Rashmica Gupta, IBM Corp.
-+ *
-+ */
-+#include <linux/kernel.h>
-+#include <asm/pgtable.h>
-+
-+#include "dump_linuxpagetables.h"
-+
-+static const struct flag_info flag_array[] = {
-+	{
-+		.mask	= _PAGE_PRIVILEGED,
-+		.val	= 0,
-+		.set	= "user",
-+		.clear	= "    ",
-+	}, {
-+		.mask	= _PAGE_RO | _PAGE_NA,
-+		.val	= 0,
-+		.set	= "rw",
-+	}, {
-+		.mask	= _PAGE_RO | _PAGE_NA,
-+		.val	= _PAGE_RO,
-+		.set	= "r ",
-+	}, {
-+		.mask	= _PAGE_RO | _PAGE_NA,
-+		.val	= _PAGE_NA,
-+		.set	= "  ",
-+	}, {
-+		.mask	= _PAGE_EXEC,
-+		.val	= _PAGE_EXEC,
-+		.set	= " X ",
-+		.clear	= "   ",
-+	}, {
-+		.mask	= _PAGE_PRESENT,
-+		.val	= _PAGE_PRESENT,
-+		.set	= "present",
-+		.clear	= "       ",
-+	}, {
-+		.mask	= _PAGE_GUARDED,
-+		.val	= _PAGE_GUARDED,
-+		.set	= "guarded",
-+		.clear	= "       ",
-+	}, {
-+		.mask	= _PAGE_DIRTY,
-+		.val	= _PAGE_DIRTY,
-+		.set	= "dirty",
-+		.clear	= "     ",
-+	}, {
-+		.mask	= _PAGE_ACCESSED,
-+		.val	= _PAGE_ACCESSED,
-+		.set	= "accessed",
-+		.clear	= "        ",
-+	}, {
-+		.mask	= _PAGE_NO_CACHE,
-+		.val	= _PAGE_NO_CACHE,
-+		.set	= "no cache",
-+		.clear	= "        ",
-+	}, {
-+		.mask	= _PAGE_SPECIAL,
-+		.val	= _PAGE_SPECIAL,
-+		.set	= "special",
-+	}
-+};
-+
-+struct pgtable_level pg_level[5] = {
-+	{
-+	}, { /* pgd */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pud */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pmd */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pte */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	},
-+};
---- /dev/null
-+++ b/arch/powerpc/mm/dump_linuxpagetables-book3s64.c
-@@ -0,0 +1,115 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * From split of dump_linuxpagetables.c
-+ * Copyright 2016, Rashmica Gupta, IBM Corp.
-+ *
-+ */
-+#include <linux/kernel.h>
-+#include <asm/pgtable.h>
-+
-+#include "dump_linuxpagetables.h"
-+
-+static const struct flag_info flag_array[] = {
-+	{
-+		.mask	= _PAGE_PRIVILEGED,
-+		.val	= 0,
-+		.set	= "user",
-+		.clear	= "    ",
-+	}, {
-+		.mask	= _PAGE_READ,
-+		.val	= _PAGE_READ,
-+		.set	= "r",
-+		.clear	= " ",
-+	}, {
-+		.mask	= _PAGE_WRITE,
-+		.val	= _PAGE_WRITE,
-+		.set	= "w",
-+		.clear	= " ",
-+	}, {
-+		.mask	= _PAGE_EXEC,
-+		.val	= _PAGE_EXEC,
-+		.set	= " X ",
-+		.clear	= "   ",
-+	}, {
-+		.mask	= _PAGE_PTE,
-+		.val	= _PAGE_PTE,
-+		.set	= "pte",
-+		.clear	= "   ",
-+	}, {
-+		.mask	= _PAGE_PRESENT,
-+		.val	= _PAGE_PRESENT,
-+		.set	= "present",
-+		.clear	= "       ",
-+	}, {
-+		.mask	= H_PAGE_HASHPTE,
-+		.val	= H_PAGE_HASHPTE,
-+		.set	= "hpte",
-+		.clear	= "    ",
-+	}, {
-+		.mask	= _PAGE_DIRTY,
-+		.val	= _PAGE_DIRTY,
-+		.set	= "dirty",
-+		.clear	= "     ",
-+	}, {
-+		.mask	= _PAGE_ACCESSED,
-+		.val	= _PAGE_ACCESSED,
-+		.set	= "accessed",
-+		.clear	= "        ",
-+	}, {
-+		.mask	= _PAGE_NON_IDEMPOTENT,
-+		.val	= _PAGE_NON_IDEMPOTENT,
-+		.set	= "non-idempotent",
-+		.clear	= "              ",
-+	}, {
-+		.mask	= _PAGE_TOLERANT,
-+		.val	= _PAGE_TOLERANT,
-+		.set	= "tolerant",
-+		.clear	= "        ",
-+	}, {
-+		.mask	= H_PAGE_BUSY,
-+		.val	= H_PAGE_BUSY,
-+		.set	= "busy",
-+	}, {
-+#ifdef CONFIG_PPC_64K_PAGES
-+		.mask	= H_PAGE_COMBO,
-+		.val	= H_PAGE_COMBO,
-+		.set	= "combo",
-+	}, {
-+		.mask	= H_PAGE_4K_PFN,
-+		.val	= H_PAGE_4K_PFN,
-+		.set	= "4K_pfn",
-+	}, {
-+#else /* CONFIG_PPC_64K_PAGES */
-+		.mask	= H_PAGE_F_GIX,
-+		.val	= H_PAGE_F_GIX,
-+		.set	= "f_gix",
-+		.is_val	= true,
-+		.shift	= H_PAGE_F_GIX_SHIFT,
-+	}, {
-+		.mask	= H_PAGE_F_SECOND,
-+		.val	= H_PAGE_F_SECOND,
-+		.set	= "f_second",
-+	}, {
-+#endif /* CONFIG_PPC_64K_PAGES */
-+		.mask	= _PAGE_SPECIAL,
-+		.val	= _PAGE_SPECIAL,
-+		.set	= "special",
-+	}
-+};
-+
-+struct pgtable_level pg_level[5] = {
-+	{
-+	}, { /* pgd */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pud */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pmd */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pte */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	},
-+};
---- /dev/null
-+++ b/arch/powerpc/mm/dump_linuxpagetables-generic.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * From split of dump_linuxpagetables.c
-+ * Copyright 2016, Rashmica Gupta, IBM Corp.
-+ *
-+ */
-+#include <linux/kernel.h>
-+#include <asm/pgtable.h>
-+
-+#include "dump_linuxpagetables.h"
-+
-+static const struct flag_info flag_array[] = {
-+	{
-+		.mask	= _PAGE_USER,
-+		.val	= _PAGE_USER,
-+		.set	= "user",
-+		.clear	= "    ",
-+	}, {
-+		.mask	= _PAGE_RW,
-+		.val	= _PAGE_RW,
-+		.set	= "rw",
-+		.clear	= "r ",
-+	}, {
-+#ifndef CONFIG_PPC_BOOK3S_32
-+		.mask	= _PAGE_EXEC,
-+		.val	= _PAGE_EXEC,
-+		.set	= " X ",
-+		.clear	= "   ",
-+	}, {
-+#endif
-+		.mask	= _PAGE_PRESENT,
-+		.val	= _PAGE_PRESENT,
-+		.set	= "present",
-+		.clear	= "       ",
-+	}, {
-+		.mask	= _PAGE_GUARDED,
-+		.val	= _PAGE_GUARDED,
-+		.set	= "guarded",
-+		.clear	= "       ",
-+	}, {
-+		.mask	= _PAGE_DIRTY,
-+		.val	= _PAGE_DIRTY,
-+		.set	= "dirty",
-+		.clear	= "     ",
-+	}, {
-+		.mask	= _PAGE_ACCESSED,
-+		.val	= _PAGE_ACCESSED,
-+		.set	= "accessed",
-+		.clear	= "        ",
-+	}, {
-+		.mask	= _PAGE_WRITETHRU,
-+		.val	= _PAGE_WRITETHRU,
-+		.set	= "write through",
-+		.clear	= "             ",
-+	}, {
-+		.mask	= _PAGE_NO_CACHE,
-+		.val	= _PAGE_NO_CACHE,
-+		.set	= "no cache",
-+		.clear	= "        ",
-+	}, {
-+		.mask	= _PAGE_SPECIAL,
-+		.val	= _PAGE_SPECIAL,
-+		.set	= "special",
-+	}
-+};
-+
-+struct pgtable_level pg_level[5] = {
-+	{
-+	}, { /* pgd */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pud */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pmd */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	}, { /* pte */
-+		.flag	= flag_array,
-+		.num	= ARRAY_SIZE(flag_array),
-+	},
-+};
---- a/arch/powerpc/mm/dump_linuxpagetables.c
-+++ b/arch/powerpc/mm/dump_linuxpagetables.c
-@@ -28,6 +28,8 @@
- #include <asm/page.h>
- #include <asm/pgalloc.h>
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -123,8 +123,8 @@ properties:
+           - const: qcom,msm8974
  
-+#include "dump_linuxpagetables.h"
-+
- #ifdef CONFIG_PPC32
- #define KERN_VIRT_START	0
- #endif
-@@ -102,159 +104,6 @@ static struct addr_marker address_marker
- 	{ -1,	NULL },
- };
+       - items:
+-          - const: qcom,msm8916-mtp/1
+           - const: qcom,msm8916-mtp
++          - const: qcom,msm8916-mtp/1
+           - const: qcom,msm8916
  
--struct flag_info {
--	u64		mask;
--	u64		val;
--	const char	*set;
--	const char	*clear;
--	bool		is_val;
--	int		shift;
--};
--
--static const struct flag_info flag_array[] = {
--	{
--		.mask	= _PAGE_USER | _PAGE_PRIVILEGED,
--		.val	= _PAGE_USER,
--		.set	= "user",
--		.clear	= "    ",
--	}, {
--		.mask	= _PAGE_RW | _PAGE_RO | _PAGE_NA,
--		.val	= _PAGE_RW,
--		.set	= "rw",
--	}, {
--		.mask	= _PAGE_RW | _PAGE_RO | _PAGE_NA,
--		.val	= _PAGE_RO,
--		.set	= "ro",
--	}, {
--#if _PAGE_NA != 0
--		.mask	= _PAGE_RW | _PAGE_RO | _PAGE_NA,
--		.val	= _PAGE_RO,
--		.set	= "na",
--	}, {
--#endif
--		.mask	= _PAGE_EXEC,
--		.val	= _PAGE_EXEC,
--		.set	= " X ",
--		.clear	= "   ",
--	}, {
--		.mask	= _PAGE_PTE,
--		.val	= _PAGE_PTE,
--		.set	= "pte",
--		.clear	= "   ",
--	}, {
--		.mask	= _PAGE_PRESENT,
--		.val	= _PAGE_PRESENT,
--		.set	= "present",
--		.clear	= "       ",
--	}, {
--#ifdef CONFIG_PPC_BOOK3S_64
--		.mask	= H_PAGE_HASHPTE,
--		.val	= H_PAGE_HASHPTE,
--#else
--		.mask	= _PAGE_HASHPTE,
--		.val	= _PAGE_HASHPTE,
--#endif
--		.set	= "hpte",
--		.clear	= "    ",
--	}, {
--#ifndef CONFIG_PPC_BOOK3S_64
--		.mask	= _PAGE_GUARDED,
--		.val	= _PAGE_GUARDED,
--		.set	= "guarded",
--		.clear	= "       ",
--	}, {
--#endif
--		.mask	= _PAGE_DIRTY,
--		.val	= _PAGE_DIRTY,
--		.set	= "dirty",
--		.clear	= "     ",
--	}, {
--		.mask	= _PAGE_ACCESSED,
--		.val	= _PAGE_ACCESSED,
--		.set	= "accessed",
--		.clear	= "        ",
--	}, {
--#ifndef CONFIG_PPC_BOOK3S_64
--		.mask	= _PAGE_WRITETHRU,
--		.val	= _PAGE_WRITETHRU,
--		.set	= "write through",
--		.clear	= "             ",
--	}, {
--#endif
--#ifndef CONFIG_PPC_BOOK3S_64
--		.mask	= _PAGE_NO_CACHE,
--		.val	= _PAGE_NO_CACHE,
--		.set	= "no cache",
--		.clear	= "        ",
--	}, {
--#else
--		.mask	= _PAGE_NON_IDEMPOTENT,
--		.val	= _PAGE_NON_IDEMPOTENT,
--		.set	= "non-idempotent",
--		.clear	= "              ",
--	}, {
--		.mask	= _PAGE_TOLERANT,
--		.val	= _PAGE_TOLERANT,
--		.set	= "tolerant",
--		.clear	= "        ",
--	}, {
--#endif
--#ifdef CONFIG_PPC_BOOK3S_64
--		.mask	= H_PAGE_BUSY,
--		.val	= H_PAGE_BUSY,
--		.set	= "busy",
--	}, {
--#ifdef CONFIG_PPC_64K_PAGES
--		.mask	= H_PAGE_COMBO,
--		.val	= H_PAGE_COMBO,
--		.set	= "combo",
--	}, {
--		.mask	= H_PAGE_4K_PFN,
--		.val	= H_PAGE_4K_PFN,
--		.set	= "4K_pfn",
--	}, {
--#else /* CONFIG_PPC_64K_PAGES */
--		.mask	= H_PAGE_F_GIX,
--		.val	= H_PAGE_F_GIX,
--		.set	= "f_gix",
--		.is_val	= true,
--		.shift	= H_PAGE_F_GIX_SHIFT,
--	}, {
--		.mask	= H_PAGE_F_SECOND,
--		.val	= H_PAGE_F_SECOND,
--		.set	= "f_second",
--	}, {
--#endif /* CONFIG_PPC_64K_PAGES */
--#endif
--		.mask	= _PAGE_SPECIAL,
--		.val	= _PAGE_SPECIAL,
--		.set	= "special",
--	}
--};
--
--struct pgtable_level {
--	const struct flag_info *flag;
--	size_t num;
--	u64 mask;
--};
--
--static struct pgtable_level pg_level[] = {
--	{
--	}, { /* pgd */
--		.flag	= flag_array,
--		.num	= ARRAY_SIZE(flag_array),
--	}, { /* pud */
--		.flag	= flag_array,
--		.num	= ARRAY_SIZE(flag_array),
--	}, { /* pmd */
--		.flag	= flag_array,
--		.num	= ARRAY_SIZE(flag_array),
--	}, { /* pte */
--		.flag	= flag_array,
--		.num	= ARRAY_SIZE(flag_array),
--	},
--};
--
- static void dump_flag_info(struct pg_state *st, const struct flag_info
- 		*flag, u64 pte, int num)
- {
---- /dev/null
-+++ b/arch/powerpc/mm/dump_linuxpagetables.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/types.h>
-+
-+struct flag_info {
-+	u64		mask;
-+	u64		val;
-+	const char	*set;
-+	const char	*clear;
-+	bool		is_val;
-+	int		shift;
-+};
-+
-+struct pgtable_level {
-+	const struct flag_info *flag;
-+	size_t num;
-+	u64 mask;
-+};
-+
-+extern struct pgtable_level pg_level[5];
+       - items:
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0903859DE3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D495B59E136
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354469AbiHWKZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S1359415AbiHWMIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353603AbiHWKLm (ORCPT
+        with ESMTP id S1359373AbiHWMDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9947417E39;
-        Tue, 23 Aug 2022 01:57:42 -0700 (PDT)
+        Tue, 23 Aug 2022 08:03:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D37BDCFFB;
+        Tue, 23 Aug 2022 02:37:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C54BB81C35;
-        Tue, 23 Aug 2022 08:57:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837DEC433C1;
-        Tue, 23 Aug 2022 08:57:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 528626146C;
+        Tue, 23 Aug 2022 09:36:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E3FC433D7;
+        Tue, 23 Aug 2022 09:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245059;
-        bh=cQUKwcbiut4+VNBJPGTQbCoxxw+3gT62RRW+DGnk7Tc=;
+        s=korg; t=1661247413;
+        bh=MCxlSMJOR6HhiMSpgL2jvCmdzjbKMba/TcDZg6n5OjI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OF6h8j5woJJ1etHYaWD9Tz6R8/IywsHshGVpCv6nayoxwVel83EpMZDubwhGiEh3G
-         nXtJhBTCiBLIVUJAg3ve7d9l4Xl+o3jNycsV49zGwHDHdIjarjOOA9aRrOU4EMUPAz
-         Qo55NExK0fZLNVUosfZgNrSXQ0bTMEr/hClQzKS8=
+        b=Jf3VxXpt83uxwO49PMx2q635FGo+kuin2dEmr9sqjj2fWNKrIkRc4OvnLSEG3DqUz
+         31xkn/TaeyNpo9RXgleJ/p2W0IEVm/L4HynVPIfUv6i9LtZjvZd0rFvheegHTDKrKI
+         GK+uKXyAQycyIL60INYQTySBe897099ziJ1Qo2ak=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 201/244] md: Notify sysfs sync_completed in md_reap_sync_thread()
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.10 028/158] bpf: Acquire map uref in .init_seq_private for hash map iterator
 Date:   Tue, 23 Aug 2022 10:26:00 +0200
-Message-Id: <20220823080106.194739462@linuxfoundation.org>
+Message-Id: <20220823080047.230320318@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Logan Gunthorpe <logang@deltatee.com>
+From: Hou Tao <houtao1@huawei.com>
 
-[ Upstream commit 9973f0fa7d20269fe6fefe6333997fb5914449c1 ]
+commit ef1e93d2eeb58a1f08c37b22a2314b94bc045f15 upstream.
 
-The mdadm test 07layouts randomly produces a kernel hung task deadlock.
-The deadlock is caused by the suspend_lo/suspend_hi files being set by
-the mdadm background process during reshape and not being cleared
-because the process hangs. (Leaving aside the issue of the fragility of
-freezing kernel tasks by buggy userspace processes...)
+bpf_iter_attach_map() acquires a map uref, and the uref may be released
+before or in the middle of iterating map elements. For example, the uref
+could be released in bpf_iter_detach_map() as part of
+bpf_link_release(), or could be released in bpf_map_put_with_uref() as
+part of bpf_map_release().
 
-When the background mdadm process hangs it, is waiting (without a
-timeout) on a change to the sync_completed file signalling that the
-reshape has completed. The process is woken up a couple times when
-the reshape finishes but it is woken up before MD_RECOVERY_RUNNING
-is cleared so sync_completed_show() reports 0 instead of "none".
+So acquiring an extra map uref in bpf_iter_init_hash_map() and
+releasing it in bpf_iter_fini_hash_map().
 
-To fix this, notify the sysfs file in md_reap_sync_thread() after
-MD_RECOVERY_RUNNING has been cleared. This wakes up mdadm and causes
-it to continue and write to suspend_lo/suspend_hi to allow IO to
-continue.
-
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Song Liu <song@kernel.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d6c4503cc296 ("bpf: Implement bpf iterator for hash maps")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20220810080538.1845898-3-houtao@huaweicloud.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/md.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/bpf/hashtab.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 4bfaf7d4977d..33946adb0d6f 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -9467,6 +9467,7 @@ void md_reap_sync_thread(struct mddev *mddev)
- 	wake_up(&resync_wait);
- 	/* flag recovery needed just to double check */
- 	set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
-+	sysfs_notify_dirent_safe(mddev->sysfs_completed);
- 	sysfs_notify_dirent_safe(mddev->sysfs_action);
- 	md_new_event(mddev);
- 	if (mddev->event_work.func)
--- 
-2.35.1
-
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1801,6 +1801,7 @@ static int bpf_iter_init_hash_map(void *
+ 		seq_info->percpu_value_buf = value_buf;
+ 	}
+ 
++	bpf_map_inc_with_uref(map);
+ 	seq_info->map = map;
+ 	seq_info->htab = container_of(map, struct bpf_htab, map);
+ 	return 0;
+@@ -1810,6 +1811,7 @@ static void bpf_iter_fini_hash_map(void
+ {
+ 	struct bpf_iter_seq_hash_map_info *seq_info = priv_data;
+ 
++	bpf_map_put_with_uref(seq_info->map);
+ 	kfree(seq_info->percpu_value_buf);
+ }
+ 
 
 

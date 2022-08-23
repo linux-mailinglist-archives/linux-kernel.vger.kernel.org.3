@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F8659DD3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29AE59DB3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352367AbiHWMHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S1353999AbiHWKQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359225AbiHWMD0 (ORCPT
+        with ESMTP id S1351945AbiHWKGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:03:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5D4DDA99;
-        Tue, 23 Aug 2022 02:37:15 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B73B963;
+        Tue, 23 Aug 2022 01:53:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0D04B81C53;
-        Tue, 23 Aug 2022 09:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11862C433C1;
-        Tue, 23 Aug 2022 09:36:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F48CB81C3B;
+        Tue, 23 Aug 2022 08:53:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F385C433C1;
+        Tue, 23 Aug 2022 08:53:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247407;
-        bh=PxGQ830qFOzB3iy4ED34T7miCNgnpGT15TyrDUDHxXc=;
+        s=korg; t=1661244830;
+        bh=ZhkPRONPRsdklvEmDO5ZqnezVhTgjCAugxYUuo/Z7Lg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NNEECGr0r/53puWquEvBFVSbdKVTJK5OcNQsj0nXv2MJGAiZEZlBwtICs9Szgokkz
-         Rt2DHzYSaglzUPbRPlUjhYe8n5doE+dJv8RSCTWHU/CNj5h2m79rHO8i8DsPubdrsC
-         OakJRXKljxzxHePTHVnooTkBhcUSXaY+QzyNqtug=
+        b=oz4GWj0q2h25/wJGgiHghE+UUVrWL9EqPVfkUcP0wTl82W8J2gGF3zPIW2E+2We0K
+         yB2O3qnRkhMqf4lbP1G4Ns3BL7UEuruNF/JCPf3lRX6TkPzH0Gh1KCRcvSgJ+LmDru
+         TXYEITS2A/OtVBixMva97IgNHRMDdCqcWxFRtBP4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.10 026/158] NFSv4/pnfs: Fix a use-after-free bug in open
-Date:   Tue, 23 Aug 2022 10:25:58 +0200
-Message-Id: <20220823080047.146410880@linuxfoundation.org>
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 4.14 198/229] nios2: dont leave NULLs in sys_call_table[]
+Date:   Tue, 23 Aug 2022 10:25:59 +0200
+Message-Id: <20220823080100.713752961@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit 2135e5d56278ffdb1c2e6d325dc6b87f669b9dac upstream.
+commit 45ec746c65097c25e77d24eae8fee0def5b6cc5d upstream.
 
-If someone cancels the open RPC call, then we must not try to free
-either the open slot or the layoutget operation arguments, since they
-are likely still in use by the hung RPC call.
+fill the gaps in there with sys_ni_syscall, as everyone does...
 
-Fixes: 6949493884fe ("NFSv4: Don't hold the layoutget locks across multiple RPC calls")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 82ed08dd1b0e ("nios2: Exception handling")
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4proc.c |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ arch/nios2/kernel/entry.S         |    1 -
+ arch/nios2/kernel/syscall_table.c |    1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -3084,12 +3084,13 @@ static int _nfs4_open_and_get_state(stru
- 	}
+--- a/arch/nios2/kernel/entry.S
++++ b/arch/nios2/kernel/entry.S
+@@ -193,7 +193,6 @@ local_restart:
+ 	movhi	r11, %hiadj(sys_call_table)
+ 	add	r1, r1, r11
+ 	ldw	r1, %lo(sys_call_table)(r1)
+-	beq	r1, r0, ret_invsyscall
  
- out:
--	if (opendata->lgp) {
--		nfs4_lgopen_release(opendata->lgp);
--		opendata->lgp = NULL;
--	}
--	if (!opendata->cancelled)
-+	if (!opendata->cancelled) {
-+		if (opendata->lgp) {
-+			nfs4_lgopen_release(opendata->lgp);
-+			opendata->lgp = NULL;
-+		}
- 		nfs4_sequence_free_slot(&opendata->o_res.seq_res);
-+	}
- 	return ret;
- }
+ 	/* Check if we are being traced */
+ 	GET_THREAD_INFO r11
+--- a/arch/nios2/kernel/syscall_table.c
++++ b/arch/nios2/kernel/syscall_table.c
+@@ -25,5 +25,6 @@
+ #define __SYSCALL(nr, call) [nr] = (call),
  
+ void *sys_call_table[__NR_syscalls] = {
++	[0 ... __NR_syscalls-1] = sys_ni_syscall,
+ #include <asm/unistd.h>
+ };
 
 

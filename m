@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EA059E69F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A3859E6A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244079AbiHWQJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S244231AbiHWQJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbiHWQIh (ORCPT
+        with ESMTP id S243671AbiHWQI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:08:37 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FC83058C8;
-        Tue, 23 Aug 2022 05:22:02 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1661257285tvampdxi
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 20:21:24 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: DQ0OCu3gog0eXFOOnpCwfQFj8W5pO1yvcYnu2yB4JEjFW0CpTRtb4p4mtINdw
-        eRzERUAFTv7UB3UEcfhSh8ivr++4kI62EdT5P/cX8N4V/JkcroxZ1CsX7Pnkn6Ccg37ptx8
-        Hy4aPKYuzmsHKM8g8tgGXvIriP3C1G8k3Idny93DtEOEG+ILZyHtmEBONjr4RnQIU8pyP1N
-        Ab7bAvQXWhDt1Hly1zA0rOnDL6eSSDGCSI/13naVFjDdk6cWUJIz74T8v50J1JInJAd4u3h
-        llYvT/ALwXZNDazh6y4I2cPFe7vVlY0yQrF/lGcDEawn4QJ0gshvjhO2xxHBeIpO98uqqAC
-        bHsZlAAdE44FZ4NvSZpvdWx1VNSDucE8YOkZlCv6MYp+YpGr1DkQilj4TAmMTU/MWnyrcbT
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     airlied@linux.ie, daniel@ffwll.ch, krzysztof.kozlowski@linaro.org
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] drm/exynos: fix repeated words in comments
-Date:   Tue, 23 Aug 2022 20:21:17 +0800
-Message-Id: <20220823122117.15757-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 23 Aug 2022 12:08:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8042536B0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 05:22:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB58461349
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:22:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1780C433C1;
+        Tue, 23 Aug 2022 12:21:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661257321;
+        bh=oWC6MMolzL8mzh7PMJA8tGSp4WsuG+0+Jpasjy9/ME0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TrRzXGxLEbtxQWpCPLXPjDMeTaxcIo7rNVhmN2nLECz6OPIhJtfvolkRFC+SgDDI4
+         CnYMg8X+vgK9lWBWfViJVKWhC59xnk+11l7It5ifSgt5TyvUkrg+F37yXJSLu3f174
+         GXbrhfG7NilQUlz0QmP3saMod9IKOgdgFFt22E0Z/mbcL6JLyBWrezIlte7jE+NwDd
+         VLZFrEOtB/0w5ywrj0Grl2iHXfAj7cgbQpTI2oSEMK/Afklytsu75JNT9/49r+HuaY
+         R77CG0hU4hTbxzeQGqaOp8bY9ue8XNig3GU8z4N5JOH7W9aYvFd07vz8gjTVmo7Lgs
+         n2WOhSbu1gB2Q==
+Date:   Tue, 23 Aug 2022 15:21:48 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rebecca Mckeever <remckee0@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH 0/2] memblock tests: add command line help option and
+ update obsolete comments
+Message-ID: <YwTGXDFao1iEGatL@kernel.org>
+References: <cover.1660451025.git.remckee0@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1660451025.git.remckee0@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'next'.
+On Sun, Aug 14, 2022 at 12:50:18AM -0500, Rebecca Mckeever wrote:
+> These patches add a help command line option to the help message and
+> update references to an obsolete build option in comments.
+> 
+> Rebecca Mckeever (2):
+>   memblock tests: add command line help option
+>   memblock tests: update reference to obsolete build option in comments
+> 
+>  tools/testing/memblock/tests/common.c | 4 +++-
+>  tools/testing/memblock/tests/common.h | 9 ++++++---
+>  2 files changed, 9 insertions(+), 4 deletions(-)
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/gpu/drm/exynos/exynos_drm_g2d.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-index 471fd6c8135f..4f9edca66632 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-@@ -1195,7 +1195,7 @@ int exynos_g2d_set_cmdlist_ioctl(struct drm_device *drm_dev, void *data,
- 	 * If don't clear SFR registers, the cmdlist is affected by register
- 	 * values of previous cmdlist. G2D hw executes SFR clear command and
- 	 * a next command at the same time then the next command is ignored and
--	 * is executed rightly from next next command, so needs a dummy command
-+	 * is executed rightly from next command, so needs a dummy command
- 	 * to next command of SFR clear command.
- 	 */
- 	cmdlist->data[cmdlist->last++] = G2D_SOFT_RESET;
+Applied, thanks!
+ 
 -- 
-2.36.1
-
+Sincerely yours,
+Mike.

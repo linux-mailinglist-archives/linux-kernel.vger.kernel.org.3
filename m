@@ -2,129 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9C559ED61
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B5259ED65
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiHWUft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 16:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S232846AbiHWUf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 16:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiHWUfT (ORCPT
+        with ESMTP id S229547AbiHWUff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:35:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7757EBE7
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 13:16:33 -0700 (PDT)
-Received: from notapiano (unknown [194.36.25.10])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6C0DF6601DBC;
-        Tue, 23 Aug 2022 21:16:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661285791;
-        bh=JzsxxNzouivL3LyaaYX6SnjsVTmMyaN7Zhs2/j5WlOo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nnMaI8bqbVUHlua3CqX6Vwg6KiYF1aJ13rYtZ523ug1LHTLuFd/zVLXFhqg578FRt
-         2vU/2IujnRXHlNWAJeTv4hIEObDZdoHsukdOKCXcHZ2A4+Baspwkf+nzWmwH9xu2oV
-         J7+NXvPg62ewlJX+ki1OpWDesCQU8QmFjnFTzHxDDj3b8cKXzX9fmfyDeck8braTFD
-         KNjpYIzjJRNXruVDPSu8nLiNkFnIHYPMffGRVRmeU8LbRSF/j2JGmxhewPxxNKsCs4
-         kn1Nm4ttPomESf87rOw4JImZDDG88sKTFAcC/QN3Q9k5DMOrNaZFegAzwq0KMpvHN9
-         mJxu5m0xKz/SA==
-Date:   Tue, 23 Aug 2022 16:16:22 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     xinlei.lee@mediatek.com
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, matthias.bgg@gmail.com, rex-bc.chen@mediatek.com,
-        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
-        yongqiang.niu@mediatek.com, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Jitao Shi <jitao.shi@mediatek.com>
-Subject: Re: [PATCH v3,2/2] drm: mediatek: Adjust the dpi output format to
- MT8186
-Message-ID: <20220823201622.meedlqvmixf5ukdf@notapiano>
-References: <1661235517-23699-1-git-send-email-xinlei.lee@mediatek.com>
- <1661235517-23699-3-git-send-email-xinlei.lee@mediatek.com>
+        Tue, 23 Aug 2022 16:35:35 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041266347
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 13:16:59 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r22so13210803pgm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 13:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=SgKlxc/q4tGu/aOFprmVwiuG2cAvB2MjF52MJkBruE4=;
+        b=R6NUwoC1uqFd7oUHLbjAB0FuZjHJhdPmHASeX6lrqfwQvj17+S27TCDMQOhDd5u6wr
+         wZynKaGAxbhZZpJiSPYX9kCrtqBHQEtFluFe8vbcG54cHbuSQ9aM18Nz/NtA2yMduTD8
+         r2qderaGRMFn+c+VVB4Bn62d1/4Nia5/EEmvA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SgKlxc/q4tGu/aOFprmVwiuG2cAvB2MjF52MJkBruE4=;
+        b=2/hJjRn2sZH8eLZ7sVfjClOmwbAU9t0eJCSwmluKIr0atRJl5LFDhsQN3xK/g6tCBi
+         NLyH10b79KfuCLljzD/nurpZcI+oW4vgGhAHORlyUGh2oVEvOzCHipuJIFBdIQUZo9lj
+         EqOd4WshnJMwK7ltCcOsM6PrVdaNZF/5X7O/j4fluDFqhRg5U/8L6a1jrLkktiv2ZC5N
+         2/FFhuqTM7v6QFyqbCHDXAGkHsHxv3b5vx4zQoBSifWCXAu7k50zwO0C8J3CklWjxpHj
+         FSNj7Xdox5ERvC4LSubxgsGBezz+Exdy0SCBKSo4B7XT7amdgrf/rMVxT9HHQsbJxBu/
+         Ztgw==
+X-Gm-Message-State: ACgBeo3/o+xMqGE0BePYqLSHgw0ER7qvYkb7Fq0BY+7PmGrxWRpQbfIv
+        dAuuQR0GhRbtA7HFGQa9g+LQOA==
+X-Google-Smtp-Source: AA6agR5R1ODtDba1SbJou8mhFJIVNykqB+C3maNIP6rLvNXvzA3SF3Z5JVQYtityF1+XvkwcpY9PHQ==
+X-Received: by 2002:a05:6a00:3691:b0:535:d465:45c5 with SMTP id dw17-20020a056a00369100b00535d46545c5mr25554467pfb.30.1661285819415;
+        Tue, 23 Aug 2022 13:16:59 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:a210:bcce:a0f1:160e])
+        by smtp.gmail.com with ESMTPSA id y4-20020a170902864400b0016ecc7d5297sm4030015plt.292.2022.08.23.13.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 13:16:58 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RFT PATCH] regulator: core: Require regulator drivers to check uV for get_optimum_mode()
+Date:   Tue, 23 Aug 2022 13:16:34 -0700
+Message-Id: <20220823131629.RFT.1.I137e6bef4f6d517be7b081be926059321102fd3d@changeid>
+X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1661235517-23699-3-git-send-email-xinlei.lee@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 02:18:37PM +0800, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Dpi output needs to adjust the output format to dual edge for MT8186.
-> Because MT8186 HW has been modified at that time, SW needs to cooperate.
-> And the register (MMSYS) reserved for dpi will be used for output
-> format control (dual_edge/single_edge).
-> 
-> Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> ---
-[..]
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-[..]
->   * @yuv422_en_bit: Enable bit of yuv422.
->   * @csc_enable_bit: Enable bit of CSC.
->   * @pixels_per_iter: Quantity of transferred pixels per iteration.
-> + * @rgb888_dual_enable: Control output format for mt8186.
+The get_optimum_mode() for regulator drivers is passed the input
+voltage and output voltage as well as the current. This is because, in
+theory, the optimum mode can depend on all three things.
 
-Let's not mention mt8186 in the description to keep the property generic. Also,
-this description should say what having 'rgb888_dual_enable = true' indicates
-about the hardware (in this case mt8186) and it currently doesn't.
+It turns out that for all regulator drivers in mainline only the
+current is looked at when implementing get_optimum_mode(). None of the
+drivers take the input or output voltage into account. Despite the
+fact that none of the drivers take the input or output voltage into
+account, though, the regulator framework will error out before calling
+into get_optimum_mode() if it doesn't know the input or output
+voltage.
 
-Let's take a step back. What does 'dual enable' mean in this context and how
-does it relate to 'dual edge' and the dpi output format? By answering those
-questions we can find a description (and maybe variable name) that makes more
-sense.
+The above behavior turned out to be a probelm for some boards when we
+landed commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
+get_optimum_mode(), not set_load()"). Before that change we'd have no
+problems running drms_uA_update() for RPMH regulators even if a
+regulator's input or output voltage was unknown. After that change
+drms_uA_update() started to fail. This is because typically boards
+using RPMH regulators don't model the input supplies of RPMH
+regulators. Input supplies for RPMH regulators nearly always come from
+the output of other RPMH regulators (or always-on regulators) and RPMH
+firmware is initialized with this knowledge and handles enabling (and
+adjusting the voltage of) input supplies. While we could model the
+parent/child relationship of the regulators in Linux, many boards
+don't bother since it adds extra overhead.
 
->   */
-[..]
-> @@ -449,6 +454,9 @@ static void mtk_dpi_dual_edge(struct mtk_dpi *dpi)
->  		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING,
->  			     dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE ?
->  			     EDGE_SEL : 0, EDGE_SEL);
-> +	if (dpi->conf->rgb888_dual_enable)
-> +		mtk_mmsys_ddp_dpi_fmt_config(dpi->mmsys_dev, DPI_RGB888_DDR_CON,
-> +					     DPI_FORMAT_MASK, NULL);
+Let's change the regulator core to make things work again. Now if we
+fail to get the input or output voltage we'll still call into
+get_optimum_mode() and we'll just pass error codes in for input_uV
+and/or output_uV parameters.
 
-This if block should be further indented.
+Since no existing regulator drivers even look at input_uV and
+output_uV we don't need to add this error handling anywhere right
+now. We'll add some comments in the core so that it's obvious that (if
+regulator drivers care) it's up to them to add the checks.
 
->  	} else {
->  		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE, 0);
->  	}
-[..]
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-> @@ -235,4 +235,8 @@
->  #define MATRIX_SEL_RGB_TO_JPEG		0
->  #define MATRIX_SEL_RGB_TO_BT601		2
->  
-> +#define DPI_FORMAT_MASK			0x1
-> +#define DPI_RGB888_DDR_CON		BIT(0)
-> +#define DPI_RGB565_SDR_CON		BIT(1)
+Reported-by: Andrew Halaney <ahalaney@redhat.com>
+Fixes: efb0cb50c427 ("regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-I'm not sure if it would make more sense to have these definitions in the mmsys
-header since they're configurations of a register in mmsys' iospace... I think
-we can keep them here but at least add a comment above:
+ drivers/regulator/core.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-/* Values for DPI configuration in MMSYS address space */
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 5b5da14976c2..0bc4b9b0a885 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -979,10 +979,13 @@ static int drms_uA_update(struct regulator_dev *rdev)
+ 	} else {
+ 		/* get output voltage */
+ 		output_uV = regulator_get_voltage_rdev(rdev);
+-		if (output_uV <= 0) {
+-			rdev_err(rdev, "invalid output voltage found\n");
+-			return -EINVAL;
+-		}
++
++		/*
++		 * Don't return an error; if regulator driver cares about
++		 * output_uV then it's up to the driver to validate.
++		 */
++		if (output_uV <= 0)
++			rdev_dbg(rdev, "invalid output voltage found\n");
+ 
+ 		/* get input voltage */
+ 		input_uV = 0;
+@@ -990,10 +993,13 @@ static int drms_uA_update(struct regulator_dev *rdev)
+ 			input_uV = regulator_get_voltage(rdev->supply);
+ 		if (input_uV <= 0)
+ 			input_uV = rdev->constraints->input_uV;
+-		if (input_uV <= 0) {
+-			rdev_err(rdev, "invalid input voltage found\n");
+-			return -EINVAL;
+-		}
++
++		/*
++		 * Don't return an error; if regulator driver cares about
++		 * input_uV then it's up to the driver to validate.
++		 */
++		if (input_uV <= 0)
++			rdev_dbg(rdev, "invalid input voltage found\n");
+ 
+ 		/* now get the optimum mode for our new total regulator load */
+ 		mode = rdev->desc->ops->get_optimum_mode(rdev, input_uV,
+-- 
+2.37.2.609.g9ff673ca1a-goog
 
-Thanks,
-Nícolas

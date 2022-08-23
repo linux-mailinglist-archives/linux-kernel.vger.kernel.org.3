@@ -2,73 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BD759EC87
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3B259ECD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiHWTif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        id S232852AbiHWTuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232333AbiHWTiO (ORCPT
+        with ESMTP id S232385AbiHWTte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:38:14 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794A6A1D14
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:34:55 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id a4so18049800wrq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=ytTjReeUrxoqSJ5BeQcZY9hlOg/OMaAOjybK5mQFt+A=;
-        b=Qy0Q9yihjuVjrN8moQnwdH5FwctVgPQjWaTW/jYlmysDVAO2t2WrbWoTwEtoaJmO7I
-         AAM5wdq4aFShbRm62kuc1uNIEpKVeAh8SmEEQ3PfYvDK6AzvNnbwQRFbA1niDLjUyRze
-         ADnk1oooR/czh6+WUVhvHGqF+EgkFgwl4/94d7l7cNsTJVGDee5XPIEoP+gbdxTuTEpm
-         +ygSBBsYP68UagMawe/iKr+zmHc42vuPYH+ZHxXrIQcDzCeyYDSvwVvmYYC9SoBuVJHY
-         MyHlPxkg1fmYUo//Epo2iJbf2qX8wqeeva53IyjehMh2NsTVCLC5JUn3hpVlqas2Ed+U
-         iUDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=ytTjReeUrxoqSJ5BeQcZY9hlOg/OMaAOjybK5mQFt+A=;
-        b=Oy99ssoDp8dkc/RDPS+xJuDK5Vwvp8U99rvSE7rPU+pFbr6aHLlAjcaZmBEnYWPRBk
-         WO+CQtMNNJWhMrL5qFoRrKZTrVptb2xdFFEms4lwgvg/0Ua0HnYJKEdfMDJBKUGh9/qA
-         w2vs9izl/Kr1kp+K6VVTn8Y13Hp4m8guEUsSV3ylrnzhgAW9JxUodkhMm4t6poowbgKp
-         pHkz+Xn8HdzHR2I04j+8y4nOiKCRG6GdO2TkSAA2UTcSca02IC5aquIAnX784tYo4eNW
-         yprEF7b5rtF5vNlwGeSnxQAifI5hBt3rWm+pxziWyz6Tg6epnPVvXZtB84fGSChiY9vI
-         OfbQ==
-X-Gm-Message-State: ACgBeo3BdBLA94+Ck27BUGs60ed9DA4nH1VfUMn/N7qHOHM9kJJAXLOJ
-        L6rMJt7BKc4uw/RXZFkpeBcWkg==
-X-Google-Smtp-Source: AA6agR4/pmlxMMCthZI/YxG8smLnTaQ2KoVUL3TkzQsGdeXmEbVwBRWaPWlRjyZd2AB6jbN6KltESA==
-X-Received: by 2002:a5d:50c8:0:b0:225:5a57:bd84 with SMTP id f8-20020a5d50c8000000b002255a57bd84mr6104142wrt.131.1661279694038;
-        Tue, 23 Aug 2022 11:34:54 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b003a31ca9dfb6sm27073664wmq.32.2022.08.23.11.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 11:34:53 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 19:34:50 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     RAJESH DASARI <raajeshdasari@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ovidiu.panait@windriver.com,
-        alexei.starovoitov@gmail.com, john.fastabend@gmail.com
-Subject: Re: bpf selftest failed in 5.4.210 kernel
-Message-ID: <YwUdyiK16jz1W5Aa@myrica>
-References: <CAPXMrf-C5XEUfOJd3GCtgtHOkc8DxDGbLxE5=GFmr+Py0zKxJA@mail.gmail.com>
- <Yv3M8wqMkLwlaHxa@kroah.com>
- <Yv3wZLuPEL9B/h83@myrica>
- <Yv9shQ3i49efHG6f@kroah.com>
- <CAPXMrf8VsNMKNLxFjdytk57mk_9ZC0avg1qCGLSMOZNirpdboQ@mail.gmail.com>
- <YwCGoRt6ifOC6mCD@kroah.com>
- <CAPXMrf-Gc-Mv1goZrk59GG96OLPxEUC-FKT6Dwo6TU6D7po=gw@mail.gmail.com>
- <YwR76AVTOsdXNpxh@kroah.com>
- <CAPXMrf-XUHnfQtnCMs6pbpM+2LUBLqE2c1Z-UwsM-mU1KdoOUA@mail.gmail.com>
+        Tue, 23 Aug 2022 15:49:34 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0889E69D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:52:56 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id B1D162C1EA6;
+        Tue, 23 Aug 2022 18:52:55 +0000 (UTC)
+Received: from pdx1-sub0-mail-a212.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id E8B1A2C1E9E;
+        Tue, 23 Aug 2022 18:52:54 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661280775; a=rsa-sha256;
+        cv=none;
+        b=KGmH7iyJd2eSoXWsDJ6nC7v7FxKNWpQIrH/eoiQ+NktQda7584haboh4sQwiDu7vC05NKH
+        ptPl0mMxUQi7797CtIgQ+QexVsHWh0TUEvHwc2fA7Qrwiqve9JIKnIe41jx541uaTtHPAK
+        rg3AzBcCCvnJH3YDOO93FKEH+CRetKldnTjKiLPOWYiRmZmmqUFFhVr1IMB8d2wxTNM1RW
+        juspih8p43LBX6D1crFrKMVtKLKW1a8tF6ZUTcGv9mMO4XkL9kgZzYo563UdpKTZSmj3Ko
+        tUaFP3l10Qnj9AQeh3PY5e8MJQBMtDfFdrSDqP0gkDPmEwPrXHg5FdBQk2QDCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661280775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=KA64pA0DH1EGqcQRpI8y0V/oDzrbveA11q1ujgABL90=;
+        b=npRN4qNmMnMaoFIxjsD757lskhnGTMxgBkzewmOc258FSrKL5a4X7O4GFYqUoBm3H+tZrC
+        /LBAT9tIxbuSjsgGqxRhgZL0Oy680KkkX9kta3EXbtE2E6Tn8b34rzsDolY21i4AvnZi23
+        jUx1/0v7ptkUPoWZ2lO8iEEAY9tdm96CNVAbMDrXOsSLScxCnG7ZXurNxmi2LOtW1ypDig
+        X1pZc0M4k6ThXiGGS30zI7gk6bycOpORJ2uEGz5gBjPuIwXpy4xFycUvzasQEwnPnWHSwL
+        acrc50ovEy/l8zVuEXpcIjHxccBtSim+eVw3o3G6NPuDbbjAMJtP7T3GpDjCbw==
+ARC-Authentication-Results: i=1;
+        rspamd-79945fd77c-vbjzp;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Arch-Minister: 078f9ac55faa30c7_1661280775428_1173728395
+X-MC-Loop-Signature: 1661280775428:1852935285
+X-MC-Ingress-Time: 1661280775428
+Received: from pdx1-sub0-mail-a212.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.120.38.149 (trex/6.7.1);
+        Tue, 23 Aug 2022 18:52:55 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a212.dreamhost.com (Postfix) with ESMTPSA id 4MByzB1bVSzPS;
+        Tue, 23 Aug 2022 11:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661280774;
+        bh=KA64pA0DH1EGqcQRpI8y0V/oDzrbveA11q1ujgABL90=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=VfC5TptjeaWDVe5VzQpc3XNpYHjVl8ek74FV8aRSn5jAHg/JD7eOAtwwK6IGdxolX
+         e/wJ2NwW9xkn/ACZ7gmcJczVrdAjqihCOHtjRknvnNLreRGr5msbefs0Ba9wTcI+qL
+         8ryJ/g4XLh136pwrTKPZZSiwEx/Q3pMTCM1C5U45fghZhlyx0Aq6wsdCZFUtv5RjL3
+         pENC6WmyOwkULjXImM4txrf0najehg9VmwdlZjfza21MD4UXOBPFfyKLnF4KBP2EYi
+         FHjA3/hVIWVusR88KVbaQjZi3t3kjZHJ57TiRWbISP3ghAZ0vX5EH2ecNmGx6lAJt+
+         PkWm9y2JPMQAQ==
+Date:   Tue, 23 Aug 2022 11:34:51 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v13 34/70] s390: remove vma linked list walks
+Message-ID: <20220823183451.su3fflupt5w5nnsn@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-35-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAPXMrf-XUHnfQtnCMs6pbpM+2LUBLqE2c1Z-UwsM-mU1KdoOUA@mail.gmail.com>
+In-Reply-To: <20220822150128.1562046-35-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,112 +109,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:31:40AM +0300, RAJESH DASARI wrote:
-> Sorry for the confusion, results are indeed confusing to me .
-> If I try with git bisect I get
-> 
-> git bisect bad
-> 9d6f67365d9cdb389fbdac2bb5b00e59e345930e is the first bad commit
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-For me bisecting points to:
+>From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+>
+>Use the VMA iterator instead.
+>
+>Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-(A)	7c1134c7da99 ("bpf: Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()")
-
-This changes the BPF verifier output and (as expected) breaks the
-test_align selftest. That's why in the same series [1] another patch fixed
-test_align. In v5.4.y, that patch is:
-
-(B)	6a9b3f0f3bad ("selftests/bpf: Fix test_align verifier log patterns")
-
-Unfortunately commit (B) addresses multiple verifier changes, not solely
-(A). My guess is those changes were in series [1] and haven't been
-backported to v5.4. So multiple solutions:
-
-* Partially revert (B), only keeping the changes needed by (A)
-* Revert (A) and (B)
-* Add the missing commits that (B) also addresses
-
-I don't know which, I suppose it depends on the intent behind backporting
-(A). Ovidiu?
-
-In any case 6098562ed9df ("selftests/bpf: Fix "dubious pointer arithmetic"
-test") can be reverted, I can send that once we figure out the rest.
-
-Thanks,
-Jean
-
-[1] https://lore.kernel.org/bpf/158507130343.15666.8018068546764556975.stgit@john-Precision-5820-Tower/
-
-> 
-> If I  try to test myself with multiple test scenarios(I have mentioned
-> in  the previous mails) for the bad commits , I see that bad commits
-> are
-> bpf: Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()
-> selftests/bpf: Fix test_align verifier log patterns
-> selftests/bpf: Fix "dubious pointer arithmetic" test
-> 
-> Thanks,
-> Rajesh Dasari.
-> 
-> On Tue, Aug 23, 2022 at 10:04 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Aug 22, 2022 at 10:23:02PM +0300, RAJESH DASARI wrote:
-> > > Hi,
-> > >
-> > > Please find the test scenarios which I have tried.
-> > >
-> > > Test 1:
-> > >
-> > > Running system Kernel version (tag/commit) :  v5.4.210
-> > > Kernel source code checkout : v5.4.210
-> > > test_align test case execution status : Failure
-> > >
-> > > Test 2:
-> > >
-> > > Running system Kernel version (tag/commit) : v5.4.210
-> > > Kernel source code checkout : v5.4.209
-> > > test_align test case execution status : Failure
-> > >
-> > > Test 3:
-> > >
-> > > Running system Kernel version (tag/commit) : v5.4.209
-> > > Kernel source code checkout : v5.4.209
-> > > test_align test case execution status : Success
-> > >
-> > > Test 4:
-> > >
-> > > Running system Kernel version (tag/commit) : ACPI: APEI: Better fix to
-> > > avoid spamming the console with old error logs ( Kernel compiled at
-> > > this commit  and system is booted with this change)
-> > > Kernel source code checkout : v5.4.210 but reverted selftests/bpf: Fix
-> > > test_align verifier log patterns and selftests/bpf: Fix "dubious
-> > > pointer arithmetic" test. If I revert only the Fix "dubious pointer
-> > > arithmetic" test, the testcase still fails.
-> > > test_align test case execution status : Success
-> > >
-> > > Test 5:
-> > >
-> > > Running system Kernel version (tag/commit) :  v5.4.210 but reverted
-> > > commit (bpf: Verifer, adjust_scalar_min_max_vals to always call
-> > > update_reg_bounds() )
-> > > Kernel source code checkout : v5.4.210 but reverted selftests/bpf: Fix
-> > > test_align verifier log patterns and selftests/bpf: Fix "dubious
-> > > pointer arithmetic" test.
-> > > test_align test case execution status : Success
-> > >
-> > > Test 6 :
-> > >
-> > > Running system Kernel version (tag/commit) : bpf: Test_verifier, #70
-> > > error message updates for 32-bit right shift( Kernel compiled at this
-> > > commit  and system is booted with this change)
-> > > Kernel source code checkout : v5.4.209 or v5.4.210
-> > > test_align test case execution status : Failure
-> >
-> > I'm sorry, but I don't know what to do with this report at all.
-> >
-> > Is there some failure somewhere?  If you use 'git bisect' do you find
-> > the offending commit?
-> >
-> > confused,
-> >
-> > greg k-h
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

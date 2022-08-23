@@ -2,136 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3195059DD82
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C63D59E1FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358482AbiHWLlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S1358134AbiHWLnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357900AbiHWLg3 (ORCPT
+        with ESMTP id S1357895AbiHWLjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:36:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5BDC7B88;
-        Tue, 23 Aug 2022 02:27:39 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 09:27:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661246858;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1zjfTNaFn8VPa2Lkn3ZMfM122fEeU0I/FmGpR0qv5RI=;
-        b=IvcnGwcc2Xj2heUIQ8SEYTdFpQSIcBX5v7C3w+bqDH++L57ZWLdrsz+esWRLB1x9K4wIK6
-        G9eHvMFHY6YpzANWuwhYvLybmtpdBMP8mbMU55piOl462Z9hwdqfPLc0Q6KqAXAFQGNb0V
-        8kHg7w0oTbMcCkIBni5Uz1R7em87iugBhCvb5BhRTs8IwkfdX4aiaGejcjuG6Azvx3XyGB
-        QU6vexapqunKN86ipv5GWSm6ka5fVPYhkBq+v7121vtd7Hw8S0ZXXj+JbN5jXLLTUN9rzC
-        5Z2p1nZcsUw1xctMGBhnmA3L+ItJxRokFp9TdGPl+zKFxAVH1stSDoqEnJUctw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661246858;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1zjfTNaFn8VPa2Lkn3ZMfM122fEeU0I/FmGpR0qv5RI=;
-        b=I9mAqVd8ECCjA3yol8K/JQg+Scsf1o02zfm0dDxv73bQ0qWVfGKmor7xuHhW0psKWHKoWp
-        oLDJ/XHyRoQ692Cg==
-From:   "tip-bot2 for Chengming Zhou" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Maintain task se depth in set_task_rq()
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220818124805.601-2-zhouchengming@bytedance.com>
-References: <20220818124805.601-2-zhouchengming@bytedance.com>
+        Tue, 23 Aug 2022 07:39:32 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC7E70E55;
+        Tue, 23 Aug 2022 02:28:34 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27N9RwWQ080103;
+        Tue, 23 Aug 2022 04:27:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661246878;
+        bh=xd4qm/j7upLytEKeiy06TJdA6DbvK6VC227evNzbywg=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=MmhNIicLemZVBqA7iUZ+/2S9/VTqObVudRkclB6P03U/ynv1XIahQKCKFvLQL5mlE
+         l7SrT3cog495av+XnkJFY5VoOaCPtzsEC9AMOTPKdLFeIZhIi47KkYu9K5bsxyFbaP
+         ehswb6ecd5j3bxcZMf2/9FPNewy6Z1pJleyqVxq8=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27N9RwZc068060
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 23 Aug 2022 04:27:58 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 23
+ Aug 2022 04:27:58 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 23 Aug 2022 04:27:58 -0500
+Received: from [10.24.69.241] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27N9RsMR112681;
+        Tue, 23 Aug 2022 04:27:55 -0500
+Message-ID: <7cd7e745-11d1-476b-a7f6-3131a4ad2bd3@ti.com>
+Date:   Tue, 23 Aug 2022 14:57:53 +0530
 MIME-Version: 1.0
-Message-ID: <166124685689.401.4486657040685089131.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <lee.jones@linaro.org>, <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <kishon@ti.com>,
+        <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
+        <grygorii.strashko@ti.com>, <rogerq@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings
+ for J7200
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+References: <20220822065631.27933-1-s-vadapalli@ti.com>
+ <20220822065631.27933-2-s-vadapalli@ti.com>
+ <20220822214126.GA896562-robh@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20220822214126.GA896562-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+Hello Rob,
 
-Commit-ID:     78b6b15770618efb60d84e2d605f6b93dc94051b
-Gitweb:        https://git.kernel.org/tip/78b6b15770618efb60d84e2d605f6b93dc94051b
-Author:        Chengming Zhou <zhouchengming@bytedance.com>
-AuthorDate:    Thu, 18 Aug 2022 20:47:57 +08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 23 Aug 2022 11:01:17 +02:00
+On 23/08/22 03:11, Rob Herring wrote:
+> On Mon, Aug 22, 2022 at 12:26:30PM +0530, Siddharth Vadapalli wrote:
+>> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
+>> that are not supported on earlier SoCs. Add a compatible for it.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  .../mfd/ti,j721e-system-controller.yaml       |  6 ++++
+>>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 30 ++++++++++++++++++-
+>>  2 files changed, 35 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>> index 73cffc45e056..466724cb4157 100644
+>> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>> @@ -54,6 +54,12 @@ patternProperties:
+>>      description:
+>>        Clock provider for TI EHRPWM nodes.
+>>  
+>> +  "phy@[0-9a-f]+$":
+>> +    type: object
+>> +    $ref: ../phy/ti,phy-gmii-sel.yaml
+> 
+> /schemas/phy/...
 
-sched/fair: Maintain task se depth in set_task_rq()
+Thank you for reviewing the patch. I will update $ref to
+/schemas/phy/phy-provider.yaml.
 
-Previously we only maintain task se depth in task_move_group_fair(),
-if a !fair task change task group, its se depth will not be updated,
-so commit eb7a59b2c888 ("sched/fair: Reset se-depth when task switched to FAIR")
-fix the problem by updating se depth in switched_to_fair() too.
+> 
+>> +    description:
+>> +      This is the register to set phy mode through phy-gmii-sel driver.
+>> +
+>>  required:
+>>    - compatible
+>>    - reg
+>> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>> index ff8a6d9eb153..0ffb97f1a77c 100644
+>> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>> @@ -53,12 +53,24 @@ properties:
+>>        - ti,am43xx-phy-gmii-sel
+>>        - ti,dm814-phy-gmii-sel
+>>        - ti,am654-phy-gmii-sel
+>> +      - ti,j7200-cpsw5g-phy-gmii-sel
+>>  
+>>    reg:
+>>      maxItems: 1
+>>  
+>>    '#phy-cells': true
+>>  
+>> +  ti,qsgmii-main-ports:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    description: |
+>> +      Required only for QSGMII mode. Array to select the port for
+>> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
+>> +      ports automatically. Any one of the 4 CPSW5G ports can act as the
+>> +      main port with the rest of them being the QSGMII_SUB ports.
+>> +    items:
+>> +      minimum: 1
+>> +      maximum: 4
+>> +
+>>  allOf:
+>>    - if:
+>>        properties:
+>> @@ -73,6 +85,22 @@ allOf:
+>>          '#phy-cells':
+>>            const: 1
+>>            description: CPSW port number (starting from 1)
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - ti,j7200-cpsw5g-phy-gmii-sel
+>> +    then:
+>> +      properties:
+>> +        '#phy-cells':
+>> +          const: 1
+>> +          description: CPSW port number (starting from 1)
+>> +        ti,qsgmii-main-ports:
+>> +          maxItems: 1
+> 
+> If the array size can only ever be 1, then it's a uint32, not a 
+> uint32-array.
 
-Then commit daa59407b558 ("sched/fair: Unify switched_{from,to}_fair()
-and task_move_group_fair()") unified these two functions, moved se.depth
-setting to attach_task_cfs_rq(), which further into attach_entity_cfs_rq()
-with commit df217913e72e ("sched/fair: Factorize attach/detach entity").
+For the current device, there can be only one QSGMII main port and
+uint32 will be sufficient. However, I plan to send patches for TI's
+J721e device which supports up to 2 QSGMII main ports. I wish to
+implement the property such that it can be reused by J721e. For this
+reason, I am defining the property as a uint32-array. With this
+implementation, J7200 will use the property as an array with one
+element, while J721e will use the property as an array with two
+elements. This is being done to avoid adding a new property in the
+future just for J721e. Please let me know if this is fine.
 
-This patch move task se depth maintenance from attach_entity_cfs_rq()
-to set_task_rq(), which will be called when CPU/cgroup change, so its
-depth will always be correct.
-
-This patch is preparation for the next patch.
-
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20220818124805.601-2-zhouchengming@bytedance.com
----
- kernel/sched/fair.c  | 8 --------
- kernel/sched/sched.h | 1 +
- 2 files changed, 1 insertion(+), 8 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index da38865..a3b0f8b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -11562,14 +11562,6 @@ static void attach_entity_cfs_rq(struct sched_entity *se)
- {
- 	struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 
--#ifdef CONFIG_FAIR_GROUP_SCHED
--	/*
--	 * Since the real-depth could have been changed (only FAIR
--	 * class maintain depth value), reset depth properly.
--	 */
--	se->depth = se->parent ? se->parent->depth + 1 : 0;
--#endif
--
- 	/* Synchronize entity with its cfs_rq */
- 	update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
- 	attach_entity_load_avg(cfs_rq, se);
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 3ccd35c..4c48221 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1930,6 +1930,7 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
- 	set_task_rq_fair(&p->se, p->se.cfs_rq, tg->cfs_rq[cpu]);
- 	p->se.cfs_rq = tg->cfs_rq[cpu];
- 	p->se.parent = tg->se[cpu];
-+	p->se.depth = tg->se[cpu] ? tg->se[cpu]->depth + 1 : 0;
- #endif
- 
- #ifdef CONFIG_RT_GROUP_SCHED
+Regards,
+Siddharth.

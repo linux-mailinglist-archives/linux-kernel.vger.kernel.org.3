@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A57C59E931
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E323659E901
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244895AbiHWRQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S245063AbiHWRQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344106AbiHWRPd (ORCPT
+        with ESMTP id S1343516AbiHWRP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:15:33 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E75145BBC;
-        Tue, 23 Aug 2022 06:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661262598; x=1692798598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7URe0xxC6qIsgHX2iNkaSTs6I2GXYi/eCN2P9MNn59g=;
-  b=WXj3n/J46Pbux/1Zyu41y+jG5NrJnU3Aovzu9CgAHzSx1goXwSm6BuPg
-   oafg1w4UCP3hiTQ0CbeEJSv5+NZSNZdgNyQ87zAgtklNPO3u//TA+2XNY
-   IPlnxCjPX2iZ/Cr1PDUMUt4rzAH816XyGNiVvvNFtHeICALMvyOjuSRlS
-   3Hk4m7/AIImhYJbBLz92Ug9PqnQQocI3Zjx+SK6r+3DNtmKPdVATrHBNA
-   2LUu87IXU0LKoVX4TIcI6SpL8+4mv2TFRf9rvqvcylq+1ArUUfYvznE/6
-   O6rL1A3TUGGTvoP6iIJtQ6Qven59474nnEbacE9DuvZE1FT4Sbyjk8FqG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="292435544"
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="292435544"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 06:49:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="560172799"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 23 Aug 2022 06:49:53 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQUHw-0000HX-2u;
-        Tue, 23 Aug 2022 13:49:52 +0000
-Date:   Tue, 23 Aug 2022 21:49:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc:     kbuild-all@lists.01.org, Daniel Xu <dxu@dxuuu.xyz>,
-        pablo@netfilter.org, fw@strlen.de, toke@kernel.org,
-        martin.lau@linux.dev, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 4/5] bpf: Add support for writing to
- nf_conn:mark
-Message-ID: <202208232110.vsR1bsL0-lkp@intel.com>
-References: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
+        Tue, 23 Aug 2022 13:15:27 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35947A74C8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:50:27 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id l1so19234589lfk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=QUolfiYZKhuZ0h0B3LuZHuKPS00eFUXYmA/Bd2y5s4I=;
+        b=TOrVT7Bw1wcze2poGYZnEnhBFQKAsugEDX5vofp3qc4BWMsBQqESe8GO4YY84wIoe2
+         l0VRiPpb5Xk23/mzscq87BN3bAWDYtQD+92/JPqA/4x97FtMSoB/DSZ/z8jH1dAcvZS1
+         vjsZYZQDEdV70m3rbv+VpBPR6z4ZHRb2yxO1XbqRZccxlREcRL5387rvuayXpIh8hkDP
+         YKnuSf0WbPG5cuDVQKsfAqVkpu9tuanHE9oFpbov8UmjGpWD1RSyC1xeDfD/LKR3NS44
+         GrrWnh8nzHOCiCTqjdbXBGzztScXKGrAQULv0ss7IEa76YzvQPBG3SNKuW+Vf0frA6cf
+         JWCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=QUolfiYZKhuZ0h0B3LuZHuKPS00eFUXYmA/Bd2y5s4I=;
+        b=lruK35oKHutS7Gnd79VCw3pNflRpNfqRgOaTO/X/MVGgB8SP1NnEHoLxXkiVFPJhmk
+         5Iy6/syCnWXH9xfH+gjz1fr2hWDy/VOk5cONwrLEy5XHgV9dRqFKRTqXPIllkqsJN737
+         /LyzC+e8lBN5zGV7iAXYG7AyYXE/Ke1yjKFjLn6id+Ajgh1ouqecT0Uvv2M0qJ0zlDPi
+         gIG38QBno2E+/40JYU+u9pSBMRVvmnCLBaKlIvEdJDBrVDt9v2p3kvpbReNPjNSVzVcw
+         pJExAca3e3fqxXBG+fjLH45TTWQW5wfHB0o1EtYrY6wfMQgDEM1RZZueD/Pp2xF3Jji6
+         7yNw==
+X-Gm-Message-State: ACgBeo1b7+nlkIC2g1VNFdWcznn+uJ1aLAiWZSHu+3B0a2eiDvz0XN/B
+        2+8tIbtzdW63tewaQHMuuvvZow==
+X-Google-Smtp-Source: AA6agR4ugY4cbiKVm7rGtwHlbVL0Ns3GCfIDgsM/fmAFTzn3OxYvT1bEvN4Wx75yq2QO2QJWGjVmNg==
+X-Received: by 2002:a05:6512:1096:b0:492:ca89:a38d with SMTP id j22-20020a056512109600b00492ca89a38dmr7602295lfg.152.1661262625537;
+        Tue, 23 Aug 2022 06:50:25 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id v3-20020a056512348300b0048af6242892sm953790lfr.14.2022.08.23.06.50.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 06:50:24 -0700 (PDT)
+Message-ID: <6d08906f-fd8e-009d-fd0f-384165c88552@linaro.org>
+Date:   Tue, 23 Aug 2022 16:50:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH linux-next] soc: qcom: icc-bwmon: remove redundant ret
+ variable
+Content-Language: en-US
+To:     cgel.zte@gmail.com
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,51 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 23/08/2022 16:36, cgel.zte@gmail.com wrote:
+> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> 
+> Return value from devm_regmap_field_bulk_alloc() directly
+> instead of taking this in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220823/202208232110.vsR1bsL0-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/496ec6d75c8e8758f93c6b987eee83713c911a05
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220823-032643
-        git checkout 496ec6d75c8e8758f93c6b987eee83713c911a05
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld: net/core/filter.o: in function `tc_cls_act_btf_struct_access':
-   net/core/filter.c:8644: undefined reference to `nf_conntrack_btf_struct_access'
-   ld: net/core/filter.o: in function `xdp_btf_struct_access':
->> include/net/net_namespace.h:369: undefined reference to `nf_conntrack_btf_struct_access'
-   pahole: .tmp_vmlinux.btf: Invalid argument
-   .btf.vmlinux.bin.o: file not recognized: file format not recognized
+I cannot find this report. This is an open source work and public
+collaboration. The "Reported-by" usually means that the issue was
+reported to us, in some way, usually in public. Can we see the report?
+Otherwise adding non-public, non-verifiable reports is useless and
+clutters our report-credit-system.
 
 
-vim +369 include/net/net_namespace.h
+> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> ---
+>  drivers/soc/qcom/icc-bwmon.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
 
-8f424b5f32d78b Eric Dumazet      2008-11-12  365  
-0c5c9fb5510633 Eric W. Biederman 2015-03-11  366  static inline struct net *read_pnet(const possible_net_t *pnet)
-8f424b5f32d78b Eric Dumazet      2008-11-12  367  {
-0c5c9fb5510633 Eric W. Biederman 2015-03-11  368  #ifdef CONFIG_NET_NS
-0c5c9fb5510633 Eric W. Biederman 2015-03-11 @369  	return pnet->net;
-8f424b5f32d78b Eric Dumazet      2008-11-12  370  #else
-0c5c9fb5510633 Eric W. Biederman 2015-03-11  371  	return &init_net;
-8f424b5f32d78b Eric Dumazet      2008-11-12  372  #endif
-0c5c9fb5510633 Eric W. Biederman 2015-03-11  373  }
-5d1e4468a7705d Denis V. Lunev    2008-04-16  374  
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+Best regards,
+Krzysztof

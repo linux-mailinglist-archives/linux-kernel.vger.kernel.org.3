@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656F959E89C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC33B59E8B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343861AbiHWRHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S1343612AbiHWRJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344509AbiHWRFf (ORCPT
+        with ESMTP id S245155AbiHWRJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:05:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF3F151422;
-        Tue, 23 Aug 2022 06:34:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9F04B81D63;
-        Tue, 23 Aug 2022 13:34:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85250C433D6;
-        Tue, 23 Aug 2022 13:34:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661261665;
-        bh=BJ7Rg49eR0G7P7lgLM1TFnK6mbu8N114hwyTrcEWg2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E27pXfPA740voGk5FfEbycGgfLATrixU1QTQHOI6tg8+PY1PM32eqTgKzkS5wJuPX
-         Xmjg+HI6+eYX0fkj9T+IOAYw3N9LYkJgiii5TEOp6QxGPRZMT3MKljWTNKUlcJdt6u
-         PJm5Qjs881niM/gIG/wwqo7jK07DeWLpqi0nxbRqn041xAvpQFhJ1DCBCoK65mBHyc
-         +3tI/jIgZkEvf2tnbL+7C+oPk9cAkevJy3ZQsAqbDfrxPjR4qLz66YePw/iYNKOH/Z
-         U+pJKWaV0yYopTLzP6U8s2v/RHHrlgEKCLSsYHASiCrHQIBag6h77yowkR7s+GVvw6
-         k/IwPys/9JU3w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EADBE404A1; Tue, 23 Aug 2022 10:34:22 -0300 (-03)
-Date:   Tue, 23 Aug 2022 10:34:22 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 1/2] perf stat: Clear reset_group for each stat run
-Message-ID: <YwTXXhVHeYAcXWmO@kernel.org>
-References: <20220822213352.75721-1-irogers@google.com>
+        Tue, 23 Aug 2022 13:09:35 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3F78A1DD;
+        Tue, 23 Aug 2022 06:36:27 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id p9so12409992pfq.13;
+        Tue, 23 Aug 2022 06:36:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=qkCUHHEjfjSKRNQH08mkmAjUm96MxGOjYlwpNmfHX0U=;
+        b=qLjD8RrkXfDmKSsc6uvFpxxaOKcjFrlX4Ed+uag+3Zcut/RvJBrmAPkRQzyN2ThJDp
+         HogTfLUISfd4IGGr7WwQ4FfKIWDNBiyTGKDGukrQvhEwF/fMh8SGC0Wsdt+L6rmQz94M
+         XMphEOULUrmPEQTUtIz7qzhZpSNdsUDAxW8yo2/XsIHk6YEr8Ps7k9FTThxVaQEMBSnU
+         Q+my5qp/br8t3pPgXgMN2AFRE73097pMSUkx/iq8c3xru2nAQPkku6i+4ku6hmjcQbzF
+         6uuI9nJssK/+iKLSpWBlZTodGnB9dClR8ltHX+fTLzY4ARGl9rmgPEWceOFzJAdd3o51
+         ty7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=qkCUHHEjfjSKRNQH08mkmAjUm96MxGOjYlwpNmfHX0U=;
+        b=j2dz7NUigDqfBmJ/raCF3JmWw8094BzWEWj07VlyidkIE0MX18ODfpQiXE3+LUYAkw
+         uI7lgYtcEonvUCONaln2gI3omk62J2EQ5FEU/Ot8hYZ7yTGGv7KXxI1wGRxoT1e/qB/b
+         ViRRj3KKQiw9/Q6PDxZ7Q5CNSYbE+8mwpjA3JJMTGjzK0QlleOQMdnuoHWd2QeOsuxyz
+         gIvgTAey65kgtqPO5S2RsRIlSR6hxr5qk/ClpN1BwvC2FJI1eU3q0mDTYLFQZJqP+c97
+         L64nWbxNaVk7k/ZuM5xUJdlVcqjqLq0C3OwaZSKwFQlFkScF5q6Yj8G2aG+GEVhP0vqD
+         Y+jA==
+X-Gm-Message-State: ACgBeo1U2XqDpG1txHUH3cqVE3Dnqigye2oEvZpXQ/Kosbzs2/M2AePf
+        Uk25D5iNI4sL13zZKLiKKW8=
+X-Google-Smtp-Source: AA6agR7efiQxwbLWixfzhjMKdtkgJvkshRWfVT7naWyUZWCL75aBLjGcDOpWiyrbZhAIN33BsfFWew==
+X-Received: by 2002:a05:6a00:b53:b0:537:7f7:63a7 with SMTP id p19-20020a056a000b5300b0053707f763a7mr2134388pfo.2.1661261786624;
+        Tue, 23 Aug 2022 06:36:26 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 203-20020a6215d4000000b005350ea966c7sm10812859pfv.154.2022.08.23.06.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 06:36:26 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     krzysztof.kozlowski@linaro.org
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] soc: qcom: icc-bwmon: remove redundant ret variable
+Date:   Tue, 23 Aug 2022 13:36:20 +0000
+Message-Id: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822213352.75721-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Aug 22, 2022 at 02:33:51PM -0700, Ian Rogers escreveu:
-> If a weak group is broken then the reset_group flag remains set for
-> the next run. Having reset_group set means the counter isn't created
-> and ultimately a segfault.
-> 
-> A simple reproduction of this is:
-> perf stat -r2 -e '{cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles}:W
-> which will be added as a test in the next patch.
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-So doing this on that existing BPF related loop may solve the problem,
-but for someone looking just at the source code, without any comment,
-may be cryptic, no?
+Return value from devm_regmap_field_bulk_alloc() directly
+instead of taking this in another redundant variable.
 
-And then the fixes tags talks about affinity, adding a bit more
-confusion, albeit being the part that does the weak logic :-\
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ drivers/soc/qcom/icc-bwmon.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Can we have a comment just before:
-
-+             counter->reset_group = false;
-
-Stating that this is needed only when using -r?
-
-- Arnaldo
+diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
+index 47c2c3e7bb3f..9df47afb0d81 100644
+--- a/drivers/soc/qcom/icc-bwmon.c
++++ b/drivers/soc/qcom/icc-bwmon.c
+@@ -551,7 +551,6 @@ static int bwmon_init_regmap(struct platform_device *pdev,
+ 	struct device *dev = &pdev->dev;
+ 	void __iomem *base;
+ 	struct regmap *map;
+-	int ret;
  
-> Fixes: 4804e0111662 ("perf stat: Use affinity for opening events")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-stat.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 7fb81a44672d..54cd29d07ca8 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -826,6 +826,7 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
->  	}
->  
->  	evlist__for_each_entry(evsel_list, counter) {
-> +		counter->reset_group = false;
->  		if (bpf_counter__load(counter, &target))
->  			return -1;
->  		if (!evsel__is_bpf(counter))
-> -- 
-> 2.37.2.609.g9ff673ca1a-goog
-
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base))
+@@ -565,11 +564,10 @@ static int bwmon_init_regmap(struct platform_device *pdev,
+ 
+ 	BUILD_BUG_ON(ARRAY_SIZE(msm8998_bwmon_reg_fields) != F_NUM_FIELDS);
+ 	BUILD_BUG_ON(ARRAY_SIZE(sdm845_llcc_bwmon_reg_fields) != F_NUM_FIELDS);
+-	ret = devm_regmap_field_bulk_alloc(dev, map, bwmon->regs,
++
++	return devm_regmap_field_bulk_alloc(dev, map, bwmon->regs,
+ 					   bwmon->data->regmap_fields,
+ 					   F_NUM_FIELDS);
+-
+-	return ret;
+ }
+ 
+ static int bwmon_probe(struct platform_device *pdev)
 -- 
+2.25.1
 
-- Arnaldo

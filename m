@@ -2,85 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E5E59E526
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EAA59E509
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241833AbiHWOeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 10:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S242276AbiHWOSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 10:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241359AbiHWOdx (ORCPT
+        with ESMTP id S241876AbiHWOS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 10:33:53 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0092CA2D9C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:49:44 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oQS2z-0004K1-CB; Tue, 23 Aug 2022 13:26:17 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Markus Reichl <m.reichl@fivetechno.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: rockchip-inno-usb2: Return zero after otg sync
-Date:   Tue, 23 Aug 2022 13:26:16 +0200
-Message-ID: <6544199.MhkbZ0Pkbq@diego>
-In-Reply-To: <20220822103219.3985075-1-pgwipeout@gmail.com>
-References: <20220822103219.3985075-1-pgwipeout@gmail.com>
+        Tue, 23 Aug 2022 10:18:27 -0400
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F0976204976;
+        Tue, 23 Aug 2022 04:32:33 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 23 Aug 2022 19:26:34
+ +0800 (GMT+08:00)
+X-Originating-IP: [218.12.19.15]
+Date:   Tue, 23 Aug 2022 19:26:34 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Brian Norris" <briannorris@chromium.org>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "Linux Kernel" <linux-kernel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "amit karwar" <amitkarwar@gmail.com>,
+        "Ganapathi Bhat" <ganapathi017@gmail.com>,
+        "Sharvari Harisangam" <sharvari.harisangam@nxp.com>,
+        "Xinming Hu" <huxinming820@gmail.com>, kvalo@kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
+        "Johannes Berg" <johannes@sipsolutions.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v7 1/2] devcoredump: remove the useless gfp_t parameter
+ in dev_coredumpv and dev_coredumpm
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <CA+ASDXNN81VczMTUt8=AyeytbMjy2vAGi_aVW_MNha9D99Z5VA@mail.gmail.com>
+References: <cover.1660739276.git.duoming@zju.edu.cn>
+ <b861ce56ba555109a67f85a146a785a69f0a3c95.1660739276.git.duoming@zju.edu.cn>
+ <YvzicURy8t2JdQke@kroah.com>
+ <176e7de7.8a223.182ac1fbc47.Coremail.duoming@zju.edu.cn>
+ <Yv5TefZcrUPY1Qjc@kroah.com>
+ <5108e03b.8c156.182b1a2973f.Coremail.duoming@zju.edu.cn>
+ <CA+ASDXNN81VczMTUt8=AyeytbMjy2vAGi_aVW_MNha9D99Z5VA@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <7f94efe8.90d97.182ca7446e2.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgD3_6tquQRj087PAw--.56628W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgULAVZdtbI0NQAZsZ
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 22. August 2022, 12:32:18 CEST schrieb Peter Geis:
-> The otg sync state patch reuses the ret variable, but fails to set it to
-> zero after use. This leads to a situation when the otg port is in
-> peripheral mode where the otg phy aborts halfway through setup. Fix this
-> by setting ret to zero after use.
-> 
-> Fixes: 8dc60f8da22f ("phy: rockchip-inno-usb2: Sync initial otg state")
-> 
-> Reported-by: Markus Reichl <m.reichl@fivetechno.de>
-> Reported-by: Michael Riesch <michael.riesch@wolfvision.net>
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
-> Tested-by: Markus Reichl <m.reichl@fivetechno.de>
-> ---
->  drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> index 0b1e9337ee8e..5fc7c374a6b4 100644
-> --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> @@ -1169,6 +1169,7 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
->  			/* do initial sync of usb state */
->  			ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
->  			extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
-> +			ret = 0;
->  		}
->  	}
-
-I also ran into that issue just now :-) .
-So am looking forward to v2.
-
-Thanks
-Heiko
-
+SGVsbG8sCgpPbiBNb24sIDIyIEF1ZyAyMDIyIDExOjIxOjM2IC0wNzAwIEJyaWFuIE5vcnJpcyB3
+cm90ZToKCj4gSGksCj4gCj4gT24gVGh1LCBBdWcgMTgsIDIwMjIgYXQgODo0NyBBTSA8ZHVvbWlu
+Z0B6anUuZWR1LmNuPiB3cm90ZToKPiA+IE9uIFRodSwgMTggQXVnIDIwMjIgMTY6NTg6MDEgKzAy
+MDAgR3JlZyBLSCB3cm90ZToKPiA+ID4gTm8sIHRoYXQgaXMgbm90IG5lY2Vzc2FyeS4gIERvIHRo
+ZSB3b3JrIG5vdyBzbyB0aGF0IHRoZXJlIGlzIG5vIGZsYWcgZGF5Cj4gPiA+IGFuZCB5b3UgZG9u
+J3QgaGF2ZSB0byB3b3JyeSBhYm91dCBuZXcgdXNlcnMsIGl0IHdpbGwgYWxsICJqdXN0IHdvcmsi
+Lgo+ID4KPiA+IERvIHlvdSBtZWFuIHdlIHNob3VsZCByZXBsYWNlIGRldl9zZXRfbmFtZSgpIGlu
+IGRldl9jb3JlZHVtcG0oKSB0byBzb21lIG90aGVyCj4gPiBmdW5jdGlvbnMgdGhhdCBjb3VsZCB3
+b3JrIGJvdGggaW4gaW50ZXJydXB0IGNvbnRleHQgYW5kIHByb2Nlc3MgY29udGV4dD8KPiAKPiBO
+by4KPiAKPiBJIGJlbGlldmUgdGhlIHN1Z2dlc3Rpb24gaXMgdGhhdCByYXRoZXIgdGhhbiBjaGFu
+Z2UgdGhlIHNpZ25hdHVyZSBmb3IKPiBkZXZfY29yZWR1bXB2KCkgKHdoaWNoIG1lYW5zIGV2ZXJ5
+b25lIGhhcyB0byBhZ3JlZSBvbiB0aGUgbmV3Cj4gc2lnbmF0dXJlIG9uIGRheSAxKSwgeW91IHNo
+b3VsZCBpbnRyb2R1Y2UgYSBuZXcgQVBJLCBsaWtlCj4gZGV2X2NvcmVkdW1wdl9ub2F0b21pYygp
+IChJJ20gbm90IGdvb2QgYXQgbmFtaW5nIFsxXSkgd2l0aCB0aGUKPiBzaWduYXR1cmUgeW91IHdh
+bnQsIGFuZCB0aGVuIG1pZ3JhdGUgdXNlcnMgb3Zlci4gT25jZSB3ZSBoYXZlIGEKPiByZWxlYXNl
+IHdpdGggbm8gdXNlcnMgb2YgdGhlIG9sZCBBUEksIHdlIGRyb3AgaXQuCj4gCj4gVGhlcmUgYXJl
+IHBsZW50eSBvZiBleGFtcGxlcyBvZiB0aGUga2VybmVsIGNvbW11bml0eSBkb2luZyBzaW1pbGFy
+Cj4gdHJhbnNpdGlvbnMuIFlvdSBjYW4gc2VhcmNoIGFyb3VuZCBmb3IgZXhhbXBsZXMsIGJ1dCBh
+IHF1aWNrIHNlYXJjaCBvZgo+IG15IG93biBzaG93cyBzb21ldGhpbmcgbGlrZSB0aGlzOgo+IGh0
+dHBzOi8vbHduLm5ldC9BcnRpY2xlcy83MzU4ODcvCj4gKEluIHBhcnRpY3VsYXIsIHRpbWVyX3Nl
+dHVwKCkgd2FzIGludHJvZHVjZWQsIGFuZCBhbGwgc2V0dXBfdGltZXIoKQo+IHVzZXJzIHdlcmUg
+bWlncmF0ZWQgdG8gaXQgd2l0aGluIGEgcmVsZWFzZSBvciB0d28uKQo+IAo+IEJyaWFuCj4gCj4g
+WzFdIFNlcmlvdXNseSwgZGV2X2NvcmVkdW1wdl9ub2F0b21pYygpIGlzIG5vdCBhIG5hbWUgSSB3
+YW50IHRvIHNlZQo+IGxhc3QgdmVyeSBsb25nLiBNYXliZSBzb21lIG90aGVyIHRyaXZpYWwgbW9k
+aWZpY2F0aW9uPyBFeGFtcGxlczoKPiAKPiBkZXZfY29yZV9kdW1wdigpCj4gZGV2X2NvcmVkdW1w
+X3YoKQo+IGRldmljZV9jb3JlZHVtcHYoKQo+IC4uLgoKVGhhbmsgeW91IHZlcnkgbXVjaCBmb3Ig
+eW91ciB0aW1lciBhbmQgc3VnZ2VzdGlvbnMhCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==
 

@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E89C59EF50
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F00559EF56
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiHWWiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S229747AbiHWWke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiHWWiw (ORCPT
+        with ESMTP id S230429AbiHWWkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:38:52 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0BE5E647
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:38:47 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso16106613pjr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:38:47 -0700 (PDT)
+        Tue, 23 Aug 2022 18:40:31 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489045C353
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:40:30 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id w28so11525726qtc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:40:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=5DFJelRh8hAibdIhoMcbXDL+2DULmlurhTcXUJAe61U=;
-        b=Gh592xm6YznjkVATkRVypJ58c4FBvmtNYI3K1Mp2jR37aBg+Zy/ni4ikRiA1J5KaqZ
-         sPgxur3Fi3Fj4pUcvG8gg0wzv6WqgTRQqABErIyEWt5SnktfAnKGXgCesXyu2/7AVfPK
-         icQvq5ZmHdieE8yqh2FfprkQdYJcxbzCSNNng=
+        d=arista.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=tEiLJXVAHrmzpiMmXdTWCj0bWAxM/BiRch8Q/bqnYmk=;
+        b=jBJzeUECgQGXkoNFKntIAAPAREE9RPYeNUWJHUPmQ/g5fq36oab9p6G1yz5EhggPnD
+         M/gMBVtm4LQVcfOWZonv++4X8z7YTyCijVrWLfADoEUitsc3TFtRv7ZcV/dh7nGC7QaN
+         Z6nYRCVXCLmXGILUga1vNLgtk3gYTeJ/pYRlcOIbKYMupLDQOsRSwP2ACh2nz7D0dOpe
+         oi4CUBXGdwBqxd7pkdHJases9yS5TSVDJncB6ddAl3zJ4mhgsYsUdFJjXfBguu5FUgGe
+         nGHN4qIWTGF+cDnUgK7BLC8xUNzUDi3mULQV3dWHBk0V5PYOcL2K1Mio06GHdoktB8xm
+         ugGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=5DFJelRh8hAibdIhoMcbXDL+2DULmlurhTcXUJAe61U=;
-        b=fxlQrsUivwefM85c0B3b/clXR9sUQQsY9gYeV+h70cJsO1B641DTxe60yjYrwcJA+v
-         zPoBHRg18KrxC0YHXPYfrwuWUi9vAwsV/Vygo6KWIM3vJIhvjSehmiPV53XBY4EfW4mK
-         ynJbRzIsaJoosQib3/9HrE4rvt2FHx8Ls7VlrwhQEvK+kSzTH0BBgLoyauJNt1+nY26Q
-         W/zwNo6b1gjrJAlHuYNy2pm3UG/gIgEQRAOTHrFnBP/DYTaqTWih+mCOSnxzn/7I3xMm
-         EftnaXimkF2JLaSFkGgXHdanKTUJGEXMrp0DpVuhfQvQQTMC8yni8KHUtXq5TJevRR8e
-         +dvg==
-X-Gm-Message-State: ACgBeo0lbJbD62HGfqi3YlHUDWl4NK3z6ydrVHtasN6BCuVZX02EQpoC
-        CAgpiq99AB8fkAIUg71bofJ4+g==
-X-Google-Smtp-Source: AA6agR7m/Kqo8Gdqd6vut3JCmGoK/kH1SvTx0YpevY8mgORzyC0lEpa+RAj0K31TJNZ4f/r/8gWj8w==
-X-Received: by 2002:a17:902:c102:b0:172:ce4b:870c with SMTP id 2-20020a170902c10200b00172ce4b870cmr18016683pli.155.1661294326737;
-        Tue, 23 Aug 2022 15:38:46 -0700 (PDT)
-Received: from b09580aaaea0 ([203.220.223.63])
-        by smtp.gmail.com with ESMTPSA id q4-20020a17090311c400b0016bc947c5b7sm11046533plh.38.2022.08.23.15.38.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 15:38:46 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 22:38:38 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/365] 5.19.4-rc1 review
-Message-ID: <20220823223838.GA345371@b09580aaaea0>
-References: <20220823080118.128342613@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=tEiLJXVAHrmzpiMmXdTWCj0bWAxM/BiRch8Q/bqnYmk=;
+        b=tSUX1uvfO2DA1rWVkYRytbqf9WJ1hgoVur19r9L3iUk/q0V8eEWCeMbe+V2cm8rty/
+         tQg1RshdWctWXcrU3bWZk03+Eav77E+it9T1N+xttcoe8PxIlHjDN+hYHsXzd+e8eFcD
+         ytWQhYL3qzOo+DoEm77Y+9LoCRK10NppPW1xvk/MKtb/d08hKthK/uCzvjIMt3hgZfii
+         tGs5ntA5vZRDGB15oLV4+rnj7BdJv1xOWnwJMgFmJ3grSotE4t0lQlmFZrufhzASFUsU
+         oBluYCzpOoyYWj0xFGw3tANnM8P3tXhNny8PLYcryqyKZaiUxPhCme89UmPFvLKu7zaK
+         DROQ==
+X-Gm-Message-State: ACgBeo05udOngsLD28Wu7qfmodl2tlvhpf4nod1ngxcw665i4n3dvFpv
+        yx8LqwC7prRAEGs22/LVZB2PBjuJ/a36TiH0P8eiHkgRdn4CiQ==
+X-Google-Smtp-Source: AA6agR7gVGAbTsKsk9f5QVA8cPqXqnevBxyh0LPoOpi923lw/ByTStCTGDQPYm3f5HMzI+jmpjFFR6/wziEREhpHdNs=
+X-Received: by 2002:a05:622a:244f:b0:344:7c4f:5a94 with SMTP id
+ bl15-20020a05622a244f00b003447c4f5a94mr21358999qtb.563.1661294429365; Tue, 23
+ Aug 2022 15:40:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220818170005.747015-1-dima@arista.com> <20220818170005.747015-20-dima@arista.com>
+ <01f8616c-2904-42f1-1e59-ca4c71f7a9bd@gmail.com>
+In-Reply-To: <01f8616c-2904-42f1-1e59-ca4c71f7a9bd@gmail.com>
+From:   Francesco Ruggeri <fruggeri@arista.com>
+Date:   Tue, 23 Aug 2022 15:40:18 -0700
+Message-ID: <CA+HUmGjYkiOmpMUA1JMeC7q4AX=xOo3B=AtTbQabJdbSJmaoQg@mail.gmail.com>
+Subject: Re: [PATCH 19/31] net/tcp: Add TCP-AO SNE support
+To:     Leonard Crestez <cdleonard@gmail.com>
+Cc:     Dmitry Safonov <dima@arista.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +82,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 09:58:21AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.4 release.
-> There are 365 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> Anything received after that time might be too late.
+On Tue, Aug 23, 2022 at 7:50 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>
+> On 8/18/22 19:59, Dmitry Safonov wrote:
+> > Add Sequence Number Extension (SNE) extension for TCP-AO.
+> > This is needed to protect long-living TCP-AO connections from replaying
+> > attacks after sequence number roll-over, see RFC5925 (6.2).
+>
+> > +#ifdef CONFIG_TCP_AO
+> > +     ao = rcu_dereference_protected(tp->ao_info,
+> > +                                    lockdep_sock_is_held((struct sock *)tp));
+> > +     if (ao) {
+> > +             if (ack < ao->snd_sne_seq)
+> > +                     ao->snd_sne++;
+> > +             ao->snd_sne_seq = ack;
+> > +     }
+> > +#endif
+> >       tp->snd_una = ack;
+> >   }
+>
+> ... snip ...
+>
+> > +#ifdef CONFIG_TCP_AO
+> > +     ao = rcu_dereference_protected(tp->ao_info,
+> > +                                    lockdep_sock_is_held((struct sock *)tp));
+> > +     if (ao) {
+> > +             if (seq < ao->rcv_sne_seq)
+> > +                     ao->rcv_sne++;
+> > +             ao->rcv_sne_seq = seq;
+> > +     }
+> > +#endif
+> >       WRITE_ONCE(tp->rcv_nxt, seq);
+>
+> It should always be the case that (rcv_nxt == rcv_sne_seq) and (snd_una
+> == snd_sne_seq) so the _sne_seq fields are redundant. It's possible to
+> avoid those extra fields.
 
-Hi Greg,
+There are cases where rcv_nxt and snd_una are set outside of
+tcp_rcv_nxt_update() and tcp_snd_una_update(), mostly during the
+initial handshake, so those cases would have to be taken care of
+explicitly, especially wrt rollovers.
+I see your point though, there may be a potential for some cleaning
+up here.
 
-5.19.4-rc1 tested.
-
-Run tested on:
-- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
-
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+Francesco

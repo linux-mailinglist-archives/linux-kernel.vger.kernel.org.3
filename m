@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4A359D8D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D701A59D956
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243455AbiHWJuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S241743AbiHWJvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242511AbiHWJrc (ORCPT
+        with ESMTP id S242687AbiHWJtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:47:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683BF9C8F7;
-        Tue, 23 Aug 2022 01:44:38 -0700 (PDT)
+        Tue, 23 Aug 2022 05:49:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D38D6A48C;
+        Tue, 23 Aug 2022 01:44:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24DB8B81C65;
-        Tue, 23 Aug 2022 08:43:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69EEEC433C1;
-        Tue, 23 Aug 2022 08:43:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F13566153C;
+        Tue, 23 Aug 2022 08:43:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05F01C433C1;
+        Tue, 23 Aug 2022 08:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244211;
-        bh=VBgzVhFa46p77ox+2URUyUqTrxw7PqtF3Lnk9z6s+ko=;
+        s=korg; t=1661244227;
+        bh=u9FU03dzZss74zYK7e0UEvHhyL3ijZBUACDdhcYl4gc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LyTpbEqG8X/7lF2RI7FQluqUoCmfubebwFcl+djxvSrcSvW4IJVnCsnlFMkdWWQ42
-         /pumN8LpuZ2rI1DQrf9AouZakm9XPxiEMrx+Ny0QVYCZpWLxmhuykxEZz5hl03+MpX
-         7rMIA5c/4YU7Vijf2GDykXGIUPBNPGwUXjHr6au8=
+        b=XwC93PXjYl5fUjobSl3a6Fu4cNREf0bNeUWh7UlE67bjGziqzbocz96oky1iwQq/R
+         sVh1mTafRhzBFiEKn3l1YhO3kMbpya5SfojuzJQEvSWExg3369FAyVviKP995yPwzB
+         jPvg0Nkfn+oS8VvpdvBiy/FhzzWy+vkfbhfV6hE4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
-        Jiri Pirko <jiri@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 057/244] devlink: Fix use-after-free after a failed reload
-Date:   Tue, 23 Aug 2022 10:23:36 +0200
-Message-Id: <20220823080100.970656746@linuxfoundation.org>
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 059/244] net: bcmgenet: Indicate MAC is in charge of PHY PM
+Date:   Tue, 23 Aug 2022 10:23:38 +0200
+Message-Id: <20220823080101.045630065@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -55,105 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ido Schimmel <idosch@nvidia.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-commit 6b4db2e528f650c7fb712961aac36455468d5902 upstream.
+commit bc3410f250219660a7be032c01c954a53b2c26ab upstream.
 
-After a failed devlink reload, devlink parameters are still registered,
-which means user space can set and get their values. In the case of the
-mlxsw "acl_region_rehash_interval" parameter, these operations will
-trigger a use-after-free [1].
+Avoid the PHY library call unnecessarily into the suspend/resume functions by
+setting phydev->mac_managed_pm to true. The GENET driver essentially does
+exactly what mdio_bus_phy_resume() does by calling phy_init_hw() plus
+phy_resume().
 
-Fix this by rejecting set and get operations while in the failed state.
-Return the "-EOPNOTSUPP" error code which does not abort the parameters
-dump, but instead causes it to skip over the problematic parameter.
-
-Another possible fix is to perform these checks in the mlxsw parameter
-callbacks, but other drivers might be affected by the same problem and I
-am not aware of scenarios where these stricter checks will cause a
-regression.
-
-[1]
-mlxsw_spectrum3 0000:00:10.0: Port 125: Failed to register netdev
-mlxsw_spectrum3 0000:00:10.0: Failed to create ports
-
-==================================================================
-BUG: KASAN: use-after-free in mlxsw_sp_acl_tcam_vregion_rehash_intrvl_get+0xbd/0xd0 drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_tcam.c:904
-Read of size 4 at addr ffff8880099dcfd8 by task kworker/u4:4/777
-
-CPU: 1 PID: 777 Comm: kworker/u4:4 Not tainted 5.19.0-rc7-custom-126601-gfe26f28c586d #1
-Hardware name: QEMU MSN4700, BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
-Workqueue: netns cleanup_net
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x92/0xbd lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:313 [inline]
- print_report.cold+0x5e/0x5cf mm/kasan/report.c:429
- kasan_report+0xb9/0xf0 mm/kasan/report.c:491
- __asan_report_load4_noabort+0x14/0x20 mm/kasan/report_generic.c:306
- mlxsw_sp_acl_tcam_vregion_rehash_intrvl_get+0xbd/0xd0 drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_tcam.c:904
- mlxsw_sp_acl_region_rehash_intrvl_get+0x49/0x60 drivers/net/ethernet/mellanox/mlxsw/spectrum_acl.c:1106
- mlxsw_sp_params_acl_region_rehash_intrvl_get+0x33/0x80 drivers/net/ethernet/mellanox/mlxsw/spectrum.c:3854
- devlink_param_get net/core/devlink.c:4981 [inline]
- devlink_nl_param_fill+0x238/0x12d0 net/core/devlink.c:5089
- devlink_param_notify+0xe5/0x230 net/core/devlink.c:5168
- devlink_ns_change_notify net/core/devlink.c:4417 [inline]
- devlink_ns_change_notify net/core/devlink.c:4396 [inline]
- devlink_reload+0x15f/0x700 net/core/devlink.c:4507
- devlink_pernet_pre_exit+0x112/0x1d0 net/core/devlink.c:12272
- ops_pre_exit_list net/core/net_namespace.c:152 [inline]
- cleanup_net+0x494/0xc00 net/core/net_namespace.c:582
- process_one_work+0x9fc/0x1710 kernel/workqueue.c:2289
- worker_thread+0x675/0x10b0 kernel/workqueue.c:2436
- kthread+0x30c/0x3d0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-The buggy address belongs to the physical page:
-page:ffffea0000267700 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x99dc
-flags: 0x100000000000000(node=0|zone=1)
-raw: 0100000000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8880099dce80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880099dcf00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff8880099dcf80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                                    ^
- ffff8880099dd000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880099dd080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-Fixes: 98bbf70c1c41 ("mlxsw: spectrum: add "acl_region_rehash_interval" devlink param")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220804173605.1266574-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/devlink.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/broadcom/genet/bcmmii.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/net/core/devlink.c
-+++ b/net/core/devlink.c
-@@ -4413,7 +4413,7 @@ static int devlink_param_get(struct devl
- 			     const struct devlink_param *param,
- 			     struct devlink_param_gset_ctx *ctx)
- {
--	if (!param->get)
-+	if (!param->get || devlink->reload_failed)
- 		return -EOPNOTSUPP;
- 	return param->get(devlink, param->id, ctx);
+--- a/drivers/net/ethernet/broadcom/genet/bcmmii.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmmii.c
+@@ -361,6 +361,9 @@ int bcmgenet_mii_probe(struct net_device
+ 	if (priv->internal_phy && !GENET_IS_V5(priv))
+ 		dev->phydev->irq = PHY_MAC_INTERRUPT;
+ 
++	/* Indicate that the MAC is responsible for PHY PM */
++	dev->phydev->mac_managed_pm = true;
++
+ 	return 0;
  }
-@@ -4422,7 +4422,7 @@ static int devlink_param_set(struct devl
- 			     const struct devlink_param *param,
- 			     struct devlink_param_gset_ctx *ctx)
- {
--	if (!param->set)
-+	if (!param->set || devlink->reload_failed)
- 		return -EOPNOTSUPP;
- 	return param->set(devlink, param->id, ctx);
- }
+ 
 
 

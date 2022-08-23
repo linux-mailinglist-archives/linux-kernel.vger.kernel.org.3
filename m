@@ -2,415 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E2A59EA41
+	by mail.lfdr.de (Postfix) with ESMTP id 1795A59EA3F
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiHWRtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S231555AbiHWRu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbiHWRs0 (ORCPT
+        with ESMTP id S233139AbiHWRuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:48:26 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D372FAF0D0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:47:41 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id a1-20020a4ab101000000b0044acf001f83so2491259ooo.10
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:47:41 -0700 (PDT)
+        Tue, 23 Aug 2022 13:50:23 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807ECB2D95
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:49:57 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id w196so16361107oiw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=KRDDD/ZTQOm4jKNRqZwPa4ZNh2t/HyznlxFVrDjnB8U=;
-        b=U0+/YUjFon/lph3ldYw4TkScr3J/MCVglErPGQ/vLneIjcO1gaF5o5kOCT+o/eHcGQ
-         SupMAksppFSPyPxykYtJXnXyLaFvHiVLigvoxvWN3yO7JXzpn2KnJa5J+9jQQMgD94ah
-         TJMxrcFPWD6bdOXSgMKgdNxUyhd05pKT4u84M=
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=I+MhWIFw4wylC1ozMc1I6NteP9cQs0GMyFhEeS/9x94=;
+        b=ByX9H6uiDkTPWcwJ0OiX4RFt26I4cpIOa9/tKClIslXtzO8ndVu6rmalqMKsehV6U6
+         OMXrGiP47fpWkN0zkSQbaTYhFk+ubbOcVjS7s33KiAR7NnziPZ95Ie7cdV84vm9BL2k/
+         uLuerYI/aNzaJXAv6ZHVfy6IV9GMOvVyGY+2E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=KRDDD/ZTQOm4jKNRqZwPa4ZNh2t/HyznlxFVrDjnB8U=;
-        b=Uigzkakyz4Zers+5dkGqJlWCICIdP/xBwfnZO6cjxNTA7MW5RU6Tjlx2s6Y/k4kRGV
-         TuDBP3kZkMvfGFI0esL8PHW7xEcGJ/K9paYP2MOsb3722u2xj81DqcNxP6kIVSUdmSC8
-         r6edjO+iCSOedUoyZZho305KFnZztfaSF52GoBZySpESrOsjkNM88tWYk0voUG4UYshY
-         oXD65OY1hzjae2AOYRoA05RRVnnL3NLQiBmxUQgZl6njmrD8nfYOBajQQxzRjdJIKKSY
-         +eMrYzHFWr2t/6Kuu13vhVuln52fwCG2c+AscQi3ngldiUkl9i0cvCf1t475xlVJZ71r
-         Dv+g==
-X-Gm-Message-State: ACgBeo3B8JsIn+169wukSD0ById3xjNqdbCWzJTCD9QCF57BcTFPlhhl
-        tH2LLy4fcVJKtE5gVw/hlsifNQ==
-X-Google-Smtp-Source: AA6agR6YzN5it96eWePaUxUMLxCc1S5wDKWZtrIqKyxwFBsKCHEzkbrHxTXvzBuqngWPpKKk7XzXuA==
-X-Received: by 2002:a4a:4541:0:b0:435:cf9f:1a45 with SMTP id y62-20020a4a4541000000b00435cf9f1a45mr8241849ooa.17.1661269661024;
-        Tue, 23 Aug 2022 08:47:41 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b23-20020a056830105700b006373175cde0sm3894735otp.44.2022.08.23.08.47.39
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=I+MhWIFw4wylC1ozMc1I6NteP9cQs0GMyFhEeS/9x94=;
+        b=4zqhlTftSy3toTq6FiSMYkfBUoqcwogKPEFB9r7XsxAwwyLr15QIQ7rLc+AncX/v+Q
+         X//W0VadG30lEsyYzCB+MtYtlIT0b+CC8AcTW5xAXDOjzRLZ0QBbyrzJTU2/jkn/O5cF
+         CBEMauOxfR4k+mZv8vzp1ToqRdLzDxtbG6V0C0V38bYS0k4qLtE/iYKoWpv6OXKqAIIR
+         1LaLAPcLqkbYH0o/a36yftEdeW+XBQmQKUkqoy6a4lh17rDodzhr1QFhBRf42WgyQv6Y
+         s6doXHlHHxHXSIKBQL16TOAYpYuGBI4HHVQMgwyDUl6ECe99bY1Fc8Y/V2QOGm7oyI3n
+         cYhg==
+X-Gm-Message-State: ACgBeo0VydYJEhLOjNTqDXzg40BSD2nHtaVxR40KcVKTxquZJ+N3du8Q
+        rmuTBJ4vQ2rmXjelK4DqQi5cTlcEC+R+Lg==
+X-Google-Smtp-Source: AA6agR6aNBdfIKwe77ZVGa1KFL2FruRKOkP1dr5cyZzqkTOn9ue2ONEjYbwR9qFtbIZBIMjrhwcDxQ==
+X-Received: by 2002:a05:6808:1304:b0:345:52b3:4b42 with SMTP id y4-20020a056808130400b0034552b34b42mr1598590oiv.145.1661269796689;
+        Tue, 23 Aug 2022 08:49:56 -0700 (PDT)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
+        by smtp.gmail.com with ESMTPSA id bq7-20020a05680823c700b00339befdfad0sm3440406oib.50.2022.08.23.08.49.55
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 08:47:40 -0700 (PDT)
-Subject: Re: [PATCH 25/31] selftests/net: Add TCP-AO library
-To:     Dmitry Safonov <dima@arista.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        David Ahern <dsahern@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220818170005.747015-1-dima@arista.com>
- <20220818170005.747015-26-dima@arista.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <aa0143bc-b0d1-69fb-c117-1e7241f0ad89@linuxfoundation.org>
-Date:   Tue, 23 Aug 2022 09:47:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 23 Aug 2022 08:49:56 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id h20-20020a056830165400b00638ac7ddba5so10060630otr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:49:55 -0700 (PDT)
+X-Received: by 2002:a05:6830:58:b0:637:1974:140a with SMTP id
+ d24-20020a056830005800b006371974140amr9735586otp.362.1661269795464; Tue, 23
+ Aug 2022 08:49:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220818170005.747015-26-dima@arista.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220112211258.21115-1-chang.seok.bae@intel.com> <20220112211258.21115-8-chang.seok.bae@intel.com>
+In-Reply-To: <20220112211258.21115-8-chang.seok.bae@intel.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 23 Aug 2022 08:49:18 -0700
+X-Gmail-Original-Message-ID: <CAE=gft4P2iGJDiYJccZFR1VnNomQB7Uo522r2gvrfNY9oKz5jg@mail.gmail.com>
+Message-ID: <CAE=gft4P2iGJDiYJccZFR1VnNomQB7Uo522r2gvrfNY9oKz5jg@mail.gmail.com>
+Subject: Re: [PATCH v5 07/12] x86/cpu/keylocker: Load an internal wrapping key
+ at boot-time
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
+        herbert@gondor.apana.org.au, Eric Biggers <ebiggers@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org,
+        luto@kernel.org, Thomas Gleixner <tglx@linutronix.de>, bp@suse.de,
+        dave.hansen@linux.intel.com, mingo@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        charishma1.gairuboyina@intel.com, kumar.n.dwarakanath@intel.com,
+        ravi.v.shankar@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 10:59 AM, Dmitry Safonov wrote:
-> Provide functions to create selftests dedicated to TCP-AO.
-> They can run in parallel, as they use temporary net namespaces.
-> They can be very specific to the feature being tested.
-> This will allow to create a lot of TCP-AO tests, without complicating
-> one binary with many --options and to create scenarios, that are
-> hard to put in bash script that uses one binary.
-> 
-> Signed-off-by: Dmitry Safonov <dima@arista.com>
+On Wed, Jan 12, 2022 at 1:21 PM Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> The Internal Wrapping Key (IWKey) is an entity of Key Locker to encode a
+> clear text key into a key handle. This key is a pivot in protecting user
+> keys. So the value has to be randomized before being loaded in the
+> software-invisible CPU state.
+>
+> IWKey needs to be established before the first user. Given that the only
+> proposed Linux use case for Key Locker is dm-crypt, the feature could be
+> lazily enabled when the first dm-crypt user arrives, but there is no
+> precedent for late enabling of CPU features and it adds maintenance burden
+> without demonstrative benefit outside of minimizing the visibility of
+> Key Locker to userspace.
+>
+> The kernel generates random bytes and load them at boot time. These bytes
+> are flushed out immediately.
+>
+> Setting the CR4.KL bit does not always enable the feature so ensure the
+> dynamic CPU bit (CPUID.AESKLE) is set before loading the key.
+>
+> Given that the Linux Key Locker support is only intended for bare metal
+> dm-crypt consumption, and that switching IWKey per VM is untenable,
+> explicitly skip Key Locker setup in the X86_FEATURE_HYPERVISOR case.
+>
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
 > ---
->   tools/testing/selftests/Makefile              |   1 +
->   tools/testing/selftests/net/tcp_ao/.gitignore |   2 +
->   tools/testing/selftests/net/tcp_ao/Makefile   |  45 +++
->   tools/testing/selftests/net/tcp_ao/connect.c  |  81 +++++
->   .../testing/selftests/net/tcp_ao/lib/aolib.h  | 333 +++++++++++++++++
->   .../selftests/net/tcp_ao/lib/netlink.c        | 341 ++++++++++++++++++
->   tools/testing/selftests/net/tcp_ao/lib/proc.c | 267 ++++++++++++++
->   .../testing/selftests/net/tcp_ao/lib/setup.c  | 297 +++++++++++++++
->   tools/testing/selftests/net/tcp_ao/lib/sock.c | 294 +++++++++++++++
->   .../testing/selftests/net/tcp_ao/lib/utils.c  |  30 ++
->   10 files changed, 1691 insertions(+)
->   create mode 100644 tools/testing/selftests/net/tcp_ao/.gitignore
->   create mode 100644 tools/testing/selftests/net/tcp_ao/Makefile
->   create mode 100644 tools/testing/selftests/net/tcp_ao/connect.c
->   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/aolib.h
->   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/netlink.c
->   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/proc.c
->   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/setup.c
->   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/sock.c
->   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/utils.c
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 10b34bb03bc1..2a3b15a13ccb 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -46,6 +46,7 @@ TARGETS += net
->   TARGETS += net/af_unix
->   TARGETS += net/forwarding
->   TARGETS += net/mptcp
-> +TARGETS += net/tcp_ao
-
-Please look into a wayto invoke all of them instead of adding individual
-net/* to the main Makefile. This list seems to be growing. :)
-
->   TARGETS += netfilter
->   TARGETS += nsfs
->   TARGETS += pidfd
-
-[snip]
-
-> +
-> +__attribute__((__format__(__printf__, 2, 3)))
-> +static inline void __test_print(void (*fn)(const char *), const char *fmt, ...)
-> +{
-> +#define TEST_MSG_BUFFER_SIZE 4096
-> +	char buf[TEST_MSG_BUFFER_SIZE];
-> +	va_list arg;
-> +
-> +	va_start(arg, fmt);
-> +	vsnprintf(buf, sizeof(buf), fmt, arg);
-> +	va_end(arg);
-> +	fn(buf);
-> +}
-> +
-
-Is there a reason add these instead of using kselftest_* print
-functions?
-
-> +#define test_print(fmt, ...)						\
-> +	__test_print(__test_msg, "%ld[%s:%u] " fmt "\n",		\
-> +		     syscall(SYS_gettid),				\
-> +		     __FILE__, __LINE__, ##__VA_ARGS__)
-> +
-> +#define test_ok(fmt, ...)						\
-> +	__test_print(__test_ok, fmt "\n", ##__VA_ARGS__)
-> +
-> +#define test_fail(fmt, ...)						\
-> +do {									\
-> +	if (errno)							\
-> +		__test_print(__test_fail, fmt ": %m\n", ##__VA_ARGS__);	\
-> +	else								\
-> +		__test_print(__test_fail, fmt "\n", ##__VA_ARGS__);	\
-> +	test_failed();							\
-> +} while(0)
-> +
-> +#define KSFT_FAIL  1
-> +#define test_error(fmt, ...)						\
-> +do {									\
-> +	if (errno)							\
-> +		__test_print(__test_error, "%ld[%s:%u] " fmt ": %m\n",	\
-> +			     syscall(SYS_gettid), __FILE__, __LINE__,	\
-> +			     ##__VA_ARGS__);				\
-> +	else								\
-> +		__test_print(__test_error, "%ld[%s:%u] " fmt "\n",	\
-> +			     syscall(SYS_gettid), __FILE__, __LINE__,	\
-> +			     ##__VA_ARGS__);				\
-> +	exit(KSFT_FAIL);						\
-> +} while(0)
-> +
-
-Is there a reason add these instead of using kselftest_* print
-functions?
-
-> + * Timeout on syscalls where failure is not expected.
-> + * You may want to rise it if the test machine is very busy.
-> + */
-> +#ifndef TEST_TIMEOUT_SEC
-> +#define TEST_TIMEOUT_SEC	5
-> +#endif
-> +
-
-Where is the TEST_TIMEOUT_SEC usually defined? Does this come
-from shell wrapper that runs this test? Can we add a message before
-starting the test print the timeout used?
-
-> +/*
-> + * Timeout on connect() where a failure is expected.
-> + * If set to 0 - kernel will try to retransmit SYN number of times, set in
-> + * /proc/sys/net/ipv4/tcp_syn_retries
-> + * By default set to 1 to make tests pass faster on non-busy machine.
-> + */
-> +#ifndef TEST_RETRANSMIT_SEC
-> +#define TEST_RETRANSMIT_SEC	1
-> +#endif
-> +
-
-Where would this TEST_RETRANSMIT_SEC defined usually?
-
-> +
-> +static inline int _test_connect_socket(int sk, const union tcp_addr taddr,
-> +					unsigned port, time_t timeout)
-> +{
-> +#ifdef IPV6_TEST
-> +	struct sockaddr_in6 addr = {
-> +		.sin6_family	= AF_INET6,
-> +		.sin6_port	= htons(port),
-> +		.sin6_addr	= taddr.a6,
-> +	};
+> Changes from RFC v2:
+> * Make bare metal only.
+> * Clean up the code (e.g. dynamically allocate the key cache).
+>   (Dan Williams)
+> * Massage the changelog.
+> * Move out the LOADIWKEY wrapper and the Key Locker CPUID defines.
+>
+> Note, Dan wonders that given that the only proposed Linux use case for
+> Key Locker is dm-crypt, the feature could be lazily enabled when the
+> first dm-crypt user arrives, but as Dave notes there is no precedent
+> for late enabling of CPU features and it adds maintenance burden
+> without demonstrative benefit outside of minimizing the visibility of
+> Key Locker to userspace.
+> ---
+>  arch/x86/include/asm/keylocker.h |  9 ++++
+>  arch/x86/kernel/Makefile         |  1 +
+>  arch/x86/kernel/cpu/common.c     |  5 +-
+>  arch/x86/kernel/keylocker.c      | 79 ++++++++++++++++++++++++++++++++
+>  arch/x86/kernel/smpboot.c        |  2 +
+>  5 files changed, 95 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/kernel/keylocker.c
+>
+> diff --git a/arch/x86/include/asm/keylocker.h b/arch/x86/include/asm/keylocker.h
+> index e85dfb6c1524..820ac29c06d9 100644
+> --- a/arch/x86/include/asm/keylocker.h
+> +++ b/arch/x86/include/asm/keylocker.h
+> @@ -5,6 +5,7 @@
+>
+>  #ifndef __ASSEMBLY__
+>
+> +#include <asm/processor.h>
+>  #include <linux/bits.h>
+>  #include <asm/fpu/types.h>
+>
+> @@ -28,5 +29,13 @@ struct iwkey {
+>  #define KEYLOCKER_CPUID_EBX_WIDE       BIT(2)
+>  #define KEYLOCKER_CPUID_EBX_BACKUP     BIT(4)
+>
+> +#ifdef CONFIG_X86_KEYLOCKER
+> +void setup_keylocker(struct cpuinfo_x86 *c);
+> +void destroy_keylocker_data(void);
 > +#else
-> +	struct sockaddr_in addr = {
-> +		.sin_family	= AF_INET,
-> +		.sin_port	= htons(port),
-> +		.sin_addr	= taddr.a4,
-> +	};
-> +#endif
-
-Why do we defined these here - are they also defined in a kernel
-header?
-
-> +	return __test_connect_socket(sk, (void *)&addr, sizeof(addr), timeout);
-> +}
-> +
-> +static inline int test_connect_socket(int sk,
-> +		const union tcp_addr taddr, unsigned port)
-> +{
-> +	return _test_connect_socket(sk, taddr, port, TEST_TIMEOUT_SEC);
-> +}
-> +
-> +extern int test_prepare_ao_sockaddr(struct tcp_ao *ao,
-> +		const char *alg, uint16_t flags,
-> +		void *addr, size_t addr_sz, uint8_t prefix,
-> +		uint8_t sndid, uint8_t rcvid, uint8_t maclen,
-> +		uint8_t keyflags, uint8_t keylen, const char *key);
-> +
-> +static inline int test_prepare_ao(struct tcp_ao *ao,
-> +		const char *alg, uint16_t flags,
-> +		union tcp_addr in_addr, uint8_t prefix,
-> +		uint8_t sndid, uint8_t rcvid, uint8_t maclen,
-> +		uint8_t keyflags, uint8_t keylen, const char *key)
-> +{
-> +#ifdef IPV6_TEST
-> +	struct sockaddr_in6 addr = {
-> +		.sin6_family	= AF_INET6,
-> +		.sin6_port	= 0,
-> +		.sin6_addr	= in_addr.a6,
-> +	};
-> +#else
-> +	struct sockaddr_in addr = {
-> +		.sin_family	= AF_INET,
-> +		.sin_port	= 0,
-> +		.sin_addr	= in_addr.a4,
-> +	};
+> +#define setup_keylocker(c) do { } while (0)
+> +#define destroy_keylocker_data() do { } while (0)
 > +#endif
 > +
-
-Same question here. In general having these ifdefs isn't ideal without
-a good reason.
-
-> +	return test_prepare_ao_sockaddr(ao, alg, flags,
-> +			(void *)&addr, sizeof(addr), prefix, sndid, rcvid,
-> +			maclen, keyflags, keylen, key);
-> +}
+>  #endif /*__ASSEMBLY__ */
+>  #endif /* _ASM_KEYLOCKER_H */
+> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+> index 2ff3e600f426..e15efa238497 100644
+> --- a/arch/x86/kernel/Makefile
+> +++ b/arch/x86/kernel/Makefile
+> @@ -144,6 +144,7 @@ obj-$(CONFIG_PERF_EVENTS)           += perf_regs.o
+>  obj-$(CONFIG_TRACING)                  += tracepoint.o
+>  obj-$(CONFIG_SCHED_MC_PRIO)            += itmt.o
+>  obj-$(CONFIG_X86_UMIP)                 += umip.o
+> +obj-$(CONFIG_X86_KEYLOCKER)            += keylocker.o
+>
+>  obj-$(CONFIG_UNWINDER_ORC)             += unwind_orc.o
+>  obj-$(CONFIG_UNWINDER_FRAME_POINTER)   += unwind_frame.o
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 0083464de5e3..23b4aa437c1e 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -57,6 +57,8 @@
+>  #include <asm/microcode_intel.h>
+>  #include <asm/intel-family.h>
+>  #include <asm/cpu_device_id.h>
+> +#include <asm/keylocker.h>
 > +
-> +static inline int test_prepare_def_ao(struct tcp_ao *ao,
-> +		const char *key, uint16_t flags,
-> +		union tcp_addr in_addr, uint8_t prefix,
-> +		uint8_t sndid, uint8_t rcvid)
-> +{
-> +	if (prefix > DEFAULT_TEST_PREFIX)
-> +		prefix = DEFAULT_TEST_PREFIX;
-> +
-> +	return test_prepare_ao(ao, DEFAULT_TEST_ALGO, flags, in_addr,
-> +			prefix, sndid, rcvid, 0, 0, strlen(key), key);
-> +}
-> +
-> +extern int test_get_one_ao(int sk, struct tcp_ao_getsockopt *out,
-> +			   uint16_t flags, void *addr, size_t addr_sz,
-> +			   uint8_t prefix, uint8_t sndid, uint8_t rcvid);
-> +extern int test_cmp_getsockopt_setsockopt(const struct tcp_ao *a,
-> +					  const struct tcp_ao_getsockopt *b);
-> +
-> +static inline int test_verify_socket_ao(int sk, struct tcp_ao *ao)
-> +{
-> +	struct tcp_ao_getsockopt tmp;
-> +	int err;
-> +
-> +	err = test_get_one_ao(sk, &tmp, 0, &ao->tcpa_addr,
-> +			sizeof(ao->tcpa_addr), ao->tcpa_prefix,
-> +			ao->tcpa_sndid, ao->tcpa_rcvid);
-> +	if (err)
-> +		return err;
-
-Is this always an error or could this a skip if dependencies aren't
-met to run the test? This is a global comment for all error cases.
-
-> +
-> +	return test_cmp_getsockopt_setsockopt(ao, &tmp);
-> +}
-> +
-> +static inline int test_set_ao(int sk, const char *key, uint16_t flags,
-> +			      union tcp_addr in_addr, uint8_t prefix,
-> +			      uint8_t sndid, uint8_t rcvid)
-> +{
-> +	struct tcp_ao tmp;
-> +	int err;
-> +
-> +	err = test_prepare_def_ao(&tmp, key, flags, in_addr,
-> +			prefix, sndid, rcvid);
-> +	if (err)
-> +		return err;
-
-Same comment as above here.
-
-> +
-> +	if (setsockopt(sk, IPPROTO_TCP, TCP_AO, &tmp, sizeof(tmp)) < 0)
-> +		return -errno;
-> +
-> +	return test_verify_socket_ao(sk, &tmp);
-> +}
-> +
-> +extern ssize_t test_server_run(int sk, ssize_t quota, time_t timeout_sec);
-> +extern ssize_t test_client_loop(int sk, char *buf, size_t buf_sz,
-> +				const size_t msg_len, time_t timeout_sec);
-> +extern int test_client_verify(int sk, const size_t msg_len, const size_t nr,
-> +			      time_t timeout_sec);
-> +
-> +struct netstat;
-> +extern struct netstat *netstat_read(void);
-> +extern void netstat_free(struct netstat *ns);
-> +extern void netstat_print_diff(struct netstat *nsa, struct netstat *nsb);
-> +extern uint64_t netstat_get(struct netstat *ns,
-> +			    const char *name, bool *not_found);
-> +
-> +static inline uint64_t netstat_get_one(const char *name, bool *not_found)
-> +{
-> +	struct netstat *ns = netstat_read();
-> +	uint64_t ret;
-> +
-> +	ret = netstat_get(ns, name, not_found);
-> +
-> +	netstat_free(ns);
-> +	return ret;
-> +}
-> +
-> +#endif /* _AOLIB_H_ */
-> diff --git a/tools/testing/selftests/net/tcp_ao/lib/netlink.c b/tools/testing/selftests/net/tcp_ao/lib/netlink.c
+>  #include <asm/uv/uv.h>
+>  #include <asm/sigframe.h>
+>
+> @@ -1595,10 +1597,11 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+>         /* Disable the PN if appropriate */
+>         squash_the_stupid_serial_number(c);
+>
+> -       /* Set up SMEP/SMAP/UMIP */
+> +       /* Setup various Intel-specific CPU security features */
+>         setup_smep(c);
+>         setup_smap(c);
+>         setup_umip(c);
+> +       setup_keylocker(c);
+>
+>         /* Enable FSGSBASE instructions if available. */
+>         if (cpu_has(c, X86_FEATURE_FSGSBASE)) {
+> diff --git a/arch/x86/kernel/keylocker.c b/arch/x86/kernel/keylocker.c
 > new file mode 100644
-> index 000000000000..f04757c921d0
+> index 000000000000..87d775a65716
 > --- /dev/null
-> +++ b/tools/testing/selftests/net/tcp_ao/lib/netlink.c
-> @@ -0,0 +1,341 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Original from tools/testing/selftests/net/ipsec.c */
-> +#include <linux/netlink.h>
+> +++ b/arch/x86/kernel/keylocker.c
+> @@ -0,0 +1,79 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Setup Key Locker feature and support internal wrapping key
+> + * management.
+> + */
+> +
 > +#include <linux/random.h>
-> +#include <linux/rtnetlink.h>
-> +#include <linux/veth.h>
-> +#include <net/if.h>
-> +#include <stdint.h>
-> +#include <string.h>
-> +#include <sys/socket.h>
+> +#include <linux/poison.h>
 > +
-> +#include "aolib.h"
+> +#include <asm/fpu/api.h>
+> +#include <asm/keylocker.h>
+> +#include <asm/tlbflush.h>
 > +
-> +#define MAX_PAYLOAD		2048
-
-tools/testing/selftests/net/gro.c seem to define this as:
-
-#define MAX_PAYLOAD (IP_MAXPACKET - sizeof(struct tcphdr) - sizeof(struct ipv6hdr))
-
-Can you do the same instead of hard-coding?
-
-
+> +static __initdata struct keylocker_setup_data {
+> +       struct iwkey key;
+> +} kl_setup;
 > +
-> +const struct sockaddr_in6 addr_any6 = {
-> +	.sin6_family	= AF_INET6,
-> +};
+> +static void __init generate_keylocker_data(void)
+> +{
+> +       get_random_bytes(&kl_setup.key.integrity_key,  sizeof(kl_setup.key.integrity_key));
+> +       get_random_bytes(&kl_setup.key.encryption_key, sizeof(kl_setup.key.encryption_key));
+> +}
 > +
-> +const struct sockaddr_in addr_any4 = {
-> +	.sin_family	= AF_INET,
-> +};
-> 
+> +void __init destroy_keylocker_data(void)
+> +{
+> +       memset(&kl_setup.key, KEY_DESTROY, sizeof(kl_setup.key));
+> +}
+> +
+> +static void __init load_keylocker(void)
 
-A couple of things to look at closely. For some failures such as
-memory allocation for the test or not being able to open a file
-
-fnetstat = fopen("/proc/net/netstat", "r");
-
-Is this a failure or missing config or not having the right permissions
-to open the fail. All of these cases would be a SKIP and not a test fail.
-
-thanks,
--- Shuah
-
+I am late to this party by 6 months, but:
+load_keylocker() cannot be __init, as it gets called during SMP core onlining.

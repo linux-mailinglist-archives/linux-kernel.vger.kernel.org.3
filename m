@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABE359D47A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5105B59D76A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243252AbiHWIYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S1349858AbiHWJYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242515AbiHWIRf (ORCPT
+        with ESMTP id S229697AbiHWJWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:17:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9571F2F9;
-        Tue, 23 Aug 2022 01:11:39 -0700 (PDT)
+        Tue, 23 Aug 2022 05:22:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1C08E0FB;
+        Tue, 23 Aug 2022 01:34:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9443AB81C29;
-        Tue, 23 Aug 2022 08:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA6D9C433B5;
-        Tue, 23 Aug 2022 08:11:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47EE6B81C1C;
+        Tue, 23 Aug 2022 08:33:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844B1C433D6;
+        Tue, 23 Aug 2022 08:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242297;
-        bh=rVd4J0guZ65vkhwgCDxawhFODU/bU6NhtmHAr44jMRY=;
+        s=korg; t=1661243608;
+        bh=TPy/KETqUmQZnZolpNzXaphI9rczF7IPRF6bkrILUNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dKJxMvch6CSK/dDCpiSqT8+Ni5a5iSMCEaHSl88yS4uipVnsbdkRsyU4ck7crFGW+
-         pRfZu1IVT0WK2KkmTW/XeXfjz9rjK1QiNg5sT/bharbjXcvr09s6kxBwcB7ir0e70D
-         8AMLZdX40o1Y9vvMQVNadegXy0ctLCqgLu7TtXgc=
+        b=dJj7kE49icp3SDmC4ZMcnu5r8Lj5UD3RVcnoPFVEvh4KZsXzPiGhh2Caeg7iz4Nh9
+         fMruXXdvuPfcjR8lYfwEfopIK+h3NQ/ndrHsckGAJ0Nacee+tpX99y4/lVXFjGVlay
+         ePFyQ0Qe7Bl9g3ewdc1NmQNpG5BxY2vDX2VIrH5s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        David Collins <quic_collinsd@quicinc.com>
-Subject: [PATCH 4.9 049/101] spmi: trace: fix stack-out-of-bound access in SPMI tracing functions
+        stable@vger.kernel.org,
+        Takeshi Saito <takeshi.saito.xv@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 301/365] mmc: renesas_sdhi: newer SoCs dont need manual tap correction
 Date:   Tue, 23 Aug 2022 10:03:22 +0200
-Message-Id: <20220823080036.420431808@linuxfoundation.org>
+Message-Id: <20220823080130.777525058@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,110 +58,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Collins <quic_collinsd@quicinc.com>
+From: Takeshi Saito <takeshi.saito.xv@renesas.com>
 
-commit 2af28b241eea816e6f7668d1954f15894b45d7e3 upstream.
+[ Upstream commit 00e8c11c137b2e4b2bf54dc9881cf32e3441ddb4 ]
 
-trace_spmi_write_begin() and trace_spmi_read_end() both call
-memcpy() with a length of "len + 1".  This leads to one extra
-byte being read beyond the end of the specified buffer.  Fix
-this out-of-bound memory access by using a length of "len"
-instead.
+The newest Gen3 SoCs and Gen4 SoCs do not need manual tap correction
+with HS400 anymore. So, instead of checking the SDHI version, add a
+quirk flag and set manual tap correction only for affected SoCs.
 
-Here is a KASAN log showing the issue:
-
-BUG: KASAN: stack-out-of-bounds in trace_event_raw_event_spmi_read_end+0x1d0/0x234
-Read of size 2 at addr ffffffc0265b7540 by task thermal@2.0-ser/1314
-...
-Call trace:
- dump_backtrace+0x0/0x3e8
- show_stack+0x2c/0x3c
- dump_stack_lvl+0xdc/0x11c
- print_address_description+0x74/0x384
- kasan_report+0x188/0x268
- kasan_check_range+0x270/0x2b0
- memcpy+0x90/0xe8
- trace_event_raw_event_spmi_read_end+0x1d0/0x234
- spmi_read_cmd+0x294/0x3ac
- spmi_ext_register_readl+0x84/0x9c
- regmap_spmi_ext_read+0x144/0x1b0 [regmap_spmi]
- _regmap_raw_read+0x40c/0x754
- regmap_raw_read+0x3a0/0x514
- regmap_bulk_read+0x418/0x494
- adc5_gen3_poll_wait_hs+0xe8/0x1e0 [qcom_spmi_adc5_gen3]
- ...
- __arm64_sys_read+0x4c/0x60
- invoke_syscall+0x80/0x218
- el0_svc_common+0xec/0x1c8
- ...
-
-addr ffffffc0265b7540 is located in stack of task thermal@2.0-ser/1314 at offset 32 in frame:
- adc5_gen3_poll_wait_hs+0x0/0x1e0 [qcom_spmi_adc5_gen3]
-
-this frame has 1 object:
- [32, 33) 'status'
-
-Memory state around the buggy address:
- ffffffc0265b7400: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
- ffffffc0265b7480: 04 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
->ffffffc0265b7500: 00 00 00 00 f1 f1 f1 f1 01 f3 f3 f3 00 00 00 00
-                                           ^
- ffffffc0265b7580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffffc0265b7600: f1 f1 f1 f1 01 f2 07 f2 f2 f2 01 f3 00 00 00 00
-==================================================================
-
-Fixes: a9fce374815d ("spmi: add command tracepoints for SPMI")
-Cc: stable@vger.kernel.org
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-Link: https://lore.kernel.org/r/20220627235512.2272783-1-quic_collinsd@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Takeshi Saito <takeshi.saito.xv@renesas.com>
+[wsa: rebased, renamed the quirk variable, removed stale comment]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Link: https://lore.kernel.org/r/20220720072901.1266-1-wsa+renesas@sang-engineering.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/trace/events/spmi.h |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/mmc/host/renesas_sdhi.h               | 1 +
+ drivers/mmc/host/renesas_sdhi_core.c          | 5 ++---
+ drivers/mmc/host/renesas_sdhi_internal_dmac.c | 6 ++++++
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
---- a/include/trace/events/spmi.h
-+++ b/include/trace/events/spmi.h
-@@ -20,15 +20,15 @@ TRACE_EVENT(spmi_write_begin,
- 		__field		( u8,         sid       )
- 		__field		( u16,        addr      )
- 		__field		( u8,         len       )
--		__dynamic_array	( u8,   buf,  len + 1   )
-+		__dynamic_array	( u8,   buf,  len       )
- 	),
+diff --git a/drivers/mmc/host/renesas_sdhi.h b/drivers/mmc/host/renesas_sdhi.h
+index 1a1e3e020a8c..c4abfee1ebae 100644
+--- a/drivers/mmc/host/renesas_sdhi.h
++++ b/drivers/mmc/host/renesas_sdhi.h
+@@ -43,6 +43,7 @@ struct renesas_sdhi_quirks {
+ 	bool hs400_4taps;
+ 	bool fixed_addr_mode;
+ 	bool dma_one_rx_only;
++	bool manual_tap_correction;
+ 	u32 hs400_bad_taps;
+ 	const u8 (*hs400_calib_table)[SDHI_CALIB_TABLE_MAX];
+ };
+diff --git a/drivers/mmc/host/renesas_sdhi_core.c b/drivers/mmc/host/renesas_sdhi_core.c
+index 55f7b27c3de7..6edbf5c161ab 100644
+--- a/drivers/mmc/host/renesas_sdhi_core.c
++++ b/drivers/mmc/host/renesas_sdhi_core.c
+@@ -380,8 +380,7 @@ static void renesas_sdhi_hs400_complete(struct mmc_host *mmc)
+ 	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_DT2FF,
+ 		       priv->scc_tappos_hs400);
  
- 	TP_fast_assign(
- 		__entry->opcode = opcode;
- 		__entry->sid    = sid;
- 		__entry->addr   = addr;
--		__entry->len    = len + 1;
--		memcpy(__get_dynamic_array(buf), buf, len + 1);
-+		__entry->len    = len;
-+		memcpy(__get_dynamic_array(buf), buf, len);
- 	),
+-	/* Gen3 can't do automatic tap correction with HS400, so disable it */
+-	if (sd_ctrl_read16(host, CTL_VERSION) == SDHI_VER_GEN3_SDMMC)
++	if (priv->quirks && priv->quirks->manual_tap_correction)
+ 		sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_RVSCNTL,
+ 			       ~SH_MOBILE_SDHI_SCC_RVSCNTL_RVSEN &
+ 			       sd_scc_read32(host, priv, SH_MOBILE_SDHI_SCC_RVSCNTL));
+@@ -718,7 +717,7 @@ static bool renesas_sdhi_manual_correction(struct tmio_mmc_host *host, bool use_
+ 	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_RVSREQ, 0);
  
- 	TP_printk("opc=%d sid=%02d addr=0x%04x len=%d buf=0x[%*phD]",
-@@ -91,7 +91,7 @@ TRACE_EVENT(spmi_read_end,
- 		__field		( u16,        addr      )
- 		__field		( int,        ret       )
- 		__field		( u8,         len       )
--		__dynamic_array	( u8,   buf,  len + 1   )
-+		__dynamic_array	( u8,   buf,  len       )
- 	),
+ 	/* Change TAP position according to correction status */
+-	if (sd_ctrl_read16(host, CTL_VERSION) == SDHI_VER_GEN3_SDMMC &&
++	if (priv->quirks && priv->quirks->manual_tap_correction &&
+ 	    host->mmc->ios.timing == MMC_TIMING_MMC_HS400) {
+ 		u32 bad_taps = priv->quirks ? priv->quirks->hs400_bad_taps : 0;
+ 		/*
+diff --git a/drivers/mmc/host/renesas_sdhi_internal_dmac.c b/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+index 3084b15ae2cb..52915404eb07 100644
+--- a/drivers/mmc/host/renesas_sdhi_internal_dmac.c
++++ b/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+@@ -170,6 +170,7 @@ static const struct renesas_sdhi_quirks sdhi_quirks_4tap_nohs400_one_rx = {
+ static const struct renesas_sdhi_quirks sdhi_quirks_4tap = {
+ 	.hs400_4taps = true,
+ 	.hs400_bad_taps = BIT(2) | BIT(3) | BIT(6) | BIT(7),
++	.manual_tap_correction = true,
+ };
  
- 	TP_fast_assign(
-@@ -99,8 +99,8 @@ TRACE_EVENT(spmi_read_end,
- 		__entry->sid    = sid;
- 		__entry->addr   = addr;
- 		__entry->ret    = ret;
--		__entry->len    = len + 1;
--		memcpy(__get_dynamic_array(buf), buf, len + 1);
-+		__entry->len    = len;
-+		memcpy(__get_dynamic_array(buf), buf, len);
- 	),
+ static const struct renesas_sdhi_quirks sdhi_quirks_nohs400 = {
+@@ -182,25 +183,30 @@ static const struct renesas_sdhi_quirks sdhi_quirks_fixed_addr = {
  
- 	TP_printk("opc=%d sid=%02d addr=0x%04x ret=%d len=%02d buf=0x[%*phD]",
+ static const struct renesas_sdhi_quirks sdhi_quirks_bad_taps1357 = {
+ 	.hs400_bad_taps = BIT(1) | BIT(3) | BIT(5) | BIT(7),
++	.manual_tap_correction = true,
+ };
+ 
+ static const struct renesas_sdhi_quirks sdhi_quirks_bad_taps2367 = {
+ 	.hs400_bad_taps = BIT(2) | BIT(3) | BIT(6) | BIT(7),
++	.manual_tap_correction = true,
+ };
+ 
+ static const struct renesas_sdhi_quirks sdhi_quirks_r8a7796_es13 = {
+ 	.hs400_4taps = true,
+ 	.hs400_bad_taps = BIT(2) | BIT(3) | BIT(6) | BIT(7),
+ 	.hs400_calib_table = r8a7796_es13_calib_table,
++	.manual_tap_correction = true,
+ };
+ 
+ static const struct renesas_sdhi_quirks sdhi_quirks_r8a77965 = {
+ 	.hs400_bad_taps = BIT(2) | BIT(3) | BIT(6) | BIT(7),
+ 	.hs400_calib_table = r8a77965_calib_table,
++	.manual_tap_correction = true,
+ };
+ 
+ static const struct renesas_sdhi_quirks sdhi_quirks_r8a77990 = {
+ 	.hs400_calib_table = r8a77990_calib_table,
++	.manual_tap_correction = true,
+ };
+ 
+ /*
+-- 
+2.35.1
+
 
 

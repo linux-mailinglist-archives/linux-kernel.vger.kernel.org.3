@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4A759D686
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30A959D317
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348496AbiHWJK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S241565AbiHWIC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240382AbiHWJJP (ORCPT
+        with ESMTP id S241494AbiHWICw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:09:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB87E86890;
-        Tue, 23 Aug 2022 01:30:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22BBEB81C35;
-        Tue, 23 Aug 2022 08:29:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 688B3C433D6;
-        Tue, 23 Aug 2022 08:29:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243350;
-        bh=XZXeOQ3dfzBQRzr9znYm6A/X4LWQ1Y7x+rJXgcRbj20=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yPU8LGtc6e7pNSZZEroWwKz6U2N2Oye3CSUGhbkwe3iMgrVlJ3+jFV5/LoCHVJibi
-         Fw1uOeWnEJ7kyAKlyo2e3LdByIwcAIBSxHisYum7PXU0hJwawZJlbQbHy7DxOaY5N7
-         jqCZTtlCzasR5+CLIhd2f88fadBQ30qFC3gjYAdk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 250/365] KVM: arm64: Reject 32bit user PSTATE on asymmetric systems
+        Tue, 23 Aug 2022 04:02:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DBD659CD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:51 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrt-0002vg-O2; Tue, 23 Aug 2022 10:02:38 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrr-001Sv2-8I; Tue, 23 Aug 2022 10:02:35 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrp-00ALa6-Ao; Tue, 23 Aug 2022 10:02:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v3 17/17] net: dsa: microchip: remove IS_9893 flag
 Date:   Tue, 23 Aug 2022 10:02:31 +0200
-Message-Id: <20220823080128.650304002@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
+Message-Id: <20220823080231.2466017-18-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,43 +60,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Upton <oliver.upton@linux.dev>
+Use chip_id as other places of this code do it
 
-[ Upstream commit b10d86fb8e46cc812171728bcd326df2f34e9ed5 ]
-
-KVM does not support AArch32 EL0 on asymmetric systems. To that end,
-prevent userspace from configuring a vCPU in such a state through
-setting PSTATE.
-
-It is already ABI that KVM rejects such a write on a system where
-AArch32 EL0 is unsupported. Though the kernel's definition of a 32bit
-system changed in commit 2122a833316f ("arm64: Allow mismatched
-32-bit EL0 support"), KVM's did not.
-
-Fixes: 2122a833316f ("arm64: Allow mismatched 32-bit EL0 support")
-Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220816192554.1455559-3-oliver.upton@linux.dev
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- arch/arm64/kvm/guest.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/dsa/microchip/ksz9477.c    | 3 ---
+ drivers/net/dsa/microchip/ksz_common.c | 3 ++-
+ drivers/net/dsa/microchip/ksz_common.h | 4 ----
+ 3 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-index 8c607199cad1..f802a3b3f8db 100644
---- a/arch/arm64/kvm/guest.c
-+++ b/arch/arm64/kvm/guest.c
-@@ -242,7 +242,7 @@ static int set_core_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
- 		u64 mode = (*(u64 *)valp) & PSR_AA32_MODE_MASK;
- 		switch (mode) {
- 		case PSR_AA32_MODE_USR:
--			if (!system_supports_32bit_el0())
-+			if (!kvm_supports_32bit_el0())
- 				return -EINVAL;
- 			break;
- 		case PSR_AA32_MODE_FIQ:
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 1dae75af8e1b9..6f857922eb3e2 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -1165,9 +1165,6 @@ int ksz9477_switch_init(struct ksz_device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (dev->chip_id == KSZ9893_CHIP_ID)
+-		dev->features |= IS_9893;
+-
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index a863d4feb4135..08491a67dc359 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -1865,7 +1865,8 @@ static void ksz_set_xmii(struct ksz_device *dev, int port,
+ 	case PHY_INTERFACE_MODE_RGMII_RXID:
+ 		data8 |= bitval[P_RGMII_SEL];
+ 		/* On KSZ9893, disable RGMII in-band status support */
+-		if (dev->features & IS_9893)
++		if (dev->chip_id == KSZ9893_CHIP_ID ||
++		    dev->chip_id == KSZ8563_CHIP_ID)
+ 			data8 &= ~P_MII_MAC_MODE;
+ 		break;
+ 	default:
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index 1b327bca1fb88..54c1cba35a9d8 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -118,7 +118,6 @@ struct ksz_device {
+ 	unsigned long mib_read_interval;
+ 	u16 mirror_rx;
+ 	u16 mirror_tx;
+-	u32 features;			/* chip specific features */
+ 	u16 port_mask;
+ };
+ 
+@@ -541,9 +540,6 @@ static inline int is_lan937x(struct ksz_device *dev)
+ 
+ #define SW_START			0x01
+ 
+-/* Used with variable features to indicate capabilities. */
+-#define IS_9893				BIT(2)
+-
+ /* xMII configuration */
+ #define P_MII_DUPLEX_M			BIT(6)
+ #define P_MII_100MBIT_M			BIT(4)
 -- 
-2.35.1
-
-
+2.30.2
 

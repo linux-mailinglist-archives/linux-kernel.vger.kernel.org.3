@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B51E59D768
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A2F59D599
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243853AbiHWJSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S236907AbiHWIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347922AbiHWJPc (ORCPT
+        with ESMTP id S1344685AbiHWIbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:15:32 -0400
+        Tue, 23 Aug 2022 04:31:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F986DADC;
-        Tue, 23 Aug 2022 01:32:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEF766128;
+        Tue, 23 Aug 2022 01:15:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F285B61257;
-        Tue, 23 Aug 2022 08:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD87C433C1;
-        Tue, 23 Aug 2022 08:32:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F7E461321;
+        Tue, 23 Aug 2022 08:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47543C433C1;
+        Tue, 23 Aug 2022 08:15:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243533;
-        bh=CGcBH5rQ3CR51QKmCPkYsyRGCuTCXCRNzB1PPUJkLT4=;
+        s=korg; t=1661242514;
+        bh=CWO5cFi5S/7DCwalQ4rsgZB2IdcrAI+RfNDTo4EngAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DxIlpNJpuP1fxKNsFobfTKfaOKkKRtFQdlFSpmHVeEqnPtdJPPXhJw4ghXlABbKkc
-         cTdnDWG8Q/dMha6aL7XakjnJXmGscNBHZr8Rj3N/DpHahFeiXCZAMRBxM2omgrWfqD
-         zAB4Fd0ZCni5jtR7oPsNbzQc20hKxSNKKEuQS1go=
+        b=1BIw3SK5GAXj+jXrVSwOggdpypn9s/J1tNCZssupVYwL2tEo7moYWnKTZxYOTWEyx
+         duILYV6C/rIiVXKHaoMj+IilcymbLmDZCwhA4rVLdOEtWmDDN/lbtTnGkCIysucjwQ
+         uy2z3c7/UH05Tx3YClMe1V2rxAExaRiSNJFH30sk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 307/365] dmaengine: sprd: Cleanup in .remove() after pm_runtime_get_sync() failed
-Date:   Tue, 23 Aug 2022 10:03:28 +0200
-Message-Id: <20220823080131.028457465@linuxfoundation.org>
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 4.9 056/101] dm raid: fix address sanitizer warning in raid_status
+Date:   Tue, 23 Aug 2022 10:03:29 +0200
+Message-Id: <20220823080036.696134505@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-[ Upstream commit 1e42f82cbec7b2cc4873751e7791e6611901c5fc ]
+commit 1fbeea217d8f297fe0e0956a1516d14ba97d0396 upstream.
 
-It's not allowed to quit remove early without cleaning up completely.
-Otherwise this results in resource leaks that probably yield graver
-problems later. Here for example some tasklets might survive the lifetime
-of the sprd-dma device and access sdev which is freed after .remove()
-returns.
+There is this warning when using a kernel with the address sanitizer
+and running this testsuite:
+https://gitlab.com/cki-project/kernel-tests/-/tree/main/storage/swraid/scsi_raid
 
-As none of the device freeing requires an active device, just ignore the
-return value of pm_runtime_get_sync().
+==================================================================
+BUG: KASAN: slab-out-of-bounds in raid_status+0x1747/0x2820 [dm_raid]
+Read of size 4 at addr ffff888079d2c7e8 by task lvcreate/13319
+CPU: 0 PID: 13319 Comm: lvcreate Not tainted 5.18.0-0.rc3.<snip> #1
+Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x6a/0x9c
+ print_address_description.constprop.0+0x1f/0x1e0
+ print_report.cold+0x55/0x244
+ kasan_report+0xc9/0x100
+ raid_status+0x1747/0x2820 [dm_raid]
+ dm_ima_measure_on_table_load+0x4b8/0xca0 [dm_mod]
+ table_load+0x35c/0x630 [dm_mod]
+ ctl_ioctl+0x411/0x630 [dm_mod]
+ dm_ctl_ioctl+0xa/0x10 [dm_mod]
+ __x64_sys_ioctl+0x12a/0x1a0
+ do_syscall_64+0x5b/0x80
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
-Link: https://lore.kernel.org/r/20220721204054.323602-1-u.kleine-koenig@pengutronix.de
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The warning is caused by reading conf->max_nr_stripes in raid_status. The
+code in raid_status reads mddev->private, casts it to struct r5conf and
+reads the entry max_nr_stripes.
+
+However, if we have different raid type than 4/5/6, mddev->private
+doesn't point to struct r5conf; it may point to struct r0conf, struct
+r1conf, struct r10conf or struct mpconf. If we cast a pointer to one
+of these structs to struct r5conf, we will be reading invalid memory
+and KASAN warns about it.
+
+Fix this bug by reading struct r5conf only if raid type is 4, 5 or 6.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/sprd-dma.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/md/dm-raid.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
-index 2138b80435ab..474d3ba8ec9f 100644
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -1237,11 +1237,8 @@ static int sprd_dma_remove(struct platform_device *pdev)
+--- a/drivers/md/dm-raid.c
++++ b/drivers/md/dm-raid.c
+@@ -3173,7 +3173,7 @@ static void raid_status(struct dm_target
  {
- 	struct sprd_dma_dev *sdev = platform_get_drvdata(pdev);
- 	struct sprd_dma_chn *c, *cn;
--	int ret;
- 
--	ret = pm_runtime_get_sync(&pdev->dev);
--	if (ret < 0)
--		return ret;
-+	pm_runtime_get_sync(&pdev->dev);
- 
- 	/* explicitly free the irq */
- 	if (sdev->irq > 0)
--- 
-2.35.1
-
+ 	struct raid_set *rs = ti->private;
+ 	struct mddev *mddev = &rs->md;
+-	struct r5conf *conf = mddev->private;
++	struct r5conf *conf = rs_is_raid456(rs) ? mddev->private : NULL;
+ 	int i, max_nr_stripes = conf ? conf->max_nr_stripes : 0;
+ 	bool array_in_sync;
+ 	unsigned int raid_param_cnt = 1; /* at least 1 for chunksize */
 
 

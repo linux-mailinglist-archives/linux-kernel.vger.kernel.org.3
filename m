@@ -2,148 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612C659EA6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4DA59ECA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbiHWSAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S230064AbiHWTnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbiHWR7t (ORCPT
+        with ESMTP id S231487AbiHWTnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:59:49 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAE6D4F77
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:05:32 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id 67so5698702pfv.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=aVBt+IuocN3gZGMsPNsv72g8OF66w1EEamrVZjnB+J4=;
-        b=aHRlHO4kNIRNDNrpKgB2QM9cSMZjQBb6u4l59Y4E0tZW/BrvBnqckZTcn9cz3SUw3D
-         igHUCLBokcR+QGB8XUc1cJbRn7hVuyKGyfeg1tfWEOZHpP64tT9cUzSSzx1Y0vgX+Uyv
-         RPdN051ayBxF8NbSnhZI7UkDJIxJC2b9PXw94OGmVsv1/XB2K1qoCbLTnhTe5HqVT1w+
-         uDjWiexbtDjcheCp9qg/+R4RDyAtHxBooBSO8W1phCNDG09PvGpKx4gmxB38OKo5Au+a
-         wQuvSmBbg3eLIxGH8V0BVxy3Pbhs0aKjR4E9VsFcpOdyvMRpUtUfAdi6lWLpFgc21aKV
-         eFRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=aVBt+IuocN3gZGMsPNsv72g8OF66w1EEamrVZjnB+J4=;
-        b=C5dH7OHymtLo4jy64Vp4MpKGc7M+qeqBoYk5xXxU2FAGg34u33qkI7xv+TN89d5Kk1
-         xTCnIj/Or8rNZ85TY8Y2b2RsrTZSFrb18e5ksWkDhhNiHG1FF3R+4rkpio5YhEOXv7XQ
-         i+gN2tSBiggEfpcP49NpizVfM41qbF0y+Niq+zpan2rLuIBru1A+bDvDhVWybWNSnMnq
-         I5geYqBDfoKaEO7GFGJ6INKFp0aHEjFTjHuInBVJVUghil/VDiNvpdXb4qIjF+/A93pH
-         J5IDcZdcbNfUw2QanfUDpqd5IJc9BKVZQ/IGOLyxPvWOKTO9/HSsikHuzFAZ0XBluENG
-         nrAg==
-X-Gm-Message-State: ACgBeo1pYuiRrFU08hphtRXcZ7+7GIZzzN6UGfCLZGpq6kxrscqjgsYg
-        nwy8247Qnp3OKYNv3h8ckszgYw==
-X-Google-Smtp-Source: AA6agR7U2euXK2YAHsShhKay0KkYkkaAjkpwjugKPMjrIdRBiwJTOXGIGRCd9tb8zWpXTJzh2djP8w==
-X-Received: by 2002:a63:1c11:0:b0:41d:89d5:8ef0 with SMTP id c17-20020a631c11000000b0041d89d58ef0mr21289304pgc.403.1661270731660;
-        Tue, 23 Aug 2022 09:05:31 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z27-20020aa7959b000000b00536ede9e344sm2384650pfj.14.2022.08.23.09.05.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 09:05:31 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 16:05:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <YwT6x2g9jcMH60LI@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <Yv7XTON3MwuC1Q3U@google.com>
- <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
- <b2743a3a-a1b4-2d2e-98be-87b58ad387cf@redhat.com>
+        Tue, 23 Aug 2022 15:43:12 -0400
+X-Greylist: delayed 17816 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 11:44:02 PDT
+Received: from mx0b-0039f301.pphosted.com (mx0b-0039f301.pphosted.com [148.163.137.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7786278;
+        Tue, 23 Aug 2022 11:43:57 -0700 (PDT)
+Received: from pps.filterd (m0174683.ppops.net [127.0.0.1])
+        by mx0b-0039f301.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NAtohs023549;
+        Tue, 23 Aug 2022 13:46:46 GMT
+Received: from eur05-vi1-obe.outbound.protection.outlook.com (mail-vi1eur05lp2169.outbound.protection.outlook.com [104.47.17.169])
+        by mx0b-0039f301.pphosted.com (PPS) with ESMTPS id 3j4wjugv5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 13:46:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NyVnRNOAjLX08sLgjNs33GL+vBAiBIOTMhHLszs0iUotGmTZ6Qvf1lrkIcd1k9DK+oSFLvFG0plEWlIT26b8vD8AI4QNHxFIfLeOFNcolsxe/z+ZwQjaUTPW0vegjN7iaXB+BSE5xXG9PmSd0vlLrrIBAgUaWrWVD6++Z2nwHq7MKfDMBaAPVVJTg7LM15Hw0YN03H5mKPvdUaEKP1pDeniV1mayq/82doXtH/y7SQ1faD2C9aRjQiv1X2YQcmKCUvai1SlaNtkG+2Z/1XlCB4SupCAOTgTMauoluyHpgeB9+6jIZ2NVbgt2XDLICBETOEO1/TLCEQ3Rf9jnqcVf6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xqKv9OaBqIzvDzwgXp6l2VxsxfpHuEmvYLwBnCC0pT4=;
+ b=iBja2gRhuTCvNEVRLY9InrDpfSMfkwLUbPO5RV52LQyvoXsiW+k9Hbv8YmqqXdhVhBUEW9aGdza289MaVjKLkd5yB62Y8bdMT2YxG68DS9lWSLJgqw/yp35oGGYiGxcBSNYiigLbrXRJUeoqAoL/sBmqxagR8yFcopAl2cOb1/6ZtWpQfHv4uWmquHlbLEZHoRjnAR+4AUD9JbmIhDN3hBkQUQSdOwGVO7IFIyGJohN2F4D+KqirSSmOev3lvH313ISt/M2pi2fToEM5kU6lj56FmJ196PNxP4POl2FtWgNy+KSSo3KAURwFRhG1xYdcWh9aFR/IAV5eFgLepMSiRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
+ dkim=pass header.d=epam.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xqKv9OaBqIzvDzwgXp6l2VxsxfpHuEmvYLwBnCC0pT4=;
+ b=p4B2w656u5i8ilLhm374yrmp8X4kVfKlDn7kLJmpGlZJnssRB7Xe0w6INt0yNIBrOHr4xBRN7DwvuJYs/NVDKkvR7lrClGcgEqjtXAyQL66KVlZO3GGNcQmTT89Od2uUZFTCAKVcPAIdgCZD2Q1Zg3s6cJRGBhI//3vMFLVqWq1fovW68pQdXcaPfcrUc68HQRx4py32tCNWVIVqm+IadO6haqRIFWDs3J9mYfueIHt4GkRq5CSWAtvATIQy25RjyGvnU0UgKAe6r+SuVfmW28QFwfc3xC7tZU8x3AnB57QTMylT6BLeUHuYrRDphNfPd4di65SctohHcARm6uMutA==
+Received: from DB8PR03MB6108.eurprd03.prod.outlook.com (2603:10a6:10:ed::15)
+ by VI1PR03MB6365.eurprd03.prod.outlook.com (2603:10a6:800:195::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.24; Tue, 23 Aug
+ 2022 13:46:43 +0000
+Received: from DB8PR03MB6108.eurprd03.prod.outlook.com
+ ([fe80::f575:76e9:4a40:7387]) by DB8PR03MB6108.eurprd03.prod.outlook.com
+ ([fe80::f575:76e9:4a40:7387%2]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
+ 13:46:43 +0000
+From:   Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH] xen: move from strlcpy with unused retval to strscpy
+Thread-Topic: [PATCH] xen: move from strlcpy with unused retval to strscpy
+Thread-Index: AQHYs0YFHPDOI0n17UKUZScrX/PwVK28hvoA
+Date:   Tue, 23 Aug 2022 13:46:43 +0000
+Message-ID: <bec94594-1a7b-14ff-ad91-f2e781b12be5@epam.com>
+References: <20220818210122.7613-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210122.7613-1-wsa+renesas@sang-engineering.com>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3d2eb1ea-308d-4c6b-ed81-08da850dea04
+x-ms-traffictypediagnostic: VI1PR03MB6365:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5FsprJaSo9YGIubgiDtTKR740XxaGquXgASgIZKhwBTbMeYK8ynota89yWoBaBkrryFY7uzj7/pN6WuxNTNiINisb9UJ6pwO8qSo/kkIUhZmNbXKiqAEmBUydLF+ColJWFmQvjbMhN/KrBup2xA/qNig16NICMqlx+Graoeg+Bp7iDBFYP5kS+VSM6KGsRmC3e1rB93ZpKojNGspxsLqco7i43Fcil54OHRIM/VV25nM//mzMliCYiGJB49mHYlzmqIj9FULmcv1dcEx5n9HkrZ+Wy7D3UlVZ/UI9kxxMKwApD5ESbWxIg47ti0sLOs+iI6d9+SSnbK5Qh1U+EpH04gb3SadjCAxdBXv2YaI27id/lOq26OsaxiV3EY2VfEIlhtb8nAO4BDUSLZBT6rBlBEXu4nRrPeYdw1LnfvjXs0qm9m0qwv5hqIp3tQpAZZYp5o0IVAIiFzYikA6m+Jf0K191GbpjiADhgwccGLn+Dt05ApIlvgj5wVcw9GXTtkBPLeEqk6J17iuhiB8vbyNEJJqXfbvLxxghlAdDqIg8DCK1hxDKfnJ680rYWkHgRa/zp+LQGcUgGpt24heihU+cbPTJXnSMOlBcQhtu7DgFknRXOJW647HcRvxQhb/cMDKBzgobVWP3ie1Vdn4zjvWlpuwKtIN6BgPRaMwgG3eDOXieXUXCF5/XY66c4ONv8X4lTGA3G3YA7ieZBd/QofyCuU8lx2eR5hXfQxZAMc+qTxRGBm3gujdqpizLaAo/UBNIK5S98lRr7QCzufCvL6LhrsVe8dejcrRg9Jeip0uZP8KlS4FYw2mNN97ndPaaUk13vqVJVAvyd9TnU+Fe9ymersoWCdYQBI97s09kLXpmTY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR03MB6108.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(39860400002)(346002)(376002)(2906002)(2616005)(6512007)(186003)(38070700005)(83380400001)(26005)(66556008)(4326008)(8676002)(64756008)(66446008)(5660300002)(91956017)(66476007)(76116006)(66946007)(36756003)(8936002)(31686004)(110136005)(86362001)(478600001)(71200400001)(53546011)(316002)(41300700001)(55236004)(54906003)(6506007)(122000001)(966005)(6486002)(31696002)(38100700002)(156123004)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RjNDdVoxdndYa1lGT0VQUkFQaTRtUVJ0d0pnYitZVUtOUHNtR3l6SDE0T2VP?=
+ =?utf-8?B?a2hkczNTUVVWbFlsanhkbUxVTGk5YXdGZEd5QXJ1MkRmeDExWFNrWitQZnpz?=
+ =?utf-8?B?ZG9rV1RmbGJaZ1dkY1FzVnR6SWgxeEtaRlNyK3B4enlaYzhWTlRiTTFhbXcx?=
+ =?utf-8?B?T3RxWHg1R09UV1hpbG5WMlVaZFJaWmFYQ3pFekQ2OWdvN3hpd05IQ3lsY282?=
+ =?utf-8?B?U21kS3d5VTJYY1hJek9JdlVnMG9zRUh5Ynczc0k3TENwaGZCcy92dDRRU2o4?=
+ =?utf-8?B?ZU4yTW9GWFdpV0s5ZzNuMlZ4S2laMXlKSEwyYnlqdW1HUXJHTU5kcnNIUDEv?=
+ =?utf-8?B?UThUbm1HdHBHR1F2WDR1NFY0OUQ0aUhBV25jVS9YV1ZRTTNXcXJSQXd0MTdh?=
+ =?utf-8?B?bUc4SlhJd3p5SGdManZhUnBSa1l4eUdGN2Y5MEtaTjA1bFM2aS9zbHJDUWJJ?=
+ =?utf-8?B?RlUvNy9OVzdDUE5mTkp5bXFlOXZVUWI4RTZySndsQThWeWJPRXNzOVkxQ1lX?=
+ =?utf-8?B?Q1d5cmUxR3crT2JWTENta09CNVFMYXlyalZrdk9wb2txSzZTUHpCalV5b204?=
+ =?utf-8?B?QTNObm5OeEVSekZHeHFMSmRONFlSakluNWk1NDVKbkFqa3ZyWU96dFVmRzQ0?=
+ =?utf-8?B?Z1VDOGdGMTJnSzFCYzFzWGlrNzVxaTJNL0tJdHhycFdQWktPWU50bGNZR3Jj?=
+ =?utf-8?B?VitKZUc3eTVCTzBMQUYwVGRLbEVhb0thRkRSSFpJVmYrMFhPSGFZRW8yR1Jy?=
+ =?utf-8?B?YTRhMXNRa1AybllDeFFGRzk2cVRVeFJ4NFZyN3I3Ui9sZHdQVkVOZmUrUGtV?=
+ =?utf-8?B?MENTQXd5YmhER2daSkE5UWQ0aUlZVERGQSs0WTBKTmxCeTNPQ2Z3aktYNTFP?=
+ =?utf-8?B?TTZNVUhZd0E2SktDY3NpWThNVEh4R0llZXFkdnk3QzcrYm10NTdOaStDc0Np?=
+ =?utf-8?B?NEV6QnIzNFd5OUxSV0ZnWXFTYlZ2dEtjRFEzcEhhYm1hOGt2ZjgvVnpJcCs0?=
+ =?utf-8?B?a29qNG91a2hjbnpWSGFhN2xPMzZwMWVRWHNIbjMwai84SWJ3YmxNUWVTc0hN?=
+ =?utf-8?B?OElWOHdMai9YcVF1QjN0Ym10M1djUUg5Qk9hZ2M4L3c2S3ZlRjdCWUtGUnBL?=
+ =?utf-8?B?bXQ4RTVGc2xROFdwaHpTckNPZk1wRlhraGFRSTZUNXRETGtIVWZHUHV0RFh6?=
+ =?utf-8?B?TUExRlRxcU94QnprbXhIMGFZVzZiKzNyUmRZSkxEMnF4bnZ5eFh2TTZYQ2N2?=
+ =?utf-8?B?MytSRnIxdWEwQ0xkTkNiZ1ZZcWhIbThWbUs3Y3VOQXd4bnU0OEJhRWhTWmJ3?=
+ =?utf-8?B?SlQ1eXRqQVh6b1gyY0l5UE5BVkRNN2E3bmVPSTdoZG9md0VCTlpwa043bmhW?=
+ =?utf-8?B?b2E5bFM2Z0lSa3g5ckhDZjFQWkFZcjlBNnRCc3N4M2VtbTlTR2xDVC9XbHlI?=
+ =?utf-8?B?dFRFVk81K3ZlRGRRUG9sYWxpYTZkL08yNGk3SGNEeWdWZDU5YkZNbFZRNlox?=
+ =?utf-8?B?U1VqUmlYTkkvRmZLRDVMME9hUiszNGt3V0loUU05djJ0ZUUyTVhST2E5bit5?=
+ =?utf-8?B?Z0hoNnMxak1HYU9icmlZSUM5TVI2YUwzR3daRkZjZ1hiall6VkZKYVZNTTVk?=
+ =?utf-8?B?L0VpR1p6OS9aZ3hIK2hFZDlQTlZTZ1B5cG1MQjU0Y1RRUGxHdFMzZElud21o?=
+ =?utf-8?B?S0RKVXVCc2ZoMWxTSEdrZzIvdTJrRGxMazF4eENSVmRlU200aDBNZ1Fya085?=
+ =?utf-8?B?dlROOWd6dFBLdW1kZnhUY3R0UDA3ZVdsbThtZmd2UXBDUXhYWVRXV2g4NHZT?=
+ =?utf-8?B?R0VEaUFxUXpDbSttNzk4WG16ZFkwVEZHMXpXTWpwa3J5dHZXekpYbzl0VjAw?=
+ =?utf-8?B?NHM1QmVIc3BIcGhETHhTMzdmakpHb0RjWUF2M3R3aHlzMUFyVFdONTFJREpU?=
+ =?utf-8?B?azlhYlRTOEhBeWJUNUlxeE9Oa014eURYSzhwRXRvN2grMFVHaWpYZXVBcUNq?=
+ =?utf-8?B?anRFQjlmSitCdHVuZEwvZDVvNm1GRkdmRXZXSFYvRmU0Yi8vQnlmalhWcnFT?=
+ =?utf-8?B?bU05SW1VMFpFdCt4UnlYcEVsN2pCM3lCUTZzUXJNa21UeU9LRVB6cXZvdC9U?=
+ =?utf-8?B?L25PUEN0T241WUFGLzAwaXpzVU1UVGNiR3FMcnZNT1VKYTAxUGs5VEpobnhB?=
+ =?utf-8?Q?pZrl5i2tFJyjDc1lklcLVCI=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A72ACA5280DF4A4FA705383EC39C87CF@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2743a3a-a1b4-2d2e-98be-87b58ad387cf@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: epam.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR03MB6108.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d2eb1ea-308d-4c6b-ed81-08da850dea04
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2022 13:46:43.3138
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pXFfW83aWUCAHR/VqEUPcIpIxLxZXh4bxsi+2SL/dNVYPlluRFBYpXlbyfCfhVbKkD4GwMvW55W8OPTF2X58j6O3ezKQyTZAylGjTkuTYR8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB6365
+X-Proofpoint-GUID: EYFioTrI64vTo-epccuuiVJCbwrt23lD
+X-Proofpoint-ORIG-GUID: EYFioTrI64vTo-epccuuiVJCbwrt23lD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-23_05,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=999 suspectscore=0 impostorscore=0 phishscore=0
+ priorityscore=1501 clxscore=1011 adultscore=0 bulkscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208230055
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022, David Hildenbrand wrote:
-> On 19.08.22 05:38, Hugh Dickins wrote:
-> > On Fri, 19 Aug 2022, Sean Christopherson wrote:
-> >> On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
-> >>> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> >>>> On Wed, 6 Jul 2022, Chao Peng wrote:
-> >>>> But since then, TDX in particular has forced an effort into preventing
-> >>>> (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
-> >>>>
-> >>>> Are any of the shmem.c mods useful to existing users of shmem.c? No.
-> >>>> Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
-> >>
-> >> But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
-> >> aren't useful for _all_ existing users, but I don't think it's fair to say that
-> >> they're not useful for _any_ existing users.
-> > 
-> > Okay, I stand corrected: there exist some users of memfd_create()
-> > who will also have use for "INACCESSIBLE" memory.
-> 
-> As raised in reply to the relevant patch, I'm not sure if we really have
-> to/want to expose MFD_INACCESSIBLE to user space. I feel like this is a
-> requirement of specific memfd_notifer (memfile_notifier) implementations
-> -- such as TDX that will convert the memory and MCE-kill the machine on
-> ordinary write access. We might be able to set/enforce this when
-> registering a notifier internally instead, and fail notifier
-> registration if a condition isn't met (e.g., existing mmap).
->
-> So I'd be curious, which other users of shmem/memfd would benefit from
-> (MMU)-"INACCESSIBLE" memory obtained via memfd_create()?
-
-I agree that there's no need to expose the inaccessible behavior via uAPI.  Making
-it a kernel-internal thing that's negotiated/resolved when KVM binds to the fd
-would align INACCESSIBLE with the UNMOVABLE and UNRECLAIMABLE flags (and any other
-flags that get added in the future).
-
-AFAICT, the user-visible flag is a holdover from the early RFCs and doesn't provide
-any unique functionality.
-
-If we go that route, we might want to have shmem/memfd require INACCESSIBLE to be
-set for the initial implementation.  I.e. disallow binding without INACCESSIBLE
-until there's a use case.
+DQpPbiAxOS4wOC4yMiAwMDowMSwgV29sZnJhbSBTYW5nIHdyb3RlOg0KDQoNCkhlbGxvIFdvbGZy
+YW0NCg0KPiBGb2xsb3cgdGhlIGFkdmljZSBvZiB0aGUgYmVsb3cgbGluayBhbmQgcHJlZmVyICdz
+dHJzY3B5JyBpbiB0aGlzDQo+IHN1YnN5c3RlbS4gQ29udmVyc2lvbiBpcyAxOjEgYmVjYXVzZSB0
+aGUgcmV0dXJuIHZhbHVlIGlzIG5vdCB1c2VkLg0KPiBHZW5lcmF0ZWQgYnkgYSBjb2NjaW5lbGxl
+IHNjcmlwdC4NCj4NCj4gTGluazogaHR0cHM6Ly91cmxkZWZlbnNlLmNvbS92My9fX2h0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL3IvQ0FIay09d2dmUm5YejBXM0QzN2QwMXEzSkZrcl9pX3VUTD1WNkE2
+RzFvVVpjcHJta253QG1haWwuZ21haWwuY29tL19fOyEhR0ZfMjlkYmNRSVVCUEEheDh0WFJYVGR6
+YlNtYVdBM0dILUFqLVpGMkhyTUlBVk9yX3Flck82YXZnMDVBS2hUMFJJN01ucVY2NER5a0ZGSGZ1
+RHdvRFl0VC1pNWJ3N25HWVNwbmVEcXp6R2ZoWUZIY203TEJRJCAgW2xvcmVbLl1rZXJuZWxbLl1v
+cmddDQo+IFNpZ25lZC1vZmYtYnk6IFdvbGZyYW0gU2FuZyA8d3NhK3JlbmVzYXNAc2FuZy1lbmdp
+bmVlcmluZy5jb20+DQoNCg0KTG9va3MgY29ycmVjdDoNCg0KUmV2aWV3ZWQtYnk6IE9sZWtzYW5k
+ciBUeXNoY2hlbmtvIDxvbGVrc2FuZHJfdHlzaGNoZW5rb0BlcGFtLmNvbT4NCg0KDQo+IC0tLQ0K
+PiAgIGRyaXZlcnMveGVuL3hlbi1zY3NpYmFjay5jICAgICAgICAgICAgICAgICB8IDIgKy0NCj4g
+ICBkcml2ZXJzL3hlbi94ZW5idXMveGVuYnVzX3Byb2JlX2Zyb250ZW5kLmMgfCAyICstDQo+ICAg
+MiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+DQo+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL3hlbi94ZW4tc2NzaWJhY2suYyBiL2RyaXZlcnMveGVuL3hlbi1z
+Y3NpYmFjay5jDQo+IGluZGV4IDdhMGM5M2FjYzJjNS4uZDNkY2RhMzQ0OTg5IDEwMDY0NA0KPiAt
+LS0gYS9kcml2ZXJzL3hlbi94ZW4tc2NzaWJhY2suYw0KPiArKysgYi9kcml2ZXJzL3hlbi94ZW4t
+c2NzaWJhY2suYw0KPiBAQCAtMTEyMSw3ICsxMTIxLDcgQEAgc3RhdGljIHZvaWQgc2NzaWJhY2tf
+ZG9fMWx1bl9ob3RwbHVnKHN0cnVjdCB2c2NzaWJrX2luZm8gKmluZm8sIGludCBvcCwNCj4gICAJ
+CQkJIiVzOiB3cml0aW5nICVzIiwgX19mdW5jX18sIHN0YXRlKTsNCj4gICAJCXJldHVybjsNCj4g
+ICAJfQ0KPiAtCXN0cmxjcHkocGh5LCB2YWwsIFZTQ1NJX05BTUVMRU4pOw0KPiArCXN0cnNjcHko
+cGh5LCB2YWwsIFZTQ1NJX05BTUVMRU4pOw0KPiAgIAlrZnJlZSh2YWwpOw0KPiAgIA0KPiAgIAkv
+KiB2aXJ0dWFsIFNDU0kgZGV2aWNlICovDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3hlbi94ZW5i
+dXMveGVuYnVzX3Byb2JlX2Zyb250ZW5kLmMgYi9kcml2ZXJzL3hlbi94ZW5idXMveGVuYnVzX3By
+b2JlX2Zyb250ZW5kLmMNCj4gaW5kZXggMDdiMDEwYTY4ZmNmLi5mNDRkNWE2NDM1MWUgMTAwNjQ0
+DQo+IC0tLSBhL2RyaXZlcnMveGVuL3hlbmJ1cy94ZW5idXNfcHJvYmVfZnJvbnRlbmQuYw0KPiAr
+KysgYi9kcml2ZXJzL3hlbi94ZW5idXMveGVuYnVzX3Byb2JlX2Zyb250ZW5kLmMNCj4gQEAgLTQw
+LDcgKzQwLDcgQEAgc3RhdGljIGludCBmcm9udGVuZF9idXNfaWQoY2hhciBidXNfaWRbWEVOX0JV
+U19JRF9TSVpFXSwgY29uc3QgY2hhciAqbm9kZW5hbWUpDQo+ICAgCQlyZXR1cm4gLUVJTlZBTDsN
+Cj4gICAJfQ0KPiAgIA0KPiAtCXN0cmxjcHkoYnVzX2lkLCBub2RlbmFtZSArIDEsIFhFTl9CVVNf
+SURfU0laRSk7DQo+ICsJc3Ryc2NweShidXNfaWQsIG5vZGVuYW1lICsgMSwgWEVOX0JVU19JRF9T
+SVpFKTsNCj4gICAJaWYgKCFzdHJjaHIoYnVzX2lkLCAnLycpKSB7DQo+ICAgCQlwcl93YXJuKCJi
+dXNfaWQgJXMgbm8gc2xhc2hcbiIsIGJ1c19pZCk7DQo+ICAgCQlyZXR1cm4gLUVJTlZBTDsNCg0K
+LS0gDQpSZWdhcmRzLA0KDQpPbGVrc2FuZHIgVHlzaGNoZW5rbw0K

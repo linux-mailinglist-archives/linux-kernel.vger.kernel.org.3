@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A8159E318
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4793F59E1EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354658AbiHWK2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S1355057AbiHWKWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352164AbiHWKM2 (ORCPT
+        with ESMTP id S1353290AbiHWKLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:12:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4324F26D6;
-        Tue, 23 Aug 2022 01:58:55 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C3C7EFC7;
+        Tue, 23 Aug 2022 01:56:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0083B81C39;
-        Tue, 23 Aug 2022 08:58:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30901C433D6;
-        Tue, 23 Aug 2022 08:58:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 020376150F;
+        Tue, 23 Aug 2022 08:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E86F7C433D7;
+        Tue, 23 Aug 2022 08:56:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245132;
-        bh=/jfp8U8V850bZODnU1RZhL/AMJJd513LUtYsEK6JinA=;
+        s=korg; t=1661244984;
+        bh=4yS/bWF1VfDmwPHBya2eTtx13bO3K83w8kHuwOh/Kz4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZO1wIj/rS9kzXrgzirY9YobWdLhHzo+vV1vG6KNWx4nhKCZYDUoLqMKoJw3UMW+pX
-         tie+ZbSvth1l2duZUXPBWIz/lmnO97LYPOtTD6X490vpClhHtsZNcDp8vc36so7fVa
-         /fL6aeFv6wR7u0zVRIhX4LXkTTphIC9M1qiNa6SI=
+        b=EpDfJHGI87b7oNLR7eN1Y3y749/p0DgsUdFF8SUzaUNiRkP9aR5K+8t1oNaRPiHLP
+         pw6tWpjFgGfQRBs7/9ReIRbDJ84gsgOHlaFzN577Pdc0pNYfLq2pUxEpvXHCx+dYY3
+         STbvVZjI/W3RV1ZbqPFEqXfC/9kMqjxF0ikoI8AQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dipanjan Das <mail.dipanjan.das@gmail.com>,
-        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 227/244] f2fs: fix to avoid use f2fs_bug_on() in f2fs_new_node_page()
+        stable@vger.kernel.org,
+        syzbot+1ee0910eca9c94f71f25@syzkaller.appspotmail.com,
+        syzbot+49b10793b867871ee26f@syzkaller.appspotmail.com,
+        syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 225/229] ALSA: timer: Use deferred fasync helper
 Date:   Tue, 23 Aug 2022 10:26:26 +0200
-Message-Id: <20220823080107.119633730@linuxfoundation.org>
+Message-Id: <20220823080101.675000241@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao.yu@oppo.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 141170b759e03958f296033bb7001be62d1d363b ]
+[ Upstream commit 95cc637c1afd83fb7dd3d7c8a53710488f4caf9c ]
 
-As Dipanjan Das <mail.dipanjan.das@gmail.com> reported, syzkaller
-found a f2fs bug as below:
+For avoiding the potential deadlock via kill_fasync() call, use the
+new fasync helpers to defer the invocation from PCI API.  Note that
+it's merely a workaround.
 
-RIP: 0010:f2fs_new_node_page+0x19ac/0x1fc0 fs/f2fs/node.c:1295
-Call Trace:
- write_all_xattrs fs/f2fs/xattr.c:487 [inline]
- __f2fs_setxattr+0xe76/0x2e10 fs/f2fs/xattr.c:743
- f2fs_setxattr+0x233/0xab0 fs/f2fs/xattr.c:790
- f2fs_xattr_generic_set+0x133/0x170 fs/f2fs/xattr.c:86
- __vfs_setxattr+0x115/0x180 fs/xattr.c:182
- __vfs_setxattr_noperm+0x125/0x5f0 fs/xattr.c:216
- __vfs_setxattr_locked+0x1cf/0x260 fs/xattr.c:277
- vfs_setxattr+0x13f/0x330 fs/xattr.c:303
- setxattr+0x146/0x160 fs/xattr.c:611
- path_setxattr+0x1a7/0x1d0 fs/xattr.c:630
- __do_sys_lsetxattr fs/xattr.c:653 [inline]
- __se_sys_lsetxattr fs/xattr.c:649 [inline]
- __x64_sys_lsetxattr+0xbd/0x150 fs/xattr.c:649
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-NAT entry and nat bitmap can be inconsistent, e.g. one nid is free
-in nat bitmap, and blkaddr in its NAT entry is not NULL_ADDR, it
-may trigger BUG_ON() in f2fs_new_node_page(), fix it.
-
-Reported-by: Dipanjan Das <mail.dipanjan.das@gmail.com>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Reported-by: syzbot+1ee0910eca9c94f71f25@syzkaller.appspotmail.com
+Reported-by: syzbot+49b10793b867871ee26f@syzkaller.appspotmail.com
+Reported-by: syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/20220728125945.29533-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/node.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ sound/core/timer.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-index 69c6bcaf5aae..0e6e73bc42d4 100644
---- a/fs/f2fs/node.c
-+++ b/fs/f2fs/node.c
-@@ -1291,7 +1291,11 @@ struct page *f2fs_new_node_page(struct dnode_of_data *dn, unsigned int ofs)
- 		dec_valid_node_count(sbi, dn->inode, !ofs);
- 		goto fail;
+diff --git a/sound/core/timer.c b/sound/core/timer.c
+index c333ceb80d5f..720d63574bfb 100644
+--- a/sound/core/timer.c
++++ b/sound/core/timer.c
+@@ -75,7 +75,7 @@ struct snd_timer_user {
+ 	unsigned int filter;
+ 	struct timespec tstamp;		/* trigger tstamp */
+ 	wait_queue_head_t qchange_sleep;
+-	struct fasync_struct *fasync;
++	struct snd_fasync *fasync;
+ 	struct mutex ioctl_lock;
+ };
+ 
+@@ -1295,7 +1295,7 @@ static void snd_timer_user_interrupt(struct snd_timer_instance *timeri,
  	}
--	f2fs_bug_on(sbi, new_ni.blk_addr != NULL_ADDR);
-+	if (unlikely(new_ni.blk_addr != NULL_ADDR)) {
-+		err = -EFSCORRUPTED;
-+		set_sbi_flag(sbi, SBI_NEED_FSCK);
-+		goto fail;
-+	}
- #endif
- 	new_ni.nid = dn->nid;
- 	new_ni.ino = dn->inode->i_ino;
+       __wake:
+ 	spin_unlock(&tu->qlock);
+-	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
++	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
+ 	wake_up(&tu->qchange_sleep);
+ }
+ 
+@@ -1332,7 +1332,7 @@ static void snd_timer_user_ccallback(struct snd_timer_instance *timeri,
+ 	spin_lock_irqsave(&tu->qlock, flags);
+ 	snd_timer_user_append_to_tqueue(tu, &r1);
+ 	spin_unlock_irqrestore(&tu->qlock, flags);
+-	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
++	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
+ 	wake_up(&tu->qchange_sleep);
+ }
+ 
+@@ -1399,7 +1399,7 @@ static void snd_timer_user_tinterrupt(struct snd_timer_instance *timeri,
+ 	spin_unlock(&tu->qlock);
+ 	if (append == 0)
+ 		return;
+-	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
++	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
+ 	wake_up(&tu->qchange_sleep);
+ }
+ 
+@@ -1465,6 +1465,7 @@ static int snd_timer_user_release(struct inode *inode, struct file *file)
+ 		if (tu->timeri)
+ 			snd_timer_close(tu->timeri);
+ 		mutex_unlock(&tu->ioctl_lock);
++		snd_fasync_free(tu->fasync);
+ 		kfree(tu->queue);
+ 		kfree(tu->tqueue);
+ 		kfree(tu);
+@@ -2017,7 +2018,7 @@ static int snd_timer_user_fasync(int fd, struct file * file, int on)
+ 	struct snd_timer_user *tu;
+ 
+ 	tu = file->private_data;
+-	return fasync_helper(fd, file, on, &tu->fasync);
++	return snd_fasync_helper(fd, file, on, &tu->fasync);
+ }
+ 
+ static ssize_t snd_timer_user_read(struct file *file, char __user *buffer,
 -- 
 2.35.1
 

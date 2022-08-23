@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806FE59E362
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DED459E214
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353953AbiHWMUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S244555AbiHWMDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359615AbiHWMQE (ORCPT
+        with ESMTP id S1359654AbiHWMCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:16:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB8F69F50;
-        Tue, 23 Aug 2022 02:41:31 -0700 (PDT)
+        Tue, 23 Aug 2022 08:02:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A17597D61;
+        Tue, 23 Aug 2022 02:36:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4CC0B81C97;
-        Tue, 23 Aug 2022 09:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1745C433C1;
-        Tue, 23 Aug 2022 09:41:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C32B61460;
+        Tue, 23 Aug 2022 09:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D962C433C1;
+        Tue, 23 Aug 2022 09:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247680;
-        bh=0SRfYvpbI5vP3rsuSx3MCV1WVj9+zFGLzEe2YE+I6kY=;
+        s=korg; t=1661247346;
+        bh=ZfhN6gBPas6paF0r6SYHnlPxLeobyhbICE7aQpwDZpg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IH2dE0EjyPK5RcdiZ6pFV5RhHrStWRulWV7Me1l/Wqg5Auj48Qjgw71p+viBFv16y
-         lYOi9AybumPEhUwG2J+/dPoSOSriOX5F2ddKMzgIOmr1ZP6BhjBVORZqv/6sp8+9ww
-         wDK6MAYdSgbJysqPf0Cg7ZIxawiw0JCGyXuTBYA8=
+        b=PtCqT7DkzmTUcJ9ZAKZRmjI0WGpRMN6Phi/BUDrVFYDyLcyl23J3nkRKfBVWvcjnk
+         ZJhn/CtJDthJrHW/xB267/ofs+W9EjJB7TuaUo5l1tB7eA3oE3e2/i/vwhuQHwED4l
+         LNVmf0DW6FCQW7tkfkenPWRaRwO11CdyRzGPegto=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Marko <robimarko@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 113/158] clk: qcom: ipq8074: dont disable gcc_sleep_clk_src
-Date:   Tue, 23 Aug 2022 10:27:25 +0200
-Message-Id: <20220823080050.511996693@linuxfoundation.org>
+        stable@vger.kernel.org, Oleg Kiselev <okiselev@amazon.com>,
+        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 368/389] ext4: avoid resizing to a partial cluster size
+Date:   Tue, 23 Aug 2022 10:27:26 +0200
+Message-Id: <20220823080130.902458340@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Marko <robimarko@gmail.com>
+From: Kiselev, Oleg <okiselev@amazon.com>
 
-[ Upstream commit 1bf7305e79aab095196131bdc87a97796e0e3fac ]
+[ Upstream commit 69cb8e9d8cd97cdf5e293b26d70a9dee3e35e6bd ]
 
-Once the usb sleep clocks are disabled, clock framework is trying to
-disable the sleep clock source also.
+This patch avoids an attempt to resize the filesystem to an
+unaligned cluster boundary.  An online resize to a size that is not
+integral to cluster size results in the last iteration attempting to
+grow the fs by a negative amount, which trips a BUG_ON and leaves the fs
+with a corrupted in-memory superblock.
 
-However, it seems that it cannot be disabled and trying to do so produces:
-[  245.436390] ------------[ cut here ]------------
-[  245.441233] gcc_sleep_clk_src status stuck at 'on'
-[  245.441254] WARNING: CPU: 2 PID: 223 at clk_branch_wait+0x130/0x140
-[  245.450435] Modules linked in: xhci_plat_hcd xhci_hcd dwc3 dwc3_qcom leds_gpio
-[  245.456601] CPU: 2 PID: 223 Comm: sh Not tainted 5.18.0-rc4 #215
-[  245.463889] Hardware name: Xiaomi AX9000 (DT)
-[  245.470050] pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  245.474307] pc : clk_branch_wait+0x130/0x140
-[  245.481073] lr : clk_branch_wait+0x130/0x140
-[  245.485588] sp : ffffffc009f2bad0
-[  245.489838] x29: ffffffc009f2bad0 x28: ffffff8003e6c800 x27: 0000000000000000
-[  245.493057] x26: 0000000000000000 x25: 0000000000000000 x24: ffffff800226ef20
-[  245.500175] x23: ffffffc0089ff550 x22: 0000000000000000 x21: ffffffc008476ad0
-[  245.507294] x20: 0000000000000000 x19: ffffffc00965ac70 x18: fffffffffffc51a7
-[  245.514413] x17: 68702e3030303837 x16: 3a6d726f6674616c x15: ffffffc089f2b777
-[  245.521531] x14: ffffffc0095c9d18 x13: 0000000000000129 x12: 0000000000000129
-[  245.528649] x11: 00000000ffffffea x10: ffffffc009621d18 x9 : 0000000000000001
-[  245.535767] x8 : 0000000000000001 x7 : 0000000000017fe8 x6 : 0000000000000001
-[  245.542885] x5 : ffffff803fdca6d8 x4 : 0000000000000000 x3 : 0000000000000027
-[  245.550002] x2 : 0000000000000027 x1 : 0000000000000023 x0 : 0000000000000026
-[  245.557122] Call trace:
-[  245.564229]  clk_branch_wait+0x130/0x140
-[  245.566490]  clk_branch2_disable+0x2c/0x40
-[  245.570656]  clk_core_disable+0x60/0xb0
-[  245.574561]  clk_core_disable+0x68/0xb0
-[  245.578293]  clk_disable+0x30/0x50
-[  245.582113]  dwc3_qcom_remove+0x60/0xc0 [dwc3_qcom]
-[  245.585588]  platform_remove+0x28/0x60
-[  245.590361]  device_remove+0x4c/0x80
-[  245.594179]  device_release_driver_internal+0x1dc/0x230
-[  245.597914]  device_driver_detach+0x18/0x30
-[  245.602861]  unbind_store+0xec/0x110
-[  245.607027]  drv_attr_store+0x24/0x40
-[  245.610847]  sysfs_kf_write+0x44/0x60
-[  245.614405]  kernfs_fop_write_iter+0x128/0x1c0
-[  245.618052]  new_sync_write+0xc0/0x130
-[  245.622391]  vfs_write+0x1d4/0x2a0
-[  245.626123]  ksys_write+0x58/0xe0
-[  245.629508]  __arm64_sys_write+0x1c/0x30
-[  245.632895]  invoke_syscall.constprop.0+0x5c/0x110
-[  245.636890]  do_el0_svc+0xa0/0x150
-[  245.641488]  el0_svc+0x18/0x60
-[  245.644872]  el0t_64_sync_handler+0xa4/0x130
-[  245.647914]  el0t_64_sync+0x174/0x178
-[  245.652340] ---[ end trace 0000000000000000 ]---
-
-So, add CLK_IS_CRITICAL flag to the clock so that the kernel won't try
-to disable the sleep clock.
-
-Signed-off-by: Robert Marko <robimarko@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220515210048.483898-10-robimarko@gmail.com
+Signed-off-by: Oleg Kiselev <okiselev@amazon.com>
+Link: https://lore.kernel.org/r/0E92A0AB-4F16-4F1A-94B7-702CC6504FDE@amazon.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ext4/resize.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 2c2ecfc5e61f..d6d5defb82c9 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -662,6 +662,7 @@ static struct clk_branch gcc_sleep_clk_src = {
- 			},
- 			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
-+			.flags = CLK_IS_CRITICAL,
- 		},
- 	},
- };
+diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
+index 306003e29c4c..f0fc7fc579e6 100644
+--- a/fs/ext4/resize.c
++++ b/fs/ext4/resize.c
+@@ -1979,6 +1979,16 @@ int ext4_resize_fs(struct super_block *sb, ext4_fsblk_t n_blocks_count)
+ 	}
+ 	brelse(bh);
+ 
++	/*
++	 * For bigalloc, trim the requested size to the nearest cluster
++	 * boundary to avoid creating an unusable filesystem. We do this
++	 * silently, instead of returning an error, to avoid breaking
++	 * callers that blindly resize the filesystem to the full size of
++	 * the underlying block device.
++	 */
++	if (ext4_has_feature_bigalloc(sb))
++		n_blocks_count &= ~((1 << EXT4_CLUSTER_BITS(sb)) - 1);
++
+ retry:
+ 	o_blocks_count = ext4_blocks_count(es);
+ 
 -- 
 2.35.1
 

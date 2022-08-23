@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F5559D3EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F9F59D451
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241898AbiHWILy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S242249AbiHWINR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241520AbiHWIJ3 (ORCPT
+        with ESMTP id S241998AbiHWIK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:09:29 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CDD6744A;
-        Tue, 23 Aug 2022 01:06:20 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11cab7d7e0fso14731655fac.6;
-        Tue, 23 Aug 2022 01:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3DUNim7WTmzHmRObYLAWDZd3QPXFrzWMAVJ6u950fVw=;
-        b=PEfKzVZ9zdDK7xpYNrTaOE8LDRrYuccID4DJC18ZZ1dOGcM/PFel+HYpWII3aKbIeF
-         DWC52FU81Nk6KSpVp4uhLoJusR/zqCu0JxHLuRXzPlJVYhVVh7+wgUCecv/5N6zsniIx
-         QvDxhVIuMs/EghKCfi/T39Sz+o9TQQaQXXA9k7Mo5jS0wfJcezhj4E8fkG3R75mS/MOr
-         n1ULmf4rkLai8G/6SCv55h0BGAWvJH87B0IvIdLCJ0EyM22FH8AIfJndotB+YyGD0hRS
-         K9As7UA+MPl9h+9Fa89Ygw7FFNqg7YRIl6gspf3za/PHuxAI/xFLO81HxY/QSBj4UIEM
-         Wz0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3DUNim7WTmzHmRObYLAWDZd3QPXFrzWMAVJ6u950fVw=;
-        b=DslT6HfCfSaOk48qI7tcWj4PNM9/7IgIoeeO/qb6lNZJ+ebQYIWpUfPCRvez5SmBXb
-         7gr3sLdyTh8NI4ZPw1BzOqAWv3pfuvkMBu+ydXvcB1v1zcy/7afK+iudz6xeIBOeLEDW
-         m+f5C76bj4UxuDBo8pawGIzBVhrjclvLHZQWlXJ54rbV2JvTdr7LsMZcuGEHqtcF/Zz6
-         6pcHAj2ev+VcK/SvCopjWqjpLsf4GvIp7HVgE/rLOEQj1tfLJQSwpyMeB8jidKYCii3e
-         j8Lm4Uj46Hs7dCA75eCOS23RuOQAYRyj+SJP/fxY6EnyruCQyf1cL+kCev/7fkEVNo9u
-         k9tg==
-X-Gm-Message-State: ACgBeo1HSHF2dhSfK8T4F0yjlEpuWuoZH0So18F5GAHpoKr+lBjGeHsd
-        X0Sh4gKlbWJP68+v30CU6F0LuAAplLNcreI4GL+lVlv7
-X-Google-Smtp-Source: AA6agR7u0uAvaNIkWvMT1B9z9RQ3S+vI04sURkMJs02g+rhl0HQ6KWE6yptMMcC6zUNNTZ6gciyBV1GEw8LrC624xeM=
-X-Received: by 2002:a05:6870:8912:b0:11b:a59c:f533 with SMTP id
- i18-20020a056870891200b0011ba59cf533mr894982oao.220.1661241979113; Tue, 23
- Aug 2022 01:06:19 -0700 (PDT)
+        Tue, 23 Aug 2022 04:10:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 511F8659EF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:06:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 214E9113E;
+        Tue, 23 Aug 2022 01:06:58 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 340EB3F718;
+        Tue, 23 Aug 2022 01:06:54 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 09:06:52 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     sudeep.holla@arm.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, 21cnbao@gmail.com, jonathan.cameron@huawei.com,
+        linuxarm@huawei.com, prime.zeng@huawei.com,
+        yangyicong@hisilicon.com
+Subject: Re: [PATCH] arch_topology: Make cluster topology span at least SMT
+ CPUs
+Message-ID: <YwSKnGii2zdd7Fig@arm.com>
+References: <20220823073044.58697-1-yangyicong@huawei.com>
 MIME-Version: 1.0
-References: <202208221854.8ASrzjKa-lkp@intel.com> <20220823030056.123709-1-bagasdotme@gmail.com>
-In-Reply-To: <20220823030056.123709-1-bagasdotme@gmail.com>
-From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Date:   Tue, 23 Aug 2022 11:06:08 +0300
-Message-ID: <CAHNKnsRUJzRGJ+muGfYAW-5EM91_j9AK-WTeV9pBZeXjH6L_6g@mail.gmail.com>
-Subject: Re: [PATCH] mips: pci: remove extraneous asterisk from top level
- comment of ar2315 PCI driver
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823073044.58697-1-yangyicong@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 6:01 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> kernel test robot reported kernel-doc warning:
->
-> arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->     * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
->
-> The warning above is caused by an extraneous asterisk on the top level
-> (description) comment of pci-ar2315.c, for which the comment is confused as
-> kernel-doc comment instead.
->
-> Remove the asterisk.
->
-> Link: https://lore.kernel.org/linux-doc/202208221854.8ASrzjKa-lkp@intel.com/
-> Fixes: 3ed7a2a702dc0f ("MIPS: ath25: add AR2315 PCI host controller driver")
-> Fixes: 3e58e839150db0 ("scripts: kernel-doc: add warning for comment not following kernel-doc syntax")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: stable@vger.kernel.org # v5.15, v5.19
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Hi Yicong,
 
-Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+On Tuesday 23 Aug 2022 at 15:30:44 (+0800), Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> Currently cpu_clustergroup_mask() will return CPU mask if cluster span
+> more or the same CPUs as cpu_coregroup_mask(). This will result topology
+> borken on non-Cluster SMT machines.
+
+Might be worth adding here:.. "when building with CONFIG_SCHED_CLUSTER=y"
+
+> 
+
+I thought I had covered this case, but I think I had considered LLC
+spanning more than one core (tested on TX2 as well).
+
+So you'd only hit this if LLC and cluster level span the same cores (a
+single core in this case, for non-cluster), in the presence of SMT.
+
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+
+Many thanks,
+Ionela.
+
+> Test with:
+> qemu-system-aarch64 -enable-kvm -machine virt \
+>  -net none \
+>  -cpu host \
+>  -bios ./QEMU_EFI.fd \
+>  -m 2G \
+>  -smp 48,sockets=2,cores=12,threads=2 \
+>  -kernel $Image \
+>  -initrd $Rootfs \
+>  -nographic
+>  -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
+> 
+> We'll get below error:
+> [    3.084568] BUG: arch topology borken
+> [    3.084570]      the SMT domain not a subset of the CLS domain
+> 
+> Since cluster is a level higher than SMT, fix this by making cluster
+> spans at least SMT CPUs.
+> 
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>  drivers/base/arch_topology.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 0424b59b695e..0056a1273275 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
+>  	 */
+>  	if (cpumask_subset(cpu_coregroup_mask(cpu),
+>  			   &cpu_topology[cpu].cluster_sibling))
+> -		return get_cpu_mask(cpu);
+> +		return cpu_smt_mask(cpu);
+>  
+>  	return &cpu_topology[cpu].cluster_sibling;
+>  }
+> -- 
+> 2.24.0
+> 

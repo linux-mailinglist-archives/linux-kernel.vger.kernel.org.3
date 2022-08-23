@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7C259DF2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48F759E094
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358175AbiHWLrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S1354929AbiHWKW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358128AbiHWLk4 (ORCPT
+        with ESMTP id S1353208AbiHWKLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:40:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566E479A78;
-        Tue, 23 Aug 2022 02:28:48 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C743F7E330;
+        Tue, 23 Aug 2022 01:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D6361321;
-        Tue, 23 Aug 2022 09:28:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9930BC433C1;
-        Tue, 23 Aug 2022 09:28:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABF34614E7;
+        Tue, 23 Aug 2022 08:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCA7C433C1;
+        Tue, 23 Aug 2022 08:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246928;
-        bh=fxqOlcdMXJw0hkRG/HqAzz/cN+6V0X3/5ww6yAtHWJg=;
+        s=korg; t=1661244972;
+        bh=kGnKy4ot8MT8zCT9ellggAB0zIaX/bDGSKngr+K3OEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TKDnp5hEkPXGfzD7a49XDsiWjzT49LYhU09/g+DKx5pS17gzPRkbws9op8vnMUg+A
-         rMGmIyk8lIFwDFAmyJ9py0F/VkbxnL7Kulg1EDCqvvH5gnu+WzIWO0mbjsAzvtznAM
-         mbfnPr0pvjVlyQxyjtNX0M+O08BMbaakPztxhhsM=
+        b=HAHpxZ4yp9vXmGp+3I4b3o7MTsI0nQfY0M5IsP5An2cdAJOBRjfaXS97S37nP0sSk
+         3i8TkIFQBEbgiylTUHqtZdZseytkY7sSFnn1jF7RTPybYN95ad5i3vRJHMNST+G83y
+         aBfDki3hR3ge7qmDH7wIfqDrAaPwvlvmKydJqZmk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 233/389] powerpc/pci: Prefer PCI domain assignment via DT linux,pci-domain and alias
+        stable@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+        Erhard Furtner <erhard_f@mailbox.org>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.15 152/244] gcc-plugins: Undefine LATENT_ENTROPY_PLUGIN when plugin disabled for a file
 Date:   Tue, 23 Aug 2022 10:25:11 +0200
-Message-Id: <20220823080125.323251170@linuxfoundation.org>
+Message-Id: <20220823080104.259578002@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Andrew Donnellan <ajd@linux.ibm.com>
 
-[ Upstream commit 0fe1e96fef0a5c53b4c0d1500d356f3906000f81 ]
+commit 012e8d2034f1bda8863435cd589636e618d6a659 upstream.
 
-Other Linux architectures use DT property 'linux,pci-domain' for
-specifying fixed PCI domain of PCI controller specified in Device-Tree.
+Commit 36d4b36b6959 ("lib/nodemask: inline next_node_in() and
+node_random()") refactored some code by moving node_random() from
+lib/nodemask.c to include/linux/nodemask.h, thus requiring nodemask.h to
+include random.h, which conditionally defines add_latent_entropy()
+depending on whether the macro LATENT_ENTROPY_PLUGIN is defined.
 
-And lot of Freescale powerpc boards have defined numbered pci alias in
-Device-Tree for every PCIe controller which number specify preferred PCI
-domain.
+This broke the build on powerpc, where nodemask.h is indirectly included
+in arch/powerpc/kernel/prom_init.c, part of the early boot machinery that
+is excluded from the latent entropy plugin using
+DISABLE_LATENT_ENTROPY_PLUGIN. It turns out that while we add a gcc flag
+to disable the actual plugin, we don't undefine LATENT_ENTROPY_PLUGIN.
 
-So prefer usage of DT property 'linux,pci-domain' (via function
-of_get_pci_domain_nr()) and DT pci alias (via function
-of_alias_get_id()) on powerpc architecture for assigning PCI domain to
-PCI controller.
+This leads to the following:
 
-Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220706102148.5060-2-pali@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    CC      arch/powerpc/kernel/prom_init.o
+  In file included from ./include/linux/nodemask.h:97,
+                   from ./include/linux/mmzone.h:17,
+                   from ./include/linux/gfp.h:7,
+                   from ./include/linux/xarray.h:15,
+                   from ./include/linux/radix-tree.h:21,
+                   from ./include/linux/idr.h:15,
+                   from ./include/linux/kernfs.h:12,
+                   from ./include/linux/sysfs.h:16,
+                   from ./include/linux/kobject.h:20,
+                   from ./include/linux/pci.h:35,
+                   from arch/powerpc/kernel/prom_init.c:24:
+  ./include/linux/random.h: In function 'add_latent_entropy':
+  ./include/linux/random.h:25:46: error: 'latent_entropy' undeclared (first use in this function); did you mean 'add_latent_entropy'?
+     25 |         add_device_randomness((const void *)&latent_entropy, sizeof(latent_entropy));
+        |                                              ^~~~~~~~~~~~~~
+        |                                              add_latent_entropy
+  ./include/linux/random.h:25:46: note: each undeclared identifier is reported only once for each function it appears in
+  make[2]: *** [scripts/Makefile.build:249: arch/powerpc/kernel/prom_init.o] Fehler 1
+  make[1]: *** [scripts/Makefile.build:465: arch/powerpc/kernel] Fehler 2
+  make: *** [Makefile:1855: arch/powerpc] Error 2
+
+Change the DISABLE_LATENT_ENTROPY_PLUGIN flags to undefine
+LATENT_ENTROPY_PLUGIN for files where the plugin is disabled.
+
+Cc: Yury Norov <yury.norov@gmail.com>
+Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216367
+Link: https://lore.kernel.org/linuxppc-dev/alpine.DEB.2.22.394.2208152006320.289321@ramsan.of.borg/
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220816051720.44108-1-ajd@linux.ibm.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/pci-common.c | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+ scripts/Makefile.gcc-plugins |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
-index a2c258a8d736..1e827e3769a8 100644
---- a/arch/powerpc/kernel/pci-common.c
-+++ b/arch/powerpc/kernel/pci-common.c
-@@ -73,16 +73,30 @@ void set_pci_dma_ops(const struct dma_map_ops *dma_ops)
- static int get_phb_number(struct device_node *dn)
- {
- 	int ret, phb_id = -1;
--	u32 prop_32;
- 	u64 prop;
+--- a/scripts/Makefile.gcc-plugins
++++ b/scripts/Makefile.gcc-plugins
+@@ -6,7 +6,7 @@ gcc-plugin-$(CONFIG_GCC_PLUGIN_LATENT_EN
+ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_LATENT_ENTROPY)		\
+ 		+= -DLATENT_ENTROPY_PLUGIN
+ ifdef CONFIG_GCC_PLUGIN_LATENT_ENTROPY
+-    DISABLE_LATENT_ENTROPY_PLUGIN += -fplugin-arg-latent_entropy_plugin-disable
++    DISABLE_LATENT_ENTROPY_PLUGIN += -fplugin-arg-latent_entropy_plugin-disable -ULATENT_ENTROPY_PLUGIN
+ endif
+ export DISABLE_LATENT_ENTROPY_PLUGIN
  
- 	/*
- 	 * Try fixed PHB numbering first, by checking archs and reading
--	 * the respective device-tree properties. Firstly, try powernv by
--	 * reading "ibm,opal-phbid", only present in OPAL environment.
-+	 * the respective device-tree properties. Firstly, try reading
-+	 * standard "linux,pci-domain", then try reading "ibm,opal-phbid"
-+	 * (only present in powernv OPAL environment), then try device-tree
-+	 * alias and as the last try to use lower bits of "reg" property.
- 	 */
--	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
-+	ret = of_get_pci_domain_nr(dn);
-+	if (ret >= 0) {
-+		prop = ret;
-+		ret = 0;
-+	}
-+	if (ret)
-+		ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
-+	if (ret)
-+		ret = of_alias_get_id(dn, "pci");
-+	if (ret >= 0) {
-+		prop = ret;
-+		ret = 0;
-+	}
- 	if (ret) {
-+		u32 prop_32;
- 		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
- 		prop = prop_32;
- 	}
-@@ -94,10 +108,7 @@ static int get_phb_number(struct device_node *dn)
- 	if ((phb_id >= 0) && !test_and_set_bit(phb_id, phb_bitmap))
- 		return phb_id;
- 
--	/*
--	 * If not pseries nor powernv, or if fixed PHB numbering tried to add
--	 * the same PHB number twice, then fallback to dynamic PHB numbering.
--	 */
-+	/* If everything fails then fallback to dynamic PHB numbering. */
- 	phb_id = find_first_zero_bit(phb_bitmap, MAX_PHBS);
- 	BUG_ON(phb_id >= MAX_PHBS);
- 	set_bit(phb_id, phb_bitmap);
--- 
-2.35.1
-
 
 

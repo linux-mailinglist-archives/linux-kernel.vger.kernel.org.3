@@ -2,107 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B319159EF63
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9034F59EF49
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbiHWWqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S231873AbiHWWcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiHWWp5 (ORCPT
+        with ESMTP id S229446AbiHWWcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:45:57 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A2B88DCF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:45:54 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 7534C3E0987;
-        Tue, 23 Aug 2022 22:45:53 +0000 (UTC)
-Received: from pdx1-sub0-mail-a223.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 9F3F73E0A1B;
-        Tue, 23 Aug 2022 22:45:52 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661294752; a=rsa-sha256;
-        cv=none;
-        b=u4bNRxIUmZk7aF9jWHaGKLjZlZgNYF6CRnhBWlZ+UPrl4FftbdNNYa4vfoPlNJ4ez/CEFq
-        feE9lBRSlXDBWJ0A8qwvk7UDS9YQKsJEo2wpDshUdtyOVhy0u49+aCkrH8OhZQ6+Z/dtgC
-        F9BUzIAbXmN3UK4bthS1+xjnmjnda9z4qg6e/xi6c+O7qhm7cuNV6FkfBVQZBBG7YIAgP+
-        tFrMWUJRpE5TbKMfyMEOiNKUAAe5K/xSvTw/dCd5eDZOW/+Qxr8ii1+BkI+EcERbqIlzYC
-        L1h2cZ74J1lhc2gbciPFL/vkC/Q6FZwkg2FfAiipZxg1+/Y0lX8NLVsV5hg4nA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661294752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=PEBSasmgg/6BVDCQaXtcCu++zDN+LuETOm83M4+x2yY=;
-        b=KGmcrXO68FCQG+abb+y+ne91dJVvoUinmMqYVbPgGtGUOpwA7BYAi4FalEKrqRC2P2K3kh
-        rJ70qR84Tqy1VVp6UZApnKoyS2z9vnmbrXTs83nABQInsZke7c/AOLStZagBCYtTHB/UID
-        lArGsKi7llUXkctaI03eGhNQVdmxhXmJNcT2XwnCKG05FKOgkVxHZgSnUhEjsJwKikCdWR
-        8ef6zycL5LGYjIyDhYsiE2nOe79tGiH6wf2KSu71Y5U3vJMRdq6G1ZlJaJacb8zzOEd5hp
-        9nXUkesgW00+yIGbp/XmjhfhkPWZ04h2/F4MbIKmtizGIWG7UeCMThdvlWeg5Q==
-ARC-Authentication-Results: i=1;
-        rspamd-5cbff9fff7-gmw4l;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Macabre-Shoe: 239145552e2697b0_1661294752943_3545556701
-X-MC-Loop-Signature: 1661294752943:2020262021
-X-MC-Ingress-Time: 1661294752942
-Received: from pdx1-sub0-mail-a223.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.119.194.202 (trex/6.7.1);
-        Tue, 23 Aug 2022 22:45:52 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a223.dreamhost.com (Postfix) with ESMTPSA id 4MC47w3VgPz9d;
-        Tue, 23 Aug 2022 15:45:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1661294748;
-        bh=PEBSasmgg/6BVDCQaXtcCu++zDN+LuETOm83M4+x2yY=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=nQwgyV4a+C8T57rU9aSJxRv47rUZYKnK0J+qJmN5HvAX0b1JNGlAAK0fgLVl8oOhq
-         cuHiV6Xc7SsQbCkNQehQtzzHbgZVYgNTH7p5dv17e8chAaSsWEeDHZNpIf5sA9+SLU
-         6A1Nb38f12QGJVvl8bntg7ZEuZKVwEuPdq3DDVfORaXTctveWBvG758n1HL3dxVpJ8
-         /mXYpiVDWDFjRKzb1qrsI/Rpa0p+7UfeX07CYkeSZM3vUrQON2m92UhpX1cYegOniU
-         p71MsOTvtWJnhuMt1SD1Oh/KchoeqgC4qaPf1ziwQ65km8RuzhFu3avIUQoGg+P5aH
-         s9C7vsF+9k29A==
-Date:   Tue, 23 Aug 2022 15:27:43 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v13 31/70] arm64: Change elfcore for_each_mte_vma() to
- use VMA iterator
-Message-ID: <20220823222743.h6nykigrg4pcrosw@offworld>
-Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
- <20220822150128.1562046-32-Liam.Howlett@oracle.com>
+        Tue, 23 Aug 2022 18:32:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5278438BC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661293929; x=1692829929;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m0mibqlSiUgWUUglYhjfbkcHu723/5ZxdtYNMx7xLbc=;
+  b=S85EDPn981Sgve0UVpnQgQX6Tj2cuz30w4ELaR7G2HL8BOMpjA1ScMYj
+   XQRgLZIMnBHO0HgjPFnfes1DIF+b64wMW6J9NUt00+eUXsvszFTJs9wsZ
+   JrM7xlO6zXo6sHMf8RECMZASJiZfXhNXoFBUDr29P8LiZmwlgzOSE7nN1
+   Crx1boBJEIILLFAX8mgxGLpWNKq5U0uL+pceYKRUFey6Z/GwK+tH8XQWz
+   JhNE/giLfh2CqZYobE0rdt1urf1Bzd7ol6Ow84HjzCf54mZ4f0oJzNRWv
+   2uq5pD03qm5dZO7Cnsq9ZsFmAuwEgEI7ZMc3lSZ1ANfYgIIu3DO1pwjhr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293809027"
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="293809027"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 15:32:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="560349245"
+Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 23 Aug 2022 15:32:07 -0700
+Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQcRL-0000ef-02;
+        Tue, 23 Aug 2022 22:32:07 +0000
+Date:   Wed, 24 Aug 2022 06:31:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.rewrite 1/6]
+ arch/s390/kernel/perf_pai_crypto.c:438:18: error: incompatible function
+ pointer types initializing 'void (*)(struct perf_event_pmu_context *, bool)'
+ (aka 'void (*)(struct perf_event_pmu_context *, _Bool)') with an expression
+ of type 'void (struct perf_eve...
+Message-ID: <202208240632.w30XSBZs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822150128.1562046-32-Liam.Howlett@oracle.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,16 +65,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022, Liam Howlett wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.rewrite
+head:   9fdadc761cf0e02e39e42d39c6d0f4a64c05ce8b
+commit: d3f415f72634827910cebbcc645c828c78725fa0 [1/6] perf: Rewrite core context handling
+config: s390-randconfig-r014-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240632.w30XSBZs-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=d3f415f72634827910cebbcc645c828c78725fa0
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.rewrite
+        git checkout d3f415f72634827910cebbcc645c828c78725fa0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/
 
->From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
->
->Rework for_each_mte_vma() to use a VMA iterator instead of an explicit
->linked-list.
->
->Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
->Acked-by: Catalin Marinas <catalin.marinas@arm.com>
->Link: https://lore.kernel.org/r/20220218023650.672072-1-Liam.Howlett@oracle.com
->Signed-off-by: Will Deacon <will@kernel.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/kernel/perf_pai_crypto.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/kernel/perf_pai_crypto.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/kernel/perf_pai_crypto.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> arch/s390/kernel/perf_pai_crypto.c:438:18: error: incompatible function pointer types initializing 'void (*)(struct perf_event_pmu_context *, bool)' (aka 'void (*)(struct perf_event_pmu_context *, _Bool)') with an expression of type 'void (struct perf_event_context *, bool)' (aka 'void (struct perf_event_context *, _Bool)') [-Wincompatible-function-pointer-types]
+           .sched_task   = paicrypt_sched_task,
+                           ^~~~~~~~~~~~~~~~~~~
+   12 warnings and 1 error generated.
+
+
+vim +438 arch/s390/kernel/perf_pai_crypto.c
+
+39d62336f5c126 Thomas Richter 2022-05-04  428  
+39d62336f5c126 Thomas Richter 2022-05-04  429  /* Performance monitoring unit for mapped counters */
+39d62336f5c126 Thomas Richter 2022-05-04  430  static struct pmu paicrypt = {
+39d62336f5c126 Thomas Richter 2022-05-04  431  	.task_ctx_nr  = perf_invalid_context,
+39d62336f5c126 Thomas Richter 2022-05-04  432  	.event_init   = paicrypt_event_init,
+39d62336f5c126 Thomas Richter 2022-05-04  433  	.add	      = paicrypt_add,
+39d62336f5c126 Thomas Richter 2022-05-04  434  	.del	      = paicrypt_del,
+39d62336f5c126 Thomas Richter 2022-05-04  435  	.start	      = paicrypt_start,
+39d62336f5c126 Thomas Richter 2022-05-04  436  	.stop	      = paicrypt_stop,
+39d62336f5c126 Thomas Richter 2022-05-04  437  	.read	      = paicrypt_read,
+39d62336f5c126 Thomas Richter 2022-05-04 @438  	.sched_task   = paicrypt_sched_task,
+39d62336f5c126 Thomas Richter 2022-05-04  439  	.attr_groups  = paicrypt_attr_groups
+39d62336f5c126 Thomas Richter 2022-05-04  440  };
+39d62336f5c126 Thomas Richter 2022-05-04  441  
+
+:::::: The code at line 438 was first introduced by commit
+:::::: 39d62336f5c126ad6dccdf66cd249f2d0e86d3c9 s390/pai: add support for cryptography counters
+
+:::::: TO: Thomas Richter <tmricht@linux.ibm.com>
+:::::: CC: Heiko Carstens <hca@linux.ibm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

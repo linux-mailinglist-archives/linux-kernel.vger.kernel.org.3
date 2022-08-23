@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8532C59E2E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0740959DF81
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354512AbiHWKaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S1356342AbiHWKzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353486AbiHWKNh (ORCPT
+        with ESMTP id S1355902AbiHWKsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:13:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04B77333E;
-        Tue, 23 Aug 2022 01:59:42 -0700 (PDT)
+        Tue, 23 Aug 2022 06:48:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7912F74DED;
+        Tue, 23 Aug 2022 02:12:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D854CB81C28;
-        Tue, 23 Aug 2022 08:59:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E0F3C433D6;
-        Tue, 23 Aug 2022 08:59:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E5BFB81C4E;
+        Tue, 23 Aug 2022 09:12:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B51AC433C1;
+        Tue, 23 Aug 2022 09:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245179;
-        bh=dlKpSa3x4yoY73lQP0rU57gjhQ+MYqOS71te7t6vVts=;
+        s=korg; t=1661245922;
+        bh=qIoP2uuXfmMzLc+/YOuIVXKKJuiDH36N6oU21shCADY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AyucyXNB0BOrhkw7Dt3Mre8pO6j7vxAvXXK8MOEcntdYfiXZjAT7ZWpvrO6f1G15d
-         YLfQJgKH5pNlN0yOBzaIENQ6lCtiOgSPAmBnsC0yTe7A8vSla/1mSuk1dVn3lpUeQC
-         q4eNgje2Ch8qc9gkCEnt63eLmGh9jFkVpZ2+GbiM=
+        b=sT5v0bIqOn9fOusCY/ZgSOPTJ80/Hp2JrWBvz09d3+dTw0PlR6W95iFxnRFSCxBS+
+         380UbpwoN20/mTjMq4fMAPgOQOAxtcDTViWVgOx0Q1ev5UFHSlo5sFrLafengtoTAL
+         PHPh9x8YXLSTK2QC+JdYWJ89NnWGlAqehAwOva/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 5.15 241/244] xfs: fix overfilling of reserve pool
-Date:   Tue, 23 Aug 2022 10:26:40 +0200
-Message-Id: <20220823080107.670496251@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.19 232/287] NFSv4/pnfs: Fix a use-after-free bug in open
+Date:   Tue, 23 Aug 2022 10:26:41 +0200
+Message-Id: <20220823080108.853280173@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Darrick J. Wong" <djwong@kernel.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 82be38bcf8a2e056b4c99ce79a3827fa743df6ec ]
+commit 2135e5d56278ffdb1c2e6d325dc6b87f669b9dac upstream.
 
-Due to cycling of m_sb_lock, it's possible for multiple callers of
-xfs_reserve_blocks to race at changing the pool size, subtracting blocks
-from fdblocks, and actually putting it in the pool.  The result of all
-this is that we can overfill the reserve pool to hilarious levels.
+If someone cancels the open RPC call, then we must not try to free
+either the open slot or the layoutget operation arguments, since they
+are likely still in use by the hung RPC call.
 
-xfs_mod_fdblocks, when called with a positive value, already knows how
-to take freed blocks and either fill the reserve until it's full, or put
-them in fdblocks.  Use that instead of setting m_resblks_avail directly.
-
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Dave Chinner <dchinner@redhat.com>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Fixes: 6949493884fe ("NFSv4: Don't hold the layoutget locks across multiple RPC calls")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_fsops.c |   13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ fs/nfs/nfs4proc.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/fs/xfs/xfs_fsops.c
-+++ b/fs/xfs/xfs_fsops.c
-@@ -448,18 +448,17 @@ xfs_reserve_blocks(
- 		 * count or we'll get an ENOSPC.  Don't set the reserved flag
- 		 * here - we don't want to reserve the extra reserve blocks
- 		 * from the reserve.
-+		 *
-+		 * The desired reserve size can change after we drop the lock.
-+		 * Use mod_fdblocks to put the space into the reserve or into
-+		 * fdblocks as appropriate.
- 		 */
- 		fdblks_delta = min(free, delta);
- 		spin_unlock(&mp->m_sb_lock);
- 		error = xfs_mod_fdblocks(mp, -fdblks_delta, 0);
--		spin_lock(&mp->m_sb_lock);
--
--		/*
--		 * Update the reserve counters if blocks have been successfully
--		 * allocated.
--		 */
- 		if (!error)
--			mp->m_resblks_avail += fdblks_delta;
-+			xfs_mod_fdblocks(mp, fdblks_delta, 0);
-+		spin_lock(&mp->m_sb_lock);
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -2920,12 +2920,13 @@ static int _nfs4_open_and_get_state(stru
  	}
+ 
  out:
- 	if (outval) {
+-	if (opendata->lgp) {
+-		nfs4_lgopen_release(opendata->lgp);
+-		opendata->lgp = NULL;
+-	}
+-	if (!opendata->cancelled)
++	if (!opendata->cancelled) {
++		if (opendata->lgp) {
++			nfs4_lgopen_release(opendata->lgp);
++			opendata->lgp = NULL;
++		}
+ 		nfs4_sequence_free_slot(&opendata->o_res.seq_res);
++	}
+ 	return ret;
+ }
+ 
 
 

@@ -2,95 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC9B59EDE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0918359EDE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiHWVBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S231288AbiHWVCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiHWVBi (ORCPT
+        with ESMTP id S229870AbiHWVCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:01:38 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CE17DF77;
-        Tue, 23 Aug 2022 14:01:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id f4so11454840pgc.12;
-        Tue, 23 Aug 2022 14:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=ntOZuNJFNelgT/pkIxDQ8M2IKR1yIkb4TRuBWRbP3hQ=;
-        b=IRhzWO1pc+SnCmzeT8APuBZpSO1H711ZFWShgoG114cPTF7w99SFwZT/UST0C5Gmwk
-         esxw3gzjn8tem0G6TrDSk3IUHkBaRK3zmHoe48GU9TEdjnMcPnB07doS0stoY5Rp996P
-         UxRuje+PFkfq0TIGDMPi2IzIDtkO12z4MlWW/y9JTHTN0W/qzH4HeYih90SGTQv9LnD3
-         ZpANem9L1nMSztsE4r3zbUIGFuCOTzC9BGDQ8em54CaukZocy67dmk+WYcr1CJL/tzw9
-         xxE89fNQczyaOMlLHDbpi1H/sZPLKhx19EsL9+6wVDMWxSmfQvLLpG3WOWpauA6C2TYZ
-         GLCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=ntOZuNJFNelgT/pkIxDQ8M2IKR1yIkb4TRuBWRbP3hQ=;
-        b=KxBm1rQ1ujr7jbmpozv0w0mKlftDeLl02SQqxfnXwZMHLrEOBO9v+/eLyY4I2KDl4G
-         vAw6sjQGXXzPGD+WAY6HwMsTAbnDr5HkY2zNwI9ws/7tuF77fKXvXBiZmV34pKxEDWRZ
-         yTrFZUaCM5F/uo7h5Hj6hPKX7cNuMbTRyWB6d8bw6C5i1yO0az/uvbuOeiFH6W1uHZZs
-         KOTyDX/fpFPOKEQG5A3LccX89yKoDTH5OEw3LDAwFcm3qXnf07Ii3JI4JJZKqzzSUU+Z
-         k2GEQcur/JzmXMcE3KwMOSXgvxdiLcMW4hfMpVL4puuwoyrx/5ndvSMls1c1xnG4IQEH
-         9HMA==
-X-Gm-Message-State: ACgBeo2wdDWG94LUQvwbqTiJkJlQPWGImgPB32wvO9Z2Id5d+vcert1z
-        bYwC2p+6p7m8JcQAEdDZqMA=
-X-Google-Smtp-Source: AA6agR7TmlIpqJqz1tUUZ1eHB3FN0ipdEHpGdI4XMicTl5POBQ31CGMGtl/lEzYMUeMkKROMeVkh4A==
-X-Received: by 2002:a65:6e46:0:b0:42a:2c7e:4232 with SMTP id be6-20020a656e46000000b0042a2c7e4232mr19892993pgb.611.1661288496326;
-        Tue, 23 Aug 2022 14:01:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l9-20020a170902f68900b0016be96e07d1sm10851201plg.121.2022.08.23.14.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:01:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 Aug 2022 14:01:34 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 000/287] 4.19.256-rc1 review
-Message-ID: <20220823210134.GB2371231@roeck-us.net>
-References: <20220823080100.268827165@linuxfoundation.org>
+        Tue, 23 Aug 2022 17:02:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F46C7F0A3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:02:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67B94113E;
+        Tue, 23 Aug 2022 14:02:08 -0700 (PDT)
+Received: from [10.57.15.101] (unknown [10.57.15.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D8BA3F67D;
+        Tue, 23 Aug 2022 14:02:03 -0700 (PDT)
+Message-ID: <478c4aba-897f-7e08-1df7-4e296538db9c@arm.com>
+Date:   Tue, 23 Aug 2022 22:01:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [REGRESSION 5.19.x] AMD HD-audio devices missing on 5.19
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>, Takashi Iwai <tiwai@suse.de>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <874jy4cqok.wl-tiwai@suse.de> <20220823010021.GA5967@nvidia.com>
+ <87h723sdde.wl-tiwai@suse.de> <87ilmjqj1f.wl-tiwai@suse.de>
+ <20220823202824.GA4516@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220823202824.GA4516@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:22:49AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.256 release.
-> There are 287 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 2022-08-23 21:28, Jason Gunthorpe wrote:
+> On Tue, Aug 23, 2022 at 01:46:36PM +0200, Takashi Iwai wrote:
+>> It was tested now and confirmed that the call path is via AMDGPU, as
+>> expected:
+>>    amdgpu_pci_probe ->
+>>    amdgpu_driver_load_kms ->
+>>    amdgpu_device_init ->
+>>    amdgpu_amdkfd_device_init ->
+>>    kgd2kfd_device_init ->
+>>    kgd2kfd_resume_iommu ->
+>>    kfd_iommu_resume ->
+>>    amd_iommu_init_device ->
+>>    iommu_attach_group ->
+>>    __iommu_attach_group
 > 
-> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> Anything received after that time might be too late.
+> Oh, when you said sound intel I thought this was an Intel CPU..
 > 
+> Yes, there is this hacky private path from the amdgpu to
+> the amd iommu driver that makes a mess of it here. We discussed it in
+> this thread:
+> 
+> https://lore.kernel.org/linux-iommu/YgtuJQhY8SNlv9%2F6@8bytes.org/
+> 
+> But nobody put it together that it would be a problem with this.
+> 
+> Something like this, perhaps, but I didn't check if overriding the
+> type would cause other problems.
+> 
+> diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+> index 696d5555be5794..6a1f02c62dffcc 100644
+> --- a/drivers/iommu/amd/iommu_v2.c
+> +++ b/drivers/iommu/amd/iommu_v2.c
+> @@ -777,6 +777,8 @@ int amd_iommu_init_device(struct pci_dev *pdev, int pasids)
+>   	if (dev_state->domain == NULL)
+>   		goto out_free_states;
+>   
+> +	/* See iommu_is_default_domain() */
+> +	dev_state->domain->type = IOMMU_DOMAIN_IDENTITY;
+>   	amd_iommu_domain_direct_map(dev_state->domain);
 
-Build results:
-	total: 157 pass: 157 fail: 0
-Qemu test results:
-	total: 422 pass: 422 fail: 0
+Same question as 6 months ago, apparently: allocating an unmanaged 
+domain with a pagetable then sucking out the pagetable is silly enough, 
+but if we're going to then also call it a proper identity domain, we 
+should really just allocate an identity domain directly; but then why 
+not just enable_v2 on the identity domain that we know is already there 
+courtesy of def_domain_type?
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Robin.
 
-Guenter
+
+Intentional whitespace-damaged patch based on wrong kernel version to 
+stress how much it is for illustration purposes only:
+----->8-----
+diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+index fb61bdca4c2c..2925103cd71a 100644
+--- a/drivers/iommu/amd/iommu_v2.c
++++ b/drivers/iommu/amd/iommu_v2.c
+@@ -135,9 +135,6 @@ static void free_device_state(struct device_state 
+*dev_state)
+
+         iommu_group_put(group);
+
+-       /* Everything is down now, free the IOMMUv2 domain */
+-       iommu_domain_free(dev_state->domain);
+-
+         /* Finally get rid of the device-state */
+         kfree(dev_state);
+  }
+@@ -730,7 +727,6 @@ EXPORT_SYMBOL(amd_iommu_unbind_pasid);
+  int amd_iommu_init_device(struct pci_dev *pdev, int pasids)
+  {
+         struct device_state *dev_state;
+-       struct iommu_group *group;
+         unsigned long flags;
+         int ret, tmp;
+         u16 devid;
+@@ -773,34 +769,20 @@ int amd_iommu_init_device(struct pci_dev *pdev, 
+int pasids)
+         if (dev_state->states == NULL)
+                 goto out_free_dev_state;
+
+-       dev_state->domain = iommu_domain_alloc(&pci_bus_type);
+-       if (dev_state->domain == NULL)
++       dev_state->domain = iommu_get_domain_for_dev(&pdev->dev);
++       if (dev_state->domain->type != IOMMU_DOMAIN_IDENTITY)
+                 goto out_free_states;
+
+-       amd_iommu_domain_direct_map(dev_state->domain);
+-
+         ret = amd_iommu_domain_enable_v2(dev_state->domain, pasids);
+         if (ret)
+-               goto out_free_domain;
+-
+-       group = iommu_group_get(&pdev->dev);
+-       if (!group) {
+-               ret = -EINVAL;
+-               goto out_free_domain;
+-       }
+-
+-       ret = iommu_attach_group(dev_state->domain, group);
+-       if (ret != 0)
+-               goto out_drop_group;
+-
+-       iommu_group_put(group);
++               goto out_free_states;
+
+         spin_lock_irqsave(&state_lock, flags);
+
+         if (__get_device_state(devid) != NULL) {
+                 spin_unlock_irqrestore(&state_lock, flags);
+                 ret = -EBUSY;
+-               goto out_free_domain;
++               goto out_free_states;
+         }
+
+         list_add_tail(&dev_state->list, &state_list);
+@@ -809,12 +791,6 @@ int amd_iommu_init_device(struct pci_dev *pdev, int 
+pasids)
+
+         return 0;
+
+-out_drop_group:
+-       iommu_group_put(group);
+-
+-out_free_domain:
+-       iommu_domain_free(dev_state->domain);
+-
+  out_free_states:
+         free_page((unsigned long)dev_state->states);
+

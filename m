@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1908859E76D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E84759E77A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244986AbiHWQgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        id S244886AbiHWQgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244941AbiHWQgb (ORCPT
+        with ESMTP id S244991AbiHWQf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:36:31 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0EDDF4F2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:47:37 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MBsS45vpGzkWV3;
-        Tue, 23 Aug 2022 22:44:04 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 22:47:34 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 22:47:33 +0800
-Message-ID: <16cf184f-95ec-a763-0606-7423db8dcb0f@huawei.com>
-Date:   Tue, 23 Aug 2022 22:47:33 +0800
+        Tue, 23 Aug 2022 12:35:29 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9461D6F25D;
+        Tue, 23 Aug 2022 07:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661266066; x=1692802066;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/OQEUPblx8ZWr1PbZjofhsyr29E34e1HQ6mir9IbSOk=;
+  b=PULi/HT3akw28FknFLQ1n/mtWUkLbon/s3OICb/bBG/296MwXgbWLKVQ
+   RH4LCqEZLp2HMMma8c6qP06AmgJGRRIISU0AWLcms0gAnmlXvBgiFz3mz
+   xVAg28z+nHRzwzxN9D9FMosUC/M13xPQBPiCYnVDRpSlqgYVpexfFBPO/
+   yYD4PRWmnXkLxJKm47ojy698TailU5WkaJo80wIaK3ulsgzWoMERpfXCi
+   E0UyijNxBuh82ZBpXaz5brgLN0JMBRE/tH8HzOL1EY73tuf2Goi5HN1lg
+   CkUgna+n1GzrmIWO86dZl5wtCiPgMnwZ9bbohRKK/kpltafx+AezNTnAh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="294494394"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="294494394"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:47:45 -0700
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="751707348"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:47:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oQVBq-002TwM-2I;
+        Tue, 23 Aug 2022 17:47:38 +0300
+Date:   Tue, 23 Aug 2022 17:47:38 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, Lee Jones <lee@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>,
+        simon.guinot@sequanux.org
+Subject: Re: [PATCH v4 1/5] gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+Message-ID: <YwToilxquEZGqzQD@smile.fi.intel.com>
+References: <20220823102344.17624-1-henning.schild@siemens.com>
+ <20220823102344.17624-2-henning.schild@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] mm: fix pgdat->kswap accessed concurrently
-Content-Language: en-US
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <muchun.song@linux.dev>
-CC:     Linux MM <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
- <1E87F09C-4904-49E2-B45C-C408DD5F6F62@linux.dev>
- <20220820135955.1520aa480fe04ab31d4fce1f@linux-foundation.org>
- <abe568d8-2d48-7e73-fe66-822915c0bd74@huawei.com>
-In-Reply-To: <abe568d8-2d48-7e73-fe66-822915c0bd74@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823102344.17624-2-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 23, 2022 at 12:23:40PM +0200, Henning Schild wrote:
+> Add GPIO support for Nuvoton NCT6116 chip. Nuvoton SuperIO chips are
+> very similar to the ones from Fintek. In other subsystems they also
+> share drivers and are called a family of drivers.
+> 
+> For the GPIO subsystem the only difference is that the direction bit is
+> reversed and that there is only one data bit per pin. On the SuperIO
+> level the logical device is another one.
+> 
+> On a chip level we do not have a manufacturer ID to check and also no
+> revision.
 
-On 2022/8/23 9:07, Kefeng Wang wrote:
->
-> On 2022/8/21 4:59, Andrew Morton wrote:
->> On Sat, 20 Aug 2022 15:33:04 +0800 Muchun Song 
->> <muchun.song@linux.dev> wrote:
->>
->>>
->>>> +    if (IS_ERR(t)) {
->>>>         /* failure at boot is fatal */
->>>>         BUG_ON(system_state < SYSTEM_RUNNING);
->>>>         pr_err("Failed to start kswapd on node %d\n", nid);
->>>> -        pgdat->kswapd = NULL;
->>>> +        WRITE_ONCE(pgdat->kswapd, NULL);
->>>> +    } else {
->>>> +        WRITE_ONCE(pgdat->kswapd, t);
->>>>     }
->>>> }
->>> IIUC, the race is like the followings:
->>>
->>> CPU 0:                    CPU 1:
->>>
->>> kswapd_run()
->>>     pgdat->kswapd = kthread_run()
->>>     if (IS_ERR(pgdat->kswapd))
->>>                     kswapd_is_running
->>>                         // load pgdat->kswapd and it is NOT NULL.
->>>         pgdat->kswapd = NULL
->>>                         task_is_running(pgdat->kswapd); // NULL 
->>> pointer dereference
->>>
->> But don't we still have a bug?  Sure, kswapd_is_running() will no
->> longer deref a null pointer.  But it now runs kswapd_is_running()
->> against a task which has exited - a use-after-free?
+...
 
-The UAF is caused by race between kswapd_stop() and kcompactd(), right?
+> - * GPIO driver for Fintek Super-I/O F71869, F71869A, F71882, F71889 and F81866
+> + * GPIO driver for Fintek and Nuvoton Super-I/O chips
 
-so  kcompactd() should be stop before kswapd_stop() to avoid the above UAF.
+I'm not sure it's good idea to drop it from here. It means reader has to get
+this info in a hard way.
 
-$ git diff
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index fad6d1f2262a..2fd45ccbce45 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1940,8 +1940,8 @@ int __ref offline_pages(unsigned long start_pfn, 
-unsigned long nr_pages,
+...
 
-         node_states_clear_node(node, &arg);
-         if (arg.status_change_nid >= 0) {
--               kswapd_stop(node);
-                 kcompactd_stop(node);
-+               kswapd_stop(node);
-         }
+> +#define gpio_dir_invert(type)	((type) == nct6116d)
+> +#define gpio_data_single(type)	((type) == nct6116d)
 
-         writeback_set_ratelimit();
+What's prevents us to add a proper prefix to these? I don't like the idea of
+them having "gpio" prefix.
 
-> we could add get/put_task_struct() to avoid the UAF， will update， 
-> thanks.
+...
 
-sorry, the task refcount won't fix anything.
+> +		pr_info(DRVNAME ": Unsupported device 0x%04x\n", devid);
+> +			pr_debug(DRVNAME ": Not a Fintek device at 0x%08x\n", addr);
+> +	pr_info(DRVNAME ": Found %s at %#x\n",
+> +		pr_info(DRVNAME ":   revision %d\n",
+
+Can we, please, utilize pr_fmt()?
+
+> +			(int)superio_inb(addr, SIO_FINTEK_DEVREV));
+
+Explicit casting in printf() means wrong specifier in 99% of cases.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> .

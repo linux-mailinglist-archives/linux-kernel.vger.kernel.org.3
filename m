@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B935E59D1A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5651059D1A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240807AbiHWHAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S240824AbiHWHB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240214AbiHWHAW (ORCPT
+        with ESMTP id S240804AbiHWHBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:00:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1EE4F68F;
-        Tue, 23 Aug 2022 00:00:21 -0700 (PDT)
+        Tue, 23 Aug 2022 03:01:20 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0C961B18
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661238021; x=1692774021;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pRFh70csbv3DLerPP6J9R5ttFXh/875KrSZevCmVDcE=;
-  b=Rlxe8yZt5cMXccUsJnVkBlBBGX/1oic6GAxVfyojb4B15nxOdRNapK0H
-   YcV7u5mr9wTQbkyHav3RbUa5KGYgel0afGhh1NhuadOQJtRJrUVenEIOm
-   VVggL7xfC9yC1q9aRIk2kMVr41iIabGWG3yI3lKtLUBTRj4eotwDPyqbA
-   /buJDUHCSUBaiRWKTVe56F66JYv+G1NSVBBlwQmFIKOSbQThTATRqAZpd
-   aZW3TQrV//fUivwO4ZWWJ98S1o8Pw08tkS+cglXa6egiDFnyyDEpATU4u
-   ucwXEPYk3tv10N+GGrElsbKmKIeL5vqoiQ0A89gd8QeE37ULDRu1W698I
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="379899105"
+  t=1661238079; x=1692774079;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aZypyCjFzyTXB8yyU6iCIEXYn2kcxBHcOlnvkN2wxx4=;
+  b=DzJaXVv/TrdemfLiaBIo7O6SJ7NAVVqMeA+M3kfF+aNz7RJskc2FDimq
+   IRTyNQrb0R1+0WEKo+XCxvRN6V1yVA1Z7JUfLaNIRpnr+hKYV/OI+FdCm
+   //qEuQPid/YDXGp7T6zEVbCOrOP2b6eIbR5NYGpxRnJPfjfzntNMjB5jL
+   UJobe2x1VKcDGsVTtCgIszzoVRGvEUwIxxokunXHJZZAIqpXzNNH7Y33C
+   +jB+JywraFVBjPoTqdozdlXgI+zkJCvGQcrQ17lY9tqCcXR4ysESSX2s1
+   GQdybcB9IKrMpPL5ghMJR6BukJxnJztypvpkQVHVOIY/otlNxX78z4j+w
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294399456"
 X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="379899105"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:00:21 -0700
+   d="scan'208";a="294399456"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:01:18 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="642334890"
-Received: from xujinlon-mobl.ccr.corp.intel.com (HELO [10.254.211.102]) ([10.254.211.102])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:00:16 -0700
-Message-ID: <81f0e556-d002-dfc1-cc7d-e8b3e51c6884@linux.intel.com>
-Date:   Tue, 23 Aug 2022 15:00:15 +0800
+   d="scan'208";a="735383095"
+Received: from lkp-server01.sh.intel.com (HELO 5b31f6010e99) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 23 Aug 2022 00:01:17 -0700
+Received: from kbuild by 5b31f6010e99 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQNuW-00009t-2k;
+        Tue, 23 Aug 2022 07:01:16 +0000
+Date:   Tue, 23 Aug 2022 15:00:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 49/314]
+ usr/include/asm/kvm.h:606:22: warning: field 'cpuid' with variable sized
+ type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU
+ extension
+Message-ID: <202208231439.fY8AdaYo-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 00/13] iommu: SVA and IOPF refactoring
-Content-Language: en-US
-To:     Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
- <890a99fe-1e9b-85bd-e4bc-b746ae17b827@linaro.org>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <890a99fe-1e9b-85bd-e4bc-b746ae17b827@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/22 12:49, Zhangfei Gao wrote:
-> On 2022/8/17 上午9:20, Lu Baolu wrote:
->> Hi folks,
->>
->> The former part of this series introduces the IOMMU interfaces to attach
->> or detach an iommu domain to/from a pasid of a device, and refactors the
->> exsiting IOMMU SVA implementation by assigning an SVA type of iommu
->> domain to a shared virtual address and replacing sva_bind/unbind iommu
->> ops with a set_dev_pasid domain ops.
->>
->> The latter part changes the existing I/O page fault handling framework
->> from only serving SVA to a generic one. Any driver or component could
->> handle the I/O page faults for its domain in its own way by installing
->> an I/O page fault handler.
->>
->> This series has been functionally tested on an x86 machine and compile
->> tested for all architectures.
->>
->> This series is also available on github:
->> [2] 
->> https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v11
->>
->> Please review and suggest.
-> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-> On arm64 (Kunpeng920) with uacce.
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   552dd80c48f67ca01bcdd10667e0c11efd375177
+commit: 1a5eb8b1aafbbb1015198bb2d2caf0e1a7557673 [49/314] KVM: TDX: initialize VM with TDX specific parameters
+config: i386-randconfig-r031-20220822 (https://download.01.org/0day-ci/archive/20220823/202208231439.fY8AdaYo-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/1a5eb8b1aafbbb1015198bb2d2caf0e1a7557673
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 1a5eb8b1aafbbb1015198bb2d2caf0e1a7557673
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Thank you very much!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-baolu
+All warnings (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/kvm.h:15:
+>> usr/include/asm/kvm.h:606:22: warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+                           struct kvm_cpuid2 cpuid;
+                                             ^
+   1 warning generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/asm/kvm.h:606:22: warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+                           struct kvm_cpuid2 cpuid;
+                                             ^
+   1 warning generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

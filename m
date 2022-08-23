@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2175459DD93
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AECC59E062
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356209AbiHWKll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
+        id S1353004AbiHWKJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354273AbiHWK1c (ORCPT
+        with ESMTP id S1352728AbiHWKCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:27:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A7B84ED3;
-        Tue, 23 Aug 2022 02:06:00 -0700 (PDT)
+        Tue, 23 Aug 2022 06:02:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622677C527;
+        Tue, 23 Aug 2022 01:50:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C6DFB81C86;
-        Tue, 23 Aug 2022 09:05:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7673BC43148;
-        Tue, 23 Aug 2022 09:05:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC92461377;
+        Tue, 23 Aug 2022 08:50:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D50C433C1;
+        Tue, 23 Aug 2022 08:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245557;
-        bh=ZWz5xNRGqs4DFUsiTNXMxvF7ZS3YmBi3o4+3EdUiwWc=;
+        s=korg; t=1661244635;
+        bh=z1UAbFAEBCVO/+MvUTbYWvY6QVA8Oi88OBcKimNBt8I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R/GaJmr3oa9em2R1XO6AiqjF/nnjPK+u/yoTLODznWYpVkq/gM273BnB9Jz9zmwKi
-         JiMWxqtK1XtBSUBN+PPWfAOCoUvK9p5PcPiCttKodudtN675uvpp3UVZNH6IErXMiD
-         GBFJIMbk3l3pR95Ct4jBrovpSfPhFFpeZMscC+jk=
+        b=2mAsYmkv3DokyukLm/jC84fXeTWh8We4mkk3W8IDQXojaWNzQVECfO4ucMuy2UDsJ
+         4NdelBXU0wovNUbDEJGLP6hDJuOH7kRqD+jordOagHVKlOAFjhNmHajIaK+MgvgocT
+         KA1cBaf/yFXy0JpRqHMZc18RBtHL5PvAihthMwyo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 116/287] HID: cp2112: prevent a buffer overflow in cp2112_xfer()
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.15 126/244] netfilter: nf_tables: possible module reference underflow in error path
 Date:   Tue, 23 Aug 2022 10:24:45 +0200
-Message-Id: <20220823080104.297228396@linuxfoundation.org>
+Message-Id: <20220823080103.290641883@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 381583845d19cb4bd21c8193449385f3fefa9caf ]
+commit c485c35ff6783ccd12c160fcac6a0e504e83e0bf upstream.
 
-Smatch warnings:
-drivers/hid/hid-cp2112.c:793 cp2112_xfer() error: __memcpy()
-'data->block[1]' too small (33 vs 255)
-drivers/hid/hid-cp2112.c:793 cp2112_xfer() error: __memcpy() 'buf' too
-small (64 vs 255)
+dst->ops is set on when nft_expr_clone() fails, but module refcount has
+not been bumped yet, therefore nft_expr_destroy() leads to module
+reference underflow.
 
-The 'read_length' variable is provided by 'data->block[0]' which comes
-from user and it(read_length) can take a value between 0-255. Add an
-upper bound to 'read_length' variable to prevent a buffer overflow in
-memcpy().
-
-Fixes: 542134c0375b ("HID: cp2112: Fix I2C_BLOCK_DATA transactions")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8cfd9b0f8515 ("netfilter: nftables: generalize set expressions support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-cp2112.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/netfilter/nf_tables_api.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-cp2112.c b/drivers/hid/hid-cp2112.c
-index 6f65f5257236..637a7ce281c6 100644
---- a/drivers/hid/hid-cp2112.c
-+++ b/drivers/hid/hid-cp2112.c
-@@ -794,6 +794,11 @@ static int cp2112_xfer(struct i2c_adapter *adap, u16 addr,
- 		data->word = le16_to_cpup((__le16 *)buf);
- 		break;
- 	case I2C_SMBUS_I2C_BLOCK_DATA:
-+		if (read_length > I2C_SMBUS_BLOCK_MAX) {
-+			ret = -EINVAL;
-+			goto power_normal;
-+		}
-+
- 		memcpy(data->block + 1, buf, read_length);
- 		break;
- 	case I2C_SMBUS_BLOCK_DATA:
--- 
-2.35.1
-
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -5479,7 +5479,7 @@ int nft_set_elem_expr_clone(const struct
+ 
+ 		err = nft_expr_clone(expr, set->exprs[i]);
+ 		if (err < 0) {
+-			nft_expr_destroy(ctx, expr);
++			kfree(expr);
+ 			goto err_expr;
+ 		}
+ 		expr_array[i] = expr;
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F81359DDDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E347459DC52
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354503AbiHWKZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S1356217AbiHWKt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353609AbiHWKLn (ORCPT
+        with ESMTP id S1356550AbiHWKme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACD8B2;
-        Tue, 23 Aug 2022 01:57:46 -0700 (PDT)
+        Tue, 23 Aug 2022 06:42:34 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD58672E;
+        Tue, 23 Aug 2022 02:10:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6741C6123D;
-        Tue, 23 Aug 2022 08:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F9AEC433C1;
-        Tue, 23 Aug 2022 08:57:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 77C12CE1B40;
+        Tue, 23 Aug 2022 09:10:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F26C433C1;
+        Tue, 23 Aug 2022 09:09:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245065;
-        bh=aD74N/hsr51I4dViwIJ6uB1M3qdYNTympSCUrh97GdU=;
+        s=korg; t=1661245799;
+        bh=oBWPVa+/s0Zsff8K0UJpXwNYvvBDOEBsVZDbzO/5imw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WKiyxVG+FJKu7P0DTkdQ96JBZc5QuKRSYXba2xUymlnLVDWGVrhQxKTKwyxcIAV7c
-         CKxgAu2se2lg5bwH3gsoCJ6ORmLbWuK3sQGhW7pKN7jw2dH5iS2t/hbwGFwM8XtCvW
-         z9EqhbQ3pNy+HQqglikEyG6FWT1S/9KCV5O12YSo=
+        b=QgMBLFMhRbePs72q98Gr36FUPfpBi8ecNKhmXzKrMGbMEBTAl69XQ28to/XDrhwg8
+         dGtayjfWs8hqwd6Izb1UO5YEI/AIWnzbUhpMSNvPzuSYD0QTdwL3i8+ANxKr1cDIpw
+         fzh/XkCekQ5uIQEVUmj8+n/MAfSbgHH1v/HMvCqI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wentao_Liang <Wentao_Liang_g@163.com>,
-        Song Liu <song@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 203/244] drivers:md:fix a potential use-after-free bug
+        stable@vger.kernel.org, stable@kernel.org,
+        Baokun Li <libaokun1@huawei.com>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 4.19 193/287] ext4: correct the misjudgment in ext4_iget_extra_inode
 Date:   Tue, 23 Aug 2022 10:26:02 +0200
-Message-Id: <20220823080106.268223829@linuxfoundation.org>
+Message-Id: <20220823080107.338891250@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wentao_Liang <Wentao_Liang_g@163.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 104212471b1c1817b311771d817fb692af983173 ]
+commit fd7e672ea98b95b9d4c9dae316639f03c16a749d upstream.
 
-In line 2884, "raid5_release_stripe(sh);" drops the reference to sh and
-may cause sh to be released. However, sh is subsequently used in lines
-2886 "if (sh->batch_head && sh != sh->batch_head)". This may result in an
-use-after-free bug.
+Use the EXT4_INODE_HAS_XATTR_SPACE macro to more accurately
+determine whether the inode have xattr space.
 
-It can be fixed by moving "raid5_release_stripe(sh);" to the bottom of
-the function.
-
-Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
-Signed-off-by: Song Liu <song@kernel.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@kernel.org
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220616021358.2504451-5-libaokun1@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/raid5.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ext4/inode.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index b58984ddca13..19e497a7e747 100644
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -2864,10 +2864,10 @@ static void raid5_end_write_request(struct bio *bi)
- 	if (!test_and_clear_bit(R5_DOUBLE_LOCKED, &sh->dev[i].flags))
- 		clear_bit(R5_LOCKED, &sh->dev[i].flags);
- 	set_bit(STRIPE_HANDLE, &sh->state);
--	raid5_release_stripe(sh);
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -4844,8 +4844,7 @@ static inline int ext4_iget_extra_inode(
+ 	__le32 *magic = (void *)raw_inode +
+ 			EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize;
  
- 	if (sh->batch_head && sh != sh->batch_head)
- 		raid5_release_stripe(sh->batch_head);
-+	raid5_release_stripe(sh);
- }
- 
- static void raid5_error(struct mddev *mddev, struct md_rdev *rdev)
--- 
-2.35.1
-
+-	if (EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize + sizeof(__le32) <=
+-	    EXT4_INODE_SIZE(inode->i_sb) &&
++	if (EXT4_INODE_HAS_XATTR_SPACE(inode)  &&
+ 	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
+ 		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
+ 		return ext4_find_inline_data_nolock(inode);
 
 

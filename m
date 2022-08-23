@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0BB59D70F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA88D59D703
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350108AbiHWJZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S1350080AbiHWJ1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346369AbiHWJYa (ORCPT
+        with ESMTP id S1350014AbiHWJZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:24:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53EF9019A;
-        Tue, 23 Aug 2022 01:35:48 -0700 (PDT)
+        Tue, 23 Aug 2022 05:25:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C0B760D2;
+        Tue, 23 Aug 2022 01:36:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5A6B81C1B;
-        Tue, 23 Aug 2022 08:34:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 569D5C433D7;
-        Tue, 23 Aug 2022 08:34:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 332D5CE1B44;
+        Tue, 23 Aug 2022 08:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B4CC433C1;
+        Tue, 23 Aug 2022 08:34:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243678;
-        bh=BWjidRQ+edWUR4aH7drez7StIMEyzcJyA/RtL4QAKXA=;
+        s=korg; t=1661243684;
+        bh=Ubdo+zLeCBEUIp0Fs/1zOYCZvfQ0W+LWuOA/P/mTFU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PaeCGs2OXk/8avndwVV/HgzjRsy1ZuS4sp3oWw8bQBBNjO847CQDfE1ExPGoYj5k0
-         GaGu25whOtxyL2q4VdnEjLUSskvrzoNcbnwcMl0N3HSSU797xQkqFtotgsP4QD7/Jt
-         XldaoiSGob7OUIYGMdkOzlqC8JK0z9RDpcZ13ydg=
+        b=Qjdk537XAETYkReiURImRW1LWfq4Z8Dwjd4TyS4ezHWnaDBUScrF94kbz9Zx83tvm
+         U6Gb8lmQjEs0fkDYTe0HqkMOP3ISwM2bocUAQkuYGYCd8/dZhIsVaNHemcJYsm7Efp
+         6zZYKTWUsbukLOaNDXTd+55xr3oJ0MFUz4aGnyqY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com,
-        syzbot+669c9abf11a6a011dd09@syzkaller.appspotmail.com,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 353/365] ALSA: pcm: Use deferred fasync helper
-Date:   Tue, 23 Aug 2022 10:04:14 +0200
-Message-Id: <20220823080133.039157499@linuxfoundation.org>
+        stable@vger.kernel.org, Dipanjan Das <mail.dipanjan.das@gmail.com>,
+        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 355/365] f2fs: fix to avoid use f2fs_bug_on() in f2fs_new_node_page()
+Date:   Tue, 23 Aug 2022 10:04:16 +0200
+Message-Id: <20220823080133.124438091@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -56,77 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chao Yu <chao.yu@oppo.com>
 
-[ Upstream commit 96b097091c66df4f6fbf5cbff21df6cc02a2f055 ]
+[ Upstream commit 141170b759e03958f296033bb7001be62d1d363b ]
 
-For avoiding the potential deadlock via kill_fasync() call, use the
-new fasync helpers to defer the invocation from timer API.  Note that
-it's merely a workaround.
+As Dipanjan Das <mail.dipanjan.das@gmail.com> reported, syzkaller
+found a f2fs bug as below:
 
-Reported-by: syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com
-Reported-by: syzbot+669c9abf11a6a011dd09@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/20220728125945.29533-4-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+RIP: 0010:f2fs_new_node_page+0x19ac/0x1fc0 fs/f2fs/node.c:1295
+Call Trace:
+ write_all_xattrs fs/f2fs/xattr.c:487 [inline]
+ __f2fs_setxattr+0xe76/0x2e10 fs/f2fs/xattr.c:743
+ f2fs_setxattr+0x233/0xab0 fs/f2fs/xattr.c:790
+ f2fs_xattr_generic_set+0x133/0x170 fs/f2fs/xattr.c:86
+ __vfs_setxattr+0x115/0x180 fs/xattr.c:182
+ __vfs_setxattr_noperm+0x125/0x5f0 fs/xattr.c:216
+ __vfs_setxattr_locked+0x1cf/0x260 fs/xattr.c:277
+ vfs_setxattr+0x13f/0x330 fs/xattr.c:303
+ setxattr+0x146/0x160 fs/xattr.c:611
+ path_setxattr+0x1a7/0x1d0 fs/xattr.c:630
+ __do_sys_lsetxattr fs/xattr.c:653 [inline]
+ __se_sys_lsetxattr fs/xattr.c:649 [inline]
+ __x64_sys_lsetxattr+0xbd/0x150 fs/xattr.c:649
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+NAT entry and nat bitmap can be inconsistent, e.g. one nid is free
+in nat bitmap, and blkaddr in its NAT entry is not NULL_ADDR, it
+may trigger BUG_ON() in f2fs_new_node_page(), fix it.
+
+Reported-by: Dipanjan Das <mail.dipanjan.das@gmail.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/sound/pcm.h     | 2 +-
- sound/core/pcm.c        | 1 +
- sound/core/pcm_lib.c    | 2 +-
- sound/core/pcm_native.c | 2 +-
- 4 files changed, 4 insertions(+), 3 deletions(-)
+ fs/f2fs/node.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/sound/pcm.h b/include/sound/pcm.h
-index 6b99310b5b88..6987110843f0 100644
---- a/include/sound/pcm.h
-+++ b/include/sound/pcm.h
-@@ -399,7 +399,7 @@ struct snd_pcm_runtime {
- 	snd_pcm_uframes_t twake; 	/* do transfer (!poll) wakeup if non-zero */
- 	wait_queue_head_t sleep;	/* poll sleep */
- 	wait_queue_head_t tsleep;	/* transfer sleep */
--	struct fasync_struct *fasync;
-+	struct snd_fasync *fasync;
- 	bool stop_operating;		/* sync_stop will be called */
- 	struct mutex buffer_mutex;	/* protect for buffer changes */
- 	atomic_t buffer_accessing;	/* >0: in r/w operation, <0: blocked */
-diff --git a/sound/core/pcm.c b/sound/core/pcm.c
-index 977d54320a5c..c917ac84a7e5 100644
---- a/sound/core/pcm.c
-+++ b/sound/core/pcm.c
-@@ -1005,6 +1005,7 @@ void snd_pcm_detach_substream(struct snd_pcm_substream *substream)
- 		substream->runtime = NULL;
+diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+index cf6f7fc83c08..02e92a72511b 100644
+--- a/fs/f2fs/node.c
++++ b/fs/f2fs/node.c
+@@ -1292,7 +1292,11 @@ struct page *f2fs_new_node_page(struct dnode_of_data *dn, unsigned int ofs)
+ 		dec_valid_node_count(sbi, dn->inode, !ofs);
+ 		goto fail;
  	}
- 	mutex_destroy(&runtime->buffer_mutex);
-+	snd_fasync_free(runtime->fasync);
- 	kfree(runtime);
- 	put_pid(substream->pid);
- 	substream->pid = NULL;
-diff --git a/sound/core/pcm_lib.c b/sound/core/pcm_lib.c
-index 1fc7c50ffa62..40751e5aff09 100644
---- a/sound/core/pcm_lib.c
-+++ b/sound/core/pcm_lib.c
-@@ -1822,7 +1822,7 @@ void snd_pcm_period_elapsed_under_stream_lock(struct snd_pcm_substream *substrea
- 		snd_timer_interrupt(substream->timer, 1);
+-	f2fs_bug_on(sbi, new_ni.blk_addr != NULL_ADDR);
++	if (unlikely(new_ni.blk_addr != NULL_ADDR)) {
++		err = -EFSCORRUPTED;
++		set_sbi_flag(sbi, SBI_NEED_FSCK);
++		goto fail;
++	}
  #endif
-  _end:
--	kill_fasync(&runtime->fasync, SIGIO, POLL_IN);
-+	snd_kill_fasync(runtime->fasync, SIGIO, POLL_IN);
- }
- EXPORT_SYMBOL(snd_pcm_period_elapsed_under_stream_lock);
- 
-diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
-index 4adaee62ef33..16fcf57c6f03 100644
---- a/sound/core/pcm_native.c
-+++ b/sound/core/pcm_native.c
-@@ -3945,7 +3945,7 @@ static int snd_pcm_fasync(int fd, struct file * file, int on)
- 	runtime = substream->runtime;
- 	if (runtime->status->state == SNDRV_PCM_STATE_DISCONNECTED)
- 		return -EBADFD;
--	return fasync_helper(fd, file, on, &runtime->fasync);
-+	return snd_fasync_helper(fd, file, on, &runtime->fasync);
- }
- 
- /*
+ 	new_ni.nid = dn->nid;
+ 	new_ni.ino = dn->inode->i_ino;
 -- 
 2.35.1
 

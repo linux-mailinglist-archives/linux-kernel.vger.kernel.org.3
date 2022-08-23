@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AE659DCC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A189E59E3D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358944AbiHWL5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
+        id S243115AbiHWMeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359039AbiHWL4F (ORCPT
+        with ESMTP id S1350007AbiHWMb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:56:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A78F67CB9;
-        Tue, 23 Aug 2022 02:33:36 -0700 (PDT)
+        Tue, 23 Aug 2022 08:31:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AF81137;
+        Tue, 23 Aug 2022 02:46:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5315761335;
-        Tue, 23 Aug 2022 09:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5208FC433C1;
-        Tue, 23 Aug 2022 09:32:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5945AB81C85;
+        Tue, 23 Aug 2022 09:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1608C433C1;
+        Tue, 23 Aug 2022 09:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247176;
-        bh=BLG1m5ZxveTg+8OAMSqltELUdyCKw/WsOmvoPuaHGb0=;
+        s=korg; t=1661247610;
+        bh=0u27id+pBB/xtW0mEgTJlfVUqsRfVezMjjVtO6rQ0mY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iYXM44HUBZC2PVAD+7geJRGE7UzX1/GwK9oVRPOAnYUedpJ929qVhjZ7n8UG8cpGz
-         OPo2Xl1TVCkvFg9IDguErVrvUM/bhD7ZtgyokUHg7Ng3N7BW2aDmz5cBnqOjO1bTeY
-         99pgZxV4ZWPofQ4VpvJkD4r4oCm87huEvR2FhAz0=
+        b=NiblFSkAU10hkcN7qBZV2ScPcZNvsWEKjULvFGAlLmS7Ktcp4PV0drmjs8wO82we3
+         tQYzu75xiuENEmvGxj2nE1ax1sadal4cWJ5QAH246WbUViGWv0z5RuFbVBOEv5tHvm
+         igIZF8ZiAqReNUUfcfz84YxFGnj3NXk9C5dmiFK0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mateusz Palczewski <mateusz.palczewski@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.4 343/389] i40e: Fix to stop tx_timeout recovery if GLOBR fails
+Subject: [PATCH 5.10 089/158] i40e: Fix to stop tx_timeout recovery if GLOBR fails
 Date:   Tue, 23 Aug 2022 10:27:01 +0200
-Message-Id: <20220823080129.863587808@linuxfoundation.org>
+Message-Id: <20220823080049.648713004@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -82,7 +82,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
 +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -409,7 +409,9 @@ static void i40e_tx_timeout(struct net_d
+@@ -382,7 +382,9 @@ static void i40e_tx_timeout(struct net_d
  		set_bit(__I40E_GLOBAL_RESET_REQUESTED, pf->state);
  		break;
  	default:

@@ -2,173 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789D959E1A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3686359DD4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241772AbiHWLXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S1357599AbiHWL02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357549AbiHWLRn (ORCPT
+        with ESMTP id S1357715AbiHWLUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:17:43 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDFA89819;
-        Tue, 23 Aug 2022 02:21:29 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id z25so18861480lfr.2;
-        Tue, 23 Aug 2022 02:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+DWGPIPc3ISzDYgpuxxTGtSNnOcnHXPhDpdYriuehoA=;
-        b=W+2mwoq3OWMQOasY34q5ndf9QlyFCqrsVYi8MwQDe1BCxhmcZpZ0Z1p+h0jGQpBVe5
-         YI9nZKuyu12VLCXV5aKWyXzAhYFJubm5BcTqhOm5wrL2+a9v0L3eEFhNb94C8Abjpofk
-         H0FkmNc+BE+pbY/Jr172MT/PHEpCKyW3hnF2iqXiX5hvBxOZ/qMwweAvrRfGGGPP9cMA
-         PGbqH0aMl7DQRqBGNw6Li+N3SzBnJJrYXLBoPOnFpF+kdMmRbo657HDBtrY4+QrpjzCd
-         0mnRokYL7mKXy66KYnO+0RA+rYX2cxrA4dx4W+HwqBjtx4j2xBHFHBg81zAcG6FZrpes
-         b2jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+DWGPIPc3ISzDYgpuxxTGtSNnOcnHXPhDpdYriuehoA=;
-        b=LCyyyL22Cgx62Kx/935uxnVEqGO96+XlxcwzUpfVRxYShIk5LmPs13I6XlhcwOo8Un
-         gP+881ZDAc5G0W/Y7HjMO8a9Skrk+3VyLECtClxeJx9uStabffi97rPK0nyLjybZ2uW9
-         /AYNr02ucudRPmXCDOL3vBo2muBkaOnBuqHBrgpGjHfchJzQi4I9mQQFdTrtWyRDpF/G
-         c7Q7SxJnLF6e2RFITMxpzjywWn1rV3qAWnR45xKHvTpmt66KWb2htPKvNPDfHXQtKC4O
-         K8M2mcQ8NlU6QyP90S+JHayLzw5Ci0JDZCa5RKZBex6zU/8fwDZZ9xrv5g9du4XRmpFm
-         h44Q==
-X-Gm-Message-State: ACgBeo1vFRUAk9FcPc2/f5k+PNtSO60ZQVqRlnLvdTu1M9LUnJEAvf3K
-        l36brOReBkzBfehdywgg6hKdMhMf+ga3vLAfqG8Y/CNe
-X-Google-Smtp-Source: AA6agR4+KWoZ7AaIB7FncIy8FTWaR54rys+sYhXWsAOHt1uJIh9H5Lnf6SzVrLAGohOucXvT3iQ9PYabEoIZSSYmXNA=
-X-Received: by 2002:a05:6512:68f:b0:492:cbb1:c4b2 with SMTP id
- t15-20020a056512068f00b00492cbb1c4b2mr7138192lfe.130.1661246487607; Tue, 23
- Aug 2022 02:21:27 -0700 (PDT)
+        Tue, 23 Aug 2022 07:20:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47B1F8C46C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:22:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBB0D113E;
+        Tue, 23 Aug 2022 02:22:51 -0700 (PDT)
+Received: from bogus (unknown [10.57.44.200])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A16143F718;
+        Tue, 23 Aug 2022 02:22:45 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 10:22:20 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     vincent.guittot@linaro.org, ionela.voinescu@arm.com,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, 21cnbao@gmail.com, jonathan.cameron@huawei.com,
+        linuxarm@huawei.com, prime.zeng@huawei.com,
+        yangyicong@hisilicon.com
+Subject: Re: [PATCH] arch_topology: Make cluster topology span at least SMT
+ CPUs
+Message-ID: <20220823092220.2p4tsq5rvmfk5ne4@bogus>
+References: <20220823073044.58697-1-yangyicong@huawei.com>
 MIME-Version: 1.0
-References: <1660908562-17409-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Yv+6YjaGAv52yvq9@slm.duckdns.org> <CALvZod7QdLSMdBoD2WztL72qS8kJe7F79JuCH6t19rRcw6Pn1w@mail.gmail.com>
- <Yv/EArPDTcCrGqJh@slm.duckdns.org> <YwNpI1ydy0yDnBH0@dhcp22.suse.cz>
- <CAGWkznEB+R0YBaBFBL7dPqs8R=qKC6+ixTWEGCYy2PaczXkaPA@mail.gmail.com>
- <YwRjyx6wFLk8WTDe@dhcp22.suse.cz> <CAGWkznGaYTv4u4kOo-rupfyWzDNJXNKTchwP6dbUK-=UXWm47w@mail.gmail.com>
- <YwSQ4APOu/H7lYGL@dhcp22.suse.cz>
-In-Reply-To: <YwSQ4APOu/H7lYGL@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Tue, 23 Aug 2022 17:20:59 +0800
-Message-ID: <CAGWkznGd6mgareABseMKY5p0f1=5dkfVkj=NS7_B6OkXBYSwyw@mail.gmail.com>
-Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823073044.58697-1-yangyicong@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 4:33 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 23-08-22 14:03:04, Zhaoyang Huang wrote:
-> > On Tue, Aug 23, 2022 at 1:21 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Tue 23-08-22 10:31:57, Zhaoyang Huang wrote:
-> [...]
-> > > > I would like to quote the comments from google side for more details
-> > > > which can also be observed from different vendors.
-> > > > "Also be advised that when you enable memcg v2 you will be using
-> > > > per-app memcg configuration which implies noticeable overhead because
-> > > > every app will have its own group. For example pagefault path will
-> > > > regress by about 15%. And obviously there will be some memory overhead
-> > > > as well. That's the reason we don't enable them in Android by
-> > > > default."
-> > >
-> > > This should be reported and investigated. Because per-application memcg
-> > > vs. memcg in general shouldn't make much of a difference from the
-> > > performance side. I can see a potential performance impact for no-memcg
-> > > vs. memcg case but even then 15% is quite a lot.
-> > Less efficiency on memory reclaim caused by multi-LRU should be one of
-> > the reason, which has been proved by comparing per-app memcg on/off.
-> > Besides, theoretically workingset could also broken as LRU is too
-> > short to compose workingset.
->
-> Do you have any data to back these claims? Is this something that could
-> be handled on the configuration level? E.g. by applying low limit
-> protection to keep the workingset in the memory?
-I don't think so. IMO, workingset works when there are pages evicted
-from LRU and then refault which provide refault distance for pages.
-Applying memcg's protection will have all LRU out of evicted which
-make the mechanism fail.
->
-> > > > > My very vague understanding is that the Android system would like to
-> > > > > freeze specific applications and for that it requires each application
-> > > > > to live in its own cgroup. This clashes with a requirement to age and
-> > > > > reclaim memory on a different granularity (aka no per process reclaim).
-> > > > > So in fact something that cgroup v1 would achieve by having 2
-> > > > > hierarchies, one for the freezer which would have a dedicated cgroup for
-> > > > > each application and the other for the memory controller where tasks are
-> > > > > grouped by a different criteria. This would rule out that a global (or
-> > > > > any external memory pressure) reclaim would age LRUs that contain a mix
-> > > > > bag of application pages rather than iterate over per-application LRUs.
-> > > > > Is that understanding correct?
-> > > > Correct, this is just our confusion. Besides, we believe that charge
-> > > > the pages to implicit memory enabled parent control group doesn't make
-> > > > sense as the memory cannot be managed at all.
-> > >
-> > > I do not get that part. The parent can manange and control the memory
-> > > usage so how come it cannot be managed at all?
-> > What I mean is the kind of parent which is enabled implicitly by
-> > enabling on its sibling group like belowing hierarchy. Imagine that C
-> > has no intention of memory control but has to be enabled as B would
-> > have it. IMO, it doesn't make sense to charge C1's memory.current to C
-> > until an explicitly echo "+memory" >  C/subtree_control.
-> > A----B---B1
-> >      \ C---C1
->
-> So let me just expand your example for clarity
->
-> A.cgroup.controllers = memory
-> A.cgroup.subtree_control = memory
->
-> A/B.cgroup.controllers = memory
-> A/B.cgroup.subtree_control = memory
-> A/B/B1.cgroup.controllers = memory
->
-> A/C.cgroup.controllers = memory
-> A/C.cgroup.subtree_control = ""
-> A/C/C1.cgroup.controllers = ""
-Yes for above hierarchy and configuration.
->
-> Is your concern that C1 is charged to A/C or that you cannot actually make
-> A/C.cgroup.controllers = "" because you want to maintain memory in A?
-> Because that would be breaking the internal node constrain rule AFAICS.
-No. I just want to keep memory on B.
->
-> Or maybe you just really want a different hierarchy where
-> A == root_cgroup and want the memory acocunted in B
-> (root/B.cgroup.controllers = memory) but not in C (root/C.cgroup.controllers = "")?
-Yes.
->
-> That would mean that C memory would be maintained on the global (root
-> memcg) LRUs which is the only internal node which is allowed to have
-> resources because it is special.
-Exactly. I would like to have all groups like C which have no parent's
-subtree_control = memory charge memory to root. Under this
-implementation, memory under enabled group will be protected by
-min/low while other groups' memory share the same LRU to have
-workingset things take effect.
-> --
-> Michal Hocko
-> SUSE Labs
+On Tue, Aug 23, 2022 at 03:30:44PM +0800, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> Currently cpu_clustergroup_mask() will return CPU mask if cluster span
+> more or the same CPUs as cpu_coregroup_mask(). This will result topology
+> borken on non-Cluster SMT machines.
+> 
+> Test with:
+> qemu-system-aarch64 -enable-kvm -machine virt \
+>  -net none \
+>  -cpu host \
+>  -bios ./QEMU_EFI.fd \
+>  -m 2G \
+>  -smp 48,sockets=2,cores=12,threads=2 \
+>  -kernel $Image \
+>  -initrd $Rootfs \
+>  -nographic
+>  -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
+> 
+> We'll get below error:
+> [    3.084568] BUG: arch topology borken
+> [    3.084570]      the SMT domain not a subset of the CLS domain
+> 
+> Since cluster is a level higher than SMT, fix this by making cluster
+> spans at least SMT CPUs.
+> 
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>  drivers/base/arch_topology.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 0424b59b695e..0056a1273275 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
+>  	 */
+>  	if (cpumask_subset(cpu_coregroup_mask(cpu),
+>  			   &cpu_topology[cpu].cluster_sibling))
+> -		return get_cpu_mask(cpu);
+
+Sorry for this, for some reason I assumed the get_cpu_mask() will cover
+threads too.
+
+-- 
+Regards,
+Sudeep

@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F273B59D86A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AD959D858
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242237AbiHWJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S242176AbiHWJnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243247AbiHWJj1 (ORCPT
+        with ESMTP id S1351950AbiHWJkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:39:27 -0400
+        Tue, 23 Aug 2022 05:40:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A46D696F6;
-        Tue, 23 Aug 2022 01:41:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D693140BED;
+        Tue, 23 Aug 2022 01:41:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8747BB81C55;
-        Tue, 23 Aug 2022 08:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E71C433C1;
-        Tue, 23 Aug 2022 08:41:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A649B81C4F;
+        Tue, 23 Aug 2022 08:41:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BA1C433D6;
+        Tue, 23 Aug 2022 08:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244062;
-        bh=LP5BzgqKsxL6/kCUIrjEs8eLaEKoR1gKWjg9bD0cpqg=;
+        s=korg; t=1661244071;
+        bh=BynSNA2pLc0++aOd/nVe1u0EbpDodCq+xxgBLeUp6rg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=acqsz9Sv2/fHKYqRZEqMRygfgxuvmHz+v75Q47PsSU/vQRbtDvG2LthdbCGH9L3+W
-         qoCuTDLAZJqS3nYIKM7d5qDrc3m2cALgy5gTC1Ve4VcYZi83Bet0YzUVahwURyMZYB
-         fQJJ/0U6U/v/8dnBDeUF2AM3hlGaIU/aTC6vPkRg=
+        b=abJTtjr2J0bjxocPwyo8CGnuMdfemCBOLT+L7XDUPuwYxlfKxaYj01IgTWbvRqvDC
+         vU5L8iL2elr+wMC78Y3PIBhH/1sClIBXih653nzRR8rGnQYkZ98QJtH0LszSjWs6Pv
+         yuCX+e2MGphtRG49jtnuXC+Dik9kerdWiDX1EfC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 5.15 031/244] apparmor: fix aa_label_asxprint return check
-Date:   Tue, 23 Aug 2022 10:23:10 +0200
-Message-Id: <20220823080100.097762623@linuxfoundation.org>
+        stable@vger.kernel.org, John Johansen <john.johansen@canonical.com>
+Subject: [PATCH 5.15 032/244] apparmor: fix setting unconfined mode on a loaded profile
+Date:   Tue, 23 Aug 2022 10:23:11 +0200
+Message-Id: <20220823080100.132500494@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -54,56 +53,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: John Johansen <john.johansen@canonical.com>
 
-commit 3e2a3a0830a2090e766d0d887d52c67de2a6f323 upstream.
+commit 3bbb7b2e9bbcd22e539e23034da753898fe3b4dc upstream.
 
-Clang static analysis reports this issue
-label.c:1802:3: warning: 2nd function call argument
-  is an uninitialized value
-  pr_info("%s", str);
-  ^~~~~~~~~~~~~~~~~~
+When loading a profile that is set to unconfined mode, that label
+flag is not set when it should be. Ensure it is set so that when
+used in a label the unconfined check will be applied correctly.
 
-str is set from a successful call to aa_label_asxprint(&str, ...)
-On failure a negative value is returned, not a -1.  So change
-the check.
-
-Fixes: f1bd904175e8 ("apparmor: add the base fns() for domain labels")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Fixes: 038165070aa5 ("apparmor: allow setting any profile into the unconfined state")
 Signed-off-by: John Johansen <john.johansen@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/apparmor/label.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ security/apparmor/policy_unpack.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -1745,7 +1745,7 @@ void aa_label_xaudit(struct audit_buffer
- 	if (!use_label_hname(ns, label, flags) ||
- 	    display_mode(ns, label, flags)) {
- 		len  = aa_label_asxprint(&name, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
-@@ -1773,7 +1773,7 @@ void aa_label_seq_xprint(struct seq_file
- 		int len;
- 
- 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
-@@ -1796,7 +1796,7 @@ void aa_label_xprintk(struct aa_ns *ns,
- 		int len;
- 
- 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
+--- a/security/apparmor/policy_unpack.c
++++ b/security/apparmor/policy_unpack.c
+@@ -746,16 +746,18 @@ static struct aa_profile *unpack_profile
+ 		profile->label.flags |= FLAG_HAT;
+ 	if (!unpack_u32(e, &tmp, NULL))
+ 		goto fail;
+-	if (tmp == PACKED_MODE_COMPLAIN || (e->version & FORCE_COMPLAIN_FLAG))
++	if (tmp == PACKED_MODE_COMPLAIN || (e->version & FORCE_COMPLAIN_FLAG)) {
+ 		profile->mode = APPARMOR_COMPLAIN;
+-	else if (tmp == PACKED_MODE_ENFORCE)
++	} else if (tmp == PACKED_MODE_ENFORCE) {
+ 		profile->mode = APPARMOR_ENFORCE;
+-	else if (tmp == PACKED_MODE_KILL)
++	} else if (tmp == PACKED_MODE_KILL) {
+ 		profile->mode = APPARMOR_KILL;
+-	else if (tmp == PACKED_MODE_UNCONFINED)
++	} else if (tmp == PACKED_MODE_UNCONFINED) {
+ 		profile->mode = APPARMOR_UNCONFINED;
+-	else
++		profile->label.flags |= FLAG_UNCONFINED;
++	} else {
+ 		goto fail;
++	}
+ 	if (!unpack_u32(e, &tmp, NULL))
+ 		goto fail;
+ 	if (tmp)
 
 

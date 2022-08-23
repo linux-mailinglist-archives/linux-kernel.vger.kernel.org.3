@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF03359E19E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FA859DCDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344950AbiHWMOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S240207AbiHWMSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352035AbiHWMMs (ORCPT
+        with ESMTP id S1351583AbiHWMO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:12:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A00CE68CF;
-        Tue, 23 Aug 2022 02:39:43 -0700 (PDT)
+        Tue, 23 Aug 2022 08:14:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65D898C99;
+        Tue, 23 Aug 2022 02:40:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACB4A61499;
-        Tue, 23 Aug 2022 09:39:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3DB2C433C1;
-        Tue, 23 Aug 2022 09:39:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7E121CE1B66;
+        Tue, 23 Aug 2022 09:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9480EC433D6;
+        Tue, 23 Aug 2022 09:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247546;
-        bh=4nsgT5C/m+bixdAE9Y8NUb2nLWbf4acscREgyVVzC7E=;
+        s=korg; t=1661247549;
+        bh=osf53EroZCz/s8yUtx8kUiASllsEgsWNQw87FBJd2e8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KJiipDmlRsamXp2k0amt2DeWGQZnT3HgQVO3IfgIbvjYm4vH0eLqRWad+ayC+sYLW
-         ZKmdD/O/w7oVhAy6hHdhKGhVel1+CPgMdQfEFSRYSWJNLlWKO80ZoUvYKqMhwMOecc
-         qB2v1Iah+oOGeGYGNI7Ydzho7b5TUnw9qrxpE2RY=
+        b=RUOf6eaRGFZxrhmI8yUJsWoB4dupQyO0Q59KBWizZhA2+fBzYoTNmrgtwOS/HKWw1
+         42AlOCmqOVUdzvUIZzSRriINgiVosOlhLveyJylSGZK5rdymnCOKamz219b+qAjOpp
+         piyfhMgQXpNaD3HAs3/eTn8ieIXVIQxecl71R75I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Samuel Holland <samuel@sholland.org>,
+        stable@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.10 041/158] pinctrl: sunxi: Add I/O bias setting for H6 R-PIO
-Date:   Tue, 23 Aug 2022 10:26:13 +0200
-Message-Id: <20220823080047.711646818@linuxfoundation.org>
+Subject: [PATCH 5.10 042/158] pinctrl: qcom: sm8250: Fix PDC map
+Date:   Tue, 23 Aug 2022 10:26:14 +0200
+Message-Id: <20220823080047.761588389@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
 References: <20220823080046.056825146@linuxfoundation.org>
@@ -56,67 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Jianhua Lu <lujianhua000@gmail.com>
 
-commit fc153c8f283bf5925615195fc9d4056414d7b168 upstream.
+commit 4b759ca15a4914f96ea204ea9200ceeb01d70666 upstream.
 
-H6 requires I/O bias configuration on both of its PIO devices.
-Previously it was only done for the main PIO.
+Fix the PDC mapping for SM8250, gpio39 is mapped to irq73(not irq37).
 
-The setting for Port L is at bit 0, so the bank calculation needs to
-account for the pin base. Otherwise the wrong bit is used.
-
-Fixes: cc62383fcebe ("pinctrl: sunxi: Support I/O bias voltage setting on H6")
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Link: https://lore.kernel.org/r/20220713025233.27248-3-samuel@sholland.org
+Fixes: b41efeed507a("pinctrl: qcom: sm8250: Specify PDC map.")
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Link: https://lore.kernel.org/r/20220803015645.22388-1-lujianhua000@gmail.com
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c |    1 +
- drivers/pinctrl/sunxi/pinctrl-sunxi.c       |    7 ++++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/pinctrl/qcom/pinctrl-sm8250.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c
-@@ -105,6 +105,7 @@ static const struct sunxi_pinctrl_desc s
- 	.npins = ARRAY_SIZE(sun50i_h6_r_pins),
- 	.pin_base = PL_BASE,
- 	.irq_banks = 2,
-+	.io_bias_cfg_variant = BIAS_VOLTAGE_PIO_POW_MODE_SEL,
- };
- 
- static int sun50i_h6_r_pinctrl_probe(struct platform_device *pdev)
---- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-@@ -624,7 +624,7 @@ static int sunxi_pinctrl_set_io_bias_cfg
- 					 unsigned pin,
- 					 struct regulator *supply)
- {
--	unsigned short bank = pin / PINS_PER_BANK;
-+	unsigned short bank;
- 	unsigned long flags;
- 	u32 val, reg;
- 	int uV;
-@@ -640,6 +640,9 @@ static int sunxi_pinctrl_set_io_bias_cfg
- 	if (uV == 0)
- 		return 0;
- 
-+	pin -= pctl->desc->pin_base;
-+	bank = pin / PINS_PER_BANK;
-+
- 	switch (pctl->desc->io_bias_cfg_variant) {
- 	case BIAS_VOLTAGE_GRP_CONFIG:
- 		/*
-@@ -657,8 +660,6 @@ static int sunxi_pinctrl_set_io_bias_cfg
- 		else
- 			val = 0xD; /* 3.3V */
- 
--		pin -= pctl->desc->pin_base;
--
- 		reg = readl(pctl->membase + sunxi_grp_config_reg(pin));
- 		reg &= ~IO_BIAS_MASK;
- 		writel(reg | val, pctl->membase + sunxi_grp_config_reg(pin));
+diff --git a/drivers/pinctrl/qcom/pinctrl-sm8250.c b/drivers/pinctrl/qcom/pinctrl-sm8250.c
+index af144e724bd9..3bd7f9fedcc3 100644
+--- a/drivers/pinctrl/qcom/pinctrl-sm8250.c
++++ b/drivers/pinctrl/qcom/pinctrl-sm8250.c
+@@ -1316,7 +1316,7 @@ static const struct msm_pingroup sm8250_groups[] = {
+ static const struct msm_gpio_wakeirq_map sm8250_pdc_map[] = {
+ 	{ 0, 79 }, { 1, 84 }, { 2, 80 }, { 3, 82 }, { 4, 107 }, { 7, 43 },
+ 	{ 11, 42 }, { 14, 44 }, { 15, 52 }, { 19, 67 }, { 23, 68 }, { 24, 105 },
+-	{ 27, 92 }, { 28, 106 }, { 31, 69 }, { 35, 70 }, { 39, 37 },
++	{ 27, 92 }, { 28, 106 }, { 31, 69 }, { 35, 70 }, { 39, 73 },
+ 	{ 40, 108 }, { 43, 71 }, { 45, 72 }, { 47, 83 }, { 51, 74 }, { 55, 77 },
+ 	{ 59, 78 }, { 63, 75 }, { 64, 81 }, { 65, 87 }, { 66, 88 }, { 67, 89 },
+ 	{ 68, 54 }, { 70, 85 }, { 77, 46 }, { 80, 90 }, { 81, 91 }, { 83, 97 },
+-- 
+2.37.2
+
 
 

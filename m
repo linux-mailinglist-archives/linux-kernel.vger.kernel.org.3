@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA7B59D741
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12C059D7ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242031AbiHWJrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S241664AbiHWJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352623AbiHWJlk (ORCPT
+        with ESMTP id S1352176AbiHWJvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:41:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCBA7A52F;
-        Tue, 23 Aug 2022 01:42:18 -0700 (PDT)
+        Tue, 23 Aug 2022 05:51:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083339E2FA;
+        Tue, 23 Aug 2022 01:45:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86FB8B81C20;
-        Tue, 23 Aug 2022 08:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF509C433D6;
-        Tue, 23 Aug 2022 08:42:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C31BB81C55;
+        Tue, 23 Aug 2022 08:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60ED3C433D6;
+        Tue, 23 Aug 2022 08:44:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244137;
-        bh=tczueR9QBrw1L/jEpqXkCntMM2hD+Z9tSAUmw/5z380=;
+        s=korg; t=1661244298;
+        bh=7hdHv7J+04cx/G4tWWXZvkrtgK+459IewjPVceZKJkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sXmT0FnKtAtFel77Td0/pHjK1QCUPIm18rEFhL0/6DNYIWp+dfcrqxoHWnRrzMP2S
-         7JqwNg6HaQaN52W4q+7T9XVL8B7+Igxwl1T9DFD1nnfBXI+k5IBg1WK3qZ3U506fB1
-         lodt+JTTgSuWxKJuRU8+/zx00iB0N+mOwZQJ0Hns=
+        b=puIq5+28ClpO65DHH/ruvepgtorxPgvG4f5dfd14hZF8/3jQqNVMv4EvVMbLpDPXM
+         3LgmqxQWSPEsY9CjQZLVchf/YbdAk8DnP/khCptkWUqCAfg4xqv4i3RQfS0DUEr2sF
+         jR3fwqXLtMebpoasqv0utP7hxqIvao2xria8lESA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 091/229] wifi: libertas: Fix possible refcount leak in if_usb_probe()
-Date:   Tue, 23 Aug 2022 10:24:12 +0200
-Message-Id: <20220823080056.960820374@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Marco Pagani <marpagan@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 098/229] fpga: altera-pr-ip: fix unsigned comparison with less than zero
+Date:   Tue, 23 Aug 2022 10:24:19 +0200
+Message-Id: <20220823080057.196214331@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -54,35 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Marco Pagani <marpagan@redhat.com>
 
-[ Upstream commit 6fd57e1d120bf13d4dc6c200a7cf914e6347a316 ]
+[ Upstream commit 2df84a757d87fd62869fc401119d429735377ec5 ]
 
-usb_get_dev will be called before lbs_get_firmware_async which means that
-usb_put_dev need to be called when lbs_get_firmware_async fails.
+Fix the "comparison with less than zero" warning reported by
+cppcheck for the unsigned (size_t) parameter count of the
+alt_pr_fpga_write() function.
 
-Fixes: ce84bb69f50e ("libertas USB: convert to asynchronous firmware loading")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220620092350.39960-1-hbh25y@gmail.com
-Link: https://lore.kernel.org/r/20220622113402.16969-1-colin.i.king@gmail.com
+Fixes: d201cc17a8a3 ("fpga pr ip: Core driver support for Altera Partial Reconfiguration IP")
+Reviewed-by: Tom Rix <trix@redhat.com>
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+Link: https://lore.kernel.org/r/20220609140520.42662-1-marpagan@redhat.com
+Signed-off-by: Xu Yilun <yilun.xu@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/marvell/libertas/if_usb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/fpga/altera-pr-ip-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/marvell/libertas/if_usb.c b/drivers/net/wireless/marvell/libertas/if_usb.c
-index bbfc89d9d65a..40a8003220bb 100644
---- a/drivers/net/wireless/marvell/libertas/if_usb.c
-+++ b/drivers/net/wireless/marvell/libertas/if_usb.c
-@@ -283,6 +283,7 @@ static int if_usb_probe(struct usb_interface *intf,
- 	return 0;
+diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
+index a7b31f9797ce..0314737d705b 100644
+--- a/drivers/fpga/altera-pr-ip-core.c
++++ b/drivers/fpga/altera-pr-ip-core.c
+@@ -119,7 +119,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
+ 	u32 *buffer_32 = (u32 *)buf;
+ 	size_t i = 0;
  
- err_get_fw:
-+	usb_put_dev(udev);
- 	lbs_remove_card(priv);
- err_add_card:
- 	if_usb_reset_device(cardp);
+-	if (count <= 0)
++	if (!count)
+ 		return -EINVAL;
+ 
+ 	/* Write out the complete 32-bit chunks */
 -- 
 2.35.1
 

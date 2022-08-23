@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A90359EAC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A71559EAD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbiHWSSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
+        id S230496AbiHWSVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiHWSRx (ORCPT
+        with ESMTP id S230390AbiHWSTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:17:53 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269D8B28
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:33:30 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id n125so14967523vsc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=6UUggVno3NtXg6nTTBbURjdR2+xiDv89pi+m1jdDxQk=;
-        b=XgpmVDbM+FApMFcUpkmb5yfvAY28J8ColrFltFSufxLYxszEwh808ROwBr1eTKW1QA
-         K3EKc2qo/jsWRGwxlhrnZkETmQzsPOw/8rw6nJ93aEIGHqwygbo5dwLUly4+eEFMs6Wu
-         jKcShrQJAnAA5rv0dobxKEOzTs7Juci4O6OUBRbV0EIXvdn012/tCC+il9JubxKtFrNh
-         gqm8zYIcqXLJggfws/eXKgmEFKh1GLX0fagmdVJK9EA3DuKSST9pVZoN3XQppYtwokbQ
-         iJs+aU3MQKxv8V5StQQD8b2APjQgeMK5EMDem1k50yRbTS3Ha1wXQF4wxzc6UV2yfXi5
-         ShKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=6UUggVno3NtXg6nTTBbURjdR2+xiDv89pi+m1jdDxQk=;
-        b=KqJxtdhNiqczmnGwxKkx0pUvbb98740j6gW+SrGVSwQKCHeqdtSzCDy+fA5nfEpHM3
-         GaQFAhB8tpvM9ExKly245XD8Jy10SmXcti7lJPM1On2HLUTGUjLIGmb4NP15Yw8abk2v
-         N7XA+ORLONbnFvLI44yb+4UTY2LbVM7Iknqmh9EzMnspnzsveIRZ2nmWxZKU+ZclJbNf
-         5pFyy4OJQYwqfSphT2LG21l2ebVCbrJF9dYkIwS6QuBOaS5ZWpgEFjNYzVyz4wHXg5fF
-         PHl3ZNOTN6AyosnMTQocrycP5FGaJ4Ki/XMRQ+jSmVi0g6urbMOdKqDxfhMMPbCsuX5d
-         6ZyA==
-X-Gm-Message-State: ACgBeo2fRX1XvLvxir8JdBV+IEJO7CEnVXNcM81Lc0NKHl+PIub1EXDV
-        7EC8177e4fTW/OeU5jcfyC74tAu8A3+jytX3zLnlkA==
-X-Google-Smtp-Source: AA6agR45Wg2d3I7bbK0Yi/m4bUEcxSx2Ew4HCRi44gF3avGYxWzrpivLcQCdHaAJDk1xqqDdkv41URxbwXwRJuxSmTA=
-X-Received: by 2002:a05:6102:ec7:b0:388:d2a2:41c5 with SMTP id
- m7-20020a0561020ec700b00388d2a241c5mr9212782vst.41.1661272408710; Tue, 23 Aug
- 2022 09:33:28 -0700 (PDT)
+        Tue, 23 Aug 2022 14:19:51 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84369D66C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:36:49 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MBvy83Ksyz9sZY;
+        Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZWOjktcaMbNv; Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MBvy82XQdz9sXB;
+        Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 47DEE8B77A;
+        Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id HbVMPEyK4SSm; Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (po17370.idsi0.si.c-s.fr [192.168.232.51])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1CBF08B763;
+        Tue, 23 Aug 2022 18:36:47 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27NGabPW242982
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 18:36:37 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27NGaaIs242981;
+        Tue, 23 Aug 2022 18:36:36 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: [PATCH] powerpc: Fix hard_irq_disable() with sanitizer
+Date:   Tue, 23 Aug 2022 18:36:35 +0200
+Message-Id: <a8298991b3df049a54ee8e558838e34265812014.1661272586.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220822213352.75721-1-irogers@google.com> <YwTXXhVHeYAcXWmO@kernel.org>
-In-Reply-To: <YwTXXhVHeYAcXWmO@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 23 Aug 2022 09:33:18 -0700
-Message-ID: <CAP-5=fVk0JjSFm=tmJA+nqySCvBi9CzrbxrzpFdyzeLXZdHd7Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] perf stat: Clear reset_group for each stat run
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1661272593; l=1135; s=20211009; h=from:subject:message-id; bh=1t5HIaMLeYA++0rVBzTlWX4uhYtioV/mAywsDNdSRQI=; b=0HJEDFtxLltDwj+bnfOadrZxhQJaIWuYCJ+lJTGuLjpaBgY7Q7cLBrBvasbAYt1ZMqB/Cnw6SV7t csagP4l9AZL6qE+V7Psi9UyiK72HgW76WXTq/cLfQXV3fvCR/5BH
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 6:34 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Mon, Aug 22, 2022 at 02:33:51PM -0700, Ian Rogers escreveu:
-> > If a weak group is broken then the reset_group flag remains set for
-> > the next run. Having reset_group set means the counter isn't created
-> > and ultimately a segfault.
-> >
-> > A simple reproduction of this is:
-> > perf stat -r2 -e '{cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles}:W
-> > which will be added as a test in the next patch.
->
-> So doing this on that existing BPF related loop may solve the problem,
-> but for someone looking just at the source code, without any comment,
-> may be cryptic, no?
->
-> And then the fixes tags talks about affinity, adding a bit more
-> confusion, albeit being the part that does the weak logic :-\
->
-> Can we have a comment just before:
->
-> +             counter->reset_group = false;
->
-> Stating that this is needed only when using -r?
+As reported by Zhouyi Zhou, WRITE_ONCE() is not atomic
+as expected when KASAN or KCSAN are compiled in.
 
-It is possible to add a comment but thinking about it, it would have
-said pretty much what the code was doing and so I skipped it. I'm wary
-of comments that capture too much of the implementation as they are
-prone to becoming stale. Logically this function is just iterating
-over the evlist creating counters, but on top of that we have the
-affinity optimization. The BPF code didn't need that and so has its
-own evlist iteration. We could add another loop just to clear
-reset_group, that didn't seem to make sense. It's unfortunate how that
-relates to the fixes tag but I don't think we should optimize for that
-case.
+Fix it by re-implementing it using inline assembly.
 
-Thanks,
-Ian
+Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Fixes: 077fc62b2b66 ("powerpc/irq: remove inline assembly in hard_irq_disable macro")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/hw_irq.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> - Arnaldo
->
-> > Fixes: 4804e0111662 ("perf stat: Use affinity for opening events")
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-stat.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> > index 7fb81a44672d..54cd29d07ca8 100644
-> > --- a/tools/perf/builtin-stat.c
-> > +++ b/tools/perf/builtin-stat.c
-> > @@ -826,6 +826,7 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
-> >       }
-> >
-> >       evlist__for_each_entry(evsel_list, counter) {
-> > +             counter->reset_group = false;
-> >               if (bpf_counter__load(counter, &target))
-> >                       return -1;
-> >               if (!evsel__is_bpf(counter))
-> > --
-> > 2.37.2.609.g9ff673ca1a-goog
->
-> --
->
-> - Arnaldo
+diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
+index 8a7b0b78a80e..83ab6668387b 100644
+--- a/arch/powerpc/include/asm/hw_irq.h
++++ b/arch/powerpc/include/asm/hw_irq.h
+@@ -285,7 +285,8 @@ static inline bool pmi_irq_pending(void)
+ 	flags = irq_soft_mask_set_return(IRQS_ALL_DISABLED);		\
+ 	local_paca->irq_happened |= PACA_IRQ_HARD_DIS;			\
+ 	if (!arch_irqs_disabled_flags(flags)) {				\
+-		WRITE_ONCE(local_paca->saved_r1, current_stack_pointer);\
++		asm volatile("std%X0 %1,%0" : "=m" (local_paca->saved_r1) \
++					    : "r" (current_stack_pointer)); \
+ 		trace_hardirqs_off();					\
+ 	}								\
+ } while(0)
+-- 
+2.37.1
+

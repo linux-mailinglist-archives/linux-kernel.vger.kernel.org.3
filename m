@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6276B59E21A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655C159DCC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352826AbiHWKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
+        id S1357456AbiHWLf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352637AbiHWKCP (ORCPT
+        with ESMTP id S1357592AbiHWLbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:15 -0400
+        Tue, 23 Aug 2022 07:31:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF62A223C;
-        Tue, 23 Aug 2022 01:50:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D6FC6525;
+        Tue, 23 Aug 2022 02:25:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 901E66122F;
-        Tue, 23 Aug 2022 08:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8174CC433D6;
-        Tue, 23 Aug 2022 08:50:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1393661174;
+        Tue, 23 Aug 2022 09:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F626C433C1;
+        Tue, 23 Aug 2022 09:25:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244620;
-        bh=PHEOO4VX3NtboMTjBW2N8IPFgmpRi7rwB6g2Y1tQN/8=;
+        s=korg; t=1661246743;
+        bh=d2B1m8MM4bVmRkRwklottmo9MO/y4rhCSkyjB7cHVMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E5mbqSfXh9uTl8Eem5S7VdahUEp2u4B0KSnSP5s94qCaX1UkPXlZmUy1trEDBc9cx
-         YR/uz2DssCaf/QZdeAVVhv6mpUTxSc9q3TVr5oXSi1Im5IHvXF5d7RKfjmlP5r+XYp
-         dvp0uL20WVQqjq+xHTbxsRRDyltG08zZveRoclY4=
+        b=P+FJD7jam2jmAhWJ8J9QB0lwX75H2Yc0K0jT+rmZ62gIbu5rkfrSk/2Co1WFmxuqR
+         RXlT2EeNzx0UTlYLFFXOLWw4Va1zW7865v9YY/VuxzP11/VaS4UyhtwfGI4JPhKCYJ
+         mSkdwsNN5bai7KMjbhBO1XiyWS2q+RRd9BgSv7xA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH 5.15 124/244] fs/ntfs3: uninitialized variable in ntfs_set_acl_ex()
-Date:   Tue, 23 Aug 2022 10:24:43 +0200
-Message-Id: <20220823080103.212067936@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 206/389] ASoC: mediatek: mt8173-rt5650: Fix refcount leak in mt8173_rt5650_dev_probe
+Date:   Tue, 23 Aug 2022 10:24:44 +0200
+Message-Id: <20220823080124.247317721@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit d4073595d0c61463ec3a87411b19e2a90f76d3f8 upstream.
+[ Upstream commit efe2178d1a32492f99e7f1f2568eea5c88a85729 ]
 
-The goto out calls kfree(value) on an uninitialized pointer.  Just
-return directly as the other error paths do.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Fix refcount leak in some error paths.
 
-Fixes: 460bbf2990b3 ("fs/ntfs3: Do not change mode if ntfs_set_ea failed")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0f83f9296d5c ("ASoC: mediatek: Add machine driver for ALC5650 codec")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220603124243.31358-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ntfs3/xattr.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/mediatek/mt8173/mt8173-rt5650.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/fs/ntfs3/xattr.c
-+++ b/fs/ntfs3/xattr.c
-@@ -561,7 +561,7 @@ static noinline int ntfs_set_acl_ex(stru
- 			err = posix_acl_update_mode(mnt_userns, inode, &mode,
- 						    &acl);
- 			if (err)
--				goto out;
-+				return err;
+diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+index 21e7d4d3ded5..cdfc697ad94e 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
++++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+@@ -266,7 +266,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 	if (!mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[0].of_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[1].of_node =
+ 		mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[0].of_node;
+@@ -279,7 +280,7 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"%s codec_capture_dai name fail %d\n",
+ 				__func__, ret);
+-			return ret;
++			goto put_platform_node;
  		}
- 		name = XATTR_NAME_POSIX_ACL_ACCESS;
- 		name_len = sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1;
+ 		mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[1].dai_name =
+ 			codec_capture_dai;
+@@ -301,7 +302,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 	if (!mt8173_rt5650_dais[DAI_LINK_HDMI_I2S].codecs->of_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	card->dev = &pdev->dev;
+ 
+@@ -310,6 +312,7 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
+ 
++put_platform_node:
+ 	of_node_put(platform_node);
+ 	return ret;
+ }
+-- 
+2.35.1
+
 
 

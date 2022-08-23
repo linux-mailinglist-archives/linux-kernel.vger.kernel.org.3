@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B6A59E237
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF75959E158
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355457AbiHWKcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        id S1355472AbiHWKcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354082AbiHWKQm (ORCPT
+        with ESMTP id S1354172AbiHWKQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:16:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0617FFBE;
-        Tue, 23 Aug 2022 02:01:05 -0700 (PDT)
+        Tue, 23 Aug 2022 06:16:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ECE80488;
+        Tue, 23 Aug 2022 02:01:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DCA161459;
-        Tue, 23 Aug 2022 09:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93125C433D6;
-        Tue, 23 Aug 2022 09:01:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AE48B81C3E;
+        Tue, 23 Aug 2022 09:01:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9862C433D6;
+        Tue, 23 Aug 2022 09:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245264;
-        bh=HU8LdLjlTrM1fgLXiOr0vT/1ta2kx9f8bTvGJqxv43Q=;
+        s=korg; t=1661245267;
+        bh=caxG/N7lNzYUw+2MPvNor1nmIpLnj2mHmK0+k+JAUL0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H2vqFjU4lAtvFiHGUxiouGjHyxcgXf84gmMqm3mMLn7tuNQWSccYmUD+90a3CxVhN
-         6/pkLdDtWns98awPI/WH5DrMlx9PoQkY54cIk2I4+qdifJwp1KglWE2mPqkOegFg8C
-         a8eGh6M57H7ucZZurwZ21csdP5D+iNbqH7gUWJ0c=
+        b=jJFSZPcoOKXcTN9OLBbFCGFLUJ/KCxqzv3VE2ovSsUdwTXhQAJ6FQz9qb/Dt+2dHT
+         l/zMhQEUdilNCUqMa3jnRB+7SJBJC7zH6mYsU8Q8OF0Iv6XCV5yyoK1HO7PvfAfwPn
+         ZPoiL5Zac7DHXovXXm1dsZJDh38aG+pz36o+M+4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 4.19 023/287] drm/amdgpu: Check BOs requested pinning domains against its preferred_domains
-Date:   Tue, 23 Aug 2022 10:23:12 +0200
-Message-Id: <20220823080101.054648420@linuxfoundation.org>
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.19 024/287] bpf: Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()
+Date:   Tue, 23 Aug 2022 10:23:13 +0200
+Message-Id: <20220823080101.093989044@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -55,46 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Li <sunpeng.li@amd.com>
+From: Ovidiu Panait <ovidiu.panait@windriver.com>
 
-commit f5ba14043621f4afdf3ad5f92ee2d8dbebbe4340 upstream.
+From: John Fastabend <john.fastabend@gmail.com>
 
-When pinning a buffer, we should check to see if there are any
-additional restrictions imposed by bo->preferred_domains. This will
-prevent the BO from being moved to an invalid domain when pinning.
+commit 294f2fc6da27620a506e6c050241655459ccd6bd upstream.
 
-For example, this can happen if the user requests to create a BO in GTT
-domain for display scanout. amdgpu_dm will allow pinning to either VRAM
-or GTT domains, since DCN can scanout from either or. However, in
-amdgpu_bo_pin_restricted(), pinning to VRAM is preferred if there is
-adequate carveout. This can lead to pinning to VRAM despite the user
-requesting GTT placement for the BO.
+Currently, for all op verification we call __red_deduce_bounds() and
+__red_bound_offset() but we only call __update_reg_bounds() in bitwise
+ops. However, we could benefit from calling __update_reg_bounds() in
+BPF_ADD, BPF_SUB, and BPF_MUL cases as well.
 
-v2: Allow the kernel to override the domain, which can happen when
-    exporting a BO to a V4L camera (for example).
+For example, a register with state 'R1_w=invP0' when we subtract from
+it,
 
-Signed-off-by: Leo Li <sunpeng.li@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+ w1 -= 2
+
+Before coerce we will now have an smin_value=S64_MIN, smax_value=U64_MAX
+and unsigned bounds umin_value=0, umax_value=U64_MAX. These will then
+be clamped to S32_MIN, U32_MAX values by coerce in the case of alu32 op
+as done in above example. However tnum will be a constant because the
+ALU op is done on a constant.
+
+Without update_reg_bounds() we have a scenario where tnum is a const
+but our unsigned bounds do not reflect this. By calling update_reg_bounds
+after coerce to 32bit we further refine the umin_value to U64_MAX in the
+alu64 case or U32_MAX in the alu32 case above.
+
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/158507151689.15666.566796274289413203.stgit@john-Precision-5820-Tower
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/bpf/verifier.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-@@ -883,6 +883,10 @@ int amdgpu_bo_pin_restricted(struct amdg
- 	if (WARN_ON_ONCE(min_offset > max_offset))
- 		return -EINVAL;
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3496,6 +3496,7 @@ static int adjust_scalar_min_max_vals(st
+ 		coerce_reg_to_size(dst_reg, 4);
+ 	}
  
-+	/* Check domain to be pinned to against preferred domains */
-+	if (bo->preferred_domains & domain)
-+		domain = bo->preferred_domains & domain;
-+
- 	/* A shared bo cannot be migrated to VRAM */
- 	if (bo->prime_shared_count) {
- 		if (domain & AMDGPU_GEM_DOMAIN_GTT)
++	__update_reg_bounds(dst_reg);
+ 	__reg_deduce_bounds(dst_reg);
+ 	__reg_bound_offset(dst_reg);
+ 	return 0;
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9A959DEC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B986959DB8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358350AbiHWLrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S1354349AbiHWKZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358561AbiHWLmE (ORCPT
+        with ESMTP id S1353580AbiHWKLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:42:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5034FCE314;
-        Tue, 23 Aug 2022 02:29:38 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A815C634F;
+        Tue, 23 Aug 2022 01:57:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19FB3B81C86;
-        Tue, 23 Aug 2022 09:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7193AC433D6;
-        Tue, 23 Aug 2022 09:29:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E0461524;
+        Tue, 23 Aug 2022 08:57:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DC24C433D6;
+        Tue, 23 Aug 2022 08:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246975;
-        bh=DwqjTzzEFEUMNHUIDQxxSQwT5uVXpJpYYtCl+9+Cpp4=;
+        s=korg; t=1661245047;
+        bh=t1roUgaSTodrFE5Q67YXj8K4EuRG/7oWKG6ZxMhzEgA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DOr1+zmU1ZNoxFEOvKVKuehPq4dhpXzAQf0XQZXu6gGTL32dvwmLVpr0X69nYwdQ6
-         30rbmJMsqLfqHQUpSDRS47LdtlYZXOPn3yAtx5B1Cml1r08qknBL2NLb5DPJ6J6RpK
-         t8KhzbHJDz9pIUloDbLpQ7otwZA9iWz7Y/Ysxb2U=
+        b=yR4tfwHPFbDJf3XrvQuQ+o4Jx4J6Jrtp/94399RFG/pxZCQzct46TMHVpUsHhYPrM
+         uc+6vNVn2HvK0qITVfJE8722v8CqPqaBk9sEWfzNJbJvRSfhQPLERPdX/QNcR9j/Sh
+         yr52bepTshpB9KtBzJWpDXRgA75c0nylN6nRkNIo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Ghinea <stefan.ghinea@windriver.com>
-Subject: [PATCH 5.4 279/389] KVM: x86: Avoid theoretical NULL pointer dereference in kvm_irq_delivery_to_apic_fast()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 198/244] dmaengine: sprd: Cleanup in .remove() after pm_runtime_get_sync() failed
 Date:   Tue, 23 Aug 2022 10:25:57 +0200
-Message-Id: <20220823080127.197073259@linuxfoundation.org>
+Message-Id: <20220823080106.062173980@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-commit 00b5f37189d24ac3ed46cb7f11742094778c46ce upstream
+[ Upstream commit 1e42f82cbec7b2cc4873751e7791e6611901c5fc ]
 
-When kvm_irq_delivery_to_apic_fast() is called with APIC_DEST_SELF
-shorthand, 'src' must not be NULL. Crash the VM with KVM_BUG_ON()
-instead of crashing the host.
+It's not allowed to quit remove early without cleaning up completely.
+Otherwise this results in resource leaks that probably yield graver
+problems later. Here for example some tasklets might survive the lifetime
+of the sprd-dma device and access sdev which is freed after .remove()
+returns.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220325132140.25650-3-vkuznets@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+As none of the device freeing requires an active device, just ignore the
+return value of pm_runtime_get_sync().
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+Link: https://lore.kernel.org/r/20220721204054.323602-1-u.kleine-koenig@pengutronix.de
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/lapic.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/dma/sprd-dma.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -955,6 +955,10 @@ bool kvm_irq_delivery_to_apic_fast(struc
- 	*r = -1;
+diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
+index 4357d2395e6b..60115d8d4083 100644
+--- a/drivers/dma/sprd-dma.c
++++ b/drivers/dma/sprd-dma.c
+@@ -1236,11 +1236,8 @@ static int sprd_dma_remove(struct platform_device *pdev)
+ {
+ 	struct sprd_dma_dev *sdev = platform_get_drvdata(pdev);
+ 	struct sprd_dma_chn *c, *cn;
+-	int ret;
  
- 	if (irq->shorthand == APIC_DEST_SELF) {
-+		if (KVM_BUG_ON(!src, kvm)) {
-+			*r = 0;
-+			return true;
-+		}
- 		*r = kvm_apic_set_irq(src->vcpu, irq, dest_map);
- 		return true;
- 	}
+-	ret = pm_runtime_get_sync(&pdev->dev);
+-	if (ret < 0)
+-		return ret;
++	pm_runtime_get_sync(&pdev->dev);
+ 
+ 	/* explicitly free the irq */
+ 	if (sdev->irq > 0)
+-- 
+2.35.1
+
 
 

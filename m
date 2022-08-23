@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247EC59EBF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C979959EBFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiHWTOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S232494AbiHWTOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiHWTOH (ORCPT
+        with ESMTP id S232859AbiHWTOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:14:07 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82576120AE
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:28 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 2so10981176edx.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:28 -0700 (PDT)
+        Tue, 23 Aug 2022 15:14:17 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BAF123782
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:45 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id h22so10974921qtu.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=G8pk0TfYrEmE764xSTeThT6Yy6xUqAqvtkBl9x4MKBo=;
-        b=gJ0iUJmmijw1HXoSFcooRNmiWw0B3gLGrREiRZtFBWGZhh9Fwn1h4mLidFz8/QDXQk
-         lerEj9+ilGXQsPCdd59yWlXAaN9/J2dmRtHFIsxWiIzzv6Da5Tk/qEO4ghVAO+T+c1uY
-         1HsVZV91dqULZXW8va4nSBmxwgJYB9Jbq1Hy0=
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=UIzDP5vwti9FmU1AI9oaSSCd8EVdsxXrvtKhWPii6Ls=;
+        b=n9EyyFTG/4qV8hBj/xZT7cxhDCcCzWUnXlR28oIo8BqRbO+yb4WdH3fOZBTkuSvL1W
+         XThcrSdj/+NAkxDa8Uc2/svIiL8VWEik9zFt7182JEFTajKgOFWXVAE9EU03/VhoVTnX
+         jrtysU+h9taVmG9fYTKKNqip/XsM03qFL9tLw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=G8pk0TfYrEmE764xSTeThT6Yy6xUqAqvtkBl9x4MKBo=;
-        b=mbfUeO4A0+0WQpvSkW1VydM+J6LEd2rvs4r9t7jBklSS4p15YwJyDLQew02qwPkEOX
-         QK98fqjxZfA2cYOGo3rKrH82BOy6vsWpQ9J5pUZJEEHrziE3hcHUO/MQCVBFuoV34Qf6
-         4hCEkr2hbJ1lX9t5vq8r25PF7aSgfbvS4EqicF0JEtZljX+YG3bRmuP1jSVhdzCKqEIX
-         wB1j3PgLS/TBTDQ8H/2m7+jD//UMxa6IwgrLJiz45tfd5OHukGDstgFdoaTlS1ue8xjo
-         dzpmg2zVx+Nk60OuaFTELJ17he1hoK1SP5q64K67By61s8KBZ9wKxGoFEzOCo7rTtMgi
-         NLTA==
-X-Gm-Message-State: ACgBeo2RvrnwZgoBvhrnJBPRZpF9HyHCp3RxT9/YL99DG3bwRxhD9hU2
-        uvBjGil4xKtI/ridA79eQY3NCA==
-X-Google-Smtp-Source: AA6agR7Nz69W25+ky8gdE+VXUXxTmV5rgYkNbc7FPirulJJQ5duw+KQVwuZUO5i2tZ+QxBJRTpx8tg==
-X-Received: by 2002:a05:6402:40c1:b0:447:154e:856d with SMTP id z1-20020a05640240c100b00447154e856dmr4004666edb.319.1661277048108;
-        Tue, 23 Aug 2022 10:50:48 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-57-252.cust.vodafonedsl.it. [188.217.57.252])
-        by smtp.gmail.com with ESMTPSA id cu9-20020a170906e00900b00726c0e63b94sm177410ejb.27.2022.08.23.10.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 10:50:47 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 19:50:45 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pci/saa7164: fix repeated words in comments
-Message-ID: <20220823175045.GB1277033@tom-ThinkPad-T14s-Gen-2i>
-References: <20220823145709.46069-1-wangjianli@cdjrlc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UIzDP5vwti9FmU1AI9oaSSCd8EVdsxXrvtKhWPii6Ls=;
+        b=0gtj9DqNOMNnQfZigeb8iHa8QPPqtQ5YeOKtXRIpypZaUxFFFDedGWDRfceXkAbxl+
+         gpVeNSFxFlhSMQGI6RQfxp5PxN4d2ulJIjPBOXK1VQQPKJ4JXxcerYRTnPlcdwpm9br1
+         5KsEmFsoUqEmYVGt7dJHoBeBANTR1B/zxk+5yTRjECHU6PwlJ5fDQOTqcD6UH985wz4e
+         Sm8qZjfyZoacEji3AAj5QLJRYV+Nwmb+FJRJDl4tJBVyCNz0MRuDdkccu4tCPoYtaWXc
+         8Arpq1AfdYsa6VNYwOYty9zCP8IIH91LBvhQFjh2OCQkwalwS71xMgZcqsuUOtRm2szg
+         Wq2Q==
+X-Gm-Message-State: ACgBeo0/yzF6HMiEJ/WBMM2T9lYjP+4hKWllCNlvflxsKKFaQMFJjfFQ
+        +Nd+1ITM3pBfPBOwzoR0dj35ShgXqGN3BA51mizs3g==
+X-Google-Smtp-Source: AA6agR730EhiRgym3AI3/b6SGv53XnXR1qB8rLkxcwKm55lfnHnwCeRBZkbhjbDTZoObhYPD5IgkvjoUGi8OhYwlX64=
+X-Received: by 2002:a05:622a:15d6:b0:344:6a92:d8ca with SMTP id
+ d22-20020a05622a15d600b003446a92d8camr20584786qty.540.1661277070554; Tue, 23
+ Aug 2022 10:51:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823145709.46069-1-wangjianli@cdjrlc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220819190807.1275937-1-pmalani@chromium.org>
+ <20220819190807.1275937-5-pmalani@chromium.org> <YwRbCvOy8WXUEphH@google.com>
+In-Reply-To: <YwRbCvOy8WXUEphH@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 23 Aug 2022 10:50:58 -0700
+Message-ID: <CACeCKaduPJuBqwnLbaaEfvxiVrJ0qmVkcWsvbDarCJi0u8-TBw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] platform/chrome: cros_ec_typec: Use Type-C driver data
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,44 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:57:09PM +0800, wangjianli wrote:
-> Delete the redundant word 'the'.
-> 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->  drivers/media/pci/saa7164/saa7164-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
-> index 7973ae42873a..d5f32e3ff544 100644
-> --- a/drivers/media/pci/saa7164/saa7164-core.c
-> +++ b/drivers/media/pci/saa7164/saa7164-core.c
-> @@ -626,7 +626,7 @@ static irqreturn_t saa7164_irq(int irq, void *dev_id)
->  	portf = &dev->ports[SAA7164_PORT_VBI2];
->  
->  	/* Check that the hardware is accessible. If the status bytes are
-> -	 * 0xFF then the device is not accessible, the the IRQ belongs
-> +	 * 0xFF then the device is not accessible, the IRQ belongs
->  	 * to another driver.
->  	 * 4 x u32 interrupt registers.
->  	 */
-> -- 
-> 2.36.1
-> 
+Hi Tzung-Bi,
 
-Hi,
-Looks good.
+Thanks for reviewing the series.
 
-Tommaso
+On Mon, Aug 22, 2022 at 9:43 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+> > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> > index 7daf4207c11e..e3f75440030d 100644
+> > --- a/drivers/platform/chrome/cros_ec_typec.c
+> > +++ b/drivers/platform/chrome/cros_ec_typec.c
+> > @@ -379,6 +379,7 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+> >               ret = cros_typec_parse_port_props(cap, fwnode, dev);
+> >               if (ret < 0)
+> >                       goto unregister_ports;
+> > +             cap->driver_data = cros_port;
+>
+> Same as previous patch.  I would suggest to send it in later series.  For
+> example, I have no knowledge to judge if `cap` is a correct place to save
+> the driver data.
+>
+> For example, I'm wondering: is the `cap` "the Type-C port's driver"?
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+The Type-C framework uses [1] the cap->driver_data while creating the
+port device.
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+That said, sure, I can resend patch 3 and 4 when I upload the alt mode series.
+
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/usb/typec/class.c#L2098

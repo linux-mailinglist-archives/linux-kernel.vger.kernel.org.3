@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF2859DDC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA8259DBDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359083AbiHWL4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S241859AbiHWLDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358642AbiHWLwc (ORCPT
+        with ESMTP id S1357261AbiHWLBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:52:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BAED5980;
-        Tue, 23 Aug 2022 02:32:59 -0700 (PDT)
+        Tue, 23 Aug 2022 07:01:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDDA86FC3;
+        Tue, 23 Aug 2022 02:14:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92FC9B8105C;
-        Tue, 23 Aug 2022 09:32:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC60DC433D6;
-        Tue, 23 Aug 2022 09:32:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D871A60F54;
+        Tue, 23 Aug 2022 09:14:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF3BC433D7;
+        Tue, 23 Aug 2022 09:14:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247158;
-        bh=+dGsXXUzWfY49oCGU7uvrd9pRam1ngxeyH+kljj5MNg=;
+        s=korg; t=1661246063;
+        bh=fxlNh0LwhOpWUkF19exROe077tMNe7vdcr/NJnAVD5A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0rIvDi114LHl+W9DriSHMHiZWB/1f/QalfsE4MDbUIz/qWIIxhbKG0PvboCutSE2v
-         5+bzGqEIx/JOvHtvzFqmwuiJILGpo9HIPJ8D6Ibvb6VwzC6UFGtHhSWbmb08ke5n0r
-         SB05+1/1pL9/Db/YtTn8qXOxkzu2jrFwWPgSjtuE=
+        b=2wdoEnJgZAOHjE3ZgcYDKyj40L/KOxRUyAMOBcNx3zOlBXstinjTps8m1OAs0PTJX
+         TD09RAkffRaqYQZI1hXBooo1QWafWk6jhOZ72syBrd+6xDqPcTsswu4L8RukKV1AFB
+         3zVKPXcSotgR9hOXm+j6EsQsMhJJ8ehT/OPSHVRo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.4 337/389] netfilter: nf_tables: really skip inactive sets when allocating name
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 4.19 246/287] nios2: traced syscall does need to check the syscall number
 Date:   Tue, 23 Aug 2022 10:26:55 +0200
-Message-Id: <20220823080129.597683392@linuxfoundation.org>
+Message-Id: <20220823080109.423177007@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,30 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit 271c5ca826e0c3c53e0eb4032f8eaedea1ee391c upstream.
+commit 25ba820ef36bdbaf9884adeac69b6e1821a7df76 upstream.
 
-While looping to build the bitmap of used anonymous set names, check the
-current set in the iteration, instead of the one that is being created.
+all checks done before letting the tracer modify the register
+state are worthless...
 
-Fixes: 37a9cc525525 ("netfilter: nf_tables: add generation mask to sets")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 82ed08dd1b0e ("nios2: Exception handling")
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/nios2/kernel/entry.S |   11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -3253,7 +3253,7 @@ cont:
- 		list_for_each_entry(i, &ctx->table->sets, list) {
- 			int tmp;
+--- a/arch/nios2/kernel/entry.S
++++ b/arch/nios2/kernel/entry.S
+@@ -255,9 +255,9 @@ traced_system_call:
+ 	ldw	r6, PT_R6(sp)
+ 	ldw	r7, PT_R7(sp)
  
--			if (!nft_is_active_next(ctx->net, set))
-+			if (!nft_is_active_next(ctx->net, i))
- 				continue;
- 			if (!sscanf(i->name, name, &tmp))
- 				continue;
+-	/* Fetch the syscall function, we don't need to check the boundaries
+-	 * since this is already done.
+-	 */
++	/* Fetch the syscall function. */
++	movui	r1, __NR_syscalls
++	bgeu	r2, r1, traced_invsyscall
+ 	slli	r1, r2, 2
+ 	movhi	r11,%hiadj(sys_call_table)
+ 	add	r1, r1, r11
+@@ -287,6 +287,11 @@ end_translate_rc_and_ret2:
+ 	RESTORE_SWITCH_STACK
+ 	br	ret_from_exception
+ 
++	/* If the syscall number was invalid return ENOSYS */
++traced_invsyscall:
++	movi	r2, -ENOSYS
++	br	translate_rc_and_ret2
++
+ Luser_return:
+ 	GET_THREAD_INFO	r11			/* get thread_info pointer */
+ 	ldw	r10, TI_FLAGS(r11)		/* get thread_info->flags */
 
 

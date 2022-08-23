@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B36959EB60
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495AE59EB64
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbiHWSs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S233302AbiHWSuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiHWSsS (ORCPT
+        with ESMTP id S233074AbiHWStj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:48:18 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC5F11B010
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:12:31 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id l19so10975052ljg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=oJRG7uz6WGBbtCoGOSmHQY70YgBhBuqvMftRIStyMs0=;
-        b=NdGEu09reixZxX3m/TPNxIYeFZ7fr5WNqIF0qIYTfmeK1vx24ssEvai7OW9XAB7KNn
-         R9TzKHZLK3CeuHeGzHjOqaD+NYMU6prJ46EAlmE/taiviOKUz4wwlVrHApU2usky32xx
-         bvV+2KT+rjw7Zbix0OOybgaCTm4MPw59fQEmXzllwnB+ouyMhjojKx1YI1pcms4nmYuF
-         AeX8//PGbdMgfwghAEl154yq6ojmHvjaakHMOFwWtotLye03UoWu8afnTvcSzEW3RAbW
-         kc4PHWxpXwNxGRhgsnWIid8EnsmhRnlF6gGyBgOcL3kFt3A/EFZ2KIrXyHbgh3WRCtss
-         CJ4g==
+        Tue, 23 Aug 2022 14:49:39 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366D01EEE9;
+        Tue, 23 Aug 2022 10:13:13 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-335624d1e26so397289407b3.4;
+        Tue, 23 Aug 2022 10:13:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=oJRG7uz6WGBbtCoGOSmHQY70YgBhBuqvMftRIStyMs0=;
-        b=rT+eZTuKyHyL7iv+YTdjD8tkzc1vCBpPo+cYVLCWEt9HP4Kw96NF9cupHR4TbenD8x
-         fvPinJ8qQLzj3UydBIxxufRY1+EHPWPdObhcoxC4WsWeLz5MVUQZ4gGFoBIV3DFOx/Tn
-         NED72GHahsiB3pnzLcJIOkNk47JLuMSehaLihKB1YqEamdfSRV/ZTXRc0X/sds/JW1+v
-         wSld28f/pjPkBKRFNfjPc5/ZNojMyNOATTFpD7FHFMwKsI7IT9BcYOoPgVxrrMrfpmUU
-         3sLhhK4qKoJ925bERfuMoHHYB41YHK4jomVcqru0JbNZz14xbD48mBqcW1IiVLyFhlN8
-         1OsQ==
-X-Gm-Message-State: ACgBeo3i1xz7L1xltCH4Jlnl02qad7sF/cNZ0TDUFpOn+d1OhD7bjmtw
-        i4kn1tPfIhFV/86FP3wyrZpXr69aTUcMIL3xgkbNFw==
-X-Google-Smtp-Source: AA6agR4SxIHfG8HjtHB58neDIxlJ5dnDXtAbRUJyYQemYFIbKyNpGne5qu+VB3chjqUwB3l3YjEBkbSNDj6xY4aGph8=
-X-Received: by 2002:a05:651c:31b:b0:261:df26:53ba with SMTP id
- a27-20020a05651c031b00b00261df2653bamr585838ljp.513.1661274749104; Tue, 23
- Aug 2022 10:12:29 -0700 (PDT)
+        bh=xjbcbO8Zt7nAdCqR/OOnim/u0BKXicwexFKdBPWF5UA=;
+        b=K3WqMYvzn1TgadkS8a65O4uKsU2lxS8SuFBx1/uKMIc8Hjhhx+CRE0XSdHZftZuL3C
+         G9KBEl3Uic3YqgGVN5Yr/H+hlUjC1S3w0rHjWSamVnaaK92RoI/UuJxgRfDLbnanFYJ9
+         lx8K3gdbpj9ylPDp8ksMjCilu5ZvqWRAfhMW1vLWx4RPFdhcXCjqRFMceiaSQ9odHNIu
+         BOvcXju69WY00uFHAvdJQFy/3x5wbxRZwnR91avjygtxquk1Fru+HnZSau59Y63E5bFv
+         aHeiWipX8ErnSVUkqoWkdTrbMMSqcwCO4D5mKoB7tLsB6QqzPJ/RKnjgidcRsyJJPKWD
+         +Whg==
+X-Gm-Message-State: ACgBeo32GJTAvGrlsQ/ReLKM6Fqw3CgsJlK3tCudhMkeIddPg0QrAtmc
+        9nd39b49i2flBl8g+NCYHZMycpe+EWsFleWDB0A=
+X-Google-Smtp-Source: AA6agR5RwwEAYHTEyDT9M8GfloXYOsPsrh7q7Mo2LXQKsUHGZLrxmsJXZfYn8sTtMQ3Ac2o8Z2P/Avkd9oxF2VclUyw=
+X-Received: by 2002:a81:104e:0:b0:336:37f1:9686 with SMTP id
+ 75-20020a81104e000000b0033637f19686mr27748007ywq.149.1661274782976; Tue, 23
+ Aug 2022 10:13:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220812114438.1574-1-mailhol.vincent@wanadoo.fr> <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
- <YwT+5GGCOKoTjfQZ@zn.tnic>
-In-Reply-To: <YwT+5GGCOKoTjfQZ@zn.tnic>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 23 Aug 2022 10:12:17 -0700
-Message-ID: <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
+References: <20220822062420.4815-1-chuanjian@nfschina.com>
+In-Reply-To: <20220822062420.4815-1-chuanjian@nfschina.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Aug 2022 19:12:52 +0200
+Message-ID: <CAJZ5v0iQsmPS2F-hTKhhHho2+=UgAfag6jNs=m-WQY0CL6t=Lw@mail.gmail.com>
+Subject: Re: [PATCH] tools/power/acpi/os_specific/service_layers/osunixxf.c:remove
+ unnecessary (void*) conversions
+To:     Dong Chuanjian <chuanjian@nfschina.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 9:23 AM Borislav Petkov <bp@alien8.de> wrote:
+On Mon, Aug 22, 2022 at 8:24 AM Dong Chuanjian <chuanjian@nfschina.com> wrote:
 >
-> On Fri, Aug 12, 2022 at 08:44:38PM +0900, Vincent Mailhol wrote:
-> > __ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x)
+> remove unnecessary void* type casting
 >
-> Are you sure about this?
->
-> My gcc documentation says:
->
-> "Built-in Function: int __builtin_ctz (unsigned int x)
->
->     Returns the number of trailing 0-bits in x, starting at the least significant bit position. If x is 0, the result is undefined."
->
-> Note the undefined part.
->
-> Also,
->
-> __builtin_ctzl(0): 0x40
-> ffs(0): 0x0
->
-> I'm using the kernel ffs() version in a small program which is basically
-> a wrapper around BSF.
+> Signed-off-by: Dong Chuanjian <chuanjian@nfschina.com>
 
-Callers of these need to guard against zero input, as the pre-existing
-comment notes:
+This is ACPICA code, so please submit changes against it to the
+upstream ACPICA project on GitHub.  Thanks!
 
->> Undefined if no bit exists, so code should check against 0 first.
--- 
-Thanks,
-~Nick Desaulniers
+> diff --git a/tools/power/acpi/os_specific/service_layers/osunixxf.c b/tools/power/acpi/os_specific/service_layers/osunixxf.c
+> index b3651a04d68c..a7e65fb95caf 100644
+> --- a/tools/power/acpi/os_specific/service_layers/osunixxf.c
+> +++ b/tools/power/acpi/os_specific/service_layers/osunixxf.c
+> @@ -679,7 +679,7 @@ acpi_os_create_semaphore(u32 max_units,
+>
+>  acpi_status acpi_os_delete_semaphore(acpi_handle handle)
+>  {
+> -       sem_t *sem = (sem_t *) handle;
+> +       sem_t *sem = handle;
+>
+>         if (!sem) {
+>                 return (AE_BAD_PARAMETER);
+> @@ -715,7 +715,7 @@ acpi_status
+>  acpi_os_wait_semaphore(acpi_handle handle, u32 units, u16 msec_timeout)
+>  {
+>         acpi_status status = AE_OK;
+> -       sem_t *sem = (sem_t *) handle;
+> +       sem_t *sem = handle;
+>         int ret_val;
+>  #ifndef ACPI_USE_ALTERNATE_TIMEOUT
+>         struct timespec time;
+> @@ -832,7 +832,7 @@ acpi_os_wait_semaphore(acpi_handle handle, u32 units, u16 msec_timeout)
+>
+>  acpi_status acpi_os_signal_semaphore(acpi_handle handle, u32 units)
+>  {
+> -       sem_t *sem = (sem_t *) handle;
+> +       sem_t *sem = handle;
+>
+>         if (!sem) {
+>                 return (AE_BAD_PARAMETER);
+> --
+> 2.18.2
+>

@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF83259EA7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3C359EA79
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbiHWSDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
+        id S232661AbiHWSES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiHWSCk (ORCPT
+        with ESMTP id S232593AbiHWSD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:02:40 -0400
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB599273;
-        Tue, 23 Aug 2022 09:08:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1661270904; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=JVbN+o5FIkISrOPZjQPBvu7OtJzN5G0kKXh7ZPoAz8eC9NXnhSBCwprJ6TF2X4asewUz/yenEjwIgIiPvLrA7h+gta3HpdyFjm/it43ikI5+9wNwfLVLviOJtDC/xGXV3bGjlXRUCujm9SpOVaq3drWXLZSvwhqoBBU0fy27ePc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1661270904; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=UjlKgz2xV4xjj14J2LSVuB5e7dOd3HlE+vr/w0QgVZY=; 
-        b=WHiautuSleOVUZ1HN15b6q2eN4Ww7jAUeZeBaFmfgFha3QC3VZ6/scZ9Y+VW9vjc15EGDVqhfCgOuZYGfcUweOcwWB1Laku9NzJ16nPd7k1BqQTnK0vz3vfyxlfwNGFC2fUoieItEf4hb8xUopcSr2i23hzmLIx/hKUAF0ayeHM=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661270904;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=UjlKgz2xV4xjj14J2LSVuB5e7dOd3HlE+vr/w0QgVZY=;
-        b=eDrovX6Mi9EX6AYter3SwakhVr0/cg9vJe4zqQeZYHzPotfHPdliEIV8aT8Se/om
-        GZaiYUGXu4AGTvESCJVUbDwa7nMZ8K0o3KIYLKZH2E7DHzPqBwzC3mWJLwKRd+HzdZE
-        66aJYjlRmyaZHmfJ5MDJQfYAxHlUy5MvydthSLG0=
-Received: from localhost.localdomain (103.249.234.81 [103.249.234.81]) by mx.zoho.in
-        with SMTPS id 166127090391618.64430756700915; Tue, 23 Aug 2022 21:38:23 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Message-ID: <20220823160810.181275-1-code@siddh.me>
-Subject: [PATCH v2] loop: Check for overflow while configuring loop
-Date:   Tue, 23 Aug 2022 21:38:10 +0530
-X-Mailer: git-send-email 2.35.1
+        Tue, 23 Aug 2022 14:03:58 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC0EB3B25
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:10:22 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MBvMc2M34z9sk1;
+        Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IixxqM55Vla7; Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MBvMc0xbWz9sjs;
+        Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 088698B77A;
+        Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id k0w-lGszsYuR; Tue, 23 Aug 2022 18:10:19 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (po17370.idsi0.si.c-s.fr [192.168.232.51])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BB7368B763;
+        Tue, 23 Aug 2022 18:10:19 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27NGA93B228335
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 18:10:09 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27NGA72T228316;
+        Tue, 23 Aug 2022 18:10:07 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: [PATCH] powerpc: Fix irq_soft_mask_set() and irq_soft_mask_return() with sanitizer
+Date:   Tue, 23 Aug 2022 18:09:53 +0200
+Message-Id: <d085ff06b48fb127c9630f11d927b9913c9a30dc.1661270957.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1661270991; l=2657; s=20211009; h=from:subject:message-id; bh=llrPL+LAbxiqu9+lBs/n9gV6IbV8Ic4a3dtYd+OqcSA=; b=4wpp2kYw9pom6zoEbN9RNiA8HbJr+L1VK6h1Kw5nVangVKaIU5XlgJxcjFitDdIvz/nP36lFXtyi uXoThT6hBqRxis5ANnvCyQ01TNkl3cJiNiPk++eZXopZom7e0Eb2
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The userspace can configure a loop using an ioctl call, wherein
-a configuration of type loop_config is passed (see lo_ioctl()'s
-case on line 1550 of drivers/block/loop.c). This proceeds to call
-loop_configure() which in turn calls loop_set_status_from_info()
-(see line 1050 of loop.c), passing &config->info which is of type
-loop_info64*. This function then sets the appropriate values, like
-the offset.
+In ppc, compiler based sanitizer will generate instrument instructions
+around statement WRITE_ONCE(local_paca->irq_soft_mask, mask):
 
-loop_device has lo_offset of type loff_t (see line 52 of loop.c),
-which is typdef-chained to long long, whereas loop_info64 has
-lo_offset of type __u64 (see line 56 of include/uapi/linux/loop.h).
+   0xc000000000295cb0 <+0>:	addis   r2,r12,774
+   0xc000000000295cb4 <+4>:	addi    r2,r2,16464
+   0xc000000000295cb8 <+8>:	mflr    r0
+   0xc000000000295cbc <+12>:	bl      0xc00000000008bb4c <mcount>
+   0xc000000000295cc0 <+16>:	mflr    r0
+   0xc000000000295cc4 <+20>:	std     r31,-8(r1)
+   0xc000000000295cc8 <+24>:	addi    r3,r13,2354
+   0xc000000000295ccc <+28>:	mr      r31,r13
+   0xc000000000295cd0 <+32>:	std     r0,16(r1)
+   0xc000000000295cd4 <+36>:	stdu    r1,-48(r1)
+   0xc000000000295cd8 <+40>:	bl      0xc000000000609b98 <__asan_store1+8>
+   0xc000000000295cdc <+44>:	nop
+   0xc000000000295ce0 <+48>:	li      r9,1
+   0xc000000000295ce4 <+52>:	stb     r9,2354(r31)
+   0xc000000000295ce8 <+56>:	addi    r1,r1,48
+   0xc000000000295cec <+60>:	ld      r0,16(r1)
+   0xc000000000295cf0 <+64>:	ld      r31,-8(r1)
+   0xc000000000295cf4 <+68>:	mtlr    r0
 
-The function directly copies offset from info to the device as
-follows (See line 980 of loop.c):
-=09lo->lo_offset =3D info->lo_offset;
+If there is a context switch before "stb     r9,2354(r31)", r31 may
+not equal to r13, in such case, irq soft mask will not work.
 
-This results in an overflow, which triggers a warning in iomap_iter()
-due to a call to iomap_iter_done() which has:
-=09WARN_ON_ONCE(iter->iomap.offset > iter->pos);
+The same problem occurs in irq_soft_mask_return() with
+READ_ONCE(local_paca->irq_soft_mask).
 
-Thus, check for negative value during loop_set_status_from_info().
+This patch partially reverts commit ef5b570d3700 ("powerpc/irq: Don't
+open code irq_soft_mask helpers") with a more modern inline assembly.
 
-Bug report: https://syzkaller.appspot.com/bug?id=3Dc620fe14aac810396d3c3edc=
-9ad73848bf69a29e
-Reported-and-tested-by: syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.c=
-om
-Cc: stable@vger.kernel.org
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
+Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+Fixes: ef5b570d3700 ("powerpc/irq: Don't open code irq_soft_mask helpers")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
-Changes since v1:
-- Do not break userspace API, so check loop_device for overflow.
-- Use EOVERFLOW instead of EINVAL.
+ arch/powerpc/include/asm/hw_irq.h | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
- drivers/block/loop.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index e3c0ba93c1a3..ad92192c7d61 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -979,6 +979,11 @@ loop_set_status_from_info(struct loop_device *lo,
-=20
- =09lo->lo_offset =3D info->lo_offset;
- =09lo->lo_sizelimit =3D info->lo_sizelimit;
+diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
+index 26ede09c521d..8a7b0b78a80e 100644
+--- a/arch/powerpc/include/asm/hw_irq.h
++++ b/arch/powerpc/include/asm/hw_irq.h
+@@ -113,7 +113,11 @@ static inline void __hard_RI_enable(void)
+ 
+ static inline notrace unsigned long irq_soft_mask_return(void)
+ {
+-	return READ_ONCE(local_paca->irq_soft_mask);
++	unsigned long flags;
 +
-+=09/* loff_t vars have been assigned __u64 */
-+=09if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
-+=09=09return -EOVERFLOW;
++	asm volatile("lbz%X1 %0,%1" : "=r" (flags) : "m" (local_paca->irq_soft_mask));
 +
- =09memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
- =09lo->lo_file_name[LO_NAME_SIZE-1] =3D 0;
- =09lo->lo_flags =3D info->lo_flags;
---=20
-2.35.1
-
++	return flags;
+ }
+ 
+ /*
+@@ -140,8 +144,7 @@ static inline notrace void irq_soft_mask_set(unsigned long mask)
+ 	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
+ 		WARN_ON(mask && !(mask & IRQS_DISABLED));
+ 
+-	WRITE_ONCE(local_paca->irq_soft_mask, mask);
+-	barrier();
++	asm volatile("stb%X1 %0,%1" : : "r" (mask), "m" (local_paca->irq_soft_mask) : "memory");
+ }
+ 
+ static inline notrace unsigned long irq_soft_mask_set_return(unsigned long mask)
+-- 
+2.37.1
 

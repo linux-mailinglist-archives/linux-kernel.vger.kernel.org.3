@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E51259E2DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEAB59DC03
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353436AbiHWKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S244565AbiHWMGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351993AbiHWKEQ (ORCPT
+        with ESMTP id S1376258AbiHWMCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:04:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC947CAAE;
-        Tue, 23 Aug 2022 01:51:21 -0700 (PDT)
+        Tue, 23 Aug 2022 08:02:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291CDDAB88;
+        Tue, 23 Aug 2022 02:36:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF892B81C39;
-        Tue, 23 Aug 2022 08:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DC1C433C1;
-        Tue, 23 Aug 2022 08:51:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA8F461485;
+        Tue, 23 Aug 2022 09:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BC3C433B5;
+        Tue, 23 Aug 2022 09:36:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244678;
-        bh=Jy32Zh/HlrBFPGofS56r9APlpigQ81Lcmqyu53Rlg4g=;
+        s=korg; t=1661247389;
+        bh=xVV0l/Pd2MYjbdMgeA4Tm9OMCqwYPPiHSBBgogv6Dhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vtzKxhBRTdrMDJnoSobxXUkkIxisa62IuO1HK50dIZ9l2LHXUdCplzVhS6Vgio1t8
-         rOFkXeEJQ9jCZ6iO6/nbxppFfE68RifUsfDf4bBECLyry0URSJZAfmjijPwR45UMIg
-         2QiZN7IwS96mO39tdUC0xOHigdoCfVANqLUbTVro=
+        b=v4NJ/SeVWQxKU35ih8ZXyMJBxNPDvOKVRnQvC66HbW8DCP4gO35oOB0d0x3QdGVCE
+         /z4Vx3AGKQhDLytw/IfisyLk6E5UsVcLpO8Qgx8PabD0U4GjJG+nzvAbTAxL+2EvC7
+         HgJUnElCC56O8pyz+xtadFvqo0UrohAju1DQ9qKQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 174/229] net_sched: cls_route: disallow handle of 0
+        stable@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>,
+        stable@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 003/158] x86/mm: Use proper mask when setting PUD mapping
 Date:   Tue, 23 Aug 2022 10:25:35 +0200
-Message-Id: <20220823080059.835003991@linuxfoundation.org>
+Message-Id: <20220823080046.179441523@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jamal Hadi Salim <jhs@mojatatu.com>
+From: Aaron Lu <aaron.lu@intel.com>
 
-commit 02799571714dc5dd6948824b9d080b44a295f695 upstream.
+commit 88e0a74902f894fbbc55ad3ad2cb23b4bfba555c upstream.
 
-Follows up on:
-https://lore.kernel.org/all/20220809170518.164662-1-cascardo@canonical.com/
+Commit c164fbb40c43f("x86/mm: thread pgprot_t through
+init_memory_mapping()") mistakenly used __pgprot() which doesn't respect
+__default_kernel_pte_mask when setting PUD mapping.
 
-handle of 0 implies from/to of universe realm which is not very
-sensible.
+Fix it by only setting the one bit we actually need (PSE) and leaving
+the other bits (that have been properly masked) alone.
 
-Lets see what this patch will do:
-$sudo tc qdisc add dev $DEV root handle 1:0 prio
-
-//lets manufacture a way to insert handle of 0
-$sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 \
-route to 0 from 0 classid 1:10 action ok
-
-//gets rejected...
-Error: handle of 0 is not valid.
-We have an error talking to the kernel, -1
-
-//lets create a legit entry..
-sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 route from 10 \
-classid 1:10 action ok
-
-//what did the kernel insert?
-$sudo tc filter ls dev $DEV parent 1:0
-filter protocol ip pref 100 route chain 0
-filter protocol ip pref 100 route chain 0 fh 0x000a8000 flowid 1:10 from 10
-	action order 1: gact action pass
-	 random type none pass val 0
-	 index 1 ref 1 bind 1
-
-//Lets try to replace that legit entry with a handle of 0
-$ sudo tc filter replace dev $DEV parent 1:0 protocol ip prio 100 \
-handle 0x000a8000 route to 0 from 0 classid 1:10 action drop
-
-Error: Replacing with handle of 0 is invalid.
-We have an error talking to the kernel, -1
-
-And last, lets run Cascardo's POC:
-$ ./poc
-0
-0
--22
--22
--22
-
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Acked-by: Stephen Hemminger <stephen@networkplumber.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: c164fbb40c43 ("x86/mm: thread pgprot_t through init_memory_mapping()")
+Signed-off-by: Aaron Lu <aaron.lu@intel.com>
+Cc: stable@kernel.org
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/cls_route.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/x86/mm/init_64.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/sched/cls_route.c
-+++ b/net/sched/cls_route.c
-@@ -431,6 +431,9 @@ static int route4_set_parms(struct net *
- 			return -EINVAL;
- 	}
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -645,7 +645,7 @@ phys_pud_init(pud_t *pud_page, unsigned
+ 			pages++;
+ 			spin_lock(&init_mm.page_table_lock);
  
-+	if (!nhandle)
-+		return -EINVAL;
-+
- 	h1 = to_hash(nhandle);
- 	b = rtnl_dereference(head->table[h1]);
- 	if (!b) {
-@@ -483,6 +486,9 @@ static int route4_change(struct net *net
- 	int err;
- 	bool new = true;
+-			prot = __pgprot(pgprot_val(prot) | __PAGE_KERNEL_LARGE);
++			prot = __pgprot(pgprot_val(prot) | _PAGE_PSE);
  
-+	if (!handle)
-+		return -EINVAL;
-+
- 	if (opt == NULL)
- 		return handle ? -EINVAL : 0;
- 
+ 			set_pte_init((pte_t *)pud,
+ 				     pfn_pte((paddr & PUD_MASK) >> PAGE_SHIFT,
 
 

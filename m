@@ -2,95 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1787E59EE23
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAC159EE24
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiHWVWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S230208AbiHWVWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiHWVWD (ORCPT
+        with ESMTP id S231372AbiHWVWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:22:03 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CADF7EFF8;
-        Tue, 23 Aug 2022 14:22:02 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id jm11so13916628plb.13;
-        Tue, 23 Aug 2022 14:22:02 -0700 (PDT)
+        Tue, 23 Aug 2022 17:22:47 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4B6870B5;
+        Tue, 23 Aug 2022 14:22:47 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id g18so15185971pju.0;
+        Tue, 23 Aug 2022 14:22:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=LjC43IYMNEf2pVDnTl+cksQfxh4VyZBw6nZxPgO+ZeI=;
-        b=U5WInIgT36mTSMtIaUT1F0sf62b0NAe5BC+eXq95YA4kT7/3GTMfBU5YsvextOdLjM
-         GQmEH0bTLovrbwR8Yh0zehoXSwhaSNz6Hxq+SAFQlR+bsviQwyRZRgeNoB0ipz6XbChh
-         NAXQeRUn5pk20gXx8Wcuggl7cZ0ImxFy6t864WR1lsyyCfmIlvTBMiTUovkoKe0wZkpt
-         37H0JUtuJZMD/br6R16tlvZEPSkgC84PXaxD5U72MsJ9xyIx9Nu7U8Gh12lUECsALw2R
-         L6GBfFn9Pr/V7eTpZ7Bya7H2v3qtIna36hLAaF7ey/3Ntzq+xgFzTzdAm/xR3vOOx4a7
-         1YQg==
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc;
+        bh=wOND1V135ybVgBeyri71HQXulvGc+Y6tAvCHYnlfi6k=;
+        b=ogDnY8T52ORM/8gqc/hAW0UAHi4wiv+vhBMGFZaT5dH0F4JeKpLUWcNE+l1BwBlm82
+         G2qgNbNTtS6fMvKyi6SxLyXgwSjMEvnMyr3Poeq/3/siN/wWsw/35fBiiCuYR+kGtIsC
+         u8bJIq2A5umMuhWTnsCOvLy38kiLduPqULm/cR/ILYhYM/K/ekv+kcV4KWX9Vbp2X42Y
+         p8RK/UllDJR5iB7pW5LMe3UyqDGPmgMiYG7JR3qBnwOwPStBh38q12i3UUY0SJhe7psT
+         /BX2vFzCWJ/MoK98DC+YGcqELHZI0Rm0t0aMNY1IZPhblGBk6js9E+XduSOMxCBdYDBk
+         0R0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=LjC43IYMNEf2pVDnTl+cksQfxh4VyZBw6nZxPgO+ZeI=;
-        b=nn3zvmD53zup0nDb5Vkil6adnBEbv7//0c2LKjZD4LIT8loQtcPB2MnxCAFp0hHj3l
-         d8pT//UxZKh/xCtK+uQ1srcA4kd9TVWc27H9QJoEHVYcBt0M7vmJEKyI5C9A6GGGmaxT
-         Xv4Dv/BjwQu4Ddrh05bkoxDIiFJcc7mepWjEkegQW0vVfaCpxpd0nzZ/Jr83VRXcEeNt
-         XoNuuGV4zRTDT3FoXafwd5dkRieGZkfVEHgHetxrzwTMpNW3+5ZY80MM9oGNm0X5EQ0K
-         LdhH5A4vTYBXXMsFEbJF95Kc+ZcQNkSfTvez9NpaJeYtmuGJBFBqEIvztseTeydq3GQg
-         FljA==
-X-Gm-Message-State: ACgBeo3QCc/nHpcGZEFNLJAc2M6+ILMdO5FwP1x+FhI5plG1P+06hv9i
-        kJ10/tlq5KOsQgoTenG+vEY=
-X-Google-Smtp-Source: AA6agR6dvnzPFU0GYj2y2bdu36cD5LQIv8BTGe80qWq1NdW6aeyfLNpirkA+aTK/d3QHlS2MqPn3KQ==
-X-Received: by 2002:a17:902:c153:b0:173:28b:3615 with SMTP id 19-20020a170902c15300b00173028b3615mr4218901plj.113.1661289722179;
-        Tue, 23 Aug 2022 14:22:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v15-20020a17090a6b0f00b001fac90ead43sm10355054pjj.29.2022.08.23.14.22.01
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc;
+        bh=wOND1V135ybVgBeyri71HQXulvGc+Y6tAvCHYnlfi6k=;
+        b=xrDWUTjqq9csL3m6oe+S+Te2G1YJX99FrlP8rU3ij95RQFbu4jjdf6oXHzVMZrw5Df
+         5s53CmjMpQ0vAuKdSZdgqBRC/f88sVQI5Y0FKTk2TvcMDVGMqN9hKLAWjeNmIvGwHgxK
+         J4sWUYc6le8j2sAKNl5FebTWGnztqJcugZr5WRoV99/TtSj+MUvz7u4TFGEcqTxAplH1
+         AovoEAMCvoI74i+MO61gyQANatA4RHiAwzAxUsq8wZDa94GNvKusQUSoEeaAcXeU9a5O
+         hgYec+gud7gd2c0h2WKR9J/VfNsjJISDeJNnB8Wy12otX4gMmGSYGqj5sn6/stAIiK9+
+         ArOw==
+X-Gm-Message-State: ACgBeo1+X5W6CDegHj/QFvzw8gG432VXk36Lh88S5n1GGIYhjYrI1dbn
+        LaIEGAMI3fFmf8r3gntLSs0=
+X-Google-Smtp-Source: AA6agR6doRoOFuOAiwu4jGggUP+8g4MGwgZtBahxEvo6lKJpHzkUzDnlfScOGMdwoOTMchQmtjkWpQ==
+X-Received: by 2002:a17:903:41c5:b0:172:fc8b:d186 with SMTP id u5-20020a17090341c500b00172fc8bd186mr5907355ple.90.1661289766379;
+        Tue, 23 Aug 2022 14:22:46 -0700 (PDT)
+Received: from localhost ([98.97.33.232])
+        by smtp.gmail.com with ESMTPSA id i17-20020a17090332d100b00172ff99d0afsm2296428plr.140.2022.08.23.14.22.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:22:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 Aug 2022 14:22:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.14 000/229] 4.14.291-rc1 review
-Message-ID: <20220823212200.GC2439282@roeck-us.net>
-References: <20220823080053.202747790@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        Tue, 23 Aug 2022 14:22:45 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 14:22:38 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Pu Lehui <pulehui@huawei.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@goddogle.com>, Jiri Olsa <jolsa@kernel.org>,
+        Pu Lehui <pulehui@huawei.com>
+Message-ID: <6305451ee5e7e_292a82086e@john.notmuch>
+In-Reply-To: <20220820120234.2121044-2-pulehui@huawei.com>
+References: <20220820120234.2121044-1-pulehui@huawei.com>
+ <20220820120234.2121044-2-pulehui@huawei.com>
+Subject: RE: [PATCH bpf-next 1/2] bpf, cgroup: Fix attach flags being assigned
+ to effective progs
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:22:41AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.291 release.
-> There are 229 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Pu Lehui wrote:
+> Attach flags is only valid for attached progs of this layer cgroup,
+> but not for effective progs. We know that the attached progs is at
+> the beginning of the effective progs array, so we can just populate
+> the elements in front of the prog_attach_flags array.
 > 
-> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+
+Trying to parse above, could you add a bit more detail on why this is
+problem so readers don't need to track it down.
+
+> ---
+>  kernel/bpf/cgroup.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 59b7eb60d5b4..9adf72e99907 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -1091,11 +1091,14 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+>  		}
+>  
 
-Build results:
-	total: 170 pass: 170 fail: 0
-Qemu test results:
-	total: 421 pass: 421 fail: 0
+Because we are looking at it let me try to understand. There are two
+paths that set cnt relative bits here,
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+  if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE) {
+      ...     
+      cnt = min_t(int, bpf_prog_array_length(effective), total_cnt);                                       
+      ...     
+  } else {
+     ...
+     progs = &cgrp->bpf.progs[atype];
+     cnt = min_t(int, prog_list_length(progs), total_cnt);
+     ...
+  }
 
-Guenter
+And the docs claim
+
+ *              **BPF_F_QUERY_EFFECTIVE**
+ *                      Only return information regarding programs which are
+ *                      currently effective at the specified *target_fd*.
+
+so in the EFFECTIVE case should we be reporting flags at all if the
+commit message says "attach flags is only valid for attached progs
+of this layer cgroup, but not for effective progs."
+
+And then in the else branch the change is what you have in the diff anyways correct?
+
+>  		if (prog_attach_flags) {
+> +			int progs_cnt = prog_list_length(&cgrp->bpf.progs[atype]);
+>  			flags = cgrp->bpf.flags[atype];
+>  
+> -			for (i = 0; i < cnt; i++)
+
+Do we need to min with total_cnt here so we don't walk off a short user list?
+
+> +			/* attach flags only for attached progs, but not effective progs */
+> +			for (i = 0; i < progs_cnt; i++)
+>  				if (copy_to_user(prog_attach_flags + i, &flags, sizeof(flags)))
+>  					return -EFAULT;
+> +
+>  			prog_attach_flags += cnt;
+>  		}
+>  
+> -- 
+> 2.25.1
+> 

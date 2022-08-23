@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5B559E08D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A083859DEA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356740AbiHWK6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S1358819AbiHWL7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357146AbiHWK4l (ORCPT
+        with ESMTP id S1359274AbiHWL4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:56:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECFE67176;
-        Tue, 23 Aug 2022 02:13:38 -0700 (PDT)
+        Tue, 23 Aug 2022 07:56:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E377494113;
+        Tue, 23 Aug 2022 02:34:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2001A60F85;
-        Tue, 23 Aug 2022 09:13:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11115C433D6;
-        Tue, 23 Aug 2022 09:13:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AF69B81C53;
+        Tue, 23 Aug 2022 09:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B833C433C1;
+        Tue, 23 Aug 2022 09:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246016;
-        bh=qUqsgPOy6zQU4YreXQqm2KXQli+UFswEmunZtLyK6aA=;
+        s=korg; t=1661247211;
+        bh=lDreysDaux3KE/9sQ1RBGecbIuH1BLpw3sVQTIQLoC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g1A6OYAgj+8GkETzNjiFYpzV3MY0rgP/rM7KzW8jB18cc35zxZ5ieRy2TSewD2Bes
-         iCwwjlod5VRToOQqOvamriZ2k7kmtKYne2Kz6X8xtS/yNjSmkJoITIYm7xZ0WNedhn
-         V91m9L2IMkuyJ47pZ9qqaM1Bomr0QMiYEBW8alv0=
+        b=nL1/3JWWfKs1AcOWe/f1OpCFj0YGKe+moFMelUffunPx6pZeyM5vkDVyAa7iYKEnU
+         3ArqY8CjF/KrQWnQ7yW/n771W+9oUqhYHRWbrrIRosq3yPdMRSqa05Q/cThQ1n7LIO
+         UKE/44DqCC3CE9m4f6LB4JIz9q8PvuQfgx7pPI3Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Pascal Terjan <pterjan@google.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 262/287] vboxguest: Do not use devm for irq
+Subject: [PATCH 5.4 353/389] drm/meson: Fix overflow implicit truncation warnings
 Date:   Tue, 23 Aug 2022 10:27:11 +0200
-Message-Id: <20220823080110.120124284@linuxfoundation.org>
+Message-Id: <20220823080130.302778511@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pascal Terjan <pterjan@google.com>
+From: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 
-[ Upstream commit 6169525b76764acb81918aa387ac168fb9a55575 ]
+[ Upstream commit 98692f52c588225034cbff458622c2c06dfcb544 ]
 
-When relying on devm it doesn't get freed early enough which causes the
-following warning when unloading the module:
+Fix -Woverflow warnings for drm/meson driver which is a result
+of moving arm64 custom MMIO accessor macros to asm-generic function
+implementations giving a bonus type-checking now and uncovering these
+overflow warnings.
 
-[249348.837181] remove_proc_entry: removing non-empty directory 'irq/20', leaking at least 'vboxguest'
-[249348.837219] WARNING: CPU: 0 PID: 6708 at fs/proc/generic.c:715 remove_proc_entry+0x119/0x140
+drivers/gpu/drm/meson/meson_viu.c: In function ‘meson_viu_init’:
+drivers/gpu/drm/meson/meson_registers.h:1826:48: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
+ #define  VIU_OSD_BLEND_REORDER(dest, src)      ((src) << (dest * 4))
+                                                ^
+drivers/gpu/drm/meson/meson_viu.c:472:18: note: in expansion of macro ‘VIU_OSD_BLEND_REORDER’
+   writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+                  ^~~~~~~~~~~~~~~~~~~~~
 
-[249348.837379] Call Trace:
-[249348.837385]  unregister_irq_proc+0xbd/0xe0
-[249348.837392]  free_desc+0x23/0x60
-[249348.837396]  irq_free_descs+0x4a/0x70
-[249348.837401]  irq_domain_free_irqs+0x160/0x1a0
-[249348.837452]  mp_unmap_irq+0x5c/0x60
-[249348.837458]  acpi_unregister_gsi_ioapic+0x29/0x40
-[249348.837463]  acpi_unregister_gsi+0x17/0x30
-[249348.837467]  acpi_pci_irq_disable+0xbf/0xe0
-[249348.837473]  pcibios_disable_device+0x20/0x30
-[249348.837478]  pci_disable_device+0xef/0x120
-[249348.837482]  vbg_pci_remove+0x6c/0x70 [vboxguest]
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Pascal Terjan <pterjan@google.com>
-Link: https://lore.kernel.org/r/20220612133744.4030602-1-pterjan@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/virt/vboxguest/vboxguest_linux.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/meson/meson_viu.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
-index 94e055ee7ad6..aa65b20883ef 100644
---- a/drivers/virt/vboxguest/vboxguest_linux.c
-+++ b/drivers/virt/vboxguest/vboxguest_linux.c
-@@ -341,8 +341,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 		goto err_vbg_core_exit;
- 	}
+diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
+index 33698814c022..9991f0a43b1a 100644
+--- a/drivers/gpu/drm/meson/meson_viu.c
++++ b/drivers/gpu/drm/meson/meson_viu.c
+@@ -400,17 +400,17 @@ void meson_viu_init(struct meson_drm *priv)
+ 			priv->io_base + _REG(VD2_IF0_LUMA_FIFO_SIZE));
  
--	ret = devm_request_irq(dev, pci->irq, vbg_core_isr, IRQF_SHARED,
--			       DEVICE_NAME, gdev);
-+	ret = request_irq(pci->irq, vbg_core_isr, IRQF_SHARED, DEVICE_NAME,
-+			  gdev);
- 	if (ret) {
- 		vbg_err("vboxguest: Error requesting irq: %d\n", ret);
- 		goto err_vbg_core_exit;
-@@ -352,7 +352,7 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	if (ret) {
- 		vbg_err("vboxguest: Error misc_register %s failed: %d\n",
- 			DEVICE_NAME, ret);
--		goto err_vbg_core_exit;
-+		goto err_free_irq;
- 	}
+ 	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A)) {
+-		writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+-			       VIU_OSD_BLEND_REORDER(1, 0) |
+-			       VIU_OSD_BLEND_REORDER(2, 0) |
+-			       VIU_OSD_BLEND_REORDER(3, 0) |
+-			       VIU_OSD_BLEND_DIN_EN(1) |
+-			       VIU_OSD_BLEND1_DIN3_BYPASS_TO_DOUT1 |
+-			       VIU_OSD_BLEND1_DOUT_BYPASS_TO_BLEND2 |
+-			       VIU_OSD_BLEND_DIN0_BYPASS_TO_DOUT0 |
+-			       VIU_OSD_BLEND_BLEN2_PREMULT_EN(1) |
+-			       VIU_OSD_BLEND_HOLD_LINES(4),
+-			       priv->io_base + _REG(VIU_OSD_BLEND_CTRL));
++		u32 val = (u32)VIU_OSD_BLEND_REORDER(0, 1) |
++			  (u32)VIU_OSD_BLEND_REORDER(1, 0) |
++			  (u32)VIU_OSD_BLEND_REORDER(2, 0) |
++			  (u32)VIU_OSD_BLEND_REORDER(3, 0) |
++			  (u32)VIU_OSD_BLEND_DIN_EN(1) |
++			  (u32)VIU_OSD_BLEND1_DIN3_BYPASS_TO_DOUT1 |
++			  (u32)VIU_OSD_BLEND1_DOUT_BYPASS_TO_BLEND2 |
++			  (u32)VIU_OSD_BLEND_DIN0_BYPASS_TO_DOUT0 |
++			  (u32)VIU_OSD_BLEND_BLEN2_PREMULT_EN(1) |
++			  (u32)VIU_OSD_BLEND_HOLD_LINES(4);
++		writel_relaxed(val, priv->io_base + _REG(VIU_OSD_BLEND_CTRL));
  
- 	ret = misc_register(&gdev->misc_device_user);
-@@ -388,6 +388,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	misc_deregister(&gdev->misc_device_user);
- err_unregister_misc_device:
- 	misc_deregister(&gdev->misc_device);
-+err_free_irq:
-+	free_irq(pci->irq, gdev);
- err_vbg_core_exit:
- 	vbg_core_exit(gdev);
- err_disable_pcidev:
-@@ -404,6 +406,7 @@ static void vbg_pci_remove(struct pci_dev *pci)
- 	vbg_gdev = NULL;
- 	mutex_unlock(&vbg_gdev_mutex);
- 
-+	free_irq(pci->irq, gdev);
- 	device_remove_file(gdev->dev, &dev_attr_host_features);
- 	device_remove_file(gdev->dev, &dev_attr_host_version);
- 	misc_deregister(&gdev->misc_device_user);
+ 		writel_relaxed(OSD_BLEND_PATH_SEL_ENABLE,
+ 			       priv->io_base + _REG(OSD1_BLEND_SRC_CTRL));
 -- 
 2.35.1
 

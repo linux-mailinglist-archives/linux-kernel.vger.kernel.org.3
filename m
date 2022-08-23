@@ -2,120 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308FC59EC19
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A070559EC4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbiHWTVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S231857AbiHWTaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbiHWTUk (ORCPT
+        with ESMTP id S230014AbiHWTaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:20:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42935A14D;
-        Tue, 23 Aug 2022 10:59:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 23 Aug 2022 15:30:04 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0ACD25C3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:18:39 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 071B4820E73;
+        Tue, 23 Aug 2022 18:18:18 +0000 (UTC)
+Received: from pdx1-sub0-mail-a212.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 6D448821C18;
+        Tue, 23 Aug 2022 18:18:17 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661278697; a=rsa-sha256;
+        cv=none;
+        b=3OQOquQh0Q8RB88NCf+qNQO3S/B9pWZFQCCRYLNKOJoZ/yHCnjcCvYQBVPjH1QVAaPU8OE
+        T8ZkQDignUb9tI1HGgWBwQgVDiBGkcXeEIhHRS62BGdVd3Uv3B5uKsdvDJpOL84urlF+4R
+        rLZ6sm6GR8Kr18/5urs7xXqVy565pOktvkvEtXMBsXOfao4X3C1hRnLLkchf+ZrEt4q4Gm
+        qiaOqCMjqBqZmOWmvrLUqrC9fm9GXICX81dGthSbF/PE0+PX+EiFljW4OyfHJAyHsB0FHf
+        T4nqfNap5i2OLs9lKbP3LQjIX+rWyDOYBiIhpCCVzwBbriAkYZD9jXMN6juB0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661278697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=BoFTfa6Pmpocvq1dOP3/e5ti6Vn5XMkAjsi+9n9j/UQ=;
+        b=ByHFOErcDJgQqsw19rbViJvVwQOlgV820SJ0aoyeTu0h9ke1vXgMGurX5byF4g8fc/dcs0
+        OIH6pxrw2SHl8bvuH6p7YVzkYem6PpBP6EVuTrXimeDtG13owzyPS1z84/q+DpDG8VV1jm
+        g9apbsP7Sv6Q8y4siccvuSCRTkMAGt/aJPg/GaSsPgOfmIB8gjlNOzHMAsxkFKULRkFE0U
+        dR5GXuSffWodFI3qMNm3vqy3+B3qU/kFiuZXQ0gETvfLDgE63DjJskIOdJne6cksjHzsrw
+        6Y0lpcqNjtH5ru2QbNzkegXK3LV8XnnDOUi7v3Wjc0/+VXTJ+pS06To+ichmJA==
+ARC-Authentication-Results: i=1;
+        rspamd-76867cc9c5-87nb9;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Cold-Dime: 288e4e58333a2f8c_1661278697719_300024312
+X-MC-Loop-Signature: 1661278697719:1880717708
+X-MC-Ingress-Time: 1661278697719
+Received: from pdx1-sub0-mail-a212.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.119.194.202 (trex/6.7.1);
+        Tue, 23 Aug 2022 18:18:17 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C57461683;
-        Tue, 23 Aug 2022 17:59:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68132C433C1;
-        Tue, 23 Aug 2022 17:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661277585;
-        bh=RIY5fu0Ccv8YyiNMD6vYWY/HtMeFS+5JWc27tNQtnlM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qbqZ/L3vXIHP4Gddr5RSmGm4FUfTbNm+JJ+OeSQJs4xQwzy/n2R0Hug9huUw1HQOI
-         MIoC0Q7Qy1nYY4czNRPpcCJLrq3AsvKnm2esp2ZtITTgJxwkQDYT808S+j5TNIcXTw
-         yJpTp5Dq3cwY/i3rOqN11QsNa0924KynDX0KMdC4m/UfVTN3WKTzaCRgaOUGc4/qwm
-         ruP4rAPIEWvjHLYRRnpK7DE72uG3JVQCt+xsIgMS64AfDfFO+MZ/7aADpjY7kBvQzk
-         ykt4cRVRzvmXI8FI9UjIiA777x56fc4xHWUq45Yw850RI2HeGxdRrlMZn5PltyiHGz
-         VHZ78y2gXkE/g==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3246910dac3so399434117b3.12;
-        Tue, 23 Aug 2022 10:59:45 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1jPFdPbYPnkcyPG8WQXx3TkqzNcu/3LFWybOysq8+fZM3Qk6Wa
-        sd77Q8T/DXpwVLq/Pq+Pe+8HNWA1NhI4B6eW6/Y=
-X-Google-Smtp-Source: AA6agR5UEK7XZYEggA4k/pHG8nif74dsCS4nPFu6i2sptT8o7hzEBmPIm4r/Iz8JJIishkf4u9k0DulvOer5/uVTSHA=
-X-Received: by 2002:a81:6143:0:b0:335:3076:168e with SMTP id
- v64-20020a816143000000b003353076168emr25966534ywb.460.1661277584419; Tue, 23
- Aug 2022 10:59:44 -0700 (PDT)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a212.dreamhost.com (Postfix) with ESMTPSA id 4MByCD4pCVz1PX;
+        Tue, 23 Aug 2022 11:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661278697;
+        bh=BoFTfa6Pmpocvq1dOP3/e5ti6Vn5XMkAjsi+9n9j/UQ=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=qa3XvDz82ZnJnUPfrl0i3TXqyyyK2VCs8mXsJlNo0jWPe9xSPvMYyrhV1g5uuPOuE
+         76zEVM4h04kNFUy+AR+pMXo3SKTVRLZosTz9x7so9AWL8oY+gGoTI9BMjpuBRAFaSY
+         oi89pGx8YXTQ0ZryKdUZFsrq3EwdUORiYzk6I1OsALwRsvLfz+LKhSd8Hw4jVaaSyB
+         LpjWsb2IfY+e3SBefm/yrXwJkpv4myEhGJatMYwXF2WujmrSsLtxlXTyS1sa5qz7Hx
+         W3yuP9OQrfb94aUh7i3qp9Wz6KgD7P0gCbpPqT2Ko/L1Tuj9CCSJV9as3ZXHBVtf67
+         7Q+cLcLGYq1dg==
+Date:   Tue, 23 Aug 2022 11:00:09 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: Re: [PATCH v13 39/70] um: remove vma linked list walk
+Message-ID: <20220823180009.3l2vbcenndiyhuf5@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-40-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-References: <20220704012328.6507-1-jiaming@nfschina.com> <20220705022617.12555-1-jiaming@nfschina.com>
-In-Reply-To: <20220705022617.12555-1-jiaming@nfschina.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 23 Aug 2022 10:59:33 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6H6Gyazn4o23UeYhfWtTFqcvw9dqS=Aqjpjf1o1qdMrg@mail.gmail.com>
-Message-ID: <CAPhsuW6H6Gyazn4o23UeYhfWtTFqcvw9dqS=Aqjpjf1o1qdMrg@mail.gmail.com>
-Subject: Re: [PATCH v2] block: Fix spelling mistakes in comments
-To:     Zhang Jiaming <jiaming@nfschina.com>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, d@ja.vu,
-        liqiong@nfschina.com, renyu@nfschina.com,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220822150128.1562046-40-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 7:26 PM Zhang Jiaming <jiaming@nfschina.com> wrote:
->
-> Fix spelling of dones't and waitting in comments.
-> Fix tense mistakes of hold and finsh in comments.
-> Use underline to connecting reconfig and mutex.
->
-> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
-> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-Sorry for getting on this late.
-
-AFAICT, this one doesn't apply any more (conflict with some of your
-other fixes). Could you please resend?
-
-Thanks,
-Song
-
-> ---
->  drivers/md/raid5-cache.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 >
-> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-> index 83c184eddbda..8d5154d94f86 100644
-> --- a/drivers/md/raid5-cache.c
-> +++ b/drivers/md/raid5-cache.c
-> @@ -125,7 +125,7 @@ struct r5l_log {
->                                          * reclaimed.  if it's 0, reclaim spaces
->                                          * used by io_units which are in
->                                          * IO_UNIT_STRIPE_END state (eg, reclaim
-> -                                        * dones't wait for specific io_unit
-> +                                        * doesn't wait for specific io_unit
->                                          * switching to IO_UNIT_STRIPE_END
->                                          * state) */
->         wait_queue_head_t iounit_wait;
-> @@ -1326,12 +1326,12 @@ static void r5l_write_super_and_discard_space(struct r5l_log *log,
->          * Discard could zero data, so before discard we must make sure
->          * superblock is updated to new log tail. Updating superblock (either
->          * directly call md_update_sb() or depend on md thread) must hold
-> -        * reconfig mutex. On the other hand, raid5_quiesce is called with
-> -        * reconfig_mutex hold. The first step of raid5_quiesce() is waitting
-> -        * for all IO finish, hence waitting for reclaim thread, while reclaim
-> -        * thread is calling this function and waitting for reconfig mutex. So
-> +        * reconfig_mutex. On the other hand, raid5_quiesce is called with
-> +        * reconfig_mutex held. The first step of raid5_quiesce() is waiting
-> +        * for all IO to finish, hence waiting for reclaim thread, while reclaim
-> +        * thread is calling this function and waiting for reconfig_mutex. So
->          * there is a deadlock. We workaround this issue with a trylock.
-> -        * FIXME: we could miss discard if we can't take reconfig mutex
-> +        * FIXME: we could miss discard if we can't take reconfig_mutex
->          */
->         set_mask_bits(&mddev->sb_flags, 0,
->                 BIT(MD_SB_CHANGE_DEVS) | BIT(MD_SB_CHANGE_PENDING));
-> --
-> 2.34.1
+>Use the VMA iterator instead.
 >
+>Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

@@ -2,90 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4587B59E4A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8499F59E494
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiHWNtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 09:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S240962AbiHWNl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 09:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239324AbiHWNrr (ORCPT
+        with ESMTP id S241719AbiHWNla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 09:47:47 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4463320984C;
-        Tue, 23 Aug 2022 03:52:34 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9E3BA440;
-        Tue, 23 Aug 2022 12:40:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661251254;
-        bh=qtB/GHrhmBGbFTFOqU8r92UoGanWbvaJR09DP0TwpEI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tS2Rs/F+MOfHTNWsI+H3m05aDeJAOtf8tSyFbGcMxlDkCQsCPLhe9L8m1+l+krphh
-         JlthAFo+rUPhGU1YsAd/yehvqfSLWAh4rBTy2J6WB+Cf615tZMk5HlMmB7VHw4Rme+
-         ogK54hF/L1LRWOeI4VuxuMQk4A33kWS6CnDFPN7o=
-Date:   Tue, 23 Aug 2022 13:40:50 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Tue, 23 Aug 2022 09:41:30 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F1B1670C8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:46:06 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id z6so19095813lfu.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=8HP34AyNYe/j7dFIL+3WKkvgCr06Jg9c/Un+6T6F0jk=;
+        b=wQwWnZ9k1393yB7VB9rbCQ26CPuiOtrOJu4XhIY12J7q0aNEfe5n4E4F4jdGFHvfkS
+         mz1u7pTeyLvtQXkCLc34UFF63tqsQ8tljVzMic/li5v7oy0KRj5HG9ktiRJb9I3qdLe+
+         CuLTEPIKQzj1RUTGOpbg3hZUNxPSPT3+B0pUQP/ZVJ8LsfbCeA3176p41scq1wOeF1R7
+         86qnJ+2RieUGWZTbDaT4jBMh4EhStWEPwS46gOve4FBMac04/nSq49OhgSuWk2tzoXhp
+         CHo/LU+k+A31QCex8CCHt/c42FvrXSMkgBL44K+ZtltvZI4A2RXkJowkRMl2D6/fQOHe
+         fWjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=8HP34AyNYe/j7dFIL+3WKkvgCr06Jg9c/Un+6T6F0jk=;
+        b=ewaadlVgGW8bjq2g28o7GvwZUG1VX9Ugd4LkgTzvsaIoZOcf70yZVPdWsPO0KuezSC
+         yJouPc77wkPjYv7DO0z/q3A9QR9yUnw1wWo2v2wb2a6Fickfn1sCingqS9S59/pKSYV6
+         28CVxDwiSI/Fw04u2CcfR32FSpA6esHRV0vQkqtQibfVWZfENTwOIePBE3YurIeu6FCD
+         zJ9Xnm8ZnI/eocnXauM4OKWEOblKKsuVwyPithMkgUkKn9h3GjtP6b4MQcuJkTZ3CRyv
+         cuhrX26LFrkckmNtnbN4od+ImEBxr/PcSMRvOgOw3dVugz3Hlmed5kIFSgHv0GDmiXfd
+         m/vQ==
+X-Gm-Message-State: ACgBeo1Tyoz8iCWAPb6Jz77jdSphZS5nife3rK7uDUYQts4u4AQKfZul
+        VGX6WKkqB0sNwLpx4Lp3xIgkVA==
+X-Google-Smtp-Source: AA6agR4rxXhTjG7SiYhxHuWSPspv2TOFhsEws3bbk7/t4rVlK4kC/2dE/cQNj9NXAAnAUP9xnujcjA==
+X-Received: by 2002:a05:6512:ad4:b0:492:c013:2359 with SMTP id n20-20020a0565120ad400b00492c0132359mr8721085lfu.376.1661251469099;
+        Tue, 23 Aug 2022 03:44:29 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id p18-20020a2eb7d2000000b00261ba22d1f2sm2096208ljo.139.2022.08.23.03.44.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 03:44:28 -0700 (PDT)
+Message-ID: <cf10e888-7fe2-7cf8-091a-40207eeb78b5@linaro.org>
+Date:   Tue, 23 Aug 2022 13:44:27 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 2/6] dt-bindings: net: dsa: mediatek,mt7530: fix reset
+ lines
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: display: synopsys,dw-hdmi: drop ref from
- reg-io-width
-Message-ID: <YwSusqWrapWASOSK@pendragon.ideasonboard.com>
-References: <20220823101031.387082-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220823101031.387082-1-krzysztof.kozlowski@linaro.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220820080758.9829-1-arinc.unal@arinc9.com>
+ <20220820080758.9829-3-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220820080758.9829-3-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 20/08/2022 11:07, Arınç ÜNAL wrote:
+> - Fix description of mediatek,mcm. mediatek,mcm is not used on MT7623NI.
 
-Thank you for the patch.
+Separate commit. You are still doing here few things at a time.
 
-On Tue, Aug 23, 2022 at 01:10:31PM +0300, Krzysztof Kozlowski wrote:
-> reg-io-width is a standard property, so no need for defining its type
-> with $ref.
+> - Add description for reset-gpios.
+> - Invalidate reset-gpios if mediatek,mcm is used. We cannot use multiple
+> reset lines at the same time.
+> - Invalidate mediatek,mcm if the compatible device is mediatek,mt7531.
+> There is no multi-chip module version of mediatek,mt7531.
+> - Require mediatek,mcm for mediatek,mt7621 as the compatible string is only
+> used for the multi-chip module version of MT7530.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  .../devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml     | 1 -
->  1 file changed, 1 deletion(-)
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 31 +++++++++++++++++--
+>  1 file changed, 28 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> index b00246faea57..4b7e54a8f037 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> @@ -26,7 +26,6 @@ properties:
->    reg-io-width:
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index edf48e917173..4c99266ce82a 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -110,11 +110,15 @@ properties:
+>    mediatek,mcm:
+>      type: boolean
 >      description:
->        Width (in bytes) of the registers specified by the reg property.
-> -    $ref: /schemas/types.yaml#/definitions/uint32
->      enum: [1, 4]
->      default: 1
+> -      if defined, indicates that either MT7530 is the part on multi-chip
+> -      module belong to MT7623A has or the remotely standalone chip as the
+> -      function MT7623N reference board provided for.
+> +      Used for MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs which the MT7530
+> +      switch is a part of the multi-chip module.
 >  
+>    reset-gpios:
+> +    description:
+> +      GPIO to reset the switch. Use this if mediatek,mcm is not used.
+> +      This property is optional because some boards share the reset line with
+> +      other components which makes it impossible to probe the switch if the
+> +      reset line is used.
+>      maxItems: 1
+>  
+>    reset-names:
+> @@ -165,6 +169,9 @@ allOf:
+>        required:
+>          - mediatek,mcm
+>      then:
+> +      properties:
+> +        reset-gpios: false
+> +
+>        required:
+>          - resets
+>          - reset-names
+> @@ -182,6 +189,24 @@ allOf:
+>          - core-supply
+>          - io-supply
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          items:
 
--- 
-Regards,
+Again, not items. This can be just const or enum.
 
-Laurent Pinchart
+> +            - const: mediatek,mt7531
+> +    then:
+> +      properties:
+> +        mediatek,mcm: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          items:
+
+Ditto.
+
+> +            - const: mediatek,mt7621
+> +    then:
+> +      required:
+> +        - mediatek,mcm
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+
+
+Best regards,
+Krzysztof

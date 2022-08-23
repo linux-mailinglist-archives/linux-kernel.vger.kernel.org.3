@@ -2,132 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F4559EC43
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4458C59EC40
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiHWTZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S230387AbiHWTZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiHWTZE (ORCPT
+        with ESMTP id S231650AbiHWTZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:25:04 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A872FF8F7F;
-        Tue, 23 Aug 2022 11:08:46 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id bf22so14695195pjb.4;
-        Tue, 23 Aug 2022 11:08:45 -0700 (PDT)
+        Tue, 23 Aug 2022 15:25:08 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6F1FB0DC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:09:42 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id ca13so17754068ejb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=jMrD17BOV98jk73P9NMr/PINIPRYYcJU7k+IUzeRBQA=;
-        b=or9uvjfPOCaGwdBvw+hLIyR+yPC8qv//wqrLKeu8hWnasHqJPxFAr1OVi/nGYJLywp
-         4MoXa1LsfePr3nTkMbdtLI+IIspnZMLsg8bqwRMUUEqBd2ssYPK8QnOpYFK/IpAFeTVk
-         tn64l35YiVkrtVNO4kyUZD+0EXEi91pcE8wAb9ypz3/y5QOVxs3wElkyEk+38AVMafrS
-         ahsKWdGxRWW+g1JQLLufAZfYq1uq8sPr3d8KbcqW3PzONzMmPwvw6LXY3OaevoGU06hM
-         A6tFf73jfJRDoM2yFxjVc5Z3mUccQu0q2RfXya7Mwi/J8iGRgI6XlTWQwMPma1mNzTb9
-         Ubog==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=z1E8GnokuPUf7Vf8jyRFI0tVUIIyZ4+J29LO62NqtGs=;
+        b=f7YWVinSY8ScIRzGU6IKFd1NVHvyN+OHFUCMQySl/7XI8jTIEO/r5Oc2amLrrPyIkb
+         Yq9Lodmd2qHYkOGWQqVBFQjnzkuEXv8IPwvbOGA62FnA7BVt9ACIGyIOBNMA6u9tDI+A
+         VgeBPNnVKcOJxRAdEckzFxiEJNdYLTy0qPiT4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=jMrD17BOV98jk73P9NMr/PINIPRYYcJU7k+IUzeRBQA=;
-        b=JwF1rQGT6kZatHIyngNKPApwg4sZ/SJhjiraI0AWVMie3tDTvNABmWthhO+3OL/F9p
-         EZtEreibiXdopnd7C/iJ1avO6HnWrmJKHKJFP1IWwMxgrWTJkO0bZEeOhMoUk8cDhDMm
-         EJiaw4ZQEuJSsuRbE6CDZ1bWz1dH+hV2oWvF72loexO/V3g7qZYKEWqTuxe+y3EHYlU6
-         N543YZV+AiGy+oOxnw/qa/KeZYutzXWdn33g5wlOzC+Prt98DCg2Vgeygsj3JycWmYaW
-         j6H3+Y3T4zitStigpD6+vkxK7AnA16Bgp4qou/T96WvuskTkhm0MT2cQqUhTYwaa6aZB
-         8+LQ==
-X-Gm-Message-State: ACgBeo1bDHcqM6SgPf2rcPWpis2wBVEkc5fzknnNJR44E+9USf9IxlOJ
-        ydma8YogjzAyGP+jvJGxS04=
-X-Google-Smtp-Source: AA6agR75j2GexfOpwOkO0RFn915LlyGgM+hyKnxNrC0WHWf3OtVsk0ilgv5CUtmtUQWo7g+Wn74h2Q==
-X-Received: by 2002:a17:90a:e614:b0:1fb:6b1b:66e5 with SMTP id j20-20020a17090ae61400b001fb6b1b66e5mr3121072pjy.72.1661278125040;
-        Tue, 23 Aug 2022 11:08:45 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:90fa])
-        by smtp.gmail.com with ESMTPSA id a1-20020a17090a688100b001fa9739d951sm12100003pjd.33.2022.08.23.11.08.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 11:08:44 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 23 Aug 2022 08:08:43 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     axboe@kernel.dk, ming.lei@redhat.com, mkoutny@suse.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: Re: [PATCH v8 4/4] blk-throttle: fix io hung due to configuration
- updates
-Message-ID: <YwUXq9XO4TstKJ66@slm.duckdns.org>
-References: <20220823033130.874230-1-yukuai1@huaweicloud.com>
- <20220823033130.874230-5-yukuai1@huaweicloud.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=z1E8GnokuPUf7Vf8jyRFI0tVUIIyZ4+J29LO62NqtGs=;
+        b=VmXgJHdoJ4Gwv8yLKBwxMvFgMCAwTScaZyNlEFcbjdlykt4+IWOt7NK3ShlgcgDCJF
+         J/GZl+MxxCuRPLBnnr1LXA4EIsaxPQJYB2kisZBSdkgVaKY14CeaXc/vsN9v75KWd53k
+         KNcQQIGLo3+L5WyK8MPzWiyEFXaGWYam8lTV2Y0IcS/GIQPmL/ftA9I+O2UXA9TH2Qmj
+         9eQ1g7YGbMm1KyVUbZisYcOqe1PtUBy70NGWcODCSsiCD4AOTRP380FCPRygIDqVG+Qg
+         t/5b9JTgSaAx251mHmJgPsKtjrhhvbBgyChWM6fgP1AyZagW1q7BwbhOAFo6ADCRrbLK
+         tjfw==
+X-Gm-Message-State: ACgBeo1xIGBf5s+zSCjGSMWhnJkvn5AoZDFxM7sMOWit8dujws1jHJ5R
+        EQ6y6s5vM7U0prN3mfBEu4+noJMFO4OF9Cm6
+X-Google-Smtp-Source: AA6agR5miQTDkwCl9vGUiVaavpTw2VRt7yzq887XcZkt4LFs9EOE5zuLQnEFYCmq5HRRfbCjGINmZw==
+X-Received: by 2002:a17:907:270e:b0:73c:b0fd:f9a2 with SMTP id w14-20020a170907270e00b0073cb0fdf9a2mr500672ejk.411.1661278180791;
+        Tue, 23 Aug 2022 11:09:40 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id q7-20020a056402032700b00445f8e0a86esm1771194edw.75.2022.08.23.11.09.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 11:09:39 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id h5so17145747wru.7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:09:38 -0700 (PDT)
+X-Received: by 2002:adf:b343:0:b0:225:1a75:2a9a with SMTP id
+ k3-20020adfb343000000b002251a752a9amr13812698wrd.281.1661278178479; Tue, 23
+ Aug 2022 11:09:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823033130.874230-5-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <YwSRFzQQKAXP2ncp@debian>
+In-Reply-To: <YwSRFzQQKAXP2ncp@debian>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 23 Aug 2022 11:09:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjn1=Gyi3Jxw4V0A=fXpOu5e1StPoyu52A6DHmbT+auzA@mail.gmail.com>
+Message-ID: <CAHk-=wjn1=Gyi3Jxw4V0A=fXpOu5e1StPoyu52A6DHmbT+auzA@mail.gmail.com>
+Subject: Re: mainline build failure for loongarch allmodconfig with gcc-12
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 11:31:30AM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> If new configuration is submitted while a bio is throttled, then new
-> waiting time is recalculated regardless that the bio might already wait
-> for some time:
-> 
-> tg_conf_updated
->  throtl_start_new_slice
->   tg_update_disptime
->   throtl_schedule_next_dispatch
-> 
-> Then io hung can be triggered by always submmiting new configuration
-> before the throttled bio is dispatched.
-> 
-> Fix the problem by respecting the time that throttled bio already waited.
-> In order to do that, add new fields to record how many bytes/io are
-> waited, and use it to calculate wait time for throttled bio under new
-> configuration.
-> 
-> Some simple test:
-> 1)
-> cd /sys/fs/cgroup/blkio/
-> echo $$ > cgroup.procs
-> echo "8:0 2048" > blkio.throttle.write_bps_device
-> {
->         sleep 2
->         echo "8:0 1024" > blkio.throttle.write_bps_device
-> } &
-> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
-> 
-> 2)
-> cd /sys/fs/cgroup/blkio/
-> echo $$ > cgroup.procs
-> echo "8:0 1024" > blkio.throttle.write_bps_device
-> {
->         sleep 4
->         echo "8:0 2048" > blkio.throttle.write_bps_device
-> } &
-> dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
-> 
-> test results: io finish time
-> 	before this patch	with this patch
-> 1)	10s			6s
-> 2)	8s			6s
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+On Tue, Aug 23, 2022 at 1:34 AM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> I have been trying to build loongarch as part of my nightly builds, and
+> I can build loongson3_defconfig without any error. But allmodconfig fails
+> with the error:
+>
+> In function '__cmpxchg',
+>     inlined from 'ssh_seq_next' at drivers/platform/surface/aggregator/controller.c:61:9,
 
-For 2-4,
+Looks like ssh_seq_next() wants to do an atomic cmpxchg() on a single
+byte value, and the Loongarch implementation only does 4- and 8-byte
+versions.
 
- Acked-by: Tejun Heo <tj@kernel.org>
+It looks like loongarch - from its MIPS heritage - inherited the "we
+can't do atomics on byte variables", so that it needs the same strange
+"do bytes as word accesses with mask-and-shifts".
 
-Thanks.
+For MIPS, the code is in __xchg_small() in arch/mips/kernel/cmpxchg.c.
 
--- 
-tejun
+Alpha has something similar, except it's all done in inline asm in
+arch/alpha/include/asm/xchg.h (look for "____cmpxchg(_u8," in there.
+
+Of course, we could just add a Kconfig variable like
+"ARCH_LACKS_BYTE_ATOMICS" and make that driver depend on it not being
+true, and just have Loongarch set it.
+
+But I think loongarch should just implement the byte masking stuff.
+Particularly since I suspect it can just copy the MIPS code as-is.
+
+                  Linus

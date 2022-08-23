@@ -2,165 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C8E59E8AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE8959E8DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344171AbiHWRMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S244942AbiHWRMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344868AbiHWRLY (ORCPT
+        with ESMTP id S1344887AbiHWRL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:11:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584EC15015B
+        Tue, 23 Aug 2022 13:11:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CE011B026
         for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661263104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YHVefDGXU83xWUJyLerizfLITJD1h0bvpZUJLhnlk24=;
-        b=AXO1SNmNaxNAq3ngFOkjpwKd9OjFxUtQlCxgejQIg8YZhdDKJzOyAzsl0mGVGXKUuO3hpU
-        dxBSGLCI7QSqq5QwrWgBYdTx5HvdDZpa7Fm4cD8qFL0wMh389YJCml7DFA11upm7Hy0FHT
-        o9nsIdQoVq8WoDhDI1ANKETuLGKrX5A=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-142-Xad8IUjnPMKax8F7-vJb4Q-1; Tue, 23 Aug 2022 09:58:23 -0400
-X-MC-Unique: Xad8IUjnPMKax8F7-vJb4Q-1
-Received: by mail-qt1-f198.google.com with SMTP id cm10-20020a05622a250a00b003437b745ccdso10608116qtb.18
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:58:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=YHVefDGXU83xWUJyLerizfLITJD1h0bvpZUJLhnlk24=;
-        b=iAuuouA+lMc9tGf6TwFhZ1c1sztvuaRXoZygcAwJjp/PQTMfhhFSt7vNYGRkNsVWCr
-         1Y1FlwVy4rQM54eRfPgOQeK3t0OzVWE5f17Mc6TgEIEk8CEyiOyg9Z+1eEA+wTF8VedT
-         f0iGgyurKs22XVOzogq6A719dZopfKPg/37Qa0SKrebQeRAFxy2bpBj94KorJpDfti2Z
-         G0EmWsLgQ90XrMNjMFa1/tHpa2X09w4Ktu12lYxrwKJvqzdhkaZyC+Gsf9nMb2hZ4hRy
-         2q8EgKYfHbS7Ul7dWkJK+3yQVlXfpelR5H7Fuf60WXTT/tCtgJjjspLFNixOjuSEkcrv
-         gd+g==
-X-Gm-Message-State: ACgBeo1mYeKFo6ywNqNubhBpxypvq5zJ4nVop/GWFFAtAtIdaABaQdw5
-        tbxl5SdMf02zUyXYkUGv9j457gLLXEf4L59q+wcCtB/jpqAuLdqK6VkFACNePKtBw/sXe7FDzWF
-        G9d71R616gBLUopoFjcwvEISo
-X-Received: by 2002:ac8:5b15:0:b0:343:6789:193a with SMTP id m21-20020ac85b15000000b003436789193amr19117264qtw.647.1661263102661;
-        Tue, 23 Aug 2022 06:58:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7gd2yWDFVr17SP2RU0l4eAn5No/A726n2hPHBkND28yI2ySau6/YWpTWAdi0/4trPHGWQO6g==
-X-Received: by 2002:ac8:5b15:0:b0:343:6789:193a with SMTP id m21-20020ac85b15000000b003436789193amr19117247qtw.647.1661263102418;
-        Tue, 23 Aug 2022 06:58:22 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id g7-20020a05620a40c700b006a6ebde4799sm12544646qko.90.2022.08.23.06.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 06:58:21 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 09:58:19 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
-        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-Message-ID: <YwTc++Lz6lh3aR4F@xz-m1.local>
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com>
- <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org>
- <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661263105; x=1692799105;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pCoa6Ugj2AJRPyPGUlNmHln305j0xDKrwGnvaLsDdR0=;
+  b=NxmDAwNXChKMGciN5YBa8dyaY4+FKC7qMrVWETJIvwlxHYpMmh5n0tlD
+   5WXsEM6EwL623C5R11gr/Wbr+W9R6+ch4WMZxNTQb6dQHtnPDjkfUw/Pz
+   BrDpl8cPchyjEI6ukqetkSQrIWJ/rNmiYe/c4rfTjZeceU3ifzNucZSTm
+   f2ZOyUtroWPjVuNkmisPbDj2mJDq9a3q6h33XCcyU7VsLv7hUF4hWrezg
+   2yQ4IcY7dIw2LfYcwqY0RQnNBjOIduOT0GcwECl44HVNwUF2vp9rtZt0R
+   KqxST7fBnAv5qYLTSz4FRY0+7PedcWRSjVIpcaUNTu9dOnlFduwDqNhP1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="357669573"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="357669573"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 06:58:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="638663353"
+Received: from sse-cse-haiyue-nuc.sh.intel.com ([10.239.241.114])
+  by orsmga008.jf.intel.com with ESMTP; 23 Aug 2022 06:58:22 -0700
+From:   Haiyue Wang <haiyue.wang@intel.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     akpm@linux-foundation.org, david@redhat.com, apopple@nvidia.com,
+        linmiaohe@huawei.com, ying.huang@intel.com,
+        songmuchun@bytedance.com, naoya.horiguchi@linux.dev,
+        alex.sierra@amd.com, mike.kravetz@oracle.com,
+        gerald.schaefer@linux.ibm.com, Haiyue Wang <haiyue.wang@intel.com>
+Subject: [PATCH v7 0/2] fix follow_page related issues
+Date:   Tue, 23 Aug 2022 21:58:39 +0800
+Message-Id: <20220823135841.934465-1-haiyue.wang@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:22:17PM +1000, Gavin Shan wrote:
-> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > index 986cee6fbc7f..0b41feb6fb7d 100644
-> > --- a/arch/arm64/kvm/arm.c
-> > +++ b/arch/arm64/kvm/arm.c
-> > @@ -747,6 +747,12 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
-> >   		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
-> >   			return kvm_vcpu_suspend(vcpu);
-> > +
-> > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu)) {
-> > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
-> > +			trace_kvm_dirty_ring_exit(vcpu);
-> > +			return 0;
-> > +		}
-> >   	}
-> >   	return 1;
-> > diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-> > index f4c2a6eb1666..08b2f01164fa 100644
-> > --- a/virt/kvm/dirty_ring.c
-> > +++ b/virt/kvm/dirty_ring.c
-> > @@ -149,6 +149,7 @@ int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
-> >   void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
-> >   {
-> > +	struct kvm_vcpu *vcpu = container_of(ring, struct kvm_vcpu, dirty_ring);
-> >   	struct kvm_dirty_gfn *entry;
-> >   	/* It should never get full */
-> > @@ -166,6 +167,9 @@ void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
-> >   	kvm_dirty_gfn_set_dirtied(entry);
-> >   	ring->dirty_index++;
-> >   	trace_kvm_dirty_ring_push(ring, slot, offset);
-> > +
-> > +	if (kvm_dirty_ring_soft_full(vcpu))
-> > +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
-> >   }
-> >   struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring, u32 offset)
-> > 
-> 
-> Ok, thanks for the details, Marc. I will adopt your code in next revision :)
+v7: Drop the zone device page check for transparent page.
 
-Note that there can be a slight difference with the old/new code, in that
-an (especially malicious) userapp can logically ignore the DIRTY_RING_FULL
-vmexit and keep kicking VCPU_RUN with the new code.
+v6: Simplify the multiple layers of conditionals for if {}
 
-Unlike the old code, the 2nd/3rd/... KVM_RUN will still run in the new code
-until the next dirty pfn being pushed to the ring, then it'll request ring
-full exit again.
+-               if (page) {
+-                       err = !is_zone_device_page(page) ? page_to_nid(page)
+-                                                        : -ENOENT;
+-                       if (foll_flags & FOLL_GET)
+-                               put_page(page);
+-               } else {
+-                       err = -ENOENT;
+-               }
++               err = -ENOENT;
++               if (!page)
++                       goto set_status;
++
++               if (!is_zone_device_page(page))
++                       err = page_to_nid(page);
++
++               if (foll_flags & FOLL_GET)
++                       put_page(page);
 
-Each time it exits the ring grows 1.
+v5: reword the commit message for FOLL_GET with more information.
 
-At last iiuc it can easily hit the ring full and trigger the warning at the
-entry of kvm_dirty_ring_push():
+v4: add '()' for the function for readability.
+    add more words about the Non-LRU pages fix in commit message.
 
-	/* It should never get full */
-	WARN_ON_ONCE(kvm_dirty_ring_full(ring));
+v3: Merge the fix for handling Non-LRU pages into one patch.
+    Drop the break_ksm zone device page check.
 
-We did that because kvm_dirty_ring_push() was previously designed to not be
-able to fail at all (e.g., in the old bitmap world we never will fail too).
-We can't because we can't lose any dirty page or migration could silently
-fail too (consider when we do user exit due to ring full and migration just
-completed; there could be unsynced pages on src/dst).
+v2: Add the Non-LRU pages fix with two patches, so that
+    'mm: migration: fix the FOLL_GET' can be applied directly
+    on linux-5.19 stable branch.
 
-So even though the old approach will need to read kvm->dirty_ring_size for
-every entrance which is a pity, it will avoid issue above.
+Haiyue Wang (2):
+  mm: migration: fix the FOLL_GET failure on following huge page
+  mm: fix the handling Non-LRU pages returned by follow_page
 
-Side note: for x86 the dirty ring check was put at the entrance not because
-it needs to be the highest priority - it should really be the same when
-check kvm requests. It's just that it'll be the fastest way to fail
-properly if needed before loading mmu, disabling preemption/irq, etc.
-
-Thanks,
+ mm/huge_memory.c |  2 +-
+ mm/ksm.c         | 12 +++++++++---
+ mm/migrate.c     | 23 +++++++++++++++++------
+ 3 files changed, 27 insertions(+), 10 deletions(-)
 
 -- 
-Peter Xu
+2.37.2
 

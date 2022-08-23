@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC0859E293
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839E759DE8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357592AbiHWLjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S241444AbiHWLkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357859AbiHWLc2 (ORCPT
+        with ESMTP id S1348544AbiHWLdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:32:28 -0400
+        Tue, 23 Aug 2022 07:33:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF0DC6B68;
-        Tue, 23 Aug 2022 02:26:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45F09109D;
+        Tue, 23 Aug 2022 02:26:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA4C061328;
-        Tue, 23 Aug 2022 09:26:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5176C433D6;
-        Tue, 23 Aug 2022 09:26:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D32CE61227;
+        Tue, 23 Aug 2022 09:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8EDC433C1;
+        Tue, 23 Aug 2022 09:26:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246814;
-        bh=x2NuveE8ONFScI78iZ8cTXF/d02hhkTjxBWlxNHqsnY=;
+        s=korg; t=1661246817;
+        bh=XRMX3midtATI9hujgoxy0IUHmmmKv8GdcEeUHf6Ogcw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SBvXkbtM2cXH+ifrMPinw/YcA7Jg+ioPXM8kcpgv5cxnOm4w9X0PVpQ31uyDidb+9
-         6RPTSgvV30yLmFEnRWgASZhZNb/oJRAP2Jg4RKUKR75yQwWl8Phz5f3I84+ClM/Xr8
-         /UgGpDMsuqxRgL3tdE+c3FZbkznO1rLaild35QQ0=
+        b=QD60Pk0WZewdIYmrRwHpNgyITz6RNZUT3Zqt32YNxbQXVxdhqPFMRuXEy0LPU6QsT
+         NWQiUqvwrZdiVYheddjy5Z+ZEh2KnOCwzvc9WG0azTo9Sq6ouBNGivjAL2NzqRgMHP
+         Ta1lmVreS3X0enZ4Kxp604UshQAaWNX6q4PCyUfY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 198/389] null_blk: fix ida error handling in null_add_dev()
-Date:   Tue, 23 Aug 2022 10:24:36 +0200
-Message-Id: <20220823080123.911913944@linuxfoundation.org>
+        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 199/389] jbd2: fix outstanding credits assert in jbd2_journal_commit_transaction()
+Date:   Tue, 23 Aug 2022 10:24:37 +0200
+Message-Id: <20220823080123.957197290@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -54,60 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Zhang Yi <yi.zhang@huawei.com>
 
-[ Upstream commit ee452a8d984f94fa8e894f003a52e776e4572881 ]
+[ Upstream commit a89573ce4ad32f19f43ec669771726817e185be0 ]
 
-There needs to be some error checking if ida_simple_get() fails.
-Also call ida_free() if there are errors later.
+We catch an assert problem in jbd2_journal_commit_transaction() when
+doing fsstress and request falut injection tests. The problem is
+happened in a race condition between jbd2_journal_commit_transaction()
+and ext4_end_io_end(). Firstly, ext4_writepages() writeback dirty pages
+and start reserved handle, and then the journal was aborted due to some
+previous metadata IO error, jbd2_journal_abort() start to commit current
+running transaction, the committing procedure could be raced by
+ext4_end_io_end() and lead to subtract j_reserved_credits twice from
+commit_transaction->t_outstanding_credits, finally the
+t_outstanding_credits is mistakenly smaller than t_nr_buffers and
+trigger assert.
 
-Fixes: 94bc02e30fb8 ("nullb: use ida to manage index")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YtEhXsr6vJeoiYhd@kili
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+kjournald2           kworker
+
+jbd2_journal_commit_transaction()
+ write_unlock(&journal->j_state_lock);
+ atomic_sub(j_reserved_credits, t_outstanding_credits); //sub once
+
+     	             jbd2_journal_start_reserved()
+     	              start_this_handle()  //detect aborted journal
+     	              jbd2_journal_free_reserved()  //get running transaction
+                       read_lock(&journal->j_state_lock)
+     	                __jbd2_journal_unreserve_handle()
+     	               atomic_sub(j_reserved_credits, t_outstanding_credits);
+                       //sub again
+                       read_unlock(&journal->j_state_lock);
+
+ journal->j_running_transaction = NULL;
+ J_ASSERT(t_nr_buffers <= t_outstanding_credits) //bomb!!!
+
+Fix this issue by using journal->j_state_lock to protect the subtraction
+in jbd2_journal_commit_transaction().
+
+Fixes: 96f1e0974575 ("jbd2: avoid long hold times of j_state_lock while committing a transaction")
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220611130426.2013258-1-yi.zhang@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/null_blk_main.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ fs/jbd2/commit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/null_blk_main.c b/drivers/block/null_blk_main.c
-index 13eae973eaea..6cbdd8a691d2 100644
---- a/drivers/block/null_blk_main.c
-+++ b/drivers/block/null_blk_main.c
-@@ -1711,8 +1711,13 @@ static int null_add_dev(struct nullb_device *dev)
- 	blk_queue_flag_clear(QUEUE_FLAG_ADD_RANDOM, nullb->q);
+diff --git a/fs/jbd2/commit.c b/fs/jbd2/commit.c
+index d45ceb2e2149..8d5aced7ed0c 100644
+--- a/fs/jbd2/commit.c
++++ b/fs/jbd2/commit.c
+@@ -514,13 +514,13 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+ 	 */
+ 	jbd2_journal_switch_revoke_table(journal);
  
- 	mutex_lock(&lock);
--	nullb->index = ida_simple_get(&nullb_indexes, 0, 0, GFP_KERNEL);
--	dev->index = nullb->index;
-+	rv = ida_simple_get(&nullb_indexes, 0, 0, GFP_KERNEL);
-+	if (rv < 0) {
-+		mutex_unlock(&lock);
-+		goto out_cleanup_zone;
-+	}
-+	nullb->index = rv;
-+	dev->index = rv;
- 	mutex_unlock(&lock);
++	write_lock(&journal->j_state_lock);
+ 	/*
+ 	 * Reserved credits cannot be claimed anymore, free them
+ 	 */
+ 	atomic_sub(atomic_read(&journal->j_reserved_credits),
+ 		   &commit_transaction->t_outstanding_credits);
  
- 	blk_queue_logical_block_size(nullb->q, dev->blocksize);
-@@ -1724,13 +1729,16 @@ static int null_add_dev(struct nullb_device *dev)
- 
- 	rv = null_gendisk_register(nullb);
- 	if (rv)
--		goto out_cleanup_zone;
-+		goto out_ida_free;
- 
- 	mutex_lock(&lock);
- 	list_add_tail(&nullb->list, &nullb_list);
- 	mutex_unlock(&lock);
- 
- 	return 0;
-+
-+out_ida_free:
-+	ida_free(&nullb_indexes, nullb->index);
- out_cleanup_zone:
- 	if (dev->zoned)
- 		null_zone_exit(dev);
+-	write_lock(&journal->j_state_lock);
+ 	trace_jbd2_commit_flushing(journal, commit_transaction);
+ 	stats.run.rs_flushing = jiffies;
+ 	stats.run.rs_locked = jbd2_time_diff(stats.run.rs_locked,
 -- 
 2.35.1
 

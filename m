@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D5859DE32
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE42059DDE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356507AbiHWKyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S1359341AbiHWML0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356256AbiHWKqx (ORCPT
+        with ESMTP id S1359550AbiHWMKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:46:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D5B868A6;
-        Tue, 23 Aug 2022 02:11:40 -0700 (PDT)
+        Tue, 23 Aug 2022 08:10:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702EF4D4ED;
+        Tue, 23 Aug 2022 02:38:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB04B81C86;
-        Tue, 23 Aug 2022 09:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC558C43470;
-        Tue, 23 Aug 2022 09:11:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABB366146C;
+        Tue, 23 Aug 2022 09:38:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86649C433D6;
+        Tue, 23 Aug 2022 09:38:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245897;
-        bh=nMFdVTIOTIai1hF1jiSNzmD+8RDh1bKHgV+Z1tDL/Ys=;
+        s=korg; t=1661247521;
+        bh=XGHTd82AAZ1RrJx/a/IRBgTOgLN+rnCHxw5CMHRf92s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kV10944b2jKy5N3rdLHFcvonyd7Vr9jyTWFuSQEEL5dTzwNJw8Fco0DyCmPzHkoTP
-         uaDY5OsvQr40dRbUlxlnv/WrjddYn6DJfKPQPhjBb1BzgGqIMEc31aysHIsM6n68Eh
-         vV6YU4lboA4Ec0j7uKyQyiENHWhGphyA7qLUVnj0=
+        b=G4HB4MN8RBE3YDKEeT/O9NBMq7uNt6dHeq+Sp5uBnDRE+H/4X+E4eYyVrsuq9reec
+         9W3mg6X+XBhCrBm0k7e+PDtHmvzHpURJl3hMwGQKfTB4sYknVD/4sb3MZsqClXtrU8
+         2zq/z8TWUt9N1Tsl/S0xrELCk+6ag5baU/DeKyc8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 4.19 224/287] apparmor: fix absroot causing audited secids to begin with =
-Date:   Tue, 23 Aug 2022 10:26:33 +0200
-Message-Id: <20220823080108.540559258@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 062/158] perf probe: Fix an error handling path in parse_perf_probe_command()
+Date:   Tue, 23 Aug 2022 10:26:34 +0200
+Message-Id: <20220823080048.576950280@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,76 +62,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Johansen <john.johansen@canonical.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit 511f7b5b835726e844a5fc7444c18e4b8672edfd upstream.
+commit 4bf6dcaa93bcd083a13c278a91418fe10e6d23a0 upstream.
 
-AppArmor is prefixing secids that are converted to secctx with the =
-to indicate the secctx should only be parsed from an absolute root
-POV. This allows catching errors where secctx are reparsed back into
-internal labels.
+If a memory allocation fail, we should branch to the error handling path
+in order to free some resources allocated a few lines above.
 
-Unfortunately because audit is using secid to secctx conversion this
-means that subject and object labels can result in a very unfortunate
-== that can break audit parsing.
-
-eg. the subj==unconfined term in the below audit message
-
-type=USER_LOGIN msg=audit(1639443365.233:160): pid=1633 uid=0 auid=1000
-ses=3 subj==unconfined msg='op=login id=1000 exe="/usr/sbin/sshd"
-hostname=192.168.122.1 addr=192.168.122.1 terminal=/dev/pts/1 res=success'
-
-Fix this by switch the prepending of = to a _. This still works as a
-special character to flag this case without breaking audit. Also move
-this check behind debug as it should not be needed during normal
-operqation.
-
-Fixes: 26b7899510ae ("apparmor: add support for absolute root view based labels")
-Reported-by: Casey Schaufler <casey@schaufler-ca.com>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
+Fixes: 15354d54698648e2 ("perf probe: Generate event name with line number")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: kernel-janitors@vger.kernel.org
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/b71bcb01fa0c7b9778647235c3ab490f699ba278.1659797452.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/apparmor/include/lib.h |    5 +++++
- security/apparmor/label.c       |    7 ++++---
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ tools/perf/util/probe-event.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/security/apparmor/include/lib.h
-+++ b/security/apparmor/include/lib.h
-@@ -25,6 +25,11 @@
-  */
+--- a/tools/perf/util/probe-event.c
++++ b/tools/perf/util/probe-event.c
+@@ -1760,8 +1760,10 @@ int parse_perf_probe_command(const char
+ 	if (!pev->event && pev->point.function && pev->point.line
+ 			&& !pev->point.lazy_line && !pev->point.offset) {
+ 		if (asprintf(&pev->event, "%s_L%d", pev->point.function,
+-			pev->point.line) < 0)
+-			return -ENOMEM;
++			pev->point.line) < 0) {
++			ret = -ENOMEM;
++			goto out;
++		}
+ 	}
  
- #define DEBUG_ON (aa_g_debug)
-+/*
-+ * split individual debug cases out in preparation for finer grained
-+ * debug controls in the future.
-+ */
-+#define AA_DEBUG_LABEL DEBUG_ON
- #define dbg_printk(__fmt, __args...) pr_debug(__fmt, ##__args)
- #define AA_DEBUG(fmt, args...)						\
- 	do {								\
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -1641,9 +1641,9 @@ int aa_label_snxprint(char *str, size_t
- 	AA_BUG(!str && size != 0);
- 	AA_BUG(!label);
- 
--	if (flags & FLAG_ABS_ROOT) {
-+	if (AA_DEBUG_LABEL && (flags & FLAG_ABS_ROOT)) {
- 		ns = root_ns;
--		len = snprintf(str, size, "=");
-+		len = snprintf(str, size, "_");
- 		update_for_len(total, len, size, str);
- 	} else if (!ns) {
- 		ns = labels_ns(label);
-@@ -1905,7 +1905,8 @@ struct aa_label *aa_label_strn_parse(str
- 	AA_BUG(!str);
- 
- 	str = skipn_spaces(str, n);
--	if (str == NULL || (*str == '=' && base != &root_ns->unconfined->label))
-+	if (str == NULL || (AA_DEBUG_LABEL && *str == '_' &&
-+			    base != &root_ns->unconfined->label))
- 		return ERR_PTR(-EINVAL);
- 
- 	len = label_count_strn_entries(str, end - str);
+ 	/* Copy arguments and ensure return probe has no C argument */
 
 

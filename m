@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3C059DCB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E2559E015
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357774AbiHWLVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+        id S1357494AbiHWLUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347099AbiHWLRN (ORCPT
+        with ESMTP id S1357850AbiHWLQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:17:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CFABD76D;
-        Tue, 23 Aug 2022 02:20:36 -0700 (PDT)
+        Tue, 23 Aug 2022 07:16:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAABBD2A8;
+        Tue, 23 Aug 2022 02:20:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 368F8B81C65;
-        Tue, 23 Aug 2022 09:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BB3FC433D7;
-        Tue, 23 Aug 2022 09:20:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E33260F85;
+        Tue, 23 Aug 2022 09:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9110CC433C1;
+        Tue, 23 Aug 2022 09:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246419;
-        bh=8WqKxn8u3x6Bt2MQwiRtikIoYoxNO1Ff0iLFwOOGdRA=;
+        s=korg; t=1661246422;
+        bh=pwWQpP2tkUmlkVpJtmOg53R333roKlKsvhhSHR4JUz4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dgTwwn3HRiX+jHttjC2j3HUyELBUBt4gYtPdXv1iNOvkABIIWQk6XVDHyjdJuQS9w
-         0wfto5zHUlmB2YPJ0qBEKroye/TppNzZTn6o7kbUjpJyUOqDzjtnFLzCeECumHu3Bz
-         Qh+o+7unhBYzrf4+WTeiz4Xaz558uieYdv3DKHzQ=
+        b=ZwIRRwisYiiBOQVSG+8/BusCxKvQqx7yMbF7W+fmGR2Nl8cwI1CPo8wWe2T/xqdbt
+         mKRbOYcKPEiNeSgd1oFWcdEAFVZS2+jC8MiJrSCYRAOnVYFruMN8w7aSydCFydv53T
+         jIvNlTauoqbW2oYD4lHLCM6ayhoGfg2NaeBmpay8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexey Kodanev <aleksei.kodanev@bell-sw.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 104/389] wifi: iwlegacy: 4965: fix potential off-by-one overflow in il4965_rs_fill_link_cmd()
-Date:   Tue, 23 Aug 2022 10:23:02 +0200
-Message-Id: <20220823080119.967347218@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 105/389] drm: bridge: adv7511: Add check for mipi_dsi_driver_register
+Date:   Tue, 23 Aug 2022 10:23:03 +0200
+Message-Id: <20220823080120.001652411@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -55,60 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit a8eb8e6f7159c7c20c0ddac428bde3d110890aa7 ]
+[ Upstream commit 831463667b5f4f1e5bce9c3b94e9e794d2bc8923 ]
 
-As a result of the execution of the inner while loop, the value
-of 'idx' can be equal to LINK_QUAL_MAX_RETRY_NUM. However, this
-is not checked after the loop and 'idx' is used to write the
-LINK_QUAL_MAX_RETRY_NUM size array 'lq_cmd->rs_table[idx]' below
-in the outer loop.
+As mipi_dsi_driver_register could return error if fails,
+it should be better to check the return value and return error
+if fails.
+Moreover, if i2c_add_driver fails,  mipi_dsi_driver_register
+should be reverted.
 
-The fix is to check the new value of 'idx' inside the nested loop,
-and break both loops if index equals the size. Checking it at the
-start is now pointless, so let's remove it.
-
-Detected using the static analysis tool - Svace.
-
-Fixes: be663ab67077 ("iwlwifi: split the drivers for agn and legacy devices 3945/4965")
-Signed-off-by: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220608171614.28891-1-aleksei.kodanev@bell-sw.com
+Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220602103401.2980938-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlegacy/4965-rs.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlegacy/4965-rs.c b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-index 0a02d8aca320..ce891ac32388 100644
---- a/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-+++ b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-@@ -2403,7 +2403,7 @@ il4965_rs_fill_link_cmd(struct il_priv *il, struct il_lq_sta *lq_sta,
- 		/* Repeat initial/next rate.
- 		 * For legacy IL_NUMBER_TRY == 1, this loop will not execute.
- 		 * For HT IL_HT_NUMBER_TRY == 3, this executes twice. */
--		while (repeat_rate > 0 && idx < LINK_QUAL_MAX_RETRY_NUM) {
-+		while (repeat_rate > 0) {
- 			if (is_legacy(tbl_type.lq_type)) {
- 				if (ant_toggle_cnt < NUM_TRY_BEFORE_ANT_TOGGLE)
- 					ant_toggle_cnt++;
-@@ -2422,6 +2422,8 @@ il4965_rs_fill_link_cmd(struct il_priv *il, struct il_lq_sta *lq_sta,
- 			    cpu_to_le32(new_rate);
- 			repeat_rate--;
- 			idx++;
-+			if (idx >= LINK_QUAL_MAX_RETRY_NUM)
-+				goto out;
- 		}
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index e2f84e2d5d3c..62ef603627b7 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -1302,10 +1302,21 @@ static struct i2c_driver adv7511_driver = {
  
- 		il4965_rs_get_tbl_info_from_mcs(new_rate, lq_sta->band,
-@@ -2466,6 +2468,7 @@ il4965_rs_fill_link_cmd(struct il_priv *il, struct il_lq_sta *lq_sta,
- 		repeat_rate--;
- 	}
+ static int __init adv7511_init(void)
+ {
+-	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
+-		mipi_dsi_driver_register(&adv7533_dsi_driver);
++	int ret;
++
++	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI)) {
++		ret = mipi_dsi_driver_register(&adv7533_dsi_driver);
++		if (ret)
++			return ret;
++	}
  
-+out:
- 	lq_cmd->agg_params.agg_frame_cnt_limit = LINK_QUAL_AGG_FRAME_LIMIT_DEF;
- 	lq_cmd->agg_params.agg_dis_start_th = LINK_QUAL_AGG_DISABLE_START_DEF;
+-	return i2c_add_driver(&adv7511_driver);
++	ret = i2c_add_driver(&adv7511_driver);
++	if (ret) {
++		if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
++			mipi_dsi_driver_unregister(&adv7533_dsi_driver);
++	}
++
++	return ret;
+ }
+ module_init(adv7511_init);
  
 -- 
 2.35.1

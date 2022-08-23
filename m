@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E012459DA09
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC3259D9A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241835AbiHWKEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
+        id S237003AbiHWJ6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348269AbiHWKAV (ORCPT
+        with ESMTP id S244207AbiHWJxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:00:21 -0400
+        Tue, 23 Aug 2022 05:53:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F21BA3;
-        Tue, 23 Aug 2022 01:48:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C52C9E2D1;
+        Tue, 23 Aug 2022 01:46:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4251A611DD;
-        Tue, 23 Aug 2022 08:48:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EE1BC433D6;
-        Tue, 23 Aug 2022 08:48:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8A8611DD;
+        Tue, 23 Aug 2022 08:46:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8087C433C1;
+        Tue, 23 Aug 2022 08:46:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244493;
-        bh=ZYTKFm1TtlDdH0qLKY2rE3EpgKLlGflmbBtmOBDDgVQ=;
+        s=korg; t=1661244382;
+        bh=TXrm5cDzcDDv4OSzZzYE5SgfVG6S5vhOnAgTDnaow9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FIwWlY6ttTDVz9nBQ2ekvRQjREhwMQ+qMfSXDzhj2fslgCPPnMcshZHEJJUeNh8h6
-         vMA1dS0wVSVO7znAeVtiPfeu46Jtu7MeKs4A+bcqbTLt8c136e6Njbv3iXR1QYahwn
-         8k3bwvpHkQAJtT1vqBBewBlR9NlZIjF4jvXbFBLg=
+        b=EXETc7c+0UjsHsjRht/JXpVT+J0nIukh9MFBUYSytP6WJSLDe3CtsptGB/J1dWhuI
+         l9TOs5qEBH38opCtothY6vhaNrVsagxxk3DurGR68MsBjiGNDiFGNNHs4jGbERt5L1
+         cl4WhVrb2uAe+D3rg6N06fPIlUMrFjh1IAO2D/ak=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen Lin <chen.lin5@zte.com.cn>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 102/244] dpaa2-eth: trace the allocated address instead of page struct
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 100/229] usb: ohci-nxp: Fix refcount leak in ohci_hcd_nxp_probe
 Date:   Tue, 23 Aug 2022 10:24:21 +0200
-Message-Id: <20220823080102.434243625@linuxfoundation.org>
+Message-Id: <20220823080057.274538251@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Lin <chen45464546@163.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit e34f49348f8b7a53205b6f77707a3a6a40cf420b upstream.
+[ Upstream commit 302970b4cad3ebfda2c05ce06c322ccdc447d17e ]
 
-We should trace the allocated address instead of page struct.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 27c874867c4e ("dpaa2-eth: Use a single page per Rx buffer")
-Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
-Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Link: https://lore.kernel.org/r/20220811151651.3327-1-chen45464546@163.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220603141231.979-1-linmq006@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/host/ohci-nxp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -1389,8 +1389,8 @@ static int dpaa2_eth_add_bufs(struct dpa
- 		buf_array[i] = addr;
- 
- 		/* tracing point */
--		trace_dpaa2_eth_buf_seed(priv->net_dev,
--					 page, DPAA2_ETH_RX_BUF_RAW_SIZE,
-+		trace_dpaa2_eth_buf_seed(priv->net_dev, page_address(page),
-+					 DPAA2_ETH_RX_BUF_RAW_SIZE,
- 					 addr, priv->rx_buf_size,
- 					 bpid);
+diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
+index 6df8e2ed40fd..5162038b794e 100644
+--- a/drivers/usb/host/ohci-nxp.c
++++ b/drivers/usb/host/ohci-nxp.c
+@@ -155,6 +155,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
  	}
+ 
+ 	isp1301_i2c_client = isp1301_get_client(isp1301_node);
++	of_node_put(isp1301_node);
+ 	if (!isp1301_i2c_client)
+ 		return -EPROBE_DEFER;
+ 
+-- 
+2.35.1
+
 
 

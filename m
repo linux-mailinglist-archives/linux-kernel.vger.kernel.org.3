@@ -2,169 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5262359D2C2
+	by mail.lfdr.de (Postfix) with ESMTP id E251659D2C4
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241373AbiHWHzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S241419AbiHWHzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241404AbiHWHzM (ORCPT
+        with ESMTP id S239227AbiHWHzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:55:12 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973DD399F2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:55:11 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3375488624aso328910747b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=6/q2WYCT6ZfXsEkC9Bz17XJaiUb6hw25Iag20Qx0nsM=;
-        b=fE6rur9XiU74c/LSzQNVVhxXHY2TiKtS5JU2ibRkNiYGAnn15hylS30CGx83K1v8Ff
-         9Te1WT8tyaYbQbrrLdJmywA0xqVSGzXquxMxVx2dzkgRWFR/sn7sIThwn+tQXyJqLBgZ
-         dgT+yBe3n0/KJ9k8hBRDIjTYBYEl3ZJkvKtsJs6A9jXJACS7lVWX2UZJfl0VQtIjvgII
-         YWkWPD4UUSuE7OrMJIdtSzfvyrF67SiX+aX7HKPIW/SDIZOSDjTKt/Rfs/fdChhDawqe
-         fjwxmfnvWYasVE0ANnsNlYfo0eiTduyizakEJNYT9XZmwt0+GkdVprJP4bg5UmgIJBmi
-         tctA==
+        Tue, 23 Aug 2022 03:55:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8911EEE1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661241309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EIwZ7BoTfdMUAhH2fOQC6fOziS/YjfnIvgRTO5vTHto=;
+        b=DyCI55PulUdOrmKB+WgGxp1BNPAeh4juvIPpeXCF87rXoNnLnpMySUbuwRhr2S0tj1ME19
+        XoH2s5lhUgWm3ytjpdAK5bRJwjnYlJotPWAxLQCFL+JlZGmvCyohxuntZ48XyDsa5fE2YY
+        haGZa/VSZ6I6oWfy2Vr9bHAQfLHmsYI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-102-nLWupQfiOBSGzat2CkmbMA-1; Tue, 23 Aug 2022 03:55:07 -0400
+X-MC-Unique: nLWupQfiOBSGzat2CkmbMA-1
+Received: by mail-wm1-f72.google.com with SMTP id f18-20020a05600c4e9200b003a5f81299caso7594930wmq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:55:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=6/q2WYCT6ZfXsEkC9Bz17XJaiUb6hw25Iag20Qx0nsM=;
-        b=spUoM/UTrL56kIjcg3B0r5v9Q9SeR3NlJjjn65XwEBO4V7c6HPjEf59jKyfRw4uiPf
-         vAGC29+ZTdIr2fO8i89jJlVZVn/g7+7mkMDn7mpQUPB4ijWolL6fLjZv5HDMJ5evu40w
-         MEfv7Z3TXMwOi2quAlM1qFjpvhSovEq3R52/rAPcpQDwcAam6ew/pPrXPXvKPzW9wjRR
-         GL0WcHx7pKdeQ23gwOq+uiD0Z7WfQCx9R/e+d3PKnEiu1APhsAdpFI693LSG2m8Y/yuw
-         UvbRujw0GsvKHevdQQ48howSWkdwpRhWx0DWlvjhBUVBE7i5dfEh47L/oGYMw/XIVUrb
-         aZoA==
-X-Gm-Message-State: ACgBeo2rFjOInwTsH9o5Lqk0EiGXK6K1QKHG4/FAR422QgMRIR2+1hhm
-        LSK10czXphE4E9+YYm6mMbaZdvX5r7cMMhQq3sUqtg==
-X-Google-Smtp-Source: AA6agR5X9J1cHStUXD+eWgp+f5ZhGKrx2w+4FpRFxngJ7RRjcrVhOmd1jOonZDjfF8w8UQfXF7JnqhjZRW7BoYvKFP4=
-X-Received: by 2002:a25:d3d1:0:b0:690:807c:9e5 with SMTP id
- e200-20020a25d3d1000000b00690807c09e5mr22810541ybf.424.1661241310788; Tue, 23
- Aug 2022 00:55:10 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=EIwZ7BoTfdMUAhH2fOQC6fOziS/YjfnIvgRTO5vTHto=;
+        b=JsEpgi02ogkiNHqTZQiNQNf0eAqsqhRvH05OVJiMj53mfMTrVKYVLUNWRlWHiH2pdm
+         e57UmbYSmYlHXkUowDNLVvWitYUThNywtOP3IBNxtNtBrN9XDcLx682ujQv1xr5C9ONv
+         MKCp2tjVtyZxjlFPaNIgjtBUsCGruJRnfuDHolZbNEhJDmEc74JCIf6Tk4op9wuzAjgg
+         RUyDIclF94XFIUwNd3g8ioSr+0nlPzc24F6XfTkisC96x3uc83bYth7hvY6jJm0wRnPb
+         LgFE0TF7aTbEChcPCBgzYtlpNewiOx4yiXAXVwXCRITclhSdvORoILyVEbfW6ov0CY+R
+         MPDA==
+X-Gm-Message-State: ACgBeo0xdl1oIjCC5NQlTZdBLHk3SMvdrz/QGs/aWjSkbU504/MxUvIi
+        o2las4AWB3s4vqjuugpUejC5jP/TRqhKp9Iq8ZWAW1a8hKG8loZ4glTNHXr74kFijO+Rd71LELf
+        Acyilc2w98pmIix3tFURhC/Ar
+X-Received: by 2002:adf:f643:0:b0:225:2cb3:4b05 with SMTP id x3-20020adff643000000b002252cb34b05mr13203060wrp.12.1661241306644;
+        Tue, 23 Aug 2022 00:55:06 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7QQcmZIjuOTP3rp/phaSR8BK9i2DfQ3gujUYj0ItGrG9WBrBV+POmli4zo4g6w/n8XuVdszg==
+X-Received: by 2002:adf:f643:0:b0:225:2cb3:4b05 with SMTP id x3-20020adff643000000b002252cb34b05mr13203037wrp.12.1661241306387;
+        Tue, 23 Aug 2022 00:55:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:1600:c48b:1fab:a330:5182? (p200300cbc70b1600c48b1faba3305182.dip0.t-ipconnect.de. [2003:cb:c70b:1600:c48b:1fab:a330:5182])
+        by smtp.gmail.com with ESMTPSA id c9-20020a05600c100900b003a2f6367049sm16281074wmc.48.2022.08.23.00.55.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 00:55:05 -0700 (PDT)
+Message-ID: <b2743a3a-a1b4-2d2e-98be-87b58ad387cf@redhat.com>
+Date:   Tue, 23 Aug 2022 09:55:03 +0200
 MIME-Version: 1.0
-References: <20220818124805.601-1-zhouchengming@bytedance.com> <20220818124805.601-8-zhouchengming@bytedance.com>
-In-Reply-To: <20220818124805.601-8-zhouchengming@bytedance.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 23 Aug 2022 09:54:59 +0200
-Message-ID: <CAKfTPtAsEpO_11cCfPu=-RRF2mP4V=5CJL2Ek3t2VUY8nz0Euw@mail.gmail.com>
-Subject: Re: [PATCH v6 7/9] sched/fair: allow changing cgroup of new forked task
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     dietmar.eggemann@arm.com, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box> <Yv7XTON3MwuC1Q3U@google.com>
+ <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+In-Reply-To: <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 at 14:48, Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> commit 7dc603c9028e ("sched/fair: Fix PELT integrity for new tasks")
-> introduce a TASK_NEW state and an unnessary limitation that would fail
-> when changing cgroup of new forked task.
->
-> Because at that time, we can't handle task_change_group_fair() for new
-> forked fair task which hasn't been woken up by wake_up_new_task(),
-> which will cause detach on an unattached task sched_avg problem.
->
-> This patch delete this unnessary limitation by adding check before do
-> detach or attach in task_change_group_fair().
->
-> So cpu_cgrp_subsys.can_attach() has nothing to do for fair tasks,
-> only define it in #ifdef CONFIG_RT_GROUP_SCHED.
->
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+On 19.08.22 05:38, Hugh Dickins wrote:
+> On Fri, 19 Aug 2022, Sean Christopherson wrote:
+>> On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
+>>> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+>>>> On Wed, 6 Jul 2022, Chao Peng wrote:
+>>>> But since then, TDX in particular has forced an effort into preventing
+>>>> (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+>>>>
+>>>> Are any of the shmem.c mods useful to existing users of shmem.c? No.
+>>>> Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
+>>
+>> But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
+>> aren't useful for _all_ existing users, but I don't think it's fair to say that
+>> they're not useful for _any_ existing users.
+> 
+> Okay, I stand corrected: there exist some users of memfd_create()
+> who will also have use for "INACCESSIBLE" memory.
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+As raised in reply to the relevant patch, I'm not sure if we really have
+to/want to expose MFD_INACCESSIBLE to user space. I feel like this is a
+requirement of specific memfd_notifer (memfile_notifier) implementations
+-- such as TDX that will convert the memory and MCE-kill the machine on
+ordinary write access. We might be able to set/enforce this when
+registering a notifier internally instead, and fail notifier
+registration if a condition isn't met (e.g., existing mmap).
 
-> ---
->  kernel/sched/core.c | 25 +++++--------------------
->  kernel/sched/fair.c |  7 +++++++
->  2 files changed, 12 insertions(+), 20 deletions(-)
->
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 8e3f1c3f0b2c..14819bd66021 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -10290,36 +10290,19 @@ static void cpu_cgroup_css_free(struct cgroup_subsys_state *css)
->         sched_unregister_group(tg);
->  }
->
-> +#ifdef CONFIG_RT_GROUP_SCHED
->  static int cpu_cgroup_can_attach(struct cgroup_taskset *tset)
->  {
->         struct task_struct *task;
->         struct cgroup_subsys_state *css;
-> -       int ret = 0;
->
->         cgroup_taskset_for_each(task, css, tset) {
-> -#ifdef CONFIG_RT_GROUP_SCHED
->                 if (!sched_rt_can_attach(css_tg(css), task))
->                         return -EINVAL;
-> -#endif
-> -               /*
-> -                * Serialize against wake_up_new_task() such that if it's
-> -                * running, we're sure to observe its full state.
-> -                */
-> -               raw_spin_lock_irq(&task->pi_lock);
-> -               /*
-> -                * Avoid calling sched_move_task() before wake_up_new_task()
-> -                * has happened. This would lead to problems with PELT, due to
-> -                * move wanting to detach+attach while we're not attached yet.
-> -                */
-> -               if (READ_ONCE(task->__state) == TASK_NEW)
-> -                       ret = -EINVAL;
-> -               raw_spin_unlock_irq(&task->pi_lock);
-> -
-> -               if (ret)
-> -                       break;
->         }
-> -       return ret;
-> +       return 0;
->  }
-> +#endif
->
->  static void cpu_cgroup_attach(struct cgroup_taskset *tset)
->  {
-> @@ -11155,7 +11138,9 @@ struct cgroup_subsys cpu_cgrp_subsys = {
->         .css_released   = cpu_cgroup_css_released,
->         .css_free       = cpu_cgroup_css_free,
->         .css_extra_stat_show = cpu_extra_stat_show,
-> +#ifdef CONFIG_RT_GROUP_SCHED
->         .can_attach     = cpu_cgroup_can_attach,
-> +#endif
->         .attach         = cpu_cgroup_attach,
->         .legacy_cftypes = cpu_legacy_files,
->         .dfl_cftypes    = cpu_files,
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index eba8a64f905a..c319b0bd2bc1 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -11840,6 +11840,13 @@ void init_cfs_rq(struct cfs_rq *cfs_rq)
->  #ifdef CONFIG_FAIR_GROUP_SCHED
->  static void task_change_group_fair(struct task_struct *p)
->  {
-> +       /*
-> +        * We couldn't detach or attach a forked task which
-> +        * hasn't been woken up by wake_up_new_task().
-> +        */
-> +       if (READ_ONCE(p->__state) == TASK_NEW)
-> +               return;
-> +
->         detach_task_cfs_rq(p);
->
->  #ifdef CONFIG_SMP
-> --
-> 2.37.2
->
+So I'd be curious, which other users of shmem/memfd would benefit from
+(MMU)-"INACCESSIBLE" memory obtained via memfd_create()?
+
+-- 
+Thanks,
+
+David / dhildenb
+

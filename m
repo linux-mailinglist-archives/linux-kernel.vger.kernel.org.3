@@ -2,246 +2,415 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A074D59EA52
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E2A59EA41
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiHWRwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S232008AbiHWRtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiHWRvo (ORCPT
+        with ESMTP id S231325AbiHWRs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:51:44 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088AAB7770
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:51:37 -0700 (PDT)
+        Tue, 23 Aug 2022 13:48:26 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D372FAF0D0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:47:41 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id a1-20020a4ab101000000b0044acf001f83so2491259ooo.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661269899; x=1692805899;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QtiuB0PriXznAv3WHqv59ONLCXXHW0skQW/X+XIfi5I=;
-  b=t+ixhpDHeUhzcr9ch8NP8pqcLW6WM5I5S2lqS6Wk48PbcCn9xgYNMfRm
-   LHc1kDGygM5cse1QmkvZqZ8FHxDzCVRD2Eh2e4ZUjA+7lLIjsbGmejM4F
-   +54w6nZJz+CHON7yLSJlT4xRrLwCpsgh8cVBdGGrL5/+xj+wYuqpVD3cg
-   U=;
-X-IronPort-AV: E=Sophos;i="5.93,258,1654560000"; 
-   d="scan'208";a="122579794"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 15:45:53 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com (Postfix) with ESMTPS id BAC9844CF4;
-        Tue, 23 Aug 2022 15:45:52 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 23 Aug 2022 15:45:47 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.43.162.140) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 23 Aug 2022 15:45:44 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>
-CC:     Christian Brauner <brauner@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com>,
-        Ayushman Dutta <ayudutta@amazon.com>
-Subject: [PATCH v3] seccomp: Move copy_seccomp() to no failure path.
-Date:   Tue, 23 Aug 2022 08:45:32 -0700
-Message-ID: <20220823154532.82913-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=KRDDD/ZTQOm4jKNRqZwPa4ZNh2t/HyznlxFVrDjnB8U=;
+        b=U0+/YUjFon/lph3ldYw4TkScr3J/MCVglErPGQ/vLneIjcO1gaF5o5kOCT+o/eHcGQ
+         SupMAksppFSPyPxykYtJXnXyLaFvHiVLigvoxvWN3yO7JXzpn2KnJa5J+9jQQMgD94ah
+         TJMxrcFPWD6bdOXSgMKgdNxUyhd05pKT4u84M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=KRDDD/ZTQOm4jKNRqZwPa4ZNh2t/HyznlxFVrDjnB8U=;
+        b=Uigzkakyz4Zers+5dkGqJlWCICIdP/xBwfnZO6cjxNTA7MW5RU6Tjlx2s6Y/k4kRGV
+         TuDBP3kZkMvfGFI0esL8PHW7xEcGJ/K9paYP2MOsb3722u2xj81DqcNxP6kIVSUdmSC8
+         r6edjO+iCSOedUoyZZho305KFnZztfaSF52GoBZySpESrOsjkNM88tWYk0voUG4UYshY
+         oXD65OY1hzjae2AOYRoA05RRVnnL3NLQiBmxUQgZl6njmrD8nfYOBajQQxzRjdJIKKSY
+         +eMrYzHFWr2t/6Kuu13vhVuln52fwCG2c+AscQi3ngldiUkl9i0cvCf1t475xlVJZ71r
+         Dv+g==
+X-Gm-Message-State: ACgBeo3B8JsIn+169wukSD0ById3xjNqdbCWzJTCD9QCF57BcTFPlhhl
+        tH2LLy4fcVJKtE5gVw/hlsifNQ==
+X-Google-Smtp-Source: AA6agR6YzN5it96eWePaUxUMLxCc1S5wDKWZtrIqKyxwFBsKCHEzkbrHxTXvzBuqngWPpKKk7XzXuA==
+X-Received: by 2002:a4a:4541:0:b0:435:cf9f:1a45 with SMTP id y62-20020a4a4541000000b00435cf9f1a45mr8241849ooa.17.1661269661024;
+        Tue, 23 Aug 2022 08:47:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b23-20020a056830105700b006373175cde0sm3894735otp.44.2022.08.23.08.47.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 08:47:40 -0700 (PDT)
+Subject: Re: [PATCH 25/31] selftests/net: Add TCP-AO library
+To:     Dmitry Safonov <dima@arista.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220818170005.747015-1-dima@arista.com>
+ <20220818170005.747015-26-dima@arista.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <aa0143bc-b0d1-69fb-c117-1e7241f0ad89@linuxfoundation.org>
+Date:   Tue, 23 Aug 2022 09:47:37 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.140]
-X-ClientProxiedBy: EX13D22UWB003.ant.amazon.com (10.43.161.76) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220818170005.747015-26-dima@arista.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our syzbot instance reported memory leaks in do_seccomp() [0], similar
-to the report [1].  It shows that we miss freeing struct seccomp_filter
-and some objects included in it.
+On 8/18/22 10:59 AM, Dmitry Safonov wrote:
+> Provide functions to create selftests dedicated to TCP-AO.
+> They can run in parallel, as they use temporary net namespaces.
+> They can be very specific to the feature being tested.
+> This will allow to create a lot of TCP-AO tests, without complicating
+> one binary with many --options and to create scenarios, that are
+> hard to put in bash script that uses one binary.
+> 
+> Signed-off-by: Dmitry Safonov <dima@arista.com>
+> ---
+>   tools/testing/selftests/Makefile              |   1 +
+>   tools/testing/selftests/net/tcp_ao/.gitignore |   2 +
+>   tools/testing/selftests/net/tcp_ao/Makefile   |  45 +++
+>   tools/testing/selftests/net/tcp_ao/connect.c  |  81 +++++
+>   .../testing/selftests/net/tcp_ao/lib/aolib.h  | 333 +++++++++++++++++
+>   .../selftests/net/tcp_ao/lib/netlink.c        | 341 ++++++++++++++++++
+>   tools/testing/selftests/net/tcp_ao/lib/proc.c | 267 ++++++++++++++
+>   .../testing/selftests/net/tcp_ao/lib/setup.c  | 297 +++++++++++++++
+>   tools/testing/selftests/net/tcp_ao/lib/sock.c | 294 +++++++++++++++
+>   .../testing/selftests/net/tcp_ao/lib/utils.c  |  30 ++
+>   10 files changed, 1691 insertions(+)
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/.gitignore
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/Makefile
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/connect.c
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/aolib.h
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/netlink.c
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/proc.c
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/setup.c
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/sock.c
+>   create mode 100644 tools/testing/selftests/net/tcp_ao/lib/utils.c
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 10b34bb03bc1..2a3b15a13ccb 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -46,6 +46,7 @@ TARGETS += net
+>   TARGETS += net/af_unix
+>   TARGETS += net/forwarding
+>   TARGETS += net/mptcp
+> +TARGETS += net/tcp_ao
 
-We can reproduce the issue with the program below [2] which calls one
-seccomp() and two clone() syscalls.
+Please look into a wayto invoke all of them instead of adding individual
+net/* to the main Makefile. This list seems to be growing. :)
 
-The first clone()d child exits earlier than its parent and sends a
-signal to kill it during the second clone(), more precisely before the
-fatal_signal_pending() test in copy_process().  When the parent receives
-the signal, it has to destroy the embryonic process and return -EINTR to
-user space.  In the failure path, we have to call seccomp_filter_release()
-to decrement the filter's refcount.
+>   TARGETS += netfilter
+>   TARGETS += nsfs
+>   TARGETS += pidfd
 
-Initially, we called it in free_task() called from the failure path, but
-the commit 3a15fb6ed92c ("seccomp: release filter after task is fully
-dead") moved it to release_task() to notify user space as early as possible
-that the filter is no longer used.
+[snip]
 
-To keep the change and current seccomp refcount semantics, let's move
-copy_seccomp() just after the signal check and add a WARN_ON_ONCE() in
-free_task() for future debugging.
+> +
+> +__attribute__((__format__(__printf__, 2, 3)))
+> +static inline void __test_print(void (*fn)(const char *), const char *fmt, ...)
+> +{
+> +#define TEST_MSG_BUFFER_SIZE 4096
+> +	char buf[TEST_MSG_BUFFER_SIZE];
+> +	va_list arg;
+> +
+> +	va_start(arg, fmt);
+> +	vsnprintf(buf, sizeof(buf), fmt, arg);
+> +	va_end(arg);
+> +	fn(buf);
+> +}
+> +
 
-[0]:
-unreferenced object 0xffff8880063add00 (size 256):
-  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.914s)
-  hex dump (first 32 bytes):
-    01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00  ................
-    ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
-  backtrace:
-    do_seccomp (./include/linux/slab.h:600 ./include/linux/slab.h:733 kernel/seccomp.c:666 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
-    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-unreferenced object 0xffffc90000035000 (size 4096):
-  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 05 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    __vmalloc_node_range (mm/vmalloc.c:3226)
-    __vmalloc_node (mm/vmalloc.c:3261 (discriminator 4))
-    bpf_prog_alloc_no_stats (kernel/bpf/core.c:91)
-    bpf_prog_alloc (kernel/bpf/core.c:129)
-    bpf_prog_create_from_user (net/core/filter.c:1414)
-    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
-    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-unreferenced object 0xffff888003fa1000 (size 1024):
-  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    bpf_prog_alloc_no_stats (./include/linux/slab.h:600 ./include/linux/slab.h:733 kernel/bpf/core.c:95)
-    bpf_prog_alloc (kernel/bpf/core.c:129)
-    bpf_prog_create_from_user (net/core/filter.c:1414)
-    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
-    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-unreferenced object 0xffff888006360240 (size 16):
-  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
-  hex dump (first 16 bytes):
-    01 00 37 00 76 65 72 6c e0 83 01 06 80 88 ff ff  ..7.verl........
-  backtrace:
-    bpf_prog_store_orig_filter (net/core/filter.c:1137)
-    bpf_prog_create_from_user (net/core/filter.c:1428)
-    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
-    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
-unreferenced object 0xffff8880060183e0 (size 8):
-  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
-  hex dump (first 8 bytes):
-    06 00 00 00 00 00 ff 7f                          ........
-  backtrace:
-    kmemdup (mm/util.c:129)
-    bpf_prog_store_orig_filter (net/core/filter.c:1144)
-    bpf_prog_create_from_user (net/core/filter.c:1428)
-    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
-    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+Is there a reason add these instead of using kselftest_* print
+functions?
 
-[1]: https://syzkaller.appspot.com/bug?id=2809bb0ac77ad9aa3f4afe42d6a610aba594a987
+> +#define test_print(fmt, ...)						\
+> +	__test_print(__test_msg, "%ld[%s:%u] " fmt "\n",		\
+> +		     syscall(SYS_gettid),				\
+> +		     __FILE__, __LINE__, ##__VA_ARGS__)
+> +
+> +#define test_ok(fmt, ...)						\
+> +	__test_print(__test_ok, fmt "\n", ##__VA_ARGS__)
+> +
+> +#define test_fail(fmt, ...)						\
+> +do {									\
+> +	if (errno)							\
+> +		__test_print(__test_fail, fmt ": %m\n", ##__VA_ARGS__);	\
+> +	else								\
+> +		__test_print(__test_fail, fmt "\n", ##__VA_ARGS__);	\
+> +	test_failed();							\
+> +} while(0)
+> +
+> +#define KSFT_FAIL  1
+> +#define test_error(fmt, ...)						\
+> +do {									\
+> +	if (errno)							\
+> +		__test_print(__test_error, "%ld[%s:%u] " fmt ": %m\n",	\
+> +			     syscall(SYS_gettid), __FILE__, __LINE__,	\
+> +			     ##__VA_ARGS__);				\
+> +	else								\
+> +		__test_print(__test_error, "%ld[%s:%u] " fmt "\n",	\
+> +			     syscall(SYS_gettid), __FILE__, __LINE__,	\
+> +			     ##__VA_ARGS__);				\
+> +	exit(KSFT_FAIL);						\
+> +} while(0)
+> +
 
-[2]:
-#define _GNU_SOURCE
-#include <sched.h>
-#include <signal.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-#include <linux/filter.h>
-#include <linux/seccomp.h>
+Is there a reason add these instead of using kselftest_* print
+functions?
 
-void main(void)
-{
-	struct sock_filter filter[] = {
-		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-	};
-	struct sock_fprog fprog = {
-		.len = sizeof(filter) / sizeof(filter[0]),
-		.filter = filter,
-	};
-	long i, pid;
+> + * Timeout on syscalls where failure is not expected.
+> + * You may want to rise it if the test machine is very busy.
+> + */
+> +#ifndef TEST_TIMEOUT_SEC
+> +#define TEST_TIMEOUT_SEC	5
+> +#endif
+> +
 
-	syscall(__NR_seccomp, SECCOMP_SET_MODE_FILTER, 0, &fprog);
+Where is the TEST_TIMEOUT_SEC usually defined? Does this come
+from shell wrapper that runs this test? Can we add a message before
+starting the test print the timeout used?
 
-	for (i = 0; i < 2; i++) {
-		pid = syscall(__NR_clone, CLONE_NEWNET | SIGKILL, NULL, NULL, 0);
-		if (pid == 0)
-			return;
-	}
-}
+> +/*
+> + * Timeout on connect() where a failure is expected.
+> + * If set to 0 - kernel will try to retransmit SYN number of times, set in
+> + * /proc/sys/net/ipv4/tcp_syn_retries
+> + * By default set to 1 to make tests pass faster on non-busy machine.
+> + */
+> +#ifndef TEST_RETRANSMIT_SEC
+> +#define TEST_RETRANSMIT_SEC	1
+> +#endif
+> +
 
-Fixes: 3a15fb6ed92c ("seccomp: release filter after task is fully dead")
-Reported-by: syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com
-Reported-by: Ayushman Dutta <ayudutta@amazon.com>
-Suggested-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
----
-v3:
-  * Fix build failure for CONFIG_SECCOMP=n case
+Where would this TEST_RETRANSMIT_SEC defined usually?
 
-v2: https://lore.kernel.org/lkml/20220823004806.38681-1-kuniyu@amazon.com/
-  * Move copy_seccomp() after no failure path instead of adding
-    seccomp_filter_release() in the failure path.
+> +
+> +static inline int _test_connect_socket(int sk, const union tcp_addr taddr,
+> +					unsigned port, time_t timeout)
+> +{
+> +#ifdef IPV6_TEST
+> +	struct sockaddr_in6 addr = {
+> +		.sin6_family	= AF_INET6,
+> +		.sin6_port	= htons(port),
+> +		.sin6_addr	= taddr.a6,
+> +	};
+> +#else
+> +	struct sockaddr_in addr = {
+> +		.sin_family	= AF_INET,
+> +		.sin_port	= htons(port),
+> +		.sin_addr	= taddr.a4,
+> +	};
+> +#endif
 
-v1: https://lore.kernel.org/lkml/20220822204436.26631-1-kuniyu@amazon.com/
----
- kernel/fork.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+Why do we defined these here - are they also defined in a kernel
+header?
 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 90c85b17bf69..6ac1cc62f197 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -537,6 +537,9 @@ void put_task_stack(struct task_struct *tsk)
- 
- void free_task(struct task_struct *tsk)
- {
-+#ifdef CONFIG_SECCOMP
-+	WARN_ON_ONCE(tsk->seccomp.filter);
-+#endif
- 	release_user_cpus_ptr(tsk);
- 	scs_release(tsk);
- 
-@@ -2409,12 +2412,6 @@ static __latent_entropy struct task_struct *copy_process(
- 
- 	spin_lock(&current->sighand->siglock);
- 
--	/*
--	 * Copy seccomp details explicitly here, in case they were changed
--	 * before holding sighand lock.
--	 */
--	copy_seccomp(p);
--
- 	rv_task_fork(p);
- 
- 	rseq_fork(p, clone_flags);
-@@ -2431,6 +2428,14 @@ static __latent_entropy struct task_struct *copy_process(
- 		goto bad_fork_cancel_cgroup;
- 	}
- 
-+	/* No more failure paths after this point. */
-+
-+	/*
-+	 * Copy seccomp details explicitly here, in case they were changed
-+	 * before holding sighand lock.
-+	 */
-+	copy_seccomp(p);
-+
- 	init_task_pid_links(p);
- 	if (likely(p->pid)) {
- 		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
--- 
-2.30.2
+> +	return __test_connect_socket(sk, (void *)&addr, sizeof(addr), timeout);
+> +}
+> +
+> +static inline int test_connect_socket(int sk,
+> +		const union tcp_addr taddr, unsigned port)
+> +{
+> +	return _test_connect_socket(sk, taddr, port, TEST_TIMEOUT_SEC);
+> +}
+> +
+> +extern int test_prepare_ao_sockaddr(struct tcp_ao *ao,
+> +		const char *alg, uint16_t flags,
+> +		void *addr, size_t addr_sz, uint8_t prefix,
+> +		uint8_t sndid, uint8_t rcvid, uint8_t maclen,
+> +		uint8_t keyflags, uint8_t keylen, const char *key);
+> +
+> +static inline int test_prepare_ao(struct tcp_ao *ao,
+> +		const char *alg, uint16_t flags,
+> +		union tcp_addr in_addr, uint8_t prefix,
+> +		uint8_t sndid, uint8_t rcvid, uint8_t maclen,
+> +		uint8_t keyflags, uint8_t keylen, const char *key)
+> +{
+> +#ifdef IPV6_TEST
+> +	struct sockaddr_in6 addr = {
+> +		.sin6_family	= AF_INET6,
+> +		.sin6_port	= 0,
+> +		.sin6_addr	= in_addr.a6,
+> +	};
+> +#else
+> +	struct sockaddr_in addr = {
+> +		.sin_family	= AF_INET,
+> +		.sin_port	= 0,
+> +		.sin_addr	= in_addr.a4,
+> +	};
+> +#endif
+> +
+
+Same question here. In general having these ifdefs isn't ideal without
+a good reason.
+
+> +	return test_prepare_ao_sockaddr(ao, alg, flags,
+> +			(void *)&addr, sizeof(addr), prefix, sndid, rcvid,
+> +			maclen, keyflags, keylen, key);
+> +}
+> +
+> +static inline int test_prepare_def_ao(struct tcp_ao *ao,
+> +		const char *key, uint16_t flags,
+> +		union tcp_addr in_addr, uint8_t prefix,
+> +		uint8_t sndid, uint8_t rcvid)
+> +{
+> +	if (prefix > DEFAULT_TEST_PREFIX)
+> +		prefix = DEFAULT_TEST_PREFIX;
+> +
+> +	return test_prepare_ao(ao, DEFAULT_TEST_ALGO, flags, in_addr,
+> +			prefix, sndid, rcvid, 0, 0, strlen(key), key);
+> +}
+> +
+> +extern int test_get_one_ao(int sk, struct tcp_ao_getsockopt *out,
+> +			   uint16_t flags, void *addr, size_t addr_sz,
+> +			   uint8_t prefix, uint8_t sndid, uint8_t rcvid);
+> +extern int test_cmp_getsockopt_setsockopt(const struct tcp_ao *a,
+> +					  const struct tcp_ao_getsockopt *b);
+> +
+> +static inline int test_verify_socket_ao(int sk, struct tcp_ao *ao)
+> +{
+> +	struct tcp_ao_getsockopt tmp;
+> +	int err;
+> +
+> +	err = test_get_one_ao(sk, &tmp, 0, &ao->tcpa_addr,
+> +			sizeof(ao->tcpa_addr), ao->tcpa_prefix,
+> +			ao->tcpa_sndid, ao->tcpa_rcvid);
+> +	if (err)
+> +		return err;
+
+Is this always an error or could this a skip if dependencies aren't
+met to run the test? This is a global comment for all error cases.
+
+> +
+> +	return test_cmp_getsockopt_setsockopt(ao, &tmp);
+> +}
+> +
+> +static inline int test_set_ao(int sk, const char *key, uint16_t flags,
+> +			      union tcp_addr in_addr, uint8_t prefix,
+> +			      uint8_t sndid, uint8_t rcvid)
+> +{
+> +	struct tcp_ao tmp;
+> +	int err;
+> +
+> +	err = test_prepare_def_ao(&tmp, key, flags, in_addr,
+> +			prefix, sndid, rcvid);
+> +	if (err)
+> +		return err;
+
+Same comment as above here.
+
+> +
+> +	if (setsockopt(sk, IPPROTO_TCP, TCP_AO, &tmp, sizeof(tmp)) < 0)
+> +		return -errno;
+> +
+> +	return test_verify_socket_ao(sk, &tmp);
+> +}
+> +
+> +extern ssize_t test_server_run(int sk, ssize_t quota, time_t timeout_sec);
+> +extern ssize_t test_client_loop(int sk, char *buf, size_t buf_sz,
+> +				const size_t msg_len, time_t timeout_sec);
+> +extern int test_client_verify(int sk, const size_t msg_len, const size_t nr,
+> +			      time_t timeout_sec);
+> +
+> +struct netstat;
+> +extern struct netstat *netstat_read(void);
+> +extern void netstat_free(struct netstat *ns);
+> +extern void netstat_print_diff(struct netstat *nsa, struct netstat *nsb);
+> +extern uint64_t netstat_get(struct netstat *ns,
+> +			    const char *name, bool *not_found);
+> +
+> +static inline uint64_t netstat_get_one(const char *name, bool *not_found)
+> +{
+> +	struct netstat *ns = netstat_read();
+> +	uint64_t ret;
+> +
+> +	ret = netstat_get(ns, name, not_found);
+> +
+> +	netstat_free(ns);
+> +	return ret;
+> +}
+> +
+> +#endif /* _AOLIB_H_ */
+> diff --git a/tools/testing/selftests/net/tcp_ao/lib/netlink.c b/tools/testing/selftests/net/tcp_ao/lib/netlink.c
+> new file mode 100644
+> index 000000000000..f04757c921d0
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/tcp_ao/lib/netlink.c
+> @@ -0,0 +1,341 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Original from tools/testing/selftests/net/ipsec.c */
+> +#include <linux/netlink.h>
+> +#include <linux/random.h>
+> +#include <linux/rtnetlink.h>
+> +#include <linux/veth.h>
+> +#include <net/if.h>
+> +#include <stdint.h>
+> +#include <string.h>
+> +#include <sys/socket.h>
+> +
+> +#include "aolib.h"
+> +
+> +#define MAX_PAYLOAD		2048
+
+tools/testing/selftests/net/gro.c seem to define this as:
+
+#define MAX_PAYLOAD (IP_MAXPACKET - sizeof(struct tcphdr) - sizeof(struct ipv6hdr))
+
+Can you do the same instead of hard-coding?
+
+
+> +
+> +const struct sockaddr_in6 addr_any6 = {
+> +	.sin6_family	= AF_INET6,
+> +};
+> +
+> +const struct sockaddr_in addr_any4 = {
+> +	.sin_family	= AF_INET,
+> +};
+> 
+
+A couple of things to look at closely. For some failures such as
+memory allocation for the test or not being able to open a file
+
+fnetstat = fopen("/proc/net/netstat", "r");
+
+Is this a failure or missing config or not having the right permissions
+to open the fail. All of these cases would be a SKIP and not a test fail.
+
+thanks,
+-- Shuah
 

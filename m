@@ -2,88 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9D959D115
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B38459D125
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239944AbiHWGN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 02:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S239753AbiHWGSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 02:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240512AbiHWGNA (ORCPT
+        with ESMTP id S239166AbiHWGSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 02:13:00 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35B35FAF4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:12:59 -0700 (PDT)
-Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id B2511310212;
-        Tue, 23 Aug 2022 08:12:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1661235177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2o1rg99c9jE5s8cxU2HEcE8p1xFOfF6k+D1wBc3N2HE=;
-        b=xnbES8GCy9LTjTlMp7hCcQO+sXx9AhfVtQ7Is0yjLbsKZNtX5dx9tb/icTUlfL4YugcTSv
-        QxhfhKq4y12Aw/fxi4FUVLFQbIMhEAKQH2PyjeCNGjv/tR/qabIp8OCiwoJrDnbqx9Gopp
-        QzNZ/E8QTsuP4VkI2/I59+W4osKEVg+iRs5o1wSg8fCs04C666q4zT7q2hBfgHVNoZYiNM
-        KRX76j1MI4xj7lVn/Em7U0TIHJ68t+6WOm+49CWsQd2Ig5vaY8Xj9geomFK6usw4eDLJmq
-        zFJ8ccQy5Hr1Hr+raJjYN5v33Q3BG2Yu9P5tc5KC1O2mzm0YXaKtyVCUwHHL4w==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Cc:     =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        linux-kernel@vger.kernel.org,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v3 5/5] lib/cpumask_kunit: add tests file to MAINTAINERS
-Date:   Tue, 23 Aug 2022 08:12:23 +0200
-Message-Id: <a4d878c1a0f95837f4d2b6db1e3c9248044e6002.1661234636.git.sander@svanheule.net>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <cover.1661234636.git.sander@svanheule.net>
-References: <cover.1661234636.git.sander@svanheule.net>
+        Tue, 23 Aug 2022 02:18:34 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBDFBC24
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:18:31 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id r22so11425067pgm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=3/lhotbB4Uar/lt4peIcoGTYHkX7iv9Q8q1pdoozNu0=;
+        b=HPvGXZlhi0nU7N1qbXgghsfXNeuVWNupf6HJIuUeCRUD+8IoJow9QQ7ZaoAYF9g2+C
+         hnnO0pM7HFbyVhJxv18B1ycqujMTc2vX71070Q9FFIBweuSgou7ZSEJMdRBijO0HA1/v
+         FziVPVgeu9nU3FeEU+XGUMmiPxP6Tqr6OUBx2ErNlGlCivCeGIEakr0+82PSQi4eaz/D
+         l2UYL0w2n9VktS8Ugo3FsCCvW+76y9QaTh8c387K5RFQD/DsfSQpgidjQvcDNGSloG4v
+         naUMJYfoeUsvz0VFr0vC18XrBtpusuu0Zoh2D1f673+pqa0E0rBuJnPgWiIanuG/4h8S
+         2JVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=3/lhotbB4Uar/lt4peIcoGTYHkX7iv9Q8q1pdoozNu0=;
+        b=ibuxdwaW7Dw2kJPjjOYCAV6xMki/wN3DTZAoogdo6gNXAaMfHAyvOo77NpqRvryyeq
+         ILlUHjdZZjxWKl/0Y+Hy78TFjHKHeHA0knF70kepM4sO1Zf6l5juDLzgoDwq5UfMw5TK
+         /KqffvIc3y15KjtOHgeRhHJXLAF/QzDcWhB0HntFt1jYVcR5VsNcv/OdECWsnvGfAtBh
+         9Q5QaUyjw3Z09/HakwI5nkdcunUEHQpZdhZxP8eeJUXcYtBokZhFUKnB9vLMyAXlh7I8
+         c4xbGB/cmmZaM0ac5Unm+T69HtGhYjzn0rFs3ygiLZp6Hpr/g+k4xfr52DieMsksewuk
+         YV8w==
+X-Gm-Message-State: ACgBeo28GByZN6qeOZqf/l9/EHsyvKzkpyn+E79hdInjCS0qAZ/D98Ru
+        2Uf15NFU0K9W23GiMdJBUOqTBQ==
+X-Google-Smtp-Source: AA6agR4M47/Yf8Et3r8O9o96m8U+PWHhEeW9jgpZEjIOsqKpb7rtFRp/rPaUtx23rNWLMFjQ6aj99A==
+X-Received: by 2002:a65:6d14:0:b0:41d:5f95:179d with SMTP id bf20-20020a656d14000000b0041d5f95179dmr19300579pgb.580.1661235511395;
+        Mon, 22 Aug 2022 23:18:31 -0700 (PDT)
+Received: from [10.4.208.12] ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170903230500b00172ccb3f4ebsm6285338plh.160.2022.08.22.23.18.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 23:18:30 -0700 (PDT)
+Message-ID: <9d1997a4-9278-07bd-7f57-952306b28b14@bytedance.com>
+Date:   Tue, 23 Aug 2022 14:18:21 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
+ disable/re-enable interface
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Tejun Heo <tj@kernel.org>, corbet@lwn.net, surenb@google.com,
+        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220808110341.15799-10-zhouchengming@bytedance.com>
+ <YvKd6dezPM6UxfD/@slm.duckdns.org>
+ <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
+ <b89155d3-9315-fefc-408b-4cf538360a1c@bytedance.com>
+ <YvPN07UlaPFAdlet@cmpxchg.org> <20220815132343.GA22640@blackbody.suse.cz>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220815132343.GA22640@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpumask related files are listed under the BITMAP API section, so the
-file with tests for cpumask should be added to that list.
+On 2022/8/15 21:23, Michal Koutný wrote:
+> On Wed, Aug 10, 2022 at 11:25:07AM -0400, Johannes Weiner <hannes@cmpxchg.org> wrote:
+>> cgroup.pressure.enable sounds good to me too. Or, because it's
+>> default-enabled and that likely won't change, cgroup.pressure.disable.
+> 
+> Will it not change?
+> 
+> I'd say that user would be interested in particular level or even just
+> level in subtree for PSI, so the opt-out may result in lots of explicit
+> disablements (or even watch for cgroups created and disable PSI there)
+> to get some performance back.
+> 
+> I have two suggestions based on the above:
+> 1) Make the default globally configurable (mount option?)
+> 2) Allow implicit enablement upon trigger creation
+> 
 
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
-Reviewed-by: David Gow <davidgow@google.com>
-Acked-by: Yury Norov <yury.norov@gmail.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+I think suggestion 1) make sense in some use case, like make per-cgroup
+PSI disabled by default using a mount option, then enable using the
+"cgroup.pressure" interface.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f512b430c7cb..0f41174be0d3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3612,6 +3612,7 @@ F:	include/linux/find.h
- F:	include/linux/nodemask.h
- F:	lib/bitmap.c
- F:	lib/cpumask.c
-+F:	lib/cpumask_kunit.c
- F:	lib/find_bit.c
- F:	lib/find_bit_benchmark.c
- F:	lib/test_bitmap.c
--- 
-2.37.2
+But suggestion 2) auto enable upon trigger creation, if we hide the
+{cpu,memory,io}.pressure files when disabled, how can we create trigger?
 
+Want to see what do Johannes and Tejun think about these suggestions?
+
+Thanks.

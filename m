@@ -2,35 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7799B59CD45
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8C159CD46
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238652AbiHWAmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 20:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S238714AbiHWAmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 20:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiHWAmk (ORCPT
+        with ESMTP id S235448AbiHWAmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 20:42:40 -0400
+        Mon, 22 Aug 2022 20:42:52 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BFB4C60A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:42:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B354CA2D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
         Content-Description:In-Reply-To:References;
-        bh=1SF0SGC2zWjdo96D+0xeHw99mifXdhz/ntpv5NKkPcQ=; b=f7o/RoHl4sysNkGDSqSmiH5bk+
-        BVJXkWWoIXlAHXbFVu6OsXOhPlHhz1hdeH447tJvDg9Chs6MB4M73kvLa1CKs/3QBPzOJ1pSXjald
-        mb34+DcKN5fLBzAM0CoUmFryXwVKav1A8fJe7pZTLLQiFPSnxNA1IJpMq/O3XyrfTBSOnGqJgw9hh
-        K+4YFuuIuRHRValii8PQ6ecLqq0voaN88C4KK4uEWe4k5brxhpey4pAL5TmAMukdo7hcpDOSTMZ6R
-        WTF3va/2IKPtSKI45SvDK+XNL657CjTfGdPeiOt0CvjPj49G+IxjVwOtqqf3ryzoIEXpyAJiGoKEv
-        JYpiejbA==;
+        bh=OcnI4ebpnDu4G7YIVsCFew6u/5qBEhwNnUgkxxm55uc=; b=akCEHY61svxxMsDCCHNRmm8aVy
+        ryA+6uUW4tYbeC25Y8VCRvhYMIhO5nItSq8O/1ldsTRuRPyTGUqNvx5BXhPYQfUOmvK1Cu7pEtjoJ
+        4UssVcm3JY5kdlcoayCZmQCIyMbk8Zp6ALJkpChNQd6jS//sHMrBi/86I2WN3mysq5ze41P9cKxPu
+        rwzlPIC8P+aARtrqtbQv7KvNcptSOdHsH1R1zcxKKj+0M13crjr5S739zRASwynttMPHUxZ3aMzrl
+        PDZo3QSkXVJ0bBiNFwxpTbs1JR8ViNgl+azGSqwkx8PMTiDXgfE5Xym6hScXdi7lneg/Uy4CpwHQJ
+        pFPnX9qw==;
 Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQI03-00Eo63-Lo; Tue, 23 Aug 2022 00:42:36 +0000
+        id 1oQI0H-00Eo70-Cq; Tue, 23 Aug 2022 00:42:49 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
         Dillon Min <dillon.minfei@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -39,9 +40,9 @@ Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH 1/2] drm/panel: use 'select' for Ili9341 panel driver helpers
-Date:   Mon, 22 Aug 2022 17:42:27 -0700
-Message-Id: <20220823004227.10820-1-rdunlap@infradead.org>
+Subject: [PATCH 2/2] drm: fix drm_mipi_dbi build errors
+Date:   Mon, 22 Aug 2022 17:42:43 -0700
+Message-Id: <20220823004243.11596-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,13 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use 'select' instead of 'depends on' for DRM helpers for the
-Ilitek ILI9341 panel driver.
-This is what is done in the vast majority of other cases and
-this makes it possible to fix a build error with drm_mipi_dbi.
+drm_mipi_dbi needs lots of DRM_KMS_HELPER support, so select
+that Kconfig symbol like it is done is most other uses, and
+the way that it was before MIPS_DBI was moved from tinydrm
+to its core location.
 
-Fixes: 5a04227326b0 ("drm/panel: Add ilitek ili9341 panel driver")
+Fixes these build errors:
+
+ld: drivers/gpu/drm/drm_mipi_dbi.o: in function `mipi_dbi_buf_copy':
+drivers/gpu/drm/drm_mipi_dbi.c:205: undefined reference to `drm_gem_fb_get_obj'
+ld: drivers/gpu/drm/drm_mipi_dbi.c:211: undefined reference to `drm_gem_fb_begin_cpu_access'
+ld: drivers/gpu/drm/drm_mipi_dbi.c:215: undefined reference to `drm_gem_fb_vmap'
+ld: drivers/gpu/drm/drm_mipi_dbi.c:222: undefined reference to `drm_fb_swab'
+ld: drivers/gpu/drm/drm_mipi_dbi.c:224: undefined reference to `drm_fb_memcpy'
+ld: drivers/gpu/drm/drm_mipi_dbi.c:227: undefined reference to `drm_fb_xrgb8888_to_rgb565'
+ld: drivers/gpu/drm/drm_mipi_dbi.c:235: undefined reference to `drm_gem_fb_vunmap'
+ld: drivers/gpu/drm/drm_mipi_dbi.c:237: undefined reference to `drm_gem_fb_end_cpu_access'
+ld: drivers/gpu/drm/drm_mipi_dbi.o: in function `mipi_dbi_dev_init_with_formats':
+ld: drivers/gpu/drm/drm_mipi_dbi.o:/X64/../drivers/gpu/drm/drm_mipi_dbi.c:469: undefined reference to `drm_gem_fb_create_with_dirty'
+
+Fixes: 174102f4de23 ("drm/tinydrm: Move mipi-dbi")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
 Cc: Dillon Min <dillon.minfei@gmail.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>
 Cc: Sam Ravnborg <sam@ravnborg.org>
@@ -73,19 +89,16 @@ Cc: dri-devel@lists.freedesktop.org
 Cc: David Airlie <airlied@linux.ie>
 Cc: Daniel Vetter <daniel@ffwll.ch>
 ---
- drivers/gpu/drm/panel/Kconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -165,8 +165,8 @@ config DRM_PANEL_ILITEK_IL9322
- config DRM_PANEL_ILITEK_ILI9341
- 	tristate "Ilitek ILI9341 240x320 QVGA panels"
- 	depends on OF && SPI
--	depends on DRM_KMS_HELPER
--	depends on DRM_GEM_DMA_HELPER
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -31,6 +31,7 @@ menuconfig DRM
+ config DRM_MIPI_DBI
+ 	tristate
+ 	depends on DRM
 +	select DRM_KMS_HELPER
-+	select DRM_GEM_DMA_HELPER
- 	depends on BACKLIGHT_CLASS_DEVICE
- 	select DRM_MIPI_DBI
- 	help
+ 
+ config DRM_MIPI_DSI
+ 	bool

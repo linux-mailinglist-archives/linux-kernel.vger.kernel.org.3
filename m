@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BDE59DE69
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A33359DD05
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244128AbiHWLdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S1346630AbiHWLdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358213AbiHWL1d (ORCPT
+        with ESMTP id S1358217AbiHWL1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 07:27:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2411C2F9E;
-        Tue, 23 Aug 2022 02:25:15 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67489C2FAB;
+        Tue, 23 Aug 2022 02:25:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55992B81C85;
-        Tue, 23 Aug 2022 09:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C072EC433C1;
-        Tue, 23 Aug 2022 09:25:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B410B81C89;
+        Tue, 23 Aug 2022 09:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5996C433D6;
+        Tue, 23 Aug 2022 09:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246713;
-        bh=hzkemkVpECEz8P8+g1ZXBJ+D0VCbFxbSR+3zAHrHpjE=;
+        s=korg; t=1661246716;
+        bh=SiBA1XzLUBHJaB51UOxXGqSYrGpx3sSACQtv/DqHTQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uBdKoM8GbUiY8OsDozjNZwc2pUieKZwVmBaya/bb+rRXgxIelmEho/AKDaBZlAxBL
-         rZeLV/U8a0PjzkWEqMsdNCkpIdIMqAD1fqa6iG28NQ3JZCDHIPhB1aKLLYOweuaVD1
-         BIkAi1JsZfW+U0EVbPy8iliHGtOCWS7ANuNvSUu8=
+        b=rb5qSrtvv69+b8fSzhi7D3GYpFVAh2Bffsf+Z99+WYO+oqx0+gYadWd5Rr9lgiT+1
+         nfM1ZBj0VwyUxgfs3LMfaMbjlCIxsg8hxKtKH+b0cugrexKdgj83Lwa3qo9G2Dm1RN
+         JbiUwZD3dde4ABLOfUSMj/INxjC3qlc588MV7KCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <nfraprado@collabora.com>, Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 165/389] clk: mediatek: reset: Fix written reset bit offset
-Date:   Tue, 23 Aug 2022 10:24:03 +0200
-Message-Id: <20220823080122.517733269@linuxfoundation.org>
+Subject: [PATCH 5.4 166/389] misc: rtsx: Fix an error handling path in rtsx_pci_probe()
+Date:   Tue, 23 Aug 2022 10:24:04 +0200
+Message-Id: <20220823080122.562955186@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -49,61 +45,59 @@ User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rex-BC Chen <rex-bc.chen@mediatek.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit edabcf71d100fd433a0fc2d0c97057c446c33b2a ]
+[ Upstream commit 44fd1917314e9d4f53dd95dd65df1c152f503d3a ]
 
-Original assert/deassert bit is BIT(0), but it's more resonable to modify
-them to BIT(id % 32) which is based on id.
+If an error occurs after a successful idr_alloc() call, the corresponding
+resource must be released with idr_remove() as already done in the .remove
+function.
 
-This patch will not influence any previous driver because the reset is
-only used for thermal. The id (MT8183_INFRACFG_AO_THERM_SW_RST) is 0.
+Update the error handling path to add the missing idr_remove() call.
 
-Fixes: 64ebb57a3df6 ("clk: reset: Modify reset-controller driver")
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Link: https://lore.kernel.org/r/20220523093346.28493-3-rex-bc.chen@mediatek.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: ada8a8a13b13 ("mfd: Add realtek pcie card reader driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/e8dc41716cbf52fb37a12e70d8972848e69df6d6.1655271216.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/mediatek/reset.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/misc/cardreader/rtsx_pcr.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
-index cb939c071b0c..89916acf0bc3 100644
---- a/drivers/clk/mediatek/reset.c
-+++ b/drivers/clk/mediatek/reset.c
-@@ -25,7 +25,7 @@ static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
- 	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
- 	unsigned int reg = data->regofs + ((id / 32) << 4);
+diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
+index 4c707d8dc3eb..5807aefd4c88 100644
+--- a/drivers/misc/cardreader/rtsx_pcr.c
++++ b/drivers/misc/cardreader/rtsx_pcr.c
+@@ -1485,7 +1485,7 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+ 	pcr->remap_addr = ioremap_nocache(base, len);
+ 	if (!pcr->remap_addr) {
+ 		ret = -ENOMEM;
+-		goto free_handle;
++		goto free_idr;
+ 	}
  
--	return regmap_write(data->regmap, reg, 1);
-+	return regmap_write(data->regmap, reg, BIT(id % 32));
- }
- 
- static int mtk_reset_deassert_set_clr(struct reset_controller_dev *rcdev,
-@@ -34,7 +34,7 @@ static int mtk_reset_deassert_set_clr(struct reset_controller_dev *rcdev,
- 	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
- 	unsigned int reg = data->regofs + ((id / 32) << 4) + 0x4;
- 
--	return regmap_write(data->regmap, reg, 1);
-+	return regmap_write(data->regmap, reg, BIT(id % 32));
- }
- 
- static int mtk_reset_assert(struct reset_controller_dev *rcdev,
+ 	pcr->rtsx_resv_buf = dma_alloc_coherent(&(pcidev->dev),
+@@ -1547,6 +1547,10 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+ 			pcr->rtsx_resv_buf, pcr->rtsx_resv_buf_addr);
+ unmap:
+ 	iounmap(pcr->remap_addr);
++free_idr:
++	spin_lock(&rtsx_pci_lock);
++	idr_remove(&rtsx_pci_idr, pcr->id);
++	spin_unlock(&rtsx_pci_lock);
+ free_handle:
+ 	kfree(handle);
+ free_pcr:
 -- 
 2.35.1
 

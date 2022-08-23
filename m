@@ -2,87 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BD859D538
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AD859D4EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241459AbiHWIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S1346182AbiHWIis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347102AbiHWIgT (ORCPT
+        with ESMTP id S1343969AbiHWIhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:36:19 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F86C76753
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661242636; x=1692778636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FFUrJBNMDk4t826TIAG649CcdossiWD3s3+Wk/wmhH4=;
-  b=PRMh7gJkry/Afvp1QLjCsrbIh/DPNl+OA/nwRPuxD5Qegn0jV0GohQ6v
-   PTvzSPciN5D8WlWg1txrQXIvrEtMAaSxWh39dDtSYBBjtaYV0JTuwUyrQ
-   zFMfYJ8jtia9IkiPtFm7/MsJ4kjNeF3ckdeqTGdwUXp8/rIq4z9qjJFTX
-   odOkMBJHhO1vph2v8HitrbDIXG2YB0GK18jMnNaO3pymYMHC4S65VlM0h
-   9rg/BAGvQaDYWv1JItqFFeuKtqfY5R/UPa2l3WJiG7HEvUxtYj0M1G6MY
-   ES5E+cb7DiVRdaXJhzHALyedCz/23IfekpYtf1zqLRDXBXZqUE/sR6wd/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="291183216"
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="291183216"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 01:17:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="751606026"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 23 Aug 2022 01:17:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 23 Aug 2022 11:17:12 +0300
-Date:   Tue, 23 Aug 2022 11:17:12 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        bleung@chromium.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_typec: Stash port driver
- info
-Message-ID: <YwSNCFt48Q9Eo02I@kuha.fi.intel.com>
-References: <20220819190807.1275937-1-pmalani@chromium.org>
- <20220819190807.1275937-4-pmalani@chromium.org>
- <YwRa/QxA/RRtxU3P@google.com>
+        Tue, 23 Aug 2022 04:37:12 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174FC77E86
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:56 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id z6so18634490lfu.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=9OqpWtEeuh8ypX1cXc7uAcrCW4m6r/tanmkI11A3Ifk=;
+        b=eTFAgLCB/8cpoPAhYcbVqIDJ2pl/IkkvWPYmcey5kKfMuCCk0rGizy9SyweRQyHtHl
+         WI5+Zy6cGOh/076pcrjt4lRApsuZLiwfqc8b0BBKrHceyBIeTQtrd5DooiBwhCozMI1z
+         +K58OvvT8GV8rPsenMeI2YUun/SFPmcjq31yfu6XKtvJ3U99AXwDZg2uoTyInitkHNLT
+         9ZksMgIJGPUHGoJ6vYxJk8KK4+nmKbPiOp34Y52JdEeN/18JcIS9CvFWXiEXCPo86W9/
+         sqkYy610lz1XikvfXKtzIpU1RfwKLioMZ0hyKegAHDfT3X2aIxP+gQiXMuiOfvF2+wWo
+         pzWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9OqpWtEeuh8ypX1cXc7uAcrCW4m6r/tanmkI11A3Ifk=;
+        b=w4vHpzsl587xLEK4PxI/DIsabhi7kA7EBDZOERSyGuCJ/HtaIBZZ3lq41iisg0yVCA
+         3lHmgH17C8ZfXZWa7PnQ5NFVBKuT0DcRWFfjyWz9k0iRuJ4xBThE4ehnH72e8biXTcUl
+         NAvBMnJHRiQgeIfNGNMU3MJ47WHWUX1JEjQFxFgTr3BoygTKMD4n3ejkHvsFRwfIFh7f
+         0/6jAiu/DTuy9kUm7LnWNlajksheg1cxxqq5f3gehcRev4Kvad/8IbLLx/64yteaqsyJ
+         XcaOmNULewO76IuAAGtysFp4rgFapZ/iRM9+YHtZ6RUOnMIQLIomoWVJlNdfI8CmHUED
+         uX0g==
+X-Gm-Message-State: ACgBeo2ycmYhgrdAcrz4v2uvzFKpEAUJ7vGxa15H9qRM2n2fm7eyd4f2
+        fu1Ehq504hT9Kl5/kSxEY++1Wg==
+X-Google-Smtp-Source: AA6agR53e29e30P7d7REqgiaaLN5FMBaCGv2iuqS7/6pzPEEi/wAmrdSXEzVfrevBl6W4oRZ5Y2p5g==
+X-Received: by 2002:a05:6512:3b8e:b0:492:f799:76b9 with SMTP id g14-20020a0565123b8e00b00492f79976b9mr544446lfv.207.1661242645734;
+        Tue, 23 Aug 2022 01:17:25 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id s8-20020a19ad48000000b0048ae316caf0sm2379428lfd.18.2022.08.23.01.17.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 01:17:24 -0700 (PDT)
+Message-ID: <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
+Date:   Tue, 23 Aug 2022 11:17:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwRa/QxA/RRtxU3P@google.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
+Content-Language: en-US
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 04:43:41AM +0000, Tzung-Bi Shih wrote:
-> On Fri, Aug 19, 2022 at 07:08:04PM +0000, Prashant Malani wrote:
-> > Stash port number and a pointer to the driver-specific struct in the
-> > local Type-C port struct.
-> > 
-> > These can be useful to the port driver to figure out how to communicate
-> > with the ChromeOS EC when an altmode driver related callback is invoked
-> > from the Type-C class code.
+On 22/08/2022 22:07, Serge Semin wrote:
+> The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
+> the CSRs layout is absolutely different and it doesn't has IRQ unlike DW
+> uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there is
+> no any reason to have these controllers described by the same bindings.
+> Thus let's split them up.
 > 
-> The patch looks good to me.  But I would suggest to send it in later series
-> that uses the driver-specific struct (e.g. in altmode driver related callbacks)
-> to make the usage clear.
+> While at it rename the original Synopsys uMCTL2 DT-schema file to a more
+> descriptive - snps,dw-umctl2-ddrc.yaml and add a more detailed title and
+> description of the device bindings.
 
-I agree.
+Filename should be based on compatible, so if renaming then
+snps,ddrc-3.80a.yaml or snps,ddrc.yaml... which leads to original
+filename anyway. Therefore nack for rename.
 
-thanks,
+BTW, if you perform renames, generate patches with proper -M/-C/-B
+arguments so this is detected.
 
--- 
-heikki
+
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> --->  .../snps,dw-umctl2-ddrc.yaml                  | 51 +++++++++++++
+
+This is a mess. I did not get any cover letters, any other patches any
+description of relation between this and your other one.
+
+It seems you make independent and conflicting changes to the same file,
+so this has to be properly organized.
+
+Send entire patchset with cover letter with description of all
+dependencies to all maintainers.
+
+This is unreviewable now, so a no.
+
+Best regards,
+Krzysztof

@@ -2,123 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F158659CF01
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15D559CF0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239530AbiHWDCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 23:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
+        id S239545AbiHWDCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 23:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239808AbiHWDBL (ORCPT
+        with ESMTP id S239676AbiHWDB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 23:01:11 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C5A5A839;
-        Mon, 22 Aug 2022 20:01:10 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id pm13so3884503pjb.5;
-        Mon, 22 Aug 2022 20:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=8LTvgu3eG+no37lZJ/vGjO+POGUS+yqe3hYSH8LxyPU=;
-        b=cXk8C7OwZaBQd+i8rei7z+/fU39R4PhBoSP8Pi3KcSjWGDA/IJGdOvu9hPlBIiZgFX
-         /8todvatRo5NUGNkTaOpOmav8df1vaVyMQhPCsaeXzzERVhrGpsZaq9rxrw2ejKWUQb3
-         q06unBvArEWW7Uzs9NFsMfFdimLDQXR8cFOJN5za0t7nNXwFRvB1RqlU1plvc7HGGZlu
-         IV9/KfNH32gHsNvAMtK8QP6HO34DQ2h0vAOt4USTmnQfBPg/ir8LlQXQbBszRc5HPzqA
-         pDBhAgBJr/sv1VomKkxn81CyZvaqSwlps8Zk1kp7G4QLYIhrFKWMw/m6tRoJ9vN3AaRA
-         KQpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=8LTvgu3eG+no37lZJ/vGjO+POGUS+yqe3hYSH8LxyPU=;
-        b=u4T6PLgZgI4eg4lUzXTMxBg0i93B8hSzWXXM7On6lOsRV0AaUvpmDVYZAUmx09RKuv
-         TUz5VGynfZPEZH9PfNxeueF04NZA3xabx2hbj99t30lm2PSO/X+MaH2dWCe6I8c+c0g7
-         yXIiXZPN5G8eW9L1H6fyO0cUxl52p41olTR2pXrmsjhp/sbil26x3gZ7C+Fsvm6JglBz
-         5Os1b4eiFLqrcK0lk5/UVcF4ONZ9Heb5K/5vrKZa/IWvPtO06pl7vqIiQrDX2gu2/HbR
-         NR37eSuEGx6yCZNz9S6l/QtpawXt0XoE8/g6NmzQu4qWCYKbINCvJ7Ri+ej7oFPcLTKo
-         hJDA==
-X-Gm-Message-State: ACgBeo2j6fOwleKxDigSzXqD2wbt0pOAq1xVcz0sqZfSDOlCKZmlCJ+W
-        W60VLvd+GHyKBulOCM561OnxMLn3ByM=
-X-Google-Smtp-Source: AA6agR7Usq8qO39CF0GcXSfNd0l5Or2tQdeC7/Iij2PzNR0XtTPxPmItyEpe5w6lRlbd/EiJu2LcTA==
-X-Received: by 2002:a17:90a:bc83:b0:1fa:d302:928 with SMTP id x3-20020a17090abc8300b001fad3020928mr1260281pjr.91.1661223669945;
-        Mon, 22 Aug 2022 20:01:09 -0700 (PDT)
-Received: from debian.. (subs03-180-214-233-72.three.co.id. [180.214.233.72])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b00172f1256590sm2385305plh.281.2022.08.22.20.01.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 20:01:09 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-Subject: [PATCH] mips: pci: remove extraneous asterisk from top level comment of ar2315 PCI driver
-Date:   Tue, 23 Aug 2022 10:00:56 +0700
-Message-Id: <20220823030056.123709-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <202208221854.8ASrzjKa-lkp@intel.com>
-References: <202208221854.8ASrzjKa-lkp@intel.com>
+        Mon, 22 Aug 2022 23:01:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C745C9D4;
+        Mon, 22 Aug 2022 20:01:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 332C1B81A03;
+        Tue, 23 Aug 2022 03:01:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69BBC43470;
+        Tue, 23 Aug 2022 03:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661223685;
+        bh=cdJDXRIWTW/8wjvzlgdNdAomL6Qpg0Nri5tYiSOPmhM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=PvrfzSj/YciPY/yB2jSUnAMRkVQNYF3UvHLoubupvCDCDwdwGqfN4WsXAeieGrxTI
+         CLP/U+3Uk73iWKXykpvAMn+K5I4B7HIAsq2lDFcJCJehdgEkRcCrU+2CDmV5tEXnS1
+         Iv3AhAJt0yWPvlKP/midjkLtJe4jI4J7GmO1X8f+3unUDVFEwxk3lEeb4aZb/pFPRP
+         fxFutr5hg/A1oA6bZlQJvJy4dlOIG0I/RjW9y8eTUScIGqSgdnYE8HDL2gZUrFCzaN
+         c5B3GUzA+NJRRSYOLQfazqere8hBquYcvX73m1vTEYkpa1DNhq6Di6BDGUXOInSPq6
+         8Y2e2fMfC45hw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7341A5C05A0; Mon, 22 Aug 2022 20:01:25 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 20:01:25 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Price <steven.price@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, boqun.feng@gmail.com
+Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
+Message-ID: <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220822021520.6996-1-kernelfans@gmail.com>
+ <20220822021520.6996-7-kernelfans@gmail.com>
+ <20220822024528.GC6159@paulmck-ThinkPad-P17-Gen-1>
+ <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1723; i=bagasdotme@gmail.com; h=from:subject; bh=grs6Phzy0fj8UUZxS8TxEqELiZEA9kf5e2WhfxsdBrY=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMksTi8W7Jks8z4wVYK/MbF/5ZzU0rL3DFasC488v9BYarb0 V9PujlIWBjEOBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAExE+CPDf9e0GYfmnIgIkvvaN/XX4U kNl0I3L0pgiDYKfzCfZ9M3/iaGv0LGWzQvFFfPC/JdGMC1Zu7BMz1b44xDZsiuEYuovy6YzgMA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot reported kernel-doc warning:
+On Tue, Aug 23, 2022 at 09:50:56AM +0800, Pingfan Liu wrote:
+> On Sun, Aug 21, 2022 at 07:45:28PM -0700, Paul E. McKenney wrote:
+> > On Mon, Aug 22, 2022 at 10:15:16AM +0800, Pingfan Liu wrote:
+> > > In order to support parallel, rcu_state.n_online_cpus should be
+> > > atomic_dec()
+> > > 
+> > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> > 
+> > I have to ask...  What testing have you subjected this patch to?
+> > 
+> 
+> This patch subjects to [1]. The series aims to enable kexec-reboot in
+> parallel on all cpu. As a result, the involved RCU part is expected to
+> support parallel.
 
-arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
+I understand (and even sympathize with) the expectation.  But results
+sometimes diverge from expectations.  There have been implicit assumptions
+in RCU about only one CPU going offline at a time, and I am not sure
+that all of them have been addressed.  Concurrent CPU onlining has
+been looked at recently here:
 
-The warning above is caused by an extraneous asterisk on the top level
-(description) comment of pci-ar2315.c, for which the comment is confused as
-kernel-doc comment instead.
+https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
 
-Remove the asterisk.
+You did us atomic_dec() to make rcu_state.n_online_cpus decrementing be
+atomic, which is good.  Did you look through the rest of RCU's CPU-offline
+code paths and related code paths?
 
-Link: https://lore.kernel.org/linux-doc/202208221854.8ASrzjKa-lkp@intel.com/
-Fixes: 3ed7a2a702dc0f ("MIPS: ath25: add AR2315 PCI host controller driver")
-Fixes: 3e58e839150db0 ("scripts: kernel-doc: add warning for comment not following kernel-doc syntax")
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: stable@vger.kernel.org # v5.15, v5.19
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- The second Fixes: commit exposes the kernel-doc warning, which the
- culprit is actually the first Fixes: commit, so it make sense to apply
- this patch to supported stable branches after the second commit one.
+> [1]: https://lore.kernel.org/linux-arm-kernel/20220822021520.6996-3-kernelfans@gmail.com/T/#mf62352138d7b040fdb583ba66f8cd0ed1e145feb
 
- arch/mips/pci/pci-ar2315.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Perhaps I am more blind than usual today, but I am not seeing anything
+in this patch describing the testing.  At this point, I am thinking in
+terms of making rcutorture test concurrent CPU offlining.
 
-diff --git a/arch/mips/pci/pci-ar2315.c b/arch/mips/pci/pci-ar2315.c
-index 30e0922f4ceaec..e17d862cfa4c6a 100644
---- a/arch/mips/pci/pci-ar2315.c
-+++ b/arch/mips/pci/pci-ar2315.c
-@@ -2,7 +2,7 @@
- /*
-  */
- 
--/**
-+/*
-  * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
-  * and interrupt. PCI interface supports MMIO access method, but does not
-  * seem to support I/O ports.
+Thoughts?
 
-base-commit: 072e51356cd5a4a1c12c1020bc054c99b98333df
--- 
-An old man doll... just what I always wanted! - Clara
+							Thanx, Paul
 
+> Thanks,
+> 
+> 	Pingfan
+> 
+> 
+> > 							Thanx, Paul
+> > 
+> > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > Cc: Josh Triplett <josh@joshtriplett.org>
+> > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > > Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> > > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Steven Price <steven.price@arm.com>
+> > > Cc: "Peter Zijlstra
+> > > Cc: Mark Rutland <mark.rutland@arm.com>
+> > > Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> > > Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+> > > To: linux-kernel@vger.kernel.org
+> > > To: rcu@vger.kernel.org
+> > > ---
+> > >  kernel/cpu.c      | 1 +
+> > >  kernel/rcu/tree.c | 3 ++-
+> > >  2 files changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/cpu.c b/kernel/cpu.c
+> > > index 1261c3f3be51..90debbe28e85 100644
+> > > --- a/kernel/cpu.c
+> > > +++ b/kernel/cpu.c
+> > > @@ -1872,6 +1872,7 @@ static struct cpuhp_step cpuhp_hp_states[] = {
+> > >  		.name			= "RCU/tree:prepare",
+> > >  		.startup.single		= rcutree_prepare_cpu,
+> > >  		.teardown.single	= rcutree_dead_cpu,
+> > > +		.support_kexec_parallel	= true,
+> > >  	},
+> > >  	/*
+> > >  	 * On the tear-down path, timers_dead_cpu() must be invoked
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index 79aea7df4345..07d31e16c65e 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -2168,7 +2168,8 @@ int rcutree_dead_cpu(unsigned int cpu)
+> > >  	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
+> > >  		return 0;
+> > >  
+> > > -	WRITE_ONCE(rcu_state.n_online_cpus, rcu_state.n_online_cpus - 1);
+> > > +	/* Hot remove path allows parallel, while Hot add races against remove on lock */
+> > > +	atomic_dec((atomic_t *)&rcu_state.n_online_cpus);
+> > >  	/* Adjust any no-longer-needed kthreads. */
+> > >  	rcu_boost_kthread_setaffinity(rnp, -1);
+> > >  	// Stop-machine done, so allow nohz_full to disable tick.
+> > > -- 
+> > > 2.31.1
+> > > 

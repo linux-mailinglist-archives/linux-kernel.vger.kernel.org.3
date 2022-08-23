@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBDB59DB2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7492059DC4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352973AbiHWKJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S1356181AbiHWKlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352696AbiHWKCV (ORCPT
+        with ESMTP id S1353714AbiHWK1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770417C741;
-        Tue, 23 Aug 2022 01:50:30 -0700 (PDT)
+        Tue, 23 Aug 2022 06:27:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EEF844DF;
+        Tue, 23 Aug 2022 02:05:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0635F6122F;
-        Tue, 23 Aug 2022 08:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D687C433D6;
-        Tue, 23 Aug 2022 08:50:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A94D9B81C66;
+        Tue, 23 Aug 2022 09:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3971C433C1;
+        Tue, 23 Aug 2022 09:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244629;
-        bh=7XvzYG1/pjFVKJRC1vdT57a3gpQ/VTg3095N79BMJe8=;
+        s=korg; t=1661245554;
+        bh=iwlSgC6Aa0nWy47+NA8m36MZZmWgMbKUT66h/Y2MjP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wqm2P+kjjpAQ0i09Ovk+mC2xEgzXV/213ZKlnaQ6rfIEpimk6WuLxI2aa3WRTqHZA
-         5CERb7Jix20PbRvsY7IuQf0WgcOEmGFae3E6UYOa6CizFz/GBm8p5M6FzPwu/up4Da
-         XPV5PqCCiBa0kbCQaJWyOlk43IUeZSIfjkzZC0oI=
+        b=oAtlR7WligDj25Q3T0/ovdHxseIgAf8QzNScJn1OlXgGxCucTJbuD97/U03T3Q5gA
+         m7pJlA8v79ODDPE2+BfO0XL/O5VG4Y6DFj7eO460TdW05JlSID9yFlTiWjSZp4gG4M
+         u9GZfpwnqDs/JpbNc336Du0daZ4GNWqLApkvjjYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.15 125/244] netfilter: nf_tables: disallow NFTA_SET_ELEM_KEY_END with NFT_SET_ELEM_INTERVAL_END flag
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 115/287] mtd: maps: Fix refcount leak in ap_flash_init
 Date:   Tue, 23 Aug 2022 10:24:44 +0200
-Message-Id: <20220823080103.250852622@linuxfoundation.org>
+Message-Id: <20220823080104.248130751@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,29 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 4963674c2e71fc062f8f089f0f58ffbb5533060b upstream.
+[ Upstream commit 77087a04c8fd554134bddcb8a9ff87b21f357926 ]
 
-These are mutually exclusive, actually NFTA_SET_ELEM_KEY_END replaces
-the flag notation.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 7b225d0b5c6d ("netfilter: nf_tables: add NFTA_SET_ELEM_KEY_END attribute")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b0afd44bc192 ("mtd: physmap_of: add a hook for Versatile write protection")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220523143255.4376-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c |    1 +
+ drivers/mtd/maps/physmap_of_versatile.c | 1 +
  1 file changed, 1 insertion(+)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -5768,6 +5768,7 @@ static int nft_add_set_elem(struct nft_c
- 	      nla[NFTA_SET_ELEM_EXPIRATION] ||
- 	      nla[NFTA_SET_ELEM_USERDATA] ||
- 	      nla[NFTA_SET_ELEM_EXPR] ||
-+	      nla[NFTA_SET_ELEM_KEY_END] ||
- 	      nla[NFTA_SET_ELEM_EXPRESSIONS]))
- 		return -EINVAL;
+diff --git a/drivers/mtd/maps/physmap_of_versatile.c b/drivers/mtd/maps/physmap_of_versatile.c
+index 961704228dd2..7d56e97bd50f 100644
+--- a/drivers/mtd/maps/physmap_of_versatile.c
++++ b/drivers/mtd/maps/physmap_of_versatile.c
+@@ -107,6 +107,7 @@ static int ap_flash_init(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 	ebi_base = of_iomap(ebi, 0);
++	of_node_put(ebi);
+ 	if (!ebi_base)
+ 		return -ENODEV;
  
+-- 
+2.35.1
+
 
 

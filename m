@@ -2,74 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55ECE59ED8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89E159EDA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbiHWUlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 16:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
+        id S232174AbiHWUnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 16:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbiHWUlQ (ORCPT
+        with ESMTP id S231804AbiHWUms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:41:16 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF63A45061;
-        Tue, 23 Aug 2022 13:31:56 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 202so13228908pgc.8;
-        Tue, 23 Aug 2022 13:31:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=JMXz8A2xJ91prAWbdCfT0dCK746jNn15pml4FJddUZ8=;
-        b=lmkye2UN1b4Q7U05sYHomO8ANCWbC2gTBnpPjVRELIc6kfHqRd/Vo/Ccvxpv/f4gLm
-         +WwN6KKqBz8qjtaRwUT2A6TuvAy6OlihkwWkGZasqLipMS7io4ukK9q5rEJ2UxmvMdfE
-         S6V8ukVXGO1bgoCMj5x/71nv9WjCe94IbSeslxVVvuayrxoUeRNDJAPWAmQ1YHCdVcLu
-         OpLgC2x08A6PfttMb9GmavnM9gqqjYDaizZhUYznFUnHc0QQFysHPpFCg2orUP4SWR8w
-         +fVbObx5l7fOvs04vUAzq+fEddctQCCLBMSFqtuVpcPR4D+kjNG0XXXlK5ZF7KUvCHmM
-         yOvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=JMXz8A2xJ91prAWbdCfT0dCK746jNn15pml4FJddUZ8=;
-        b=HChtXyWM+5NLOqQfMcgAy+L4e+zBwIiRupYjHbzfWEle5A/OP25vruxgcEPIcUsz62
-         M2psmHotqUmdk5/NDRlJWQpTilh95JHE5DPyHS0M20QLhQN/fsI1s1BBkZPzhMRNDA8z
-         5qyyDRDsr12W1vRjRAa6w2+andqmp4wLyer8ZEFgsU0jOFBUiaVWI63schhmHR4GHZzQ
-         FYQDPXbiE2IVXu3i1g5MvuMKcA+LJtypfTu4DPhio5+9vFGkAJszTY/AI0q+G/uKd2D5
-         /p5+9N72MwDNM7u7lpcef4R3cdOPzIKOsyJ7Tz6nz/eLCv/fR98z5CDTnnOguB7p13hq
-         5a9A==
-X-Gm-Message-State: ACgBeo2GI4Y7h3XnbApKmpfwyHL3XIrzk/J3w9nEAFCx4KW+Mz5MPm82
-        tjmOTidNB7pZjgm046wFdyo=
-X-Google-Smtp-Source: AA6agR6eFGJtDbMiDfSBHxH2zYgfAXTpySXUYD6g0Jr7+0wSy/Y0lHWU6h+PUxJv7wehoXRH4GX42A==
-X-Received: by 2002:a63:fc50:0:b0:427:a666:bfe3 with SMTP id r16-20020a63fc50000000b00427a666bfe3mr20980312pgk.547.1661286716094;
-        Tue, 23 Aug 2022 13:31:56 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:90fa])
-        by smtp.gmail.com with ESMTPSA id j7-20020a170903024700b00172ea8ff334sm5075633plh.7.2022.08.23.13.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 13:31:55 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 23 Aug 2022 10:31:54 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
-Subject: Re: [PATCH 6/7] kernfs: Allow kernfs nodes to be deactivated and
- re-activated
-Message-ID: <YwU5Ou78/WVqrYwS@slm.duckdns.org>
-References: <20220820000550.367085-1-tj@kernel.org>
- <20220820000550.367085-7-tj@kernel.org>
- <d918a1f5-40f4-c90c-a7f5-720dcfddb89b@bytedance.com>
+        Tue, 23 Aug 2022 16:42:48 -0400
+X-Greylist: delayed 280 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 13:34:20 PDT
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0998495AE;
+        Tue, 23 Aug 2022 13:34:19 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E16C71BF208;
+        Tue, 23 Aug 2022 20:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661286858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cV2NYGANONs+McSZvth2jIIUoxYHU0k9OlnO5k/fti8=;
+        b=g9GRFiJZXQBWjLSL7fa3c+GxOy35rFp7co+wXhz2QxRHKdudxe9b4gGUYUJd1m5DSwBhjI
+        k3JXP7zsNIuosPyqVimmgIlb4HE1dATEZThoRQRpHWVWEw7nSKiBNwEXJWePeOco1v2eS6
+        77jpYArCbpvNqfhLI8mt9xmj0lFZdNfoKjAV+LcGoH01u+rp70LU5/WTYWzYc4gMS9L/+2
+        eSam3+3tiBbWaf+A+2RovwLNj4QRemNqiWHItiifJsYWkbzeWIOuAf+T/17JVgi1mLL8C4
+        OnP17U+Cv+LG1DBiEeBVOKKtt3xHof4uFmTeIaAm2G2dlWenTx2NHs841r0uWA==
+Date:   Tue, 23 Aug 2022 22:34:17 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     a.zummo@towertech.it, christophe.jaillet@wanadoo.fr
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: mxc: Use devm_clk_get_enabled() helper
+Message-ID: <166128682527.2843313.7668943064097862489.b4-ty@bootlin.com>
+References: <1b5ad1877304b01ddbba73ca615274a52f781aa2.1660582728.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d918a1f5-40f4-c90c-a7f5-720dcfddb89b@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <1b5ad1877304b01ddbba73ca615274a52f781aa2.1660582728.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,34 +52,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, Aug 23, 2022 at 01:49:07PM +0800, Chengming Zhou wrote:
-> > -		if (pos->flags & KERNFS_ACTIVATED)
-> > +		if (kernfs_active(pos) || (kn->flags & KERNFS_REMOVING))
+On Mon, 15 Aug 2022 18:59:23 +0200, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>    - calls devm_clk_get()
+>    - calls clk_prepare_enable() and registers what is needed in order to
+>      call clk_disable_unprepare() when needed, as a managed resource.
 > 
-> May I ask a question, what's the difference between kernfs_active() and KERNFS_ACTIVATED?
+> This simplifies the code, the error handling paths and avoid the need of
+> a dedicated function used with devm_add_action_or_reset().
 > 
-> KERNFS_ACTIVATED is always set when kernfs_activate() and never clear, so I think it means:
-> 
-> 1. !KERNFS_ACTIVATED : allocated but not activated
-> 2. KERNFS_ACTIVATED && !kernfs_active() : make deactivated by kernfs_deactivate_locked()
-> 
-> I see most code check kernfs_active(), but two places check KERNFS_ACTIVATED, I'm not sure where
-> should check KERNFS_ACTIVATED, or is there any chance we can remove KERNFS_ACTIVATED?
+> [...]
 
-Yeah, ACTIVATED means taht created but never activated while kernfs_active()
-means currently active. I tried to substitute all ACTIVATED tests with
-kernfs_active() and remove the former but I wasn't sure about changing
-kernfs_add_one() behavior.
+Applied, thanks!
 
-I think it's too confusing to combine the initial activated state with
-user-requested show/hide state and causes other problems like
-kernfs_activate() used to activate newly created files unhiding files
-explicitly deactivated. Lemme separate out show/hide state into something
-separate so that the distinction is clear.
+[1/1] rtc: mxc: Use devm_clk_get_enabled() helper
+      commit: 25bcfaad5ec4e82aede4270d4925967f8520d4cf
 
-Thanks.
+Best regards,
 
 -- 
-tejun
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

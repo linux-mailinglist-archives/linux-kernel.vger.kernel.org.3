@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977FC59D92B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB8259D985
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240602AbiHWJw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        id S243419AbiHWJru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351651AbiHWJut (ORCPT
+        with ESMTP id S1351767AbiHWJpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:50:49 -0400
+        Tue, 23 Aug 2022 05:45:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E10C9DFBC;
-        Tue, 23 Aug 2022 01:45:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEBD7A779;
+        Tue, 23 Aug 2022 01:43:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C6D1B81C6A;
-        Tue, 23 Aug 2022 08:45:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E08B2C433C1;
-        Tue, 23 Aug 2022 08:45:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71950B81C5C;
+        Tue, 23 Aug 2022 08:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B47C433C1;
+        Tue, 23 Aug 2022 08:43:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244317;
-        bh=v72sCb1UKg/hUfqN4kpl6JgOnAKHwuo/rcMINgfYefU=;
+        s=korg; t=1661244187;
+        bh=VFtKmVcVHFihUMWJ0z4ZSZNShLPoexT9ifPT9YdIUEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UbH0oSPTbP7YkJUzn7jxkl/BhgJ8jyGGiyQXctU3OpnKtw+tGuupc07aT7OqYcCtq
-         1xYQd/gk3u+y7pwuXB82lmyeHLoXGd1qZ05qBdFlOGNz5MV7A5m9wt34hRAHVj+ZWT
-         fMlZ2qe8wYcKLqGjnVF3YnCvAt/q7Gj1RgBaSNsE=
+        b=2HfODPPp8sS9sTqnZQnI/iRv3G3jGLnZyebcSCV0S3LmsyzqKDr70zY9tAeCJ/T21
+         h0pbu6qaRYiFPbdyXHk7JKo269i6h/FmAExmlEmmtnKUyClxl3NKeZKvOEE1ODqi/h
+         mgdSppgrmVw6BiON5QA0QgI3/CNXGxJ66Vux8Nsk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harman Kalra <hkalra@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 072/244] octeontx2-af: suppress external profile loading warning
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 070/229] drm: bridge: sii8620: fix possible off-by-one
 Date:   Tue, 23 Aug 2022 10:23:51 +0200
-Message-Id: <20220823080101.466987922@linuxfoundation.org>
+Message-Id: <20220823080056.229988262@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harman Kalra <hkalra@marvell.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit cf2437626502b5271d19686b03dea306efe17ea0 upstream.
+[ Upstream commit 21779cc21c732c5eff8ea1624be6590450baa30f ]
 
-The packet parser profile supplied as firmware may not
-be present all the time and default profile is used mostly.
-Hence suppress firmware loading warning from kernel due to
-absence of firmware in kernel image.
+The next call to sii8620_burst_get_tx_buf will result in off-by-one
+When ctx->burst.tx_count + size == ARRAY_SIZE(ctx->burst.tx_buf). The same
+thing happens in sii8620_burst_get_rx_buf.
 
-Fixes: 3a7244152f9c ("octeontx2-af: add support for custom KPU entries")
-Signed-off-by: Harman Kalra <hkalra@marvell.com>
-Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This patch also change tx_count and tx_buf to rx_count and rx_buf in
+sii8620_burst_get_rx_buf. It is unreasonable to check tx_buf's size and
+use rx_buf.
+
+Fixes: e19e9c692f81 ("drm/bridge/sii8620: add support for burst eMSC transmissions")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220518065856.18936-1-hbh25y@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/sil-sii8620.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-@@ -1650,7 +1650,7 @@ static void npc_load_kpu_profile(struct
- 	 * Firmware database method.
- 	 * Default KPU profile.
- 	 */
--	if (!request_firmware(&fw, kpu_profile, rvu->dev)) {
-+	if (!request_firmware_direct(&fw, kpu_profile, rvu->dev)) {
- 		dev_info(rvu->dev, "Loading KPU profile from firmware: %s\n",
- 			 kpu_profile);
- 		rvu->kpu_fwdata = kzalloc(fw->size, GFP_KERNEL);
+diff --git a/drivers/gpu/drm/bridge/sil-sii8620.c b/drivers/gpu/drm/bridge/sil-sii8620.c
+index b93486892f4a..9edb7af37d1e 100644
+--- a/drivers/gpu/drm/bridge/sil-sii8620.c
++++ b/drivers/gpu/drm/bridge/sil-sii8620.c
+@@ -628,7 +628,7 @@ static void *sii8620_burst_get_tx_buf(struct sii8620 *ctx, int len)
+ 	u8 *buf = &ctx->burst.tx_buf[ctx->burst.tx_count];
+ 	int size = len + 2;
+ 
+-	if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
++	if (ctx->burst.tx_count + size >= ARRAY_SIZE(ctx->burst.tx_buf)) {
+ 		dev_err(ctx->dev, "TX-BLK buffer exhausted\n");
+ 		ctx->error = -EINVAL;
+ 		return NULL;
+@@ -645,7 +645,7 @@ static u8 *sii8620_burst_get_rx_buf(struct sii8620 *ctx, int len)
+ 	u8 *buf = &ctx->burst.rx_buf[ctx->burst.rx_count];
+ 	int size = len + 1;
+ 
+-	if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
++	if (ctx->burst.rx_count + size >= ARRAY_SIZE(ctx->burst.rx_buf)) {
+ 		dev_err(ctx->dev, "RX-BLK buffer exhausted\n");
+ 		ctx->error = -EINVAL;
+ 		return NULL;
+-- 
+2.35.1
+
 
 

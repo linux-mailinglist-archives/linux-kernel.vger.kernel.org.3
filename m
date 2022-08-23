@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AF559DCFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E51259E2DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354660AbiHWKV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S1353436AbiHWKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352929AbiHWKJe (ORCPT
+        with ESMTP id S1351993AbiHWKEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:09:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD84C7DF69;
-        Tue, 23 Aug 2022 01:55:47 -0700 (PDT)
+        Tue, 23 Aug 2022 06:04:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC947CAAE;
+        Tue, 23 Aug 2022 01:51:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D6ABB81C3B;
-        Tue, 23 Aug 2022 08:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02C5C433D7;
-        Tue, 23 Aug 2022 08:55:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF892B81C39;
+        Tue, 23 Aug 2022 08:51:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DC1C433C1;
+        Tue, 23 Aug 2022 08:51:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244945;
-        bh=FieQMfNxzXPSEp5kaQfeG0576MsAbAodd6WqEw1eqxE=;
+        s=korg; t=1661244678;
+        bh=Jy32Zh/HlrBFPGofS56r9APlpigQ81Lcmqyu53Rlg4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VvLWGc129qyQDlCgbrMVufxbAfpNjBdOCqbVwvwvtaDk5QOWW11b9+z0/MOa+t0U+
-         CvP+Du8UnPpIxVZX/rmXa4TUgdU3cLvm/SAt2aQUt4wVEqfPm8jkb89XPTt5IldQb5
-         12xRJyxjAMhhPMjwm2p7n9Zy3jIBb1hlkQP4gQJA=
+        b=vtzKxhBRTdrMDJnoSobxXUkkIxisa62IuO1HK50dIZ9l2LHXUdCplzVhS6Vgio1t8
+         rOFkXeEJQ9jCZ6iO6/nbxppFfE68RifUsfDf4bBECLyry0URSJZAfmjijPwR45UMIg
+         2QiZN7IwS96mO39tdUC0xOHigdoCfVANqLUbTVro=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Minas Harutyunyan <hminas@synopsys.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 176/244] usb: dwc2: gadget: remove D+ pull-up while no vbus with usb-role-switch
+        stable@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 174/229] net_sched: cls_route: disallow handle of 0
 Date:   Tue, 23 Aug 2022 10:25:35 +0200
-Message-Id: <20220823080105.159639234@linuxfoundation.org>
+Message-Id: <20220823080059.835003991@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
 
-[ Upstream commit db638c6500abaffb8f7770b2a69c40d003d54ae1 ]
+commit 02799571714dc5dd6948824b9d080b44a295f695 upstream.
 
-When using usb-role-switch, D+ pull-up is set as soon as DTCL_SFTDISCON is
-cleared, whatever the vbus valid signal state is. The pull-up should not
-be set when vbus isn't present (this is determined by the drd controller).
+Follows up on:
+https://lore.kernel.org/all/20220809170518.164662-1-cascardo@canonical.com/
 
-This patch ensures that B-Session (so Peripheral role + vbus valid signal)
-is valid before clearing the DCTL_SFTDISCON bit when role switch is used.
-Keep original behavior when usb-role-switch isn't used.
+handle of 0 implies from/to of universe realm which is not very
+sensible.
 
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Link: https://lore.kernel.org/r/20220622160717.314580-1-fabrice.gasnier@foss.st.com
+Lets see what this patch will do:
+$sudo tc qdisc add dev $DEV root handle 1:0 prio
+
+//lets manufacture a way to insert handle of 0
+$sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 \
+route to 0 from 0 classid 1:10 action ok
+
+//gets rejected...
+Error: handle of 0 is not valid.
+We have an error talking to the kernel, -1
+
+//lets create a legit entry..
+sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 route from 10 \
+classid 1:10 action ok
+
+//what did the kernel insert?
+$sudo tc filter ls dev $DEV parent 1:0
+filter protocol ip pref 100 route chain 0
+filter protocol ip pref 100 route chain 0 fh 0x000a8000 flowid 1:10 from 10
+	action order 1: gact action pass
+	 random type none pass val 0
+	 index 1 ref 1 bind 1
+
+//Lets try to replace that legit entry with a handle of 0
+$ sudo tc filter replace dev $DEV parent 1:0 protocol ip prio 100 \
+handle 0x000a8000 route to 0 from 0 classid 1:10 action drop
+
+Error: Replacing with handle of 0 is invalid.
+We have an error talking to the kernel, -1
+
+And last, lets run Cascardo's POC:
+$ ./poc
+0
+0
+-22
+-22
+-22
+
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Acked-by: Stephen Hemminger <stephen@networkplumber.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/sched/cls_route.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index e1cebf581a4a..519bb82b00e8 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3594,7 +3594,8 @@ void dwc2_hsotg_core_disconnect(struct dwc2_hsotg *hsotg)
- void dwc2_hsotg_core_connect(struct dwc2_hsotg *hsotg)
- {
- 	/* remove the soft-disconnect and let's go */
--	dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
-+	if (!hsotg->role_sw || (dwc2_readl(hsotg, GOTGCTL) & GOTGCTL_BSESVLD))
-+		dwc2_clear_bit(hsotg, DCTL, DCTL_SFTDISCON);
- }
+--- a/net/sched/cls_route.c
++++ b/net/sched/cls_route.c
+@@ -431,6 +431,9 @@ static int route4_set_parms(struct net *
+ 			return -EINVAL;
+ 	}
  
- /**
--- 
-2.35.1
-
++	if (!nhandle)
++		return -EINVAL;
++
+ 	h1 = to_hash(nhandle);
+ 	b = rtnl_dereference(head->table[h1]);
+ 	if (!b) {
+@@ -483,6 +486,9 @@ static int route4_change(struct net *net
+ 	int err;
+ 	bool new = true;
+ 
++	if (!handle)
++		return -EINVAL;
++
+ 	if (opt == NULL)
+ 		return handle ? -EINVAL : 0;
+ 
 
 

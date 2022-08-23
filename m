@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE4759E0C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C523059E170
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241829AbiHWLyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S1356900AbiHWKz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359050AbiHWLvh (ORCPT
+        with ESMTP id S1356159AbiHWKtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:51:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1CBD4181;
-        Tue, 23 Aug 2022 02:32:26 -0700 (PDT)
+        Tue, 23 Aug 2022 06:49:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E154BAB18A;
+        Tue, 23 Aug 2022 02:12:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 873A3613F7;
-        Tue, 23 Aug 2022 09:32:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0F6C433C1;
-        Tue, 23 Aug 2022 09:32:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B00CB81C88;
+        Tue, 23 Aug 2022 09:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88066C433D6;
+        Tue, 23 Aug 2022 09:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247140;
-        bh=2xyhPch0MJygp7RYrx8cqb8RHV1ck2BsROSzHKc8JQ8=;
+        s=korg; t=1661245951;
+        bh=aNIRR/iONKqARPCKsB/oCtcZdHegiXVYWMndFZ7GRFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZEii6ScxkdK9vWEZEQqPmtszYD2tuDbWysZ6xlQlyOIz9gIHPgIYf+Htl57m6xCZ5
-         7ThXbsmIhUkT5ZLj/8NRgjq2lkxLRuhhh3scHVKzxH1bnBer8kObXCgHPubluMSr9L
-         YHsDgq0NPl+jJt69Vr7kyS1+qniNm+EgnCi/Ef2Y=
+        b=CL0mCzVlKv8wWBJpbjbMYeVJoNchUvLWr6Su1aN8CNMESD+Mf573Nky8sYXp8vfU5
+         5nvPe+e7U6aRGR7RCm/R6V9qAkGvZAd2PHGlipRJUBD38zMQPzSOWZnhM+wItvDZ9O
+         32yPIa8RuxlINvWEAVlBHH6Kj6gQ2PyhNWJnw5Ys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiu Jianfeng <xiujianfeng@huawei.com>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 5.4 300/389] apparmor: Fix memleak in aa_simple_write_to_buffer()
-Date:   Tue, 23 Aug 2022 10:26:18 +0200
-Message-Id: <20220823080128.102865094@linuxfoundation.org>
+        stable@vger.kernel.org, Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH 4.19 210/287] net/9p: Initialize the iounit field during fid creation
+Date:   Tue, 23 Aug 2022 10:26:19 +0200
+Message-Id: <20220823080107.996496307@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+From: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-commit 417ea9fe972d2654a268ad66e89c8fcae67017c3 upstream.
+commit aa7aeee169480e98cf41d83c01290a37e569be6d upstream.
 
-When copy_from_user failed, the memory is freed by kvfree. however the
-management struct and data blob are allocated independently, so only
-kvfree(data) cause a memleak issue here. Use aa_put_loaddata(data) to
-fix this issue.
+Ensure that the fid's iounit field is set to zero when a new fid is
+created. Certain 9P operations, such as OPEN and CREATE, allow the
+server to reply with an iounit size which the client code assigns to the
+p9_fid struct shortly after the fid is created by p9_fid_create(). On
+the other hand, an XATTRWALK operation doesn't allow for the server to
+specify an iounit value. The iounit field of the newly allocated p9_fid
+struct remained uninitialized in that case. Depending on allocation
+patterns, the iounit value could have been something reasonable that was
+carried over from previously freed fids or, in the worst case, could
+have been arbitrary values from non-fid related usages of the memory
+location.
 
-Fixes: a6a52579e52b5 ("apparmor: split load data into management struct and data blob")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
+The bug was detected in the Windows Subsystem for Linux 2 (WSL2) kernel
+after the uninitialized iounit field resulted in the typical sequence of
+two getxattr(2) syscalls, one to get the size of an xattr and another
+after allocating a sufficiently sized buffer to fit the xattr value, to
+hit an unexpected ERANGE error in the second call to getxattr(2). An
+uninitialized iounit field would sometimes force rsize to be smaller
+than the xattr value size in p9_client_read_once() and the 9P server in
+WSL refused to chunk up the READ on the attr_fid and, instead, returned
+ERANGE to the client. The virtfs server in QEMU seems happy to chunk up
+the READ and this problem goes undetected there.
+
+Link: https://lkml.kernel.org/r/20220710141402.803295-1-tyhicks@linux.microsoft.com
+Fixes: ebf46264a004 ("fs/9p: Add support user. xattr")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+[tyhicks: Adjusted context due to:
+ - Lack of fid refcounting introduced in v5.11 commit 6636b6dcc3db ("9p:
+   add refcount to p9_fid struct")
+ - Difference in how buffer sizes are specified v5.16 commit
+   6e195b0f7c8e ("9p: fix a bunch of checkpatch warnings")]
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/apparmor/apparmorfs.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/9p/client.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
---- a/security/apparmor/apparmorfs.c
-+++ b/security/apparmor/apparmorfs.c
-@@ -403,7 +403,7 @@ static struct aa_loaddata *aa_simple_wri
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -908,16 +908,13 @@ static struct p9_fid *p9_fid_create(stru
+ 	struct p9_fid *fid;
  
- 	data->size = copy_size;
- 	if (copy_from_user(data->data, userbuf, copy_size)) {
--		kvfree(data);
-+		aa_put_loaddata(data);
- 		return ERR_PTR(-EFAULT);
- 	}
+ 	p9_debug(P9_DEBUG_FID, "clnt %p\n", clnt);
+-	fid = kmalloc(sizeof(struct p9_fid), GFP_KERNEL);
++	fid = kzalloc(sizeof(struct p9_fid), GFP_KERNEL);
+ 	if (!fid)
+ 		return NULL;
  
+-	memset(&fid->qid, 0, sizeof(struct p9_qid));
+ 	fid->mode = -1;
+ 	fid->uid = current_fsuid();
+ 	fid->clnt = clnt;
+-	fid->rdir = NULL;
+-	fid->fid = 0;
+ 
+ 	idr_preload(GFP_KERNEL);
+ 	spin_lock_irq(&clnt->lock);
 
 

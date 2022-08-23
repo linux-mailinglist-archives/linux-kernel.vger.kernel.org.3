@@ -2,59 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A730459E74F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6786859E75F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244422AbiHWQbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S242894AbiHWQch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244941AbiHWQaf (ORCPT
+        with ESMTP id S244774AbiHWQcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:30:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F606152;
-        Tue, 23 Aug 2022 06:00:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 23 Aug 2022 12:32:02 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56953A2872;
+        Tue, 23 Aug 2022 06:03:50 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0F9AB81D46;
-        Tue, 23 Aug 2022 13:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B39EC433D7;
-        Tue, 23 Aug 2022 13:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661259610;
-        bh=vFYiXo/P9K/4JU1QhwwFk5O85O6WmJkkrgsVcBQli/E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qESWTLeRSSaxMmItsSzL6/p8MEOxyEJ0hZSoJajH9L6X9Trnt1jeca3kAE3HRcm3q
-         7LOpt2l+Y4UCV6geAcu+6BlTOLRgUy4Gg8jBHvfgfbyfaNvQ5836Ufg0P6KsOSrvA7
-         UPPlMtR6rzOgPBcoP3LF6qCfFOaY2Duu4xjyYw6i/1oc4T0lSrL+HhaFC9umHSnns3
-         E1X8h7iypVxoPsGVT7WAdpryn/lQAJSuFZ7AG/tB5UL4I+gG3ljrRQlwBu7CdavUMw
-         7SkZzpdILB8BsHZpBhqWf3If3EDg9J2GDpDHs2qdpZciv5hnYgv2BBcDXyzZce73xZ
-         EnW8kmObstBHA==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Ryder Lee <ryder.lee@mediatek.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Felix Fietkau <nbd@nbd.name>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v4] PCI: mediatek-gen3: Change driver name to mtk-pcie-gen3
-Date:   Tue, 23 Aug 2022 15:00:03 +0200
-Message-Id: <166125958529.60702.17839683437013330997.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220505083907.86598-1-nbd@nbd.name>
-References: <20220505083907.86598-1-nbd@nbd.name>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 301D761EA192D;
+        Tue, 23 Aug 2022 15:03:47 +0200 (CEST)
+Message-ID: <03f4ae8c-c918-0499-c70c-50a19a8abd30@molgen.mpg.de>
+Date:   Tue, 23 Aug 2022 15:03:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Content-Language: en-US
+To:     Clemens Ladisch <clemens@ladisch.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Dell.Client.Kernel@dell.com
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Dell XPS 13 9370: hpet_acpi_add: no address or irqs in _CRS
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,17 +45,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 May 2022 10:39:07 +0200, Felix Fietkau wrote:
-> driver_register() will refuse to register another driver with the same name.
-> This change allows pcie-mediatek-gen3 to coexist with pcie-mediatek built into
-> the kernel.
-> 
-> 
+Dear Linux folks,
 
-Applied to pci/mediatek, thanks!
 
-[1/1] PCI: mediatek-gen3: Change driver name to mtk-pcie-gen3
-      https://git.kernel.org/lpieralisi/pci/c/034fdac01fe5
+On the Dell XPS 13 9370 with Debian sid/unstable Linux 5.18.16 warns 
+about missing values in _CRS:
 
-Thanks,
-Lorenzo
+     [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 
+07/06/2022
+
+     [    1.868930] calling  hpet_init+0x0/0x76 @ 1
+     [    1.869360] hpet_acpi_add: no address or irqs in _CRS
+     [    1.869812] initcall hpet_init+0x0/0x76 returned 0 after 876 usecs
+
+All HPET logs:
+
+     $ dmesg | grep -i HPET
+     [    0.008467] ACPI: HPET 0x000000003F0E8CD8 000038 (v01 DELL 
+CBX3     01072009 AMI. 0005000B)
+     [    0.008477] ACPI: HPET 0x000000003F0EA378 000038 (v01 INTEL 
+KBL-ULT  00000001 MSFT 0000005F)
+     [    0.008539] ACPI: Reserving HPET table memory at [mem 
+0x3f0e8cd8-0x3f0e8d0f]
+     [    0.008542] ACPI: Reserving HPET table memory at [mem 
+0x3f0ea378-0x3f0ea3af]
+     [    0.013206] ACPI: HPET id: 0x8086a701 base: 0xfed00000
+     [    0.055379] hpet: HPET dysfunctional in PC10. Force disabled.
+     [    0.055401] DMAR-IR: HPET id 0 under DRHD base 0xfed91000
+     [    0.542049] hpet_acpi_add: no address or irqs in _CRS
+
+I attached the full Linux logs (`dmesg`), and the output of `acpidump` 
+to the bug #216402 in the Linux kernel bugtracker [1].
+
+ From the disassembled DSDT:
+
+         Device (HPET)
+         {
+             Name (_HID, EisaId ("PNP0103") /* HPET System Timer */)  // 
+_HID: Hardware ID
+             Name (_UID, Zero)  // _UID: Unique ID
+             Name (BUF0, ResourceTemplate ()
+             {
+                 Memory32Fixed (ReadWrite,
+                     0xFED00000,         // Address Base
+                     0x00000400,         // Address Length
+                     _Y34)
+             })
+             Method (_STA, 0, NotSerialized)  // _STA: Status
+             {
+                 If (HPTE)
+                 {
+                     Return (0x0F)
+                 }
+
+                 Return (Zero)
+             }
+
+             Method (_CRS, 0, Serialized)  // _CRS: Current Resource 
+Settings
+             {
+                 If (HPTE)
+                 {
+                     CreateDWordField (BUF0, 
+\_SB.PCI0.LPCB.HPET._Y34._BAS, HPT0)  // _BAS: Base Address
+                     HPT0 = HPTB /* \HPTB */
+                 }
+
+                 Return (BUF0) /* \_SB_.PCI0.LPCB.HPET.BUF0 */
+             }
+         }
+
+Besides adding `hpet=disable` to Linux’ CLI, is there a way to address 
+the warning?
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=216402

@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA6E59DEE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C7459DDF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355094AbiHWKbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S240995AbiHWMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353445AbiHWKPF (ORCPT
+        with ESMTP id S1352485AbiHWMMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:15:05 -0400
+        Tue, 23 Aug 2022 08:12:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FE072EDA;
-        Tue, 23 Aug 2022 02:00:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8417E68C1;
+        Tue, 23 Aug 2022 02:39:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BB036156A;
-        Tue, 23 Aug 2022 09:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F188C433D7;
-        Tue, 23 Aug 2022 09:00:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F5AC612D6;
+        Tue, 23 Aug 2022 09:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5073AC433D6;
+        Tue, 23 Aug 2022 09:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245213;
-        bh=HsE6Hc1g0L5kt8Rb3CEnOB/34WTJkVgtm0Yx9+swGaY=;
+        s=korg; t=1661247542;
+        bh=8CmxgCYmN7CuAnJkg+oksYBTsGEpAazn0mrXZaAWCg0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SdmQUzUoZlGVaIPzx+hIUWf2k60WLRlDHwhT4PBfPMSHiVR75Hcw7EYiw5j22Jpu7
-         1hMV4GeVKjSdpPJifYQJS6F6OhmBkJmldhc7FtyYU7aToH7buOmF+LWD5vLpNiLjNA
-         RFaKzfTChFTzBsfitFx9aQ9W+hxF/9EVQoNGOq8Y=
+        b=pbmigzh5pbW4MWKYN78i5FMS2ZeGneq0p2s38CaEctnsDLB6ILSzcvh63SEBhi4py
+         d7wG/nUh/VCSlsWsHnzoRuR7bCI4nJD+VHVdXJoWNmah5e/ZW9govh2RrD1MMAlJGA
+         6r316KJBAYaQO5Xqp2gxrSbaNPubr5QNlsvZ+4+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>,
-        Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 213/244] ASoC: rsnd: care default case on rsnd_ssiu_busif_err_irq_ctrl()
+        stable@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.10 040/158] pinctrl: qcom: msm8916: Allow CAMSS GP clocks to be muxed
 Date:   Tue, 23 Aug 2022 10:26:12 +0200
-Message-Id: <20220823080106.618967926@linuxfoundation.org>
+Message-Id: <20220823080047.680185996@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,42 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+From: Nikita Travkin <nikita@trvn.ru>
 
-[ Upstream commit ef30911d3c39fd57884c348c29b9cbff88def155 ]
+commit 44339391c666e46cba522d19c65a6ad1071c68b7 upstream.
 
-Before, ssiu.c didn't care SSI5-8, thus,
-commit b1384d4c95088d0 ("ASoC: rsnd: care default case on
-rsnd_ssiu_busif_err_status_clear()") cares it for status clear.
+GPIO 31, 32 can be muxed to GCC_CAMSS_GP(1,2)_CLK respectively but the
+function was never assigned to the pingroup (even though the function
+exists already).
 
-But we should care it for error irq handling, too.
-This patch cares it.
+Add this mode to the related pins.
 
-Reported-by: Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>
-Reported-by: Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>
-Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Link: https://lore.kernel.org/r/871quocio1.wl-kuninori.morimoto.gx@renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 5373a2c5abb6 ("pinctrl: qcom: Add msm8916 pinctrl driver")
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+Link: https://lore.kernel.org/r/20220612145955.385787-4-nikita@trvn.ru
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sh/rcar/ssiu.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pinctrl/qcom/pinctrl-msm8916.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/sh/rcar/ssiu.c b/sound/soc/sh/rcar/ssiu.c
-index 4b8a63e336c7..d7f4646ee029 100644
---- a/sound/soc/sh/rcar/ssiu.c
-+++ b/sound/soc/sh/rcar/ssiu.c
-@@ -67,6 +67,8 @@ static void rsnd_ssiu_busif_err_irq_ctrl(struct rsnd_mod *mod, int enable)
- 		shift  = 1;
- 		offset = 1;
- 		break;
-+	default:
-+		return;
- 	}
- 
- 	for (i = 0; i < 4; i++) {
--- 
-2.35.1
-
+--- a/drivers/pinctrl/qcom/pinctrl-msm8916.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm8916.c
+@@ -844,8 +844,8 @@ static const struct msm_pingroup msm8916
+ 	PINGROUP(28, pwr_modem_enabled_a, NA, NA, NA, NA, NA, qdss_tracedata_b, NA, atest_combodac),
+ 	PINGROUP(29, cci_i2c, NA, NA, NA, NA, NA, qdss_tracedata_b, NA, atest_combodac),
+ 	PINGROUP(30, cci_i2c, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
+-	PINGROUP(31, cci_timer0, NA, NA, NA, NA, NA, NA, NA, NA),
+-	PINGROUP(32, cci_timer1, NA, NA, NA, NA, NA, NA, NA, NA),
++	PINGROUP(31, cci_timer0, flash_strobe, NA, NA, NA, NA, NA, NA, NA),
++	PINGROUP(32, cci_timer1, flash_strobe, NA, NA, NA, NA, NA, NA, NA),
+ 	PINGROUP(33, cci_async, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
+ 	PINGROUP(34, pwr_nav_enabled_a, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
+ 	PINGROUP(35, pwr_crypto_enabled_a, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
 
 

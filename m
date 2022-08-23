@@ -2,45 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442B359ECCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D8F59ECCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbiHWTra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S232788AbiHWTrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiHWTqv (ORCPT
+        with ESMTP id S232364AbiHWTqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:46:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FF2D9EB3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:50:21 -0700 (PDT)
+        Tue, 23 Aug 2022 15:46:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC505A15F;
+        Tue, 23 Aug 2022 11:50:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8FB2B82075
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD378C433C1;
-        Tue, 23 Aug 2022 18:50:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB76F6170D;
+        Tue, 23 Aug 2022 18:50:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DEDC433B5;
+        Tue, 23 Aug 2022 18:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661280618;
-        bh=/xv4OXPsvPMkUzwbd/AWtLyj0uWi/jiA2ATVA8TWE4k=;
+        s=k20201202; t=1661280634;
+        bh=Oyq3LAklv8BSoebYYWHKIy5H9iMh+4uB439rsWCYqJk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=mpNJ/EG/TqO3lfmwvJTa7aGTqPMHdTXS3Rf+ENbEj92mySCtv0t/twhfGz5xNNDy5
-         f7Vn8WmmA7jF9lCC+6daoPf0Y367FNpoNvhELxLR0NGvnwilpT6GUFoCDQm81yjcvn
-         neagGHcDTXf0y5g9O9WqgEW0wmHYBXyhrmn/vfOadkpdTfTWwMruT6AyYOvxgZN0a8
-         gTj4pOcxwJfY38OXPHNqf4WAjCKltR4A4cppObItZjKgBGPShoUpqsxFKstnZPqgSu
-         0nzzy53pxh7bgbKGwIW5QbBsexPBNokJtAc6AfMW8YmkgO4WZbDQzkKerVsXEX+b6E
-         9ZSwFuCBMxfQQ==
+        b=XoZeQPipdtTarbtkshQSe12v5T0JUKXWQL33TnqBdI0ZyeJjx+IMm1F29DMTHxtOU
+         i86mANEPVU9AA3QQXinb2Vo6yYzVsP2/E9AuP7QpQ51xcqfnglZq+upx0dFofMfwrQ
+         IUksfOAVEFwLaONGuLz1Iv+I9WixBNsB4PRW85fnkWqECojsBHABBS2j+I72b73N9b
+         E682Xl1EdaW0bQnAMIStv73bqKJ8MGYorGJGrIj+DJE0Ab7hAQSsUS5RGUIkuAo4ax
+         ve5aDYmbFheIBWO/A5tg3ZmC9jab8dtmxpbqAx5xU8u7m6Ak8vW/kHE0lPAU8j8VDu
+         aTLIlFM4x6ezg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-In-Reply-To: <20220823135700.265019-1-linus.walleij@linaro.org>
-References: <20220823135700.265019-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH] regmap: check right noinc bounds in debug print
-Message-Id: <166128061762.1031868.7908972361165797075.b4-ty@kernel.org>
-Date:   Tue, 23 Aug 2022 19:50:17 +0100
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Adam Ward <Adam.Ward.opensource@diasemi.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Andy Gross <agross@kernel.org>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220823145649.3118479-7-robh@kernel.org>
+References: <20220823145649.3118479-7-robh@kernel.org>
+Subject: Re: [PATCH] regulator: dt-bindings: Add missing (unevaluated|additional)Properties on child nodes
+Message-Id: <166128062992.1031899.17043641765652674620.b4-ty@kernel.org>
+Date:   Tue, 23 Aug 2022 19:50:29 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,21 +72,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 15:57:00 +0200, Linus Walleij wrote:
-> We were using the wrong bound in the debug prints: this
-> needs to be the number of elements, not the number of bytes,
-> since we're indexing into an element-size typed array.
+On Tue, 23 Aug 2022 09:56:38 -0500, Rob Herring wrote:
+> In order to ensure only documented properties are present, node schemas
+> must have unevaluatedProperties or additionalProperties set to false
+> (typically).
 > 
 > 
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/1] regmap: check right noinc bounds in debug print
-      commit: b7059927c3e32c96d2ff50c206549d8fac0ba69e
+[1/1] regulator: dt-bindings: Add missing (unevaluated|additional)Properties on child nodes
+      commit: de6fbef10c4b9c589f3b84bd926e56ba742263ea
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,134 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8ADE59E779
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C3B59E774
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244904AbiHWQgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S244995AbiHWQgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245289AbiHWQfq (ORCPT
+        with ESMTP id S245443AbiHWQgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:35:46 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2519D41A0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:06:17 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MBqDn22Y4zGplg;
-        Tue, 23 Aug 2022 21:04:09 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 21:05:48 +0800
-CC:     <yangyicong@hisilicon.com>, <sudeep.holla@arm.com>,
-        <vincent.guittot@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <21cnbao@gmail.com>, <jonathan.cameron@huawei.com>,
-        <linuxarm@huawei.com>, <prime.zeng@huawei.com>
-Subject: Re: [PATCH] arch_topology: Make cluster topology span at least SMT
- CPUs
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-References: <20220823073044.58697-1-yangyicong@huawei.com>
- <YwSKnGii2zdd7Fig@arm.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <d0bc04af-5481-5df2-ff75-9072b4b047c1@huawei.com>
-Date:   Tue, 23 Aug 2022 21:05:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 23 Aug 2022 12:36:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDB8BCB2;
+        Tue, 23 Aug 2022 06:06:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD603614D1;
+        Tue, 23 Aug 2022 13:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50939C433D6;
+        Tue, 23 Aug 2022 13:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661259995;
+        bh=H8h0RHLn6+JPT0ZVlwXJ4vwSe51HEfutMbaRAkltf4o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eTC4CsZPJhQPvAAqMNaRmhc+GWcLHArz3Ok0OJBhL/Qt3r11I5bcFchOdk5TCZBuK
+         cTi3PShOjAfQEmiDdM9EoYeK/R3rFYXmMk8alFomd38l5Z4w9V00ekY/CLVg5wtPUG
+         cd1fexliwWx6meFgLre6v8tCdtsotGNZwRWBb6DKBMPLpvIzJK6gx7dPJ1/BUksyUL
+         AvbvTQ86Y74Y6gMx7gvvDccar5p/ga6ag/SoBSgQCOucWgOzCV+qIaje4Ay17H1401
+         EsRDWlNTETXDCcNa0tlYnQS4NE4lLq6aupAwRCMFiCDFU0yiTi4VJkKAUYLh1c8XvL
+         /69x1Wd2TRaDA==
+Date:   Tue, 23 Aug 2022 14:06:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Implement get_optimum_mode(), not
+ set_load()
+Message-ID: <YwTQ1i5s5cwowRss@sirena.org.uk>
+References: <20220726102024.1.Icc838fe7bf0ef54a014ab2fee8af311654f5342a@changeid>
+ <20220822193153.zn2oxljmd76awqot@halaneylaptop>
+ <CAD=FV=V_V-M1fJmeWH_=wG4GB9GERL9ToAZTwAjX9i-6k6QkWA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YwSKnGii2zdd7Fig@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="X6FF6FFLRgFUYXaS"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=V_V-M1fJmeWH_=wG4GB9GERL9ToAZTwAjX9i-6k6QkWA@mail.gmail.com>
+X-Cookie: You can't take damsel here now.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/23 16:06, Ionela Voinescu wrote:
-> Hi Yicong,
-> 
-> On Tuesday 23 Aug 2022 at 15:30:44 (+0800), Yicong Yang wrote:
->> From: Yicong Yang <yangyicong@hisilicon.com>
->>
->> Currently cpu_clustergroup_mask() will return CPU mask if cluster span
->> more or the same CPUs as cpu_coregroup_mask(). This will result topology
->> borken on non-Cluster SMT machines.
-> 
-> Might be worth adding here:.. "when building with CONFIG_SCHED_CLUSTER=y"
-> 
 
-will add this qualifier. thanks.
+--X6FF6FFLRgFUYXaS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->>
-> 
-> I thought I had covered this case, but I think I had considered LLC
-> spanning more than one core (tested on TX2 as well).
-> 
-> So you'd only hit this if LLC and cluster level span the same cores (a
-> single core in this case, for non-cluster), in the presence of SMT.
-> 
+On Mon, Aug 22, 2022 at 01:13:55PM -0700, Doug Anderson wrote:
 
-Not sure I understand it correctly but in the below case I think the LLC may span
-the same core with socket?
+> I guess at this point I'll wait for Mark to give his suggestion for
+> what to do. Options I'm aware of:
 
-> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> 
-> Many thanks,
-> Ionela.
-> 
->> Test with:
->> qemu-system-aarch64 -enable-kvm -machine virt \
->>  -net none \
->>  -cpu host \
->>  -bios ./QEMU_EFI.fd \
->>  -m 2G \
->>  -smp 48,sockets=2,cores=12,threads=2 \
->>  -kernel $Image \
->>  -initrd $Rootfs \
->>  -nographic
->>  -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
->>
->> We'll get below error:
->> [    3.084568] BUG: arch topology borken
->> [    3.084570]      the SMT domain not a subset of the CLS domain
->>
->> Since cluster is a level higher than SMT, fix this by making cluster
->> spans at least SMT CPUs.
->>
->> Cc: Sudeep Holla <sudeep.holla@arm.com>
->> Cc: Vincent Guittot <vincent.guittot@linaro.org>
->> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
->> Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>  drivers/base/arch_topology.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
->> index 0424b59b695e..0056a1273275 100644
->> --- a/drivers/base/arch_topology.c
->> +++ b/drivers/base/arch_topology.c
->> @@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
->>  	 */
->>  	if (cpumask_subset(cpu_coregroup_mask(cpu),
->>  			   &cpu_topology[cpu].cluster_sibling))
->> -		return get_cpu_mask(cpu);
->> +		return cpu_smt_mask(cpu);
->>  
->>  	return &cpu_topology[cpu].cluster_sibling;
->>  }
->> -- 
->> 2.24.0
->>
-> 
-> .
-> 
+> a) ${SUBJECT} patch was written as a cleanup as per Mark's request and
+> we could just revert it.
+
+> b) We could make it so that failures to get the input/output voltages
+> doesn't count as an error when going through the get_optimum_mode()
+> path.
+
+We could push the checks for a valid voltage down into the drivers, a
+lot of things aren't particularly sensitive to the output voltage here
+and are much more sensitive to the current draw.  Depending on people's
+attitudes to DT stability for Qualcomm platforms we could also fix the
+affected DTs as well, though that doesn't stop us handling this in the
+core too.
+
+--X6FF6FFLRgFUYXaS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmME0NUACgkQJNaLcl1U
+h9A/qAf+L08yi+AfUUOKiU+RzeDrbdpo0B+MwdqVLYM65myh59wA/z7dIUHNWslx
+QSLK+T8ppVRnu/qedfMqhWKigjP69HkVs8aVDVNx5InAXyYL9fWpS+sIq9PTrYpO
+crrASb+hFdboUdcrIbMq6xVSD0C9u5R98AgjTbAuGoYrRosXjWtViQVivCiBn3fm
+cNeDwOU5CEoouqAAvtjpjjbUbkIn6SZdTt95yIhWvUQuU7nOShmngfCQ+uQAbt0s
+hW4jcN4RS4Q1wPzDC0ccZl44BI2U0UvhMH/otFKXvjPnTU8DFH0tgBTTldmbPjd7
+wOKME+0yd4AvtUjLkUauv4iJuVESKQ==
+=QS7l
+-----END PGP SIGNATURE-----
+
+--X6FF6FFLRgFUYXaS--

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8462559D765
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D4E59D78A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242130AbiHWJyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+        id S234683AbiHWJnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352245AbiHWJv0 (ORCPT
+        with ESMTP id S1351818AbiHWJkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:51:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CBF9F0D5;
-        Tue, 23 Aug 2022 01:45:51 -0700 (PDT)
+        Tue, 23 Aug 2022 05:40:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B600779686;
+        Tue, 23 Aug 2022 01:41:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 591CF6123D;
-        Tue, 23 Aug 2022 08:45:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D329C433D6;
-        Tue, 23 Aug 2022 08:45:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 103E06152E;
+        Tue, 23 Aug 2022 08:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DD5C433C1;
+        Tue, 23 Aug 2022 08:40:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244350;
-        bh=9b1xcz5ZdzJJW2NlfVI2a27n7SsK5+EFJIyllGw0yIk=;
+        s=korg; t=1661244041;
+        bh=UnsYK3CCZV3d4U2OT6f8xJcmMIqfdF3LWGKXGLp2kE4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RoUv2KeAIZboMqBXJlnfAJxOi56sN8wLjXssDZMObUhkBL9e+FIvOsBAH92+oFyv7
-         qm+/PtPeFcbOTzsy6qqymmrfrT8fA7TuRe8sTryiiwxu5DnHpYjnpsnKbYSdX325Uf
-         x4ZUwW77JyGdkBSftHkdA3nLutkBAOg1OuhU5Kpo=
+        b=QeNYWMiPcAU7XSz8sblioW0AFHTwHleTTWA01yyccx8GKInLCtXC9H5uN3wkRx5Xw
+         4n9F1R3wd6f5V2P7dxqsVQYoB5kdQ0Xck0LCHXBmU+8OZnKt0BU7y8BbGfK/GKvlpt
+         8HPh5INeZwNKsXdzzI7+bN1gaMt8uus7Br+A9lgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Matthias May <matthias.may@westermo.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 077/244] mlx5: do not use RT_TOS for IPv6 flowlabel
-Date:   Tue, 23 Aug 2022 10:23:56 +0200
-Message-Id: <20220823080101.624025877@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christian Lamparter <chunkeey@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 077/229] wifi: p54: Fix an error handling path in p54spi_probe()
+Date:   Tue, 23 Aug 2022 10:23:58 +0200
+Message-Id: <20220823080056.464724503@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias May <matthias.may@westermo.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit bcb0da7fffee9464073998b267ce5543da2356d2 upstream.
+[ Upstream commit 83781f0162d080fec7dcb911afd1bc2f5ad04471 ]
 
-According to Guillaume Nault RT_TOS should never be used for IPv6.
+If an error occurs after a successful call to p54spi_request_firmware(), it
+must be undone by a corresponding release_firmware() as already done in
+the error handling path of p54spi_request_firmware() and in the .remove()
+function.
 
-Quote:
-RT_TOS() is an old macro used to interprete IPv4 TOS as described in
-the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
-code, although, given the current state of the code, most of the
-existing calls have no consequence.
+Add the missing call in the error handling path and remove it from
+p54spi_request_firmware() now that it is the responsibility of the caller
+to release the firmware
 
-But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
-field to be interpreted the RFC 1349 way. There's no historical
-compatibility to worry about.
-
-Fixes: ce99f6b97fcd ("net/mlx5e: Support SRIOV TC encapsulation offloads for IPv6 tunnels")
-Acked-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: Matthias May <matthias.may@westermo.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: cd8d3d321285 ("p54spi: p54spi driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/297d2547ff2ee627731662abceeab9dbdaf23231.1655068321.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/intersil/p54/p54spi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
-@@ -497,7 +497,7 @@ int mlx5e_tc_tun_create_header_ipv6(stru
- 	int err;
+diff --git a/drivers/net/wireless/intersil/p54/p54spi.c b/drivers/net/wireless/intersil/p54/p54spi.c
+index e41bf042352e..3dcfad5b61ff 100644
+--- a/drivers/net/wireless/intersil/p54/p54spi.c
++++ b/drivers/net/wireless/intersil/p54/p54spi.c
+@@ -177,7 +177,7 @@ static int p54spi_request_firmware(struct ieee80211_hw *dev)
  
- 	attr.ttl = tun_key->ttl;
--	attr.fl.fl6.flowlabel = ip6_make_flowinfo(RT_TOS(tun_key->tos), tun_key->label);
-+	attr.fl.fl6.flowlabel = ip6_make_flowinfo(tun_key->tos, tun_key->label);
- 	attr.fl.fl6.daddr = tun_key->u.ipv6.dst;
- 	attr.fl.fl6.saddr = tun_key->u.ipv6.src;
+ 	ret = p54_parse_firmware(dev, priv->firmware);
+ 	if (ret) {
+-		release_firmware(priv->firmware);
++		/* the firmware is released by the caller */
+ 		return ret;
+ 	}
  
-@@ -611,7 +611,7 @@ int mlx5e_tc_tun_update_header_ipv6(stru
+@@ -672,6 +672,7 @@ static int p54spi_probe(struct spi_device *spi)
+ 	return 0;
  
- 	attr.ttl = tun_key->ttl;
- 
--	attr.fl.fl6.flowlabel = ip6_make_flowinfo(RT_TOS(tun_key->tos), tun_key->label);
-+	attr.fl.fl6.flowlabel = ip6_make_flowinfo(tun_key->tos, tun_key->label);
- 	attr.fl.fl6.daddr = tun_key->u.ipv6.dst;
- 	attr.fl.fl6.saddr = tun_key->u.ipv6.src;
- 
+ err_free_common:
++	release_firmware(priv->firmware);
+ 	free_irq(gpio_to_irq(p54spi_gpio_irq), spi);
+ err_free_gpio_irq:
+ 	gpio_free(p54spi_gpio_irq);
+-- 
+2.35.1
+
 
 

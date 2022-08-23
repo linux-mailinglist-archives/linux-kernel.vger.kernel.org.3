@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF9959DFC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8347A59E0DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356560AbiHWKmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S1353809AbiHWKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355012AbiHWKas (ORCPT
+        with ESMTP id S1352179AbiHWKEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:30:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78F685AAA;
-        Tue, 23 Aug 2022 02:06:30 -0700 (PDT)
+        Tue, 23 Aug 2022 06:04:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767FD7CB49;
+        Tue, 23 Aug 2022 01:51:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFCC761596;
-        Tue, 23 Aug 2022 09:06:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5A6C433B5;
-        Tue, 23 Aug 2022 09:06:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF3BAB81BF8;
+        Tue, 23 Aug 2022 08:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC5BC433C1;
+        Tue, 23 Aug 2022 08:51:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245589;
-        bh=GBN9yMYjGurun1AV7Y40ykMKxztoq6vHXN9KuxWaQRQ=;
+        s=korg; t=1661244703;
+        bh=xchc2uYcdy/PHF2UcBVcST9d80rgCnHTzb/KmibmEeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pz3r1zVPgOEpZria0vYEOH3LlyJkmmJIR+jZl0NXdt+hr36FGaONV3qeMlhUzTQh7
-         u8DImZoPaa8ccL7C/5dQI1U/pd6JDrGbZ8rUFxQnTLRZB2VxQ70nRsgB6QAThfo9s3
-         iqRAbgFR8BboITl574qbQvUouV3v0FNWEseD3AjY=
+        b=mWmfsGD2tCKrJh5yYm6kPc1k8B5Gb1ia36kW9ImL7VtqYCpQ/qz2EqInmD87361qP
+         3MKkXBqWt8T08YI3rREbEvBMnzq5CP2I/pmU7p/9j63ZJ7uNv07FMq+Kg/stAapQnZ
+         9LJ4uvqpObmHeoYYPxYTBE68CY64NYJC4JibBslY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 125/287] soundwire: bus_type: fix remove and shutdown support
-Date:   Tue, 23 Aug 2022 10:24:54 +0200
-Message-Id: <20220823080104.601080377@linuxfoundation.org>
+        stable@vger.kernel.org, Amit Cohen <amcohen@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 136/244] mlxsw: spectrum: Clear PTP configuration after unregistering the netdevice
+Date:   Tue, 23 Aug 2022 10:24:55 +0200
+Message-Id: <20220823080103.693521759@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Amit Cohen <amcohen@nvidia.com>
 
-[ Upstream commit df6407782964dc7e35ad84230abb38f46314b245 ]
+commit a159e986ad26d3f35c0157ac92760ba5e44e6785 upstream.
 
-The bus sdw_drv_remove() and sdw_drv_shutdown() helpers are used
-conditionally, if the driver provides these routines.
+Currently as part of removing port, PTP API is called to clear the
+existing configuration and set the 'rx_filter' and 'tx_type' to zero.
+The clearing is done before unregistering the netdevice, which means that
+there is a window of time in which the user can reconfigure PTP in the
+port, and this configuration will not be cleared.
 
-These helpers already test if the driver provides a .remove or
-.shutdown callback, so there's no harm in invoking the
-sdw_drv_remove() and sdw_drv_shutdown() unconditionally.
+Reorder the operations, clear PTP configuration after unregistering the
+netdevice.
 
-In addition, the current code is imbalanced with
-dev_pm_domain_attach() called from sdw_drv_probe(), but
-dev_pm_domain_detach() called from sdw_drv_remove() only if the driver
-provides a .remove callback.
-
-Fixes: 9251345dca24b ("soundwire: Add SoundWire bus type")
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20220610015105.25987-1-yung-chuan.liao@linux.intel.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8748642751ede ("mlxsw: spectrum: PTP: Support SIOCGHWTSTAMP, SIOCSHWTSTAMP ioctls")
+Signed-off-by: Amit Cohen <amcohen@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soundwire/bus_type.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
-index 283b2832728e..414621f3c43c 100644
---- a/drivers/soundwire/bus_type.c
-+++ b/drivers/soundwire/bus_type.c
-@@ -154,12 +154,8 @@ int __sdw_register_driver(struct sdw_driver *drv, struct module *owner)
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum.c
+@@ -1730,9 +1730,9 @@ static void mlxsw_sp_port_remove(struct
  
- 	drv->driver.owner = owner;
- 	drv->driver.probe = sdw_drv_probe;
--
--	if (drv->remove)
--		drv->driver.remove = sdw_drv_remove;
--
--	if (drv->shutdown)
--		drv->driver.shutdown = sdw_drv_shutdown;
-+	drv->driver.remove = sdw_drv_remove;
-+	drv->driver.shutdown = sdw_drv_shutdown;
- 
- 	return driver_register(&drv->driver);
- }
--- 
-2.35.1
-
+ 	cancel_delayed_work_sync(&mlxsw_sp_port->periodic_hw_stats.update_dw);
+ 	cancel_delayed_work_sync(&mlxsw_sp_port->ptp.shaper_dw);
+-	mlxsw_sp_port_ptp_clear(mlxsw_sp_port);
+ 	mlxsw_core_port_clear(mlxsw_sp->core, local_port, mlxsw_sp);
+ 	unregister_netdev(mlxsw_sp_port->dev); /* This calls ndo_stop */
++	mlxsw_sp_port_ptp_clear(mlxsw_sp_port);
+ 	mlxsw_sp_port_vlan_classification_set(mlxsw_sp_port, true, true);
+ 	mlxsw_sp->ports[local_port] = NULL;
+ 	mlxsw_sp_port_vlan_flush(mlxsw_sp_port, true);
 
 

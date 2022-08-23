@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBD059DD41
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653A459DBDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356906AbiHWKwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S1355282AbiHWKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355852AbiHWKo4 (ORCPT
+        with ESMTP id S1353440AbiHWKL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:44:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E203574E0E;
-        Tue, 23 Aug 2022 02:10:45 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67237F088;
+        Tue, 23 Aug 2022 01:56:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91B2CB81C66;
-        Tue, 23 Aug 2022 09:10:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B8BC433C1;
-        Tue, 23 Aug 2022 09:10:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83AA7614E7;
+        Tue, 23 Aug 2022 08:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84157C433D6;
+        Tue, 23 Aug 2022 08:56:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245843;
-        bh=blwVWMpUy9hCuLKBJidBkAIAlZ68adKolCiqqm6WzoU=;
+        s=korg; t=1661245005;
+        bh=XpSNX1f32Q6TMFam1wAor2QPc0RbNk2vlmC0HXRK4HU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hp+Fdv3lgGJN5YQx3vPGqIhE201itmh1yzzn+K0ghJL1OvEAwjC5E0WKpOfjWjNTA
-         LUZyaZ+dq4XHWusd+K6tRsxN6/oD+i6yNC2eQHboDdR0nOr4qbnI4kTcSlDvwIfjIc
-         xE8OtPTkPsvSFeAN0cNcY9VwNFX3CqTdZRL+yNAI=
+        b=vyAYj4fR39pmAuInkNtnIeIZwrkwR+1z2qlq2m0dKDyo7pdzISZQmipq4qo544PU7
+         JQQc5sDn+hNF44zV8TdNMhNFr/icmqdmDJje29F/FYRA0XmIlPKKe8D5GwoIXmXAiX
+         KI2EOhG6ZSxgqSCBd1sUqwIezsAFDO9Go38pEEMo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 177/287] scripts/faddr2line: Fix vmlinux detection on arm64
+        stable@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 187/244] habanalabs/gaudi: mask constant value before cast
 Date:   Tue, 23 Aug 2022 10:25:46 +0200
-Message-Id: <20220823080106.731482839@linuxfoundation.org>
+Message-Id: <20220823080105.602580987@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+From: Oded Gabbay <ogabbay@kernel.org>
 
-[ Upstream commit b6a5068854cfe372da7dee3224dcf023ed5b00cb ]
+[ Upstream commit e3f49437a2e0221a387ecd192d742ae1434e1e3a ]
 
-Since commit dcea997beed6 ("faddr2line: Fix overlapping text section
-failures, the sequel"), faddr2line is completely broken on arm64.
+This fixes a sparse warning of
+"cast truncates bits from constant value"
 
-For some reason, on arm64, the vmlinux ELF object file type is ET_DYN
-rather than ET_EXEC.  Check for both when determining whether the object
-is vmlinux.
-
-Modules and vmlinux.o have type ET_REL on all arches.
-
-Fixes: dcea997beed6 ("faddr2line: Fix overlapping text section failures, the sequel")
-Reported-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Tested-by: John Garry <john.garry@huawei.com>
-Link: https://lore.kernel.org/r/dad1999737471b06d6188ce4cdb11329aa41682c.1658426357.git.jpoimboe@kernel.org
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/faddr2line | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/misc/habanalabs/gaudi/gaudi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/scripts/faddr2line b/scripts/faddr2line
-index 2571caac3156..70f8c3ecd555 100755
---- a/scripts/faddr2line
-+++ b/scripts/faddr2line
-@@ -112,7 +112,9 @@ __faddr2line() {
- 	# section offsets.
- 	local file_type=$(${READELF} --file-header $objfile |
- 		${AWK} '$1 == "Type:" { print $2; exit }')
--	[[ $file_type = "EXEC" ]] && is_vmlinux=1
-+	if [[ $file_type = "EXEC" ]] || [[ $file_type == "DYN" ]]; then
-+		is_vmlinux=1
-+	fi
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index 801acab048eb..8132200dca67 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -3318,19 +3318,19 @@ static void gaudi_init_nic_qman(struct hl_device *hdev, u32 nic_offset,
+ 	u32 nic_qm_err_cfg, irq_handler_offset;
+ 	u32 q_off;
  
- 	# Go through each of the object's symbols which match the func name.
- 	# In rare cases there might be duplicates, in which case we print all
+-	mtr_base_en_lo = lower_32_bits(CFG_BASE +
++	mtr_base_en_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 			mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+ 	mtr_base_en_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+-	so_base_en_lo = lower_32_bits(CFG_BASE +
++	so_base_en_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_SOB_OBJ_0);
+ 	so_base_en_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_SOB_OBJ_0);
+-	mtr_base_ws_lo = lower_32_bits(CFG_BASE +
++	mtr_base_ws_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+ 	mtr_base_ws_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+-	so_base_ws_lo = lower_32_bits(CFG_BASE +
++	so_base_ws_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_SOB_OBJ_0);
+ 	so_base_ws_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_SOB_OBJ_0);
 -- 
 2.35.1
 

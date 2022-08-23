@@ -2,125 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6C059E9F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21D859EA13
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiHWRoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S231833AbiHWRpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbiHWRmy (ORCPT
+        with ESMTP id S230252AbiHWRog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:42:54 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9514E4F1AB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:31:31 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id p18so13129069plr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:31:31 -0700 (PDT)
+        Tue, 23 Aug 2022 13:44:36 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C36B7D1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:31:59 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so17568263pjj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:31:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=rPJEhUskbEuhZn5UA0VRxGqCt2ycgFbaFmo1YwbQDCs=;
-        b=DOyuZ2DfDHo6PdftwMOSLANQo+RXcgn8aKot/yQS4w0BpH/12ThLtf/aUdXHWx2ykL
-         Oee+34wOXm90is6sA3C1KZgU8QGqujMVxtqyexAurhJ43I5qY0TTSQ2PUyRfCkbRlI3t
-         lrD83eW8bdfgcBoYlYp1J5U3lzxlwJ+Tx0eJp0+QQaUEMqm5NPKz33TPNaFd5FoYqqmS
-         6BG2yWKzNDCVpb09Ny2BVvbukaEnA+gjzKQWPUJm16wKJIIRFP2v6ztboSDTGLoK6gWw
-         weVusjX6vrC7oND5KRgWOxPjiE62/5/8eJULKkKNr86FTehQz7c54cM5SwQ6uxWOrKZ8
-         +dIg==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=qct9z1POCA7Jy2X8nJy6q3YtzWuUbY8HrzeX4jusHq4=;
+        b=lVeP3UhkfDNVJUMCfamBrw0VUh/SlY3tf79Q4V3Mo9XPr2BNDN9MDheA7ptj64ryOH
+         wnFO33a21kIeFSrxcgIEpY01+baeZxbcxsc5W26g46Y3GvuGFx8A4zPoejNY3gmdMsu5
+         5nfSbWWTGThTBHIuSVtp9BFnbj6+UCaCN9w3pTwecQsSD/z041P1WYXqZ2ZW7UzcGQkK
+         ZAdFYQr2XywegE2t+DnXm5qHvQ80Fd7vTO3aNBRSxy1PZbeSC0my0ZuIvjb/LelrhF6t
+         E5SU5+zR73hH5RBoMKWSYXAfH4zUabq6gQrp0nsSIyKd8RkN8++GuEyK9uMxOqOaezXu
+         oJ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=rPJEhUskbEuhZn5UA0VRxGqCt2ycgFbaFmo1YwbQDCs=;
-        b=Fczx2vIcwFk2PJfJ1WEPir8X/oabzNjf6hrF6RTEwlwlXm8zmfQ2KFgntEdbynFkF1
-         /QSl70JwnRTkL7sBm5xu36O7tDlYCmJhFX8npScIhceo80zwN84Mwz6eeaN0Jh9L9QHa
-         suBPL8+Dh5E7Sm+nvy1VhXT+4W0Ov3IcKcAzOIj9LR0VBhF9rUG4dCso7jWU5xUD/a3p
-         oJyhnB1qmcH2EFtfa7VkMBTxhoE+bJRTVFfvnE+x4t/av/oinkwZr2aXfx2f+KTI+RZH
-         5SVR2AB0+c5v1lP2LQ4B5THUr40kBWxvgDJwnWyIiXfs7Nbvrzm8qhmJavNOTycjaKI3
-         R5Og==
-X-Gm-Message-State: ACgBeo1zf1rFt6xlJB/wh2oCxB3ErdL8cWIgggs5sckiSmC43N28GLQJ
-        9N6FWYLI7nmtuy6R0tj6PRz2Qg==
-X-Google-Smtp-Source: AA6agR4teugBk55hCVUg1jS+OSM50LM+YswrnzcEa3qGxXrae3Vo99tlJTyAYNu2PU1z50tnAONynQ==
-X-Received: by 2002:a17:90b:4c08:b0:1fb:66d3:79c with SMTP id na8-20020a17090b4c0800b001fb66d3079cmr2934289pjb.121.1661268690966;
-        Tue, 23 Aug 2022 08:31:30 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b0016892555955sm10738749plr.179.2022.08.23.08.31.30
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=qct9z1POCA7Jy2X8nJy6q3YtzWuUbY8HrzeX4jusHq4=;
+        b=kJgg2T3eLAoOJdihVMoe9VDfNUySThU+qPp5bLXptajWMmLK8s/f2+Dhtdpd1Cf6sQ
+         yrBirAGHz+zB7nIXkyFU39+vAd3ypORK5pbPMX/oCtVb8z3VXyHi8Bi886cpcPA7knGH
+         iHlQfmjeuh36CaRsh2rxMJL0Ukw2zMvqrmGdMREs6r5aPNKuwv0/I6q5IxxxynNbi3tL
+         xRJy+nIK8eDVtg7c11VW5r3k79nQJVg3DzMqKM1UPmxi8dzOhVSSKHqF3fBklx0Uz88y
+         T/An6NsjxJWcV0gnBM6HCZElGWWCiFIPjpAXAmBswBK/qwiGev7V/ArilXJb0hvzkXYk
+         T0cw==
+X-Gm-Message-State: ACgBeo0WSm74atXDyxykR4Pd477vEP0FlxbnX9bHJhOXCTULrXYxOsZz
+        BKYE1ig4Jazjw8tHP+C7fC8Hw9mdNazF
+X-Google-Smtp-Source: AA6agR7jcesWlNnD7IhPKRcm+XBvX5f7MQ+5XS2sVM3V8pbihZ1qzUU3KfoXO29qUuES555fpng/8A==
+X-Received: by 2002:a17:90b:4a51:b0:1f5:8308:6ed7 with SMTP id lb17-20020a17090b4a5100b001f583086ed7mr3748418pjb.177.1661268719263;
+        Tue, 23 Aug 2022 08:31:59 -0700 (PDT)
+Received: from thinkpad ([220.158.159.146])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170903228e00b001728eb339e2sm10706306plh.286.2022.08.23.08.31.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 08:31:30 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 15:31:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct hv_enlightened_vmcs'
- definition
-Message-ID: <YwTyzk2TiC226n33@google.com>
-References: <875yiptvsc.fsf@redhat.com>
- <Yv59dZwP6rNUtsrn@google.com>
- <87czcsskkj.fsf@redhat.com>
- <YwOm7Ph54vIYAllm@google.com>
- <87edx8xn8h.fsf@redhat.com>
- <YwO2fSCGXnE/9mc2@google.com>
- <878rngxjb7.fsf@redhat.com>
- <YwPLt2e7CuqMzjt1@google.com>
- <87wnazwh1r.fsf@redhat.com>
- <YwTrlgeqoAqyH0KF@google.com>
+        Tue, 23 Aug 2022 08:31:58 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 21:01:52 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org,
+        james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com
+Subject: Re: [PATCH v2 1/3] soc: qcom: llcc: Pass SoC specific EDAC register
+ offsets to EDAC driver
+Message-ID: <20220823153152.GA6371@thinkpad>
+References: <20220812060602.7672-1-manivannan.sadhasivam@linaro.org>
+ <20220812060602.7672-2-manivannan.sadhasivam@linaro.org>
+ <396e6b2e-11d1-a11d-206a-cfd69f6cd358@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YwTrlgeqoAqyH0KF@google.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <396e6b2e-11d1-a11d-206a-cfd69f6cd358@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022, Sean Christopherson wrote:
-> On Tue, Aug 23, 2022, Vitaly Kuznetsov wrote:
-> > >> In any case, what we need, is an option for VMM (read: QEMU) to create
-> > >> the configuration with 'TscScaling' filtered out even KVM supports the
-> > >> bit in eVMCS. This way the guest will be able to migrate backwards to an
-> > >> older KVM which doesn't support it, i.e.
-> > >> 
-> > >> '-cpu CascadeLake-Sever,hv-evmcs'
-> > >>  creates the 'origin' eVMCS configuration, no TscScaling
-> > >> 
-> > >> '-cpu CascadeLake-Sever,hv-evmcs,hv-evmcs-2022' creates the updated one.
+On Mon, Aug 22, 2022 at 05:29:13PM +0530, Sai Prakash Ranjan wrote:
+> Hi Mani,
 > 
-> Ah, I see what you're worried about.  Your concern is that QEMU will add a VMX
-> feature to a predefined CPU model, but only later gain eVMCS support, and so
-> "CascadeLake-Server,hv-evmcs" will do different things depending on the KVM
-> version.
+> On 8/12/2022 11:36 AM, Manivannan Sadhasivam wrote:
+> > The LLCC EDAC register offsets varies between each SoCs. Until now, the
+> > EDAC driver used the hardcoded register offsets. But this caused crash
+> > on SM8450 SoC where the register offsets has been changed.
+> > 
+> > So to avoid this crash and also to make it easy to accomodate changes for
+> > new SoCs, let's pass the SoC specific register offsets to the EDAC driver.
+> > 
+> > Currently, two set of offsets are used. One is SM8450 specific and another
+> > one is common to all SoCs.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > 
-> But again, that's already reality.  Run "-cpu CascadeLake-Server" against a KVM
-> from before commits:
+> <snip> ...
 > 
->   28c1c9fabf48 ("KVM/VMX: Emulate MSR_IA32_ARCH_CAPABILITIES")
->   1eaafe91a0df ("kvm: x86: IA32_ARCH_CAPABILITIES is always supported")
+> >   static const struct qcom_llcc_config sm8350_cfg = {
+> > @@ -309,6 +370,7 @@ static const struct qcom_llcc_config sm8350_cfg = {
+> >   	.size           = ARRAY_SIZE(sm8350_data),
+> >   	.need_llcc_cfg	= true,
+> >   	.reg_offset	= llcc_v1_2_reg_offset,
+> > +	.edac_reg	= &common_edac_reg,
+> >   };
+> >   static const struct qcom_llcc_config sm8450_cfg = {
+> > @@ -316,6 +378,7 @@ static const struct qcom_llcc_config sm8450_cfg = {
+> >   	.size           = ARRAY_SIZE(sm8450_data),
+> >   	.need_llcc_cfg	= true,
+> >   	.reg_offset	= llcc_v21_reg_offset,
+> > +	.edac_reg	= &sm8450_edac_reg,
+> >   };
+> > 
 > 
-> and it will fail.  There are undoubtedly many other features that are similarly
-> affected, just go back far enough in KVM time.
+> Can we have LLCC version specific register offsets instead of SoC specific similar to reg_offset callbacks?
+> For SM8450, it would be llcc_v21_edac_reg and for others llcc_v1_2_edac_reg instead of common_edac_reg.
+> common_edac_reg is very general and is not exactly common for all, its just common for SoCs with same LLCC.
+> 
 
-The one potential issue I see is that KVM currently silently hides TSC_SCALING
-and PERF_GLOBAL_CTRL, i.e. migrating from new KVM to old KVM may "succeed" and
-then later fail a nested VM-Entry.
+I thought about it but I was not sure if rest of the SoCs are using version
+v1.2. I know that reg_offset uses v1.2 but I was skeptical and hence used the
+SoC specific offsets.
 
-PERF_GLOBAL_CTRL is solved because Microsoft has conveniently provided a CPUID
-bit.
+Can you confirm if rest of the SoCs are using v1.2?
 
-TSC_SCALING is unlikely to be a problem since it's so new, but if we're worried
-about someone doing e.g. "-cpu CascadeLake-Server,hv-evmcs,+vmx-tsc-scaling", then
-we can add a KVM quirk to silently hide TSC_SCALING from the guest when eVMCS is
-enabled.
+Thanks,
+Mani
+
+> Version based is more applicable as multiple SoCs might use same LLCC versions and would reduce SoC specific data
+> which would be needed for every SoC in case some newer LLCC comes out. I know you could just call sm8450_edac_reg
+> for lets say sm8550 or so on to reduce duplication but that won't look good.
+> 
+> 
+> Thanks,
+> Sai
+
+-- 
+மணிவண்ணன் சதாசிவம்

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D4459DDAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E7659E395
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244198AbiHWLEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
+        id S244064AbiHWMYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356576AbiHWK74 (ORCPT
+        with ESMTP id S1345057AbiHWMUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:59:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B251786C09;
-        Tue, 23 Aug 2022 02:14:03 -0700 (PDT)
+        Tue, 23 Aug 2022 08:20:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8BEF9E7;
+        Tue, 23 Aug 2022 02:42:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCBC161226;
-        Tue, 23 Aug 2022 09:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF21C433D6;
-        Tue, 23 Aug 2022 09:13:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18E3161460;
+        Tue, 23 Aug 2022 09:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11710C4314F;
+        Tue, 23 Aug 2022 09:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246035;
-        bh=PpYQ9sWEw42NyUlX2lft+LxP0PilRZHReFOoNyV3Z/o=;
+        s=korg; t=1661247748;
+        bh=/Q5pUORS8PperCMlDsARse1qnrG1sQL5K88clcjPeiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yBMFzK0mzGzmgmX72pQXGFs/3upNyk3QnZLTY4uhRMjtgWQvv66iMXVpS90vhXZ9I
-         OgR+o0W+RAtfDuVlpSPgT1e2LWB/YOHMG+48Zj8J4qG9IST2/eLvEEZpP/Vce+aPCT
-         G3ihooX7EMYIr0Dj6U0sojuujK9Ojdj44auOONKs=
+        b=Pg8LXWRmqpn1ZDGdbGCO3iY1fatruHAF824O+YMny6/UJvpmwWMYwDsUnNQoD2tcL
+         9P2ngIWjW6MjCjXXwBvAUrbcfDfEWdP3EkPOJmvnNF0EPUArNkFHC7/067S/0oH0ku
+         rTZ7INWeDMleRqQfWBRlT1O14abKnKlscMH48JZM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wentao_Liang <Wentao_Liang_g@163.com>,
-        Song Liu <song@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
+        Faqiang Zhu <faqiang.zhu@nxp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 267/287] drivers:md:fix a potential use-after-free bug
+Subject: [PATCH 5.10 104/158] usb: cdns3 fix use-after-free at workaround 2
 Date:   Tue, 23 Aug 2022 10:27:16 +0200
-Message-Id: <20220823080110.340175238@linuxfoundation.org>
+Message-Id: <20220823080050.214993643@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wentao_Liang <Wentao_Liang_g@163.com>
+From: Frank Li <Frank.Li@nxp.com>
 
-[ Upstream commit 104212471b1c1817b311771d817fb692af983173 ]
+[ Upstream commit 7d602f30149a117eea260208b1661bc404c21dfd ]
 
-In line 2884, "raid5_release_stripe(sh);" drops the reference to sh and
-may cause sh to be released. However, sh is subsequently used in lines
-2886 "if (sh->batch_head && sh != sh->batch_head)". This may result in an
-use-after-free bug.
+BUG: KFENCE: use-after-free read in __list_del_entry_valid+0x10/0xac
 
-It can be fixed by moving "raid5_release_stripe(sh);" to the bottom of
-the function.
+cdns3_wa2_remove_old_request()
+{
+	...
+	kfree(priv_req->request.buf);
+	cdns3_gadget_ep_free_request(&priv_ep->endpoint, &priv_req->request);
+	list_del_init(&priv_req->list);
+	^^^ use after free
+	...
+}
 
-Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
-Signed-off-by: Song Liu <song@kernel.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+cdns3_gadget_ep_free_request() free the space pointed by priv_req,
+but priv_req is used in the following list_del_init().
+
+This patch move list_del_init() before cdns3_gadget_ep_free_request().
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Signed-off-by: Faqiang Zhu <faqiang.zhu@nxp.com>
+Link: https://lore.kernel.org/r/20220608190430.2814358-1-Frank.Li@nxp.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/raid5.c | 2 +-
+ drivers/usb/cdns3/gadget.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index dad426cc0f90..6f04473f0838 100644
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -2670,10 +2670,10 @@ static void raid5_end_write_request(struct bio *bi)
- 	if (!test_and_clear_bit(R5_DOUBLE_LOCKED, &sh->dev[i].flags))
- 		clear_bit(R5_LOCKED, &sh->dev[i].flags);
- 	set_bit(STRIPE_HANDLE, &sh->state);
--	raid5_release_stripe(sh);
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index f120da442d43..a37ea946459c 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -655,9 +655,9 @@ static void cdns3_wa2_remove_old_request(struct cdns3_endpoint *priv_ep)
+ 		trace_cdns3_wa2(priv_ep, "removes eldest request");
  
- 	if (sh->batch_head && sh != sh->batch_head)
- 		raid5_release_stripe(sh->batch_head);
-+	raid5_release_stripe(sh);
- }
+ 		kfree(priv_req->request.buf);
++		list_del_init(&priv_req->list);
+ 		cdns3_gadget_ep_free_request(&priv_ep->endpoint,
+ 					     &priv_req->request);
+-		list_del_init(&priv_req->list);
+ 		--priv_ep->wa2_counter;
  
- static void raid5_error(struct mddev *mddev, struct md_rdev *rdev)
+ 		if (!chain)
 -- 
 2.35.1
 

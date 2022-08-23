@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B5E59E058
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D6759E2A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356125AbiHWKxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S1359506AbiHWMI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355885AbiHWKp2 (ORCPT
+        with ESMTP id S1359252AbiHWMHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:45:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6696CD3D;
-        Tue, 23 Aug 2022 02:11:20 -0700 (PDT)
+        Tue, 23 Aug 2022 08:07:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30A565E3;
+        Tue, 23 Aug 2022 02:38:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A6E7B81C35;
-        Tue, 23 Aug 2022 09:11:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6699BC433C1;
-        Tue, 23 Aug 2022 09:11:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 864BB61467;
+        Tue, 23 Aug 2022 09:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57479C433C1;
+        Tue, 23 Aug 2022 09:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245877;
-        bh=h1jkUpnziud4k0faG/n89NzZ4EPIruthGTUed7lsyA4=;
+        s=korg; t=1661247500;
+        bh=69ovCRcumfGslh/oGLivZ4DIr8oJgQGwFuXGEqHGW5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hOJbQh2bfjCNhnNXg/aBp8M6I63wdLAEJwXzLp1/CByHc/CYsNSuC0CldJwBgMTRw
-         PM1P0KAz8TKFtCxuVCLJYh/f/zjN8tJrebSCrGIW+Biusms/rDP8suJXn3IZ3/uNTD
-         ixtkv5lxH5T8LQ6/YiryAwXtue/WNdxzRg4vtyNs=
+        b=gsPa9kEgtLU+FR/qnzFc0olVYq3Wwx5OMjvEUyfS2fi8ntQoBSB/WUOIJjF74OSA6
+         DtQHMDmtfmu3/CEJu6COle5cF+6R5J3ZlnU5aIDwq/ML7Q54lQ4YQrfdtqQmDyxpr5
+         qwWPJY4KkJgi3R6/vNEKMHUFmbs8o8Z2MSLR/HHo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 4.19 219/287] mmc: pxamci: Fix an error handling path in pxamci_probe()
+        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, llvm@lists.linux.dev,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 056/158] tools build: Switch to new openssl API for test-libcrypto
 Date:   Tue, 23 Aug 2022 10:26:28 +0200
-Message-Id: <20220823080108.337613461@linuxfoundation.org>
+Message-Id: <20220823080048.357389373@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +68,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-commit 98d7c5e5792b8ce3e1352196dac7f404bb1b46ec upstream.
+commit 5b245985a6de5ac18b5088c37068816d413fb8ed upstream.
 
-The commit in Fixes: has moved some code around without updating gotos to
-the error handling path.
+Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
+error when it encounters the deprecated function MD5_Init() and the others.
 
-Update it now and release some resources if pxamci_of_init() fails.
+The error would be interpreted as missing libcrypto, while in reality it is
+not.
 
-Fixes: fa3a5115469c ("mmc: pxamci: call mmc_of_parse()")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/6d75855ad4e2470e9ed99e0df21bc30f0c925a29.1658862932.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd variations")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: llvm@lists.linux.dev
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nick Terrell <terrelln@fb.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Quentin Monnet <quentin@isovalent.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/r/20220719170555.2576993-4-roberto.sassu@huawei.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/pxamci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/build/feature/test-libcrypto.c |   15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
---- a/drivers/mmc/host/pxamci.c
-+++ b/drivers/mmc/host/pxamci.c
-@@ -653,7 +653,7 @@ static int pxamci_probe(struct platform_
+--- a/tools/build/feature/test-libcrypto.c
++++ b/tools/build/feature/test-libcrypto.c
+@@ -1,16 +1,23 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include <openssl/evp.h>
+ #include <openssl/sha.h>
+ #include <openssl/md5.h>
  
- 	ret = pxamci_of_init(pdev, mmc);
- 	if (ret)
--		return ret;
-+		goto out;
+ int main(void)
+ {
+-	MD5_CTX context;
++	EVP_MD_CTX *mdctx;
+ 	unsigned char md[MD5_DIGEST_LENGTH + SHA_DIGEST_LENGTH];
+ 	unsigned char dat[] = "12345";
++	unsigned int digest_len;
  
- 	host = mmc_priv(mmc);
- 	host->mmc = mmc;
+-	MD5_Init(&context);
+-	MD5_Update(&context, &dat[0], sizeof(dat));
+-	MD5_Final(&md[0], &context);
++	mdctx = EVP_MD_CTX_new();
++	if (!mdctx)
++		return 0;
++
++	EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
++	EVP_DigestUpdate(mdctx, &dat[0], sizeof(dat));
++	EVP_DigestFinal_ex(mdctx, &md[0], &digest_len);
++	EVP_MD_CTX_free(mdctx);
+ 
+ 	SHA1(&dat[0], sizeof(dat), &md[0]);
+ 
 
 

@@ -2,95 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5021C59EB85
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659E959EB77
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiHWSx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S234358AbiHWSwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234006AbiHWSv2 (ORCPT
+        with ESMTP id S234362AbiHWSvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:51:28 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB617C533;
-        Tue, 23 Aug 2022 10:15:12 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31f445bd486so396548217b3.13;
-        Tue, 23 Aug 2022 10:15:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xSFNOJlym8FyrOBEvPYLVgoTndKDA46syAL7gGM1hOQ=;
-        b=6o/5GvxRGZiJsEfz6BbwvqQEKK55W3NqRxvr0QHdJzQ+X0EMkO12daAOG6Ynet9kBc
-         1/+Nw6p8COC/akG5Fu8B/UpPmbAZE69E0ybAi8G7nnnYM9sOYdA1RyI02ev347wcniRn
-         53YtsdKY31Yu+qpaC45lGoxRA1omYkWtAor15a6XmREWVIr9azc8dUXmFDtc5y0vN/4X
-         65aGk8oDqn34JXBYcufYS5EaV21qLDPwNS/DrFkMcPY6Q2KSTvGVFlasTOjOhxjk8R7X
-         hLW8W6KBP+RRvd8wvMM5/S1cy4vHDjHbbixcZmB2F5n8SvvotnsWeXKqanuiNGqkTCm1
-         3Cnw==
-X-Gm-Message-State: ACgBeo0SGQDj7xWm2nWGv/sVHfoRpla0UBtBNGFRtyUYRZmQmsSeYYAr
-        MP5kYLoR76TgBNUJ/BsB4Z/HBtNyK79M268OPjI=
-X-Google-Smtp-Source: AA6agR6wVbKtF7UDOTRRPr2VBYorKqh9xH2F7ddWUbFhnA2Q6INyF/YwWXao1fhCx13Aln4bqi0l+/jeBbnoJGIgFqc=
-X-Received: by 2002:a81:9906:0:b0:2db:640f:49d8 with SMTP id
- q6-20020a819906000000b002db640f49d8mr7277324ywg.326.1661274912179; Tue, 23
- Aug 2022 10:15:12 -0700 (PDT)
+        Tue, 23 Aug 2022 14:51:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B763D11C3C5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:15:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E2832336D9;
+        Tue, 23 Aug 2022 17:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661274943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vEBpfl3pgtZLUcRnNN7xouCt+plGofu/FkYkOP6oe74=;
+        b=p9IJlS3zT1E+49k0he/IUMtkrf5PaPs/2CtKcr7/jCHdwJmnJzbNXPR72OcSNZ9FkhBGiZ
+        9cxsQKq8zr5M8z19dqNKTRxczJ2JIrHp2VMcnd0a/PU+hWksx/JKClq6zTPwdU7gjbhDkd
+        PiGkU3rwbWs21JNBwhIEnt6OfVfSFYU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661274943;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vEBpfl3pgtZLUcRnNN7xouCt+plGofu/FkYkOP6oe74=;
+        b=ufVOXxEjYVZaxVi7jU3dSTd2kMdZQnX4kFBw9I5u+qbypfctDP1or1FUc0fpKduFwbIp2R
+        msnbC4hiSEbIxSAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8A22B13AB7;
+        Tue, 23 Aug 2022 17:15:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8YB3ID8LBWPxRgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 23 Aug 2022 17:15:43 +0000
+Message-ID: <ffb4012b-e038-a92e-c84c-bb1d061fe29f@suse.cz>
+Date:   Tue, 23 Aug 2022 19:15:43 +0200
 MIME-Version: 1.0
-References: <20220822091416.6177-1-zeming@nfschina.com>
-In-Reply-To: <20220822091416.6177-1-zeming@nfschina.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 19:15:01 +0200
-Message-ID: <CAJZ5v0iFW4OxhWrPiBOvg7AneEuey27sFKYH_XEWSbA+qNppDg@mail.gmail.com>
-Subject: Re: [PATCH] power/acpi: Remove unnecessary return in acpi_os_** function;
-To:     Li zeming <zeming@nfschina.com>
-Cc:     Robert Moore <robert.moore@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 1/9] slub: Make PREEMPT_RT support less convoluted
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>, linux-mm@kvack.org
+References: <20220817162703.728679-1-bigeasy@linutronix.de>
+ <20220817162703.728679-2-bigeasy@linutronix.de>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220817162703.728679-2-bigeasy@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 11:16 AM Li zeming <zeming@nfschina.com> wrote:
->
-> Remove the return in the function; it looks clearer.
->
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-
-This is ACPICA code, so please submit changes against it to the
-upstream ACPICA project on GitHub.  Thanks!
-
+On 8/17/22 18:26, Sebastian Andrzej Siewior wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> The slub code already has a few helpers depending on PREEMPT_RT. Add a few
+> more and get rid of the CONFIG_PREEMPT_RT conditionals all over the place.
+> 
+> No functional change.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: linux-mm@kvack.org
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > ---
->  tools/power/acpi/os_specific/service_layers/osunixxf.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/tools/power/acpi/os_specific/service_layers/osunixxf.c b/tools/power/acpi/os_specific/service_layers/osunixxf.c
-> index b3651a04d68c..127630c38f1a 100644
-> --- a/tools/power/acpi/os_specific/service_layers/osunixxf.c
-> +++ b/tools/power/acpi/os_specific/service_layers/osunixxf.c
-> @@ -510,8 +510,6 @@ void *acpi_os_map_memory(acpi_physical_address where, acpi_size length)
->
->  void acpi_os_unmap_memory(void *where, acpi_size length)
->  {
-> -
-> -       return;
->  }
+>  mm/slub.c | 66 +++++++++++++++++++++++++------------------------------
+>  1 file changed, 30 insertions(+), 36 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 862dbd9af4f52..5f7c5b5bd49f9 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -100,9 +100,11 @@
+>   *   except the stat counters. This is a percpu structure manipulated only by
+>   *   the local cpu, so the lock protects against being preempted or interrupted
+>   *   by an irq. Fast path operations rely on lockless operations instead.
+> - *   On PREEMPT_RT, the local lock does not actually disable irqs (and thus
+> - *   prevent the lockless operations), so fastpath operations also need to take
+> - *   the lock and are no longer lockless.
+> + *
+> + *   On PREEMPT_RT, the local lock neither disables interrupts nor preemption
+> + *   which means the lockless fastpath cannot be used as it might interfere with
+> + *   an in-progress slow path operations. In this case the local lock is always
+> + *   taken but it still utilizes the freelist for the common operations.
+>   *
+>   *   lockless fastpaths
+>   *
+> @@ -163,8 +165,11 @@
+>   * function call even on !PREEMPT_RT, use inline preempt_disable() there.
+>   */
+>  #ifndef CONFIG_PREEMPT_RT
+> -#define slub_get_cpu_ptr(var)	get_cpu_ptr(var)
+> -#define slub_put_cpu_ptr(var)	put_cpu_ptr(var)
+> +#define slub_get_cpu_ptr(var)		get_cpu_ptr(var)
+> +#define slub_put_cpu_ptr(var)		put_cpu_ptr(var)
+> +#define use_lockless_fast_path()	(true)
+
+> +#define slub_local_irq_save(flags)	local_irq_save(flags)
+> +#define slub_local_irq_restore(flags)	local_irq_restore(flags)
+
+Note these won't be neccessary anymore after
+https://lore.kernel.org/linux-mm/20220823170400.26546-6-vbabka@suse.cz/T/#u
+
+>  #else
+>  #define slub_get_cpu_ptr(var)		\
+>  ({					\
+> @@ -176,6 +181,9 @@ do {					\
+>  	(void)(var);			\
+>  	migrate_enable();		\
+>  } while (0)
+> +#define use_lockless_fast_path()	(false)
+> +#define slub_local_irq_save(flags)	do { } while (0)
+> +#define slub_local_irq_restore(flags)	do { } while (0)
 >  #endif
->
-> @@ -1313,5 +1311,4 @@ acpi_os_execute(acpi_execute_type type,
->
->  void acpi_os_wait_events_complete(void)
+>  
+>  #ifdef CONFIG_SLUB_DEBUG
+> @@ -460,16 +468,14 @@ static __always_inline void __slab_unlock(struct slab *slab)
+>  
+>  static __always_inline void slab_lock(struct slab *slab, unsigned long *flags)
 >  {
-> -       return;
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		local_irq_save(*flags);
+> +	slub_local_irq_save(*flags);
+>  	__slab_lock(slab);
 >  }
-> --
-> 2.18.2
->
+>  
+>  static __always_inline void slab_unlock(struct slab *slab, unsigned long *flags)
+>  {
+>  	__slab_unlock(slab);
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		local_irq_restore(*flags);
+> +	slub_local_irq_restore(*flags);
+>  }
+
+Ditto.
+
+>  /*
+> @@ -482,7 +488,7 @@ static inline bool __cmpxchg_double_slab(struct kmem_cache *s, struct slab *slab
+>  		void *freelist_new, unsigned long counters_new,
+>  		const char *n)
+>  {
+> -	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> +	if (use_lockless_fast_path())
+>  		lockdep_assert_irqs_disabled();
+
+This test would stay after the patch I referenced above. But while this
+change will keep testing the technically correct thing, the name would be
+IMHO misleading here, as this is semantically not about the lockless fast
+path, but whether we need to have irqs disabled to avoid a deadlock due to
+irq incoming when we hold the bit_spin_lock() and its handler trying to
+acquire it as well.

@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A2C59E274
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FA059DDA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359496AbiHWMIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S1353194AbiHWKO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359739AbiHWMGf (ORCPT
+        with ESMTP id S1352529AbiHWKFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:06:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243EBDEB67;
-        Tue, 23 Aug 2022 02:38:01 -0700 (PDT)
+        Tue, 23 Aug 2022 06:05:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9069F6B672;
+        Tue, 23 Aug 2022 01:52:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EA9BB81C98;
-        Tue, 23 Aug 2022 09:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A90C433D6;
-        Tue, 23 Aug 2022 09:37:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2504E6150F;
+        Tue, 23 Aug 2022 08:52:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342ADC433D6;
+        Tue, 23 Aug 2022 08:52:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247454;
-        bh=EKZDETK2wMS8ga13sw3/T56Jn7RQhNCk9lH3fLtohFk=;
+        s=korg; t=1661244725;
+        bh=o5kMqKGNeYaD1QjftcGevNh2DTWdrdudlXdleTnx8zM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=enC175gIAnNKQF/w2bP7ov5IkJ2XDJiOgLVBeSrEg3Op824Q54v9VQ/AALNnKhoyM
-         4/OrXe0BNmKmH4AeOSq7VU7c+3PGDVxIfNPdn3CAoix8xUOux7O+v6g/2HIz8ZV1zx
-         4nsVraFRK3o9S3uDcXiXEZ9jemBVxCK4qEGUkl+Q=
+        b=eejVIGHQ3sBSZ7nONPs8Dfsd3ZCO9M9lBjgpj1fBjP/AcYUdfepBfKq92z2O1nH+h
+         xBvCCHm+XpiuqPS+IsYoC/qFhsm1AL5npbE7gV2l/khvlJoVIntt5FZQpeosQvdz3X
+         gQiRSPtyYO5dmMKt9OlQWA8MDmVwxUY7+/pzqvSc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.10 010/158] tracing: Have filter accept "common_cpu" to be consistent
+        stable@vger.kernel.org, John Johansen <john.johansen@canonical.com>
+Subject: [PATCH 4.14 181/229] apparmor: fix quiet_denied for file rules
 Date:   Tue, 23 Aug 2022 10:25:42 +0200
-Message-Id: <20220823080046.491607346@linuxfoundation.org>
+Message-Id: <20220823080100.081326681@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,40 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: John Johansen <john.johansen@canonical.com>
 
-commit b2380577d4fe1c0ef3fa50417f1e441c016e4cbe upstream.
+commit 68ff8540cc9e4ab557065b3f635c1ff4c96e1f1c upstream.
 
-Make filtering consistent with histograms. As "cpu" can be a field of an
-event, allow for "common_cpu" to keep it from being confused with the
-"cpu" field of the event.
+Global quieting of denied AppArmor generated file events is not
+handled correctly. Unfortunately the is checking if quieting of all
+audit events is set instead of just denied events.
 
-Link: https://lkml.kernel.org/r/20220820134401.513062765@goodmis.org
-Link: https://lore.kernel.org/all/20220820220920.e42fa32b70505b1904f0a0ad@kernel.org/
-
-Cc: stable@vger.kernel.org
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Fixes: 1e3bac71c5053 ("tracing/histogram: Rename "cpu" to "common_cpu"")
-Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: 67012e8209df ("AppArmor: basic auditing infrastructure.")
+Signed-off-by: John Johansen <john.johansen@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_events.c |    1 +
- 1 file changed, 1 insertion(+)
+ security/apparmor/audit.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -168,6 +168,7 @@ static int trace_define_generic_fields(v
+--- a/security/apparmor/audit.c
++++ b/security/apparmor/audit.c
+@@ -143,7 +143,7 @@ int aa_audit(int type, struct aa_profile
+ 	}
+ 	if (AUDIT_MODE(profile) == AUDIT_QUIET ||
+ 	    (type == AUDIT_APPARMOR_DENIED &&
+-	     AUDIT_MODE(profile) == AUDIT_QUIET))
++	     AUDIT_MODE(profile) == AUDIT_QUIET_DENIED))
+ 		return aad(sa)->error;
  
- 	__generic_field(int, CPU, FILTER_CPU);
- 	__generic_field(int, cpu, FILTER_CPU);
-+	__generic_field(int, common_cpu, FILTER_CPU);
- 	__generic_field(char *, COMM, FILTER_COMM);
- 	__generic_field(char *, comm, FILTER_COMM);
- 
+ 	if (KILL_MODE(profile) && type == AUDIT_APPARMOR_DENIED)
 
 

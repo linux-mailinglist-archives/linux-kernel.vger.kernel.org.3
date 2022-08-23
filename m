@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBFF59E35F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E9359DB73
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352062AbiHWMUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
+        id S1356727AbiHWK6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359593AbiHWMQB (ORCPT
+        with ESMTP id S1356585AbiHWKzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:16:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B0BEA17F;
-        Tue, 23 Aug 2022 02:41:28 -0700 (PDT)
+        Tue, 23 Aug 2022 06:55:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A142C1EAD5;
+        Tue, 23 Aug 2022 02:13:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C683614CE;
-        Tue, 23 Aug 2022 09:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203E3C433C1;
-        Tue, 23 Aug 2022 09:40:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E53C60F85;
+        Tue, 23 Aug 2022 09:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3973FC433C1;
+        Tue, 23 Aug 2022 09:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247631;
-        bh=DJczms3G8wxy3yEKcPN6IhuSXlztd2FJCuz7abn2IT8=;
+        s=korg; t=1661246006;
+        bh=yx3F4GWmfbblmgPgIsm34N4nZ3rzz+7Tif+D4H6tSck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zoUOnTtdHuD3Q90UbBXeardPoaG7yN3UsIaKYbCDaz4xKR22urh5eMWVpHSCIVxEj
-         7HAl68bc/h4FPrbrZKCE6fiiodQp0pd73oU9/APkvBIciUHtf50+gsq9dYrwr1pZFC
-         phkXv76mZQCwdsagNETLNTin3GnBqw0Mu+ti5wL4=
+        b=sfS8SdQRn7BJy33Z753sKZFklWlKMuYTlIN9NAj2XRd92J/45VwNhUPnjs1Rn3kda
+         uqchswjKcxgekD7qvA0J7vhqlmSatSAG8SoreTkpsxiFSn7JqbyIJ4SPraHQ7Xnr3z
+         mhEjz3LplCHyIfGAO3iRgIa+wx3RxIbohoRihe0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 096/158] ASoC: SOF: intel: move sof_intel_dsp_desc() forward
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 259/287] irqchip/tegra: Fix overflow implicit truncation warnings
 Date:   Tue, 23 Aug 2022 10:27:08 +0200
-Message-Id: <20220823080049.927581254@linuxfoundation.org>
+Message-Id: <20220823080109.997432325@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,63 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bard Liao <yung-chuan.liao@linux.intel.com>
+From: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 
-[ Upstream commit 2f1315ae94b46bf0d5b4be29be15cc3641364404 ]
+[ Upstream commit 443685992bda9bb4f8b17fc02c9f6c60e62b1461 ]
 
-sof_intel_dsp_desc() will be used by hda_dsp_check_sdw_irq() in the
-following commit.
+Fix -Woverflow warnings for tegra irqchip driver which is a result
+of moving arm64 custom MMIO accessor macros to asm-generic function
+implementations giving a bonus type-checking now and uncovering these
+overflow warnings.
 
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Link: https://lore.kernel.org/r/20210723115451.7245-5-yung-chuan.liao@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+drivers/irqchip/irq-tegra.c: In function ‘tegra_ictlr_suspend’:
+drivers/irqchip/irq-tegra.c:151:18: warning: large integer implicitly truncated to unsigned type [-Woverflow]
+   writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
+                  ^
+
+Suggested-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/intel/hda.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/irqchip/irq-tegra.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index b0faf050132d..b4cc72483137 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -39,6 +39,17 @@
- #define EXCEPT_MAX_HDR_SIZE	0x400
- #define HDA_EXT_ROM_STATUS_SIZE 8
+diff --git a/drivers/irqchip/irq-tegra.c b/drivers/irqchip/irq-tegra.c
+index 0abc0cd1c32e..1b3048ecb600 100644
+--- a/drivers/irqchip/irq-tegra.c
++++ b/drivers/irqchip/irq-tegra.c
+@@ -157,10 +157,10 @@ static int tegra_ictlr_suspend(void)
+ 		lic->cop_iep[i] = readl_relaxed(ictlr + ICTLR_COP_IEP_CLASS);
  
-+static const struct sof_intel_dsp_desc
-+	*get_chip_info(struct snd_sof_pdata *pdata)
-+{
-+	const struct sof_dev_desc *desc = pdata->desc;
-+	const struct sof_intel_dsp_desc *chip_info;
-+
-+	chip_info = desc->chip_info;
-+
-+	return chip_info;
-+}
-+
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
+ 		/* Disable COP interrupts */
+-		writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
++		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_COP_IER_CLR);
  
- /*
-@@ -674,17 +685,6 @@ static int hda_init_caps(struct snd_sof_dev *sdev)
- 	return 0;
- }
+ 		/* Disable CPU interrupts */
+-		writel_relaxed(~0ul, ictlr + ICTLR_CPU_IER_CLR);
++		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_CPU_IER_CLR);
  
--static const struct sof_intel_dsp_desc
--	*get_chip_info(struct snd_sof_pdata *pdata)
--{
--	const struct sof_dev_desc *desc = pdata->desc;
--	const struct sof_intel_dsp_desc *chip_info;
--
--	chip_info = desc->chip_info;
--
--	return chip_info;
--}
--
- static irqreturn_t hda_dsp_interrupt_handler(int irq, void *context)
- {
- 	struct snd_sof_dev *sdev = context;
+ 		/* Enable the wakeup sources of ictlr */
+ 		writel_relaxed(lic->ictlr_wake_mask[i], ictlr + ICTLR_CPU_IER_SET);
+@@ -181,12 +181,12 @@ static void tegra_ictlr_resume(void)
+ 
+ 		writel_relaxed(lic->cpu_iep[i],
+ 			       ictlr + ICTLR_CPU_IEP_CLASS);
+-		writel_relaxed(~0ul, ictlr + ICTLR_CPU_IER_CLR);
++		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_CPU_IER_CLR);
+ 		writel_relaxed(lic->cpu_ier[i],
+ 			       ictlr + ICTLR_CPU_IER_SET);
+ 		writel_relaxed(lic->cop_iep[i],
+ 			       ictlr + ICTLR_COP_IEP_CLASS);
+-		writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
++		writel_relaxed(GENMASK(31, 0), ictlr + ICTLR_COP_IER_CLR);
+ 		writel_relaxed(lic->cop_ier[i],
+ 			       ictlr + ICTLR_COP_IER_SET);
+ 	}
+@@ -321,7 +321,7 @@ static int __init tegra_ictlr_init(struct device_node *node,
+ 		lic->base[i] = base;
+ 
+ 		/* Disable all interrupts */
+-		writel_relaxed(~0UL, base + ICTLR_CPU_IER_CLR);
++		writel_relaxed(GENMASK(31, 0), base + ICTLR_CPU_IER_CLR);
+ 		/* All interrupts target IRQ */
+ 		writel_relaxed(0, base + ICTLR_CPU_IEP_CLASS);
+ 
 -- 
 2.35.1
 

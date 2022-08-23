@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1C659D855
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16F159D841
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241635AbiHWJuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S1350719AbiHWJeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241743AbiHWJr7 (ORCPT
+        with ESMTP id S1350625AbiHWJc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:47:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE509719AE;
-        Tue, 23 Aug 2022 01:44:45 -0700 (PDT)
+        Tue, 23 Aug 2022 05:32:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7813783BDB;
+        Tue, 23 Aug 2022 01:38:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95065B81C55;
-        Tue, 23 Aug 2022 08:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECFC0C433C1;
-        Tue, 23 Aug 2022 08:43:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA55661517;
+        Tue, 23 Aug 2022 08:37:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC77C433B5;
+        Tue, 23 Aug 2022 08:37:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244230;
-        bh=6RUbOO660W57gg9vcDPO2ChUAqzUiVW0WI9kwpLZkTU=;
+        s=korg; t=1661243872;
+        bh=5F3L1hqSN/7exQ2u/UxDEhO+Ah+rnMqDKqPMrqS7AEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1K5vHnHxCrg9U5yyxVxdJnRNNaiCSpDSJJpVU6Fxqaa8vluvUGjGDUGVm6+eLmGti
-         rygEk7BH2upVm6Mk67Y8nBjWm6sf3RkdxvjM5GURo1KB93Tb6d8wIDdjkvZkEaSY+m
-         BI61DGLkUyG94Njjbm01WyrqrztBx+WYv50TVZlM=
+        b=AS1NiJ0q3hxiyZ6zL0nLPlK2gt+XBOcY1VAp6DK6tUpxMHZqU13zRXdh8xEDDkt0n
+         TSIATAzTJTqRNCsQvJu3461MjWAGKz8RqumWQ4xX3Fj7aqmOX1tMTdKNNrWbS1GOwh
+         bcreHCio9YrwV/i57XKzl9n//4QH+HChyqvKOfIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        Fedor Pchelkin <pchelkin@ispras.ru>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.15 050/244] can: j1939: j1939_session_destroy(): fix memory leak of skbs
-Date:   Tue, 23 Aug 2022 10:23:29 +0200
-Message-Id: <20220823080100.737215509@linuxfoundation.org>
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 049/229] ARM: findbit: fix overflowing offset
+Date:   Tue, 23 Aug 2022 10:23:30 +0200
+Message-Id: <20220823080055.424373126@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fedor Pchelkin <pchelkin@ispras.ru>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-commit 8c21c54a53ab21842f5050fa090f26b03c0313d6 upstream.
+[ Upstream commit ec85bd369fd2bfaed6f45dd678706429d4f75b48 ]
 
-We need to drop skb references taken in j1939_session_skb_queue() when
-destroying a session in j1939_session_destroy(). Otherwise those skbs
-would be lost.
+When offset is larger than the size of the bit array, we should not
+attempt to access the array as we can perform an access beyond the
+end of the array. Fix this by changing the pre-condition.
 
-Link to Syzkaller info and repro: https://forge.ispras.ru/issues/11743.
+Using "cmp r2, r1; bhs ..." covers us for the size == 0 case, since
+this will always take the branch when r1 is zero, irrespective of
+the value of r2. This means we can fix this bug without adding any
+additional code!
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-V1: https://lore.kernel.org/all/20220708175949.539064-1-pchelkin@ispras.ru
-
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Suggested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/all/20220805150216.66313-1-pchelkin@ispras.ru
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/can/j1939/transport.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/arm/lib/findbit.S | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -260,6 +260,8 @@ static void __j1939_session_drop(struct
+diff --git a/arch/arm/lib/findbit.S b/arch/arm/lib/findbit.S
+index 7848780e8834..20fef6c41f6f 100644
+--- a/arch/arm/lib/findbit.S
++++ b/arch/arm/lib/findbit.S
+@@ -43,8 +43,8 @@ ENDPROC(_find_first_zero_bit_le)
+  * Prototype: int find_next_zero_bit(void *addr, unsigned int maxbit, int offset)
+  */
+ ENTRY(_find_next_zero_bit_le)
+-		teq	r1, #0
+-		beq	3b
++		cmp	r2, r1
++		bhs	3b
+ 		ands	ip, r2, #7
+ 		beq	1b			@ If new byte, goto old routine
+  ARM(		ldrb	r3, [r0, r2, lsr #3]	)
+@@ -84,8 +84,8 @@ ENDPROC(_find_first_bit_le)
+  * Prototype: int find_next_zero_bit(void *addr, unsigned int maxbit, int offset)
+  */
+ ENTRY(_find_next_bit_le)
+-		teq	r1, #0
+-		beq	3b
++		cmp	r2, r1
++		bhs	3b
+ 		ands	ip, r2, #7
+ 		beq	1b			@ If new byte, goto old routine
+  ARM(		ldrb	r3, [r0, r2, lsr #3]	)
+@@ -118,8 +118,8 @@ ENTRY(_find_first_zero_bit_be)
+ ENDPROC(_find_first_zero_bit_be)
  
- static void j1939_session_destroy(struct j1939_session *session)
- {
-+	struct sk_buff *skb;
-+
- 	if (session->transmission) {
- 		if (session->err)
- 			j1939_sk_errqueue(session, J1939_ERRQUEUE_TX_ABORT);
-@@ -274,7 +276,11 @@ static void j1939_session_destroy(struct
- 	WARN_ON_ONCE(!list_empty(&session->sk_session_queue_entry));
- 	WARN_ON_ONCE(!list_empty(&session->active_session_list_entry));
+ ENTRY(_find_next_zero_bit_be)
+-		teq	r1, #0
+-		beq	3b
++		cmp	r2, r1
++		bhs	3b
+ 		ands	ip, r2, #7
+ 		beq	1b			@ If new byte, goto old routine
+ 		eor	r3, r2, #0x18		@ big endian byte ordering
+@@ -152,8 +152,8 @@ ENTRY(_find_first_bit_be)
+ ENDPROC(_find_first_bit_be)
  
--	skb_queue_purge(&session->skb_queue);
-+	while ((skb = skb_dequeue(&session->skb_queue)) != NULL) {
-+		/* drop ref taken in j1939_session_skb_queue() */
-+		skb_unref(skb);
-+		kfree_skb(skb);
-+	}
- 	__j1939_session_drop(session);
- 	j1939_priv_put(session->priv);
- 	kfree(session);
+ ENTRY(_find_next_bit_be)
+-		teq	r1, #0
+-		beq	3b
++		cmp	r2, r1
++		bhs	3b
+ 		ands	ip, r2, #7
+ 		beq	1b			@ If new byte, goto old routine
+ 		eor	r3, r2, #0x18		@ big endian byte ordering
+-- 
+2.35.1
+
 
 

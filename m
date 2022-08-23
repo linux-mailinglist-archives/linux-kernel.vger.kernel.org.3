@@ -2,128 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE5459EC09
+	by mail.lfdr.de (Postfix) with ESMTP id A0D9D59EC08
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbiHWTQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S234146AbiHWTQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiHWTQX (ORCPT
+        with ESMTP id S230059AbiHWTQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:16:23 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB57A3D7E;
-        Tue, 23 Aug 2022 10:53:30 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3375488624aso370316837b3.3;
+        Tue, 23 Aug 2022 15:16:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A646A9CCDE
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:53:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2574B113E;
         Tue, 23 Aug 2022 10:53:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VqZm+8na/QHZHDfzUfzKJintAOoGSoCypb//YKr06Fk=;
-        b=FhIieYZQpuvtgQ130F+wwXq4v+Ajo46wy30D5mI/zj3m4egQUsVCKCoaTxs/69Dc/S
-         zg9qGB4ynaaJJvsFKDqNVGPcpGtqT+MHO68OzBJp9nsFC7+YEJdWsao4dALPc31BEu0V
-         qYbD1f6cDg8R0pYDFGLGVNj045JsVdgmPncfK/HYjfovy2Fe7biqzFMLO0C0nr6D+tun
-         2gP3Wdc+8y9++guIg/88J4Q/suyPDNvQXPUGeoSVC53j/H3ytLARzl59NqDorbMv9oD2
-         Jd2KmrY1qWhHVF6CF1EeDx/UtuM2VC3EiiqEs7znmxdsgmlJoKuI3OOWhAw1SyznNDA3
-         Wd2A==
-X-Gm-Message-State: ACgBeo2nX15ENIF09pL/KTmQKKtWHawAgqa2Kk3Fr0r3hOvD4qFpF1LD
-        FegWMAsy69oaeEES95UZ7f59uHT8XPkt3wN9uzo=
-X-Google-Smtp-Source: AA6agR4K72Wap+WDzaVg/TijNgXe4VkARLEXudFY61Uz55Psek5ray9ml+q1pgKliEAq5wnh/A+ODgUfnP/QAcspmjE=
-X-Received: by 2002:a0d:f647:0:b0:328:317c:9069 with SMTP id
- g68-20020a0df647000000b00328317c9069mr26354082ywf.301.1661277208941; Tue, 23
- Aug 2022 10:53:28 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0993D3F718;
+        Tue, 23 Aug 2022 10:53:24 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 18:53:23 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     yangyicong@hisilicon.com, sudeep.holla@arm.com,
+        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, 21cnbao@gmail.com,
+        jonathan.cameron@huawei.com, linuxarm@huawei.com,
+        prime.zeng@huawei.com
+Subject: Re: [PATCH] arch_topology: Make cluster topology span at least SMT
+ CPUs
+Message-ID: <YwUUEzULS1ha1rqY@arm.com>
+References: <20220823073044.58697-1-yangyicong@huawei.com>
+ <YwSKnGii2zdd7Fig@arm.com>
+ <d0bc04af-5481-5df2-ff75-9072b4b047c1@huawei.com>
 MIME-Version: 1.0
-References: <20220808132158.24099-1-jlee@suse.com>
-In-Reply-To: <20220808132158.24099-1-jlee@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 19:53:18 +0200
-Message-ID: <CAJZ5v0ig8mkNSrwsUhNVVGeBgB9TMmTDZQQmf_tCV4oJ85VPRA@mail.gmail.com>
-Subject: Re: [PATCH] thermal/int340x_thermal: handle data_vault when the value
- is ZERO_SIZE_PTR
-To:     "Lee, Chun-Yi" <joeyli.kernel@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Lee, Chun-Yi" <jlee@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d0bc04af-5481-5df2-ff75-9072b4b047c1@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 3:22 PM Lee, Chun-Yi <joeyli.kernel@gmail.com> wrote:
->
-> In some case, the GDDV returns a package with a buffer which has
-> zero length. It causes that kmemdup() returns ZERO_SIZE_PTR (0x10).
->
-> Then the data_vault_read() got NULL point dereference problem when
-> accessing the 0x10 value in data_vault.
->
-> [   71.024560] BUG: kernel NULL pointer dereference, address:
-> 0000000000000010
->
-> This patch uses ZERO_OR_NULL_PTR() for checking ZERO_SIZE_PTR or
-> NULL value in data_vault.
->
-> Signed-off-by: "Lee, Chun-Yi" <jlee@suse.com>
+Hi,
 
-Applied as 6.0-rc material, thanks!
+On Tuesday 23 Aug 2022 at 21:05:47 (+0800), Yicong Yang wrote:
+> On 2022/8/23 16:06, Ionela Voinescu wrote:
+> > Hi Yicong,
+> > 
+> > On Tuesday 23 Aug 2022 at 15:30:44 (+0800), Yicong Yang wrote:
+> >> From: Yicong Yang <yangyicong@hisilicon.com>
+> >>
+> >> Currently cpu_clustergroup_mask() will return CPU mask if cluster span
+> >> more or the same CPUs as cpu_coregroup_mask(). This will result topology
+> >> borken on non-Cluster SMT machines.
+> > 
+> > Might be worth adding here:.. "when building with CONFIG_SCHED_CLUSTER=y"
+> > 
+> 
+> will add this qualifier. thanks.
+> 
+> >>
+> > 
+> > I thought I had covered this case, but I think I had considered LLC
+> > spanning more than one core (tested on TX2 as well).
+> > 
+> > So you'd only hit this if LLC and cluster level span the same cores (a
+> > single core in this case, for non-cluster), in the presence of SMT.
+> > 
+> 
+> Not sure I understand it correctly but in the below case I think the LLC may span
+> the same core with socket?
 
-> ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 80d4e0676083..365489bf4b8c 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -527,7 +527,7 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
->         priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
->                                    obj->package.elements[0].buffer.length,
->                                    GFP_KERNEL);
-> -       if (!priv->data_vault)
-> +       if (ZERO_OR_NULL_PTR(priv->data_vault))
->                 goto out_free;
->
->         bin_attr_data_vault.private = priv->data_vault;
-> @@ -597,7 +597,7 @@ static int int3400_thermal_probe(struct platform_device *pdev)
->                         goto free_imok;
->         }
->
-> -       if (priv->data_vault) {
-> +       if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
->                 result = sysfs_create_group(&pdev->dev.kobj,
->                                             &data_attribute_group);
->                 if (result)
-> @@ -615,7 +615,8 @@ static int int3400_thermal_probe(struct platform_device *pdev)
->  free_sysfs:
->         cleanup_odvp(priv);
->         if (priv->data_vault) {
-> -               sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
-> +               if (!ZERO_OR_NULL_PTR(priv->data_vault))
-> +                       sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
->                 kfree(priv->data_vault);
->         }
->  free_uuid:
-> @@ -647,7 +648,7 @@ static int int3400_thermal_remove(struct platform_device *pdev)
->         if (!priv->rel_misc_dev_res)
->                 acpi_thermal_rel_misc_device_remove(priv->adev->handle);
->
-> -       if (priv->data_vault)
-> +       if (!ZERO_OR_NULL_PTR(priv->data_vault))
->                 sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
->         sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
->         sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
-> --
-> 2.26.2
->
+Ah, I've jumped to conclusions based on the "non-cluster" mention. Does
+"non-cluster" just mean that there's no intermediary "cluster" grouping of
+CPUs between core and LLC? How does the PPTT table look like, by the
+way?
+
+Thanks,
+Ionela.
+
+> 
+> > Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> > 
+> > Many thanks,
+> > Ionela.
+> > 
+> >> Test with:
+> >> qemu-system-aarch64 -enable-kvm -machine virt \
+> >>  -net none \
+> >>  -cpu host \
+> >>  -bios ./QEMU_EFI.fd \
+> >>  -m 2G \
+> >>  -smp 48,sockets=2,cores=12,threads=2 \
+> >>  -kernel $Image \
+> >>  -initrd $Rootfs \
+> >>  -nographic
+> >>  -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
+> >>
+> >> We'll get below error:
+> >> [    3.084568] BUG: arch topology borken
+> >> [    3.084570]      the SMT domain not a subset of the CLS domain
+> >>
+> >> Since cluster is a level higher than SMT, fix this by making cluster
+> >> spans at least SMT CPUs.
+> >>
+> >> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> >> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> >> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> >> Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
+> >> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> >> ---
+> >>  drivers/base/arch_topology.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> >> index 0424b59b695e..0056a1273275 100644
+> >> --- a/drivers/base/arch_topology.c
+> >> +++ b/drivers/base/arch_topology.c
+> >> @@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
+> >>  	 */
+> >>  	if (cpumask_subset(cpu_coregroup_mask(cpu),
+> >>  			   &cpu_topology[cpu].cluster_sibling))
+> >> -		return get_cpu_mask(cpu);
+> >> +		return cpu_smt_mask(cpu);
+> >>  
+> >>  	return &cpu_topology[cpu].cluster_sibling;
+> >>  }
+> >> -- 
+> >> 2.24.0
+> >>
+> > 
+> > .
+> > 

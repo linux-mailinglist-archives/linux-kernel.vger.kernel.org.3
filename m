@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1368A59DDFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01E959DC0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356642AbiHWKvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
+        id S1358483AbiHWLtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350994AbiHWKmx (ORCPT
+        with ESMTP id S1358540AbiHWLqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:42:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7061FAA4F9;
-        Tue, 23 Aug 2022 02:10:20 -0700 (PDT)
+        Tue, 23 Aug 2022 07:46:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772D3D25D7;
+        Tue, 23 Aug 2022 02:30:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7208560EFB;
-        Tue, 23 Aug 2022 09:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A64EC433B5;
-        Tue, 23 Aug 2022 09:10:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D2A8B81B1F;
+        Tue, 23 Aug 2022 09:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B009C433C1;
+        Tue, 23 Aug 2022 09:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245818;
-        bh=uW7eY63ZhSgsE1wQj23d5+bX5fq600O+sVk+bqkRiew=;
+        s=korg; t=1661247015;
+        bh=XXnsT8YnvLr5n07bfMayojz6yEaBHQq9iwO02OlXMVs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rLEBzOLE8IvyN1Cq+w1HKyAQVbPrrChJ+hOw6Uyuyx+RpXEyFsUtZKpLLgfcw+sp2
-         7ccnXTtbg2IGHrKzYsSulcBqnbRVdC0RaCdYW8MPrNg+oynVFn6Ir41YLLWwyYaf4/
-         fEDE+LSLjzYtW0JAquixGZZ90cod72Xpl5jqW+lE=
+        b=J+nUOgGPkJb0pMkUo2FRMg4QugRJzTZYwdRq1hJzObXTdxRUQF+rPKKBk+417trri
+         QcL810bmJIOFKL8tNhEQJ5/T5w4CMZXkxgoqI5TMwTpdsSNjvYoSFaSdspabigKLki
+         NkzhF616HCuQbrPOC7SLvpzEe+oOion9Un2ggIDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 4.19 199/287] dm writecache: set a default MAX_WRITEBACK_JOBS
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.4 290/389] mmc: pxamci: Fix an error handling path in pxamci_probe()
 Date:   Tue, 23 Aug 2022 10:26:08 +0200
-Message-Id: <20220823080107.545184357@linuxfoundation.org>
+Message-Id: <20220823080127.670632086@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit ca7dc242e358e46d963b32f9d9dd829785a9e957 upstream.
+commit 98d7c5e5792b8ce3e1352196dac7f404bb1b46ec upstream.
 
-dm-writecache has the capability to limit the number of writeback jobs
-in progress. However, this feature was off by default. As such there
-were some out-of-memory crashes observed when lowering the low
-watermark while the cache is full.
+The commit in Fixes: has moved some code around without updating gotos to
+the error handling path.
 
-This commit enables writeback limit by default. It is set to 256MiB or
-1/16 of total system memory, whichever is smaller.
+Update it now and release some resources if pxamci_of_init() fails.
 
+Fixes: fa3a5115469c ("mmc: pxamci: call mmc_of_parse()")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Link: https://lore.kernel.org/r/6d75855ad4e2470e9ed99e0df21bc30f0c925a29.1658862932.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-writecache.c |    2 +-
+ drivers/mmc/host/pxamci.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/dm-writecache.c
-+++ b/drivers/md/dm-writecache.c
-@@ -20,7 +20,7 @@
+--- a/drivers/mmc/host/pxamci.c
++++ b/drivers/mmc/host/pxamci.c
+@@ -648,7 +648,7 @@ static int pxamci_probe(struct platform_
  
- #define HIGH_WATERMARK			50
- #define LOW_WATERMARK			45
--#define MAX_WRITEBACK_JOBS		0
-+#define MAX_WRITEBACK_JOBS		min(0x10000000 / PAGE_SIZE, totalram_pages / 16)
- #define ENDIO_LATENCY			16
- #define WRITEBACK_LATENCY		64
- #define AUTOCOMMIT_BLOCKS_SSD		65536
+ 	ret = pxamci_of_init(pdev, mmc);
+ 	if (ret)
+-		return ret;
++		goto out;
+ 
+ 	host = mmc_priv(mmc);
+ 	host->mmc = mmc;
 
 

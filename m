@@ -2,110 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5321659D01F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 06:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65D559D01A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 06:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239283AbiHWEjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 00:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S239441AbiHWEem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 00:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiHWEja (ORCPT
+        with ESMTP id S231897AbiHWEej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 00:39:30 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7488F5246D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 21:39:29 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33d356e7629so45505287b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 21:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=eCx7HCyYhMVr1Cnt8cn0N8ALL0nL9w7hY17tTHbimY4=;
-        b=jrnCAzZ8mUui4idMn39tH4y6Hp+N0XhYghte0f+EXUBENFnuTJtssjk83zBHZO8tBM
-         juElvdV++c0aVazJQdJqkTHu6n4jPwo9ZSr+XUmZr44YblGyK2Jj+AxOBl/eiCSMEfxf
-         fYR1ewqUaNjWXP4izPlufq9DPAx8V7QVm1MBDH9sthYlvugzZ/gPdoE3d7F9YwS0MDFl
-         Mp0tdXCt2GjFwrtLBOWvWtaJiY9CtQ0QjtBmwwMSpYWZmusRitLQQgoWqYJX5GmDUabQ
-         UUlxV2ZWWUWLBTntSeYTxvRrODg8VhgTipUx/ujbaXrKXQVgcCp7jjEPkEnhD/w6rWTz
-         6EDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=eCx7HCyYhMVr1Cnt8cn0N8ALL0nL9w7hY17tTHbimY4=;
-        b=gn3wcxSJ0OlpPniq2Oh8O7G0XL352YYJOvW3nV+ZO7VvT5BVf2VcUnyGOWGiYeGd+9
-         tYSKcUJgApgE2TXal5muZZBNU1OHbEbyu33aOQuNO6XWxfogGC+M/QhXOUjbmfbz+xW1
-         UYse73uShkMw083RdWlOfj1xNC3zBj4jQvQjky28aaFQ9EeuR2AaAeu2yatL+fw1dz/H
-         b9uc64M+hG5JFETULkEeabUpLwu5u8Ts6WvOZzN/8f0oPaThAK5VrgQEF615VPy7gEQN
-         cpJjMTsbIs/pEa3ZlOEdjMDMvKdtbN8j0aHlBMxqqPYrd6uskT9M2I4jwBDIy2lY5bxU
-         BDZg==
-X-Gm-Message-State: ACgBeo12gW5GDuN+HJbOqE6j2WbE8thBcuejwyHTprciDImh2nMdewLI
-        1y1n1k1EDzpMmvMQNflQg3ybyjT4q9dT
-X-Google-Smtp-Source: AA6agR4HX6Jqo6bJiJyo5zbZUVUEossBVoWuqPVT3688Mpy7XFWNdELwqQdKxOMxR2a6v+aQyaTHhwNEuJ11
-X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:aa4:997c:9497:366e])
- (user=apusaka job=sendgmr) by 2002:a25:b986:0:b0:671:a73:1ea6 with SMTP id
- r6-20020a25b986000000b006710a731ea6mr21903490ybg.405.1661229568686; Mon, 22
- Aug 2022 21:39:28 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 12:39:22 +0800
-Message-Id: <20220823123850.1.I0cb00facc6a47efc8cee54d5d4a02fadb388e5a5@changeid>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] Bluetooth: hci_event: Fix checking conn for le_conn_complete_evt
-From:   Archie Pusaka <apusaka@google.com>
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Sonny Sasaka <sonnysasaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Soenke Huster <soenke.huster@eknoes.de>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 00:34:39 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6C14E63A;
+        Mon, 22 Aug 2022 21:34:37 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MBbrq15q7zkWMF;
+        Tue, 23 Aug 2022 12:31:07 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 12:34:35 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 23 Aug
+ 2022 12:34:35 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <martin.petersen@oracle.com>
+CC:     <james.smart@broadcom.com>, <dick.kennedy@broadcom.com>
+Subject: [PATCH -next v2] scsi: lpfc: add missing destroy_workqueue() on error path in lpfc_sli4_driver_resource_setup()
+Date:   Tue, 23 Aug 2022 12:42:37 +0800
+Message-ID: <20220823044237.285643-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+Add the missing destroy_workqueue() before return from
+lpfc_sli4_driver_resource_setup() in error path.
 
-To prevent multiple conn complete events, we shouldn't look up the
-conn with hci_lookup_le_connect, since it requires the state to be
-BT_CONNECT. By the time the duplicate event is processed, the state
-might have changed, so we end up processing the new event anyway.
-
-Change the lookup function to hci_conn_hash_lookup_ba.
-
-Fixes: d5ebaa7c5f6f6 ("Bluetooth: hci_event: Ignore multiple conn complete events")
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Sonny Sasaka <sonnysasaka@chromium.org>
-
+Fixes: 3cee98db2610 ("scsi: lpfc: Fix crash on driver unload in wq free")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
+v2:
+  correct label spelling error
+---
+ drivers/scsi/lpfc/lpfc_init.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- net/bluetooth/hci_event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 938abe6352bf..1906822a061b 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -5801,7 +5801,7 @@ static void le_conn_complete_evt(struct hci_dev *hdev, u8 status,
- 	 */
- 	hci_dev_clear_flag(hdev, HCI_LE_ADV);
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index c69c5a0979ec..55a1ad6eed03 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -8053,7 +8053,7 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+ 	/* Allocate device driver memory */
+ 	rc = lpfc_mem_alloc(phba, SGL_ALIGN_SZ);
+ 	if (rc)
+-		return -ENOMEM;
++		goto out_destroy_workqueue;
  
--	conn = hci_lookup_le_connect(hdev);
-+	conn = hci_conn_hash_lookup_ba(hdev, LE_LINK, bdaddr);
- 	if (!conn) {
- 		/* In case of error status and there is no connection pending
- 		 * just unlock as there is nothing to cleanup.
+ 	/* IF Type 2 ports get initialized now. */
+ 	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) >=
+@@ -8481,6 +8481,9 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+ 	lpfc_destroy_bootstrap_mbox(phba);
+ out_free_mem:
+ 	lpfc_mem_free(phba);
++out_destroy_workqueue:
++	destroy_workqueue(phba->wq);
++	phba->wq = NULL;
+ 	return rc;
+ }
+ 
 -- 
-2.37.1.595.g718a3a8f04-goog
+2.25.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEDE59E0FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08C159E1E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358758AbiHWLx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S1351288AbiHWMM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358731AbiHWLuo (ORCPT
+        with ESMTP id S1351906AbiHWMMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:50:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03B6D2EAB;
-        Tue, 23 Aug 2022 02:31:48 -0700 (PDT)
+        Tue, 23 Aug 2022 08:12:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E2EE42F4;
+        Tue, 23 Aug 2022 02:39:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16B44B8105C;
-        Tue, 23 Aug 2022 09:31:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F4FC433D6;
-        Tue, 23 Aug 2022 09:31:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72F60613CA;
+        Tue, 23 Aug 2022 09:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D3C0C433D6;
+        Tue, 23 Aug 2022 09:38:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247105;
-        bh=tgwi/tP+hcVfUhfNfNmv7WL2po1ZQx4WqR5FMscIIQM=;
+        s=korg; t=1661247533;
+        bh=EkgEL8VNg3xEP7YC4/zdUsjn0OhSMPb/3b8UAiUZx84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YxqHU8Fcow4VV0zd4n6PGJ4HMmSdS9oCNVybyJUvu/lxZVlS7n0eR/qdKLqyx9e4j
-         3hB4m3B0zFzQDVorSrOMrIGgI+tpMN3EQlRFEy5YWmUzGT+LEo866BQY9s9ID7vrZc
-         ibXxtekL6RT2E06E0rDNy91RTTq4fVVJzgWwrDvM=
+        b=G5jVe4bbp6upFGtX59yFMB//Jn8KzI2ykflZkCaMAyv5esDTQYCQGN2CfGY6I9yZz
+         irHzSG1qyG0H1LTjFUC87VbUtE2W7pR2aMTyXUFBMYE3HytI/zzdiU558rdna5uBRq
+         eSb5gEAT9JzOHTdRIzl8CdmNg2crvly7n8OBEoEQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 319/389] vsock: Set socket state back to SS_UNCONNECTED in vsock_connect_timeout()
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.10 065/158] nios2: dont leave NULLs in sys_call_table[]
 Date:   Tue, 23 Aug 2022 10:26:37 +0200
-Message-Id: <20220823080128.865043509@linuxfoundation.org>
+Message-Id: <20220823080048.711344815@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit a3e7b29e30854ed67be0d17687e744ad0c769c4b upstream.
+commit 45ec746c65097c25e77d24eae8fee0def5b6cc5d upstream.
 
-Imagine two non-blocking vsock_connect() requests on the same socket.
-The first request schedules @connect_work, and after it times out,
-vsock_connect_timeout() sets *sock* state back to TCP_CLOSE, but keeps
-*socket* state as SS_CONNECTING.
+fill the gaps in there with sys_ni_syscall, as everyone does...
 
-Later, the second request returns -EALREADY, meaning the socket "already
-has a pending connection in progress", even though the first request has
-already timed out.
-
-As suggested by Stefano, fix it by setting *socket* state back to
-SS_UNCONNECTED, so that the second request will return -ETIMEDOUT.
-
-Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
-Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 82ed08dd1b0e ("nios2: Exception handling")
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/vmw_vsock/af_vsock.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/nios2/kernel/entry.S         |    1 -
+ arch/nios2/kernel/syscall_table.c |    1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1110,6 +1110,7 @@ static void vsock_connect_timeout(struct
- 	if (sk->sk_state == TCP_SYN_SENT &&
- 	    (sk->sk_shutdown != SHUTDOWN_MASK)) {
- 		sk->sk_state = TCP_CLOSE;
-+		sk->sk_socket->state = SS_UNCONNECTED;
- 		sk->sk_err = ETIMEDOUT;
- 		sk->sk_error_report(sk);
- 		vsock_transport_cancel_pkt(vsk);
+--- a/arch/nios2/kernel/entry.S
++++ b/arch/nios2/kernel/entry.S
+@@ -193,7 +193,6 @@ local_restart:
+ 	movhi	r11, %hiadj(sys_call_table)
+ 	add	r1, r1, r11
+ 	ldw	r1, %lo(sys_call_table)(r1)
+-	beq	r1, r0, ret_invsyscall
+ 
+ 	/* Check if we are being traced */
+ 	GET_THREAD_INFO r11
+--- a/arch/nios2/kernel/syscall_table.c
++++ b/arch/nios2/kernel/syscall_table.c
+@@ -13,5 +13,6 @@
+ #define __SYSCALL(nr, call) [nr] = (call),
+ 
+ void *sys_call_table[__NR_syscalls] = {
++	[0 ... __NR_syscalls-1] = sys_ni_syscall,
+ #include <asm/unistd.h>
+ };
 
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A6159D80D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FA759D8BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241263AbiHWJjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S1351699AbiHWJix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351276AbiHWJiW (ORCPT
+        with ESMTP id S1351575AbiHWJh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:38:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B6469F48;
-        Tue, 23 Aug 2022 01:40:59 -0700 (PDT)
+        Tue, 23 Aug 2022 05:37:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE93232B89;
+        Tue, 23 Aug 2022 01:40:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CF8EB81C62;
-        Tue, 23 Aug 2022 08:39:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D1CC433D6;
-        Tue, 23 Aug 2022 08:39:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1577361517;
+        Tue, 23 Aug 2022 08:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F263C433D7;
+        Tue, 23 Aug 2022 08:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243980;
-        bh=ZUgivN8zhNC9/Vowk6oVJLvlCbVPWbn1Iq8fxa3fI6I=;
+        s=korg; t=1661243989;
+        bh=5F9RsjFgVNOGiSc2oDB5+Far0a7iC5ApU7VDGncrxM0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JMviMhyCdG+yCk0OS6r9kUhpFOBX47cgs9daJMRptZwJYZGMUK1f1sfKhoLd04VTX
-         ZIN3AM8H3Wy00rLQEOLC2o/rwjHEaQnEhC9HSvfFaJckDncTFlPMg2KeMBPK6DRh21
-         JUqtWAEFC482h4QQttgEN3mg/T6xBnZivYEAnvH8=
+        b=LfziJT/DabePtSgAyMxlobBpsGxqozCktToWfc8I1nHbSpeDg+kj2KWcMJUR/ziYE
+         0b2xgZKBoKKfMKTB73SAuo0sfXRlVCKyVnZmn59Q+kBxTHtVD1rjMf3NDC0yM8Z3Je
+         H1VlFMWKFM01R+PeP4xM7VkwhFQ4AxO4aI7podFQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Subject: [PATCH 4.14 037/229] USB: HCD: Fix URB giveback issue in tasklet function
-Date:   Tue, 23 Aug 2022 10:23:18 +0200
-Message-Id: <20220823080054.902065549@linuxfoundation.org>
+        stable@vger.kernel.org, hewenliang <hewenliang4@huawei.com>,
+        Haibin Zhang <haibinzhang@tencent.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 040/229] arm64: fix oops in concurrently setting insn_emulation sysctls
+Date:   Tue, 23 Aug 2022 10:23:21 +0200
+Message-Id: <20220823080055.024139667@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,124 +56,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+From: haibinzhang (张海斌) <haibinzhang@tencent.com>
 
-commit 26c6c2f8a907c9e3a2f24990552a4d77235791e6 upstream.
+[ Upstream commit af483947d472eccb79e42059276c4deed76f99a6 ]
 
-Usb core introduce the mechanism of giveback of URB in tasklet context to
-reduce hardware interrupt handling time. On some test situation(such as
-FIO with 4KB block size), when tasklet callback function called to
-giveback URB, interrupt handler add URB node to the bh->head list also.
-If check bh->head list again after finish all URB giveback of local_list,
-then it may introduce a "dynamic balance" between giveback URB and add URB
-to bh->head list. This tasklet callback function may not exit for a long
-time, which will cause other tasklet function calls to be delayed. Some
-real-time applications(such as KB and Mouse) will see noticeable lag.
+emulation_proc_handler() changes table->data for proc_dointvec_minmax
+and can generate the following Oops if called concurrently with itself:
 
-In order to prevent the tasklet function from occupying the cpu for a long
-time at a time, new URBS will not be added to the local_list even though
-the bh->head list is not empty. But also need to ensure the left URB
-giveback to be processed in time, so add a member high_prio for structure
-giveback_urb_bh to prioritize tasklet and schelule this tasklet again if
-bh->head list is not empty.
+ | Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+ | Internal error: Oops: 96000006 [#1] SMP
+ | Call trace:
+ | update_insn_emulation_mode+0xc0/0x148
+ | emulation_proc_handler+0x64/0xb8
+ | proc_sys_call_handler+0x9c/0xf8
+ | proc_sys_write+0x18/0x20
+ | __vfs_write+0x20/0x48
+ | vfs_write+0xe4/0x1d0
+ | ksys_write+0x70/0xf8
+ | __arm64_sys_write+0x20/0x28
+ | el0_svc_common.constprop.0+0x7c/0x1c0
+ | el0_svc_handler+0x2c/0xa0
+ | el0_svc+0x8/0x200
 
-At the same time, we are able to prioritize tasklet through structure
-member high_prio. So, replace the local high_prio_bh variable with this
-structure member in usb_hcd_giveback_urb.
+To fix this issue, keep the table->data as &insn->current_mode and
+use container_of() to retrieve the insn pointer. Another mutex is
+used to protect against the current_mode update but not for retrieving
+insn_emulation as table->data is no longer changing.
 
-Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
-Cc: stable <stable@kernel.org>
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Link: https://lore.kernel.org/r/20220726074918.5114-1-WeitaoWang-oc@zhaoxin.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Co-developed-by: hewenliang <hewenliang4@huawei.com>
+Signed-off-by: hewenliang <hewenliang4@huawei.com>
+Signed-off-by: Haibin Zhang <haibinzhang@tencent.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220128090324.2727688-1-hewenliang4@huawei.com
+Link: https://lore.kernel.org/r/9A004C03-250B-46C5-BF39-782D7551B00E@tencent.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hcd.c  |   26 +++++++++++++++-----------
- include/linux/usb/hcd.h |    1 +
- 2 files changed, 16 insertions(+), 11 deletions(-)
+ arch/arm64/kernel/armv8_deprecated.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1814,7 +1814,6 @@ static void usb_giveback_urb_bh(unsigned
+diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+index 092046704cbc..b82e32daaf66 100644
+--- a/arch/arm64/kernel/armv8_deprecated.c
++++ b/arch/arm64/kernel/armv8_deprecated.c
+@@ -63,6 +63,7 @@ struct insn_emulation {
+ static LIST_HEAD(insn_emulation);
+ static int nr_insn_emulated __initdata;
+ static DEFINE_RAW_SPINLOCK(insn_emulation_lock);
++static DEFINE_MUTEX(insn_emulation_mutex);
  
- 	spin_lock_irq(&bh->lock);
- 	bh->running = true;
-- restart:
- 	list_replace_init(&bh->head, &local_list);
- 	spin_unlock_irq(&bh->lock);
- 
-@@ -1828,10 +1827,17 @@ static void usb_giveback_urb_bh(unsigned
- 		bh->completing_ep = NULL;
- 	}
- 
--	/* check if there are new URBs to giveback */
-+	/*
-+	 * giveback new URBs next time to prevent this function
-+	 * from not exiting for a long time.
-+	 */
- 	spin_lock_irq(&bh->lock);
--	if (!list_empty(&bh->head))
--		goto restart;
-+	if (!list_empty(&bh->head)) {
-+		if (bh->high_prio)
-+			tasklet_hi_schedule(&bh->bh);
-+		else
-+			tasklet_schedule(&bh->bh);
-+	}
- 	bh->running = false;
- 	spin_unlock_irq(&bh->lock);
- }
-@@ -1856,7 +1862,7 @@ static void usb_giveback_urb_bh(unsigned
- void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ static void register_emulation_hooks(struct insn_emulation_ops *ops)
  {
- 	struct giveback_urb_bh *bh;
--	bool running, high_prio_bh;
-+	bool running;
+@@ -208,10 +209,10 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+ 				  loff_t *ppos)
+ {
+ 	int ret = 0;
+-	struct insn_emulation *insn = (struct insn_emulation *) table->data;
++	struct insn_emulation *insn = container_of(table->data, struct insn_emulation, current_mode);
+ 	enum insn_emulation_mode prev_mode = insn->current_mode;
  
- 	/* pass status to tasklet via unlinked */
- 	if (likely(!urb->unlinked))
-@@ -1867,13 +1873,10 @@ void usb_hcd_giveback_urb(struct usb_hcd
- 		return;
+-	table->data = &insn->current_mode;
++	mutex_lock(&insn_emulation_mutex);
+ 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ 
+ 	if (ret || !write || prev_mode == insn->current_mode)
+@@ -224,7 +225,7 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+ 		update_insn_emulation_mode(insn, INSN_UNDEF);
  	}
+ ret:
+-	table->data = insn;
++	mutex_unlock(&insn_emulation_mutex);
+ 	return ret;
+ }
  
--	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
-+	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
- 		bh = &hcd->high_prio_bh;
--		high_prio_bh = true;
--	} else {
-+	else
- 		bh = &hcd->low_prio_bh;
--		high_prio_bh = false;
--	}
+@@ -254,7 +255,7 @@ static void __init register_insn_emulation_sysctl(struct ctl_table *table)
+ 		sysctl->maxlen = sizeof(int);
  
- 	spin_lock(&bh->lock);
- 	list_add_tail(&urb->urb_list, &bh->head);
-@@ -1882,7 +1885,7 @@ void usb_hcd_giveback_urb(struct usb_hcd
- 
- 	if (running)
- 		;
--	else if (high_prio_bh)
-+	else if (bh->high_prio)
- 		tasklet_hi_schedule(&bh->bh);
- 	else
- 		tasklet_schedule(&bh->bh);
-@@ -2900,6 +2903,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
- 
- 	/* initialize tasklets */
- 	init_giveback_urb_bh(&hcd->high_prio_bh);
-+	hcd->high_prio_bh.high_prio = true;
- 	init_giveback_urb_bh(&hcd->low_prio_bh);
- 
- 	/* enable irqs just before we start the controller,
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -65,6 +65,7 @@
- 
- struct giveback_urb_bh {
- 	bool running;
-+	bool high_prio;
- 	spinlock_t lock;
- 	struct list_head  head;
- 	struct tasklet_struct bh;
+ 		sysctl->procname = insn->ops->name;
+-		sysctl->data = insn;
++		sysctl->data = &insn->current_mode;
+ 		sysctl->extra1 = &insn->min;
+ 		sysctl->extra2 = &insn->max;
+ 		sysctl->proc_handler = emulation_proc_handler;
+-- 
+2.35.1
+
 
 

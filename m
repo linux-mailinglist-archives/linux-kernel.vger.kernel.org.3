@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBC859D94B
+	by mail.lfdr.de (Postfix) with ESMTP id EA9D659D94D
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351101AbiHWJgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
+        id S1351284AbiHWJhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351242AbiHWJfG (ORCPT
+        with ESMTP id S1351366AbiHWJfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:35:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF7E95E5F;
-        Tue, 23 Aug 2022 01:39:36 -0700 (PDT)
+        Tue, 23 Aug 2022 05:35:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D50B96FEC;
+        Tue, 23 Aug 2022 01:39:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF7C4B81C6D;
-        Tue, 23 Aug 2022 08:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD88C433D6;
-        Tue, 23 Aug 2022 08:38:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F7C861377;
+        Tue, 23 Aug 2022 08:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CFDEC433B5;
+        Tue, 23 Aug 2022 08:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243905;
-        bh=JLgT1YjRQoCyfhyImHJaeFjmVBeCtSn+RgWnOxdaFZI=;
+        s=korg; t=1661243911;
+        bh=16N7gqoDhgtgU26/uFo+Xnm3wcLCzPvXEWtJM8/2n9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GI3O3i8sb4GMGEWsb9o52i6/itAK5gQDRF9U5Szbx13lqZkeoBaoBST0RC86xeYSf
-         /pHts2jMJ202u5hsFttmvghL5WaFLfGFQkL262J1eBw92IdPXtsAIb/6Mf3ajhHRzK
-         JKEeoqJcz76yFlyrNGtf3OTk/cFgOpFcoZ8mwO5Y=
+        b=Izz6ntPeuGcgTQPBjogT6+kSPA2Nkrz1kp1breh76rzaxHIT7EOGv/zZWdNBtAciS
+         xydVrOPcBIB/Rn1j3cW2CgQ5s7j6q6ymAkct0IPKFpVwclmX6mriXiDdLBxtETJowQ
+         CqpXfJeqWKCc+493jRZyFZsOPafHyGdWqLZwhlgw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Michal Simek <michal.simek@amd.com>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 054/229] cpufreq: zynq: Fix refcount leak in zynq_get_revision
-Date:   Tue, 23 Aug 2022 10:23:35 +0200
-Message-Id: <20220823080055.643224062@linuxfoundation.org>
+Subject: [PATCH 4.14 055/229] ARM: dts: qcom: pm8841: add required thermal-sensor-cells
+Date:   Tue, 23 Aug 2022 10:23:36 +0200
+Message-Id: <20220823080055.675282770@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,35 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit d1ff2559cef0f6f8d97fba6337b28adb10689e16 ]
+[ Upstream commit e2759fa0676c9a32bbddb9aff955b54bb35066ad ]
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+The PM8841 temperature sensor has to define thermal-sensor-cells.
 
-Fixes: 00f7dc636366 ("ARM: zynq: Add support for SOC_BUS")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220605082807.21526-1-linmq006@gmail.com
-Signed-off-by: Michal Simek <michal.simek@amd.com>
+Fixes: dab8134ca072 ("ARM: dts: qcom: Add PM8841 functions device nodes")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220608112702.80873-2-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-zynq/common.c | 1 +
+ arch/arm/boot/dts/qcom-pm8841.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-zynq/common.c b/arch/arm/mach-zynq/common.c
-index 6aba9ebf8041..a8b1b9c6626e 100644
---- a/arch/arm/mach-zynq/common.c
-+++ b/arch/arm/mach-zynq/common.c
-@@ -84,6 +84,7 @@ static int __init zynq_get_revision(void)
- 	}
+diff --git a/arch/arm/boot/dts/qcom-pm8841.dtsi b/arch/arm/boot/dts/qcom-pm8841.dtsi
+index 2fd59c440903..c73e5b149ac5 100644
+--- a/arch/arm/boot/dts/qcom-pm8841.dtsi
++++ b/arch/arm/boot/dts/qcom-pm8841.dtsi
+@@ -25,6 +25,7 @@ temp-alarm@2400 {
+ 			compatible = "qcom,spmi-temp-alarm";
+ 			reg = <0x2400>;
+ 			interrupts = <4 0x24 0 IRQ_TYPE_EDGE_RISING>;
++			#thermal-sensor-cells = <0>;
+ 		};
+ 	};
  
- 	zynq_devcfg_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	if (!zynq_devcfg_base) {
- 		pr_err("%s: Unable to map I/O memory\n", __func__);
- 		return -1;
 -- 
 2.35.1
 

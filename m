@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3CD59DE24
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A7259DFA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355031AbiHWKeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S238963AbiHWLYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353653AbiHWKSG (ORCPT
+        with ESMTP id S1357561AbiHWLRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:18:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A0180EAD;
-        Tue, 23 Aug 2022 02:01:45 -0700 (PDT)
+        Tue, 23 Aug 2022 07:17:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC9389835;
+        Tue, 23 Aug 2022 02:21:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5401461530;
-        Tue, 23 Aug 2022 09:01:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B20FC433D6;
-        Tue, 23 Aug 2022 09:01:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06AF26121F;
+        Tue, 23 Aug 2022 09:21:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A98C433C1;
+        Tue, 23 Aug 2022 09:21:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245304;
-        bh=1DV94zophLjpcEDGwBTmbdo/8rx+MYKlO0RwTEpo6bI=;
+        s=korg; t=1661246498;
+        bh=x4pgOTjFZ7j24t7uOJInGC/hzSu3Wx5f/DwhD36NE14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D3pcOf6zoQkwOCCp0to2zO3s6H3T89sC2oPO1z++5Jl8TKYxkIWaDEk33M0mDcZrF
-         0X/2NXDFBLHfnhyqygP0Bx8I7vc+xIjj1EqfDOnCAPQIQgRWiRH1rKwgzU601eB/Sh
-         RsadMJu0vFD81kwIhZNg1Zp3Jh7rfSRpNfNQCNqQ=
+        b=KeAlSf87BIKkdgMqTQxsH+os40Ew0kp/TkFIovgthGYZw9iFwsQfYhiMFdlV4U06z
+         ihDv6kM5oXwi6ReJp2zqEJE+Z7jumrAcBwyaJrOoPe9mt6SWAyaKV8S647L51FtRW9
+         8HHgSGt7chB2VpB/MbjLeGL3hdKwoxzIn5anEub4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Jeongik Cha <jeongik@google.com>
-Subject: [PATCH 4.19 006/287] wifi: mac80211_hwsim: use 32-bit skb cookie
-Date:   Tue, 23 Aug 2022 10:22:55 +0200
-Message-Id: <20220823080100.475833180@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Alexey Kodanev <aleksei.kodanev@bell-sw.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 098/389] drm/radeon: fix potential buffer overflow in ni_set_mc_special_registers()
+Date:   Tue, 23 Aug 2022 10:22:56 +0200
+Message-Id: <20220823080119.697036744@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
 
-commit cc5250cdb43d444061412df7fae72d2b4acbdf97 upstream.
+[ Upstream commit 136f614931a2bb73616b292cf542da3a18daefd5 ]
 
-We won't really have enough skbs to need a 64-bit cookie,
-and on 32-bit platforms storing the 64-bit cookie into the
-void *rate_driver_data doesn't work anyway. Switch back to
-using just a 32-bit cookie and uintptr_t for the type to
-avoid compiler warnings about all this.
+The last case label can write two buffers 'mc_reg_address[j]' and
+'mc_data[j]' with 'j' offset equal to SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE
+since there are no checks for this value in both case labels after the
+last 'j++'.
 
-Fixes: 4ee186fa7e40 ("wifi: mac80211_hwsim: fix race condition in pending packet")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Cc: Jeongik Cha <jeongik@google.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Instead of changing '>' to '>=' there, add the bounds check at the start
+of the second 'case' (the first one already has it).
+
+Also, remove redundant last checks for 'j' index bigger than array size.
+The expression is always false. Moreover, before or after the patch
+'table->last' can be equal to SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE and it
+seems it can be a valid value.
+
+Detected using the static analysis tool - Svace.
+Fixes: 69e0b57a91ad ("drm/radeon/kms: add dpm support for cayman (v5)")
+Signed-off-by: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mac80211_hwsim.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/radeon/ni_dpm.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/net/wireless/mac80211_hwsim.c
-+++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -552,7 +552,7 @@ struct mac80211_hwsim_data {
- 	bool ps_poll_pending;
- 	struct dentry *debugfs;
- 
--	atomic64_t pending_cookie;
-+	atomic_t pending_cookie;
- 	struct sk_buff_head pending;	/* packets pending */
- 	/*
- 	 * Only radios in the same group can communicate together (the
-@@ -1067,7 +1067,7 @@ static void mac80211_hwsim_tx_frame_nl(s
- 	int i;
- 	struct hwsim_tx_rate tx_attempts[IEEE80211_TX_MAX_RATES];
- 	struct hwsim_tx_rate_flag tx_attempts_flags[IEEE80211_TX_MAX_RATES];
--	u64 cookie;
-+	uintptr_t cookie;
- 
- 	if (data->ps != PS_DISABLED)
- 		hdr->frame_control |= cpu_to_le16(IEEE80211_FCTL_PM);
-@@ -1136,7 +1136,7 @@ static void mac80211_hwsim_tx_frame_nl(s
- 		goto nla_put_failure;
- 
- 	/* We create a cookie to identify this skb */
--	cookie = (u64)atomic64_inc_return(&data->pending_cookie);
-+	cookie = atomic_inc_return(&data->pending_cookie);
- 	info->rate_driver_data[0] = (void *)cookie;
- 	if (nla_put_u64_64bit(skb, HWSIM_ATTR_COOKIE, cookie, HWSIM_ATTR_PAD))
- 		goto nla_put_failure;
-@@ -3146,10 +3146,10 @@ static int hwsim_tx_info_frame_received_
- 	/* look for the skb matching the cookie passed back from user */
- 	spin_lock_irqsave(&data2->pending.lock, flags);
- 	skb_queue_walk_safe(&data2->pending, skb, tmp) {
--		u64 skb_cookie;
-+		uintptr_t skb_cookie;
- 
- 		txi = IEEE80211_SKB_CB(skb);
--		skb_cookie = (u64)(uintptr_t)txi->rate_driver_data[0];
-+		skb_cookie = (uintptr_t)txi->rate_driver_data[0];
- 
- 		if (skb_cookie == ret_skb_cookie) {
- 			__skb_unlink(skb, &data2->pending);
+diff --git a/drivers/gpu/drm/radeon/ni_dpm.c b/drivers/gpu/drm/radeon/ni_dpm.c
+index bd2e577c701f..288ec3039bc2 100644
+--- a/drivers/gpu/drm/radeon/ni_dpm.c
++++ b/drivers/gpu/drm/radeon/ni_dpm.c
+@@ -2740,10 +2740,10 @@ static int ni_set_mc_special_registers(struct radeon_device *rdev,
+ 					table->mc_reg_table_entry[k].mc_data[j] |= 0x100;
+ 			}
+ 			j++;
+-			if (j > SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE)
+-				return -EINVAL;
+ 			break;
+ 		case MC_SEQ_RESERVE_M >> 2:
++			if (j >= SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE)
++				return -EINVAL;
+ 			temp_reg = RREG32(MC_PMG_CMD_MRS1);
+ 			table->mc_reg_address[j].s1 = MC_PMG_CMD_MRS1 >> 2;
+ 			table->mc_reg_address[j].s0 = MC_SEQ_PMG_CMD_MRS1_LP >> 2;
+@@ -2752,8 +2752,6 @@ static int ni_set_mc_special_registers(struct radeon_device *rdev,
+ 					(temp_reg & 0xffff0000) |
+ 					(table->mc_reg_table_entry[k].mc_data[i] & 0x0000ffff);
+ 			j++;
+-			if (j > SMC_NISLANDS_MC_REGISTER_ARRAY_SIZE)
+-				return -EINVAL;
+ 			break;
+ 		default:
+ 			break;
+-- 
+2.35.1
+
 
 

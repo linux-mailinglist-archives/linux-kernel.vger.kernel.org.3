@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A7B59DE8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B4B59DD52
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356815AbiHWKy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        id S1358783AbiHWLyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355685AbiHWKr5 (ORCPT
+        with ESMTP id S1358871AbiHWLvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:47:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9269F86C18;
-        Tue, 23 Aug 2022 02:12:00 -0700 (PDT)
+        Tue, 23 Aug 2022 07:51:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CCFD347C;
+        Tue, 23 Aug 2022 02:31:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E31E60F85;
-        Tue, 23 Aug 2022 09:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9A7C433D6;
-        Tue, 23 Aug 2022 09:11:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4C48B81C98;
+        Tue, 23 Aug 2022 09:31:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E569BC433D6;
+        Tue, 23 Aug 2022 09:31:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245919;
-        bh=Q4K1n/gCWk4R0nhTBAqldyQaNxCFu9Nsl2oB7WC7y1k=;
+        s=korg; t=1661247115;
+        bh=69ovCRcumfGslh/oGLivZ4DIr8oJgQGwFuXGEqHGW5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZOIAnN82wYLjoMcd4aUCezzxB1EvcMSgv9qAkTJ5dj3WoBi5Wf9vrPOcF9dw24BO+
-         TCT7orQYMetlCN/BwoxbyCT0ooL1pyTxLno/lLUsoYW75UHPLfzYqcFCwUfcLZT8WT
-         DOkhBrSbTiRwPys9eFywYt03EGGad7CR2ET3Xvro=
+        b=NBMv1LGnpeev5Y3mrmaDaqsyMV18S60tPbN1xy2dDsZDuoroyypnJtV6i2p0PkXWN
+         XhNgAdPx1dFtyQnae66pkGRfW1K9QinJJknioaFcJV8iWrJdrMCVE3bjx1Ks7BEIBZ
+         mw66GMI1yrouvPqXRwVM2qk+YvhSkInUuh+bXeJs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Xianwei <zhang.xianwei8@zte.com.cn>,
-        Yi Wang <wang.yi59@zte.com.cn>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 4.19 231/287] NFSv4.1: RECLAIM_COMPLETE must handle EACCES
+        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, llvm@lists.linux.dev,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.4 322/389] tools build: Switch to new openssl API for test-libcrypto
 Date:   Tue, 23 Aug 2022 10:26:40 +0200
-Message-Id: <20220823080108.814584086@linuxfoundation.org>
+Message-Id: <20220823080128.985378948@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +68,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-commit e35a5e782f67ed76a65ad0f23a484444a95f000f upstream.
+commit 5b245985a6de5ac18b5088c37068816d413fb8ed upstream.
 
-A client should be able to handle getting an EACCES error while doing
-a mount operation to reclaim state due to NFS4CLNT_RECLAIM_REBOOT
-being set. If the server returns RPC_AUTH_BADCRED because authentication
-failed when we execute "exportfs -au", then RECLAIM_COMPLETE will go a
-wrong way. After mount succeeds, all OPEN call will fail due to an
-NFS4ERR_GRACE error being returned. This patch is to fix it by resending
-a RPC request.
+Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
+error when it encounters the deprecated function MD5_Init() and the others.
 
-Signed-off-by: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
-Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
-Fixes: aa5190d0ed7d ("NFSv4: Kill nfs4_async_handle_error() abuses by NFSv4.1")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+The error would be interpreted as missing libcrypto, while in reality it is
+not.
+
+Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd variations")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: llvm@lists.linux.dev
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nick Terrell <terrelln@fb.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Quentin Monnet <quentin@isovalent.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/r/20220719170555.2576993-4-roberto.sassu@huawei.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4proc.c |    3 +++
- 1 file changed, 3 insertions(+)
+ tools/build/feature/test-libcrypto.c |   15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -8701,6 +8701,9 @@ static int nfs41_reclaim_complete_handle
- 		rpc_delay(task, NFS4_POLL_RETRY_MAX);
- 		/* fall through */
- 	case -NFS4ERR_RETRY_UNCACHED_REP:
-+	case -EACCES:
-+		dprintk("%s: failed to reclaim complete error %d for server %s, retrying\n",
-+			__func__, task->tk_status, clp->cl_hostname);
- 		return -EAGAIN;
- 	case -NFS4ERR_BADSESSION:
- 	case -NFS4ERR_DEADSESSION:
+--- a/tools/build/feature/test-libcrypto.c
++++ b/tools/build/feature/test-libcrypto.c
+@@ -1,16 +1,23 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include <openssl/evp.h>
+ #include <openssl/sha.h>
+ #include <openssl/md5.h>
+ 
+ int main(void)
+ {
+-	MD5_CTX context;
++	EVP_MD_CTX *mdctx;
+ 	unsigned char md[MD5_DIGEST_LENGTH + SHA_DIGEST_LENGTH];
+ 	unsigned char dat[] = "12345";
++	unsigned int digest_len;
+ 
+-	MD5_Init(&context);
+-	MD5_Update(&context, &dat[0], sizeof(dat));
+-	MD5_Final(&md[0], &context);
++	mdctx = EVP_MD_CTX_new();
++	if (!mdctx)
++		return 0;
++
++	EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
++	EVP_DigestUpdate(mdctx, &dat[0], sizeof(dat));
++	EVP_DigestFinal_ex(mdctx, &md[0], &digest_len);
++	EVP_MD_CTX_free(mdctx);
+ 
+ 	SHA1(&dat[0], sizeof(dat), &md[0]);
+ 
 
 

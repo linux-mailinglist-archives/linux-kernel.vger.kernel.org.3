@@ -2,240 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD0959EC58
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8C559EC55
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiHWTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        id S230021AbiHWTch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiHWTbx (ORCPT
+        with ESMTP id S232328AbiHWTcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:31:53 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8F8501B4;
-        Tue, 23 Aug 2022 11:23:25 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id f4so10939612qkl.7;
-        Tue, 23 Aug 2022 11:23:25 -0700 (PDT)
+        Tue, 23 Aug 2022 15:32:02 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0358AA59B4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:24:01 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c2so13555376plo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:24:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hl2ZhT5jYud6nqmuitdZrPDQAyGkFVueC+KbleXIJi0=;
-        b=JrIa1OFDqt41Da0UO3IcnulL7dkdWXnYr6hnZMzWYSbcrkSN7ou30SIEnzMbJrKsY6
-         u5CuHohXigZbEbyhpYK9JlS6swj+dpVrb1cli96GwuysoJtnaf2+65TX34uEdUsOtCoN
-         Fr6Njl3SuprVW+ahKp2U4qoTQ3hDUR702g2c1SyBlYjS9leEBj6OQiQj0QI40xwIp8pV
-         juISk+iYdvTEfJSIedYrRpGdJbMj8Zp6RupnPX6dBLSeTZSa1DM96OsTPNrOMaxdFA9J
-         8dbyE9d9W5uHSlC468z302NWFPX5zLLvxWhAtaTmnaK2pV/VKA28fCze7L4vEn2F+6jT
-         7DYQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc;
+        bh=7XTGVkMBPLrwjtXxcaOx31Px0tvAGpLY3EuE7oCCnjI=;
+        b=QUiNSn917AVTIsrzbGnUa617Ladt8vDyJ8nDZLINOxnle2vQeENAUIXJWhCywURT0G
+         i1G8J5GPlHiqJcgXFXfdcXY9pCFt1G7Sxy5zR48Ta0uhJXvosmei+9D2NfxJYTTtHoWc
+         loVF8T5YXKtEapCIn0IWvUJikZ9qqCMJXMbUX7qj6jGbe35rdkghS9lJ+ML1sj2Yy5JP
+         rbkIWnVRIdFuRNiguifR+T4GXjiQWY/6DxPzSfsM+iW6BFnyfudXcg98xH+53Cbe3oQL
+         3wTI0zpyFmaqgOIt+WsThvYhaKwq3evPe+wEhcOPxL1zQ/i7Ehz9k07ljeYz3B7fKyA/
+         UOOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hl2ZhT5jYud6nqmuitdZrPDQAyGkFVueC+KbleXIJi0=;
-        b=iwSt0Q1Z3B2nElEaomzGS0zsLBw9LmjEal8PNXk0akSMFaMLULx4gFZVi70w+9xDMB
-         Nu4gaWpml0i1DKUhjsu1BD/Iiw0yjuCbvH4ersHr8nJC4oBpyqlzI6YuMMybZuLbsxLF
-         bbzD0XITSVQGdWjwMv5ckZrsz5WJVAYCIDPeEYUOph23/P+q5azWZezb61riBMH0NvkB
-         xCoeYfzpdwO+RZwPffBEVrNL9/ljteeUPkAdl1yZF+aDDaucu2JhNQ9hkihshkUGuF6r
-         2O6XDAl+RsXv3wU8HT0JmllJvHHj3K+b/2uSg6qdpl8mr623M2s6i4aCq8JYCubagJlA
-         ublw==
-X-Gm-Message-State: ACgBeo0UzFEKZF5TuxFS7b5rPdA2diOO+KgHbXz+aNPl8VECl9MVY0uI
-        gyC2x2rmXQJQMX+wMgaqtDmiznFz0w5kd/GVwTQ=
-X-Google-Smtp-Source: AA6agR6uzuFu5gu6+eBn1q09mUSGCdjReoka/EFxwiWXrFCxt/cPbOLXqEiSJanMMVL/Mgl9gFFX4Aap050CjTsOfDM=
-X-Received: by 2002:a37:27c1:0:b0:6bb:41b5:2d89 with SMTP id
- n184-20020a3727c1000000b006bb41b52d89mr17033459qkn.679.1661279004133; Tue, 23
- Aug 2022 11:23:24 -0700 (PDT)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=7XTGVkMBPLrwjtXxcaOx31Px0tvAGpLY3EuE7oCCnjI=;
+        b=e/gWbszuSapV+c3vaX1SlUQcpAg19/2U2DTwxdLas6BxE7y9s1DyNo0dxd8/CdjbiD
+         nyCGCgPcanhkDGibt89Am5MQ+ayGisWP6LjA+FkCUVMQAJ2MgB/2izOBnL6AFhxNxPbV
+         mYFvPqWaTEHlg7pqvkDCJeipS40avxeV2con5HttH3vdPd0+Sy9L7kdF/0SzWy//YE6d
+         2pc7UAmeivPM+aZYEHH0rQSMYw05T9jn9KWa00fTlqWcsVHKFtKIZomLNiNFZDchcUuz
+         7YMP/9NGFrOSyK8fwDvYGi2Q+Xui2Uepuw+7ieiXdMOOfAFYzv4G3vRm6Mz6EdK7W1u1
+         twNw==
+X-Gm-Message-State: ACgBeo320SpmBzEWnZq3nVyUkcfeU0+hn0fCrFaek8lEby1vzD3EKfUo
+        CEqbl2/HdawWAk3dtHbdEj60Gg==
+X-Google-Smtp-Source: AA6agR5+pbDTRD51vIsgkYI58hWxVoEtGJ3K3IFa8qKR94EwPjqxMSHDIYNArBj1P94/Qu1HRRweYA==
+X-Received: by 2002:a17:902:e54f:b0:172:ef3e:f725 with SMTP id n15-20020a170902e54f00b00172ef3ef725mr9200223plf.66.1661279040572;
+        Tue, 23 Aug 2022 11:24:00 -0700 (PDT)
+Received: from localhost ([76.146.1.42])
+        by smtp.gmail.com with ESMTPSA id h17-20020a170902f55100b0016e808dbe55sm10952991plf.96.2022.08.23.11.23.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 11:24:00 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Oded Gabbay <oded.gabbay@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: Re: New subsystem for acceleration devices
+In-Reply-To: <CAFCwf13WU3ZEjurEaEnVC56zorwKr-uuQn-ec10r301Fh+XEtA@mail.gmail.com>
+References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
+ <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
+ <CAFCwf12N6DeJAQVjY7PFG50q2m405e=XCCFvHBn1RG65BGbT8w@mail.gmail.com>
+ <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
+ <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
+ <CAPM=9txme2dQD9kyM6gnYyXL34hYP8wcGMbduOUcFsKe+4zTcQ@mail.gmail.com>
+ <CAFCwf11TPKTF_Ndi60FneWp5g3SoawJvfJoKVWJ-QjxjpawMmg@mail.gmail.com>
+ <CAFCwf13WU3ZEjurEaEnVC56zorwKr-uuQn-ec10r301Fh+XEtA@mail.gmail.com>
+Date:   Tue, 23 Aug 2022 11:23:59 -0700
+Message-ID: <7hk06ykedc.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <20220823145649.3118479-7-robh@kernel.org>
-In-Reply-To: <20220823145649.3118479-7-robh@kernel.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 23 Aug 2022 20:23:13 +0200
-Message-ID: <CAOX2RU4u+v9EPAPoxZmL4iGAmt+VuuxNJW-_AE7TZaFHZBTaEA@mail.gmail.com>
-Subject: Re: [PATCH] regulator: dt-bindings: Add missing (unevaluated|additional)Properties
- on child nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Support Opensource <support.opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Adam Ward <Adam.Ward.opensource@diasemi.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 at 16:57, Rob Herring <robh@kernel.org> wrote:
->
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/regulator/dlg,da9121.yaml           |  1 +
->  .../bindings/regulator/maxim,max77802.yaml       |  1 +
->  .../bindings/regulator/maxim,max8997.yaml        |  1 +
->  .../bindings/regulator/mt6315-regulator.yaml     |  1 +
->  .../bindings/regulator/qcom,spmi-regulator.yaml  |  1 +
->  .../regulator/qcom-labibb-regulator.yaml         | 16 ++++++++++++++++
->  .../regulator/richtek,rt4801-regulator.yaml      |  1 +
->  .../regulator/rohm,bd71815-regulator.yaml        |  1 +
->  8 files changed, 23 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
-> index 24ace6e1e5ec..63e1161a87de 100644
-> --- a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
-> @@ -83,6 +83,7 @@ properties:
->
->    regulators:
->      type: object
-> +    additionalProperties: false
->      description: |
->        List of regulators provided by the device
->
-> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml b/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
-> index 236348c4710c..71138c611b6c 100644
-> --- a/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
-> @@ -79,6 +79,7 @@ patternProperties:
->      patternProperties:
->        regulator-state-(standby|mem|disk):
->          type: object
-> +        additionalProperties: true
->          properties:
->            regulator-mode: false
->
-> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml b/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
-> index 4321f061a7f6..2b266ea43716 100644
-> --- a/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
-> @@ -111,6 +111,7 @@ properties:
->
->    regulators:
->      type: object
-> +    additionalProperties: false
->      description:
->        List of child nodes that specify the regulators.
->
-> diff --git a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-> index 37402c370fbb..364b58730be2 100644
-> --- a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-> @@ -29,6 +29,7 @@ properties:
->        "^vbuck[1-4]$":
->          type: object
->          $ref: "regulator.yaml#"
-> +        unevaluatedProperties: false
->
->          properties:
->            regulator-compatible:
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-> index 8b7c4af4b551..3266cd0c580f 100644
-> --- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-> @@ -35,6 +35,7 @@ patternProperties:
->      description: List of regulators and its properties
->      type: object
->      $ref: regulator.yaml#
-> +    unevaluatedProperties: false
->
->      properties:
->        qcom,ocp-max-retries:
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> index 1ddc1efd19e2..f97b8083678f 100644
-> --- a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
-> @@ -20,6 +20,7 @@ properties:
->
->    lab:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        qcom,soft-start-us:
-> @@ -33,11 +34,19 @@ properties:
->          description:
->            Short-circuit and over-current interrupts for lab.
->
-> +      interrupt-names:
-> +        minItems: 1
-> +        items:
-> +          - const: sc-err
-> +          - const: ocp
-> +
->      required:
->        - interrupts
-> +      - interrupt-names
->
->    ibb:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        qcom,discharge-resistor-kohms:
-> @@ -52,8 +61,15 @@ properties:
->          description:
->            Short-circuit and over-current interrupts for ibb.
->
-> +      interrupt-names:
-> +        minItems: 1
-> +        items:
-> +          - const: sc-err
-> +          - const: ocp
-> +
->      required:
->        - interrupts
-> +      - interrupt-names
->
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-> index 091150c4e579..4a8a221bc902 100644
-> --- a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
-> @@ -42,6 +42,7 @@ patternProperties:
->    "^DSV(P|N)$":
->      type: object
->      $ref: regulator.yaml#
-> +    unevaluatedProperties: false
->      description:
->        Properties for single display bias regulator.
->
-> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
-> index 7d0adb74a396..d61e8675f067 100644
-> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
-> @@ -27,6 +27,7 @@ properties:
->      description:
->        properties for wled regulator
->      $ref: regulator.yaml#
-> +    unevaluatedProperties: false
->
->      properties:
->        regulator-name:
-> --
-> 2.34.1
+Hi Obed,
 
-For qcom,spmi-regulator.yaml:
-Reviewed-by: Robert Marko <robimarko@gmail.com>
->
+Oded Gabbay <oded.gabbay@gmail.com> writes:
+
+[...]
+
+> I want to update that I'm currently in discussions with Dave to figure
+> out what's the best way to move forward. We are writing it down to do
+> a proper comparison between the two paths (new accel subsystem or
+> using drm). I guess it will take a week or so.
+
+Any update on the discussions with Dave? and/or are there any plans to
+discuss this further at LPC/ksummit yet?
+
+We (BayLibre) are upstreaming support for APUs on Mediatek SoCs, and are
+using the DRM-based approach.  I'll also be at LPC and happy to discuss
+in person.
+
+For some context on my/our interest: back in Sept 2020 we initially
+submitted an rpmesg based driver for kernel communication[1].  After
+review comments, we rewrote that based on DRM[2] and are now using it
+for some MTK SoCs[3] and supporting our MTK customers with it.
+
+Hopefully we will get the kernel interfaces sorted out soon, but next,
+there's the userspace side of things.  To that end, we're also working
+on libAPU, a common, open userspace stack.  Alex Bailon recently
+presented a proposal earlier this year at Embedded Recipes in Paris
+(video[4], slides[5].)
+
+libAPU would include abstractions of the kernel interfaces for DRM
+(using libdrm), remoteproc/rpmsg, virtio etc. but also goes farther and
+proposes an open firmware for the accelerator side using
+libMetal/OpenAMP + rpmsg for communication with (most likely closed
+source) vendor firmware.  Think of this like sound open firmware (SOF[6]),
+but for accelerators.
+
+We've been using this succesfully for Mediatek SoCs (which have a
+Cadence VP6 APU) and have submitted/published the code, including the
+OpenAMP[7] and libmetal[8] parts in addition to the kernel parts already
+mentioned.
+
+We're to the point where we're pretty happy with how this works for MTK
+SoCs, and wanting to collaborate with folks working on other platforms
+and to see what's needed to support other kinds of accelerators with a
+common userspace and open firmware infrastructure.
+
+Kevin
+
+[1] https://lore.kernel.org/r/20200930115350.5272-1-abailon@baylibre.com
+[2] https://lore.kernel.org/r/20210917125945.620097-1-abailon@baylibre.com
+[3] https://lore.kernel.org/r/20210819151340.741565-1-abailon@baylibre.com
+[4] https://www.youtube.com/watch?v=Uj1FZoF8MMw&t=18211s
+[5] https://embedded-recipes.org/2022/wp-content/uploads/2022/06/bailon.pdf
+[6] https://www.sofproject.org/
+[7] https://github.com/BayLibre/open-amp/tree/v2021.10-mtk 
+[8] https://github.com/BayLibre/libmetal/tree/v2021.10-mtk 

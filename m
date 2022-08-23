@@ -2,154 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAC159EE24
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675CB59EE29
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiHWVWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S231582AbiHWVXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiHWVWr (ORCPT
+        with ESMTP id S231372AbiHWVXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:22:47 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4B6870B5;
-        Tue, 23 Aug 2022 14:22:47 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id g18so15185971pju.0;
-        Tue, 23 Aug 2022 14:22:47 -0700 (PDT)
+        Tue, 23 Aug 2022 17:23:06 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F01089815
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:23:04 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id v23so8660251plo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc;
-        bh=wOND1V135ybVgBeyri71HQXulvGc+Y6tAvCHYnlfi6k=;
-        b=ogDnY8T52ORM/8gqc/hAW0UAHi4wiv+vhBMGFZaT5dH0F4JeKpLUWcNE+l1BwBlm82
-         G2qgNbNTtS6fMvKyi6SxLyXgwSjMEvnMyr3Poeq/3/siN/wWsw/35fBiiCuYR+kGtIsC
-         u8bJIq2A5umMuhWTnsCOvLy38kiLduPqULm/cR/ILYhYM/K/ekv+kcV4KWX9Vbp2X42Y
-         p8RK/UllDJR5iB7pW5LMe3UyqDGPmgMiYG7JR3qBnwOwPStBh38q12i3UUY0SJhe7psT
-         /BX2vFzCWJ/MoK98DC+YGcqELHZI0Rm0t0aMNY1IZPhblGBk6js9E+XduSOMxCBdYDBk
-         0R0Q==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=tuz1493y5LHiNwEe6XwII/bIcU4nWijq2K6QDL5tITs=;
+        b=PChKyPfKBGLrWsDb3RQw8hHWPW6P36wY6RVrVp3cyccjsLkcv15Yd3SHixUb2vTkbu
+         eNhUbCACRrkfRDBpDRNYQUjwod7L/nG1Slt82LDV1lTM+TCPjxEGwI001CFCrdgz7puz
+         BUXvO3pbe490/hfyoWviGBhaL5Qj0YdJM3gxM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc;
-        bh=wOND1V135ybVgBeyri71HQXulvGc+Y6tAvCHYnlfi6k=;
-        b=xrDWUTjqq9csL3m6oe+S+Te2G1YJX99FrlP8rU3ij95RQFbu4jjdf6oXHzVMZrw5Df
-         5s53CmjMpQ0vAuKdSZdgqBRC/f88sVQI5Y0FKTk2TvcMDVGMqN9hKLAWjeNmIvGwHgxK
-         J4sWUYc6le8j2sAKNl5FebTWGnztqJcugZr5WRoV99/TtSj+MUvz7u4TFGEcqTxAplH1
-         AovoEAMCvoI74i+MO61gyQANatA4RHiAwzAxUsq8wZDa94GNvKusQUSoEeaAcXeU9a5O
-         hgYec+gud7gd2c0h2WKR9J/VfNsjJISDeJNnB8Wy12otX4gMmGSYGqj5sn6/stAIiK9+
-         ArOw==
-X-Gm-Message-State: ACgBeo1+X5W6CDegHj/QFvzw8gG432VXk36Lh88S5n1GGIYhjYrI1dbn
-        LaIEGAMI3fFmf8r3gntLSs0=
-X-Google-Smtp-Source: AA6agR6doRoOFuOAiwu4jGggUP+8g4MGwgZtBahxEvo6lKJpHzkUzDnlfScOGMdwoOTMchQmtjkWpQ==
-X-Received: by 2002:a17:903:41c5:b0:172:fc8b:d186 with SMTP id u5-20020a17090341c500b00172fc8bd186mr5907355ple.90.1661289766379;
-        Tue, 23 Aug 2022 14:22:46 -0700 (PDT)
-Received: from localhost ([98.97.33.232])
-        by smtp.gmail.com with ESMTPSA id i17-20020a17090332d100b00172ff99d0afsm2296428plr.140.2022.08.23.14.22.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=tuz1493y5LHiNwEe6XwII/bIcU4nWijq2K6QDL5tITs=;
+        b=M+dz3Qd8z1Pn83OTNfL4vEgvH3CA/3JhMXexeTtQ9mOfb+EbDsOFhsQzP3l+WXiRJM
+         i5JrVF5B7mkmQLqC5okYyP65EpwG7H1TH77N1535TwBq5W559dPo+cNXV3KSnbLvbg7I
+         YrYKWxI7xD5mT89c3tOSVU6VzkCwNw7dmyKU8xFyggpACO6net5YE9R5KQO5Fv5KTLWu
+         bQMiCw3TVrWEf0HmfZv5F71Tn2ifjRKZj07VDgvvhlurtkOxjWl/Ola4Hnx8v65ywuER
+         KX5+hl+6FYcW0GS34AygfVSxDWflZySfAftXVlPEaZBCaeAZ5bNXn1FAALCjhcTqGNRr
+         alKg==
+X-Gm-Message-State: ACgBeo1oV6zfnUOeaVrwBgSDJILmDPJ2/3oHSqP10AYr3epJJ67hTTGl
+        J5y2WO+MZ6yET7+y9snFgQa1Fg==
+X-Google-Smtp-Source: AA6agR61U3W1D49veW7t3wdUmwP8XfdySJz1qFxuH+VdrROwQk4UomkZ9pJJz3k8edQqVlH2jNY7fA==
+X-Received: by 2002:a17:902:e552:b0:16d:d3c0:85fb with SMTP id n18-20020a170902e55200b0016dd3c085fbmr25427017plf.38.1661289783919;
+        Tue, 23 Aug 2022 14:23:03 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:653f:9151:f544:1470])
+        by smtp.gmail.com with ESMTPSA id a1-20020aa795a1000000b005366696b735sm6544811pfk.77.2022.08.23.14.23.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:22:45 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 14:22:38 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Pu Lehui <pulehui@huawei.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@goddogle.com>, Jiri Olsa <jolsa@kernel.org>,
-        Pu Lehui <pulehui@huawei.com>
-Message-ID: <6305451ee5e7e_292a82086e@john.notmuch>
-In-Reply-To: <20220820120234.2121044-2-pulehui@huawei.com>
-References: <20220820120234.2121044-1-pulehui@huawei.com>
- <20220820120234.2121044-2-pulehui@huawei.com>
-Subject: RE: [PATCH bpf-next 1/2] bpf, cgroup: Fix attach flags being assigned
- to effective progs
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 14:23:03 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] drm/msm/dp: Silence inconsistent indent warning
+Date:   Tue, 23 Aug 2022 14:23:02 -0700
+Message-Id: <20220823212302.1744145-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pu Lehui wrote:
-> Attach flags is only valid for attached progs of this layer cgroup,
-> but not for effective progs. We know that the attached progs is at
-> the beginning of the effective progs array, so we can just populate
-> the elements in front of the prog_attach_flags array.
-> 
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Build robots complain
 
-Trying to parse above, could you add a bit more detail on why this is
-problem so readers don't need to track it down.
+ smatch warnings:
+ drivers/gpu/drm/msm/dp/dp_link.c:969 dp_link_process_link_status_update() warn: inconsistent indenting
 
-> ---
->  kernel/bpf/cgroup.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 59b7eb60d5b4..9adf72e99907 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1091,11 +1091,14 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
->  		}
->  
+Fix it along with a trailing space from the same commit.
 
-Because we are looking at it let me try to understand. There are two
-paths that set cnt relative bits here,
+Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Fixes: ea530388e64b ("drm/msm/dp: skip checking LINK_STATUS_UPDATED bit")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
 
-  if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE) {
-      ...     
-      cnt = min_t(int, bpf_prog_array_length(effective), total_cnt);                                       
-      ...     
-  } else {
-     ...
-     progs = &cgrp->bpf.progs[atype];
-     cnt = min_t(int, prog_list_length(progs), total_cnt);
-     ...
-  }
+Changes from v1 (https://lore.kernel.org/r/20220823024356.783318-1-swboyd@chromium.org)
+ * Roll in extra whitespace fix
 
-And the docs claim
+ drivers/gpu/drm/msm/dp/dp_link.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- *              **BPF_F_QUERY_EFFECTIVE**
- *                      Only return information regarding programs which are
- *                      currently effective at the specified *target_fd*.
+diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
+index 36f0af02749f..36bb6191d2f0 100644
+--- a/drivers/gpu/drm/msm/dp/dp_link.c
++++ b/drivers/gpu/drm/msm/dp/dp_link.c
+@@ -786,7 +786,7 @@ static int dp_link_process_link_training_request(struct dp_link_private *link)
+ 			link->request.test_lane_count);
+ 
+ 	link->dp_link.link_params.num_lanes = link->request.test_lane_count;
+-	link->dp_link.link_params.rate = 
++	link->dp_link.link_params.rate =
+ 		drm_dp_bw_code_to_link_rate(link->request.test_link_rate);
+ 
+ 	return 0;
+@@ -965,8 +965,7 @@ static int dp_link_process_link_status_update(struct dp_link_private *link)
+ 	if (channel_eq_done && clock_recovery_done)
+ 		return -EINVAL;
+ 
+-
+-       return 0;
++	return 0;
+ }
+ 
+ /**
 
-so in the EFFECTIVE case should we be reporting flags at all if the
-commit message says "attach flags is only valid for attached progs
-of this layer cgroup, but not for effective progs."
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+https://chromeos.dev
 
-And then in the else branch the change is what you have in the diff anyways correct?
-
->  		if (prog_attach_flags) {
-> +			int progs_cnt = prog_list_length(&cgrp->bpf.progs[atype]);
->  			flags = cgrp->bpf.flags[atype];
->  
-> -			for (i = 0; i < cnt; i++)
-
-Do we need to min with total_cnt here so we don't walk off a short user list?
-
-> +			/* attach flags only for attached progs, but not effective progs */
-> +			for (i = 0; i < progs_cnt; i++)
->  				if (copy_to_user(prog_attach_flags + i, &flags, sizeof(flags)))
->  					return -EFAULT;
-> +
->  			prog_attach_flags += cnt;
->  		}
->  
-> -- 
-> 2.25.1
-> 

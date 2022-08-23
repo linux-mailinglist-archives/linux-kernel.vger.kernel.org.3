@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D3459EBE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247EC59EBF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiHWTLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S231984AbiHWTOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbiHWTKn (ORCPT
+        with ESMTP id S231493AbiHWTOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:10:43 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7CE69F67
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661276918; x=1692812918;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3DXsFiehmOWjIK0HPPx03C/izDXYsGR9JU9dpMMy13M=;
-  b=m+/MX7+K/Ch1/xI9qdlFaYQho6syurCb2PqEB0g69ci/MQ+yNLM1Rd36
-   640ejGmK+Rb6rOhTe7YLrrFfAIm6zZzBd96FOoTMoseJMX2hpy2jpJpJK
-   yr16aSGiLh7H0klZnCuvXe/zcO1TEs05uajVQISSdr9fq1cu7ewF5qX2h
-   cF+8jMeyBczMLOd7mEPLNIdQseNn2kR+sI3r0dq7O/yFeTg93lP39NMO4
-   fIqSyA4sET1CUCVDag+pdqtm2X4xNRyR/3Hu9r37wkRiab8l/lybhMftZ
-   vnFVNTIF6ATXlZLij6KrD7WXEsndE3rzcbVZRn0PH0R+Q9SmRDI9rzLdg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="291317767"
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="291317767"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:48:36 -0700
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="612493072"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:48:35 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH] x86/cpu: Add new Raptor Lake CPU model number
-Date:   Tue, 23 Aug 2022 10:48:19 -0700
-Message-Id: <20220823174819.223941-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 23 Aug 2022 15:14:07 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82576120AE
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:28 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 2so10981176edx.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=G8pk0TfYrEmE764xSTeThT6Yy6xUqAqvtkBl9x4MKBo=;
+        b=gJ0iUJmmijw1HXoSFcooRNmiWw0B3gLGrREiRZtFBWGZhh9Fwn1h4mLidFz8/QDXQk
+         lerEj9+ilGXQsPCdd59yWlXAaN9/J2dmRtHFIsxWiIzzv6Da5Tk/qEO4ghVAO+T+c1uY
+         1HsVZV91dqULZXW8va4nSBmxwgJYB9Jbq1Hy0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=G8pk0TfYrEmE764xSTeThT6Yy6xUqAqvtkBl9x4MKBo=;
+        b=mbfUeO4A0+0WQpvSkW1VydM+J6LEd2rvs4r9t7jBklSS4p15YwJyDLQew02qwPkEOX
+         QK98fqjxZfA2cYOGo3rKrH82BOy6vsWpQ9J5pUZJEEHrziE3hcHUO/MQCVBFuoV34Qf6
+         4hCEkr2hbJ1lX9t5vq8r25PF7aSgfbvS4EqicF0JEtZljX+YG3bRmuP1jSVhdzCKqEIX
+         wB1j3PgLS/TBTDQ8H/2m7+jD//UMxa6IwgrLJiz45tfd5OHukGDstgFdoaTlS1ue8xjo
+         dzpmg2zVx+Nk60OuaFTELJ17he1hoK1SP5q64K67By61s8KBZ9wKxGoFEzOCo7rTtMgi
+         NLTA==
+X-Gm-Message-State: ACgBeo2RvrnwZgoBvhrnJBPRZpF9HyHCp3RxT9/YL99DG3bwRxhD9hU2
+        uvBjGil4xKtI/ridA79eQY3NCA==
+X-Google-Smtp-Source: AA6agR7Nz69W25+ky8gdE+VXUXxTmV5rgYkNbc7FPirulJJQ5duw+KQVwuZUO5i2tZ+QxBJRTpx8tg==
+X-Received: by 2002:a05:6402:40c1:b0:447:154e:856d with SMTP id z1-20020a05640240c100b00447154e856dmr4004666edb.319.1661277048108;
+        Tue, 23 Aug 2022 10:50:48 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-57-252.cust.vodafonedsl.it. [188.217.57.252])
+        by smtp.gmail.com with ESMTPSA id cu9-20020a170906e00900b00726c0e63b94sm177410ejb.27.2022.08.23.10.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 10:50:47 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 19:50:45 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pci/saa7164: fix repeated words in comments
+Message-ID: <20220823175045.GB1277033@tom-ThinkPad-T14s-Gen-2i>
+References: <20220823145709.46069-1-wangjianli@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823145709.46069-1-wangjianli@cdjrlc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,41 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Note1: Model 0xB7 already claimed the "no suffix" #define for a regular
-client part, so add (yet another) suffix "S" to distinguish this new
-part from the earlier one.
+On Tue, Aug 23, 2022 at 10:57:09PM +0800, wangjianli wrote:
+> Delete the redundant word 'the'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/media/pci/saa7164/saa7164-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+> index 7973ae42873a..d5f32e3ff544 100644
+> --- a/drivers/media/pci/saa7164/saa7164-core.c
+> +++ b/drivers/media/pci/saa7164/saa7164-core.c
+> @@ -626,7 +626,7 @@ static irqreturn_t saa7164_irq(int irq, void *dev_id)
+>  	portf = &dev->ports[SAA7164_PORT_VBI2];
+>  
+>  	/* Check that the hardware is accessible. If the status bytes are
+> -	 * 0xFF then the device is not accessible, the the IRQ belongs
+> +	 * 0xFF then the device is not accessible, the IRQ belongs
+>  	 * to another driver.
+>  	 * 4 x u32 interrupt registers.
+>  	 */
+> -- 
+> 2.36.1
+> 
 
-Note2: the RAPTORLAKE* and ALDERLAKE* processors are very similar from a
-software enabling point of view.  There are no known features that have
-model-specific enabling and also differ between the two.  In other words,
-every single place that list *one* or more RAPTORLAKE* or ALDERLAKE*
-processors should list all of them.
+Hi,
+Looks good.
 
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/include/asm/intel-family.h | 2 ++
- 1 file changed, 2 insertions(+)
+Tommaso
 
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index def6ca121111..aeb38023a703 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -27,6 +27,7 @@
-  *		_X	- regular server parts
-  *		_D	- micro server parts
-  *		_N,_P	- other mobile parts
-+ *		_S	- other client parts
-  *
-  *		Historical OPTDIFFs:
-  *
-@@ -112,6 +113,7 @@
- 
- #define INTEL_FAM6_RAPTORLAKE		0xB7
- #define INTEL_FAM6_RAPTORLAKE_P		0xBA
-+#define INTEL_FAM6_RAPTORLAKE_S		0xBF
- 
- /* "Small Core" Processors (Atom) */
- 
 -- 
-2.35.3
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

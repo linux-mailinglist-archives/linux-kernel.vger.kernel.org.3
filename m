@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E090B59DB39
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AED59E03E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353156AbiHWKK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S1355977AbiHWKqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352830AbiHWKCe (ORCPT
+        with ESMTP id S1355426AbiHWKiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:34 -0400
+        Tue, 23 Aug 2022 06:38:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC177C53D;
-        Tue, 23 Aug 2022 01:51:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3A1A720F;
+        Tue, 23 Aug 2022 02:07:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D172B81BF8;
-        Tue, 23 Aug 2022 08:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EBC8C433D6;
-        Tue, 23 Aug 2022 08:50:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AFE5B81C65;
+        Tue, 23 Aug 2022 09:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F92C433C1;
+        Tue, 23 Aug 2022 09:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244659;
-        bh=N+m636UE15ZLpNywr+fbVOB/mn0j1i9xnTyDMEwWYMI=;
+        s=korg; t=1661245663;
+        bh=5Yabsf9P9O//Eym2yywOLLQ57DVHSg+BZbAaS79Jszs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LLs/IQvyHSYSOkHyvbTklvz2/yz03xVVVKIu2mtXJCfAyMcwleEh4u1vC7GOZBsV5
-         9DrEs3go+hMuHBpWuW7wrl7IicjhL1WMEWGlY3eTCjo+GWLwk3j+49HkTK2599Eo0j
-         DeO1lGLOs4U47KWc6+feVW6mTZtzIFLQJfk3vj3Q=
+        b=KL6NdvaMjez7UwcLEg3oYA/enpqul4I7Czn6q7dEaa7UbHCW428ZtSNdvRC+MrgZZ
+         tnZPKU3pfHoAzrtg+CFMbH1TpBMjKoHG+qiblr2J0PhrGEaA6+8Drw9xoXsx1/xnwv
+         dnWINX608e0nBx6wV4ArJ8/EwKFmpN0VVpEnNd4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Baokun Li <libaokun1@huawei.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.14 158/229] ext4: correct the misjudgment in ext4_iget_extra_inode
+        stable@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 150/287] serial: 8250_dw: Store LSR into lsr_saved_flags in dw8250_tx_wait_empty()
 Date:   Tue, 23 Aug 2022 10:25:19 +0200
-Message-Id: <20220823080059.324006952@linuxfoundation.org>
+Message-Id: <20220823080105.646601472@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit fd7e672ea98b95b9d4c9dae316639f03c16a749d upstream.
+[ Upstream commit af14f3007e2dca0d112f10f6717ba43093f74e81 ]
 
-Use the EXT4_INODE_HAS_XATTR_SPACE macro to more accurately
-determine whether the inode have xattr space.
+Make sure LSR flags are preserved in dw8250_tx_wait_empty(). This
+function is called from a low-level out function and therefore cannot
+call serial_lsr_in() as it would lead to infinite recursion.
 
-Cc: stable@kernel.org
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220616021358.2504451-5-libaokun1@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+It is borderline if the flags need to be saved here at all since this
+code relates to writing LCR register which usually implies no important
+characters should be arriving.
+
+Fixes: 914eaf935ec7 ("serial: 8250_dw: Allow TX FIFO to drain before writing to UART_LCR")
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220608095431.18376-7-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inode.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/tty/serial/8250/8250_dw.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -4735,8 +4735,7 @@ static inline int ext4_iget_extra_inode(
- 	__le32 *magic = (void *)raw_inode +
- 			EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize;
+diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+index c73d0eddd9b8..cc9d1f416db8 100644
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -140,12 +140,15 @@ static void dw8250_check_lcr(struct uart_port *p, int value)
+ /* Returns once the transmitter is empty or we run out of retries */
+ static void dw8250_tx_wait_empty(struct uart_port *p)
+ {
++	struct uart_8250_port *up = up_to_u8250p(p);
+ 	unsigned int tries = 20000;
+ 	unsigned int delay_threshold = tries - 1000;
+ 	unsigned int lsr;
  
--	if (EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize + sizeof(__le32) <=
--	    EXT4_INODE_SIZE(inode->i_sb) &&
-+	if (EXT4_INODE_HAS_XATTR_SPACE(inode)  &&
- 	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
- 		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
- 		return ext4_find_inline_data_nolock(inode);
+ 	while (tries--) {
+ 		lsr = readb (p->membase + (UART_LSR << p->regshift));
++		up->lsr_saved_flags |= lsr & LSR_SAVE_FLAGS;
++
+ 		if (lsr & UART_LSR_TEMT)
+ 			break;
+ 
+-- 
+2.35.1
+
 
 

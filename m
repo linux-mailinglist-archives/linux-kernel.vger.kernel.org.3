@@ -2,138 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9062059E728
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A543B59E72E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243375AbiHWQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S243105AbiHWQ0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244941AbiHWQZW (ORCPT
+        with ESMTP id S245182AbiHWQZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:25:22 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70077.outbound.protection.outlook.com [40.107.7.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EFEA00CC;
-        Tue, 23 Aug 2022 05:49:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d2YjE1EGEArSd0fEThu/pO3rmdG0s/yt1llk6rANQbEkK2QsKOC7B0dIyfUAw/E4Ee1TLOfONiFoI4JG07gDzXMe46rnFvGvHVP90a8n4pLVux1kUbGv81xOILS6krvQOwkuNggVX1JOf4mARdLHPL6/JM64guI+seQY5BfirHmHECUZEnoQ9l4YOIavbz6Fbd9ReTwIk6nNGed4ddtF6LvBbhdleOeetVi29H9geDBoQpljcGAdH3Q2eM9CGlWDO6uVz8MtosvvK/lUvcoSFsM+PTRgKJe07XO1SttpqOjsEzW6TIz925W4ptDu+8J/uR/MIB1Bhnu1LP+q33WfCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=882ZMDRRSZ81l4PjkJ422jeCBssxgPi1+5pNprp6wx8=;
- b=N9S7lf0BMAu3bmpqD6+xPgiAFSYSarzcAZi7yqMX3A7jjwyez9TFovtU0q31SpALK30+BCGsNQey7to6MVW8gAQnKHf99ufPgbtAYMVh+jPl/W+JFho6NB6+q+wWI4krSGzG6TUptaqXRgeXpsrSlEvnOjC23VTHLlxSKmjTzGS4IGlspXRWthPONsSnFXXn43E6fkzuRKurZxxGhl7tHG0coD9ni+bGmhH7cMA4FPPF0DZklEAFVkAUFDQTG/kj8xfvCCpYi7JjJqeSD4stGjVf3NxQb++x4OCOy4gqPePrOhDHHWgZg6szghkeVWFr5il0yILNLbPdRYXBEQJu0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=882ZMDRRSZ81l4PjkJ422jeCBssxgPi1+5pNprp6wx8=;
- b=pORrqEs0/6UyEjHuFHmRNir3TbajA+QJ7PdlAeJ/ApcsrXkl7+ehaWkykJT/+5ZCmq9WhEyNigaqLQXnianTd9iDhWfrP+IQXHQ4l6s0hRsPsiYYsi3F2IAJwm4h6Q/pPQ4OWlNqs0Ru/BEnjqEbPq81uAzd6m1eur4qxCJHGRw=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS8PR04MB8674.eurprd04.prod.outlook.com (2603:10a6:20b:429::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Tue, 23 Aug
- 2022 12:49:14 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5546.023; Tue, 23 Aug 2022
- 12:49:14 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "wsa@kernel.org" <wsa@kernel.org>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Clark Wang <xiaoning.wang@nxp.com>
-Subject: RE: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
-Thread-Topic: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
-Thread-Index: AQHYsW876SxYc4rxXUGbKvyYc8nHU626pHbAgAG9ZACAABcMsA==
-Date:   Tue, 23 Aug 2022 12:49:14 +0000
-Message-ID: <DU0PR04MB9417CA946AD601F900500A5488709@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
- <DU0PR04MB9417E7BD5F1FB7A8E00BAA3F88719@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <7eb3cca0-1be6-8f7f-a7bf-f0c9478e7080@linaro.org>
-In-Reply-To: <7eb3cca0-1be6-8f7f-a7bf-f0c9478e7080@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9e54adb5-ae57-4604-6eb2-08da8505e24b
-x-ms-traffictypediagnostic: AS8PR04MB8674:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T1G8HshyMYxXLZvE+8tcBDkPq2eoxtXpkJRVqtKcQ5/94aNxiaefzi8igZPOt3gVU8UNdyTPNW+GIJC4cJL3xnzaeMMt9AahlC4stq5oe7AiqmKoaH7+eQGZq6D2gC+HrecQ/XmGEbWIHU8zLkRBs9ANz16AwNhhuZ20c/5dmLhNX+wNID3y3SRyiqsEdz55d3l7LXROMD+kiBxzCIJxQcFXPSrIs4d86aJwSvCqMwIYliK6WD7Ceyi6WQGd2mDR3OWnLJWXRza0cjd7j24ohfu+y0HybZOPPmvcRrlgRE7GdNV48aMXtuS/v4R452/jdPNtxaOQzp/jyimQCYV7y5rvXnrCxvYL3vKgzx4LosyTkVpBGtzuDm3nxxxuNUvrMXuKy9lUWNnn0FspeejGaj6fbEqMnS+WlpiJF+OTSRBLi1xRS+AHvfE3CNdZBQKfD/XoRwXNgshnWKvMdq9cGpGGP49SrswR53n3p+cH4RtzOE/oqkoFPWgbyMWXeDzVIWFHxXLvUgFUruzQ8k67ro1lF2Vfwj3ECmyNFW3hB4G+I9jN2Ui3e/cQYkYmV9VrVis9WRlY4jGZZoMOMe21UVgOEvt+JvqD+R6lOkIjxiJXInQ75FuEqD2oDw97vwHfpiILuxA3nezhJEzV2COyFGhfcfuW3YLkWf1t8C4moEMURfVkgfYj2jciwFKBIMAzSwIf4Z5SYzUhiDjdYTBM1o2piGpUhnkLs4i3BQvqm3liV6weVmw7SC4FgGnsTUD4c5n1ZTUkHQpUDkwc8ME/3A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(396003)(346002)(136003)(366004)(86362001)(186003)(38100700002)(38070700005)(83380400001)(122000001)(52536014)(8936002)(4744005)(44832011)(7416002)(5660300002)(4326008)(8676002)(76116006)(66946007)(66556008)(66446008)(66476007)(64756008)(55016003)(2906002)(71200400001)(41300700001)(26005)(9686003)(478600001)(53546011)(7696005)(6506007)(33656002)(316002)(110136005)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZGw5MkNaUUVuZkJwcnJsVEhzL1pwbnFJSzg5Njdud2E0bEgyM2JFRlUyWDdO?=
- =?utf-8?B?V3k0VFd3SDFXSzB3ZTl1OWlFRlFaZWJ4c1BXK2FScWlNQjlHM3JYVEZxS1A4?=
- =?utf-8?B?dlNFN3QzM1J2YWRkaCtIWmlWZHNrVXEzZFdBR3J6OEFENytZL1pnVGRQZXI5?=
- =?utf-8?B?QXhBN2dVbHdMMWw1ZVlYTDdsL0krQmNkcmVNL3c2WVNaSVJwRE5ua2phYldk?=
- =?utf-8?B?RFlZTFlQcDNkSi9VbXF1QklqRUcrZ2lWQjcyR0M1UmxCNTlrYUlvcVJna1Bp?=
- =?utf-8?B?MkZyVEpRNU03a29pbkw3MVFNTHVFTEV2dUM2VUh1K29zaHphcWprdDl6NWN4?=
- =?utf-8?B?UXo5aElBQUk2MjlRRktKVWU2SXlNQnV0TE96cTN5UGJPY0x3ako1VWtqRGFz?=
- =?utf-8?B?L2dGT3JQcEtoNTVIZW1adlNNSWZUdUVGYzdBSHNCWWtkQnRPTm81RVVBMmF0?=
- =?utf-8?B?TkR3Y3R2VVJ4akh4d0FNTmNUcERqanIrUU9MM3l1RlVQZ0hiVi93RUxNbFRK?=
- =?utf-8?B?SjVwbjVady9tb1E3YjN3d2lpcnkxeTNVdXB1SkF5NFRCR2xielFCUmJkWldK?=
- =?utf-8?B?TmY3a2JBaWE2UmhKRW94cUZFODhSaWNZQzk4TVo4cVJxek1oTDlnRG1UbTlZ?=
- =?utf-8?B?MHBzT08vNzJCYlFERXcvanA3VmFZTjI4Ym1KZ1N2dlJWc1ZUejdBT2w0dzdH?=
- =?utf-8?B?RFJ0UGMvdVdmKzY4MDQrcDNJZjJ2N3E3SWZhc0pXdy8yVVBqWVNEQks5QWl0?=
- =?utf-8?B?V0R5L0Q4RFhtZHBCMXVGQnZadCtPenlkeElab1FJb0NzOGlHNUh1VnZNUlFX?=
- =?utf-8?B?bk1TUlVHMGVjQ3RvTVVtTlNjWVdqQ1dUNHovblFwSHNjYXZaK1dVeWlNd2hX?=
- =?utf-8?B?anZjQTBkMkVnaXl0M09WOE9WTWFFNDRTMjZGY0gyNjFLMExrZVBadDhpeFB0?=
- =?utf-8?B?VXVGL0N6SEY2WUZnNklPZlVsYXJid2JHS000aDYvQ2pKQ1dyYktZMUdEM3NH?=
- =?utf-8?B?czVUeUNGQ0E0bTBqajdxQ1Y3R2pnbXh5RE1peWhyUTM5MWI2bGVLQytCN1h0?=
- =?utf-8?B?ZUVpSnVQTUxGYTBBYTNqdlB2YTdCTXBUSEJ2d3psY3d0em1YbXZEOUpQcEJy?=
- =?utf-8?B?WGRERWVRcCtOZ0t4WmVsc2hmTWlxOGI3bWZkU3ljV0x6cStmcHFWNFl1d0ZS?=
- =?utf-8?B?VzhZcU9vV1g4NzJzdzEzeGZXbXl0RHZOMFVzWTVjc1lETU1TTEpJZGN2Y3BJ?=
- =?utf-8?B?alEzMjBZOGlSb0xhV3RaTDV6SVJrZkZvQ21oaTlaYW4rY1NVU0t3YU8yQWdk?=
- =?utf-8?B?cVBGRlgwM29meVQ0Q3pzREE2QU9mMVR4NEltSDVMQ1ZNb0kvSUVFUWVHM3ow?=
- =?utf-8?B?NnlDVXNBWGFvYzFyVkF2YWRSQUUvU2ZBczB2cThBOTdaaE5ham5KWjM2SzFC?=
- =?utf-8?B?eHV3bGZRQWJRMDFPL0hpbmdQem1jZmo3YXJTR2gyYWFidGgzZGJFdUFDTFkx?=
- =?utf-8?B?WTFrdHdSaXFIYkZGQjY0WVVjZW5YSEtNb2ZqajNSUVJQU25jd3V1dmhML08z?=
- =?utf-8?B?NDZtb21OZFNDRVpmYXlXYytIZE5YOWE4NzV5eWNwTDdsaG5ZeWwrRHJvbmph?=
- =?utf-8?B?Vm5XbzdOOUFncG15UUtEekM0NWtaR1ZZZU1QUUkyMkV2ZmV6U1ZMcWh1OVFy?=
- =?utf-8?B?MkdwSnRsU3FldHVkdnFLUm91ZjhCTm84dXNndVMxSXVoWVJqeUdCWWR4aHhE?=
- =?utf-8?B?UGthZE10UHZLMW9jcG41WHJDVmlpUDZ5K0QwVlNTL1dXT3VYbVA3eFpOcXNM?=
- =?utf-8?B?VlEvT1RuRUZkWUZvOHY1ckpxRVRkSVRqUHdhaFpFL04vKzZkbVdSdEZXZ3pz?=
- =?utf-8?B?L1BweHZ2UXd6MTJDd24rb3BKZUJFQWZSYWhKeng0WTdqem9obnNITVlITlUw?=
- =?utf-8?B?bUZncUZTck13TjEwcHhWL1ZEbXk1ZCtyMWNkMFdiNWNXSzVzMW1FWnJtWUxB?=
- =?utf-8?B?cGd5ZVpZSkVVcGxzV2lYeFdNVFp2OG9mbEFBMVhDTmQra0xyQlhvYWlGLzFW?=
- =?utf-8?B?QWpHVFYzZW0raXR6MWZGN1M4UEpKK2Q4VmRBemwzcVBxZ3h5OGF2MmRMeTVK?=
- =?utf-8?Q?aiRk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 23 Aug 2022 12:25:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3D4164B36;
+        Tue, 23 Aug 2022 05:50:32 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MBps20q55z1N7K9;
+        Tue, 23 Aug 2022 20:47:02 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 20:50:30 +0800
+Subject: Re: [PATCH -next 2/5] landlock: add chmod and chown support
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+CC:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <shuah@kernel.org>, <corbet@lwn.net>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <20220822114701.26975-3-xiujianfeng@huawei.com> <YwPKG3G9PlStYPkz@nuc>
+ <5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <6d6edd60-5ed7-0f5d-d641-75e006c0e60e@huawei.com>
+Date:   Tue, 23 Aug 2022 20:50:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e54adb5-ae57-4604-6eb2-08da8505e24b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2022 12:49:14.3959
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GNeO3eAf0bAsGLA5sV9vOty3XP76Ys9R0mFYpBjj1oTIE5deyPtEEQk29Tv9ML0sSgBYwi9HmNCQgXmjXqIdIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8674
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,19 +55,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIFYyIDAvN10gaTJjLWlteC1scGkyYzogYWRkIElQRyBjbG9j
-aw0KPiANCj4gT24gMjIvMDgvMjAyMiAxMTo0NiwgUGVuZyBGYW4gd3JvdGU6DQo+ID4+IFN1Ympl
-Y3Q6IFtQQVRDSCBWMiAwLzddIGkyYy1pbXgtbHBpMmM6IGFkZCBJUEcgY2xvY2sNCj4gPg0KPiA+
-ICsgV29sZnJhbSBTYW5nIEkyQyBtYWludGFpbmVyLg0KPiA+DQo+ID4gS3J6eXN6dG9mLA0KPiA+
-DQo+ID4gRG8geW91IGhhdmUgdGltZSB0byBnaXZlIGEgbG9vayB3aGV0aGVyIHRoaXMgcGF0Y2hz
-ZXQgaXMgb2sgZm9yIHlvdT8NCj4gPiBQbGVhc2UgZm9yZ2l2ZSBpZiB0aGlzIGlzIHRvbyBlYXJs
-eSBwaW5nLiBTb21lIGkuTVg5MyBkdHMgdXBkYXRlDQo+ID4gcGVuZGluZw0KPiA+DQo+IA0KPiBJ
-IGRvbid0IHVuZGVyc3RhbmQgdGhlIHBpbmcuIFlvdSBnb3QgZXZlcnl0aGluZyBuZWVkZWQgZnJv
-bSB1cywgd2h5IHN0aWxsDQo+IHBpbmdpbmc/IFdoYXQgdGhhdCBEVFMgaGFzIGFueXRoaW5nIHRv
-IGRvIHdpdGggdXM/DQoNCkluIGxhc3QgdmVyc2lvbiwgeW91IHJhaXNlZCBhIGNvbW1lbnQgdGhh
-dCB0aGUgZHJpdmVyIHBhdGNoIGJyb2tlIEFCSSwgbm90DQpiYWNrd2FyZCBjb21wYXRpYmxlLiBT
-byBJIHVwZGF0ZWQgdGhlIGRyaXZlciBwYXRjaCB0byBiZSBiYWNrd2FyZA0KY29tcGF0aWJsZSBp
-biBWMyA6KQ0KDQpUaGFua3MgZm9yIHlvdXIgcmV2aWV3IGZvciB0aGUgYmluZGluZyBwYXRjaGVz
-LCBJIGhhdmUgaW5jbHVkZWQgeW91ciB0YWcgaW4gVjMNCkZvciBkcml2ZXIvZHRzIHBhcnQsIEky
-QyAmIGkuTVggbWFpbnRhaW5lciB3aWxsIHJldmlldy4NCg0KVGhhbmtzLA0KUGVuZy4NCg0KPiAN
-Cj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg==
+
+
+在 2022/8/23 5:07, Mickaël Salaün 写道:
+> 
+> On 22/08/2022 20:25, Günther Noack wrote:
+>> Hi!
+>>
+>> Thanks for sending this patch set! :)
+>>
+>> On Mon, Aug 22, 2022 at 07:46:58PM +0800, Xiu Jianfeng wrote:
+>>> Add two flags LANDLOCK_ACCESS_FS_CHMOD and LANDLOCK_ACCESS_FS_CHOWN to
+>>> support restriction to chmod(2) and chown(2) with landlock.
+>>>
+>>> Also change the landlock ABI version from 3 to 4.
+>>>
+>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>> ---
+>>>   include/uapi/linux/landlock.h                |  8 ++++++--
+>>>   security/landlock/fs.c                       | 16 +++++++++++++++-
+>>>   security/landlock/limits.h                   |  2 +-
+>>>   security/landlock/syscalls.c                 |  2 +-
+>>>   tools/testing/selftests/landlock/base_test.c |  2 +-
+>>>   tools/testing/selftests/landlock/fs_test.c   |  6 ++++--
+>>>   6 files changed, 28 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/include/uapi/linux/landlock.h 
+>>> b/include/uapi/linux/landlock.h
+>>> index 735b1fe8326e..5ce633c92722 100644
+>>> --- a/include/uapi/linux/landlock.h
+>>> +++ b/include/uapi/linux/landlock.h
+>>> @@ -141,13 +141,15 @@ struct landlock_path_beneath_attr {
+>>>    *   directory) parent.  Otherwise, such actions are denied with 
+>>> errno set to
+>>>    *   EACCES.  The EACCES errno prevails over EXDEV to let user space
+>>>    *   efficiently deal with an unrecoverable error.
+>>> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a file.
+>>> + * - %LANDLOCK_ACCESS_FS_CHOWN: Change the owner and/or group of a 
+>>> file.
+> 
+> This section talk about "access rights that only apply to the content of 
+> a directory, not the directory itself", which is not correct (see 
+> LANDLOCK_ACCESS_FS_READ_DIR). I'd like these access rights to remain 
+> here but this kernel patch and the related tests need some changes.
+> 
+> What about a LANDLOCK_ACCESS_FS_CHGRP? I'm not sure if we need to 
+> differentiate these actions or not, but we need arguments to choose.
+> 
+> 
+>>>    *
+>>>    * .. warning::
+>>>    *
+>>>    *   It is currently not possible to restrict some file-related 
+>>> actions
+>>>    *   accessible through these syscall families: :manpage:`chdir(2)`,
+>>> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+>>> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>>> + *   :manpage:`stat(2)`, :manpage:`flock(2)`,
+>>> + *   :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>>
+>> *formatting nit*
+>> We could fill up the full line width here
+>>
+>>>    *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`, :manpage:`access(2)`.
+>>>    *   Future Landlock evolutions will enable to restrict them.
+>>>    */
+>>> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
+>>>   #define LANDLOCK_ACCESS_FS_MAKE_SYM            (1ULL << 12)
+>>>   #define LANDLOCK_ACCESS_FS_REFER            (1ULL << 13)
+>>>   #define LANDLOCK_ACCESS_FS_TRUNCATE            (1ULL << 14)
+>>> +#define LANDLOCK_ACCESS_FS_CHMOD            (1ULL << 15)
+>>> +#define LANDLOCK_ACCESS_FS_CHOWN            (1ULL << 16)
+>>>   /* clang-format on */
+>>>
+>>>   #endif /* _UAPI_LINUX_LANDLOCK_H */
+>>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+>>> index c57f581a9cd5..c25d5f89c8be 100644
+>>> --- a/security/landlock/fs.c
+>>> +++ b/security/landlock/fs.c
+>>> @@ -147,7 +147,9 @@ static struct landlock_object 
+>>> *get_inode_object(struct inode *const inode)
+>>>       LANDLOCK_ACCESS_FS_EXECUTE | \
+>>>       LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>>>       LANDLOCK_ACCESS_FS_READ_FILE | \
+>>> -    LANDLOCK_ACCESS_FS_TRUNCATE)
+>>> +    LANDLOCK_ACCESS_FS_TRUNCATE | \
+>>> +    LANDLOCK_ACCESS_FS_CHMOD | \
+>>> +    LANDLOCK_ACCESS_FS_CHOWN)
+>>>   /* clang-format on */
+>>>
+>>>   /*
+>>> @@ -1146,6 +1148,16 @@ static int hook_path_truncate(const struct 
+>>> path *const path)
+>>>       return current_check_access_path(path, 
+>>> LANDLOCK_ACCESS_FS_TRUNCATE);
+>>>   }
+>>>
+>>> +static int hook_path_chmod(const struct path *const dir, umode_t mode)
+> 
+> This is not a "dir" but a "path".
+> 
+> 
+>>> +{
+>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHMOD);
+>>> +}
+>>> +
+>>> +static int hook_path_chown(const struct path *const dir, kuid_t uid, 
+>>> kgid_t gid)
+> 
+> Same here.
+> 
+> 
+>>> +{
+>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHOWN);
+>>> +}
+>>
+>> One implication of this approach is that the chown+chmod right on a
+>> directory's contents are always going together with the same rights on
+>> the directory itself.
+>>
+>> For example, if you grant chmod+chown access rights for "datadir/",
+>> the command "chmod 0600 datadir/file1" will work, but so will the
+>> command "chmod 0600 datadir". But the approach of checking just the
+>> parent directory's rights is also inflexible if you think through the
+>> kinds of rights you can grant with it. (It would also not be possible
+>> to grant chmod+chown on individual files.)
+> 
+> Good point. For an initial chmod/chown/chgrp access right, I'd prefer to 
+> be able to set these access rights on a directory but only for its 
+> content, not the directory itself. I think it is much safer and should 
+> be enough for the majority of use cases, but let me know if I'm missing 
+> something. I'm not sure being able to change the root directory access 
+> rights may be a good idea anyway (even for containers). ;)
+> 
+> A path_beneath rule enables to identify a file hierarchy (i.e. the 
+> content of a directory), not to make modifications visible outside of 
+> the directory identifying the hierarchy (hence the "parent_fd" field), 
+> which would be the case with the current chmod/chown access rights.
+> 
+> 
+>>
+>> Do you have any thoughts on how to resolve this if this flexibility
+>> might be needed?
+>>
+>> I wonder whether the right way to resolve this would be to give users
+>> a way to make that distinction at the level of landlock_add_rule(),
+>> with an API like this (note the additional flag):
+>>
+>>    err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+>>                            &path_beneath, LANDLOCK_STRICTLY_BENEATH);
+>>                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+>>
+>> Multiple calls of landlock_add_rule() on the same file are already
+>> today joining the requested access rights, so it would be possible to
+>> mix-and-match "strict beneath" with "beneath" rights on the same
+>> directory, and it would work in the same way for other access rights
+>> as well.
+> 
+> This kind of option is interesting. For now, some access rights are kind 
+> of "doubled" to enable to differentiate between a file and a directory 
+> (i.e. READ_DIR/READ_FILE, REMOVE_DIR/REMOVE_FILE, WRITE_FILE/MAKE_*) 
+> when it may be useful, but this is different.
+> 
+> I think this "strictly beneath" behavior should be the default, which is 
+> currently the case.
+> 
+> 
+>>
+>> To be clear: I'm proposing this approach not because I think it should
+>> be part of this patch set, but because it would be good to have a way
+>> forward if that kind of flexibility is needed in the future.
+>>
+>> Does that seem reasonable?
+> 
+> This is the kind of questions that made such access rights not 
+> appropriate for the initial version of Landlock. But we should talk 
+> about that now.
+
+Hi Günther and Mickaël,
+
+Thanks for your comments, so I think the conclusion here is that we have 
+to make sure that in this patchset chown/chmod access rights can be set 
+on a directory only for its content, not the directory itself, right? 
+any good idea about how to implement this? :)
+
+> 
+> 
+>>
+>>> +
+>>>   /* File hooks */
+>>>
+>>>   static inline access_mask_t get_file_access(const struct file 
+>>> *const file)
+>>> @@ -1199,6 +1211,8 @@ static struct security_hook_list 
+>>> landlock_hooks[] __lsm_ro_after_init = {
+>>>       LSM_HOOK_INIT(path_unlink, hook_path_unlink),
+>>>       LSM_HOOK_INIT(path_rmdir, hook_path_rmdir),
+>>>       LSM_HOOK_INIT(path_truncate, hook_path_truncate),
+>>> +    LSM_HOOK_INIT(path_chmod, hook_path_chmod),
+>>> +    LSM_HOOK_INIT(path_chown, hook_path_chown),
+>>>
+>>>       LSM_HOOK_INIT(file_open, hook_file_open),
+>>>   };
+>>> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
+>>> index 82288f0e9e5e..08858da7fb4f 100644
+>>> --- a/security/landlock/limits.h
+>>> +++ b/security/landlock/limits.h
+>>> @@ -18,7 +18,7 @@
+>>>   #define LANDLOCK_MAX_NUM_LAYERS        16
+>>>   #define LANDLOCK_MAX_NUM_RULES        U32_MAX
+>>>
+>>> -#define LANDLOCK_LAST_ACCESS_FS        LANDLOCK_ACCESS_FS_TRUNCATE
+>>> +#define LANDLOCK_LAST_ACCESS_FS        LANDLOCK_ACCESS_FS_CHOWN
+>>>   #define LANDLOCK_MASK_ACCESS_FS        ((LANDLOCK_LAST_ACCESS_FS << 
+>>> 1) - 1)
+>>>   #define LANDLOCK_NUM_ACCESS_FS        
+>>> __const_hweight64(LANDLOCK_MASK_ACCESS_FS)
+>>>
+>>> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+>>> index f4d6fc7ed17f..469e0e11735c 100644
+>>> --- a/security/landlock/syscalls.c
+>>> +++ b/security/landlock/syscalls.c
+>>> @@ -129,7 +129,7 @@ static const struct file_operations ruleset_fops = {
+>>>       .write = fop_dummy_write,
+>>>   };
+>>>
+>>> -#define LANDLOCK_ABI_VERSION 3
+>>> +#define LANDLOCK_ABI_VERSION 4
+>>
+>> ABI version 3 has not made it into a stable kernel yet; I wonder
+>> whether it wouldn't be easier to just bundle the truncate, chmod and
+>> chown rights as part of ABI version 3 (assuming that the patches make
+>> it into a stable release together)?
+>>
+>> Mickaël, do you have an opinion on this?
+> 
+> I'll make sure to only have one ABI version bump per kernel release, but 
+> it is OK to bump it for this patch series in case it is not ready for 
+> the next merge window. I'll change it if required when merging into my 
+> tree. It is easier to change the code to decrease the version, so please 
+> keep it as is. ;)
+> .

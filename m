@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FA059DDA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482A359E1BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353194AbiHWKO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
+        id S1354058AbiHWK1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352529AbiHWKFv (ORCPT
+        with ESMTP id S1353865AbiHWKMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:05:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9069F6B672;
-        Tue, 23 Aug 2022 01:52:06 -0700 (PDT)
+        Tue, 23 Aug 2022 06:12:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB7327CC6;
+        Tue, 23 Aug 2022 01:58:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2504E6150F;
-        Tue, 23 Aug 2022 08:52:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342ADC433D6;
-        Tue, 23 Aug 2022 08:52:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5213961524;
+        Tue, 23 Aug 2022 08:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A64AC433D6;
+        Tue, 23 Aug 2022 08:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244725;
-        bh=o5kMqKGNeYaD1QjftcGevNh2DTWdrdudlXdleTnx8zM=;
+        s=korg; t=1661245111;
+        bh=Ugp6EmnpxCW/jUonBrd4q610od/cbBfW+Rlicj6AB3g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eejVIGHQ3sBSZ7nONPs8Dfsd3ZCO9M9lBjgpj1fBjP/AcYUdfepBfKq92z2O1nH+h
-         xBvCCHm+XpiuqPS+IsYoC/qFhsm1AL5npbE7gV2l/khvlJoVIntt5FZQpeosQvdz3X
-         gQiRSPtyYO5dmMKt9OlQWA8MDmVwxUY7+/pzqvSc=
+        b=R2oIuUYz4HimquRkVyliOTiWMk7gSJ9bOXSNt9c/GOScq3KM2aiQq9LE01j/Iw8wC
+         Zehx/ucu35EKy1ekiRiIppSvEcIeIAb5BAFCQBS5poBOGU3r9/dkMtfPoorh6198Ad
+         loB1iU/I4Zn2VSIABo/GfAGwwU5PlP4umJWHXdIM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 4.14 181/229] apparmor: fix quiet_denied for file rules
+        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 183/244] scsi: lpfc: Fix possible memory leak when failing to issue CMF WQE
 Date:   Tue, 23 Aug 2022 10:25:42 +0200
-Message-Id: <20220823080100.081326681@linuxfoundation.org>
+Message-Id: <20220823080105.446445858@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Johansen <john.johansen@canonical.com>
+From: James Smart <jsmart2021@gmail.com>
 
-commit 68ff8540cc9e4ab557065b3f635c1ff4c96e1f1c upstream.
+[ Upstream commit 2f67dc7970bce3529edce93a0a14234d88b3fcd5 ]
 
-Global quieting of denied AppArmor generated file events is not
-handled correctly. Unfortunately the is checking if quieting of all
-audit events is set instead of just denied events.
+There is no corresponding free routine if lpfc_sli4_issue_wqe fails to
+issue the CMF WQE in lpfc_issue_cmf_sync_wqe.
 
-Fixes: 67012e8209df ("AppArmor: basic auditing infrastructure.")
-Signed-off-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If ret_val is non-zero, then free the iocbq request structure.
+
+Link: https://lore.kernel.org/r/20220701211425.2708-6-jsmart2021@gmail.com
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/apparmor/audit.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_sli.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/security/apparmor/audit.c
-+++ b/security/apparmor/audit.c
-@@ -143,7 +143,7 @@ int aa_audit(int type, struct aa_profile
- 	}
- 	if (AUDIT_MODE(profile) == AUDIT_QUIET ||
- 	    (type == AUDIT_APPARMOR_DENIED &&
--	     AUDIT_MODE(profile) == AUDIT_QUIET))
-+	     AUDIT_MODE(profile) == AUDIT_QUIET_DENIED))
- 		return aad(sa)->error;
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index fb69416c9623..f594a006d04c 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -2012,10 +2012,12 @@ lpfc_issue_cmf_sync_wqe(struct lpfc_hba *phba, u32 ms, u64 total)
  
- 	if (KILL_MODE(profile) && type == AUDIT_APPARMOR_DENIED)
+ 	sync_buf->cmd_flag |= LPFC_IO_CMF;
+ 	ret_val = lpfc_sli4_issue_wqe(phba, &phba->sli4_hba.hdwq[0], sync_buf);
+-	if (ret_val)
++	if (ret_val) {
+ 		lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT,
+ 				"6214 Cannot issue CMF_SYNC_WQE: x%x\n",
+ 				ret_val);
++		__lpfc_sli_release_iocbq(phba, sync_buf);
++	}
+ out_unlock:
+ 	spin_unlock_irqrestore(&phba->hbalock, iflags);
+ 	return ret_val;
+-- 
+2.35.1
+
 
 

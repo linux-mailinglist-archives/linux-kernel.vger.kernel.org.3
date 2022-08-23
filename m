@@ -2,208 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2CF59D2A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5DE59D29E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241333AbiHWHv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
+        id S241362AbiHWHvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241284AbiHWHuo (ORCPT
+        with ESMTP id S241424AbiHWHvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:50:44 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F365540;
-        Tue, 23 Aug 2022 00:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661241042; x=1692777042;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=+N2EYIj5Y/kAfNRjxZ9A6hyRC0mYBBeB8H9Ch63v6B0=;
-  b=ZL0EPOtpjn+LGc109FFJW8xM0TrvMQo3YipCAKJE/cuPvOPTDVueU/kj
-   0UnT/1D8ilBlCXlDl2EaKDY+BC27bbgV7xqLBK+SIK7UUqX9/D9evmuT9
-   nm4EJ3nt8zMh148dVP+ZG7bmQ9l8/R5mQfTxqIZh0hs9ZbcOVSHpLB/dl
-   2zAknY6Q4m3FXwMkbRDxYgXhLvj6hvewmsnNVL7sOfAr34Dsl3U7GxWTh
-   M6Yqxu7mprDYNwZPSnZMrfVupYPdWvbPGJaiWIecyZ8o3xT3AalAyAerI
-   M4J4CU4G502uydYhwhnFxW95Hy4tZ1N++pnbD/S5mhNsAp4J1NrcKxWeq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="379909972"
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="379909972"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:50:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="560065993"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga003.jf.intel.com with ESMTP; 23 Aug 2022 00:50:17 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 23 Aug 2022 00:50:17 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 23 Aug 2022 00:50:17 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 23 Aug 2022 00:50:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TnZxVY7v/1pOi3ykG4dzFMaIrCG6rj7ovQFeCjkqXGAbKrmxNYY6PXLp1phzIJ0ga+jphG+llzB2cjYU5oojxao4gTg9Gf3g8hORcLueDCVDZcJhZRTka61jmY3SNjJZee/ZBa9s2RMP/evvyiOfH+JVMLrNcvDxT9NtJsq5vWCSrsCSXWSeVDr93iHsgx37ZyPx9Yt3KCaRUc6niMHnVnKH6MXpCYEqdqpKPr0GiiX9GZo7gO+PsmMm86ThDMczZk+VOzZS1IDTR4DVixTfoPKyn6AR6fDBIfuB7gvoPtno+c/rgn9I+tB+VF58q3Q+81buRb/lKMpY+9KKOu71Mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hOFcFosSlPHdejH5jJXmzVxjaO1fGWlLXcpNWCU6X4U=;
- b=Kw74IVDkjNWEuAXIfU8mDivfs4eN0HC4RqUCOBee4GZvH3y7CxMQgfKYfttRLydoKC5ZAhmIXy7hya5hVrfEQ6G6ymKujNVZmIWctDhVk3ysFlY+75BPbwRjy7gm6x38H8z3a7AsSoccs9WpEuObwI/2hdYF8xNuKjbCq9gDM5l5x4poXjDXXwkKz0rJBpD4lOrhArOm4FKDu6T15ugFD5+WByTV6+YCjOx+GCaeCCXmEbNcQrHGBDae0su0BbCi8iCIzGeFE5oC8BNnSm03oTWnnr0cfuo4FEHzWwYmprfT/iGpC7gsHw25uWiEJyymhwSE77yvhuKEvNvothyj8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
- (2603:10b6:301:53::18) by DM4PR11MB6066.namprd11.prod.outlook.com
- (2603:10b6:8:62::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Tue, 23 Aug
- 2022 07:50:15 +0000
-Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
- ([fe80::e9a3:201:f95c:891e]) by MWHPR1101MB2221.namprd11.prod.outlook.com
- ([fe80::e9a3:201:f95c:891e%6]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
- 07:50:15 +0000
-Date:   Tue, 23 Aug 2022 15:50:09 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     <isaku.yamahata@intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <isaku.yamahata@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>,
-        "Sean Christopherson" <seanjc@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        "Will Deacon" <will@kernel.org>
-Subject: Re: [RFC PATCH 12/18] KVM: Do processor compatibility check on cpu
- online and resume
-Message-ID: <YwSGsbpuJ5cdNmDG@gao-cwp>
-References: <cover.1660974106.git.isaku.yamahata@intel.com>
- <60f9ec74499c673c474e9d909c2f3176bc6711c3.1660974106.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <60f9ec74499c673c474e9d909c2f3176bc6711c3.1660974106.git.isaku.yamahata@intel.com>
-X-ClientProxiedBy: SG2PR02CA0098.apcprd02.prod.outlook.com
- (2603:1096:4:92::14) To MWHPR1101MB2221.namprd11.prod.outlook.com
- (2603:10b6:301:53::18)
+        Tue, 23 Aug 2022 03:51:15 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED7265670
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:51:09 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220823075106euoutp015c549b251adad840a5ca1fa66f23b7c9~N6fLALcfo0965309653euoutp01_
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:51:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220823075106euoutp015c549b251adad840a5ca1fa66f23b7c9~N6fLALcfo0965309653euoutp01_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1661241066;
+        bh=OdAUYDUE0RtxDQJxlta/lTLQKVFbvQ5IcKfejb7SxWc=;
+        h=Date:Subject:To:From:In-Reply-To:References:From;
+        b=YzmgmcreHTCQyHKzbK7wQcdrFDvjDpGnfAdLxrBybth93xVC13cEfcwL3nXZ9FbsZ
+         luZQ/FVXNGsnho4N++2uYNlnSzdyjlGF9TtsV1fmnx3v1z3ZbHzWo3/Cz6QW+LrlII
+         moB4MVkgjLPZQj4dR1wy2LEXAOSnqMBRpLoODUsw=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220823075105eucas1p27cf58d12d4928050fc3bd26ebe977b56~N6fKaInLg0812408124eucas1p2R;
+        Tue, 23 Aug 2022 07:51:05 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 85.D8.07817.9E684036; Tue, 23
+        Aug 2022 08:51:05 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220823075105eucas1p24f6502d7088ffeb65180723f4c7b246c~N6fKA_8PA0769807698eucas1p2l;
+        Tue, 23 Aug 2022 07:51:05 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220823075105eusmtrp105eefa20678a3cf5dac665d1e9457bc8~N6fKAEZ9Y0366903669eusmtrp1w;
+        Tue, 23 Aug 2022 07:51:05 +0000 (GMT)
+X-AuditID: cbfec7f4-893ff70000011e89-0e-630486e9ec36
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1A.34.10862.9E684036; Tue, 23
+        Aug 2022 08:51:05 +0100 (BST)
+Received: from [106.210.134.141] (unknown [106.210.134.141]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220823075104eusmtip236de6fdbca44ee6174d98b378a9f9f27~N6fJaM3L92482924829eusmtip2A;
+        Tue, 23 Aug 2022 07:51:04 +0000 (GMT)
+Message-ID: <64f39fcd-9dfb-1c40-377c-034f5f043072@samsung.com>
+Date:   Tue, 23 Aug 2022 09:51:04 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6c1f5945-c0a2-466b-78db-08da84dc1dd4
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6066:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uUPFlfpis/gFUjzYXD2NiEcNncCIK2omVYQPldntjr2cvjrqV15p8jek0QAqQzBUlCPLv7OdrhLo3h0M0XlxD59cCBE7Wy+qjUCwmZYC/X7J+LLww2QbTBrVRdP9eCW0m/fIgDz/OCKmh3zuY5HRdLU8CegqK5ccyRuJZtvY9e8KpXb9PAcNncOvoSEAgGvt/yEIB8mFLJxAliG8gh1Xh//3mhp8bXJUMHqc5uLlUGYLR58P3nmvD0OFhUPaOrd2zk6K5X0nI6hgr4LIFVT1MN751hiHECcNnXnzT7j6KKjSJjWRxycipXeWL2StLZaEqQ+rPbQ4kMjdKdxGlKLAfNngflLri30DR11uHdXhM8zpdSeW5FWE37J/q7tre0RRF2nPdotOiTAH0cP7XVaqmiykD0R+4TiI+whgL2OtCk46hhTuM6XNEzzVrYeXMl9dMGuHv+ZZbnQ+bzru+DJunY7gXYCh8o3cmtdu0SvFsYozZ5XkwOEytvZd2awl6u0AexGpijHZD1kfD40CvVF7Pir0gbB2a1IzhH0+QgjKHrBG0ex8kIV3jZPSxa7y+XpcfISe8onGHUoeVrG/Q6PVtPr6FHfXNofjsn5MwIfCiCktgyiL0kutsLBU+i55hT6Z8zKfb6JwAvi1eYvyYasyEJQpsV6p46wYjnUdAxAE80TOppa0p6dyhjWBzejaJtw1XMMymAjYgcs95iUaFqrwEw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2221.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(366004)(376002)(396003)(136003)(346002)(38100700002)(6636002)(316002)(86362001)(34206002)(8936002)(82960400001)(66946007)(66476007)(66556008)(5660300002)(8676002)(2906002)(4326008)(9686003)(6512007)(6506007)(33716001)(6486002)(44832011)(478600001)(54906003)(83380400001)(186003)(41300700001)(26005)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LkqPJkguJ0hJ+aopFOv1tKxsusEgkmBoZj5i1v2AZuLg5YOcYJl6gcl1AV3x?=
- =?us-ascii?Q?LHcZ3XARJDYsnNYOVQNApdvcFcivQMcZA1db1pNwVI95EsoIKbbz5knnD8Nh?=
- =?us-ascii?Q?xRMv5l7zC6qdCCXVoubtSjRS/Omm0Xed2WILEZIk6CIAMPYHVkMaIHstJ0tK?=
- =?us-ascii?Q?4tPulVUIXxRBg1dYE7SK3W9+O6Ih4FItf0QWdrB1proOKyUmTtbsyg6DneJq?=
- =?us-ascii?Q?uw2IKnF/BKDSsIU7+UbD/3fHh05Xw9I1Yx79tRFIj0xwJpYzFIp6Cwlan+eU?=
- =?us-ascii?Q?dATKITaxEAYlq1Go+ItS/IyfUEafLV6Vh0CZ7wLlXhSJq+wLbD7BFs3jbt5n?=
- =?us-ascii?Q?y69GljZNAT4xAN6OaSK3xID+0DhaRFyLyTrVyt6vlo/9t6BJAVan9ORP5fPe?=
- =?us-ascii?Q?6dlI8cJnWj8biWD1VOC+wP2O3cKEjzxgxLARoBQZKfnmbVluUNw93msNO7PF?=
- =?us-ascii?Q?B4zxXdjBTXYLgdAurXJmBWrGv0X61Scd1zpCNtcx4nxbGi3B9pXc7Yw5odu7?=
- =?us-ascii?Q?nnAIT36gQ8nWd0L2FkMx5NRgsyTbDB7FPiZqP1RO28i03b1LicoxMaupTq17?=
- =?us-ascii?Q?TZNfytJl6utrFiDXI69sHc7MT+BjtvjlAu3sulwME1jnU4FYA3tA/ZBQbm4F?=
- =?us-ascii?Q?/WeFGnoBWslryxX3n5AMywqxwLP1ngCTXePOcujl5R6MlNMmXkfCs3HcbL79?=
- =?us-ascii?Q?hfNiLqycRgcEo2c9ns+3dC0HR4McfH4T6NbxhuJC2M69dyjhi8ojXyD0obqA?=
- =?us-ascii?Q?PX7Ruc1wcbBCqVlftVBqxIK4/x2ZUBSCdg/bdrOQhh3oe8j6vZJBsOMk6xML?=
- =?us-ascii?Q?o2FzAh+X1jziiM/p8Zx++ju5DZb/GLBNk5l8ShhZod34nm6j0SgmQBwKSz9O?=
- =?us-ascii?Q?oiAYXybZEWlpXilEAZ7xE6EBR51cmJWr3qghY9xpFrfw1LM96pyvM8Z0p2vt?=
- =?us-ascii?Q?L0XymTGsxKpbn6e58SWTB3pdEyedOkgceO5dKrqz7W071YqvM9/9ZOwBmfmN?=
- =?us-ascii?Q?JPjh9ePbjwUBYKDYU+I5ooiuCjsTdsmc8gs0pKCLhukeTZFIB+9CyFpvI/Z4?=
- =?us-ascii?Q?1i2gUJZe6HZNQJAkvXwL84gPPaPGg5ZodjATFSb3p1qPElITJIDz3sfoQ/cI?=
- =?us-ascii?Q?+lmtsn7tt0pRNAK4iMa72pYKSWPWPYOkDptUwztOe22kbxRnVhjO9tQ16RBf?=
- =?us-ascii?Q?XLXEJYgaqnegHw9ST1CfMoChIOh2pWA1vU8uJFwDNchdcR8IPwneFnFLn1XX?=
- =?us-ascii?Q?yDbjhJ8mwxxvtfd59tHofmSmW9YiaJWjqqJXVHDSyNDxwo3Fc0jRCxI2uCDh?=
- =?us-ascii?Q?QNslCApXMYZswMA0ap5VFFYoriLpOYhpLtSD5JlGAR+OK4mfyfvGRU9TXCOr?=
- =?us-ascii?Q?xtbu9FWVVyRnK2Z2eOQp0B6r5OnY8r2GdOaFpi/ZyLrgJV5j91EuZ8Z2koys?=
- =?us-ascii?Q?PjYkyaBgin8a3RZGVgJDQ0sOeMn2pas9/KUb/Pnysq+dPKQdvTX343Pv/7eB?=
- =?us-ascii?Q?/CVkv0vzcTeTqaHXuHua/uaQAinYn9SzK1r/X/hs9C14f/abwyDhwdgJSkhb?=
- =?us-ascii?Q?DOhm8IiOl8BuCi2NMrE3K+Gt412uJyheYS+HWHrR?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c1f5945-c0a2-466b-78db-08da84dc1dd4
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2221.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 07:50:15.6200
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tZTh6ItXi4hI1SM8FYU+VXQ8Fngjd9a88V1RYdEdkOSG109duZ5kU0OM/lHuhPwVwW5xRiNCB+okbG//TsyCGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6066
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH] clk: samsung: MAINTAINERS: add Krzysztof Kozlowski
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+In-Reply-To: <20220823073154.359090-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNKsWRmVeSWpSXmKPExsWy7djPc7ov21iSDZ4v0bJ4MG8bm8X1L89Z
+        Lfa+3spu8bHnHqvF5V1z2CxmnN/HZHHxlKvFv2sbWSxW7frD6MDp8f5GK7vHzll32T02repk
+        87hzbQ+bR9+WVYwenzfJBbBFcdmkpOZklqUW6dslcGW8bT7IWPCduWLe0pdMDYzTmbsYOTkk
+        BEwkHp1sZu1i5OIQEljBKPH7w34mCOcLo0T3mruMEM5nRomJC//AtXT0/GOHSCxnlFj5dT6U
+        85FRYv7xtUwgVbwCdhJ9b7+ygtgsAqoSF9d9YYSIC0qcnPmEBcQWFUiWePZ/MTuILSzgLnFr
+        QRNYPbOAuMStJ/PB7hARuMMk0fjwE1gDm4ChRO/RPrBBnAKuEq/b9rBBNMhLbH87B+q8FxwS
+        /euNIWwXiWMn7rJA2MISr45vYYewZSROT+6BitdLTJ5yhQ3C7mCU+LrXDMK2lpiw6QRQnANo
+        vqbE+l36EGFHiTML3zKBhCUE+CRuvBWEuIBPYtI2UJiChHklOtqEIKpVJH6vms4EYUtJdD/5
+        D7XUQ2LF7k9MExgVZyEFyiwkz89C8tcshBsWMLKsYhRPLS3OTU8tNspLLdcrTswtLs1L10vO
+        z93ECExPp/8d/7KDcfmrj3qHGJk4GA8xSnAwK4nwVl9kSBbiTUmsrEotyo8vKs1JLT7EKM3B
+        oiTOm5y5IVFIID2xJDU7NbUgtQgmy8TBKdXAxC2S6fW4kPdLksPq69zPVFy8Paf+CLJe4s3e
+        l60eblY+2Wd7CsM/vr3e7Z5m2/6JaRVe+mg09WbZrnLV1B3hfGJy8m92sOzZ+SZixgfXx/b3
+        WzZwlRyJkjxtPm1H2+3I1U+/Wf37WvTwquTlG+IbPWzfyV8JLt20m5NXUHPr3ScHV75/eM2s
+        RrV3e9G2GUI5De0vX1gfOx8/g+PmGyYm5eWfBEwVI7UUrLjnqN4MUZ2i/cOt65eRXf7i29t/
+        mdWbLgzUz3kn2/RKksE/N0/PPz91yoZdZ5ykVp3Yc19D3idWlHnqson9LlbzjM7/NPr6N1s9
+        UfjExMOXtLYtXqo5W+PVv0mBvrkT3jBqp8x6ocRSnJFoqMVcVJwIANv0p32+AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIIsWRmVeSWpSXmKPExsVy+t/xe7ov21iSDU5f5rV4MG8bm8X1L89Z
+        Lfa+3spu8bHnHqvF5V1z2CxmnN/HZHHxlKvFv2sbWSxW7frD6MDp8f5GK7vHzll32T02repk
+        87hzbQ+bR9+WVYwenzfJBbBF6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZmSrp
+        29mkpOZklqUW6dsl6GW8bT7IWPCduWLe0pdMDYzTmbsYOTkkBEwkOnr+sXcxcnEICSxllHi5
+        /RqQwwGUkJKY36IEUSMs8edaFxtEzXtGidnXN7GCJHgF7CT63n4Fs1kEVCUurvvCCBEXlDg5
+        8wkLiC0qkCyx4NBSMFtYwF3i1oImsHpmAXGJW0/mM4EMFRG4xyTx9eUtJogNMxglVmxaAHYe
+        m4ChRO/RPrCpnAKuEq/b9rCBXMcsoC6xfp4QxCB5ie1v5zBPYBSchWT3LCQ7ZiF0zELSsYCR
+        ZRWjSGppcW56brGRXnFibnFpXrpecn7uJkZg3G079nPLDsaVrz7qHWJk4mA8xCjBwawkwlt9
+        kSFZiDclsbIqtSg/vqg0J7X4EKMp0P8TmaVEk/OBkZ9XEm9oZmBqaGJmaWBqaWasJM7rWdCR
+        KCSQnliSmp2aWpBaBNPHxMEp1cC0bN/ZHNPYNjO90JSnLtf5V862bnx4oU3m8II5FtxXv8bZ
+        1X89mLyguyxiueRpzqSmY8m37MREcsOjF2sFnZVm+RuzwNLx7rXQYz4rp56QF0nZH2RWrFfr
+        tnJ2p71yxtxgt7zM4q7re9Kq5U5JtL75I1ph4My1Kf/Xv9V3Vp1ruO4h8+SksO95YVetGX6c
+        M3p6t1y70d3AcF+0VGCd8OSpmcqV8b8EKtTUO+8VZdinNcY+q45V3K90zp1zjsQu0eDlu2vW
+        a++fp3TW4seKzuOTj4j+apTLPBayYvEnrsgOOfWmQxESGxM/2s72ME3uUb8hmHvwzdHE9IuN
+        OlcLHfinLj73ad/LZZUWy+XZ9iuxFGckGmoxFxUnAgAtkIR/RAMAAA==
+X-CMS-MailID: 20220823075105eucas1p24f6502d7088ffeb65180723f4c7b246c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220823073202eucas1p148f4ef93a8469ccfb5f4f2bdc7146555
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220823073202eucas1p148f4ef93a8469ccfb5f4f2bdc7146555
+References: <CGME20220823073202eucas1p148f4ef93a8469ccfb5f4f2bdc7146555@eucas1p1.samsung.com>
+        <20220823073154.359090-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 11:00:18PM -0700, isaku.yamahata@intel.com wrote:
->From: Isaku Yamahata <isaku.yamahata@intel.com>
->
->So far the processor compatibility check is not done for newly added CPU.
->It should be done.
->
->Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
->---
-> virt/kvm/kvm_arch.c | 20 +++++++++++++++-----
-> 1 file changed, 15 insertions(+), 5 deletions(-)
->
->diff --git a/virt/kvm/kvm_arch.c b/virt/kvm/kvm_arch.c
->index 2ed8de0591c9..20971f43df95 100644
->--- a/virt/kvm/kvm_arch.c
->+++ b/virt/kvm/kvm_arch.c
->@@ -99,9 +99,15 @@ __weak int kvm_arch_del_vm(int usage_count)
+On 23.08.2022 09:31, Krzysztof Kozlowski wrote:
+> Add Krzysztof Kozlowski (already Samsung SoC maintainer) as Samsung SoC
+> clock maintainer to handle the patches.
 > 
-> __weak int kvm_arch_online_cpu(unsigned int cpu, int usage_count)
-> {
->-	if (usage_count)
->-		return __hardware_enable();
->-	return 0;
->+	int r;
->+
->+	if (!usage_count)
->+		return 0;
->+
->+	r = kvm_arch_check_processor_compat();
->+	if (r)
->+		return r;
-
-I think kvm_arch_check_processor_compat() should be called even when
-usage_count is 0. Otherwise, compatibility checks may be missing on some
-CPUs if no VM is running when those CPUs becomes online.
-
->+	return __hardware_enable();
-> }
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> __weak int kvm_arch_offline_cpu(unsigned int cpu, int usage_count)
->@@ -126,6 +132,10 @@ __weak int kvm_arch_suspend(int usage_count)
+> ---
 > 
-> __weak void kvm_arch_resume(int usage_count)
-> {
->-	if (usage_count)
->-		(void)__hardware_enable();
->+	if (!usage_count)
->+		return;
->+
->+	if (kvm_arch_check_processor_compat())
->+		return; /* FIXME: disable KVM */
+> Agreed with Sylwester who is recently busy. Let me handle some patches
+> as I already handle rest of Samsung SoC.
+> 
+> I plan to send pulls the same way Sylwester did - to Stephen.
 
-Ditto.
+Acked-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 
->+	(void)__hardware_enable();
-> }
->-- 
->2.25.1
->

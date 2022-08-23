@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834CD59E475
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A1C59E467
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239383AbiHWNKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 09:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S239930AbiHWNK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 09:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239865AbiHWNKA (ORCPT
+        with ESMTP id S240927AbiHWNKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 09:10:00 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A9A133BB6
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:11:29 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z6so18988024lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:11:29 -0700 (PDT)
+        Tue, 23 Aug 2022 09:10:05 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B1A7EFED
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:11:39 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id bx38so13017136ljb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:11:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=AZasA7ru4RBuOT7il+83aHYYeB5TFBrGiGUj7Hz0hho=;
-        b=rEDtys7/7ehxHoe6Wrw9K9tDKHsQaWvQWc/iO7EXhJIqEvqH8g0cRZm+ntDEI/BBho
-         RUPePCWjNMAQQa7z1vSihgZ+HQaj1h021VoaQeLMiOw0+w1uPPRtPLpnA17oilmxOKig
-         Ck5pabaJqWlll2wAeFXbP4S8W2o47Kvf0V+RivEivn5Gbv5eKO5RlYB5vz4FJFGQqnUJ
-         q/7uO0DlfHX5rRd8SmiH/Nujcdetzhqfzt1CXFAsO1p4RZqtgUs9h82SYNJULDZpgdxi
-         /dTg9cpbEYzGJVHnGv8PaBuVyF0m7BD7n4f9UzIzBqh5GtAVqvBF8tJdfVPd6yHpXRVK
-         6Clw==
+        bh=hw2j/4pLlHBNSTZTWWhfb4AnPh8ql3cI9ASIz+WVLdI=;
+        b=SlaGgjcTZDU2Cv3G8yUnbFhPsB+iAh7kLOsVOlXs1XdVHwg4pKiXl1darE9glMkP3S
+         TymTkKXsm6xoYFxYzLqhSEmo7KD6uX5R7T1Hf7uKpvOLJCTDyQ/xiSTqiqSufGwZGjcF
+         x3cPaLYQHWAKbK8xZ7jCsqIpLI95vKvzopXtTAV1TOrUK6IoKbkSeB4DSQwwVFk+ouc7
+         Du/TwAbTL9EtOD5kykQD1gWL1u/sx8es8OX34qYOTIQo8r6gmDTplLwPJ5MXRDYzBXd1
+         wgSWPz1P48eE+KjtdGiNYLONgkjUfsnc8tjoZi6Kht8a8dENhziM3zsnXavrqsutY3vO
+         p6Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=AZasA7ru4RBuOT7il+83aHYYeB5TFBrGiGUj7Hz0hho=;
-        b=seGZ5Qg77ZMXmQ9j/oo4S7lLVnsD6KvNvLacNNTIyLMVW+qVlEGmhJmNofx/PECrt1
-         /IgXw33zIUvhaPmP1acBIlRluZ7fW50+NMiWQ9+0sRIICtNttyf6EYFdh93zKWh2Cd62
-         3JLsudzQoHjRmQN0L72e6dTk3nTVeeDksUTl+wkya4k5WBR5vY5APQSRhsKkW7yCCwxY
-         WJhfBtDYGz4o8a2aBBTJMe/7r10Qj0nJF6o/tnNQn1ULUAOMSie7LR/mkVDcrILQVXiw
-         rK0qnt9PObBV3j7IWrsPcq11NCW7hQHHZuRnHu96svREpoKOlJeSBi5f/2ScCVj9d60x
-         gEtw==
-X-Gm-Message-State: ACgBeo2tL8/QV7wvh3tagv/3ePJKnFqRdpHB9lVmcMdniji75wscVF+E
-        ojv1lEZwEhOLSufZ3xgo9Z+u5g==
-X-Google-Smtp-Source: AA6agR6pd09B988zCU50PRE+Ehh4CmDVrkjcaGeGv4/suuwgIa/1BEky+q4J4ZmdTHCH0FOq/Grfmg==
-X-Received: by 2002:ac2:4e6a:0:b0:492:f027:218e with SMTP id y10-20020ac24e6a000000b00492f027218emr1721637lfs.676.1661249414775;
-        Tue, 23 Aug 2022 03:10:14 -0700 (PDT)
+        bh=hw2j/4pLlHBNSTZTWWhfb4AnPh8ql3cI9ASIz+WVLdI=;
+        b=uMig0NHHMgwgSxEH1pA9QNOX7UKQzObSy3vYP5J5zBT+B7mfaa4kT7xPiUN0tWMgz6
+         JhfHDdfMXfDnXCz2qaOgexGsff+jlFBnazlWQebEF/Skh5+afKHiP6W/qs8Ukk5yRpVN
+         2um1avqgn912ecMrtuI21U1WQkDOx2JpM4I/voHSQ2F1oF/zI8wqqSpHxGhA8WIne8Kr
+         vdh08ooBfNbbC6Eo+psSA5OLygipfuZwpdCxIdT4QZ+8HxB+01FhbLqNzvVAqeSUjw6j
+         e4XYMVl437b/jRYsTcdoj6E2u0Iij/kxTbOBsPul+hlMt/s8SiD6Bp2NAJNHfA4LDGOh
+         RZ2w==
+X-Gm-Message-State: ACgBeo0iagiLpnlXDJqV9iKDi/XrI950uAbfsVl18aLHm6GsCqwZY2EM
+        WRUu2BNLAFOEr4uOZWSyHHqo5w==
+X-Google-Smtp-Source: AA6agR4jYO3jxv/cP+R0PcOjMe1ISfIavZaIP2e0W7K1bX4G+0TdlXOY+kSP2zMaY0pGfvFCyTurLQ==
+X-Received: by 2002:a2e:a887:0:b0:25e:3174:fb67 with SMTP id m7-20020a2ea887000000b0025e3174fb67mr6392657ljq.337.1661249424724;
+        Tue, 23 Aug 2022 03:10:24 -0700 (PDT)
 Received: from krzk-bin.. (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id 28-20020ac25f5c000000b00492db7f47f2sm1383025lfz.275.2022.08.23.03.10.13
+        by smtp.gmail.com with ESMTPSA id n27-20020a05651203fb00b0048af2fe78c4sm1513034lfq.3.2022.08.23.03.10.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 03:10:14 -0700 (PDT)
+        Tue, 23 Aug 2022 03:10:24 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: net: can: nxp,sja1000: drop ref from reg-io-width
-Date:   Tue, 23 Aug 2022 13:10:11 +0300
-Message-Id: <20220823101011.386970-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: mfd: syscon: drop ref from reg-io-width
+Date:   Tue, 23 Aug 2022 13:10:21 +0300
+Message-Id: <20220823101021.387034-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,21 +73,21 @@ reg-io-width is a standard property, so no need for defining its type
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml | 1 -
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml b/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
-index b1327c5b86cf..d919910c690c 100644
---- a/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
-+++ b/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
-@@ -31,7 +31,6 @@ properties:
-     maxItems: 1
- 
-   reg-io-width:
+diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+index c958086a5fc3..9c75daff6ec1 100644
+--- a/Documentation/devicetree/bindings/mfd/syscon.yaml
++++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+@@ -81,7 +81,6 @@ properties:
+     description: |
+       The size (in bytes) of the IO accesses that should be performed
+       on the device.
 -    $ref: /schemas/types.yaml#/definitions/uint32
-     description: I/O register width (in bytes) implemented by this device
-     default: 1
-     enum: [ 1, 2, 4 ]
+     enum: [1, 2, 4, 8]
+ 
+   hwlocks:
 -- 
 2.34.1
 

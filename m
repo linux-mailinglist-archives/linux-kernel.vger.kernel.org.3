@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF6059DCF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08CF59DD34
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358538AbiHWLmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S1353680AbiHWKSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358036AbiHWLgj (ORCPT
+        with ESMTP id S1352571AbiHWKIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:36:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40D7C7FA8;
-        Tue, 23 Aug 2022 02:27:46 -0700 (PDT)
+        Tue, 23 Aug 2022 06:08:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA625AC6D;
+        Tue, 23 Aug 2022 01:54:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CE0461321;
-        Tue, 23 Aug 2022 09:27:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188E0C433D7;
-        Tue, 23 Aug 2022 09:27:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 975B7B81C28;
+        Tue, 23 Aug 2022 08:54:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9EDC433C1;
+        Tue, 23 Aug 2022 08:54:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246864;
-        bh=pYE4hdN4k+9wkJ2QecTs0NNP6OxSLjD284QBt0UcSf0=;
+        s=korg; t=1661244866;
+        bh=dS3oUX565XXqWz6LAky5wfcvCoNURNos/Hxa/WUf87o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O2JbNZLxydPo3Fb+gTUTN/BVIZG+IvNdyIy1jr3MWnNmqVr3P4Ilkr1JgsLw6VxSV
-         IlXQGDNLZEH/WEkDGhDnh/0a8RDlNWflKBov9v62LkZWISlCRW2zIi11nCH4GDkaZq
-         +dqRFf1m3qeWaiHlA9LGueYkYk6xUl82BkhuEPkc=
+        b=NDEONu/NZp5fFAYTP4rRYIRqcMS39hAvwopWdg78v2yc64s7X13vNCjq1bwajL+pa
+         Nn3nriLvFhOpOjb0m0bHxNVou1FvpcLybxk5HnYtGNDvTme+XqEIaCnu+ShiFBFWdX
+         THlMHPolGpSwlc5wTMaRyNBYgxhOW0P0Gq4yPawU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 245/389] video: fbdev: vt8623fb: Check the size of screen before memset_io()
+        stable@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 164/244] platform/chrome: cros_ec_proto: dont show MKBP version if unsupported
 Date:   Tue, 23 Aug 2022 10:25:23 +0200
-Message-Id: <20220823080125.799010407@linuxfoundation.org>
+Message-Id: <20220823080104.692056989@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Tzung-Bi Shih <tzungbi@kernel.org>
 
-[ Upstream commit ec0754c60217248fa77cc9005d66b2b55200ac06 ]
+[ Upstream commit b36f0643ff14a2fb281b105418e4e73c9d7c11d0 ]
 
-In the function vt8623fb_set_par(), the value of 'screen_size' is
-calculated by the user input. If the user provides the improper value,
-the value of 'screen_size' may larger than 'info->screen_size', which
-may cause the following bug:
+It wrongly showed the following message when it doesn't support MKBP:
+"MKBP support version 4294967295".
 
-[  583.339036] BUG: unable to handle page fault for address: ffffc90005000000
-[  583.339049] #PF: supervisor write access in kernel mode
-[  583.339052] #PF: error_code(0x0002) - not-present page
-[  583.339074] RIP: 0010:memset_orig+0x33/0xb0
-[  583.339110] Call Trace:
-[  583.339118]  vt8623fb_set_par+0x11cd/0x21e0
-[  583.339146]  fb_set_var+0x604/0xeb0
-[  583.339181]  do_fb_ioctl+0x234/0x670
-[  583.339209]  fb_ioctl+0xdd/0x130
+Fix it.
 
-Fix the this by checking the value of 'screen_size' before memset_io().
-
-Fixes: 558b7bd86c32 ("vt8623fb: new framebuffer driver for VIA VT8623")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Link: https://lore.kernel.org/r/20220609084957.3684698-14-tzungbi@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/vt8623fb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/platform/chrome/cros_ec_proto.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/video/fbdev/vt8623fb.c b/drivers/video/fbdev/vt8623fb.c
-index c339a8fbad81..61e2028924a6 100644
---- a/drivers/video/fbdev/vt8623fb.c
-+++ b/drivers/video/fbdev/vt8623fb.c
-@@ -504,6 +504,8 @@ static int vt8623fb_set_par(struct fb_info *info)
- 			 (info->var.vmode & FB_VMODE_DOUBLE) ? 2 : 1, 1,
- 			 1, info->node);
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index ed2b4807328d..1575d603d3ff 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -507,13 +507,13 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ 	ret = cros_ec_get_host_command_version_mask(ec_dev,
+ 						    EC_CMD_GET_NEXT_EVENT,
+ 						    &ver_mask);
+-	if (ret < 0 || ver_mask == 0)
++	if (ret < 0 || ver_mask == 0) {
+ 		ec_dev->mkbp_event_supported = 0;
+-	else
++	} else {
+ 		ec_dev->mkbp_event_supported = fls(ver_mask);
  
-+	if (screen_size > info->screen_size)
-+		screen_size = info->screen_size;
- 	memset_io(info->screen_base, 0x00, screen_size);
+-	dev_dbg(ec_dev->dev, "MKBP support version %u\n",
+-		ec_dev->mkbp_event_supported - 1);
++		dev_dbg(ec_dev->dev, "MKBP support version %u\n", ec_dev->mkbp_event_supported - 1);
++	}
  
- 	/* Device and screen back on */
+ 	/* Probe if host sleep v1 is supported for S0ix failure detection. */
+ 	ret = cros_ec_get_host_command_version_mask(ec_dev,
 -- 
 2.35.1
 

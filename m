@@ -2,124 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC7E59CF2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AD959CF40
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbiHWDIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 23:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S239793AbiHWDLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 23:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239970AbiHWDHq (ORCPT
+        with ESMTP id S240180AbiHWDKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 23:07:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4425FAD9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 20:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661223925; x=1692759925;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dFchl2bmcRn49wmin1I4Kwm9RG7Qfuh91pAl14MRq5w=;
-  b=bZbTXW3A20brAiUHp9Qwimx1esKPNDq0b+TgBDXHQJ4VcNxDDCjJv7gr
-   3cFAJUS1xv7vJAq9qOFYp9z5H7YVm7YWfm1lXm8/qDkq/GUJwNQbp/SPH
-   I6ezWb8wGPpgxmSBePNmeD8xNsv83aQIP/SgF4NQ4N9SEcz8btXSpLgec
-   imL9oTREXrRZL8jqdw8Sc1GGtcKghyHHUr+figW++HUFMqJ9Yg9LQVOUB
-   LsJs9hXe87knpNV0fQ9g3/JIqEGBc+yhNP9FrR8yqJc+dvMJ3jA6JNvdm
-   QZSD45buA5xie9QzkKZja5TOxpRYMYuvE1CnMgIDpIMlJcd/zWe3dxB2f
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="273962555"
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="273962555"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 20:05:24 -0700
-X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
-   d="scan'208";a="638470575"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 20:05:22 -0700
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH] soundwire: dmi-quirks: add remapping for HP Omen 16-k0005TX
-Date:   Tue, 23 Aug 2022 11:09:19 +0800
-Message-Id: <20220823030919.2346629-1-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 22 Aug 2022 23:10:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF7C5C9F9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 20:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661224189;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PdyIPdKorQDXK1tldjSfL+LVZR0k6xko4u2KPDklhbE=;
+        b=Eoo/flel6hLt/KZy7cD9iidZ7wNixoQud4lCyOkgFFotYgL9bOqE06EOK0tUuljW78oYyl
+        JzUkvaLEf5q44yYoQx/JMNsBPtnMH4dBfNmpEvRC57mlgzipcBrcttVbYQ/+c7dyujaWuv
+        k1FgpzIGTExgr1/EZKqklYyd4S9aJco=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-d3zYu98qMW-lWG9QS1UrQg-1; Mon, 22 Aug 2022 23:09:42 -0400
+X-MC-Unique: d3zYu98qMW-lWG9QS1UrQg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EADE185A79C;
+        Tue, 23 Aug 2022 03:09:41 +0000 (UTC)
+Received: from [10.64.54.16] (vpn2-54-16.bne.redhat.com [10.64.54.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6E92E492C3B;
+        Tue, 23 Aug 2022 03:09:32 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v1 3/5] KVM: selftests: Dirty host pages in dirty_log_test
+From:   Gavin Shan <gshan@redhat.com>
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net,
+        maz@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+References: <20220819005601.198436-1-gshan@redhat.com>
+ <20220819005601.198436-4-gshan@redhat.com>
+ <20220819052805.qnhw2d3arxixzvhl@kamzik>
+ <3abb690f-e616-630f-ba40-e590ec8bb5c1@redhat.com>
+Message-ID: <0496fe72-e3da-9778-b307-eb5cc157e8fe@redhat.com>
+Date:   Tue, 23 Aug 2022 13:09:28 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <3abb690f-e616-630f-ba40-e590ec8bb5c1@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Hi Drew,
 
-The DSDT for this device has a number of problems:
-a) it lists rt711 on link0 and link1, but link1 is disabled
-b) the rt711 entry on link0 uses the wrong v2 instead of v3 (SDCA)
-c) the rt1316 amplifier on link3 is not listed.
+On 8/22/22 4:29 PM, Gavin Shan wrote:
+> On 8/19/22 3:28 PM, Andrew Jones wrote:
+>> On Fri, Aug 19, 2022 at 08:55:59AM +0800, Gavin Shan wrote:
+>>> It's assumed that 1024 host pages, instead of guest pages, are dirtied
+>>> in each iteration in guest_code(). The current implementation misses
+>>> the case of mismatched page sizes in host and guest. For example,
+>>> ARM64 could have 64KB page size in guest, but 4KB page size in host.
+>>> (TEST_PAGES_PER_LOOP / 16), instead of TEST_PAGES_PER_LOOP, host pages
+>>> are dirtied in every iteration.
+>>>
+>>> Fix the issue by touching all sub-pages when we have mismatched
+>>> page sizes in host and guest.
+>>
+>> I'll let the dirty-log test authors decide what's best to do for this
+>> test, but I'd think we should let the guest continue dirtying its
+>> pages without knowledge of the host pages. Then, adjust the host test
+>> code to assert all sub-pages, other than the ones it expects the guest
+>> to have written, remain untouched.
+>>
+> 
+> I don't think what is clarified in the change log is correct. The current
+> implementation already had the logic to handle the mismatched page sizes
+> in vm_dirty_log_verify() where 'step' is used for it by fetching value
+> from vm_num_host_pages(mode, 1). Please ignore this patch for now, as
+> explained below.
+> 
+> The issue I have is the 'dirty_log_test' hangs when I have 4KB host page size
+> and 64KB guest page size. It seems the vcpu doesn't exit due to full ring
+> buffer state or kick-off. I will have more investigations to figure out the
+> root cause.
+> 
 
-Add a remapping table to work-around these BIOS shenanigans.
+[...]
 
-BugLink: https://github.com/thesofproject/sof/issues/5955
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
----
- drivers/soundwire/dmi-quirks.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Please ignore this PATCH[3/5], I think this should be fixed by selecting
+correct dirty ring count and the fix will be folded to PATCH[5/5] in next
+revision.
 
-diff --git a/drivers/soundwire/dmi-quirks.c b/drivers/soundwire/dmi-quirks.c
-index 747983743a14..f81cdd83ec26 100644
---- a/drivers/soundwire/dmi-quirks.c
-+++ b/drivers/soundwire/dmi-quirks.c
-@@ -55,7 +55,26 @@ static const struct adr_remap dell_sku_0A3E[] = {
- 	{}
- };
- 
-+/*
-+ * The HP Omen 16-k0005TX does not expose the correct version of RT711 on link0
-+ * and does not expose a RT1316 on link3
-+ */
-+static const struct adr_remap hp_omen_16[] = {
-+	/* rt711-sdca on link0 */
-+	{
-+		0x000020025d071100ull,
-+		0x000030025d071101ull
-+	},
-+	/* rt1316-sdca on link3 */
-+	{
-+		0x000120025d071100ull,
-+		0x000330025d131601ull
-+	},
-+	{}
-+};
-+
- static const struct dmi_system_id adr_remap_quirk_table[] = {
-+	/* TGL devices */
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
-@@ -78,6 +97,14 @@ static const struct dmi_system_id adr_remap_quirk_table[] = {
- 		},
- 		.driver_data = (void *)dell_sku_0A3E,
- 	},
-+	/* ADL devices */
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "OMEN by HP Gaming Laptop 16-k0xxx"),
-+		},
-+		.driver_data = (void *)hp_omen_16,
-+	},
- 	{}
- };
- 
--- 
-2.25.1
+In dirty_log_test, we have 1GB memory for guest to write and make them
+dirty. When we have mismatch page sizes on host and guest, which is either
+4kb-host-64kb-guest or 64kb-host-4kb-guest apart from 16kb case, 16384 host
+pages are dirtied in each iteration. The default dirty ring count is 65536.
+So the vcpu never exit due to full-dirty-ring-buffer state. This leads the
+guest's code keep running and the dirty log isn't collected by the main
+thread.
+
+     #define TEST_DIRTY_RING_COUNT           65536
+
+     dirty_pages_per_iteration = (0x40000000 / 0x10000)
+                               = 0x4000
+                               = 16384
+
+Thanks,
+Gavin
 

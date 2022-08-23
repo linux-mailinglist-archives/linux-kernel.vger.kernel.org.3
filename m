@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61CD59DBF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D32959DB43
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353347AbiHWKNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S1357957AbiHWLjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352736AbiHWKGL (ORCPT
+        with ESMTP id S242860AbiHWLcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89D371733;
-        Tue, 23 Aug 2022 01:52:37 -0700 (PDT)
+        Tue, 23 Aug 2022 07:32:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE33B76943;
+        Tue, 23 Aug 2022 02:26:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 443A6611DD;
-        Tue, 23 Aug 2022 08:52:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D59C433D6;
-        Tue, 23 Aug 2022 08:52:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFBB761315;
+        Tue, 23 Aug 2022 09:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F03C433D6;
+        Tue, 23 Aug 2022 09:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244756;
-        bh=0dcqyPKtuvYuqhuGOTA2PfPgKoo20KhKXVF0lcFfqyk=;
+        s=korg; t=1661246808;
+        bh=3xxcuQJQA/NI4ag+LK3Y2WgZoK6Y9m0qoIvOAHxyx9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LhhPioN2OfD9ppDS5SeXGSJNXVqw8q9e7cEO+kjaX7MGhB3LVhc+KeXTSIISGKrhe
-         ENpbCkhWBLJ7aKy9MqWZTuhZ6B9/x//3hp+KS29rhKr8om9dpTOHF8bR5iEqsbvFq7
-         wD2euTbKVQ4BYBGso0MSmGH3i2oFL2CwNQHpjElk=
+        b=jn4wvhUxUvsjo9uc8VCI5NWynH6r7pMEEO1VuLBy0giDb8fCK/vZZ39aC8kfZDcVU
+         VrFg5ci7rNdwW+cb5J1Z/N2Cnn2Wa/vDXbAbU2jHppF7I3V9+IGVLEvJVmMWXmSwOh
+         vxDLFhocmzG2iFi5mzxrv7WQoJ0v2oMYptv+xby0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Grzegorz Siwik <grzegorz.siwik@intel.com>,
-        Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
-        Igor Raits <igor@gooddata.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.15 144/244] ice: Ignore EEXIST when setting promisc mode
+        stable@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 225/389] s390/zcore: fix race when reading from hardware system area
 Date:   Tue, 23 Aug 2022 10:25:03 +0200
-Message-Id: <20220823080103.979269040@linuxfoundation.org>
+Message-Id: <20220823080125.007761834@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,38 +57,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grzegorz Siwik <grzegorz.siwik@intel.com>
+From: Alexander Gordeev <agordeev@linux.ibm.com>
 
-commit 11e551a2efa4481bd4f616ab75374a2710b480e9 upstream.
+[ Upstream commit 9ffed254d938c9e99eb7761c7f739294c84e0367 ]
 
-Ignore EEXIST error when setting promiscuous mode.
-This fix is needed because the driver could set promiscuous mode
-when it still has not cleared properly.
-Promiscuous mode could be set only once, so setting it second
-time will be rejected.
+Memory buffer used for reading out data from hardware system
+area is not protected against concurrent access.
 
-Fixes: 5eda8afd6bcc ("ice: Add support for PF/VF promiscuous mode")
-Signed-off-by: Grzegorz Siwik <grzegorz.siwik@intel.com>
-Link: https://lore.kernel.org/all/CAK8fFZ7m-KR57M_rYX6xZN39K89O=LGooYkKsu6HKt0Bs+x6xQ@mail.gmail.com/
-Tested-by: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-Tested-by: Igor Raits <igor@gooddata.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Fixes: 411ed3225733 ("[S390] zfcpdump support.")
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Link: https://lore.kernel.org/r/e68137f0f9a0d2558f37becc20af18e2939934f6.1658206891.git.agordeev@linux.ibm.com
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_switch.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/s390/char/zcore.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/ice/ice_switch.c
-+++ b/drivers/net/ethernet/intel/ice/ice_switch.c
-@@ -2614,7 +2614,7 @@ ice_set_vlan_vsi_promisc(struct ice_hw *
- 		else
- 			status = ice_set_vsi_promisc(hw, vsi_handle,
- 						     promisc_mask, vlan_id);
--		if (status)
-+		if (status && status != -EEXIST)
- 			break;
- 	}
+diff --git a/drivers/s390/char/zcore.c b/drivers/s390/char/zcore.c
+index 08f812475f5e..c9d172510509 100644
+--- a/drivers/s390/char/zcore.c
++++ b/drivers/s390/char/zcore.c
+@@ -53,6 +53,7 @@ static struct dentry *zcore_reipl_file;
+ static struct dentry *zcore_hsa_file;
+ static struct ipl_parameter_block *zcore_ipl_block;
  
++static DEFINE_MUTEX(hsa_buf_mutex);
+ static char hsa_buf[PAGE_SIZE] __aligned(PAGE_SIZE);
+ 
+ /*
+@@ -69,19 +70,24 @@ int memcpy_hsa_user(void __user *dest, unsigned long src, size_t count)
+ 	if (!hsa_available)
+ 		return -ENODATA;
+ 
++	mutex_lock(&hsa_buf_mutex);
+ 	while (count) {
+ 		if (sclp_sdias_copy(hsa_buf, src / PAGE_SIZE + 2, 1)) {
+ 			TRACE("sclp_sdias_copy() failed\n");
++			mutex_unlock(&hsa_buf_mutex);
+ 			return -EIO;
+ 		}
+ 		offset = src % PAGE_SIZE;
+ 		bytes = min(PAGE_SIZE - offset, count);
+-		if (copy_to_user(dest, hsa_buf + offset, bytes))
++		if (copy_to_user(dest, hsa_buf + offset, bytes)) {
++			mutex_unlock(&hsa_buf_mutex);
+ 			return -EFAULT;
++		}
+ 		src += bytes;
+ 		dest += bytes;
+ 		count -= bytes;
+ 	}
++	mutex_unlock(&hsa_buf_mutex);
+ 	return 0;
+ }
+ 
+@@ -99,9 +105,11 @@ int memcpy_hsa_kernel(void *dest, unsigned long src, size_t count)
+ 	if (!hsa_available)
+ 		return -ENODATA;
+ 
++	mutex_lock(&hsa_buf_mutex);
+ 	while (count) {
+ 		if (sclp_sdias_copy(hsa_buf, src / PAGE_SIZE + 2, 1)) {
+ 			TRACE("sclp_sdias_copy() failed\n");
++			mutex_unlock(&hsa_buf_mutex);
+ 			return -EIO;
+ 		}
+ 		offset = src % PAGE_SIZE;
+@@ -111,6 +119,7 @@ int memcpy_hsa_kernel(void *dest, unsigned long src, size_t count)
+ 		dest += bytes;
+ 		count -= bytes;
+ 	}
++	mutex_unlock(&hsa_buf_mutex);
+ 	return 0;
+ }
+ 
+-- 
+2.35.1
+
 
 

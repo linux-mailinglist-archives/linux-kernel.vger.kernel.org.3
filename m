@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280C159E1E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF59359DF06
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356027AbiHWMLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S1358399AbiHWLsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359472AbiHWMIg (ORCPT
+        with ESMTP id S1357800AbiHWLme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:08:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD0CEAB;
-        Tue, 23 Aug 2022 02:38:33 -0700 (PDT)
+        Tue, 23 Aug 2022 07:42:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A172CE4B5;
+        Tue, 23 Aug 2022 02:29:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 915A961389;
-        Tue, 23 Aug 2022 09:37:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC5DC433C1;
-        Tue, 23 Aug 2022 09:37:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65881B81C89;
+        Tue, 23 Aug 2022 09:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AF5C433D7;
+        Tue, 23 Aug 2022 09:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247448;
-        bh=IofdAwIDyvUXY6X9Xr4M4jwUuXAIwWHoIICBfaLTqs0=;
+        s=korg; t=1661246979;
+        bh=F2zdgkDF/XedTRQAuWZeDhYcXnbH11Mv0smvHCoCLAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VPuxVBNFdP0nAUa+Vk6h4CFDXtZn4koTD7bLxcvgNklniLrcW60uNuSG/rhDycRlJ
-         m46EeG1QQdGzAHvJPzpiKhCqm5mW9oAjupFKiLV64c7TXm3jCSbtaJFJWtJGXfhcyX
-         b6sXKG6bUSGRwD53srroh1OC6Xtsn2X52X54Im0Q=
+        b=No0cN/cikvieO+dttZhaF7azM01KkNhlZdvDo4rNGRSEg6Vnp9quxQ6Wu/i5700yc
+         6V6jq0VFB33rDvo8xaEVDi/TR/n1VzOgBsne/AhVF/jDOMK8iY+Y9gD2HPRlc6o/xw
+         Dd9rFW9LZxWFl1mydNDDmj8sb1DYGNffr9WfyS9k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.10 008/158] mmc: meson-gx: Fix an error handling path in meson_mmc_probe()
+        stable@vger.kernel.org, stable@kernel.org,
+        Baokun Li <libaokun1@huawei.com>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.4 262/389] ext4: correct max_inline_xattr_value_size computing
 Date:   Tue, 23 Aug 2022 10:25:40 +0200
-Message-Id: <20220823080046.400346292@linuxfoundation.org>
+Message-Id: <20220823080126.525732860@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Baokun Li <libaokun1@huawei.com>
 
-commit b3e1cf31154136da855f3cb6117c17eb0b6bcfb4 upstream.
+commit c9fd167d57133c5b748d16913c4eabc55e531c73 upstream.
 
-The commit in Fixes has introduced a new error handling which should goto
-the existing error handling path.
-Otherwise some resources leak.
+If the ext4 inode does not have xattr space, 0 is returned in the
+get_max_inline_xattr_value_size function. Otherwise, the function returns
+a negative value when the inode does not contain EXT4_STATE_XATTR.
 
-Fixes: 19c6beaa064c ("mmc: meson-gx: add device reset")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/be4b863bacf323521ba3a02efdc4fca9cdedd1a6.1659855351.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: stable@kernel.org
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220616021358.2504451-4-libaokun1@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/meson-gx-mmc.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/ext4/inline.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/mmc/host/meson-gx-mmc.c
-+++ b/drivers/mmc/host/meson-gx-mmc.c
-@@ -1161,8 +1161,10 @@ static int meson_mmc_probe(struct platfo
- 	}
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -34,6 +34,9 @@ static int get_max_inline_xattr_value_si
+ 	struct ext4_inode *raw_inode;
+ 	int free, min_offs;
  
- 	ret = device_reset_optional(&pdev->dev);
--	if (ret)
--		return dev_err_probe(&pdev->dev, ret, "device reset failed\n");
-+	if (ret) {
-+		dev_err_probe(&pdev->dev, ret, "device reset failed\n");
-+		goto free_host;
-+	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	host->regs = devm_ioremap_resource(&pdev->dev, res);
++	if (!EXT4_INODE_HAS_XATTR_SPACE(inode))
++		return 0;
++
+ 	min_offs = EXT4_SB(inode->i_sb)->s_inode_size -
+ 			EXT4_GOOD_OLD_INODE_SIZE -
+ 			EXT4_I(inode)->i_extra_isize -
 
 

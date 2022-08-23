@@ -2,706 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631BC59E9DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2641459E9C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbiHWRe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
+        id S232296AbiHWRhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbiHWReW (ORCPT
+        with ESMTP id S231142AbiHWRgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:34:22 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CEE7D1FC;
-        Tue, 23 Aug 2022 08:13:12 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id u24so8226861lji.0;
-        Tue, 23 Aug 2022 08:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=CSqkYPAyRqO5N2lNYSGZuEqbPoNq5Wl5uPjFUZY3VVY=;
-        b=AojDAgiupfOinUSFXJcaDjw6/okbv+oyi9ROOekjZYsQOOYBjwu0aGal9qKluDj5/d
-         L5O1bHJ/cv7CBsC7fIe+LOc4UzEyGLMcDyeLQwzGu0027yh3d+uJYxnxvxn6Gql18UBa
-         gBNtaao99vpMe952jhn5gPhCCBCvj/EEwoGzko87BuNlF6MkzvJy82UfF240nRuM2ayp
-         WYSbC3iI9vk/sx0fc6v/qTrr14KC8XwR9xNymM1VwiCaDC7xjQiKdXO/aTtb54p16X5s
-         A2DpJazSuL0NTA1CJfZcDVvrEYsYoXdYDY/eoyxZFb3OaeUItHN4DRnrZMSJt4agnay5
-         z+XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=CSqkYPAyRqO5N2lNYSGZuEqbPoNq5Wl5uPjFUZY3VVY=;
-        b=xnkq5bKg7AUp7jbGMYScpsUDW+KrAoGAsczq0PSF2IlgHV5Vpr8Tg0OOGEZr0PtPQd
-         RCXxxJ1tR5rH6UvNmk0IaV5Q0PfbRy06Dwlsj6Vitba7RLDHMZICMqo+fVZqDf+z/BXi
-         elR0dv8rJPFSF88OaQCBn8uHvgWM/k/pGYM/zhXvdr/3zw6Q3tuOTLT63/SBJJikt7pR
-         anXeeWPMHbn8KDMJvL/ijnTur2vumbzd3Ck5d+VrRkw7XFJ3DPBrRHl+wNNwDLpRHQHZ
-         jS42UIWIqvje2ncmQnOaDfdv5WWULxgK393RAkLCJWC6YNUuyHbeI98MOEdbNqAbb7FO
-         1MpA==
-X-Gm-Message-State: ACgBeo3UmEMqhhW1guHEZmBYl8BN3vGZRoS/gp0ZpHbss09MGAAyqlDk
-        sDZVIm4MljLSr4UXRfEtKAo=
-X-Google-Smtp-Source: AA6agR6qmRIMAR+HkVQpAhUNRt4HZBDBepKIwQZfZ4zo6Kv6yRaT4S7PNza1ROMvQUqXaMQejW+qZg==
-X-Received: by 2002:a2e:9e0b:0:b0:261:d9ac:b533 with SMTP id e11-20020a2e9e0b000000b00261d9acb533mr569107ljk.74.1661267590346;
-        Tue, 23 Aug 2022 08:13:10 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id d20-20020ac241d4000000b0048b045a5c3asm73487lfi.201.2022.08.23.08.13.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 08:13:09 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 17:18:04 +0200
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jiri Kosina <jikos@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
-Subject: Re: [RESEND PATCH 1/2] HID: Add driver for RC Simulator Controllers
-Message-ID: <YwTvrNuulKx0SB6H@gmail.com>
-References: <20220822060936.769855-1-marcus.folkesson@gmail.com>
- <CAO-hwJ+3Yrr--cr=r5+jvs4A=A-cmDtrKQETo=YOYDC3nXTMBg@mail.gmail.com>
+        Tue, 23 Aug 2022 13:36:49 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511357B280;
+        Tue, 23 Aug 2022 08:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661267986; x=1692803986;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=JLTBgpD0w4DOztbvu40nEPqLSHOMc+AFfZEiH4LhLSw=;
+  b=f8MXqVUCuNJGbF+vGlaoYQIkIoV9msYHjJVx5UyVMKYhNLvcZ3ho/btg
+   rtoF8xFy+N7QUOIwsoohqy0h7W+rS29gKakWZvnk5kkBxjDtFZg6vMch1
+   tnhCuixnK9JiVD1L1RUJneVtbn3Iqtln8kBramZ650ek+UGQ3vy9coVCc
+   JhH3cucWpQmcAntsO/4TVCur1qysbV+bL4PnllZDz9UigOJEhBxIUM3Ns
+   35JDfEuvEEYNMuKV07X3m2W41a7xKRQyvzcq8q588Wk/HODX/0QdmfG0D
+   pySsve4aDMpsxYYcRsLbZnn8slyT/23u3u5s2TA6T9bJOog68eTfdtgv5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293715984"
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="293715984"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 08:19:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="586031079"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga006.jf.intel.com with ESMTP; 23 Aug 2022 08:19:45 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 23 Aug 2022 08:19:45 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 23 Aug 2022 08:19:44 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 23 Aug 2022 08:19:44 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 23 Aug 2022 08:19:44 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b15O7kPI8wZrg8z4pELijknddONFFpEp5A94Ss32Q3RdTc4VdrMun8/+w/psgcgCBTasdETNhRlBA+c/Hl7HlZVg4mq5bE15XroGdigDv8mlhaCoW8zxk+1m8HRPZHcjso6KD3Uk2ugTP5D0ct6biCTocd//ywtiW1rRPx5nfv8Y0TaIrAqZs2fN2tOw0mmV5DOSkOE/X+RIP86kKmOvI4Y5sUr6YqskWsAZmg0PQLzwGjG8l57sEbyDEcSB0Q7wfvwSU0SwAcCpjIHOLSdpr9Mxoe6hFnSRBktl5jEAAAD83bTu8csuxRRrPRxxpGrHQMqO8C2ogh80pnlV9thkXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P7gLIm8ygTt9oky89G7cI8SV3vMlTS8ukUBe3YhG2og=;
+ b=goAh2DPZ95yIv/XEkE+Fe3LgcKVjMt8FPkvx7dppeMxdz0e5niET4nahDSXJi21X5txSdml5bO781VXABgugQ037qJK0DnXDX20M9BjyuFFN5T1OqUsQO1v1yTEOwyhPnPWFkyqBrwRPTOtg1jFF9ooT1kxqAJnjYBwyrWtwi3DyXSp9pP4CVvHXCEv21AxTWNCQPZ09RG0NPluYHtp1tUSO4c118Ix0ABy1oxESEAkLxIsIXShi27ChMi6LFDq+cLtS8wGEMXBmbQlv5WoeR8N+FXYtlED/EQaxP7NW0cp5qGHIPUIndPQDThcDXwOPWb7gNT0KO1uA4MzdC63wCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
+ by DM6PR11MB2714.namprd11.prod.outlook.com (2603:10b6:5:ce::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Tue, 23 Aug
+ 2022 15:19:42 +0000
+Received: from CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::28c9:82b2:cf83:97c8]) by CO1PR11MB4914.namprd11.prod.outlook.com
+ ([fe80::28c9:82b2:cf83:97c8%8]) with mapi id 15.20.5546.024; Tue, 23 Aug 2022
+ 15:19:42 +0000
+Message-ID: <0056a39d-d7dc-34ea-3a71-6d5d3835c2d5@intel.com>
+Date:   Tue, 23 Aug 2022 08:19:39 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1] drivers/net/ethernet: check return value of e1e_rphy()
+Content-Language: en-US
+To:     lily <floridsleeves@gmail.com>, <intel-wired-lan@lists.osuosl.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <anthony.l.nguyen@intel.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+References: <20220823060200.1452663-1-floridsleeves@gmail.com>
+From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
+In-Reply-To: <20220823060200.1452663-1-floridsleeves@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0226.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::21) To CO1PR11MB4914.namprd11.prod.outlook.com
+ (2603:10b6:303:90::24)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="O6mxBkcZjd/3ARLA"
-Content-Disposition: inline
-In-Reply-To: <CAO-hwJ+3Yrr--cr=r5+jvs4A=A-cmDtrKQETo=YOYDC3nXTMBg@mail.gmail.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6bbf82a3-c1f3-47af-3360-08da851ae770
+X-MS-TrafficTypeDiagnostic: DM6PR11MB2714:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OUI+Kd/7HZcyIIY7Gtj0gD+Fhms0zb6tWeMEWoy6ajQxSabS7eeLGO0jMxb4WFFjYdYyLPjsey2MJPPCK6Nfqp/fOI3SuCKIMMsmtClNHZUZ7CqcxhKqpQyDpj2o+z2FMYR+xHIaYRZ3/6Sw8arZ/MBPOOyevHU04kb2RcL6d6+yl7yCW/Idp4O64rXVuuaxPQBGibPzc0wBbQ7cAhgBMSYoaaYezJ+1WUmChVKKXKb/ry3MwVnWTgWJkQBa30hejfWdjx/Ar5bSGO0HZh8+U7FmpjNrNKLfNLA4aZiImR6Zqg4cE8miSrRHdjdZyZ3nHgY5JUmDmum5TxIRenAxE/YjqKAvgU/FZop1YYTK17+Oeuv/0XhcsNKbY/jE9Dl21IZYyiDrJUd6pH7oksw3nJTSS4PbC1NTQeNyeXJJepvMLGe+CHFZNJL3FYzRvHgzNk/4+yWjRyAMDoT/gwcKJTkZgbJ1i/SVMk6XRRMaJfa9r/7eF8SqUHUVKBZhJHL4RuAVjgBOXebIq9OLOBd7Ip/8S4ufggM5kplI2tRoj+khsTkUVOe1wzamIZXW4GEkoUDiBWOTYOe/PQswCw0L+y/0+aXZ/pewC8N9RuxB9Rj+ue7/5fs31P6VUV+BKTz9OIz9lZ9SUirgkRQiONGwlQF6HTqA4mBMdcuUGgFh3miLtG5ONUhxddU8HAvgmsh8woubMtRI7sp3fozLsF4KyuWMhTWf7D9VJ8V4d+3ATFggDdWNjtdzJBxC60yfA3Krflbfi3ZJ5tEy+U19l6BMVNPEOLM7MBkBip5C4bdCfd1AJkOjSh1pxEmuGqXdu2cgljRX7beqcbvBGSecDt5gqw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(136003)(366004)(346002)(396003)(39860400002)(66476007)(4326008)(8676002)(66556008)(66946007)(36756003)(38100700002)(82960400001)(31686004)(86362001)(31696002)(478600001)(8936002)(6512007)(83380400001)(26005)(186003)(6486002)(6666004)(966005)(41300700001)(6506007)(316002)(53546011)(2906002)(44832011)(2616005)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TTlnWEtMMmxtam16YzR1b1E4Z0x3UXNTcFlBaHNabE5ZdXBiWW1NOEtZbW95?=
+ =?utf-8?B?K2VFUXVTUU1QcGprdGwxZUpPZ0V4WTJ0VDdXWTVaTEk1eGY0eDA2azR1aFg4?=
+ =?utf-8?B?MzEyZWo4TGlDd3BNbzcxcitmWWQrM1d3d0w1VUFTYzkyUzhqTDFVd3hsenBv?=
+ =?utf-8?B?YmxWcVZZRndiVWNvK051MVorNXllN2I2NDlkSnFEUVg2ak13dHpOSHJxUzN6?=
+ =?utf-8?B?Ym44MHc5WjN3Ymc5aHc0U1MxWWRsUEVmaDdLcjNrWFhHeWRzZG1kekdOWkVk?=
+ =?utf-8?B?NWdtWVc3Z3JQTTRlYzBPVWZHZzU0cjhGeXFaUm5hSWF6RTM4Q3ZQd1kzNVFu?=
+ =?utf-8?B?TXJhb25HeU9pTVRsaDA4L3FLbkFjblR2b1k0VzhlaTY5TzBvTFdRc3RLL0Vo?=
+ =?utf-8?B?MGRrRm5Ma1BRcExwOW5YVkdKMHZ3OUVKNlR4TlFoaXZ3MlB6VUJpSnBpRTZu?=
+ =?utf-8?B?NUppK0NXalpKUDQxT3BiOFlnYi91eXhCYVhVVk4xcU9SLzN6RlBnSFZhMElF?=
+ =?utf-8?B?NUZMaEprUEYzeVp0RmxGOTU2U21WekhDemhveGFVYzhieWc0aWZSTmcwQkUx?=
+ =?utf-8?B?TmhxUHV1d2tmT2Myd01RY1JDc1pHMzZuQWROazU5ZENqcDk1cHh2aHc2Wi83?=
+ =?utf-8?B?UFFQTjhqMlV0alF2TU53akpVQ0lVNUFSUkMxUk1aK3h2ZTNEb3RLKzVuSTVj?=
+ =?utf-8?B?Mng2MGRVa1V2WGJpSzRKTlA3ZXJ6SGF3c3dyMUVVMHg5WHlvdmRtVzNHa1J6?=
+ =?utf-8?B?ZTA0d3NCWUtnT1ZQbzJlWGNiYTRxV3cveG5RTmp1c1pXd1UwdU9Md3M4Kysx?=
+ =?utf-8?B?dHhMbVFpd2wzUk44QmZ5bTUzZU5vSXl0cWJvaUZ4S2hRR2NrZWwzK0pmcGZa?=
+ =?utf-8?B?THVWanJ6NW96ejFlL3J5TmJpZGo1djJoNWVFM0g5WWE4ODhqS25JbkxXRzdj?=
+ =?utf-8?B?WHd4ZXFXa2ViamliYW5wS3B2dUIrVzRJMi8wYm5tQk5Gd25LNWZseSs1ZFhh?=
+ =?utf-8?B?WWtnL1F1ckdjWWJYZm44Wk5ldGdvVHRqYTlGUlpVR0FTZ0lzcW5tSzRWcmU0?=
+ =?utf-8?B?TjZpdDZxMUpQZFNiSXVWdnJEdXFzb29iQXUwM2hpYStNWVlPLzlzaGtaTUhQ?=
+ =?utf-8?B?SDFoaHFOZXBJdzZvTkROR2V3VWM3VDV5Z1J4czJ1ZnBEREFsc0hEQjVMMXNW?=
+ =?utf-8?B?Y2VnNXY0NmVQcWhBVjY0UTVCNUl0ZzlLa1ZTYW10MTF1TUVybmJxbDJlMGx5?=
+ =?utf-8?B?RHQ3S3JHZENqR1doblBZakt2dVpUTmxTZ0tWdytNNXRDQ1dsOWZVTDVkNFV6?=
+ =?utf-8?B?QWlaZnFka2NFeWRkNjFJSWZUODJTV2J3WnNpbDd6SGV6U2g4TFhUY3VsWDN2?=
+ =?utf-8?B?V0wyb1hzMW1VVndvM2NvaG1rT05ZcDMxM1JyQS9pbXhjbG9XeHhLTllQQmdq?=
+ =?utf-8?B?c2VCTGh0eHVCbHF1YzNxdFZCeFUzY0orT1ZtSjhpREVMNk1jcWhtOGhRS3Fx?=
+ =?utf-8?B?Sm9VdDB1K1grenFsdUJqZjBuaThvQlJtRFJLQlBNb0ltYnpOcmpHcFlreFBN?=
+ =?utf-8?B?UXRIQUE3bFR6QW1WdDZieFdRWko4QWtsVWdZd2YvRDQzOW1pTXptM0pjTVVa?=
+ =?utf-8?B?MmNWVWd1R2RLSjB5TTExM0VZMkloNG9oaG5jb3lZWDNhcEdWV2x1dnp4cWRI?=
+ =?utf-8?B?TEtVWVEyWnRCT1hoOHhXUThmcm8rUUZDR0dna1VRbHBwOUMvMnFsR0I4dTRp?=
+ =?utf-8?B?TVZ1THVGeVFjQTY4Wm1SOUE3NUx4RVJSUWVBalZ3U2ZaSXVSV2FaNk1MLzlt?=
+ =?utf-8?B?d3VLSWhKZThwZEpYUFBZYWdGcEQxd1lJZUpISFBzOWJSRWRndFlyZklaKzhD?=
+ =?utf-8?B?bkRwOXdzeG12djhxT3JQRWdpcXc3SVNycHA4RU81VXUzRlFYdC9nSGdGaVha?=
+ =?utf-8?B?M0hGb1FYbnhDdnVIdlZnazV3dUY3NGlBQS91U2RkYVZiM1d3T0d5N3ZXeUFn?=
+ =?utf-8?B?aG5aYzdabmNOTkpMaTk1SjczZDdVSEptZGdsaWF1cytjQzFkVExCSXh6aGN0?=
+ =?utf-8?B?OWYrcElVMFd5OVRNYnMzYWNHSkZWMHZyUkpxRmJ0YkVpVFhjd0RNeFVoSXhR?=
+ =?utf-8?B?czhFNXRjZ0JPQTYxQ01uYVh2bDBiSm16R0x0c3pXb2pRMmV5QkNWRzB1ckFS?=
+ =?utf-8?B?b3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bbf82a3-c1f3-47af-3360-08da851ae770
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 15:19:42.6598
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b65ZAVat7G4NVISd32MOOHpNKyKc6Fpf44+AixULED7XgvwEw0Sg/eeTgD8dexbYw7xdnWQOQ1+GOXLXuwcr/M9pMnPvAeCQw0ONCSrFBv8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2714
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/22/2022 11:02 PM, lily wrote:
+> e1e_rphy() could return error value, which need to be checked.
 
---O6mxBkcZjd/3ARLA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for having a look at the e1000e driver. Was there some bug you 
+found or is this just a fix based on a tool or observation?
 
-Thank you  Benjamin,
+If a tool was used, what tool?
 
-On Tue, Aug 23, 2022 at 11:49:59AM +0200, Benjamin Tissoires wrote:
-> Hi Marcus,
->=20
-> [and sorry for the delay in the review of your patches]
->=20
-> On Mon, Aug 22, 2022 at 8:04 AM Marcus Folkesson
-> <marcus.folkesson@gmail.com> wrote:
-> >
-> > Several RC Simulator Controllers are HID compliant with similar
-> > interface.
-> >
-> > Add support for these controllers:
-> >  - Phoenix RC (HID variant)
-> >  - Car VRC2.0
-> >  - Real Flight G5/G6/G7
-> >  - Aero Fly, FMS
-> >  - OrangeRX FrSky
-> >
-> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> > ---
-> >  Documentation/hid/index.rst |   1 +
-> >  Documentation/hid/rcsim.rst | 142 ++++++++++++++++
-> >  drivers/hid/Kconfig         |  11 ++
-> >  drivers/hid/Makefile        |   1 +
-> >  drivers/hid/hid-ids.h       |   5 +
-> >  drivers/hid/hid-rcsim.c     | 315 ++++++++++++++++++++++++++++++++++++
-> >  6 files changed, 475 insertions(+)
-> >  create mode 100644 Documentation/hid/rcsim.rst
-> >  create mode 100644 drivers/hid/hid-rcsim.c
-> >
-> > diff --git a/Documentation/hid/index.rst b/Documentation/hid/index.rst
-> > index e50f513c579c..e5813d264f37 100644
-> > --- a/Documentation/hid/index.rst
-> > +++ b/Documentation/hid/index.rst
-> > @@ -17,3 +17,4 @@ Human Interface Devices (HID)
-> >     hid-alps
-> >     intel-ish-hid
-> >     amd-sfh-hid
-> > +   rcsim
-> > diff --git a/Documentation/hid/rcsim.rst b/Documentation/hid/rcsim.rst
-> > new file mode 100644
-> > index 000000000000..1a031f7189cb
-> > --- /dev/null
-> > +++ b/Documentation/hid/rcsim.rst
-> > @@ -0,0 +1,142 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +rcsim - RC Simulator Controllers
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +:Author: Marcus Folkesson <marcus.folkesson@gmail.com>
-> > +
-> > +This driver let you use your own RC controller plugged
-> > +into your computer using an HID compatible USB dongle.
-> > +
-> > +There are several HID compatible USB dongles from different
-> > +vendors. The driver currently supports:
-> > +
-> > +- Phoenix RC (HID variant) (8ch)
-> > +- Car VRC2.0 (2ch)
-> > +- Real Flight G5/G6/G7 (6ch)
-> > +- Aero Fly, FMS (8ch)
-> > +- OrangeRX FrSky (6ch)
-> > +
-> > +Many RC controllers is able to configure which stick goes to which cha=
-nnel.
-> > +This is also configurable in most simulators, so a matching is not nec=
-essary.
-> > +
-> > +Supported dongles
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +PhoenixRC
-> > +----------
-> > +
-> > +The PhoenixRC has one HID compatible variant which is supported by thi=
-s driver.
-> > +The controller has support for 8 analog channels.
-> > +
-> > +The driver is generating the following input event for on channels:
-> > +
-> > ++---------+----------------+
-> > +| Channel |      Event     |
-> > ++=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D+
-> > +|     1   |  ABS_Y         |
-> > ++---------+----------------+
-> > +|     2   |  ABS_X         |
-> > ++---------+----------------+
-> > +|     3   |  ABS_RY        |
-> > ++---------+----------------+
-> > +|     4   |  ABS_RX        |
-> > ++---------+----------------+
-> > +|     5   |  ABS_RUDDER    |
-> > ++---------+----------------+
-> > +|     6   |  ABS_THROTTLE  |
-> > ++---------+----------------+
-> > +|     7   |  ABS_Z         |
-> > ++---------+----------------+
-> > +|     8   |  ABS_RZ        |
-> > ++---------+----------------+
-> > +
-> > +VRC2.0
-> > +----------
-> > +VRC2.0 is a controller for RC Cars.
-> > +The controller has support for 2 analog channels.
-> > +
-> > +The driver is generating the following input event for on channels:
-> > +
-> > ++---------+----------------+
-> > +| Channel |      Event     |
-> > ++=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D+
-> > +|     1   |  ABS_GAS       |
-> > ++---------+----------------+
-> > +|     2   |  ABS_WHEEL     |
-> > ++---------+----------------+
-> > +
-> > +RealFlight
-> > +----------
-> > +
-> > +This driver supports Realflight G4-G7 and above
-> > +The controller has support for 4 analog channels and two buttons.
-> > +
-> > +The driver is generating the following input event for on channels:
-> > +
-> > ++---------+----------------+
-> > +| Channel |      Event     |
-> > ++=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D+
-> > +|     1   |  ABS_Y         |
-> > ++---------+----------------+
-> > +|     2   |  ABS_X         |
-> > ++---------+----------------+
-> > +|     3   |  ABS_RY        |
-> > ++---------+----------------+
-> > +|     4   |  ABS_RX        |
-> > ++---------+----------------+
-> > +|     5   |  BTN_A         |
-> > ++---------+----------------+
-> > +|     6   |  BTN_B         |
-> > ++---------+----------------+
-> > +
-> > +XTR+G2+FMS Controllers
-> > +--------------------------------
-> > +
-> > +The controllers has support for 8 analog channels.
-> > +
-> > +The driver is generating the following input event for on channels:
-> > +
-> > ++---------+----------------+
-> > +| Channel |      Event     |
-> > ++=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D+
-> > +|     1   |  ABS_Y         |
-> > ++---------+----------------+
-> > +|     2   |  ABS_X         |
-> > ++---------+----------------+
-> > +|     3   |  ABS_RY        |
-> > ++---------+----------------+
-> > +|     4   |  ABS_RX        |
-> > ++---------+----------------+
-> > +|     5   |  ABS_RUDDER    |
-> > ++---------+----------------+
-> > +|     6   |  ABS_THROTTLE  |
-> > ++---------+----------------+
-> > +|     7   |  ABS_Z         |
-> > ++---------+----------------+
-> > +|     8   |  ABS_RZ        |
-> > ++---------+----------------+
-> > +
-> > +OrangeRX
-> > +----------
-> > +
-> > +The controllers has support for 6 analog channels.
-> > +
-> > +The driver is generating the following input event for on channels:
-> > +
-> > ++---------+----------------+
-> > +| Channel |      Event     |
-> > ++=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D+
-> > +|     1   |  ABS_Y         |
-> > ++---------+----------------+
-> > +|     2   |  ABS_X         |
-> > ++---------+----------------+
-> > +|     3   |  ABS_RY        |
-> > ++---------+----------------+
-> > +|     4   |  ABS_RX        |
-> > ++---------+----------------+
-> > +|     5   |  ABS_RUDDER    |
-> > ++---------+----------------+
-> > +|     6   |  ABS_THROTTLE  |
-> > ++---------+----------------+
-> > diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> > index 70da5931082f..d8313d36086c 100644
-> > --- a/drivers/hid/Kconfig
-> > +++ b/drivers/hid/Kconfig
-> > @@ -957,6 +957,17 @@ config HID_RAZER
-> >         Support for Razer devices that are not fully compliant with the
-> >         HID standard.
-> >
-> > +config HID_RCSIM
-> > +       tristate "RC Simulator Controllers"
-> > +       depends on HID
-> > +       help
-> > +       Support for several HID compatible RC Simulator Controllers inc=
-luding
-> > +         - Phoenix RC
-> > +         - Car VRC2.0
-> > +         - Real Flight
-> > +         - Aero Fly, FMS
-> > +         - OrangeRX FrSky
-> > +
-> >  config HID_PRIMAX
-> >         tristate "Primax non-fully HID-compliant devices"
-> >         depends on HID
-> > diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-> > index cac2cbe26d11..85d50ab352ee 100644
-> > --- a/drivers/hid/Makefile
-> > +++ b/drivers/hid/Makefile
-> > @@ -102,6 +102,7 @@ obj-$(CONFIG_HID_PLANTRONICS)       +=3D hid-plantr=
-onics.o
-> >  obj-$(CONFIG_HID_PLAYSTATION)  +=3D hid-playstation.o
-> >  obj-$(CONFIG_HID_PRIMAX)       +=3D hid-primax.o
-> >  obj-$(CONFIG_HID_RAZER)        +=3D hid-razer.o
-> > +obj-$(CONFIG_HID_RCSIM)        +=3D hid-rcsim.o
->=20
-> General rule of thumbs, we try to name the drivers after their
-> vendors, unless we know we have a generic driver.
->=20
-> Here, this driver seems to be really tied to a small set of devices,
-> and thus I don't think we can call it "generic".
-
-Got it.
-
->=20
-> >  obj-$(CONFIG_HID_REDRAGON)     +=3D hid-redragon.o
-> >  obj-$(CONFIG_HID_RETRODE)      +=3D hid-retrode.o
-> >  obj-$(CONFIG_HID_ROCCAT)       +=3D hid-roccat.o hid-roccat-common.o \
-> > diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> > index d9eb676abe96..baf5f74d5bed 100644
-> > --- a/drivers/hid/hid-ids.h
-> > +++ b/drivers/hid/hid-ids.h
-> > @@ -1381,6 +1381,11 @@
-> >
-> >  #define USB_VENDOR_ID_MULTIPLE_1781    0x1781
-> >  #define USB_DEVICE_ID_RAPHNET_4NES4SNES_OLD    0x0a9d
-> > +#define USB_DEVICE_ID_PHOENIXRC        0x0898
-> > +#define USB_DEVICE_ID_REALFLIGHT       0x0e56
-> > +
-> > +#define USB_VENDOR_ID_DIPLING  0x0B9B
-> > +#define USB_DEVICE_ID_DIPLING_RCCONTROLLER     0x4012
-> >
-> >  #define USB_VENDOR_ID_DRACAL_RAPHNET   0x289b
-> >  #define USB_DEVICE_ID_RAPHNET_2NES2SNES        0x0002
-> > diff --git a/drivers/hid/hid-rcsim.c b/drivers/hid/hid-rcsim.c
-> > new file mode 100644
-> > index 000000000000..0f214cb5816a
-> > --- /dev/null
-> > +++ b/drivers/hid/hid-rcsim.c
-> > @@ -0,0 +1,315 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Driver for several HID compatible RC Simulator Controllers.
-> > + * Currently supported controllers are:
-> > + *
-> > + * - Phoenix RC (HID variant) (8ch)
-> > + * - Car VRC2.0 (2ch)
-> > + * - Real Flight G5/G6/G7 (6ch)
-> > + * - Aero Fly, FMS (8ch)
-> > + * - OrangeRX FrSky (6ch)
-> > + *
-> > + * Copyright (C) 2022 Marcus Folkesson <marcus.folkesson@gmail.com>
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/device.h>
-> > +#include <linux/input.h>
-> > +#include <linux/hid.h>
-> > +#include <linux/module.h>
-> > +#include <linux/usb.h>
-> > +
-> > +#include "hid-ids.h"
-> > +
-> > +/*
-> > + * Some of these VID/PID are probably "borrowed", so keep them locally=
- and
-> > + * do not populate hid-ids.h with those.
-> > + */
-> > +
-> > +/* PHOENIXRC Controlloer (HID variant) */
-> > +#define PHOENIXRC_VID  (USB_VENDOR_ID_MULTIPLE_1781)
-> > +#define PHOENIXRC_PID  (USB_DEVICE_ID_PHOENIXRC)
-> > +#define PHOENIXRC_DSIZE        (8)
-> > +
-> > +/* VRC2 Controlloer */
-> > +#define VRC2_VID       (0x07c0)
-> > +#define VRC2_PID       (0x1125)
-> > +#define VRC2_DSIZE     (7)
-> > +
-> > +/* Realflight G4-&7 and Above Controller */
-> > +#define REALFLIGHT_VID (USB_VENDOR_ID_MULTIPLE_1781)
-> > +#define REALFLIGHT_PID (USB_DEVICE_ID_REALFLIGHT)
-> > +#define REALFLIGHT_DSIZE       (8)
-> > +
-> > +#define REALFLIGHT_BTN_A       BIT(0)
-> > +#define REALFLIGHT_BTN_B       BIT(1)
-> > +
-> > +/* XTR+G2+FMS Controller */
-> > +#define XTRG2FMS_VID   (USB_VENDOR_ID_DIPLING)
-> > +#define XTRG2FMS_PID   (USB_DEVICE_ID_DIPLING_RCCONTROLLER)
-> > +#define XTRG2FMS_DSIZE (8)
-> > +
-> > +#define XTRG2FMS_X_HI  GENMASK(3, 2)
-> > +#define XTRG2FMS_Y_HI  GENMASK(1, 0)
-> > +#define XTRG2FMS_RX_HI GENMASK(7, 6)
-> > +#define XTRG2FMS_RY_HI GENMASK(5, 4)
-> > +#define XTRG2FMS_ALT1_HI       GENMASK(3, 2)
-> > +#define XTRG2FMS_ALT2_HI       GENMASK(1, 0)
-> > +
-> > +/* OrangeRX FrSky */
-> > +#define ORANGERX_VID   (0x0451)
-> > +#define ORANGERX_PID   (0x16a5)
-> > +#define ORANGERX_DSIZE (8)
-> > +
-> > +enum rcsim_controller {
-> > +       PHOENIXRC,
-> > +       VRC2,
-> > +       REALFLIGHT,
-> > +       XTRG2FMS,
-> > +       ORANGERX
-> > +};
-> > +
-> > +struct rcsim_priv {
-> > +       struct hid_device *hdev;
-> > +       struct input_dev *input;
-> > +       enum rcsim_controller controller;
-> > +       u8 alt;
-> > +};
-> > +
-> > +static int rcsim_open(struct input_dev *dev)
-> > +{
-> > +       struct rcsim_priv *priv =3D input_get_drvdata(dev);
-> > +
-> > +       return hid_hw_open(priv->hdev);
-> > +}
-> > +
-> > +static void rcsim_close(struct input_dev *dev)
-> > +{
-> > +       struct rcsim_priv *priv =3D input_get_drvdata(dev);
-> > +
-> > +       hid_hw_close(priv->hdev);
-> > +}
-> > +
-> > +static int rcsim_setup_input(struct rcsim_priv *priv)
-> > +{
-> > +       struct input_dev *input;
-> > +
-> > +       input =3D devm_input_allocate_device(&priv->hdev->dev);
-> > +       if (!input)
-> > +               return -ENOMEM;
-> > +
-> > +       input->id.bustype =3D priv->hdev->bus;
-> > +       input->id.vendor  =3D priv->hdev->vendor;
-> > +       input->id.product =3D priv->hdev->product;
-> > +       input->id.version =3D priv->hdev->bus;
-> > +       input->phys =3D priv->hdev->phys;
-> > +       input->uniq =3D priv->hdev->uniq;
-> > +       input->open =3D rcsim_open;
-> > +       input->close =3D rcsim_close;
-> > +
-> > +       input_set_drvdata(input, priv);
-> > +
-> > +       switch (priv->controller) {
-> > +       case PHOENIXRC:
-> > +               input_set_abs_params(input, ABS_X, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_Y, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_RX, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_RY, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_Z, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_RZ, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_RUDDER, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_THROTTLE, 0, 255, 0, 0);
-> > +               input->name =3D "RC Simuator Controller PhoenixRC";
-> > +               break;
-> > +       case VRC2:
-> > +               input_set_abs_params(input, ABS_GAS, 0, 2048, 0, 0);
-> > +               input_set_abs_params(input, ABS_WHEEL, 0, 2048, 0, 0);
-> > +               input->name =3D "RC Simuator Controller VRC2.0";
-> > +               break;
-> > +       case REALFLIGHT:
-> > +               input_set_abs_params(input, ABS_X, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_Y, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_RX, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_RY, 0, 1024, 0, 0);
-> > +               input_set_capability(input, EV_KEY, BTN_A);
-> > +               input_set_capability(input, EV_KEY, BTN_B);
-> > +               input->name =3D "RC Simuator Controller Realflight";
-> > +               break;
-> > +       case XTRG2FMS:
-> > +               input_set_abs_params(input, ABS_X, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_Y, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_RX, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_RY, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_Z, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_RZ, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_RUDDER, 0, 1024, 0, 0);
-> > +               input_set_abs_params(input, ABS_THROTTLE, 0, 1024, 0, 0=
-);
-> > +               input->name =3D "RC Simuator Controller AeroFly, FMS";
-> > +               priv->alt =3D 0;
-> > +               break;
-> > +       case ORANGERX:
-> > +               input_set_abs_params(input, ABS_X, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_Y, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_RX, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_RY, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_RUDDER, 0, 255, 0, 0);
-> > +               input_set_abs_params(input, ABS_THROTTLE, 0, 255, 0, 0);
-> > +               input->name =3D "RC Simuator Controller OrangeRX FrSky";
-> > +               break;
-> > +       };
-> > +
-> > +       priv->input =3D input;
-> > +       return input_register_device(priv->input);
-> > +}
->=20
-> You are basically rewriting hid-input.c, which is suboptimal.
-
-Ouch. I will have a look at hid-input, thanks.
-
->=20
-> I guess the report descriptor provided by these devices are basically
-> useless, and so you have to parse the reports yourself in the
-> raw_event callback.
-
-Yep.
-
->=20
-> But instead of manually doing that, why not overwrite the report
-> descriptor (with .rdesc_fixup) and declare here all of the data that
- Do you mean .report_fixup?
-
-> needs to be exported. You could remove basically everything in this
-> driver by just providing a fixed report descriptor.
-
-What you are aiming for is to fixup the report descriptor and let the
-generic hid-raw driver handle the rest, or do I get you wrong?
-
-How is the report mapped to certain events then?
-
-I do read at [1] but it is not obvious how to put it together.
-Most drivers I've looked at that is using .report_fixup just fix broken
-reports. I guess these reports are not "broken", just.. odd?
+For networking patches please follow the guidance at 
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
 
 
->=20
-> > +
-> > +static int rcsim_raw_event(struct hid_device *hdev,
-> > +                              struct hid_report *report,
-> > +                              u8 *raw_data, int size)
-> > +{
-> > +       struct rcsim_priv *priv =3D hid_get_drvdata(hdev);
-> > +       u16 value;
-> > +
-> > +       switch (priv->controller) {
-> > +       case PHOENIXRC:
-> > +               if (size !=3D PHOENIXRC_DSIZE)
-> > +                       break;
-> > +
-> > +               /* X, RX, Y and RY, RUDDER and THROTTLE are sent every =
-time */
-> > +               input_report_abs(priv->input, ABS_X, raw_data[2]);
-> > +               input_report_abs(priv->input, ABS_Y, raw_data[0]);
-> > +               input_report_abs(priv->input, ABS_RX, raw_data[4]);
-> > +               input_report_abs(priv->input, ABS_RY, raw_data[3]);
-> > +               input_report_abs(priv->input, ABS_RUDDER, raw_data[5]);
-> > +               input_report_abs(priv->input, ABS_THROTTLE, raw_data[6]=
-);
-> > +
-> > +               /* Z and RZ are sent every other time */
-> > +               if (priv->alt)
-> > +                       input_report_abs(priv->input, ABS_Z, raw_data[7=
-]);
-> > +               else
-> > +                       input_report_abs(priv->input, ABS_RZ, raw_data[=
-7]);
-> > +
-> > +               priv->alt ^=3D 1;
-> > +               break;
-> > +       case VRC2:
-> > +               if (size !=3D VRC2_DSIZE)
-> > +                       break;
-> > +               value =3D (raw_data[1] << 8 | raw_data[0]) & GENMASK(10=
-, 0);
-> > +               input_report_abs(priv->input, ABS_GAS, value);
-> > +               value =3D (raw_data[3] << 8 | raw_data[2]) & GENMASK(10=
-, 0);
-> > +               input_report_abs(priv->input, ABS_WHEEL, value);
-> > +               break;
-> > +       case REALFLIGHT:
-> > +               if (size !=3D REALFLIGHT_DSIZE)
-> > +                       break;
-> > +               input_report_abs(priv->input, ABS_X, raw_data[2]);
-> > +               input_report_abs(priv->input, ABS_Y, raw_data[1]);
-> > +               input_report_abs(priv->input, ABS_RX, raw_data[5]);
-> > +               input_report_abs(priv->input, ABS_RY, raw_data[3]);
-> > +               input_report_abs(priv->input, ABS_MISC, raw_data[4]);
-> > +               input_report_key(priv->input, BTN_A,
-> > +                               raw_data[7] & REALFLIGHT_BTN_A);
-> > +               input_report_key(priv->input, BTN_B,
-> > +                               raw_data[7] & REALFLIGHT_BTN_B);
-> > +               break;
-> > +       case XTRG2FMS:
-> > +               if (size !=3D XTRG2FMS_DSIZE)
-> > +                       break;
-> > +
-> > +               /* X, RX, Y and RY are sent every time */
-> > +               value =3D FIELD_GET(XTRG2FMS_X_HI, raw_data[3]);
-> > +               value =3D (value << 8) | raw_data[1];
-> > +               input_report_abs(priv->input, ABS_X, value);
-> > +
-> > +               value =3D FIELD_GET(XTRG2FMS_Y_HI, raw_data[3]);
-> > +               value =3D (value << 8) | raw_data[2];
-> > +               input_report_abs(priv->input, ABS_Y, value);
-> > +
-> > +               value =3D FIELD_GET(XTRG2FMS_RX_HI, raw_data[3]);
-> > +               value =3D (value << 8) | raw_data[0];
-> > +               input_report_abs(priv->input, ABS_RX, value);
-> > +
-> > +               value =3D FIELD_GET(XTRG2FMS_RY_HI, raw_data[3]);
-> > +               value =3D (value << 8) | raw_data[4];
-> > +               input_report_abs(priv->input, ABS_RY, value);
-> > +
-> > +               /* Z, RZ, RUDDER and THROTTLE are sent every other time=
- */
-> > +               value =3D FIELD_GET(XTRG2FMS_ALT1_HI, raw_data[7]);
-> > +               value =3D (value << 8) | raw_data[6];
-> > +               if (priv->alt)
-> > +                       input_report_abs(priv->input, ABS_Z, value);
-> > +               else
-> > +                       input_report_abs(priv->input, ABS_RUDDER, value=
-);
-> > +
-> > +               value =3D FIELD_GET(XTRG2FMS_ALT2_HI, raw_data[7]);
-> > +               value =3D (value << 8) | raw_data[5];
-> > +               if (priv->alt)
-> > +                       input_report_abs(priv->input, ABS_RZ, value);
-> > +               else
-> > +                       input_report_abs(priv->input, ABS_THROTTLE, val=
-ue);
-> > +
-> > +               priv->alt ^=3D 1;
-> > +               break;
-> > +       case ORANGERX:
-> > +               if (size !=3D ORANGERX_DSIZE)
-> > +                       break;
-> > +               input_report_abs(priv->input, ABS_X, raw_data[0]);
-> > +               input_report_abs(priv->input, ABS_Y, raw_data[2]);
-> > +               input_report_abs(priv->input, ABS_RX, raw_data[3]);
-> > +               input_report_abs(priv->input, ABS_RY, raw_data[1]);
-> > +               input_report_abs(priv->input, ABS_RUDDER, raw_data[5]);
-> > +               input_report_abs(priv->input, ABS_THROTTLE, raw_data[6]=
-);
-> > +               break;
-> > +       };
-> > +
-> > +       input_sync(priv->input);
-> > +       return 0;
-> > +}
-> > +
-> > +static int rcsim_probe(struct hid_device *hdev, const struct hid_devic=
-e_id *id)
-> > +{
-> > +       struct device *dev =3D &hdev->dev;
-> > +       struct rcsim_priv *priv;
-> > +       int ret;
-> > +
-> > +       if (!hid_is_using_ll_driver(hdev, &usb_hid_driver))
-> > +               return -ENODEV;
->=20
-> You are not accessing anything in the USB stack, so there is no need
-> to prevent regression tests that could inject uhid devices to your
-> drivers.
+> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> ---
+>   drivers/net/ethernet/intel/e1000e/phy.c | 14 +++++++++++---
+>   1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
+> index fd07c3679bb1..15ac302fdee0 100644
+> --- a/drivers/net/ethernet/intel/e1000e/phy.c
+> +++ b/drivers/net/ethernet/intel/e1000e/phy.c
+> @@ -2697,9 +2697,12 @@ static s32 e1000_access_phy_wakeup_reg_bm(struct e1000_hw *hw, u32 offset,
+>   void e1000_power_up_phy_copper(struct e1000_hw *hw)
+>   {
+>   	u16 mii_reg = 0;
+> +	int ret;
+>   
+>   	/* The PHY will retain its settings across a power down/up cycle */
+> -	e1e_rphy(hw, MII_BMCR, &mii_reg);
+> +	ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
+> +	if (ret)
+> +		return ret;
 
-Ok, thanks.
+Can't return value to a void declared function, did you even compile 
+test this?
 
->=20
-> Cheers,
-> Benjamin
->=20
+Maybe it should be like:
+     if (ret) {
+	// this is psuedo code
+         dev_warn(..., "PHY read failed during power up\n");
+         return;
+     }
 
-Best regards,
-Marcus Folkesson
+>   	mii_reg &= ~BMCR_PDOWN;
+>   	e1e_wphy(hw, MII_BMCR, mii_reg);
+>   }
+> @@ -2715,9 +2718,12 @@ void e1000_power_up_phy_copper(struct e1000_hw *hw)
+>   void e1000_power_down_phy_copper(struct e1000_hw *hw)
+>   {
+>   	u16 mii_reg = 0;
+> +	int ret;
+>   
+>   	/* The PHY will retain its settings across a power down/up cycle */
+> -	e1e_rphy(hw, MII_BMCR, &mii_reg);
+> +	ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
+> +	if (ret)
+> +		return ret;
 
-[1] https://www.usb.org/hid
+same here.
 
+>   	mii_reg |= BMCR_PDOWN;
+>   	e1e_wphy(hw, MII_BMCR, mii_reg);
+>   	usleep_range(1000, 2000);
+> @@ -3037,7 +3043,9 @@ s32 e1000_link_stall_workaround_hv(struct e1000_hw *hw)
+>   		return 0;
+>   
+>   	/* Do not apply workaround if in PHY loopback bit 14 set */
+> -	e1e_rphy(hw, MII_BMCR, &data);
+> +	ret_val = e1e_rphy(hw, MII_BMCR, &data);
+> +	if (ret_val)
+> +		return ret_val;
+>   	if (data & BMCR_LOOPBACK)
+>   		return 0;
+>   
 
---O6mxBkcZjd/3ARLA
-Content-Type: application/pgp-signature; name="signature.asc"
+Did any of the callers of the above function care about the return code 
+being an error value? This has been like this for a long time...
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmME76gACgkQiIBOb1ld
-UjLWGg//YV2eqhAwVheBoH6rccbk2c6fN/gazy2DVg+Mp0zpw94bCrFDSxHI1lCx
-2lMFzFkyK+wFcsvIxnu8zHApweDLlX0gzqKHfyNPyzY8ytmhQkCDD8kS00LEpUHu
-b+rvFdazKx4BuyFhwJh5laHObl/Uw59PhPVI/DFtRKM0DOzHunZ8Nm7atsGwk2+x
-J1bZTRxbP4sbxDIZyT2gcGGx4VC49zv39HhGTe5MAd+dt3+c/uQyz2Uoy2SYjxwM
-MQefR24kWKUJr3UsY1WXuC1vRLcfbt9fn+MASD/ynMgCeAk/mUSi6FvxtB5V2fE1
-aHbg70W1CBYkh8JUSAKTqiYyP9/8jYQxlIxTMxEXdlCnAGRNTMZ530Vi805IOnHF
-alysNc6e6EVNDCQxNuvC3hJFN9Ygc/pxiLNzV9JQF7EO2mo+OjFKk5ZSZmVMkOnp
-TDJud1dDCdhB5hk7/HR5ff4WF10C6BjWJcZitHWkV0+xr/uRrbZhiLU1n5NdDVrn
-G53S7KPVo1nrwWN4lZUVjIIQCYLlJOftuvRNtAtzDoO83WgPVDogrwZ7GzUhUTPO
-s5mL343VL0d+qamQ5pT203H8NqxxKOMK6jA1nCzFfW8LEqvEBTqvXgwE7x6zvcQd
-3W/fImHzwN01OKkFo7VTTCsjYrqAFUIJet5gkoIE84NRJN0uZW4=
-=WCti
------END PGP SIGNATURE-----
-
---O6mxBkcZjd/3ARLA--

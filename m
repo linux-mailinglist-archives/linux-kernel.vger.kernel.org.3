@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8D159DDE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF69859DBD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353135AbiHWKKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S1354321AbiHWKVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352792AbiHWKCb (ORCPT
+        with ESMTP id S1352911AbiHWKJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648427C326;
-        Tue, 23 Aug 2022 01:50:58 -0700 (PDT)
+        Tue, 23 Aug 2022 06:09:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BE270E7C;
+        Tue, 23 Aug 2022 01:55:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72C7E6123D;
-        Tue, 23 Aug 2022 08:50:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F355C433D6;
-        Tue, 23 Aug 2022 08:50:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DDC061561;
+        Tue, 23 Aug 2022 08:55:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D0B6C433D6;
+        Tue, 23 Aug 2022 08:55:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244656;
-        bh=OXoMqLlZZZMsi5G+sDeP4/86SNRjwZBF89nVavGfgew=;
+        s=korg; t=1661244927;
+        bh=ItqQFXDDWb3IjtNXUtXeNW31x5hR5NXcdcX8U4BxumU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zFqnopMjTA8+J5sx6ytpqgo3FA2/QCk1qm+y67hWJ56uqwL6uKYdRb7vW6Pzyvtsv
-         UFwzQm1hjy8aFBJIS097q7RTC0SMcv1kt5TLmdB718IiQEQhTbrwO2y+74eAMly2AS
-         sB70oVp/n3KJ16qO8iWGDcptAoKqelp6aUFSXY/w=
+        b=PHgwiq/qW2taCTcvf94myMNk/RRMSzqNdaZ2d9bN+CggEchecQPpYA9/byL1ULmxG
+         L+5dxxuuVGvjNNpWv1LG27pZqmIf+E4Cw6icSUqsCUE+om1Q2nUlTEU89iTn7WENaE
+         gBnPEmHq6/pwrhJ4/9U0KKwOqqP1fXxMkDJzcZyY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ronald Wahl <ronald.wahl@raritan.com>,
-        Jose Alonso <joalonsof@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 171/229] Revert "net: usb: ax88179_178a needs FLAG_SEND_ZLP"
+        stable@vger.kernel.org, Stanley Chu <stanley.chu@mediatek.com>,
+        Po-Wen Kao <powen.kao@mediatek.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 173/244] scsi: ufs: ufs-mediatek: Fix the timing of configuring device regulators
 Date:   Tue, 23 Aug 2022 10:25:32 +0200
-Message-Id: <20220823080059.743742261@linuxfoundation.org>
+Message-Id: <20220823080105.047904117@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,105 +56,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jose Alonso <joalonsof@gmail.com>
+From: Po-Wen Kao <powen.kao@mediatek.com>
 
-commit 6fd2c17fb6e02a8c0ab51df1cfec82ce96b8e83d upstream.
+[ Upstream commit 3fd23b8dfb54d9b74eba6dfdd3225db3ac116785 ]
 
-This reverts commit 36a15e1cb134c0395261ba1940762703f778438c.
+Currently the LPM configurations of device regulators may not work since
+VCC is not disabled yet while ufs_mtk_vreg_set_lpm() is executed.
 
-The usage of FLAG_SEND_ZLP causes problems to other firmware/hardware
-versions that have no issues.
+Fix this by changing the timing of invoking ufs_mtk_vreg_set_lpm().
 
-The FLAG_SEND_ZLP is not safe to use in this context.
-See:
-https://patchwork.ozlabs.org/project/netdev/patch/1270599787.8900.8.camel@Linuxdev4-laptop/#118378
-The original problem needs another way to solve.
-
-Fixes: 36a15e1cb134 ("net: usb: ax88179_178a needs FLAG_SEND_ZLP")
-Cc: stable@vger.kernel.org
-Reported-by: Ronald Wahl <ronald.wahl@raritan.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216327
-Link: https://bugs.archlinux.org/task/75491
-Signed-off-by: Jose Alonso <joalonsof@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220616053725.5681-5-stanley.chu@mediatek.com
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/ax88179_178a.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/scsi/ufs/ufs-mediatek.c | 58 ++++++++++++++++++++++++++++++---
+ 1 file changed, 53 insertions(+), 5 deletions(-)
 
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1707,7 +1707,7 @@ static const struct driver_info ax88179_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 4e53857605de..9f1d69d33149 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -949,7 +949,6 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 		 * ufshcd_suspend() re-enabling regulators while vreg is still
+ 		 * in low-power mode.
+ 		 */
+-		ufs_mtk_vreg_set_lpm(hba, true);
+ 		err = ufs_mtk_mphy_power_on(hba, false);
+ 		if (err)
+ 			goto fail;
+@@ -973,12 +972,13 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ {
+ 	int err;
+ 
++	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL)
++		ufs_mtk_vreg_set_lpm(hba, false);
++
+ 	err = ufs_mtk_mphy_power_on(hba, true);
+ 	if (err)
+ 		goto fail;
+ 
+-	ufs_mtk_vreg_set_lpm(hba, false);
+-
+ 	if (ufshcd_is_link_hibern8(hba)) {
+ 		err = ufs_mtk_link_set_hpm(hba);
+ 		if (err)
+@@ -1139,9 +1139,57 @@ static int ufs_mtk_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++int ufs_mtk_system_suspend(struct device *dev)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++	int ret;
++
++	ret = ufshcd_system_suspend(dev);
++	if (ret)
++		return ret;
++
++	ufs_mtk_vreg_set_lpm(hba, true);
++
++	return 0;
++}
++
++int ufs_mtk_system_resume(struct device *dev)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	ufs_mtk_vreg_set_lpm(hba, false);
++
++	return ufshcd_system_resume(dev);
++}
++
++int ufs_mtk_runtime_suspend(struct device *dev)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++	int ret = 0;
++
++	ret = ufshcd_runtime_suspend(dev);
++	if (ret)
++		return ret;
++
++	ufs_mtk_vreg_set_lpm(hba, true);
++
++	return 0;
++}
++
++int ufs_mtk_runtime_resume(struct device *dev)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	ufs_mtk_vreg_set_lpm(hba, false);
++
++	return ufshcd_runtime_resume(dev);
++}
++
+ static const struct dev_pm_ops ufs_mtk_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(ufshcd_system_suspend, ufshcd_system_resume)
+-	SET_RUNTIME_PM_OPS(ufshcd_runtime_suspend, ufshcd_runtime_resume, NULL)
++	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
++				ufs_mtk_system_resume)
++	SET_RUNTIME_PM_OPS(ufs_mtk_runtime_suspend,
++			   ufs_mtk_runtime_resume, NULL)
+ 	.prepare	 = ufshcd_suspend_prepare,
+ 	.complete	 = ufshcd_resume_complete,
  };
-@@ -1720,7 +1720,7 @@ static const struct driver_info ax88178a
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1733,7 +1733,7 @@ static const struct driver_info cypress_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1746,7 +1746,7 @@ static const struct driver_info dlink_du
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1759,7 +1759,7 @@ static const struct driver_info sitecom_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1772,7 +1772,7 @@ static const struct driver_info samsung_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1785,7 +1785,7 @@ static const struct driver_info lenovo_i
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1798,7 +1798,7 @@ static const struct driver_info belkin_i
- 	.link_reset = ax88179_link_reset,
- 	.reset	= ax88179_reset,
- 	.stop	= ax88179_stop,
--	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D24159DBD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24ABC59E264
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353449AbiHWKNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S1358286AbiHWLpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352739AbiHWKGN (ORCPT
+        with ESMTP id S1358378AbiHWLln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761CD7D1E0;
-        Tue, 23 Aug 2022 01:52:42 -0700 (PDT)
+        Tue, 23 Aug 2022 07:41:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23489C9EBC;
+        Tue, 23 Aug 2022 02:29:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 022DDB81C1C;
-        Tue, 23 Aug 2022 08:52:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53EAEC433C1;
-        Tue, 23 Aug 2022 08:52:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A27C61367;
+        Tue, 23 Aug 2022 09:29:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312EFC43470;
+        Tue, 23 Aug 2022 09:29:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244759;
-        bh=3kW5zkmIQhfzV/FZ21DIxuwrovQVfGfLbePBlM5UX/s=;
+        s=korg; t=1661246947;
+        bh=em22IH7EYocoaprgJVVC05+5sXO5hU+3UnK+SmO3Uak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y91aMxgnjtKzO995JZfL7goBKWQOlG8elAK6yYuZXOuIIp59JVHqcuryv90+6YlWj
-         kyQVayRVXLgLM7nFjBl395iHNlT4c6CGZfor2MOqmgH38WgSIXu4VaHSKRJcLq80jy
-         vsRZ1xN2CECiaXeziSORaLCPXXjE5LDHlfTkLI9s=
+        b=bqTwxAVl82HcjcJWbpSHqGHNCZtuI0H6+rB5xx9MV+SD8poZr0fFgT3f0HJqRluzz
+         +PxFym1Su/QceMDLF3DG69l9Mgvu+QdWns2X16cSPjDbhzgFCrxnu/5zDUyJdyV7I4
+         JuO5e4iFbXYP97PuyazHWxWA8LA+hBfEXZDd9Li8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Xianwei <zhang.xianwei8@zte.com.cn>,
-        Yi Wang <wang.yi59@zte.com.cn>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 4.14 186/229] NFSv4.1: RECLAIM_COMPLETE must handle EACCES
-Date:   Tue, 23 Aug 2022 10:25:47 +0200
-Message-Id: <20220823080100.258722355@linuxfoundation.org>
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.4 270/389] dm writecache: set a default MAX_WRITEBACK_JOBS
+Date:   Tue, 23 Aug 2022 10:25:48 +0200
+Message-Id: <20220823080126.843954410@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit e35a5e782f67ed76a65ad0f23a484444a95f000f upstream.
+commit ca7dc242e358e46d963b32f9d9dd829785a9e957 upstream.
 
-A client should be able to handle getting an EACCES error while doing
-a mount operation to reclaim state due to NFS4CLNT_RECLAIM_REBOOT
-being set. If the server returns RPC_AUTH_BADCRED because authentication
-failed when we execute "exportfs -au", then RECLAIM_COMPLETE will go a
-wrong way. After mount succeeds, all OPEN call will fail due to an
-NFS4ERR_GRACE error being returned. This patch is to fix it by resending
-a RPC request.
+dm-writecache has the capability to limit the number of writeback jobs
+in progress. However, this feature was off by default. As such there
+were some out-of-memory crashes observed when lowering the low
+watermark while the cache is full.
 
-Signed-off-by: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
-Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
-Fixes: aa5190d0ed7d ("NFSv4: Kill nfs4_async_handle_error() abuses by NFSv4.1")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+This commit enables writeback limit by default. It is set to 256MiB or
+1/16 of total system memory, whichever is smaller.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4proc.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/md/dm-writecache.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -8371,6 +8371,9 @@ static int nfs41_reclaim_complete_handle
- 		rpc_delay(task, NFS4_POLL_RETRY_MAX);
- 		/* fall through */
- 	case -NFS4ERR_RETRY_UNCACHED_REP:
-+	case -EACCES:
-+		dprintk("%s: failed to reclaim complete error %d for server %s, retrying\n",
-+			__func__, task->tk_status, clp->cl_hostname);
- 		return -EAGAIN;
- 	case -NFS4ERR_BADSESSION:
- 	case -NFS4ERR_DEADSESSION:
+--- a/drivers/md/dm-writecache.c
++++ b/drivers/md/dm-writecache.c
+@@ -20,7 +20,7 @@
+ 
+ #define HIGH_WATERMARK			50
+ #define LOW_WATERMARK			45
+-#define MAX_WRITEBACK_JOBS		0
++#define MAX_WRITEBACK_JOBS		min(0x10000000 / PAGE_SIZE, totalram_pages() / 16)
+ #define ENDIO_LATENCY			16
+ #define WRITEBACK_LATENCY		64
+ #define AUTOCOMMIT_BLOCKS_SSD		65536
 
 

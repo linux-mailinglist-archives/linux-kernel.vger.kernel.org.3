@@ -2,167 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3605959CCAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B39D59CCAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238364AbiHWABK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 20:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        id S238532AbiHWABa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 20:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiHWABF (ORCPT
+        with ESMTP id S238414AbiHWABV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 20:01:05 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CAE4F6BE
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:01:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661212864; x=1692748864;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ytl9LcAEMMGeKBrWeDNoe+fwsZtNZXDjTlB4EanrOUc=;
-  b=at3vKJKx8gXEXaeeXmcky9tZtdIMbJLys1n7XMa58qWK4mr7ZZg5nKnK
-   ium0JI4q0hUrivhe4UE/Jn78+KbtdM0EvexM22oTFrT85FDGvkEjS1YWa
-   g0c8Oouq3uxAdd9vy4YGnXU39ji1JRYgHaNuP6V+a6lpvIC9QL9gUqR6M
-   s=;
-X-IronPort-AV: E=Sophos;i="5.93,255,1654560000"; 
-   d="scan'208";a="1047105320"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:00:49 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-51ba86d8.us-west-2.amazon.com (Postfix) with ESMTPS id 3178A98B8D;
-        Tue, 23 Aug 2022 00:00:46 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 23 Aug 2022 00:00:45 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.160.191) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 23 Aug 2022 00:00:43 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <keescook@chromium.org>
-CC:     <ayudutta@amazon.com>, <brauner@kernel.org>, <kuni1840@gmail.com>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <luto@amacapital.net>,
-        <syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com>,
-        <wad@chromium.org>
-Subject: Re: [PATCH v1] seccomp: Release filter when copy_process() fails.
-Date:   Mon, 22 Aug 2022 17:00:35 -0700
-Message-ID: <20220823000035.35716-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <202208221636.1DE3D674@keescook>
-References: <202208221636.1DE3D674@keescook>
+        Mon, 22 Aug 2022 20:01:21 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D1457205
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:01:19 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27N01CNv080249;
+        Mon, 22 Aug 2022 19:01:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661212872;
+        bh=6gL8GX1okldRhQ3vdUKlxXXVejTWjDezNq+uH1iQOhI=;
+        h=From:To:CC:Subject:Date;
+        b=aU0jfePkxeDtbFrgl9rrImPnBbVH2+5duKpj9GceIhLOxVoz17c7ERjEFgx65Oy/3
+         a0OF1g044RrhtybnYwvhAg9F4wqDeIkiMsS266x4kt6eeN8Smb5O9JAH6mm1ntTV3V
+         Z48lEtrVOxe+Oa2VQxnaVS9xQ+w7sPIOSohZzUDk=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27N01CgS038656
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 22 Aug 2022 19:01:12 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 22
+ Aug 2022 19:01:12 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 22 Aug 2022 19:01:12 -0500
+Received: from ula0226330.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27N01B8h089285;
+        Mon, 22 Aug 2022 19:01:12 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Davis <afd@ti.com>
+Subject: [PATCH] drm: Move radeon and amdgpu Kconfig options into their directories
+Date:   Mon, 22 Aug 2022 19:01:11 -0500
+Message-ID: <20220823000111.9765-1-afd@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.43.160.191]
-X-ClientProxiedBy: EX13D22UWB001.ant.amazon.com (10.43.161.198) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Kees Cook <keescook@chromium.org>
-Date:   Mon, 22 Aug 2022 16:38:07 -0700
-> On Mon, Aug 22, 2022 at 02:49:35PM -0700, Kuniyuki Iwashima wrote:
-> > From:   Kees Cook <keescook@chromium.org>
-> > Date:   Mon, 22 Aug 2022 14:16:03 -0700
-> > > On Mon, Aug 22, 2022 at 01:44:36PM -0700, Kuniyuki Iwashima wrote:
-> > > > Our syzbot instance reported memory leaks in do_seccomp() [0], similar
-> > > > to the report [1].  It shows that we miss freeing struct seccomp_filter
-> > > > and some objects included in it.
-> > > > 
-> > > > We can reproduce the issue with the program below [2] which calls one
-> > > > seccomp() and two clone() syscalls.
-> > > > 
-> > > > The first clone()d child exits earlier than its parent and sends a
-> > > > signal to kill it during the second clone(), more precisely before the
-> > > > fatal_signal_pending() test in copy_process().  When the parent receives
-> > > > the signal, it has to destroy the embryonic process and return -EINTR to
-> > > > user space.  In the failure path, we have to call seccomp_filter_release()
-> > > > to decrement the filter's ref count.
-> > > > 
-> > > > Initially, we called it in free_task() called from the failure path, but
-> > > > the commit 3a15fb6ed92c ("seccomp: release filter after task is fully
-> > > > dead") moved it to release_task() to notify user space as early as possible
-> > > > that the filter is no longer used.
-> > > > 
-> > > > To keep the change, let's call seccomp_filter_release() in copy_process()
-> > > > and add a WARN_ON_ONCE() in free_task() for future debugging.
-> > > 
-> > > Thanks for tracking this down! I think I'd prefer to avoid changing the
-> > > semantics around the existing seccomp refcount lifetime, so what about
-> > > just moving copy_seccomp() below the last possible error path?
-> > 
-> > Actually, I also thought of it but avoid it because it means we move the
-> > signal check relatively earlier than before, so would-be-killed processes
-> > could consume more resouces.
-> > 
-> > What do you think about this?
-> 
-> There's no allocation happening in copy_seccomp(), just reference
-> counts being added. Given the lock that is held, the ordering here
-> doesn't matter as far as I can tell, except for the fact that
-> copy_seccomp() expects to go through full thread death if something goes
-> wrong. So, simply moving it later should do the trick here.
+Most Kconfig options to enable a driver are in the Kconfig file
+inside the relevant directory, move these two to the same.
 
-Ok, I'm fine with that change.
-I'll test it again and post v2 with WARN_ON_ONCE().
-Thank you!
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
+ drivers/gpu/drm/Kconfig            | 42 ------------------------------
+ drivers/gpu/drm/amd/amdgpu/Kconfig | 22 ++++++++++++++++
+ drivers/gpu/drm/radeon/Kconfig     | 22 ++++++++++++++++
+ 3 files changed, 44 insertions(+), 42 deletions(-)
 
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index 6c2256e8474b..24fa9ccd92a4 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -234,50 +234,8 @@ source "drivers/gpu/drm/i2c/Kconfig"
+ 
+ source "drivers/gpu/drm/arm/Kconfig"
+ 
+-config DRM_RADEON
+-	tristate "ATI Radeon"
+-	depends on DRM && PCI && MMU
+-	depends on AGP || !AGP
+-	select FW_LOADER
+-	select DRM_DISPLAY_DP_HELPER
+-	select DRM_DISPLAY_HELPER
+-        select DRM_KMS_HELPER
+-        select DRM_TTM
+-	select DRM_TTM_HELPER
+-	select POWER_SUPPLY
+-	select HWMON
+-	select BACKLIGHT_CLASS_DEVICE
+-	select INTERVAL_TREE
+-	help
+-	  Choose this option if you have an ATI Radeon graphics card.  There
+-	  are both PCI and AGP versions.  You don't need to choose this to
+-	  run the Radeon in plain VGA mode.
+-
+-	  If M is selected, the module will be called radeon.
+-
+ source "drivers/gpu/drm/radeon/Kconfig"
+ 
+-config DRM_AMDGPU
+-	tristate "AMD GPU"
+-	depends on DRM && PCI && MMU
+-	select FW_LOADER
+-	select DRM_DISPLAY_DP_HELPER
+-	select DRM_DISPLAY_HDMI_HELPER
+-	select DRM_DISPLAY_HELPER
+-	select DRM_KMS_HELPER
+-	select DRM_SCHED
+-	select DRM_TTM
+-	select DRM_TTM_HELPER
+-	select POWER_SUPPLY
+-	select HWMON
+-	select BACKLIGHT_CLASS_DEVICE
+-	select INTERVAL_TREE
+-	select DRM_BUDDY
+-	help
+-	  Choose this option if you have a recent AMD Radeon graphics card.
+-
+-	  If M is selected, the module will be called amdgpu.
+-
+ source "drivers/gpu/drm/amd/amdgpu/Kconfig"
+ 
+ source "drivers/gpu/drm/nouveau/Kconfig"
+diff --git a/drivers/gpu/drm/amd/amdgpu/Kconfig b/drivers/gpu/drm/amd/amdgpu/Kconfig
+index 7777d55275de..36b1206124cf 100644
+--- a/drivers/gpu/drm/amd/amdgpu/Kconfig
++++ b/drivers/gpu/drm/amd/amdgpu/Kconfig
+@@ -1,4 +1,26 @@
+ # SPDX-License-Identifier: MIT
++
++config DRM_AMDGPU
++	tristate "AMD GPU"
++	depends on DRM && PCI && MMU
++	select FW_LOADER
++	select DRM_DISPLAY_DP_HELPER
++	select DRM_DISPLAY_HDMI_HELPER
++	select DRM_DISPLAY_HELPER
++	select DRM_KMS_HELPER
++	select DRM_SCHED
++	select DRM_TTM
++	select DRM_TTM_HELPER
++	select POWER_SUPPLY
++	select HWMON
++	select BACKLIGHT_CLASS_DEVICE
++	select INTERVAL_TREE
++	select DRM_BUDDY
++	help
++	  Choose this option if you have a recent AMD Radeon graphics card.
++
++	  If M is selected, the module will be called amdgpu.
++
+ config DRM_AMDGPU_SI
+ 	bool "Enable amdgpu support for SI parts"
+ 	depends on DRM_AMDGPU
+diff --git a/drivers/gpu/drm/radeon/Kconfig b/drivers/gpu/drm/radeon/Kconfig
+index 52819e7f1fca..3248d12c562d 100644
+--- a/drivers/gpu/drm/radeon/Kconfig
++++ b/drivers/gpu/drm/radeon/Kconfig
+@@ -1,4 +1,26 @@
+ # SPDX-License-Identifier: MIT
++
++config DRM_RADEON
++	tristate "ATI Radeon"
++	depends on DRM && PCI && MMU
++	depends on AGP || !AGP
++	select FW_LOADER
++	select DRM_DISPLAY_DP_HELPER
++	select DRM_DISPLAY_HELPER
++        select DRM_KMS_HELPER
++        select DRM_TTM
++	select DRM_TTM_HELPER
++	select POWER_SUPPLY
++	select HWMON
++	select BACKLIGHT_CLASS_DEVICE
++	select INTERVAL_TREE
++	help
++	  Choose this option if you have an ATI Radeon graphics card.  There
++	  are both PCI and AGP versions.  You don't need to choose this to
++	  run the Radeon in plain VGA mode.
++
++	  If M is selected, the module will be called radeon.
++
+ config DRM_RADEON_USERPTR
+ 	bool "Always enable userptr support"
+ 	depends on DRM_RADEON
+-- 
+2.36.1
 
-> 
-> -Kees
-> 
-> > 
-> > > 
-> > > 
-> > > diff --git a/kernel/fork.c b/kernel/fork.c
-> > > index 90c85b17bf69..e7f4e7f1e01e 100644
-> > > --- a/kernel/fork.c
-> > > +++ b/kernel/fork.c
-> > > @@ -2409,12 +2409,6 @@ static __latent_entropy struct task_struct *copy_process(
-> > >  
-> > >  	spin_lock(&current->sighand->siglock);
-> > >  
-> > > -	/*
-> > > -	 * Copy seccomp details explicitly here, in case they were changed
-> > > -	 * before holding sighand lock.
-> > > -	 */
-> > > -	copy_seccomp(p);
-> > > -
-> > >  	rv_task_fork(p);
-> > >  
-> > >  	rseq_fork(p, clone_flags);
-> > > @@ -2431,6 +2425,14 @@ static __latent_entropy struct task_struct *copy_process(
-> > >  		goto bad_fork_cancel_cgroup;
-> > >  	}
-> > >  
-> > > +	/* No more failures paths after this point. */
-> > > +
-> > > +	/*
-> > > +	 * Copy seccomp details explicitly here, in case they were changed
-> > > +	 * before holding sighand lock.
-> > > +	 */
-> > > +	copy_seccomp(p);
-> > > +
-> > >  	init_task_pid_links(p);
-> > >  	if (likely(p->pid)) {
-> > >  		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
-> > > 
-> > > 
-> > > Totally untested, but I think it would fix this?
-> > > 
-> > > -Kees
-> > > 
-> > > -- 
-> > > Kees Cook
-> 
-> -- 
-> Kees Cook

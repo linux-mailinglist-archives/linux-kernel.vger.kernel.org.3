@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE0F59E0BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAF759DE2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355936AbiHWLjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S1353155AbiHWKOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357951AbiHWLc2 (ORCPT
+        with ESMTP id S1352761AbiHWKGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:32:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1399290C6F;
-        Tue, 23 Aug 2022 02:26:52 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6367CB7B;
+        Tue, 23 Aug 2022 01:52:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BAF761330;
-        Tue, 23 Aug 2022 09:26:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15346C433C1;
-        Tue, 23 Aug 2022 09:26:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B746CB81C1C;
+        Tue, 23 Aug 2022 08:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BC9C433C1;
+        Tue, 23 Aug 2022 08:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246811;
-        bh=+NeAf9h5pfFDUXnKms+x2U0x3UtSbInesnl7Zo/kjxU=;
+        s=korg; t=1661244765;
+        bh=A6bFZv0bjISMgnH2QlTdPywLgKoNC1AA0iEbtLhYWN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xkCQiJi2UVeA8A2WBOuujoXM2SuMBjV4yPPSR9yxgQiD0S/XxO6aNuYR9CnT6uY0R
-         Boj5NZ9eoDA4XC5IokvB6tB3uXNn/UruXT9df+8gvPrg6rRm3WlVeApcqcsr5U/Uab
-         GWF1bd68nHRNFnDItmwwLo02mqNLQKoULAdHPF0I=
+        b=INEAlfR+uYTnwv2padIrWR4nc3p3p3xNUGLCx1F3FG5s77zmWKnRFV/tGOd4xhGVB
+         dJr6j5l11iAivs7sOxVDa1gE+qdwuRzRFtByKGRglgUBo97x11QHZzpZ3BPIPIcyp8
+         qrizKpNyoufdMDkdoGfT3L1QqAzJRgTylnxaBM5A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 226/389] ASoC: qcom: q6dsp: Fix an off-by-one in q6adm_alloc_copp()
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.15 145/244] i2c: imx: Make sure to unregister adapter on remove()
 Date:   Tue, 23 Aug 2022 10:25:04 +0200
-Message-Id: <20220823080125.041533349@linuxfoundation.org>
+Message-Id: <20220823080104.010296633@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 673f58f62ca6fc98979d1cf3fe89c3ff33f29b2e ]
+commit d98bdd3a5b50446d8e010be5b04ce81c4eabf728 upstream.
 
-find_first_zero_bit() returns MAX_COPPS_PER_PORT at max here.
-So 'idx' should be tested with ">=" or the test can't match.
+If for whatever reasons pm_runtime_resume_and_get() fails and .remove() is
+exited early, the i2c adapter stays around and the irq still calls its
+handler, while the driver data and the register mapping go away. So if
+later the i2c adapter is accessed or the irq triggers this results in
+havoc accessing freed memory and unmapped registers.
 
-Fixes: 7b20b2be51e1 ("ASoC: qdsp6: q6adm: Add q6adm driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/0fca3271649736053eb9649d87e1ca01b056be40.1658394124.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So unregister the software resources even if resume failed, and only skip
+the hardware access in that case.
+
+Fixes: 588eb93ea49f ("i2c: imx: add runtime pm support to improve the performance")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/qcom/qdsp6/q6adm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-imx.c |   20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6adm.c b/sound/soc/qcom/qdsp6/q6adm.c
-index da242515e146..8e3539941fad 100644
---- a/sound/soc/qcom/qdsp6/q6adm.c
-+++ b/sound/soc/qcom/qdsp6/q6adm.c
-@@ -217,7 +217,7 @@ static struct q6copp *q6adm_alloc_copp(struct q6adm *adm, int port_idx)
- 	idx = find_first_zero_bit(&adm->copp_bitmap[port_idx],
- 				  MAX_COPPS_PER_PORT);
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1487,9 +1487,7 @@ static int i2c_imx_remove(struct platfor
+ 	struct imx_i2c_struct *i2c_imx = platform_get_drvdata(pdev);
+ 	int irq, ret;
  
--	if (idx > MAX_COPPS_PER_PORT)
-+	if (idx >= MAX_COPPS_PER_PORT)
- 		return ERR_PTR(-EBUSY);
+-	ret = pm_runtime_resume_and_get(&pdev->dev);
+-	if (ret < 0)
+-		return ret;
++	ret = pm_runtime_get_sync(&pdev->dev);
  
- 	c = kzalloc(sizeof(*c), GFP_ATOMIC);
--- 
-2.35.1
-
+ 	/* remove adapter */
+ 	dev_dbg(&i2c_imx->adapter.dev, "adapter removed\n");
+@@ -1498,17 +1496,21 @@ static int i2c_imx_remove(struct platfor
+ 	if (i2c_imx->dma)
+ 		i2c_imx_dma_free(i2c_imx);
+ 
+-	/* setup chip registers to defaults */
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2CR);
+-	imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
++	if (ret == 0) {
++		/* setup chip registers to defaults */
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IADR);
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_IFDR);
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2CR);
++		imx_i2c_write_reg(0, i2c_imx, IMX_I2C_I2SR);
++		clk_disable(i2c_imx->clk);
++	}
+ 
+ 	clk_notifier_unregister(i2c_imx->clk, &i2c_imx->clk_change_nb);
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq >= 0)
+ 		free_irq(irq, i2c_imx);
+-	clk_disable_unprepare(i2c_imx->clk);
++
++	clk_unprepare(i2c_imx->clk);
+ 
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
 
 

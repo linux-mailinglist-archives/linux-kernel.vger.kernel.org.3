@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D571459DEA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628DA59DFBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358409AbiHWLsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S1359244AbiHWMHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358067AbiHWLnL (ORCPT
+        with ESMTP id S241742AbiHWMDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:43:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B417DD0239;
-        Tue, 23 Aug 2022 02:29:49 -0700 (PDT)
+        Tue, 23 Aug 2022 08:03:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2197DC5C5;
+        Tue, 23 Aug 2022 02:36:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBC2D61227;
-        Tue, 23 Aug 2022 09:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B2FC433C1;
-        Tue, 23 Aug 2022 09:29:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D74561389;
+        Tue, 23 Aug 2022 09:36:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A0CC433D7;
+        Tue, 23 Aug 2022 09:36:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246988;
-        bh=hoW8gNIAGLEsM0fWmTZQ90WaIxQHpc7DjZgA0ZdiBN0=;
+        s=korg; t=1661247416;
+        bh=3pYrimhcGr0K85s/IZAnpNsiTmUnQgIr+fgbMTw5icc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KuLatMV/Cvq9q9b+MVlsU3wxmW9B5JMSoMAzQ9L2793F97si1xRJ/EmXihXuOqG/C
-         YpAdQkIEKDtGMiFv7yn3ED2gBz9AL5gW9Zh8NP8SyqS0vT6Ts5PISV+Ufo2o7mq1Yk
-         JYnbEccLaK9OwSGvajhh9BMkEmUnYHejIrDATtmE=
+        b=SPPKMb3Sl8ztf/7hsjIpvB+tmWeSWl2W+bzHD1aIJgnKCt2ZPpk69oW7R5B+jFHav
+         sRMJN92G+8AIid2iezBxCmjF9Ixp/qHOaMk2oW2Cc1PMEiVrEDgCkPumJUbX3L+Chz
+         ToXHa8h3pric/iPm1p7Rl96EIefAZU2S2TPDFnM8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ronald Wahl <ronald.wahl@raritan.com>,
-        Jose Alonso <joalonsof@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 282/389] Revert "net: usb: ax88179_178a needs FLAG_SEND_ZLP"
-Date:   Tue, 23 Aug 2022 10:26:00 +0200
-Message-Id: <20220823080127.325707289@linuxfoundation.org>
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.10 029/158] bpf: Acquire map uref in .init_seq_private for sock local storage map iterator
+Date:   Tue, 23 Aug 2022 10:26:01 +0200
+Message-Id: <20220823080047.265635596@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,105 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jose Alonso <joalonsof@gmail.com>
+From: Hou Tao <houtao1@huawei.com>
 
-commit 6fd2c17fb6e02a8c0ab51df1cfec82ce96b8e83d upstream.
+commit 3c5f6e698b5c538bbb23cd453b22e1e4922cffd8 upstream.
 
-This reverts commit 36a15e1cb134c0395261ba1940762703f778438c.
+bpf_iter_attach_map() acquires a map uref, and the uref may be released
+before or in the middle of iterating map elements. For example, the uref
+could be released in bpf_iter_detach_map() as part of
+bpf_link_release(), or could be released in bpf_map_put_with_uref() as
+part of bpf_map_release().
 
-The usage of FLAG_SEND_ZLP causes problems to other firmware/hardware
-versions that have no issues.
+So acquiring an extra map uref in bpf_iter_init_sk_storage_map() and
+releasing it in bpf_iter_fini_sk_storage_map().
 
-The FLAG_SEND_ZLP is not safe to use in this context.
-See:
-https://patchwork.ozlabs.org/project/netdev/patch/1270599787.8900.8.camel@Linuxdev4-laptop/#118378
-The original problem needs another way to solve.
-
-Fixes: 36a15e1cb134 ("net: usb: ax88179_178a needs FLAG_SEND_ZLP")
-Cc: stable@vger.kernel.org
-Reported-by: Ronald Wahl <ronald.wahl@raritan.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216327
-Link: https://bugs.archlinux.org/task/75491
-Signed-off-by: Jose Alonso <joalonsof@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/r/20220810080538.1845898-4-houtao@huaweicloud.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/ax88179_178a.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ net/core/bpf_sk_storage.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -1690,7 +1690,7 @@ static const struct driver_info ax88179_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -794,10 +794,18 @@ static int bpf_iter_init_sk_storage_map(
+ {
+ 	struct bpf_iter_seq_sk_storage_map_info *seq_info = priv_data;
+ 
++	bpf_map_inc_with_uref(aux->map);
+ 	seq_info->map = aux->map;
+ 	return 0;
+ }
+ 
++static void bpf_iter_fini_sk_storage_map(void *priv_data)
++{
++	struct bpf_iter_seq_sk_storage_map_info *seq_info = priv_data;
++
++	bpf_map_put_with_uref(seq_info->map);
++}
++
+ static int bpf_iter_attach_map(struct bpf_prog *prog,
+ 			       union bpf_iter_link_info *linfo,
+ 			       struct bpf_iter_aux_info *aux)
+@@ -843,7 +851,7 @@ static const struct seq_operations bpf_s
+ static const struct bpf_iter_seq_info iter_seq_info = {
+ 	.seq_ops		= &bpf_sk_storage_map_seq_ops,
+ 	.init_seq_private	= bpf_iter_init_sk_storage_map,
+-	.fini_seq_private	= NULL,
++	.fini_seq_private	= bpf_iter_fini_sk_storage_map,
+ 	.seq_priv_size		= sizeof(struct bpf_iter_seq_sk_storage_map_info),
  };
-@@ -1703,7 +1703,7 @@ static const struct driver_info ax88178a
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1716,7 +1716,7 @@ static const struct driver_info cypress_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1729,7 +1729,7 @@ static const struct driver_info dlink_du
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1742,7 +1742,7 @@ static const struct driver_info sitecom_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1755,7 +1755,7 @@ static const struct driver_info samsung_
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1768,7 +1768,7 @@ static const struct driver_info lenovo_i
- 	.link_reset = ax88179_link_reset,
- 	.reset = ax88179_reset,
- 	.stop = ax88179_stop,
--	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
-@@ -1781,7 +1781,7 @@ static const struct driver_info belkin_i
- 	.link_reset = ax88179_link_reset,
- 	.reset	= ax88179_reset,
- 	.stop	= ax88179_stop,
--	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
-+	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
- 	.rx_fixup = ax88179_rx_fixup,
- 	.tx_fixup = ax88179_tx_fixup,
- };
+ 
 
 

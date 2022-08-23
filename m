@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B65359EAF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84ED359EAEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiHWSZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S229812AbiHWSZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbiHWSZ0 (ORCPT
+        with ESMTP id S232798AbiHWSZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 14:25:26 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917267E828;
-        Tue, 23 Aug 2022 09:43:02 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3321c2a8d4cso394605777b3.5;
-        Tue, 23 Aug 2022 09:43:02 -0700 (PDT)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE847E814
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:42:55 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id d71so12731636pgc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:42:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=CiTVAMBmeZgTNns54/ZRjjMIll+fZRM35ET0N/iSCew=;
+        b=gM9QSsTQkKhWzpfwX/ZmC9QIytz881CKpNrrJlXiSi70CtWBcfBGdCBmHaLM2eWszH
+         FK+bdgBu9fnF6/omQ5DvDr/CNzqUfLnL3lM7LHAVyiHcQCRltHkopFIcHkRarM3g/s+7
+         Q86Y/S49n0krQ2Bl+DoWxWEtpo0Xu18WStexI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=/gDV+GVLpJWz4HxWURgyPhOW3DPummyzOYP/8Om8IFQ=;
-        b=qy68F4NsialSef1KpyquY7Srrcn4MXpPTDCmxsWtrWseUDBxoQGyTmoTEWoNwTLUjv
-         u+w8PxQ5ACa6Ra0NVMJegZS6KsLQt/XFUWj2PV14G6bekxhvmWopd9scuY30jsiFdEGJ
-         fGfrfEtVhwzhWvSLDGuafAJTmracKS2E/mu9gpiG/S4uTWMcER8W285y2ISeCidRKHfl
-         GSAB9TmrqPcl7CGX3TuWmRrqaI2ZLRZ1UVDBV+8qnIIHHmc634YBXIxS+OpSrwZQfr7i
-         tDWRfp6zTjYwcWkpDaLw0g+IWewARWnavpDcZX7PNTBBt1mRnBMMM8GcyVdJ55lCNzp8
-         d0jA==
-X-Gm-Message-State: ACgBeo04v+QBf6l8wOD2IDxJqmcX6UN7EEDdoZSpQzLDDmoe2ro4PbPN
-        1GREDOwAreTb36PKlGjtgV1mMhx1oTGA+/xQerJYENAR
-X-Google-Smtp-Source: AA6agR5TOxKA+4W9IqYAEfEi3Ub3wtwiOglAL943t/fVgPU8CnSRA8MuXK3l/V6I+4AghrSFYoUeEy4UH2suF8quBqU=
-X-Received: by 2002:a25:ec0c:0:b0:690:d092:2d56 with SMTP id
- j12-20020a25ec0c000000b00690d0922d56mr23429607ybh.622.1661272981822; Tue, 23
- Aug 2022 09:43:01 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=CiTVAMBmeZgTNns54/ZRjjMIll+fZRM35ET0N/iSCew=;
+        b=1mby4UAU8klZFnUsV0CZSI4mZFuVsGQ/uhHQxPjdMJAuXkJYm18zz2uw8XertcpC+P
+         HPadWUofLIGyGrK1EkIN8o+Fk6+j8+00/W4g2f6ZOe5cc36ZOH/rn1NRr7MOYAmPinm9
+         cUl2S4e3sQrQZq7Ib4N558BnuF9gPR2DSWQI/85UWXsTuPfH22nHHLN6NVBuW56reXM7
+         ZcwCPvr3bZyA0c78y+VKulU1yQseg253ASrGa32rDFoSk2SwXf0+kFF5MGxSSH4fA7/r
+         kOLZsvW9MBPTBm3yfxTa3EUsmtGS5jSopwfpmm+1NG4aTw7BXugsUtqQGJHBuCUzXkJP
+         4xqg==
+X-Gm-Message-State: ACgBeo1iJgcK32JXqq/0H3VYoVS4bwg/4KRbY0jLbr2y9t7XUxpNryhj
+        48IqmQ3LkcYvTm3Zx3rn+A7d0A==
+X-Google-Smtp-Source: AA6agR4b+B+CmYuZ7X6Ph1GzceiQelM5K4w7fEKztUhStEjaw1yKzCRdAdoek0y/fzvxtiqc0Ej1dA==
+X-Received: by 2002:a05:6a00:35c3:b0:536:ab9f:ceca with SMTP id dc3-20020a056a0035c300b00536ab9fcecamr9635768pfb.37.1661272975462;
+        Tue, 23 Aug 2022 09:42:55 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:fee6:a961:5d1d:553])
+        by smtp.gmail.com with UTF8SMTPSA id p4-20020aa79e84000000b00535fd0cb58bsm9425178pfq.111.2022.08.23.09.42.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 09:42:55 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 09:42:53 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 2/2] clk: qcom: gcc-sc7280: Keep USB GDSC power domains
+ on when USB wakeup is enabled
+Message-ID: <YwUDjaG6n95Ddij2@google.com>
+References: <20220822115246.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid>
+ <20220822115246.2.If09027f73daa6e1ed95f5eab02326b543c67132e@changeid>
+ <YwS3FCOqIeajMEgz@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <1660649244-146842-1-git-send-email-john.garry@huawei.com>
- <1660649244-146842-3-git-send-email-john.garry@huawei.com>
- <CAHp75VdhCovo1uT3oxQAymEO9X+29oDet7LjYkLvpmj+r15Tfg@mail.gmail.com> <dd41c5c3-ee16-821c-afd4-ddda4443bc78@huawei.com>
-In-Reply-To: <dd41c5c3-ee16-821c-afd4-ddda4443bc78@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 18:42:50 +0200
-Message-ID: <CAJZ5v0gR0mZBGiCLR6mxdbaNGebti54M-VvV=jT0310KioPD7g@mail.gmail.com>
-Subject: Re: [PATCH PoC 2/3] ACPI: platform: Refactor acpi_create_platform_device()
-To:     John Garry <john.garry@huawei.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YwS3FCOqIeajMEgz@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:10 AM John Garry <john.garry@huawei.com> wrote:
->
-> On 18/08/2022 20:41, Andy Shevchenko wrote:
-> > On Tue, Aug 16, 2022 at 2:33 PM John Garry <john.garry@huawei.com> wrote:
-> >>
-> >> There is commonality between acpi_create_platform_device() and
-> >> hisi_lpc_acpi_add_child(), in that it covers 2x main steps:
-> >> - Read resources for the acpi_device
-> >> - Create platform device
-> >>
-> >> Refactor acpi_create_platform_device() so that it may be reused by
-> >> hisi_lpc_acpi_add_child() to reduce duplication.
-> >
-> > ...
-> >
-> >> + * acpi_create_platform_device_ops - Create platform device for ACPI device node
-> >
-> > Not sure I understand why _ops is a suffix for the function. I would
-> > expect _ops to be a data struct where the ->xlate() and perhaps other
-> > callbacks may be collected. It may be that I have missed that portion
-> > in the previous discussion.
->
-> ok, maybe I can put all the members into a struct, but I don't think
-> that it improves the overall code too much.
->
-> >
-> > ...
-> >
-> >> +       if (name)
-> >> +               pdevinfo.name = name;
-> >> +       else
-> >> +               pdevinfo.name = dev_name(&adev->dev);
-> >
-> >> +       pdevinfo.data = data;
-> >> +       pdevinfo.size_data = size_data;
-> >
-> > It rather reminds me of platform device registration full with this
-> > device info. May be what you need is
-> > struct acpi_platfrom_device_info {
-> >    properties;
-> >    name;
-> >    id;
-> >    ->xlate();
-> >    ...
-> > };
-> >
-> > ?
-> >
-> > ...
-> >
-> >> +struct platform_device *acpi_create_platform_device_ops(
-> >> +                               struct acpi_device *adev,
-> >> +                               const char *name,
-> >> +                               const struct property_entry *properties,
-> >> +                               void *data, size_t size_data,
-> >> +                               int (*xlat)(struct acpi_device *adev,
-> >> +                                           struct resource *res,
-> >> +                                           void *data, size_t size_data),
-> >> +                               int id);
-> >
-> > ...because this looks  a bit too much from the amount of parameters
-> > point of view.
-> >
->
-> ok, agreed.
->
-> But even if we improve this code, the hisi_lpc changes are quite large
-> and unwieldly.
+On Tue, Aug 23, 2022 at 01:16:36PM +0200, Johan Hovold wrote:
+> On Mon, Aug 22, 2022 at 11:53:11AM -0700, Matthias Kaehlcke wrote:
+> > Set GENPD_FLAG_ACTIVE_WAKEUP for the USB GDSC power domains of SC7280.
+> > 
+> > Suggested-by: Johan Hovold <johan+linaro@kernel.org>
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> > 
+> >  drivers/clk/qcom/gcc-sc7280.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
+> > index 7ff64d4d5920..4ff855269467 100644
+> > --- a/drivers/clk/qcom/gcc-sc7280.c
+> > +++ b/drivers/clk/qcom/gcc-sc7280.c
+> > @@ -3125,6 +3125,7 @@ static struct gdsc gcc_usb30_prim_gdsc = {
+> >  	.gdscr = 0xf004,
+> >  	.pd = {
+> >  		.name = "gcc_usb30_prim_gdsc",
+> > +		.flags = GENPD_FLAG_ACTIVE_WAKEUP,
+> 
+> Have you verified that the power-domain doesn't need to remain on also
+> when USB isn't used for wakeup?
 
-Well, they allow you to drop quite a few LOC ...
+So far I haven't observed issues with this on sc7180 and sc7280 when USB
+wakeup is disabled.
+
+> This is the case for sc8280xp and indicates that there are further
+> missing pieces here (at least for that platform).
+
+What are you observing on sc8280xp when wakeup is disabled?

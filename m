@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C687959D2BD
+	by mail.lfdr.de (Postfix) with ESMTP id 7E94059D2BC
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240457AbiHWHzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S240578AbiHWHzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241422AbiHWHzU (ORCPT
+        with ESMTP id S241449AbiHWHza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:55:20 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB8333343
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:55:19 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y127so9757849pfy.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:55:19 -0700 (PDT)
+        Tue, 23 Aug 2022 03:55:30 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208F71EEE1;
+        Tue, 23 Aug 2022 00:55:29 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id f21so13314701pjt.2;
+        Tue, 23 Aug 2022 00:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=Z+RQpvDmeUMwkzD0zE5O9n7j7IoYm1Li9Lv8hFvLuiA=;
-        b=B35tb0ihyKDB3F0yiWv9zXHButoLRNlU/g/hnff3vJGN1dshZ1QMseik2JO5v86hSy
-         y2vSsDnv4mpxcMojUaw5BoFVLAgOgQyqZUqJlHFQGVwZlk9WSjkc0KwDusyvXgUoqmcD
-         JKhZCUI+/P7I5X6K4xbbwKq1xdKUdp5GnMlcqlDxP0VqP32nnmfrTd7EB6pwyWMs/oR5
-         iztE1mhVe7Nt0EQ8QShrgt9t1XOcCvnEGwxGBf4ze0uSECsXIgQGNIJQlt2i1cJLBSKm
-         /iHm6LacJ6c9BF75ti3cvuPt4d96bnGbWsZz2irwFiWpHt1SvOifRAv3bGgH4naQ3v86
-         rKTg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Xxc+am8JnZzn38/YDRBLpPnG3B37sa007H6emh7sE1Q=;
+        b=R5xBAQKoFl+3tgqEOz+RslovkAqgtUwmbSJqJbDX8B1c8NmMSCIwNWjdl/0syrbgWt
+         ut68/XCzsoTvkQYqU+36wRCNb49XsTNU4wwS1Hy0ILDfwwdhi66kMAVmIGrgns32Zvsi
+         FQ6Mch1DXKHhq1VZpdG4xfSP+VEoWiPCOF6Vmu1KemQdPLi47EAxYSb5lgfZMrWR7PQy
+         MXGNlClcX7/lqGHrMT2Ia3aigTO1SNHAntfbitDynXtzDAAPrEg+tmG6eTfeNF+9K20V
+         rhW023/By44bb1Xl8ZH1DgagEHsSHPTzu4cY6XLsQhIiBjP2Ggn+nXY78lfBWfyVdZNE
+         MXdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Z+RQpvDmeUMwkzD0zE5O9n7j7IoYm1Li9Lv8hFvLuiA=;
-        b=6MU2Yf1zPKIy0D48aCeWGF5WScDkhzUTfxaLDsJj05cJYqtnGyEWiwF3sSIX3kPVv/
-         3qGSbIQe1qGVc8fG4fBy/wYQZ3W1TtIt0kjYilEwHO4I9TLpTW+wM/ISjbdl1lQEI54J
-         uj0S07DdZ35Q/q6yY9VK1ns+YfPI69hGyVDUQkH6sDsLhHQImdf3MSI8nu7MazXArCML
-         ZNPbkqGtMErK+mxbGByRbs/n2pHcENIs9n9eeceQKoo6rjKW+LpydOKagSaGARhYenKy
-         zQvEp6OD31N+3CeB/r4tS8WwduAx4ueISPe/mROEbdadp92kizCIJUUfWeL2dMfJAkZ2
-         d7Eg==
-X-Gm-Message-State: ACgBeo2xK1pv1e6jA7nc2t3k2NpxOK8rDkC/fZ+oRAjwjPr0IZE3lNJ5
-        lje+MF5PBOKspXEYqQePt94=
-X-Google-Smtp-Source: AA6agR593saMfnIXLLt48gWmj18L+jMdWcoS/nRdwvS8vspgXhn88hj4OSKLUYHJRJhZN6xmfOxvQA==
-X-Received: by 2002:a65:460c:0:b0:429:f162:78e1 with SMTP id v12-20020a65460c000000b00429f16278e1mr20062230pgq.7.1661241319240;
-        Tue, 23 Aug 2022 00:55:19 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i19-20020a63e913000000b0041a6638b357sm8633277pgh.72.2022.08.23.00.55.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 00:55:19 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] drm/mediatek: Remove the unneeded result variable
-Date:   Tue, 23 Aug 2022 07:55:15 +0000
-Message-Id: <20220823075515.209198-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Xxc+am8JnZzn38/YDRBLpPnG3B37sa007H6emh7sE1Q=;
+        b=pptgG7ZDjo9Q5WGOgAfjRKnhkedr6WKJkfj1t4uoA7C0Y4efEuWk64Vvl5J06uv5Av
+         njD+doeZupi3thF5ROCrXm+nG7AdkFn2xZ4SNioWXQsyW8TwY5w/QYZhGkMDpmlRtHnD
+         wjX3F2PX5w1mjeVB6/4xCvfmn6DFXzxTmKRad9gfvbonRXheewwO4pLWGD3MkdfzSVcT
+         2z0E7/8gqRWR8Pu731FS1cPwUszhUjDu5+4J+T8HYjYRqAii0s5qCwrSSUL5ZRaWRXae
+         G1W8dwhx+5JOdfUHdNV+xpXsouVxg2u/W6D3oHltS61OpHZ9SOEM/5vCMSWuZClUpHck
+         e0Uw==
+X-Gm-Message-State: ACgBeo3zE2lufuadwZGuKLWiVn1lb5TuK5a3PyUZ5bp7G8HWczfH4+kh
+        +IkVNk8G3dFyul1FVSpjxy0=
+X-Google-Smtp-Source: AA6agR5ZqZn05y3setXe2Ki853S0taRN0SeK5U8VFr0708OGCldReMvivNFDBZIb4kfxxohTcbMs+g==
+X-Received: by 2002:a17:90a:304a:b0:1fa:d832:5aca with SMTP id q10-20020a17090a304a00b001fad8325acamr2104066pjl.16.1661241328592;
+        Tue, 23 Aug 2022 00:55:28 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-14.three.co.id. [180.214.232.14])
+        by smtp.gmail.com with ESMTPSA id z124-20020a626582000000b00536531536adsm5988664pfb.47.2022.08.23.00.55.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 00:55:28 -0700 (PDT)
+Message-ID: <468ecea7-81fb-4a61-2094-3223bfbf55d4@gmail.com>
+Date:   Tue, 23 Aug 2022 14:55:22 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] mips: pci: remove extraneous asterisk from top level
+ comment of ar2315 PCI driver
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+References: <202208221854.8ASrzjKa-lkp@intel.com>
+ <20220823030056.123709-1-bagasdotme@gmail.com> <YwRzqiJjHdnCA65Y@kroah.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <YwRzqiJjHdnCA65Y@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 8/23/22 13:28, Greg KH wrote:
+> On Tue, Aug 23, 2022 at 10:00:56AM +0700, Bagas Sanjaya wrote:
+>> kernel test robot reported kernel-doc warning:
+>>
+>> arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>>     * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
+>>
+>> The warning above is caused by an extraneous asterisk on the top level
+>> (description) comment of pci-ar2315.c, for which the comment is confused as
+>> kernel-doc comment instead.
+>>
+>> Remove the asterisk.
+>>
+>> Link: https://lore.kernel.org/linux-doc/202208221854.8ASrzjKa-lkp@intel.com/
+>> Fixes: 3ed7a2a702dc0f ("MIPS: ath25: add AR2315 PCI host controller driver")
+>> Fixes: 3e58e839150db0 ("scripts: kernel-doc: add warning for comment not following kernel-doc syntax")
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Cc: stable@vger.kernel.org # v5.15, v5.19
+> 
+> kerneldoc issues are not stable worth, sorry.
+> 
 
-Return the value drm_mode_config_helper_suspend() directly instead of
-storing it in another redundant variable.
+Thanks for reminding me. Should I resend without Cc stable?
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 5f02f8d0e4fc..91f58db5915f 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -833,11 +833,8 @@ static int mtk_drm_sys_prepare(struct device *dev)
- {
- 	struct mtk_drm_private *private = dev_get_drvdata(dev);
- 	struct drm_device *drm = private->drm;
--	int ret;
--
--	ret = drm_mode_config_helper_suspend(drm);
- 
--	return ret;
-+	return drm_mode_config_helper_suspend(drm);
- }
- 
- static void mtk_drm_sys_complete(struct device *dev)
 -- 
-2.25.1
+An old man doll... just what I always wanted! - Clara

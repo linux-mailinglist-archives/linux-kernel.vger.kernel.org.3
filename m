@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86EA59E2EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39ACA59DF86
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358920AbiHWL5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S1357138AbiHWK4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358996AbiHWLz4 (ORCPT
+        with ESMTP id S1357013AbiHWKww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:55:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1717567C9D;
-        Tue, 23 Aug 2022 02:33:33 -0700 (PDT)
+        Tue, 23 Aug 2022 06:52:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB86ABF1E;
+        Tue, 23 Aug 2022 02:13:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 650EB612D6;
-        Tue, 23 Aug 2022 09:32:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEC0C433C1;
-        Tue, 23 Aug 2022 09:32:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1BC66113E;
+        Tue, 23 Aug 2022 09:13:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0EF7C433C1;
+        Tue, 23 Aug 2022 09:13:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247173;
-        bh=vuQge0PulIGZ9pyZu2DcvjEEixulXcuj83UwgGzf73s=;
+        s=korg; t=1661245982;
+        bh=8hgEPptPotcAEFQiDmgZ8x/yHxxyNyJ3aCUqRbrzYe0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vB6XHpFxw6rCv4MFBAzPzubCtqGeUNhvayZwI5nKO3vUmc3g0RiM1kmrq9Fj0NZT+
-         EDImSQdW3rK5c1Oa7bFqGVktuUmffiJ8gvCez7PD5/Ix+55aNsggTEtw/MABdAsoD/
-         eMx2ZFeyBx7BxkuzzHBFoYYiQ2r+uIEW+CqwQqvY=
+        b=ytihZ/N9wF0bVs3WJBc+aY5YMp3HJbuPjLbu8/kHd4Ay9JtQO7wt7BROG5sPkGzNA
+         BdH4KdU0QkMdMNXdK0IQbxdOANHwP8LYYpYF2p7Y249M7Qkz3d7R7GtBWKRv4eeKmY
+         RJyZsvagqdJfOVvAVs5EbYGG3cELFFRtuYmyHMzc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Grzegorz Siwik <grzegorz.siwik@intel.com>,
-        Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
-        Igor Raits <igor@gooddata.com>,
+        stable@vger.kernel.org, Alan Brady <alan.brady@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.4 342/389] ice: Ignore EEXIST when setting promisc mode
-Date:   Tue, 23 Aug 2022 10:27:00 +0200
-Message-Id: <20220823080129.825300310@linuxfoundation.org>
+Subject: [PATCH 4.19 252/287] i40e: Fix to stop tx_timeout recovery if GLOBR fails
+Date:   Tue, 23 Aug 2022 10:27:01 +0200
+Message-Id: <20220823080109.695712144@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Grzegorz Siwik <grzegorz.siwik@intel.com>
+From: Alan Brady <alan.brady@intel.com>
 
-commit 11e551a2efa4481bd4f616ab75374a2710b480e9 upstream.
+commit 57c942bc3bef0970f0b21f8e0998e76a900ea80d upstream.
 
-Ignore EEXIST error when setting promiscuous mode.
-This fix is needed because the driver could set promiscuous mode
-when it still has not cleared properly.
-Promiscuous mode could be set only once, so setting it second
-time will be rejected.
+When a tx_timeout fires, the PF attempts to recover by incrementally
+resetting.  First we try a PFR, then CORER and finally a GLOBR.  If the
+GLOBR fails, then we keep hitting the tx_timeout and incrementing the
+recovery level and issuing dmesgs, which is both annoying to the user
+and accomplishes nothing.
 
-Fixes: 5eda8afd6bcc ("ice: Add support for PF/VF promiscuous mode")
-Signed-off-by: Grzegorz Siwik <grzegorz.siwik@intel.com>
-Link: https://lore.kernel.org/all/CAK8fFZ7m-KR57M_rYX6xZN39K89O=LGooYkKsu6HKt0Bs+x6xQ@mail.gmail.com/
-Tested-by: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-Tested-by: Igor Raits <igor@gooddata.com>
+If the GLOBR fails, then we're pretty much totally hosed, and there's
+not much else we can do to recover, so this makes it such that we just
+kill the VSI and stop hitting the tx_timeout in such a case.
+
+Fixes: 41c445ff0f48 ("i40e: main driver core")
+Signed-off-by: Alan Brady <alan.brady@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
 Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_switch.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/ice/ice_switch.c
-+++ b/drivers/net/ethernet/intel/ice/ice_switch.c
-@@ -2627,7 +2627,7 @@ ice_set_vlan_vsi_promisc(struct ice_hw *
- 		else
- 			status = ice_set_vsi_promisc(hw, vsi_handle,
- 						     promisc_mask, vlan_id);
--		if (status)
-+		if (status && status != -EEXIST)
- 			break;
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -397,7 +397,9 @@ static void i40e_tx_timeout(struct net_d
+ 		set_bit(__I40E_GLOBAL_RESET_REQUESTED, pf->state);
+ 		break;
+ 	default:
+-		netdev_err(netdev, "tx_timeout recovery unsuccessful\n");
++		netdev_err(netdev, "tx_timeout recovery unsuccessful, device is in non-recoverable state.\n");
++		set_bit(__I40E_DOWN_REQUESTED, pf->state);
++		set_bit(__I40E_VSI_DOWN_REQUESTED, vsi->state);
+ 		break;
  	}
  
 

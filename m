@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6032D59DB52
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99BE59DC47
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353879AbiHWKQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S1355911AbiHWKpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352938AbiHWKGa (ORCPT
+        with ESMTP id S1355197AbiHWKiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB91511177;
-        Tue, 23 Aug 2022 01:53:40 -0700 (PDT)
+        Tue, 23 Aug 2022 06:38:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8035D85FCF;
+        Tue, 23 Aug 2022 02:07:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54D4CB81C28;
-        Tue, 23 Aug 2022 08:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9C9C433D6;
-        Tue, 23 Aug 2022 08:53:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E675EB81C85;
+        Tue, 23 Aug 2022 09:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B583C433C1;
+        Tue, 23 Aug 2022 09:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244818;
-        bh=a/tR0wRoyr4JuYKwTcIB1bxG4Gavs+wVKA4M6lxPakE=;
+        s=korg; t=1661245653;
+        bh=7gKvBrCgfjXar+M7RVKi01m33VmCzuS0lNw/8ARW1do=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hAez04SDu9ICXZugcXse63g5lwsda5/ZKDRtMqOhmZvfRnwn52efAu1Wzc7MsFcpi
-         BqVdKWj94STythVjZc+017i8jJAxUypIJiUHilfcirRE8yRYkXMaq/lBnG+atkrrQc
-         cZy9067jGMqJFP/pbBAlSgsb3APbi2jlFuDuf+1g=
+        b=Ce0qTmfc7kECKhW29Ax3dsD6MuATph4C9AeWK6kCEEOPcVh5Edthlu6EtjeCEWjjL
+         gFva4q6Gh80XaN8yZevnJPkvEotM4pr10bn+kGdjDpjjRYUdU6FepbHr4TCXiUlfUH
+         Lt41RxvYN9iZFMccfXPJ8sM6lwQGtYRbhiFCj2vw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 157/244] drm/meson: Fix refcount bugs in meson_vpu_has_available_connectors()
+Subject: [PATCH 4.19 147/287] ASoC: mt6797-mt6351: Fix refcount leak in mt6797_mt6351_dev_probe
 Date:   Tue, 23 Aug 2022 10:25:16 +0200
-Message-Id: <20220823080104.437021684@linuxfoundation.org>
+Message-Id: <20220823080105.522496550@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 91b3c8dbe898df158fd2a84675f3a284ff6666f7 ]
+[ Upstream commit 7472eb8d7dd12b6b9b1a4f4527719cc9c7f5965f ]
 
-In this function, there are two refcount leak bugs:
-(1) when breaking out of for_each_endpoint_of_node(), we need call
-the of_node_put() for the 'ep';
-(2) we should call of_node_put() for the reference returned by
-of_graph_get_remote_port() when it is not used anymore.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controller")
-Signed-off-by: Liang He <windhl@126.com>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220726010722.1319416-1-windhl@126.com
+Fixes: f0ab0bf250da ("ASoC: add mt6797-mt6351 driver and config option")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220603083417.9011-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_drv.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ sound/soc/mediatek/mt6797/mt6797-mt6351.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
-index c98525d60df5..a56607501d36 100644
---- a/drivers/gpu/drm/meson/meson_drv.c
-+++ b/drivers/gpu/drm/meson/meson_drv.c
-@@ -114,8 +114,11 @@ static bool meson_vpu_has_available_connectors(struct device *dev)
- 	for_each_endpoint_of_node(dev->of_node, ep) {
- 		/* If the endpoint node exists, consider it enabled */
- 		remote = of_graph_get_remote_port(ep);
--		if (remote)
-+		if (remote) {
-+			of_node_put(remote);
-+			of_node_put(ep);
- 			return true;
-+		}
+diff --git a/sound/soc/mediatek/mt6797/mt6797-mt6351.c b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
+index b1558c57b9ca..0c49e1a9a897 100644
+--- a/sound/soc/mediatek/mt6797/mt6797-mt6351.c
++++ b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
+@@ -179,7 +179,8 @@ static int mt6797_mt6351_dev_probe(struct platform_device *pdev)
+ 	if (!codec_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
  	}
+ 	for (i = 0; i < card->num_links; i++) {
+ 		if (mt6797_mt6351_dai_links[i].codec_name)
+@@ -192,6 +193,9 @@ static int mt6797_mt6351_dev_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
  
- 	return false;
++	of_node_put(codec_node);
++put_platform_node:
++	of_node_put(platform_node);
+ 	return ret;
+ }
+ 
 -- 
 2.35.1
 

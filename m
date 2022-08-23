@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7899859E2F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C61A59E13F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353521AbiHWKLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S1350069AbiHWKoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352171AbiHWKEh (ORCPT
+        with ESMTP id S1355645AbiHWKgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:04:37 -0400
+        Tue, 23 Aug 2022 06:36:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C155C7CA8D;
-        Tue, 23 Aug 2022 01:51:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD42A61CD;
+        Tue, 23 Aug 2022 02:07:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E09BB8105C;
-        Tue, 23 Aug 2022 08:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9ADC433B5;
-        Tue, 23 Aug 2022 08:51:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25851B81C94;
+        Tue, 23 Aug 2022 09:07:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E459C433C1;
+        Tue, 23 Aug 2022 09:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244694;
-        bh=9nBzl6UABDLghwFHO1nasarlpDPMZDFE+Q6xgbY2Q+U=;
+        s=korg; t=1661245631;
+        bh=SrbAtyQryqiIjUrEYkpoAKvWYRMpR7d+M4Tnh4zVXZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C4xfycDGUCypPdc8uEFQtUBU9anyXuLbMtaWcje6ovlMzEH3ZVmHjDC5M1kib+w5v
-         n2JRYPiyDUOb5FuMrAAMqyLsllvGQCiukKR38n6QkD2+47TCVc0A4aH+grsJSIhX9H
-         bxwxXfOaqWhS2O5mXBnEfEyOUDMgJECwtV2/10Zk=
+        b=gL/V6suVV2YxdKBwb3xn2neqUNfNTcR0fmIUglAO8n9a8Do2aKhBQ/8JN6ajYo3I/
+         jPGFgF8lmRghHGbKcY+BLYQS3m/iCcGf0ga6CaeTZfiP4rbE5L7l6KmqQUlWL+sdPf
+         AsWY1g4nqJm3RTLbFFkY8Hkcijtznx5JaJPMxn30=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 117/244] ASoC: SOF: debug: Fix potential buffer overflow by snprintf()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel test robot <lkp@intel.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 107/287] wifi: wil6210: debugfs: fix uninitialized variable use in `wil_write_file_wmi()`
 Date:   Tue, 23 Aug 2022 10:24:36 +0200
-Message-Id: <20220823080102.925360091@linuxfoundation.org>
+Message-Id: <20220823080103.981225238@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-commit 1eb123ce985e6cf302ac6e3f19862d132d86fa8f upstream.
+[ Upstream commit d578e0af3a003736f6c440188b156483d451b329 ]
 
-snprintf() returns the would-be-filled size when the string overflows
-the given buffer size, hence using this value may result in the buffer
-overflow (although it's unrealistic).
+Commit 7a4836560a61 changes simple_write_to_buffer() with memdup_user()
+but it forgets to change the value to be returned that came from
+simple_write_to_buffer() call. It results in the following warning:
 
-This patch replaces with a safer version, scnprintf() for papering
-over such a potential issue.
+  warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+           return rc;
+                  ^~
 
-Fixes: 5b10b6298921 ("ASoC: SOF: Add `memory_info` file to debugfs")
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/20220801165420.25978-3-tiwai@suse.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Remove rc variable and just return the passed in length if the
+memdup_user() succeeds.
+
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 7a4836560a6198d245d5732e26f94898b12eb760 ("wifi: wil6210: debugfs: fix info leak in wil_write_file_wmi()")
+Fixes: ff974e4083341383d3dd4079e52ed30f57f376f0 ("wil6210: debugfs interface to send raw WMI command")
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220724202452.61846-1-ammar.faizi@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/debug.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/wireless/ath/wil6210/debugfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/soc/sof/debug.c
-+++ b/sound/soc/sof/debug.c
-@@ -668,9 +668,9 @@ static int memory_info_update(struct snd
- 	}
+diff --git a/drivers/net/wireless/ath/wil6210/debugfs.c b/drivers/net/wireless/ath/wil6210/debugfs.c
+index 675b2829b4c7..3a46b319e9f1 100644
+--- a/drivers/net/wireless/ath/wil6210/debugfs.c
++++ b/drivers/net/wireless/ath/wil6210/debugfs.c
+@@ -1002,7 +1002,7 @@ static ssize_t wil_write_file_wmi(struct file *file, const char __user *buf,
+ 	void *cmd;
+ 	int cmdlen = len - sizeof(struct wmi_cmd_hdr);
+ 	u16 cmdid;
+-	int rc, rc1;
++	int rc1;
  
- 	for (i = 0, len = 0; i < reply->num_elems; i++) {
--		ret = snprintf(buf + len, buff_size - len, "zone %d.%d used %#8x free %#8x\n",
--			       reply->elems[i].zone, reply->elems[i].id,
--			       reply->elems[i].used, reply->elems[i].free);
-+		ret = scnprintf(buf + len, buff_size - len, "zone %d.%d used %#8x free %#8x\n",
-+				reply->elems[i].zone, reply->elems[i].id,
-+				reply->elems[i].used, reply->elems[i].free);
- 		if (ret < 0)
- 			goto error;
- 		len += ret;
+ 	if (cmdlen < 0 || *ppos != 0)
+ 		return -EINVAL;
+@@ -1019,7 +1019,7 @@ static ssize_t wil_write_file_wmi(struct file *file, const char __user *buf,
+ 
+ 	wil_info(wil, "0x%04x[%d] -> %d\n", cmdid, cmdlen, rc1);
+ 
+-	return rc;
++	return len;
+ }
+ 
+ static const struct file_operations fops_wmi = {
+-- 
+2.35.1
+
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8347A59E0DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A233D59E045
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353809AbiHWKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
+        id S1357656AbiHWLi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352179AbiHWKEl (ORCPT
+        with ESMTP id S1357975AbiHWLcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:04:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767FD7CB49;
-        Tue, 23 Aug 2022 01:51:46 -0700 (PDT)
+        Tue, 23 Aug 2022 07:32:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4666E760F1;
+        Tue, 23 Aug 2022 02:26:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF3BAB81BF8;
-        Tue, 23 Aug 2022 08:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC5BC433C1;
-        Tue, 23 Aug 2022 08:51:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9131EB81B1F;
+        Tue, 23 Aug 2022 09:26:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16D4C433C1;
+        Tue, 23 Aug 2022 09:26:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244703;
-        bh=xchc2uYcdy/PHF2UcBVcST9d80rgCnHTzb/KmibmEeg=;
+        s=korg; t=1661246780;
+        bh=veCuL6KWz3iIbpQCswj2sNXfQMLL9Tn2IcLRHQlPaPw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mWmfsGD2tCKrJh5yYm6kPc1k8B5Gb1ia36kW9ImL7VtqYCpQ/qz2EqInmD87361qP
-         3MKkXBqWt8T08YI3rREbEvBMnzq5CP2I/pmU7p/9j63ZJ7uNv07FMq+Kg/stAapQnZ
-         9LJ4uvqpObmHeoYYPxYTBE68CY64NYJC4JibBslY=
+        b=IYxvg7iIKIXB/LGeo+t9dsJXhrqsQxD0qOW4WE9EIXoJOjFtL86+MWt4KSatJkH1W
+         zUcH1e/M+HO4cH0UFnfEd3c+YRINQYNLXJdkea1v1EfXbL1d5p7pxqgCqnjH57P2XQ
+         wkdQhYLimEwPc1GzOfcQKcsh8eia2CbutbcW7/ns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Amit Cohen <amcohen@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 136/244] mlxsw: spectrum: Clear PTP configuration after unregistering the netdevice
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 217/389] tty: n_gsm: fix DM command
 Date:   Tue, 23 Aug 2022 10:24:55 +0200
-Message-Id: <20220823080103.693521759@linuxfoundation.org>
+Message-Id: <20220823080124.663725708@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amit Cohen <amcohen@nvidia.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit a159e986ad26d3f35c0157ac92760ba5e44e6785 upstream.
+[ Upstream commit 18a948c7d90995d127785e308fa7b701df4c499f ]
 
-Currently as part of removing port, PTP API is called to clear the
-existing configuration and set the 'rx_filter' and 'tx_type' to zero.
-The clearing is done before unregistering the netdevice, which means that
-there is a window of time in which the user can reconfigure PTP in the
-port, and this configuration will not be cleared.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.3.3 defines the DM response. There exists
+no DM command. However, the current implementation incorrectly sends DM as
+command in case of unexpected UIH frames in gsm_queue().
+Correct this behavior by always sending DM as response.
 
-Reorder the operations, clear PTP configuration after unregistering the
-netdevice.
-
-Fixes: 8748642751ede ("mlxsw: spectrum: PTP: Support SIOCGHWTSTAMP, SIOCSHWTSTAMP ioctls")
-Signed-off-by: Amit Cohen <amcohen@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220707113223.3685-2-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlxsw/spectrum.c |    2 +-
+ drivers/tty/n_gsm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/mellanox/mlxsw/spectrum.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum.c
-@@ -1730,9 +1730,9 @@ static void mlxsw_sp_port_remove(struct
- 
- 	cancel_delayed_work_sync(&mlxsw_sp_port->periodic_hw_stats.update_dw);
- 	cancel_delayed_work_sync(&mlxsw_sp_port->ptp.shaper_dw);
--	mlxsw_sp_port_ptp_clear(mlxsw_sp_port);
- 	mlxsw_core_port_clear(mlxsw_sp->core, local_port, mlxsw_sp);
- 	unregister_netdev(mlxsw_sp_port->dev); /* This calls ndo_stop */
-+	mlxsw_sp_port_ptp_clear(mlxsw_sp_port);
- 	mlxsw_sp_port_vlan_classification_set(mlxsw_sp_port, true, true);
- 	mlxsw_sp->ports[local_port] = NULL;
- 	mlxsw_sp_port_vlan_flush(mlxsw_sp_port, true);
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index f4b5ac840222..39b6bcdc2c55 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1894,7 +1894,7 @@ static void gsm_queue(struct gsm_mux *gsm)
+ 			goto invalid;
+ #endif
+ 		if (dlci == NULL || dlci->state != DLCI_OPEN) {
+-			gsm_command(gsm, address, DM|PF);
++			gsm_response(gsm, address, DM|PF);
+ 			return;
+ 		}
+ 		dlci->data(dlci, gsm->buf, gsm->len);
+-- 
+2.35.1
+
 
 

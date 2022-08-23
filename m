@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C0F59E33F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3C159DBBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242504AbiHWMRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
+        id S1358877AbiHWL7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351721AbiHWMO6 (ORCPT
+        with ESMTP id S1359293AbiHWL4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:14:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588EF98CB3;
-        Tue, 23 Aug 2022 02:40:58 -0700 (PDT)
+        Tue, 23 Aug 2022 07:56:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4FAD6BAD;
+        Tue, 23 Aug 2022 02:34:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0F68B81C53;
-        Tue, 23 Aug 2022 09:39:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C8CDC433D6;
-        Tue, 23 Aug 2022 09:39:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7B30B81C89;
+        Tue, 23 Aug 2022 09:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADA9C433C1;
+        Tue, 23 Aug 2022 09:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247582;
-        bh=B7aoIJ3yzrTQ/OoMT4+TgU+dfqKNByzk991qODNE/Lg=;
+        s=korg; t=1661247250;
+        bh=X6jgYWZ4Mu4BRn1XVD+JQfc78HmS4SDy8hx0sB+nn/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O01js55HdVzVzElcIMwzoKV7BroCTe6U3Sv6xQ+d0G6igGv3q3O1Q5Y4yiBB+c3Rm
-         4L6F5nW8XyM9j69zgSmVBdfhj6oOYOiF9gV17Or0w+Yxdk+860b15A/fOvoyBeLWAj
-         Nw8Domk/hrBVmEnHVN6jNqD5TdK01crLf1s2jhG4=
+        b=lwKcA03ErS6NUopAAOpxPiVc4xCzX+H+dcyQsSvtjBCDzu54Crf+8ifhLYduqPXiI
+         0ia16yBFIiozkJR3qFvzCyndgyfer57RgUkK/s86FhlxNArGnT3PfKO0ThW1JoulxA
+         nYec0ntzDhbwyCBAcHoEBWGLyxObr2gzwvzpexZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergei Antonov <saproj@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 081/158] net: moxa: pass pdev instead of ndev to DMA functions
+        stable@vger.kernel.org,
+        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
+        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
+        Marek Szlosek <marek.szlosek@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.4 335/389] iavf: Fix adminq error handling
 Date:   Tue, 23 Aug 2022 10:26:53 +0200
-Message-Id: <20220823080049.313362811@linuxfoundation.org>
+Message-Id: <20220823080129.510039394@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,111 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Antonov <saproj@gmail.com>
+From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
 
-commit 3a12df22a8f68954a4ba48435c06b3d1791c87c4 upstream.
+commit 419831617ed349992c84344dbd9e627f9e68f842 upstream.
 
-dma_map_single() calls fail in moxart_mac_setup_desc_ring() and
-moxart_mac_start_xmit() which leads to an incessant output of this:
+iavf_alloc_asq_bufs/iavf_alloc_arq_bufs allocates with dma_alloc_coherent
+memory for VF mailbox.
+Free DMA regions for both ASQ and ARQ in case error happens during
+configuration of ASQ/ARQ registers.
+Without this change it is possible to see when unloading interface:
+74626.583369: dma_debug_device_change: device driver has pending DMA allocations while released from device [count=32]
+One of leaked entries details: [device address=0x0000000b27ff9000] [size=4096 bytes] [mapped with DMA_BIDIRECTIONAL] [mapped as coherent]
 
-[   16.043925] moxart-ethernet 92000000.mac eth0: DMA mapping error
-[   16.050957] moxart-ethernet 92000000.mac eth0: DMA mapping error
-[   16.058229] moxart-ethernet 92000000.mac eth0: DMA mapping error
-
-Passing pdev to DMA is a common approach among net drivers.
-
-Fixes: 6c821bd9edc9 ("net: Add MOXA ART SoCs ethernet driver")
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Suggested-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220812171339.2271788-1-saproj@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: d358aa9a7a2d ("i40evf: init code and hardware support")
+Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+Tested-by: Marek Szlosek <marek.szlosek@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/moxa/moxart_ether.c |   20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_adminq.c |   15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/moxa/moxart_ether.c
-+++ b/drivers/net/ethernet/moxa/moxart_ether.c
-@@ -77,7 +77,7 @@ static void moxart_mac_free_memory(struc
- 	int i;
+--- a/drivers/net/ethernet/intel/iavf/iavf_adminq.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_adminq.c
+@@ -324,6 +324,7 @@ static enum iavf_status iavf_config_arq_
+ static enum iavf_status iavf_init_asq(struct iavf_hw *hw)
+ {
+ 	enum iavf_status ret_code = 0;
++	int i;
  
- 	for (i = 0; i < RX_DESC_NUM; i++)
--		dma_unmap_single(&ndev->dev, priv->rx_mapping[i],
-+		dma_unmap_single(&priv->pdev->dev, priv->rx_mapping[i],
- 				 priv->rx_buf_size, DMA_FROM_DEVICE);
+ 	if (hw->aq.asq.count > 0) {
+ 		/* queue already initialized */
+@@ -354,12 +355,17 @@ static enum iavf_status iavf_init_asq(st
+ 	/* initialize base registers */
+ 	ret_code = iavf_config_asq_regs(hw);
+ 	if (ret_code)
+-		goto init_adminq_free_rings;
++		goto init_free_asq_bufs;
  
- 	if (priv->tx_desc_base)
-@@ -147,11 +147,11 @@ static void moxart_mac_setup_desc_ring(s
- 		       desc + RX_REG_OFFSET_DESC1);
+ 	/* success! */
+ 	hw->aq.asq.count = hw->aq.num_asq_entries;
+ 	goto init_adminq_exit;
  
- 		priv->rx_buf[i] = priv->rx_buf_base + priv->rx_buf_size * i;
--		priv->rx_mapping[i] = dma_map_single(&ndev->dev,
-+		priv->rx_mapping[i] = dma_map_single(&priv->pdev->dev,
- 						     priv->rx_buf[i],
- 						     priv->rx_buf_size,
- 						     DMA_FROM_DEVICE);
--		if (dma_mapping_error(&ndev->dev, priv->rx_mapping[i]))
-+		if (dma_mapping_error(&priv->pdev->dev, priv->rx_mapping[i]))
- 			netdev_err(ndev, "DMA mapping error\n");
++init_free_asq_bufs:
++	for (i = 0; i < hw->aq.num_asq_entries; i++)
++		iavf_free_dma_mem(hw, &hw->aq.asq.r.asq_bi[i]);
++	iavf_free_virt_mem(hw, &hw->aq.asq.dma_head);
++
+ init_adminq_free_rings:
+ 	iavf_free_adminq_asq(hw);
  
- 		moxart_desc_write(priv->rx_mapping[i],
-@@ -240,7 +240,7 @@ static int moxart_rx_poll(struct napi_st
- 		if (len > RX_BUF_SIZE)
- 			len = RX_BUF_SIZE;
+@@ -383,6 +389,7 @@ init_adminq_exit:
+ static enum iavf_status iavf_init_arq(struct iavf_hw *hw)
+ {
+ 	enum iavf_status ret_code = 0;
++	int i;
  
--		dma_sync_single_for_cpu(&ndev->dev,
-+		dma_sync_single_for_cpu(&priv->pdev->dev,
- 					priv->rx_mapping[rx_head],
- 					priv->rx_buf_size, DMA_FROM_DEVICE);
- 		skb = netdev_alloc_skb_ip_align(ndev, len);
-@@ -294,7 +294,7 @@ static void moxart_tx_finished(struct ne
- 	unsigned int tx_tail = priv->tx_tail;
+ 	if (hw->aq.arq.count > 0) {
+ 		/* queue already initialized */
+@@ -413,12 +420,16 @@ static enum iavf_status iavf_init_arq(st
+ 	/* initialize base registers */
+ 	ret_code = iavf_config_arq_regs(hw);
+ 	if (ret_code)
+-		goto init_adminq_free_rings;
++		goto init_free_arq_bufs;
  
- 	while (tx_tail != tx_head) {
--		dma_unmap_single(&ndev->dev, priv->tx_mapping[tx_tail],
-+		dma_unmap_single(&priv->pdev->dev, priv->tx_mapping[tx_tail],
- 				 priv->tx_len[tx_tail], DMA_TO_DEVICE);
+ 	/* success! */
+ 	hw->aq.arq.count = hw->aq.num_arq_entries;
+ 	goto init_adminq_exit;
  
- 		ndev->stats.tx_packets++;
-@@ -358,9 +358,9 @@ static netdev_tx_t moxart_mac_start_xmit
++init_free_arq_bufs:
++	for (i = 0; i < hw->aq.num_arq_entries; i++)
++		iavf_free_dma_mem(hw, &hw->aq.arq.r.arq_bi[i]);
++	iavf_free_virt_mem(hw, &hw->aq.arq.dma_head);
+ init_adminq_free_rings:
+ 	iavf_free_adminq_arq(hw);
  
- 	len = skb->len > TX_BUF_SIZE ? TX_BUF_SIZE : skb->len;
- 
--	priv->tx_mapping[tx_head] = dma_map_single(&ndev->dev, skb->data,
-+	priv->tx_mapping[tx_head] = dma_map_single(&priv->pdev->dev, skb->data,
- 						   len, DMA_TO_DEVICE);
--	if (dma_mapping_error(&ndev->dev, priv->tx_mapping[tx_head])) {
-+	if (dma_mapping_error(&priv->pdev->dev, priv->tx_mapping[tx_head])) {
- 		netdev_err(ndev, "DMA mapping error\n");
- 		goto out_unlock;
- 	}
-@@ -379,7 +379,7 @@ static netdev_tx_t moxart_mac_start_xmit
- 		len = ETH_ZLEN;
- 	}
- 
--	dma_sync_single_for_device(&ndev->dev, priv->tx_mapping[tx_head],
-+	dma_sync_single_for_device(&priv->pdev->dev, priv->tx_mapping[tx_head],
- 				   priv->tx_buf_size, DMA_TO_DEVICE);
- 
- 	txdes1 = TX_DESC1_LTS | TX_DESC1_FTS | (len & TX_DESC1_BUF_SIZE_MASK);
-@@ -494,7 +494,7 @@ static int moxart_mac_probe(struct platf
- 	priv->tx_buf_size = TX_BUF_SIZE;
- 	priv->rx_buf_size = RX_BUF_SIZE;
- 
--	priv->tx_desc_base = dma_alloc_coherent(&pdev->dev, TX_REG_DESC_SIZE *
-+	priv->tx_desc_base = dma_alloc_coherent(p_dev, TX_REG_DESC_SIZE *
- 						TX_DESC_NUM, &priv->tx_base,
- 						GFP_DMA | GFP_KERNEL);
- 	if (!priv->tx_desc_base) {
-@@ -502,7 +502,7 @@ static int moxart_mac_probe(struct platf
- 		goto init_fail;
- 	}
- 
--	priv->rx_desc_base = dma_alloc_coherent(&pdev->dev, RX_REG_DESC_SIZE *
-+	priv->rx_desc_base = dma_alloc_coherent(p_dev, RX_REG_DESC_SIZE *
- 						RX_DESC_NUM, &priv->rx_base,
- 						GFP_DMA | GFP_KERNEL);
- 	if (!priv->rx_desc_base) {
 
 

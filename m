@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878FA59D873
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A19259D955
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349047AbiHWJRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S231867AbiHWJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349118AbiHWJOQ (ORCPT
+        with ESMTP id S1349985AbiHWJQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:14:16 -0400
+        Tue, 23 Aug 2022 05:16:28 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0B686FFB;
-        Tue, 23 Aug 2022 01:32:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B69883E0;
+        Tue, 23 Aug 2022 01:32:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A559BB81BF8;
-        Tue, 23 Aug 2022 08:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A11C433C1;
-        Tue, 23 Aug 2022 08:31:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42BE6B81C35;
+        Tue, 23 Aug 2022 08:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 899D1C433C1;
+        Tue, 23 Aug 2022 08:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243502;
-        bh=DDjUZxl2V2JdEZSkI5b5kOsibxbKLbbmvroI1QTDkPw=;
+        s=korg; t=1661243563;
+        bh=Wk2EN4oWzCNZy1fjsGB+gIos7yTqSgZhVXSohy2ODQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rCqtvxHBFQxpJdXtpvVlyfXjMHYVXuXJ8Uy+0PDS0z0790MwQR+Gddxhzot/gPFJO
-         +Si1jxIIqoAjcmvPpOuBLTica8XmFW4TubTqDcQ0T3lX8AGhAGrl/2OjY0XvNQQzVv
-         sQs26H3dkjsGBitxdlZTVVweTXW9/3qx4r6DHXyk=
+        b=BxJNnbXxmUMmdTXGLj0GbU5dEFut44r0cpvrifZTHr/5E1+yHi0jtLMKY0EajY9ZP
+         1gKUPmCpAMXVSP3iedreJo1zX4jixlJ2zApr+GPnpieEJdmL3ApZQudypXMUCjUheI
+         lSEUqavKRRlfYGQvy8hRzFKhvEkySsI8RVIdqeQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 296/365] PCI/ACPI: Guard ARM64-specific mcfg_quirks
-Date:   Tue, 23 Aug 2022 10:03:17 +0200
-Message-Id: <20220823080130.574617110@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Dooks <ben.dooks@sifive.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 299/365] dmaengine: dw-axi-dmac: do not print NULL LLI during error
+Date:   Tue, 23 Aug 2022 10:03:20 +0200
+Message-Id: <20220823080130.678002903@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -55,42 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huacai Chen <chenhuacai@loongson.cn>
+From: Ben Dooks <ben.dooks@sifive.com>
 
-[ Upstream commit 40a6cc141b4b9580de140bcb3e893445708acc5d ]
+[ Upstream commit 86cb0defe0e275453bc39e856bb523eb425a6537 ]
 
-Guard ARM64-specific quirks with CONFIG_ARM64 to avoid build errors,
-since mcfg_quirks will be shared by more than one architectures.
+During debugging we have seen an issue where axi_chan_dump_lli()
+is passed a NULL LLI pointer which ends up causing an OOPS due
+to trying to get fields from it. Simply print NULL LLI and exit
+to avoid this.
 
-Link: https://lore.kernel.org/r/20220714124216.1489304-2-chenhuacai@loongson.cn
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+Link: https://lore.kernel.org/r/20220708170153.269991-3-ben.dooks@sifive.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/pci_mcfg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/acpi/pci_mcfg.c b/drivers/acpi/pci_mcfg.c
-index 53cab975f612..63b98eae5e75 100644
---- a/drivers/acpi/pci_mcfg.c
-+++ b/drivers/acpi/pci_mcfg.c
-@@ -41,6 +41,8 @@ struct mcfg_fixup {
- static struct mcfg_fixup mcfg_quirks[] = {
- /*	{ OEM_ID, OEM_TABLE_ID, REV, SEGMENT, BUS_RANGE, ops, cfgres }, */
- 
-+#ifdef CONFIG_ARM64
+diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+index c741da02b67e..41583f01a360 100644
+--- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
++++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+@@ -982,6 +982,11 @@ static int dw_axi_dma_chan_slave_config(struct dma_chan *dchan,
+ static void axi_chan_dump_lli(struct axi_dma_chan *chan,
+ 			      struct axi_dma_hw_desc *desc)
+ {
++	if (!desc->lli) {
++		dev_err(dchan2dev(&chan->vc.chan), "NULL LLI\n");
++		return;
++	}
 +
- #define AL_ECAM(table_id, rev, seg, ops) \
- 	{ "AMAZON", table_id, rev, seg, MCFG_BUS_ANY, ops }
- 
-@@ -169,6 +171,7 @@ static struct mcfg_fixup mcfg_quirks[] = {
- 	ALTRA_ECAM_QUIRK(1, 13),
- 	ALTRA_ECAM_QUIRK(1, 14),
- 	ALTRA_ECAM_QUIRK(1, 15),
-+#endif /* ARM64 */
- };
- 
- static char mcfg_oem_id[ACPI_OEM_ID_SIZE];
+ 	dev_err(dchan2dev(&chan->vc.chan),
+ 		"SAR: 0x%llx DAR: 0x%llx LLP: 0x%llx BTS 0x%x CTL: 0x%x:%08x",
+ 		le64_to_cpu(desc->lli->sar),
 -- 
 2.35.1
 

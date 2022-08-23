@@ -2,95 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC79359EC4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B55659EC50
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiHWT2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S230310AbiHWT3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiHWT2R (ORCPT
+        with ESMTP id S231357AbiHWT3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:28:17 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E704F3258
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:15:38 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id o184so16943574oif.13
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=9K7K88FsF8kEbdkhom65oGNYjCLYbs6+n8/9saUSNLQ=;
-        b=YonbyMFZtTtCbC+1zsmXeE4UMqMAnd1q2E2yfR06k4ejLcZlWwvVWpfAT5pVpPDiaS
-         PSe7eZKCLiZwsP4/dOsyA/PUJPA4EXVcXYEfdKmYhTPwcmSC4cGyBuWPExZRfrbKr59z
-         s94ctp68HWHdo27sJ8NgbeNLeMuFd2Pbf0sYd6wVZinkf9+meb2I3ixzEvKtc0hvEUK+
-         ModwGHBOtVGI/eJpBMqHi3ic7J2A+7sIWigR7kHoRHjnTiKrMaDc26MnzUBPyUUSx4JJ
-         chSzfOGbZIDlL45ZNaPHuAnVQydWcrjKOntUQz8Ha/f2RIUexdjrCVpbJ2jxmSF5Eh5W
-         kI6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=9K7K88FsF8kEbdkhom65oGNYjCLYbs6+n8/9saUSNLQ=;
-        b=VTjF30W4XKeQzip8Jc6eqEomxOZbUil6rGabaRnqKxkQThGju53sYBgSng24a3g/EY
-         7aHzIODzRMxP7X56SvJZ1jl+rudIOcs+hqniUBqpEhXDwpNuYiH975+7pit5Njf3FfPX
-         bpALAfXKqxEFus2/ogv003ebDZqj6EBJJM4T65euwVxs2iWe1xF+2htOv6MjKM5QW1eQ
-         grc+ZZy507t3u0AqHaLcgFuEd99uCxAHnzqjuRTFJkCwehCj0p65dPdrUoeSdVEUDBI4
-         vsqkY+ZxBOLVn9qE3eiWL/v8Ni0QrNAvWKhPRrUDPJsWlZnQSWNwmGN9ktF6kwSqf/Lg
-         RCSg==
-X-Gm-Message-State: ACgBeo3yBmLpB6cjc67ovYy5jM6LA4SWc/iaiVdvoiRX9HbpMbvUt285
-        QUi1cE27L+xcveZMCjEsH8oVbaDQ2hYcU8VQiX0=
-X-Google-Smtp-Source: AA6agR7VJ0kv6VTSNAEyR9ldpSjuxqBcShQsKHcRrM9HUxTIQMcFCYl4ayZ4iZ2qqqgGXjAIzRcSzSIQh7AZNkhKMC0=
-X-Received: by 2002:a05:6808:130a:b0:344:e23f:811b with SMTP id
- y10-20020a056808130a00b00344e23f811bmr1758301oiv.82.1661278508214; Tue, 23
- Aug 2022 11:15:08 -0700 (PDT)
+        Tue, 23 Aug 2022 15:29:11 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 437407C526;
+        Tue, 23 Aug 2022 11:17:38 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id C28FF13501;
+        Tue, 23 Aug 2022 21:16:40 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 12885134BC;
+        Tue, 23 Aug 2022 21:16:38 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 8DE973C0441;
+        Tue, 23 Aug 2022 21:16:32 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 27NIGTfi085162;
+        Tue, 23 Aug 2022 21:16:31 +0300
+Date:   Tue, 23 Aug 2022 21:16:29 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     "longguang.yue" <bigclouds@163.com>
+cc:     horms@verge.net.au, kadlec@netfilter.org, fw@strlen.de,
+        pablo@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ipvs: add a sysctl switch to control ipvs to bypass
+ OUTPUT chain or not
+In-Reply-To: <20220819100702.14889-1-bigclouds@163.com>
+Message-ID: <495ceee5-f8dc-06e-d1ef-258d1889c7b8@ssi.bg>
+References: <20220819100702.14889-1-bigclouds@163.com>
 MIME-Version: 1.0
-Sender: davidscottman334@gmail.com
-Received: by 2002:a05:6358:880b:b0:b5:9917:7822 with HTTP; Tue, 23 Aug 2022
- 11:15:07 -0700 (PDT)
-From:   "Mr. Jimmy Moore" <jimmymoore265@gmail.com>
-Date:   Tue, 23 Aug 2022 21:15:07 +0300
-X-Google-Sender-Auth: ApQygC0XgkOtpB-sxrTHlJ7ra-I
-Message-ID: <CAB0r4CO1Duf6NF-QweDh7mdcze2DQU9SQ9udkv52jAXRjiv2wA@mail.gmail.com>
-Subject: COVID-19 COMPENSATION FUNDS.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,LOTTO_DEPT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UNITED NATIONS COVID-19 OVERDUE COMPENSATION UNIT.
-REFERENCE PAYMENT CODE: 8525595
-BAILOUT AMOUNT: $500,000.00 USD
-ADDRESS: NEW YORK, NY 10017, UNITED STATES
 
-Dear award recipient, Covid-19 Compensation funds.
+	Hello,
 
-You are receiving this correspondence because we have finally reached
-a consensus with the UN, IRS, and IMF that your total fund worth
-$500,000.00 USD of Covid-19 Compensation payment shall be delivered to
-your nominated mode of receipt, and you are expected to pay the sum of
-$10,000 for levies owed to authorities after receiving your funds.
+On Fri, 19 Aug 2022, longguang.yue wrote:
 
-You have a grace period of 2 weeks to pay the $10,000 levy after you
-have received your Covid-19 Compensation total sum of $500,000.00 USD.
-We shall proceed with the payment of your bailout grant only if you
-agree to the terms and conditions stated.
+> Netfilter's rules are matched in sequence, more rules worse performance.
+> IPVS is a special system, its traffic is clear and definite, for better
+> performance, should better not be interfered heavily. This patch adds a
+> sysctl switch and enable ipvs to control traffic to pass netfilter
+> OUTPUT chain or not.
+> 
+> Signed-off-by: longguang.yue <bigclouds@163.com>
+> ---
+>  include/net/ip_vs.h             | 11 +++++++++++
+>  net/netfilter/ipvs/ip_vs_ctl.c  |  8 ++++++++
+>  net/netfilter/ipvs/ip_vs_xmit.c | 31 ++++++++++++++++++++++++-------
+>  3 files changed, 43 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+> index ff1804a0c469..c1232ef3a1b5 100644
+> --- a/include/net/ip_vs.h
+> +++ b/include/net/ip_vs.h
+> @@ -932,6 +932,7 @@ struct netns_ipvs {
+>  	int			sysctl_schedule_icmp;
+>  	int			sysctl_ignore_tunneled;
+>  	int			sysctl_run_estimation;
+> +	int			sysctl_output_bypass;
+>  
+>  	/* ip_vs_lblc */
+>  	int			sysctl_lblc_expiration;
+> @@ -1077,6 +1078,11 @@ static inline int sysctl_run_estimation(struct netns_ipvs *ipvs)
+>  	return ipvs->sysctl_run_estimation;
+>  }
+>  
+> +static inline int sysctl_output_bypass(struct netns_ipvs *ipvs)
+> +{
+> +	return ipvs->sysctl_output_bypass;
+> +}
+> +
+>  #else
+>  
+>  static inline int sysctl_sync_threshold(struct netns_ipvs *ipvs)
+> @@ -1174,6 +1180,11 @@ static inline int sysctl_run_estimation(struct netns_ipvs *ipvs)
+>  	return 1;
+>  }
+>  
+> +static inline int sysctl_output_bypass(struct netns_ipvs *ipvs)
+> +{
+> +	return 0;
+> +}
+> +
+>  #endif
+>  
+>  /* IPVS core functions
+> diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+> index efab2b06d373..8a08a783e85e 100644
+> --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+> @@ -2019,6 +2019,12 @@ static struct ctl_table vs_vars[] = {
+>  		.mode		= 0644,
+>  		.proc_handler	= proc_dointvec,
+>  	},
+> +	{
+> +		.procname	= "output_bypass",
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dointvec,
+> +	},
+>  #ifdef CONFIG_IP_VS_DEBUG
+>  	{
+>  		.procname	= "debug_level",
+> @@ -4094,6 +4100,8 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
+>  	tbl[idx++].data = &ipvs->sysctl_ignore_tunneled;
+>  	ipvs->sysctl_run_estimation = 1;
+>  	tbl[idx++].data = &ipvs->sysctl_run_estimation;
+> +	ipvs->sysctl_output_bypass = 1;
 
-Contact Dr. Mustafa Ali for more information by email at: (
-mustafaliali180@gmail.com ) Your consent in this regard would be
-highly appreciated.
+	Default should be 0, so without above line.
 
-Regards,
-Mr. Jimmy Moore.
-Undersecretary-General United Nations
-Office of Internal Oversight-UNIOS.
+> +	tbl[idx++].data = &ipvs->sysctl_output_bypass;
+>  #ifdef CONFIG_IP_VS_DEBUG
+>  	/* Global sysctls must be ro in non-init netns */
+>  	if (!net_eq(net, &init_net))
+> diff --git a/net/netfilter/ipvs/ip_vs_xmit.c b/net/netfilter/ipvs/ip_vs_xmit.c
+> index 029171379884..46a34dd2555e 100644
+> --- a/net/netfilter/ipvs/ip_vs_xmit.c
+> +++ b/net/netfilter/ipvs/ip_vs_xmit.c
+> @@ -653,8 +653,12 @@ static inline int ip_vs_nat_send_or_cont(int pf, struct sk_buff *skb,
+>  		skb_forward_csum(skb);
+>  		if (skb->dev)
+>  			skb_clear_tstamp(skb);
+> -		NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
+> -			NULL, skb_dst(skb)->dev, dst_output);
+> +		if (sysctl_output_bypass(cp->ipvs)) {
+> +			dst_output(cp->ipvs->net, NULL, skb);
+> +		} else {
+> +			NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
+> +				NULL, skb_dst(skb)->dev, dst_output);
+> +		}
+>  	} else
+>  		ret = NF_ACCEPT;
+>  
+> @@ -675,8 +679,12 @@ static inline int ip_vs_send_or_cont(int pf, struct sk_buff *skb,
+>  		skb_forward_csum(skb);
+>  		if (skb->dev)
+>  			skb_clear_tstamp(skb);
+> -		NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
+> -			NULL, skb_dst(skb)->dev, dst_output);
+> +		if (sysctl_output_bypass(cp->ipvs)) {
+> +			dst_output(cp->ipvs->net, NULL, skb);
+> +		} else {
+> +			NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
+> +				NULL, skb_dst(skb)->dev, dst_output);
+> +		}
+>  	} else
+>  		ret = NF_ACCEPT;
+>  	return ret;
+> @@ -1262,10 +1270,19 @@ ip_vs_tunnel_xmit(struct sk_buff *skb, struct ip_vs_conn *cp,
+>  	skb->ignore_df = 1;
+>  
+>  	ret = ip_vs_tunnel_xmit_prepare(skb, cp);
+> -	if (ret == NF_ACCEPT)
+> -		ip_local_out(net, skb->sk, skb);
+> -	else if (ret == NF_DROP)
+> +	if (ret == NF_ACCEPT) {
+> +		if (sysctl_output_bypass(cp->ipvs)) {
+> +			struct iphdr *iph = ip_hdr(skb);
+> +
+> +			iph->tot_len = htons(skb->len);
+> +			ip_send_check(iph);
+> +			dst_output(cp->ipvs->net, NULL, skb);
+
+	After our last discussion I still think this is a hack.
+If you expand also __ip6_local_out you'll see what maintenance
+cost adds such flag. Your patch also warns how much ip_local_out
+changed in the years and our NF_HOOK calls look as hacks too.
+They were used to avoid duplicate calls like ip_send_check
+which we should not have anymore, ip_send_check was added to the
+ip_defrag flow in 2015 with commit 0848f6428ba3. So, I think we
+should be moving to ip_local_out/ip6_local_out calls which are
+risky to duplicate here in the IPVS code.
+
+> +		} else {
+> +			ip_local_out(net, skb->sk, skb);
+> +		}
+> +	} else if (ret == NF_DROP) {
+>  		kfree_skb(skb);
+> +	}
+>  
+>  	LeaveFunction(10);
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+

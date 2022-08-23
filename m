@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2751B59DE55
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8B559DEB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359437AbiHWMIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S1353403AbiHWKL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244277AbiHWMD4 (ORCPT
+        with ESMTP id S1352123AbiHWKEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:03:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA38DDB58;
-        Tue, 23 Aug 2022 02:37:21 -0700 (PDT)
+        Tue, 23 Aug 2022 06:04:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9437CAB3;
+        Tue, 23 Aug 2022 01:51:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97A1DB81C65;
-        Tue, 23 Aug 2022 09:37:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D07F4C433D6;
-        Tue, 23 Aug 2022 09:37:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82C53611DD;
+        Tue, 23 Aug 2022 08:51:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6908BC433D6;
+        Tue, 23 Aug 2022 08:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247423;
-        bh=UCYycxyPUwO1hHOBKfBA1QUnk84cOVlOhcqdGlDU2ck=;
+        s=korg; t=1661244684;
+        bh=940HAywEM73UL70jDkF4U0wYf98SJc6UM4UQiogCvyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p7fTU/ZvVZF9FkVg93Il3Lh+L+B+/DuFegiEnqguk37m892hS6Lt0BYyXm7Dh+68G
-         6E9CEEHP9mHubhstyoQLxEe2QbHGHsWzW3qxXzLtwBFDF5jfV9nn3cwrpDWduLwkbX
-         D7N/nCFocjfhboDzZ9RBZehtQ1xvzneVFgcRj2vc=
+        b=R+5wkFIx6o0gmkcPMR9WGjcVB5WW9NPVr/E76sSq8D8J5ykdIBTZWxtcghhdgUtrN
+         79JZVvfne0L+c24sdiYJCcR4VSAS0G2h49KYNxGtnQHSn6AR4ihc8U3lUMqUZdc9ti
+         ZTm7VQYjaiVe6O196/kci8Zdr2sSzOAeKaZvHK5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 004/158] rds: add missing barrier to release_refill
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 4.14 175/229] powerpc/ptdump: Fix display of RW pages on FSL_BOOK3E
 Date:   Tue, 23 Aug 2022 10:25:36 +0200
-Message-Id: <20220823080046.230216609@linuxfoundation.org>
+Message-Id: <20220823080059.865938476@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-commit 9f414eb409daf4f778f011cf8266d36896bb930b upstream.
+commit dd8de84b57b02ba9c1fe530a6d916c0853f136bd upstream.
 
-The functions clear_bit and set_bit do not imply a memory barrier, thus it
-may be possible that the waitqueue_active function (which does not take
-any locks) is moved before clear_bit and it could miss a wakeup event.
+On FSL_BOOK3E, _PAGE_RW is defined with two bits, one for user and one
+for supervisor. As soon as one of the two bits is set, the page has
+to be display as RW. But the way it is implemented today requires both
+bits to be set in order to display it as RW.
 
-Fix this bug by adding a memory barrier after clear_bit.
+Instead of display RW when _PAGE_RW bits are set and R otherwise,
+reverse the logic and display R when _PAGE_RW bits are all 0 and
+RW otherwise.
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+This change has no impact on other platforms as _PAGE_RW is a single
+bit on all of them.
+
+Fixes: 8eb07b187000 ("powerpc/mm: Dump linux pagetables")
 Cc: stable@vger.kernel.org
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/0c33b96317811edf691e81698aaee8fa45ec3449.1656427391.git.christophe.leroy@csgroup.eu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/rds/ib_recv.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/mm/dump_linuxpagetables.c |   13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
---- a/net/rds/ib_recv.c
-+++ b/net/rds/ib_recv.c
-@@ -363,6 +363,7 @@ static int acquire_refill(struct rds_con
- static void release_refill(struct rds_connection *conn)
- {
- 	clear_bit(RDS_RECV_REFILL, &conn->c_flags);
-+	smp_mb__after_atomic();
- 
- 	/* We don't use wait_on_bit()/wake_up_bit() because our waking is in a
- 	 * hot path and finding waiters is very rare.  We don't want to walk
+--- a/arch/powerpc/mm/dump_linuxpagetables.c
++++ b/arch/powerpc/mm/dump_linuxpagetables.c
+@@ -123,15 +123,10 @@ static const struct flag_info flag_array
+ 		.set	= "user",
+ 		.clear	= "    ",
+ 	}, {
+-#if _PAGE_RO == 0
+-		.mask	= _PAGE_RW,
+-		.val	= _PAGE_RW,
+-#else
+-		.mask	= _PAGE_RO,
+-		.val	= 0,
+-#endif
+-		.set	= "rw",
+-		.clear	= "ro",
++		.mask	= _PAGE_RW | _PAGE_RO,
++		.val	= _PAGE_RO,
++		.set	= "ro",
++		.clear	= "rw",
+ 	}, {
+ 		.mask	= _PAGE_EXEC,
+ 		.val	= _PAGE_EXEC,
 
 

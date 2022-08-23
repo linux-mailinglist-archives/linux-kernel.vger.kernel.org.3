@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFC059DE89
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA6E59DEE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243095AbiHWMMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
+        id S1355094AbiHWKbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359768AbiHWMLJ (ORCPT
+        with ESMTP id S1353445AbiHWKPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:11:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2A8E0FFA;
-        Tue, 23 Aug 2022 02:39:09 -0700 (PDT)
+        Tue, 23 Aug 2022 06:15:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FE072EDA;
+        Tue, 23 Aug 2022 02:00:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00382B81C9A;
-        Tue, 23 Aug 2022 09:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A594C433D6;
-        Tue, 23 Aug 2022 09:38:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BB036156A;
+        Tue, 23 Aug 2022 09:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F188C433D7;
+        Tue, 23 Aug 2022 09:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247539;
-        bh=8x8a63ntKhqkoOD+w91XE3oumOK0E4SykLQt4bVGTB8=;
+        s=korg; t=1661245213;
+        bh=HsE6Hc1g0L5kt8Rb3CEnOB/34WTJkVgtm0Yx9+swGaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ap4XRKEsT/IBz/FfUNolqjSRFlTCrd6fpNHD864fkHToqCOkx78k3C+Gyn0rLzXZL
-         Cr0RpOdoGRcHqVZmIJ7T9b0WaUgRfRDYzQdlWmaLbmKimkg3zMbweFtJSrrnVjhVdq
-         52Vnj4V95zjTRmSt0qiBl6vFuwqAZGVH2mhwGbck=
+        b=SdmQUzUoZlGVaIPzx+hIUWf2k60WLRlDHwhT4PBfPMSHiVR75Hcw7EYiw5j22Jpu7
+         1hMV4GeVKjSdpPJifYQJS6F6OhmBkJmldhc7FtyYU7aToH7buOmF+LWD5vLpNiLjNA
+         RFaKzfTChFTzBsfitFx9aQ9W+hxF/9EVQoNGOq8Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.10 039/158] pinctrl: nomadik: Fix refcount leak in nmk_pinctrl_dt_subnode_to_map
-Date:   Tue, 23 Aug 2022 10:26:11 +0200
-Message-Id: <20220823080047.639775358@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>,
+        Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 213/244] ASoC: rsnd: care default case on rsnd_ssiu_busif_err_irq_ctrl()
+Date:   Tue, 23 Aug 2022 10:26:12 +0200
+Message-Id: <20220823080106.618967926@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-commit 4b32e054335ea0ce50967f63a7bfd4db058b14b9 upstream.
+[ Upstream commit ef30911d3c39fd57884c348c29b9cbff88def155 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak."
+Before, ssiu.c didn't care SSI5-8, thus,
+commit b1384d4c95088d0 ("ASoC: rsnd: care default case on
+rsnd_ssiu_busif_err_status_clear()") cares it for status clear.
 
-Fixes: c2f6d059abfc ("pinctrl: nomadik: refactor DT parser to take two paths")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220607111602.57355-1-linmq006@gmail.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+But we should care it for error irq handling, too.
+This patch cares it.
+
+Reported-by: Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>
+Reported-by: Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>
+Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/871quocio1.wl-kuninori.morimoto.gx@renesas.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/nomadik/pinctrl-nomadik.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/soc/sh/rcar/ssiu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-+++ b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-@@ -1421,8 +1421,10 @@ static int nmk_pinctrl_dt_subnode_to_map
+diff --git a/sound/soc/sh/rcar/ssiu.c b/sound/soc/sh/rcar/ssiu.c
+index 4b8a63e336c7..d7f4646ee029 100644
+--- a/sound/soc/sh/rcar/ssiu.c
++++ b/sound/soc/sh/rcar/ssiu.c
+@@ -67,6 +67,8 @@ static void rsnd_ssiu_busif_err_irq_ctrl(struct rsnd_mod *mod, int enable)
+ 		shift  = 1;
+ 		offset = 1;
+ 		break;
++	default:
++		return;
+ 	}
  
- 	has_config = nmk_pinctrl_dt_get_config(np, &configs);
- 	np_config = of_parse_phandle(np, "ste,config", 0);
--	if (np_config)
-+	if (np_config) {
- 		has_config |= nmk_pinctrl_dt_get_config(np_config, &configs);
-+		of_node_put(np_config);
-+	}
- 	if (has_config) {
- 		const char *gpio_name;
- 		const char *pin;
+ 	for (i = 0; i < 4; i++) {
+-- 
+2.35.1
+
 
 

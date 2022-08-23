@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E72359E8D3
+	by mail.lfdr.de (Postfix) with ESMTP id C6A4159E8D4
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244107AbiHWRM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S1343726AbiHWRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344912AbiHWRL1 (ORCPT
+        with ESMTP id S1344937AbiHWRL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:11:27 -0400
+        Tue, 23 Aug 2022 13:11:29 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BE2AF0F2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:58:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633C150173
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661263108; x=1692799108;
+  t=1661263112; x=1692799112;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kZQc7O6HWnTgp0S4GaudnO6gE/HwhaVoL4feiAvfF0s=;
-  b=gZPFOc+ZK1xRZwkylHcrZ7ojfYGib+c+C37K1c8pR+GiTeTP1HZXDal9
-   5L0QdrZhZcxlMmT6h0TiCRLvHDymMpnXwn1BJk3A2QBcmOH6msO4nuym2
-   /xxPYO0ELUo2IYvMnT3JDMvb8Vxs/bmUv8fWeHhNbzLcEY9NGLt8mkDd+
-   K9JhUuU5wOQcqO6dfi0DKt7JEoKPGIg2+fU+Fo1+iDHf72+C61WArmNwE
-   DuwcE1sJilPIGKBJb9ogFvBbbTx0cp77XHlluhdJ7qKrp8R4cs0UcswxF
-   /bvw1QO500zZFB8TdlsSUbaPkItlASWN7AnCiqwMMSjKkhuhRWpCRd8G0
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="357669580"
+  bh=4Pu50YmzN3N8F0nGXEPtFaQtALXj/wKmJ3as5yUVNsM=;
+  b=Cg2mWjGDiDzLLB0dsiSgaCLxU6sC9HoY+NyEG8KV5K10Vkhedq/zW+NH
+   0/vKhvIZ8ER55gJcuAQ4OW2hnZMtOcWz6M9PkJ8yCiO5SHgJ8ksEIdQlz
+   a9FP9uIwQ9InLHVMnBQBosgrgNp2yHoI8uammwi6v3dVLKp8p2S8GU5Zw
+   4X0tpbbqE3S2CkC4wvNQPlGGPlFHVX2Xrd6SkjTD7Xc75Pnp3+NzumOIf
+   vKJdB2UIdu4RCHgLvqbYGkwyPxQox4uYFwmL8l0siAwx8ojq8+nGAh2V2
+   +hYe3798iyLVGBcf7swFqUOSc6hdF4RmL33WkDw3CTrAbB3I2PWLbFWLR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="357669589"
 X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="357669580"
+   d="scan'208";a="357669589"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 06:58:28 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 06:58:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="638663365"
+   d="scan'208";a="638663381"
 Received: from sse-cse-haiyue-nuc.sh.intel.com ([10.239.241.114])
-  by orsmga008.jf.intel.com with ESMTP; 23 Aug 2022 06:58:25 -0700
+  by orsmga008.jf.intel.com with ESMTP; 23 Aug 2022 06:58:29 -0700
 From:   Haiyue Wang <haiyue.wang@intel.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     akpm@linux-foundation.org, david@redhat.com, apopple@nvidia.com,
@@ -45,10 +45,10 @@ Cc:     akpm@linux-foundation.org, david@redhat.com, apopple@nvidia.com,
         songmuchun@bytedance.com, naoya.horiguchi@linux.dev,
         alex.sierra@amd.com, mike.kravetz@oracle.com,
         gerald.schaefer@linux.ibm.com, Haiyue Wang <haiyue.wang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>
-Subject: [PATCH v7 1/2] mm: migration: fix the FOLL_GET failure on following huge page
-Date:   Tue, 23 Aug 2022 21:58:40 +0800
-Message-Id: <20220823135841.934465-2-haiyue.wang@intel.com>
+        Felix Kuehling <Felix.Kuehling@amd.com>
+Subject: [PATCH v7 2/2] mm: fix the handling Non-LRU pages returned by follow_page
+Date:   Tue, 23 Aug 2022 21:58:41 +0800
+Message-Id: <20220823135841.934465-3-haiyue.wang@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823135841.934465-1-haiyue.wang@intel.com>
 References: <20220823135841.934465-1-haiyue.wang@intel.com>
@@ -64,73 +64,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not all huge page APIs support FOLL_GET option, so move_pages() syscall
-will fail to get the page node information for some huge pages.
+The handling Non-LRU pages returned by follow_page() jumps directly, it
+doesn't call put_page() to handle the reference count, since 'FOLL_GET'
+flag for follow_page() has get_page() called. Fix the zone device page
+check by handling the page reference count correctly before returning.
 
-Like x86 on linux 5.19 with 1GB huge page API follow_huge_pud(), it will
-return NULL page for FOLL_GET when calling move_pages() syscall with the
-NULL 'nodes' parameter, the 'status' parameter has '-2' error in array.
+And as David reviewed, "device pages are never PageKsm pages". Drop this
+zone device page check for break_ksm().
 
-Note: follow_huge_pud() now supports FOLL_GET in linux 6.0.
-      Link: https://lore.kernel.org/all/20220714042420.1847125-3-naoya.horiguchi@linux.dev
+Since the zone device page can't be a transparent huge page, so drop the
+redundant zone device page check for split_huge_pages_pid(). (by Miaohe)
 
-But these huge page APIs don't support FOLL_GET:
-  1. follow_huge_pud() in arch/s390/mm/hugetlbpage.c
-  2. follow_huge_addr() in arch/ia64/mm/hugetlbpage.c
-     It will cause WARN_ON_ONCE for FOLL_GET.
-  3. follow_huge_pgd() in mm/hugetlb.c
-
-This is an temporary solution to mitigate the side effect of the race
-condition fix by calling follow_page() with FOLL_GET set for huge pages.
-
-After supporting follow huge page by FOLL_GET is done, this fix can be
-reverted safely.
-
-Fixes: 4cd614841c06 ("mm: migration: fix possible do_pages_stat_array racing with memory offline")
+Fixes: 3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_pages")
 Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
 Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Reviewed-by: Alistair Popple <apopple@nvidia.com>
 Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 ---
- mm/migrate.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ mm/huge_memory.c |  2 +-
+ mm/ksm.c         | 12 +++++++++---
+ mm/migrate.c     | 19 ++++++++++++-------
+ 3 files changed, 22 insertions(+), 11 deletions(-)
 
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 8a7c1b344abe..2ee6d38a1426 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2963,7 +2963,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+ 		/* FOLL_DUMP to ignore special (like zero) pages */
+ 		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
+ 
+-		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
++		if (IS_ERR_OR_NULL(page))
+ 			continue;
+ 
+ 		if (!is_transparent_hugepage(page))
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 42ab153335a2..e26f57fc1f0e 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -475,7 +475,7 @@ static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
+ 		cond_resched();
+ 		page = follow_page(vma, addr,
+ 				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
+-		if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
++		if (IS_ERR_OR_NULL(page))
+ 			break;
+ 		if (PageKsm(page))
+ 			ret = handle_mm_fault(vma, addr,
+@@ -560,12 +560,15 @@ static struct page *get_mergeable_page(struct rmap_item *rmap_item)
+ 		goto out;
+ 
+ 	page = follow_page(vma, addr, FOLL_GET);
+-	if (IS_ERR_OR_NULL(page) || is_zone_device_page(page))
++	if (IS_ERR_OR_NULL(page))
+ 		goto out;
++	if (is_zone_device_page(page))
++		goto out_putpage;
+ 	if (PageAnon(page)) {
+ 		flush_anon_page(vma, page, addr);
+ 		flush_dcache_page(page);
+ 	} else {
++out_putpage:
+ 		put_page(page);
+ out:
+ 		page = NULL;
+@@ -2308,11 +2311,13 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
+ 			if (ksm_test_exit(mm))
+ 				break;
+ 			*page = follow_page(vma, ksm_scan.address, FOLL_GET);
+-			if (IS_ERR_OR_NULL(*page) || is_zone_device_page(*page)) {
++			if (IS_ERR_OR_NULL(*page)) {
+ 				ksm_scan.address += PAGE_SIZE;
+ 				cond_resched();
+ 				continue;
+ 			}
++			if (is_zone_device_page(*page))
++				goto next_page;
+ 			if (PageAnon(*page)) {
+ 				flush_anon_page(vma, *page, ksm_scan.address);
+ 				flush_dcache_page(*page);
+@@ -2327,6 +2332,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
+ 				mmap_read_unlock(mm);
+ 				return rmap_item;
+ 			}
++next_page:
+ 			put_page(*page);
+ 			ksm_scan.address += PAGE_SIZE;
+ 			cond_resched();
 diff --git a/mm/migrate.c b/mm/migrate.c
-index 6a1597c92261..581dfaad9257 100644
+index 581dfaad9257..44e05ce41d49 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -1848,6 +1848,7 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
+@@ -1672,9 +1672,12 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
+ 		goto out;
  
- 	for (i = 0; i < nr_pages; i++) {
- 		unsigned long addr = (unsigned long)(*pages);
-+		unsigned int foll_flags = FOLL_DUMP;
- 		struct vm_area_struct *vma;
- 		struct page *page;
- 		int err = -EFAULT;
-@@ -1856,8 +1857,12 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
- 		if (!vma)
+ 	err = -ENOENT;
+-	if (!page || is_zone_device_page(page))
++	if (!page)
+ 		goto out;
+ 
++	if (is_zone_device_page(page))
++		goto out_putpage;
++
+ 	err = 0;
+ 	if (page_to_nid(page) == node)
+ 		goto out_putpage;
+@@ -1868,13 +1871,15 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
+ 		if (IS_ERR(page))
  			goto set_status;
  
-+		/* Not all huge page follow APIs support 'FOLL_GET' */
-+		if (!is_vm_hugetlb_page(vma))
-+			foll_flags |= FOLL_GET;
+-		if (page && !is_zone_device_page(page)) {
++		err = -ENOENT;
++		if (!page)
++			goto set_status;
 +
- 		/* FOLL_DUMP to ignore special (like zero) pages */
--		page = follow_page(vma, addr, FOLL_GET | FOLL_DUMP);
-+		page = follow_page(vma, addr, foll_flags);
- 
- 		err = PTR_ERR(page);
- 		if (IS_ERR(page))
-@@ -1865,7 +1870,8 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
- 
- 		if (page && !is_zone_device_page(page)) {
++		if (!is_zone_device_page(page))
  			err = page_to_nid(page);
--			put_page(page);
-+			if (foll_flags & FOLL_GET)
-+				put_page(page);
- 		} else {
- 			err = -ENOENT;
- 		}
+-			if (foll_flags & FOLL_GET)
+-				put_page(page);
+-		} else {
+-			err = -ENOENT;
+-		}
++
++		if (foll_flags & FOLL_GET)
++			put_page(page);
+ set_status:
+ 		*status = err;
+ 
 -- 
 2.37.2
 

@@ -2,209 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260A459EFD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A83859EFD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiHWXoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 19:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S230014AbiHWXpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 19:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHWXoA (ORCPT
+        with ESMTP id S230400AbiHWXp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 19:44:00 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3F08A6DA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:43:59 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id s3-20020a17090a5d0300b001fb3ac54a03so2463738pji.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:43:59 -0700 (PDT)
+        Tue, 23 Aug 2022 19:45:29 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7998A6FB;
+        Tue, 23 Aug 2022 16:45:27 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id f4so11731454pgc.12;
+        Tue, 23 Aug 2022 16:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=buqUxxwCuurQCGvIWcBzNGEGiMpXO6f0MopvbFAVuy4=;
-        b=s/Oyq3bRVMysOt8x1cdAlmAVaIQaKOVzdheav1QwmS/why5h7fuGl6FotWAtmCy+Ic
-         311rK/Dfs3CoeZbhiTK/EV9qg4CTFVe9PRqhF55GA1M6x0Qazif190N4PDrL4Iw8e22I
-         Or2ddCuIb+nCXb0Oq09xFIU6w+tZZa2CYkFCtfHbqQmsHEbVpR/HaykE718hfD/2+cmK
-         FHCsHVR/BzQT5aIaRQXrR2krqsAu4c1izZCkVr+W5nRiDk2q6/9pDHE4N4r9mRi5UiDX
-         +uZA43S6aKRTYPnA/t+VEktQhywGjsdlU8JDZpVqw6aVn0GvJCle5n89MdNDfLt/fwxJ
-         Imsg==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc;
+        bh=8UO1wGihVQ8kGhkOFqHrGxvl0WX3n5u+/PNd+s9miG4=;
+        b=Kf/bPhzyGLBmL3jMqyoAS1wVdm0HbkKsBxknTWHyipKk1/Nwbsnkjx331Ne0JBRB1Z
+         MyFkyd7yAasunIGco2idYhnfjVqDntfJCO3BbptWb7lwr73JnW0JWysCDFTWWhyY5S8F
+         i1GNQXvdL7Bnu4N2EdVgAcqIZ5dxdWjFgZjcxhjKXfNV8e8DNekkhBetd0pujeqUpQb5
+         vvoILcm3q0qQ2YURqwseBEYFMEae8tjkz5lz5mBi9Y8uW40GIyXMnaUA8Wmbi8FS4lol
+         +oJnVgLBWqO4vHynvSIY/0ACCmssGZHa5Z7aZ6W7b7r3n7Nus07w9e/jYvwIsxPdHCkw
+         d8Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=buqUxxwCuurQCGvIWcBzNGEGiMpXO6f0MopvbFAVuy4=;
-        b=zGzFNwg2FoSmki9lBotl+hPKTLDacGHkdidR7DE8d7gbvk18tPeUTD4F+L1xwcAbM1
-         lv2LFKr6AklpMcPUm59u9EMfZb/B1Ypvs9p/hipSz+irKqOsElowVuljaoO9it0J/3pt
-         AxIl9IkkO+xzfJ6ISSQf69/teHL4SUrJthYn7XwRzX6M1i/wWV2FRdjwerDWODGSdFRo
-         421x4ZIDhF/HXjHAtkKKszwmB8V5pGIcXrwH8fr4PYDjjL1bYicEMtkbMdLZ1fWYk8+d
-         VoYDnY9keslubGo6q45YbT/AkV0mKWqIKKuH2YwfDw2IQkM3TDeZC+vsKt1mSck0bZJ8
-         7lGQ==
-X-Gm-Message-State: ACgBeo0h86dAuQxoejlBLx9xj8V0Jjfw5aj4dASWEOPklvCeZnhs17kh
-        nrgBmlVXnNJwLIrtZi6EzKl3/BTjPf0=
-X-Google-Smtp-Source: AA6agR5+C8UQv+q7r1T7kLEd8fXqzZIi6N5tjhP3Ko5nQNLbJjezxePfaQk5d1pCxegFzhVlFxLYJf2DCnQ=
-X-Received: from pshier-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b0b])
- (user=pshier job=sendgmr) by 2002:a17:902:c945:b0:16d:d425:324a with SMTP id
- i5-20020a170902c94500b0016dd425324amr25716205pla.7.1661298238537; Tue, 23 Aug
- 2022 16:43:58 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 16:43:53 -0700
-Message-Id: <20220823234353.937002-1-pshier@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] x86/msr: add idle version of wrmsr trace
-From:   FirstName LastName <pshier@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Roth <michael.roth@amd.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Peter Shier <pshier@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc;
+        bh=8UO1wGihVQ8kGhkOFqHrGxvl0WX3n5u+/PNd+s9miG4=;
+        b=sCOJI8O9mMgO4XXHoaOB5nRmrpJBkha43av8D6YrW+vV5ux9G+hMFZpQ3WXd4y9qVe
+         sE0cPR1G4KZyUMXQ5PxZevfByGZS1tFQ4GGUowKDrnluh5h9/LCpgwxUisnTvCQhZoXc
+         kKbKx2SQsRfgINFl4j6kKE4NJATasBFgqCPhQgXgL+hemaqxUdCJdlQoDM8nK8tclinM
+         LDt8d6QNAaKj6UOSMUGdUC5SJIASE4owVAgtJ985Jm3z7NpCF7tsBl+/X0HnoF4/qicS
+         8E29U32IcvkDOH7NDwCaW0DYxFQqLm8oQfuceYASuAS4sczhyb411rpuQolCHxYpQJFz
+         Szsw==
+X-Gm-Message-State: ACgBeo0SK9wlFKTX7VEHSwAKRssBW4QcO7RsRF4mnF6EWtheF+/kDO75
+        sqPZdDYyH5eKIdMdgtmQgL2nAQ3Cn4Y=
+X-Google-Smtp-Source: AA6agR4wsWBfS/h8Oqcln35rb24DFeeWRbkA2yf6gm3M2Ld7LHKc9n7NbLPaM+69QilFxSOaoe50WQ==
+X-Received: by 2002:a05:6a00:14c7:b0:52e:efb7:bd05 with SMTP id w7-20020a056a0014c700b0052eefb7bd05mr26749780pfu.24.1661298326786;
+        Tue, 23 Aug 2022 16:45:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:90fa])
+        by smtp.gmail.com with ESMTPSA id 16-20020a621810000000b00536bef77afasm4301385pfy.31.2022.08.23.16.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 16:45:26 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 Aug 2022 13:45:24 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: [GIT PULL] cgroup fixes for v6.0-rc2
+Message-ID: <YwVmlMzNMS5ym9JI@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Shier <pshier@google.com>
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-With commit bf5835bcdb963 ("intel_idle: Disable IBRS during long idle"),
-enabling wrmsr trace with CONFIG_LOCKDEP causes "suspicious
-rcu_dereference_check() usage" warning because do_trace_write_msr does not
-use trace_write_msr_rcuidle.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Add idle versions of needed routines and change intel_idle_ibrs to use it.
+are available in the Git repository at:
 
-Sample warning:
-============================
-WARNING: suspicious RCU usage
-6.0.0-dbg-DEV #7 Tainted: G S         O      
------------------------------
-arch/x86/include/asm/msr-trace.h:48 suspicious rcu_dereference_check() usage!
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.0-rc2-fixes
 
-other info that might help us debug this:
+for you to fetch changes up to 763f4fb76e24959c370cdaa889b2492ba6175580:
 
-rcu_scheduler_active = 2, debug_locks = 1
-RCU used illegally from extended quiescent state!
-no locks held by swapper/59/0.
+  cgroup: Fix race condition at rebind_subsystems() (2022-08-23 08:11:06 -1000)
 
-stack backtrace:
-CPU: 59 PID: 0 Comm: swapper/59 Tainted: G S         O       6.0.0-dbg-DEV #7
-Call Trace:
- dump_stack_lvl
- dump_stack
- lockdep_rcu_suspicious
- trace_write_msr
- do_trace_write_msr
- intel_idle_ibrs
- cpuidle_enter_state
- cpuidle_enter
- do_idle
- cpu_startup_entry
- start_secondary
- secondary_startup_64_no_verify
+----------------------------------------------------------------
+cgroup fixes for v6.0-rc2
 
+Contains fixes for the following issues:
 
-Tested on skylake using:
-echo "msr:write_msr" >/sys/kernel/debug/tracing/set_event
-with and without patch.
+* psi data structure was changed to be allocated dynamically but it wasn't
+  being cleared leading to reporting garbage values and triggering spurious
+  oom kills.
 
-Signed-off-by: Peter Shier <pshier@google.com>
----
- arch/x86/include/asm/msr.h | 16 ++++++++++++++++
- arch/x86/lib/msr.c         |  6 ++++++
- drivers/idle/intel_idle.c  |  4 ++--
- 3 files changed, 24 insertions(+), 2 deletions(-)
+* A deadlock involving cpuset and cpu hotplug.
 
-diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
-index 65ec1965cd28..248cc58b7758 100644
---- a/arch/x86/include/asm/msr.h
-+++ b/arch/x86/include/asm/msr.h
-@@ -62,10 +62,12 @@ DECLARE_TRACEPOINT(read_msr);
- DECLARE_TRACEPOINT(write_msr);
- DECLARE_TRACEPOINT(rdpmc);
- extern void do_trace_write_msr(unsigned int msr, u64 val, int failed);
-+extern void do_trace_write_msr_idle(unsigned int msr, u64 val, int failed);
- extern void do_trace_read_msr(unsigned int msr, u64 val, int failed);
- extern void do_trace_rdpmc(unsigned int msr, u64 val, int failed);
- #else
- static inline void do_trace_write_msr(unsigned int msr, u64 val, int failed) {}
-+extern void do_trace_write_msr_idle(unsigned int msr, u64 val, int failed) {}
- static inline void do_trace_read_msr(unsigned int msr, u64 val, int failed) {}
- static inline void do_trace_rdpmc(unsigned int msr, u64 val, int failed) {}
- #endif
-@@ -148,6 +150,15 @@ native_write_msr(unsigned int msr, u32 low, u32 high)
- 		do_trace_write_msr(msr, ((u64)high << 32 | low), 0);
- }
- 
-+static inline void notrace
-+native_write_msr_idle(unsigned int msr, u32 low, u32 high)
-+{
-+	__wrmsr(msr, low, high);
-+
-+	if (tracepoint_enabled(write_msr))
-+		do_trace_write_msr_idle(msr, ((u64)high << 32 | low), 0);
-+}
-+
- /* Can be uninlined because referenced by paravirt */
- static inline int notrace
- native_write_msr_safe(unsigned int msr, u32 low, u32 high)
-@@ -262,6 +273,11 @@ static inline void wrmsrl(unsigned int msr, u64 val)
- 	native_write_msr(msr, (u32)(val & 0xffffffffULL), (u32)(val >> 32));
- }
- 
-+static inline void wrmsrl_idle(unsigned int msr, u64 val)
-+{
-+	native_write_msr_idle(msr, (u32)(val & 0xffffffffULL), (u32)(val >> 32));
-+}
-+
- /* wrmsr with exception handling */
- static inline int wrmsr_safe(unsigned int msr, u32 low, u32 high)
- {
-diff --git a/arch/x86/lib/msr.c b/arch/x86/lib/msr.c
-index b09cd2ad426c..58fdf0f13850 100644
---- a/arch/x86/lib/msr.c
-+++ b/arch/x86/lib/msr.c
-@@ -121,6 +121,12 @@ void do_trace_write_msr(unsigned int msr, u64 val, int failed)
- EXPORT_SYMBOL(do_trace_write_msr);
- EXPORT_TRACEPOINT_SYMBOL(write_msr);
- 
-+void do_trace_write_msr_idle(unsigned int msr, u64 val, int failed)
-+{
-+	trace_write_msr_rcuidle(msr, val, failed);
-+}
-+EXPORT_SYMBOL(do_trace_write_msr_idle);
-+
- void do_trace_read_msr(unsigned int msr, u64 val, int failed)
- {
- 	trace_read_msr(msr, val, failed);
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 3e101719689a..bdecd2638c59 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -187,12 +187,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
- 	int ret;
- 
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-+		wrmsrl_idle(MSR_IA32_SPEC_CTRL, 0);
- 
- 	ret = __intel_idle(dev, drv, index);
- 
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-+		wrmsrl_idle(MSR_IA32_SPEC_CTRL, spec_ctrl);
- 
- 	return ret;
- }
--- 
+* When a controller is moved across cgroup hierarchies, css->rstat_css_node
+  didn't get RCU drained properly from the previous list.
 
+----------------------------------------------------------------
+Hao Jia (3):
+      sched/psi: Zero the memory of struct psi_group
+      sched/psi: Remove unused parameter nbytes of psi_trigger_create()
+      sched/psi: Remove redundant cgroup_psi() when !CONFIG_CGROUPS
 
+Jing-Ting Wu (1):
+      cgroup: Fix race condition at rebind_subsystems()
+
+Tejun Heo (1):
+      cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock
+
+ include/linux/cgroup.h |  5 ----
+ include/linux/psi.h    |  2 +-
+ kernel/cgroup/cgroup.c | 80 +++++++++++++++++++++++++++++++++++---------------
+ kernel/cgroup/cpuset.c |  3 +-
+ kernel/sched/psi.c     | 10 ++-----
+ 5 files changed, 61 insertions(+), 39 deletions(-)

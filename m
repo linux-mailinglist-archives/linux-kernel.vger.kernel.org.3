@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD29F59E1CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98BB59DC69
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359109AbiHWL7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
+        id S1356581AbiHWLDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359269AbiHWL4a (ORCPT
+        with ESMTP id S1357196AbiHWLBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:56:30 -0400
+        Tue, 23 Aug 2022 07:01:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EEEC7F86;
-        Tue, 23 Aug 2022 02:34:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B36BAF0E0;
+        Tue, 23 Aug 2022 02:14:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1326B81C96;
-        Tue, 23 Aug 2022 09:34:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0631C433D6;
-        Tue, 23 Aug 2022 09:34:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39548B81C98;
+        Tue, 23 Aug 2022 09:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED85C433C1;
+        Tue, 23 Aug 2022 09:14:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247241;
-        bh=74BDVeIvMBWQuIu/Rh+9XV75YMCsgnfcdiv4ClaKEQU=;
+        s=korg; t=1661246050;
+        bh=w0p436ssZfj/lQdy31bDOBkJyI06WCHkjyGiFQ8EqOQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2PDstKpMbULm/qEE/aPPcw0TvdjcUJmQdNng9TtdJFdjAvaOSiBcFDfgswIvHRRcu
-         ps7vkfGAo7Ae8b0qSAPv1Ts4DmfoHKkTR0PPyGZWbD4mehtxQaZUdlljVu+kDW4oA2
-         OBsjme13JeyB1QA2G/o129XSOkgE1RA0QPP443kU=
+        b=vqu5CRm0LKLCgJo/DLyKRKTJcBMxB+0qpVIl70CeR/85GaXi/2L4RmLcTOr4MIs6q
+         u+qEuedvVqMr2QK/+IvQCp7mgauhuDaZeddFqD7pXYr6I9c0SwLMPxPpGBcgT/kPPV
+         2YuNCoaiZAAFu4baTqWuX9eXjw65xc7g0Qaur8+0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.4 332/389] nios2: fix syscall restart checks
-Date:   Tue, 23 Aug 2022 10:26:50 +0200
-Message-Id: <20220823080129.391011846@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 4.19 242/287] xen/xenbus: fix return type in xenbus_file_read()
+Date:   Tue, 23 Aug 2022 10:26:51 +0200
+Message-Id: <20220823080109.246499863@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 2d631bd58fe0ea3e3350212e23c9aba1fb606514 upstream.
+commit 32ad11127b95236dfc52375f3707853194a7f4b4 upstream.
 
-sys_foo() returns -512 (aka -ERESTARTSYS) => do_signal() sees
-512 in r2 and 1 in r1.
+This code tries to store -EFAULT in an unsigned int.  The
+xenbus_file_read() function returns type ssize_t so the negative value
+is returned as a positive value to the user.
 
-sys_foo() returns 512 => do_signal() sees 512 in r2 and 0 in r1.
+This change forces another change to the min() macro.  Originally, the
+min() macro used "unsigned" type which checkpatch complains about.  Also
+unsigned type would break if "len" were not capped at MAX_RW_COUNT.  Use
+size_t for the min().  (No effect on runtime for the min_t() change).
 
-The former is restart-worthy; the latter obviously isn't.
-
-Fixes: b53e906d255d ("nios2: Signal handling support")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Fixes: 2fb3683e7b16 ("xen: Add xenbus device driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Link: https://lore.kernel.org/r/YutxJUaUYRG/VLVc@kili
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/kernel/signal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/xen/xenbus/xenbus_dev_frontend.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/nios2/kernel/signal.c
-+++ b/arch/nios2/kernel/signal.c
-@@ -240,7 +240,7 @@ static int do_signal(struct pt_regs *reg
- 	/*
- 	 * If we were from a system call, check for system call restarting...
- 	 */
--	if (regs->orig_r2 >= 0) {
-+	if (regs->orig_r2 >= 0 && regs->r1) {
- 		continue_addr = regs->ea;
- 		restart_addr = continue_addr - 4;
- 		retval = regs->r2;
+--- a/drivers/xen/xenbus/xenbus_dev_frontend.c
++++ b/drivers/xen/xenbus/xenbus_dev_frontend.c
+@@ -128,7 +128,7 @@ static ssize_t xenbus_file_read(struct f
+ {
+ 	struct xenbus_file_priv *u = filp->private_data;
+ 	struct read_buffer *rb;
+-	unsigned i;
++	ssize_t i;
+ 	int ret;
+ 
+ 	mutex_lock(&u->reply_mutex);
+@@ -148,7 +148,7 @@ again:
+ 	rb = list_entry(u->read_buffers.next, struct read_buffer, list);
+ 	i = 0;
+ 	while (i < len) {
+-		unsigned sz = min((unsigned)len - i, rb->len - rb->cons);
++		size_t sz = min_t(size_t, len - i, rb->len - rb->cons);
+ 
+ 		ret = copy_to_user(ubuf + i, &rb->msg[rb->cons], sz);
+ 
 
 

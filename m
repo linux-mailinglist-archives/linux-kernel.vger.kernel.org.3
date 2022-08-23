@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFCD59E14D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4999F59E098
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244433AbiHWLp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S1358866AbiHWLzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358452AbiHWLlw (ORCPT
+        with ESMTP id S1359221AbiHWLwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:41:52 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F89CD536
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:29:24 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id d16so10961004wrr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:29:24 -0700 (PDT)
+        Tue, 23 Aug 2022 07:52:06 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEFCD51C2;
+        Tue, 23 Aug 2022 02:32:44 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id c24so11765635pgg.11;
+        Tue, 23 Aug 2022 02:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=smile-fr.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=b5SqvktMLhNdA3mMaOmzLY6p2cT5md25GAzVuMoc4r4=;
-        b=CIp0kiP5yLD5kCI5UiDO5IlEgewnVN+5NJDKY0BQOcuMfrfzjlyZW9FNLVmiUTybS+
-         qvxGi43zIhsaCgvMi5VTXrLCUTs+c9COja1v/TXJCkF5MSNvp6RsIZJEYuLmP/altkxe
-         Oz1HJhPIYL6gHiggAuF5Orb+8BcZ7uXTp+/FGiVimmgvJV2oUl0nnTJLfOkpl7ePesaY
-         hnxofDecgzIsB3aUOstMzBJbtzunQJnI6ijG7+6/Xt8aBFsW8I8lgeXoU/rMoeyTXOqJ
-         jfaIb0hT0b5XPOn/l3xmfiC9hHS/w+vLIVBQdh9fi5AhRt99K/lwa2DThLqKsDjxxNnk
-         byLQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=lB8NoAFXZ2ojNqB5NHqtJca8PZPv13Mxr0Sf4o4zAgs=;
+        b=Hfd9KdXbIhbkSlfQznWZaJb5TmMaqJiAfLkPMefN5SZTy9aTY3UGQ0KqPwkS1grIfm
+         vCy4hKurr4Zs2tkcBQYtzP2/kOR8gtY6xNJicOakdqoWNH4JZUqypeyNPn6UI5TAkyEl
+         oXBA7V9t0O+vKQXWgvZyZxday/87L0JM+pZQesVwchkSur42u/MwJZF2wbdiI4rO7f+S
+         nrqKU0UfZgLtpQGsQOElfdFXi74uyCuU3j1227SwSEGFh4YFChEkn/Ly9aOsLpoBUJTP
+         B4ogg406gufB0GKJj1WS6teWqnCG7WAKU6WNm7FuHngPjaYPU1B+zHGakDngAcG0GI9S
+         MQWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=b5SqvktMLhNdA3mMaOmzLY6p2cT5md25GAzVuMoc4r4=;
-        b=W+tQy/6ZKUr6iuRnqOtursEOhoDvypTBF/SWDe8ePoK4PwpWhehvsZIHniHFmsvMMT
-         UW+TO6C5O4462Hr//44qpto2kSBEqEEDwbV1plOSUx/CMUluDOCh1tiKwqC/wmvgAqGg
-         6O7vuyj4ymtdwp0U1vKLCOp1aNPiQzg73JN61rt5VdRoUq9Fu4syOq5zv2fMBvgDO90m
-         O9dTv7tkMvQ4zIB/t8As4oeAq28/M34gm4uQjOPZD10SotPLf1tIbeYTeqZOQ5keIUfJ
-         SUEWSzHizH8PNV5lvqj4kaKVO95qeKZ3EyPYChfXLQGCLyigfTZRdO76Uuaxu7BZp7Z+
-         Y4hw==
-X-Gm-Message-State: ACgBeo1igzfEBr+s+BAcq5CK9bc5cetQIGhesdDIbLkZ4CXmyCYlMG7p
-        FtLo+SQ6a+y9/JwOHo9TgXgMCQ==
-X-Google-Smtp-Source: AA6agR4YYoSedYVviurRFDL2MlH/IvkuklQao1Lewjf01WxdkCHF4BXPKT/acLkLZeVw7OZxj5trNQ==
-X-Received: by 2002:a5d:59c3:0:b0:225:512d:23b8 with SMTP id v3-20020a5d59c3000000b00225512d23b8mr5786037wry.505.1661246962417;
-        Tue, 23 Aug 2022 02:29:22 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f? (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr. [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
-        by smtp.gmail.com with ESMTPSA id c19-20020a05600c4a1300b003a30fbde91dsm19014200wmp.20.2022.08.23.02.29.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 02:29:21 -0700 (PDT)
-Message-ID: <c62649f0-2be1-459c-bfa5-4c94a3e4300f@smile.fr>
-Date:   Tue, 23 Aug 2022 11:29:21 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=lB8NoAFXZ2ojNqB5NHqtJca8PZPv13Mxr0Sf4o4zAgs=;
+        b=soj6Rdi0hQjyBEbRxgPHNkj2cfKca6yLPf2ZJNqJpd2rE+NL8rpXGuvRAJ8lrim77X
+         HK8m2B7QacXt2rL4sBBYsdC7gi90PAklXD8ff3kwuEQuJ3VY4xoJ70XbQDbBjhRzJ2H/
+         uoqCn+wGVgyGIUAz+yWzRBG9s22jrrqf+B8ONKAsWQTxkhPn4xP6ihqSAyG5mkEsVrhV
+         whUTwjiXJk/Xhw7X5NlcUYngfUdFb+W3+NWs42m3xijTbKUKaM9kLL7/wKS6D2FQDpQg
+         Cy2siFHNFEMh9JDhm3thlMB6m1kWpKo2rsun1n/zl8f7hQms7CiK0+nitReVQYXk9G2b
+         0V6Q==
+X-Gm-Message-State: ACgBeo3paDW/Gci605Q8aSETfj7jX7VxbvvBKRtBCF7ItJXtGbtsefJG
+        NcqpChPxYjZDcy26Q3pstOADVIbKjFw=
+X-Google-Smtp-Source: AA6agR7pIIeHPiBQ2/MIHoqFUmi90hSjVnWTFT92xDq3NVbeeCVMhyFqRRdHiLpUtrCXa+Qeg9x14w==
+X-Received: by 2002:a05:6a00:f8d:b0:536:c6c9:a2d with SMTP id ct13-20020a056a000f8d00b00536c6c90a2dmr6436699pfb.52.1661247162167;
+        Tue, 23 Aug 2022 02:32:42 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0017297a6b39dsm10057212plg.265.2022.08.23.02.32.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 02:32:41 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: [PATCH RESEND v2 0/8] x86/pmu: Corner cases fixes and optimization
+Date:   Tue, 23 Aug 2022 17:32:13 +0800
+Message-Id: <20220823093221.38075-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] clk: ti: Fix reference imbalance in
- ti_find_clock_provider
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>
-References: <63d9211f-d5ce-562e-358a-50f26c7caf35@siemens.com>
- <20220819212337.AECB9C433D6@smtp.kernel.org>
-From:   Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20220819212337.AECB9C433D6@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Good well-designed tests can help us find more bugs, especially when
+the test steps differ from the Linux kernel behaviour in terms of the
+timing of access to virtualized hw resources.
 
-Le 19/08/2022 à 23:23, Stephen Boyd a écrit :
-> Quoting Jan Kiszka (2022-08-08 15:26:58)
->> From: Jan Kiszka <jan.kiszka@siemens.com>
->>
->> When a clock is found via clock-output-names, we need to reference it
->> explicitly to match of_find_node_by_name behavior. Failing to do so
->> causes warnings like this:
->>
-> 
-> Is this superseeded by
-> https://lore.kernel.org/r/20220621091118.33930-1-tony@atomide.com?
+In this patch series, there are three small optimization (006/007/008),
+one hardware surprise (001), and most of these fixes have stepped
+on my little toes.
 
-I noticed the same issue and tested separately with both patches.
+Please feel free to run tests, add more or share comments.
 
-Indeed, this patch is not needed anymore with "[PATCH] clk: ti: Fix missing
-of_node_get() ti_find_clock_provider()" applied.
+Previous:
+https://lore.kernel.org/kvm/20220721103549.49543-1-likexu@tencent.com/
+https://lore.kernel.org/kvm/20220803130124.72340-1-likexu@tencent.com/
 
-Best regards,
-Romain
+V2 -> V2 RESEND Changelog:
+- The "pebs_capable" fix has been merged into tip/perf/tree tree;
+- Move the other two AMD vPMU optimization here;
+
+Like Xu (8):
+  perf/x86/core: Completely disable guest PEBS via guest's global_ctrl
+  KVM: x86/pmu: Avoid setting BIT_ULL(-1) to pmu->host_cross_mapped_mask
+  KVM: x86/pmu: Don't generate PEBS records for emulated instructions
+  KVM: x86/pmu: Avoid using PEBS perf_events for normal counters
+  KVM: x86/pmu: Defer reprogram_counter() to kvm_pmu_handle_event()
+  KVM: x86/pmu: Defer counter emulated overflow via pmc->stale_counter
+  KVM: x86/svm/pmu: Direct access pmu->gp_counter[] to implement
+    amd_*_to_pmc()
+  KVM: x86/svm/pmu: Rewrite get_gp_pmc_amd() for more counters
+    scalability
+
+ arch/x86/events/intel/core.c    |   3 +-
+ arch/x86/include/asm/kvm_host.h |   6 +-
+ arch/x86/kvm/pmu.c              |  47 ++++++++-----
+ arch/x86/kvm/pmu.h              |   6 +-
+ arch/x86/kvm/svm/pmu.c          | 116 +++++---------------------------
+ arch/x86/kvm/vmx/pmu_intel.c    |  30 ++++-----
+ 6 files changed, 73 insertions(+), 135 deletions(-)
+
+-- 
+2.37.2
+

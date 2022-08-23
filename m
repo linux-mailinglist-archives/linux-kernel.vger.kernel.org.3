@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C391A59D818
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F13659D819
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241563AbiHWJxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S240352AbiHWJrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352100AbiHWJvR (ORCPT
+        with ESMTP id S1352645AbiHWJlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:51:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0BC9E2E9;
-        Tue, 23 Aug 2022 01:45:44 -0700 (PDT)
+        Tue, 23 Aug 2022 05:41:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F9699269;
+        Tue, 23 Aug 2022 01:42:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1665BB81C3E;
-        Tue, 23 Aug 2022 08:44:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D995C433C1;
-        Tue, 23 Aug 2022 08:44:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E952A614E9;
+        Tue, 23 Aug 2022 08:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B756C433D6;
+        Tue, 23 Aug 2022 08:42:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244295;
-        bh=7Rn4cdXpRAM5OklFmWT4YS51CyztgZROwx8ZSo8Jkk8=;
+        s=korg; t=1661244134;
+        bh=3YWFN+XdT8fZR01BOiGHTKj+hLvtm2wKp6jWFyaFJ34=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tx36S5NiuVZvdZ/d0nqdZOzDm7z3gh1MuOjw+Kq60Jwb6mR9L61Hj7WvHTi1tupIr
-         B5dAM4Ck314pKZ4wZN1MetV4ww0oHfgqU0zmwi3kNz4adI03Dlc+yZ9yo4pP6X5RDP
-         zAAsYQPMzKjJKUINnjpOsA1H6u8z9h/nFdyfd3Ww=
+        b=q+orXx6TQk0XQu3Zqn//M2qVPuoxoKvpX3CG7qJpUo8Newmr9P/U8o+ob508gWhoV
+         P5rY8P0Sg6nXk8xXx73TmNlP2kyRzY7YJJuY/2u4k+TYOkthCBC0TX3QvwWDGQfkVH
+         P2Rcys7qSSfB6cVU9m8JyT6W5+rO6ZUXw5t7zzek=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.15 069/244] um: Add missing apply_returns()
-Date:   Tue, 23 Aug 2022 10:23:48 +0200
-Message-Id: <20220823080101.377073102@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 068/229] drm/rockchip: vop: Dont crash for invalid duplicate_state()
+Date:   Tue, 23 Aug 2022 10:23:49 +0200
+Message-Id: <20220823080056.147646905@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Brian Norris <briannorris@chromium.org>
 
-commit 637285e7f8d6da70a70c64e7895cb0672357a1f7 upstream.
+[ Upstream commit 1449110b0dade8b638d2c17ab7c5b0ff696bfccb ]
 
-Implement apply_returns() stub for UM, just like all the other patching
-routines.
+It's possible for users to try to duplicate the CRTC state even when the
+state doesn't exist. drm_atomic_helper_crtc_duplicate_state() (and other
+users of __drm_atomic_helper_crtc_duplicate_state()) already guard this
+with a WARN_ON() instead of crashing, so let's do that here too.
 
-Fixes: 15e67227c49a ("x86: Undo return-thunk damage")
-Reported-by: Randy Dunlap <rdunlap@infradead.org)
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4e257d9eee23 ("drm/rockchip: get rid of rockchip_drm_crtc_mode_config")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Sean Paul <seanpaul@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220617172623.1.I62db228170b1559ada60b8d3e1637e1688424926@changeid
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/kernel/um_arch.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -437,6 +437,10 @@ void apply_returns(s32 *start, s32 *end)
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index 80a65eaed0be..feb6a458f82d 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -1068,6 +1068,9 @@ static struct drm_crtc_state *vop_crtc_duplicate_state(struct drm_crtc *crtc)
  {
- }
+ 	struct rockchip_crtc_state *rockchip_state;
  
-+void apply_returns(s32 *start, s32 *end)
-+{
-+}
++	if (WARN_ON(!crtc->state))
++		return NULL;
 +
- void apply_alternatives(struct alt_instr *start, struct alt_instr *end)
- {
- }
+ 	rockchip_state = kzalloc(sizeof(*rockchip_state), GFP_KERNEL);
+ 	if (!rockchip_state)
+ 		return NULL;
+-- 
+2.35.1
+
 
 

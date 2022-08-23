@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB17859DE9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BF459E1C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355679AbiHWKpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
+        id S1355751AbiHWKpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355711AbiHWKg4 (ORCPT
+        with ESMTP id S1355734AbiHWKg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:36:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D279A6C22;
-        Tue, 23 Aug 2022 02:07:22 -0700 (PDT)
+        Tue, 23 Aug 2022 06:36:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D72A6C38;
+        Tue, 23 Aug 2022 02:07:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FE4E6158D;
-        Tue, 23 Aug 2022 09:07:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B16C433D6;
-        Tue, 23 Aug 2022 09:07:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 731A3B81C89;
+        Tue, 23 Aug 2022 09:07:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4195C433D6;
+        Tue, 23 Aug 2022 09:07:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245641;
-        bh=kEJ44uGQhbsnlEsOnJCVVttPofYwKWyYENYgbKrdolw=;
+        s=korg; t=1661245644;
+        bh=YrtYR5uzYTGHvW1l1duOpFLg7RFtdbzcLZIhVMmPlcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QJz0a/n4O7lY0E4L4toPKQmTHVz+OnY2avEqTSTvTCO2vCiw9IJgDb0LUGbQJ+k5/
-         106HjGUZI0PdR9AFnvdDpAx4E1V0Iu7d3++pZxXU1Htd+x8QuRjDYPUu7zSwULFtYY
-         KlrueIFIILBodMra+xgVskGpTFB5GBPy0xNvSdm8=
+        b=HooSGEnZeecdagB0+kQsxM506ftYGTKw+34qGWFlpYuKQNNtOZMxfXyCfcWKYKaOv
+         FY65ThT6U2ttUvQUanpY+nJC8bh4qnmb5bnTtt/uGuCHXriY8K3k9PAydYZ5nSQ5Sw
+         Z+b6E4VU7eU6P0KTWr1XVFcdLrAHdZ2xfB7AciG4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Bernard Pidoux <f6bvp@free.fr>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 110/287] netdevsim: Avoid allocation warnings triggered from user space
-Date:   Tue, 23 Aug 2022 10:24:39 +0200
-Message-Id: <20220823080104.076774622@linuxfoundation.org>
+Subject: [PATCH 4.19 111/287] net: rose: fix netdev reference changes
+Date:   Tue, 23 Aug 2022 10:24:40 +0200
+Message-Id: <20220823080104.106110987@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -57,52 +56,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit d0b80a9edb1a029ff913e81b47540e57ad034329 ]
+[ Upstream commit 931027820e4dafabc78aff82af59f8c1c4bd3128 ]
 
-We need to suppress warnings from sily map sizes. Also switch
-from GFP_USER to GFP_KERNEL_ACCOUNT, I'm pretty sure I misunderstood
-the flags when writing this code.
+Bernard reported that trying to unload rose module would lead
+to infamous messages:
 
-Fixes: 395cacb5f1a0 ("netdevsim: bpf: support fake map offload")
-Reported-by: syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com
+unregistered_netdevice: waiting for rose0 to become free. Usage count = xx
+
+This patch solves the issue, by making sure each socket referring to
+a netdevice holds a reference count on it, and properly releases it
+in rose_release().
+
+rose_dev_first() is also fixed to take a device reference
+before leaving the rcu_read_locked section.
+
+Following patch will add ref_tracker annotations to ease
+future bug hunting.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Bernard Pidoux <f6bvp@free.fr>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Tested-by: Bernard Pidoux <f6bvp@free.fr>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220726213605.154204-1-kuba@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/netdevsim/bpf.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ net/rose/af_rose.c    | 11 +++++++++--
+ net/rose/rose_route.c |  2 ++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-index 12f100392ed1..ca9042ddb6d7 100644
---- a/drivers/net/netdevsim/bpf.c
-+++ b/drivers/net/netdevsim/bpf.c
-@@ -330,10 +330,12 @@ nsim_map_alloc_elem(struct bpf_offloaded_map *offmap, unsigned int idx)
- {
- 	struct nsim_bpf_bound_map *nmap = offmap->dev_priv;
+diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
+index d00a0ef39a56..03a1ee221112 100644
+--- a/net/rose/af_rose.c
++++ b/net/rose/af_rose.c
+@@ -194,6 +194,7 @@ static void rose_kill_by_device(struct net_device *dev)
+ 			rose_disconnect(s, ENETUNREACH, ROSE_OUT_OF_ORDER, 0);
+ 			if (rose->neighbour)
+ 				rose->neighbour->use--;
++			dev_put(rose->device);
+ 			rose->device = NULL;
+ 		}
+ 	}
+@@ -594,6 +595,8 @@ static struct sock *rose_make_new(struct sock *osk)
+ 	rose->idle	= orose->idle;
+ 	rose->defer	= orose->defer;
+ 	rose->device	= orose->device;
++	if (rose->device)
++		dev_hold(rose->device);
+ 	rose->qbitincl	= orose->qbitincl;
  
--	nmap->entry[idx].key = kmalloc(offmap->map.key_size, GFP_USER);
-+	nmap->entry[idx].key = kmalloc(offmap->map.key_size,
-+				       GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
- 	if (!nmap->entry[idx].key)
- 		return -ENOMEM;
--	nmap->entry[idx].value = kmalloc(offmap->map.value_size, GFP_USER);
-+	nmap->entry[idx].value = kmalloc(offmap->map.value_size,
-+					 GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
- 	if (!nmap->entry[idx].value) {
- 		kfree(nmap->entry[idx].key);
- 		nmap->entry[idx].key = NULL;
-@@ -475,7 +477,7 @@ nsim_bpf_map_alloc(struct netdevsim *ns, struct bpf_offloaded_map *offmap)
- 	if (offmap->map.map_flags)
- 		return -EINVAL;
+ 	return sk;
+@@ -647,6 +650,7 @@ static int rose_release(struct socket *sock)
+ 		break;
+ 	}
  
--	nmap = kzalloc(sizeof(*nmap), GFP_USER);
-+	nmap = kzalloc(sizeof(*nmap), GFP_KERNEL_ACCOUNT);
- 	if (!nmap)
- 		return -ENOMEM;
++	dev_put(rose->device);
+ 	sock->sk = NULL;
+ 	release_sock(sk);
+ 	sock_put(sk);
+@@ -721,7 +725,6 @@ static int rose_connect(struct socket *sock, struct sockaddr *uaddr, int addr_le
+ 	struct rose_sock *rose = rose_sk(sk);
+ 	struct sockaddr_rose *addr = (struct sockaddr_rose *)uaddr;
+ 	unsigned char cause, diagnostic;
+-	struct net_device *dev;
+ 	ax25_uid_assoc *user;
+ 	int n, err = 0;
  
+@@ -778,9 +781,12 @@ static int rose_connect(struct socket *sock, struct sockaddr *uaddr, int addr_le
+ 	}
+ 
+ 	if (sock_flag(sk, SOCK_ZAPPED)) {	/* Must bind first - autobinding in this may or may not work */
++		struct net_device *dev;
++
+ 		sock_reset_flag(sk, SOCK_ZAPPED);
+ 
+-		if ((dev = rose_dev_first()) == NULL) {
++		dev = rose_dev_first();
++		if (!dev) {
+ 			err = -ENETUNREACH;
+ 			goto out_release;
+ 		}
+@@ -788,6 +794,7 @@ static int rose_connect(struct socket *sock, struct sockaddr *uaddr, int addr_le
+ 		user = ax25_findbyuid(current_euid());
+ 		if (!user) {
+ 			err = -EINVAL;
++			dev_put(dev);
+ 			goto out_release;
+ 		}
+ 
+diff --git a/net/rose/rose_route.c b/net/rose/rose_route.c
+index 46ae92d70324..5671853bef83 100644
+--- a/net/rose/rose_route.c
++++ b/net/rose/rose_route.c
+@@ -616,6 +616,8 @@ struct net_device *rose_dev_first(void)
+ 			if (first == NULL || strncmp(dev->name, first->name, 3) < 0)
+ 				first = dev;
+ 	}
++	if (first)
++		dev_hold(first);
+ 	rcu_read_unlock();
+ 
+ 	return first;
 -- 
 2.35.1
 

@@ -2,74 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD5459D295
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DE159D297
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241199AbiHWHsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S241183AbiHWHrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241186AbiHWHsv (ORCPT
+        with ESMTP id S241110AbiHWHrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:48:51 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE47812AB3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=RGiGH
-        p7oMEjT6uibunWe+zoBBBB1zHI0xeEhGOD4JUk=; b=lSpraQrDT1UgzBln6DywU
-        RoaCAcReaVSM4EqcaVMcpHSkAbh44L9aIkAYlmCZ/wCbst65YtCAQS75sZLzu8xb
-        2i+MAaB/NC/gdpT1uGXkLPqxSyUibjBa8r6Qiw9saYmYb1znCMaSByExu+o55kYZ
-        J6zMVf4Bkp3p1jPHnGCj8c=
-Received: from VM-0-11-ubuntu.. (unknown [49.235.41.28])
-        by smtp2 (Coremail) with SMTP id GtxpCgC3L_L2hQRjVX0BXg--.9755S4;
-        Tue, 23 Aug 2022 15:47:05 +0800 (CST)
-From:   suhui_kernel@163.com
-To:     mingo@kernel.org
-Cc:     akpm@linux-foundation.org, bp@alien8.de, dietmar.eggemann@arm.com,
-        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
-        luto@amacapital.net, mgorman@suse.de, peterz@infradead.org,
-        tglx@linutronix.de, torvalds@linux-foundation.org,
-        vincent.guittot@linaro.org, nhuck@google.com,
-        ndesaulniers@google.com, lukas.bulwahn@gmail.com,
-        masahiroy@kernel.org
-Subject: Re: [PATCH 09/15] sched/headers: Introduce kernel/sched/build_policy.c and build multiple .c files there
-Date:   Tue, 23 Aug 2022 15:47:02 +0800
-Message-Id: <20220823074702.2900118-1-suhui_kernel@163.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220315084247.40783-10-mingo@kernel.org>
-References: <20220315084247.40783-10-mingo@kernel.org>
+        Tue, 23 Aug 2022 03:47:47 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7DF647D3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:47:46 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 2so8917720edx.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=BYIdG9zoxzlJrcwnEQC3uPCB8wf/8dgeUZMVUqHrFso=;
+        b=r/ygoMH4PmOcKkRHWKGLm4IJsjvq7jQQvgR8f0yM8XfPlucwO7274qaI+UOtzXCcgi
+         +Rn5qDcqdr53GXGjAwkE1WU0NGsaCc4fIe23izlDzWN/gJib6IHg5uP+Wgzu2uz4F8zM
+         Qa+1JOclWTMrk6wFRCar84pDpAnUeCeBUHnnLzNkjm8kpBjpnUOu3r3jSrvpyUHlSWcH
+         QdPTuvHjK7KkQd4nILuQ5mupXY4PR5hz/Lq9xe7WPwqqmpUGTbBX5Qo6Fe16FpsXUW/T
+         AmH7Dv+xDbm8lPhe/wqpvTQbTflDAd9ceUHVm6HvNys/WAPxxIrseYdTTSuNUuseZvMn
+         Y7pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=BYIdG9zoxzlJrcwnEQC3uPCB8wf/8dgeUZMVUqHrFso=;
+        b=gKGuRW1XD3AAR1e8U/j5c1QEpvEoQKXmmBJBusJIw92tya/x3oX4JxmEw9OePDmLb0
+         AUgF0+HlKegHXFLILI047zAFzmaRVfX3tsBuGpMoz4PyReDBX5fXHeb5qWLdixvNcWAS
+         o304S42sTCikOUEhXzNdQ65oHWfJWMtnUTZt95CcHDlKjP/NDfbSYEskZsEFonyFBrjj
+         aRzP33RqJ74Y/0zLR56QgKkQJojKzE/N6RWKTs+FpjV26lFEpJoOl/m7v+edlOLEi/mz
+         /DlMAOoz/zFMswFchTb+CE0YWpsrPGUIFq+MW6L5oyqSC7A2JR98M5WEYy1rGKrnTj9q
+         lzow==
+X-Gm-Message-State: ACgBeo2b/aqg12pIhO8uY+LcISv5PeiLcKn4I6a0Gv9yueymC9unOMky
+        8opFtCeQzA9SWT8NxrtuH1uiGfp47c12hHFlgZV8WNqljg==
+X-Google-Smtp-Source: AA6agR5rF1UelnTaKi7EozwOAA/BkqIZaLPDGwyCS+1GcJkzZ/CKZXyYqgNOUU9xEwZ/jVzg1riK+C3nxR3AskhtSUI=
+X-Received: by 2002:a05:6402:40cb:b0:446:fd02:f03b with SMTP id
+ z11-20020a05640240cb00b00446fd02f03bmr2470245edb.405.1661240865088; Tue, 23
+ Aug 2022 00:47:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgC3L_L2hQRjVX0BXg--.9755S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JrWkKF4fAF4xuF47KrWruFg_yoWDtwcEk3
-        40kw47Ww13CFyvqF13tF4fZrWkta9rta4rJFn7W3y3GFWktFs5WanIqF1fua45ta1Fvrn7
-        Krn3Xa4vyF129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjQB_UUUUUU==
-X-Originating-IP: [49.235.41.28]
-X-CM-SenderInfo: 5vxk3xhbnh20lho6il2tof0z/xtbBsgJmbV75gIq+2wAAsz
+References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com> <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+In-Reply-To: <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
+From:   =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>
+Date:   Tue, 23 Aug 2022 09:47:33 +0200
+Message-ID: <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Nathan Chancellor <nathan@kernel.org>, keescook@chromium.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ingo, Since commit f96eca432015ddc1b621632488ebc345bca06791 merged, the
-scripts/clang-tools/gen_compile_commands.py can't work very well.
-  In this patch the build_policy.c and build_utility.c include kernel/sched/xxx.c(
-such as rt.c idle.c...), so it compile the build_utility.o build_policy.o directly,
-and it won't generate kernel/sched/xxx.c(such as rt.o idle.o), so the gen_compile_commands.py
-can't work.
-  It will report "[8/23/2022, 3:24:06 PM] "rt.c" not found in "${workspaceFolder}/compile_commands.json".
-'includePath' from c_cpp_properties.json in folder 'linux' will be used for this file instead.".
-  And i test the kdump & crash tools, it can find the functions by line in kernel/sched/xxx.c(
-such as rt.c idle.c), it works well.
-  I can't solve this report error, so i want to get help.
-  Maybe we change the gen_compile_commands.py code can solve this problem or
-can we revert this change?(3.9% build wall time decrease really matter? it will
-destory all tool's parse result which depends on the compiled file result).
+>
+> Hi all,
+>
+> Apologies in advance if you see this twice. I did not see the original
+> make it to either lore.kernel.org or the freedesktop.org archives so I
+> figured it might have been sent into the void.
+>
+> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
+> > From: =C5=81ukasz Bartosik <lb@semihalf.com>
+> >
+> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
+> > The root cause is null pointer defeference of bi_next
+> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
+> >
+> > BUG: kernel NULL pointer dereference, address: 000000000000002e
+> > PGD 0 P4D 0
+> > Oops: 0002 [#1] PREEMPT SMP NOPTI
+> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
+> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05/=
+14/2021
+> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
+> > ...
+> > [    2.554467] Call Trace:
+> > [    2.554467]  <TASK>
+> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
+> > [    2.554467]  ? _printk+0x59/0x73
+> > [    2.554467]  ? _dev_err+0x77/0x91
+> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
+> > [    2.554467]  i915_driver_probe+0x4c8/0x638
+> > [    2.554467]  i915_pci_probe+0xf8/0x14e
+> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
+> > [    2.554467]  pci_device_probe+0xaa/0x142
+> > [    2.554467]  really_probe+0x13f/0x2f4
+> > [    2.554467]  __driver_probe_device+0x9e/0xd3
+> > [    2.554467]  driver_probe_device+0x24/0x7c
+> > [    2.554467]  __driver_attach+0xba/0xcf
+> > [    2.554467]  ? driver_attach+0x1f/0x1f
+> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
+> > [    2.554467]  bus_add_driver+0x11b/0x1f7
+> > [    2.554467]  driver_register+0x60/0xea
+> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> > [    2.554467]  i915_init+0x2c/0xb9
+> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
+> > [    2.554467]  do_one_initcall+0x12e/0x2b3
+> > [    2.554467]  do_initcall_level+0xd6/0xf3
+> > [    2.554467]  do_initcalls+0x4e/0x79
+> > [    2.554467]  kernel_init_freeable+0xed/0x14d
+> > [    2.554467]  ? rest_init+0xc1/0xc1
+> > [    2.554467]  kernel_init+0x1a/0x120
+> > [    2.554467]  ret_from_fork+0x1f/0x30
+> > [    2.554467]  </TASK>
+> > ...
+> > Kernel panic - not syncing: Fatal exception
+> >
+> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
+> > Signed-off-by: =C5=81ukasz Bartosik <lb@semihalf.com>
+> > ---
+> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
+> >  1 file changed, 9 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm/=
+i915/display/intel_bw.c
+> > index 2da4aacc956b..bd0ed68b7faa 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
+> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_privat=
+e *dev_priv, const struct intel
+> >               int clpchgroup;
+> >               int j;
+> >
+> > -             if (i < num_groups - 1)
+> > -                     bi_next =3D &dev_priv->max_bw[i + 1];
+> > -
+> >               clpchgroup =3D (sa->deburst * qi.deinterleave / num_chann=
+els) << i;
+> >
+> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
+> > -                     bi_next->num_planes =3D (ipqdepth - clpchgroup) /=
+ clpchgroup + 1;
+> > -             else
+> > -                     bi_next->num_planes =3D 0;
+> > +             if (i < num_groups - 1) {
+> > +                     bi_next =3D &dev_priv->max_bw[i + 1];
+> > +
+> > +                     if (clpchgroup < clperchgroup)
+> > +                             bi_next->num_planes =3D (ipqdepth - clpch=
+group) /
+> > +                                                    clpchgroup + 1;
+> > +                     else
+> > +                             bi_next->num_planes =3D 0;
+> > +             }
+> >
+> >               bi->num_qgv_points =3D qi.num_points;
+> >               bi->num_psf_gv_points =3D qi.num_psf_points;
+> > --
+> > 2.35.0.rc2.247.g8bbb082509-goog
+> >
+> >
+>
+> Was this patch ever applied or was the issue fixed in a different way?
+> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
+> compiler supports it), bi_next will be deterministically initialized to
+> NULL, which means 'bi_next->num_planes =3D 0' will crash when the first i=
+f
+> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
+> us at [1] so it impacts real users (and I have been applying this change
+> locally for six months). I see some discussion in this thread, was it
+> ever resolved?
+>
+> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
+>
+> Cheers,
+> Nathan
 
+The patch was not accepted by upstream. I gave up after sending two reminde=
+rs
+that the issue is still present which resulted in no upstream reaction.
+I have been also applying that patch locally for a few months.
+Thanks for bringing it up to upstream attention again.

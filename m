@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566D559E137
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA3859E338
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356089AbiHWK62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S242314AbiHWMTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356550AbiHWKyS (ORCPT
+        with ESMTP id S1356104AbiHWMPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:54:18 -0400
+        Tue, 23 Aug 2022 08:15:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B132DC7;
-        Tue, 23 Aug 2022 02:13:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1A998D21;
+        Tue, 23 Aug 2022 02:41:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63310B81C88;
-        Tue, 23 Aug 2022 09:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10C0C433C1;
-        Tue, 23 Aug 2022 09:13:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75CA3B81C65;
+        Tue, 23 Aug 2022 09:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8415C433C1;
+        Tue, 23 Aug 2022 09:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245994;
-        bh=+cQueMhG49MjrWyekbaH7KLGxxmn10UFrF2aTy84y2Y=;
+        s=korg; t=1661247625;
+        bh=kGnKy4ot8MT8zCT9ellggAB0zIaX/bDGSKngr+K3OEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XmpshZIi48SWWkXsO2Oali1j4HNNlNIOKUIQiC0Bl4iuwIS255deAAj6NR3velFey
-         C8Wrb6RJDAsM7h6T0fz1o+t+o9PvoEC55tE/QzluioQd0L+/7T7IxYvuxzbhBfzIjo
-         siiwIcOmXautNSXFuNDO9GiYAPHqm0U/5AOsEPbY=
+        b=kYknOwYK7/RIg9f9jPq69X9JNIIRYUEw69KsUOLI8Yv2vjvN9EgCi3WRCoqSVS6FO
+         VjzL264hJy0Is2uzKLCjKJCMh8+PpH4Qy9UTgznY12IiFFLs7b4fUonHGigul1ampx
+         kVMNp/DbzI7Scqz29BCuV5ShDRx6ABIWg90qCMcI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hector Martin <marcan@marcan.st>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 4.19 256/287] locking/atomic: Make test_and_*_bit() ordered on failure
-Date:   Tue, 23 Aug 2022 10:27:05 +0200
-Message-Id: <20220823080109.872293149@linuxfoundation.org>
+        stable@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+        Erhard Furtner <erhard_f@mailbox.org>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.10 094/158] gcc-plugins: Undefine LATENT_ENTROPY_PLUGIN when plugin disabled for a file
+Date:   Tue, 23 Aug 2022 10:27:06 +0200
+Message-Id: <20220823080049.836873967@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Andrew Donnellan <ajd@linux.ibm.com>
 
-commit 415d832497098030241605c52ea83d4e2cfa7879 upstream.
+commit 012e8d2034f1bda8863435cd589636e618d6a659 upstream.
 
-These operations are documented as always ordered in
-include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
-type use cases where one side needs to ensure a flag is left pending
-after some shared data was updated rely on this ordering, even in the
-failure case.
+Commit 36d4b36b6959 ("lib/nodemask: inline next_node_in() and
+node_random()") refactored some code by moving node_random() from
+lib/nodemask.c to include/linux/nodemask.h, thus requiring nodemask.h to
+include random.h, which conditionally defines add_latent_entropy()
+depending on whether the macro LATENT_ENTROPY_PLUGIN is defined.
 
-This is the case with the workqueue code, which currently suffers from a
-reproducible ordering violation on Apple M1 platforms (which are
-notoriously out-of-order) that ends up causing the TTY layer to fail to
-deliver data to userspace properly under the right conditions.  This
-change fixes that bug.
+This broke the build on powerpc, where nodemask.h is indirectly included
+in arch/powerpc/kernel/prom_init.c, part of the early boot machinery that
+is excluded from the latent entropy plugin using
+DISABLE_LATENT_ENTROPY_PLUGIN. It turns out that while we add a gcc flag
+to disable the actual plugin, we don't undefine LATENT_ENTROPY_PLUGIN.
 
-Change the documentation to restrict the "no order on failure" story to
-the _lock() variant (for which it makes sense), and remove the
-early-exit from the generic implementation, which is what causes the
-missing barrier semantics in that case.  Without this, the remaining
-atomic op is fully ordered (including on ARM64 LSE, as of recent
-versions of the architecture spec).
+This leads to the following:
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
-Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Acked-by: Will Deacon <will@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+    CC      arch/powerpc/kernel/prom_init.o
+  In file included from ./include/linux/nodemask.h:97,
+                   from ./include/linux/mmzone.h:17,
+                   from ./include/linux/gfp.h:7,
+                   from ./include/linux/xarray.h:15,
+                   from ./include/linux/radix-tree.h:21,
+                   from ./include/linux/idr.h:15,
+                   from ./include/linux/kernfs.h:12,
+                   from ./include/linux/sysfs.h:16,
+                   from ./include/linux/kobject.h:20,
+                   from ./include/linux/pci.h:35,
+                   from arch/powerpc/kernel/prom_init.c:24:
+  ./include/linux/random.h: In function 'add_latent_entropy':
+  ./include/linux/random.h:25:46: error: 'latent_entropy' undeclared (first use in this function); did you mean 'add_latent_entropy'?
+     25 |         add_device_randomness((const void *)&latent_entropy, sizeof(latent_entropy));
+        |                                              ^~~~~~~~~~~~~~
+        |                                              add_latent_entropy
+  ./include/linux/random.h:25:46: note: each undeclared identifier is reported only once for each function it appears in
+  make[2]: *** [scripts/Makefile.build:249: arch/powerpc/kernel/prom_init.o] Fehler 1
+  make[1]: *** [scripts/Makefile.build:465: arch/powerpc/kernel] Fehler 2
+  make: *** [Makefile:1855: arch/powerpc] Error 2
+
+Change the DISABLE_LATENT_ENTROPY_PLUGIN flags to undefine
+LATENT_ENTROPY_PLUGIN for files where the plugin is disabled.
+
+Cc: Yury Norov <yury.norov@gmail.com>
+Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216367
+Link: https://lore.kernel.org/linuxppc-dev/alpine.DEB.2.22.394.2208152006320.289321@ramsan.of.borg/
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220816051720.44108-1-ajd@linux.ibm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/atomic_bitops.txt     |    2 +-
- include/asm-generic/bitops/atomic.h |    6 ------
- 2 files changed, 1 insertion(+), 7 deletions(-)
+ scripts/Makefile.gcc-plugins |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/atomic_bitops.txt
-+++ b/Documentation/atomic_bitops.txt
-@@ -59,7 +59,7 @@ Like with atomic_t, the rule of thumb is
-  - RMW operations that have a return value are fully ordered.
+--- a/scripts/Makefile.gcc-plugins
++++ b/scripts/Makefile.gcc-plugins
+@@ -6,7 +6,7 @@ gcc-plugin-$(CONFIG_GCC_PLUGIN_LATENT_EN
+ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_LATENT_ENTROPY)		\
+ 		+= -DLATENT_ENTROPY_PLUGIN
+ ifdef CONFIG_GCC_PLUGIN_LATENT_ENTROPY
+-    DISABLE_LATENT_ENTROPY_PLUGIN += -fplugin-arg-latent_entropy_plugin-disable
++    DISABLE_LATENT_ENTROPY_PLUGIN += -fplugin-arg-latent_entropy_plugin-disable -ULATENT_ENTROPY_PLUGIN
+ endif
+ export DISABLE_LATENT_ENTROPY_PLUGIN
  
-  - RMW operations that are conditional are unordered on FAILURE,
--   otherwise the above rules apply. In the case of test_and_{}_bit() operations,
-+   otherwise the above rules apply. In the case of test_and_set_bit_lock(),
-    if the bit in memory is unchanged by the operation then it is deemed to have
-    failed.
- 
---- a/include/asm-generic/bitops/atomic.h
-+++ b/include/asm-generic/bitops/atomic.h
-@@ -35,9 +35,6 @@ static inline int test_and_set_bit(unsig
- 	unsigned long mask = BIT_MASK(nr);
- 
- 	p += BIT_WORD(nr);
--	if (READ_ONCE(*p) & mask)
--		return 1;
--
- 	old = atomic_long_fetch_or(mask, (atomic_long_t *)p);
- 	return !!(old & mask);
- }
-@@ -48,9 +45,6 @@ static inline int test_and_clear_bit(uns
- 	unsigned long mask = BIT_MASK(nr);
- 
- 	p += BIT_WORD(nr);
--	if (!(READ_ONCE(*p) & mask))
--		return 0;
--
- 	old = atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
- 	return !!(old & mask);
- }
 
 

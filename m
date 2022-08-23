@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A04059D4EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F27359D7B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238613AbiHWIYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S1351532AbiHWJp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242221AbiHWITB (ORCPT
+        with ESMTP id S1351941AbiHWJkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:19:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5572E4057F;
-        Tue, 23 Aug 2022 01:11:52 -0700 (PDT)
+        Tue, 23 Aug 2022 05:40:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512AE792D8;
+        Tue, 23 Aug 2022 01:41:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6E5DB81C25;
-        Tue, 23 Aug 2022 08:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DEEEC433D6;
-        Tue, 23 Aug 2022 08:11:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1CC66123D;
+        Tue, 23 Aug 2022 08:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02A6C433D6;
+        Tue, 23 Aug 2022 08:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242309;
-        bh=e6CbxlTdKoiBbHXhARdur1EgTYEw0P1/1u6sqts1RDk=;
+        s=korg; t=1661243617;
+        bh=wx7auUZauTUrHSIJMex3tejmGanZog/dMv720xCvWTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GKH1NOqKVYMosSPF4DR/kMwecoWq/L6SnhcKnU5JpRCBA7s9/c2BQPy0lRzjv0CP7
-         2wGVneJaM8CRMZsVbz8rWxUbLPjAfEMem0eJFf/Xv3zUkcGRHuJFXsgR3B+xNmAf7b
-         ahK0Dx3BgFRNIanvE6pbdD5O42OKmCBhTNAT7IXY=
+        b=uraBdw8zS8OsMI46LCIh7tzxYAof5f57jmzEIFxgwOTqk3SzPqWL+apN/qz+WTXrj
+         h+db5lDAMFhJweYlVn9hy1yr9riy4ZDX9//J6ZKDqehd9IWGufpn6kNFUJg1/h01yI
+         76ZRNyIkHAJu23+M9OTVXXPUDi7joURehgNbAwxE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Lukas Czerner <lczerner@redhat.com>,
-        Andreas Dilger <adilger@dilger.ca>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.9 051/101] ext4: make sure ext4_append() always allocates new block
-Date:   Tue, 23 Aug 2022 10:03:24 +0200
-Message-Id: <20220823080036.510604201@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Liao Chang <liaochang1@huawei.com>,
+        Guo Ren <guoren@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 304/365] csky/kprobe: reclaim insn_slot on kprobe unregistration
+Date:   Tue, 23 Aug 2022 10:03:25 +0200
+Message-Id: <20220823080130.903891051@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Czerner <lczerner@redhat.com>
+From: Liao Chang <liaochang1@huawei.com>
 
-commit b8a04fe77ef1360fbf73c80fddbdfeaa9407ed1b upstream.
+[ Upstream commit a2310c74d418deca0f1d749c45f1f43162510f51 ]
 
-ext4_append() must always allocate a new block, otherwise we run the
-risk of overwriting existing directory block corrupting the directory
-tree in the process resulting in all manner of problems later on.
+On kprobe registration kernel allocate one insn_slot for new kprobe,
+but it forget to reclaim the insn_slot on unregistration, leading to a
+potential leakage.
 
-Add a sanity check to see if the logical block is already allocated and
-error out if it is.
-
-Cc: stable@kernel.org
-Signed-off-by: Lukas Czerner <lczerner@redhat.com>
-Reviewed-by: Andreas Dilger <adilger@dilger.ca>
-Link: https://lore.kernel.org/r/20220704142721.157985-2-lczerner@redhat.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/namei.c |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/csky/kernel/probes/kprobes.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -51,6 +51,7 @@ static struct buffer_head *ext4_append(h
- 					struct inode *inode,
- 					ext4_lblk_t *block)
+diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
+index 34ba684d5962..3c6e5c725d81 100644
+--- a/arch/csky/kernel/probes/kprobes.c
++++ b/arch/csky/kernel/probes/kprobes.c
+@@ -124,6 +124,10 @@ void __kprobes arch_disarm_kprobe(struct kprobe *p)
+ 
+ void __kprobes arch_remove_kprobe(struct kprobe *p)
  {
-+	struct ext4_map_blocks map;
- 	struct buffer_head *bh;
- 	int err;
- 
-@@ -60,6 +61,21 @@ static struct buffer_head *ext4_append(h
- 		return ERR_PTR(-ENOSPC);
- 
- 	*block = inode->i_size >> inode->i_sb->s_blocksize_bits;
-+	map.m_lblk = *block;
-+	map.m_len = 1;
-+
-+	/*
-+	 * We're appending new directory block. Make sure the block is not
-+	 * allocated yet, otherwise we will end up corrupting the
-+	 * directory.
-+	 */
-+	err = ext4_map_blocks(NULL, inode, &map, 0);
-+	if (err < 0)
-+		return ERR_PTR(err);
-+	if (err) {
-+		EXT4_ERROR_INODE(inode, "Logical block already allocated");
-+		return ERR_PTR(-EFSCORRUPTED);
++	if (p->ainsn.api.insn) {
++		free_insn_slot(p->ainsn.api.insn, 0);
++		p->ainsn.api.insn = NULL;
 +	}
+ }
  
- 	bh = ext4_bread(handle, inode, *block, EXT4_GET_BLOCKS_CREATE);
- 	if (IS_ERR(bh))
+ static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
+-- 
+2.35.1
+
 
 

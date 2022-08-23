@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD3359E16E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A8359DF6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351993AbiHWKM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S1355168AbiHWKnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352427AbiHWKFk (ORCPT
+        with ESMTP id S1355521AbiHWKca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:05:40 -0400
+        Tue, 23 Aug 2022 06:32:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27272A3448;
-        Tue, 23 Aug 2022 01:52:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541EDA572E;
+        Tue, 23 Aug 2022 02:06:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FC08611DD;
-        Tue, 23 Aug 2022 08:52:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE2DC433C1;
-        Tue, 23 Aug 2022 08:52:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 598E86155D;
+        Tue, 23 Aug 2022 09:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D14C433D6;
+        Tue, 23 Aug 2022 09:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244722;
-        bh=Lj3vgTIfpEYlX7Q9QBsnBXWw2WeUak/ATk2ICgEljuo=;
+        s=korg; t=1661245601;
+        bh=EybR0K8FIJjUR+xXMlRDmtFDxa6phjBNGmXo8Ep1NLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KCew92kTEalx7DJ4Qk5J6lgAnd/abseY9v6S5UHwlgjl9jLi0RSeZzXI7uCddWOt8
-         pQtAxWFr4eFMdnFtzuwU7SpUNLT3Jd5lUTL6GzIggL8q4aw4czY4Pr0EZcXZ3oCfYg
-         yIJ0wHVGY6qt+xoYB+PYP3e2ZraICF2CdFUCSmag=
+        b=d1f1IBf0Ws7ItNBWW94fzP+IywvkTFOsaBRjYLErFuHkioXX/7uqYotL44EVhjIQA
+         AgQwlscgsC3mZMdg7Tw94Nl6Hb4L3qE1GVuGSq7u40aoatLMT1l5d+1JgD8dY23POi
+         UmspVBw1gyXlZzEJpboufsAkdsqEA3e6iXPQbjl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 139/244] net: dsa: microchip: ksz9477: fix fdb_dump last invalid entry
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 129/287] memstick/ms_block: Fix a memory leak
 Date:   Tue, 23 Aug 2022 10:24:58 +0200
-Message-Id: <20220823080103.795969863@linuxfoundation.org>
+Message-Id: <20220823080104.749924521@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Ramadoss <arun.ramadoss@microchip.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit 36c0d935015766bf20d621c18313f17691bda5e3 upstream.
+[ Upstream commit 54eb7a55be6779c4d0c25eaf5056498a28595049 ]
 
-In the ksz9477_fdb_dump function it reads the ALU control register and
-exit from the timeout loop if there is valid entry or search is
-complete. After exiting the loop, it reads the alu entry and report to
-the user space irrespective of entry is valid. It works till the valid
-entry. If the loop exited when search is complete, it reads the alu
-table. The table returns all ones and it is reported to user space. So
-bridge fdb show gives ff:ff:ff:ff:ff:ff as last entry for every port.
-To fix it, after exiting the loop the entry is reported only if it is
-valid one.
+'erased_blocks_bitmap' is never freed. As it is allocated at the same time
+as 'used_blocks_bitmap', it is likely that it should be freed also at the
+same time.
 
-Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20220816105516.18350-1-arun.ramadoss@microchip.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Add the corresponding bitmap_free() in msb_data_clear().
+
+Fixes: 0ab30494bc4f ("memstick: add support for legacy memorysticks")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/b3b78926569445962ea5c3b6e9102418a9effb88.1656155715.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/microchip/ksz9477.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/memstick/core/ms_block.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -759,6 +759,9 @@ static int ksz9477_port_fdb_dump(struct
- 			goto exit;
- 		}
- 
-+		if (!(ksz_data & ALU_VALID))
-+			continue;
-+
- 		/* read ALU table */
- 		ksz9477_read_table(dev, alu_table);
- 
+diff --git a/drivers/memstick/core/ms_block.c b/drivers/memstick/core/ms_block.c
+index 0874fa882649..addf76a8d1b0 100644
+--- a/drivers/memstick/core/ms_block.c
++++ b/drivers/memstick/core/ms_block.c
+@@ -1962,6 +1962,7 @@ static void msb_data_clear(struct msb_data *msb)
+ {
+ 	kfree(msb->boot_page);
+ 	bitmap_free(msb->used_blocks_bitmap);
++	bitmap_free(msb->erased_blocks_bitmap);
+ 	kfree(msb->lba_to_pba_table);
+ 	kfree(msb->cache);
+ 	msb->card = NULL;
+-- 
+2.35.1
+
 
 

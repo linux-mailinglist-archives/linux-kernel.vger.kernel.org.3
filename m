@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4623E59D838
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D8059DA62
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349849AbiHWJ1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S1352460AbiHWKHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240349AbiHWJYS (ORCPT
+        with ESMTP id S1352430AbiHWKBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:24:18 -0400
+        Tue, 23 Aug 2022 06:01:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DE22BC9;
-        Tue, 23 Aug 2022 01:35:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4357C1C3;
+        Tue, 23 Aug 2022 01:49:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D0E5B81C3B;
-        Tue, 23 Aug 2022 08:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A430C433C1;
-        Tue, 23 Aug 2022 08:34:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BA2FB81C4C;
+        Tue, 23 Aug 2022 08:34:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2DD1C433D6;
+        Tue, 23 Aug 2022 08:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243659;
-        bh=jld3Qog9SsdZFeVcGy1YR+rTIrPAlZB2z9rTGiZgsQY=;
+        s=korg; t=1661243669;
+        bh=t0TSqAFuhyH1+CMJ7UbBnSE+KHqu5QO/EWY90mPSeHY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YqmiYjEiZAeJGtAgFmEmu4TtRuoNPj+uxPB6nlo6vj53VCljHNypntsky9YMAwHbz
-         cfWFMw8mJ1ClWdJAa+kh37HIYCMYuhIW6hKmEzwnCIqE3Vb+2msUY6ELLH2oSqZz4G
-         +CkUWG7rv2lMEAeDBSTTT8LRu7viiEzuA8/sb7QU=
+        b=XP7+8gwUK+RlQ2syisO10kgb1tEsOGEEzUmfmF9BqL+gxersn460Fc7bOkFAyHVdS
+         4yhfjEvV1FlNaebmIYF1SEdYWwOQpGMVJa92YflI5eYMDUy6uTmq1ePzTkYohW2u1F
+         6V9p9sVvVagBwFFK2kIoglQ/WaszmlurbV1QoUXA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 348/365] ASoC: codecs: va-macro: use fsgen as clock
-Date:   Tue, 23 Aug 2022 10:04:09 +0200
-Message-Id: <20220823080132.818607059@linuxfoundation.org>
+Subject: [PATCH 5.19 350/365] powerpc/ioda/iommu/debugfs: Generate unique debugfs entries
+Date:   Tue, 23 Aug 2022 10:04:11 +0200
+Message-Id: <20220823080132.903219215@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -57,68 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
 
-[ Upstream commit 30097967e0566cac817273ef76add100f6b0f463 ]
+[ Upstream commit d73b46c3c1449bf27f793b9d9ee86ed70c7a7163 ]
 
-VA Macro fsgen clock is supplied to other LPASS Macros using proper
-clock apis, however the internal user uses the registers directly without
-clk apis. This approch has race condition where in external users of
-the clock might cut the clock while VA macro is actively using this.
+The iommu_table::it_index is a LIOBN which is not initialized on PowerNV
+as it is not used except IOMMU debugfs where it is used for a node name.
 
-Moving the internal usage to clk apis would provide a proper refcounting
-and avoid such race conditions.
+This initializes it_index witn a unique number to avoid warnings and
+have a node for every iommu_table.
 
-This issue was noticed while headset was pulled out while recording is
-in progress and shifting record patch to DMIC.
+This should not cause any behavioral change without CONFIG_IOMMU_DEBUGFS.
 
-Reported-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Tested-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Link: https://lore.kernel.org/r/20220727124749.4604-1-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220714080800.3712998-1-aik@ozlabs.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/lpass-va-macro.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ arch/powerpc/platforms/powernv/pci-ioda.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
-index d18b56e60433..1ea10dc70748 100644
---- a/sound/soc/codecs/lpass-va-macro.c
-+++ b/sound/soc/codecs/lpass-va-macro.c
-@@ -199,6 +199,7 @@ struct va_macro {
- 	struct clk *mclk;
- 	struct clk *macro;
- 	struct clk *dcodec;
-+	struct clk *fsgen;
- 	struct clk_hw hw;
- 	struct lpass_macro *pds;
+diff --git a/arch/powerpc/platforms/powernv/pci-ioda.c b/arch/powerpc/platforms/powernv/pci-ioda.c
+index c8cf2728031a..9de9b2fb163d 100644
+--- a/arch/powerpc/platforms/powernv/pci-ioda.c
++++ b/arch/powerpc/platforms/powernv/pci-ioda.c
+@@ -1609,6 +1609,7 @@ static void pnv_pci_ioda1_setup_dma_pe(struct pnv_phb *phb,
+ 	tbl->it_ops = &pnv_ioda1_iommu_ops;
+ 	pe->table_group.tce32_start = tbl->it_offset << tbl->it_page_shift;
+ 	pe->table_group.tce32_size = tbl->it_size << tbl->it_page_shift;
++	tbl->it_index = (phb->hose->global_number << 16) | pe->pe_number;
+ 	if (!iommu_init_table(tbl, phb->hose->node, 0, 0))
+ 		panic("Failed to initialize iommu table");
  
-@@ -467,9 +468,9 @@ static int va_macro_mclk_event(struct snd_soc_dapm_widget *w,
- 
- 	switch (event) {
- 	case SND_SOC_DAPM_PRE_PMU:
--		return va_macro_mclk_enable(va, true);
-+		return clk_prepare_enable(va->fsgen);
- 	case SND_SOC_DAPM_POST_PMD:
--		return va_macro_mclk_enable(va, false);
-+		clk_disable_unprepare(va->fsgen);
+@@ -1779,6 +1780,7 @@ static long pnv_pci_ioda2_setup_default_config(struct pnv_ioda_pe *pe)
+ 		res_end = min(window_size, SZ_4G) >> tbl->it_page_shift;
  	}
  
- 	return 0;
-@@ -1473,6 +1474,12 @@ static int va_macro_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_clkout;
- 
-+	va->fsgen = clk_hw_get_clk(&va->hw, "fsgen");
-+	if (IS_ERR(va->fsgen)) {
-+		ret = PTR_ERR(va->fsgen);
-+		goto err_clkout;
-+	}
-+
- 	ret = devm_snd_soc_register_component(dev, &va_macro_component_drv,
- 					      va_macro_dais,
- 					      ARRAY_SIZE(va_macro_dais));
++	tbl->it_index = (pe->phb->hose->global_number << 16) | pe->pe_number;
+ 	if (iommu_init_table(tbl, pe->phb->hose->node, res_start, res_end))
+ 		rc = pnv_pci_ioda2_set_window(&pe->table_group, 0, tbl);
+ 	else
 -- 
 2.35.1
 

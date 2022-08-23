@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFD059E1A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F18159DDB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353720AbiHWKL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S1357778AbiHWLiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348269AbiHWKEj (ORCPT
+        with ESMTP id S1357919AbiHWLcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:04:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E687CA8A;
-        Tue, 23 Aug 2022 01:51:39 -0700 (PDT)
+        Tue, 23 Aug 2022 07:32:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1129760C4;
+        Tue, 23 Aug 2022 02:26:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80661B8105C;
-        Tue, 23 Aug 2022 08:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FC0C433D6;
-        Tue, 23 Aug 2022 08:51:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B3636126A;
+        Tue, 23 Aug 2022 09:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E20C433C1;
+        Tue, 23 Aug 2022 09:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244697;
-        bh=RVt6G3W9mdbfkIy7nW8MAcnxPBPOKSh1h3YBa/FUnjU=;
+        s=korg; t=1661246777;
+        bh=Yx3XOlt71fds3wG4aOZHbBS34tPgjiVxatuLqfYxJ48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uaSvOLeShmLywXMXdQhtgdaBc+zTsOSQB/9OdvYyDjASLM3H7yJ0yP5uO/SKJ/ida
-         Z4xuGkSZZE/Yf6GFBDxBWGNQEoAtW/R6OpBUT7m1MwZuLZu3/UCOO1vxnN8pG7W8uC
-         RzvKnHn4PvTYW8WssOr5D29gSK9Dy7dE5SnLYe4I=
+        b=NCfgllCeUcp12D9wLj5tmUXJ4+YSkUSykAeaN/O8VDQLc1m1Wn+LspAxD3e6wBPN8
+         tCX9m+eQkMCTgh+ixoRvUM/YdfKaEsX+182ziNFGN9EWdkN0q5dpODnxvoifkyi/fU
+         Xs/7LufjfdGEpgCXcV5NeftzgD9qjp8EvTO6d5fY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@savoirfairelinux.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sergei Antonov <saproj@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 135/244] net: dsa: mv88e6060: prevent crash on an unused port
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 216/389] tty: n_gsm: fix wrong T1 retry count handling
 Date:   Tue, 23 Aug 2022 10:24:54 +0200
-Message-Id: <20220823080103.644982901@linuxfoundation.org>
+Message-Id: <20220823080124.624526635@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,53 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Antonov <saproj@gmail.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 246bbf2f977ea36aaf41f5d24370fef433250728 upstream.
+[ Upstream commit f30e10caa80aa1f35508bc17fc302dbbde9a833c ]
 
-If the port isn't a CPU port nor a user port, 'cpu_dp'
-is a null pointer and a crash happened on dereferencing
-it in mv88e6060_setup_port():
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.7.3 states that the valid range for the
+maximum number of retransmissions (N2) is from 0 to 255 (both including).
+gsm_dlci_t1() handles this number incorrectly by performing N2 - 1
+retransmission attempts. Setting N2 to zero results in more than 255
+retransmission attempts.
+Fix gsm_dlci_t1() to comply with 3GPP 27.010.
 
-[    9.575872] Unable to handle kernel NULL pointer dereference at virtual address 00000014
-...
-[    9.942216]  mv88e6060_setup from dsa_register_switch+0x814/0xe84
-[    9.948616]  dsa_register_switch from mdio_probe+0x2c/0x54
-[    9.954433]  mdio_probe from really_probe.part.0+0x98/0x2a0
-[    9.960375]  really_probe.part.0 from driver_probe_device+0x30/0x10c
-[    9.967029]  driver_probe_device from __device_attach_driver+0xb8/0x13c
-[    9.973946]  __device_attach_driver from bus_for_each_drv+0x90/0xe0
-[    9.980509]  bus_for_each_drv from __device_attach+0x110/0x184
-[    9.986632]  __device_attach from bus_probe_device+0x8c/0x94
-[    9.992577]  bus_probe_device from deferred_probe_work_func+0x78/0xa8
-[    9.999311]  deferred_probe_work_func from process_one_work+0x290/0x73c
-[   10.006292]  process_one_work from worker_thread+0x30/0x4b8
-[   10.012155]  worker_thread from kthread+0xd4/0x10c
-[   10.017238]  kthread from ret_from_fork+0x14/0x3c
-
-Fixes: 0abfd494deef ("net: dsa: use dedicated CPU port")
-CC: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-CC: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20220811070939.1717146-1-saproj@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220707113223.3685-1-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6060.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/tty/n_gsm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/dsa/mv88e6060.c
-+++ b/drivers/net/dsa/mv88e6060.c
-@@ -118,6 +118,9 @@ static int mv88e6060_setup_port(struct m
- 	int addr = REG_PORT(p);
- 	int ret;
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 186f4633fd4a..f4b5ac840222 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1534,8 +1534,8 @@ static void gsm_dlci_t1(struct timer_list *t)
  
-+	if (dsa_is_unused_port(priv->ds, p))
-+		return 0;
-+
- 	/* Do not force flow control, disable Ingress and Egress
- 	 * Header tagging, disable VLAN tunneling, and set the port
- 	 * state to Forwarding.  Additionally, if this is the CPU
+ 	switch (dlci->state) {
+ 	case DLCI_OPENING:
+-		dlci->retries--;
+ 		if (dlci->retries) {
++			dlci->retries--;
+ 			gsm_command(dlci->gsm, dlci->addr, SABM|PF);
+ 			mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
+ 		} else if (!dlci->addr && gsm->control == (DM | PF)) {
+@@ -1550,8 +1550,8 @@ static void gsm_dlci_t1(struct timer_list *t)
+ 
+ 		break;
+ 	case DLCI_CLOSING:
+-		dlci->retries--;
+ 		if (dlci->retries) {
++			dlci->retries--;
+ 			gsm_command(dlci->gsm, dlci->addr, DISC|PF);
+ 			mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
+ 		} else
+-- 
+2.35.1
+
 
 

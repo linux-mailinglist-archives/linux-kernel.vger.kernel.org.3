@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C2559D6C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E2B59D76E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241936AbiHWJjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
+        id S241785AbiHWJxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351689AbiHWJim (ORCPT
+        with ESMTP id S1351913AbiHWJvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:38:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB43225EB1;
-        Tue, 23 Aug 2022 01:41:06 -0700 (PDT)
+        Tue, 23 Aug 2022 05:51:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4149E2D7;
+        Tue, 23 Aug 2022 01:45:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D11D16153C;
-        Tue, 23 Aug 2022 08:39:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B084AC433D6;
-        Tue, 23 Aug 2022 08:39:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5E03B81C4D;
+        Tue, 23 Aug 2022 08:44:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE16CC433C1;
+        Tue, 23 Aug 2022 08:44:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243999;
-        bh=3nNFgxHraRJWA0ShV22x8RUpKDKlePeNDiV/IlDMamg=;
+        s=korg; t=1661244289;
+        bh=DR1snfRLybVmdH1tOb3/8khLmueGUFR93/TihdxZuYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQmJUufWNUijtmn5P/GDwEbN+d+WfmB9xU8INGKmbJ4rffpVfEXLB85N8Wa2cHWSM
-         liD/nOlxM1VIZD1QKqQYnLiJ30FPXVS6D9T75s7/2EPmiLsJZPTbGXBkwgDc3F0Dkz
-         jyaRVG12Ign2O+Kf7djQ0ifEklCM+gU+28q3BY+s=
+        b=LgN/ROKslviYay73BT5PFe37Z9xKdY2gAOnXXsG0u/s01EwSs8zZao1wFMn/HcEAN
+         5Mg/opfFZC7GP7x5/PP36cYr6wT2bCrp6CPi8VHfniifTFx7/PjMNKZpqnSFWAY888
+         P6bFUI+sO2wmOP7MOxJTasQ7Ethb7l4TKrSh9igI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 066/229] media: hdpvr: fix error value returns in hdpvr_read
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.15 068/244] Input: exc3000 - fix return value check of wait_for_completion_timeout
 Date:   Tue, 23 Aug 2022 10:23:47 +0200
-Message-Id: <20220823080056.079825043@linuxfoundation.org>
+Message-Id: <20220823080101.347387951@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 359c27c6ddbde404f44a9c0d3ec88ccd1e2042f2 ]
+commit 6bb7144c3fa16a5efb54a8e2aff1817b4168018e upstream.
 
-Error return values are supposed to be negative in hdpvr_read. Most
-error returns are currently handled via an unsigned integer "ret". When
-setting a negative error value to "ret", the value actually becomes a
-large positive value, because "ret" is unsigned. Later on, the "ret"
-value is returned. But as ssize_t is a 64-bit signed number, the error
-return value stays a large positive integer instead of a negative
-integer. This can cause an error value to be interpreted as the read
-size, which can cause a buffer overread for applications relying on the
-returned size.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-Fixes: 9aba42efe85b ("V4L/DVB (11096): V4L2 Driver for the Hauppauge HD PVR usb capture device")
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 102feb1ddfd0 ("Input: exc3000 - factor out vendor data request")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220411105828.22140-1-linmq006@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-video.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/touchscreen/exc3000.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index 1cecb37e16d2..59bd44736fae 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -413,7 +413,7 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
- 	struct hdpvr_device *dev = video_drvdata(file);
- 	struct hdpvr_buffer *buf = NULL;
- 	struct urb *urb;
--	unsigned int ret = 0;
-+	int ret = 0;
- 	int rem, cnt;
+--- a/drivers/input/touchscreen/exc3000.c
++++ b/drivers/input/touchscreen/exc3000.c
+@@ -220,6 +220,7 @@ static int exc3000_vendor_data_request(s
+ {
+ 	u8 buf[EXC3000_LEN_VENDOR_REQUEST] = { 0x67, 0x00, 0x42, 0x00, 0x03 };
+ 	int ret;
++	unsigned long time_left;
  
- 	if (*pos)
--- 
-2.35.1
-
+ 	mutex_lock(&data->query_lock);
+ 
+@@ -233,9 +234,9 @@ static int exc3000_vendor_data_request(s
+ 		goto out_unlock;
+ 
+ 	if (response) {
+-		ret = wait_for_completion_timeout(&data->wait_event,
+-						  timeout * HZ);
+-		if (ret <= 0) {
++		time_left = wait_for_completion_timeout(&data->wait_event,
++							timeout * HZ);
++		if (time_left == 0) {
+ 			ret = -ETIMEDOUT;
+ 			goto out_unlock;
+ 		}
 
 

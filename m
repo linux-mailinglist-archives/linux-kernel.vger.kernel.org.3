@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3254159D9CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B5E59DA28
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347128AbiHWKC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
+        id S1352610AbiHWKF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352529AbiHWJ5E (ORCPT
+        with ESMTP id S1352177AbiHWKBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:57:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52B5A1A4A;
-        Tue, 23 Aug 2022 01:47:43 -0700 (PDT)
+        Tue, 23 Aug 2022 06:01:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9DB481EE;
+        Tue, 23 Aug 2022 01:48:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FBE661485;
-        Tue, 23 Aug 2022 08:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80278C433C1;
-        Tue, 23 Aug 2022 08:47:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8122ECE1B44;
+        Tue, 23 Aug 2022 08:48:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB78C433D6;
+        Tue, 23 Aug 2022 08:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244462;
-        bh=DsVmaptLfGCsQ/cJXoqcuHsaqqRmiKwEQQuGkw90wIM=;
+        s=korg; t=1661244531;
+        bh=/2iN9ZUAX5ag3aUD6VdxWCJF8EhmGNhcvw+NYou29Qs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TOefoa2ngIuPEsywkD8Npfcmw09eyLCfgR1niNsSwYjeEN9GRfGd2ij/LvWZRpQCE
-         OGhb4ymjTmDkt8VvWKtVQJmUlhhEFINzt2Ml5stnec78ln62idDkRUbC/XGnj56r7H
-         J5vupMah+rCD3PbsUFzMHDHNmHvujqhPk3A+kTHA=
+        b=Qi0ZBr11oLzvM7WWiGI41V3a1jdXZpPEZjgJUwXUtQziRTs86rJaJZ/g6cbNGCZHu
+         b/20yzdxa2LmLn2APzXlG/kmHNczrAYf3sn/usIX0+pmyldjA7jCHYqUYabU/xtsK3
+         ANlrnjZHBw+L+DP9O3j1IOJbPh/rA8D+W0WlKBsY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.15 084/244] dt-bindings: arm: qcom: fix MSM8916 MTP compatibles
-Date:   Tue, 23 Aug 2022 10:24:03 +0200
-Message-Id: <20220823080101.844362583@linuxfoundation.org>
+Subject: [PATCH 5.15 085/244] dt-bindings: arm: qcom: fix MSM8994 boards compatibles
+Date:   Tue, 23 Aug 2022 10:24:04 +0200
+Message-Id: <20220823080101.874848429@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -58,34 +58,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit bb35fe1efbae4114bd288fae0f56070f563adcfc upstream.
+commit c704bd373f58a84193eebe40bd271d6b73c138b0 upstream.
 
-The order of compatibles for MSM8916 MTP board is different:
+The compatibles for APQ8094/MSM8994 boards are different than specified
+in bindings.  None of them use fallback to other SoC variant.
 
-  msm8916-mtp.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
-    ['qcom,msm8916-mtp', 'qcom,msm8916-mtp/1', 'qcom,msm8916'] is too long
-
-Fixes: 9d3ef77fe568 ("dt-bindings: arm: Convert QCom board/soc bindings to json-schema")
+Fixes: 9ad3c08f6f1b ("dt-bindings: arm: qcom: Document sony boards for apq8094")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220520123252.365762-3-krzysztof.kozlowski@linaro.org
+Link: https://lore.kernel.org/r/20220520123252.365762-4-krzysztof.kozlowski@linaro.org
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/arm/qcom.yaml |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 --- a/Documentation/devicetree/bindings/arm/qcom.yaml
 +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -135,8 +135,8 @@ properties:
-           - const: qcom,msm8974
+@@ -154,12 +154,15 @@ properties:
+       - items:
+           - enum:
+               - sony,karin_windy
++          - const: qcom,apq8094
++
++      - items:
++          - enum:
+               - sony,karin-row
+               - sony,satsuki-row
+               - sony,sumire-row
+               - sony,suzuran-row
+-              - qcom,msm8994
+-          - const: qcom,apq8094
++          - const: qcom,msm8994
  
        - items:
--          - const: qcom,msm8916-mtp/1
-           - const: qcom,msm8916-mtp
-+          - const: qcom,msm8916-mtp/1
-           - const: qcom,msm8916
- 
-       - items:
+           - const: qcom,msm8996-mtp
 
 

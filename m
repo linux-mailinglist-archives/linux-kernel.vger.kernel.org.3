@@ -2,223 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3502D59EDF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9758859EDEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiHWVFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        id S230501AbiHWVBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiHWVAW (ORCPT
+        with ESMTP id S229628AbiHWVBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:00:22 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4BA792F5;
-        Tue, 23 Aug 2022 14:00:21 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id z187so14570671pfb.12;
-        Tue, 23 Aug 2022 14:00:21 -0700 (PDT)
+        Tue, 23 Aug 2022 17:01:48 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901757E837
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:01:46 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id p6so15306514vsr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=llF/Z9RKGbAToint2Q3pYV/WcHsJ2EzQ2K+586Fwtzg=;
-        b=Z2b0XFlRKLzo0KPhUmL7G6a3nzRNVfIlMez11msmUgyTi4CY8yPLlpKq45M5aRZpmS
-         UVzAvEIOxw3EL9NJroTKO4rzuxNvreNxZ1GyAlGcDVh7+xrf+/ezeko5ghx7tucntbwF
-         hjL0ZVLwH5laEBW+YUThbBNfmJ7w+Fj6Cp94tJ/OYd4j7BJc9vmqBWANWMWGRi3ogDpK
-         OiUjWz8EwbSGUVM3fPEQ1N+9tfWbKu6ulSOiHytMc4PcW6ZlXkVkciPQj08YIPzBxdz0
-         HVAuSNN/CrlucWlB99lmu2W+S5vQs1MBny5xTSIRF9uk23HAFAxoDeie2nN04Px49y9s
-         QT4g==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=pO7ZqfRiAmnavkU8GmZ06Kcz4TLBMS10b+H3mC3wfmU=;
+        b=OVGYBmdyPJ8RRrVeNjcQD3+Vq4FTxBUG+dj4v4VrW40FjbP+uLaK80uyXaHoGi3pYd
+         Nps0IxRCRhlJJZZL66k1c2eYBrBNCZEUz4hLFXZbXNFnBXZT7l8orRKsAS3lAF4JO8rp
+         abCtDO2uJepmv+wMMo/k4GcRE9k7pNRdYcTE7J6eKAg3zM5U5gYUMkfJQXly/WbI7Ct2
+         TjqPyvCZZGPgfy9hT9rrNaYN5w8S4eiuiA8yVOht4sObJnUWJ4tVWH6BWeKgItVpp+CX
+         RbwZMUP/ee+xhz1KPgTOblF3/wQ2aDRQEYvoDa5VoH4llMnXfYNacxwq5/0SN7sCxGUp
+         Zxjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=llF/Z9RKGbAToint2Q3pYV/WcHsJ2EzQ2K+586Fwtzg=;
-        b=STiiVsbQIBw0gUOlzGJVm4V0Xdlf5k32Kjp+buI0D4TzrnNCTO1gbYwxdL35PPPPbK
-         oehR0maj+T8Oyx2BTsTAVzbfd3dytCalLZcbRS2KEgj4UyM4dY8pwto/vB5AGH92feak
-         4J5Hx7Im5QHZZeVjKEaDe3APM7NsPnxISHkEun9su0QdEVsMUkfSELqMRVb9upUNrVqv
-         bYuFYFR9imqLr+cqLPGST4O6Z6oJs2oTmAeO34j2ZYgg1fUi5y0v4k2/jNbJF6qeXN20
-         T2gjcbzXEWWvq5P+cAedFn3hBPsMasWsxfCWL4nHS4eOmR1/K7mBfBKgOiHN+RQmjyEx
-         Y9DQ==
-X-Gm-Message-State: ACgBeo2n0e1FVUTXV41huWC+oRjkBrCLLE/eAesx3QBMgp6SETv+F9h7
-        re+Tt3Yr7u5ulE40ER30ox8=
-X-Google-Smtp-Source: AA6agR5znyIZN3Po17o+XN3W8ysSiZ3nrMIj9VUiPxfMtsbcTWAg1twpukar8m3YeaJVxQIGVG+p5Q==
-X-Received: by 2002:a63:8749:0:b0:41d:89d4:ce3d with SMTP id i70-20020a638749000000b0041d89d4ce3dmr20976837pge.344.1661288420750;
-        Tue, 23 Aug 2022 14:00:20 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k1-20020aa79721000000b0053675c0b773sm5826262pfg.88.2022.08.23.14.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:00:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 Aug 2022 14:00:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.9 000/101] 4.9.326-rc1 review
-Message-ID: <20220823210018.GA2371231@roeck-us.net>
-References: <20220823080034.579196046@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=pO7ZqfRiAmnavkU8GmZ06Kcz4TLBMS10b+H3mC3wfmU=;
+        b=D4/KuJm3qe3j3bxsRphgBdk2Tth0FaJH41QqX/f2rAqFD0BTKz9lEFLw5Teb2sqS1w
+         PXtHaVkqFWGupm4RZY/Lvns4SCRx8K0UUMketwbWAfQ2dL/3lII8cw3uEa2JcKzE8N6O
+         4wbA/mKVBuRZMry1t3/MZHPD0ZUGM51b2goE5MG9LrpxmfrLZHxWKKoYlJGXMXyDGn4b
+         J2qvY2LWbC2TC3VWotPv2pMtUZqm9ECxLdBj4k7OTc8b0R4e4sZFdQEB1a1Zy33zjeYr
+         eXeGZljBiv2+1wcY5B/9h/SYvKTWc7pQxue37oYXstwJv8EDas0KWap0c/eQ0nExhOyT
+         zBSQ==
+X-Gm-Message-State: ACgBeo0n3dEZgmrjmIvwSycChNdi0psrnE5lgjFkE8Fjx0AJxn92dpE2
+        YBTgHW4L5bGDeJcTvXnyADnmRk0ISYWzxMdH4QrYo0YtSr7JxrLi
+X-Google-Smtp-Source: AA6agR61EaCs5pkD4JW0vpgV7j5D9H/ME8bnIG4kRzC8Mj9moq2yJIOm6N7SLV6Cl5LVKp8JI2qh5mo1Jz1pHeGfqkk=
+X-Received: by 2002:a05:6102:3005:b0:390:5c54:7aea with SMTP id
+ s5-20020a056102300500b003905c547aeamr4855722vsa.50.1661288505413; Tue, 23 Aug
+ 2022 14:01:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220811161331.37055-1-peterx@redhat.com> <20220811161331.37055-4-peterx@redhat.com>
+ <87lerudwcb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87lerudwcb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 23 Aug 2022 15:01:09 -0600
+Message-ID: <CAOUHufaVC2Za-p8m0aiHw6YkheDcrO-C3wRGixwDS32VTS+k1w@mail.gmail.com>
+Subject: Re: [PATCH v4 3/7] mm/swap: Add swp_offset_pfn() to fetch PFN from
+ swap entry
+To:     Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:02:33AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.326 release.
-> There are 101 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> Anything received after that time might be too late.
-> 
-Build results:
-	total: 164 pass: 141 fail: 23
-Failed builds:
-	arm:allmodconfig
-	arm:imx_v6_v7_defconfig
-	arm:ixp4xx_defconfig
-	arm:u8500_defconfig
-	arm:multi_v5_defconfig
-	arm:omap1_defconfig
-	arm:footbridge_defconfig
-	arm:axm55xx_defconfig
-	arm:keystone_defconfig
-	arm:vexpress_defconfig
-	arm:at91_dt_defconfig
-	arm:shmobile_defconfig
-	arm:nhk8815_defconfig
-	arm:orion5x_defconfig
-	arm:exynos_defconfig
-	arm:cm_x2xx_defconfig
-	arm:integrator_defconfig
-	arm:pxa910_defconfig
-	ia64:defconfig
-	ia64:allnoconfig
-	ia64:tinyconfig
-	score:defconfig
-	um:defconfig
-Qemu test results:
-	total: 394 pass: 343 fail: 51
-Failed tests:
-	arm:versatilepb:versatile_defconfig:aeabi:pci:scsi:mem128:net,default:versatile-pb:rootfs
-	arm:versatilepb:versatile_defconfig:aeabi:pci:mem128:net,default:versatile-pb:initrd
-	arm:versatileab:versatile_defconfig:mem128:net,default:versatile-ab:initrd
-	arm:smdkc210:exynos_defconfig:cpuidle:nocrypto:mem128:exynos4210-smdkv310:initrd
-	arm:smdkc210:exynos_defconfig:cpuidle:nocrypto:sd2:mem128:exynos4210-smdkv310:rootfs
-	arm:realview-pb-a8:realview_defconfig:realview_pb:mem512:net,default:arm-realview-pba8:initrd
-	arm:realview-pbx-a9:realview_defconfig:realview_pb:net,default:arm-realview-pbx-a9:initrd
-	arm:realview-eb:realview_defconfig:realview_eb:mem512:net,default:arm-realview-eb:initrd
-	arm:realview-eb-mpcore:realview_defconfig:realview_eb:mem512:net,default:arm-realview-eb-11mp-ctrevb:initrd
-	arm:akita:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:initrd
-	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:net,usb:initrd
-	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:mmc:net,usb:rootfs
-	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:ata:net,usb:rootfs
-	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:usb:net,usb:rootfs
-	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:net,usb:initrd
-	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:mmc:net,usb:rootfs
-	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:ata:net,usb:rootfs
-	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:usb:net,usb:rootfs
-	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:net,usb:initrd
-	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:mmc:net,usb:rootfs
-	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:ata:net,usb:rootfs
-	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:usb:net,usb:rootfs
-	arm:integratorcp:integrator_defconfig:mem128:net,default:integratorcp:initrd
-	arm:integratorcp:integrator_defconfig:mem128:sd:net,default:integratorcp:rootfs
-	mips:malta_defconfig:nocd:smp:net,e1000:initrd
-	mips:malta_defconfig:nocd:smp:net,pcnet:flash,4,1,1:rootfs
-	mips:malta_defconfig:nocd:smp:net,pcnet:ide:rootfs
-	mips:malta_defconfig:nocd:smp:net,e1000:usb-xhci:rootfs
-	mips:malta_defconfig:nocd:smp:net,e1000-82545em:usb-uas-xhci:rootfs
-	mips:malta_defconfig:nocd:smp:net,i82801:usb-ehci:rootfs
-	mips:malta_defconfig:nocd:smp:net,ne2k_pci:sdhci:mmc:rootfs
-	mips:malta_defconfig:nocd:smp:net,pcnet:scsi[53C810]:rootfs
-	mips:malta_defconfig:nocd:smp:net,rtl8139:scsi[53C895A]:rootfs
-	mips:malta_defconfig:nocd:smp:net,tulip:scsi[DC395]:rootfs
-	mips:malta_defconfig:nocd:smp:net,virtio-net:scsi[AM53C974]:rootfs
-	mips:malta_defconfig:nocd:smp:net,i82550:scsi[MEGASAS]:rootfs
-	mips:malta_defconfig:nocd:smp:net,i82558a:scsi[MEGASAS2]:rootfs
-	mips:malta_defconfig:nocd:smp:net,i82562:scsi[FUSION]:rootfs
-	mips:malta_defconfig:nocd:nosmp:net,e1000:initrd
-	mips:malta_defconfig:nocd:nosmp:ide:net,pcnet:rootfs
-	mipsel:mips32r6-generic:malta_32r6_defconfig:nocd:smp:net,pcnet:ide:rootfs
-	sheb:rts7751r2dplus_defconfig:initrd
-	sheb:rts7751r2dplus_defconfig:ata:rootfs
-	xtensa:dc232b:lx60:generic_kc705_defconfig
-	xtensa:dc232b:lx200:generic_kc705_defconfig
-	xtensa:dc232b:kc705:generic_kc705_defconfig
-	xtensa:dc232b:kc705:generic_kc705_defconfig
-	xtensa:dc233c:ml605:generic_kc705_defconfig
-	xtensa:dc233c:kc705:generic_kc705_defconfig
-	xtensa:dc233c:kc705:generic_kc705_defconfig
-	xtensa:de212:kc705-nommu:nommu_kc705_defconfig
+On Thu, Aug 11, 2022 at 8:33 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Peter Xu <peterx@redhat.com> writes:
+>
+> > We've got a bunch of special swap entries that stores PFN inside the swap
+> > offset fields.  To fetch the PFN, normally the user just calls swp_offset()
+> > assuming that'll be the PFN.
+> >
+> > Add a helper swp_offset_pfn() to fetch the PFN instead, fetching only the
+> > max possible length of a PFN on the host, meanwhile doing proper check with
+> > MAX_PHYSMEM_BITS to make sure the swap offsets can actually store the PFNs
+> > properly always using the BUILD_BUG_ON() in is_pfn_swap_entry().
+> >
+> > One reason to do so is we never tried to sanitize whether swap offset can
+> > really fit for storing PFN.  At the meantime, this patch also prepares us
+> > with the future possibility to store more information inside the swp offset
+> > field, so assuming "swp_offset(entry)" to be the PFN will not stand any
+> > more very soon.
+> >
+> > Replace many of the swp_offset() callers to use swp_offset_pfn() where
+> > proper.  Note that many of the existing users are not candidates for the
+> > replacement, e.g.:
+> >
+> >   (1) When the swap entry is not a pfn swap entry at all, or,
+> >   (2) when we wanna keep the whole swp_offset but only change the swp type.
+> >
+> > For the latter, it can happen when fork() triggered on a write-migration
+> > swap entry pte, we may want to only change the migration type from
+> > write->read but keep the rest, so it's not "fetching PFN" but "changing
+> > swap type only".  They're left aside so that when there're more information
+> > within the swp offset they'll be carried over naturally in those cases.
+> >
+> > Since at it, dropping hwpoison_entry_to_pfn() because that's exactly what
+> > the new swp_offset_pfn() is about.
+> >
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+>
+> LGTM, Thanks!
+>
+> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-Some change must have caused problems with the old binutils / linker
-version used when building v4.9.y kernels in my test bed.
+Hi,
 
-Guenter
+I hit the following crash on mm-everything-2022-08-22-22-59. Please take a look.
 
----
+Thanks.
 
-Build errors:
-
-arm:
-
-arm-linux-gnueabi-ld: error: source object drivers/net/ethernet/cirrus/built-in.o has EABI version 5, but target drivers/net/ethernet/built-in.o has EABI version 0
-arm-linux-gnueabi-ld: failed to merge target specific data of file drivers/net/ethernet/cirrus/built-in.o
-arm-linux-gnueabi-ld: error: source object drivers/net/ethernet/freescale/built-in.o has EABI version 5, but target drivers/net/ethernet/built-in.o has EABI version 0
-arm-linux-gnueabi-ld: failed to merge target specific data of file drivers/net/ethernet/freescale/built-in.o
-arm-linux-gnueabi-ld: error: source object drivers/net/ethernet/smsc/built-in.o has EABI version 5, but target drivers/net/ethernet/built-in.o has EABI version 0
-arm-linux-gnueabi-ld: failed to merge target specific data of file drivers/net/ethernet/smsc/built-in.o
-make[4]: *** [scripts/Makefile.build:460: drivers/net/ethernet/built-in.o] Error 1
-make[3]: *** [scripts/Makefile.build:558: drivers/net/ethernet] Error 2
-
-This affects a variety of files depending on the configuration.
-
-ia64:
-
-ia64-linux-ld: drivers/video/fbdev/omap2/built-in.o: linking constant-gp files with non-constant-gp files
-ia64-linux-ld: failed to merge target specific data of file drivers/video/fbdev/omap2/built-in.o
-
-ia64-linux-ld: drivers/gpu/vga/built-in.o: linking constant-gp files with non-constant-gp files
-ia64-linux-ld: failed to merge target specific data of file drivers/gpu/vga/built-in.o
-
-score:
-
-Persistent compiler (or linker) error, resulting in core dump (gcc 4.9.1)
-
-um:
-
-Linker error, resulting in core dumps (gcc 6.3.0)
-
-mips (qemu tests):
-
-Yet another linker crash.
-
-mips32r6-generic:
-
-Error log:
-mips-linux-ld: drivers/gpu/vga/built-in.o: linking mips:isa32r6 module with previous mips:3000 modules
-mips-linux-ld: drivers/gpu/vga/built-in.o: linking -mnan=2008 module with previous -mnan=legacy modules
-mips-linux-ld: failed to merge target specific data of file drivers/gpu/vga/built-in.o
-
-sheb:
-
-Another linker crash.
-
-xtensa:
-
-Again, linker crash
+  kernel BUG at include/linux/swapops.h:117!
+  CPU: 46 PID: 5245 Comm: EventManager_De Tainted: G S         O L
+6.0.0-dbg-DEV #2
+  RIP: 0010:pfn_swap_entry_to_page+0x72/0xf0
+  Code: c6 48 8b 36 48 83 fe ff 74 53 48 01 d1 48 83 c1 08 48 8b 09 f6
+c1 01 75 7b 66 90 48 89 c1 48 8b 09 f6 c1 01 74 74 5d c3 eb 9e <0f> 0b
+48 ba ff ff ff ff 03 00 00 00 eb ae a9 ff 0f 00 00 75 13 48
+  RSP: 0018:ffffa59e73fabb80 EFLAGS: 00010282
+  RAX: 00000000ffffffe8 RBX: 0c00000000000000 RCX: ffffcd5440000000
+  RDX: 1ffffffffff7a80a RSI: 0000000000000000 RDI: 0c0000000000042b
+  RBP: ffffa59e73fabb80 R08: ffff9965ca6e8bb8 R09: 0000000000000000
+  R10: ffffffffa5a2f62d R11: 0000030b372e9fff R12: ffff997b79db5738
+  R13: 000000000000042b R14: 0c0000000000042b R15: 1ffffffffff7a80a
+  FS:  00007f549d1bb700(0000) GS:ffff99d3cf680000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 0000440d035b3180 CR3: 0000002243176004 CR4: 00000000003706e0
+  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+  Call Trace:
+   <TASK>
+   change_pte_range+0x36e/0x880
+   change_p4d_range+0x2e8/0x670
+   change_protection_range+0x14e/0x2c0
+   mprotect_fixup+0x1ee/0x330
+   do_mprotect_pkey+0x34c/0x440
+   __x64_sys_mprotect+0x1d/0x30

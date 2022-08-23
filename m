@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6983E59DF67
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D0959E11F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349907AbiHWKrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
+        id S1353805AbiHWKP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356180AbiHWKlg (ORCPT
+        with ESMTP id S1352910AbiHWKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:41:36 -0400
+        Tue, 23 Aug 2022 06:06:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBCBA8CCA;
-        Tue, 23 Aug 2022 02:09:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7765411172;
+        Tue, 23 Aug 2022 01:53:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84524B81C86;
-        Tue, 23 Aug 2022 09:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F3ABC433C1;
-        Tue, 23 Aug 2022 09:09:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 221B7B81C1C;
+        Tue, 23 Aug 2022 08:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845CBC433D6;
+        Tue, 23 Aug 2022 08:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245747;
-        bh=EvoiNs+He1GQrUAvagiuGS7Q01c86CvJKokJ9g52My8=;
+        s=korg; t=1661244811;
+        bh=y2Uk6kUiCZrxv1Byz5ipE9DsC/gbpMLsnOK3xfZGDSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OlNULDfntKlgXW2PIenxP32K2VH4WOdpZBMkFl0GupzxHSLp+x2LpgpQGts5kNtnx
-         V7t0/H52JVS+kSiOBXSZtyIh0gpOwvFNzXueP0BRRlcsxGIXaHXkjh0+kNqqOW8Crw
-         AIVh+aZGsITTm3W05KLHj3yVwcSomwtW4v9R2ojE=
+        b=WEhtXVTATTJWd9gyKaVnlNiDWnb4wxNn9OCd0AEqFAoVbyfyfqc48PCtG/Pc+6IN9
+         oRTbfszIua9BRRpAMsjcrbthvXZsLPxekzG1emiAUMJWRduOroHIkv6fKGKGl4HOvK
+         uROl5Hc1faL8EaEqYAmqXRl2fx1W+IwMqVDHCE4E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 146/287] ASoC: mediatek: mt8173: Fix refcount leak in mt8173_rt5650_rt5676_dev_probe
+Subject: [PATCH 5.15 156/244] ASoC: SOF: Intel: hda: Fix potential buffer overflow by snprintf()
 Date:   Tue, 23 Aug 2022 10:25:15 +0200
-Message-Id: <20220823080105.472939788@linuxfoundation.org>
+Message-Id: <20220823080104.402123475@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit ae4f11c1ed2d67192fdf3d89db719ee439827c11 ]
+[ Upstream commit 94c1ceb043c1a002de9649bb630c8e8347645982 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Fix missing of_node_put() in error paths.
+snprintf() returns the would-be-filled size when the string overflows
+the given buffer size, hence using this value may result in the buffer
+overflow (although it's unrealistic).
 
-Fixes: 94319ba10eca ("ASoC: mediatek: Use platform_of_node for machine drivers")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220602034144.60159-1-linmq006@gmail.com
+This patch replaces with a safer version, scnprintf() for papering
+over such a potential issue.
+
+Fixes: 29c8e4398f02 ("ASoC: SOF: Intel: hda: add extended rom status dump to error log")
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20220801165420.25978-4-tiwai@suse.de
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ sound/soc/sof/intel/hda.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-index 242f99716c61..c37c962173d9 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-@@ -245,14 +245,16 @@ static int mt8173_rt5650_rt5676_dev_probe(struct platform_device *pdev)
- 	if (!mt8173_rt5650_rt5676_codecs[0].of_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_node;
- 	}
- 	mt8173_rt5650_rt5676_codecs[1].of_node =
- 		of_parse_phandle(pdev->dev.of_node, "mediatek,audio-codec", 1);
- 	if (!mt8173_rt5650_rt5676_codecs[1].of_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_node;
- 	}
- 	mt8173_rt5650_rt5676_codec_conf[0].of_node =
- 		mt8173_rt5650_rt5676_codecs[1].of_node;
-@@ -265,7 +267,8 @@ static int mt8173_rt5650_rt5676_dev_probe(struct platform_device *pdev)
- 	if (!mt8173_rt5650_rt5676_dais[DAI_LINK_HDMI_I2S].codec_of_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_node;
+diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
+index e733c401562f..35cbef171f4a 100644
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -413,7 +413,7 @@ static void hda_dsp_dump_ext_rom_status(struct snd_sof_dev *sdev, u32 flags)
+ 	chip = get_chip_info(sdev->pdata);
+ 	for (i = 0; i < HDA_EXT_ROM_STATUS_SIZE; i++) {
+ 		value = snd_sof_dsp_read(sdev, HDA_DSP_BAR, chip->rom_status_reg + i * 0x4);
+-		len += snprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
++		len += scnprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
  	}
  
- 	card->dev = &pdev->dev;
-@@ -275,6 +278,7 @@ static int mt8173_rt5650_rt5676_dev_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
- 
-+put_node:
- 	of_node_put(platform_node);
- 	return ret;
- }
+ 	sof_dev_dbg_or_err(sdev->dev, flags & SOF_DBG_DUMP_FORCE_ERR_LEVEL,
 -- 
 2.35.1
 

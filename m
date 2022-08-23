@@ -2,196 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE2C59DD07
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D66559DCAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351538AbiHWKiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S1355593AbiHWKjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355122AbiHWKWz (ORCPT
+        with ESMTP id S1354244AbiHWKYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:22:55 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2111.outbound.protection.outlook.com [40.107.22.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCE061731;
-        Tue, 23 Aug 2022 02:04:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mE/4XGmteJ7nj1qOve1aFQiXBjfRbGsQwWXVpojdPMfpgRWco63UDAyqVqXSeM/kIVk100JStJvDPcai1lL25uaIYXbz0eqyC4FaoxhmbnsFCdryzBIdc46E/ejwPZwqO5z8+kYH6tnG5pA/8VvERy96p3MrP9dz3VkVtNG/c915u22jITNrhncPjfND6uPsRszFPhUMpoKHxLr/+zkXWxrnvHcUFXd7xBpP16q9Evk9YyAVF6yZ3iQvy0fpBr3oPDBJoBijf3MN8By0w0BsoeEnUXloPp8x+gE7T3uMvK1zDkTLivxCteTjZo/8F3HoTvBRxw6F50mvpAmx1+ppOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IVOyJTqCBmfFQAE8IlZy5sr9FyrQpvLn0qQfTZiOaBM=;
- b=a80ZWVyL0v+42WsYU/jTlB0mLJ3y1NPsH+eKczE2k4Ki9bVA5H945gi6Ngzvj//dZUJNaYSABRViNBnOFRa2R3vaJ800ms8EUTeZ9r4Jdoi3bmanKIaPWuS5eYoReZ3mJWlRDYVrK6oaKs0U2zHvtdV5yzr1T9mWiuXjvhnhKe7QCaxJHf3kb15Wdg47vehYa/oXqkT2UlYhlIpFnmk798ctdxdFgdEYPSprJr5KPVb5KJXMUE8rY9GWu3oHSzP5rCvcVvQyR1GaqkUAxQ5S+3vPgDoUNTjA9JCX3w5G23Dd39Zp/N1Ux+z6kmkBY1t10ZLzqIRluDzEEskoRF380g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bang-olufsen.dk; dmarc=pass action=none
- header.from=bang-olufsen.dk; dkim=pass header.d=bang-olufsen.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bang-olufsen.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IVOyJTqCBmfFQAE8IlZy5sr9FyrQpvLn0qQfTZiOaBM=;
- b=Rk1Nv/B0ITvYedM5p6oHwILdiWQKClZlWohXOUwDEv4SVtiXwIYuLJuV/+EK+xL2Kh9ha32Qdx9ynsAQ43DsPnBe8isaIBPn+/LqxXaaxqiYl0vk9qeHZVuqtMfSmExV29MAEpm6NvfpI18ue+WRbNVuHQB0xS96cvB/DlSjIS8=
-Received: from VI1PR03MB3950.eurprd03.prod.outlook.com (2603:10a6:803:75::30)
- by AM4PR0302MB2593.eurprd03.prod.outlook.com (2603:10a6:200:97::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.24; Tue, 23 Aug
- 2022 09:03:58 +0000
-Received: from VI1PR03MB3950.eurprd03.prod.outlook.com
- ([fe80::3965:8efc:7af6:756e]) by VI1PR03MB3950.eurprd03.prod.outlook.com
- ([fe80::3965:8efc:7af6:756e%7]) with mapi id 15.20.5482.016; Tue, 23 Aug 2022
- 09:03:54 +0000
-From:   =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <ALSI@bang-olufsen.dk>
-To:     Franky Lin <franky.lin@broadcom.com>
-CC:     =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <alvin@pqrs.dk>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next 1/2] brcmfmac: Support multiple AP interfaces and
- fix STA disconnection issue
-Thread-Topic: [PATCH -next 1/2] brcmfmac: Support multiple AP interfaces and
- fix STA disconnection issue
-Thread-Index: AQHYncbIqgE6tTzSOEmqAWMY+pX2wK2oxbkAgAordoCACGfoAIABCeSA
-Date:   Tue, 23 Aug 2022 09:03:53 +0000
-Message-ID: <20220823090353.me2pxlq4uzotp6jz@bang-olufsen.dk>
-References: <20220722122956.841786-1-alvin@pqrs.dk>
- <20220722122956.841786-2-alvin@pqrs.dk>
- <CA+8PC_fYF7aZCBEweF5s0+8Rr_5yRQcMutFJ2gCKs6QEdmrw6g@mail.gmail.com>
- <20220817085015.z3ubo4vhi5jeiopo@bang-olufsen.dk>
- <CA+8PC_fGeV09ve=VE=V9yneghg_rfDZmEAZBVmA9rivinMmd5A@mail.gmail.com>
-In-Reply-To: <CA+8PC_fGeV09ve=VE=V9yneghg_rfDZmEAZBVmA9rivinMmd5A@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bang-olufsen.dk;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b464e8c4-e0e8-4f2b-3245-08da84e6677c
-x-ms-traffictypediagnostic: AM4PR0302MB2593:EE_
-x-ld-processed: 210d08b8-83f7-470a-bc96-381193ca14a1,ExtAddr
-x-ms-exchange-atpmessageproperties: SA|SL
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Q3U6i4iIGsOqxihyETXXYJ7o4gBrHZfgeYUbrNaZqgCV1sIsQtg5/TdmxlzPc6Mim1ZboyKSvUIRGxu9m4WQe+EB3ROvyUvPLvVD72icRdwg+r5Ux81O2QpGpUKtobTAZ/Ojrg1L7Vwjr5VSkw2G0lROqMMKaKBAv+iJEodhTNhjSU8LZxlmB69MjXFRBvB2ZuqOtIi6TmHRGuDEgsFTsJHcODIxkgeCbtot67EblX96Wx9xcPBTwxG2h6AOmgK5SEXSM7onBx6/pOJ/dgmiGFDVvBdRXvfYm4LlHqO6/qFLUQIPM/TitL8mvkp30fV/sBgy8yQYUGss3HjZqd39uV6KT3gFwXT4+9dVjuGTx+EIBcOiPkUVCdI52AgJn5P3Yfo5Dfc+CJwnB4JO5r6+3TrIY36wHgQQzzfupanXHIGrIILK5BIsTicJDfr6WbIK2n3HJj/vccXgcaqFOzZehHEmH217Zd8+KStYb5HYw1g5u4R6Yqq/y7VdiKx19Z7zwnWjiD6q+/S/ZTqdtWV+302w4wA7TdKXQhE44Su+/rPZi7VK9drvBx+imsFa3XT4TpwOonWvfmb2uTV+FltcbcByyqo8aUjEhHMf6JmbSeWS+mRyJ2htg/zFFo8vBmffcioLN2N74vjuYe68cgSxBwvxwVyXzihbSpn00BcJahz1ZSOVjigRmKcAVRmEtC4eAB/utSmCh5gfYb1IQAMHF71qgOOwD+qsouv3sFMG+FPxr2N1hUQsC+WOcnhqW14E5iGti+8+AwYyT5RYsA2SKw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB3950.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(39850400004)(376002)(396003)(346002)(122000001)(316002)(36756003)(85182001)(54906003)(6916009)(8936002)(8976002)(71200400001)(83380400001)(38100700002)(85202003)(6506007)(66476007)(478600001)(66556008)(66446008)(6486002)(76116006)(66574015)(66946007)(91956017)(38070700005)(8676002)(64756008)(4326008)(1076003)(186003)(7416002)(5660300002)(2906002)(53546011)(41300700001)(2616005)(86362001)(26005)(6512007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bzhSN2xVN0NWWWZPUHRIcDE3cjRmQVZHVUlhN05ycDI4c0E5amlIVmFkSWo0?=
- =?utf-8?B?V0xWcHVEQmM4aS9NakN1RElmYnozZmNSMnZFSzZnNVBIMks2ZkM2MTkvUEJh?=
- =?utf-8?B?cXF1RHp6NlpQV2x2Rmk2VXJERWUwcDBZRjRodmtVekIrZit0VkZWTTE5TVVy?=
- =?utf-8?B?aGE1SW5keGdNMTd6ZWVDMnNoTi9IT1cyeXJoUjlFbzRQV1l0OTM2SE1nb0lj?=
- =?utf-8?B?TEJUbTNRdTlxcWJlR0M1SENCOEpod2NwaHphZHh0S1c1Wkh1S2hVa2NGdXcr?=
- =?utf-8?B?cEJleDdMRUNobHFYb2srRDdEZ3BxRUYzZXF4eE5jSXUvYzBFTFVjZE1Fdzkx?=
- =?utf-8?B?SHJsL1FrS3JKb1kwaXNaNkpvZTZqbVdITUFNL3YvY3J2dGFobzFYQ1hUOTBY?=
- =?utf-8?B?YnRtaVRaUHI4MHZsa1JhcnZLMEN5aFJuc0ZrTGtNb1BpL0t3VjdjMEpucEx6?=
- =?utf-8?B?WUp5ZDgwUFRiWUNZMGtEdVNlYmVUdUxwcUUvTlBjWlFrMlFOTW10RnJxUENY?=
- =?utf-8?B?UTgxT1RLV1JNRVh4c1kwaHNEVFlaWDg5MFJwWUxSbjJRdUQxQ0ZqQmV3NHNv?=
- =?utf-8?B?M1g1VDVrTmJEK1lYdnZqMncvSzlnN1JPQ0FTVnoyS1ZnWWk5ZkF4YnBTcWlG?=
- =?utf-8?B?Z3VRdWNQTU9TSFNHNnp3bmtaOUlKMGwzNytDUEtoM1NxVkE4OGY3UkNTdzJR?=
- =?utf-8?B?M0d4MTk1Rko4N0ZsSGV3OVZydmZXcUl5dFNEYy9nSisyZmJPcnJDZUpJK25D?=
- =?utf-8?B?d1RESVpqeWlYYU1GQUxOZFJuQXJLNG1yKzJZcWxQUUhydmpNRzErMVBTbkw0?=
- =?utf-8?B?VEFIcXY4K2JtT1VLSEtwK2VRV0w0bFlLN1VnaTYrVjM3WjEwWW1wSmFyR1Ry?=
- =?utf-8?B?di9mNmh2Ly9lTEl5UVIwV21uLytNUUlTdCtQb3RUL1FneEpRZ2s5Z29sQkxl?=
- =?utf-8?B?NzV0WVNwMHBManZNR0FROFRRYXNZUTQ0eXRON0lKZE9VYkxiUERwcDRLSVg4?=
- =?utf-8?B?eUtsTHdhUWpvc2EyMVE4TERUY0d2eUl1dkpiaStmSUh2ZG9qbUZjSENuS2ly?=
- =?utf-8?B?cSs4UkZKUld1Rk9BT3hFSStOYXVTK2xkN2I2eThtWGVTZlg0aTVhaitEZ2JU?=
- =?utf-8?B?aGtwOTdpcFBobVZaYVI4blhPdDZSSWdHUjhRaExYTzcweWJMbjI0ZUMwQWRp?=
- =?utf-8?B?QThnMmMrUm9oSG5WeXVKV1RNallrQjJtT3Bib3RaUWZIemFqUlVBbTc3bTBu?=
- =?utf-8?B?YnNwa1dPTXAxb1d1VE8yRGRncExKWnNjS0FoWE5yVmZHc1I0c2xQRGpLOVFR?=
- =?utf-8?B?dXo5L2d0Y0VuTkJiY1cycnkzTFpmenQ4dDhlZDhPV2pPSk95QU92QWlrTGlB?=
- =?utf-8?B?ZVAycjNEL3JvVjVPVlZDVnFzRjZmNlBNS1JzTGlhVkpScHB4SzNVNDVQQys3?=
- =?utf-8?B?azlweFBYUG45S3hwOThOcWRIaGJsNWlWc3dZdnpjdkdGYVpncDQyamJBRXNU?=
- =?utf-8?B?eDBYc3R0R2pSZWFMdDVZQ3k0NFFQRVVkV2lUaXprV0xud3VGMnhSUkRBb0ZE?=
- =?utf-8?B?Z1VmcUxIR25lbHVIdjVCTXlWUytEdUpQNzUxbFQ0bForNGdvdzFUM0VWUm1I?=
- =?utf-8?B?OE1RSnYwVjhYeTl3OVhuWGMvNGVUSHZYR2xCeUtCMk1OSlg2bk84T00rVmVX?=
- =?utf-8?B?dW5QcWpPc1VjQURVTG1NamZ3ZW9sSHJEY2tZL21KK1VWN25zVkxnS1g3YWY0?=
- =?utf-8?B?UllUMjd4YzZTSHE0ZmVSNDZLS2J3a1NwdC9CQTVyZXBPWUlQanpwNjRVaVhF?=
- =?utf-8?B?dk5ibnlJRWp1ZGlROHAxeStoZkZta2tYcitIUE9Jc3g1cHJyWGsweGx6YTRE?=
- =?utf-8?B?Zjgxc1lQaVgxM1R3aHJnbk5HbFdTbGFXMmtNOENtOUtGSU9qUHVZczJhaWIz?=
- =?utf-8?B?eStqWkVYQ0Q2eFQxb0xhVTVJYXZta2p3VmlQczJ1YVIva0YzemUwWm5ZTVFr?=
- =?utf-8?B?MTVDeWlLb3M3ajF3UElEb2lZNzRjcGZ0U3NCREJJSU1Gc2R6aTNGc1BGTmxQ?=
- =?utf-8?B?c3VlT1lubHlTVWtVMm9XZVpzaFN5eGdGTlRhKzhMWURpODNPWm1NU1Y2T0Nw?=
- =?utf-8?B?NEtLSTZWLzJvNUwvNGNoVnM4dllla3lhZkVzcHVoTmlvZWFyR3FWWnJHcEFw?=
- =?utf-8?B?dVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3E4C073E9F54D948A66F88C8F19CADC7@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 23 Aug 2022 06:24:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A5CA3D7E
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661245487; x=1692781487;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9SOYythy7j/MXfRmlQCo9b2tnL50CgZqRYrTw3v6/MI=;
+  b=dOMescNLYiHQQA88j7sBMaizavg18RHEIWhzGijQ9RubOe0Q7L7kRtzz
+   Fb3MliHjTPF36JGOZjV0sUzo6ejCq5Zsk+B3gV8OBxHMg9xO4RwG+iC93
+   3b5eZ9koXRLCVuVjUZAVrt77yjw1zqVZoY1AbxPlNoRAjvcAEEHZoNOPz
+   PMB+T9Uq3NJGqTTL8uDSt47sAu6p1SExkp0B6hRl0JfPqefNOSO4QPSHq
+   ZDJYjTMQJytRElgoNVL0oGNTJ68VjMbbw+Opvh71SdfaYkWKBptb7M1Ai
+   rxEuqHFvm2dHphRf+dd7iwR7bzeKMmTpS6nNyxnRWA/2sEC/K0SO4vYgE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294424186"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="294424186"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 02:04:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="937388230"
+Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Aug 2022 02:04:45 -0700
+Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQPq1-00003r-0G;
+        Tue, 23 Aug 2022 09:04:45 +0000
+Date:   Tue, 23 Aug 2022 17:04:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>
+Subject: [pdx86-platform-drivers-x86:backlight-detect-refactor-v3 5/31]
+ drivers/gpu/drm/nouveau/nouveau_backlight.c:410: undefined reference to
+ `acpi_video_backlight_use_native'
+Message-ID: <202208231625.icHjRXDI-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bang-olufsen.dk
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB3950.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b464e8c4-e0e8-4f2b-3245-08da84e6677c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2022 09:03:53.9571
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 210d08b8-83f7-470a-bc96-381193ca14a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AVl3IsQgTEc/wDGlJm7J1bo3qtcUvAV1wPoD58ugZUdKPck0DG4GuO5u8kY2NbmPQxJM17/OWvc5vwb+GDbOvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR0302MB2593
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRnJhbmt5LA0KDQpPbiBNb24sIEF1ZyAyMiwgMjAyMiBhdCAxMDoxMjoxNEFNIC0wNzAwLCBG
-cmFua3kgTGluIHdyb3RlOg0KPiBPbiBXZWQsIEF1ZyAxNywgMjAyMiBhdCAxOjUwIEFNIEFsdmlu
-IMWgaXByYWdhIDxBTFNJQGJhbmctb2x1ZnNlbi5kaz4gd3JvdGU6DQo+ID4gT24gV2VkLCBBdWcg
-MTAsIDIwMjIgYXQgMDI6MzI6MDZQTSAtMDcwMCwgRnJhbmt5IExpbiB3cm90ZToNCj4gPiA+IE9u
-IEZyaSwgSnVsIDIyLCAyMDIyIGF0IDU6MzAgQU0gQWx2aW4gxaBpcHJhZ2EgPGFsdmluQHBxcnMu
-ZGs+IHdyb3RlOg0KPiA+ID4gPiAgLyoqDQo+ID4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25l
-dC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvY29tbW9uLmMgYi9kcml2ZXJz
-L25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEvYnJjbWZtYWMvY29tbW9uLmMNCj4gPiA+
-ID4gaW5kZXggZmUwMWRhOWU2MjBkLi44M2UwMjNhMjJmOWIgMTAwNjQ0DQo+ID4gPiA+IC0tLSBh
-L2RyaXZlcnMvbmV0L3dpcmVsZXNzL2Jyb2FkY29tL2JyY204MDIxMS9icmNtZm1hYy9jb21tb24u
-Yw0KPiA+ID4gPiArKysgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9icm9hZGNvbS9icmNtODAyMTEv
-YnJjbWZtYWMvY29tbW9uLmMNCj4gPiA+ID4gQEAgLTMwMyw2ICszMDMsMTEgQEAgaW50IGJyY21m
-X2NfcHJlaW5pdF9kY21kcyhzdHJ1Y3QgYnJjbWZfaWYgKmlmcCkNCj4gPiA+ID4gICAgICAgICAg
-ICAgICAgIGJyY21mX2RiZyhJTkZPLCAiQ0xNIHZlcnNpb24gPSAlc1xuIiwgY2xtdmVyKTsNCj4g
-PiA+ID4gICAgICAgICB9DQo+ID4gPiA+DQo+ID4gPiA+ICsgICAgICAgLyogc2V0IGFwc3RhICov
-DQo+ID4gPiA+ICsgICAgICAgZXJyID0gYnJjbWZfZmlsX2lvdmFyX2ludF9zZXQoaWZwLCAiYXBz
-dGEiLCAxKTsNCj4gPiA+ID4gKyAgICAgICBpZiAoZXJyKQ0KPiA+ID4gPiArICAgICAgICAgICAg
-ICAgYnJjbWZfaW5mbygiZmFpbGVkIHNldHRpbmcgYXBzdGEsICVkXG4iLCBlcnIpOw0KPiA+ID4g
-PiArDQo+ID4gPg0KPiA+ID4gSSBkbyBub3QgdW5kZXJzdGFuZCB3aHkgZW50ZXJpbmcgYXBzdGEg
-bW9kZSBieSBkZWZhdWx0LiBUaGUgbW9kZSBpcw0KPiA+ID4gc3VwcG9zZWQgdG8gYmUgZW5hYmxl
-ZCBvbmx5IHdoZW4gYW4gQVAgaW50ZXJmYWNlIGlzIGNyZWF0ZWQgaW4NCj4gPiA+IGJyY21mX2Nm
-ZzgwMjExX3N0YXJ0X2FwLiBJIHRoaW5rIG9uZSBvZiB0aGUgc2lkZSBlZmZlY3RzIG9mIGFwc3Rh
-IG1vZGUNCj4gPiA+IGlzIHRoYXQgbWVtb3J5IGZvb3RwcmludCBzaWduaWZpY2FudGx5IGluY3Jl
-YXNlcy4gSXQgc2hvdWxkIHJlbWFpbg0KPiA+ID4gZGlzYWJsZWQgZm9yIFNUQSBvbmx5IG1vZGUg
-KHdoaWNoIGlzIHRoZSBtYWpvciB1c2UgY2FzZSkgZm9yIGJldHRlcg0KPiA+ID4gcGVyZm9ybWFu
-Y2UuDQo+ID4NCj4gPiBCeSBiZXR0ZXIgcGVyZm9ybWFuY2UsIGRvIHlvdSBqdXN0IG1lYW4gImxv
-d2VyIGNoYW5jZSBvZiBtZW1vcnkNCj4gPiBleGhhdXN0aW9uIj8gSWYgc28sIHN1cmVseSB0aGUg
-ZmlybXdhcmUgd291bGQgYmUgZGVzaWduZWQgc3VjaCB0aGF0IGl0DQo+ID4gZG9lc24ndCBydW4g
-b3V0IG9mIG1lbW9yeSB1bmRlciB0aGUgYWR2ZXJ0aXNlZCB1c2UtY2FzZXMgKFNUQSwgQVArU1RB
-DQo+ID4gZXRjLiksIHJlZ2FyZGxlc3Mgb2YgdGhlIGN1cnJlbnQgYXBzdGEgc2V0dGluZz8NCj4g
-DQo+IEkgdGhpbmsgc29tZSBwYWNrZXQgcmVsYXRlZCBidWZmZXJzIHdpbGwgYmUgYWRqdXN0ZWQg
-Zm9yIGFwc3RhIG1vZGUgc28NCj4gdGhlIHN0YSBtb2RlIHBlcmZvcm1hbmNlIHdpbGwgaHVydCBi
-ZWNhdXNlIHRoZXJlIGlzIGxlc3MgYnVmZmVyIHRvDQo+IHVzZS4NCj4gDQo+IEFub3RoZXIgc2ln
-bmlmaWNhbnQgaW1wYWN0IEkgYW0gc3VyZSBhYm91dCBpcyBzb21lIHBvd2VyIHNhdmluZw0KPiBm
-ZWF0dXJlcyB3aWxsIGJlIHR1cm5lZCBvZmYgb25jZSBhcHN0YSBtb2RlIGlzIGVuYWJsZWQuIFNv
-IHRoZSBjaGlwDQo+IHdpbGwgZHJhaW4gbW9yZSBwb3dlciBldmVuIHRoZSBBUCBpbnRlcmZhY2Ug
-aXMgbm90IGNyZWF0ZWQuDQoNCk9LLiBBbmQgdGhpcyBhcHN0YSBtb2RlIHNlZW1zIG9ubHkgdG8g
-YmUgdXNlZCBmb3IgU1RBICsgUDJQIG1vZGUgaW4gdGhlDQp1cHN0cmVhbSBkcml2ZXIncyBjdXJy
-ZW50IGZvcm0uIEJ1dCBkb2Vzbid0IHRoZSBkcml2ZXIgYWxzbyBzdXBwb3J0IEFQICsNClNUQSBt
-b2RlIG9yZGluYXJpbHk/IFdvdWxkIGFwc3RhPTEgbm90IGJlIG5lY2Vzc2FyeSBmb3IgdGhhdCB1
-c2UtY2FzZT8NCk9mIGNvdXJzZSBJIGFzc3VtZSB5b3UgY2FuIG9ubHkgYW5zd2VyIG1lIGZvciBC
-cm9hZGNvbSBjaGlwc2V0cy4NCg0KVHJ5aW5nIHRvIHVuZGVyc3RhbmQgd2hldGhlciB0byBkcm9w
-IHRoaXMgd2hvbGUgc2VyaWVzIG9yIHdoZXRoZXIgYQ0KbW9kaWZpZWQgdmVyc2lvbiBjYW4gYmUg
-c3VpdGFibHkgdXBzdHJlYW1lZC4NCg0KS2luZCByZWdhcmRzLA0KQWx2aW4NCg0KPiANCj4gUmVn
-YXJkcywNCj4gLSBGcmFua3k=
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git backlight-detect-refactor-v3
+head:   137c0ecca7db6e41715a3b3506871ef45cec29b4
+commit: eeefca542f6b6d7f7b99692aadbd2204b5053d3b [5/31] drm/nouveau: Don't register backlight when another backlight should be used
+config: ia64-randconfig-r002-20220821 (https://download.01.org/0day-ci/archive/20220823/202208231625.icHjRXDI-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=eeefca542f6b6d7f7b99692aadbd2204b5053d3b
+        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
+        git fetch --no-tags pdx86-platform-drivers-x86 backlight-detect-refactor-v3
+        git checkout eeefca542f6b6d7f7b99692aadbd2204b5053d3b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ia64-linux-ld: drivers/gpu/drm/nouveau/nouveau_backlight.o: in function `nouveau_backlight_init':
+>> drivers/gpu/drm/nouveau/nouveau_backlight.c:410: undefined reference to `acpi_video_backlight_use_native'
+
+
+vim +410 drivers/gpu/drm/nouveau/nouveau_backlight.c
+
+   352	
+   353	int
+   354	nouveau_backlight_init(struct drm_connector *connector)
+   355	{
+   356		struct nouveau_drm *drm = nouveau_drm(connector->dev);
+   357		struct nouveau_backlight *bl;
+   358		struct nouveau_encoder *nv_encoder = NULL;
+   359		struct nvif_device *device = &drm->client.device;
+   360		char backlight_name[BL_NAME_SIZE];
+   361		struct backlight_properties props = {0};
+   362		const struct backlight_ops *ops;
+   363		int ret;
+   364	
+   365		if (apple_gmux_present()) {
+   366			NV_INFO_ONCE(drm, "Apple GMUX detected: not registering Nouveau backlight interface\n");
+   367			return 0;
+   368		}
+   369	
+   370		if (connector->connector_type == DRM_MODE_CONNECTOR_LVDS)
+   371			nv_encoder = find_encoder(connector, DCB_OUTPUT_LVDS);
+   372		else if (connector->connector_type == DRM_MODE_CONNECTOR_eDP)
+   373			nv_encoder = find_encoder(connector, DCB_OUTPUT_DP);
+   374		else
+   375			return 0;
+   376	
+   377		if (!nv_encoder)
+   378			return 0;
+   379	
+   380		bl = kzalloc(sizeof(*bl), GFP_KERNEL);
+   381		if (!bl)
+   382			return -ENOMEM;
+   383	
+   384		switch (device->info.family) {
+   385		case NV_DEVICE_INFO_V0_CURIE:
+   386			ret = nv40_backlight_init(nv_encoder, &props, &ops);
+   387			break;
+   388		case NV_DEVICE_INFO_V0_TESLA:
+   389		case NV_DEVICE_INFO_V0_FERMI:
+   390		case NV_DEVICE_INFO_V0_KEPLER:
+   391		case NV_DEVICE_INFO_V0_MAXWELL:
+   392		case NV_DEVICE_INFO_V0_PASCAL:
+   393		case NV_DEVICE_INFO_V0_VOLTA:
+   394		case NV_DEVICE_INFO_V0_TURING:
+   395		case NV_DEVICE_INFO_V0_AMPERE: //XXX: not confirmed
+   396			ret = nv50_backlight_init(bl, nouveau_connector(connector),
+   397						  nv_encoder, &props, &ops);
+   398			break;
+   399		default:
+   400			ret = 0;
+   401			goto fail_alloc;
+   402		}
+   403	
+   404		if (ret) {
+   405			if (ret == -ENODEV)
+   406				ret = 0;
+   407			goto fail_alloc;
+   408		}
+   409	
+ > 410		if (!acpi_video_backlight_use_native()) {
+   411			NV_INFO(drm, "Skipping nv_backlight registration\n");
+   412			goto fail_alloc;
+   413		}
+   414	
+   415		if (!nouveau_get_backlight_name(backlight_name, bl)) {
+   416			NV_ERROR(drm, "Failed to retrieve a unique name for the backlight interface\n");
+   417			goto fail_alloc;
+   418		}
+   419	
+   420		props.type = BACKLIGHT_RAW;
+   421		bl->dev = backlight_device_register(backlight_name, connector->kdev,
+   422						    nv_encoder, ops, &props);
+   423		if (IS_ERR(bl->dev)) {
+   424			if (bl->id >= 0)
+   425				ida_free(&bl_ida, bl->id);
+   426			ret = PTR_ERR(bl->dev);
+   427			goto fail_alloc;
+   428		}
+   429	
+   430		nouveau_connector(connector)->backlight = bl;
+   431		if (!bl->dev->props.brightness)
+   432			bl->dev->props.brightness =
+   433				bl->dev->ops->get_brightness(bl->dev);
+   434		backlight_update_status(bl->dev);
+   435	
+   436		return 0;
+   437	
+   438	fail_alloc:
+   439		kfree(bl);
+   440		return ret;
+   441	}
+   442	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

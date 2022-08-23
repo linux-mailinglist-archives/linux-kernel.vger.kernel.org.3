@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0605C59E36E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436C059E229
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359556AbiHWMVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        id S1348272AbiHWLG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359713AbiHWMQQ (ORCPT
+        with ESMTP id S1356576AbiHWLEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:16:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF2CEA897;
-        Tue, 23 Aug 2022 02:41:46 -0700 (PDT)
+        Tue, 23 Aug 2022 07:04:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752E0B2873;
+        Tue, 23 Aug 2022 02:15:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1409B81CA0;
-        Tue, 23 Aug 2022 09:41:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4428AC433C1;
-        Tue, 23 Aug 2022 09:41:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB08F60F50;
+        Tue, 23 Aug 2022 09:15:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F75C433C1;
+        Tue, 23 Aug 2022 09:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247689;
-        bh=z24/BARLJ//SDqxiofAV43yx4a8PcW9v68+Ar14AMV8=;
+        s=korg; t=1661246117;
+        bh=Syn49+GFPMqD0AC+qtGcAiSRfizHIhpdfBenoWSbbRE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t0riD1J+309lJ+zgiYBtB9/MlYcsBd/+drCAu/q8jdX8tIuWKBTVo3+L3Ayim0i2W
-         xB6ceBVPRC09w3jpeNhh/R1Ys7Tgyi2ezJZI5y2b+T2eOzyFnMU9b7+5TKFJxBnlAS
-         Ox+Nj8wxYl4OsJ+fkZ/xNehVm645G0kc2HOtkLXE=
+        b=MspJHyAmdQSUn3HWObtXeLyRGyHR+Zy5VQfDRmOGpk9AYGv7culqaIkzUkWJnmr3p
+         U26vZOS6jg5LO2L+4zpbO+1twv7K3IWbyaf3UE33Te/FbndzVINnnzaImJyfNvNmk1
+         NYKoi7TWUb5of+N9LCDniC02aUdcYme7aEbAIZWs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 116/158] clk: qcom: clk-alpha-pll: fix clk_trion_pll_configure description
-Date:   Tue, 23 Aug 2022 10:27:28 +0200
-Message-Id: <20220823080050.621165380@linuxfoundation.org>
+Subject: [PATCH 4.19 280/287] smb3: check xattr value length earlier
+Date:   Tue, 23 Aug 2022 10:27:29 +0200
+Message-Id: <20220823080110.890263139@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+From: Steve French <stfrench@microsoft.com>
 
-[ Upstream commit 94bed9bb05c7850ff5d80b87cc29004901f37956 ]
+[ Upstream commit 5fa2cffba0b82336a2244d941322eb1627ff787b ]
 
-After merging lucid and trion pll functions in commit 0b01489475c6
-("clk: qcom: clk-alpha-pll: same regs and ops for trion and lucid")
-the function clk_trion_pll_configure() is left with an old description
-header, which results in a W=2 compile time warning, fix it.
+Coverity complains about assigning a pointer based on
+value length before checking that value length goes
+beyond the end of the SMB.  Although this is even more
+unlikely as value length is a single byte, and the
+pointer is not dereferenced until laterm, it is clearer
+to check the lengths first.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220701062711.2757855-1-vladimir.zapolskiy@linaro.org
+Addresses-Coverity: 1467704 ("Speculative execution data leak")
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/clk-alpha-pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/cifs/smb2ops.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index 1a571c04a76c..cf265ab035ea 100644
---- a/drivers/clk/qcom/clk-alpha-pll.c
-+++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -1379,7 +1379,7 @@ const struct clk_ops clk_alpha_pll_postdiv_fabia_ops = {
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_fabia_ops);
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index cc34a28aecbc..f906984eb25b 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -762,9 +762,7 @@ move_smb2_ea_to_cifs(char *dst, size_t dst_size,
+ 	size_t name_len, value_len, user_name_len;
  
- /**
-- * clk_lucid_pll_configure - configure the lucid pll
-+ * clk_trion_pll_configure - configure the trion pll
-  *
-  * @pll: clk alpha pll
-  * @regmap: register map
+ 	while (src_size > 0) {
+-		name = &src->ea_data[0];
+ 		name_len = (size_t)src->ea_name_length;
+-		value = &src->ea_data[src->ea_name_length + 1];
+ 		value_len = (size_t)le16_to_cpu(src->ea_value_length);
+ 
+ 		if (name_len == 0) {
+@@ -777,6 +775,9 @@ move_smb2_ea_to_cifs(char *dst, size_t dst_size,
+ 			goto out;
+ 		}
+ 
++		name = &src->ea_data[0];
++		value = &src->ea_data[src->ea_name_length + 1];
++
+ 		if (ea_name) {
+ 			if (ea_name_len == name_len &&
+ 			    memcmp(ea_name, name, name_len) == 0) {
 -- 
 2.35.1
 

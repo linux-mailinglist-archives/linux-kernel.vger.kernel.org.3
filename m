@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606D059DEC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F58659DD9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358306AbiHWLtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
+        id S1356840AbiHWKwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358179AbiHWLrH (ORCPT
+        with ESMTP id S1355775AbiHWKoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:47:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B9FD276B;
-        Tue, 23 Aug 2022 02:30:36 -0700 (PDT)
+        Tue, 23 Aug 2022 06:44:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49B7AB044;
+        Tue, 23 Aug 2022 02:10:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A4C0612B5;
-        Tue, 23 Aug 2022 09:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2416C433C1;
-        Tue, 23 Aug 2022 09:30:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81870608D5;
+        Tue, 23 Aug 2022 09:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C53C433C1;
+        Tue, 23 Aug 2022 09:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247021;
-        bh=BHFna084pn5MOacG9nBUkhKjVk4MnmkKBvgPQsiETg0=;
+        s=korg; t=1661245827;
+        bh=PQwFh3y1zqnoCjaqteSP56ZnA2D0ZUNmXY2D9oi4lEI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TY4o4D5v9f1MmHSSAAacLaSNJ8s9ZXcB2y0hbrl7mT/Mxd5SbZIjr0Ker+JCxXzU4
-         oJHK/uKeiq3y2DnqyCWCpX0a5rB1yHm3hKx3ntYopqLr8zTS5usUzbuxDkxduTJaF4
-         5Mvns+lKrfkOkNLNN6+0uWFhrVOy/JELNkuRki5s=
+        b=H/Tk5gZMTqvEqXGPHIc0S44svBVwcf52ATTIM3a8Vx0co5bCYkA2ScXTI2Zxwfq1g
+         ME1Ybx7VsSRPwd8sjNDxOTSNMcjeQ6sdhKHnp/IErsri9nw2c/9F9INmFTc7J7n+uq
+         qkJQZmiT8EwwNweOcR+kHAMY7YDcFKVbEVhFf1M0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.4 292/389] tracing: Have filter accept "common_cpu" to be consistent
+        stable@vger.kernel.org, Zhenpeng Lin <zplin@u.northwestern.edu>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Kamal Mostafa <kamal@canonical.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 201/287] net_sched: cls_route: remove from list when handle is 0
 Date:   Tue, 23 Aug 2022 10:26:10 +0200
-Message-Id: <20220823080127.750902149@linuxfoundation.org>
+Message-Id: <20220823080107.633720163@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,40 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-commit b2380577d4fe1c0ef3fa50417f1e441c016e4cbe upstream.
+commit 9ad36309e2719a884f946678e0296be10f0bb4c1 upstream.
 
-Make filtering consistent with histograms. As "cpu" can be a field of an
-event, allow for "common_cpu" to keep it from being confused with the
-"cpu" field of the event.
+When a route filter is replaced and the old filter has a 0 handle, the old
+one won't be removed from the hashtable, while it will still be freed.
 
-Link: https://lkml.kernel.org/r/20220820134401.513062765@goodmis.org
-Link: https://lore.kernel.org/all/20220820220920.e42fa32b70505b1904f0a0ad@kernel.org/
+The test was there since before commit 1109c00547fc ("net: sched: RCU
+cls_route"), when a new filter was not allocated when there was an old one.
+The old filter was reused and the reinserting would only be necessary if an
+old filter was replaced. That was still wrong for the same case where the
+old handle was 0.
 
-Cc: stable@vger.kernel.org
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Fixes: 1e3bac71c5053 ("tracing/histogram: Rename "cpu" to "common_cpu"")
-Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Remove the old filter from the list independently from its handle value.
+
+This fixes CVE-2022-2588, also reported as ZDI-CAN-17440.
+
+Reported-by: Zhenpeng Lin <zplin@u.northwestern.edu>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Reviewed-by: Kamal Mostafa <kamal@canonical.com>
+Cc: <stable@vger.kernel.org>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Link: https://lore.kernel.org/r/20220809170518.164662-1-cascardo@canonical.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_events.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/sched/cls_route.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -166,6 +166,7 @@ static int trace_define_generic_fields(v
+--- a/net/sched/cls_route.c
++++ b/net/sched/cls_route.c
+@@ -528,7 +528,7 @@ static int route4_change(struct net *net
+ 	rcu_assign_pointer(f->next, f1);
+ 	rcu_assign_pointer(*fp, f);
  
- 	__generic_field(int, CPU, FILTER_CPU);
- 	__generic_field(int, cpu, FILTER_CPU);
-+	__generic_field(int, common_cpu, FILTER_CPU);
- 	__generic_field(char *, COMM, FILTER_COMM);
- 	__generic_field(char *, comm, FILTER_COMM);
- 
+-	if (fold && fold->handle && f->handle != fold->handle) {
++	if (fold) {
+ 		th = to_hash(fold->handle);
+ 		h = from_hash(fold->handle >> 16);
+ 		b = rtnl_dereference(head->table[th]);
 
 

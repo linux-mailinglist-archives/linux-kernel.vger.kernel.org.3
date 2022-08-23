@@ -2,103 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD5459E564
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C26C59E5BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242726AbiHWOxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 10:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S243376AbiHWPJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 11:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242741AbiHWOxJ (ORCPT
+        with ESMTP id S243309AbiHWPJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 10:53:09 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7411695D9;
-        Tue, 23 Aug 2022 05:18:16 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1661255821tgysc78a
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 19:57:00 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: ElntjVByhgVQv4+GOszWIo/B50C+UxqZL1+AmKuizmDK1uH7z+g2iiryx0hmA
-        1G1WEJ0FlHyuGSgfekId81w8IBsTH6wo69LieT81SqIGNNViyOkOyK5t9kAOamiHOmn2ygY
-        7fWy2UyDXHCroky5EP/pOeCQ0RxbKWLoXWssXWY4Clvy+xXfhX4qB3yHNrGuH7KBE+eSvYU
-        3n8KuwB5FRrCIGf9QJR+8DzVNDUSVQmhdTzIojoeZULgcuiJ7F9CjRNOUaRx4i+dCAf7cXT
-        L7aSWqCYEp/+nTWuD5qpHT/2GVZ/VEqiYycduTsEAx6wFQdRoaOiUKIylh3TTjSx/IDu09J
-        YGxTfhfRTACWyMUA2+b8uK9/6sVn2IcftTifnC9d7xGhLud3L7INJeNqISxqQzRpj+rr8r7
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, airlied@linux.ie, daniel@ffwll.ch
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] msm/adreno: fix repeated words in comments
-Date:   Tue, 23 Aug 2022 19:56:54 +0800
-Message-Id: <20220823115654.58725-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 23 Aug 2022 11:09:31 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891F4107758;
+        Tue, 23 Aug 2022 05:39:15 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MBnlC3xpmzlVpd;
+        Tue, 23 Aug 2022 19:56:55 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 20:00:08 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 20:00:07 +0800
+Subject: Re: [PATCH v4 1/2] rcu: Eliminate rcu_state.nocb_is_setup
+To:     <paulmck@kernel.org>
+CC:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220817014253.1982-1-thunder.leizhen@huawei.com>
+ <20220817014253.1982-2-thunder.leizhen@huawei.com>
+ <20220822163411.GF6159@paulmck-ThinkPad-P17-Gen-1>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <89bd14ea-6980-4857-9e2a-9d89c94e88a7@huawei.com>
+Date:   Tue, 23 Aug 2022 20:00:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220822163411.GF6159@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'power'.
- Delete the redundant word 'in'.
- Delete the redundant word 'for'.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 9f76f5b15759..32ecb783c3c1 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -352,7 +352,7 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state)
- 	gmu_write(gmu, REG_A6XX_GMU_HOST2GMU_INTR_SET, 1 << bit);
- }
- 
--/* Enable CPU control of SPTP power power collapse */
-+/* Enable CPU control of SPTP power collapse */
- static int a6xx_sptprac_enable(struct a6xx_gmu *gmu)
- {
- 	int ret;
-@@ -374,7 +374,7 @@ static int a6xx_sptprac_enable(struct a6xx_gmu *gmu)
- 	return 0;
- }
- 
--/* Disable CPU control of SPTP power power collapse */
-+/* Disable CPU control of SPTP power collapse */
- static void a6xx_sptprac_disable(struct a6xx_gmu *gmu)
- {
- 	u32 val;
-@@ -1277,7 +1277,7 @@ static int a6xx_gmu_rpmh_arc_votes_init(struct device *dev, u32 *votes,
- 		}
- 
- 		/*
--		 * Look for a level in in the secondary list that matches. If
-+		 * Look for a level in the secondary list that matches. If
- 		 * nothing fits, use the maximum non zero vote
- 		 */
- 
-@@ -1559,7 +1559,7 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
- 			goto err_memory;
- 	}
- 
--	/* Allocate memory for for the HFI queues */
-+	/* Allocate memory for the HFI queues */
- 	ret = a6xx_gmu_memory_alloc(gmu, &gmu->hfi, SZ_16K, 0, "hfi");
- 	if (ret)
- 		goto err_memory;
+On 2022/8/23 0:34, Paul E. McKenney wrote:
+> On Wed, Aug 17, 2022 at 09:42:52AM +0800, Zhen Lei wrote:
+>> 'rcu_state.nocb_is_setup' is initialized to true only if 'rcu_nocb_mask'
+>> successfully allocates memory. So it can be replaced by
+>> 'cpumask_available(rcu_nocb_mask)'. More importantly, the latter is more
+>> intuitive, and it has been used in several places.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> 
+> One of the implementations of cpumask_available() does indeed check
+> for NULL.  But here is the other one:
+> 
+> static inline bool cpumask_available(cpumask_var_t mask)
+> {
+> 	return true;
+> }
+
+Thanks for the heads-up.
+
+> 
+> So I have to ask...  In a kernel built with CONFIG_CPUMASK_OFFSTACK=n,
+> will this change really work?
+
+Yes, I run the test cases on arm64, which does not turn on option
+CONFIG_CPUMASK_OFFSTACK by default.
+
+I've listed a combination of build options in the cover-letter. In
+this case, cpumask_empty(rcu_nocb_mask) is true.
+----
+CONFIG_NO_HZ_FULL=n, CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=n, cmdline without rcu_nocbs
+[    0.000000] rcu:     Offload RCU callbacks from CPUs: (none).
+----
+
+> 
+> Another important question is "Do all of the existing uses of
+> cpumask_available() really work?"  Yes, I do believe that they do
+
+The only functional change caused by this patch is:
+For clarity, CONFIG_RCU_NOCB_CPU=y and CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=n are
+omitted from the following conditions.
+
+When
+  CONFIG_NO_HZ_FULL=n and boot cmdline without 'rcu_nocbs='.
+or
+  CONFIG_NO_HZ_FULL=y and boot cmdline without 'nohz_full='.
+
+The rdp->nocb_gp_kthread and rdp->nocb_cb_kthread threads are still created.
+
+But we have provided EXPORT_SYMBOL_GPL functions rcu_nocb_cpu_deoffload() and
+rcu_nocb_cpu_offload(), which can dynamically modify 'rcu_nocb_mask'. So it
+seems appropriate to prepare these threads in advance. Of course, it looks like
+only 'rcutorture' currently uses these two functions now.
+
+Otherwise, we can do some optimization:
+If none of the CPUs in a 'nocb_gp' group is marked in rcu_nocb_mask, this
+grouping does not need to create corresponding threads "rcuog/%d" and "rcuo%c/%d".
+
+And in rcu_init_nohz():
+-       if (!rcu_state.nocb_is_setup)
++       if (!cpumask_available(rcu_nocb_mask) || cpumask_empty(rcu_nocb_mask))
+                return;
+
+
+
+> work, but it would be good to get another set of eyes on that code.
+> "All software developers are blind!"  ;-)
+> 
+> 							Thanx, Paul
+> 
+>> ---
+>>  kernel/rcu/tree.h      | 1 -
+>>  kernel/rcu/tree_nocb.h | 8 +++-----
+>>  2 files changed, 3 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+>> index d4a97e40ea9c3e2..06f659c63d2d192 100644
+>> --- a/kernel/rcu/tree.h
+>> +++ b/kernel/rcu/tree.h
+>> @@ -375,7 +375,6 @@ struct rcu_state {
+>>  	arch_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
+>>  						/* Synchronize offline with */
+>>  						/*  GP pre-initialization. */
+>> -	int nocb_is_setup;			/* nocb is setup from boot */
+>>  };
+>>  
+>>  /* Values for rcu_state structure's gp_flags field. */
+>> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+>> index 0a5f0ef41484518..ff763e7dc53551f 100644
+>> --- a/kernel/rcu/tree_nocb.h
+>> +++ b/kernel/rcu/tree_nocb.h
+>> @@ -69,7 +69,6 @@ static int __init rcu_nocb_setup(char *str)
+>>  			cpumask_setall(rcu_nocb_mask);
+>>  		}
+>>  	}
+>> -	rcu_state.nocb_is_setup = true;
+>>  	return 1;
+>>  }
+>>  __setup("rcu_nocbs", rcu_nocb_setup);
+>> @@ -1215,7 +1214,7 @@ void __init rcu_init_nohz(void)
+>>  	struct rcu_data *rdp;
+>>  
+>>  #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
+>> -	if (!rcu_state.nocb_is_setup) {
+>> +	if (!cpumask_available(rcu_nocb_mask)) {
+>>  		need_rcu_nocb_mask = true;
+>>  		offload_all = true;
+>>  	}
+>> @@ -1235,10 +1234,9 @@ void __init rcu_init_nohz(void)
+>>  				return;
+>>  			}
+>>  		}
+>> -		rcu_state.nocb_is_setup = true;
+>>  	}
+>>  
+>> -	if (!rcu_state.nocb_is_setup)
+>> +	if (!cpumask_available(rcu_nocb_mask))
+>>  		return;
+>>  
+>>  #if defined(CONFIG_NO_HZ_FULL)
+>> @@ -1299,7 +1297,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+>>  	struct task_struct *t;
+>>  	struct sched_param sp;
+>>  
+>> -	if (!rcu_scheduler_fully_active || !rcu_state.nocb_is_setup)
+>> +	if (!rcu_scheduler_fully_active || !cpumask_available(rcu_nocb_mask))
+>>  		return;
+>>  
+>>  	/* If there already is an rcuo kthread, then nothing to do. */
+>> -- 
+>> 2.25.1
+>>
+> .
+> 
+
 -- 
-2.36.1
-
+Regards,
+  Zhen Lei

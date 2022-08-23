@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24ABC59E264
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1C259E247
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358286AbiHWLpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S1357002AbiHWKwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358378AbiHWLln (ORCPT
+        with ESMTP id S1355860AbiHWKo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:41:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23489C9EBC;
-        Tue, 23 Aug 2022 02:29:09 -0700 (PDT)
+        Tue, 23 Aug 2022 06:44:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832356CD0D;
+        Tue, 23 Aug 2022 02:10:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A27C61367;
-        Tue, 23 Aug 2022 09:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312EFC43470;
-        Tue, 23 Aug 2022 09:29:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DC22B81C63;
+        Tue, 23 Aug 2022 09:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A83C433C1;
+        Tue, 23 Aug 2022 09:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246947;
-        bh=em22IH7EYocoaprgJVVC05+5sXO5hU+3UnK+SmO3Uak=;
+        s=korg; t=1661245849;
+        bh=wTxpJY+B15fweHM9fBmoHGEdTlkxs3vXb9rtlhbnw7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bqTwxAVl82HcjcJWbpSHqGHNCZtuI0H6+rB5xx9MV+SD8poZr0fFgT3f0HJqRluzz
-         +PxFym1Su/QceMDLF3DG69l9Mgvu+QdWns2X16cSPjDbhzgFCrxnu/5zDUyJdyV7I4
-         JuO5e4iFbXYP97PuyazHWxWA8LA+hBfEXZDd9Li8=
+        b=uu3U7LB94U5jj9wxbLi4ExC1mbXY2yk84S1r9m7Aqp/wzAbS89ckaWivwOxyrKa1Q
+         XF1yCAUXYzPhxSPnyyh0x1P1yUPCG4/0P5brgbAzeWuZdPE1J+E59+Y6YCfSRpcfkP
+         gu4BlUOLI8JTdp2J0S01Ag7CAz6GgtZrf/P7gpfM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.4 270/389] dm writecache: set a default MAX_WRITEBACK_JOBS
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 179/287] video: fbdev: arkfb: Fix a divide-by-zero bug in ark_set_pixclock()
 Date:   Tue, 23 Aug 2022 10:25:48 +0200
-Message-Id: <20220823080126.843954410@linuxfoundation.org>
+Message-Id: <20220823080106.800250184@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-commit ca7dc242e358e46d963b32f9d9dd829785a9e957 upstream.
+[ Upstream commit 2f1c4523f7a3aaabe7e53d3ebd378292947e95c8 ]
 
-dm-writecache has the capability to limit the number of writeback jobs
-in progress. However, this feature was off by default. As such there
-were some out-of-memory crashes observed when lowering the low
-watermark while the cache is full.
+Since the user can control the arguments of the ioctl() from the user
+space, under special arguments that may result in a divide-by-zero bug
+in:
+  drivers/video/fbdev/arkfb.c:784: ark_set_pixclock(info, (hdiv * info->var.pixclock) / hmul);
+with hdiv=1, pixclock=1 and hmul=2 you end up with (1*1)/2 = (int) 0.
+and then in:
+  drivers/video/fbdev/arkfb.c:504: rv = dac_set_freq(par->dac, 0, 1000000000 / pixclock);
+we'll get a division-by-zero.
 
-This commit enables writeback limit by default. It is set to 256MiB or
-1/16 of total system memory, whichever is smaller.
+The following log can reveal it:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+RIP: 0010:ark_set_pixclock drivers/video/fbdev/arkfb.c:504 [inline]
+RIP: 0010:arkfb_set_par+0x10fc/0x24c0 drivers/video/fbdev/arkfb.c:784
+Call Trace:
+ fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1034
+ do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+ fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
+
+Fix this by checking the argument of ark_set_pixclock() first.
+
+Fixes: 681e14730c73 ("arkfb: new framebuffer driver for ARK Logic cards")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-writecache.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/arkfb.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/md/dm-writecache.c
-+++ b/drivers/md/dm-writecache.c
-@@ -20,7 +20,7 @@
+diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
+index 13ba371e70aa..bfa221b68d71 100644
+--- a/drivers/video/fbdev/arkfb.c
++++ b/drivers/video/fbdev/arkfb.c
+@@ -778,7 +778,12 @@ static int arkfb_set_par(struct fb_info *info)
+ 		return -EINVAL;
+ 	}
  
- #define HIGH_WATERMARK			50
- #define LOW_WATERMARK			45
--#define MAX_WRITEBACK_JOBS		0
-+#define MAX_WRITEBACK_JOBS		min(0x10000000 / PAGE_SIZE, totalram_pages() / 16)
- #define ENDIO_LATENCY			16
- #define WRITEBACK_LATENCY		64
- #define AUTOCOMMIT_BLOCKS_SSD		65536
+-	ark_set_pixclock(info, (hdiv * info->var.pixclock) / hmul);
++	value = (hdiv * info->var.pixclock) / hmul;
++	if (!value) {
++		fb_dbg(info, "invalid pixclock\n");
++		value = 1;
++	}
++	ark_set_pixclock(info, value);
+ 	svga_set_timings(par->state.vgabase, &ark_timing_regs, &(info->var), hmul, hdiv,
+ 			 (info->var.vmode & FB_VMODE_DOUBLE)     ? 2 : 1,
+ 			 (info->var.vmode & FB_VMODE_INTERLACED) ? 2 : 1,
+-- 
+2.35.1
+
 
 

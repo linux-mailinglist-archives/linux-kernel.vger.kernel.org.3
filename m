@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C2F59E1C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B7259DFC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240189AbiHWKTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        id S1354647AbiHWK0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352589AbiHWKIM (ORCPT
+        with ESMTP id S1353644AbiHWKLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:08:12 -0400
+        Tue, 23 Aug 2022 06:11:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595A15A814;
-        Tue, 23 Aug 2022 01:54:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3F14F1BD;
+        Tue, 23 Aug 2022 01:57:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC5FD614E7;
-        Tue, 23 Aug 2022 08:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE709C433C1;
-        Tue, 23 Aug 2022 08:54:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C78F6123D;
+        Tue, 23 Aug 2022 08:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46741C433C1;
+        Tue, 23 Aug 2022 08:57:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244869;
-        bh=wHY68nJcyo2katdIxL+WELqzCPei9l12nIZdOUziNv0=;
+        s=korg; t=1661245074;
+        bh=5QEhkpbOIt5ZQhJj4twQe+roC+RNayxcEOZD8bg916A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y+168JPCPzowtSf3/HLkwfCPZpDFOxUx/DSxRXTJhgtqaU2JWLlJP7kkwGT7/m83J
-         nBkGhs1yQXvtQUr7NseMjR/4M8KC44r9CgvYjKz8h9vfAsN3kh7ZuzYG7GTDnIa5W6
-         uxhBxAgdrYqSs+pob6yLJAXbeyjE0QahZzViIS88=
+        b=aPuvZJC/NO7OHNpcFfLLLDQ3XvSZsAlJm/Pqw7fxfPeTUECx4rekPvgyuQZUdK8eo
+         4A5+aC9WO7JctGIlxHyilf3q8+rqmjR9ojeHIKmuUoV8QdeE3ZH4dfFdbf0xUw2kj4
+         vJklpbP3FfEt3B0k+JkI5tsP0OZ/GCTNVldsrRys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.14 204/229] powerpc/pci: Fix get_phb_number() locking
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 206/244] lib/list_debug.c: Detect uninitialized lists
 Date:   Tue, 23 Aug 2022 10:26:05 +0200
-Message-Id: <20220823080100.943073812@linuxfoundation.org>
+Message-Id: <20220823080106.380597402@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,105 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Guenter Roeck <linux@roeck-us.net>
 
-commit 8d48562a2729742f767b0fdd994d6b2a56a49c63 upstream.
+[ Upstream commit 0cc011c576aaa4de505046f7a6c90933d7c749a9 ]
 
-The recent change to get_phb_number() causes a DEBUG_ATOMIC_SLEEP
-warning on some systems:
+In some circumstances, attempts are made to add entries to or to remove
+entries from an uninitialized list.  A prime example is
+amdgpu_bo_vm_destroy(): It is indirectly called from
+ttm_bo_init_reserved() if that function fails, and tries to remove an
+entry from a list.  However, that list is only initialized in
+amdgpu_bo_create_vm() after the call to ttm_bo_init_reserved() returned
+success.  This results in crashes such as
 
-  BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
-  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper
-  preempt_count: 1, expected: 0
-  RCU nest depth: 0, expected: 0
-  1 lock held by swapper/1:
-   #0: c157efb0 (hose_spinlock){+.+.}-{2:2}, at: pcibios_alloc_controller+0x64/0x220
-  Preemption disabled at:
-  [<00000000>] 0x0
-  CPU: 0 PID: 1 Comm: swapper Not tainted 5.19.0-yocto-standard+ #1
-  Call Trace:
-  [d101dc90] [c073b264] dump_stack_lvl+0x50/0x8c (unreliable)
-  [d101dcb0] [c0093b70] __might_resched+0x258/0x2a8
-  [d101dcd0] [c0d3e634] __mutex_lock+0x6c/0x6ec
-  [d101dd50] [c0a84174] of_alias_get_id+0x50/0xf4
-  [d101dd80] [c002ec78] pcibios_alloc_controller+0x1b8/0x220
-  [d101ddd0] [c140c9dc] pmac_pci_init+0x198/0x784
-  [d101de50] [c140852c] discover_phbs+0x30/0x4c
-  [d101de60] [c0007fd4] do_one_initcall+0x94/0x344
-  [d101ded0] [c1403b40] kernel_init_freeable+0x1a8/0x22c
-  [d101df10] [c00086e0] kernel_init+0x34/0x160
-  [d101df30] [c001b334] ret_from_kernel_thread+0x5c/0x64
+ BUG: kernel NULL pointer dereference, address: 0000000000000000
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 1 PID: 1479 Comm: chrome Not tainted 5.10.110-15768-g29a72e65dae5
+ Hardware name: Google Grunt/Grunt, BIOS Google_Grunt.11031.149.0 07/15/2020
+ RIP: 0010:__list_del_entry_valid+0x26/0x7d
+ ...
+ Call Trace:
+  amdgpu_bo_vm_destroy+0x48/0x8b
+  ttm_bo_init_reserved+0x1d7/0x1e0
+  amdgpu_bo_create+0x212/0x476
+  ? amdgpu_bo_user_destroy+0x23/0x23
+  ? kmem_cache_alloc+0x60/0x271
+  amdgpu_bo_create_vm+0x40/0x7d
+  amdgpu_vm_pt_create+0xe8/0x24b
+ ...
 
-This is because pcibios_alloc_controller() holds hose_spinlock but
-of_alias_get_id() takes of_mutex which can sleep.
+Check if the list's prev and next pointers are NULL to catch such problems.
 
-The hose_spinlock protects the phb_bitmap, and also the hose_list, but
-it doesn't need to be held while get_phb_number() calls the OF routines,
-because those are only looking up information in the device tree.
-
-So fix it by having get_phb_number() take the hose_spinlock itself, only
-where required, and then dropping the lock before returning.
-pcibios_alloc_controller() then needs to take the lock again before the
-list_add() but that's safe, the order of the list is not important.
-
-Fixes: 0fe1e96fef0a ("powerpc/pci: Prefer PCI domain assignment via DT 'linux,pci-domain' and alias")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220815065550.1303620-1-mpe@ellerman.id.au
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/20220531222951.92073-1-linux@roeck-us.net
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/pci-common.c |   16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ lib/list_debug.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
---- a/arch/powerpc/kernel/pci-common.c
-+++ b/arch/powerpc/kernel/pci-common.c
-@@ -73,10 +73,6 @@ const struct dma_map_ops *get_pci_dma_op
- }
- EXPORT_SYMBOL(get_pci_dma_ops);
- 
--/*
-- * This function should run under locking protection, specifically
-- * hose_spinlock.
-- */
- static int get_phb_number(struct device_node *dn)
+diff --git a/lib/list_debug.c b/lib/list_debug.c
+index 5d5424b51b74..413daa72a3d8 100644
+--- a/lib/list_debug.c
++++ b/lib/list_debug.c
+@@ -20,7 +20,11 @@
+ bool __list_add_valid(struct list_head *new, struct list_head *prev,
+ 		      struct list_head *next)
  {
- 	int ret, phb_id = -1;
-@@ -113,15 +109,20 @@ static int get_phb_number(struct device_
- 	if (!ret)
- 		phb_id = (int)(prop & (MAX_PHBS - 1));
+-	if (CHECK_DATA_CORRUPTION(next->prev != prev,
++	if (CHECK_DATA_CORRUPTION(prev == NULL,
++			"list_add corruption. prev is NULL.\n") ||
++	    CHECK_DATA_CORRUPTION(next == NULL,
++			"list_add corruption. next is NULL.\n") ||
++	    CHECK_DATA_CORRUPTION(next->prev != prev,
+ 			"list_add corruption. next->prev should be prev (%px), but was %px. (next=%px).\n",
+ 			prev, next->prev, next) ||
+ 	    CHECK_DATA_CORRUPTION(prev->next != next,
+@@ -42,7 +46,11 @@ bool __list_del_entry_valid(struct list_head *entry)
+ 	prev = entry->prev;
+ 	next = entry->next;
  
-+	spin_lock(&hose_spinlock);
-+
- 	/* We need to be sure to not use the same PHB number twice. */
- 	if ((phb_id >= 0) && !test_and_set_bit(phb_id, phb_bitmap))
--		return phb_id;
-+		goto out_unlock;
- 
- 	/* If everything fails then fallback to dynamic PHB numbering. */
- 	phb_id = find_first_zero_bit(phb_bitmap, MAX_PHBS);
- 	BUG_ON(phb_id >= MAX_PHBS);
- 	set_bit(phb_id, phb_bitmap);
- 
-+out_unlock:
-+	spin_unlock(&hose_spinlock);
-+
- 	return phb_id;
- }
- 
-@@ -132,10 +133,13 @@ struct pci_controller *pcibios_alloc_con
- 	phb = zalloc_maybe_bootmem(sizeof(struct pci_controller), GFP_KERNEL);
- 	if (phb == NULL)
- 		return NULL;
--	spin_lock(&hose_spinlock);
-+
- 	phb->global_number = get_phb_number(dev);
-+
-+	spin_lock(&hose_spinlock);
- 	list_add_tail(&phb->list_node, &hose_list);
- 	spin_unlock(&hose_spinlock);
-+
- 	phb->dn = dev;
- 	phb->is_dynamic = slab_is_available();
- #ifdef CONFIG_PPC64
+-	if (CHECK_DATA_CORRUPTION(next == LIST_POISON1,
++	if (CHECK_DATA_CORRUPTION(next == NULL,
++			"list_del corruption, %px->next is NULL\n", entry) ||
++	    CHECK_DATA_CORRUPTION(prev == NULL,
++			"list_del corruption, %px->prev is NULL\n", entry) ||
++	    CHECK_DATA_CORRUPTION(next == LIST_POISON1,
+ 			"list_del corruption, %px->next is LIST_POISON1 (%px)\n",
+ 			entry, LIST_POISON1) ||
+ 	    CHECK_DATA_CORRUPTION(prev == LIST_POISON2,
+-- 
+2.35.1
+
 
 

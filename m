@@ -2,157 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C43459E85C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461D759E697
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344356AbiHWRBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S244245AbiHWQG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343800AbiHWRAX (ORCPT
+        with ESMTP id S244315AbiHWQFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:00:23 -0400
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0736814CEE8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:31:26 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id QSOUozmIH9qatQSOUobcah; Tue, 23 Aug 2022 13:48:33 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 23 Aug 2022 13:48:33 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <667f1658-cf29-6b19-fd57-0c62f625d536@wanadoo.fr>
-Date:   Tue, 23 Aug 2022 13:48:30 +0200
+        Tue, 23 Aug 2022 12:05:55 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C117A741;
+        Tue, 23 Aug 2022 05:16:58 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oQSQu-0004S9-Jv; Tue, 23 Aug 2022 13:51:00 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Liang Chen <cl@rock-chips.com>
+Subject: Re: [PATCH 1/3] dt-bindings: phy: add compatible for rk356x to rockchip-inno-csi-dphy
+Date:   Tue, 23 Aug 2022 13:50:59 +0200
+Message-ID: <2716442.usQuhbGJ8B@diego>
+In-Reply-To: <20220720091527.1270365-2-michael.riesch@wolfvision.net>
+References: <20220720091527.1270365-1-michael.riesch@wolfvision.net> <20220720091527.1270365-2-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Add driver for
- I2C host controller in multifunction endpoint of pci1xxxx switch
-Content-Language: fr
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa@kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, krzk@kernel.org,
-        jarkko.nikula@linux.intel.com, robh@kernel.org,
-        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
-        rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
-        UNGLinuxDriver@microchip.com
-References: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 23/08/2022 à 16:56, Tharun Kumar P a écrit :
-> Microchip PCI1XXXX is an unmanaged PCIe3.1a Switch for Consumer,
-> Industrial and Automotive applications. This switch has multiple
-> downstream ports. In one of the Switch's Downstream port, there
-> is a multifunction endpoint for peripherals which includes an I2C
-> host controller. The I2C function in the endpoint operates at 100KHz,
-> 400KHz and 1 MHz and has buffer depth of 128 bytes.
-> This patch provides the I2C controller driver for the I2C endpoint
-> of the switch.
+Am Mittwoch, 20. Juli 2022, 11:15:25 CEST schrieb Michael Riesch:
+> The driver for the Innosilicon MIPI CSI DPHY is compatible with the variant
+> in the Rockchip RK356x SoCs. Add the compatible string to the binding.
 > 
-> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> ---
->   MAINTAINERS                            |    8 +
->   drivers/i2c/busses/Kconfig             |   10 +
->   drivers/i2c/busses/Makefile            |    1 +
->   drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 1123 ++++++++++++++++++++++++
->   4 files changed, 1142 insertions(+)
->   create mode 100644 drivers/i2c/busses/i2c-mchp-pci1xxxx.c
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
 
-> +static int pci1xxxx_i2c_probe_pci(struct pci_dev *pdev,
-> +				  const struct pci_device_id *ent)
-> +{
-> +	struct pci1xxxx_i2c *i2c;
-> +	int ret;
-> +
-> +	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
-> +	if (!i2c)
-> +		return -ENOMEM;
-> +
-> +	pci_set_drvdata(pdev, i2c);
-> +
-> +	i2c->i2c_xfer_in_progress = false;
-> +
-> +	ret = pcim_enable_device(pdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pci_set_master(pdev);
-> +
-> +	/* we are getting the base address of the SMB core. SMB core uses
-> +	 * BAR0 and 32K is the size here pci_resource_len returns 32K by
-> +	 * reading BAR0
-> +	 */
-> +
-> +	ret = pcim_iomap_regions(pdev, BIT(0), pci_name(pdev));
-> +	if (ret < 0)
-> +		return -ENOMEM;
-> +
-> +	i2c->i2c_base =	pcim_iomap_table(pdev)[0];
-> +
-> +	init_completion(&i2c->i2c_xfer_done);
-> +
-> +	pci1xxxx_i2c_init(i2c);
-> +
-> +	dev_info(&pdev->dev, "i2c clock freq: %d\n", i2c->freq);
-> +
-> +	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*Register the isr. we are not using any isr flags here.*/
-> +	ret = devm_request_irq(&pdev->dev, pci_irq_vector(pdev, 0),
-> +			       pci1xxxx_i2c_isr, PCI1XXXX_IRQ_FLAGS,
-> +			       pci_name(pdev), i2c);
-> +	if (ret)
-> +		goto err_free_region;
-> +
-> +	i2c->adap = pci1xxxx_i2c_ops;
-> +	i2c->adap.class = I2C_CLASS_SPD;
-> +	i2c->adap.dev.parent = &pdev->dev;
-> +
-> +	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
-> +		 "MCHP PCI1xxxx i2c adapter at %s", pci_name(pdev));
-> +
-> +	i2c_set_adapdata(&i2c->adap, i2c);
-> +
-> +	ret = i2c_add_adapter(&i2c->adap);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "i2c add adapter failed = %d\n", ret);
-> +		pci1xxxx_i2c_shutdown(i2c);
-> +		goto err_free_region;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_free_region:
-> +	pci_free_irq_vectors(pdev);
-
-Should this also be part of the .remove function?
-
-CJ
-
-> +	return ret;
-> +}
-> +
-> +static void pci1xxxx_i2c_remove_pci(struct pci_dev *pdev)
-> +{
-> +	struct pci1xxxx_i2c *i2c = pci_get_drvdata(pdev);
-> +
-> +	i2c_del_adapter(&i2c->adap);
-> +	pci1xxxx_i2c_shutdown(i2c);
-> +}
-> +

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071D759DF26
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0491B59DCFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356208AbiHWKqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S1352993AbiHWKJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355658AbiHWKkX (ORCPT
+        with ESMTP id S1352717AbiHWKCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:40:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C622BDB0;
-        Tue, 23 Aug 2022 02:08:14 -0700 (PDT)
+        Tue, 23 Aug 2022 06:02:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B3F7C53E;
+        Tue, 23 Aug 2022 01:50:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CEE761598;
-        Tue, 23 Aug 2022 09:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B62C433C1;
-        Tue, 23 Aug 2022 09:08:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5F07B8105C;
+        Tue, 23 Aug 2022 08:50:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0619FC433C1;
+        Tue, 23 Aug 2022 08:50:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245693;
-        bh=pn7Xkki/c1OBI4ZWFGs7oupIMGY204Tf9wIvyQ/9v5c=;
+        s=korg; t=1661244632;
+        bh=KHKdcDR1KcGMN127IkrwnlFmcCyodJnypzzaBS50q94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ebh/g8kgOm7RdRDWfQogw3W455WYbH6uRDc5QB6iw8u5NIk3Bkhzpb2BoW2awtLSC
-         jvZlhUt3lxwceiQxu27EcEJ7RYqkRu1X4tUTMWVz+1iPGKzi3I6Tb7DEvw6iARbNu+
-         rBoE9gqnk0RANAacPOm+aauF0zo8y6Zjlyp4YDwI=
+        b=mGOuJUTltSaEgam8ToqSubkZgGtl4VNAlzLrKDYzfgT7Xl6UTjkKahx/tzMzQWLEk
+         fAJFI7m2tKUD39zU8VHbjKn3JJkUh9lh2vMYWD/fSAhCz1gMEEQt9MqhlVUydsKe+7
+         KuL2X/3CAMMXqxwedx2q3WLgoKzOG+aBzKiJTukM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 159/287] tty: n_gsm: fix missing corner cases in gsmld_poll()
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Ghinea <stefan.ghinea@windriver.com>
+Subject: [PATCH 4.14 167/229] KVM: x86: Check lapic_in_kernel() before attempting to set a SynIC irq
 Date:   Tue, 23 Aug 2022 10:25:28 +0200
-Message-Id: <20220823080106.053513743@linuxfoundation.org>
+Message-Id: <20220823080059.622082211@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit 7e5b4322cde067e1d0f1bf8f490e93f664a7c843 ]
+commit 7ec37d1cbe17d8189d9562178d8b29167fe1c31a upstream
 
-gsmld_poll() currently fails to handle the following corner cases correctly:
-- remote party closed the associated tty
+When KVM_CAP_HYPERV_SYNIC{,2} is activated, KVM already checks for
+irqchip_in_kernel() so normally SynIC irqs should never be set. It is,
+however,  possible for a misbehaving VMM to write to SYNIC/STIMER MSRs
+causing erroneous behavior.
 
-Add the missing checks and map those to EPOLLHUP.
-Reorder the checks to group them by their reaction.
+The immediate issue being fixed is that kvm_irq_delivery_to_apic()
+(kvm_irq_delivery_to_apic_fast()) crashes when called with
+'irq.shorthand = APIC_DEST_SELF' and 'src == NULL'.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220707113223.3685-4-daniel.starke@siemens.com
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220325132140.25650-2-vkuznets@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/x86/kvm/hyperv.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 727707e02551..f6d2be13b32e 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2561,12 +2561,15 @@ static __poll_t gsmld_poll(struct tty_struct *tty, struct file *file,
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -317,6 +317,9 @@ static int synic_set_irq(struct kvm_vcpu
+ 	struct kvm_lapic_irq irq;
+ 	int ret, vector;
  
- 	poll_wait(file, &tty->read_wait, wait);
- 	poll_wait(file, &tty->write_wait, wait);
++	if (KVM_BUG_ON(!lapic_in_kernel(vcpu), vcpu->kvm))
++		return -EINVAL;
 +
-+	if (gsm->dead)
-+		mask |= EPOLLHUP;
- 	if (tty_hung_up_p(file))
- 		mask |= EPOLLHUP;
-+	if (test_bit(TTY_OTHER_CLOSED, &tty->flags))
-+		mask |= EPOLLHUP;
- 	if (!tty_is_writelocked(tty) && tty_write_room(tty) > 0)
- 		mask |= EPOLLOUT | EPOLLWRNORM;
--	if (gsm->dead)
--		mask |= EPOLLHUP;
- 	return mask;
- }
+ 	if (sint >= ARRAY_SIZE(synic->sint))
+ 		return -EINVAL;
  
--- 
-2.35.1
-
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257D359DBA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C7559DDF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355536AbiHWKjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S1350137AbiHWLa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355281AbiHWKX0 (ORCPT
+        with ESMTP id S1357678AbiHWL0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:23:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C72A3465;
-        Tue, 23 Aug 2022 02:04:27 -0700 (PDT)
+        Tue, 23 Aug 2022 07:26:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1556BFE89;
+        Tue, 23 Aug 2022 02:24:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F13FB81C89;
-        Tue, 23 Aug 2022 09:04:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB073C433C1;
-        Tue, 23 Aug 2022 09:04:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25DB9612B5;
+        Tue, 23 Aug 2022 09:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E540C433C1;
+        Tue, 23 Aug 2022 09:24:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245464;
-        bh=eO4wzGcORruDBbQHGEoSVy8v7g9gEkJj9bYk1j+gKKM=;
+        s=korg; t=1661246657;
+        bh=re7zcDtxJno2oqiMy9XInb93oaaAzETIW9ezqafgn+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GGOc/OJLUxdutP/2ddfZWPtY5x4tIiAk/7Tb6gWpgja0yQ3DitnrTxBai+qU/T0bV
-         6k4P7cFnhPaRRv7pAs1A2yV9QvBBq0zYO7HTY39OqeEmAlLBm9pY4pJeIRvnDj+dxD
-         cZNL4Btvc1dT3qNHjzQJUyFUuzpde5gr/m+UvAm8=
+        b=y9WPGCN8it+orzrkfsAI8I1hmXutn1bp7s4RVtT6oNzEAsISNpK3USN9EKSh83CmJ
+         4z2thACYlHIOCy7YvxMavABVMV/vQWegU8GEn/Hp44m2kPoxv/GSh1Dt7IDocmXSki
+         DVIShBjZGBOmJSP2PA/gD87ZeSdkyvo6pTsL69iI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anquan Wu <leiqi96@hotmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 087/287] libbpf: Fix the name of a reused map
-Date:   Tue, 23 Aug 2022 10:24:16 +0200
-Message-Id: <20220823080103.224063724@linuxfoundation.org>
+Subject: [PATCH 5.4 179/389] memstick/ms_block: Fix some incorrect memory allocation
+Date:   Tue, 23 Aug 2022 10:24:17 +0200
+Message-Id: <20220823080123.107808446@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anquan Wu <leiqi96@hotmail.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit bf3f00378524adae16628cbadbd11ba7211863bb ]
+[ Upstream commit 2e531bc3e0d86362fcd8a577b3278d9ef3cc2ba0 ]
 
-BPF map name is limited to BPF_OBJ_NAME_LEN.
-A map name is defined as being longer than BPF_OBJ_NAME_LEN,
-it will be truncated to BPF_OBJ_NAME_LEN when a userspace program
-calls libbpf to create the map. A pinned map also generates a path
-in the /sys. If the previous program wanted to reuse the map，
-it can not get bpf_map by name, because the name of the map is only
-partially the same as the name which get from pinned path.
+Some functions of the bitmap API take advantage of the fact that a bitmap
+is an array of long.
 
-The syscall information below show that map name "process_pinned_map"
-is truncated to "process_pinned_".
+So, to make sure this assertion is correct, allocate bitmaps with
+bitmap_zalloc() instead of kzalloc()+hand-computed number of bytes.
 
-    bpf(BPF_OBJ_GET, {pathname="/sys/fs/bpf/process_pinned_map",
-    bpf_fd=0, file_flags=0}, 144) = -1 ENOENT (No such file or directory)
+While at it, also use bitmap_free() instead of kfree() to keep the
+semantic.
 
-    bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_HASH, key_size=4,
-    value_size=4,max_entries=1024, map_flags=0, inner_map_fd=0,
-    map_name="process_pinned_",map_ifindex=0, btf_fd=3, btf_key_type_id=6,
-    btf_value_type_id=10,btf_vmlinux_value_type_id=0}, 72) = 4
-
-This patch check that if the name of pinned map are the same as the
-actual name for the first (BPF_OBJ_NAME_LEN - 1),
-bpf map still uses the name which is included in bpf object.
-
-Fixes: 26736eb9a483 ("tools: libbpf: allow map reuse")
-Signed-off-by: Anquan Wu <leiqi96@hotmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/OSZP286MB1725CEA1C95C5CB8E7CCC53FB8869@OSZP286MB1725.JPNP286.PROD.OUTLOOK.COM
+Fixes: 0ab30494bc4f ("memstick: add support for legacy memorysticks")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/dbf633c48c24ae6d95f852557e8d8b3bbdef65fe.1656155715.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/memstick/core/ms_block.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 249fa8d7376e..76cf63705c86 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1060,7 +1060,7 @@ static int bpf_map_find_btf_info(struct bpf_map *map, const struct btf *btf)
- int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+diff --git a/drivers/memstick/core/ms_block.c b/drivers/memstick/core/ms_block.c
+index 55907e4c36b1..399510585245 100644
+--- a/drivers/memstick/core/ms_block.c
++++ b/drivers/memstick/core/ms_block.c
+@@ -1335,17 +1335,17 @@ static int msb_ftl_initialize(struct msb_data *msb)
+ 	msb->zone_count = msb->block_count / MS_BLOCKS_IN_ZONE;
+ 	msb->logical_block_count = msb->zone_count * 496 - 2;
+ 
+-	msb->used_blocks_bitmap = kzalloc(msb->block_count / 8, GFP_KERNEL);
+-	msb->erased_blocks_bitmap = kzalloc(msb->block_count / 8, GFP_KERNEL);
++	msb->used_blocks_bitmap = bitmap_zalloc(msb->block_count, GFP_KERNEL);
++	msb->erased_blocks_bitmap = bitmap_zalloc(msb->block_count, GFP_KERNEL);
+ 	msb->lba_to_pba_table =
+ 		kmalloc_array(msb->logical_block_count, sizeof(u16),
+ 			      GFP_KERNEL);
+ 
+ 	if (!msb->used_blocks_bitmap || !msb->lba_to_pba_table ||
+ 						!msb->erased_blocks_bitmap) {
+-		kfree(msb->used_blocks_bitmap);
++		bitmap_free(msb->used_blocks_bitmap);
++		bitmap_free(msb->erased_blocks_bitmap);
+ 		kfree(msb->lba_to_pba_table);
+-		kfree(msb->erased_blocks_bitmap);
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -1953,7 +1953,7 @@ static int msb_bd_open(struct block_device *bdev, fmode_t mode)
+ static void msb_data_clear(struct msb_data *msb)
  {
- 	struct bpf_map_info info = {};
--	__u32 len = sizeof(info);
-+	__u32 len = sizeof(info), name_len;
- 	int new_fd, err;
- 	char *new_name;
- 
-@@ -1068,7 +1068,12 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
- 	if (err)
- 		return err;
- 
--	new_name = strdup(info.name);
-+	name_len = strlen(info.name);
-+	if (name_len == BPF_OBJ_NAME_LEN - 1 && strncmp(map->name, info.name, name_len) == 0)
-+		new_name = strdup(map->name);
-+	else
-+		new_name = strdup(info.name);
-+
- 	if (!new_name)
- 		return -errno;
- 
+ 	kfree(msb->boot_page);
+-	kfree(msb->used_blocks_bitmap);
++	bitmap_free(msb->used_blocks_bitmap);
+ 	kfree(msb->lba_to_pba_table);
+ 	kfree(msb->cache);
+ 	msb->card = NULL;
 -- 
 2.35.1
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E7E59D717
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C65559D7CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351771AbiHWJzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
+        id S243366AbiHWJta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345929AbiHWJyG (ORCPT
+        with ESMTP id S1352571AbiHWJqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:54:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB97B9F77B;
-        Tue, 23 Aug 2022 01:46:27 -0700 (PDT)
+        Tue, 23 Aug 2022 05:46:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB74DB27;
+        Tue, 23 Aug 2022 01:44:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 622E3B81BF8;
-        Tue, 23 Aug 2022 08:46:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5E00C433C1;
-        Tue, 23 Aug 2022 08:46:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3345661540;
+        Tue, 23 Aug 2022 08:43:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F27C433B5;
+        Tue, 23 Aug 2022 08:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244386;
-        bh=d/nMLC3Lz+jLZL1pYaR6VR52kEJoAe2FcyZI315sBwc=;
+        s=korg; t=1661244199;
+        bh=Ar0Ri1pXQ2u5TEvE1oM8+Sx9bnNlWLzCZzLjllN8NEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I0KubDfnsEdgN1njRQad92H3TEYqQpe+0hnNlyaZg+lEx8yp2ryifjNTz3gebDNa5
-         iRb6SD76tTbrLHc6r9uo/Uhlio/uhldNMTXJtSx66u0Qwi5NJ84M32fgrYPqrIZsDl
-         3T/I2B27ryG08chxHaPS2SgT3yPwl6rN2Q5N6vKs=
+        b=t3QaiXGALtus5VP4P49vqbKBhf+exQtlOg9QIwkTArpm2m5NONVjNGVf7BH76/dOE
+         lp7pPGXpG4Gb+d9y1PPSkM5wttDE3/suWF1p0S2CF78DPIJLTbmGSSbsTH/wfpwbRX
+         06dCKaybAwLTXnQngyqhOWXCSSoCbStallyVeelk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>
-Subject: [PATCH 5.15 054/244] SUNRPC: Fix xdr_encode_bool()
-Date:   Tue, 23 Aug 2022 10:23:33 +0200
-Message-Id: <20220823080100.868709019@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.15 055/244] SUNRPC: Reinitialise the backchannel request buffers before reuse
+Date:   Tue, 23 Aug 2022 10:23:34 +0200
+Message-Id: <20220823080100.903408710@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -54,38 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit c770f31d8f580ed4b965c64f924ec1cc50e41734 upstream.
+commit 6622e3a73112fc336c1c2c582428fb5ef18e456a upstream.
 
-I discovered that xdr_encode_bool() was returning the same address
-that was passed in the @p parameter. The documenting comment states
-that the intent is to return the address of the next buffer
-location, just like the other "xdr_encode_*" helpers.
+When we're reusing the backchannel requests instead of freeing them,
+then we should reinitialise any values of the send/receive xdr_bufs so
+that they reflect the available space.
 
-The result was the encoded results of NFSv3 PATHCONF operations were
-not formed correctly.
-
-Fixes: ded04a587f6c ("NFSD: Update the NFSv3 PATHCONF3res encoder to use struct xdr_stream")
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Fixes: 0d2a970d0ae5 ("SUNRPC: Fix a backchannel race")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/sunrpc/xdr.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/sunrpc/backchannel_rqst.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/include/linux/sunrpc/xdr.h
-+++ b/include/linux/sunrpc/xdr.h
-@@ -405,8 +405,8 @@ static inline int xdr_stream_encode_item
-  */
- static inline __be32 *xdr_encode_bool(__be32 *p, u32 n)
- {
--	*p = n ? xdr_one : xdr_zero;
--	return p++;
-+	*p++ = n ? xdr_one : xdr_zero;
-+	return p;
+--- a/net/sunrpc/backchannel_rqst.c
++++ b/net/sunrpc/backchannel_rqst.c
+@@ -64,6 +64,17 @@ static void xprt_free_allocation(struct
+ 	kfree(req);
  }
  
- /**
++static void xprt_bc_reinit_xdr_buf(struct xdr_buf *buf)
++{
++	buf->head[0].iov_len = PAGE_SIZE;
++	buf->tail[0].iov_len = 0;
++	buf->pages = NULL;
++	buf->page_len = 0;
++	buf->flags = 0;
++	buf->len = 0;
++	buf->buflen = PAGE_SIZE;
++}
++
+ static int xprt_alloc_xdr_buf(struct xdr_buf *buf, gfp_t gfp_flags)
+ {
+ 	struct page *page;
+@@ -292,6 +303,9 @@ void xprt_free_bc_rqst(struct rpc_rqst *
+ 	 */
+ 	spin_lock_bh(&xprt->bc_pa_lock);
+ 	if (xprt_need_to_requeue(xprt)) {
++		xprt_bc_reinit_xdr_buf(&req->rq_snd_buf);
++		xprt_bc_reinit_xdr_buf(&req->rq_rcv_buf);
++		req->rq_rcv_buf.len = PAGE_SIZE;
+ 		list_add_tail(&req->rq_bc_pa_list, &xprt->bc_pa_list);
+ 		xprt->bc_alloc_count++;
+ 		atomic_inc(&xprt->bc_slot_count);
 
 

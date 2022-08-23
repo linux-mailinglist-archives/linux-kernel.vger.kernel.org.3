@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5563B59E309
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F4C59DD47
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354053AbiHWKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S1356144AbiHWKqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352960AbiHWKGc (ORCPT
+        with ESMTP id S1355265AbiHWKkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:32 -0400
+        Tue, 23 Aug 2022 06:40:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F011BE94;
-        Tue, 23 Aug 2022 01:53:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ACFA74C6;
+        Tue, 23 Aug 2022 02:08:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 905216153D;
-        Tue, 23 Aug 2022 08:53:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88DB3C433D6;
-        Tue, 23 Aug 2022 08:53:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B622C615A0;
+        Tue, 23 Aug 2022 09:08:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E35C433C1;
+        Tue, 23 Aug 2022 09:08:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244824;
-        bh=KBS0Bw+5URDBqS6bBdmXuY9kF7ZqSJW7N+F4TsqBqPc=;
+        s=korg; t=1661245684;
+        bh=ej/8fqZj7Vg0PrkSVCiLU8mYWjPJPW4/aaRQtdEs9uE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n7ZfCEnexg8GzjMApSEtDf3VuhL62kZZfHzZ4RytmG7LBJoyoRPZ7z6xeDNHIaONL
-         lBnjABUY3lFODzxRfAGoBOobyylv1YXr+Gm6+Ey29UXCq1Lb2GvXecbo9Uf5E09hSA
-         1FVwAZr17Mkq7bm1gXXq40WZpkJo5rlH8IT9NBG8=
+        b=Bev3oys3W3FyI8bJClIL9obokzcKkKl8PCcxPybUN3OtNGBRCt8GdSJyhuyCJnWZ0
+         BJDxHlxqlwNsoClIBs78uR567oJPz6C8fOk0BkRI/pnGocm71NhWVqRKKcpG6sTwhf
+         pjF+KOpi1/o/r+VtpccoGtZUuvSIF0PkIi25fdlA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 149/244] stmmac: intel: Add a missing clk_disable_unprepare() call in intel_eth_pci_remove()
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 139/287] USB: serial: fix tty-port initialized comments
 Date:   Tue, 23 Aug 2022 10:25:08 +0200
-Message-Id: <20220823080104.141086166@linuxfoundation.org>
+Message-Id: <20220823080105.170528399@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Johan Hovold <johan@kernel.org>
 
-commit 5c23d6b717e4e956376f3852b90f58e262946b50 upstream.
+[ Upstream commit 688ee1d1785c1359f9040f615dd8e6054962bce2 ]
 
-Commit 09f012e64e4b ("stmmac: intel: Fix clock handling on error and remove
-paths") removed this clk_disable_unprepare()
+Fix up the tty-port initialized comments which got truncated and
+obfuscated when replacing the old ASYNCB_INITIALIZED flag.
 
-This was partly revert by commit ac322f86b56c ("net: stmmac: Fix clock
-handling on remove path") which removed this clk_disable_unprepare()
-because:
-"
-   While unloading the dwmac-intel driver, clk_disable_unprepare() is
-   being called twice in stmmac_dvr_remove() and
-   intel_eth_pci_remove(). This causes kernel panic on the second call.
-"
-
-However later on, commit 5ec55823438e8 ("net: stmmac: add clocks management
-for gmac driver") has updated stmmac_dvr_remove() which do not call
-clk_disable_unprepare() anymore.
-
-So this call should now be called from intel_eth_pci_remove().
-
-Fixes: 5ec55823438e8 ("net: stmmac: add clocks management for gmac driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/d7c8c1dadf40df3a7c9e643f76ffadd0ccc1ad1b.1660659689.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d41861ca19c9 ("tty: Replace ASYNC_INITIALIZED bit and update atomically")
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/serial/sierra.c     | 3 ++-
+ drivers/usb/serial/usb-serial.c | 2 +-
+ drivers/usb/serial/usb_wwan.c   | 3 ++-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -1098,6 +1098,7 @@ static void intel_eth_pci_remove(struct
+diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
+index a43263a0edd8..891e52bc5002 100644
+--- a/drivers/usb/serial/sierra.c
++++ b/drivers/usb/serial/sierra.c
+@@ -757,7 +757,8 @@ static void sierra_close(struct usb_serial_port *port)
  
- 	stmmac_dvr_remove(&pdev->dev);
+ 	/*
+ 	 * Need to take susp_lock to make sure port is not already being
+-	 * resumed, but no need to hold it due to initialized
++	 * resumed, but no need to hold it due to the tty-port initialized
++	 * flag.
+ 	 */
+ 	spin_lock_irq(&intfdata->susp_lock);
+ 	if (--intfdata->open_ports == 0)
+diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+index b1f0aa12ba39..eb4f20651186 100644
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -251,7 +251,7 @@ static int serial_open(struct tty_struct *tty, struct file *filp)
+  *
+  * Shut down a USB serial port. Serialized against activate by the
+  * tport mutex and kept to matching open/close pairs
+- * of calls by the initialized flag.
++ * of calls by the tty-port initialized flag.
+  *
+  * Not called if tty is console.
+  */
+diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+index 997ff88ec04b..2ebf0842fa43 100644
+--- a/drivers/usb/serial/usb_wwan.c
++++ b/drivers/usb/serial/usb_wwan.c
+@@ -463,7 +463,8 @@ void usb_wwan_close(struct usb_serial_port *port)
  
-+	clk_disable_unprepare(priv->plat->stmmac_clk);
- 	clk_unregister_fixed_rate(priv->plat->stmmac_clk);
- 
- 	pcim_iounmap_regions(pdev, BIT(0));
+ 	/*
+ 	 * Need to take susp_lock to make sure port is not already being
+-	 * resumed, but no need to hold it due to initialized
++	 * resumed, but no need to hold it due to the tty-port initialized
++	 * flag.
+ 	 */
+ 	spin_lock_irq(&intfdata->susp_lock);
+ 	if (--intfdata->open_ports == 0)
+-- 
+2.35.1
+
 
 

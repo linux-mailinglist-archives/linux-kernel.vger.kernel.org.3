@@ -2,84 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2DD59D4D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBF459D4FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243000AbiHWI1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S243362AbiHWI1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243800AbiHWIVn (ORCPT
+        with ESMTP id S243834AbiHWIVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:21:43 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ADF71706;
-        Tue, 23 Aug 2022 01:12:57 -0700 (PDT)
+        Tue, 23 Aug 2022 04:21:46 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52C070E59
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:13:01 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id gb36so25831022ejc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1661242378;
-  x=1692778378;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=dsmv2HWtXdyoSrM7X25yViaz1yQI9MEMGWUi+MfjE0g=;
-  b=BGbqcAusKcLIyRblNhfi4BhRxGfzA8XQ7BgxiegR9i/HxXXXVs5SgZO2
-   9pbFZgmUHz/amsdF+K3uPLFq9IdlOxtQ96qTxc3WbP4VeNhIECo8k0hB6
-   UcKz5OQfuCJa8083MXcuiGRZcE6HmM3//dlGI387AOlJTYOiaZSUXVq6T
-   j3jz/5ZUXYHydJ2cxJLax6fA0YGwNiDuTwSFJSvmTNDogXDxSczc/K5u+
-   7FT1OmJmRwO4Y7rLlEVKXwO838gAVmrkEvK3jaEAYJHUxeQ57UAK0XWLP
-   USH6IA+KEvmkLEgVdTs8YkKtjF5F8ugx5FivBrfsu2IRJ/KLVbc/pZdRX
-   w==;
-Date:   Tue, 23 Aug 2022 10:12:33 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Lars-Peter Clausen <lars@metafoo.de>
-CC:     Jonathan Cameron <jic23@kernel.org>, kernel <kernel@axis.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [PATCH] iio: buffer: Silence lock nesting splat
-Message-ID: <YwSL8VD78u0ea0Qb@axis.com>
-References: <20220816080828.1218667-1-vincent.whitchurch@axis.com>
- <20220820120640.6d1b928d@jic23-huawei>
- <ff2bc13c-f66f-03f3-fc01-c4f962f7b694@metafoo.de>
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=M2VC3T3i8SI6ISvyTjIYNrIDwSYB0SPwFcKC30GUfDM=;
+        b=YhnTBXKsX1sutRE3jqRO9H6Pjc1ZGKYwM6o16Q0HFOdstfdMOz52ZyhELuCQJXRG36
+         zhmsnRPt5OkaQBKmjswJIygbaUEYQfs5ITpnbmXlta8HzIMzCM5ofAonMP0eWDOuo/dS
+         +Rdh140kzsHwOpdzshLKhiTpaVIWcDxpncvtaY8fcWjxK/W+dbyvunc1qRpd+s0M3QME
+         n0Bmg63HsdKktJ6CvRLGxpiXhXz4I1s/EP64HmMismIM9r2zLw7T3nR4gq22B0+JIB/I
+         s9M/zgtKzwbvOY5obJkZjPkjN1v9+5tlUkl0QmaAFM0w1vSGg0xj1KyEZG4fpvS6Fda/
+         wlGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=M2VC3T3i8SI6ISvyTjIYNrIDwSYB0SPwFcKC30GUfDM=;
+        b=X64yS/W9vVCxg79IK2tLjIiA6bumiqn5abzLnxMDZVI+IiSJQ7KSJF1cx3io7HiVXE
+         4FKgS29JN5UL3KDs1fwPThPaIhh8fxIpbvdyChKRFsPqab9J+cuyKx0W+ylg8wPnu6YO
+         p5jdQeZNa88cilPb7JcaUKRVWFDoKi51qqegEWxKLtEyzLWIh/of+y9abfqRhoH0vFt5
+         LryazT2fWJEAC/nusNG7AE0R//KkiANyW9z2h7PwTl2ogXhZjev63Wjzqj501Q+q9geT
+         Ypn9xEBE03YIjAL/AGm2kfLoMPdDII7Q3BW2pZG0rSwUAXsMRV/+juMOFJQ95LYf+9N5
+         z5AQ==
+X-Gm-Message-State: ACgBeo1Aztp3hhxCoO4rWugj8xS/z37GjuKd/mEEhl0jVwidnRS0Jp7M
+        WK7Xd/qDK3Dvvq5PF1S6RfG84WpmwEXCOBqIJyggLw==
+X-Google-Smtp-Source: AA6agR6adncEGL6epJiFBvb7FvvzRHDp7dN9532v8AKMOIlxyCEYv+l415yM/3YSXIcselx7YV94occ/T/pXa7FdGTA=
+X-Received: by 2002:a17:907:2c48:b0:73c:931e:5175 with SMTP id
+ hf8-20020a1709072c4800b0073c931e5175mr13431983ejc.44.1661242379105; Tue, 23
+ Aug 2022 01:12:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ff2bc13c-f66f-03f3-fc01-c4f962f7b694@metafoo.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYuecPu-n-ujLsv7vL8RjEJA-6rOZjc363+p1oo6v-FKKQ@mail.gmail.com>
+ <CAGETcx_EpQx-QRtCbbcEDpLHSnNeYysNEnmTOQL4+vb4zzvk4Q@mail.gmail.com>
+In-Reply-To: <CAGETcx_EpQx-QRtCbbcEDpLHSnNeYysNEnmTOQL4+vb4zzvk4Q@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 23 Aug 2022 13:42:47 +0530
+Message-ID: <CA+G9fYvsqiMPqeo+Yqx4WQEEhXbWqKFbRdKTnP9a1FxQGRroUA@mail.gmail.com>
+Subject: Re: Unable to handle kernel NULL pointer dereference at virtual
+ address 0000000000000008
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Russell King <linux@armlinux.org.uk>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Rob Herring <robh@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 01:08:28PM +0200, Lars-Peter Clausen wrote:
-> There are two different approaches for this kind of nested locking. One 
-> is to use mutex_lock_nested(). This works if there is a strict 
-> hierarchy. The I2C framework for example has a function to determine the 
-> position of a I2C mux in the hierarchy and uses that for locking. See 
-> https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-core-base.c#L1151.
-> 
-> I'm not sure this directly translates to IIO since the 
-> consumers/producers don't have to be a in strict hierarchy.  And if it 
-> is a complex graph it can be difficult to figure out the right level for 
-> mutex_lock_nested().
-> 
-> The other method is to mark each mutex as its own class. lockdep does 
-> the lock checking based on the lock class and by default the same mutex 
-> of different instances is considered the same class to keep the resource 
-> requirements for the checker lower.
-> 
-> Regmap for example does this. See 
-> https://elixir.bootlin.com/linux/latest/source/drivers/base/regmap/regmap.c#L795.
-> 
-> This could be a solution for IIO with the downside how the additional 
-> work for the checker. But as long as there are only a few IIO devices 
-> per system that should be OK. We could also only set the per device lock 
-> class if in kernel consumers are enabled.
+Hi Saravana,
 
-The second method certainly sounds like a better fix, since it also
-still warns if one actually takes the same iio_dev mutex twice.  I'll
-respin the patch.  Thanks.
+On Tue, 23 Aug 2022 at 02:09, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Mon, Aug 22, 2022 at 7:00 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > The arm64 Qualcomm db410c device boot failed intermittently on
+> > Linux next-20220822 and Linux mainline 6.0.0-rc1.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > [    0.000000] Linux version 6.0.0-rc1 (tuxmake@tuxmake)
+> > (aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU ld (GNU Binutils
+> > for Debian) 2.38.90.20220713) #1 SMP PREEMPT @1661110347
+> > [    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
+> > <trim>
+> > [    3.609382] Loading compiled-in X.509 certificates
+> > [    3.702306] Unable to handle kernel NULL pointer dereference at
+> > virtual address 0000000000000008
+> > [    3.702380] Mem abort info:
+
+<trim>
+
+> > [    3.771199] pc : pl011_probe+0x30/0x154
+> > [    3.778480] l8: Bringing 0uV into 1750000-1750000uV
+> > [    3.783073] lr : amba_probe+0x11c/0x1b0
+
+<trim>
+
+>
+> Hi Naresh,
+>
+> Thanks for the report!
+>
+> These two patches together should fix the issue:
+> https://lore.kernel.org/lkml/20220818172852.3548-1-isaacmanjarres@google.com/
+> https://lore.kernel.org/lkml/20220817184026.3468620-1-isaacmanjarres@google.com/
+
+Reported-by and Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Reported-by and Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+> Can you give them a shot please?
+
+I have applied the above two patches on Linus master branch and built
+and boot tested on db410c the boot is successful now [1].
+
+> Also, in general, it'd be nice if you could report issues in the
+> original thread of the patch causing issues. It would make it easier
+> to keep track of all the issues.
+
+When I bisect and confirm bad commits then I will reply to that thread.
+
+[1] https://lkft.validation.linaro.org/scheduler/job/5423144#L2005
+
+- Naresh

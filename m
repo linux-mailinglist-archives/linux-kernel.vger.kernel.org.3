@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B89259E1F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E14959DF1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352846AbiHWKJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S1347954AbiHWKTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352633AbiHWKCO (ORCPT
+        with ESMTP id S1352709AbiHWKIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBC97C509;
-        Tue, 23 Aug 2022 01:50:18 -0700 (PDT)
+        Tue, 23 Aug 2022 06:08:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31746E2CB;
+        Tue, 23 Aug 2022 01:54:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94BA56123D;
-        Tue, 23 Aug 2022 08:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCF4C433D6;
-        Tue, 23 Aug 2022 08:50:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D74EB81C39;
+        Tue, 23 Aug 2022 08:54:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3DFC433C1;
+        Tue, 23 Aug 2022 08:54:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244617;
-        bh=fqxtpDYui42e3oAumHWuDp8Hl2ILf0kVXWlvW13h+cU=;
+        s=korg; t=1661244884;
+        bh=d9zByOqMLOF3FIcefgl0t3MfVCirt6tjn609U+L5Uy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hAJXefLtUpO2qMYr4yPCTqAC0g07eg7rXihZ7o/Yt5ZyZyKSa5jjrTWCwLYchyTMk
-         3XC3X0UtnWrySS+0nO5XiMftoC5AT/1rpxzlHgk6VZhr+ONxUzM7Hnddw53YyhOQjJ
-         HOt+6ctP+gifysQX0OCSOQ03mYAZ17YVKzV8vYes=
+        b=pfGj1Zou0viuiteCmBH6RdR7ZwfOJ6g7rV+Sh5iF3k7Ip1olhV17tngcr4rwcichF
+         cnxVFp71j71tsyjsvnC6FZXHnvliKTRiefMxRb446tt89lJ8Eq1XMFDIB0akRMDoqJ
+         mO/6uNOYc996gQ/yfWt45qK/3xW1h57gagZQQ4+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 4.14 165/229] btrfs: reject log replay if there is unsupported RO compat flag
+        stable@vger.kernel.org, Dan Vacura <w36195@motorola.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 167/244] usb: gadget: uvc: calculate the number of request depending on framesize
 Date:   Tue, 23 Aug 2022 10:25:26 +0200
-Message-Id: <20220823080059.557577359@linuxfoundation.org>
+Message-Id: <20220823080104.803122251@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,84 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-commit dc4d31684974d140250f3ee612c3f0cab13b3146 upstream.
+[ Upstream commit 87d76b5f1d8eeb49efa16e2018e188864cbb9401 ]
 
-[BUG]
-If we have a btrfs image with dirty log, along with an unsupported RO
-compatible flag:
+The current limitation of possible number of requests being handled is
+dependent on the gadget speed. It makes more sense to depend on the
+typical frame size when calculating the number of requests. This patch
+is changing this and is using the previous limits as boundaries for
+reasonable minimum and maximum number of requests.
 
-log_root		30474240
-...
-compat_flags		0x0
-compat_ro_flags		0x40000003
-			( FREE_SPACE_TREE |
-			  FREE_SPACE_TREE_VALID |
-			  unknown flag: 0x40000000 )
+For a 1080p jpeg encoded video stream with a maximum imagesize of
+e.g. 800kB with a maxburst of 8 and an multiplier of 1 the resulting
+number of requests is calculated to 49.
 
-Then even if we can only mount it RO, we will still cause metadata
-update for log replay:
+        800768         1
+nreqs = ------ * -------------- ~= 49
+          2      (1024 * 8 * 1)
 
-  BTRFS info (device dm-1): flagging fs with big metadata feature
-  BTRFS info (device dm-1): using free space tree
-  BTRFS info (device dm-1): has skinny extents
-  BTRFS info (device dm-1): start tree-log replay
-
-This is definitely against RO compact flag requirement.
-
-[CAUSE]
-RO compact flag only forces us to do RO mount, but we will still do log
-replay for plain RO mount.
-
-Thus this will result us to do log replay and update metadata.
-
-This can be very problematic for new RO compat flag, for example older
-kernel can not understand v2 cache, and if we allow metadata update on
-RO mount and invalidate/corrupt v2 cache.
-
-[FIX]
-Just reject the mount unless rescue=nologreplay is provided:
-
-  BTRFS error (device dm-1): cannot replay dirty log with unsupport optional features (0x40000000), try rescue=nologreplay instead
-
-We don't want to set rescue=nologreply directly, as this would make the
-end user to read the old data, and cause confusion.
-
-Since the such case is really rare, we're mostly fine to just reject the
-mount with an error message, which also includes the proper workaround.
-
-CC: stable@vger.kernel.org #4.9+
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Tested-by: Dan Vacura <w36195@motorola.com>
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Link: https://lore.kernel.org/r/20220529223848.105914-2-m.grzeschik@pengutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/disk-io.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/usb/gadget/function/uvc_queue.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
---- a/fs/btrfs/disk-io.c
-+++ b/fs/btrfs/disk-io.c
-@@ -2718,6 +2718,20 @@ int open_ctree(struct super_block *sb,
- 		err = -EINVAL;
- 		goto fail_alloc;
- 	}
-+	/*
-+	 * We have unsupported RO compat features, although RO mounted, we
-+	 * should not cause any metadata write, including log replay.
-+	 * Or we could screw up whatever the new feature requires.
-+	 */
-+	if (unlikely(features && btrfs_super_log_root(disk_super) &&
-+		     !btrfs_test_opt(fs_info, NOLOGREPLAY))) {
-+		btrfs_err(fs_info,
-+"cannot replay dirty log with unsupported compat_ro features (0x%llx), try rescue=nologreplay",
-+			  features);
-+		err = -EINVAL;
-+		goto fail_alloc;
-+	}
+diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
+index 99dc9adf56ef..a64b842665b9 100644
+--- a/drivers/usb/gadget/function/uvc_queue.c
++++ b/drivers/usb/gadget/function/uvc_queue.c
+@@ -44,7 +44,8 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+ {
+ 	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
+ 	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
+-	struct usb_composite_dev *cdev = video->uvc->func.config->cdev;
++	unsigned int req_size;
++	unsigned int nreq;
+ 
+ 	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
+ 		*nbuffers = UVC_MAX_VIDEO_BUFFERS;
+@@ -53,10 +54,16 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+ 
+ 	sizes[0] = video->imagesize;
+ 
+-	if (cdev->gadget->speed < USB_SPEED_SUPER)
+-		video->uvc_num_requests = 4;
+-	else
+-		video->uvc_num_requests = 64;
++	req_size = video->ep->maxpacket
++		 * max_t(unsigned int, video->ep->maxburst, 1)
++		 * (video->ep->mult);
 +
++	/* We divide by two, to increase the chance to run
++	 * into fewer requests for smaller framesizes.
++	 */
++	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
++	nreq = clamp(nreq, 4U, 64U);
++	video->uvc_num_requests = nreq;
  
- 	max_active = fs_info->thread_pool_size;
- 
+ 	return 0;
+ }
+-- 
+2.35.1
+
 
 

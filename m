@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FCC59CCB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EB159CCB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238733AbiHWABu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 20:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S238879AbiHWADj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 20:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238567AbiHWABr (ORCPT
+        with ESMTP id S238567AbiHWADf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 20:01:47 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C5156BBD;
-        Mon, 22 Aug 2022 17:01:46 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h24so15069120wrb.8;
-        Mon, 22 Aug 2022 17:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3umAISoMC9J1t3BQnQeJGoOxGoRbwjWe7DCguBppyoc=;
-        b=Zeg6Kz2RJM9iX7KdwqBfkrJ5XtKSu2WYnnXIK1wVEw6q5cJlmZRYnZmGaxQoQolmB1
-         WFEmQxnNAd5pgsCMkCvaA19L2kXw/pcag7CNE0jvQnuEcl0/ariluL27G0EGMk9xndBK
-         E7Ugqd9OhUioYRXzvSqZhJ1KVGA6xhDo+Cy/Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3umAISoMC9J1t3BQnQeJGoOxGoRbwjWe7DCguBppyoc=;
-        b=GHVXXX+LTl6fU+iWKyfXN7O/72TFmDNuk4hnJ+TMwUlSZb4hf+LkBCMyxs61tCnqXT
-         sJ+7xeuhkgIwtARlG07xz+s049m8DsocdnTR3mBgKbhXAfSf4pOI1yLO9OJoKcOux/fF
-         1sBBxYswbGRBy6mb9+rDmYoP3C/2WWrKzPHgO1Dxu6az22h7nwHa6koADqo+vfYppEu4
-         ElocdalDxFkltB3XQzBx79rM1wGi3yrNzRB7QSzRKB5xjjwbvqjsP2KBTznmprWTyYwM
-         Jxdn+FLTMLJRCZBOPxgMDi5XhaftQkz3z4D+8B6KQWcGMcgZ85wJHydK+6pTyrL6ePI8
-         wLdw==
-X-Gm-Message-State: ACgBeo06pLVVwqcT60TEUOW33ewYLTX42JqKpgDb0ifdQx7LPbgxD1Jb
-        H7fXNnh3ilAp2rHsyafTsMn/qaJB2d0skusMqgoEFWLY
-X-Google-Smtp-Source: AA6agR6mr3WZ/vgmSGJDMvRNbfbSeY+27SFUtG2f01EaGpn62xeLlnirjZG+tWS0fwnTFBEaCEPEd5gkEGvVWU+bFfc=
-X-Received: by 2002:a05:6000:1c0c:b0:225:569c:dd2c with SMTP id
- ba12-20020a0560001c0c00b00225569cdd2cmr4445061wrb.628.1661212904633; Mon, 22
- Aug 2022 17:01:44 -0700 (PDT)
+        Mon, 22 Aug 2022 20:03:35 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957E113F50
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:03:33 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27N03RMd086994;
+        Mon, 22 Aug 2022 19:03:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661213007;
+        bh=+4YlvD2lm4oR+5jkPdSahNrSh4ZAMtVQt61EY5evfbs=;
+        h=From:To:CC:Subject:Date;
+        b=ryvIwCrxVz7g0Iledoq8NVn/xhBYJf7P2cC2Th7ZkzJHftUWH0WXM5+NH18goVFLy
+         cjD2vKZd7LyUefX0F7SI5CmRJ44Qthm6fKmgN0WOGvp7uQQWNXajepRkjLMg0FAUtz
+         aVH9KaZirWeSC2MT7aXnR5Eqjel8Ha3SG+YTRW7o=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27N03RpI031614
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 22 Aug 2022 19:03:27 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 22
+ Aug 2022 19:03:27 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 22 Aug 2022 19:03:27 -0500
+Received: from ula0226330.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27N03QJI093455;
+        Mon, 22 Aug 2022 19:03:26 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Davis <afd@ti.com>
+Subject: [PATCH] drm: omapdrm: Improve check for contiguous buffers
+Date:   Mon, 22 Aug 2022 19:03:26 -0500
+Message-ID: <20220823000326.10056-1-afd@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220822070204.GA6110@hcl-ThinkPad-T495>
-In-Reply-To: <20220822070204.GA6110@hcl-ThinkPad-T495>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 23 Aug 2022 00:01:32 +0000
-Message-ID: <CACPK8XfgYma8=qV0kKOKSSpXprC1sBZgKuaGsAhD1ifYG4KgTw@mail.gmail.com>
-Subject: Re: [PATCH v1] ARM: dts: aspeed: Update for Facebook Yosemite V2 BMC
-To:     Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,100 +63,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 at 07:02, Karthikeyan Pasupathi
-<pkarthikeyan1509@gmail.com> wrote:
->
-> This patch includes the following updates for Yosemite V2
-> BMC.
->
-> 1) Updated GPIO configuration for power control.
+While a scatter-gather table having only 1 entry does imply it is
+contiguous, it is a logic error to assume the inverse. Tables can have
+more than 1 entry and still be contiguous. Use a proper check here.
 
-Please take a look the openbmc naming conventions for the GPIOs. If
-you are not going to follow them, please explain why in your commit
-message.
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
+ drivers/gpu/drm/omapdrm/omap_gem.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/gpu/drm/omapdrm/omap_gem.c b/drivers/gpu/drm/omapdrm/omap_gem.c
+index cf571796fd26..52c00b795459 100644
+--- a/drivers/gpu/drm/omapdrm/omap_gem.c
++++ b/drivers/gpu/drm/omapdrm/omap_gem.c
+@@ -48,7 +48,7 @@ struct omap_gem_object {
+ 	 *   OMAP_BO_MEM_DMA_API flag set)
+ 	 *
+ 	 * - buffers imported from dmabuf (with the OMAP_BO_MEM_DMABUF flag set)
+-	 *   if they are physically contiguous (when sgt->orig_nents == 1)
++	 *   if they are physically contiguous
+ 	 *
+ 	 * - buffers mapped through the TILER when pin_cnt is not zero, in which
+ 	 *   case the DMA address points to the TILER aperture
+@@ -148,12 +148,18 @@ u64 omap_gem_mmap_offset(struct drm_gem_object *obj)
+ 	return drm_vma_node_offset_addr(&obj->vma_node);
+ }
+ 
++static bool omap_gem_sgt_is_contiguous(struct sg_table *sgt, size)
++{
++	return !(drm_prime_get_contiguous_size(sgt) < size);
++}
++
+ static bool omap_gem_is_contiguous(struct omap_gem_object *omap_obj)
+ {
+ 	if (omap_obj->flags & OMAP_BO_MEM_DMA_API)
+ 		return true;
+ 
+-	if ((omap_obj->flags & OMAP_BO_MEM_DMABUF) && omap_obj->sgt->nents == 1)
++	if ((omap_obj->flags & OMAP_BO_MEM_DMABUF) &&
++	    omap_gem_sgt_is_contiguous(omap_obj->sgt, omap_obj->base->size))
+ 		return true;
+ 
+ 	return false;
+@@ -1398,7 +1404,7 @@ struct drm_gem_object *omap_gem_new_dmabuf(struct drm_device *dev, size_t size,
+ 	union omap_gem_size gsize;
+ 
+ 	/* Without a DMM only physically contiguous buffers can be supported. */
+-	if (sgt->orig_nents != 1 && !priv->has_dmm)
++	if (!omap_gem_sgt_is_contiguous(sgt, size) && !priv->has_dmm)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	gsize.bytes = PAGE_ALIGN(size);
+@@ -1412,7 +1418,7 @@ struct drm_gem_object *omap_gem_new_dmabuf(struct drm_device *dev, size_t size,
+ 
+ 	omap_obj->sgt = sgt;
+ 
+-	if (sgt->orig_nents == 1) {
++	if (omap_gem_sgt_is_contiguous(sgt, size)) {
+ 		omap_obj->dma_addr = sg_dma_address(sgt->sgl);
+ 	} else {
+ 		/* Create pages list from sgt */
+-- 
+2.36.1
 
-> 2) Added IPMB-13 channel for Debug Card communication.
-> 3) Removed EEPROM driver IPMB-12 channel and keeping it as
->    "status ok".
-
-If you find yourself writing a commit log that contains 1), 2), 3)
-then there's a fair chance you could have sent three separate patches.
-Consider this for next time.
-
->
-> Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-> ---
->  .../dts/aspeed-bmc-facebook-yosemitev2.dts    | 49 +++++++++++++++++--
->  1 file changed, 44 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> index 8864e9c312a8..4d2ff7eb6740 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> @@ -119,6 +119,40 @@
->                         &pinctrl_adc15_default>;
->  };
->
-> +&gpio {
-> +       status = "okay";
-> +       gpio-line-names =
-> +       /*A0-A7*/   "","","","","","","","",
-> +       /*B0-B7*/   "","","","","","","","",
-> +       /*C0-C7*/   "","","","","","","","",
-> +       /*D0-D7*/   "POWER_BUTTON","POWER_OUT1","","POWER_OUT2","","POWER_OUT3","","POWER_OUT4",
-> +       /*E0-E7*/   "DEBUG_UART_SEL0","DEBUG_UART_SEL1","DEBUG_UART_SEL2","DEBUG_UART_RX_SEL_N","","","","",
-> +       /*F0-F7*/   "","","","","","","","",
-> +       /*G0-G7*/   "LED_POST_CODE_0","LED_POST_CODE_1","LED_POST_CODE_2","LED_POST_CODE_3","","","","",
-> +       /*H0-H7*/   "","","","","","","","",
-> +       /*I0-I7*/   "SLOT1_POWER_OK","SLOT2_POWER_OK","SLOT3_POWER_OK","SLOT4_POWER_OK","","","","",
-> +       /*J0-J7*/   "","","","","","","","",
-> +       /*K0-K7*/   "","","","","","","","",
-> +       /*L0-L7*/   "","","","","","","","",
-> +       /*M0-M7*/   "","","","","","","","",
-> +       /*N0-N7*/   "","","I2C_SLOT1","I2C_SLOT2","I2C_SLOT3","I2C_SLOT4","","",
-> +       /*O0-O7*/   "","","","SELECTOR_BUTTON","SLOT1_POWER","SLOT2_POWER","SLOT3_POWER","SLOT4_POWER",
-> +       /*P0-P7*/   "","","","","LED_POST_CODE_4","LED_POST_CODE_5","LED_POST_CODE_6","LED_POST_CODE_7",
-> +       /*Q0-Q7*/   "","","","","","","","",
-> +       /*R0-R7*/   "","","","GPIO_DBG_CARD_PRSNT","","","","",
-> +       /*S0-S7*/   "RESET_OUT1","RESET_OUT2","RESET_OUT3","RESET_OUT4","","","","",
-> +       /*T0-T7*/   "","","","","","","","",
-> +       /*U0-U7*/   "","","","","","","","",
-> +       /*V0-V7*/   "","","","","","","","",
-> +       /*W0-W7*/   "","","","","","","","",
-> +       /*X0-X7*/   "","","","","","","","",
-> +       /*Y0-Y7*/   "","","","","","","","",
-> +       /*Z0-Z7*/   "POST_COMPLETE","POST_COMPLETE2","POST_COMPLETE3","POST_COMPLETE4","","","","",
-> +       /*AA0-AA7*/ "","","","","HAND_SW1","HAND_SW2","HAND_SW3","HAND_SW4",
-> +       /*AB0-AB7*/ "RESET_BUTTON","","","","","","","",
-> +               /*AC0-AC7*/ "","","","","","","","";
-> +};
-> +
->  &i2c1 {
->         //Host1 IPMB bus
->         status = "okay";
-> @@ -207,11 +241,16 @@
->
->  &i2c12 {
->         status = "okay";
-> -       //MEZZ_FRU
-> -       eeprom@51 {
-> -               compatible = "atmel,24c64";
-> -               reg = <0x51>;
-> -               pagesize = <32>;
-> +};
-> +
-> +&i2c13 {
-> +       status = "okay";
-> +       // Debug Card
-> +       multi-master;
-> +       ipmb13@10 {
-> +               compatible = "ipmb-dev";
-> +               reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +               i2c-protocol;
->         };
->  };
->
-> --
-> 2.17.1
->

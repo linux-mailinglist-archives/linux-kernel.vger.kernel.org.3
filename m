@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7E559EBFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11D659EC04
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiHWTPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S234102AbiHWTQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiHWTO4 (ORCPT
+        with ESMTP id S232650AbiHWTPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:14:56 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07918E9B7
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:52:19 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id i129so7490686vke.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Es/SKRV3OFmw44FXdjOkfiW1qF34GTyugA5yXeHJg1o=;
-        b=Htyr6zgvLeb7VOm7M8YiX0MsuKqOQFg/1Dp9MRFHsmMgRGKEd9WwyKRrcHeLFHDm29
-         nM/bfzgL5k3eFrWzgPUgctn35VeUeDiJtJePnx7M8C0hWVKT2REkwMdmxOUxw1i9Lfw/
-         CbaaQ7uMsAT/X0Ph7VPdpGckzFqaPwgU378K5NGCsUHDagyqlzkGONXRTiXCOcBGYWCI
-         q+YsgKQhl5xhXQB8Pc+6yWmSx4zaOylSieaKP7lpCxr22IPB5+DWeJotUqS+aEZLUsRo
-         lVTqqaXDT5t9QEmcI+bIRPwSAPgzInt39jLGTIsGH1dQuSP7u56N7t5qOqn2Fr4w4b5y
-         /Ucw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Es/SKRV3OFmw44FXdjOkfiW1qF34GTyugA5yXeHJg1o=;
-        b=QFyHiHkHZHroWyVZHbD6BcDbtYP90ixQRvuGyS68ggSEZMIxdrgOuBNI+KOnNpb6Cs
-         p6jNhJoI4tzW3bLjd+L8m+zjjel3E3/TXh0Hfug4TP/Bp/QghwEN9vtygOMRaIEFIjjw
-         ozuKKkkYAJ+GTZTqF6LE4EHkU7OZAAHE2fBWY2/rUfdp5D4uAxReNujmiSjTJhET0Isy
-         NQe5zvpsRwTfZ5NFXwgv8FAmsrzvMvezaWnuQpA4C5PUY9n1bveLNR+YXga3KrfyltEL
-         BUIM+UVsN4i6q+bQG8Txw7ERtJdgPG044bc85LvTIOJYbton+XnLOBvmyJ9l9niKtKyK
-         kW1g==
-X-Gm-Message-State: ACgBeo2CA7nI/2dA9zz43KddRcpIf+FiOM9wgUV7DNqxUagAvQJdq4Pn
-        m7zhYyofcenjT5b78LaR9Uk+dMeadziq8NCe9dJnPg==
-X-Google-Smtp-Source: AA6agR5LT5c2oH4HlSHea9+vMd6hW5j0wL9NLrJYmoLqS7f6O+74rga8DGg+9ywWJM7NvmxoN1meBCLo0cewOr+i/3A=
-X-Received: by 2002:a1f:9b07:0:b0:378:7c48:c6c with SMTP id
- d7-20020a1f9b07000000b003787c480c6cmr9890448vke.32.1661277112758; Tue, 23 Aug
- 2022 10:51:52 -0700 (PDT)
+        Tue, 23 Aug 2022 15:15:52 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B935D0FC;
+        Tue, 23 Aug 2022 10:53:08 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NGlCIZ013898;
+        Tue, 23 Aug 2022 17:52:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rUw2in+AH1erjyxM6/5u1ukVrsGpIF9x+6A1qOpftQY=;
+ b=nJyJANptU6yyFLb6ikz3Hp7PqxgKAij4TjmVWMjSKLJeo8wbHR9iv9wwDZ0/RtvMT6/E
+ 2xV2l9RoaKODrCgAzBoXBDDEeeGLYL3QkqU9fNWOUh3lMdQE3VIjyKZsrlGq96JCHFBT
+ px9xcXPA/tfziFgK7v7yTToSAyKxdSl5qcI1YwbzRN9Ij3IgqP5TuL3WRqQkpk1EbbNw
+ gpmwi4DSTfMi9GiVrK8VyUqXzQDSq8FemxJY6oujhA96Fc5kq1DSH/rAX28neFvEdevz
+ igxyeJqf04hlXEbZIZId/YR/HRxFqFQuMwZPdZoN+HwkdN5wAgT8lwS1WP5HwEftJF8s hw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52pq8a11-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 17:52:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27NHqcDG013801
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 17:52:38 GMT
+Received: from [10.111.161.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 23 Aug
+ 2022 10:52:36 -0700
+Message-ID: <2237e6d0-8ee3-48a9-ab4c-4a99ed0e5646@quicinc.com>
+Date:   Tue, 23 Aug 2022 10:52:34 -0700
 MIME-Version: 1.0
-References: <20220823080118.128342613@linuxfoundation.org> <20220823080131.532813281@linuxfoundation.org>
- <c49d3b2b-9f5a-4257-9085-f7ac107cff40@oracle.com>
-In-Reply-To: <c49d3b2b-9f5a-4257-9085-f7ac107cff40@oracle.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 23 Aug 2022 11:51:16 -0600
-Message-ID: <CAOUHufagA1x4jyjH9Q0RX65fwF3SyYHUTkNnB0S_t-2GqbiC2A@mail.gmail.com>
-Subject: Re: [PATCH 5.19 319/365] swiotlb: panic if nslabs is too small
-To:     Dongli Zhang <dongli.zhang@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        stable <stable@vger.kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] disp/dpu1: fix repeated words in comments
+Content-Language: en-US
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>, <robdclark@gmail.com>,
+        <dmitry.baryshkov@linaro.org>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>
+CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220823115100.44060-1-yuanjilin@cdjrlc.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220823115100.44060-1-yuanjilin@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 70aeHVeJT2NAGntlt0BzuPj93oCTqYFp
+X-Proofpoint-GUID: 70aeHVeJT2NAGntlt0BzuPj93oCTqYFp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-23_07,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 spamscore=0
+ impostorscore=0 clxscore=1011 adultscore=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208230070
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 11:25 AM Dongli Zhang <dongli.zhang@oracle.com> wrote:
->
-> Adding Robin, Yu and swiotlb list.
+Please fix the subject line .
 
-Thanks.
+It should be drm/msm/dpu: fix repeated words in comments
 
-> There is an on-going discussion whether to revert this patch, because it breaks
-> a corner case in MIPS
+Also, you can add
 
-I wouldn't call it a corner case. Cavium Octeon is the major platform
-we use to test Debian MIPS ports [1], and 4 out of 5 best-selling
-Wi-Fi routers are MIPS-based [2].
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
 
-[1] https://wiki.debian.org/MIPSPort
-[2] https://www.amazon.com/bestsellers/pc/300189
-
-> when many kernel CONFIGs are not enabled (related to PCI
-> and device). As a result, MIPS pre-allocates only PAGE_SIZE buffer as swiotlb.
->
-> https://lore.kernel.org/all/20220820012031.1285979-1-yuzhao@google.com/
->
-> However, the core idea of the patch is to panic on purpose if the swiotlb is
-> configured with <1MB memory, in order to sync with the remap failure handler in
-> swiotlb_init_remap().
->
-> Therefore, I am waiting for suggestion from Christoph whether (1) to revert this
-> patch, or (2) enforce the restriction to disallow <1MB allocation.
-
-There are other archs (arm, ppc, riscv, s390, etc.) that call
-swiotlb_init(). Have you verified them all?
+On 8/23/2022 4:51 AM, Jilin Yuan wrote:
+>   Delete the redundant word 'is'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index bce47647d891..59ca7d70a652 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -1169,7 +1169,7 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
+>   
+>   	/*
+>   	 * max crtc width is equal to the max mixer width * 2 and max height is
+> -	 * is 4K
+> +	 * 4K
+>   	 */
+>   	dev->mode_config.max_width =
+>   			dpu_kms->catalog->caps->max_mixer_width * 2;

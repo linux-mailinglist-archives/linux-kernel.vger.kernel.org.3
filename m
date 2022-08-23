@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189BF59E376
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0137B59E0F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbiHWMWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S1359559AbiHWMGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376294AbiHWMQq (ORCPT
+        with ESMTP id S1359353AbiHWMBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:16:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58C5EC4D5;
-        Tue, 23 Aug 2022 02:41:56 -0700 (PDT)
+        Tue, 23 Aug 2022 08:01:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FD7D91E2;
+        Tue, 23 Aug 2022 02:35:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C92F8612D6;
-        Tue, 23 Aug 2022 09:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF45C433D6;
-        Tue, 23 Aug 2022 09:41:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2DA461468;
+        Tue, 23 Aug 2022 09:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C4CC433C1;
+        Tue, 23 Aug 2022 09:34:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247714;
-        bh=c/6VzAsYv+gnK5VyepI2p2EwSqHQf9tsNnTDEQudJ4A=;
+        s=korg; t=1661247283;
+        bh=sO+e8fdG0iggdNXE9VJVXd52yGBas04bWeyD/n3OLL0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JkOuWfdF/lSpuDUsX+TsSRdn0549eoH0XRgwD9HDTjooRoSxKx18cAKFwZu2vbZxP
-         euCd1wNVSDk01fDvnRKsMHaoWwkn8a/P+G+ZpcimjCua0h56G6XfepT9KusbYbFL/g
-         1ycgisT7EHfsuNb1yE8a+y2OCGGsHQau+uO3fcI4=
+        b=BgRfkLgJMlvI3omTYYyQrX6Y2b75WyyHRoguNKfThHuntolzAre4aLx5wf03eEou9
+         l2wxiF/NOA+6ShCsagvp09iK+EJKpW7/p0wRn1gdIEqdT+LD0ZZOSPdynVYAlrZTew
+         mR/xLMbuJfzTAM/wwQ6xh/6yN7LYA6nT81EkZLBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bob Pearson <rpearsonhpe@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 123/158] RDMA/rxe: Limit the number of calls to each tasklet
+Subject: [PATCH 5.4 377/389] powerpc/32: Dont always pass -mcpu=powerpc to the compiler
 Date:   Tue, 23 Aug 2022 10:27:35 +0200
-Message-Id: <20220823080050.870680726@linuxfoundation.org>
+Message-Id: <20220823080131.296286018@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,86 +59,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Pearson <rpearsonhpe@gmail.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit eff6d998ca297cb0b2e53b032a56cf8e04dd8b17 ]
+[ Upstream commit 446cda1b21d9a6b3697fe399c6a3a00ff4a285f5 ]
 
-Limit the maximum number of calls to each tasklet from rxe_do_task()
-before yielding the cpu. When the limit is reached reschedule the tasklet
-and exit the calling loop. This patch prevents one tasklet from consuming
-100% of a cpu core and causing a deadlock or soft lockup.
+Since commit 4bf4f42a2feb ("powerpc/kbuild: Set default generic
+machine type for 32-bit compile"), when building a 32 bits kernel
+with a bi-arch version of GCC, or when building a book3s/32 kernel,
+the option -mcpu=powerpc is passed to GCC at all time, relying on it
+being eventually overriden by a subsequent -mcpu=xxxx.
 
-Link: https://lore.kernel.org/r/20220630190425.2251-9-rpearsonhpe@gmail.com
-Signed-off-by: Bob Pearson <rpearsonhpe@gmail.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+But when building the same kernel with a 32 bits only version of GCC,
+that is not done, relying on gcc being built with the expected default
+CPU.
+
+This logic has two problems. First, it is a bit fragile to rely on
+whether the GCC version is bi-arch or not, because today we can have
+bi-arch versions of GCC configured with a 32 bits default. Second,
+there are some versions of GCC which don't support -mcpu=powerpc,
+for instance for e500 SPE-only versions.
+
+So, stop relying on this approximative logic and allow the user to
+decide whether he/she wants to use the toolchain's default CPU or if
+he/she wants to set one, and allow only possible CPUs based on the
+selected target.
+
+Reported-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Tested-by: Pali Rohár <pali@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/d4df724691351531bf46d685d654689e5dfa0d74.1657549153.git.christophe.leroy@csgroup.eu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/rxe/rxe_param.h |  6 ++++++
- drivers/infiniband/sw/rxe/rxe_task.c  | 16 ++++++++++++----
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ arch/powerpc/Makefile                  | 26 +-------------------------
+ arch/powerpc/platforms/Kconfig.cputype | 21 ++++++++++++++++++---
+ 2 files changed, 19 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_param.h b/drivers/infiniband/sw/rxe/rxe_param.h
-index f9fb56ec6dfd..dca86422b0a2 100644
---- a/drivers/infiniband/sw/rxe/rxe_param.h
-+++ b/drivers/infiniband/sw/rxe/rxe_param.h
-@@ -98,6 +98,12 @@ enum rxe_device_param {
- 	RXE_INFLIGHT_SKBS_PER_QP_HIGH	= 64,
- 	RXE_INFLIGHT_SKBS_PER_QP_LOW	= 16,
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index b9d2fcf030d0..eedd114a017c 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -17,23 +17,6 @@ HAS_BIARCH	:= $(call cc-option-yn, -m32)
+ # Set default 32 bits cross compilers for vdso and boot wrapper
+ CROSS32_COMPILE ?=
  
-+	/* Max number of interations of each tasklet
-+	 * before yielding the cpu to let other
-+	 * work make progress
-+	 */
-+	RXE_MAX_ITERATIONS		= 1024,
+-ifeq ($(HAS_BIARCH),y)
+-ifeq ($(CROSS32_COMPILE),)
+-ifdef CONFIG_PPC32
+-# These options will be overridden by any -mcpu option that the CPU
+-# or platform code sets later on the command line, but they are needed
+-# to set a sane 32-bit cpu target for the 64-bit cross compiler which
+-# may default to the wrong ISA.
+-KBUILD_CFLAGS		+= -mcpu=powerpc
+-KBUILD_AFLAGS		+= -mcpu=powerpc
+-endif
+-endif
+-endif
+-
+-ifdef CONFIG_PPC_BOOK3S_32
+-KBUILD_CFLAGS		+= -mcpu=powerpc
+-endif
+-
+ # If we're on a ppc/ppc64/ppc64le machine use that defconfig, otherwise just use
+ # ppc64_defconfig because we have nothing better to go on.
+ uname := $(shell uname -m)
+@@ -192,6 +175,7 @@ endif
+ endif
+ 
+ CFLAGS-$(CONFIG_TARGET_CPU_BOOL) += $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
++AFLAGS-$(CONFIG_TARGET_CPU_BOOL) += $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
+ 
+ # Altivec option not allowed with e500mc64 in GCC.
+ ifdef CONFIG_ALTIVEC
+@@ -202,14 +186,6 @@ endif
+ CFLAGS-$(CONFIG_E5500_CPU) += $(E5500_CPU)
+ CFLAGS-$(CONFIG_E6500_CPU) += $(call cc-option,-mcpu=e6500,$(E5500_CPU))
+ 
+-ifdef CONFIG_PPC32
+-ifdef CONFIG_PPC_E500MC
+-CFLAGS-y += $(call cc-option,-mcpu=e500mc,-mcpu=powerpc)
+-else
+-CFLAGS-$(CONFIG_E500) += $(call cc-option,-mcpu=8540 -msoft-float,-mcpu=powerpc)
+-endif
+-endif
+-
+ asinstr := $(call as-instr,lis 9$(comma)foo@high,-DHAVE_AS_ATHIGH=1)
+ 
+ KBUILD_CPPFLAGS	+= -I $(srctree)/arch/$(ARCH) $(asinstr)
+diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+index a9b20aa1dfd4..325dc8b53422 100644
+--- a/arch/powerpc/platforms/Kconfig.cputype
++++ b/arch/powerpc/platforms/Kconfig.cputype
+@@ -118,9 +118,9 @@ config GENERIC_CPU
+ 	depends on PPC64 && CPU_LITTLE_ENDIAN
+ 	select ARCH_HAS_FAST_MULTIPLIER
+ 
+-config GENERIC_CPU
++config POWERPC_CPU
+ 	bool "Generic 32 bits powerpc"
+-	depends on PPC32 && !PPC_8xx
++	depends on PPC32 && !PPC_8xx && !PPC_85xx
+ 
+ config CELL_CPU
+ 	bool "Cell Broadband Engine"
+@@ -174,11 +174,23 @@ config G4_CPU
+ 	depends on PPC_BOOK3S_32
+ 	select ALTIVEC
+ 
++config E500_CPU
++	bool "e500 (8540)"
++	depends on PPC_85xx && !PPC_E500MC
 +
- 	/* Delay before calling arbiter timer */
- 	RXE_NSEC_ARB_TIMER_DELAY	= 200,
++config E500MC_CPU
++	bool "e500mc"
++	depends on PPC_85xx && PPC_E500MC
++
++config TOOLCHAIN_DEFAULT_CPU
++	bool "Rely on the toolchain's implicit default CPU"
++	depends on PPC32
++
+ endchoice
  
-diff --git a/drivers/infiniband/sw/rxe/rxe_task.c b/drivers/infiniband/sw/rxe/rxe_task.c
-index 6951fdcb31bf..568cf56c236b 100644
---- a/drivers/infiniband/sw/rxe/rxe_task.c
-+++ b/drivers/infiniband/sw/rxe/rxe_task.c
-@@ -8,7 +8,7 @@
- #include <linux/interrupt.h>
- #include <linux/hardirq.h>
+ config TARGET_CPU_BOOL
+ 	bool
+-	default !GENERIC_CPU
++	default !GENERIC_CPU && !TOOLCHAIN_DEFAULT_CPU
  
--#include "rxe_task.h"
-+#include "rxe.h"
+ config TARGET_CPU
+ 	string
+@@ -193,6 +205,9 @@ config TARGET_CPU
+ 	default "e300c2" if E300C2_CPU
+ 	default "e300c3" if E300C3_CPU
+ 	default "G4" if G4_CPU
++	default "8540" if E500_CPU
++	default "e500mc" if E500MC_CPU
++	default "powerpc" if POWERPC_CPU
  
- int __rxe_do_task(struct rxe_task *task)
- 
-@@ -34,6 +34,7 @@ void rxe_do_task(struct tasklet_struct *t)
- 	int ret;
- 	unsigned long flags;
- 	struct rxe_task *task = from_tasklet(task, t, tasklet);
-+	unsigned int iterations = RXE_MAX_ITERATIONS;
- 
- 	spin_lock_irqsave(&task->state_lock, flags);
- 	switch (task->state) {
-@@ -62,13 +63,20 @@ void rxe_do_task(struct tasklet_struct *t)
- 		spin_lock_irqsave(&task->state_lock, flags);
- 		switch (task->state) {
- 		case TASK_STATE_BUSY:
--			if (ret)
-+			if (ret) {
- 				task->state = TASK_STATE_START;
--			else
-+			} else if (iterations--) {
- 				cont = 1;
-+			} else {
-+				/* reschedule the tasklet and exit
-+				 * the loop to give up the cpu
-+				 */
-+				tasklet_schedule(&task->tasklet);
-+				task->state = TASK_STATE_START;
-+			}
- 			break;
- 
--		/* soneone tried to run the task since the last time we called
-+		/* someone tried to run the task since the last time we called
- 		 * func, so we will call one more time regardless of the
- 		 * return value
- 		 */
+ config PPC_BOOK3S
+ 	def_bool y
 -- 
 2.35.1
 

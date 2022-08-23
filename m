@@ -2,169 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B9E59EB26
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E3059EB31
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiHWSf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
+        id S232131AbiHWShr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbiHWSfW (ORCPT
+        with ESMTP id S231947AbiHWShZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:35:22 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60363333;
-        Tue, 23 Aug 2022 09:58:19 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-324ec5a9e97so395293337b3.7;
-        Tue, 23 Aug 2022 09:58:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Yrkfc16+mfEM4x9y9bsw0D4I9UYk2b6HtWw8z6hU6Hc=;
-        b=4CW682MAE/ihG+pzBpfMT8imkn4oaOEgjvR96gp94CcJn96gTyzYBBe7haAUzu7b92
-         5pA7wVSuYGsq4O1Jcp75a0kB2mpS5iicv9WHV2i+L7nrt0HwFQimZpzvcrWgVXZmZww7
-         2511NbopsnHQPnHAauSuvea4KroE2BsDX2u4BkvPBqZttmSUwH35PHoSr0/QshXntWNM
-         h0vepNhytyfVGc0H/Fjto5uCsuLTwMVV/avsPUxyA3oL4wYXpAG97FOc4sNKzLPu5mYu
-         cNIvumqTqwPoj190pyeCdxfuXOlx+vbDowNRDpcQ34I7LPezHuJ/VhvMMALJ6srtfHyZ
-         H+cg==
-X-Gm-Message-State: ACgBeo16a+JTV5qgB3ywF1Wkbx7Np/abA4Vx8pn/M8Bv1L0J+IV0n7Tq
-        j1eCLJklorRiItqn3jCP6i9nAfvli8IYLWghzSiZ/Zw7
-X-Google-Smtp-Source: AA6agR4FUn6Pmyx6+Pdvyk5F1zjEDkt9eAsf2aDzzDOiPDy0SnAjwGKKcJqWy7tuIPUNPAU+b84uCIKSRBAjYe2BNPM=
-X-Received: by 2002:a25:ec0c:0:b0:690:d092:2d56 with SMTP id
- j12-20020a25ec0c000000b00690d0922d56mr23479069ybh.622.1661273898565; Tue, 23
- Aug 2022 09:58:18 -0700 (PDT)
+        Tue, 23 Aug 2022 14:37:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1BD113693;
+        Tue, 23 Aug 2022 10:00:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8184C60FDE;
+        Tue, 23 Aug 2022 17:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADB0C433C1;
+        Tue, 23 Aug 2022 17:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661274018;
+        bh=8XJRkjJBSt9PFqdic69tPPBqRtVjZZnOH7jdPBoSQvM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=iJinRQzIFKEw4AyefuwgSmSIn9LpaKkjZbx6hw7P5A0mjF6y3SdNEzWA2IoMDZLbS
+         yO1expq7AgjyKl5VAJcdvUuBDls7IdFNXSMfN64aX+vCBS2vXEv9JYrHp4yMgBtL6b
+         VZuUukkqmCLzr/FNLAXPyLwNGJKvGMmHf4iyzKqG2AT8dHL6j8EGutvlmALryqTzUc
+         oaAoI99xbJrrhvSzWlt+0boBcOZgQaOaAgRimeD0gee2IRteSd8iOE2i8iLSWu894M
+         3A/LFdWnbCHQNGmVclBRG3LArqaSoRkRKakxbRIEFCRkIIRN4z+8+9Sytz0JbRHSSW
+         +Q7wam88LdZKw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+In-Reply-To: <20220822181853.23063-1-Sergey.Semin@baikalelectronics.ru>
+References: <20220822181853.23063-1-Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH] spi: dw: Add deferred controller registration support
+Message-Id: <166127401557.469144.1274592925850885799.b4-ty@kernel.org>
+Date:   Tue, 23 Aug 2022 18:00:15 +0100
 MIME-Version: 1.0
-References: <20220818205955.6504-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220818205955.6504-1-wsa+renesas@sang-engineering.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 18:58:07 +0200
-Message-ID: <CAJZ5v0iub-bjSdnSmT3mXZ+2wAOeJVHnMnUQ1K5DNGK+O-F_xA@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: move from strlcpy with unused retval to strscpy
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-0c1df
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:00 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
->
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/acpi/bus.c            | 4 ++--
->  drivers/acpi/processor_idle.c | 8 ++++----
->  drivers/acpi/utils.c          | 6 +++---
->  3 files changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index c0d20d997891..1d29f5dc7d79 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -802,7 +802,7 @@ static bool acpi_of_modalias(struct acpi_device *adev,
->
->         str = obj->string.pointer;
->         chr = strchr(str, ',');
-> -       strlcpy(modalias, chr ? chr + 1 : str, len);
-> +       strscpy(modalias, chr ? chr + 1 : str, len);
->
->         return true;
->  }
-> @@ -822,7 +822,7 @@ void acpi_set_modalias(struct acpi_device *adev, const char *default_id,
->                        char *modalias, size_t len)
->  {
->         if (!acpi_of_modalias(adev, modalias, len))
-> -               strlcpy(modalias, default_id, len);
-> +               strscpy(modalias, default_id, len);
->  }
->  EXPORT_SYMBOL_GPL(acpi_set_modalias);
->
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index 16a1663d02d4..1778016ea895 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -787,7 +787,7 @@ static int acpi_processor_setup_cstates(struct acpi_processor *pr)
->
->                 state = &drv->states[count];
->                 snprintf(state->name, CPUIDLE_NAME_LEN, "C%d", i);
-> -               strlcpy(state->desc, cx->desc, CPUIDLE_DESC_LEN);
-> +               strscpy(state->desc, cx->desc, CPUIDLE_DESC_LEN);
->                 state->exit_latency = cx->latency;
->                 state->target_residency = cx->latency * latency_factor;
->                 state->enter = acpi_idle_enter;
-> @@ -956,7 +956,7 @@ static int acpi_processor_evaluate_lpi(acpi_handle handle,
->
->                 obj = pkg_elem + 9;
->                 if (obj->type == ACPI_TYPE_STRING)
-> -                       strlcpy(lpi_state->desc, obj->string.pointer,
-> +                       strscpy(lpi_state->desc, obj->string.pointer,
->                                 ACPI_CX_DESC_LEN);
->
->                 lpi_state->index = state_idx;
-> @@ -1022,7 +1022,7 @@ static bool combine_lpi_states(struct acpi_lpi_state *local,
->         result->arch_flags = parent->arch_flags;
->         result->index = parent->index;
->
-> -       strlcpy(result->desc, local->desc, ACPI_CX_DESC_LEN);
-> +       strscpy(result->desc, local->desc, ACPI_CX_DESC_LEN);
->         strlcat(result->desc, "+", ACPI_CX_DESC_LEN);
->         strlcat(result->desc, parent->desc, ACPI_CX_DESC_LEN);
->         return true;
-> @@ -1196,7 +1196,7 @@ static int acpi_processor_setup_lpi_states(struct acpi_processor *pr)
->
->                 state = &drv->states[i];
->                 snprintf(state->name, CPUIDLE_NAME_LEN, "LPI-%d", i);
-> -               strlcpy(state->desc, lpi->desc, CPUIDLE_DESC_LEN);
-> +               strscpy(state->desc, lpi->desc, CPUIDLE_DESC_LEN);
->                 state->exit_latency = lpi->wake_latency;
->                 state->target_residency = lpi->min_residency;
->                 if (lpi->arch_flags)
-> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-> index 5a7b8065e77f..4acd6f7d1395 100644
-> --- a/drivers/acpi/utils.c
-> +++ b/drivers/acpi/utils.c
-> @@ -878,7 +878,7 @@ bool acpi_dev_present(const char *hid, const char *uid, s64 hrv)
->         struct acpi_dev_match_info match = {};
->         struct device *dev;
->
-> -       strlcpy(match.hid[0].id, hid, sizeof(match.hid[0].id));
-> +       strscpy(match.hid[0].id, hid, sizeof(match.hid[0].id));
->         match.uid = uid;
->         match.hrv = hrv;
->
-> @@ -911,7 +911,7 @@ acpi_dev_get_next_match_dev(struct acpi_device *adev, const char *hid, const cha
->         struct acpi_dev_match_info match = {};
->         struct device *dev;
->
-> -       strlcpy(match.hid[0].id, hid, sizeof(match.hid[0].id));
-> +       strscpy(match.hid[0].id, hid, sizeof(match.hid[0].id));
->         match.uid = uid;
->         match.hrv = hrv;
->
-> @@ -961,7 +961,7 @@ EXPORT_SYMBOL(acpi_video_backlight_string);
->
->  static int __init acpi_backlight(char *str)
->  {
-> -       strlcpy(acpi_video_backlight_string, str,
-> +       strscpy(acpi_video_backlight_string, str,
->                 sizeof(acpi_video_backlight_string));
->         return 1;
->  }
-> --
+On Mon, 22 Aug 2022 21:18:53 +0300, Serge Semin wrote:
+> It's pretty possible to have the spi_register_controller() method
+> returning -EPROBE_DEFER status in case, for instance, if the GPIOs used
+> for the CS implementation aren't ready to be requested due to the
+> corresponding platform devices still pending to be probed. Let's make sure
+> the DW SSI driver won't print error message in that case by calling the
+> dev_err_probe() function if the SPI-registration procedure exited with
+> a non-zero status.
+> 
+> [...]
 
-Applied as 6.1 material, thanks!
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: dw: Add deferred controller registration support
+      commit: 52c135d495ca019abbacf063f5ef43bd5b189070
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

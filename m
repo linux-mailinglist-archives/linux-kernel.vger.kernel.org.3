@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D0159E2A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D464759DD43
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357395AbiHWLGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S1350442AbiHWLDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356905AbiHWLEK (ORCPT
+        with ESMTP id S1357397AbiHWLCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:04:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2993B2D8C;
-        Tue, 23 Aug 2022 02:15:13 -0700 (PDT)
+        Tue, 23 Aug 2022 07:02:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441A2B0B31;
+        Tue, 23 Aug 2022 02:14:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75719B81C89;
-        Tue, 23 Aug 2022 09:14:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D66EAC433D7;
-        Tue, 23 Aug 2022 09:14:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5E4B60F85;
+        Tue, 23 Aug 2022 09:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF335C433C1;
+        Tue, 23 Aug 2022 09:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246069;
-        bh=MCE+uIiIuB/Uh9Iht3jUtdPKJvJ8Z8u25fHMsaDGZCE=;
+        s=korg; t=1661246094;
+        bh=H8zKAP2GVQ+txb/T0C5yinAoxu0tC3loh6dAjeV3vrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rkZ68ZnTeQs2+iWkLpdJsRG4yjxTpH/Neglz1ge2XKH8yc/0zw28MdzFZRd3u8Cyp
-         +S/2e8fXOHKSxJnSI1LxJi4qvi5QtLYxhC30RkU0PXcNQh03CFkQ+6TbnW9fCHqEBX
-         jaKnsUfijVfWspbzzIDjZ4NPokGYzBc9dGNaYCIg=
+        b=YMOcSd7Ck/XlfhrP3TTJWXcr4Fq3516xepPnM7mBUBInBSXmp9YEf8j10XloLk+HE
+         5d/2NFn1Vi0WhugmTvp/G0JFsqmsK5ypKG5360ha131AIOn2wKgnUyTGiVIGkiX0/c
+         83UrnDzMYWoIgG+WPaVf3qH4BCqSJctlzcsnS2Cs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 272/287] vfio: Clear the caps->buf to NULL after free
-Date:   Tue, 23 Aug 2022 10:27:21 +0200
-Message-Id: <20220823080110.542528037@linuxfoundation.org>
+Subject: [PATCH 4.19 273/287] mips: cavium-octeon: Fix missing of_node_put() in octeon2_usb_clocks_start
+Date:   Tue, 23 Aug 2022 10:27:22 +0200
+Message-Id: <20220823080110.583375750@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -56,35 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Schspa Shi <schspa@gmail.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 6641085e8d7b3f061911517f79a2a15a0a21b97b ]
+[ Upstream commit 7a9f743ceead60ed454c46fbc3085ee9a79cbebb ]
 
-On buffer resize failure, vfio_info_cap_add() will free the buffer,
-report zero for the size, and return -ENOMEM.  As additional
-hardening, also clear the buffer pointer to prevent any chance of a
-double free.
+We should call of_node_put() for the reference 'uctl_node' returned by
+of_get_parent() which will increase the refcount. Otherwise, there will
+be a refcount leak bug.
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
-Link: https://lore.kernel.org/r/20220629022948.55608-1-schspa@gmail.com
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vfio/vfio.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/cavium-octeon/octeon-platform.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-index 7a386fb30bf1..0d146b45e0b4 100644
---- a/drivers/vfio/vfio.c
-+++ b/drivers/vfio/vfio.c
-@@ -1808,6 +1808,7 @@ struct vfio_info_cap_header *vfio_info_cap_add(struct vfio_info_cap *caps,
- 	buf = krealloc(caps->buf, caps->size + size, GFP_KERNEL);
- 	if (!buf) {
- 		kfree(caps->buf);
-+		caps->buf = NULL;
- 		caps->size = 0;
- 		return ERR_PTR(-ENOMEM);
+diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
+index 4d83f5bc7211..54c8389decda 100644
+--- a/arch/mips/cavium-octeon/octeon-platform.c
++++ b/arch/mips/cavium-octeon/octeon-platform.c
+@@ -86,11 +86,12 @@ static void octeon2_usb_clocks_start(struct device *dev)
+ 					 "refclk-frequency", &clock_rate);
+ 		if (i) {
+ 			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
++			of_node_put(uctl_node);
+ 			goto exit;
+ 		}
+ 		i = of_property_read_string(uctl_node,
+ 					    "refclk-type", &clock_type);
+-
++		of_node_put(uctl_node);
+ 		if (!i && strcmp("crystal", clock_type) == 0)
+ 			is_crystal_clock = true;
  	}
 -- 
 2.35.1

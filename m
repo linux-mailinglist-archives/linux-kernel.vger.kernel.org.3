@@ -2,218 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9782B59CD10
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3889659CD16
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiHWAQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 20:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S238751AbiHWAQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 20:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239118AbiHWAQZ (ORCPT
+        with ESMTP id S239122AbiHWAQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 20:16:25 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097DC2645
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:15:41 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27N0FV6k107065;
-        Mon, 22 Aug 2022 19:15:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661213731;
-        bh=1pvEIPM5APQYIyVk9xEPtDo5fZUVbe90+kCOuMJEMmk=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=Awm180sKAWTrh07acCCEnY52GRYqhnpHRsphg0OJ+jnrF0uHtcBpv532TesA+SuBs
-         Xjh56JsdQ9ChlSkV7s58fjW0ZE6SovCBUTMjQKO25fNoSV7CrUR1Gm7QBF5e5tVagt
-         5o7ciiVUgIxAyK5vFIZhnb2HcwHEMDCmGaeCP0gM=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27N0FVRc046189
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 Aug 2022 19:15:31 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 22
- Aug 2022 19:15:31 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 22 Aug 2022 19:15:30 -0500
-Received: from [10.250.35.81] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27N0FUmo067307;
-        Mon, 22 Aug 2022 19:15:30 -0500
-Message-ID: <c09c1ff3-5be4-71e0-ba76-d96da1e49501@ti.com>
-Date:   Mon, 22 Aug 2022 19:15:30 -0500
+        Mon, 22 Aug 2022 20:16:26 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2844A18C
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:15:55 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id p9so10830314pfq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=5ONLOfjRsoyPNCSm/9MdBrJPI+jYBbaqSy2BAfAUm/Q=;
+        b=OkDfM0p2XEu+RyEIar6eQhsqQQAAvfk5Y2ZPxRZvU28SOe4SV20koCjbQp5WYjV4MV
+         10gDz1F5TcGWIN808P9wVGirnJYR45Bt4Z2T8MsF5VvTDh3GS7EPh28GF/ta2jmIFGss
+         PzvrdDz10j8/IoefmrDSD23meeYWgxV+B2YhU+mtXDNWT805kwcHSOoo/HlFxaP40rnz
+         poybFV1BbAE1QkifbrdVRWaYUv0wow4JkyiN//9CoBd0Ck0hBgIxi0BPjRKFNFYQE05+
+         dvEIvK/A/DjdDqToAX2Iwx4TDgN1D7VmcjolXuL/ucnPneinOEZEWKKUksBc44dV3BI3
+         Ml4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=5ONLOfjRsoyPNCSm/9MdBrJPI+jYBbaqSy2BAfAUm/Q=;
+        b=aIhW9ncbREaJcgkAJXjoQtqO0A4XFuHsPqafiyC6O3VGv4wAxUDNWH3ow12d0+zTqV
+         +n1OLNohgNc0iM7drQZPvza/2bVmQoDtRcN6Tuqok/sLAbYmFba9fTdZQqlDbq/voY5J
+         O+jwKIym1TzzH/3tmAKaXR1X6QPFtpL85bOe24ZdeEbTmX5SzOFmH584UqGwdPIldz65
+         D8bQlo1lbM3pftbXQa26qqhVG/AVg7xsNvfdrE/MNwn/KNk2ek5GR3EhoUOcd0HqZLAT
+         H889qZbgzl3nyl50U19la7TKjkWKWvqlXUzT7T0ykjd7Larzhma6pFTsHc+Y8uyv5iqZ
+         HSnw==
+X-Gm-Message-State: ACgBeo0q+xOKUVO0GQxWsWqnf3yg/i2F0mshicPTaFlYE+0Tq0dghgZk
+        dkS1qY/9wkqybt5yBnbOi5CgBQ==
+X-Google-Smtp-Source: AA6agR5bcsmhKNFUmJDECvCD72+wAIOTlxVXT6dxVHmC9aW2Q+UHWDFuOGMUuBSeKiY0xtcD2Gl16Q==
+X-Received: by 2002:a63:1208:0:b0:423:c60e:ed09 with SMTP id h8-20020a631208000000b00423c60eed09mr18237602pgl.385.1661213755177;
+        Mon, 22 Aug 2022 17:15:55 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m11-20020a170902db0b00b001637529493esm9055688plx.66.2022.08.22.17.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 17:15:54 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 00:15:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
+        leobras@redhat.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org
+Subject: Re: [PATCH] KVM: x86: Always enable legacy fp/sse
+Message-ID: <YwQcN0GKMeZXNmhF@google.com>
+References: <20220816175936.23238-1-dgilbert@redhat.com>
+ <YvwODUu/rdzjzDjk@google.com>
+ <YvzK+slWoAvm0/Wn@work-vm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm: Move radeon and amdgpu Kconfig options into their
- directories
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20220823000111.9765-1-afd@ti.com>
- <a5f03c19-faeb-9a64-a214-8f6a0552e8dc@infradead.org>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <a5f03c19-faeb-9a64-a214-8f6a0552e8dc@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvzK+slWoAvm0/Wn@work-vm>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/22/22 7:06 PM, Randy Dunlap wrote:
-> Hi--
+On Wed, Aug 17, 2022, Dr. David Alan Gilbert wrote:
+> * Sean Christopherson (seanjc@google.com) wrote:
+> > On Tue, Aug 16, 2022, Dr. David Alan Gilbert (git) wrote:
+> > > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> > > index de6d44e07e34..3b2319cecfd1 100644
+> > > --- a/arch/x86/kvm/cpuid.c
+> > > +++ b/arch/x86/kvm/cpuid.c
+> > > @@ -298,7 +298,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+> > >  	guest_supported_xcr0 =
+> > >  		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
+> > >  
+> > > -	vcpu->arch.guest_fpu.fpstate->user_xfeatures = guest_supported_xcr0;
+> > > +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = guest_supported_xcr0 |
+> > > +		XFEATURE_MASK_FPSSE;
 > 
-> On 8/22/22 17:01, Andrew Davis wrote:
->> Most Kconfig options to enable a driver are in the Kconfig file
->> inside the relevant directory, move these two to the same.
->>
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> ---
->>   drivers/gpu/drm/Kconfig            | 42 ------------------------------
->>   drivers/gpu/drm/amd/amdgpu/Kconfig | 22 ++++++++++++++++
->>   drivers/gpu/drm/radeon/Kconfig     | 22 ++++++++++++++++
->>   3 files changed, 44 insertions(+), 42 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
->> index 6c2256e8474b..24fa9ccd92a4 100644
->> --- a/drivers/gpu/drm/Kconfig
->> +++ b/drivers/gpu/drm/Kconfig
->> @@ -234,50 +234,8 @@ source "drivers/gpu/drm/i2c/Kconfig"
->>   
->>   source "drivers/gpu/drm/arm/Kconfig"
->>   
->> -config DRM_RADEON
->> -	tristate "ATI Radeon"
->> -	depends on DRM && PCI && MMU
->> -	depends on AGP || !AGP
->> -	select FW_LOADER
->> -	select DRM_DISPLAY_DP_HELPER
->> -	select DRM_DISPLAY_HELPER
->> -        select DRM_KMS_HELPER
->> -        select DRM_TTM
->> -	select DRM_TTM_HELPER
->> -	select POWER_SUPPLY
->> -	select HWMON
->> -	select BACKLIGHT_CLASS_DEVICE
->> -	select INTERVAL_TREE
->> -	help
->> -	  Choose this option if you have an ATI Radeon graphics card.  There
->> -	  are both PCI and AGP versions.  You don't need to choose this to
->> -	  run the Radeon in plain VGA mode.
->> -
->> -	  If M is selected, the module will be called radeon.
->> -
->>   source "drivers/gpu/drm/radeon/Kconfig"
->>   
->> -config DRM_AMDGPU
->> -	tristate "AMD GPU"
->> -	depends on DRM && PCI && MMU
->> -	select FW_LOADER
->> -	select DRM_DISPLAY_DP_HELPER
->> -	select DRM_DISPLAY_HDMI_HELPER
->> -	select DRM_DISPLAY_HELPER
->> -	select DRM_KMS_HELPER
->> -	select DRM_SCHED
->> -	select DRM_TTM
->> -	select DRM_TTM_HELPER
->> -	select POWER_SUPPLY
->> -	select HWMON
->> -	select BACKLIGHT_CLASS_DEVICE
->> -	select INTERVAL_TREE
->> -	select DRM_BUDDY
->> -	help
->> -	  Choose this option if you have a recent AMD Radeon graphics card.
->> -
->> -	  If M is selected, the module will be called amdgpu.
->> -
->>   source "drivers/gpu/drm/amd/amdgpu/Kconfig"
->>   
->>   source "drivers/gpu/drm/nouveau/Kconfig"
->> diff --git a/drivers/gpu/drm/amd/amdgpu/Kconfig b/drivers/gpu/drm/amd/amdgpu/Kconfig
->> index 7777d55275de..36b1206124cf 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/Kconfig
->> +++ b/drivers/gpu/drm/amd/amdgpu/Kconfig
->> @@ -1,4 +1,26 @@
->>   # SPDX-License-Identifier: MIT
->> +
->> +config DRM_AMDGPU
->> +	tristate "AMD GPU"
->> +	depends on DRM && PCI && MMU
->> +	select FW_LOADER
->> +	select DRM_DISPLAY_DP_HELPER
->> +	select DRM_DISPLAY_HDMI_HELPER
->> +	select DRM_DISPLAY_HELPER
->> +	select DRM_KMS_HELPER
->> +	select DRM_SCHED
->> +	select DRM_TTM
->> +	select DRM_TTM_HELPER
->> +	select POWER_SUPPLY
->> +	select HWMON
->> +	select BACKLIGHT_CLASS_DEVICE
->> +	select INTERVAL_TREE
->> +	select DRM_BUDDY
->> +	help
->> +	  Choose this option if you have a recent AMD Radeon graphics card.
->> +
->> +	  If M is selected, the module will be called amdgpu.
->> +
->>   config DRM_AMDGPU_SI
->>   	bool "Enable amdgpu support for SI parts"
->>   	depends on DRM_AMDGPU
->> diff --git a/drivers/gpu/drm/radeon/Kconfig b/drivers/gpu/drm/radeon/Kconfig
->> index 52819e7f1fca..3248d12c562d 100644
->> --- a/drivers/gpu/drm/radeon/Kconfig
->> +++ b/drivers/gpu/drm/radeon/Kconfig
->> @@ -1,4 +1,26 @@
->>   # SPDX-License-Identifier: MIT
->> +
->> +config DRM_RADEON
->> +	tristate "ATI Radeon"
->> +	depends on DRM && PCI && MMU
->> +	depends on AGP || !AGP
->> +	select FW_LOADER
->> +	select DRM_DISPLAY_DP_HELPER
->> +	select DRM_DISPLAY_HELPER
->> +        select DRM_KMS_HELPER
->> +        select DRM_TTM
+> Hi Sean,
+>   Thanks for the reply,
 > 
-> Would you change those 2 lines above to use one tab + 2 spaces
-> for indentation, please?
+> > I don't think this is correct.  This will allow the guest to set the SSE bit
+> > even when XSAVE isn't supported due to kvm_guest_supported_xcr0() returning
+> > user_xfeatures.
+> > 
+> >   static inline u64 kvm_guest_supported_xcr0(struct kvm_vcpu *vcpu)
+> >   {
+> > 	return vcpu->arch.guest_fpu.fpstate->user_xfeatures;
+> >   }
+> > 
+> > I believe the right place to fix this is in validate_user_xstate_header().  It's
+> > reachable if and only if XSAVE is supported in the host, and when XSAVE is _not_
+> > supported, the kernel unconditionally allows FP+SSE.  So it follows that the kernel
+> > should also allow FP+SSE when using XSAVE too.  That would also align the logic
+> > with fpu_copy_guest_fpstate_to_uabi(), which fordces the FPSSE flags.  Ditto for
+> > the non-KVM save_xstate_epilog().
 > 
-
-
-Sure, I just copy/paste exactly as they are in the top level Kconfig,
-white-space issues and all, to make it easy to see that nothing was changed.
-
-I can fix the indent issue in a followup patch if that work better.
-Whichever works better.
-
-Andrew
-
-
->> +	select DRM_TTM_HELPER
->> +	select POWER_SUPPLY
->> +	select HWMON
->> +	select BACKLIGHT_CLASS_DEVICE
->> +	select INTERVAL_TREE
->> +	help
->> +	  Choose this option if you have an ATI Radeon graphics card.  There
->> +	  are both PCI and AGP versions.  You don't need to choose this to
->> +	  run the Radeon in plain VGA mode.
->> +
->> +	  If M is selected, the module will be called radeon.
->> +
->>   config DRM_RADEON_USERPTR
->>   	bool "Always enable userptr support"
->>   	depends on DRM_RADEON
+> OK, yes, I'd followed the check that failed down to this test; although
+> by itself this test works until Leo's patch came along later; so I
+> wasn't sure where to fix it.
 > 
+> > Aha!  And fpu__init_system_xstate() ensure the host supports FP+SSE when XSAVE
+> > is enabled (knew their had to be a sanity check somewhere).
+> > 
+> > ---
+> >  arch/x86/kernel/fpu/xstate.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> > index c8340156bfd2..83b9a9653d47 100644
+> > --- a/arch/x86/kernel/fpu/xstate.c
+> > +++ b/arch/x86/kernel/fpu/xstate.c
+> > @@ -399,8 +399,13 @@ int xfeature_size(int xfeature_nr)
+> >  static int validate_user_xstate_header(const struct xstate_header *hdr,
+> >  				       struct fpstate *fpstate)
+> >  {
+> > -	/* No unknown or supervisor features may be set */
+> > -	if (hdr->xfeatures & ~fpstate->user_xfeatures)
+> > +	/*
+> > +	 * No unknown or supervisor features may be set.  Userspace is always
+> > +	 * allowed to restore FP+SSE state (XSAVE/XRSTOR are used by the kernel
+> > +	 * if and only if FP+SSE are supported in xstate).
+> > +	 */
+> > +	if (hdr->xfeatures & ~fpstate->user_xfeatures &
+> > +	    ~(XFEATURE_MASK_FP | XFEATURE_MASK_SSE))
+> >  		return -EINVAL;
+> > 
+> >  	/* Userspace must use the uncompacted format */
+> 
+> That passes the small smoke test for me; will you repost that then?
+
+*sigh*
+
+The bug is more subtle than just failing to restore.  Saving can also "fail".  If
+XSAVE is hidden from the guest on an XSAVE-capable host, __copy_xstate_to_uabi_buf()
+will happily reinitialize FP+SSE state and thus corrupt guest FPU state on migration.
+
+And not that it matters now, but before realizing that KVM_GET_XSAVE is also broken,
+I decided I like Dave's patch better because KVM really should separate what userspace
+can save/restore from what the guest can access.
+
+Amusingly, there's actually another bug lurking with respect to usurping user_xfeatures
+to represent supported_guest_xcr0.  The latter is zero-initialized, whereas
+user_xfeatures is set to the "default" features on initialization, i.e. migrating a
+VM without ever doing KVM_SET_CPUID2 would do odd things.
+
+Sending a v2 shortly to reinstate guest_supported_xcr0 before landing Dave's patch.

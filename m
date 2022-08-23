@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4D859D79B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0CC59D665
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349061AbiHWJXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        id S243864AbiHWIaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349933AbiHWJVO (ORCPT
+        with ESMTP id S245198AbiHWI0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:21:14 -0400
+        Tue, 23 Aug 2022 04:26:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4C08A7E4;
-        Tue, 23 Aug 2022 01:34:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B5F6C137;
+        Tue, 23 Aug 2022 01:14:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28301B81C4C;
-        Tue, 23 Aug 2022 08:33:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7945AC433D6;
-        Tue, 23 Aug 2022 08:33:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AA0DB81C3A;
+        Tue, 23 Aug 2022 08:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 754E7C433C1;
+        Tue, 23 Aug 2022 08:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243604;
-        bh=mwmDbCfw/ao0izZKovfnIvnOORITV54RWHghuELPKFg=;
+        s=korg; t=1661242468;
+        bh=wpt7uKioQEW6C34e+ng7mA8HJn1XgbnbQsHPjPhBV4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HZVGWGz+ehC/nk/FSVG6XcBEX9vW2svqCJf89hZ/dn5ugJx+jrCRKIIeRlTZnx+t8
-         nLGC/k6Qh2vIIBsdTFs5nOsBPaiePxU7oEyfGF4jRUhGPGE9ckiBfMdNrs1GR0+R2f
-         BePyXx2BHIO1A5P7HBT+NBrTSWWMGcPZKCLvhtbE=
+        b=lK801emb3R7XX2spzOxIHt7krfq/6z94EmtuF+cDFkD4K1HJB/D9t5ddyPoXOENam
+         oPwF/65TmLPj1r4KkL+Ow4hEWuTnciaD5aG4oEMkZO6FeTUWxuRky8IORS6R6xytsE
+         ARo1fDGG+aDk/ZDml2+FVz4DLz3cbamZS7+G6oR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 328/365] ASoC: SOF: Intel: cnl: Do not process IPC reply before firmware boot
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 4.9 076/101] xen/xenbus: fix return type in xenbus_file_read()
 Date:   Tue, 23 Aug 2022 10:03:49 +0200
-Message-Id: <20220823080131.919228424@linuxfoundation.org>
+Message-Id: <20220823080037.476671583@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,94 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit acacd9eefd0def5a83244d88e5483b5f38ee7287 ]
+commit 32ad11127b95236dfc52375f3707853194a7f4b4 upstream.
 
-It is not yet clear, but it is possible to create a firmware so broken
-that it will send a reply message before a FW_READY message (it is not
-yet clear if FW_READY will arrive later).
-Since the reply_data is allocated only after the FW_READY message, this
-will lead to a NULL pointer dereference if not filtered out.
+This code tries to store -EFAULT in an unsigned int.  The
+xenbus_file_read() function returns type ssize_t so the negative value
+is returned as a positive value to the user.
 
-The issue was reported with IPC4 firmware but the same condition is present
-for IPC3.
+This change forces another change to the min() macro.  Originally, the
+min() macro used "unsigned" type which checkpatch complains about.  Also
+unsigned type would break if "len" were not capped at MAX_RW_COUNT.  Use
+size_t for the min().  (No effect on runtime for the min_t() change).
 
-Reported-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220712122357.31282-2-peter.ujfalusi@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 2fb3683e7b16 ("xen: Add xenbus device driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Link: https://lore.kernel.org/r/YutxJUaUYRG/VLVc@kili
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sof/intel/cnl.c | 37 ++++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 13 deletions(-)
+ drivers/xen/xenbus/xenbus_dev_frontend.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/sof/intel/cnl.c b/sound/soc/sof/intel/cnl.c
-index cd6e5f8a5eb4..6c98f65635fc 100644
---- a/sound/soc/sof/intel/cnl.c
-+++ b/sound/soc/sof/intel/cnl.c
-@@ -60,17 +60,23 @@ irqreturn_t cnl_ipc4_irq_thread(int irq, void *context)
+--- a/drivers/xen/xenbus/xenbus_dev_frontend.c
++++ b/drivers/xen/xenbus/xenbus_dev_frontend.c
+@@ -122,7 +122,7 @@ static ssize_t xenbus_file_read(struct f
+ {
+ 	struct xenbus_file_priv *u = filp->private_data;
+ 	struct read_buffer *rb;
+-	unsigned i;
++	ssize_t i;
+ 	int ret;
  
- 		if (primary & SOF_IPC4_MSG_DIR_MASK) {
- 			/* Reply received */
--			struct sof_ipc4_msg *data = sdev->ipc->msg.reply_data;
-+			if (likely(sdev->fw_state == SOF_FW_BOOT_COMPLETE)) {
-+				struct sof_ipc4_msg *data = sdev->ipc->msg.reply_data;
+ 	mutex_lock(&u->reply_mutex);
+@@ -142,7 +142,7 @@ again:
+ 	rb = list_entry(u->read_buffers.next, struct read_buffer, list);
+ 	i = 0;
+ 	while (i < len) {
+-		unsigned sz = min((unsigned)len - i, rb->len - rb->cons);
++		size_t sz = min_t(size_t, len - i, rb->len - rb->cons);
  
--			data->primary = primary;
--			data->extension = extension;
-+				data->primary = primary;
-+				data->extension = extension;
+ 		ret = copy_to_user(ubuf + i, &rb->msg[rb->cons], sz);
  
--			spin_lock_irq(&sdev->ipc_lock);
-+				spin_lock_irq(&sdev->ipc_lock);
- 
--			snd_sof_ipc_get_reply(sdev);
--			snd_sof_ipc_reply(sdev, data->primary);
-+				snd_sof_ipc_get_reply(sdev);
-+				snd_sof_ipc_reply(sdev, data->primary);
- 
--			spin_unlock_irq(&sdev->ipc_lock);
-+				spin_unlock_irq(&sdev->ipc_lock);
-+			} else {
-+				dev_dbg_ratelimited(sdev->dev,
-+						    "IPC reply before FW_READY: %#x|%#x\n",
-+						    primary, extension);
-+			}
- 		} else {
- 			/* Notification received */
- 			notification_data.primary = primary;
-@@ -124,15 +130,20 @@ irqreturn_t cnl_ipc_irq_thread(int irq, void *context)
- 					CNL_DSP_REG_HIPCCTL,
- 					CNL_DSP_REG_HIPCCTL_DONE, 0);
- 
--		spin_lock_irq(&sdev->ipc_lock);
-+		if (likely(sdev->fw_state == SOF_FW_BOOT_COMPLETE)) {
-+			spin_lock_irq(&sdev->ipc_lock);
- 
--		/* handle immediate reply from DSP core */
--		hda_dsp_ipc_get_reply(sdev);
--		snd_sof_ipc_reply(sdev, msg);
-+			/* handle immediate reply from DSP core */
-+			hda_dsp_ipc_get_reply(sdev);
-+			snd_sof_ipc_reply(sdev, msg);
- 
--		cnl_ipc_dsp_done(sdev);
-+			cnl_ipc_dsp_done(sdev);
- 
--		spin_unlock_irq(&sdev->ipc_lock);
-+			spin_unlock_irq(&sdev->ipc_lock);
-+		} else {
-+			dev_dbg_ratelimited(sdev->dev, "IPC reply before FW_READY: %#x\n",
-+					    msg);
-+		}
- 
- 		ipc_irq = true;
- 	}
--- 
-2.35.1
-
 
 

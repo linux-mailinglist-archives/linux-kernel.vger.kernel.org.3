@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7367B59E1DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDF059E187
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353225AbiHWKLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S1356390AbiHWKrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352320AbiHWKCh (ORCPT
+        with ESMTP id S1355958AbiHWKlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7CFA2630;
-        Tue, 23 Aug 2022 01:51:07 -0700 (PDT)
+        Tue, 23 Aug 2022 06:41:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B22B2F658;
+        Tue, 23 Aug 2022 02:08:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5D256150F;
-        Tue, 23 Aug 2022 08:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2674C433C1;
-        Tue, 23 Aug 2022 08:51:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D847AB81C89;
+        Tue, 23 Aug 2022 09:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27919C433D6;
+        Tue, 23 Aug 2022 09:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244666;
-        bh=t9EAyhTB6WaOrs6vp1R5UqNAeAWhZro/XkIxBgAHZao=;
+        s=korg; t=1661245709;
+        bh=xfVhT/Ww2Zofb8/o0WAnWVFqM53cof+RjSCvjxrBhUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cfANHe7ae8ki5YsgBBeVvRiXmM/xOgZ/CR4W1WYJUAUEl/Yv1qaKjauTYFU42m9VP
-         FAjzgsbXqwLKh+EiQsR2R/1Uq8zStnG8dEWt5OUv0qyEG8SXMkFYb267XwRKyRXqDL
-         hT3N/Uakmq8Xbi9Zyl1aCg6CUfN3o+jS+B+ogI0s=
+        b=129IFzjyfTJ2SpfOq9rwqfkhw+2Dn3uka2o60N58hQm5YFunrfPuADx1xqgwRae/l
+         yOf/a8yxE8ruZpwNpgaceq4IkKwWMW/2ExRMxmQzmbssX/BxGS8qFvAjLoBTlgaPev
+         N51T8PcQMZo2YGwvKxcORH25Tv9X32693bfY8B4Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Subject: [PATCH 4.14 172/229] Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 164/287] iommu/arm-smmu: qcom_iommu: Add of_node_put() when breaking out of loop
 Date:   Tue, 23 Aug 2022 10:25:33 +0200
-Message-Id: <20220823080059.774255146@linuxfoundation.org>
+Message-Id: <20220823080106.255068628@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Liang He <windhl@126.com>
 
-commit 332f1795ca202489c665a75e62e18ff6284de077 upstream.
+[ Upstream commit a91eb6803c1c715738682fece095145cbd68fe0b ]
 
-The patch d0be8347c623: "Bluetooth: L2CAP: Fix use-after-free caused
-by l2cap_chan_put" from Jul 21, 2022, leads to the following Smatch
-static checker warning:
+In qcom_iommu_has_secure_context(), we should call of_node_put()
+for the reference 'child' when breaking out of for_each_child_of_node()
+which will automatically increase and decrease the refcount.
 
-        net/bluetooth/l2cap_core.c:1977 l2cap_global_chan_by_psm()
-        error: we previously assumed 'c' could be null (see line 1996)
-
-Fixes: d0be8347c623 ("Bluetooth: L2CAP: Fix use-after-free caused by l2cap_chan_put")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d051f28c8807 ("iommu/qcom: Initialize secure page table")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220719124955.1242171-1-windhl@126.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/l2cap_core.c |   13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/iommu/qcom_iommu.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -1804,11 +1804,11 @@ static struct l2cap_chan *l2cap_global_c
- 						   bdaddr_t *dst,
- 						   u8 link_type)
+diff --git a/drivers/iommu/qcom_iommu.c b/drivers/iommu/qcom_iommu.c
+index b0a4a3d2f60e..244e2f7eae84 100644
+--- a/drivers/iommu/qcom_iommu.c
++++ b/drivers/iommu/qcom_iommu.c
+@@ -767,9 +767,12 @@ static bool qcom_iommu_has_secure_context(struct qcom_iommu_dev *qcom_iommu)
  {
--	struct l2cap_chan *c, *c1 = NULL;
-+	struct l2cap_chan *c, *tmp, *c1 = NULL;
+ 	struct device_node *child;
  
- 	read_lock(&chan_list_lock);
+-	for_each_child_of_node(qcom_iommu->dev->of_node, child)
+-		if (of_device_is_compatible(child, "qcom,msm-iommu-v1-sec"))
++	for_each_child_of_node(qcom_iommu->dev->of_node, child) {
++		if (of_device_is_compatible(child, "qcom,msm-iommu-v1-sec")) {
++			of_node_put(child);
+ 			return true;
++		}
++	}
  
--	list_for_each_entry(c, &chan_list, global_l) {
-+	list_for_each_entry_safe(c, tmp, &chan_list, global_l) {
- 		if (state && c->state != state)
- 			continue;
- 
-@@ -1827,11 +1827,10 @@ static struct l2cap_chan *l2cap_global_c
- 			dst_match = !bacmp(&c->dst, dst);
- 			if (src_match && dst_match) {
- 				c = l2cap_chan_hold_unless_zero(c);
--				if (!c)
--					continue;
--
--				read_unlock(&chan_list_lock);
--				return c;
-+				if (c) {
-+					read_unlock(&chan_list_lock);
-+					return c;
-+				}
- 			}
- 
- 			/* Closest match */
+ 	return false;
+ }
+-- 
+2.35.1
+
 
 

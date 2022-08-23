@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6FA59E35B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D4459E046
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244084AbiHWMUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S1356800AbiHWLD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359550AbiHWMP4 (ORCPT
+        with ESMTP id S1357217AbiHWLBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:15:56 -0400
+        Tue, 23 Aug 2022 07:01:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3D6EA147;
-        Tue, 23 Aug 2022 02:41:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F63AF4A1;
+        Tue, 23 Aug 2022 02:14:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1F70614C4;
-        Tue, 23 Aug 2022 09:40:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECACC433C1;
-        Tue, 23 Aug 2022 09:40:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D95B66113E;
+        Tue, 23 Aug 2022 09:14:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5CFAC433C1;
+        Tue, 23 Aug 2022 09:14:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247652;
-        bh=HWPvRsRbImhp+mxkyDgXuQ+z0w/UFpkDqwsXmE51S2M=;
+        s=korg; t=1661246066;
+        bh=ajC9fmuZ+CPDrrB+BCdmcpwg5awUxWuQoxY0RGRfBJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P0hCKbEoY/4YTbA7bfMzdeTFft8xIIZQ3vMByWb9I9R7t3iQDoT+x0UeyKhLv6/3f
-         t5+6GIr12oULvvi8Rq5uGtDkvfJqIdTAdLE/+EW/AZYxza1bSN+V+rDu6R3MfG6MoO
-         UKSSmUUJQqcMWHj5vktlgZu6+GN38TZfcsPzeC/s=
+        b=x74m5uFGudiM/dZAwb3itbsHcgxdDeT9fPOQh5XRwnvckcQcsWoebX+sKMzMSqtV/
+         Y9PDRPKIh79TIXkH4mt8AXCSFvvnw/kJGJEhwyModoK+2N0ezo9GLg0AnO0nP0eFP8
+         ypwGub+0E5lvvrdh+FUtR9ZAAC9Ivi8LNUEVsVdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 073/158] ASoC: tas2770: Drop conflicting set_bias_level power setting
-Date:   Tue, 23 Aug 2022 10:26:45 +0200
-Message-Id: <20220823080049.005365066@linuxfoundation.org>
+        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
+        Matthias May <matthias.may@westermo.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 237/287] geneve: do not use RT_TOS for IPv6 flowlabel
+Date:   Tue, 23 Aug 2022 10:26:46 +0200
+Message-Id: <20220823080109.030375355@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Matthias May <matthias.may@westermo.com>
 
-commit 482c23fbc7e9bf5a7a74defd0735d5346215db58 upstream.
+commit ca2bb69514a8bc7f83914122f0d596371352416c upstream.
 
-The driver is setting the PWR_CTRL field in both the set_bias_level
-callback and on DAPM events of the DAC widget (and also in the
-mute_stream method). Drop the set_bias_level callback altogether as the
-power setting it does is in conflict with the other code paths.
+According to Guillaume Nault RT_TOS should never be used for IPv6.
 
-Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220808141246.5749-4-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Quote:
+RT_TOS() is an old macro used to interprete IPv4 TOS as described in
+the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
+code, although, given the current state of the code, most of the
+existing calls have no consequence.
+
+But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
+field to be interpreted the RFC 1349 way. There's no historical
+compatibility to worry about.
+
+Fixes: 3a56f86f1be6 ("geneve: handle ipv6 priority like ipv4 tos")
+Acked-by: Guillaume Nault <gnault@redhat.com>
+Signed-off-by: Matthias May <matthias.may@westermo.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/tas2770.c |   33 ---------------------------------
- 1 file changed, 33 deletions(-)
+ drivers/net/geneve.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -46,38 +46,6 @@ static void tas2770_reset(struct tas2770
- 	usleep_range(1000, 2000);
- }
+--- a/drivers/net/geneve.c
++++ b/drivers/net/geneve.c
+@@ -799,8 +799,7 @@ static struct dst_entry *geneve_get_v6_d
+ 		use_cache = false;
+ 	}
  
--static int tas2770_set_bias_level(struct snd_soc_component *component,
--				 enum snd_soc_bias_level level)
--{
--	struct tas2770_priv *tas2770 =
--			snd_soc_component_get_drvdata(component);
--
--	switch (level) {
--	case SND_SOC_BIAS_ON:
--		snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
--					      TAS2770_PWR_CTRL_MASK,
--					      TAS2770_PWR_CTRL_ACTIVE);
--		break;
--	case SND_SOC_BIAS_STANDBY:
--	case SND_SOC_BIAS_PREPARE:
--		snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
--					      TAS2770_PWR_CTRL_MASK,
--					      TAS2770_PWR_CTRL_MUTE);
--		break;
--	case SND_SOC_BIAS_OFF:
--		snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
--					      TAS2770_PWR_CTRL_MASK,
--					      TAS2770_PWR_CTRL_SHUTDOWN);
--		break;
--
--	default:
--		dev_err(tas2770->dev, "wrong power level setting %d\n", level);
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
- #ifdef CONFIG_PM
- static int tas2770_codec_suspend(struct snd_soc_component *component)
- {
-@@ -555,7 +523,6 @@ static const struct snd_soc_component_dr
- 	.probe			= tas2770_codec_probe,
- 	.suspend		= tas2770_codec_suspend,
- 	.resume			= tas2770_codec_resume,
--	.set_bias_level = tas2770_set_bias_level,
- 	.controls		= tas2770_snd_controls,
- 	.num_controls		= ARRAY_SIZE(tas2770_snd_controls),
- 	.dapm_widgets		= tas2770_dapm_widgets,
+-	fl6->flowlabel = ip6_make_flowinfo(RT_TOS(prio),
+-					   info->key.label);
++	fl6->flowlabel = ip6_make_flowinfo(prio, info->key.label);
+ 	dst_cache = (struct dst_cache *)&info->dst_cache;
+ 	if (use_cache) {
+ 		dst = dst_cache_get_ip6(dst_cache, &fl6->saddr);
 
 

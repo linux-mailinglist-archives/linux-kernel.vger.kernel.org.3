@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1494459D37E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072EE59D6F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242179AbiHWIPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S1348790AbiHWJOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242132AbiHWIKn (ORCPT
+        with ESMTP id S243264AbiHWJLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:10:43 -0400
+        Tue, 23 Aug 2022 05:11:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785FF69F6C;
-        Tue, 23 Aug 2022 01:07:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00646D546;
+        Tue, 23 Aug 2022 01:31:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14CA26123F;
-        Tue, 23 Aug 2022 08:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7FFC433C1;
-        Tue, 23 Aug 2022 08:07:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69F1C61446;
+        Tue, 23 Aug 2022 08:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73115C433D7;
+        Tue, 23 Aug 2022 08:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242074;
-        bh=HGZuHszCVXMKiPLMwr7I2qv6J3qZJWqweO7wKCDi7TU=;
+        s=korg; t=1661243491;
+        bh=5GyLM1CyVv10Ove+YIIf3oMlmnKfA55OKySxx0jDfxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eWBkwSH5vctso18R54dKOKIMCC6sGN4R5dwTiHh8t7dKj9Z4KWtL4BEzeerE57kp3
-         T2/GcxGkvuqcn38NcdcdzEgOy3VmwO9vfGhbrUpYHQOIjqXtYIDQPJ2aBL7hx/T2B5
-         CZx3XMeybHjhQhQ07JvgsevgU87RZTu3kgvfRlUY=
+        b=2e5dBniPRzaeLNIQZWm4IECGo5A6fHMoL6FniSrwqIN8V6lrDJwxcDChr9zjWV6sz
+         3HHtHUSFrZfX9/WEjWO82lY/ZDuWoRWGpeBpmTTXMdGJRzukcnKYMpBEu/BOoiziPV
+         8Jxhkgss2QpRcdkEqJ71Wv+/BJQ8xGYV6e0JWFWU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Alexander Grund <theflamefire89@gmail.com>
-Subject: [PATCH 4.9 015/101] selinux: fix inode_doinit_with_dentry() LABEL_INVALID error handling
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 267/365] PCI: aardvark: Fix reporting Slot capabilities on emulated bridge
 Date:   Tue, 23 Aug 2022 10:02:48 +0200
-Message-Id: <20220823080035.146702826@linuxfoundation.org>
+Message-Id: <20220823080129.356964313@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,97 +57,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 200ea5a2292dc444a818b096ae6a32ba3caa51b9 upstream.
+[ Upstream commit bcdb6fd4f3e9ac1097698c8d8f56b70853b49873 ]
 
-A previous fix, commit 83370b31a915 ("selinux: fix error initialization
-in inode_doinit_with_dentry()"), changed how failures were handled
-before a SELinux policy was loaded.  Unfortunately that patch was
-potentially problematic for two reasons: it set the isec->initialized
-state without holding a lock, and it didn't set the inode's SELinux
-label to the "default" for the particular filesystem.  The later can
-be a problem if/when a later attempt to revalidate the inode fails
-and SELinux reverts to the existing inode label.
+Slot capabilities are currently not reported because emulated bridge does
+not report the PCI_EXP_FLAGS_SLOT flag.
 
-This patch should restore the default inode labeling that existed
-before the original fix, without affecting the LABEL_INVALID marking
-such that revalidation will still be attempted in the future.
+Set PCI_EXP_FLAGS_SLOT to let the kernel know that PCI_EXP_SLT* registers
+are supported.
 
-Fixes: 83370b31a915 ("selinux: fix error initialization in inode_doinit_with_dentry()")
-Reported-by: Sven Schnelle <svens@linux.ibm.com>
-Tested-by: Sven Schnelle <svens@linux.ibm.com>
-Reviewed-by: Ondrej Mosnacek <omosnace@redhat.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Alexander Grund <theflamefire89@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Move setting of PCI_EXP_SLTCTL register from "dynamic" pcie_conf_read
+function to static buffer as it is only statically filled the
+PCI_EXP_SLTSTA_PDS flag and dynamic read callback is not needed for this
+register.
+
+Set Presence State Bit to 1 since there is no support for unplugging the
+card and there is currently no platform able to detect presence of a card -
+in such a case the bit needs to be set to 1.
+
+Finally correctly set Physical Slot Number to 1 since there is only one
+port and zero value is reserved for ports within the same silicon as Root
+Port which is not our case for Aardvark HW.
+
+Link: https://lore.kernel.org/r/20220524132827.8837-3-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/selinux/hooks.c |   31 +++++++++++++------------------
- 1 file changed, 13 insertions(+), 18 deletions(-)
+ drivers/pci/controller/pci-aardvark.c | 33 +++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -1450,13 +1450,7 @@ static int inode_doinit_with_dentry(stru
- 			 * inode_doinit with a dentry, before these inodes could
- 			 * be used again by userspace.
- 			 */
--			isec->initialized = LABEL_INVALID;
--			/*
--			 * There is nothing useful to jump to the "out"
--			 * label, except a needless spin lock/unlock
--			 * cycle.
--			 */
--			return 0;
-+			goto out_invalid;
- 		}
+diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+index ffec82c8a523..62db476a8651 100644
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -8,6 +8,7 @@
+  * Author: Hezi Shahmoon <hezi.shahmoon@marvell.com>
+  */
  
- 		len = INITCONTEXTLEN;
-@@ -1564,15 +1558,8 @@ static int inode_doinit_with_dentry(stru
- 			 * inode_doinit() with a dentry, before these inodes
- 			 * could be used again by userspace.
- 			 */
--			if (!dentry) {
--				isec->initialized = LABEL_INVALID;
--				/*
--				 * There is nothing useful to jump to the "out"
--				 * label, except a needless spin lock/unlock
--				 * cycle.
--				 */
--				return 0;
--			}
-+			if (!dentry)
-+				goto out_invalid;
- 			rc = selinux_genfs_get_sid(dentry, sclass,
- 						   sbsec->flags, &sid);
- 			dput(dentry);
-@@ -1585,11 +1572,10 @@ static int inode_doinit_with_dentry(stru
- out:
- 	spin_lock(&isec->lock);
- 	if (isec->initialized == LABEL_PENDING) {
--		if (!sid || rc) {
-+		if (rc) {
- 			isec->initialized = LABEL_INVALID;
- 			goto out_unlock;
- 		}
++#include <linux/bitfield.h>
+ #include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/interrupt.h>
+@@ -857,14 +858,11 @@ advk_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
+ 
+ 
+ 	switch (reg) {
+-	case PCI_EXP_SLTCTL:
+-		*value = PCI_EXP_SLTSTA_PDS << 16;
+-		return PCI_BRIDGE_EMUL_HANDLED;
 -
- 		isec->initialized = LABEL_INITIALIZED;
- 		isec->sid = sid;
- 	}
-@@ -1597,6 +1583,15 @@ out:
- out_unlock:
- 	spin_unlock(&isec->lock);
- 	return rc;
-+
-+out_invalid:
-+	spin_lock(&isec->lock);
-+	if (isec->initialized == LABEL_PENDING) {
-+		isec->initialized = LABEL_INVALID;
-+		isec->sid = sid;
-+	}
-+	spin_unlock(&isec->lock);
-+	return 0;
- }
+ 	/*
+-	 * PCI_EXP_RTCTL and PCI_EXP_RTSTA are also supported, but do not need
+-	 * to be handled here, because their values are stored in emulated
+-	 * config space buffer, and we read them from there when needed.
++	 * PCI_EXP_SLTCAP, PCI_EXP_SLTCTL, PCI_EXP_RTCTL and PCI_EXP_RTSTA are
++	 * also supported, but do not need to be handled here, because their
++	 * values are stored in emulated config space buffer, and we read them
++	 * from there when needed.
+ 	 */
  
- /* Convert a Linux signal to an access vector. */
+ 	case PCI_EXP_LNKCAP: {
+@@ -977,8 +975,25 @@ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
+ 	/* Support interrupt A for MSI feature */
+ 	bridge->conf.intpin = PCI_INTERRUPT_INTA;
+ 
+-	/* Aardvark HW provides PCIe Capability structure in version 2 */
+-	bridge->pcie_conf.cap = cpu_to_le16(2);
++	/*
++	 * Aardvark HW provides PCIe Capability structure in version 2 and
++	 * indicate slot support, which is emulated.
++	 */
++	bridge->pcie_conf.cap = cpu_to_le16(2 | PCI_EXP_FLAGS_SLOT);
++
++	/*
++	 * Set Presence Detect State bit permanently since there is no support
++	 * for unplugging the card nor detecting whether it is plugged. (If a
++	 * platform exists in the future that supports it, via a GPIO for
++	 * example, it should be implemented via this bit.)
++	 *
++	 * Set physical slot number to 1 since there is only one port and zero
++	 * value is reserved for ports within the same silicon as Root Port
++	 * which is not our case.
++	 */
++	bridge->pcie_conf.slotcap = cpu_to_le32(FIELD_PREP(PCI_EXP_SLTCAP_PSN,
++							   1));
++	bridge->pcie_conf.slotsta = cpu_to_le16(PCI_EXP_SLTSTA_PDS);
+ 
+ 	/* Indicates supports for Completion Retry Status */
+ 	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
+-- 
+2.35.1
+
 
 

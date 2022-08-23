@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127D659D82C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E2959D81E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351386AbiHWJzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
+        id S237065AbiHWJmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344438AbiHWJyE (ORCPT
+        with ESMTP id S1351777AbiHWJk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:54:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298DC6A49A;
-        Tue, 23 Aug 2022 01:46:22 -0700 (PDT)
+        Tue, 23 Aug 2022 05:40:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E8778BFB;
+        Tue, 23 Aug 2022 01:41:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CCFD6153C;
-        Tue, 23 Aug 2022 08:45:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F55C433D6;
-        Tue, 23 Aug 2022 08:45:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC25E61545;
+        Tue, 23 Aug 2022 08:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0055CC433D6;
+        Tue, 23 Aug 2022 08:40:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244357;
-        bh=bfj1rlsQXGQ8Wn6QfQwt2YuiHr8K9dNN60BDvqIIFzk=;
+        s=korg; t=1661244047;
+        bh=aqtmc+GVlURHEGXqXvyfAmByh5SXHExesIF6rdrC7b4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AWHqa+ANDAEjO0GwqjFp3L5ECdlJJv8fIjgtubPkaosekCOypYnqL9sW92rGvRUem
-         lVODCU1eoVbrJeQSC60AV7uiMb8zs8aD3pljJeEbAl1X5mX1dVXMSMzq/pKqZdZeB5
-         zE5jwDjJrAL/tao4Is0/3AzKW3LHRYWgHpiB/dUo=
+        b=UNFc++1RjHwleYzhDUVN45f9PydspRayrJEqHzEATKiDRk+lXD4Aw2rgeRQIddO1i
+         7uQc1js3CiFUJW8j8N9uAztbidp4sA1wfexD+kavKIdkkY3FissQrYovg4FhdE60rS
+         8fdlwhhRB6Xcrq9iLePuruti/Jyk4qASP+teUE2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Matthias May <matthias.may@westermo.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 078/244] ipv6: do not use RT_TOS for IPv6 flowlabel
-Date:   Tue, 23 Aug 2022 10:23:57 +0200
-Message-Id: <20220823080101.656251834@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>,
+        Christian Lamparter <chunkeey@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 078/229] wifi: p54: add missing parentheses in p54_flush()
+Date:   Tue, 23 Aug 2022 10:23:59 +0200
+Message-Id: <20220823080056.504148486@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias May <matthias.may@westermo.com>
+From: Rustam Subkhankulov <subkhankulov@ispras.ru>
 
-commit ab7e2e0dfa5d37540ab1dc5376e9a2cb9188925d upstream.
+[ Upstream commit bcfd9d7f6840b06d5988c7141127795cf405805e ]
 
-According to Guillaume Nault RT_TOS should never be used for IPv6.
+The assignment of the value to the variable total in the loop
+condition must be enclosed in additional parentheses, since otherwise,
+in accordance with the precedence of the operators, the conjunction
+will be performed first, and only then the assignment.
 
-Quote:
-RT_TOS() is an old macro used to interprete IPv4 TOS as described in
-the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
-code, although, given the current state of the code, most of the
-existing calls have no consequence.
+Due to this error, a warning later in the function after the loop may
+not occur in the situation when it should.
 
-But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
-field to be interpreted the RFC 1349 way. There's no historical
-compatibility to worry about.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Fixes: 571912c69f0e ("net: UDP tunnel encapsulation module for tunnelling different protocols like MPLS, IP, NSH etc.")
-Acked-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: Matthias May <matthias.may@westermo.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+Fixes: 0d4171e2153b ("p54: implement flush callback")
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220714134831.106004-1-subkhankulov@ispras.ru
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/ip6_output.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/wireless/intersil/p54/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1289,8 +1289,7 @@ struct dst_entry *ip6_dst_lookup_tunnel(
- 	fl6.daddr = info->key.u.ipv6.dst;
- 	fl6.saddr = info->key.u.ipv6.src;
- 	prio = info->key.tos;
--	fl6.flowlabel = ip6_make_flowinfo(RT_TOS(prio),
--					  info->key.label);
-+	fl6.flowlabel = ip6_make_flowinfo(prio, info->key.label);
- 
- 	dst = ipv6_stub->ipv6_dst_lookup_flow(net, sock->sk, &fl6,
- 					      NULL);
+diff --git a/drivers/net/wireless/intersil/p54/main.c b/drivers/net/wireless/intersil/p54/main.c
+index ab6d39e12069..120c3f21f382 100644
+--- a/drivers/net/wireless/intersil/p54/main.c
++++ b/drivers/net/wireless/intersil/p54/main.c
+@@ -688,7 +688,7 @@ static void p54_flush(struct ieee80211_hw *dev, struct ieee80211_vif *vif,
+ 	 * queues have already been stopped and no new frames can sneak
+ 	 * up from behind.
+ 	 */
+-	while ((total = p54_flush_count(priv) && i--)) {
++	while ((total = p54_flush_count(priv)) && i--) {
+ 		/* waste time */
+ 		msleep(20);
+ 	}
+-- 
+2.35.1
+
 
 

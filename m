@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C801059D97C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E97559DA61
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344258AbiHWJsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S1352410AbiHWKHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352164AbiHWJqA (ORCPT
+        with ESMTP id S1352428AbiHWKBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:46:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDFE60509;
-        Tue, 23 Aug 2022 01:43:47 -0700 (PDT)
+        Tue, 23 Aug 2022 06:01:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9254C9753D;
+        Tue, 23 Aug 2022 01:49:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3E964CE1B39;
-        Tue, 23 Aug 2022 08:33:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 529CDC433D7;
-        Tue, 23 Aug 2022 08:33:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BE39B81C4E;
+        Tue, 23 Aug 2022 08:34:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68159C4314B;
+        Tue, 23 Aug 2022 08:34:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243601;
-        bh=zZLL++bYvl0F92rMoTpAbVJJgVpyIgrqAToCvPmUEYA=;
+        s=korg; t=1661243662;
+        bh=HsE6Hc1g0L5kt8Rb3CEnOB/34WTJkVgtm0Yx9+swGaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VmRSCqBn//LUADhOOiNW8oEzqoLeoGhx5UdtPDY5pUsSKn+hge+eReoH6I1cd+fdF
-         KavDY1+klCUGk+x8A5i8+Ya4FOkomML2tZktmrM51mfdsE/irMv5F9lmezcgeuP2t2
-         6xu5LXEqr+Z6oRqGSFr8UAaY9aLWK4Df2lXMToYg=
+        b=lccaubqsTk8obb6MKEW1x12wA2929Y7jpQvg7LrxB05169ouXwlgYoNegwXyIXf2R
+         ZMO4olhQMRnUlB17to1/YLXtiY2MsDRDTz20bLD9B5qYkSuYFUmNzzgRI8qKwXSLXJ
+         leUAhIoiv7U4bUFQeRoCc5Tuf8ZuiqGRg3rQ3k+Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        stable@vger.kernel.org,
+        Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>,
+        Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 327/365] modules: Ensure natural alignment for .altinstructions and __bug_table sections
-Date:   Tue, 23 Aug 2022 10:03:48 +0200
-Message-Id: <20220823080131.868020705@linuxfoundation.org>
+Subject: [PATCH 5.19 331/365] ASoC: rsnd: care default case on rsnd_ssiu_busif_err_irq_ctrl()
+Date:   Tue, 23 Aug 2022 10:03:52 +0200
+Message-Id: <20220823080132.062538913@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -55,54 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-[ Upstream commit 87c482bdfa79f378297d92af49cdf265be199df5 ]
+[ Upstream commit ef30911d3c39fd57884c348c29b9cbff88def155 ]
 
-In the kernel image vmlinux.lds.S linker scripts the .altinstructions
-and __bug_table sections are 4- or 8-byte aligned because they hold 32-
-and/or 64-bit values.
+Before, ssiu.c didn't care SSI5-8, thus,
+commit b1384d4c95088d0 ("ASoC: rsnd: care default case on
+rsnd_ssiu_busif_err_status_clear()") cares it for status clear.
 
-Most architectures use altinstructions and BUG() or WARN() in modules as
-well, but in the module linker script (module.lds.S) those sections are
-currently missing. As consequence the linker will store their content
-byte-aligned by default, which then can lead to unnecessary unaligned
-memory accesses by the CPU when those tables are processed at runtime.
+But we should care it for error irq handling, too.
+This patch cares it.
 
-Usually unaligned memory accesses are unnoticed, because either the
-hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on
-parisc or sparc) emulate and fix them up at runtime. Nevertheless, such
-unaligned accesses introduce a performance penalty and can even crash
-the kernel if there is a bug in the unalignment exception handlers
-(which happened once to me on the parisc architecture and which is why I
-noticed that issue at all).
-
-This patch fixes a non-critical issue and might be backported at any time.
-It's trivial and shouldn't introduce any regression because it simply
-tells the linker to use a different (8-byte alignment) for those
-sections by default.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-Link: https://lore.kernel.org/all/Yr8%2Fgr8e8I7tVX4d@p100/
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Reported-by: Nguyen Bao Nguyen <nguyen.nguyen.yj@renesas.com>
+Reported-by: Nishiyama Kunihiko <kunihiko.nishiyama.dn@renesas.com>
+Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/871quocio1.wl-kuninori.morimoto.gx@renesas.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/module.lds.S | 2 ++
+ sound/soc/sh/rcar/ssiu.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 1d0e1e4dc3d2..3a3aa2354ed8 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -27,6 +27,8 @@ SECTIONS {
- 	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
- 	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
+diff --git a/sound/soc/sh/rcar/ssiu.c b/sound/soc/sh/rcar/ssiu.c
+index 4b8a63e336c7..d7f4646ee029 100644
+--- a/sound/soc/sh/rcar/ssiu.c
++++ b/sound/soc/sh/rcar/ssiu.c
+@@ -67,6 +67,8 @@ static void rsnd_ssiu_busif_err_irq_ctrl(struct rsnd_mod *mod, int enable)
+ 		shift  = 1;
+ 		offset = 1;
+ 		break;
++	default:
++		return;
+ 	}
  
-+	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
-+	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
- 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
- 
- 	__patchable_function_entries : { *(__patchable_function_entries) }
+ 	for (i = 0; i < 4; i++) {
 -- 
 2.35.1
 

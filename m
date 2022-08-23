@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957AA59E23B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363BB59DC21
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354613AbiHWKZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S242574AbiHWMNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353642AbiHWKLr (ORCPT
+        with ESMTP id S1356023AbiHWMMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF37F13A;
-        Tue, 23 Aug 2022 01:58:00 -0700 (PDT)
+        Tue, 23 Aug 2022 08:12:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26535A3E8;
+        Tue, 23 Aug 2022 02:39:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FB8EB81C35;
-        Tue, 23 Aug 2022 08:57:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C14C433C1;
-        Tue, 23 Aug 2022 08:57:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6900D61389;
+        Tue, 23 Aug 2022 09:39:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A5C2C433D6;
+        Tue, 23 Aug 2022 09:39:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245077;
-        bh=wL+I1X6OYqaa+s1yOlsuInujXPWsQqoekriR1F0yces=;
+        s=korg; t=1661247558;
+        bh=Ar0Ri1pXQ2u5TEvE1oM8+Sx9bnNlWLzCZzLjllN8NEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0kkAjwIFef/4m4QCnn0k/VHQVm3jNLAo1I49ALpQhyFiGy5l82r6/NLIOAqq9VKdF
-         hxrw7pyBueKk1UGjzb3mVqvezg9wRu91cs3SfAvfqDUUHTuhyxOH4VplKSIHmGICxL
-         3VwU1KDKqrCKqAYi4r46gnXbv4RKxB/Uq8EcsaaA=
+        b=LIMVFsLxIb8TkbE0coDgLq+EgSoo3aNQbqr0GQS213P4wpz4i5wR6IPAN5v6h+h5p
+         zeHK24Ko/HpY/Z4qZVUb3oddzd1tQrFbZQ7awtTWJk/xF+bHvjnbB6yxTwohWO4Iun
+         lXX4zhJ7ml1qlh66/bgrHbN+g5RYBgLawGPtYvBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Timur Tabi <timur@kernel.org>,
-        Liang He <windhl@126.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 207/244] tty: serial: Fix refcount leak bug in ucc_uart.c
-Date:   Tue, 23 Aug 2022 10:26:06 +0200
-Message-Id: <20220823080106.412901268@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.10 035/158] SUNRPC: Reinitialise the backchannel request buffers before reuse
+Date:   Tue, 23 Aug 2022 10:26:07 +0200
+Message-Id: <20220823080047.493046546@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit d24d7bb2cd947676f9b71fb944d045e09b8b282f ]
+commit 6622e3a73112fc336c1c2c582428fb5ef18e456a upstream.
 
-In soc_info(), of_find_node_by_type() will return a node pointer
-with refcount incremented. We should use of_node_put() when it is
-not used anymore.
+When we're reusing the backchannel requests instead of freeing them,
+then we should reinitialise any values of the send/receive xdr_bufs so
+that they reflect the available space.
 
-Acked-by: Timur Tabi <timur@kernel.org>
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220618060850.4058525-1-windhl@126.com
+Fixes: 0d2a970d0ae5 ("SUNRPC: Fix a backchannel race")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/ucc_uart.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/sunrpc/backchannel_rqst.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
-index 6000853973c1..3cc9ef08455c 100644
---- a/drivers/tty/serial/ucc_uart.c
-+++ b/drivers/tty/serial/ucc_uart.c
-@@ -1137,6 +1137,8 @@ static unsigned int soc_info(unsigned int *rev_h, unsigned int *rev_l)
- 		/* No compatible property, so try the name. */
- 		soc_string = np->name;
+--- a/net/sunrpc/backchannel_rqst.c
++++ b/net/sunrpc/backchannel_rqst.c
+@@ -64,6 +64,17 @@ static void xprt_free_allocation(struct
+ 	kfree(req);
+ }
  
-+	of_node_put(np);
++static void xprt_bc_reinit_xdr_buf(struct xdr_buf *buf)
++{
++	buf->head[0].iov_len = PAGE_SIZE;
++	buf->tail[0].iov_len = 0;
++	buf->pages = NULL;
++	buf->page_len = 0;
++	buf->flags = 0;
++	buf->len = 0;
++	buf->buflen = PAGE_SIZE;
++}
 +
- 	/* Extract the SOC number from the "PowerPC," string */
- 	if ((sscanf(soc_string, "PowerPC,%u", &soc) != 1) || !soc)
- 		return 0;
--- 
-2.35.1
-
+ static int xprt_alloc_xdr_buf(struct xdr_buf *buf, gfp_t gfp_flags)
+ {
+ 	struct page *page;
+@@ -292,6 +303,9 @@ void xprt_free_bc_rqst(struct rpc_rqst *
+ 	 */
+ 	spin_lock_bh(&xprt->bc_pa_lock);
+ 	if (xprt_need_to_requeue(xprt)) {
++		xprt_bc_reinit_xdr_buf(&req->rq_snd_buf);
++		xprt_bc_reinit_xdr_buf(&req->rq_rcv_buf);
++		req->rq_rcv_buf.len = PAGE_SIZE;
+ 		list_add_tail(&req->rq_bc_pa_list, &xprt->bc_pa_list);
+ 		xprt->bc_alloc_count++;
+ 		atomic_inc(&xprt->bc_slot_count);
 
 

@@ -2,89 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1894059EA4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6860E59EA5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbiHWRvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S232253AbiHWRxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234109AbiHWRuu (ORCPT
+        with ESMTP id S232977AbiHWRwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:50:50 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA794F650;
-        Tue, 23 Aug 2022 08:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=S7JuWIzJexO0qQd7I43+qNWfasTh4kJF/2AB4acc9Fs=; b=wP982P1lHIUHbrYUcSB8e1/FoR
-        Bz6RGKWd06Yer9negTdpGnC+Z50HUs9Bp6xLkpCKAqahk0G+xmsez2LNZU+CMx9dXEL/MVUusaLnZ
-        wDfDJi5zg/To/6uK4AFuvaZrENtk7CWxBWB343hVnj4hYBAHia1LPcwLEVia7qsQHYF8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oQWAx-00EMdR-Nt; Tue, 23 Aug 2022 17:50:47 +0200
-Date:   Tue, 23 Aug 2022 17:50:47 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Suman Ghosh <sumang@marvell.com>
-Cc:     sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
-        jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] octeontx2-pf: Add egress PFC support
-Message-ID: <YwT3V6A4xrS3jAqf@lunn.ch>
-References: <20220823065829.1060339-1-sumang@marvell.com>
+        Tue, 23 Aug 2022 13:52:44 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F3C6DF85
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:54:12 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id h8-20020a92c268000000b002e95299cff0so8004992ild.23
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:54:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=YORKRMrGh1zHmTJn3Q8vpb+7xewfCJwmWBrDZuO9Hvk=;
+        b=rwNf3u0lfhVEVtrgnZ+W4VV/4iqUmXnuMwdxp1BoqhtRuTeUuwOTLo8+Q2+TFkwse1
+         /FfFiLhyhjJ/hr+RSMy18Kes3T+jlZrPN/zuKhOb/wJodnoyh1xCMAcIVHyxQ0dRFkqD
+         JKS7oTeC+WVtSx18YUqe27Us48Je9qXbwxiK1DeRzt/JgDlSXIwF7G36UaclgOrugBXf
+         OHkOeBbBvGR+QJN4/lly16g9tVd+AGwdRok4ytJBr6nKCA7DzOGs2mhOeX1b+f24NUip
+         Ru36JyU9GGlC/Hs5On2b8r+ULd/dOh2mQf9ViuHgMMev4pDFJa0+IwxBL7Iw1Pg+IBdT
+         77ZQ==
+X-Gm-Message-State: ACgBeo399a4uAoRvFtmUx/eOhn1H8ICxmonXdzqKcvLmf7Hq4ZMxvYjf
+        h1kjup2fAJr2sbzy68pmt8ViPYLwm/jqJJEG7RgANJQ/Xljy
+X-Google-Smtp-Source: AA6agR7DlJVunae3GLR7JIa5CdMoF6d825J9cnKYadOmoeVZl/kMpo9A6rnXBwiLn6b23Z3kvfFODw1snEpilyS3FSBFHKm/eGjF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823065829.1060339-1-sumang@marvell.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4197:b0:349:fc58:d66a with SMTP id
+ az23-20020a056638419700b00349fc58d66amr873003jab.101.1661270052061; Tue, 23
+ Aug 2022 08:54:12 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 08:54:11 -0700
+In-Reply-To: <20220823153542.177799-1-code@siddh.me>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000054488105e6ea93c8@google.com>
+Subject: Re: [syzbot] WARNING in iomap_iter
+From:   syzbot <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>
+To:     code@siddh.me, david@fromorbit.com, djwong@kernel.org,
+        fgheet255t@gmail.com, hch@infradead.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        riteshh@linux.ibm.com, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
-> +int otx2_txschq_config(struct otx2_nic *pfvf, int lvl, int prio, bool txschq_for_pfc)
->  {
->  	struct otx2_hw *hw = &pfvf->hw;
->  	struct nix_txschq_config *req;
-> @@ -602,7 +602,13 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
->  	req->lvl = lvl;
->  	req->num_regs = 1;
->  
-> -	schq = hw->txschq_list[lvl][0];
-> +#ifdef CONFIG_DCB
-> +	if (txschq_for_pfc)
-> +		schq = pfvf->pfc_schq_list[lvl][prio];
-> +	else
-> +#endif
+Hello,
 
-Please could you try to remove as many of these #ifdef CONFIG_DCB as
-possible. It makes build testing less efficient at finding build
-problems. Can you do:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> +	if (IS_ENABLED(CONFIG_DCB) && txschq_for_pfc)
-> +		schq = pfvf->pfc_schq_list[lvl][prio];
+Reported-and-tested-by: syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
 
-> +#ifdef CONFIG_DCB
-> +int otx2_pfc_txschq_config(struct otx2_nic *pfvf)
-> +{
-> +	u8 pfc_en, pfc_bit_set;
-> +	int prio, lvl, err;
-> +
-> +	pfc_en = pfvf->pfc_en;
-> +	for (prio = 0; prio < NIX_PF_PFC_PRIO_MAX; prio++) {
-> +		pfc_bit_set = pfc_en & (1 << prio);
-> +
+Tested on:
 
-Maybe put all of this into a file of its own, and provide stubs for
-when it is not enabled?
+commit:         072e5135 Merge tag 'nfs-for-5.20-2' of git://git.linux..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=123599b5080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3f885f57a0f25c38
+dashboard link: https://syzkaller.appspot.com/bug?extid=a8e049cd3abd342936b6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=160ef0a3080000
 
-     Andrew
+Note: testing is done by a robot and is best-effort only.

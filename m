@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B7659DEE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264E459DDE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359403AbiHWMIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        id S1354561AbiHWKZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359331AbiHWMDl (ORCPT
+        with ESMTP id S1353626AbiHWKLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:03:41 -0400
+        Tue, 23 Aug 2022 06:11:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4431BDCFFA;
-        Tue, 23 Aug 2022 02:37:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57FE167F0;
+        Tue, 23 Aug 2022 01:57:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D840161467;
-        Tue, 23 Aug 2022 09:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B71C433D7;
-        Tue, 23 Aug 2022 09:37:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5314B6155E;
+        Tue, 23 Aug 2022 08:57:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5910FC433D6;
+        Tue, 23 Aug 2022 08:57:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247426;
-        bh=SZ+/sgtHqCsEHpNeUbek1EZlYk4KcpR5xLQujRwlQ7g=;
+        s=korg; t=1661245068;
+        bh=sDPGvO3iaQnn+7wjvslt/FtR26VgUYouggIzz/B690o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0B3Dp8DhHRTMG96pa+poYz+aID5Gr6v6dfwV6TL3ERfLr7POyDpDUlJv2ZPuUZRvg
-         WJ5De3W2Hn3NzPIvRaK6kRu3Dwtt58S3yWx16LfsM+Hgmknq4lIa8bV76C3Z1PivEu
-         Ym2hwU8kzYN1nhx4McQ8DSGYk7YHO6AFTqrc4XpE=
+        b=TXjA+DVrZdxAQvZYGKF4176f+ratBdVBNUlM4BGDLv/4ySjPQ/FveFZJYWH90yKGQ
+         Sc1qQp8/dcTBAuJwx1WENt1C4IQSjkY41/mKxjnngSoxdeKF7DVqR8N/gG/d2TcONJ
+         Rk1ZeNlbWi82ADvuwhpHjhPDMfI7oEqnxlwBerrA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.10 031/158] bpf: Check the validity of max_rdwr_access for sock local storage map iterator
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 204/244] ext4: avoid remove directory when directory is corrupted
 Date:   Tue, 23 Aug 2022 10:26:03 +0200
-Message-Id: <20220823080047.340687367@linuxfoundation.org>
+Message-Id: <20220823080106.309197493@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+From: Ye Bin <yebin10@huawei.com>
 
-commit 52bd05eb7c88e1ad8541a48873188ccebca9da26 upstream.
+[ Upstream commit b24e77ef1c6d4dbf42749ad4903c97539cc9755a ]
 
-The value of sock local storage map is writable in map iterator, so check
-max_rdwr_access instead of max_rdonly_access.
+Now if check directoy entry is corrupted, ext4_empty_dir may return true
+then directory will be removed when file system mounted with "errors=continue".
+In order not to make things worse just return false when directory is corrupted.
 
-Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/r/20220810080538.1845898-6-houtao@huaweicloud.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220622090223.682234-1-yebin10@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/bpf_sk_storage.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ext4/namei.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -823,7 +823,7 @@ static int bpf_iter_attach_map(struct bp
- 	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
- 		goto put_map;
- 
--	if (prog->aux->max_rdonly_access > map->value_size) {
-+	if (prog->aux->max_rdwr_access > map->value_size) {
- 		err = -EACCES;
- 		goto put_map;
- 	}
+diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+index 5821638cb893..7d3ec39121f7 100644
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -3090,11 +3090,8 @@ bool ext4_empty_dir(struct inode *inode)
+ 		de = (struct ext4_dir_entry_2 *) (bh->b_data +
+ 					(offset & (sb->s_blocksize - 1)));
+ 		if (ext4_check_dir_entry(inode, NULL, de, bh,
+-					 bh->b_data, bh->b_size, offset)) {
+-			offset = (offset | (sb->s_blocksize - 1)) + 1;
+-			continue;
+-		}
+-		if (le32_to_cpu(de->inode)) {
++					 bh->b_data, bh->b_size, offset) ||
++		    le32_to_cpu(de->inode)) {
+ 			brelse(bh);
+ 			return false;
+ 		}
+-- 
+2.35.1
+
 
 

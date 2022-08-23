@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6425C59DCB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2619359DE63
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355915AbiHWKlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
+        id S243912AbiHWKHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354610AbiHWKZ7 (ORCPT
+        with ESMTP id S1352410AbiHWKBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:25:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A076874CC5;
-        Tue, 23 Aug 2022 02:05:27 -0700 (PDT)
+        Tue, 23 Aug 2022 06:01:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BE77C197;
+        Tue, 23 Aug 2022 01:49:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EC9B6157B;
-        Tue, 23 Aug 2022 09:05:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DEBCC433D6;
-        Tue, 23 Aug 2022 09:05:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42A45B8105C;
+        Tue, 23 Aug 2022 08:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9563EC433C1;
+        Tue, 23 Aug 2022 08:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245526;
-        bh=ljTxXHMuDcwS8wbr/+tJlNXTojI1MAVrPBctDNCGIH8=;
+        s=korg; t=1661244578;
+        bh=/8UyoVEL/6prq7euy3iXui/QYxwtGVXrnVvgQbV3Lk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o4YCDyhFrb3ERQtJc9MlhWN1czgpR03tixRHGijEb4PyubxAzHJBuCslergzewxeK
-         /d0dNkocCnWd3Yj48/4xhiu35ZYTg8TvpZ3G3LFN6goKgdhqXEql5KRyNumguumLLs
-         qZInyfjclBO9u60VSP2p5WoPU7DmS2PmTRXq8Ku0=
+        b=RxB/875abvlubRq1mqJHzHupD3Zl97qrD4fH61ZpqEp5JmKKDCzlkzh4jo2dUVm7Q
+         ZHoesvKl2Cixyt8eX7dlcVAbX70MlFZG64ESecnCHE7x1BzQ9xcu7G/U95reeKhcGW
+         n2DMmjTn6dDvkew8iY2ZnudDFBqQTSbThOWVKS6U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Alexey Kodanev <aleksei.kodanev@bell-sw.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 075/287] wifi: iwlegacy: 4965: fix potential off-by-one overflow in il4965_rs_fill_link_cmd()
-Date:   Tue, 23 Aug 2022 10:24:04 +0200
-Message-Id: <20220823080102.752636929@linuxfoundation.org>
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.15 086/244] dt-bindings: clock: qcom,gcc-msm8996: add more GCC clock sources
+Date:   Tue, 23 Aug 2022 10:24:05 +0200
+Message-Id: <20220823080101.904782940@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit a8eb8e6f7159c7c20c0ddac428bde3d110890aa7 ]
+commit 2b4e75a7a7c8d3531a40ebb103b92f88ff693f79 upstream.
 
-As a result of the execution of the inner while loop, the value
-of 'idx' can be equal to LINK_QUAL_MAX_RETRY_NUM. However, this
-is not checked after the loop and 'idx' is used to write the
-LINK_QUAL_MAX_RETRY_NUM size array 'lq_cmd->rs_table[idx]' below
-in the outer loop.
+Add additional GCC clock sources. This includes PCIe and USB PIPE and
+UFS symbol clocks.
 
-The fix is to check the new value of 'idx' inside the nested loop,
-and break both loops if index equals the size. Checking it at the
-start is now pointless, so let's remove it.
-
-Detected using the static analysis tool - Svace.
-
-Fixes: be663ab67077 ("iwlwifi: split the drivers for agn and legacy devices 3945/4965")
-Signed-off-by: Alexey Kodanev <aleksei.kodanev@bell-sw.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220608171614.28891-1-aleksei.kodanev@bell-sw.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 2a8aa18c1131 ("dt-bindings: clk: qcom: Fix self-validation, split, and clean cruft")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220620071936.1558906-2-dmitry.baryshkov@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlegacy/4965-rs.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml |   16 ++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/net/wireless/intel/iwlegacy/4965-rs.c b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-index 54ff83829afb..f204e139e5f0 100644
---- a/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-+++ b/drivers/net/wireless/intel/iwlegacy/4965-rs.c
-@@ -2422,7 +2422,7 @@ il4965_rs_fill_link_cmd(struct il_priv *il, struct il_lq_sta *lq_sta,
- 		/* Repeat initial/next rate.
- 		 * For legacy IL_NUMBER_TRY == 1, this loop will not execute.
- 		 * For HT IL_HT_NUMBER_TRY == 3, this executes twice. */
--		while (repeat_rate > 0 && idx < LINK_QUAL_MAX_RETRY_NUM) {
-+		while (repeat_rate > 0) {
- 			if (is_legacy(tbl_type.lq_type)) {
- 				if (ant_toggle_cnt < NUM_TRY_BEFORE_ANT_TOGGLE)
- 					ant_toggle_cnt++;
-@@ -2441,6 +2441,8 @@ il4965_rs_fill_link_cmd(struct il_priv *il, struct il_lq_sta *lq_sta,
- 			    cpu_to_le32(new_rate);
- 			repeat_rate--;
- 			idx++;
-+			if (idx >= LINK_QUAL_MAX_RETRY_NUM)
-+				goto out;
- 		}
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml
+@@ -22,16 +22,32 @@ properties:
+     const: qcom,gcc-msm8996
  
- 		il4965_rs_get_tbl_info_from_mcs(new_rate, lq_sta->band,
-@@ -2485,6 +2487,7 @@ il4965_rs_fill_link_cmd(struct il_priv *il, struct il_lq_sta *lq_sta,
- 		repeat_rate--;
- 	}
+   clocks:
++    minItems: 3
+     items:
+       - description: XO source
+       - description: Second XO source
+       - description: Sleep clock source
++      - description: PCIe 0 PIPE clock (optional)
++      - description: PCIe 1 PIPE clock (optional)
++      - description: PCIe 2 PIPE clock (optional)
++      - description: USB3 PIPE clock (optional)
++      - description: UFS RX symbol 0 clock (optional)
++      - description: UFS RX symbol 1 clock (optional)
++      - description: UFS TX symbol 0 clock (optional)
  
-+out:
- 	lq_cmd->agg_params.agg_frame_cnt_limit = LINK_QUAL_AGG_FRAME_LIMIT_DEF;
- 	lq_cmd->agg_params.agg_dis_start_th = LINK_QUAL_AGG_DISABLE_START_DEF;
+   clock-names:
++    minItems: 3
+     items:
+       - const: cxo
+       - const: cxo2
+       - const: sleep_clk
++      - const: pcie_0_pipe_clk_src
++      - const: pcie_1_pipe_clk_src
++      - const: pcie_2_pipe_clk_src
++      - const: usb3_phy_pipe_clk_src
++      - const: ufs_rx_symbol_0_clk_src
++      - const: ufs_rx_symbol_1_clk_src
++      - const: ufs_tx_symbol_0_clk_src
  
--- 
-2.35.1
-
+   '#clock-cells':
+     const: 1
 
 

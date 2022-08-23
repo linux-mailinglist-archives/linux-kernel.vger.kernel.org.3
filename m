@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4DD59E2AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0198059E05B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355283AbiHWKkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S1355318AbiHWKkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354207AbiHWKZM (ORCPT
+        with ESMTP id S1354302AbiHWKZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:25:12 -0400
+        Tue, 23 Aug 2022 06:25:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03330A405C;
-        Tue, 23 Aug 2022 02:04:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321E3832E1;
+        Tue, 23 Aug 2022 02:04:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A51CB8105C;
-        Tue, 23 Aug 2022 09:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4D2C433C1;
-        Tue, 23 Aug 2022 09:04:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D793AB81C65;
+        Tue, 23 Aug 2022 09:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCE9C433C1;
+        Tue, 23 Aug 2022 09:04:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245489;
-        bh=DWD3GZq6j5zEbQtORBVne/OcWKHdw1NZa8O3C6p2FYQ=;
+        s=korg; t=1661245492;
+        bh=DPuyn0vXH02KiwaX6fibOkAwgcLn6wDShe4JqCjHAHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jDMENSr9znHagoxOCSTAhblZbcbb0DB1Xuspaakv+NFVA5Da8OLhM4sUDdotPIKA8
-         0CJHSytTT/hoSTI+ukNEbfLua8RiPu4G8hdUrOPo6pJZNTxzQMswwK0d+dgUiQUskY
-         1YwZpDNRJZY1YyT/UT6y4AY2nTjtRc1zmm0YKDnU=
+        b=gmWMDAxk0NyHLCeFosBJvJgffr5gNykNs733vqxRMAd62HJ73mg+ypdMPGEzTPj4R
+         FWn+IvWxO/YANgyrNj09uWRtwZtp4hbiCTIvNvWWOBmUih9awv0+UtrAtfTE0xdJ8q
+         9TcHl2qQHKUvjdHVP/N9Bosa5THUAMKSR6CwtU7Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 094/287] can: pch_can: do not report txerr and rxerr during bus-off
-Date:   Tue, 23 Aug 2022 10:24:23 +0200
-Message-Id: <20220823080103.494719635@linuxfoundation.org>
+Subject: [PATCH 4.19 095/287] can: rcar_can: do not report txerr and rxerr during bus-off
+Date:   Tue, 23 Aug 2022 10:24:24 +0200
+Message-Id: <20220823080103.542142960@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -58,44 +58,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-[ Upstream commit 3a5c7e4611ddcf0ef37a3a17296b964d986161a6 ]
+[ Upstream commit a37b7245e831a641df360ca41db6a71c023d3746 ]
 
 During bus off, the error count is greater than 255 and can not fit in
 a u8.
 
-Fixes: 0c78ab76a05c ("pch_can: Add setting TEC/REC statistics processing")
-Link: https://lore.kernel.org/all/20220719143550.3681-2-mailhol.vincent@wanadoo.fr
+Fixes: fd1159318e55 ("can: add Renesas R-Car CAN driver")
+Link: https://lore.kernel.org/all/20220719143550.3681-3-mailhol.vincent@wanadoo.fr
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/pch_can.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/can/rcar/rcar_can.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-index ced11ea89269..3e1d71c70b0d 100644
---- a/drivers/net/can/pch_can.c
-+++ b/drivers/net/can/pch_can.c
-@@ -507,6 +507,9 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 		cf->can_id |= CAN_ERR_BUSOFF;
- 		priv->can.can_stats.bus_off++;
+diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
+index 963da8eda168..0156c18d5a2d 100644
+--- a/drivers/net/can/rcar/rcar_can.c
++++ b/drivers/net/can/rcar/rcar_can.c
+@@ -233,11 +233,8 @@ static void rcar_can_error(struct net_device *ndev)
+ 	if (eifr & (RCAR_CAN_EIFR_EWIF | RCAR_CAN_EIFR_EPIF)) {
+ 		txerr = readb(&priv->regs->tecr);
+ 		rxerr = readb(&priv->regs->recr);
+-		if (skb) {
++		if (skb)
+ 			cf->can_id |= CAN_ERR_CRTL;
+-			cf->data[6] = txerr;
+-			cf->data[7] = rxerr;
+-		}
+ 	}
+ 	if (eifr & RCAR_CAN_EIFR_BEIF) {
+ 		int rx_errors = 0, tx_errors = 0;
+@@ -337,6 +334,9 @@ static void rcar_can_error(struct net_device *ndev)
  		can_bus_off(ndev);
-+	} else {
-+		cf->data[6] = errc & PCH_TEC;
-+		cf->data[7] = (errc & PCH_REC) >> 8;
+ 		if (skb)
+ 			cf->can_id |= CAN_ERR_BUSOFF;
++	} else if (skb) {
++		cf->data[6] = txerr;
++		cf->data[7] = rxerr;
  	}
- 
- 	errc = ioread32(&priv->regs->errc);
-@@ -567,9 +570,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 		break;
- 	}
- 
--	cf->data[6] = errc & PCH_TEC;
--	cf->data[7] = (errc & PCH_REC) >> 8;
--
- 	priv->can.state = state;
- 	netif_receive_skb(skb);
- 
+ 	if (eifr & RCAR_CAN_EIFR_ORIF) {
+ 		netdev_dbg(priv->ndev, "Receive overrun error interrupt\n");
 -- 
 2.35.1
 

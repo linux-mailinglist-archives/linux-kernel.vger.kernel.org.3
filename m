@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391FA59DBA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EDC59E1EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356464AbiHWMLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S1358600AbiHWLuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359734AbiHWMLF (ORCPT
+        with ESMTP id S1358510AbiHWLtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:11:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E80EBA9D4;
-        Tue, 23 Aug 2022 02:38:58 -0700 (PDT)
+        Tue, 23 Aug 2022 07:49:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646C7D2928;
+        Tue, 23 Aug 2022 02:30:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DCD7B81C9B;
-        Tue, 23 Aug 2022 09:37:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA49DC433D6;
-        Tue, 23 Aug 2022 09:37:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F9D8B81C85;
+        Tue, 23 Aug 2022 09:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65A7C433C1;
+        Tue, 23 Aug 2022 09:30:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247475;
-        bh=HS7B2uIuWwLLSSyYuRoib1F7/Bkai00cbf34YWH7dlM=;
+        s=korg; t=1661247052;
+        bh=tlXaeYOTBR4BxZS8c9V7BazF3L0omHcyLCdBs2LcKhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GWRK72K3xk4sHB77efWQ/jrvqjSpz7dowu4QQUAoEkhRqt6MXo9OBDli71pMJQjAx
-         8t8fccqOeoLNcc79n2Z5Gb61pngKdn7g1fRMEqnAn7kv+LEVJnjKj9gyLazWTDB/gD
-         xSjKHao4CCZ3+wstZXhcAo8CUnUK+dCAQjdoDqNE=
+        b=JDrer+KTTqStsebW2ln0V03NTxBRsCgSLVdRzgnN4MrR2vYYBkgySpxGBTb7M99bq
+         UMEP731T3aKWBHo4+Xe6EG+JBBEvLCv94l5jS5GtJd8f2dvaosMDtMBuHbHqCoFTfj
+         N3O6w9TNsRumWI6KbadIOL15cRuKFQpTwGjP7ncs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 049/158] vsock: Set socket state back to SS_UNCONNECTED in vsock_connect_timeout()
-Date:   Tue, 23 Aug 2022 10:26:21 +0200
-Message-Id: <20220823080048.075103804@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.4 304/389] NFSv4: Fix races in the legacy idmapper upcall
+Date:   Tue, 23 Aug 2022 10:26:22 +0200
+Message-Id: <20220823080128.266299242@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +54,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit a3e7b29e30854ed67be0d17687e744ad0c769c4b upstream.
+commit 51fd2eb52c0ca8275a906eed81878ef50ae94eb0 upstream.
 
-Imagine two non-blocking vsock_connect() requests on the same socket.
-The first request schedules @connect_work, and after it times out,
-vsock_connect_timeout() sets *sock* state back to TCP_CLOSE, but keeps
-*socket* state as SS_CONNECTING.
+nfs_idmap_instantiate() will cause the process that is waiting in
+request_key_with_auxdata() to wake up and exit. If there is a second
+process waiting for the idmap->idmap_mutex, then it may wake up and
+start a new call to request_key_with_auxdata(). If the call to
+idmap_pipe_downcall() from the first process has not yet finished
+calling nfs_idmap_complete_pipe_upcall_locked(), then we may end up
+triggering the WARN_ON_ONCE() in nfs_idmap_prepare_pipe_upcall().
 
-Later, the second request returns -EALREADY, meaning the socket "already
-has a pending connection in progress", even though the first request has
-already timed out.
+The fix is to ensure that we clear idmap->idmap_upcall_data before
+calling nfs_idmap_instantiate().
 
-As suggested by Stefano, fix it by setting *socket* state back to
-SS_UNCONNECTED, so that the second request will return -ETIMEDOUT.
-
-Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
-Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: e9ab41b620e4 ("NFSv4: Clean up the legacy idmapper upcall")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/vmw_vsock/af_vsock.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/nfs/nfs4idmap.c |   46 ++++++++++++++++++++++++----------------------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
 
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1242,6 +1242,7 @@ static void vsock_connect_timeout(struct
- 	if (sk->sk_state == TCP_SYN_SENT &&
- 	    (sk->sk_shutdown != SHUTDOWN_MASK)) {
- 		sk->sk_state = TCP_CLOSE;
-+		sk->sk_socket->state = SS_UNCONNECTED;
- 		sk->sk_err = ETIMEDOUT;
- 		sk->sk_error_report(sk);
- 		vsock_transport_cancel_pkt(vsk);
+--- a/fs/nfs/nfs4idmap.c
++++ b/fs/nfs/nfs4idmap.c
+@@ -560,22 +560,20 @@ nfs_idmap_prepare_pipe_upcall(struct idm
+ 	return true;
+ }
+ 
+-static void
+-nfs_idmap_complete_pipe_upcall_locked(struct idmap *idmap, int ret)
++static void nfs_idmap_complete_pipe_upcall(struct idmap_legacy_upcalldata *data,
++					   int ret)
+ {
+-	struct key *authkey = idmap->idmap_upcall_data->authkey;
+-
+-	kfree(idmap->idmap_upcall_data);
+-	idmap->idmap_upcall_data = NULL;
+-	complete_request_key(authkey, ret);
+-	key_put(authkey);
++	complete_request_key(data->authkey, ret);
++	key_put(data->authkey);
++	kfree(data);
+ }
+ 
+-static void
+-nfs_idmap_abort_pipe_upcall(struct idmap *idmap, int ret)
++static void nfs_idmap_abort_pipe_upcall(struct idmap *idmap,
++					struct idmap_legacy_upcalldata *data,
++					int ret)
+ {
+-	if (idmap->idmap_upcall_data != NULL)
+-		nfs_idmap_complete_pipe_upcall_locked(idmap, ret);
++	if (cmpxchg(&idmap->idmap_upcall_data, data, NULL) == data)
++		nfs_idmap_complete_pipe_upcall(data, ret);
+ }
+ 
+ static int nfs_idmap_legacy_upcall(struct key *authkey, void *aux)
+@@ -612,7 +610,7 @@ static int nfs_idmap_legacy_upcall(struc
+ 
+ 	ret = rpc_queue_upcall(idmap->idmap_pipe, msg);
+ 	if (ret < 0)
+-		nfs_idmap_abort_pipe_upcall(idmap, ret);
++		nfs_idmap_abort_pipe_upcall(idmap, data, ret);
+ 
+ 	return ret;
+ out2:
+@@ -668,6 +666,7 @@ idmap_pipe_downcall(struct file *filp, c
+ 	struct request_key_auth *rka;
+ 	struct rpc_inode *rpci = RPC_I(file_inode(filp));
+ 	struct idmap *idmap = (struct idmap *)rpci->private;
++	struct idmap_legacy_upcalldata *data;
+ 	struct key *authkey;
+ 	struct idmap_msg im;
+ 	size_t namelen_in;
+@@ -677,10 +676,11 @@ idmap_pipe_downcall(struct file *filp, c
+ 	 * will have been woken up and someone else may now have used
+ 	 * idmap_key_cons - so after this point we may no longer touch it.
+ 	 */
+-	if (idmap->idmap_upcall_data == NULL)
++	data = xchg(&idmap->idmap_upcall_data, NULL);
++	if (data == NULL)
+ 		goto out_noupcall;
+ 
+-	authkey = idmap->idmap_upcall_data->authkey;
++	authkey = data->authkey;
+ 	rka = get_request_key_auth(authkey);
+ 
+ 	if (mlen != sizeof(im)) {
+@@ -702,18 +702,17 @@ idmap_pipe_downcall(struct file *filp, c
+ 	if (namelen_in == 0 || namelen_in == IDMAP_NAMESZ) {
+ 		ret = -EINVAL;
+ 		goto out;
+-}
++	}
+ 
+-	ret = nfs_idmap_read_and_verify_message(&im,
+-			&idmap->idmap_upcall_data->idmap_msg,
+-			rka->target_key, authkey);
++	ret = nfs_idmap_read_and_verify_message(&im, &data->idmap_msg,
++						rka->target_key, authkey);
+ 	if (ret >= 0) {
+ 		key_set_timeout(rka->target_key, nfs_idmap_cache_timeout);
+ 		ret = mlen;
+ 	}
+ 
+ out:
+-	nfs_idmap_complete_pipe_upcall_locked(idmap, ret);
++	nfs_idmap_complete_pipe_upcall(data, ret);
+ out_noupcall:
+ 	return ret;
+ }
+@@ -727,7 +726,7 @@ idmap_pipe_destroy_msg(struct rpc_pipe_m
+ 	struct idmap *idmap = data->idmap;
+ 
+ 	if (msg->errno)
+-		nfs_idmap_abort_pipe_upcall(idmap, msg->errno);
++		nfs_idmap_abort_pipe_upcall(idmap, data, msg->errno);
+ }
+ 
+ static void
+@@ -735,8 +734,11 @@ idmap_release_pipe(struct inode *inode)
+ {
+ 	struct rpc_inode *rpci = RPC_I(inode);
+ 	struct idmap *idmap = (struct idmap *)rpci->private;
++	struct idmap_legacy_upcalldata *data;
+ 
+-	nfs_idmap_abort_pipe_upcall(idmap, -EPIPE);
++	data = xchg(&idmap->idmap_upcall_data, NULL);
++	if (data)
++		nfs_idmap_complete_pipe_upcall(data, -EPIPE);
+ }
+ 
+ int nfs_map_name_to_uid(const struct nfs_server *server, const char *name, size_t namelen, kuid_t *uid)
 
 

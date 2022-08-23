@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A2F59D599
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72A359D763
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbiHWIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
+        id S241471AbiHWJSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344685AbiHWIbf (ORCPT
+        with ESMTP id S1349401AbiHWJP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:31:35 -0400
+        Tue, 23 Aug 2022 05:15:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEF766128;
-        Tue, 23 Aug 2022 01:15:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4C16DAE5;
+        Tue, 23 Aug 2022 01:32:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F7E461321;
-        Tue, 23 Aug 2022 08:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47543C433C1;
-        Tue, 23 Aug 2022 08:15:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E0D06123D;
+        Tue, 23 Aug 2022 08:32:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68F3C433D6;
+        Tue, 23 Aug 2022 08:32:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242514;
-        bh=CWO5cFi5S/7DCwalQ4rsgZB2IdcrAI+RfNDTo4EngAY=;
+        s=korg; t=1661243539;
+        bh=TmwB1yyIO7hlQxEEZ3YP1Hse/khGDr1TusJ9UJG8jgQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1BIw3SK5GAXj+jXrVSwOggdpypn9s/J1tNCZssupVYwL2tEo7moYWnKTZxYOTWEyx
-         duILYV6C/rIiVXKHaoMj+IilcymbLmDZCwhA4rVLdOEtWmDDN/lbtTnGkCIysucjwQ
-         uy2z3c7/UH05Tx3YClMe1V2rxAExaRiSNJFH30sk=
+        b=KCBR+26xAnyk1YQjv5JdDVTIM8F/AsaRGYO4ew1ReG/eACdxMRFZroWc66BvYZEHK
+         IMdkI3peg283gi5yUW2KxU99pmy2EFXZ0+ha+QfqWFi6DWqeRkQGj7T0eenknJGwUR
+         qva+cUYbmdcf8HTAF55pWfc/yEYubPs0PT1zWgdU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 4.9 056/101] dm raid: fix address sanitizer warning in raid_status
-Date:   Tue, 23 Aug 2022 10:03:29 +0200
-Message-Id: <20220823080036.696134505@linuxfoundation.org>
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Stafford Horne <shorne@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 309/365] openrisc: io: Define iounmap argument as volatile
+Date:   Tue, 23 Aug 2022 10:03:30 +0200
+Message-Id: <20220823080131.102623174@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Stafford Horne <shorne@gmail.com>
 
-commit 1fbeea217d8f297fe0e0956a1516d14ba97d0396 upstream.
+[ Upstream commit 52e0ea900202d23843daee8f7089817e81dd3dd7 ]
 
-There is this warning when using a kernel with the address sanitizer
-and running this testsuite:
-https://gitlab.com/cki-project/kernel-tests/-/tree/main/storage/swraid/scsi_raid
+When OpenRISC enables PCI it allows for more drivers to be compiled
+resulting in exposing the following with -Werror.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in raid_status+0x1747/0x2820 [dm_raid]
-Read of size 4 at addr ffff888079d2c7e8 by task lvcreate/13319
-CPU: 0 PID: 13319 Comm: lvcreate Not tainted 5.18.0-0.rc3.<snip> #1
-Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-Call Trace:
- <TASK>
- dump_stack_lvl+0x6a/0x9c
- print_address_description.constprop.0+0x1f/0x1e0
- print_report.cold+0x55/0x244
- kasan_report+0xc9/0x100
- raid_status+0x1747/0x2820 [dm_raid]
- dm_ima_measure_on_table_load+0x4b8/0xca0 [dm_mod]
- table_load+0x35c/0x630 [dm_mod]
- ctl_ioctl+0x411/0x630 [dm_mod]
- dm_ctl_ioctl+0xa/0x10 [dm_mod]
- __x64_sys_ioctl+0x12a/0x1a0
- do_syscall_64+0x5b/0x80
+    drivers/video/fbdev/riva/fbdev.c: In function 'rivafb_probe':
+    drivers/video/fbdev/riva/fbdev.c:2062:42: error:
+	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
 
-The warning is caused by reading conf->max_nr_stripes in raid_status. The
-code in raid_status reads mddev->private, casts it to struct r5conf and
-reads the entry max_nr_stripes.
+    drivers/video/fbdev/nvidia/nvidia.c: In function 'nvidiafb_probe':
+    drivers/video/fbdev/nvidia/nvidia.c:1414:20: error:
+	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
 
-However, if we have different raid type than 4/5/6, mddev->private
-doesn't point to struct r5conf; it may point to struct r0conf, struct
-r1conf, struct r10conf or struct mpconf. If we cast a pointer to one
-of these structs to struct r5conf, we will be reading invalid memory
-and KASAN warns about it.
+    drivers/scsi/aic7xxx/aic7xxx_osm.c: In function 'ahc_platform_free':
+    drivers/scsi/aic7xxx/aic7xxx_osm.c:1231:41: error:
+	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
 
-Fix this bug by reading struct r5conf only if raid type is 4, 5 or 6.
+Most architectures define the iounmap argument to be volatile.  To fix this
+issue we do the same for OpenRISC.  This patch must go before PCI is enabled on
+OpenRISC to avoid any compile failures.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/lkml/20220729033728.GA2195022@roeck-us.net/
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Stafford Horne <shorne@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-raid.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/openrisc/include/asm/io.h | 2 +-
+ arch/openrisc/mm/ioremap.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/md/dm-raid.c
-+++ b/drivers/md/dm-raid.c
-@@ -3173,7 +3173,7 @@ static void raid_status(struct dm_target
+diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
+index c298061c70a7..8aa3e78181e9 100644
+--- a/arch/openrisc/include/asm/io.h
++++ b/arch/openrisc/include/asm/io.h
+@@ -31,7 +31,7 @@
+ void __iomem *ioremap(phys_addr_t offset, unsigned long size);
+ 
+ #define iounmap iounmap
+-extern void iounmap(void __iomem *addr);
++extern void iounmap(volatile void __iomem *addr);
+ 
+ #include <asm-generic/io.h>
+ 
+diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
+index daae13a76743..8ec0dafecf25 100644
+--- a/arch/openrisc/mm/ioremap.c
++++ b/arch/openrisc/mm/ioremap.c
+@@ -77,7 +77,7 @@ void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
+ }
+ EXPORT_SYMBOL(ioremap);
+ 
+-void iounmap(void __iomem *addr)
++void iounmap(volatile void __iomem *addr)
  {
- 	struct raid_set *rs = ti->private;
- 	struct mddev *mddev = &rs->md;
--	struct r5conf *conf = mddev->private;
-+	struct r5conf *conf = rs_is_raid456(rs) ? mddev->private : NULL;
- 	int i, max_nr_stripes = conf ? conf->max_nr_stripes : 0;
- 	bool array_in_sync;
- 	unsigned int raid_param_cnt = 1; /* at least 1 for chunksize */
+ 	/* If the page is from the fixmap pool then we just clear out
+ 	 * the fixmap mapping.
+-- 
+2.35.1
+
 
 

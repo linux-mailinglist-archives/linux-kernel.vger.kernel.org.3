@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6049A59DDF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AAB59E3A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358460AbiHWMDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S244594AbiHWMZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359366AbiHWMBT (ORCPT
+        with ESMTP id S1356909AbiHWMVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:01:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A595AD0;
-        Tue, 23 Aug 2022 02:35:42 -0700 (PDT)
+        Tue, 23 Aug 2022 08:21:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5944174353;
+        Tue, 23 Aug 2022 02:43:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EBB36148C;
-        Tue, 23 Aug 2022 09:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30850C433C1;
-        Tue, 23 Aug 2022 09:35:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CA931CE1B58;
+        Tue, 23 Aug 2022 09:42:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E31C433D7;
+        Tue, 23 Aug 2022 09:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247331;
-        bh=TN/x55yLpmLQrDF6tZthviXQbzSPtd4gFj3kiA9aBO4=;
+        s=korg; t=1661247764;
+        bh=0LLFBfOKHFPod6bxQlh8610jSWOZ/Fs0Wgi1kYBiWWk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nMhqi0/4wjGnzQpBfmLurnUYLYlgpEEuqOjmpOLZqxUgxxJZZZ8eWYoxOHer4gaBs
-         6rnx4vveDiKIVqhTglK4fzCJqY3LZ9UVJ0WgRuQbz0J98YkNfmVmif+qWLDPlCoOXp
-         QhAtIC1IbOpfLmgQ8kFz3zr+IrmszKUe6VwtSKP4=
+        b=SFnzRLl66/ORGQVQwOz+hYp5PvxyanGIhywxccFmMB9ZAlvvtJbHIFBb7932GCWLp
+         Jm2nQSDAuqMGmpysBcbx0KLhdRN3mvGYOjZjBYFnZm3RfYZBKjfWhBB43p1Et4Iu9/
+         PWZMMf7ogd8voTMJx4uKRTqxthSNmFFYJrK4MtWo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 363/389] selftests/kprobe: Do not test for GRP/ without event failures
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Liang He <windhl@126.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 109/158] usb: host: ohci-ppc-of: Fix refcount leak bug
 Date:   Tue, 23 Aug 2022 10:27:21 +0200
-Message-Id: <20220823080130.717497993@linuxfoundation.org>
+Message-Id: <20220823080050.366332656@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit f5eab65ff2b76449286d18efc7fee3e0b72f7d9b ]
+[ Upstream commit 40a959d7042bb7711e404ad2318b30e9f92c6b9b ]
 
-A new feature is added where kprobes (and other probes) do not need to
-explicitly state the event name when creating a probe. The event name will
-come from what is being attached.
+In ohci_hcd_ppc_of_probe(), of_find_compatible_node() will return
+a node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-That is:
-
-  # echo 'p:foo/ vfs_read' > kprobe_events
-
-Will no longer error, but instead create an event:
-
-  # cat kprobe_events
- p:foo/p_vfs_read_0 vfs_read
-
-This should not be tested as an error case anymore. Remove it from the
-selftest as now this feature "breaks" the selftest as it no longer fails
-as expected.
-
-Link: https://lore.kernel.org/all/1656296348-16111-1-git-send-email-quic_linyyuan@quicinc.com/
-Link: https://lkml.kernel.org/r/20220712161707.6dc08a14@gandalf.local.home
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220617034637.4003115-1-windhl@126.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc       | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/usb/host/ohci-ppc-of.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index ef1e9bafb098..728c2762ee58 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -24,7 +24,6 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
- check_error 'p:^12345678901234567890123456789012345678901234567890123456789012345/bar vfs_read'	# GROUP_TOO_LONG
+diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
+index 45f7cceb6df3..98e46725999e 100644
+--- a/drivers/usb/host/ohci-ppc-of.c
++++ b/drivers/usb/host/ohci-ppc-of.c
+@@ -169,6 +169,7 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
+ 				release_mem_region(res.start, 0x4);
+ 		} else
+ 			pr_debug("%s: cannot get ehci offset from fdt\n", __FILE__);
++		of_node_put(np);
+ 	}
  
- check_error 'p:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
--check_error 'p:foo/^ vfs_read'		# NO_EVENT_NAME
- check_error 'p:foo/^12345678901234567890123456789012345678901234567890123456789012345 vfs_read'	# EVENT_TOO_LONG
- check_error 'p:foo/^bar.1 vfs_read'	# BAD_EVENT_NAME
- 
+ 	irq_dispose_mapping(irq);
 -- 
 2.35.1
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6A259E00C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE8559E1CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356008AbiHWKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
+        id S1353850AbiHWKZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356407AbiHWKmK (ORCPT
+        with ESMTP id S1353543AbiHWKLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:42:10 -0400
+        Tue, 23 Aug 2022 06:11:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BBCA98FB;
-        Tue, 23 Aug 2022 02:09:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9A1D6E;
+        Tue, 23 Aug 2022 01:57:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0947BB81C53;
-        Tue, 23 Aug 2022 09:09:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C91C433D6;
-        Tue, 23 Aug 2022 09:09:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B62CB81C39;
+        Tue, 23 Aug 2022 08:57:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8140DC433D6;
+        Tue, 23 Aug 2022 08:57:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245765;
-        bh=HW8oSDo9+AP0Lh/FOT/cK/fI51j5qkfr5A+LITh7TqM=;
+        s=korg; t=1661245031;
+        bh=mTC0kP17e1XCi3YiZ/Si/p45n4hJH4RH53+7e7trTvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CXpeMFbnsBOdyf1oxkCWIHukAUf6iYJ8PzwZwFqexteWWTgolMPO5R1pVvLQPmgOt
-         qvssKMvgvgo28L20QGnd7rwXXkNWzKHO/F273Eq5oIHOQaV8xm9oKWQkhzvKu28EyL
-         7p7H8807tBzdWiroLqfp386AsyNMtYH/nkKLAwM8=
+        b=1iX6PYnd9C81Xu2wkZR3X4dTIPrt/u+MISnUPZhG7vhQrLx6abKyUhKuFA4Vow/9u
+         4ssWLws8lakYdd0KfquMujZozUdbrydODTqWPB6ei/zLV5CSzOg5OO8RqeLVLKVOyn
+         B3st3XhZXJ79sGvPgX569AYADqhUY0ph9tRW2zUo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 183/287] video: fbdev: s3fb: Check the size of screen before memset_io()
+        stable@vger.kernel.org, Ben Dooks <ben.dooks@sifive.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 193/244] dmaengine: dw-axi-dmac: do not print NULL LLI during error
 Date:   Tue, 23 Aug 2022 10:25:52 +0200
-Message-Id: <20220823080106.959200057@linuxfoundation.org>
+Message-Id: <20220823080105.842297214@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Ben Dooks <ben.dooks@sifive.com>
 
-[ Upstream commit 6ba592fa014f21f35a8ee8da4ca7b95a018f13e8 ]
+[ Upstream commit 86cb0defe0e275453bc39e856bb523eb425a6537 ]
 
-In the function s3fb_set_par(), the value of 'screen_size' is
-calculated by the user input. If the user provides the improper value,
-the value of 'screen_size' may larger than 'info->screen_size', which
-may cause the following bug:
+During debugging we have seen an issue where axi_chan_dump_lli()
+is passed a NULL LLI pointer which ends up causing an OOPS due
+to trying to get fields from it. Simply print NULL LLI and exit
+to avoid this.
 
-[   54.083733] BUG: unable to handle page fault for address: ffffc90003000000
-[   54.083742] #PF: supervisor write access in kernel mode
-[   54.083744] #PF: error_code(0x0002) - not-present page
-[   54.083760] RIP: 0010:memset_orig+0x33/0xb0
-[   54.083782] Call Trace:
-[   54.083788]  s3fb_set_par+0x1ec6/0x4040
-[   54.083806]  fb_set_var+0x604/0xeb0
-[   54.083836]  do_fb_ioctl+0x234/0x670
-
-Fix the this by checking the value of 'screen_size' before memset_io().
-
-Fixes: a268422de8bf ("fbdev driver for S3 Trio/Virge")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+Link: https://lore.kernel.org/r/20220708170153.269991-3-ben.dooks@sifive.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/s3fb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/video/fbdev/s3fb.c b/drivers/video/fbdev/s3fb.c
-index d63f23e26f7d..b17b806b4187 100644
---- a/drivers/video/fbdev/s3fb.c
-+++ b/drivers/video/fbdev/s3fb.c
-@@ -902,6 +902,8 @@ static int s3fb_set_par(struct fb_info *info)
- 	value = clamp((htotal + hsstart + 1) / 2 + 2, hsstart + 4, htotal + 1);
- 	svga_wcrt_multi(par->state.vgabase, s3_dtpc_regs, value);
- 
-+	if (screen_size > info->screen_size)
-+		screen_size = info->screen_size;
- 	memset_io(info->screen_base, 0x00, screen_size);
- 	/* Device and screen back on */
- 	svga_wcrt_mask(par->state.vgabase, 0x17, 0x80, 0x80);
+diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+index 35993ab92154..8f765e2d7c72 100644
+--- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
++++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+@@ -944,6 +944,11 @@ static int dw_axi_dma_chan_slave_config(struct dma_chan *dchan,
+ static void axi_chan_dump_lli(struct axi_dma_chan *chan,
+ 			      struct axi_dma_hw_desc *desc)
+ {
++	if (!desc->lli) {
++		dev_err(dchan2dev(&chan->vc.chan), "NULL LLI\n");
++		return;
++	}
++
+ 	dev_err(dchan2dev(&chan->vc.chan),
+ 		"SAR: 0x%llx DAR: 0x%llx LLP: 0x%llx BTS 0x%x CTL: 0x%x:%08x",
+ 		le64_to_cpu(desc->lli->sar),
 -- 
 2.35.1
 

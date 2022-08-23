@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D4D59E1A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD97B59DED4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbiHWLZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S1354044AbiHWKTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242047AbiHWLSz (ORCPT
+        with ESMTP id S1352720AbiHWKIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:18:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4683189CCD;
-        Tue, 23 Aug 2022 02:22:12 -0700 (PDT)
+        Tue, 23 Aug 2022 06:08:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BD26E2CF;
+        Tue, 23 Aug 2022 01:54:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D75B161281;
-        Tue, 23 Aug 2022 09:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9B8C433D6;
-        Tue, 23 Aug 2022 09:22:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B4EFB81C48;
+        Tue, 23 Aug 2022 08:38:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E4BC43145;
+        Tue, 23 Aug 2022 08:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246531;
-        bh=yLJQgwkl7YDdmJb25J+56Kv8TjjphIVaEYwvTG8E6zw=;
+        s=korg; t=1661243927;
+        bh=drOoGIBMOeRwHmzS4ziAXbQ0TDul30Lkh7ed/X2k6Ss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cop+8KRQ7YwEudcuUFo1iCd/zhhF4Az8pXMlVFR7xh/xkYx6tRFKazXJFXJnIuF+u
-         amQkqBOG2gCRz5jP8zu5BvI3hbubGp7RGLINhb86HMkw9ZOj2pjiJsU7xEZjqBPGKr
-         ETBx/i91Bqr+k6coCSCEV5XIQQzCeYMh5PlgM/h0=
+        b=j7bZ8yo5AO+fJB5yHu/wJE2aT4po1Z+cTg7SjkgnT9U0Wzjk1uYtpptlFPeys6Sz7
+         LIoTKlMqx8Y0cF0MxvRFk/kfy6z/uS0XodTU+lvX/g11oXTi+jswm4mz+clsagAezp
+         Sc/7k6aaetVm2TXfXOvQrd9xoI88vemY9G8KQZw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 140/389] can: pch_can: pch_can_error(): initialize errc before using it
+Subject: [PATCH 4.14 057/229] regulator: of: Fix refcount leak bug in of_get_regulation_constraints()
 Date:   Tue, 23 Aug 2022 10:23:38 +0200
-Message-Id: <20220823080121.454269318@linuxfoundation.org>
+Message-Id: <20220823080055.767674846@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 9950f11211331180269867aef848c7cf56861742 ]
+[ Upstream commit 66efb665cd5ad69b27dca8571bf89fc6b9c628a4 ]
 
-After commit 3a5c7e4611dd, the variable errc is accessed before being
-initialized, c.f. below W=2 warning:
+We should call the of_node_put() for the reference returned by
+of_get_child_by_name() which has increased the refcount.
 
-| In function 'pch_can_error',
-|     inlined from 'pch_can_poll' at drivers/net/can/pch_can.c:739:4:
-| drivers/net/can/pch_can.c:501:29: warning: 'errc' may be used uninitialized [-Wmaybe-uninitialized]
-|   501 |                 cf->data[6] = errc & PCH_TEC;
-|       |                             ^
-| drivers/net/can/pch_can.c: In function 'pch_can_poll':
-| drivers/net/can/pch_can.c:484:13: note: 'errc' was declared here
-|   484 |         u32 errc, lec;
-|       |             ^~~~
-
-Moving errc initialization up solves this issue.
-
-Fixes: 3a5c7e4611dd ("can: pch_can: do not report txerr and rxerr during bus-off")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/all/20220721160032.9348-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 40e20d68bb3f ("regulator: of: Add support for parsing regulator_state for suspend state")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220715111027.391032-1-windhl@126.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/pch_can.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/regulator/of_regulator.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-index b148572e4a74..586bda050d28 100644
---- a/drivers/net/can/pch_can.c
-+++ b/drivers/net/can/pch_can.c
-@@ -489,6 +489,7 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 	if (!skb)
- 		return;
+diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
+index a3bf7c993723..f82b522bffa7 100644
+--- a/drivers/regulator/of_regulator.c
++++ b/drivers/regulator/of_regulator.c
+@@ -158,8 +158,12 @@ static void of_get_regulation_constraints(struct device_node *np,
+ 		}
  
-+	errc = ioread32(&priv->regs->errc);
- 	if (status & PCH_BUS_OFF) {
- 		pch_can_set_tx_all(priv, 0);
- 		pch_can_set_rx_all(priv, 0);
-@@ -501,7 +502,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 		cf->data[7] = (errc & PCH_REC) >> 8;
- 	}
+ 		suspend_np = of_get_child_by_name(np, regulator_states[i]);
+-		if (!suspend_np || !suspend_state)
++		if (!suspend_np)
+ 			continue;
++		if (!suspend_state) {
++			of_node_put(suspend_np);
++			continue;
++		}
  
--	errc = ioread32(&priv->regs->errc);
- 	/* Warning interrupt. */
- 	if (status & PCH_EWARN) {
- 		state = CAN_STATE_ERROR_WARNING;
+ 		if (!of_property_read_u32(suspend_np, "regulator-mode",
+ 					  &pval)) {
 -- 
 2.35.1
 

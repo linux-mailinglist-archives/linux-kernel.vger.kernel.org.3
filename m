@@ -2,177 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70BA59EC1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308FC59EC19
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbiHWTVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S232066AbiHWTVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiHWTUd (ORCPT
+        with ESMTP id S234303AbiHWTUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:20:33 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35621CD784;
-        Tue, 23 Aug 2022 10:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IU6VaLqWRQa8AsfWC7mdNjG+QFTd5ie930XuTDlDza0=; b=GHpdEGELeLBX4zYUJzZm1W+kmn
-        vJJvoEm6YqLYeAV9CmEShp9eLqTlA3c5/98R81ZMfPwKsYfksAQQE/2+g8HZZCjPUmbuplSOusXX6
-        5kuMbZBTBCglAqbnd1uxEAZpvGhSY8ivckFwS/OpAA1RJUurVjZTK6jULtXzLMQbKTQSF+Ght8ten
-        nvINrmbzZlE8lE1mIGuFx0YaZEOpFop6GyTTWYrYXOQbVZtL4tO3c1jZLZNVoqGgg+4dLBtwJ/3B/
-        OHPgz+Vklh6rVJm8VHrnu+iYHQwk6dPzyj+yi/yfr3A2TvUi4Ti/ZqPOLo0k77NXnnGf4qVI7L7F9
-        ofRchHkg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33898)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oQYBA-0003Sa-56; Tue, 23 Aug 2022 18:59:08 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oQYB7-0003Km-Oh; Tue, 23 Aug 2022 18:59:05 +0100
-Date:   Tue, 23 Aug 2022 18:59:05 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next 2/2] net: altera: tse: convert to phylink
-Message-ID: <YwUVabmOJNDgf/JK@shell.armlinux.org.uk>
-References: <20220823140517.3091239-1-maxime.chevallier@bootlin.com>
- <20220823140517.3091239-3-maxime.chevallier@bootlin.com>
+        Tue, 23 Aug 2022 15:20:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42935A14D;
+        Tue, 23 Aug 2022 10:59:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C57461683;
+        Tue, 23 Aug 2022 17:59:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68132C433C1;
+        Tue, 23 Aug 2022 17:59:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661277585;
+        bh=RIY5fu0Ccv8YyiNMD6vYWY/HtMeFS+5JWc27tNQtnlM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qbqZ/L3vXIHP4Gddr5RSmGm4FUfTbNm+JJ+OeSQJs4xQwzy/n2R0Hug9huUw1HQOI
+         MIoC0Q7Qy1nYY4czNRPpcCJLrq3AsvKnm2esp2ZtITTgJxwkQDYT808S+j5TNIcXTw
+         yJpTp5Dq3cwY/i3rOqN11QsNa0924KynDX0KMdC4m/UfVTN3WKTzaCRgaOUGc4/qwm
+         ruP4rAPIEWvjHLYRRnpK7DE72uG3JVQCt+xsIgMS64AfDfFO+MZ/7aADpjY7kBvQzk
+         ykt4cRVRzvmXI8FI9UjIiA777x56fc4xHWUq45Yw850RI2HeGxdRrlMZn5PltyiHGz
+         VHZ78y2gXkE/g==
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3246910dac3so399434117b3.12;
+        Tue, 23 Aug 2022 10:59:45 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1jPFdPbYPnkcyPG8WQXx3TkqzNcu/3LFWybOysq8+fZM3Qk6Wa
+        sd77Q8T/DXpwVLq/Pq+Pe+8HNWA1NhI4B6eW6/Y=
+X-Google-Smtp-Source: AA6agR5UEK7XZYEggA4k/pHG8nif74dsCS4nPFu6i2sptT8o7hzEBmPIm4r/Iz8JJIishkf4u9k0DulvOer5/uVTSHA=
+X-Received: by 2002:a81:6143:0:b0:335:3076:168e with SMTP id
+ v64-20020a816143000000b003353076168emr25966534ywb.460.1661277584419; Tue, 23
+ Aug 2022 10:59:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823140517.3091239-3-maxime.chevallier@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220704012328.6507-1-jiaming@nfschina.com> <20220705022617.12555-1-jiaming@nfschina.com>
+In-Reply-To: <20220705022617.12555-1-jiaming@nfschina.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 23 Aug 2022 10:59:33 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6H6Gyazn4o23UeYhfWtTFqcvw9dqS=Aqjpjf1o1qdMrg@mail.gmail.com>
+Message-ID: <CAPhsuW6H6Gyazn4o23UeYhfWtTFqcvw9dqS=Aqjpjf1o1qdMrg@mail.gmail.com>
+Subject: Re: [PATCH v2] block: Fix spelling mistakes in comments
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     linux-raid <linux-raid@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, d@ja.vu,
+        liqiong@nfschina.com, renyu@nfschina.com,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 04:05:17PM +0200, Maxime Chevallier wrote:
-> This commit converts the Altera Triple Speed Ethernet Controller to
-> phylink. This controller supports MII, GMII and RGMII with its MAC, and
-> SGMII + 1000BaseX through a small embedded PCS.
-> 
-> The PCS itself has a register set very similar to what is found in a
-> typical 802.3 ethernet PHY, but this register set memory-mapped instead
-> of lying on an mdio bus.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+On Mon, Jul 4, 2022 at 7:26 PM Zhang Jiaming <jiaming@nfschina.com> wrote:
+>
+> Fix spelling of dones't and waitting in comments.
+> Fix tense mistakes of hold and finsh in comments.
+> Use underline to connecting reconfig and mutex.
+>
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-This needs some work.
+Sorry for getting on this late.
 
-> +static void alt_tse_mac_link_state(struct phylink_config *config,
-> +				   struct phylink_link_state *state)
-> +{
-> +	struct net_device *ndev = to_net_dev(config->dev);
-> +	struct altera_tse_private *priv = netdev_priv(ndev);
-> +
-> +	u16 bmsr, lpa;
-> +
-> +	bmsr = sgmii_pcs_read(priv, MII_BMSR);
-> +	lpa = sgmii_pcs_read(priv, MII_LPA);
-> +
-> +	phylink_mii_c22_pcs_decode_state(state, bmsr, lpa);
-> +}
-> +
-> +static void alt_tse_mac_an_restart(struct phylink_config *config)
-> +{
-> +	struct net_device *ndev = to_net_dev(config->dev);
-> +	struct altera_tse_private *priv = netdev_priv(ndev);
-> +	u16 bmcr;
-> +
-> +	bmcr = sgmii_pcs_read(priv, MII_BMCR);
-> +	bmcr |= BMCR_ANRESTART;
-> +	sgmii_pcs_write(priv, MII_BMCR, bmcr);
-> +}
-> +
-> +static void alt_tse_pcs_config(struct net_device *ndev,
-> +			       const struct phylink_link_state *state)
-> +{
-> +	struct altera_tse_private *priv = netdev_priv(ndev);
-> +	u32 ctrl, if_mode;
-> +
-> +	if (state->interface != PHY_INTERFACE_MODE_SGMII &&
-> +	    state->interface != PHY_INTERFACE_MODE_1000BASEX)
-> +		return;
-> +
-> +	ctrl = sgmii_pcs_read(priv, MII_BMCR);
-> +	if_mode = sgmii_pcs_read(priv, SGMII_PCS_IF_MODE);
-> +
-> +	/* Set link timer to 1.6ms, as per the MegaCore Function User Guide */
-> +	sgmii_pcs_write(priv, SGMII_PCS_LINK_TIMER_0, 0x0D40);
-> +	sgmii_pcs_write(priv, SGMII_PCS_LINK_TIMER_1, 0x03);
-> +
-> +	if (state->interface == PHY_INTERFACE_MODE_SGMII) {
-> +		if_mode |= PCS_IF_MODE_USE_SGMII_AN | PCS_IF_MODE_SGMII_ENA;
-> +	} else if (state->interface == PHY_INTERFACE_MODE_1000BASEX) {
-> +		if_mode &= ~(PCS_IF_MODE_USE_SGMII_AN | PCS_IF_MODE_SGMII_ENA);
-> +		if_mode |= PCS_IF_MODE_SGMI_SPEED_1000;
-> +	}
-> +
-> +	ctrl |= (BMCR_SPEED1000 | BMCR_FULLDPLX | BMCR_ANENABLE);
-> +
-> +	sgmii_pcs_write(priv, MII_BMCR, ctrl);
-> +	sgmii_pcs_write(priv, SGMII_PCS_IF_MODE, if_mode);
-> +
-> +	sgmii_pcs_reset(priv);
-> +}
+AFAICT, this one doesn't apply any more (conflict with some of your
+other fixes). Could you please resend?
 
-These look like they can be plugged directly into the phylink_pcs
-support - please use that in preference to bolting it ino the MAC
-ops - as every other ethernet driver (with the exception of
-mtk_eth_soc) does today.
+Thanks,
+Song
 
-> +
-> +static void alt_tse_mac_config(struct phylink_config *config, unsigned int mode,
-> +			       const struct phylink_link_state *state)
-> +{
-> +	struct net_device *ndev = to_net_dev(config->dev);
-> +	struct altera_tse_private *priv = netdev_priv(ndev);
-> +	u32 ctrl;
-> +
-> +	ctrl = csrrd32(priv->mac_dev, tse_csroffs(command_config));
-> +	ctrl &= ~(MAC_CMDCFG_ENA_10 | MAC_CMDCFG_ETH_SPEED | MAC_CMDCFG_HD_ENA);
-> +
-> +	if (state->duplex == DUPLEX_HALF)
-> +		ctrl |= MAC_CMDCFG_HD_ENA;
-
-Using state->duplex in mac_config has always been a problem, it's not
-well defined, and there are paths through phylink where state->duplex
-does not reflect the state of the link when this function is called.
-This is why it's always been clearly documented that this shall not be
-used in mac_config.
-
-> +
-> +	if (state->speed == SPEED_1000)
-> +		ctrl |= MAC_CMDCFG_ETH_SPEED;
-> +	else if (state->speed == SPEED_10)
-> +		ctrl |= MAC_CMDCFG_ENA_10;
-
-Using state->speed brings with it the same problems as state->duplex.
-
-Please instead use mac_link_up() (and pcs_link_up()) - which are the
-only callbacks from phylink that you can be sure give you the
-speed, duplex and pause settings for the link.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> ---
+>  drivers/md/raid5-cache.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+> index 83c184eddbda..8d5154d94f86 100644
+> --- a/drivers/md/raid5-cache.c
+> +++ b/drivers/md/raid5-cache.c
+> @@ -125,7 +125,7 @@ struct r5l_log {
+>                                          * reclaimed.  if it's 0, reclaim spaces
+>                                          * used by io_units which are in
+>                                          * IO_UNIT_STRIPE_END state (eg, reclaim
+> -                                        * dones't wait for specific io_unit
+> +                                        * doesn't wait for specific io_unit
+>                                          * switching to IO_UNIT_STRIPE_END
+>                                          * state) */
+>         wait_queue_head_t iounit_wait;
+> @@ -1326,12 +1326,12 @@ static void r5l_write_super_and_discard_space(struct r5l_log *log,
+>          * Discard could zero data, so before discard we must make sure
+>          * superblock is updated to new log tail. Updating superblock (either
+>          * directly call md_update_sb() or depend on md thread) must hold
+> -        * reconfig mutex. On the other hand, raid5_quiesce is called with
+> -        * reconfig_mutex hold. The first step of raid5_quiesce() is waitting
+> -        * for all IO finish, hence waitting for reclaim thread, while reclaim
+> -        * thread is calling this function and waitting for reconfig mutex. So
+> +        * reconfig_mutex. On the other hand, raid5_quiesce is called with
+> +        * reconfig_mutex held. The first step of raid5_quiesce() is waiting
+> +        * for all IO to finish, hence waiting for reclaim thread, while reclaim
+> +        * thread is calling this function and waiting for reconfig_mutex. So
+>          * there is a deadlock. We workaround this issue with a trylock.
+> -        * FIXME: we could miss discard if we can't take reconfig mutex
+> +        * FIXME: we could miss discard if we can't take reconfig_mutex
+>          */
+>         set_mask_bits(&mddev->sb_flags, 0,
+>                 BIT(MD_SB_CHANGE_DEVS) | BIT(MD_SB_CHANGE_PENDING));
+> --
+> 2.34.1
+>

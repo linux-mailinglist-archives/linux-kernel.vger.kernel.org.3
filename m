@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B586C59D239
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149DD59D22D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240982AbiHWHaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S241006AbiHWHbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240956AbiHWHaO (ORCPT
+        with ESMTP id S241033AbiHWHac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:30:14 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B647562A93
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:30:12 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id x10so12709602ljq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=31EpOHbl+nrYiysahic+51blRSoZd90XSQRkgmuZH8Q=;
-        b=L3txLJbzNASJ23txY0RNdj71aCCiDk/ZgPs0vd6IuBr9Jv6qjFsL+DguB2evwx37e7
-         qo4/+MYuYGWPNLgSL57Rm2eeWZ0HZ679AAcpgNEiFasaUq9yWOO1vzzYHiv66AA+BpOR
-         q3iJj0TRj0U6/9X3QnNeitZxTTQebAAcJncBbhkUsEraYO3eM+aSY59qlihVBwx5nzOk
-         94AX7APlauoQ9znqABTxQg9Mzq4dUkgFtJPUmGf9CWyI/yxlEgcUxsz7IB/MJMoz6HFj
-         /mKsPjjmnBKxWQr7rHvftyc/piBxizSgIumInoNChwp9dy3mD42mvjbK8o5G6lpeATl2
-         UL7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=31EpOHbl+nrYiysahic+51blRSoZd90XSQRkgmuZH8Q=;
-        b=jko+iADFkDNyVla2CuqrumCQjDaf2sxTPxsKgIddW0GXUOu+p3/mozcCIqjlYbsjBg
-         wuB94/B1JQkBLANcxK2pqPc3R6dCvE/zofYQAgZ3BRx1SDIgQwFJWc07O3uh0ECNiXLE
-         ls1bRzoRhAGvcqhzjrvYMBVI6Y1mQu4OXOmJyC/Qr+4KG9Qvk04aRF+UY92jToPJTkjV
-         qgVV37RPJuzf7f+3EEXyOXX3UjOP0QDn7lCdxwofqDPZBTxMI1ophxogv5hi90nhVh0j
-         Gb/lCPZRKDbF0DTE8baoywSlUKl8fKSR77+IdmdhKicNtT9GCo2H/9heNDKh8xG1wuoz
-         7TbQ==
-X-Gm-Message-State: ACgBeo3v5CNknklaloBkRO5saiYPXZdbtfQC3+PIV9TXXpRr2jwylG9p
-        mn29WZs39YZWXiBfMSOkz95Ijw==
-X-Google-Smtp-Source: AA6agR7UsstB+zMX2Ji4pK97oKYfHBo72sTQaY6/pQpWOeEaDcMW0YiVsuF5zXcBH40oxBMg2GQp0A==
-X-Received: by 2002:a2e:a593:0:b0:25f:e6ac:c28e with SMTP id m19-20020a2ea593000000b0025fe6acc28emr7003949ljp.485.1661239811099;
-        Tue, 23 Aug 2022 00:30:11 -0700 (PDT)
-Received: from krzk-bin.. (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05651220d300b0048a7ef09b22sm2361230lfr.274.2022.08.23.00.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 00:30:10 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: exynos: Add SysMMU nodes for Exynos850
-Date:   Tue, 23 Aug 2022 10:30:06 +0300
-Message-Id: <20220823073006.358764-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 Aug 2022 03:30:32 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9178962A93;
+        Tue, 23 Aug 2022 00:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661239831; x=1692775831;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=j51hMQhIOMj+pWMUO1f6irDGuNzX4i/XllUj8uvQjxw=;
+  b=AlrjlsrSq4Rmpqym5Tto2NfkR+loB7z+eG3BFmHmYHGRu4IObOc2V21d
+   2G6+RCzF4JbumzkxHNuouj+M4WP9kUz9Z3J5pmbEXoX0QW6UZhaNCw5i4
+   cVHxR5FhUTpCvzvpeIZWR1L0cmAM+j4zjabKs+q19c3H2gRB3Cq5EFMxp
+   XwI4+Y8bubM1qqvaOseiwg3StNy4lMgldH5mEFlWccTXdt0QtKuxHBXEm
+   CEamteDspBC7QQnn/xg/3s0S4SdPgKekSJlr/uFK0Jlq8sXm5q1AmdwPK
+   cTr+kwhHpQ2WYWus+xB5PxcW5gjhcfri1SlsRSy5unkG8VrEhosh8an6I
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="357594797"
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="357594797"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:30:31 -0700
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="642344795"
+Received: from xujinlon-mobl.ccr.corp.intel.com (HELO [10.254.211.102]) ([10.254.211.102])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:30:23 -0700
+Message-ID: <d538aa77-ac9a-e436-5558-e97e9c68d222@linux.intel.com>
+Date:   Tue, 23 Aug 2022 15:30:21 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v11 05/13] iommu: Add attach/detach_dev_pasid iommu
+ interface
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
+ <20220817012024.3251276-6-baolu.lu@linux.intel.com>
+ <Yv4/s6lX6Nq+40tu@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Yv4/s6lX6Nq+40tu@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,73 +79,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sam Protsenko <semen.protsenko@linaro.org>
+On 2022/8/18 21:33, Jason Gunthorpe wrote:
+> On Wed, Aug 17, 2022 at 09:20:16AM +0800, Lu Baolu wrote:
+> 
+>> +static int __iommu_set_group_pasid(struct iommu_domain *domain,
+>> +				   struct iommu_group *group, ioasid_t pasid)
+>> +{
+>> +	struct iommu_domain *ops_domain;
+>> +	struct group_device *device;
+>> +	int ret = 0;
+>> +
+>> +	if (domain == group->blocking_domain)
+>> +		ops_domain = xa_load(&group->pasid_array, pasid);
+>> +	else
+>> +		ops_domain = domain;
+> 
+> This seems weird, why isn't this just always
+> 
+> domain->ops->set_dev_pasid()?
 
-Add all SysMMU nodes to Exynos850 SoC device tree.
+Sure. I will fix this in the next version.
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220809113323.29965-10-semen.protsenko@linaro.org
----
- arch/arm64/boot/dts/exynos/exynos850.dtsi | 45 +++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+> 
+>> +	if (curr) {
+>> +		ret = xa_err(curr) ? : -EBUSY;
+>> +		goto out_unlock;
+>> +	}
+>> +
+>> +	ret = __iommu_set_group_pasid(domain, group, pasid);
+>> +	if (ret) {
+>> +		__iommu_set_group_pasid(group->blocking_domain, group, pasid);
+>> +		xa_erase(&group->pasid_array, pasid);
+> 
+> I was looking at this trying to figure out why we are having
+> attach/detach semantics vs set and this error handling seems to be the
+> reason
+> 
+> Lets add a comment because it is subtle thing:
+> 
+>    Setting a PASID to a blocking domain cannot fail, so we can always
+>    safely error unwind a failure to attach a domain back to the original
+>    group configuration of the PASID being unused.
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-index 8e78b50416d8..c61441f3a89a 100644
---- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-@@ -503,6 +503,51 @@ i2c_6: i2c@13890000 {
- 			status = "disabled";
- 		};
- 
-+		sysmmu_mfcmscl: sysmmu@12c50000 {
-+			compatible = "samsung,exynos-sysmmu";
-+			reg = <0x12c50000 0x9000>;
-+			interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-names = "sysmmu";
-+			clocks = <&cmu_mfcmscl CLK_GOUT_MFCMSCL_SYSMMU_CLK>;
-+			#iommu-cells = <0>;
-+		};
-+
-+		sysmmu_dpu: sysmmu@130c0000 {
-+			compatible = "samsung,exynos-sysmmu";
-+			reg = <0x130c0000 0x9000>;
-+			interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-names = "sysmmu";
-+			clocks = <&cmu_dpu CLK_GOUT_DPU_SMMU_CLK>;
-+			#iommu-cells = <0>;
-+		};
-+
-+		sysmmu_is0: sysmmu@14550000 {
-+			compatible = "samsung,exynos-sysmmu";
-+			reg = <0x14550000 0x9000>;
-+			interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-names = "sysmmu";
-+			clocks = <&cmu_is CLK_GOUT_IS_SYSMMU_IS0_CLK>;
-+			#iommu-cells = <0>;
-+		};
-+
-+		sysmmu_is1: sysmmu@14570000 {
-+			compatible = "samsung,exynos-sysmmu";
-+			reg = <0x14570000 0x9000>;
-+			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-names = "sysmmu";
-+			clocks = <&cmu_is CLK_GOUT_IS_SYSMMU_IS1_CLK>;
-+			#iommu-cells = <0>;
-+		};
-+
-+		sysmmu_aud: sysmmu@14850000 {
-+			compatible = "samsung,exynos-sysmmu";
-+			reg = <0x14850000 0x9000>;
-+			interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
-+			clock-names = "sysmmu";
-+			clocks = <&cmu_aud CLK_GOUT_AUD_SYSMMU_CLK>;
-+			#iommu-cells = <0>;
-+		};
-+
- 		sysreg_peri: syscon@10020000 {
- 			compatible = "samsung,exynos850-sysreg", "syscon";
- 			reg = <0x10020000 0x10000>;
--- 
-2.34.1
+Updated.
 
+> 
+>> +/*
+>> + * iommu_detach_device_pasid() - Detach the domain from pasid of device
+>> + * @domain: the iommu domain.
+>> + * @dev: the attached device.
+>> + * @pasid: the pasid of the device.
+>> + *
+>> + * The @domain must have been attached to @pasid of the @dev with
+>> + * iommu_attach_device_pasid().
+>> + */
+>> +void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
+>> +			       ioasid_t pasid)
+> 
+> Don't pass domain here?
+
+It is checked in the function to make sure that the detached domain is
+the same one as the previous attached one.
+
+> 
+>> +/*
+>> + * iommu_get_domain_for_dev_pasid() - Retrieve domain for @pasid of @dev
+>> + * @dev: the queried device
+>> + * @pasid: the pasid of the device
+>> + *
+>> + * This is a variant of iommu_get_domain_for_dev(). It returns the existing
+>> + * domain attached to pasid of a device. It's only for internal use of the
+>> + * IOMMU subsystem. The caller must take care to avoid any possible
+>> + * use-after-free case.
+> 
+> How exactly does the caller manage that?
+
+"... the returned domain pointer could only be used before detaching
+from the device PASID."
+
+> 
+>> + *
+>> + * Return: attached domain on success, NULL otherwise.
+>> + */
+>> +struct iommu_domain *
+>> +iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid)
+>> +{
+>> +	struct iommu_domain *domain;
+>> +	struct iommu_group *group;
+>> +
+>> +	if (!pasid_valid(pasid))
+>> +		return NULL;
+> 
+> Why bother? If the pasid is not valid then it definitely won't be in the xarray.
+
+Removed.
+
+> But otherwise this overall thing seems fine to me
+
+Thank you!
+
+Best regards,
+baolu

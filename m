@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263DB59E04C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96A859DC75
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358917AbiHWLzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S1356824AbiHWKwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243992AbiHWLwH (ORCPT
+        with ESMTP id S1355770AbiHWKoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:52:07 -0400
+        Tue, 23 Aug 2022 06:44:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7242BD39B7;
-        Tue, 23 Aug 2022 02:32:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C2B868B6;
+        Tue, 23 Aug 2022 02:10:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F85161335;
-        Tue, 23 Aug 2022 09:32:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D38C433C1;
-        Tue, 23 Aug 2022 09:32:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 884E260DF6;
+        Tue, 23 Aug 2022 09:10:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93645C433D6;
+        Tue, 23 Aug 2022 09:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247149;
-        bh=t5e8m7zUSZLlKDZ0aO+vYJnddTUtFWDaqH96W3GXM0M=;
+        s=korg; t=1661245831;
+        bh=3fugVo6TbpnGxFPfuFIJRDl1aYklh6ri5IkSSvgTZ0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iD2PErDZXnNuDmrjtEVuvgKM6GnxT8noi6Jfn02dnyMF33631JsEkntEwqjh7eEGi
-         /DXRhKQzlHuVe4lCxgxk64qhVIIbhJ+wA6f+V4rOnE8hiQFS2+DLqe2NentXQUDIqb
-         PFdV+OEN6EIhLqwdy3FoTOfD0mbz83xmsxYGeQKo=
+        b=CQHOkOIVX9OMZXd9YEy3B2rZRFgWpYTvp4avVKAQOtSFi1Yr3z6Ibsa9z+8wHfXO5
+         1+fhsmk29k3M4qdbyS9ea3J/6fqj0XxAY+NdfWmR0Firt4q5CxaWvnXHNS2EiL2I4z
+         JDMYoUsNrlTcXs4brKy+B7+CQKsvTlybxlGX46wk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.4 293/389] can: ems_usb: fix clangs -Wunaligned-access warning
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 4.19 202/287] btrfs: reject log replay if there is unsupported RO compat flag
 Date:   Tue, 23 Aug 2022 10:26:11 +0200
-Message-Id: <20220823080127.791496032@linuxfoundation.org>
+Message-Id: <20220823080107.675539451@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Qu Wenruo <wqu@suse.com>
 
-commit a4cb6e62ea4d36e53fb3c0f18ea4503d7b76674f upstream.
+commit dc4d31684974d140250f3ee612c3f0cab13b3146 upstream.
 
-clang emits a -Wunaligned-access warning on struct __packed
-ems_cpc_msg.
+[BUG]
+If we have a btrfs image with dirty log, along with an unsupported RO
+compatible flag:
 
-The reason is that the anonymous union msg (not declared as packed) is
-being packed right after some non naturally aligned variables (3*8
-bits + 2*32) inside a packed struct:
+log_root		30474240
+...
+compat_flags		0x0
+compat_ro_flags		0x40000003
+			( FREE_SPACE_TREE |
+			  FREE_SPACE_TREE_VALID |
+			  unknown flag: 0x40000000 )
 
-| struct __packed ems_cpc_msg {
-| 	u8 type;	/* type of message */
-| 	u8 length;	/* length of data within union 'msg' */
-| 	u8 msgid;	/* confirmation handle */
-| 	__le32 ts_sec;	/* timestamp in seconds */
-| 	__le32 ts_nsec;	/* timestamp in nano seconds */
-|	/* ^ not naturally aligned */
-|
-| 	union {
-| 	/* ^ not declared as packed */
-| 		u8 generic[64];
-| 		struct cpc_can_msg can_msg;
-| 		struct cpc_can_params can_params;
-| 		struct cpc_confirm confirmation;
-| 		struct cpc_overrun overrun;
-| 		struct cpc_can_error error;
-| 		struct cpc_can_err_counter err_counter;
-| 		u8 can_state;
-| 	} msg;
-| };
+Then even if we can only mount it RO, we will still cause metadata
+update for log replay:
 
-Starting from LLVM 14, having an unpacked struct nested in a packed
-struct triggers a warning. c.f. [1].
+  BTRFS info (device dm-1): flagging fs with big metadata feature
+  BTRFS info (device dm-1): using free space tree
+  BTRFS info (device dm-1): has skinny extents
+  BTRFS info (device dm-1): start tree-log replay
 
-Fix the warning by marking the anonymous union as packed.
+This is definitely against RO compact flag requirement.
 
-[1] https://github.com/llvm/llvm-project/issues/55520
+[CAUSE]
+RO compact flag only forces us to do RO mount, but we will still do log
+replay for plain RO mount.
 
-Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB interface")
-Link: https://lore.kernel.org/all/20220802094021.959858-1-mkl@pengutronix.de
-Cc: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Cc: Sebastian Haas <haas@ems-wuensche.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Thus this will result us to do log replay and update metadata.
+
+This can be very problematic for new RO compat flag, for example older
+kernel can not understand v2 cache, and if we allow metadata update on
+RO mount and invalidate/corrupt v2 cache.
+
+[FIX]
+Just reject the mount unless rescue=nologreplay is provided:
+
+  BTRFS error (device dm-1): cannot replay dirty log with unsupport optional features (0x40000000), try rescue=nologreplay instead
+
+We don't want to set rescue=nologreply directly, as this would make the
+end user to read the old data, and cause confusion.
+
+Since the such case is really rare, we're mostly fine to just reject the
+mount with an error message, which also includes the proper workaround.
+
+CC: stable@vger.kernel.org #4.9+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/ems_usb.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/disk-io.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/drivers/net/can/usb/ems_usb.c
-+++ b/drivers/net/can/usb/ems_usb.c
-@@ -194,7 +194,7 @@ struct __packed ems_cpc_msg {
- 	__le32 ts_sec;	/* timestamp in seconds */
- 	__le32 ts_nsec;	/* timestamp in nano seconds */
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -2920,6 +2920,20 @@ int open_ctree(struct super_block *sb,
+ 		err = -EINVAL;
+ 		goto fail_alloc;
+ 	}
++	/*
++	 * We have unsupported RO compat features, although RO mounted, we
++	 * should not cause any metadata write, including log replay.
++	 * Or we could screw up whatever the new feature requires.
++	 */
++	if (unlikely(features && btrfs_super_log_root(disk_super) &&
++		     !btrfs_test_opt(fs_info, NOLOGREPLAY))) {
++		btrfs_err(fs_info,
++"cannot replay dirty log with unsupported compat_ro features (0x%llx), try rescue=nologreplay",
++			  features);
++		err = -EINVAL;
++		goto fail_alloc;
++	}
++
  
--	union {
-+	union __packed {
- 		u8 generic[64];
- 		struct cpc_can_msg can_msg;
- 		struct cpc_can_params can_params;
+ 	ret = btrfs_init_workqueues(fs_info, fs_devices);
+ 	if (ret) {
 
 

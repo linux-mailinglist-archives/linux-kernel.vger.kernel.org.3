@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D597859E044
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F371559E038
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352148AbiHWMLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S1358065AbiHWLnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359622AbiHWMKr (ORCPT
+        with ESMTP id S1357715AbiHWLiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:10:47 -0400
+        Tue, 23 Aug 2022 07:38:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90D369F4C;
-        Tue, 23 Aug 2022 02:38:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1C21054A;
+        Tue, 23 Aug 2022 02:28:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30782B81C65;
-        Tue, 23 Aug 2022 09:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 972E3C433D6;
-        Tue, 23 Aug 2022 09:37:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88A6CB81C85;
+        Tue, 23 Aug 2022 09:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D203CC433C1;
+        Tue, 23 Aug 2022 09:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247457;
-        bh=ypEv1n++CtxAilts2e0nw7v+ULA4+1lQCQ2OdLMVVwA=;
+        s=korg; t=1661246899;
+        bh=SQXOfBhhjusfyQ7h7S2cvioqr/p4Hpbw5vz6sQzz1Wk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gOjqxUl5aJLfx+AxvuYaRN8hKUDHsgnCVdVOERJvD900Wg3zAXtwBmXKDXHD4N6gK
-         13nTM+F6Kk/ShzIURa4eA9jwWPJ2REAYl2onSKU+L30dZQlItvhdFo0kaRAACh4vRz
-         nElh/+6yiHtMSqD0IfI+8i1fEeMikTakiZisnMmU=
+        b=SkI16JYsi2c/l5fDN6rzH6CtbkpHXhOObXBf3CgXXIdfB0qLIUFQv6GmEm9gkQr+R
+         EjEpnQTCGEBjWxN8xv5Pwxhu0y8NG60YC0vxIeKgV2LdZ6acwRwZyX5I+raIEQPpb1
+         j1sX/UXGKgmM7KBxWjjF/DB4GFTXaDBfKxlITTM0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 001/158] ALSA: info: Fix llseek return value when using callback
+        stable@vger.kernel.org, WANG Xuerui <git@xen0n.name>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH 5.4 255/389] tpm: eventlog: Fix section mismatch for DEBUG_SECTION_MISMATCH
 Date:   Tue, 23 Aug 2022 10:25:33 +0200
-Message-Id: <20220823080046.105831093@linuxfoundation.org>
+Message-Id: <20220823080126.253203932@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,51 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+From: Huacai Chen <chenhuacai@loongson.cn>
 
-commit 9be080edcca330be4af06b19916c35227891e8bc upstream.
+commit bed4593645366ad7362a3aa7bc0d100d8d8236a8 upstream.
 
-When using callback there was a flow of
+If DEBUG_SECTION_MISMATCH enabled, __calc_tpm2_event_size() will not be
+inlined, this cause section mismatch like this:
 
-	ret = -EINVAL
-	if (callback) {
-		offset = callback();
-		goto out;
-	}
-	...
-	offset = some other value in case of no callback;
-	ret = offset;
-out:
-	return ret;
+WARNING: modpost: vmlinux.o(.text.unlikely+0xe30c): Section mismatch in reference from the variable L0 to the function .init.text:early_ioremap()
+The function L0() references
+the function __init early_memremap().
+This is often because L0 lacks a __init
+annotation or the annotation of early_ioremap is wrong.
 
-which causes the snd_info_entry_llseek() to return -EINVAL when there is
-callback handler. Fix this by setting "ret" directly to callback return
-value before jumping to "out".
+Fix it by using __always_inline instead of inline for the called-once
+function __calc_tpm2_event_size().
 
-Fixes: 73029e0ff18d ("ALSA: info - Implement common llseek for binary mode")
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220817124924.3974577-1-amadeuszx.slawinski@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 44038bc514a2 ("tpm: Abstract crypto agile event size calculations")
+Cc: stable@vger.kernel.org # v5.3
+Reported-by: WANG Xuerui <git@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/info.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/tpm_eventlog.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/core/info.c
-+++ b/sound/core/info.c
-@@ -112,9 +112,9 @@ static loff_t snd_info_entry_llseek(stru
- 	entry = data->entry;
- 	mutex_lock(&entry->access);
- 	if (entry->c.ops->llseek) {
--		offset = entry->c.ops->llseek(entry,
--					      data->file_private_data,
--					      file, offset, orig);
-+		ret = entry->c.ops->llseek(entry,
-+					   data->file_private_data,
-+					   file, offset, orig);
- 		goto out;
- 	}
+--- a/include/linux/tpm_eventlog.h
++++ b/include/linux/tpm_eventlog.h
+@@ -157,7 +157,7 @@ struct tcg_algorithm_info {
+  * Return: size of the event on success, 0 on failure
+  */
  
+-static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
++static __always_inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+ 					 struct tcg_pcr_event *event_header,
+ 					 bool do_mapping)
+ {
 
 

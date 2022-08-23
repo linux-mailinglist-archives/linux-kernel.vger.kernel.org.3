@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A75A59D5EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C8059D75E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243426AbiHWIZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S237172AbiHWJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243493AbiHWIVP (ORCPT
+        with ESMTP id S1349686AbiHWJQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:21:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE76D6F553;
-        Tue, 23 Aug 2022 01:12:36 -0700 (PDT)
+        Tue, 23 Aug 2022 05:16:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1264E870BD;
+        Tue, 23 Aug 2022 01:32:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DF5DB81C36;
-        Tue, 23 Aug 2022 08:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBAEDC43144;
-        Tue, 23 Aug 2022 08:12:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D094B81C4C;
+        Tue, 23 Aug 2022 08:32:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6414C433D6;
+        Tue, 23 Aug 2022 08:32:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242355;
-        bh=exLWc5wfuhzLstDPxiLLQ/227evYWkphKy8CKnPSkFA=;
+        s=korg; t=1661243545;
+        bh=MrWX07tsnUvzSzDyKHxZReNNiPHWtCGNB4A0lNM0qb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TroV75M1an1zq5WHYxrk76CQgec1eeUUAJXmxvV5q7y2cZa6FjGoPmZccNTu+ZphW
-         Y7N4ZxupZKFsUSRqSHeBlk+59w3CLnET7HX+F/+MwdwQhaLBxxRLQQMYv1KrlUwUjq
-         5kj/AhubztSq9RhbLZ40Al7nPcmR1cKLyWC9jcvo=
+        b=16Cpz7SX72askWAFOgS9C3s5MwRffoD/DuK+SsVaL0xxEfSjOKqKYzRzI0PhLhdlD
+         1LZLYjDlw3jP46ice7A9OL0tKkOZm/CK/yGEEUE2O0a1XXsqvvQfEcbYuEqHx5hOs/
+         Fj2KZMd9IY5uMzEWLkTIPGyMXi0Bm5rgLgAOCAjQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Wei Wang <weiwan@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 059/101] tcp: fix over estimation in sk_forced_mem_schedule()
+        stable@vger.kernel.org, Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 311/365] md: Notify sysfs sync_completed in md_reap_sync_thread()
 Date:   Tue, 23 Aug 2022 10:03:32 +0200
-Message-Id: <20220823080036.832741502@linuxfoundation.org>
+Message-Id: <20220823080131.186923522@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Logan Gunthorpe <logang@deltatee.com>
 
-commit c4ee118561a0f74442439b7b5b486db1ac1ddfeb upstream.
+[ Upstream commit 9973f0fa7d20269fe6fefe6333997fb5914449c1 ]
 
-sk_forced_mem_schedule() has a bug similar to ones fixed
-in commit 7c80b038d23e ("net: fix sk_wmem_schedule() and
-sk_rmem_schedule() errors")
+The mdadm test 07layouts randomly produces a kernel hung task deadlock.
+The deadlock is caused by the suspend_lo/suspend_hi files being set by
+the mdadm background process during reshape and not being cleared
+because the process hangs. (Leaving aside the issue of the fragility of
+freezing kernel tasks by buggy userspace processes...)
 
-While this bug has little chance to trigger in old kernels,
-we need to fix it before the following patch.
+When the background mdadm process hangs it, is waiting (without a
+timeout) on a change to the sync_completed file signalling that the
+reshape has completed. The process is woken up a couple times when
+the reshape finishes but it is woken up before MD_RECOVERY_RUNNING
+is cleared so sync_completed_show() reports 0 instead of "none".
 
-Fixes: d83769a580f1 ("tcp: fix possible deadlock in tcp_send_fin()")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
-Reviewed-by: Wei Wang <weiwan@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To fix this, notify the sysfs file in md_reap_sync_thread() after
+MD_RECOVERY_RUNNING has been cleared. This wakes up mdadm and causes
+it to continue and write to suspend_lo/suspend_hi to allow IO to
+continue.
+
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/md/md.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -2986,11 +2986,12 @@ begin_fwd:
-  */
- void sk_forced_mem_schedule(struct sock *sk, int size)
- {
--	int amt;
-+	int delta, amt;
- 
--	if (size <= sk->sk_forward_alloc)
-+	delta = size - sk->sk_forward_alloc;
-+	if (delta <= 0)
- 		return;
--	amt = sk_mem_pages(size);
-+	amt = sk_mem_pages(delta);
- 	sk->sk_forward_alloc += amt * SK_MEM_QUANTUM;
- 	sk_memory_allocated_add(sk, amt);
- 
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 660c52d48256..522b3d6b8c46 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -9466,6 +9466,7 @@ void md_reap_sync_thread(struct mddev *mddev)
+ 	wake_up(&resync_wait);
+ 	/* flag recovery needed just to double check */
+ 	set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
++	sysfs_notify_dirent_safe(mddev->sysfs_completed);
+ 	sysfs_notify_dirent_safe(mddev->sysfs_action);
+ 	md_new_event();
+ 	if (mddev->event_work.func)
+-- 
+2.35.1
+
 
 

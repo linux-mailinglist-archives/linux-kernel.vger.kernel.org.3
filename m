@@ -2,102 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2740259EE82
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B1959EE8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiHWV4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S231636AbiHWWAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiHWV4I (ORCPT
+        with ESMTP id S231559AbiHWWAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:56:08 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A73B21E0E;
-        Tue, 23 Aug 2022 14:56:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iAgBssOpd/sZ1R2rXM2cm+uxEbjXk2FmMol4xmjjx46kperFZ9M4iTB3pQ26p/VKVnW+0DIahjNNIZjDJVtUIgeZz0pwKxW0DzXt5bwF/PWEbD51m4XHaDeZ+o5frfGRvYVJ5IVlOdnJ23EFDwZFtMJwFwnNWWtLkJuaZR9jXiDqfEv0PLYGPdxDKu09Wkiqqaks709KxnyZEDTCVYhwjPk9eKhNtXkvzrb84Kz+foTPz4dFRQ50+Msd5mWw6gGjanEKV0EXbT+FzQU62CMwOvw17hRaeDmcjlFut9ZOSV0AqZ/9mrnst+94GHdnx45QQBEledGeJevWIc56RY/bTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d0f2XjPrxqoQUgxQjP/tf25RswGarrCT94ARK1Lxw50=;
- b=D4A9sgijjOlN8uvx3wMpFQY9ROmRDdHjmj34zdelrDyveAAmAbMABmtTdWf0unCUqju7wDO/RDTOUromPLR7jEsxFHo0y00jApBaGmiqAwEchebPBhdxf9vbFNQtmi9gxZ5BVCkrAfsjXYWgE4lQczPYfAWus8B5vWLp7kndcEFveU4BUwEt9U6DJu0cekyMYRL2P/ndAkP3UWjY0OjB16l18u9N6pnpaeLDMB+C3SRdSbFXnm09k5TTIh01MooybhJiY3mlkrn6ubSYvmsRsxEkU1qtHKaA1K4Z4WVLijrqitMa3n1aWpl77wBCJQ5aZ+khImBwnkqZ91uFCMIQVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d0f2XjPrxqoQUgxQjP/tf25RswGarrCT94ARK1Lxw50=;
- b=s1Yue2Q6wAORAtl314sCvRPLfrk2GufrQIN/NWYTWehNadEQYOUgV6ATGs2RosJyXXgWrSFqvaDk7Uxneti/0lfBn/oCWYDA8/gGTrMOEyfWMK5XUkwpSSYv3vIBY/Nn4FnsqZb7+Lvty603aLlVW+odCnQE9yRUieDfo5wMuvo=
-Received: from MW4PR03CA0327.namprd03.prod.outlook.com (2603:10b6:303:dd::32)
- by BYAPR12MB3030.namprd12.prod.outlook.com (2603:10b6:a03:ae::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Tue, 23 Aug
- 2022 21:56:04 +0000
-Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dd:cafe::66) by MW4PR03CA0327.outlook.office365.com
- (2603:10b6:303:dd::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.20 via Frontend
- Transport; Tue, 23 Aug 2022 21:56:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5566.15 via Frontend Transport; Tue, 23 Aug 2022 21:56:03 +0000
-Received: from tlendack-t1.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 23 Aug
- 2022 16:56:02 -0500
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>
-CC:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Asish Kalra <ashish.kalra@amd.com>,
-        "Michael Roth" <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        <stable@vger.kernel.org>, "Sean Christopherson" <seanjc@google.com>
-Subject: [PATCH] x86/sev: Don't use cc_platform_has() for early SEV-SNP calls
-Date:   Tue, 23 Aug 2022 16:55:51 -0500
-Message-ID: <0c9b9a6c33ff4b8ce17a87a6c09db44d3b52bad3.1661291751.git.thomas.lendacky@amd.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 23 Aug 2022 18:00:23 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EC05A829;
+        Tue, 23 Aug 2022 15:00:22 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id 92-20020a9d0be5000000b0063946111607so1358953oth.10;
+        Tue, 23 Aug 2022 15:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=KxUnJO5kb4knBfdxm8mXJ+AuQhFumfmLRhT6rxam+RI=;
+        b=PFBIoO3Tr9ZKI+LdxB+z2ngMlEd+2QVBA7kjAAQNZ4xICRXJ5GXCXb/C/6r1NxZ0Eb
+         bQHeIGudoW7wbPVN61R4Q38wQtV0UGUEVnrOI0q8fth7fsYeNTP3hue2NFRqJn91IHhv
+         tMT9xlcs1OElw6MzIXX5BgfRZ6GSBfPeNtPX5ertXIkgSIKwPj/TVWKU03esLsQKBooE
+         Pi+zS2rqOIVwX6NQyolqsmbeuDiBL0pg++13uNXmJO9NwmOKdFHjL6BoFsO2wGGm0OKP
+         HGlw6XE30IachmI0niAHMhpCysaMlkHbL/+69guE2wZiqcs+GGm/Midk9Fr1BBF6zJl0
+         zZgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=KxUnJO5kb4knBfdxm8mXJ+AuQhFumfmLRhT6rxam+RI=;
+        b=dlh1R8xBZP+YRrGcujJvld3pILXct3eaiq1EblfsABRC+9v3wFYDT7sbTbGR1fqiEZ
+         dhx+lJjrV6raiF72kVdsyKe2H4tEFXTxk6X6KhRiLsrt3vpk/ANn6Hc3xGG43Cl7FUu6
+         30+EK3JI5hKe+vfNerDTyKKVUVr/h18XX5+PIzcsZUoZIICrEkZhqkFC8IRN34guXkZ9
+         /LcxjtS3U7hYIEUcNB6BLUf769Fz0DJutSNInrG3l4SrXh3VtKAxmr/wf6nRNL8QGPv+
+         0JQnKXAE+d932LbSNu3PE1TE4CuvrUs9zOhz3ah79HiBmRKLNJkhRHa/vJunEPzNsuu1
+         owIA==
+X-Gm-Message-State: ACgBeo2Q1/fOXmyXENAwa5WeCNlWe+z5wI33G6yq65ISQnZhT23XdKrD
+        dH93A7HAY05MOfFRVJ9wKGr0l1Bu8mFwo2jvO88=
+X-Google-Smtp-Source: AA6agR6yvxeRJ1r5dz8UoW2dhWNf4E3ZO3dZi4TMMLWAKElVhVFa/163CDI9rblTbYjseBsGZzfezNSR0ORlRhDrH40=
+X-Received: by 2002:a9d:61d2:0:b0:639:31ca:87fe with SMTP id
+ h18-20020a9d61d2000000b0063931ca87femr3407223otk.22.1661292021482; Tue, 23
+ Aug 2022 15:00:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4c018d9d-390e-4336-51d8-08da8552466a
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3030:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G3214nZxwjv41t0S7pOmOoCfYRo36Uz0XCcz/nx78/e8LShzMnnFta1qGlqy5/UcOHVGqbezS/N3/q+Yv181HKwkk/J+sOnGzWAozHNPX6LAR3JEKLmeBtG6iUo4q8TpZW1Fep/SoIZlJ8VV3Y3seF4ZzsT0hjT6/iulqtrBeoZX9W86d0yocjKiDhTMDk67prRQ3bEK2uw51kzJGKAFkrHykRo9sfGxho+IqWniqUmpVEBC45TxwNh4ZdEDw27ZjdZktk7NhjVCqIl6huLufiyPE3h8r5LBjrvtUsxw5qvzlNn5ylf9/E50PoXy1XOmsYQx9cDnOK86SwvPQZL75kf8b3oGtuvzSFVKMeZHHru/Rh3iQYpPnvbNBGDDmY9u2KbxzKypL0A5zv/nAwVTq+Hztv3oesCiTM42ky6C8CSR1Cj+d58gAQv29oC8GQXtbejlugWJVS39ZG8ISU5jFSVXehPG/rSkHdGdZKGhcD9A8c84v+s1ysf1wvjwlNUaYJOuLGEWGuKj4WJvFYJC9Gz/HyIS98Btuomf+28jc0fkXgPUKkVJ9RHcc2gwj6xUTAitJ01RH8mogeXwdcWchp4Le5kfGYBi/2A5KGVmXdXt5ZYyMDUUSNcjqZrLlc8g7qKEL5UNOzQGLVROig8QH6EaOyCKgFt1TEKc6SrD1vb0OordyNBpN6I78QSsJaDX+TYUeDyngoaQvD0n5Sk8five8kSP1iDvc1IcGAt6gA8rdLSdmvSaXjWuehI6dyIJalLZFQu2X7Ztcrtiy3cInhCpeokmBqFIKgZM6AxT9P4ikDAT1fj0V0QqwaYIHQ0qsWkXwghlz0HX18cBhV5YHxoUOrD1cTvIdo61Np2SYLDkGVf4fMn7BYS5VfppvTdQ
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(39860400002)(136003)(40470700004)(46966006)(36840700001)(7416002)(82740400003)(356005)(86362001)(8676002)(70586007)(40460700003)(70206006)(4326008)(316002)(81166007)(36860700001)(8936002)(40480700001)(110136005)(83380400001)(5660300002)(2906002)(82310400005)(336012)(7696005)(6666004)(16526019)(47076005)(426003)(41300700001)(478600001)(186003)(54906003)(26005)(2616005)(966005)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 21:56:03.9657
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c018d9d-390e-4336-51d8-08da8552466a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3030
+References: <20220823163719.90399-1-robdclark@gmail.com> <8d3c8ae2-f342-b38c-e0d2-9abd357703f5@quicinc.com>
+In-Reply-To: <8d3c8ae2-f342-b38c-e0d2-9abd357703f5@quicinc.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 23 Aug 2022 15:00:55 -0700
+Message-ID: <CAF6AEGtC5g17buULLxag5Ev4=To2QENSBwqOVbmxdopWtpt8cw@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH v2] drm/msm/iommu: optimize map/unmap
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>, Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,63 +73,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running identity mapped and depending on the kernel configuration,
-it is possible that cc_platform_has() can have compiler generated code
-that uses jump tables. This causes a boot failure because the jump table
-uses un-mapped kernel virtual addresses, not identity mapped addresses.
-This has been seen with CONFIG_RETPOLINE=n.
+On Tue, Aug 23, 2022 at 2:37 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> On 8/23/2022 10:07 PM, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Using map_pages/unmap_pages cuts down on the # of pgtable walks needed
+> > in the process of finding where to insert/remove an entry.  The end
+> > result is ~5-10x faster than mapping a single page at a time.
+> >
+> > v2: Rename iommu_pgsize(), drop obsolete comments, fix error handling
+> >      in msm_iommu_pagetable_map()
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >   drivers/gpu/drm/msm/msm_iommu.c | 101 +++++++++++++++++++++++++++-----
+> >   1 file changed, 86 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
+> > index a54ed354578b..5577cea7c009 100644
+> > --- a/drivers/gpu/drm/msm/msm_iommu.c
+> > +++ b/drivers/gpu/drm/msm/msm_iommu.c
+> > @@ -21,6 +21,7 @@ struct msm_iommu_pagetable {
+> >       struct msm_mmu base;
+> >       struct msm_mmu *parent;
+> >       struct io_pgtable_ops *pgtbl_ops;
+> > +     unsigned long pgsize_bitmap;    /* Bitmap of page sizes in use */
+> >       phys_addr_t ttbr;
+> >       u32 asid;
+> >   };
+> > @@ -29,23 +30,84 @@ static struct msm_iommu_pagetable *to_pagetable(struct msm_mmu *mmu)
+> >       return container_of(mmu, struct msm_iommu_pagetable, base);
+> >   }
+> >
+> > +/* based on iommu_pgsize() in iommu.c: */
+> > +static size_t calc_pgsize(struct msm_iommu_pagetable *pagetable,
+> > +                        unsigned long iova, phys_addr_t paddr,
+> > +                        size_t size, size_t *count)
+> > +{
+> > +     unsigned int pgsize_idx, pgsize_idx_next;
+> > +     unsigned long pgsizes;
+> > +     size_t offset, pgsize, pgsize_next;
+> > +     unsigned long addr_merge = paddr | iova;
+> > +
+> > +     /* Page sizes supported by the hardware and small enough for @size */
+> > +     pgsizes = pagetable->pgsize_bitmap & GENMASK(__fls(size), 0);
+> > +
+> > +     /* Constrain the page sizes further based on the maximum alignment */
+> > +     if (likely(addr_merge))
+> > +             pgsizes &= GENMASK(__ffs(addr_merge), 0);
+> > +
+> > +     /* Make sure we have at least one suitable page size */
+> > +     BUG_ON(!pgsizes);
+> > +
+> > +     /* Pick the biggest page size remaining */
+> > +     pgsize_idx = __fls(pgsizes);
+> > +     pgsize = BIT(pgsize_idx);
+> > +     if (!count)
+> > +             return pgsize;
+> > +
+> > +     /* Find the next biggest support page size, if it exists */
+> > +     pgsizes = pagetable->pgsize_bitmap & ~GENMASK(pgsize_idx, 0);
+> > +     if (!pgsizes)
+> > +             goto out_set_count;
+> > +
+> > +     pgsize_idx_next = __ffs(pgsizes);
+> > +     pgsize_next = BIT(pgsize_idx_next);
+> > +
+> > +     /*
+> > +      * There's no point trying a bigger page size unless the virtual
+> > +      * and physical addresses are similarly offset within the larger page.
+> > +      */
+> > +     if ((iova ^ paddr) & (pgsize_next - 1))
+> > +             goto out_set_count;
+> > +
+> > +     /* Calculate the offset to the next page size alignment boundary */
+> > +     offset = pgsize_next - (addr_merge & (pgsize_next - 1));
+> > +
+> > +     /*
+> > +      * If size is big enough to accommodate the larger page, reduce
+> > +      * the number of smaller pages.
+> > +      */
+> > +     if (offset + pgsize_next <= size)
+> > +             size = offset;
+> > +
+> > +out_set_count:
+> > +     *count = size >> pgsize_idx;
+> > +     return pgsize;
+> > +}
+> > +
+> Can we keep this in iommu driver? Seems useful to other drivers too.
 
-Similar to sme_encrypt_kernel(), use an open-coded direct check for the
-status of SNP rather than trying to eliminate the jump table. This
-preserves any code optimization in cc_platform_has() that can be useful
-post boot. It also limits the changes to SEV-specific files so that
-future compiler features won't necessarily require possible build changes
-just because they are not compatible with running identity mapped.
+This might end up being only temporary.. Robin had the idea of adding
+a private way to create "dummy" iommu_domain's which we could use
+instead of the pgtbl ops directly.  On one hand, it would simplify
+this quite a bit.  On the other hand it would force powering up (at
+least the SMMU) for unmaps/maps, and make it harder to do things like
+this:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216385
-Link: https://lore.kernel.org/all/YqfabnTRxFSM+LoX@google.com/
-Cc: <stable@vger.kernel.org> # 5.19.x
-Reported-by: Sean Christopherson <seanjc@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
----
- arch/x86/kernel/sev.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+  https://patchwork.freedesktop.org/patch/498660/?series=107536&rev=1
 
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 63dc626627a0..4f84c3f11af5 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -701,7 +701,13 @@ static void __init early_set_pages_state(unsigned long paddr, unsigned int npage
- void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr,
- 					 unsigned int npages)
- {
--	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+	/*
-+	 * This can be invoked in early boot while running identity mapped, so
-+	 * use an open coded check for SNP instead of using cc_platform_has().
-+	 * This eliminates worries about jump tables or checking boot_cpu_data
-+	 * in the cc_platform_has() function.
-+	 */
-+	if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
- 		return;
- 
- 	 /*
-@@ -717,7 +723,13 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
- 					unsigned int npages)
- {
--	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+	/*
-+	 * This can be invoked in early boot while running identity mapped, so
-+	 * use an open coded check for SNP instead of using cc_platform_has().
-+	 * This eliminates worries about jump tables or checking boot_cpu_data
-+	 * in the cc_platform_has() function.
-+	 */
-+	if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
- 		return;
- 
- 	/* Invalidate the memory pages before they are marked shared in the RMP table. */
--- 
-2.37.2
+> Perhaps implement an sg friendly version of iopgtble ops, like
+> unmap_sg() maybe!
 
+Probably not a good idea to push more into the iopgtbl
+implementations.. __iommu_map_sg() does have a bit of cleverness, but
+that shouldn't really be required if we get our sg from
+drm_prime_pages_to_sg() since sg_alloc_append_table_from_pages()
+already performs a similar merging
+
+BR,
+-R
+
+>
+> -Akhil.
+> >   static int msm_iommu_pagetable_unmap(struct msm_mmu *mmu, u64 iova,
+> >               size_t size)
+> >   {
+> >       struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
+> >       struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
+> > -     size_t unmapped = 0;
+> >
+> > -     /* Unmap the block one page at a time */
+> >       while (size) {
+> > -             unmapped += ops->unmap(ops, iova, 4096, NULL);
+> > -             iova += 4096;
+> > -             size -= 4096;
+> > +             size_t unmapped, pgsize, count;
+> > +
+> > +             pgsize = calc_pgsize(pagetable, iova, iova, size, &count);
+> > +
+> > +             unmapped = ops->unmap_pages(ops, iova, pgsize, count, NULL);
+> > +             if (!unmapped)
+> > +                     break;
+> > +
+> > +             iova += unmapped;
+> > +             size -= unmapped;
+> >       }
+> >
+> >       iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
+> >
+> > -     return (unmapped == size) ? 0 : -EINVAL;
+> > +     return (size == 0) ? 0 : -EINVAL;
+> >   }
+> >
+> >   static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
+> > @@ -54,7 +116,6 @@ static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
+> >       struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
+> >       struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
+> >       struct scatterlist *sg;
+> > -     size_t mapped = 0;
+> >       u64 addr = iova;
+> >       unsigned int i;
+> >
+> > @@ -62,17 +123,26 @@ static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
+> >               size_t size = sg->length;
+> >               phys_addr_t phys = sg_phys(sg);
+> >
+> > -             /* Map the block one page at a time */
+> >               while (size) {
+> > -                     if (ops->map(ops, addr, phys, 4096, prot, GFP_KERNEL)) {
+> > -                             msm_iommu_pagetable_unmap(mmu, iova, mapped);
+> > +                     size_t pgsize, count, mapped = 0;
+> > +                     int ret;
+> > +
+> > +                     pgsize = calc_pgsize(pagetable, addr, phys, size, &count);
+> > +
+> > +                     ret = ops->map_pages(ops, addr, phys, pgsize, count,
+> > +                                          prot, GFP_KERNEL, &mapped);
+> > +
+> > +                     /* map_pages could fail after mapping some of the pages,
+> > +                      * so update the counters before error handling.
+> > +                      */
+> > +                     phys += mapped;
+> > +                     addr += mapped;
+> > +                     size -= mapped;
+> > +
+> > +                     if (ret) {
+> > +                             msm_iommu_pagetable_unmap(mmu, iova, addr - iova);
+> >                               return -EINVAL;
+> >                       }
+> > -
+> > -                     phys += 4096;
+> > -                     addr += 4096;
+> > -                     size -= 4096;
+> > -                     mapped += 4096;
+> >               }
+> >       }
+> >
+> > @@ -207,6 +277,7 @@ struct msm_mmu *msm_iommu_pagetable_create(struct msm_mmu *parent)
+> >
+> >       /* Needed later for TLB flush */
+> >       pagetable->parent = parent;
+> > +     pagetable->pgsize_bitmap = ttbr0_cfg.pgsize_bitmap;
+> >       pagetable->ttbr = ttbr0_cfg.arm_lpae_s1_cfg.ttbr;
+> >
+> >       /*
+>

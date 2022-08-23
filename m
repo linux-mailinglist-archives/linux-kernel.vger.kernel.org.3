@@ -2,73 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F1559EAF1
+	by mail.lfdr.de (Postfix) with ESMTP id 9B65359EAF2
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiHWSZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S230417AbiHWSZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiHWSZZ (ORCPT
+        with ESMTP id S232777AbiHWSZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:25:25 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BDB7E336
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:42:47 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id v125so16723260oie.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=zJ2NTFSuwbgn1shPsMG7t3f98JKsP5lqwb6cWvxUrKw=;
-        b=I2B5IMyQc4PlyUqQEthZV6KZuLYFHrzZsWfbUhzgVaqwggMxciplLK4/AF2kt8GSmr
-         R/UYHXTPEjaEJoLOmxqvmcKv/pXfSvkOVBfWpMskIsvwYpYGqkiDYna6N6PdDzh/66mp
-         iwDqFoEOHotvATJyBekA/riEVhD3JmfIZB4djeB/RpnTxtyGAcZnaTwq6NAq05E7WGSP
-         T2k+dELOEHvGuzlirMiWO1+37kRyt3m+DzJ2b3KelNVZcZDdPDDInPzxXDqcpeXL1RII
-         FvyCJGkEoU680IXHgK/r3OZ88ixUEpy1L1FVj33QkKMNEor3tKoEpSX9Se+qQeCUVqg9
-         nPmg==
+        Tue, 23 Aug 2022 14:25:26 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917267E828;
+        Tue, 23 Aug 2022 09:43:02 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3321c2a8d4cso394605777b3.5;
+        Tue, 23 Aug 2022 09:43:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=zJ2NTFSuwbgn1shPsMG7t3f98JKsP5lqwb6cWvxUrKw=;
-        b=6lSB4azdkwiYm+u47NNLoQVKMVcMhRMe+5jtlu4iWPkyO0+8A9o3nOpiu6CGEfK8O4
-         TgDJvXpBeJrlilugFhDno0sqn4m7TPLMgpqO4V/VgTpSwEveG1mn3/XQ8ORVXe7PlKTV
-         euEjQDMV8oq3ESS+ILY1uDTFxTn1WPwSb1qUKcuvmSlpGfZnazagBgJFRvxxbBi5rxqz
-         TnZFkBc8BX0zkfEOJxcETpu/o6pAIt6eYQ2k8FkzhpQK8G+aE/gKh6rOXFSpUQMuiRRK
-         zTaOMSjZjXVmfDnQlvgnKYjd+TgdYNb4TApnIIIwjSR/MfsY09xAzG0bBM21qMafVRhL
-         Tfdg==
-X-Gm-Message-State: ACgBeo1lCDFVwnsuYpfBXaorb3Ayr/57s+pphe8YzBNd9O9oeBJp+Y9T
-        BuT3w7IGi2zxuH6acG77MKTxRicj35/Z3hUgVPs=
-X-Google-Smtp-Source: AA6agR59fuyL9XCFMbTnPCA8zJHg50t/rrgsiFgdDZqqvy/CuYVr2cMxrmW97DutW2oQvJu2Qbhif346T7ihs+jZ+2s=
-X-Received: by 2002:a05:6808:118e:b0:337:b6f3:67ca with SMTP id
- j14-20020a056808118e00b00337b6f367camr1629493oil.111.1661272966666; Tue, 23
- Aug 2022 09:42:46 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/gDV+GVLpJWz4HxWURgyPhOW3DPummyzOYP/8Om8IFQ=;
+        b=qy68F4NsialSef1KpyquY7Srrcn4MXpPTDCmxsWtrWseUDBxoQGyTmoTEWoNwTLUjv
+         u+w8PxQ5ACa6Ra0NVMJegZS6KsLQt/XFUWj2PV14G6bekxhvmWopd9scuY30jsiFdEGJ
+         fGfrfEtVhwzhWvSLDGuafAJTmracKS2E/mu9gpiG/S4uTWMcER8W285y2ISeCidRKHfl
+         GSAB9TmrqPcl7CGX3TuWmRrqaI2ZLRZ1UVDBV+8qnIIHHmc634YBXIxS+OpSrwZQfr7i
+         tDWRfp6zTjYwcWkpDaLw0g+IWewARWnavpDcZX7PNTBBt1mRnBMMM8GcyVdJ55lCNzp8
+         d0jA==
+X-Gm-Message-State: ACgBeo04v+QBf6l8wOD2IDxJqmcX6UN7EEDdoZSpQzLDDmoe2ro4PbPN
+        1GREDOwAreTb36PKlGjtgV1mMhx1oTGA+/xQerJYENAR
+X-Google-Smtp-Source: AA6agR5TOxKA+4W9IqYAEfEi3Ub3wtwiOglAL943t/fVgPU8CnSRA8MuXK3l/V6I+4AghrSFYoUeEy4UH2suF8quBqU=
+X-Received: by 2002:a25:ec0c:0:b0:690:d092:2d56 with SMTP id
+ j12-20020a25ec0c000000b00690d0922d56mr23429607ybh.622.1661272981822; Tue, 23
+ Aug 2022 09:43:01 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6850:2204:b0:32a:3d8f:8c7e with HTTP; Tue, 23 Aug 2022
- 09:42:46 -0700 (PDT)
-Reply-To: rw7017415@gmail.com
-From:   Richard Wilson <catherinemartinezmtk@gmail.com>
-Date:   Tue, 23 Aug 2022 16:42:46 +0000
-Message-ID: <CAL_q8eUk_BPf5DxkfNNSYk9jDSc5oTejzSRaw0-9hgpJ_kbdmg@mail.gmail.com>
-Subject: Deposit
-To:     undisclosed-recipients:;
+References: <1660649244-146842-1-git-send-email-john.garry@huawei.com>
+ <1660649244-146842-3-git-send-email-john.garry@huawei.com>
+ <CAHp75VdhCovo1uT3oxQAymEO9X+29oDet7LjYkLvpmj+r15Tfg@mail.gmail.com> <dd41c5c3-ee16-821c-afd4-ddda4443bc78@huawei.com>
+In-Reply-To: <dd41c5c3-ee16-821c-afd4-ddda4443bc78@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Aug 2022 18:42:50 +0200
+Message-ID: <CAJZ5v0gR0mZBGiCLR6mxdbaNGebti54M-VvV=jT0310KioPD7g@mail.gmail.com>
+Subject: Re: [PATCH PoC 2/3] ACPI: platform: Refactor acpi_create_platform_device()
+To:     John Garry <john.garry@huawei.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear
-I am contacting you to assist retrieve his huge deposit Mr. Alexander
-left in the bank before its get confiscated by the bank. Get back to
-me for more detail's
-Barr's Richard Wilson
+On Fri, Aug 19, 2022 at 10:10 AM John Garry <john.garry@huawei.com> wrote:
+>
+> On 18/08/2022 20:41, Andy Shevchenko wrote:
+> > On Tue, Aug 16, 2022 at 2:33 PM John Garry <john.garry@huawei.com> wrote:
+> >>
+> >> There is commonality between acpi_create_platform_device() and
+> >> hisi_lpc_acpi_add_child(), in that it covers 2x main steps:
+> >> - Read resources for the acpi_device
+> >> - Create platform device
+> >>
+> >> Refactor acpi_create_platform_device() so that it may be reused by
+> >> hisi_lpc_acpi_add_child() to reduce duplication.
+> >
+> > ...
+> >
+> >> + * acpi_create_platform_device_ops - Create platform device for ACPI device node
+> >
+> > Not sure I understand why _ops is a suffix for the function. I would
+> > expect _ops to be a data struct where the ->xlate() and perhaps other
+> > callbacks may be collected. It may be that I have missed that portion
+> > in the previous discussion.
+>
+> ok, maybe I can put all the members into a struct, but I don't think
+> that it improves the overall code too much.
+>
+> >
+> > ...
+> >
+> >> +       if (name)
+> >> +               pdevinfo.name = name;
+> >> +       else
+> >> +               pdevinfo.name = dev_name(&adev->dev);
+> >
+> >> +       pdevinfo.data = data;
+> >> +       pdevinfo.size_data = size_data;
+> >
+> > It rather reminds me of platform device registration full with this
+> > device info. May be what you need is
+> > struct acpi_platfrom_device_info {
+> >    properties;
+> >    name;
+> >    id;
+> >    ->xlate();
+> >    ...
+> > };
+> >
+> > ?
+> >
+> > ...
+> >
+> >> +struct platform_device *acpi_create_platform_device_ops(
+> >> +                               struct acpi_device *adev,
+> >> +                               const char *name,
+> >> +                               const struct property_entry *properties,
+> >> +                               void *data, size_t size_data,
+> >> +                               int (*xlat)(struct acpi_device *adev,
+> >> +                                           struct resource *res,
+> >> +                                           void *data, size_t size_data),
+> >> +                               int id);
+> >
+> > ...because this looks  a bit too much from the amount of parameters
+> > point of view.
+> >
+>
+> ok, agreed.
+>
+> But even if we improve this code, the hisi_lpc changes are quite large
+> and unwieldly.
+
+Well, they allow you to drop quite a few LOC ...

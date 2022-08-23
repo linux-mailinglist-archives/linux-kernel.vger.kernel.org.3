@@ -2,152 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2E559EC64
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4AA59EC67
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiHWTdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S230025AbiHWTeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiHWTcb (ORCPT
+        with ESMTP id S232371AbiHWTdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:32:31 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772D3AC248
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:24:41 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31f445bd486so401372457b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:24:40 -0700 (PDT)
+        Tue, 23 Aug 2022 15:33:45 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D89183B4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:27:11 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id q81so3976974iod.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=XtHnpqNsO1GqMrMs/hDiQG1cyMYMiBI2ato5C3wCzTY=;
-        b=ZKjjBYj1gBxAdyZVr4lWAsSGku+8GieBuHQ0OEl+X6QIkz2TOPeiJzxckGICnDAK6n
-         HQDdOGwtXOJmY2+WICC2VDh8zfUiHfdLpJC8lWSq7GxlkVvqWeAgjuHN4CFZcvp6aLOZ
-         khUt1UxKnVrjmLB7um48WbJx2FswKGDvb7Oe2zpjfVf9shqM7nucZZVk+DMnjbtAEIIu
-         yI/uwG1Y513oEBHTDMT3NV3d95LxaNIG/5QDAwtKNc7sKA2wBoKhbb+hb73rCvLoG64i
-         wc5mWc5YcuVubR46MgT47K/oMOGJQlY7a9xMpfU0Dwz4AIlp11JdSygsuDWpwwtdQjyk
-         uHdQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=vvZ+6YfB5+idgplC7NLCltNGeNPQRdHTy8X0/J0b+yc=;
+        b=pHjgdw6272fXR3NG+RiZ95v7+6n04PYMc+MwIn8sgcAYtUAh9zX0lbUZ7iCnhP6L1e
+         qrXvnFMS1OtkD1OYVHm1LD/BS950cgO+xZLMf36t5wIBi1e327llTZxEDAgVwLSACG2N
+         oyzuiUv8jTmjTKFFZjgqZEYMFD7FMlOdrnMs4mBHr5/mACp9eDI3Q8lbn66F1iQSVJgU
+         9YpYyvRpDekh7c9/ZhPbr1GZCcNatdryuo+qYnzHzi2qgtUvgxMXD5qGHWQXXkDxq4Vp
+         iArbFzBsb0nN1kRkBewpkau02EDpR0JwMYjINpoclePIzuAvlTdJlCkrnyDUaLojIK0u
+         6YVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=XtHnpqNsO1GqMrMs/hDiQG1cyMYMiBI2ato5C3wCzTY=;
-        b=L1mp4L8iLpdGp/ulo0MOQ3/NSo8C76p2NM0rivv+fR8bSLhfDa8k0BSLrGNeELnZbM
-         ydH0fpP/45iJo/8JNVXch3tjXCcACCpLAgNrh9z+hsvkXPnXyau2ucmQYVefC0vxXCvr
-         q65Bsihxpv7OuhLBG/6lvk7QT/AOy8ia2IHqtUFiMfyIIzYY5/cthTJjFDuUO9+US7qG
-         608NhuxbAboz/aJPReU0TQ8fWXZ9fVHd5hxTRvkSQ2SZzlymOW/209lf2MWi63CMIq0r
-         mnZqoj3hd78xBtB1EXuc7E9QY++k1sinDyHFcpx8JLXLCqhwXhpa6GJYf0avqvA9VjQz
-         uF2Q==
-X-Gm-Message-State: ACgBeo2AEUd/zbGeC0/GJf5I9ifALJIi86My0/K6dCLtHpuYUdg/7+4j
-        IjcxiKIE5thFaefk8EHn+COVYMpDnSlKSXUkgjysEg==
-X-Google-Smtp-Source: AA6agR5pGU5afgAW1EmPG74/gUZ4nBuucS0dag+FVmm04t1k3abnSKIImoKbMJKXkhk9kD94wSV2vICNKg4sS6nDwjk=
-X-Received: by 2002:a0d:eb87:0:b0:338:d06b:e605 with SMTP id
- u129-20020a0deb87000000b00338d06be605mr20055821ywe.316.1661279079937; Tue, 23
- Aug 2022 11:24:39 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=vvZ+6YfB5+idgplC7NLCltNGeNPQRdHTy8X0/J0b+yc=;
+        b=k3K565fwymODdEe9xabYfUV+meOTV9Z1Uughz58+FJ9tb40ZWfkf3XqYnrqvkjsMtV
+         +ywjpX33qZOkh2MSE/hYftKJILkncp6vL7ycGtAsfkfpjAuurPCMuLzXIPqT56bnRK4T
+         nCQcvkCxtflutfNUFmWtZuoY/X3XSgK54h1BrLeq4tiWCMNLC9pIpkBmmRRUlIz80CTf
+         viOfxAsWC4Yres7VJfHNUQgrwJWi+kqhd4Pe1C1LUdRMLkct0KVcRBtgU9G0QnmQEeJL
+         a4AUrN/JGmKtZSiLKce9Nhm/yl7UqW3Puy4xGWbWs7wZ5plkPUZ4c0Hbm6QAVUZR8XC+
+         q9dA==
+X-Gm-Message-State: ACgBeo1U2qP9lSfb34btekD1ZNbqAlCnYWxgp0wsmJrJPEa0DGSx5Tyl
+        6zpRklq3XhbCg/n4ZhbGa2xkTWIqDt91zg==
+X-Google-Smtp-Source: AA6agR7DhNYSUdgGr9FzRwaAGYMr4Mklx8mLgtzrQtfHwuCPCqcTZF5/fCEZN9V7KRH3whMk6Q3jvA==
+X-Received: by 2002:a05:6638:430d:b0:343:69f4:2016 with SMTP id bt13-20020a056638430d00b0034369f42016mr12779119jab.90.1661279230964;
+        Tue, 23 Aug 2022 11:27:10 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id cn11-20020a0566383a0b00b003482878ec91sm5971640jab.16.2022.08.23.11.27.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 11:27:08 -0700 (PDT)
+Message-ID: <654cb5de-a563-b812-a435-d9b435cee334@kernel.dk>
+Date:   Tue, 23 Aug 2022 12:27:06 -0600
 MIME-Version: 1.0
-References: <20220726173824.1166873-1-dianders@chromium.org>
- <20220726103631.v2.4.Ie85f68215ada39f502a96dcb8a1f3ad977e3f68a@changeid>
- <CAMSo37XsawRxTnJriLUAwJAj0+ZzpACtMiR_3V7H1H9WXg3T_Q@mail.gmail.com>
- <CAD=FV=V5c0bCOCBvdnqVJ6Sa1XKeg+d7kTEL2Okh4GAL66MGiw@mail.gmail.com>
- <CAMSo37Uve4qrAA81zrO9eOGc4y7vjg-OZ9L7m9xWM7UkQ6PzmQ@mail.gmail.com>
- <CAMSo37U1uxUFkn4Jda5E+nDiz0wp8_ERbNa9BUgWttZ6dEssAg@mail.gmail.com> <CAD=FV=WNNAYtdoocp_ShyNBOBmqSSr79=x_2UKq+yfA+HiOo9w@mail.gmail.com>
-In-Reply-To: <CAD=FV=WNNAYtdoocp_ShyNBOBmqSSr79=x_2UKq+yfA+HiOo9w@mail.gmail.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Wed, 24 Aug 2022 02:24:29 +0800
-Message-ID: <CAMSo37W47x-rFdNqJBJPW6TqCYC=K2fUS3FRPRCUg=t37a3u-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] regulator: core: Allow specifying an initial load
- w/ the bulk API
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        John Stultz <jstultz@google.com>,
-        Alistair Delva <alistair.delva@linaro.org>,
-        Todd Kjos <tkjos@google.com>, Steve Muckle <smuckle@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 2/2] coredump: Allow coredumps to pipes to work with
+ io_uring
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Olivier Langlois <olivier@trillion01.com>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        io-uring@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
+ <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
+ <87h7i694ij.fsf_-_@disp2133> <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
+ <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
+ <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
+ <878rw9u6fb.fsf@email.froward.int.ebiederm.org>
+ <303f7772-eb31-5beb-2bd0-4278566591b0@gmail.com>
+ <87ilsg13yz.fsf@email.froward.int.ebiederm.org>
+ <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
+ <a29a1649-5e50-4221-9f44-66a35fbdff80@kernel.dk>
+ <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org>
+ <87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>
+ <61abfb5a517e0ee253b0dc7ba9cd32ebd558bcb0.camel@trillion01.com>
+ <bb423622f97826f483100a1a7f20ce10a9090158.camel@trillion01.com>
+ <875yiisttu.fsf@email.froward.int.ebiederm.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <875yiisttu.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Douglas
+On 8/23/22 12:22 PM, Eric W. Biederman wrote:
+> Olivier Langlois <olivier@trillion01.com> writes:
+> 
+>> On Mon, 2022-08-22 at 17:16 -0400, Olivier Langlois wrote:
+>>>
+>>> What is stopping the task calling do_coredump() to be interrupted and
+>>> call task_work_add() from the interrupt context?
+>>>
+>>> This is precisely what I was experiencing last summer when I did work
+>>> on this issue.
+>>>
+>>> My understanding of how async I/O works with io_uring is that the
+>>> task
+>>> is added to a wait queue without being put to sleep and when the
+>>> io_uring callback is called from the interrupt context,
+>>> task_work_add()
+>>> is called so that the next time io_uring syscall is invoked, pending
+>>> work is processed to complete the I/O.
+>>>
+>>> So if:
+>>>
+>>> 1. io_uring request is initiated AND the task is in a wait queue
+>>> 2. do_coredump() is called before the I/O is completed
+>>>
+>>> IMHO, this is how you end up having task_work_add() called while the
+>>> coredump is generated.
+>>>
+>> I forgot to add that I have experienced the issue with TCP/IP I/O.
+>>
+>> I suspect that with a TCP socket, the race condition window is much
+>> larger than if it was disk I/O and this might make it easier to
+>> reproduce the issue this way...
+> 
+> I was under the apparently mistaken impression that the io_uring
+> task_work_add only comes from the io_uring userspace helper threads.
+> Those are definitely suppressed by my change.
+> 
+> Do you have any idea in the code where io_uring code is being called in
+> an interrupt context?  I would really like to trace that code path so I
+> have a better grasp on what is happening.
+> 
+> If task_work_add is being called from interrupt context then something
+> additional from what I have proposed certainly needs to be done.
 
-On Tue, 23 Aug 2022 at 22:50, Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Mon, Aug 22, 2022 at 11:23 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
-> >
-> > Hi, Douglas
-> >
-> > Just an update on the fix you pointed out previously here:
-> > > > [1] https://lore.kernel.org/r/20220809142738.1.I91625242f137c707bb345c51c80c5ecee02eeff3@changeid
-> >
-> > With it I could boot the hikey960 build to the home screen if it does
-> > not use the GKI kernel.
-> > but the problem will be reproduced if it uses the GKI kernel.
-> >
-> > And if this change is reverted, then it could boot with the GKI kernel as well.
-> >
-> > I am not sure what's the reason there, but there seems to be some
-> > difference with the fix above and the workaround of revert.
-> > Not sure if you have any idea about that.
-> >
-> > Regarding the GKI kernel(Android Generic Kernel Image)[2], it's built
-> > from the android-mainline tree(f51334eac4de) without any workaround.
-> > (Neither the revert, nor the fix applied), and the regulator modules
-> > used for the hikey960 build are hi6421v530-regulator.ko and
-> > hi655x-regulator.ko
-> >
-> > I am still not sure if it would work with the GKI kernel that has the
-> > fix that you pointed out in. the case that both the GKI kernel and
-> > vendor tree have the fix.
-> > Will update here when I have some results.
+task_work may come from the helper threads, but generally it does not.
+One example would be doing a read from a socket. There's no data there,
+poll is armed to trigger a retry. When we get the poll notification that
+there's now data to be read, then we kick that off with task_work. Since
+it's from the poll handler, it can trigger from interrupt context. See
+the path from io_uring/poll.c:io_poll_wake() -> __io_poll_execute() ->
+io_req_task_work_add() -> task_work_add().
 
-Just checked, with the fix applied in the GKI kernel, the problem is
-not reproduced again.
-
-> > [2]: https://source.android.com/docs/core/architecture/kernel/generic-kernel-image?hl=en
->
-> That's not too surprising. The broken patch is in the core kernel so
-> you need the fix in the core kernel.
-Sorry, I still do not get the point here.
-
-The GKI kernel is the same one, that does not have the revert and the
-fix applied.
-
-for the vendor tree(the ko files and dtb files are used)
-#1 built with this commit reverted.
-#2 built with the fix applied.
-
-#1 could boot with the GKI kernel, while #2 does not boot with the same error.
-What might cause the difference?
-
-> I think that means you'll have to
-> wait until `android-mainline` gets the fix. I don't work on Android,
-> so if there's some other route to get an expedited fix into
-> android-mainline I'm not aware of it.
-
-Thanks, I will wait for the fix to be merged into the android-mainline,
-before that I will use the revert workaround for the moment.
+It can also happen for regular IRQ based reads from regular files, where
+the completion is actually done via task_work added from the potentially
+IRQ based completion path.
 
 -- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+Jens Axboe

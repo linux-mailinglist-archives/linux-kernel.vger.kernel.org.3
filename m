@@ -2,75 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F9C59EF7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D0E59EF82
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbiHWWwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S229960AbiHWW6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiHWWwI (ORCPT
+        with ESMTP id S229603AbiHWW6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:52:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF178C457;
-        Tue, 23 Aug 2022 15:52:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC798B821EA;
-        Tue, 23 Aug 2022 22:52:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B6DC433D6;
-        Tue, 23 Aug 2022 22:52:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661295123;
-        bh=ypcp98VMiz7kBu3cGUG6LeZApIJKQVW/y2vnoL910eE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=DZr0NmbKznJeIxoMhkhF17OzDK9v7sRfbGjSpGHBhpuFXyaHu8pNRwi/f4WhYs1gu
-         fekrHQ9D3yzuX7WWC9la2iCPghUT/3qpBnlV2W+ecrQekSCy1AuZS+x0Q9ITg7vxwq
-         kqDbik3OjleTwSvxURbUmFKUVr9Qlj3oR+nuq1v0HACDIpkYN1ZVMQP1vxVdvfFL28
-         daUG1+gDBGClvtNGSaBHq3pBpfmKnHGbiEb1tWlquRDv1zfMlpceI2OWt+kdXL2L+8
-         QmiOq4fP2jZetKEMikK6z3hOqwNJhTGV8qPoOaI2pC/d5yPnDvrHSX7VAXOb2o/Xyg
-         ULw0dMO4rLqNw==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 23 Aug 2022 18:58:14 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7831176;
+        Tue, 23 Aug 2022 15:58:12 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id ay12so7906705wmb.1;
+        Tue, 23 Aug 2022 15:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=lk8/tj/nL+5/3atLQyJ228xPqcFNf3nUrZ03uJtpZEE=;
+        b=pvfL7cJb4Q6aj5gWTQZr10k4cTHpOUxS7OR9MD9VoS52aLJQqXyhRq0jV08egaTM99
+         +PZuXYnNSeIR+5K3C2HGqM0kq7LHIw+Bmdtna0MRXVK7AYCWQfuhPS4audm7Iuq6it+t
+         zxDpN7LXKfs3pakXGXkNaf7nkqR2s9gEe1UCs9azV0aGGogLnmVRsknkLmP3C90Wiqod
+         d8jmm9Qo1MIPLKZOwYA+BCnoxz6dM3fB+Vkgi7RPZrHrGPLzexH9gEYz8gDcOSBDz5Vc
+         NQekFrrPeElUGnSETN4rTBDqiBV9Ca5A1nAh7wXsROpOmYDgoFI2tjnwb+qsY/5mJEM9
+         gDpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=lk8/tj/nL+5/3atLQyJ228xPqcFNf3nUrZ03uJtpZEE=;
+        b=Bj8Q4W0SI1hBRnot+EUI5XlWa1COWrjhUFWIZpmGAsnCe6H2n7U3q6ND7iVVFq163u
+         iQRvccUsFGeATGCrClUylJxBWqXRy/+gAlYxH5S3SZO52lIzlPHMHrEqT+FZK+tdLMoN
+         st0/YLRCa5NnzstZ72/pdd89TUyjPR4yYpg+I8sej6d/TPmKHBqJ2M+mQwpfKWWyWCpt
+         BSUC7Pf9i6OS1s30ARsF6VEbv4670vy6rwCFYN+JunssVKijbCtOPEOkN+maBAIMVD9t
+         t5vo0aKXfdKV1bjvw+gUceSv2iaihqvjuedqJQ5UU50pJOVGWDCdkC9sQcGmxp5hW268
+         vx2Q==
+X-Gm-Message-State: ACgBeo0y4xBHYFkf8Zc5ZNq/S6EOtssZ5oC4eKmoYqLp4KfC6kA+MNKs
+        CAROb00OsSlau6+w+fKWDfQ=
+X-Google-Smtp-Source: AA6agR43PKc2OD8KiUkOBN1+RxOPi6GqXs/g9ouzuKC/13rWTetZzknP+V5rl+Lf0JXq4gPbsnRVWg==
+X-Received: by 2002:a7b:cc90:0:b0:3a5:3899:7be1 with SMTP id p16-20020a7bcc90000000b003a538997be1mr3361217wma.19.1661295491434;
+        Tue, 23 Aug 2022 15:58:11 -0700 (PDT)
+Received: from localhost.localdomain ([84.255.184.228])
+        by smtp.gmail.com with ESMTPSA id y6-20020a056000108600b002250c35826dsm15052123wrw.104.2022.08.23.15.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 15:58:10 -0700 (PDT)
+From:   Mazin Al Haddad <mazinalhaddad05@gmail.com>
+To:     pontus.fuchs@gmail.com
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org, paskripkin@gmail.com,
+        Mazin Al Haddad <mazinalhaddad05@gmail.com>,
+        syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
+Subject: [PATCH v2] ar5523: check endpoints type and direction in probe()
+Date:   Wed, 24 Aug 2022 01:57:54 +0300
+Message-Id: <20220823225754.519945-1-mazinalhaddad05@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220713154953.3336-2-stefan.wahren@i2se.com>
-References: <20220713154953.3336-1-stefan.wahren@i2se.com> <20220713154953.3336-2-stefan.wahren@i2se.com>
-Subject: Re: [PATCH 1/3] clk: bcm: rpi: Prevent out-of-bounds access
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Phil Elwell <phil@raspberrypi.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Date:   Tue, 23 Aug 2022 15:52:01 -0700
-User-Agent: alot/0.10
-Message-Id: <20220823225203.92B6DC433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Stefan Wahren (2022-07-13 08:49:51)
-> The while loop in raspberrypi_discover_clocks() relies on the assumption
-> that the id of the last clock element is zero. Because this data comes
-> from the Videocore firmware and it doesn't guarantuee such a behavior
-> this could lead to out-of-bounds access. So fix this by providing
-> a sentinel element.
->=20
-> Fixes: 93d2725affd6 ("clk: bcm: rpi: Discover the firmware clocks")
-> Link: https://github.com/raspberrypi/firmware/issues/1688
-> Suggested-by: Phil Elwell <phil@raspberrypi.com>
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> ---
+Fixes a bug reported by syzbot, where a warning occurs in usb_submit_urb()
+due to the wrong endpoint type. There is no check for both the number
+of endpoints and the type which causes an error as the code tries to
+send a URB to the wrong endpoint.
 
-Applied to clk-fixes
+Fix it by adding a check for the number of endpoints and the
+direction/type of the endpoints. If the endpoints do not match the
+expected configuration -ENODEV is returned.
+
+Syzkaller report:
+
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 1 PID: 71 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+Modules linked in:
+CPU: 1 PID: 71 Comm: kworker/1:2 Not tainted 5.19.0-rc7-syzkaller-00150-g32f02a211b0a #0
+Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ ar5523_cmd+0x420/0x790 drivers/net/wireless/ath/ar5523/ar5523.c:275
+ ar5523_cmd_read drivers/net/wireless/ath/ar5523/ar5523.c:302 [inline]
+ ar5523_host_available drivers/net/wireless/ath/ar5523/ar5523.c:1376 [inline]
+ ar5523_probe+0xc66/0x1da0 drivers/net/wireless/ath/ar5523/ar5523.c:1655
+
+Link: https://syzkaller.appspot.com/bug?extid=1bc2c2afd44f820a669f
+Reported-and-tested-by: syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
+Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
+---
+v1->v2 changes:
+	- Fix incorrect check in if statement within switch case (was missing
+		a "!" operator).
+	- Added comments explaining the code.
+
+ drivers/net/wireless/ath/ar5523/ar5523.c | 33 ++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/drivers/net/wireless/ath/ar5523/ar5523.c b/drivers/net/wireless/ath/ar5523/ar5523.c
+index 6f937d2cc126..d7e86dc4c293 100644
+--- a/drivers/net/wireless/ath/ar5523/ar5523.c
++++ b/drivers/net/wireless/ath/ar5523/ar5523.c
+@@ -1581,8 +1581,41 @@ static int ar5523_probe(struct usb_interface *intf,
+ 	struct usb_device *dev = interface_to_usbdev(intf);
+ 	struct ieee80211_hw *hw;
+ 	struct ar5523 *ar;
++	struct usb_host_interface *host = intf->cur_altsetting;
+ 	int error = -ENOMEM;
+ 
++	if (host->desc.bNumEndpoints != 4) {
++		dev_err(&dev->dev, "Wrong number of endpoints\n");
++		return -ENODEV;
++	}
++
++	// Check for type of endpoint and direction.
++	for (int i = 0; i < host->desc.bNumEndpoints; ++i) {
++		struct usb_endpoint_descriptor *ep = &host->endpoint[i].desc;
++
++		switch (i) {
++		case 0:
++		case 1:
++			// if endpoint direction and type does not match
++			if (!((ep->bEndpointAddress & USB_DIR_OUT) &&
++			      ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
++			      == USB_ENDPOINT_XFER_BULK))){
++				dev_err(&dev->dev, "Wrong type of endpoints\n");
++				return -ENODEV;
++			}
++			break;
++		case 2:
++		case 3:
++			if (!((ep->bEndpointAddress & USB_DIR_IN) &&
++			      ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
++			     == USB_ENDPOINT_XFER_BULK))){
++				dev_err(&dev->dev, "Wrong type of endpoints\n");
++				return -ENODEV;
++			}
++			break;
++		}
++	}
++
+ 	/*
+ 	 * Load firmware if the device requires it.  This will return
+ 	 * -ENXIO on success and we'll get called back afer the usb
+-- 
+2.37.2
+

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C36259DD42
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0984859DF9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356696AbiHWK6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
+        id S1356713AbiHWK6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356807AbiHWKy6 (ORCPT
+        with ESMTP id S244111AbiHWKy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:54:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D4F17A80;
+        Tue, 23 Aug 2022 06:54:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8139B17E2F;
         Tue, 23 Aug 2022 02:13:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF7ADB81C35;
-        Tue, 23 Aug 2022 09:13:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F632C433D6;
-        Tue, 23 Aug 2022 09:13:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34EE661122;
+        Tue, 23 Aug 2022 09:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB0AC433D6;
+        Tue, 23 Aug 2022 09:13:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246000;
-        bh=WONbyPd92C87yD12AFBp86wxDUVPadaQjeI5ARmuaJ8=;
+        s=korg; t=1661246003;
+        bh=ort/3hcnaukUGsA7LDhSiF203JxpCct0qeqwR3Ahero=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o3iyk5qfE7c4qpFXsaK9KH9rPmS932/b2Z7ELHS2kTonhalOFPGIWpZ6Tnw+OMlud
-         AJ9eDPDEu9b90K0OrkZJjGNWtQ0XaijmIcgmS7m7fF8ZVJD9Ck7NL7+nhtRtPyJHMq
-         tXx1bAhHHdqx/1sJIWjGWUDNPCAOrHdU8ziDS+TE=
+        b=YiSsDGSV/ymZkzbsv3zM6+xdylYAt0w2pVemV64C3xoKhqnPQOw95UaT0N9BhjY5o
+         QcmWRBkTIA2zLJkJ2vPVtBe34syyujuAcvaDxqrAxS63t9Obd1jmxbLHhS/9U3CxJj
+         Hq5zgiMg5gpDvdolPikJhjt9StawQSwhIGyvM+nc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Pavan Chebbi <pavan.chebbi@broadcom.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 257/287] drm/meson: Fix refcount bugs in meson_vpu_has_available_connectors()
-Date:   Tue, 23 Aug 2022 10:27:06 +0200
-Message-Id: <20220823080109.922330877@linuxfoundation.org>
+Subject: [PATCH 4.19 258/287] PCI: Add ACS quirk for Broadcom BCM5750x NICs
+Date:   Tue, 23 Aug 2022 10:27:07 +0200
+Message-Id: <20220823080109.963872987@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -56,44 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Pavan Chebbi <pavan.chebbi@broadcom.com>
 
-[ Upstream commit 91b3c8dbe898df158fd2a84675f3a284ff6666f7 ]
+[ Upstream commit afd306a65cedb9589564bdb23a0c368abc4215fd ]
 
-In this function, there are two refcount leak bugs:
-(1) when breaking out of for_each_endpoint_of_node(), we need call
-the of_node_put() for the 'ep';
-(2) we should call of_node_put() for the reference returned by
-of_graph_get_remote_port() when it is not used anymore.
+The Broadcom BCM5750x NICs may be multi-function devices.  They do not
+advertise ACS capability. Peer-to-peer transactions are not possible
+between the individual functions, so it is safe to treat them as fully
+isolated.
 
-Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controller")
-Signed-off-by: Liang He <windhl@126.com>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220726010722.1319416-1-windhl@126.com
+Add an ACS quirk for these devices so the functions can be in independent
+IOMMU groups and attached individually to userspace applications using
+VFIO.
+
+Link: https://lore.kernel.org/r/1654796507-28610-1-git-send-email-michael.chan@broadcom.com
+Signed-off-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_drv.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/pci/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
-index 1887473cdd79..9959522ce802 100644
---- a/drivers/gpu/drm/meson/meson_drv.c
-+++ b/drivers/gpu/drm/meson/meson_drv.c
-@@ -141,8 +141,11 @@ static bool meson_vpu_has_available_connectors(struct device *dev)
- 	for_each_endpoint_of_node(dev->of_node, ep) {
- 		/* If the endpoint node exists, consider it enabled */
- 		remote = of_graph_get_remote_port(ep);
--		if (remote)
-+		if (remote) {
-+			of_node_put(remote);
-+			of_node_put(ep);
- 			return true;
-+		}
- 	}
- 
- 	return false;
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 7cd38c9eaa02..f494e76faaa0 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -4799,6 +4799,9 @@ static const struct pci_dev_acs_enabled {
+ 	{ PCI_VENDOR_ID_AMPERE, 0xE00C, pci_quirk_xgene_acs },
+ 	/* Broadcom multi-function device */
+ 	{ PCI_VENDOR_ID_BROADCOM, 0x16D7, pci_quirk_mf_endpoint_acs },
++	{ PCI_VENDOR_ID_BROADCOM, 0x1750, pci_quirk_mf_endpoint_acs },
++	{ PCI_VENDOR_ID_BROADCOM, 0x1751, pci_quirk_mf_endpoint_acs },
++	{ PCI_VENDOR_ID_BROADCOM, 0x1752, pci_quirk_mf_endpoint_acs },
+ 	{ PCI_VENDOR_ID_BROADCOM, 0xD714, pci_quirk_brcm_acs },
+ 	{ 0 }
+ };
 -- 
 2.35.1
 

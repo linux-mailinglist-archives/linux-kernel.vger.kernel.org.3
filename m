@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A530A59DF87
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C981B59DE23
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355734AbiHWLmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S1358028AbiHWLnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358218AbiHWLhM (ORCPT
+        with ESMTP id S1357745AbiHWLiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:37:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA8BC9275;
-        Tue, 23 Aug 2022 02:28:06 -0700 (PDT)
+        Tue, 23 Aug 2022 07:38:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F06F101CF;
+        Tue, 23 Aug 2022 02:28:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 439BD61174;
-        Tue, 23 Aug 2022 09:28:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E6B9C433C1;
-        Tue, 23 Aug 2022 09:28:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4ACDB81C89;
+        Tue, 23 Aug 2022 09:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C309C433C1;
+        Tue, 23 Aug 2022 09:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246883;
-        bh=pQ/YAxx82IxXZJaC+oKXN/2jjUS2Y+qfcqwQwTxngg0=;
+        s=korg; t=1661246886;
+        bh=V4LgSedpr3Mn3JFQSAmnZTgGzA5U6Wo8O3HklmKyLu4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DH2qtrp8gsiE1QDIcWr7PzUEi8+RqPlrhKbKt1ASHqTt5Zee1wlN9VGYN4v/MhlFF
-         KSjWLb9xfTu5UnaMKWnay1JZe40NOhkWgTF6R1UjUzAOOtLNwOcCCyrRh0pb0QpdW6
-         h8szh55rSDfwK622LSzJnV2NqCt1eMg+2t0PL9Tg=
+        b=J528pb1rmNSGQoSULv4WjCvR3z6mFamfFW9CISF1HfAQ8D7YbP5gadmCnbuLDmnzs
+         32WV0bhgkZnBwdga68GWET9jNMingunocPwlClH4YkHZwTHTPIGjgtprIMRHtA0R06
+         /0guiJzaynqreIxGprK01PiczaBN+pEpowjleiWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
+        stable@vger.kernel.org, Naresh Bannoth <nbannoth@in.ibm.com>,
+        Kyle Mahlkuch <Kyle.Mahlkuch@ibm.com>,
+        Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.4 250/389] scsi: qla2xxx: Turn off multi-queue for 8G adapters
-Date:   Tue, 23 Aug 2022 10:25:28 +0200
-Message-Id: <20220823080126.024862097@linuxfoundation.org>
+Subject: [PATCH 5.4 251/389] scsi: qla2xxx: Fix erroneous mailbox timeout after PCI error injection
+Date:   Tue, 23 Aug 2022 10:25:29 +0200
+Message-Id: <20220823080126.074957854@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -57,59 +59,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-commit 5304673bdb1635e27555bd636fd5d6956f1cd552 upstream.
+commit f260694e6463b63ae550aad25ddefe94cb1904da upstream.
 
-For 8G adapters, multi-queue was enabled accidentally. Make sure
-multi-queue is not enabled.
+Clear wait for mailbox interrupt flag to prevent stale mailbox:
 
-Link: https://lore.kernel.org/r/20220616053508.27186-5-njavali@marvell.com
+Feb 22 05:22:56 ltcden4-lp7 kernel: qla2xxx [0135:90:00.1]-500a:4: LOOP UP detected (16 Gbps).
+Feb 22 05:22:59 ltcden4-lp7 kernel: qla2xxx [0135:90:00.1]-d04c:4: MBX Command timeout for cmd 69, ...
+
+To fix the issue, driver needs to clear the MBX_INTR_WAIT flag on purging
+the mailbox. When the stale mailbox completion does arrive, it will be
+dropped.
+
+Link: https://lore.kernel.org/r/20220616053508.27186-11-njavali@marvell.com
+Fixes: b6faaaf796d7 ("scsi: qla2xxx: Serialize mailbox request")
+Cc: Naresh Bannoth <nbannoth@in.ibm.com>
+Cc: Kyle Mahlkuch <Kyle.Mahlkuch@ibm.com>
 Cc: stable@vger.kernel.org
+Reported-by: Naresh Bannoth <nbannoth@in.ibm.com>
+Tested-by: Naresh Bannoth <nbannoth@in.ibm.com>
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |    4 ++--
- drivers/scsi/qla2xxx/qla_isr.c |   16 ++++++----------
- 2 files changed, 8 insertions(+), 12 deletions(-)
+ drivers/scsi/qla2xxx/qla_mbx.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -3899,8 +3899,8 @@ struct qla_hw_data {
- #define IS_OEM_001(ha)          ((ha)->device_type & DT_OEM_001)
- #define HAS_EXTENDED_IDS(ha)    ((ha)->device_type & DT_EXTENDED_IDS)
- #define IS_CT6_SUPPORTED(ha)	((ha)->device_type & DT_CT6_SUPPORTED)
--#define IS_MQUE_CAPABLE(ha)	((ha)->mqenable || IS_QLA83XX(ha) || \
--				IS_QLA27XX(ha) || IS_QLA28XX(ha))
-+#define IS_MQUE_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
-+				 IS_QLA28XX(ha))
- #define IS_BIDI_CAPABLE(ha) \
-     (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
- /* Bit 21 of fw_attributes decides the MCTP capabilities */
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -3568,16 +3568,12 @@ msix_register_fail:
- 	}
- 
- 	/* Enable MSI-X vector for response queue update for queue 0 */
--	if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
--		if (ha->msixbase && ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
--	} else
--		if (ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
-+	if (IS_MQUE_CAPABLE(ha) &&
-+	    (ha->msixbase && ha->mqiobase && ha->max_qpairs))
-+		ha->mqenable = 1;
-+	else
-+		ha->mqenable = 0;
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -271,6 +271,12 @@ qla2x00_mailbox_command(scsi_qla_host_t
+ 		atomic_inc(&ha->num_pend_mbx_stage3);
+ 		if (!wait_for_completion_timeout(&ha->mbx_intr_comp,
+ 		    mcp->tov * HZ)) {
++			ql_dbg(ql_dbg_mbx, vha, 0x117a,
++			    "cmd=%x Timeout.\n", command);
++			spin_lock_irqsave(&ha->hardware_lock, flags);
++			clear_bit(MBX_INTR_WAIT, &ha->mbx_cmd_flags);
++			spin_unlock_irqrestore(&ha->hardware_lock, flags);
 +
- 	ql_dbg(ql_dbg_multiq, vha, 0xc005,
- 	    "mqiobase=%p, max_rsp_queues=%d, max_req_queues=%d.\n",
- 	    ha->mqiobase, ha->max_rsp_queues, ha->max_req_queues);
+ 			if (chip_reset != ha->chip_reset) {
+ 				spin_lock_irqsave(&ha->hardware_lock, flags);
+ 				ha->flags.mbox_busy = 0;
+@@ -281,12 +287,6 @@ qla2x00_mailbox_command(scsi_qla_host_t
+ 				rval = QLA_ABORTED;
+ 				goto premature_exit;
+ 			}
+-			ql_dbg(ql_dbg_mbx, vha, 0x117a,
+-			    "cmd=%x Timeout.\n", command);
+-			spin_lock_irqsave(&ha->hardware_lock, flags);
+-			clear_bit(MBX_INTR_WAIT, &ha->mbx_cmd_flags);
+-			spin_unlock_irqrestore(&ha->hardware_lock, flags);
+-
+ 		} else if (ha->flags.purge_mbox ||
+ 		    chip_reset != ha->chip_reset) {
+ 			spin_lock_irqsave(&ha->hardware_lock, flags);
 
 

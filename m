@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CF359D4F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B6D59D7A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345124AbiHWIfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
+        id S1349494AbiHWJZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243485AbiHWIcX (ORCPT
+        with ESMTP id S1349503AbiHWJW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:32:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD1C67459;
-        Tue, 23 Aug 2022 01:16:32 -0700 (PDT)
+        Tue, 23 Aug 2022 05:22:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CDD75CD1;
+        Tue, 23 Aug 2022 01:35:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FD4612DA;
-        Tue, 23 Aug 2022 08:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D34C433C1;
-        Tue, 23 Aug 2022 08:16:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22205B81C54;
+        Tue, 23 Aug 2022 08:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D17C433C1;
+        Tue, 23 Aug 2022 08:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242591;
-        bh=/tKUeDNsWC4TjtU5BAtVdURhSCpADm0fbCBQrx2Hg4k=;
+        s=korg; t=1661243665;
+        bh=nn64llpKQwSVbNBIKVAhqVnQyKZuwOGj7VhDj+fGt14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qn3Zip0bbzXZZ5wOcZwAzIFmjUmLpBhOX4XwcHM0qRsQzJcMgZb7cbfSslXxGz+3Q
-         51EobrpSBfuNloYlLlPxlSiavfvSsUgKGPapjkiwYXNTJAVProgQq83tE94AFe5lyT
-         ZJrXYURE+i4FahViqRXCRW7v5LIWVhfeU5K6npjk=
+        b=Ch91C9fygbVTb6h9tn6hXt9xiT/HoHVLYuFzDaORqzhJEEABF/95VfSSrkwpyzo0V
+         QQfe18blI3aKOAsggLIMepo/YljJUxJJ3hryZZGRJlE89F/Hk7DLRBFOjzi9OQrCLQ
+         HRsxEWE7TzZZ8eQVCtmjyGgqfThitX8lubTTz2N8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Alois Wohlschlager <alois1@gmx-topmail.de>,
+        Miklos Szeredi <mszeredi@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 096/101] mips: cavium-octeon: Fix missing of_node_put() in octeon2_usb_clocks_start
-Date:   Tue, 23 Aug 2022 10:04:09 +0200
-Message-Id: <20220823080038.235159132@linuxfoundation.org>
+Subject: [PATCH 5.19 349/365] ovl: warn if trusted xattr creation fails
+Date:   Tue, 23 Aug 2022 10:04:10 +0200
+Message-Id: <20220823080132.857906640@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-[ Upstream commit 7a9f743ceead60ed454c46fbc3085ee9a79cbebb ]
+[ Upstream commit b10b85fe5149ee8b39fbbf86095b303632dde2cd ]
 
-We should call of_node_put() for the reference 'uctl_node' returned by
-of_get_parent() which will increase the refcount. Otherwise, there will
-be a refcount leak bug.
+When mounting overlayfs in an unprivileged user namespace, trusted xattr
+creation will fail.  This will lead to failures in some file operations,
+e.g. in the following situation:
 
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+  mkdir lower upper work merged
+  mkdir lower/directory
+  mount -toverlay -olowerdir=lower,upperdir=upper,workdir=work none merged
+  rmdir merged/directory
+  mkdir merged/directory
+
+The last mkdir will fail:
+
+  mkdir: cannot create directory 'merged/directory': Input/output error
+
+The cause for these failures is currently extremely non-obvious and hard to
+debug.  Hence, warn the user and suggest using the userxattr mount option,
+if it is not already supplied and xattr creation fails during the
+self-check.
+
+Reported-by: Alois Wohlschlager <alois1@gmx-topmail.de>
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/cavium-octeon/octeon-platform.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/overlayfs/super.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-index 2ecc8d1b0539..f295be876390 100644
---- a/arch/mips/cavium-octeon/octeon-platform.c
-+++ b/arch/mips/cavium-octeon/octeon-platform.c
-@@ -130,11 +130,12 @@ static void octeon2_usb_clocks_start(struct device *dev)
- 					 "refclk-frequency", &clock_rate);
- 		if (i) {
- 			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
-+			of_node_put(uctl_node);
- 			goto exit;
+diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+index 1ce5c9698393..4c2096130209 100644
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
+@@ -1418,11 +1418,12 @@ static int ovl_make_workdir(struct super_block *sb, struct ovl_fs *ofs,
+ 	 */
+ 	err = ovl_setxattr(ofs, ofs->workdir, OVL_XATTR_OPAQUE, "0", 1);
+ 	if (err) {
++		pr_warn("failed to set xattr on upper\n");
+ 		ofs->noxattr = true;
+ 		if (ofs->config.index || ofs->config.metacopy) {
+ 			ofs->config.index = false;
+ 			ofs->config.metacopy = false;
+-			pr_warn("upper fs does not support xattr, falling back to index=off,metacopy=off.\n");
++			pr_warn("...falling back to index=off,metacopy=off.\n");
  		}
- 		i = of_property_read_string(uctl_node,
- 					    "refclk-type", &clock_type);
--
-+		of_node_put(uctl_node);
- 		if (!i && strcmp("crystal", clock_type) == 0)
- 			is_crystal_clock = true;
- 	}
+ 		/*
+ 		 * xattr support is required for persistent st_ino.
+@@ -1430,8 +1431,10 @@ static int ovl_make_workdir(struct super_block *sb, struct ovl_fs *ofs,
+ 		 */
+ 		if (ofs->config.xino == OVL_XINO_AUTO) {
+ 			ofs->config.xino = OVL_XINO_OFF;
+-			pr_warn("upper fs does not support xattr, falling back to xino=off.\n");
++			pr_warn("...falling back to xino=off.\n");
+ 		}
++		if (err == -EPERM && !ofs->config.userxattr)
++			pr_info("try mounting with 'userxattr' option\n");
+ 		err = 0;
+ 	} else {
+ 		ovl_removexattr(ofs, ofs->workdir, OVL_XATTR_OPAQUE);
 -- 
 2.35.1
 

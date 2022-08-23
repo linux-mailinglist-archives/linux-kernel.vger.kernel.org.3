@@ -2,171 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1915059D1F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D5359D1FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240646AbiHWHYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S240946AbiHWH0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiHWHYs (ORCPT
+        with ESMTP id S233020AbiHWH0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:24:48 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2059.outbound.protection.outlook.com [40.107.212.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253B962A94;
-        Tue, 23 Aug 2022 00:24:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jGvRJH3UrJCYJxJJ7ishAFycZZEJXGaK556+I1QT66Hk+5h7Eo1B476/XQNpj+wO9qFiojYGrFUcOh89kIQuNftJ5y5zy4Rnn/OzXkvbtO3Or7A7PZwqixHilb4t/7TaYnp62SnGEjE4bqvXvNFa1311EmXifD3QzLK8IZtUMuVrrhjvd0g0QKTB4gLNGZ747Ai/2Vfs1nAJ3MjCWQLf55l5EVsQIdyB2s2to+UFtmn4rGGBuyYkhuSw/jUR1xHTJuOMRQUkhp+10cVYIba/AyZ409YS+GWxTDDIqs1j1V7f17C+mHLV/83zieviRqe3+3JPGKmIB6HNi2tBRzn4rQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+sEku82Dbcvg5O6a4FBAiTuhF4cRolUjE0Q0ZzxIAe0=;
- b=OoOKtPxIui5fykbrleoBXYnmltF8h/ABUbEgzyJQez61wciA220EBIaGt1CrbLJZaz+Z/9TTlper5ExAfEc+V1A28Y5nBXK25Rohh12eE8AdaBicC5jH2+4A+KRj7H8casTbZRxAst3OGPLiyeNs8uxgIbOokDn8r3j33MdqU0f22tt6nDeG3rLDBZcoiCIMH7Z70NgRaW7pdV8K/2xJCeNsWmMWsrC1sOlWx7/znrJ8o0m8ImpuYCubPA5IWHr8O9eQfk8ElZqZ6Gf9TY+jQQd9sxaqS/g5/AePIvIyxzuZJogKVQdhCmkwuGEyqg+5yICoX7iqKHCbm2alSbH6SQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+sEku82Dbcvg5O6a4FBAiTuhF4cRolUjE0Q0ZzxIAe0=;
- b=KRUFwJDvmysHH5Eo2esSGeYAr/gS0mGplQsIJnH9AQ48U7MZJsBvkJ0KPFgUQ5klnmquvRKd1iBTPEPsLMgkNaAJlnX4ynJ6zweztWVPlnSdnsVYysP69lpdHgc7gbsq4J0awsNKETxGehqsmWvkDi674mQfCQxoLHtft+DAfDBvhsaCPI6zmv7oikOzC2Mo/KgOpxa/04+pAJuCtml4h9gP/HayiPjGt5C3IOUE9fIlCPsYz7zhFGi5TNDqCIBvZErys3FC30gCDlNlfwvjxCRrrAidOczX8wcbmlpcrWlx5FA6sZENUwjqf2/Db/ZrHOhuAZgC4oA22t2kGN4bRg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com (2603:10b6:208:3e9::22)
- by DM6PR12MB5519.namprd12.prod.outlook.com (2603:10b6:5:1b5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Tue, 23 Aug
- 2022 07:24:45 +0000
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc]) by IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc%5]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
- 07:24:45 +0000
-Date:   Tue, 23 Aug 2022 10:24:38 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     netdev@kapio-technology.com
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <YwSAtgS7fgHNLMEy@shredder>
-References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
- <YvkM7UJ0SX+jkts2@shredder>
- <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
- <YwHZ1J9DZW00aJDU@shredder>
- <ce4266571b2b47ae8d56bd1f790cb82a@kapio-technology.com>
- <YwMW4iGccDu6jpaZ@shredder>
- <c2822d6dd66a1239ff8b7bfd06019008@kapio-technology.com>
- <YwR4MQ2xOMlvKocw@shredder>
- <9dcb4db4a77811308c56fe5b9b7c5257@kapio-technology.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9dcb4db4a77811308c56fe5b9b7c5257@kapio-technology.com>
-X-ClientProxiedBy: VI1PR0302CA0023.eurprd03.prod.outlook.com
- (2603:10a6:800:e9::33) To IA1PR12MB6163.namprd12.prod.outlook.com
- (2603:10b6:208:3e9::22)
+        Tue, 23 Aug 2022 03:26:08 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DCA62A9D;
+        Tue, 23 Aug 2022 00:26:05 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27N7I8mi019262;
+        Tue, 23 Aug 2022 07:25:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SmOYCQlEi9xOYSyDiv1CZsdu0MNpYC68EjaM4akqad0=;
+ b=Y9TlNJQL3bt2TjCZI+ODTGspLlnve8roixvsUwMPCPJBVWr1KZ2Oz0MJmgMqv/Oz2flu
+ ZsGr7hStED3LA9vlQOD7TQYYLW7FvcrI8M1IH0cIw60+4oEsVrG/YEAdhHYJksDaA2pm
+ 9MORs9m1kXXeBu5sht2uc+nVhUXS3UHk4fK+AEAe6K0SzksB43CcMohkGOyzNi1XyKiU
+ RtAn+4RVRcweY3piRBqk4VxyElSV1l47kQ/mMSjov64hTqA/tYF9KOv+fsD9brRlSjv4
+ dr7fZtbmf+R3Lb0ElHOMpc/piR0Si7+PaDoVKsoqcjoslQSwvUKfsC8nL+yH1Y8xxaDp OA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4tct84q9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 07:25:33 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27N7IbrP020072;
+        Tue, 23 Aug 2022 07:25:33 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4tct84pk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 07:25:33 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27N7LYrS017635;
+        Tue, 23 Aug 2022 07:25:31 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3j2q88ucvt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 07:25:31 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27N7PSEb28901874
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 07:25:28 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 459094C04A;
+        Tue, 23 Aug 2022 07:25:28 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3A084C040;
+        Tue, 23 Aug 2022 07:25:27 +0000 (GMT)
+Received: from [9.145.84.26] (unknown [9.145.84.26])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 23 Aug 2022 07:25:27 +0000 (GMT)
+Message-ID: <6d11d3b5-a313-8e2b-2f38-44c5a4a63a28@linux.ibm.com>
+Date:   Tue, 23 Aug 2022 09:25:27 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dbcc84f5-cef2-4458-90ae-08da84d88dae
-X-MS-TrafficTypeDiagnostic: DM6PR12MB5519:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gH3x8iFrPG27IEkLVJ9itvXOZ4zRBxnP3z4g76eNuqz3YZqjl5OHnmsy4xzQ1e21SpybeUV7DOxrhNtXbPbuqdDx/k/tQkhuZkuoSZH53wg1Y9bfel/Sk+nH+fdnKEpQLQyvZXpkqEP92Sgdi/SLNxhggjHvbf+QL5cN15cdbz+9FCKKiQ7kyL+tULW7uK3QssKSW6nz9ppUvQyoW6KFQPRKdNpP9p6iqbpoA+5xyOL0D3nA+6+OZ7/EI6pD62d0YT8n4EPIKZ19CbjQISPSZQ7r7GyEqbqIkJmy6l8DifqwKUK9t6ZYbQsqZHJCRcDZYCuzEbMqJWePHrSVk4tYarL/1STu4tt1LBUy4XhJQvyf0vPV0bl1RpcgnxcPOjBxRkM6eXbIRvKK+sgOofpiO2WmxXc669ovr5e7rmSew9RAw6eNLTNVU+xH1VSE0V/xsIbWSIkAa5jzfdhyR/PN7NbV0y8vvMTkOBaDc9DajgCAWlt1/zNOazqRaAT+YZ2jwn4iiZgbmToPSihQGArnfL0wcKpjC2BvY3uHnq2sUnLXyW9AQbOMoR2b1AFFhJRlPfCC/ITo1eX5vb5c2G+koujfBcJGeeoXcDmgf1JexC83/TQMc1etGc8bnK1lBlz3z4IwOgZp8uEXbR1MwHgZdQ9iEBUXJ7eCDd7QxXSpSFLQTQJN94H+XB3iCLcfWxSQxGEZQibE4sMG7PYsbM4yRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6163.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(376002)(136003)(39860400002)(396003)(346002)(366004)(2906002)(5660300002)(33716001)(8676002)(4326008)(66556008)(66476007)(66946007)(316002)(6666004)(6506007)(6916009)(54906003)(41300700001)(9686003)(53546011)(478600001)(6486002)(26005)(6512007)(38100700002)(86362001)(186003)(8936002)(7416002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?25TaRi5FLTw7hxUwP8haF7NTwS3vfZS0Wh368T1dOihphSO2Uea0dVOfc67o?=
- =?us-ascii?Q?Jw7kjdFX7pslWaI9OhSHuB3SS+Lb6PoxJ8l+bpmHgw2N//czQ7kl/RgFwoIz?=
- =?us-ascii?Q?MDy6OSuVFAu810bfFIJhxNKuyD4Wpd6j6DxXpXku3Y8Cupc/OYdJBYdBv9gt?=
- =?us-ascii?Q?RncGw1h6M6ToTAPEZ3RnUmRFXJUgciZV+uSWWD0hAVFkbyeYebme3JJx+bx5?=
- =?us-ascii?Q?X3RV2PW+UL4cgNqaA5b0LAFyKR4gqOameQsT9WDTW2GOXbnSTI8jXlHOEHkE?=
- =?us-ascii?Q?FXKu7+3vpoXulM06U7tTFMaeMd6b4qO3xsi8ezw5K11G6bUJaNdx82RWnLbR?=
- =?us-ascii?Q?BS1dBOmPx1DrqFyduwt6fsDzHQIuLFvmIpvI0KnibyJNceczRh3LAwyiU37O?=
- =?us-ascii?Q?w4QYIiZm2amUkDn+CwZRMKAQLV/tXlpjWo2h5NCkQhSPJmFm7pAO0av7Ihs3?=
- =?us-ascii?Q?GGjxhSRRcfDcYYhRoU08rF/9Gi8s9FMNRyxTVa8o/62JT4SnETfwrqLzqw7B?=
- =?us-ascii?Q?nJFKeZJyOc8b95r5RfbwWQqwSHAo9yW4pmTw4tlYabLtYBk8p4WBxniODbnc?=
- =?us-ascii?Q?zUNPAn2tZJG4Oq0VuQ7qVQYIBS/afn5mhJh6YhEXf1WzFwgE4OabdOwc4yEy?=
- =?us-ascii?Q?RgglLjHRFSKD9yPKri/lNn1qGEOFfbr8HgikWBoJWjON6wp5/BZ5YewCqI8U?=
- =?us-ascii?Q?ggUJbnrd6swBH56GWOWm1OLPkZOQcWmsjMmmS0Q+7IkV3mnqffTPltkU9PEj?=
- =?us-ascii?Q?ljOX5cbgW6YKRC8PL9tbmJL4mBZ374INUNP5Q7poK0UDO7izJYYqI79ckDgs?=
- =?us-ascii?Q?Ye4PtfhiZkWzCKfzy7DW9nRhwg/fMhYKrlAu5QzKQkhGqcF521x5F1lJHbK7?=
- =?us-ascii?Q?U0LuHDGQZVLx0v2lp/hHnz5JbfZso1sqiw6AjlS+g2cCGhf9w+oHnYW4Fsf9?=
- =?us-ascii?Q?VJoa95TisqUwtrvz+93zGGwIsU+VeSztmT12avSMYxCf8/ChN8ZvHpa3MNn4?=
- =?us-ascii?Q?nVsaFT+9qvhtYF9WIxUgQZwTXHrgqtYEjeJWZfQQtQGeUEk0VckC11WXsmqO?=
- =?us-ascii?Q?3ohsaHyz3N+h24shuAs3hNvZkl2/zvcjpM0IjFDb6iD3DOVH5fSXiQWi2oVl?=
- =?us-ascii?Q?xCjHA/WppxRN1COBJGwzHxpwMJcBftBiroTJbnU21AuuSEfV9edTDdYcvhcq?=
- =?us-ascii?Q?cK2i4Rai2uwLiOXnWf30Ad/UTPyGAgz/7kCQe2kj2o/Pxvhfezl8WXALApBU?=
- =?us-ascii?Q?tWd32U81I1czKyueiieb6yrtrw5C3tFfCg7M3meGxZaOtkxSaQzumBpRNmCB?=
- =?us-ascii?Q?s49jA0gUmEqqftPkPL78SgI6eHKg72xYz7bf77Z5z4kmlqayw3nt/OvirnSE?=
- =?us-ascii?Q?/9ePAOSxEKhTs/KzLzzD1KNpb8HcfyaFokzzaIAH5oZqJKhLu6MYJIkLTts7?=
- =?us-ascii?Q?caAE8xKb5xAhh9D+gzTfgpKyPQ74BEsFGbZPH5v5tPd2tTv84puASKxym1AA?=
- =?us-ascii?Q?DCJVODqrduLKIuEhU0MVHe6I9BkHTgoG11SGDGKLkstGuZpeNG+6pJjDnr/8?=
- =?us-ascii?Q?+676ctdIWoc1DscctfgWLEyihXTif+lfDlAU9gK4?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dbcc84f5-cef2-4458-90ae-08da84d88dae
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6163.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 07:24:45.2907
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X4ZCjY8QCRaXFlYKcmV5wNcfkP1IvsExmprgcLgUMDAQ8Hvko9W6/1sNd3PPmoTrr5CzlbsHWi5idYnD1gmbnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5519
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, mjrosato@linux.ibm.com
+Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
+        borntraeger@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, schnelle@linux.ibm.com,
+        alex.williamson@redhat.com, cohuck@redhat.com
+References: <20220819122945.9309-1-pmorel@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v2] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
+In-Reply-To: <20220819122945.9309-1-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WApmKQCF6vWAoWUcQpk8IJczJiuGuinz
+X-Proofpoint-ORIG-GUID: VYjopGuI7cEjOcfPDg0iFkAn8lI1nGfm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-23_02,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 clxscore=1011 mlxscore=0 spamscore=0 mlxlogscore=803
+ adultscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208230027
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 09:13:54AM +0200, netdev@kapio-technology.com wrote:
-> On 2022-08-23 08:48, Ido Schimmel wrote:
-> > On Mon, Aug 22, 2022 at 09:49:28AM +0200, netdev@kapio-technology.com
-> > wrote:
+On 8/19/22 14:29, Pierre Morel wrote:
+> We have a cross dependency between KVM and VFIO when using
+> s390 vfio_pci_zdev extensions for PCI passthrough
+> To be able to keep both subsystem modular we add a registering
+> hook inside the S390 core code.
 > 
-> > > As I am not familiar with roaming in this context, I need to know
-> > > how the SW
-> > > bridge should behave in this case.
-> > 
+> This fixes a build problem when VFIO is built-in and KVM is built
+> as a module.
 > 
-> > > In this case, is the roaming only between locked ports or does the
-> > > roaming include that the entry can move to a unlocked port, resulting
-> > > in the locked flag getting removed?
-> > 
-> > Any two ports. If the "locked" entry in mv88e6xxx cannot move once
-> > installed, then the "sticky" flag accurately describes it.
-> > 
-> 
-> But since I am also doing the SW bridge implementation without mv88e6xxx I
-> need it to function according to needs.
-> Thus the locked entries created in the bridge I shall not put the sticky
-> flag on, but there will be the situation where a locked entry can move to an
-> unlocked port, which we regarded as a bug. 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop interpretive execution")
+> Cc: <stable@vger.kernel.org>
 
-I do not regard this as a bug. It makes sense to me that an authorized
-port can cause an entry pointing to an unauthorized port to roam to
-itself. Just like normal learned entries. What I considered as a bug is
-the fact that the "locked" flag is not cleared when roaming to an
-authorized port.
+Acked-by: Janosch Frank <frankja@linux.ibm.com>
 
-> In that case there is two possibilities, the locked entry can move to
-> an unlocked port with the locked flag being removed or the locked
-> entry can only move to another locked port?
-
-My suggestion is to allow roaming and maintain / clear the "locked" flag
-based on whether the new destination port is locked or not.
+@Niklas @Matt: Since the patches that introduced the PCI interpretation 
+went via the KVM tree I'll also move this patch via the KVM tree.

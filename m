@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260A159DD0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071D759DF26
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352372AbiHWKJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S1356208AbiHWKqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352663AbiHWKCR (ORCPT
+        with ESMTP id S1355658AbiHWKkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845067C50B;
-        Tue, 23 Aug 2022 01:50:24 -0700 (PDT)
+        Tue, 23 Aug 2022 06:40:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C622BDB0;
+        Tue, 23 Aug 2022 02:08:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B9D86123D;
-        Tue, 23 Aug 2022 08:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9373AC433D6;
-        Tue, 23 Aug 2022 08:50:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CEE761598;
+        Tue, 23 Aug 2022 09:08:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B62C433C1;
+        Tue, 23 Aug 2022 09:08:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244623;
-        bh=pYv0s+DA1pMeJor9ECUWgdPYc8ygXV2JEQzucavj7a4=;
+        s=korg; t=1661245693;
+        bh=pn7Xkki/c1OBI4ZWFGs7oupIMGY204Tf9wIvyQ/9v5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uuf6xfXW1BL6vwju9nthOqfJM+qqRon1NG7OzTOXmWdAkzBDOYIQ4BCuCEneFQWqr
-         IVAT8wpv7kBbs49pyHb3gjCSWZmNMjJGn99TTTaXzdT//ZACW9aumWYYB1z7DKgxQe
-         hBhBrAtPetjNJiRrZ5pwdrzpOCj2KvnsepM3YC0w=
+        b=ebh/g8kgOm7RdRDWfQogw3W455WYbH6uRDc5QB6iw8u5NIk3Bkhzpb2BoW2awtLSC
+         jvZlhUt3lxwceiQxu27EcEJ7RYqkRu1X4tUTMWVz+1iPGKzi3I6Tb7DEvw6iARbNu+
+         rBoE9gqnk0RANAacPOm+aauF0zo8y6Zjlyp4YDwI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Ghinea <stefan.ghinea@windriver.com>
-Subject: [PATCH 4.14 166/229] KVM: Add infrastructure and macro to mark VM as bugged
-Date:   Tue, 23 Aug 2022 10:25:27 +0200
-Message-Id: <20220823080059.589456877@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 159/287] tty: n_gsm: fix missing corner cases in gsmld_poll()
+Date:   Tue, 23 Aug 2022 10:25:28 +0200
+Message-Id: <20220823080106.053513743@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,127 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <sean.j.christopherson@intel.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 0b8f11737cffc1a406d1134b58687abc29d76b52 upstream
+[ Upstream commit 7e5b4322cde067e1d0f1bf8f490e93f664a7c843 ]
 
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-Message-Id: <3a0998645c328bf0895f1290e61821b70f048549.1625186503.git.isaku.yamahata@intel.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[SG: Adjusted context for kernel version 4.14]
-Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
+gsmld_poll() currently fails to handle the following corner cases correctly:
+- remote party closed the associated tty
+
+Add the missing checks and map those to EPOLLHUP.
+Reorder the checks to group them by their reaction.
+
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220707113223.3685-4-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/kvm_host.h |   28 +++++++++++++++++++++++++++-
- virt/kvm/kvm_main.c      |   10 +++++-----
- 2 files changed, 32 insertions(+), 6 deletions(-)
+ drivers/tty/n_gsm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -127,6 +127,7 @@ static inline bool is_error_page(struct
- #define KVM_REQ_MMU_RELOAD        (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_PENDING_TIMER     2
- #define KVM_REQ_UNHALT            3
-+#define KVM_REQ_VM_BUGGED         (4 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQUEST_ARCH_BASE     8
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 727707e02551..f6d2be13b32e 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2561,12 +2561,15 @@ static __poll_t gsmld_poll(struct tty_struct *tty, struct file *file,
  
- #define KVM_ARCH_REQ_FLAGS(nr, flags) ({ \
-@@ -446,6 +447,7 @@ struct kvm {
- 	struct kvm_stat_data **debugfs_stat_data;
- 	struct srcu_struct srcu;
- 	struct srcu_struct irq_srcu;
-+	bool vm_bugged;
- 	pid_t userspace_pid;
- };
- 
-@@ -475,6 +477,31 @@ struct kvm {
- #define vcpu_err(vcpu, fmt, ...)					\
- 	kvm_err("vcpu%i " fmt, (vcpu)->vcpu_id, ## __VA_ARGS__)
- 
-+bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
-+static inline void kvm_vm_bugged(struct kvm *kvm)
-+{
-+	kvm->vm_bugged = true;
-+	kvm_make_all_cpus_request(kvm, KVM_REQ_VM_BUGGED);
-+}
+ 	poll_wait(file, &tty->read_wait, wait);
+ 	poll_wait(file, &tty->write_wait, wait);
 +
-+#define KVM_BUG(cond, kvm, fmt...)				\
-+({								\
-+	int __ret = (cond);					\
-+								\
-+	if (WARN_ONCE(__ret && !(kvm)->vm_bugged, fmt))		\
-+		kvm_vm_bugged(kvm);				\
-+	unlikely(__ret);					\
-+})
-+
-+#define KVM_BUG_ON(cond, kvm)					\
-+({								\
-+	int __ret = (cond);					\
-+								\
-+	if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))		\
-+		kvm_vm_bugged(kvm);				\
-+	unlikely(__ret);					\
-+})
-+
- static inline struct kvm_io_bus *kvm_get_bus(struct kvm *kvm, enum kvm_bus idx)
- {
- 	return srcu_dereference_check(kvm->buses[idx], &kvm->srcu,
-@@ -732,7 +759,6 @@ void kvm_put_guest_fpu(struct kvm_vcpu *
++	if (gsm->dead)
++		mask |= EPOLLHUP;
+ 	if (tty_hung_up_p(file))
+ 		mask |= EPOLLHUP;
++	if (test_bit(TTY_OTHER_CLOSED, &tty->flags))
++		mask |= EPOLLHUP;
+ 	if (!tty_is_writelocked(tty) && tty_write_room(tty) > 0)
+ 		mask |= EPOLLOUT | EPOLLWRNORM;
+-	if (gsm->dead)
+-		mask |= EPOLLHUP;
+ 	return mask;
+ }
  
- void kvm_flush_remote_tlbs(struct kvm *kvm);
- void kvm_reload_remote_mmus(struct kvm *kvm);
--bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
- 
- long kvm_arch_dev_ioctl(struct file *filp,
- 			unsigned int ioctl, unsigned long arg);
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -2660,7 +2660,7 @@ static long kvm_vcpu_ioctl(struct file *
- 	struct kvm_fpu *fpu = NULL;
- 	struct kvm_sregs *kvm_sregs = NULL;
- 
--	if (vcpu->kvm->mm != current->mm)
-+	if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_bugged)
- 		return -EIO;
- 
- 	if (unlikely(_IOC_TYPE(ioctl) != KVMIO))
-@@ -2864,7 +2864,7 @@ static long kvm_vcpu_compat_ioctl(struct
- 	void __user *argp = compat_ptr(arg);
- 	int r;
- 
--	if (vcpu->kvm->mm != current->mm)
-+	if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_bugged)
- 		return -EIO;
- 
- 	switch (ioctl) {
-@@ -2922,7 +2922,7 @@ static long kvm_device_ioctl(struct file
- {
- 	struct kvm_device *dev = filp->private_data;
- 
--	if (dev->kvm->mm != current->mm)
-+	if (dev->kvm->mm != current->mm || dev->kvm->vm_bugged)
- 		return -EIO;
- 
- 	switch (ioctl) {
-@@ -3087,7 +3087,7 @@ static long kvm_vm_ioctl(struct file *fi
- 	void __user *argp = (void __user *)arg;
- 	int r;
- 
--	if (kvm->mm != current->mm)
-+	if (kvm->mm != current->mm || kvm->vm_bugged)
- 		return -EIO;
- 	switch (ioctl) {
- 	case KVM_CREATE_VCPU:
-@@ -3264,7 +3264,7 @@ static long kvm_vm_compat_ioctl(struct f
- 	struct kvm *kvm = filp->private_data;
- 	int r;
- 
--	if (kvm->mm != current->mm)
-+	if (kvm->mm != current->mm || kvm->vm_bugged)
- 		return -EIO;
- 	switch (ioctl) {
- 	case KVM_GET_DIRTY_LOG: {
+-- 
+2.35.1
+
 
 

@@ -2,73 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D6D59E852
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB1E59E88B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245715AbiHWRB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S1343560AbiHWRD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343888AbiHWRAc (ORCPT
+        with ESMTP id S1344308AbiHWRBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:00:32 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F108A9E0D0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:12:13 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1661263923tx83jlr4
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 22:12:01 +0800 (CST)
-X-QQ-SSF: 0100000000200040B000B00A0000000
-X-QQ-FEAT: znfcQSa1hKYzzlmEkavydIuQBfcQG+Gw6Ff3QaZY4yoHaABX9TSRukEz/XikS
-        xGfiPf5JhYBhXEDIkLKv/YfwsQsGkKpDhi+00nW2+GOCyBlJggUcu5I8EaM4Ckx0NQA4KUn
-        1ym8Mdr5BCRKzVuskuqyycqjegswQu1VpvK7j2ZahEtwv/wCJNQ1Bj394wdkM6+s0IyhYVq
-        f3st/RXI9Prm/Z56KnFiNK0TeY5ZxoVbz2vj2wGzMueWL7EktU1CMPkJ6+GD6rW7J74oQLB
-        Vc2H2ZuWb0x24m+D7N6voZXYPO8mthvsNi1JbtiRxrvez/IKbqWiKwFG+TPqjn+aNNsZnJ/
-        hbWSQEADMKjRyYMTAUrqkcRBChndtomxHXOW2pdiEAQL+MQ2SE=
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, irlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] gpu/drm: fix repeated words in comments
-Date:   Tue, 23 Aug 2022 22:11:54 +0800
-Message-Id: <20220823141154.9956-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 23 Aug 2022 13:01:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8872E9E0D4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661263933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kYvU0b08zm/V0xwR5oEjOP2aPgvABHjHuDzOrfSOpNM=;
+        b=W2nl2DCx8AZO9DepOOW2xzLTTK4eNjMaJjE4nX8SHMFFf7AXpZ6YB0hkEKl7jQf8admegt
+        Tsghc+vP2LD9CnqHwfiugQVlFE6dR9TOqYDGT/5zCtBZcnA3lHuwQgVPaNyIp+iYZ1BCZc
+        km9POfH6zvB4u7LAkLN5LcIIkXhFLOI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-453-IILv1f45PVWyhyOEee0mzQ-1; Tue, 23 Aug 2022 10:12:10 -0400
+X-MC-Unique: IILv1f45PVWyhyOEee0mzQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E47CC3C0D85A;
+        Tue, 23 Aug 2022 14:12:08 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C00AC40CF8E7;
+        Tue, 23 Aug 2022 14:12:07 +0000 (UTC)
+Subject: [PATCH 0/7] smb3: Add iter helpers and use iov_iters down to the
+ network transport
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-cifs@vger.kernel.org, Steve French <sfrench@samba.org>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Shyam Prasad N <nspmangalore@gmail.com>, dhowells@redhat.com,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 23 Aug 2022 15:12:07 +0100
+Message-ID: <166126392703.708021.14465850073772688008.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+Hi Steve, Al,
+
+Here's an updated version of a subset of my branch to make the cifs/smb3
+driver pass iov_iters down to the lowest layers where they can be passed to
+the network transport.
+
+Al: Could you look at the first two patches, that add extract_iter_to_iter()
+to see about decanting iterators of various types (but that might have to be
+lost) into iterators that can be held on to (pinning pages in the process),
+and iov_iter_scan() which passes each partial page of an iterator to a scanner
+function to do something with (such as create an sglist element for).
+
+Possibly I should add an extract_iter_to_sglist() - I'm doing that in a number
+of places.
+
+Steve: assuming Al is okay with the iov_iter patches, can you look at taking
+this into your tree (or should it go through mine?)?
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-for-viro
+
+David
 ---
- drivers/gpu/drm/drm_mipi_dsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+David Howells (7):
+      iov_iter: Add a function to extract an iter's buffers to a bvec iter
+      iov_iter: Add a general purpose iteration function
+      cifs: Add some helper functions
+      cifs: Add a function to read into an iter from a socket
+      cifs: Change the I/O paths to use an iterator rather than a page list
+      cifs: Remove unused code
+      cifs: Add some RDMA send tracepoints
 
-diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
-index c40bde96cfdf..fd2790a5664d 100644
---- a/drivers/gpu/drm/drm_mipi_dsi.c
-+++ b/drivers/gpu/drm/drm_mipi_dsi.c
-@@ -606,7 +606,7 @@ EXPORT_SYMBOL(mipi_dsi_turn_on_peripheral);
- 
- /*
-  * mipi_dsi_set_maximum_return_packet_size() - specify the maximum size of the
-- *    the payload in a long packet transmitted from the peripheral back to the
-+ *    payload in a long packet transmitted from the peripheral back to the
-  *    host processor
-  * @dsi: DSI peripheral device
-  * @value: the maximum size of the payload
--- 
-2.36.1
+
+ fs/cifs/cifsencrypt.c |   40 +-
+ fs/cifs/cifsfs.h      |    3 +
+ fs/cifs/cifsglob.h    |   28 +-
+ fs/cifs/cifsproto.h   |   11 +-
+ fs/cifs/cifssmb.c     |   13 +-
+ fs/cifs/connect.c     |   16 +
+ fs/cifs/file.c        | 1653 ++++++++++++++++++-----------------------
+ fs/cifs/fscache.c     |   22 +-
+ fs/cifs/fscache.h     |   10 +-
+ fs/cifs/misc.c        |  108 ---
+ fs/cifs/smb2ops.c     |  369 +++++----
+ fs/cifs/smb2pdu.c     |   44 +-
+ fs/cifs/smbdirect.c   |  335 ++++-----
+ fs/cifs/smbdirect.h   |    4 +-
+ fs/cifs/trace.h       |   95 +++
+ fs/cifs/transport.c   |   54 +-
+ include/linux/uio.h   |    8 +
+ lib/iov_iter.c        |  159 +++-
+ 18 files changed, 1391 insertions(+), 1581 deletions(-)
+
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7711759D7FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB07159D786
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240363AbiHWJv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S238318AbiHWJxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242729AbiHWJu0 (ORCPT
+        with ESMTP id S1352123AbiHWJvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:50:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3A69DB47;
-        Tue, 23 Aug 2022 01:45:08 -0700 (PDT)
+        Tue, 23 Aug 2022 05:51:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7986F6AA15;
+        Tue, 23 Aug 2022 01:45:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EACEB81C5A;
-        Tue, 23 Aug 2022 08:44:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFFD6C433C1;
-        Tue, 23 Aug 2022 08:44:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCB96B8105C;
+        Tue, 23 Aug 2022 08:44:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007E9C433C1;
+        Tue, 23 Aug 2022 08:44:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244268;
-        bh=/RaeS7m5dAmIU2S1dxom5JWgLdGUIw6c/w0E9WlM5zo=;
+        s=korg; t=1661244286;
+        bh=sto1LCv4DQGYhbhbX/aWkxvRFogNADA9fty7b01kRcU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hc5Q7/wiBwTCIRDtNrouRBp9CfCrDKgSLVIT/qFoRxTWmk5PeBXwGPbBLbgkSZvqN
-         fDljMV1qgx6D3p6eKB49nac6KGzq3VyvsPfQVQpmmVwwyZum9JeOmidZcM+2Bp3V9t
-         9qQs2CRUUt89oGFC1a5DhmbTHcLAXOfaEmLdzsIU=
+        b=grEEyB++9dHYQtXHBMksoC9DH1UAOm7EbQtRhqAa0ob85dxSiDmRvchXbSXtVNNyo
+         wW5jTMXyFx0dJyHZmjUxcYaMIyPJizwLaVh2V4Wql8e8rLme/dyKkEP+nxItoqnohB
+         U+Hc7/2CrQZx2DZkFfbS/1M6TSAhJZjQ/nim/ZvE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Robert Richter <rric@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 111/229] mmc: cavium-thunderx: Add of_node_put() when breaking out of loop
-Date:   Tue, 23 Aug 2022 10:24:32 +0200
-Message-Id: <20220823080057.645464694@linuxfoundation.org>
+Subject: [PATCH 4.14 114/229] mm/mmap.c: fix missing call to vm_unacct_memory in mmap_region
+Date:   Tue, 23 Aug 2022 10:24:35 +0200
+Message-Id: <20220823080057.754261520@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -56,40 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-[ Upstream commit 7ee480795e41db314f2c445c65ed854a5d6e8e32 ]
+[ Upstream commit 7f82f922319ede486540e8746769865b9508d2c2 ]
 
-In thunder_mmc_probe(), we should call of_node_put() when breaking
-out of for_each_child_of_node() which has increased and decreased
-the refcount during each iteration.
+Since the beginning, charged is set to 0 to avoid calling vm_unacct_memory
+twice because vm_unacct_memory will be called by above unmap_region.  But
+since commit 4f74d2c8e827 ("vm: remove 'nr_accounted' calculations from
+the unmap_vmas() interfaces"), unmap_region doesn't call vm_unacct_memory
+anymore.  So charged shouldn't be set to 0 now otherwise the calling to
+paired vm_unacct_memory will be missed and leads to imbalanced account.
 
-Fixes: 166bac38c3c5 ("mmc: cavium: Add MMC PCI driver for ThunderX SOCs")
-Signed-off-by: Liang He <windhl@126.com>
-Acked-by: Robert Richter <rric@kernel.org>
-Link: https://lore.kernel.org/r/20220719095216.1241601-2-windhl@126.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lkml.kernel.org/r/20220618082027.43391-1-linmiaohe@huawei.com
+Fixes: 4f74d2c8e827 ("vm: remove 'nr_accounted' calculations from the unmap_vmas() interfaces")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/cavium-thunderx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ mm/mmap.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/mmc/host/cavium-thunderx.c b/drivers/mmc/host/cavium-thunderx.c
-index eee08d81b242..f79806e31e7e 100644
---- a/drivers/mmc/host/cavium-thunderx.c
-+++ b/drivers/mmc/host/cavium-thunderx.c
-@@ -138,8 +138,10 @@ static int thunder_mmc_probe(struct pci_dev *pdev,
- 				continue;
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 64d1d133af79..a29d5b1fa1a1 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1778,7 +1778,6 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
  
- 			ret = cvm_mmc_of_slot_probe(&host->slot_pdev[i]->dev, host);
--			if (ret)
-+			if (ret) {
-+				of_node_put(child_node);
- 				goto error;
-+			}
- 		}
- 		i++;
- 	}
+ 	/* Undo any partial mapping done by a device driver. */
+ 	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
+-	charged = 0;
+ 	if (vm_flags & VM_SHARED)
+ 		mapping_unmap_writable(file->f_mapping);
+ allow_write_and_free_vma:
 -- 
 2.35.1
 

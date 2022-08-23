@@ -2,157 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AEB59D1C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8660659D1D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240915AbiHWHL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S239682AbiHWHMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240880AbiHWHLT (ORCPT
+        with ESMTP id S240928AbiHWHMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:11:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0862361D59;
-        Tue, 23 Aug 2022 00:11:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 23 Aug 2022 03:12:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0541D61D78
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:12:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F627B801C0;
-        Tue, 23 Aug 2022 07:11:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA25C433D6;
-        Tue, 23 Aug 2022 07:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661238675;
-        bh=vMiL6tXO64IX78O0F1aZDGjmvXqzBiRZfMNOvY56/yc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sAXFQaKxAKlCaC7NX2XtYskIX7HQAcGV2PhFFxMovv9H01hIZnB8HG2j3roNk9mn9
-         0Qh1nhXLd9lFMfUaEw+6kXC3Q3qdnWkXtkBOMxILre+GO8H2gJsMsCEylYnxdg7BNT
-         aW0K0lA5C0AzHIztQaBAlSxyc88eSbIQthX8qP7Y=
-Date:   Tue, 23 Aug 2022 09:11:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dominique Martinet <dominique.martinet@atmark-techno.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sean V Kelley <sean.v.kelley@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pci@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
-        Hinko Kocevar <hinko.kocevar@ess.eu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>
-Subject: Re: [PATCH 5.10 480/545] PCI/ERR: Add pci_walk_bridge() to
- pcie_do_recovery()
-Message-ID: <YwR9kFH3UqhkV4d0@kroah.com>
-References: <20220819153850.911668266@linuxfoundation.org>
- <YwL/brvUP1aiwo93@atmark-techno.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8558033F07;
+        Tue, 23 Aug 2022 07:12:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661238754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=7rYnIbsTHqMgra5J+MjLdZgHDRmMu3X1VKDoHDywm+8=;
+        b=FnOZlSLSPocaKobjTXbWHYwCCzGIpkek3KxBOW2F4vMHZSPX6ZJmgbUg53l9EOOff59E7g
+        NsCJtQzbx+rumglvxzJ0csSGZs+48kdwCRMLlHThaD9syuq7eu+Gal3kBgtMX8CvziKKkm
+        liFPYya6aEm4+rWx/L5cLMCGnxiTetg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661238754;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=7rYnIbsTHqMgra5J+MjLdZgHDRmMu3X1VKDoHDywm+8=;
+        b=jGyRtA4dANNwEYH0Ymriix/GaaBT1S8j/lNL8Y7Os6K5QsOKdtkJQHYD8s6/ldV7ADKswb
+        RBT8zgzHZCu+OfDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B66E13AB7;
+        Tue, 23 Aug 2022 07:12:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id b8MCGuJ9BGPiNgAAMHmgww
+        (envelope-from <dwagner@suse.de>); Tue, 23 Aug 2022 07:12:34 +0000
+Date:   Tue, 23 Aug 2022 09:12:33 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: mitigations=off and failsafe boot options
+Message-ID: <20220823071233.v5shk3tpu7ssctpc@carbon.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwL/brvUP1aiwo93@atmark-techno.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 01:00:46PM +0900, Dominique Martinet wrote:
-> Greg Kroah-Hartman wrote on Fri, Aug 19, 2022 at 05:44:10PM +0200:
-> > From: Sean V Kelley <sean.v.kelley@intel.com>
-> > 
-> > [ Upstream commit 05e9ae19ab83881a0f33025bd1288e41e552a34b ]
-> > 
-> > Consolidate subordinate bus checks with pci_walk_bus() into
-> > pci_walk_bridge() for walking below potentially AER affected bridges.
-> > 
-> > Link: https://lore.kernel.org/r/20201121001036.8560-10-sean.v.kelley@intel.com
-> > Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # non-native/no RCEC
-> > Signed-off-by: Sean V Kelley <sean.v.kelley@intel.com>
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > ---
-> >  drivers/pci/pcie/err.c | 30 +++++++++++++++++++++++-------
-> >  1 file changed, 23 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
-> > index 931e75f2549d..8b53aecdb43d 100644
-> > --- a/drivers/pci/pcie/err.c
-> > +++ b/drivers/pci/pcie/err.c
-> > [...]
-> > @@ -165,23 +182,22 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
-> >  	else
-> >  		bridge = pci_upstream_bridge(dev);
-> >  
-> > -	bus = bridge->subordinate;
-> >  	pci_dbg(bridge, "broadcast error_detected message\n");
-> >  	if (state == pci_channel_io_frozen) {
-> > -		pci_walk_bus(bus, report_frozen_detected, &status);
-> > +		pci_walk_bridge(bridge, report_frozen_detected, &status);
-> >  		status = reset_subordinates(bridge);
-> >  		if (status != PCI_ERS_RESULT_RECOVERED) {
-> >  			pci_warn(bridge, "subordinate device reset failed\n");
-> >  			goto failed;
-> >  		}
-> 
-> A local conflict merging this made me notice a later commit:
-> -----
-> commit 387c72cdd7fb6bef650fb078d0f6ae9682abf631
-> Author: Keith Busch <kbusch@kernel.org>
-> Date:   Mon Jan 4 15:02:58 2021 -0800
-> 
-> PCI/ERR: Retain status from error notification
-> 
-> Overwriting the frozen detected status with the result of the link reset
-> loses the NEED_RESET result that drivers are depending on for error
-> handling to report the .slot_reset() callback. Retain this status so
-> that subsequent error handling has the correct flow.
-> 
-> Link: https://lore.kernel.org/r/20210104230300.1277180-4-kbusch@kernel.org
-> Reported-by: Hinko Kocevar <hinko.kocevar@ess.eu>
-> Tested-by: Hedi Berriche <hedi.berriche@hpe.com>
-> Signed-off-by: Keith Busch <kbusch@kernel.org>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Acked-by: Sean V Kelley <sean.v.kelley@intel.com>
-> Acked-by: Hedi Berriche <hedi.berriche@hpe.com>
-> 
-> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
-> index a84f0bf4c1e2..b576aa890c76 100644
-> --- a/drivers/pci/pcie/err.c
-> +++ b/drivers/pci/pcie/err.c
-> @@ -198,8 +198,7 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  	pci_dbg(bridge, "broadcast error_detected message\n");
->  	if (state == pci_channel_io_frozen) {
->  		pci_walk_bridge(bridge, report_frozen_detected, &status);
-> -		status = reset_subordinates(bridge);
-> -		if (status != PCI_ERS_RESULT_RECOVERED) {
-> +		if (reset_subordinates(bridge) != PCI_ERS_RESULT_RECOVERED) {
->  			pci_warn(bridge, "subordinate device reset failed\n");
->  			goto failed;
->  		}
-> -----
-> 
-> Since this (commit I reply to) has been picked up, I think it'd make
-> sense to also include this (commit I just listed) in a later 5.10 tag.
-> It cherry-picks without error but would you like me to resend?
-> (I have added in Cc all involved people to this mail)
-> 
-> Digging through the mails the patch came with seem to imply approval for
-> stable merges; but it didn't make sense until pci_walk_bridge() had been
-> added just now. Now it's here we probably want both:
-> https://lore.kernel.org/all/d9ee4151-b28d-a52a-b5be-190a75e0e49b@intel.com/
-> 
-> 
-> (I noticed because the NXP kernel we are provided includes a different
-> "fix" for what I believe to be the same issue, previously discussed here:
-> https://lore.kernel.org/linux-pci/12115.1588207324@famine/
-> 
-> I haven't actually encountered any of the problems discribed, so this is
-> purely theorical for me; it just looks a bit weird.)
+Hi,
 
-I've queued up the commit you referenced above now, thanks!
+Boris asked me to post my problem. So here we go.
 
-greg k-h
+On my old lab box (i7-860) the kernel options mitigations=off had no
+effect. After booting the machine (openSUSE Tumbleweed kernel
+5.19.2-1-default and also 6.0-rc2 with the same config) always enabled
+the mitigations:
+
+# cat lscpu-5.19.2-1-default.log
+
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Address sizes:                   36 bits physical, 48 bits virtual
+Byte Order:                      Little Endian
+CPU(s):                          4
+On-line CPU(s) list:             0-3
+Vendor ID:                       GenuineIntel
+Model name:                      Intel(R) Core(TM) i7 CPU         860  @ 2.80GHz
+CPU family:                      6
+Model:                           30
+Thread(s) per core:              1
+Core(s) per socket:              4
+Socket(s):                       1
+Stepping:                        5
+BogoMIPS:                        5596.26
+Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm sse4_1 sse4_2 popcnt lahf_lm ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid dtherm ida flush_l1d
+Virtualization:                  VT-x
+L1d cache:                       128 KiB (4 instances)
+L1i cache:                       128 KiB (4 instances)
+L2 cache:                        1 MiB (4 instances)
+L3 cache:                        8 MiB (1 instance)
+NUMA node(s):                    1
+NUMA node0 CPU(s):               0-3
+Vulnerability Itlb multihit:     KVM: Mitigation: VMX disabled
+Vulnerability L1tf:              Mitigation; PTE Inversion; VMX vulnerable, SMT disabled
+Vulnerability Mds:               Vulnerable; SMT disabled
+Vulnerability Meltdown:          Vulnerable
+Vulnerability Mmio stale data:   Not affected
+Vulnerability Retbleed:          Not affected
+Vulnerability Spec store bypass: Vulnerable
+Vulnerability Spectre v1:        Vulnerable: __user pointer sanitization and usercopy barriers only; no swapgs barriers
+Vulnerability Spectre v2:        Vulnerable, IBPB: disabled, STIBP: disabled, PBRSB-eIBRS: Not affected
+Vulnerability Srbds:             Not affected
+Vulnerability Tsx async abort:   Not affected
+
+
+After few experiments, I was able to identify the source of the
+problem. When I reinstalled the machine recently, the default settings
+of the boot medium didn't work so I used the failsafe option which
+worked. Those got added to /etc/default/grub and hence were enabled
+all the time.
+
+After removing those, the machine booted just fine and most mitigations
+are off as requested (except the itlb-multihit).
+
+# uname -a
+Linux lf.lan 6.0.0-rc2-1-default+ #4 SMP PREEMPT_DYNAMIC Tue Aug 23 08:29:06 CEST 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+# lscpu
+Architecture:            x86_64
+  CPU op-mode(s):        32-bit, 64-bit
+  Address sizes:         36 bits physical, 48 bits virtual
+  Byte Order:            Little Endian
+CPU(s):                  8
+  On-line CPU(s) list:   0-7
+Vendor ID:               GenuineIntel
+  Model name:            Intel(R) Core(TM) i7 CPU         860  @ 2.80GHz
+    CPU family:          6
+    Model:               30
+    Thread(s) per core:  2
+    Core(s) per socket:  4
+    Socket(s):           1
+    Stepping:            5
+    Frequency boost:     enabled
+    CPU max MHz:         2926.0000
+    CPU min MHz:         1197.0000
+    BogoMIPS:            5595.93
+    Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm sse4_1 sse4_2 popcnt lahf_lm ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid dtherm ida flush_l1d
+Virtualization features:
+  Virtualization:        VT-x
+Caches (sum of all):
+  L1d:                   128 KiB (4 instances)
+  L1i:                   128 KiB (4 instances)
+  L2:                    1 MiB (4 instances)
+  L3:                    8 MiB (1 instance)
+NUMA:
+  NUMA node(s):          1
+  NUMA node0 CPU(s):     0-7
+Vulnerabilities:
+  Itlb multihit:         KVM: Mitigation: VMX disabled
+  L1tf:                  Mitigation; PTE Inversion; VMX vulnerable
+  Mds:                   Vulnerable; SMT vulnerable
+  Meltdown:              Vulnerable
+  Mmio stale data:       Not affected
+  Retbleed:              Not affected
+  Spec store bypass:     Vulnerable
+  Spectre v1:            Vulnerable: __user pointer sanitization and usercopy barriers only; no swapgs barriers
+  Spectre v2:            Vulnerable, IBPB: disabled, STIBP: disabled, PBRSB-eIBRS: Not affected
+  Srbds:                 Not affected
+  Tsx async abort:       Not affected
+
+
+The failsafe options in question are:
+
+  apm=off acpi=off mce=off barrier=off ide=nodma idewait=50 i8042.nomux
+  psmouse.proto=bare irqpoll pci=nommconf resume=...
+
+I am okay to leave at this. Maybe you might find this feedback helpful.
+
+Thanks,
+Daniel

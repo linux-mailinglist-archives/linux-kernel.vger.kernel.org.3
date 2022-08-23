@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CC359DE8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4378459E161
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358424AbiHWLsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S1358371AbiHWLsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358169AbiHWLoE (ORCPT
+        with ESMTP id S1357927AbiHWLnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:44:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D678FD074F;
-        Tue, 23 Aug 2022 02:29:54 -0700 (PDT)
+        Tue, 23 Aug 2022 07:43:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F3AD11E2;
+        Tue, 23 Aug 2022 02:29:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7775AB81C66;
-        Tue, 23 Aug 2022 09:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27B1C433C1;
-        Tue, 23 Aug 2022 09:29:50 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BE645CE1B40;
+        Tue, 23 Aug 2022 09:29:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF94AC433C1;
+        Tue, 23 Aug 2022 09:29:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246991;
-        bh=hAFBu0imeopBah68UDNV2iX2Igkn6Hr9V1s5wp2Yw9U=;
+        s=korg; t=1661246994;
+        bh=74affbnttGnyqEhedSfWUdEvnKEhCwGfv9CcwS7CboE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bvLi00Fi6FPWeMUz7ry4tyuBd3VWTMSV6SwOYedKWhO5YNptBnn5KczoQ/QAWfZiQ
-         HsnFLwBkKO2p4drbrPWbbz6aiXKyOgT5xujIKKj9ZuTZRflKIzGhLnGIfus8q2MiAh
-         AexnViYxcIVJ3rnlxS0kKUtSvzGHfsHzytc3mAiM=
+        b=M7ymRu3LPVJCNRnwFYSV2Hkv83bdL11VSc9Sp7CbWRysu7sf/aR4EN+c5NLRGTtv9
+         4z2uq1Bkf5TgZYuheS6j8f805c6Q0EZN57pQ1l1WA/6qfsSO3zrw3T68fB2/fnskn8
+         GRlhDfALwRYPpqd8zOuSxW6j/69imRjAlM9Yu2iw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Subject: [PATCH 5.4 283/389] Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression
-Date:   Tue, 23 Aug 2022 10:26:01 +0200
-Message-Id: <20220823080127.376029742@linuxfoundation.org>
+        stable@vger.kernel.org, Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH 5.4 284/389] net/9p: Initialize the iounit field during fid creation
+Date:   Tue, 23 Aug 2022 10:26:02 +0200
+Message-Id: <20220823080127.423091447@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -54,56 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-commit 332f1795ca202489c665a75e62e18ff6284de077 upstream.
+commit aa7aeee169480e98cf41d83c01290a37e569be6d upstream.
 
-The patch d0be8347c623: "Bluetooth: L2CAP: Fix use-after-free caused
-by l2cap_chan_put" from Jul 21, 2022, leads to the following Smatch
-static checker warning:
+Ensure that the fid's iounit field is set to zero when a new fid is
+created. Certain 9P operations, such as OPEN and CREATE, allow the
+server to reply with an iounit size which the client code assigns to the
+p9_fid struct shortly after the fid is created by p9_fid_create(). On
+the other hand, an XATTRWALK operation doesn't allow for the server to
+specify an iounit value. The iounit field of the newly allocated p9_fid
+struct remained uninitialized in that case. Depending on allocation
+patterns, the iounit value could have been something reasonable that was
+carried over from previously freed fids or, in the worst case, could
+have been arbitrary values from non-fid related usages of the memory
+location.
 
-        net/bluetooth/l2cap_core.c:1977 l2cap_global_chan_by_psm()
-        error: we previously assumed 'c' could be null (see line 1996)
+The bug was detected in the Windows Subsystem for Linux 2 (WSL2) kernel
+after the uninitialized iounit field resulted in the typical sequence of
+two getxattr(2) syscalls, one to get the size of an xattr and another
+after allocating a sufficiently sized buffer to fit the xattr value, to
+hit an unexpected ERANGE error in the second call to getxattr(2). An
+uninitialized iounit field would sometimes force rsize to be smaller
+than the xattr value size in p9_client_read_once() and the 9P server in
+WSL refused to chunk up the READ on the attr_fid and, instead, returned
+ERANGE to the client. The virtfs server in QEMU seems happy to chunk up
+the READ and this problem goes undetected there.
 
-Fixes: d0be8347c623 ("Bluetooth: L2CAP: Fix use-after-free caused by l2cap_chan_put")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Link: https://lkml.kernel.org/r/20220710141402.803295-1-tyhicks@linux.microsoft.com
+Fixes: ebf46264a004 ("fs/9p: Add support user. xattr")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+[tyhicks: Adjusted context due to:
+ - Lack of fid refcounting introduced in v5.11 commit 6636b6dcc3db ("9p:
+   add refcount to p9_fid struct")
+ - Difference in how buffer sizes are specified v5.16 commit
+   6e195b0f7c8e ("9p: fix a bunch of checkpatch warnings")]
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bluetooth/l2cap_core.c |   13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ net/9p/client.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -1813,11 +1813,11 @@ static struct l2cap_chan *l2cap_global_c
- 						   bdaddr_t *dst,
- 						   u8 link_type)
- {
--	struct l2cap_chan *c, *c1 = NULL;
-+	struct l2cap_chan *c, *tmp, *c1 = NULL;
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -893,16 +893,13 @@ static struct p9_fid *p9_fid_create(stru
+ 	struct p9_fid *fid;
  
- 	read_lock(&chan_list_lock);
+ 	p9_debug(P9_DEBUG_FID, "clnt %p\n", clnt);
+-	fid = kmalloc(sizeof(struct p9_fid), GFP_KERNEL);
++	fid = kzalloc(sizeof(struct p9_fid), GFP_KERNEL);
+ 	if (!fid)
+ 		return NULL;
  
--	list_for_each_entry(c, &chan_list, global_l) {
-+	list_for_each_entry_safe(c, tmp, &chan_list, global_l) {
- 		if (state && c->state != state)
- 			continue;
+-	memset(&fid->qid, 0, sizeof(struct p9_qid));
+ 	fid->mode = -1;
+ 	fid->uid = current_fsuid();
+ 	fid->clnt = clnt;
+-	fid->rdir = NULL;
+-	fid->fid = 0;
  
-@@ -1836,11 +1836,10 @@ static struct l2cap_chan *l2cap_global_c
- 			dst_match = !bacmp(&c->dst, dst);
- 			if (src_match && dst_match) {
- 				c = l2cap_chan_hold_unless_zero(c);
--				if (!c)
--					continue;
--
--				read_unlock(&chan_list_lock);
--				return c;
-+				if (c) {
-+					read_unlock(&chan_list_lock);
-+					return c;
-+				}
- 			}
- 
- 			/* Closest match */
+ 	idr_preload(GFP_KERNEL);
+ 	spin_lock_irq(&clnt->lock);
 
 

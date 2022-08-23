@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD62059DDB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A55259DB96
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353255AbiHWKTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
+        id S1354949AbiHWKdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352698AbiHWKIc (ORCPT
+        with ESMTP id S1351945AbiHWKRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:08:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E4A6DFA7;
-        Tue, 23 Aug 2022 01:54:43 -0700 (PDT)
+        Tue, 23 Aug 2022 06:17:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162758050F;
+        Tue, 23 Aug 2022 02:01:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7FFDB81C54;
-        Tue, 23 Aug 2022 08:39:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D8EC433C1;
-        Tue, 23 Aug 2022 08:39:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61161B81C28;
+        Tue, 23 Aug 2022 09:01:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0319C433D6;
+        Tue, 23 Aug 2022 09:01:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243986;
-        bh=NtEwKMZ/Nfx57WqXVp8dLzBoBoDtiLiAqK5M3OVyZj0=;
+        s=korg; t=1661245289;
+        bh=YLHITOvYu0lt7iEImGEtaN+nTdRoAlJHZbNZO7E2YxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UavR/g+vJINka8Vb6ngdEe9hodN3pXydW1sTCySVhwM5WY1AfoW6tAZV9XpI7dSs9
-         DxtH0VyY80rBTxAo5VFXD2bQoPBsf6VBikH+RWXHf+aIHiYlk79vaXGmB+CTyQwE2Q
-         fQ2LHPYTTa4Q53HFS2U/NP4PAm4+SNzyn+3Z94U0=
+        b=nVHCP85yR2NyNeE2EyjJpT35d58WolVdt108aEHVe8Vy2EbrQYZbJpGnI4P84FM37
+         GUjbJWxqxI3XEBxv1es9l/pJ4d8LPFE/WP+7sofdEf9sxEqeWYKASFJFqU0RTgxzfv
+         dcHRHQN+exAqv1WIp0ABeNgnzWPwxaRXrfKnax+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Francis Laniel <flaniel@linux.microsoft.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 039/229] arm64: Do not forget syscall when starting a new thread.
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH 4.19 031/287] ia64, processor: fix -Wincompatible-pointer-types in ia64_get_irr()
 Date:   Tue, 23 Aug 2022 10:23:20 +0200
-Message-Id: <20220823080054.982504326@linuxfoundation.org>
+Message-Id: <20220823080101.325562952@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francis Laniel <flaniel@linux.microsoft.com>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit de6921856f99c11d3986c6702d851e1328d4f7f6 ]
+commit e5a16a5c4602c119262f350274021f90465f479d upstream.
 
-Enable tracing of the execve*() system calls with the
-syscalls:sys_exit_execve tracepoint by removing the call to
-forget_syscall() when starting a new thread and preserving the value of
-regs->syscallno across exec.
+test_bit(), as any other bitmap op, takes `unsigned long *` as a
+second argument (pointer to the actual bitmap), as any bitmap
+itself is an array of unsigned longs. However, the ia64_get_irr()
+code passes a ref to `u64` as a second argument.
+This works with the ia64 bitops implementation due to that they
+have `void *` as the second argument and then cast it later on.
+This works with the bitmap API itself due to that `unsigned long`
+has the same size on ia64 as `u64` (`unsigned long long`), but
+from the compiler PoV those two are different.
+Define @irr as `unsigned long` to fix that. That implies no
+functional changes. Has been hidden for 16 years!
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220608162447.666494-2-flaniel@linux.microsoft.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: a58786917ce2 ("[IA64] avoid broken SAL_CACHE_FLUSH implementations")
+Cc: stable@vger.kernel.org # 2.6.16+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/processor.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/ia64/include/asm/processor.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 9eb95ab19924..8767f9d4ebc6 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -143,8 +143,9 @@ void tls_preserve_current_state(void);
- 
- static inline void start_thread_common(struct pt_regs *regs, unsigned long pc)
+--- a/arch/ia64/include/asm/processor.h
++++ b/arch/ia64/include/asm/processor.h
+@@ -552,7 +552,7 @@ ia64_get_irr(unsigned int vector)
  {
-+	s32 previous_syscall = regs->syscallno;
- 	memset(regs, 0, sizeof(*regs));
--	forget_syscall(regs);
-+	regs->syscallno = previous_syscall;
- 	regs->pc = pc;
- }
+ 	unsigned int reg = vector / 64;
+ 	unsigned int bit = vector % 64;
+-	u64 irr;
++	unsigned long irr;
  
--- 
-2.35.1
-
+ 	switch (reg) {
+ 	case 0: irr = ia64_getreg(_IA64_REG_CR_IRR0); break;
 
 

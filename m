@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD1059D930
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E510B59D916
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349460AbiHWJMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S236033AbiHWJsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348451AbiHWJKF (ORCPT
+        with ESMTP id S1352245AbiHWJqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:10:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE92027CD3;
-        Tue, 23 Aug 2022 01:30:59 -0700 (PDT)
+        Tue, 23 Aug 2022 05:46:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0E86050A;
+        Tue, 23 Aug 2022 01:43:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4F4DB81C59;
-        Tue, 23 Aug 2022 08:30:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D17C433D7;
-        Tue, 23 Aug 2022 08:30:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 96C79CE1B41;
+        Tue, 23 Aug 2022 08:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33A0C433D6;
+        Tue, 23 Aug 2022 08:28:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243407;
-        bh=Ivg1RtIfWpntWqpOEmsfcxyH9dZBFGT8p91JPEwm8JI=;
+        s=korg; t=1661243332;
+        bh=j1xQ+IIYNGAXrtO8PnOzFliezrN84TmBv/RgoyfbKOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AJFrLPCEN4RTCkHHHHEAIn2vBino/fV9pjD+aGM3go1zjZx8hM5WKO9jn+/PsFUhc
-         0X1SSU/EncmTgXuiMyZKS0leQmJqvO4kqzMAM2HwA7fbpcSSHHMfo6xImjq3vfxpX6
-         4jHpLy3XcuBd6QamJAO1KDuz0pdMcIskbrsRC+70=
+        b=I03ve2DhgVglL7mwGz0DlcrplVEzpozn0C6ObDpiYyOd/UM75hGhXetivz95wyRuN
+         HMNV8kZGkWzIsmWF9hAUuCry1C+qjLh7rRSVno2aEgs5gLnH3fQ4XzqnyWXLMJPsKW
+         bKOWUQDVtovFHjXAsiOx/CY1ETkEyX/VVHQ9wzoo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.19 237/365] stmmac: intel: Add a missing clk_disable_unprepare() call in intel_eth_pci_remove()
-Date:   Tue, 23 Aug 2022 10:02:18 +0200
-Message-Id: <20220823080128.152003986@linuxfoundation.org>
+        stable@vger.kernel.org, Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 244/365] drm/i915/ttm: dont leak the ccs state
+Date:   Tue, 23 Aug 2022 10:02:25 +0200
+Message-Id: <20220823080128.429516312@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -56,47 +58,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Matthew Auld <matthew.auld@intel.com>
 
-commit 5c23d6b717e4e956376f3852b90f58e262946b50 upstream.
+[ Upstream commit 232d150fa15606e96c0e01e5c7a2d4e03f621787 ]
 
-Commit 09f012e64e4b ("stmmac: intel: Fix clock handling on error and remove
-paths") removed this clk_disable_unprepare()
+The kernel only manages the ccs state with lmem-only objects, however
+the kernel should still take care not to leak the CCS state from the
+previous user.
 
-This was partly revert by commit ac322f86b56c ("net: stmmac: Fix clock
-handling on remove path") which removed this clk_disable_unprepare()
-because:
-"
-   While unloading the dwmac-intel driver, clk_disable_unprepare() is
-   being called twice in stmmac_dvr_remove() and
-   intel_eth_pci_remove(). This causes kernel panic on the second call.
-"
-
-However later on, commit 5ec55823438e8 ("net: stmmac: add clocks management
-for gmac driver") has updated stmmac_dvr_remove() which do not call
-clk_disable_unprepare() anymore.
-
-So this call should now be called from intel_eth_pci_remove().
-
-Fixes: 5ec55823438e8 ("net: stmmac: add clocks management for gmac driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/d7c8c1dadf40df3a7c9e643f76ffadd0ccc1ad1b.1660659689.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 48760ffe923a ("drm/i915/gt: Clear compress metadata for Flat-ccs objects")
+Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Cc: Ramalingam C <ramalingam.c@intel.com>
+Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220727164346.282407-1-matthew.auld@intel.com
+(cherry picked from commit 353819d85f87be46aeb9c1dd929d445a006fc6ec)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/i915/gt/intel_migrate.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -1104,6 +1104,7 @@ static void intel_eth_pci_remove(struct
+diff --git a/drivers/gpu/drm/i915/gt/intel_migrate.c b/drivers/gpu/drm/i915/gt/intel_migrate.c
+index 2c35324b5f68..2b10b96b17b5 100644
+--- a/drivers/gpu/drm/i915/gt/intel_migrate.c
++++ b/drivers/gpu/drm/i915/gt/intel_migrate.c
+@@ -708,7 +708,7 @@ intel_context_migrate_copy(struct intel_context *ce,
+ 	u8 src_access, dst_access;
+ 	struct i915_request *rq;
+ 	int src_sz, dst_sz;
+-	bool ccs_is_src;
++	bool ccs_is_src, overwrite_ccs;
+ 	int err;
  
- 	stmmac_dvr_remove(&pdev->dev);
+ 	GEM_BUG_ON(ce->vm != ce->engine->gt->migrate.context->vm);
+@@ -749,6 +749,8 @@ intel_context_migrate_copy(struct intel_context *ce,
+ 			get_ccs_sg_sgt(&it_ccs, bytes_to_cpy);
+ 	}
  
-+	clk_disable_unprepare(priv->plat->stmmac_clk);
- 	clk_unregister_fixed_rate(priv->plat->stmmac_clk);
++	overwrite_ccs = HAS_FLAT_CCS(i915) && !ccs_bytes_to_cpy && dst_is_lmem;
++
+ 	src_offset = 0;
+ 	dst_offset = CHUNK_SZ;
+ 	if (HAS_64K_PAGES(ce->engine->i915)) {
+@@ -852,6 +854,25 @@ intel_context_migrate_copy(struct intel_context *ce,
+ 			if (err)
+ 				goto out_rq;
+ 			ccs_bytes_to_cpy -= ccs_sz;
++		} else if (overwrite_ccs) {
++			err = rq->engine->emit_flush(rq, EMIT_INVALIDATE);
++			if (err)
++				goto out_rq;
++
++			/*
++			 * While we can't always restore/manage the CCS state,
++			 * we still need to ensure we don't leak the CCS state
++			 * from the previous user, so make sure we overwrite it
++			 * with something.
++			 */
++			err = emit_copy_ccs(rq, dst_offset, INDIRECT_ACCESS,
++					    dst_offset, DIRECT_ACCESS, len);
++			if (err)
++				goto out_rq;
++
++			err = rq->engine->emit_flush(rq, EMIT_INVALIDATE);
++			if (err)
++				goto out_rq;
+ 		}
  
- 	pcim_iounmap_regions(pdev, BIT(0));
+ 		/* Arbitration is re-enabled between requests. */
+-- 
+2.35.1
+
 
 

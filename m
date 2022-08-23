@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AA459CEE9
+	by mail.lfdr.de (Postfix) with ESMTP id 019BE59CEE8
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 04:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239552AbiHWC7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 22:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S239172AbiHWC7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 22:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237982AbiHWC7C (ORCPT
+        with ESMTP id S237982AbiHWC7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 22:59:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3028F2ED5D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 19:59:02 -0700 (PDT)
+        Mon, 22 Aug 2022 22:59:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858EA2F64E
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 19:59:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C324061284
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:59:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D2CBC433D6;
-        Tue, 23 Aug 2022 02:59:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2288561262
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:59:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D74C433D6;
+        Tue, 23 Aug 2022 02:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661223541;
-        bh=zEGCdiCEhQgHzxLRIHt6IH/jihMqCetl8mb2h4TvxOA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=t77SGfZU3PeW1SOXqd935mVmEY+OTY9Ww55Il4eKFf+wbcABvfyDx6Fm0DSlE5DgH
-         G0jZo8RVXDo1+MXVxsXAO9Ubzv1a4UNIlHrwBKmCb6CHwT7D5Q8VUIHGjsIwVffikt
-         nVyJtrtB2qKvum2ny0NZTbJhRv5g9BuNZwr3OVrfJqvDyblCxHyzvAQw+Ib3dE29mn
-         NDp9F4nguEj1Odp/LnndEceTXeLjw4k0aDsQPwET5JfA0ygcjgWDHnpQ4JnbGQi+YI
-         eXdtNZ01RvzX4CDj1QapYNusYiD3+/qUhlz4qw7WkjVSWNv/mkwi3HWRD7nXLBFJld
-         X1Siq2eKCB3bQ==
+        s=k20201202; t=1661223551;
+        bh=tu/uBFTcTkD8ciezaLIOud2OqZdulEjwj2vtD/px5uc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SpXBeLqV5vtJX7spIw8NCgUXoIE46giPZLJWaYr/8/BgkBGBHgBGxjzuIqqkcCtif
+         grYh6CR/oKI4dsu7X6CS/6ltQDX3CuOrPyl9EFz5/8e6/ZzRxMpuFqjQAYrZtbpMTF
+         ofDa07b7BsGgq0iBsEG1+1qa5BQjr7NoKqUdbm8ABCGQCpi/C5bGnVSNZRGlXFioJB
+         KVqnP7p+7FKAK75Zuy7+whZPIsj5UJbL9nF8YFL+wgAmHbtzcbsj4wr2QYxCsIqUX4
+         51wUBvbzeFAZ6Nt1jhNPgDI46q5HWlX6nAYik3PPgyvrLp46uqzMqye8SFCwfpQ4ws
+         0DskTi/XB3eSw==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/3] tracing/hist: Add percentage histogram suffixes
-Date:   Tue, 23 Aug 2022 11:58:57 +0900
-Message-Id: <166122353724.94548.7395770385598120122.stgit@devnote2>
+Subject: [PATCH v3 1/3] tracing: Fix to check event_mutex is held while accessing trigger list
+Date:   Tue, 23 Aug 2022 11:59:06 +0900
+Message-Id: <166122354657.94548.11354367471822600616.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <166122353724.94548.7395770385598120122.stgit@devnote2>
+References: <166122353724.94548.7395770385598120122.stgit@devnote2>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -54,64 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Here is the 3rd version of .percent and .graph suffixes for histogram
-trigger to show the value in percentage and in bar-graph respectively.
+Since the check_user_trigger() is called outside of RCU
+read lock, this list_for_each_entry_rcu() caused a suspicious
+RCU usage warning.
 
-I added one minor bugfix patch and update original patches to show
-hitcount.graph and hitcount.percent correctly.
+ # echo hist:keys=pid > events/sched/sched_stat_runtime/trigger
+ # cat events/sched/sched_stat_runtime/trigger
+[   43.167032]
+[   43.167418] =============================
+[   43.167992] WARNING: suspicious RCU usage
+[   43.168567] 5.19.0-rc5-00029-g19ebe4651abf #59 Not tainted
+[   43.169283] -----------------------------
+[   43.169863] kernel/trace/trace_events_trigger.c:145 RCU-list traversed in non-reader section!!
+...
 
-This will help us to check the trend of the histogram instantly
-without the post processing tool.
+However, this file->triggers list is safe when it is accessed
+under event_mutex is held.
+To fix this warning, adds a lockdep_is_held check to the
+list_for_each_entry_rcu().
 
-Here shows the example of the percentage and the bar graph of
-the hitcount of the running tasks.
-
-  # cd /sys/kernel/debug/tracing/
-  # echo hist:keys=pid:vals=hitcount.percent,hitcount.graph:sort=pid > \
-        events/sched/sched_stat_runtime/trigger
-  # sleep 10
-  # cat events/sched/sched_stat_runtime/hist
- # event histogram
- #
- # trigger info: hist:keys=pid:vals=hitcount,hitcount.percent,hitcount.graph:sort=pid:size=2048 [active]
- #
-
- { pid:          8 } hitcount:          3  hitcount (%):   3.33  hitcount: ###                 
- { pid:         16 } hitcount:         10  hitcount (%):  11.11  hitcount: ##########          
- { pid:         26 } hitcount:          1  hitcount (%):   1.11  hitcount: #                   
- { pid:         57 } hitcount:          3  hitcount (%):   3.33  hitcount: ###                 
- { pid:         61 } hitcount:         20  hitcount (%):  22.22  hitcount: ####################
- { pid:         64 } hitcount:          3  hitcount (%):   3.33  hitcount: ###                 
- { pid:         69 } hitcount:          2  hitcount (%):   2.22  hitcount: ##                  
- { pid:         70 } hitcount:          1  hitcount (%):   1.11  hitcount: #                   
- { pid:         77 } hitcount:         10  hitcount (%):  11.11  hitcount: ##########          
- { pid:        124 } hitcount:          2  hitcount (%):   2.22  hitcount: ##                  
- { pid:        130 } hitcount:          2  hitcount (%):   2.22  hitcount: ##                  
- { pid:        146 } hitcount:         18  hitcount (%):  20.00  hitcount: ##################  
- { pid:        153 } hitcount:          8  hitcount (%):   8.88  hitcount: ########            
- { pid:        154 } hitcount:          7  hitcount (%):   7.77  hitcount: #######             
-
- Totals:
-     Hits: 90
-     Entries: 14
-     Dropped: 0
-
-Thank you,
-
+Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
+ kernel/trace/trace_events_trigger.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Masami Hiramatsu (Google) (3):
-      tracing: Fix to check event_mutex is held while accessing trigger list
-      tracing: Add .percent suffix option to histogram values
-      tracing: Add .graph suffix option to histogram value
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index cb866c3141af..918730d74932 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -142,7 +142,8 @@ static bool check_user_trigger(struct trace_event_file *file)
+ {
+ 	struct event_trigger_data *data;
+ 
+-	list_for_each_entry_rcu(data, &file->triggers, list) {
++	list_for_each_entry_rcu(data, &file->triggers, list,
++				lockdep_is_held(&event_mutex)) {
+ 		if (data->flags & EVENT_TRIGGER_FL_PROBE)
+ 			continue;
+ 		return true;
 
-
- kernel/trace/trace.c                |    3 -
- kernel/trace/trace_events_hist.c    |  160 +++++++++++++++++++++++++++++++----
- kernel/trace/trace_events_trigger.c |    3 -
- 3 files changed, 147 insertions(+), 19 deletions(-)
-
---
-Masami Hiramatsu (Google) <mhiramat@kernel.org>

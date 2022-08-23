@@ -2,178 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B6559EE2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410DE59EE30
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiHWVZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S231293AbiHWV0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHWVZL (ORCPT
+        with ESMTP id S230426AbiHWV0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:25:11 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A8681693;
-        Tue, 23 Aug 2022 14:25:10 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id ds12-20020a17090b08cc00b001fae6343d9fso2274384pjb.0;
-        Tue, 23 Aug 2022 14:25:10 -0700 (PDT)
+        Tue, 23 Aug 2022 17:26:39 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEA689827
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:26:37 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-11c9af8dd3eso18011151fac.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:26:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=rqAIRkbPGrIsWv7eIgL9K7O7OCvji1Q8YP90RKFz8IY=;
-        b=Eu4nBVX1bW1mvmukU+tlLFBg9iRJR/sN6yWCyXYGAtTbdOq8NCAFvpWmQgCTtPGRT+
-         aRHxV5Ppwt0B4hb+emogvLb3AVhaGTPJ9mMCO8Su1OVRqlE12VDtWkNFLoa3tEqxPhgZ
-         lwuh1qZPCTSF4kkI3Q0YiiGroLsw2IHq4MDjlg2HP00q/tIBj+IaXJtWuw3KtZ/nhq+N
-         V+qO3EfzipET/fF8yxt9EL+Pu6a8fflYcCZJc53k8gf69tJMqPKy16H7kK8t11KN/VEo
-         RO08GNtNtxsU3P8epQ5NX797s4CoEIqBEwooUM21EkzxHNOoBCQBsKth7SMJ8Jnv1Vog
-         nsDw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=88XJiOmSnVqt34ABSh9LJkvlPL2wXTdT9a7x84FgDcA=;
+        b=ajkrkOb9lVgwoqRtIl5yDF1gQr9nA8i+nVQFmuB/HGS6CNUYkxAQAqFePDK7M7oUJG
+         8DxAvm1Jk7hK0Z2tlfw3zE39l+ikoJULVRO6c0JuB4gr53mFI/HOcCcM63guZgl4C2NJ
+         rjIHhsvY8y5+72ivZr26eHrAyZ/Lc+E/MU6efJO0d+D9eDhev2E5C8x750KvkIUc2nHS
+         5yLA8QU4rgU0esf3qz6Pr7iv9v1HobN4VAIyOpu4BBthxVYfwCwv+PfsnqiH2myy+XHR
+         zOQ124DAPj+DOLpphYamwbe4WxoLEH+R3b2C8t67cclrTAn12BRNRgSccxYNIruEdTYP
+         cYJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=rqAIRkbPGrIsWv7eIgL9K7O7OCvji1Q8YP90RKFz8IY=;
-        b=ljOpQRTjYLm0FeTfevo5pYkwTG/jdJ5T+Y2Rgz7sizqShuIOsfpZNn6Wog/58tAodF
-         fEpx8u2V0fJV1Qsh1gGnyVO/w8p7iyp1zqf02tPU/gBLZL0M74UxeOI3DoTxVRa3AW6k
-         o9cVDcjpAo3/Jfa4hzgyDUezkyTONs8b4PxejppkV+oLsA7sgjP4FLd0eERbeafq2AHF
-         pVzA2Ur+rvk7KjD3uC8eVh5J+qrUWvvodDQcs2rosAtOOIPGIHbcyUwEcVfSNE0UzSSu
-         EOmyORLToIu4VW1SatcLrSyhnIyce/hh+wRjYKrpM96VCrgHvGk4nr6YXKwNIkgC9t19
-         FGjw==
-X-Gm-Message-State: ACgBeo2roXSy4BsB32w4YYLYWhMjiSSYD8HSdDHxuJGwC7/HnywRzhPH
-        xiRSvNXsV+dhWihdYV022kw=
-X-Google-Smtp-Source: AA6agR4YMXNQ6a3ov6N5+QW3piMbl+pOMnF20yCk2YE5uCUAWBfusTwI6IPphkOAp3JAo+2esxAH0A==
-X-Received: by 2002:a17:902:bd49:b0:170:953d:c489 with SMTP id b9-20020a170902bd4900b00170953dc489mr26215274plx.96.1661289910203;
-        Tue, 23 Aug 2022 14:25:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i9-20020a170902c94900b001641b2d61d4sm11095320pla.30.2022.08.23.14.25.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:25:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 Aug 2022 14:25:08 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.9 000/101] 4.9.326-rc1 review
-Message-ID: <20220823212508.GA2588726@roeck-us.net>
-References: <20220823080034.579196046@linuxfoundation.org>
- <20220823210018.GA2371231@roeck-us.net>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=88XJiOmSnVqt34ABSh9LJkvlPL2wXTdT9a7x84FgDcA=;
+        b=wC56VHHif1RUdE/ZQLIalq3ZXAQAhvuRHh91iTHxlT7/X/MqnJbqyw0jqPoQAvjSEc
+         oJsz6x8rTDwxUpltKa8C6dwccA5c/N9rbUu12KV0mxOmg36HBejYyTG4z1V37xemN4sL
+         o5+xB+gnDA8Bzc7F3+t5+DrpZc3uSYA+uXI9NDXMBF4FxMkp72YtrKiEjZOwgyZpY5GK
+         pdNunBcIyeiYxV09wuhQeranoFB8LfyJ2QQXqbVFEFbDw0K5wJLs/k7DRhsAnZN+5R20
+         ictr3iP5t2n746J2PkKpAEOJtFCAmEfmFlpdDdLwlluPKaefBnOvgSMfoEVX7VFAbr00
+         7Rmw==
+X-Gm-Message-State: ACgBeo0UCZ0H7V6t3bt+kCK9XwcRJSMupvKOKIexWYz0A+ReTfSQoHQM
+        BHJ1FX/wNriLSVm0CNTxhlJ99WeP4MkMUk+OWBwTHg==
+X-Google-Smtp-Source: AA6agR67bw1dvH8TFlRIswHkLor4hFRO/RnxVuSxSSMkGuDIVg3Gz6z0M+esF8pmvvVJjhiPMu5rt5pxf8JVsmk1Pww=
+X-Received: by 2002:a05:6870:3282:b0:11d:10ad:a85d with SMTP id
+ q2-20020a056870328200b0011d10ada85dmr2261194oac.181.1661289996780; Tue, 23
+ Aug 2022 14:26:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823210018.GA2371231@roeck-us.net>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <163244601049.30292.5855870305350227855.stgit@bmoger-ubuntu>
+In-Reply-To: <163244601049.30292.5855870305350227855.stgit@bmoger-ubuntu>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 23 Aug 2022 14:26:24 -0700
+Message-ID: <CALMp9eSKcwChbc=cgYpdrTCtt49S1uuRdYoe83yph3tXGN6a2Q@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: Expose Predictive Store Forwarding Disable
+To:     Babu Moger <babu.moger@amd.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        pbonzini@redhat.com, hpa@zytor.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, joro@8bytes.org,
+        tony.luck@intel.com, peterz@infradead.org,
+        kyung.min.park@intel.com, wei.huang2@amd.com, jgross@suse.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 02:00:20PM -0700, Guenter Roeck wrote:
-> On Tue, Aug 23, 2022 at 10:02:33AM +0200, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 4.9.326 release.
-> > There are 101 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> > Anything received after that time might be too late.
-> > 
-> Build results:
-> 	total: 164 pass: 141 fail: 23
-> Failed builds:
-> 	arm:allmodconfig
-> 	arm:imx_v6_v7_defconfig
-> 	arm:ixp4xx_defconfig
-> 	arm:u8500_defconfig
-> 	arm:multi_v5_defconfig
-> 	arm:omap1_defconfig
-> 	arm:footbridge_defconfig
-> 	arm:axm55xx_defconfig
-> 	arm:keystone_defconfig
-> 	arm:vexpress_defconfig
-> 	arm:at91_dt_defconfig
-> 	arm:shmobile_defconfig
-> 	arm:nhk8815_defconfig
-> 	arm:orion5x_defconfig
-> 	arm:exynos_defconfig
-> 	arm:cm_x2xx_defconfig
-> 	arm:integrator_defconfig
-> 	arm:pxa910_defconfig
-> 	ia64:defconfig
-> 	ia64:allnoconfig
-> 	ia64:tinyconfig
-> 	score:defconfig
-> 	um:defconfig
-> Qemu test results:
-> 	total: 394 pass: 343 fail: 51
-> Failed tests:
-> 	arm:versatilepb:versatile_defconfig:aeabi:pci:scsi:mem128:net,default:versatile-pb:rootfs
-> 	arm:versatilepb:versatile_defconfig:aeabi:pci:mem128:net,default:versatile-pb:initrd
-> 	arm:versatileab:versatile_defconfig:mem128:net,default:versatile-ab:initrd
-> 	arm:smdkc210:exynos_defconfig:cpuidle:nocrypto:mem128:exynos4210-smdkv310:initrd
-> 	arm:smdkc210:exynos_defconfig:cpuidle:nocrypto:sd2:mem128:exynos4210-smdkv310:rootfs
-> 	arm:realview-pb-a8:realview_defconfig:realview_pb:mem512:net,default:arm-realview-pba8:initrd
-> 	arm:realview-pbx-a9:realview_defconfig:realview_pb:net,default:arm-realview-pbx-a9:initrd
-> 	arm:realview-eb:realview_defconfig:realview_eb:mem512:net,default:arm-realview-eb:initrd
-> 	arm:realview-eb-mpcore:realview_defconfig:realview_eb:mem512:net,default:arm-realview-eb-11mp-ctrevb:initrd
-> 	arm:akita:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:initrd
-> 	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:net,usb:initrd
-> 	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:mmc:net,usb:rootfs
-> 	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:ata:net,usb:rootfs
-> 	arm:borzoi:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:usb:net,usb:rootfs
-> 	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:net,usb:initrd
-> 	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:mmc:net,usb:rootfs
-> 	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:ata:net,usb:rootfs
-> 	arm:spitz:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:usb:net,usb:rootfs
-> 	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:net,usb:initrd
-> 	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:mmc:net,usb:rootfs
-> 	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:ata:net,usb:rootfs
-> 	arm:terrier:pxa_defconfig:nodebug:nocd:nofs:nonvme:noscsi:notests:novirt:nofdt:usb:net,usb:rootfs
-> 	arm:integratorcp:integrator_defconfig:mem128:net,default:integratorcp:initrd
-> 	arm:integratorcp:integrator_defconfig:mem128:sd:net,default:integratorcp:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,e1000:initrd
-> 	mips:malta_defconfig:nocd:smp:net,pcnet:flash,4,1,1:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,pcnet:ide:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,e1000:usb-xhci:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,e1000-82545em:usb-uas-xhci:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,i82801:usb-ehci:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,ne2k_pci:sdhci:mmc:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,pcnet:scsi[53C810]:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,rtl8139:scsi[53C895A]:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,tulip:scsi[DC395]:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,virtio-net:scsi[AM53C974]:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,i82550:scsi[MEGASAS]:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,i82558a:scsi[MEGASAS2]:rootfs
-> 	mips:malta_defconfig:nocd:smp:net,i82562:scsi[FUSION]:rootfs
-> 	mips:malta_defconfig:nocd:nosmp:net,e1000:initrd
-> 	mips:malta_defconfig:nocd:nosmp:ide:net,pcnet:rootfs
-> 	mipsel:mips32r6-generic:malta_32r6_defconfig:nocd:smp:net,pcnet:ide:rootfs
-> 	sheb:rts7751r2dplus_defconfig:initrd
-> 	sheb:rts7751r2dplus_defconfig:ata:rootfs
-> 	xtensa:dc232b:lx60:generic_kc705_defconfig
-> 	xtensa:dc232b:lx200:generic_kc705_defconfig
-> 	xtensa:dc232b:kc705:generic_kc705_defconfig
-> 	xtensa:dc232b:kc705:generic_kc705_defconfig
-> 	xtensa:dc233c:ml605:generic_kc705_defconfig
-> 	xtensa:dc233c:kc705:generic_kc705_defconfig
-> 	xtensa:dc233c:kc705:generic_kc705_defconfig
-> 	xtensa:de212:kc705-nommu:nommu_kc705_defconfig
-> 
-> Some change must have caused problems with the old binutils / linker
-> version used when building v4.9.y kernels in my test bed.
-> 
+On Thu, Sep 23, 2021 at 6:15 PM Babu Moger <babu.moger@amd.com> wrote:
+>
+> From: Babu Moger <Babu.Moger@amd.com>
+>
+> Predictive Store Forwarding: AMD Zen3 processors feature a new
+> technology called Predictive Store Forwarding (PSF).
+>
+> PSF is a hardware-based micro-architectural optimization designed
+> to improve the performance of code execution by predicting address
+> dependencies between loads and stores.
+>
+> How PSF works:
+>
+> It is very common for a CPU to execute a load instruction to an address
+> that was recently written by a store. Modern CPUs implement a technique
+> known as Store-To-Load-Forwarding (STLF) to improve performance in such
+> cases. With STLF, data from the store is forwarded directly to the load
+> without having to wait for it to be written to memory. In a typical CPU,
+> STLF occurs after the address of both the load and store are calculated
+> and determined to match.
+>
+> PSF expands on this by speculating on the relationship between loads and
+> stores without waiting for the address calculation to complete. With PSF,
+> the CPU learns over time the relationship between loads and stores. If
+> STLF typically occurs between a particular store and load, the CPU will
+> remember this.
+>
+> In typical code, PSF provides a performance benefit by speculating on
+> the load result and allowing later instructions to begin execution
+> sooner than they otherwise would be able to.
+>
+> The details of security analysis of AMD predictive store forwarding is
+> documented here.
+> https://www.amd.com/system/files/documents/security-analysis-predictive-s=
+tore-forwarding.pdf
+>
+> Predictive Store Forwarding controls:
+> There are two hardware control bits which influence the PSF feature:
+> - MSR 48h bit 2 =E2=80=93 Speculative Store Bypass (SSBD)
+> - MSR 48h bit 7 =E2=80=93 Predictive Store Forwarding Disable (PSFD)
+>
+> The PSF feature is disabled if either of these bits are set.  These bits
+> are controllable on a per-thread basis in an SMT system. By default, both
+> SSBD and PSFD are 0 meaning that the speculation features are enabled.
+>
+> While the SSBD bit disables PSF and speculative store bypass, PSFD only
+> disables PSF.
+>
+> PSFD may be desirable for software which is concerned with the
+> speculative behavior of PSF but desires a smaller performance impact than
+> setting SSBD.
+>
+> Support for PSFD is indicated in CPUID Fn8000_0008 EBX[28].
+> All processors that support PSF will also support PSFD.
+>
+> Linux kernel does not have the interface to enable/disable PSFD yet. Plan
+> here is to expose the PSFD technology to KVM so that the guest kernel can
+> make use of it if they wish to.
+>
+> Signed-off-by: Babu Moger <Babu.Moger@amd.com>
+> ---
+> NOTE: Per earlier discussions, Linux kernel interface for PSF mitigation
+> is not included in this series. This series only exposes the PSFD technol=
+ogy
+> to KVM guests. Here is the link for earlier discussion.
+> https://lore.kernel.org/lkml/20210517220059.6452-1-rsaripal@amd.com/
+> https://lore.kernel.org/lkml/20210505190923.276051-1-rsaripal@amd.com/
+> https://lore.kernel.org/lkml/20210430131733.192414-1-rsaripal@amd.com/
+> https://lore.kernel.org/lkml/20210428160349.158774-1-rsaripal@amd.com/
+> https://lore.kernel.org/lkml/20210422171013.50207-1-rsaripal@amd.com/
+> https://lore.kernel.org/lkml/20210421090117.22315-1-rsaripal@amd.com/
+>
+>  arch/x86/include/asm/cpufeatures.h |    1 +
+>  arch/x86/kvm/cpuid.c               |    2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cp=
+ufeatures.h
+> index d0ce5cfd3ac1..7d6268ede35a 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -313,6 +313,7 @@
+>  #define X86_FEATURE_AMD_SSBD           (13*32+24) /* "" Speculative Stor=
+e Bypass Disable */
+>  #define X86_FEATURE_VIRT_SSBD          (13*32+25) /* Virtualized Specula=
+tive Store Bypass Disable */
+>  #define X86_FEATURE_AMD_SSB_NO         (13*32+26) /* "" Speculative Stor=
+e Bypass is fixed in hardware. */
+> +#define X86_FEATURE_PSFD               (13*32+28) /* Predictive Store Fo=
+rwarding Disable */
+>
+>  /* Thermal and Power Management Leaf, CPUID level 0x00000006 (EAX), word=
+ 14 */
+>  #define X86_FEATURE_DTHERM             (14*32+ 0) /* Digital Thermal Sen=
+sor */
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index fe03bd978761..ba773919f21d 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -500,7 +500,7 @@ void kvm_set_cpu_caps(void)
+>         kvm_cpu_cap_mask(CPUID_8000_0008_EBX,
+>                 F(CLZERO) | F(XSAVEERPTR) |
+>                 F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F=
+(VIRT_SSBD) |
+> -               F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_STIBP_ALWAYS_ON)
+> +               F(AMD_SSB_NO) | F(AMD_STIBP) | F(AMD_STIBP_ALWAYS_ON) | F=
+(PSFD)
+>         );
+>
+>         /*
+>
+>
 
-Bisected with ia64 to commit 26f954a9e4e2 ("Makefile: link with -z
-noexecstack --no-warn-rwx-segments"). I did not test everything,
-but every build I did test passes with this patch reverted.
+For consistency, should this feature be renamed AMD_PSFD, now that
+Intel is enumerating PSFD with CPUID.(EAX=3D7,ECX=3D2):EDX.PSFD[bit 0]?
+See https://www.intel.com/content/www/us/en/developer/articles/technical/so=
+ftware-security-guidance/technical-documentation/cpuid-enumeration-and-arch=
+itectural-msrs.html.
 
-Guenter
+And, Paolo, why are we carrying X86_FEATURE_PSFD as a private #define
+in KVM rather than putting it where it belongs in cpufeatures.h?

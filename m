@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C766E59DEF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5745559DC7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356373AbiHWKzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S1354585AbiHWKc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355947AbiHWKse (ORCPT
+        with ESMTP id S1353441AbiHWKOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:48:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96EC25E8F;
-        Tue, 23 Aug 2022 02:12:11 -0700 (PDT)
+        Tue, 23 Aug 2022 06:14:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A4972FCF;
+        Tue, 23 Aug 2022 01:59:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C7E8B81C66;
-        Tue, 23 Aug 2022 09:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C3EC433D6;
-        Tue, 23 Aug 2022 09:12:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0957B81C28;
+        Tue, 23 Aug 2022 08:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32050C433C1;
+        Tue, 23 Aug 2022 08:59:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245929;
-        bh=OQlvZM+K22KXk20z/y80Vu43gP5UH4g2hFg4EP4s7Wc=;
+        s=korg; t=1661245188;
+        bh=EBimmJxbHe39CL+TyotCC12WSqh4D6A6NfBwAC6AG18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ro28e8kxR/SfEbZfBlYwCvrG49ZT/o8oMnVYdAGHgcNFN/hF4QcMcVvpDRaMoJXE+
-         zavLMQyxWtI/HmxLKNDf3uqoIKz4IkmImbZdITq1keLWe+4BS1oGxiQtPXan/u9TT1
-         TATvKEQTyaEOWFBXds4sjf2KL6SQAEMGaMKygZMo=
+        b=TWGd0CGOVFh5BrSfwhbP0KPJumiCc95bw0jb4tTnkNp0uICro80Atpb0cN+rmzhbe
+         Bdi7QM67EdmC0F44ZT4tcALPpgUwK2iQPpK15Iwsp5IfoYoEr4t456K5ZM98o6oZOK
+         VQQT+JJ1jr8HO6S1HsPM83ErcerKNSTKOgbjgYVM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 4.19 233/287] SUNRPC: Reinitialise the backchannel request buffers before reuse
+        Eric Sandeen <sandeen@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Leah Rumancik <leah.rumancik@gmail.com>
+Subject: [PATCH 5.15 243/244] xfs: revert "xfs: actually bump warning counts when we send warnings"
 Date:   Tue, 23 Aug 2022 10:26:42 +0200
-Message-Id: <20220823080108.889190037@linuxfoundation.org>
+Message-Id: <20220823080107.747498057@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Eric Sandeen <sandeen@redhat.com>
 
-commit 6622e3a73112fc336c1c2c582428fb5ef18e456a upstream.
+[ Upstream commit bc37e4fb5cac2925b2e286b1f1d4fc2b519f7d92 ]
 
-When we're reusing the backchannel requests instead of freeing them,
-then we should reinitialise any values of the send/receive xdr_bufs so
-that they reflect the available space.
+This reverts commit 4b8628d57b725b32616965e66975fcdebe008fe7.
 
-Fixes: 0d2a970d0ae5 ("SUNRPC: Fix a backchannel race")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+XFS quota has had the concept of a "quota warning limit" since
+the earliest Irix implementation, but a mechanism for incrementing
+the warning counter was never implemented, as documented in the
+xfs_quota(8) man page. We do know from the historical archive that
+it was never incremented at runtime during quota reservation
+operations.
+
+With this commit, the warning counter quickly increments for every
+allocation attempt after the user has crossed a quote soft
+limit threshold, and this in turn transitions the user to hard
+quota failures, rendering soft quota thresholds and timers useless.
+This was reported as a regression by users.
+
+Because the intended behavior of this warning counter has never been
+understood or documented, and the result of this change is a regression
+in soft quota functionality, revert this commit to make soft quota
+limits and timers operable again.
+
+Fixes: 4b8628d57b72 ("xfs: actually bump warning counts when we send warnings)
+Signed-off-by: Eric Sandeen <sandeen@redhat.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Dave Chinner <dchinner@redhat.com>
+Signed-off-by: Dave Chinner <david@fromorbit.com>
+Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sunrpc/backchannel_rqst.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ fs/xfs/xfs_trans_dquot.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/net/sunrpc/backchannel_rqst.c
-+++ b/net/sunrpc/backchannel_rqst.c
-@@ -69,6 +69,17 @@ static void xprt_free_allocation(struct
- 	kfree(req);
- }
+--- a/fs/xfs/xfs_trans_dquot.c
++++ b/fs/xfs/xfs_trans_dquot.c
+@@ -603,7 +603,6 @@ xfs_dqresv_check(
+ 			return QUOTA_NL_ISOFTLONGWARN;
+ 		}
  
-+static void xprt_bc_reinit_xdr_buf(struct xdr_buf *buf)
-+{
-+	buf->head[0].iov_len = PAGE_SIZE;
-+	buf->tail[0].iov_len = 0;
-+	buf->pages = NULL;
-+	buf->page_len = 0;
-+	buf->flags = 0;
-+	buf->len = 0;
-+	buf->buflen = PAGE_SIZE;
-+}
-+
- static int xprt_alloc_xdr_buf(struct xdr_buf *buf, gfp_t gfp_flags)
- {
- 	struct page *page;
-@@ -291,6 +302,9 @@ void xprt_free_bc_rqst(struct rpc_rqst *
- 	 */
- 	spin_lock_bh(&xprt->bc_pa_lock);
- 	if (xprt_need_to_requeue(xprt)) {
-+		xprt_bc_reinit_xdr_buf(&req->rq_snd_buf);
-+		xprt_bc_reinit_xdr_buf(&req->rq_rcv_buf);
-+		req->rq_rcv_buf.len = PAGE_SIZE;
- 		list_add_tail(&req->rq_bc_pa_list, &xprt->bc_pa_list);
- 		xprt->bc_alloc_count++;
- 		req = NULL;
+-		res->warnings++;
+ 		return QUOTA_NL_ISOFTWARN;
+ 	}
+ 
 
 

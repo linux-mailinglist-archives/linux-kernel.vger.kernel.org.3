@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D9B59D7CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA7E59D779
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243347AbiHWJsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S1351385AbiHWJjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351916AbiHWJpl (ORCPT
+        with ESMTP id S1351346AbiHWJie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:45:41 -0400
+        Tue, 23 Aug 2022 05:38:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DDB2F7;
-        Tue, 23 Aug 2022 01:43:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CF05E314;
+        Tue, 23 Aug 2022 01:40:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EDD4B81C4F;
-        Tue, 23 Aug 2022 08:43:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A1B2C433D6;
-        Tue, 23 Aug 2022 08:43:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A95F5B81C6F;
+        Tue, 23 Aug 2022 08:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0410BC433C1;
+        Tue, 23 Aug 2022 08:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244180;
-        bh=wvDu/ipmfAlirHb5j2FpWgwFya3KrOeJTyYaZnia1G8=;
+        s=korg; t=1661244005;
+        bh=iEBNwJXJZXuq4CJ5XN0UuXtBxokmOgf2OI7wZs/yPh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CdHDgkxv9ioSHTRq9P0KRjNy/4t4kgWU6FkAj7L2NNPtTA1u8laAXlvFu9n+iTPvF
-         tJErhwXKTCMRGJ6tl5SVxZGywEpu0rcD5/2VGSCMyZGmr8yMyNj9Rnb1++1DDV2adk
-         7cfS7/35s77wW9XbS8l3SIZOWQFAagdZ06kv4BO4=
+        b=WgD3iZcBL56SbHwBFWqaXL8O6y3MdQEKO9kebGEqVbT0P3dUeyK6Q8ClTKfAlG+q4
+         jO3yfErGSKCp89ywNzQVyDtlkCY+9e3Ivdx3/Otem8mBQK7sKTFC+9NFGYTrm07kHT
+         PC4wpBwuE1V3Oc5n9yjxOF3NEHbvaB8EEofzx89I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        stable@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 069/229] drm/mediatek: dpi: Remove output format of YUV
-Date:   Tue, 23 Aug 2022 10:23:50 +0200
-Message-Id: <20220823080056.184219976@linuxfoundation.org>
+Subject: [PATCH 4.14 071/229] media: platform: mtk-mdp: Fix mdp_ipi_comm structure alignment
+Date:   Tue, 23 Aug 2022 10:23:52 +0200
+Message-Id: <20220823080056.265603348@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,71 +60,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-[ Upstream commit c9ed0713b3c35fc45677707ba47f432cad95da56 ]
+[ Upstream commit ab14c99c035da7156a3b66fa171171295bc4b89a ]
 
-DPI is not support output format as YUV, but there is the setting of
-configuring output YUV. Therefore, remove them in this patch.
+The mdp_ipi_comm structure defines a command that is either
+PROCESS (start processing) or DEINIT (destroy instance); we
+are using this one to send PROCESS or DEINIT commands from Linux
+to an MDP instance through a VPU write but, while the first wants
+us to stay 4-bytes aligned, the VPU instead requires an 8-bytes
+data alignment.
 
-Fixes: 9e629c17aa8d ("drm/mediatek: Add DPI sub driver")
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220701035845.16458-5-rex-bc.chen@mediatek.com/
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Keeping in mind that these commands are executed immediately
+after sending them (hence not chained with others before the
+VPU/MDP "actually" start executing), it is fine to simply add
+a padding of 4 bytes to this structure: this keeps the same
+performance as before, as we're still stack-allocating it,
+while avoiding hackery inside of mtk-vpu to ensure alignment
+bringing a definitely bigger performance impact.
+
+Fixes: c8eb2d7e8202 ("[media] media: Add Mediatek MDP Driver")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
+Reviewed-by: Irui Wang <irui.wang@mediatek.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dpi.c | 31 ++++++------------------------
- 1 file changed, 6 insertions(+), 25 deletions(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index e80a603e5fb0..6b12be8ca33e 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -51,13 +51,7 @@ enum mtk_dpi_out_channel_swap {
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h b/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h
+index 78e2cc0dead1..4f4a51dd48e1 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h
+@@ -48,12 +48,14 @@ struct mdp_ipi_init {
+  * @ipi_id        : IPI_MDP
+  * @ap_inst       : AP mtk_mdp_vpu address
+  * @vpu_inst_addr : VPU MDP instance address
++ * @padding       : Alignment padding
+  */
+ struct mdp_ipi_comm {
+ 	uint32_t msg_id;
+ 	uint32_t ipi_id;
+ 	uint64_t ap_inst;
+ 	uint32_t vpu_inst_addr;
++	uint32_t padding;
  };
  
- enum mtk_dpi_out_color_format {
--	MTK_DPI_COLOR_FORMAT_RGB,
--	MTK_DPI_COLOR_FORMAT_RGB_FULL,
--	MTK_DPI_COLOR_FORMAT_YCBCR_444,
--	MTK_DPI_COLOR_FORMAT_YCBCR_422,
--	MTK_DPI_COLOR_FORMAT_XV_YCC,
--	MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
--	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
-+	MTK_DPI_COLOR_FORMAT_RGB
- };
- 
- struct mtk_dpi {
-@@ -346,24 +340,11 @@ static void mtk_dpi_config_2n_h_fre(struct mtk_dpi *dpi)
- static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 					enum mtk_dpi_out_color_format format)
- {
--	if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_444) ||
--	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
--		mtk_dpi_config_yuv422_enable(dpi, false);
--		mtk_dpi_config_csc_enable(dpi, true);
--		mtk_dpi_config_swap_input(dpi, false);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_BGR);
--	} else if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_422) ||
--		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
--		mtk_dpi_config_yuv422_enable(dpi, true);
--		mtk_dpi_config_csc_enable(dpi, true);
--		mtk_dpi_config_swap_input(dpi, true);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
--	} else {
--		mtk_dpi_config_yuv422_enable(dpi, false);
--		mtk_dpi_config_csc_enable(dpi, false);
--		mtk_dpi_config_swap_input(dpi, false);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
--	}
-+	/* only support RGB888 */
-+	mtk_dpi_config_yuv422_enable(dpi, false);
-+	mtk_dpi_config_csc_enable(dpi, false);
-+	mtk_dpi_config_swap_input(dpi, false);
-+	mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
- }
- 
- static void mtk_dpi_power_off(struct mtk_dpi *dpi, enum mtk_dpi_power_ctl pctl)
+ /**
 -- 
 2.35.1
 

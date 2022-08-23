@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0201259E469
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82C359E48C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239747AbiHWN2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 09:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S231696AbiHWNdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 09:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242000AbiHWN2G (ORCPT
+        with ESMTP id S244000AbiHWNba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 09:28:06 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB0C15786E
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:28:09 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id d21so7161474eje.3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:28:09 -0700 (PDT)
+        Tue, 23 Aug 2022 09:31:30 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE52E1631D5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:32:04 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id m5so8395166lfj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:32:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=tDoKHJNCxvovH/OdGSUDSJIA93fGME4N3+WprjnQxsw=;
-        b=iy5C4EFbb1VSRZHG1k7DNq8EVOcOse15as56mgI63fVSvBtJWf0mRirwQie4lPceEn
-         zBbPdZ+yNs4YcmaEuOAA0Cj/lben3WOd78Rhu7t4cTiL3FhOmC0p9FjRH/dVmPXn+SUV
-         BwJ9ywyeAUI6yIGpfmqOgSQ9K6Tm6onWBTRR1Tf1XVVv7U05adHOI7u06xWRiGhOgN2k
-         OagBBMGShyhXjFhrL1VL4aZBb2EmwiXNfhIakTyWquoE/eiCbCkX0B6Qob+VxSYwq1L3
-         DTX2zHJvGV61RptgNj2fF/R7RhNIUSizPxuzNEcuCAVgz7ue6re1x41b6d+1oEBrJa5E
-         s1uQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Nn4yg27RpfUKH0YwS0M7KTMeTIZP8soc1NaWLCIj4V8=;
+        b=gkDFGfVmjxorFP0c8X8RqzS6sIe38tA8r5/IRMeJD58cuS654rYWUc0VUpTgkQsX6D
+         oC5y6aFltTHtCfp7gWAu0dVG3v+vvjlTMXsMhnYVenk42cE1/C1FmZbiUfcWCSJ3oiza
+         tZaFzvpe7KIIwM3G2VxVyR1Xae5YWI0FxkpvTb+1J0fISLkxbqWnUF/qEq+xmuvLhHRC
+         ARQCtQeK00NcVks36jyX9RiVypEIK9iNk27XMriXHTjK2k4G/lp3CAZm/6GuAply/rNJ
+         Fzjafy7WN5H0uDU3jDwjFiopKU2J1wOguxA+9/V5Ql6F189yfsiXdXUzIxAIznQOwYxj
+         L7MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=tDoKHJNCxvovH/OdGSUDSJIA93fGME4N3+WprjnQxsw=;
-        b=DPTImf+58Cx+Y/AB3dvSqAWgrtXCpmfoWwuL2wvpqML7LkC5V3U27P85NN9MgkdgHF
-         7/ErcG+OdKtaOUS4PtZiNuHEjVfDvJ1psug+1jr2pEXp7ro1T7sVWBzKlCsKOY/zXVwI
-         nc8cvHAFCPsRqWmrkOBICnQTAk/Nra/zCeB3+6QWMQs4jyWTlZtbf/x9UAtzdeQUlOJ3
-         okJobwFbQB9p81BbceOfK5aJe43r5OU5vZMwFDJuEEPys8AqGlho1yhGovAsD2Vj/N4C
-         qN9qY04blqOCJH0fVqUMAjQc4nz24Ep6alKsSZEFYXNOHdBn9m/QDtV+OwVK6Gq52+jD
-         f0pw==
-X-Gm-Message-State: ACgBeo0sTZjosB9FVmGvGpClmJBvS5kSK6t4p88uTk/E62gRGAGwG/qV
-        VcgwZEBV7Kj0d2jHq13iOgC59fyGxgkRw3Br7WFnvkRr+zGtjg==
-X-Google-Smtp-Source: AA6agR7THiCEgefB2sdBBcvdIqgG2vu6qMqwFvww/Dwz6e69ZMVbaQHWEyotbW7T0Rv1YiQcTrclrQ4Eo0hJrTZ/3Nw=
-X-Received: by 2002:a17:907:e8c:b0:73d:8146:9aa1 with SMTP id
- ho12-20020a1709070e8c00b0073d81469aa1mr6396366ejc.253.1661250415034; Tue, 23
- Aug 2022 03:26:55 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Nn4yg27RpfUKH0YwS0M7KTMeTIZP8soc1NaWLCIj4V8=;
+        b=SanYR3Jnb6CHXGGRP2W2YeR/6CTvBINJmZL4TnFEx0/MmVvJOg+GgbmJ1Qies2N4ru
+         p4DDQZifwyKUc6ou1eoZ4yGiTg/u3wKZtKVTqS43cmX5sf7yjhJOupN15klG5eqEIK3P
+         7RQGuBYCKNGVREDZ5yLDjTRH35gy7YY+ei04LHK4IznCq7+fHID2CI8D2f2dq3m9MjKI
+         xzEFrSZXf+GGdlbAylk1wlcqQeoZ71iGmhPYBGZiBwuB4aQ/xM9I2j8uNpbGrQyjmgE6
+         o7HYXiCh0lX2fOLq/eRFImkdG8AaSWjiIYQie/HfyGUdD1F31Lj/vM5AB1pIGrPjqs/5
+         Cw6g==
+X-Gm-Message-State: ACgBeo00Cygvfnqh24NKX82Dm9qgg7jvksOml1QegoDdNqMLutM6w1y+
+        vE4JmgBXgGT/So10GbcoLJdJIg==
+X-Google-Smtp-Source: AA6agR6ZRkMVMh+0YxEKZ+XwxyYWZ3pJDxMNBgaSOGfr08HN4I6//S4wDDlMs98filiwjQ7OQ3HNrg==
+X-Received: by 2002:a19:4903:0:b0:492:e648:5bc0 with SMTP id w3-20020a194903000000b00492e6485bc0mr2531218lfa.288.1661250664301;
+        Tue, 23 Aug 2022 03:31:04 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id 6-20020a2e1646000000b0025e2c5a12b6sm2271863ljw.129.2022.08.23.03.31.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 03:31:03 -0700 (PDT)
+Message-ID: <8712b866-af22-d9ac-fd84-7d77c2628682@linaro.org>
+Date:   Tue, 23 Aug 2022 13:31:02 +0300
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 23 Aug 2022 15:56:43 +0530
-Message-ID: <CA+G9fYvos=FHZwtGj-fo3TEdWGnw7rZQ=+Gavn=ZA6LCC2_zJw@mail.gmail.com>
-Subject: [next] arm: drivers/net/ethernet/ti/davinci_mdio.c:649: undefined
- reference to `free_mdio_bitbang'
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        regressions@lists.linux.dev,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Ravi Gunasekaran <r-gunasekaran@ti.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Add driver for
+ I2C host controller in multifunction endpoint of pci1xxxx switch
+Content-Language: en-US
+To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        robh@kernel.org, semen.protsenko@linaro.org, sven@svenpeter.dev,
+        jsd@semihalf.com, rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
+        UNGLinuxDriver@microchip.com
+References: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,80 +80,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arm builds failed on Linux next-20220823 tag for the following builds.
+On 23/08/2022 17:56, Tharun Kumar P wrote:
+> Microchip PCI1XXXX is an unmanaged PCIe3.1a Switch for Consumer,
+> Industrial and Automotive applications. This switch has multiple
+> downstream ports. In one of the Switch's Downstream port, there
+> is a multifunction endpoint for peripherals which includes an I2C
+> host controller. The I2C function in the endpoint operates at 100KHz,
+> 400KHz and 1 MHz and has buffer depth of 128 bytes.
+> This patch provides the I2C controller driver for the I2C endpoint
+> of the switch.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+(...)
 
-Regressions found on arm:
-   - build-clang-nightly-keystone_defconfig
-   - build-clang-13-keystone_defconfig
-   - build-gcc-10-omap2plus_defconfig
-   - build-gcc-8-davinci_all_defconfig
-   - build-gcc-11-davinci_all_defconfig
-   - build-clang-14-omap2plus_defconfig
-   - build-clang-14-keystone_defconfig
-   - build-gcc-10-davinci_all_defconfig
-   - build-clang-14-davinci_all_defconfig
-   - build-clang-11-davinci_all_defconfig
-   - build-gcc-9-davinci_all_defconfig
-   - build-gcc-9-omap2plus_defconfig
-   - build-clang-11-omap2plus_defconfig
-   - build-clang-12-davinci_all_defconfig
-   - build-clang-13-davinci_all_defconfig
-   - build-clang-12-keystone_defconfig
-   - build-gcc-8-omap2plus_defconfig
-   - build-clang-13-omap2plus_defconfig
-   - build-gcc-11-omap2plus_defconfig
-   - build-gcc-8-keystone_defconfig
-   - build-gcc-10-keystone_defconfig
-   - build-clang-nightly-omap2plus_defconfig
-   - build-clang-nightly-davinci_all_defconfig
-   - build-gcc-9-keystone_defconfig
-   - build-gcc-11-keystone_defconfig
-   - build-clang-11-keystone_defconfig
-   - build-clang-12-omap2plus_defconfig
+> +static int pci1xxxx_i2c_suspend(struct device *dev)
+> +{
+> +	struct pci1xxxx_i2c *i2c = dev_get_drvdata(dev);
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	u32 regval;
+> +
+> +	i2c_mark_adapter_suspended(&i2c->adap);
+> +
+> +	while ((i2c->i2c_xfer_in_progress))
+> +		msleep(20);
+> +
+> +	pci1xxxx_i2c_config_high_level_intr(i2c,
+> +					    SMBALERT_WAKE_INTR_MASK,
+> +					    true);
+> +
+> +	/*Enable the PERST_DIS bit to mask the PERST from
+> +	 *resetting the core regs
+> +	 */
 
+Use Linux coding style comments. Everywhere...
 
-Build error:
--------------
-arm-linux-gnueabihf-ld: drivers/net/ethernet/ti/davinci_mdio.o: in
-function `davinci_mdio_remove':
-drivers/net/ethernet/ti/davinci_mdio.c:649: undefined reference to
-`free_mdio_bitbang'
-arm-linux-gnueabihf-ld: drivers/net/ethernet/ti/davinci_mdio.o: in
-function `davinci_mdio_probe':
-drivers/net/ethernet/ti/davinci_mdio.c:545: undefined reference to
-`alloc_mdio_bitbang'
-arm-linux-gnueabihf-ld: drivers/net/ethernet/ti/davinci_mdio.o: in
-function `davinci_mdiobb_read':
-drivers/net/ethernet/ti/davinci_mdio.c:236: undefined reference to `mdiobb_read'
-arm-linux-gnueabihf-ld: drivers/net/ethernet/ti/davinci_mdio.o: in
-function `davinci_mdiobb_write':
-drivers/net/ethernet/ti/davinci_mdio.c:253: undefined reference to
-`mdiobb_write'
-make[1]: *** [Makefile:1250: vmlinux] Error 1
+(...)
 
+> +
+> +static int pci1xxxx_i2c_probe_pci(struct pci_dev *pdev,
+> +				  const struct pci_device_id *ent)
+> +{
+> +	struct pci1xxxx_i2c *i2c;
+> +	int ret;
+> +
+> +	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
+> +	if (!i2c)
+> +		return -ENOMEM;
+> +
+> +	pci_set_drvdata(pdev, i2c);
+> +
+> +	i2c->i2c_xfer_in_progress = false;
+> +
+> +	ret = pcim_enable_device(pdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pci_set_master(pdev);
+> +
+> +	/* we are getting the base address of the SMB core. SMB core uses
+> +	 * BAR0 and 32K is the size here pci_resource_len returns 32K by
+> +	 * reading BAR0
+> +	 */
+> +
+> +	ret = pcim_iomap_regions(pdev, BIT(0), pci_name(pdev));
+> +	if (ret < 0)
+> +		return -ENOMEM;
+> +
+> +	i2c->i2c_base =	pcim_iomap_table(pdev)[0];
+> +
+> +	init_completion(&i2c->i2c_xfer_done);
+> +
+> +	pci1xxxx_i2c_init(i2c);
+> +
+> +	dev_info(&pdev->dev, "i2c clock freq: %d\n", i2c->freq);
 
-metadata:
----------
-Build: https://builds.tuxbuild.com/2DkF0UFq3NZAwUKNFLTyWfDPqem/
-config: https://builds.tuxbuild.com/2DkF0UFq3NZAwUKNFLTyWfDPqem/config
-git_describe: next-20220823
-git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-git_sha: 05477f3653b82d8b3bcf39d2937d9893124976db
-git_short_log: 05477f3653b8 ("Add linux-next specific files for 20220823")
+That's not a helpful print. Don't pollute dmesg.
 
-Steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
+> +
+> +	ret = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*Register the isr. we are not using any isr flags here.*/
 
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
+Use Linux coding style comments. Everywhere...
 
-tuxmake --runtime podman --target-arch arm --toolchain gcc-11
---kconfig omap2plus_defconfig
+> +	ret = devm_request_irq(&pdev->dev, pci_irq_vector(pdev, 0),
+> +			       pci1xxxx_i2c_isr, PCI1XXXX_IRQ_FLAGS,
+> +			       pci_name(pdev), i2c);
+> +	if (ret)
+> +		goto err_free_region;
+> +
+> +	i2c->adap = pci1xxxx_i2c_ops;
+> +	i2c->adap.class = I2C_CLASS_SPD;
+> +	i2c->adap.dev.parent = &pdev->dev;
+> +
+> +	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
+> +		 "MCHP PCI1xxxx i2c adapter at %s", pci_name(pdev));
+> +
+> +	i2c_set_adapdata(&i2c->adap, i2c);
+> +
+> +	ret = i2c_add_adapter(&i2c->adap);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "i2c add adapter failed = %d\n", ret);
+> +		pci1xxxx_i2c_shutdown(i2c);
 
+Why do you call here pci1xxxx_i2c_shutdown() but not in previous error path?
 
---
-Linaro LKFT
-https://lkft.linaro.org
+> +		goto err_free_region;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_free_region:
+> +	pci_free_irq_vectors(pdev);
+> +	return ret;
+> +}
+> +
+> +static void pci1xxxx_i2c_remove_pci(struct pci_dev *pdev)
+> +{
+> +	struct pci1xxxx_i2c *i2c = pci_get_drvdata(pdev);
+
+No need for pci_free_irq_vectors()?
+
+> +
+> +	i2c_del_adapter(&i2c->adap);
+> +	pci1xxxx_i2c_shutdown(i2c);
+> +}
+> +
+
+Best regards,
+Krzysztof

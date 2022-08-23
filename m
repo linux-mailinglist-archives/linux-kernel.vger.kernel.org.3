@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FCA59ED3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5991159ED42
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiHWUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 16:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S230379AbiHWUYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 16:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiHWUPJ (ORCPT
+        with ESMTP id S232097AbiHWUYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:15:09 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0D249B41;
-        Tue, 23 Aug 2022 12:37:31 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id z187so14383950pfb.12;
-        Tue, 23 Aug 2022 12:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=kxeD7t6AephRFE0VvTfMAllbUT0ZPa2W2zfu9iRzx6o=;
-        b=NNc0g5zX4Rk3hhtpLy68iQ5KjKuhXHl573Sw56xUyXvN3TvClXdEratdWpbNeNl7FA
-         yB7/XCecUngtsYrXCx+Vu/scUmO/OnBJIWtSWbrKEs7Ip/MBR0SCsfUKCtSKkY6uV0b1
-         TwUPZp5u5+8k3X+vD2eZArCdj9X/9IxsEl6LRcCpvSh/aP9LVpOvfOIdrAVt4/Fn+abG
-         7oOWGE7BEF5Dx6SIfBNVe4VmuxyuVxVFEmaMT1wEqa8CvaXi+32I4E4ghdO76fRfdcvW
-         JTWpH94Kr/xC3sCkGHgxxhBk+v6iGP8nXxADAmgDIijEPlPBoE0YaNf0MaANXGnf0aYd
-         n9/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=kxeD7t6AephRFE0VvTfMAllbUT0ZPa2W2zfu9iRzx6o=;
-        b=XamNLtkhVZpVIxdHA4zKvh13ktGDBHHRbvzXV1sWOwZXnDqYWGz+TvNb8SVT7fB/YG
-         Mw0DPfUUogsIh6Zyer896wdhqEAkiOd+vYClEqP47jvkrmYJWFq6BIViHDpDDNPANWbM
-         2oj3PAdfifN9LgdJG2ZCjs+TNnWdCqNZsztKZGbtIDwEJuzCc3Jt5d3DluV+A9AmL+2+
-         KEMO5dBbktqWYwUY9g+p16C+KoF50B3XRrOqocl/WIw9gp58eygDaWhXWZHXGLnNXECh
-         h3q0ttsjzzWA3V511lsYS23WXu/bu54HHlKdw5pCKxKavA7KMSV+m6tEon5Nxqx2IfVP
-         vJkQ==
-X-Gm-Message-State: ACgBeo3GIUg0/VZlVI6JYu05D9xgYW19UlfOI1B8e3JuaglXydEmvlUW
-        xRFE+9fKBe32yA/x5t9O0LY=
-X-Google-Smtp-Source: AA6agR5B2R0kKGDPnXohyBoZRX7quqVG5GU/3TcvmqxcfEH9pEy4AK9DS9MRIS2vFGmHiL9z+RsiAw==
-X-Received: by 2002:a05:6a00:1883:b0:536:e59f:f776 with SMTP id x3-20020a056a00188300b00536e59ff776mr6229940pfh.49.1661283450756;
-        Tue, 23 Aug 2022 12:37:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:90fa])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170902a38a00b001708e1a10a3sm10944120pla.94.2022.08.23.12.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 12:37:30 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 23 Aug 2022 09:37:28 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
-Subject: Re: [PATCH 4/7] kernfs: Skip kernfs_drain_open_files() more
- aggressively
-Message-ID: <YwUseD1GBHd2iN+q@slm.duckdns.org>
-References: <20220820000550.367085-1-tj@kernel.org>
- <20220820000550.367085-5-tj@kernel.org>
- <e340ccaa-92f2-3870-ed26-70df87ad8c8f@bytedance.com>
+        Tue, 23 Aug 2022 16:24:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B64ED4BC0;
+        Tue, 23 Aug 2022 12:51:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5BDEB1F8AC;
+        Tue, 23 Aug 2022 19:51:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661284310;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2RCUwt1b+lcpY49aMgbRIAVLt9QpUtE7/soKWVObSPU=;
+        b=P8H/rWXj/Zjoc0NMM0FOcZpRJmCIUAK9pBQhVCZnIXqukc5vzCdZF17heyMqwFMuGr+SXI
+        FLOPEwDY7nfgXm6NlfGbBCibvgduB3rrOZcF4amzZsh/kjUnAqak3izLa/kwcAkgx7cIkm
+        7Ly4lZJF1bDIhS15wFd7o71RAJy0854=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661284310;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2RCUwt1b+lcpY49aMgbRIAVLt9QpUtE7/soKWVObSPU=;
+        b=pavdNYUSyduIZiGeGrOST6NK7MGuRB5eV27vIpkmfD/oUluWAdFQUVnrSI8/Razi8VV6AQ
+        r6CRyPwWtRlwKpBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B80F13A89;
+        Tue, 23 Aug 2022 19:51:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rnopBdYvBWMQeQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 23 Aug 2022 19:51:50 +0000
+Date:   Tue, 23 Aug 2022 21:46:35 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] btrfs: don't print information about space cache or tree
+ every remount
+Message-ID: <20220823194635.GM13489@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <ca82edf897ae4cbd71277e76f43c6631ffd26b5a.1661268435.git.maciej.szmigiero@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e340ccaa-92f2-3870-ed26-70df87ad8c8f@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <ca82edf897ae4cbd71277e76f43c6631ffd26b5a.1661268435.git.maciej.szmigiero@oracle.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,14 +79,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 01:27:22PM +0800, Chengming Zhou wrote:
-> > +	if (of) {
-> > +		WARN_ON_ONCE((kn->flags & KERNFS_HAS_RELEASE) && !of->released);
+On Tue, Aug 23, 2022 at 05:28:20PM +0200, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 > 
-> kernfs_unlink_open_file() is also used in error case "err_put_node" in kernfs_fop_open(),
-> which should also dec the on->nr_to_release?
+> btrfs currently prints information about space cache or free space tree
+> being in use on every remount, regardless whether such remount actually
+> enabled or disabled one of these features.
+> 
+> This is actually unnecessary since providing remount options changing the
+> state of these features will explicitly print the appropriate notice.
+> 
+> Let's instead print such unconditional information just on an initial mount
+> to avoid filling the kernel log when, for example, laptop-mode-tools
+> remount the fs on some events.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 
-Ah, right you're. Will fix. Thanks for pointing it out.
-
--- 
-tejun
+Makes sense, added to misc-next, thanks.

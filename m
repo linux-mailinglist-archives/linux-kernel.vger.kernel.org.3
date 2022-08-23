@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E7F59EC6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97D759EC70
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiHWTeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
+        id S232161AbiHWTe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbiHWTeQ (ORCPT
+        with ESMTP id S230457AbiHWTe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:34:16 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA648138795;
-        Tue, 23 Aug 2022 11:28:00 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 7FBBC1C0005; Tue, 23 Aug 2022 20:27:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1661279277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yklnFjZgD43o0mSrBqTG5ikYsePHVB8TnZYM1NtY/cU=;
-        b=hb2AzFqYFN9CE4hRDZadbcwtd03KTFOkWhK1CwPavMIu123Qk2cgbwtz3QtillQFoSDNVl
-        UXav3t14w6KFqvL31aIkKwRdzaRadPwL6GWlsqMwZctRYFuGgjEE9Qi2zWorAFGtCL1WNI
-        nbnYOVCtDrEtEje3YW5vgzbDDX+jqKY=
-Date:   Tue, 23 Aug 2022 20:27:57 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Nikita Travkin <nikitos.tr@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Yi Xin <Yixin.zhu@intel.com>,
-        Mallikarjuna reddy <mallikarjunax.reddy@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        - NeilBrown <neilb@suse.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: leds: Add missing
- (unevaluated|additional)Properties on child nodes
-Message-ID: <20220823182756.GA13402@duo.ucw.cz>
-References: <20220823145649.3118479-13-robh@kernel.org>
+        Tue, 23 Aug 2022 15:34:29 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373061C2;
+        Tue, 23 Aug 2022 11:28:14 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 202so12979638pgc.8;
+        Tue, 23 Aug 2022 11:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=wmSMCRFZSxcgnDSmELzb7JIe5u2Gi0VRVmvHwrpfAws=;
+        b=lpp9S+kBi2bxX0uqMqqitmwkC/F8KjETINbFgtPX33rOBLZqiofK8OVkTuZF6cTqi5
+         cIISJO5g0NVILJpqVy2mX/Jthv8Ri7x0qpO0lbdONdYHf0mJ5kVX+U6pMpPN8p9IdyWz
+         eW+owDT42DCziICeAHUyStY66gE+FRKa1aaIm+LOfQazFWF6GrxxBG72t0/50OAVkPxC
+         Ga+aZAl61sD92lYYOMcCpcHYhx/Tj79KRsVDoTINYuh+4/79S6zf+XulGFmyM+SeTTkI
+         M4i7x7BLdJPddgYzmP3PZKksDl5jJZ0Ojbsar2GA6C5RVWNkerJxwp2dRRLfccXfMeHC
+         rTcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=wmSMCRFZSxcgnDSmELzb7JIe5u2Gi0VRVmvHwrpfAws=;
+        b=1ORrnK47EbyJPsBik9lNqn16HXhZO0qbl69qqi/j7Bnj9PNCOOzAGNJoYq6GE/2uzc
+         6E6svWXIMHrTTnKPL47X3nLjczPoNCyM6rsV2ZLxpASF014ZaFtHSaWfmsOa5xH1vgKl
+         Eka6RFLpK81ItfUSx4nCC3clMqEwRFOf1x/jUkqP7HGnm145TQk/IXKOzlH5Ax5V6k/Z
+         E0+SW2H2BGnikg3aaZ3EQgF9BHR9FoJtzX/LWFv6gQ/XeNGGrwb8TpSrCnkqbsc7omSt
+         sc1gCp/Yhe7cpDhiT9D7pjfsBNYwBreCVq1ndx+trQ3F9T/DnGOPtFF0EAHWQKRS3qQW
+         EXtQ==
+X-Gm-Message-State: ACgBeo20JPOa7wgbxbr8RqgdjrqLZgCu0XeAzHlxpAkDSYRtUM1fvGnP
+        kjUCleUZRTwiwsGueaD9jurnmlMQyGQNaA==
+X-Google-Smtp-Source: AA6agR7TIJQ4Mm+joOcCymHFuewcD/S1AtW0VepCnt5olMRV4A3d0Q/2sbKF/Bz/l2i4KZqJ31zepw==
+X-Received: by 2002:a63:310e:0:b0:429:bf9c:99ed with SMTP id x14-20020a63310e000000b00429bf9c99edmr21123513pgx.524.1661279293034;
+        Tue, 23 Aug 2022 11:28:13 -0700 (PDT)
+Received: from fedora.. ([103.159.189.136])
+        by smtp.gmail.com with ESMTPSA id b13-20020a17090a6e0d00b001f2fa09786asm10328798pjk.19.2022.08.23.11.28.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 11:28:12 -0700 (PDT)
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Khalid Masum <khalid.masum.92@gmail.com>
+Subject: [PATCH 1/2] usb: ehci: Prevent possible modulo by zero
+Date:   Wed, 24 Aug 2022 00:27:57 +0600
+Message-Id: <20220823182758.13401-2-khalid.masum.92@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220823182758.13401-1-khalid.masum.92@gmail.com>
+References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="4Ckj6UjgE2iN1+kY"
-Content-Disposition: inline
-In-Reply-To: <20220823145649.3118479-13-robh@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,80 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+usb_maxpacket() returns 0 if it fails to fetch the endpoint. This
+value is later used for calculating modulo. Which can cause modulo
+by zero in qtd_fill and qh_urb_transaction.
 
---4Ckj6UjgE2iN1+kY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Prevent this breakage by returning if maxpacket is found to be 0.
 
-Hi!
+Fixes coverity warning: 744857 ("Division or modulo by zero")
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+---
+ drivers/usb/host/ehci-q.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+index 807e64991e3e..eb31d13e9ecd 100644
+--- a/drivers/usb/host/ehci-q.c
++++ b/drivers/usb/host/ehci-q.c
+@@ -646,6 +646,8 @@ qh_urb_transaction (
+ 	/* else it's already initted to "out" pid (0 << 8) */
+ 
+ 	maxpacket = usb_maxpacket(urb->dev, urb->pipe);
++	if (unlikely(!maxpacket))
++		return NULL;
+ 
+ 	/*
+ 	 * buffer gets wrapped in one or more qtds;
+-- 
+2.37.1
 
-Patch does way more than that:
-
-Can we get some explanation why that's correct?
-
-Best regards,
-								Pavel
-
-> index f8d7963c3a13..8b3b3bf1eaf2 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-lgm.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-lgm.yaml
-> @@ -56,7 +56,8 @@ properties:
-> =20
->      patternProperties:
->        "^led@[0-2]$":
-> -        type: object
-> +        $ref: common.yaml#
-> +        unevaluatedProperties: false
-> =20
->          properties:
->            reg:
-> @@ -64,6 +65,9 @@ properties:
->              minimum: 0
->              maximum: 2
-> =20
-> +          led-gpios:
-> +            maxItems: 1
-> +
->            intel,sso-hw-trigger:
->              type: boolean
->              description: This property indicates Hardware driven/control=
- LED.
-> @@ -118,14 +122,14 @@ examples:
->            reg =3D <0>;
->            function =3D "gphy";
->            color =3D <LED_COLOR_ID_GREEN>;
-> -          led-gpio =3D <&ssogpio 0 0>;
-> +          led-gpios =3D <&ssogpio 0 0>;
->          };
-> =20
->          led@2 {
->            reg =3D <2>;
->            function =3D LED_FUNCTION_POWER;
->            color =3D <LED_COLOR_ID_GREEN>;
-> -          led-gpio =3D <&ssogpio 23 0>;
-> +          led-gpios =3D <&ssogpio 23 0>;
->          };
->        };
->      };
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---4Ckj6UjgE2iN1+kY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYwUcLAAKCRAw5/Bqldv6
-8ky9AJ9P4Ex4545/zifOiwMeA2XQFpMf8ACfZljZ6R8cY/VTkyid1n336KObjaQ=
-=zYWp
------END PGP SIGNATURE-----
-
---4Ckj6UjgE2iN1+kY--

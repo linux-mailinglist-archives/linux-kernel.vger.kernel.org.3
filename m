@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBCA59D9BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6C159D9BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351813AbiHWKAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S1351939AbiHWKA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352190AbiHWJ4a (ORCPT
+        with ESMTP id S1352320AbiHWJ4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:56:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3676A0332;
-        Tue, 23 Aug 2022 01:47:19 -0700 (PDT)
+        Tue, 23 Aug 2022 05:56:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F80A0300;
+        Tue, 23 Aug 2022 01:47:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3CC5B81C35;
-        Tue, 23 Aug 2022 08:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B8F9C4347C;
-        Tue, 23 Aug 2022 08:47:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC50B611DD;
+        Tue, 23 Aug 2022 08:47:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0335C433C1;
+        Tue, 23 Aug 2022 08:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244436;
-        bh=teXgXwagCJhheI7Y+/QuiPceXborMnBt0F32WtrSM8E=;
+        s=korg; t=1661244444;
+        bh=+EWlPLXccA8DIb+f4YN3r+iDOk1ctotMAa2U6XA4CPg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xEjzXuya6OYYWVwFFGgsSQXB88X9n6rkg4dnu4/dmk0onySCZLcJfHKSif/yxv2Gm
-         bHrN+rdc7ZzUjojOZbg05rNGl1xYeb4eEWAltQlifeZU1nA6MTGzVVdfcErw8MJoSY
-         ef7to1si416t6DZTGdr7EWeqSY+DvWl+dWxPPH7I=
+        b=m3N1onIKnCCPtSUTvG5odikgIhNvyfQ9Nlm3ej8NtMO2gB+oYdt/uzW/Y+d04mgy4
+         Hx1g/1TNdZPxxpVvFae/BZoEaYGI5pkijQSWVviq8iKDx2jn4x5eWPJIxM3YYvYfHu
+         NZSlWRbQFv3gMljPGU9czxhAqcaI+CV2vUcdgrZk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 137/229] powerpc/spufs: Fix refcount leak in spufs_init_isolated_loader
-Date:   Tue, 23 Aug 2022 10:24:58 +0200
-Message-Id: <20220823080058.586853140@linuxfoundation.org>
+Subject: [PATCH 4.14 138/229] powerpc/xive: Fix refcount leak in xive_get_max_prio
+Date:   Tue, 23 Aug 2022 10:24:59 +0200
+Message-Id: <20220823080058.616954930@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -58,34 +57,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 6ac059dacffa8ab2f7798f20e4bd3333890c541c ]
+[ Upstream commit 255b650cbec6849443ce2e0cdd187fd5e61c218c ]
 
-of_find_node_by_path() returns remote device nodepointer with
+of_find_node_by_path() returns a node pointer with
 refcount incremented, we should use of_node_put() on it when done.
 Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 0afacde3df4c ("[POWERPC] spufs: allow isolated mode apps by starting the SPE loader")
+Fixes: eac1e731b59e ("powerpc/xive: guest exploitation of the XIVE interrupt controller")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220603121543.22884-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220605053225.56125-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/cell/spufs/inode.c | 1 +
+ arch/powerpc/sysdev/xive/spapr.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/platforms/cell/spufs/inode.c b/arch/powerpc/platforms/cell/spufs/inode.c
-index 9558d725a99b..37ba89f2fd80 100644
---- a/arch/powerpc/platforms/cell/spufs/inode.c
-+++ b/arch/powerpc/platforms/cell/spufs/inode.c
-@@ -684,6 +684,7 @@ spufs_init_isolated_loader(void)
- 		return;
+diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
+index 10235098a726..e9b8e06c9dce 100644
+--- a/arch/powerpc/sysdev/xive/spapr.c
++++ b/arch/powerpc/sysdev/xive/spapr.c
+@@ -569,6 +569,7 @@ static bool xive_get_max_prio(u8 *max_prio)
+ 	}
  
- 	loader = of_get_property(dn, "loader", &size);
-+	of_node_put(dn);
- 	if (!loader)
- 		return;
- 
+ 	reg = of_get_property(rootdn, "ibm,plat-res-int-priorities", &len);
++	of_node_put(rootdn);
+ 	if (!reg) {
+ 		pr_err("Failed to read 'ibm,plat-res-int-priorities' property\n");
+ 		return false;
 -- 
 2.35.1
 

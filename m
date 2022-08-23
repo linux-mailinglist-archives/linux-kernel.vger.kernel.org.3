@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE1059D9DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387EC59D89C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351739AbiHWKD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S242423AbiHWJtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352460AbiHWJ46 (ORCPT
+        with ESMTP id S1352566AbiHWJqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:56:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4381CA1A77;
-        Tue, 23 Aug 2022 01:47:39 -0700 (PDT)
+        Tue, 23 Aug 2022 05:46:33 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404596050F;
+        Tue, 23 Aug 2022 01:44:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D88B5B81C35;
-        Tue, 23 Aug 2022 08:47:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 334D1C433C1;
-        Tue, 23 Aug 2022 08:47:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 40838CE1B44;
+        Tue, 23 Aug 2022 08:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B0BC433C1;
+        Tue, 23 Aug 2022 08:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244453;
-        bh=w0p436ssZfj/lQdy31bDOBkJyI06WCHkjyGiFQ8EqOQ=;
+        s=korg; t=1661244161;
+        bh=iwlSgC6Aa0nWy47+NA8m36MZZmWgMbKUT66h/Y2MjP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1ndqCl6W+nIih8vE6fAXd8KbgmZ4NmDjcgPgFhV9YcgLysd43meI2vTnKSFr2CCgE
-         RsHx875my14uPutC80DZLkO/44mzgPn5KFnxwI8fnpSyLKD6dm6ymJkPKQRzp/V42Y
-         agYgiSEvxkQQ/aQkePNrqIgo0KQvH15FKcBjY+6o=
+        b=mofMnoaNR2AicMb4hCqphwc93rudAgDjnzO/MNE1FSjNidMDThgEffG3bsv/dLxk+
+         5cg5SEAy5WB0I37QgeyIi2TRA6ZjJOy4iWt1t8lofMJqEJkVNh9eLEIg5QO7PwGJXk
+         F0H3Zq1fNhjPdgeZE7IqcZGeWS1sWr7l+Ky5b0Ew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 5.15 096/244] xen/xenbus: fix return type in xenbus_file_read()
-Date:   Tue, 23 Aug 2022 10:24:15 +0200
-Message-Id: <20220823080102.226698313@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 095/229] mtd: maps: Fix refcount leak in ap_flash_init
+Date:   Tue, 23 Aug 2022 10:24:16 +0200
+Message-Id: <20220823080057.103541548@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 32ad11127b95236dfc52375f3707853194a7f4b4 upstream.
+[ Upstream commit 77087a04c8fd554134bddcb8a9ff87b21f357926 ]
 
-This code tries to store -EFAULT in an unsigned int.  The
-xenbus_file_read() function returns type ssize_t so the negative value
-is returned as a positive value to the user.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-This change forces another change to the min() macro.  Originally, the
-min() macro used "unsigned" type which checkpatch complains about.  Also
-unsigned type would break if "len" were not capped at MAX_RW_COUNT.  Use
-size_t for the min().  (No effect on runtime for the min_t() change).
-
-Fixes: 2fb3683e7b16 ("xen: Add xenbus device driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Link: https://lore.kernel.org/r/YutxJUaUYRG/VLVc@kili
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b0afd44bc192 ("mtd: physmap_of: add a hook for Versatile write protection")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220523143255.4376-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/xen/xenbus/xenbus_dev_frontend.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/maps/physmap_of_versatile.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/xen/xenbus/xenbus_dev_frontend.c
-+++ b/drivers/xen/xenbus/xenbus_dev_frontend.c
-@@ -128,7 +128,7 @@ static ssize_t xenbus_file_read(struct f
- {
- 	struct xenbus_file_priv *u = filp->private_data;
- 	struct read_buffer *rb;
--	unsigned i;
-+	ssize_t i;
- 	int ret;
+diff --git a/drivers/mtd/maps/physmap_of_versatile.c b/drivers/mtd/maps/physmap_of_versatile.c
+index 961704228dd2..7d56e97bd50f 100644
+--- a/drivers/mtd/maps/physmap_of_versatile.c
++++ b/drivers/mtd/maps/physmap_of_versatile.c
+@@ -107,6 +107,7 @@ static int ap_flash_init(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 	ebi_base = of_iomap(ebi, 0);
++	of_node_put(ebi);
+ 	if (!ebi_base)
+ 		return -ENODEV;
  
- 	mutex_lock(&u->reply_mutex);
-@@ -148,7 +148,7 @@ again:
- 	rb = list_entry(u->read_buffers.next, struct read_buffer, list);
- 	i = 0;
- 	while (i < len) {
--		unsigned sz = min((unsigned)len - i, rb->len - rb->cons);
-+		size_t sz = min_t(size_t, len - i, rb->len - rb->cons);
- 
- 		ret = copy_to_user(ubuf + i, &rb->msg[rb->cons], sz);
- 
+-- 
+2.35.1
+
 
 

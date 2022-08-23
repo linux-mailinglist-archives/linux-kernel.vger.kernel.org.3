@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EB259D7F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9738F59D63F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbiHWJ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S1343970AbiHWIfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350464AbiHWJZu (ORCPT
+        with ESMTP id S1345145AbiHWIbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:25:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1804E90830;
-        Tue, 23 Aug 2022 01:36:28 -0700 (PDT)
+        Tue, 23 Aug 2022 04:31:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E96E6DAC8;
+        Tue, 23 Aug 2022 01:16:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 829B6614F5;
-        Tue, 23 Aug 2022 08:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A867C433C1;
-        Tue, 23 Aug 2022 08:35:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 334C161242;
+        Tue, 23 Aug 2022 08:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B26C433D6;
+        Tue, 23 Aug 2022 08:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243717;
-        bh=YPFGWF+SZ3nfFejBqr/SAmSzFD052TPPo811pYAyxFQ=;
+        s=korg; t=1661242523;
+        bh=myMdnGVdYAOwkYIWpgpdgy4cNjrQGpV3r6l/uJbrmlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mJCsBt15vXH0R7p/F2hgD6OLcsoL0Q1hCK3SYz1FpkccsAIHtgNU7LYH4PTsq45ZF
-         QWYRtgvcRrafUetZIo/glmWm7Mk4/wtzt35v4jXgKksD8R3bmiKjpG3ERC+ExgCZzI
-         4okWyzlaZf/L7RuJKxg2nu2xZaE1P0sv41lY7VLU=
+        b=1C8A6gCOrnAVZD3rpz50A0LojhX/3mDMzg1UNM0o/9mKyIt8WLVbp+CVS2sElfKVz
+         gT426LTo3AR4T8JhmlO4KDNVk9gv3b4MHQO80lxV+YzvlCwYVmtVCTE/A8NVqNeYBR
+         zxRcIheFjI0uxqJKxdDFjiKITiJMOdlBh+k2L0Jw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 335/365] ASoC: nau8821: Dont unconditionally free interrupt
-Date:   Tue, 23 Aug 2022 10:03:56 +0200
-Message-Id: <20220823080132.229436719@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 4.9 084/101] netfilter: nf_tables: really skip inactive sets when allocating name
+Date:   Tue, 23 Aug 2022 10:03:57 +0200
+Message-Id: <20220823080037.763250725@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 2d86cef353b8f3d20b16f8c5615742fd6938c801 ]
+commit 271c5ca826e0c3c53e0eb4032f8eaedea1ee391c upstream.
 
-The remove() operation unconditionally frees the interrupt for the device
-but we may not actually have an interrupt so there might be nothing to
-free. Since the interrupt is requested after all other resources we don't
-need the explicit free anyway, unwinding is guaranteed to be safe, so just
-delete the remove() function and let devm take care of things.
+While looping to build the bitmap of used anonymous set names, check the
+current set in the iteration, instead of the one that is being created.
 
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Tested-by: Zheyu Ma <zheyuma97@gmail.com>
-Link: https://lore.kernel.org/r/20220718140405.57233-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 37a9cc525525 ("netfilter: nf_tables: add generation mask to sets")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/nau8821.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ net/netfilter/nf_tables_api.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/nau8821.c b/sound/soc/codecs/nau8821.c
-index ce4e7f46bb06..e078d2ffb3f6 100644
---- a/sound/soc/codecs/nau8821.c
-+++ b/sound/soc/codecs/nau8821.c
-@@ -1665,15 +1665,6 @@ static int nau8821_i2c_probe(struct i2c_client *i2c)
- 	return ret;
- }
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -2515,7 +2515,7 @@ cont:
+ 		list_for_each_entry(i, &ctx->table->sets, list) {
+ 			int tmp;
  
--static int nau8821_i2c_remove(struct i2c_client *i2c_client)
--{
--	struct nau8821 *nau8821 = i2c_get_clientdata(i2c_client);
--
--	devm_free_irq(nau8821->dev, nau8821->irq, nau8821);
--
--	return 0;
--}
--
- static const struct i2c_device_id nau8821_i2c_ids[] = {
- 	{ "nau8821", 0 },
- 	{ }
-@@ -1703,7 +1694,6 @@ static struct i2c_driver nau8821_driver = {
- 		.acpi_match_table = ACPI_PTR(nau8821_acpi_match),
- 	},
- 	.probe_new = nau8821_i2c_probe,
--	.remove = nau8821_i2c_remove,
- 	.id_table = nau8821_i2c_ids,
- };
- module_i2c_driver(nau8821_driver);
--- 
-2.35.1
-
+-			if (!nft_is_active_next(ctx->net, set))
++			if (!nft_is_active_next(ctx->net, i))
+ 				continue;
+ 			if (!sscanf(i->name, name, &tmp))
+ 				continue;
 
 

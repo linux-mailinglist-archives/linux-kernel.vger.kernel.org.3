@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A093B59E052
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9B259E2FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355561AbiHWKg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S1355592AbiHWKge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354506AbiHWKVi (ORCPT
+        with ESMTP id S1354540AbiHWKVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:21:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A86EE33;
-        Tue, 23 Aug 2022 02:02:56 -0700 (PDT)
+        Tue, 23 Aug 2022 06:21:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ED582760;
+        Tue, 23 Aug 2022 02:02:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3F1CB81C54;
-        Tue, 23 Aug 2022 09:02:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A0B3C43470;
-        Tue, 23 Aug 2022 09:02:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBB92B81C54;
+        Tue, 23 Aug 2022 09:02:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44554C433D6;
+        Tue, 23 Aug 2022 09:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245373;
-        bh=8usOAsQE0nY2RX9D88449YqHhr60C4dx7CTc1aw9+RM=;
+        s=korg; t=1661245376;
+        bh=Bj8CgMYA2fxI+RpD8jD7zNYFs0yEL1HzpHHAhRb91yQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aUSTGLVvMcZDoZIy1DMrQc8QTyYX0buYsqMqPlBjqZRr3Ok+wM8oIn0aM+re/mQgb
-         UKgpWccAv6njA9ejuv434LmH85Nx/EPDxjrPC7I6hVh8ZfqaeNeTkIzGy4/igerZ5J
-         pIPumfrrIZkRanP1XMjKUJtaT83lJezt8uu7DeYQ=
+        b=Bpwo9tDNn1vU+qYyxtMu6Qsf31JTNSToqHkU8swsJ2yvg8A0ljzg9m3o+k2ACtDdA
+         hYHv4MkInfjGvIcnEV5m+oTMyt65z4XL2MU2/52Qkj/AHY1Un9la0NaW2wmdPWWwcq
+         25vnC3jKEyyopzucG1HSfKMSscXBlIg8/Q3JeiPo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 058/287] soc: fsl: guts: machine variable might be unset
-Date:   Tue, 23 Aug 2022 10:23:47 +0200
-Message-Id: <20220823080102.193571502@linuxfoundation.org>
+Subject: [PATCH 4.19 059/287] ARM: OMAP2+: Fix refcount leak in omap3xxx_prm_late_init
+Date:   Tue, 23 Aug 2022 10:23:48 +0200
+Message-Id: <20220823080102.224716596@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -55,35 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit ab3f045774f704c4e7b6a878102f4e9d4ae7bc74 ]
+[ Upstream commit 942228fbf5d4901112178b93d41225be7c0dd9de ]
 
-If both the model and the compatible properties are missing, then
-machine will not be set. Initialize it with NULL.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 34c1c21e94ac ("soc: fsl: fix section mismatch build warnings")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: 1e037794f7f0 ("ARM: OMAP3+: PRM: register interrupt information from DT")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Message-Id: <20220526073724.21169-1-linmq006@gmail.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/fsl/guts.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-omap2/prm3xxx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/fsl/guts.c b/drivers/soc/fsl/guts.c
-index 302e0c8d69d9..6693c32e7447 100644
---- a/drivers/soc/fsl/guts.c
-+++ b/drivers/soc/fsl/guts.c
-@@ -136,7 +136,7 @@ static int fsl_guts_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct resource *res;
- 	const struct fsl_soc_die_attr *soc_die;
--	const char *machine;
-+	const char *machine = NULL;
- 	u32 svr;
+diff --git a/arch/arm/mach-omap2/prm3xxx.c b/arch/arm/mach-omap2/prm3xxx.c
+index dfa65fc2c82b..30445849b5e3 100644
+--- a/arch/arm/mach-omap2/prm3xxx.c
++++ b/arch/arm/mach-omap2/prm3xxx.c
+@@ -711,6 +711,7 @@ static int omap3xxx_prm_late_init(void)
+ 	}
  
- 	/* Initialize guts */
+ 	irq_num = of_irq_get(np, 0);
++	of_node_put(np);
+ 	if (irq_num == -EPROBE_DEFER)
+ 		return irq_num;
+ 
 -- 
 2.35.1
 

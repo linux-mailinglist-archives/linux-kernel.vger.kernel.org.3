@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B100859D759
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A21D59D579
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349806AbiHWJYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S243736AbiHWIcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237661AbiHWJWM (ORCPT
+        with ESMTP id S243412AbiHWIaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:22:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E08E9B7;
-        Tue, 23 Aug 2022 01:35:16 -0700 (PDT)
+        Tue, 23 Aug 2022 04:30:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0338974E0B;
+        Tue, 23 Aug 2022 01:15:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D69CB81C62;
-        Tue, 23 Aug 2022 08:35:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7832C433C1;
-        Tue, 23 Aug 2022 08:35:11 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 71974CE1B35;
+        Tue, 23 Aug 2022 08:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879BCC433D7;
+        Tue, 23 Aug 2022 08:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243712;
-        bh=cqi1K+RO/h6CzrfnFuokGsXKuj/66SUMCYKD3hLy4mA=;
+        s=korg; t=1661242502;
+        bh=74BDVeIvMBWQuIu/Rh+9XV75YMCsgnfcdiv4ClaKEQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mx//a14pXuE09VOHfJZEcgnc92LqpnvxUROxmyfNkMudpXRA6+00k8AMGzOSZEre1
-         /NDFk0/yO89uimkjekSFZnQCf+5P39orLU7joHLDNlCoDsqSiC5qrbY1sLigd/BimC
-         NuvjKzF4EqoOOIKhKu71qJQun/S2Yliv10l7scWI=
+        b=faJo7Th67wI3Y8hrR1CeMEKasabHROba2H7QK58JoivYuQATcinlfIlRfOulbzrlS
+         MYCOs2I54Xey4PTPLtXQXe7aFnpb0vCZ69m5rx0M9W6mFzRs52trJIXMzasWS42VRb
+         bvQdmP9BMVRTwmCK2GKI/jKiBb3oH4m/W8YYp9gA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brice Goglin <Brice.Goglin@inria.fr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 333/365] riscv: dts: sifive: Add fu740 topology information
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 4.9 081/101] nios2: fix syscall restart checks
 Date:   Tue, 23 Aug 2022 10:03:54 +0200
-Message-Id: <20220823080132.150589788@linuxfoundation.org>
+Message-Id: <20220823080037.661864419@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-[ Upstream commit bf6cd1c01c959a31002dfa6784c0d8caffed4cf1 ]
+commit 2d631bd58fe0ea3e3350212e23c9aba1fb606514 upstream.
 
-The fu740 has no cpu-map node, so tools like hwloc cannot correctly
-parse the topology. Add the node using the existing node labels.
+sys_foo() returns -512 (aka -ERESTARTSYS) => do_signal() sees
+512 in r2 and 1 in r1.
 
-Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
-Link: https://github.com/open-mpi/hwloc/issues/536
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Link: https://lore.kernel.org/r/20220705190435.1790466-4-mail@conchuod.ie
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+sys_foo() returns 512 => do_signal() sees 512 in r2 and 0 in r1.
+
+The former is restart-worthy; the latter obviously isn't.
+
+Fixes: b53e906d255d ("nios2: Signal handling support")
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/boot/dts/sifive/fu740-c000.dtsi | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ arch/nios2/kernel/signal.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-index 7b77c13496d8..43bed6c0a84f 100644
---- a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-+++ b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-@@ -134,6 +134,30 @@
- 				interrupt-controller;
- 			};
- 		};
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+
-+				core2 {
-+					cpu = <&cpu2>;
-+				};
-+
-+				core3 {
-+					cpu = <&cpu3>;
-+				};
-+
-+				core4 {
-+					cpu = <&cpu4>;
-+				};
-+			};
-+		};
- 	};
- 	soc {
- 		#address-cells = <2>;
--- 
-2.35.1
-
+--- a/arch/nios2/kernel/signal.c
++++ b/arch/nios2/kernel/signal.c
+@@ -240,7 +240,7 @@ static int do_signal(struct pt_regs *reg
+ 	/*
+ 	 * If we were from a system call, check for system call restarting...
+ 	 */
+-	if (regs->orig_r2 >= 0) {
++	if (regs->orig_r2 >= 0 && regs->r1) {
+ 		continue_addr = regs->ea;
+ 		restart_addr = continue_addr - 4;
+ 		retval = regs->r2;
 
 

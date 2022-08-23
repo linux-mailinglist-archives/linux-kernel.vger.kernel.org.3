@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D606759D84C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4F659D91B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351197AbiHWJeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
+        id S1348467AbiHWJiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351068AbiHWJeA (ORCPT
+        with ESMTP id S1350610AbiHWJgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:34:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C050E83BC7;
-        Tue, 23 Aug 2022 01:39:08 -0700 (PDT)
+        Tue, 23 Aug 2022 05:36:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A414E9858E;
+        Tue, 23 Aug 2022 01:40:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1547A61544;
-        Tue, 23 Aug 2022 08:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17294C433C1;
-        Tue, 23 Aug 2022 08:38:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D736CB81C20;
+        Tue, 23 Aug 2022 08:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204A8C433D6;
+        Tue, 23 Aug 2022 08:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243893;
-        bh=UNiwTXmjdQ6KGQtbGIn0zAj/bX+4Qo6BgYbbX6UQpYQ=;
+        s=korg; t=1661243899;
+        bh=q0lwBwOpc6ybYAZdxR23GL4Xf+A9Fy0uKv6IPGQ9w8g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TkTm9lt1Bp0bjjJAQXEI56mlMBZf1PwtC0ZudCSxomLeiFg7BaX52vG3DHw69k0lr
-         GRgJ6BdMqLSf5KHmcaw58/CYXHdJTVyo6Mf+460usX6xqdsajz55yY359O2EQSlfS8
-         u0d+/PbrQLQjgd9619nTIk+7o/PNKdVOEi5lXZC4=
+        b=vi3jaAwotS6a8CFmkSGZHEXs4ohEKBDTUWyhgq8NO11eqrhYXJhcdmxoq0azqB81/
+         +FR8XJ5vsLddtL95mVkds2iR0PSMGGQgwweUJ4zVRTlWQK3XZHLFJBQNCE3ZEDDBcH
+         fiOFqzKidFhIyUxzYH/0B02DAzid4asCWx17/N7g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 052/229] ARM: dts: ast2500-evb: fix board compatible
-Date:   Tue, 23 Aug 2022 10:23:33 +0200
-Message-Id: <20220823080055.562379798@linuxfoundation.org>
+Subject: [PATCH 4.14 053/229] soc: fsl: guts: machine variable might be unset
+Date:   Tue, 23 Aug 2022 10:23:34 +0200
+Message-Id: <20220823080055.600279021@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,33 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 30b276fca5c0644f3cb17bceb1bd6a626c670184 ]
+[ Upstream commit ab3f045774f704c4e7b6a878102f4e9d4ae7bc74 ]
 
-The AST2500 EVB board should have dedicated compatible.
+If both the model and the compatible properties are missing, then
+machine will not be set. Initialize it with NULL.
 
-Fixes: 02440622656d ("arm/dst: Add Aspeed ast2500 device tree")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220529104928.79636-4-krzysztof.kozlowski@linaro.org
+Fixes: 34c1c21e94ac ("soc: fsl: fix section mismatch build warnings")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/aspeed-ast2500-evb.dts | 2 +-
+ drivers/soc/fsl/guts.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-ast2500-evb.dts b/arch/arm/boot/dts/aspeed-ast2500-evb.dts
-index c971cc93f42d..b7ee74a1fd94 100644
---- a/arch/arm/boot/dts/aspeed-ast2500-evb.dts
-+++ b/arch/arm/boot/dts/aspeed-ast2500-evb.dts
-@@ -5,7 +5,7 @@
+diff --git a/drivers/soc/fsl/guts.c b/drivers/soc/fsl/guts.c
+index 6af7a11f09a5..affc38a92166 100644
+--- a/drivers/soc/fsl/guts.c
++++ b/drivers/soc/fsl/guts.c
+@@ -136,7 +136,7 @@ static int fsl_guts_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct resource *res;
+ 	const struct fsl_soc_die_attr *soc_die;
+-	const char *machine;
++	const char *machine = NULL;
+ 	u32 svr;
  
- / {
- 	model = "AST2500 EVB";
--	compatible = "aspeed,ast2500";
-+	compatible = "aspeed,ast2500-evb", "aspeed,ast2500";
- 
- 	aliases {
- 		serial4 = &uart5;
+ 	/* Initialize guts */
 -- 
 2.35.1
 

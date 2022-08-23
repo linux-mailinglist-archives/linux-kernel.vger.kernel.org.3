@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451A759E004
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C228D59DC57
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357834AbiHWLjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S1353013AbiHWKM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358046AbiHWLcS (ORCPT
+        with ESMTP id S1352699AbiHWKGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:32:18 -0400
+        Tue, 23 Aug 2022 06:06:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1EE7675B;
-        Tue, 23 Aug 2022 02:26:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70CEA3466;
+        Tue, 23 Aug 2022 01:52:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B688B81C89;
-        Tue, 23 Aug 2022 09:26:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03EBDC433D7;
-        Tue, 23 Aug 2022 09:26:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53177B81C35;
+        Tue, 23 Aug 2022 08:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF00C433D6;
+        Tue, 23 Aug 2022 08:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246798;
-        bh=SVAvuIG5d2w0weB0GqrOa9TrS0lpy0jSMeYRu80LnY0=;
+        s=korg; t=1661244744;
+        bh=8FgyVo3x1/fTtKYfDm5v9sXbRI0V0BPvK2V8hKQPRrw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wTpilk9ZmyG49YF4P30JLQ6ZXBF7MYTPT/+B0lmWypCwwsfsNBYCf0ry6RCDU9NSt
-         H1Wlg9isGcfF5jFinaG+BN/a5DzFtfzvYVVr0+3NbOzdQgMhDrWSsIdYBt+Z71cGT3
-         5Xd/0KX//6+9gsslvtQUWqJMLPmCtInR9yzRj3bA=
+        b=LwqUB8RQuPbB8gc5/yK7mJxvl31pg3l8ojeCxlUX4yR9bvv2YhgPF6z51h+9h3XoE
+         pL+rqcUJmvm5vRjxGebHYC/ZkWC2VifTAqBs9FebYN7agZ4TcS/iduZBp79ilOTDIq
+         kcruk/5IulhS3HEl+3f+N+DgW/M9mpLZ7fywZAJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 223/389] mfd: max77620: Fix refcount leak in max77620_initialise_fps
+        stable@vger.kernel.org, Sergei Antonov <saproj@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 142/244] net: dsa: dont warn in dsa_port_set_state_now() when driver doesnt support it
 Date:   Tue, 23 Aug 2022 10:25:01 +0200
-Message-Id: <20220823080124.912822849@linuxfoundation.org>
+Message-Id: <20220823080103.908855403@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 1520669c8255bd637c6b248b2be910e2688d38dd ]
+commit 211987f3ac734000ea1548784b2a4539a974fbc8 upstream.
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+ds->ops->port_stp_state_set() is, like most DSA methods, optional, and
+if absent, the port is supposed to remain in the forwarding state (as
+standalone). Such is the case with the mv88e6060 driver, which does not
+offload the bridge layer. DSA warns that the STP state can't be changed
+to FORWARDING as part of dsa_port_enable_rt(), when in fact it should not.
 
-Fixes: 327156c59360 ("mfd: max77620: Add core driver for MAX77620/MAX20024")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220601043222.64441-1-linmq006@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The error message is also not up to modern standards, so take the
+opportunity to make it more descriptive.
+
+Fixes: fd3645413197 ("net: dsa: change scope of STP state setter")
+Reported-by: Sergei Antonov <saproj@gmail.com>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Sergei Antonov <saproj@gmail.com>
+Link: https://lore.kernel.org/r/20220816201445.1809483-1-vladimir.oltean@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mfd/max77620.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/dsa/port.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/max77620.c b/drivers/mfd/max77620.c
-index a851ff473a44..2bf5bcbc8852 100644
---- a/drivers/mfd/max77620.c
-+++ b/drivers/mfd/max77620.c
-@@ -418,9 +418,11 @@ static int max77620_initialise_fps(struct max77620_chip *chip)
- 		ret = max77620_config_fps(chip, fps_child);
- 		if (ret < 0) {
- 			of_node_put(fps_child);
-+			of_node_put(fps_np);
- 			return ret;
- 		}
- 	}
-+	of_node_put(fps_np);
+--- a/net/dsa/port.c
++++ b/net/dsa/port.c
+@@ -111,11 +111,14 @@ int dsa_port_set_state(struct dsa_port *
+ static void dsa_port_set_state_now(struct dsa_port *dp, u8 state,
+ 				   bool do_fast_age)
+ {
++	struct dsa_switch *ds = dp->ds;
+ 	int err;
  
- 	config = chip->enable_global_lpm ? MAX77620_ONOFFCNFG2_SLP_LPM_MSK : 0;
- 	ret = regmap_update_bits(chip->rmap, MAX77620_REG_ONOFFCNFG2,
--- 
-2.35.1
-
+ 	err = dsa_port_set_state(dp, state, do_fast_age);
+-	if (err)
+-		pr_err("DSA: failed to set STP state %u (%d)\n", state, err);
++	if (err && err != -EOPNOTSUPP) {
++		dev_err(ds->dev, "port %d failed to set STP state %u: %pe\n",
++			dp->index, state, ERR_PTR(err));
++	}
+ }
+ 
+ int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy)
 
 

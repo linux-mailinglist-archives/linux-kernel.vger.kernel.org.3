@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E46259DF14
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED3459E188
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356769AbiHWKyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S1358764AbiHWLyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348712AbiHWKrg (ORCPT
+        with ESMTP id S1358766AbiHWLuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:47:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE0E86B60;
-        Tue, 23 Aug 2022 02:11:54 -0700 (PDT)
+        Tue, 23 Aug 2022 07:50:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8940FD31C3;
+        Tue, 23 Aug 2022 02:31:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB62E60F50;
-        Tue, 23 Aug 2022 09:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7FD2C433D7;
-        Tue, 23 Aug 2022 09:11:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81EB861335;
+        Tue, 23 Aug 2022 09:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76558C433C1;
+        Tue, 23 Aug 2022 09:31:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245913;
-        bh=2xyhPch0MJygp7RYrx8cqb8RHV1ck2BsROSzHKc8JQ8=;
+        s=korg; t=1661247108;
+        bh=QpaOQGnPyiaqjTcP0TWmOZuX9U8CU0Dku+XEIud8RJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zxy++z+J7gmG1jE1aSKeCFO+QSaKYPreuBDGTocRw6Zs+QzHOSLUkpArb1yyD3IKs
-         LPO8jE5PZ4VbUrJJPXXjU+MJv3NLJdkPOKZpNuY5Ks7VFGglbiLWB0n27VRWz/PAxI
-         EchE5gK2Z/MTVcDTCJ0hnQKLjQU2jDK5YKIFrzN8=
+        b=R+RTdvemnDWuSlAOjag8RN2975nzdcZbZl9FQP4sTCQ4I/FniBni/eBUl5HXnj/RD
+         o1V+4nwk9NogXREJcx4tIv8rzlQoHEggpL4VU+byuUv9ZRxefk2uIeStNuzH8l6Wun
+         5Eg2tEhWJDqs7gxz2JsOUxv3AiHlG9FIBzFiUT9w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiu Jianfeng <xiujianfeng@huawei.com>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 4.19 229/287] apparmor: Fix memleak in aa_simple_write_to_buffer()
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.4 320/389] dt-bindings: arm: qcom: fix MSM8916 MTP compatibles
 Date:   Tue, 23 Aug 2022 10:26:38 +0200
-Message-Id: <20220823080108.728228207@linuxfoundation.org>
+Message-Id: <20220823080128.914246920@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 417ea9fe972d2654a268ad66e89c8fcae67017c3 upstream.
+commit bb35fe1efbae4114bd288fae0f56070f563adcfc upstream.
 
-When copy_from_user failed, the memory is freed by kvfree. however the
-management struct and data blob are allocated independently, so only
-kvfree(data) cause a memleak issue here. Use aa_put_loaddata(data) to
-fix this issue.
+The order of compatibles for MSM8916 MTP board is different:
 
-Fixes: a6a52579e52b5 ("apparmor: split load data into management struct and data blob")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
+  msm8916-mtp.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
+    ['qcom,msm8916-mtp', 'qcom,msm8916-mtp/1', 'qcom,msm8916'] is too long
+
+Fixes: 9d3ef77fe568 ("dt-bindings: arm: Convert QCom board/soc bindings to json-schema")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220520123252.365762-3-krzysztof.kozlowski@linaro.org
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/apparmor/apparmorfs.c |    2 +-
+ Documentation/devicetree/bindings/arm/qcom.yaml |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/security/apparmor/apparmorfs.c
-+++ b/security/apparmor/apparmorfs.c
-@@ -403,7 +403,7 @@ static struct aa_loaddata *aa_simple_wri
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -112,8 +112,8 @@ properties:
+           - const: qcom,msm8974
  
- 	data->size = copy_size;
- 	if (copy_from_user(data->data, userbuf, copy_size)) {
--		kvfree(data);
-+		aa_put_loaddata(data);
- 		return ERR_PTR(-EFAULT);
- 	}
+       - items:
+-          - const: qcom,msm8916-mtp/1
+           - const: qcom,msm8916-mtp
++          - const: qcom,msm8916-mtp/1
+           - const: qcom,msm8916
  
+       - items:
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B1859DC42
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E8259E30C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355029AbiHWKWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S1356057AbiHWKtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353279AbiHWKLL (ORCPT
+        with ESMTP id S1356442AbiHWKmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5BA7E82B;
-        Tue, 23 Aug 2022 01:56:17 -0700 (PDT)
+        Tue, 23 Aug 2022 06:42:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A0CA99C1;
+        Tue, 23 Aug 2022 02:09:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A0F7B81C39;
-        Tue, 23 Aug 2022 08:56:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFB6C433C1;
-        Tue, 23 Aug 2022 08:56:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26906B81C65;
+        Tue, 23 Aug 2022 09:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694C7C433B5;
+        Tue, 23 Aug 2022 09:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244975;
-        bh=kmauTnMR3HAoOyBOAkL6MvXio1F+6vYPbBFtfh7SbRs=;
+        s=korg; t=1661245768;
+        bh=3nV4cuml4jh9nAIY7uGteK5wojYwzwG4Cf/ZdFQPqYw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I4Cq9PPdPETk+l65Ey2Qy0m2AJWxEbT6StX8f6tsrGLfHVd8CVxzjOwTADQK0QkXf
-         0z7o3VWhwjnUtDQ9DxLYNGPY44AzoD2zqyc4H3pHDebDfe//5F9Jh1LUwYCXOblJzs
-         yUUHY+CXeiO3P1hJm3BUtnaLd9jg4T7LUksSq7ms=
+        b=T8Tsmj/RKf3SgVRSVOfOoHNDh3E279vD2yosj3TqW9mnK6LCJQl8bfoK6MeW3Vzym
+         Mhq9S0Z3h6lhZ4G0iS+dFoFWouAqd0jj0XFEH8N5ADZbAbydiuoUMF5gUvyCMFaPpM
+         Kyo16Y0VL8Q/utBaiChWOP1jlbb7esE7ohWyBeF8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
-Subject: [PATCH 4.14 192/229] vsock: Fix memory leak in vsock_connect()
+        stable@vger.kernel.org, Benjamin Block <bblock@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 4.19 184/287] scsi: zfcp: Fix missing auto port scan and thus missing target ports
 Date:   Tue, 23 Aug 2022 10:25:53 +0200
-Message-Id: <20220823080100.470225294@linuxfoundation.org>
+Message-Id: <20220823080106.994006708@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,83 +55,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Steffen Maier <maier@linux.ibm.com>
 
-commit 7e97cfed9929eaabc41829c395eb0d1350fccb9d upstream.
+commit 4da8c5f76825269f28d6a89fa752934a4bcb6dfa upstream.
 
-An O_NONBLOCK vsock_connect() request may try to reschedule
-@connect_work.  Imagine the following sequence of vsock_connect()
-requests:
+Case (1):
+  The only waiter on wka_port->completion_wq is zfcp_fc_wka_port_get()
+  trying to open a WKA port. As such it should only be woken up by WKA port
+  *open* responses, not by WKA port close responses.
 
-  1. The 1st, non-blocking request schedules @connect_work, which will
-     expire after 200 jiffies.  Socket state is now SS_CONNECTING;
+Case (2):
+  A close WKA port response coming in just after having sent a new open WKA
+  port request and before blocking for the open response with wait_event()
+  in zfcp_fc_wka_port_get() erroneously renders the wait_event a NOP
+  because the close handler overwrites wka_port->status. Hence the
+  wait_event condition is erroneously true and it does not enter blocking
+  state.
 
-  2. Later, the 2nd, blocking request gets interrupted by a signal after
-     a few jiffies while waiting for the connection to be established.
-     Socket state is back to SS_UNCONNECTED, but @connect_work is still
-     pending, and will expire after 100 jiffies.
+With non-negligible probability, the following time space sequence happens
+depending on timing without this fix:
 
-  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
-     again.  Since @connect_work is already scheduled,
-     schedule_delayed_work() silently returns.  sock_hold() is called
-     twice, but sock_put() will only be called once in
-     vsock_connect_timeout(), causing a memory leak reported by syzbot:
+user process        ERP thread zfcp work queue tasklet system work queue
+============        ========== =============== ======= =================
+$ echo 1 > online
+zfcp_ccw_set_online
+zfcp_ccw_activate
+zfcp_erp_adapter_reopen
+msleep scan backoff zfcp_erp_strategy
+|                   ...
+|                   zfcp_erp_action_cleanup
+|                   ...
+|                   queue delayed scan_work
+|                   queue ns_up_work
+|                              ns_up_work:
+|                              zfcp_fc_wka_port_get
+|                               open wka request
+|                                              open response
+|                              GSPN FC-GS
+|                              RSPN FC-GS [NPIV-only]
+|                              zfcp_fc_wka_port_put
+|                               (--wka->refcount==0)
+|                               sched delayed wka->work
+|
+~~~Case (1)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+zfcp_erp_wait
+flush scan_work
+|                                                      wka->work:
+|                                                      wka->status=CLOSING
+|                                                      close wka request
+|                              scan_work:
+|                              zfcp_fc_wka_port_get
+|                               (wka->status==CLOSING)
+|                               wka->status=OPENING
+|                               open wka request
+|                               wait_event
+|                               |              close response
+|                               |              wka->status=OFFLINE
+|                               |              wake_up /*WRONG*/
+~~~Case (2)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|                                                      wka->work:
+|                                                      wka->status=CLOSING
+|                                                      close wka request
+zfcp_erp_wait
+flush scan_work
+|                              scan_work:
+|                              zfcp_fc_wka_port_get
+|                               (wka->status==CLOSING)
+|                               wka->status=OPENING
+|                               open wka request
+|                                              close response
+|                                              wka->status=OFFLINE
+|                                              wake_up /*WRONG&NOP*/
+|                               wait_event /*NOP*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|                               (wka->status!=ONLINE)
+|                               return -EIO
+|                              return early
+                                               open response
+                                               wka->status=ONLINE
+                                               wake_up /*NOP*/
 
-  BUG: memory leak
-  unreferenced object 0xffff88810ea56a40 (size 1232):
-    comm "syz-executor756", pid 3604, jiffies 4294947681 (age 12.350s)
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-      28 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  (..@............
-    backtrace:
-      [<ffffffff837c830e>] sk_prot_alloc+0x3e/0x1b0 net/core/sock.c:1930
-      [<ffffffff837cbe22>] sk_alloc+0x32/0x2e0 net/core/sock.c:1989
-      [<ffffffff842ccf68>] __vsock_create.constprop.0+0x38/0x320 net/vmw_vsock/af_vsock.c:734
-      [<ffffffff842ce8f1>] vsock_create+0xc1/0x2d0 net/vmw_vsock/af_vsock.c:2203
-      [<ffffffff837c0cbb>] __sock_create+0x1ab/0x2b0 net/socket.c:1468
-      [<ffffffff837c3acf>] sock_create net/socket.c:1519 [inline]
-      [<ffffffff837c3acf>] __sys_socket+0x6f/0x140 net/socket.c:1561
-      [<ffffffff837c3bba>] __do_sys_socket net/socket.c:1570 [inline]
-      [<ffffffff837c3bba>] __se_sys_socket net/socket.c:1568 [inline]
-      [<ffffffff837c3bba>] __x64_sys_socket+0x1a/0x20 net/socket.c:1568
-      [<ffffffff84512815>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-      [<ffffffff84512815>] do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
-      [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-  <...>
+So we erroneously end up with no automatic port scan. This is a big problem
+when it happens during boot. The timing is influenced by v3.19 commit
+18f87a67e6d6 ("zfcp: auto port scan resiliency").
 
-Use mod_delayed_work() instead: if @connect_work is already scheduled,
-reschedule it, and undo sock_hold() to keep the reference count
-balanced.
+Fix it by fully mutually excluding zfcp_fc_wka_port_get() and
+zfcp_fc_wka_port_offline(). For that to work, we make the latter block
+until we got the response for a close WKA port. In order not to penalize
+the system workqueue, we move wka_port->work to our own adapter workqueue.
+Note that before v2.6.30 commit 828bc1212a68 ("[SCSI] zfcp: Set WKA-port to
+offline on adapter deactivation"), zfcp did block in
+zfcp_fc_wka_port_offline() as well, but with a different condition.
 
-Reported-and-tested-by: syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
-Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
-Co-developed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+While at it, make non-functional cleanups to improve code reading in
+zfcp_fc_wka_port_get(). If we cannot send the WKA port open request, don't
+rely on the subsequent wait_event condition to immediately let this case
+pass without blocking. Also don't want to rely on the additional condition
+handling the refcount to be skipped just to finally return with -EIO.
+
+Link: https://lore.kernel.org/r/20220729162529.1620730-1-maier@linux.ibm.com
+Fixes: 5ab944f97e09 ("[SCSI] zfcp: attach and release SAN nameserver port on demand")
+Cc: <stable@vger.kernel.org> #v2.6.28+
+Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
+Signed-off-by: Steffen Maier <maier@linux.ibm.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/vmw_vsock/af_vsock.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/s390/scsi/zfcp_fc.c  |   29 ++++++++++++++++++++---------
+ drivers/s390/scsi/zfcp_fc.h  |    6 ++++--
+ drivers/s390/scsi/zfcp_fsf.c |    4 ++--
+ 3 files changed, 26 insertions(+), 13 deletions(-)
 
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1222,7 +1222,14 @@ static int vsock_stream_connect(struct s
- 			 * timeout fires.
- 			 */
- 			sock_hold(sk);
--			schedule_delayed_work(&vsk->connect_work, timeout);
-+
-+			/* If the timeout function is already scheduled,
-+			 * reschedule it, then ungrab the socket refcount to
-+			 * keep it balanced.
-+			 */
-+			if (mod_delayed_work(system_wq, &vsk->connect_work,
-+					     timeout))
-+				sock_put(sk);
+--- a/drivers/s390/scsi/zfcp_fc.c
++++ b/drivers/s390/scsi/zfcp_fc.c
+@@ -145,27 +145,33 @@ void zfcp_fc_enqueue_event(struct zfcp_a
  
- 			/* Skip ahead to preserve error code set above. */
- 			goto out_wait;
+ static int zfcp_fc_wka_port_get(struct zfcp_fc_wka_port *wka_port)
+ {
++	int ret = -EIO;
++
+ 	if (mutex_lock_interruptible(&wka_port->mutex))
+ 		return -ERESTARTSYS;
+ 
+ 	if (wka_port->status == ZFCP_FC_WKA_PORT_OFFLINE ||
+ 	    wka_port->status == ZFCP_FC_WKA_PORT_CLOSING) {
+ 		wka_port->status = ZFCP_FC_WKA_PORT_OPENING;
+-		if (zfcp_fsf_open_wka_port(wka_port))
++		if (zfcp_fsf_open_wka_port(wka_port)) {
++			/* could not even send request, nothing to wait for */
+ 			wka_port->status = ZFCP_FC_WKA_PORT_OFFLINE;
++			goto out;
++		}
+ 	}
+ 
+-	mutex_unlock(&wka_port->mutex);
+-
+-	wait_event(wka_port->completion_wq,
++	wait_event(wka_port->opened,
+ 		   wka_port->status == ZFCP_FC_WKA_PORT_ONLINE ||
+ 		   wka_port->status == ZFCP_FC_WKA_PORT_OFFLINE);
+ 
+ 	if (wka_port->status == ZFCP_FC_WKA_PORT_ONLINE) {
+ 		atomic_inc(&wka_port->refcount);
+-		return 0;
++		ret = 0;
++		goto out;
+ 	}
+-	return -EIO;
++out:
++	mutex_unlock(&wka_port->mutex);
++	return ret;
+ }
+ 
+ static void zfcp_fc_wka_port_offline(struct work_struct *work)
+@@ -181,9 +187,12 @@ static void zfcp_fc_wka_port_offline(str
+ 
+ 	wka_port->status = ZFCP_FC_WKA_PORT_CLOSING;
+ 	if (zfcp_fsf_close_wka_port(wka_port)) {
++		/* could not even send request, nothing to wait for */
+ 		wka_port->status = ZFCP_FC_WKA_PORT_OFFLINE;
+-		wake_up(&wka_port->completion_wq);
++		goto out;
+ 	}
++	wait_event(wka_port->closed,
++		   wka_port->status == ZFCP_FC_WKA_PORT_OFFLINE);
+ out:
+ 	mutex_unlock(&wka_port->mutex);
+ }
+@@ -193,13 +202,15 @@ static void zfcp_fc_wka_port_put(struct
+ 	if (atomic_dec_return(&wka_port->refcount) != 0)
+ 		return;
+ 	/* wait 10 milliseconds, other reqs might pop in */
+-	schedule_delayed_work(&wka_port->work, HZ / 100);
++	queue_delayed_work(wka_port->adapter->work_queue, &wka_port->work,
++			   msecs_to_jiffies(10));
+ }
+ 
+ static void zfcp_fc_wka_port_init(struct zfcp_fc_wka_port *wka_port, u32 d_id,
+ 				  struct zfcp_adapter *adapter)
+ {
+-	init_waitqueue_head(&wka_port->completion_wq);
++	init_waitqueue_head(&wka_port->opened);
++	init_waitqueue_head(&wka_port->closed);
+ 
+ 	wka_port->adapter = adapter;
+ 	wka_port->d_id = d_id;
+--- a/drivers/s390/scsi/zfcp_fc.h
++++ b/drivers/s390/scsi/zfcp_fc.h
+@@ -170,7 +170,8 @@ enum zfcp_fc_wka_status {
+ /**
+  * struct zfcp_fc_wka_port - representation of well-known-address (WKA) FC port
+  * @adapter: Pointer to adapter structure this WKA port belongs to
+- * @completion_wq: Wait for completion of open/close command
++ * @opened: Wait for completion of open command
++ * @closed: Wait for completion of close command
+  * @status: Current status of WKA port
+  * @refcount: Reference count to keep port open as long as it is in use
+  * @d_id: FC destination id or well-known-address
+@@ -180,7 +181,8 @@ enum zfcp_fc_wka_status {
+  */
+ struct zfcp_fc_wka_port {
+ 	struct zfcp_adapter	*adapter;
+-	wait_queue_head_t	completion_wq;
++	wait_queue_head_t	opened;
++	wait_queue_head_t	closed;
+ 	enum zfcp_fc_wka_status	status;
+ 	atomic_t		refcount;
+ 	u32			d_id;
+--- a/drivers/s390/scsi/zfcp_fsf.c
++++ b/drivers/s390/scsi/zfcp_fsf.c
+@@ -1592,7 +1592,7 @@ static void zfcp_fsf_open_wka_port_handl
+ 		wka_port->status = ZFCP_FC_WKA_PORT_ONLINE;
+ 	}
+ out:
+-	wake_up(&wka_port->completion_wq);
++	wake_up(&wka_port->opened);
+ }
+ 
+ /**
+@@ -1650,7 +1650,7 @@ static void zfcp_fsf_close_wka_port_hand
+ 	}
+ 
+ 	wka_port->status = ZFCP_FC_WKA_PORT_OFFLINE;
+-	wake_up(&wka_port->completion_wq);
++	wake_up(&wka_port->closed);
+ }
+ 
+ /**
 
 

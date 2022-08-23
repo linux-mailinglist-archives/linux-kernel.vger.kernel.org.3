@@ -2,140 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6DB59E62B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA37259E634
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241752AbiHWPkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S241786AbiHWPlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 11:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239278AbiHWPjs (ORCPT
+        with ESMTP id S243510AbiHWPkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:39:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E46C6966;
-        Tue, 23 Aug 2022 04:32:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 23 Aug 2022 11:40:22 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B765283C47
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:34:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EAE3613C5;
-        Tue, 23 Aug 2022 11:31:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BC2C433D6;
-        Tue, 23 Aug 2022 11:31:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661254298;
-        bh=HMMDK4yYSV9hm8Y33k5jiYF0HqGibjiYVN4UI5136Ok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eSG6RpwdXQVjXqGGUGSzBgYYSjjWgqK6gbvzkYRyVINwqKx29HDxHMkUtsepj0ygb
-         3yft+3n5uIaY8Y5eeUicqzMTKjtQcK7bRHoIPBupQLfMnxrnPiIyBu9OX/UlhF8PUk
-         JEHGI4X+MfTcUjKGsdVdfhdBsWhqH2LFtgIHK+5AO7nO3ShU043O+AGhLEFMhf6Aru
-         4LB2YHR6z3H4fpx5j1KJY81JhWuBMDNIviXWyyOi/ZsWvjBFECr0Z81DeqkdBmajhF
-         KqGRo+AqloYIYMiEjXdSP9F2ovz5OC1MFpuf1v+Rss1/N6/WeaIQ2PesRpejZ0gcTa
-         ouQUX241mStIQ==
-Date:   Tue, 23 Aug 2022 12:31:32 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] ASoC: apple: mca: Start new platform driver
-Message-ID: <YwS6lHeGH0BZKHeB@sirena.org.uk>
-References: <20220819125430.4920-1-povik+lin@cutebit.org>
- <20220819125430.4920-4-povik+lin@cutebit.org>
- <YwO/aqs7eqZx07kS@sirena.org.uk>
- <24C0ABFA-BF71-4492-8A6A-E9BE1462B403@cutebit.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 45F511FB68;
+        Tue, 23 Aug 2022 11:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661254407; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hH3pElKLVEACEg6paPrYzIjRh821NDe2aASfVrh8O7w=;
+        b=V5iMWzi+6jSrWL6e9jNE3QUQCxfoXWLwEkwCfaiPi62PeYZbeiHod98X2YPiTp7s/BvyFG
+        YEOBGoDscpuJOjpdgvg1YAfVNIvWxrmG74i4kaLXolEwfEGBTNTWzIMR2OlYVAMr+NHAtk
+        gKNzfo333vX6J7dsDW2Z3agk5Ve+qtY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661254407;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hH3pElKLVEACEg6paPrYzIjRh821NDe2aASfVrh8O7w=;
+        b=2ctTKiNDfrGEki/5hmuPX4OGQMQN8GoXLbGhKHaidvbZUpq7g7kQfViFPn1aAK/AmA7Bdi
+        ZSe2rbE0ewz6IdDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 16ACA13A89;
+        Tue, 23 Aug 2022 11:33:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /mfiBAe7BGMKLgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 23 Aug 2022 11:33:27 +0000
+Message-ID: <093f6a32-40f8-78ea-0070-600cfe08a3dd@suse.cz>
+Date:   Tue, 23 Aug 2022 13:33:26 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NBQO/q/cbDr7E10q"
-Content-Disposition: inline
-In-Reply-To: <24C0ABFA-BF71-4492-8A6A-E9BE1462B403@cutebit.org>
-X-Cookie: You can't take damsel here now.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3] mm/slab_common: Deleting kobject in
+ kmem_cache_destroy() without holding slab_mutex/cpu_hotplug_lock
+To:     Waiman Long <longman@redhat.com>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220812183033.346425-1-longman@redhat.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220812183033.346425-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/12/22 20:30, Waiman Long wrote:
+> A circular locking problem is reported by lockdep due to the following
+> circular locking dependency.
+> 
+>   +--> cpu_hotplug_lock --> slab_mutex --> kn->active --+
+>   |                                                     |
+>   +-----------------------------------------------------+
+> 
+> The forward cpu_hotplug_lock ==> slab_mutex ==> kn->active dependency
+> happens in
+> 
+>   kmem_cache_destroy():	cpus_read_lock(); mutex_lock(&slab_mutex);
+>   ==> sysfs_slab_unlink()
+>       ==> kobject_del()
+>           ==> kernfs_remove()
+> 	      ==> __kernfs_remove()
+> 	          ==> kernfs_drain(): rwsem_acquire(&kn->dep_map, ...);
+> 
+> The backward kn->active ==> cpu_hotplug_lock dependency happens in
+> 
+>   kernfs_fop_write_iter(): kernfs_get_active();
+>   ==> slab_attr_store()
+>       ==> cpu_partial_store()
+>           ==> flush_all(): cpus_read_lock()
+> 
+> One way to break this circular locking chain is to avoid holding
+> cpu_hotplug_lock and slab_mutex while deleting the kobject in
+> sysfs_slab_unlink() which should be equivalent to doing a write_lock
+> and write_unlock pair of the kn->active virtual lock.
+> 
+> Since the kobject structures are not protected by slab_mutex or the
+> cpu_hotplug_lock, we can certainly release those locks before doing
+> the delete operation.
+> 
+> Move sysfs_slab_unlink() and sysfs_slab_release() to the newly
+> created kmem_cache_release() and call it outside the slab_mutex &
+> cpu_hotplug_lock critical sections. There will be a slight delay
+> in the deletion of sysfs files if kmem_cache_release() is called
+> indirectly from a work function.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
---NBQO/q/cbDr7E10q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks, added to slab.git for-6.0/fixes
 
-On Tue, Aug 23, 2022 at 09:33:36AM +0200, Martin Povi=C5=A1er wrote:
-> > On 22. 8. 2022, at 19:39, Mark Brown <broonie@kernel.org> wrote:
-> > On Fri, Aug 19, 2022 at 02:54:29PM +0200, Martin Povi=C5=A1er wrote:
+> ---
+> 
+>  [v3] Move sysfs_slab_unlink() out to kmem_cache_release() and move
+>       schedule_work() back right after list_add_tail().
+> 
+>  mm/slab_common.c | 45 +++++++++++++++++++++++++++++----------------
+>  1 file changed, 29 insertions(+), 16 deletions(-)
+> 
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 17996649cfe3..07b948288f84 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -392,6 +392,28 @@ kmem_cache_create(const char *name, unsigned int size, unsigned int align,
+>  }
+>  EXPORT_SYMBOL(kmem_cache_create);
+>  
+> +#ifdef SLAB_SUPPORTS_SYSFS
+> +/*
+> + * For a given kmem_cache, kmem_cache_destroy() should only be called
+> + * once or there will be a use-after-free problem. The actual deletion
+> + * and release of the kobject does not need slab_mutex or cpu_hotplug_lock
+> + * protection. So they are now done without holding those locks.
+> + *
+> + * Note that there will be a slight delay in the deletion of sysfs files
+> + * if kmem_cache_release() is called indrectly from a work function.
+> + */
+> +static void kmem_cache_release(struct kmem_cache *s)
+> +{
+> +	sysfs_slab_unlink(s);
+> +	sysfs_slab_release(s);
+> +}
+> +#else
+> +static void kmem_cache_release(struct kmem_cache *s)
+> +{
+> +	slab_kmem_cache_release(s);
+> +}
+> +#endif
+> +
+>  static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
+>  {
+>  	LIST_HEAD(to_destroy);
+> @@ -418,11 +440,7 @@ static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
+>  	list_for_each_entry_safe(s, s2, &to_destroy, list) {
+>  		debugfs_slab_release(s);
+>  		kfence_shutdown_cache(s);
+> -#ifdef SLAB_SUPPORTS_SYSFS
+> -		sysfs_slab_release(s);
+> -#else
+> -		slab_kmem_cache_release(s);
+> -#endif
+> +		kmem_cache_release(s);
+>  	}
+>  }
+>  
+> @@ -437,20 +455,11 @@ static int shutdown_cache(struct kmem_cache *s)
+>  	list_del(&s->list);
+>  
+>  	if (s->flags & SLAB_TYPESAFE_BY_RCU) {
+> -#ifdef SLAB_SUPPORTS_SYSFS
+> -		sysfs_slab_unlink(s);
+> -#endif
+>  		list_add_tail(&s->list, &slab_caches_to_rcu_destroy);
+>  		schedule_work(&slab_caches_to_rcu_destroy_work);
+>  	} else {
+>  		kfence_shutdown_cache(s);
+>  		debugfs_slab_release(s);
+> -#ifdef SLAB_SUPPORTS_SYSFS
+> -		sysfs_slab_unlink(s);
+> -		sysfs_slab_release(s);
+> -#else
+> -		slab_kmem_cache_release(s);
+> -#endif
+>  	}
+>  
+>  	return 0;
+> @@ -465,14 +474,16 @@ void slab_kmem_cache_release(struct kmem_cache *s)
+>  
+>  void kmem_cache_destroy(struct kmem_cache *s)
+>  {
+> +	int refcnt;
+> +
+>  	if (unlikely(!s) || !kasan_check_byte(s))
+>  		return;
+>  
+>  	cpus_read_lock();
+>  	mutex_lock(&slab_mutex);
+>  
+> -	s->refcount--;
+> -	if (s->refcount)
+> +	refcnt = --s->refcount;
+> +	if (refcnt)
+>  		goto out_unlock;
+>  
+>  	WARN(shutdown_cache(s),
+> @@ -481,6 +492,8 @@ void kmem_cache_destroy(struct kmem_cache *s)
+>  out_unlock:
+>  	mutex_unlock(&slab_mutex);
+>  	cpus_read_unlock();
+> +	if (!refcnt && !(s->flags & SLAB_TYPESAFE_BY_RCU))
+> +		kmem_cache_release(s);
+>  }
+>  EXPORT_SYMBOL(kmem_cache_destroy);
+>  
 
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * Apple SoCs MCA driver
-> >> + *
-> >> + * Copyright (C) The Asahi Linux Contributors
-> >> + *
-> >> + * The MCA peripheral is made up of a number of identical units calle=
-d clusters.
-
-> > Please make the entire comment block a C++ one so things look more
-> > intentional.
-
-> Is this so that it does not look like the SPDX header was added
-> mechanically? I will do it, just curious what the reasoning is.
-
-Yes, broadly.
-
-> >> +	/*
-> >> +	 * We can't power up the device earlier than this because
-> >> +	 * the power state driver would error out on seeing the device
-> >> +	 * as clock-gated.
-> >> +	 */
-> >> +	cl->pd_link =3D device_link_add(mca->dev, cl->pd_dev,
-> >> +				      DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME |
-> >> +					      DL_FLAG_RPM_ACTIVE);
-
-> > I'm not clear on this dynamically adding and removing device links stuff
-> > - it looks like the main (only?) purpose is to take a runtime PM
-> > reference to the target device which is fine but it's not clear why
-> > device links are involved given that the links are created and destroyed
-> > every time the DAI is used, AFAICT always in the same fixed
-> > relationship.  It's not a problem, it's just unclear.
-
-> Indeed the only purpose is powering up the cluster=E2=80=99s power domain=
- (there=E2=80=99s
-> one domain for each cluster). Adding the links is the only way I know to
-> do it. They need to be added dynamically (as opposed to statically linkin=
-g,
-> say, the DAI=E2=80=99s ->dev to the cluster=E2=80=99s ->pd_dev, which I g=
-uess may do
-> something similar), because we need to sequence the power-up/power-down
-> with the enablement of the clocks.
-
-You could also just do the underlying runtime power management
-operations directly couldn't you?  It's not clear what the device link
-stuff is adding.
-
---NBQO/q/cbDr7E10q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMEupQACgkQJNaLcl1U
-h9DK1wf+JNGwnyOsdkMz+Zc28n5YvfvcyoQByI5EreszsWd//Rg/MxJpVjsrCXpo
-JkHBVOL9QMhZ8SBrmK3cZ80OpwHBZ1HnME6vXezsk0QzgH7jWXLvYZmEMcXSP/zJ
-8rGk+8LdxeZMvYEbi4xL1/gOSRgOEKO8GOtIQuRsGAiit8bCFL2ukdG+PUji4pim
-ZuNY1Hsh+hSHSG4jJDA0QaYqRBMcbMgZW8RTNkWIr02A12ZEDDs4ESd4ckDoYumX
-tdl+LCIGBJDYc9A0RIvRUfCTgEqKqyWHQvGtlN1Ia5Nyg7BCynhMJx9oGt2HDxVk
-Uvg0e3pz0L9taZVPcOrYU5p07Q8omQ==
-=8Yqm
------END PGP SIGNATURE-----
-
---NBQO/q/cbDr7E10q--

@@ -2,259 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3F859EA29
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A074D59EA52
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbiHWRsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
+        id S231435AbiHWRwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbiHWRsQ (ORCPT
+        with ESMTP id S232898AbiHWRvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:48:16 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14AEB0298
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:45:32 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id ds12-20020a17090b08cc00b001fae6343d9fso1747813pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:45:32 -0700 (PDT)
+        Tue, 23 Aug 2022 13:51:44 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088AAB7770
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=aXOmftwku6Y3qboGNOex5sTFkecyKGqHqqdOpA80U8Q=;
-        b=b1ecWrac5OQUnpKnoCY5mwpODALUKxMqJHOtJ0ZJI7XnI3h4WQgQ0m0LFULrZ8lT2S
-         pi66Pqr348BC5OlPcroDzWO2ubRI2Ykf/ZV5toizwLmHFd86TBAEbUjlZL8nOgkVj67H
-         Btvlv95vllbhkWBlI88MIZVAiIYpd8yS4vDex6lCQbwPxyncdQZmkhLFDwgildZO13dq
-         YbYCIFUZUG5su7367IEIZD7wGuJWlPu57SnPmqMqMWojcWtiQ8lBwfUwqfJdiDX1k+1G
-         Jj0uMyagxU7KawVOGfw6rCHbR+aEF5tOcFussbdBaS10+w1zB+hNBRbk8TqAZkLjC0BY
-         BSZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=aXOmftwku6Y3qboGNOex5sTFkecyKGqHqqdOpA80U8Q=;
-        b=KqbElJdlsBt2aquuvEs+77TIy52ZORxto2NOPtpxhxROpjsixe/L2EWaSCvNxXkSzY
-         U06z14S+L0ukywOj+HBSCWX0rofdg+dJVPEh1KLQQC4x740VyihALG9SyXapriFfQ99K
-         C4efAY+OklSwL3cTGmUxnySeK10nioU6zDO7bHxC8OfyK7dM8EhS57K52RDfxZdxVe1w
-         x6hW/Vw2JLu4zMKosPTKf6Xk3WibXw12+eB9nkKDNW1ZfbLnbqTnpqS+vi0TLm91saAV
-         42oyuzb3BB7Cs+YZL1Fnd3JdMGrUxlRuStI5RZ02T/SvEoBxpg8py50kBmMXZfFlD8Pu
-         Ycxw==
-X-Gm-Message-State: ACgBeo3aMGVAkfe+DXf0Fsv2iUIAvyfeXnvTyNLJeXLAmc3SeMvQeOv/
-        VXwYOyD+4GDCsBfj90eRHQAi
-X-Google-Smtp-Source: AA6agR6a35exwO/28hItzLxrNIv1gt6gI+pn8DH3e5V5Ht+v9BXXp7TOSoKpBRlk9ZeLTmNoKXbIRw==
-X-Received: by 2002:a17:902:7247:b0:16e:ecb2:4870 with SMTP id c7-20020a170902724700b0016eecb24870mr25042399pll.110.1661269532319;
-        Tue, 23 Aug 2022 08:45:32 -0700 (PDT)
-Received: from thinkpad ([220.158.159.146])
-        by smtp.gmail.com with ESMTPSA id p13-20020a170902e74d00b0016d231e366fsm3751282plf.59.2022.08.23.08.45.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 08:45:31 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 21:15:26 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 00/24] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220823154526.GB6371@thinkpad>
-References: <20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661269899; x=1692805899;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QtiuB0PriXznAv3WHqv59ONLCXXHW0skQW/X+XIfi5I=;
+  b=t+ixhpDHeUhzcr9ch8NP8pqcLW6WM5I5S2lqS6Wk48PbcCn9xgYNMfRm
+   LHc1kDGygM5cse1QmkvZqZ8FHxDzCVRD2Eh2e4ZUjA+7lLIjsbGmejM4F
+   +54w6nZJz+CHON7yLSJlT4xRrLwCpsgh8cVBdGGrL5/+xj+wYuqpVD3cg
+   U=;
+X-IronPort-AV: E=Sophos;i="5.93,258,1654560000"; 
+   d="scan'208";a="122579794"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 15:45:53 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com (Postfix) with ESMTPS id BAC9844CF4;
+        Tue, 23 Aug 2022 15:45:52 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 23 Aug 2022 15:45:47 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.43.162.140) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 23 Aug 2022 15:45:44 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>
+CC:     Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com>,
+        Ayushman Dutta <ayudutta@amazon.com>
+Subject: [PATCH v3] seccomp: Move copy_seccomp() to no failure path.
+Date:   Tue, 23 Aug 2022 08:45:32 -0700
+Message-ID: <20220823154532.82913-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.140]
+X-ClientProxiedBy: EX13D22UWB003.ant.amazon.com (10.43.161.76) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 09:53:08PM +0300, Serge Semin wrote:
-> This is a final patchset in the series created in the framework of
-> my Baikal-T1 PCIe/eDMA-related work:
-> 
-> [1: Done v5] PCI: dwc: Various fixes and cleanups
-> Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
-> Merged: kernel 6.0-rc1
-> [2: Done v4] PCI: dwc: Add hw version and dma-ranges support
-> Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru
-> Merged: kernel 6.0-rc1
-> [3: In-review v5] PCI: dwc: Add generic resources and Baikal-T1 support
-> Link: https://lore.kernel.org/linux-pci/20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru/
-> [4: Done v5] dmaengine: dw-edma: Add RP/EP local DMA support
-> Link: ---you are looking at it---
-> 
-> Note it is very recommended to merge the patchsets in the same order as
-> they are listed in the set above in order to have them applied smoothly.
-> Nothing prevents them from being reviewed synchronously though.
-> 
-> Please note originally this series was self content, but due to Frank
-> being a bit faster in his work submission I had to rebase my patchset onto
-> his one. So now this patchset turns to be dependent on the Frank' work:
-> 
-> Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
-> 
-> Here is a short summary regarding this patchset. The series starts with
-> fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
-> initializes the LL/DT base addresses for the platforms with not matching
-> CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
-> method to get a correct base address. After that you can find a series of
-> the interleaved xfers fixes. It turned out the interleaved transfers
-> implementation didn't work quite correctly from the very beginning for
-> instance missing src/dst addresses initialization, etc. In the framework
-> of the next two patches we suggest to add a new platform-specific
-> callback - pci_address() and use it to convert the CPU address to the PCIe
-> space address. It is at least required for the DW eDMA remote End-point
-> setup on the platforms with not-matching CPU/PCIe address spaces. In case
-> of the DW eDMA local RP/EP setup the conversion will be done automatically
-> by the outbound iATU (if no DMA-bypass flag is specified for the
-> corresponding iATU window). Then we introduce a set of the patches to make
-> the DebugFS part of the code supporting the multi-eDMA controllers
-> platforms. It starts with several cleanup patches and is closed joining
-> the Read/Write channels into a single DMA-device as they originally should
-> have been. After that you can find the patches with adding the non-atomic
-> io-64 methods usage, dropping DT-region descriptors allocation, replacing
-> chip IDs with the device name. In addition to that in order to have the
-> eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
-> dma-ranges-based memory ranges mapping since in case of the root port DT
-> node it's applicable for the peripheral PCIe devices only. Finally at the
-> series closure we introduce a generic DW eDMA controller support being
-> available in the DW PCIe Root Port/Endpoint driver.
-> 
+Our syzbot instance reported memory leaks in do_seccomp() [0], similar
+to the report [1].  It shows that we miss freeing struct seccomp_filter
+and some objects included in it.
 
-I've tested this series on Qualcomm SM8450 SoC based dev board. So,
+We can reproduce the issue with the program below [2] which calls one
+seccomp() and two clone() syscalls.
 
-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+The first clone()d child exits earlier than its parent and sends a
+signal to kill it during the second clone(), more precisely before the
+fatal_signal_pending() test in copy_process().  When the parent receives
+the signal, it has to destroy the embryonic process and return -EINTR to
+user space.  In the failure path, we have to call seccomp_filter_release()
+to decrement the filter's refcount.
 
-Not sure what is the merging strategy for this one but this series should get
-merged into a single tree. Since the PCI patch is touching the designware
-driver, merging the series into dmaengine tree might result in conflict later.
+Initially, we called it in free_task() called from the failure path, but
+the commit 3a15fb6ed92c ("seccomp: release filter after task is fully
+dead") moved it to release_task() to notify user space as early as possible
+that the filter is no longer used.
 
-Thanks,
-Mani
+To keep the change and current seccomp refcount semantics, let's move
+copy_seccomp() just after the signal check and add a WARN_ON_ONCE() in
+free_task() for future debugging.
 
-> Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Drop the patches:
->   [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
->   [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
->   since they are going to be merged in in the framework of the
->   Frank's patchset.
-> - Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
->   failure."
-> - Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
->   definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
-> - Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
->   'dent'." (@Manivannan)
-> - Slightly extend the eDMA name array size. (@Manivannan)
-> - Change the specific DMA mapping comment a bit to being
->   clearer. (@Manivannan)
-> - Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
->   method."
-> - Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
->   device. That happens if the driver is disabled. (@Manivannan)
-> - Add "dma" registers resource mapping procedure. (@Manivannan)
-> - Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
-> - Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
-> - Remove eDMA in the dw_pcie_ep_exit() method.
-> - Move the dw_pcie_edma_detect() method execution to the tail of the
->   dw_pcie_ep_init() function.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v3:
-> - Conditionally set dchan->dev->device.dma_coherent field since it can
->   be missing on some platforms. (@Manivannan)
-> - Drop the patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
->   method". A similar modification has been done in another patchset.
-> - Add more comprehensive and less regression prune eDMA block detection
->   procedure.
-> - Drop the patch: "dma-direct: take dma-ranges/offsets into account in
->   resource mapping". It will be separately reviewed.
-> - Remove Manivannan tb tag from the modified patches.
-> - Rebase onto the kernel v5.18.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru
-> Changelog v4:
-> - Rabase onto the laters Frank Li series:
-> Link: https://lore.kernel.org/all/20220524152159.2370739-1-Frank.Li@nxp.com/
-> - Add Vinod' Ab-tag.
-> - Rebase onto the kernel v5.19-rcX.
-> 
-> Link: https://lore.kernel.org/linux-pci/20220728142841.12305-1-Sergey.Semin@baikalelectronics.ru
-> Changelog v5:
-> - Just resend.
-> - Rebase onto the kernel v6.0-rc2.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Acked-By: Vinod Koul <vkoul@kernel.org>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: "Krzysztof Wilczyński" <kw@linux.com>
-> Cc: linux-pci@vger.kernel.org
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (24):
->   dmaengine: Fix dma_slave_config.dst_addr description
->   dmaengine: dw-edma: Release requested IRQs on failure
->   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
->   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
->     xfers
->   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
->   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
->   dmaengine: dw-edma: Add CPU to PCIe bus address translation
->   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
->     glue-driver
->   dmaengine: dw-edma: Drop chancnt initialization
->   dmaengine: dw-edma: Fix DebugFS reg entry type
->   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
->   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
->   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
->   dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
->   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
->   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
->   dmaengine: dw-edma: Join Write/Read channels into a single device
->   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
->   dmaengine: dw-edma: Use non-atomic io-64 methods
->   dmaengine: dw-edma: Drop DT-region allocation
->   dmaengine: dw-edma: Replace chip ID number with device name
->   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
->   dmaengine: dw-edma: Skip cleanup procedure if no private data found
->   PCI: dwc: Add DW eDMA engine support
-> 
->  drivers/dma/dw-edma/dw-edma-core.c            | 216 +++++-----
->  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
->  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
->  drivers/dma/dw-edma/dw-edma-v0-core.c         |  60 +--
->  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
->  .../pci/controller/dwc/pcie-designware-ep.c   |  12 +-
->  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
->  drivers/pci/controller/dwc/pcie-designware.c  | 186 +++++++++
->  drivers/pci/controller/dwc/pcie-designware.h  |  20 +
->  include/linux/dma/edma.h                      |  18 +-
->  include/linux/dmaengine.h                     |   2 +-
->  13 files changed, 583 insertions(+), 356 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+[0]:
+unreferenced object 0xffff8880063add00 (size 256):
+  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.914s)
+  hex dump (first 32 bytes):
+    01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00  ................
+    ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+  backtrace:
+    do_seccomp (./include/linux/slab.h:600 ./include/linux/slab.h:733 kernel/seccomp.c:666 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
+    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+unreferenced object 0xffffc90000035000 (size 4096):
+  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 05 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    __vmalloc_node_range (mm/vmalloc.c:3226)
+    __vmalloc_node (mm/vmalloc.c:3261 (discriminator 4))
+    bpf_prog_alloc_no_stats (kernel/bpf/core.c:91)
+    bpf_prog_alloc (kernel/bpf/core.c:129)
+    bpf_prog_create_from_user (net/core/filter.c:1414)
+    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
+    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+unreferenced object 0xffff888003fa1000 (size 1024):
+  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    bpf_prog_alloc_no_stats (./include/linux/slab.h:600 ./include/linux/slab.h:733 kernel/bpf/core.c:95)
+    bpf_prog_alloc (kernel/bpf/core.c:129)
+    bpf_prog_create_from_user (net/core/filter.c:1414)
+    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
+    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+unreferenced object 0xffff888006360240 (size 16):
+  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
+  hex dump (first 16 bytes):
+    01 00 37 00 76 65 72 6c e0 83 01 06 80 88 ff ff  ..7.verl........
+  backtrace:
+    bpf_prog_store_orig_filter (net/core/filter.c:1137)
+    bpf_prog_create_from_user (net/core/filter.c:1428)
+    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
+    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+unreferenced object 0xffff8880060183e0 (size 8):
+  comm "repro_seccomp", pid 230, jiffies 4294687090 (age 9.915s)
+  hex dump (first 8 bytes):
+    06 00 00 00 00 00 ff 7f                          ........
+  backtrace:
+    kmemdup (mm/util.c:129)
+    bpf_prog_store_orig_filter (net/core/filter.c:1144)
+    bpf_prog_create_from_user (net/core/filter.c:1428)
+    do_seccomp (kernel/seccomp.c:671 kernel/seccomp.c:708 kernel/seccomp.c:1871 kernel/seccomp.c:1991)
+    do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
 
+[1]: https://syzkaller.appspot.com/bug?id=2809bb0ac77ad9aa3f4afe42d6a610aba594a987
+
+[2]:
+#define _GNU_SOURCE
+#include <sched.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <linux/filter.h>
+#include <linux/seccomp.h>
+
+void main(void)
+{
+	struct sock_filter filter[] = {
+		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+	};
+	struct sock_fprog fprog = {
+		.len = sizeof(filter) / sizeof(filter[0]),
+		.filter = filter,
+	};
+	long i, pid;
+
+	syscall(__NR_seccomp, SECCOMP_SET_MODE_FILTER, 0, &fprog);
+
+	for (i = 0; i < 2; i++) {
+		pid = syscall(__NR_clone, CLONE_NEWNET | SIGKILL, NULL, NULL, 0);
+		if (pid == 0)
+			return;
+	}
+}
+
+Fixes: 3a15fb6ed92c ("seccomp: release filter after task is fully dead")
+Reported-by: syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com
+Reported-by: Ayushman Dutta <ayudutta@amazon.com>
+Suggested-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+---
+v3:
+  * Fix build failure for CONFIG_SECCOMP=n case
+
+v2: https://lore.kernel.org/lkml/20220823004806.38681-1-kuniyu@amazon.com/
+  * Move copy_seccomp() after no failure path instead of adding
+    seccomp_filter_release() in the failure path.
+
+v1: https://lore.kernel.org/lkml/20220822204436.26631-1-kuniyu@amazon.com/
+---
+ kernel/fork.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 90c85b17bf69..6ac1cc62f197 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -537,6 +537,9 @@ void put_task_stack(struct task_struct *tsk)
+ 
+ void free_task(struct task_struct *tsk)
+ {
++#ifdef CONFIG_SECCOMP
++	WARN_ON_ONCE(tsk->seccomp.filter);
++#endif
+ 	release_user_cpus_ptr(tsk);
+ 	scs_release(tsk);
+ 
+@@ -2409,12 +2412,6 @@ static __latent_entropy struct task_struct *copy_process(
+ 
+ 	spin_lock(&current->sighand->siglock);
+ 
+-	/*
+-	 * Copy seccomp details explicitly here, in case they were changed
+-	 * before holding sighand lock.
+-	 */
+-	copy_seccomp(p);
+-
+ 	rv_task_fork(p);
+ 
+ 	rseq_fork(p, clone_flags);
+@@ -2431,6 +2428,14 @@ static __latent_entropy struct task_struct *copy_process(
+ 		goto bad_fork_cancel_cgroup;
+ 	}
+ 
++	/* No more failure paths after this point. */
++
++	/*
++	 * Copy seccomp details explicitly here, in case they were changed
++	 * before holding sighand lock.
++	 */
++	copy_seccomp(p);
++
+ 	init_task_pid_links(p);
+ 	if (likely(p->pid)) {
+ 		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
 -- 
-மணிவண்ணன் சதாசிவம்
+2.30.2
+

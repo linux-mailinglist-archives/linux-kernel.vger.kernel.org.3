@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E777459DC11
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957AA59E23B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357928AbiHWLsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S1354613AbiHWKZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358388AbiHWLpw (ORCPT
+        with ESMTP id S1353642AbiHWKLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:45:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D2ECE322;
-        Tue, 23 Aug 2022 02:30:10 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF37F13A;
+        Tue, 23 Aug 2022 01:58:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8932B61335;
-        Tue, 23 Aug 2022 09:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93828C433C1;
-        Tue, 23 Aug 2022 09:30:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FB8EB81C35;
+        Tue, 23 Aug 2022 08:57:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C14C433C1;
+        Tue, 23 Aug 2022 08:57:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247006;
-        bh=VV9VWbqCXr3v62WIm+26KJr4UKL4Y09Hi/jbiUvSFA4=;
+        s=korg; t=1661245077;
+        bh=wL+I1X6OYqaa+s1yOlsuInujXPWsQqoekriR1F0yces=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nZOncfIh6oaTml5O/wOBqO9OTNCCObKW4GvWyfXwURaITSg5pHJ5HxP2ouf8ZlCiv
-         jry/7GUg8XIZkWTHltclhdSlYVJQsFXcSnV0LKvlSGOsiiLLbdVlYuMpkwtwX67HCG
-         Ci/uqyyicfmhuN8+MOCk/t+mzcsEKqm9yczR5YBM=
+        b=0kkAjwIFef/4m4QCnn0k/VHQVm3jNLAo1I49ALpQhyFiGy5l82r6/NLIOAqq9VKdF
+         hxrw7pyBueKk1UGjzb3mVqvezg9wRu91cs3SfAvfqDUUHTuhyxOH4VplKSIHmGICxL
+         3VwU1KDKqrCKqAYi4r46gnXbv4RKxB/Uq8EcsaaA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 5.4 288/389] ata: libata-eh: Add missing command name
+        stable@vger.kernel.org, Timur Tabi <timur@kernel.org>,
+        Liang He <windhl@126.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 207/244] tty: serial: Fix refcount leak bug in ucc_uart.c
 Date:   Tue, 23 Aug 2022 10:26:06 +0200
-Message-Id: <20220823080127.578978362@linuxfoundation.org>
+Message-Id: <20220823080106.412901268@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Liang He <windhl@126.com>
 
-commit d3122bf9aa4c974f5e2c0112f799757b3a2779da upstream.
+[ Upstream commit d24d7bb2cd947676f9b71fb944d045e09b8b282f ]
 
-Add the missing command name for ATA_CMD_NCQ_NON_DATA to
-ata_get_cmd_name().
+In soc_info(), of_find_node_by_type() will return a node pointer
+with refcount incremented. We should use of_node_put() when it is
+not used anymore.
 
-Fixes: 661ce1f0c4a6 ("libata/libsas: Define ATA_CMD_NCQ_NON_DATA")
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Acked-by: Timur Tabi <timur@kernel.org>
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220618060850.4058525-1-windhl@126.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ata/libata-eh.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/ucc_uart.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/ata/libata-eh.c
-+++ b/drivers/ata/libata-eh.c
-@@ -2329,6 +2329,7 @@ const char *ata_get_cmd_descript(u8 comm
- 		{ ATA_CMD_WRITE_QUEUED_FUA_EXT, "WRITE DMA QUEUED FUA EXT" },
- 		{ ATA_CMD_FPDMA_READ,		"READ FPDMA QUEUED" },
- 		{ ATA_CMD_FPDMA_WRITE,		"WRITE FPDMA QUEUED" },
-+		{ ATA_CMD_NCQ_NON_DATA,		"NCQ NON-DATA" },
- 		{ ATA_CMD_FPDMA_SEND,		"SEND FPDMA QUEUED" },
- 		{ ATA_CMD_FPDMA_RECV,		"RECEIVE FPDMA QUEUED" },
- 		{ ATA_CMD_PIO_READ,		"READ SECTOR(S)" },
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index 6000853973c1..3cc9ef08455c 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -1137,6 +1137,8 @@ static unsigned int soc_info(unsigned int *rev_h, unsigned int *rev_l)
+ 		/* No compatible property, so try the name. */
+ 		soc_string = np->name;
+ 
++	of_node_put(np);
++
+ 	/* Extract the SOC number from the "PowerPC," string */
+ 	if ((sscanf(soc_string, "PowerPC,%u", &soc) != 1) || !soc)
+ 		return 0;
+-- 
+2.35.1
+
 
 

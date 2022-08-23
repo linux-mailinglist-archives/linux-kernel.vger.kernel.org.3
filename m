@@ -2,107 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF2F59D6E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D1159D72F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349701AbiHWJ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S1350473AbiHWJcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349465AbiHWJYP (ORCPT
+        with ESMTP id S1350672AbiHWJal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:24:15 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01155901A0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:35:49 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id b5so11803943wrr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=kCvkiarFiXJ9jD4jJ8Afsozfi7HxwB9THrkLcggctw4=;
-        b=AJwK8PvK7cqqRaWVCBGh4TIKUuauSmmPTOr3P5eR8YQjakHWqRgiSygCMNRjpeLNWD
-         zcv+csKSgVzWW1shfKi5tSLPpSKeFhviuKZJFawMVznW+xYeJ9EqeZ7IaBqfjNbwPYZK
-         1su/P5RC0CMJ2FatHA7E+qfliwabhOmq+TD6b7MtmvbBfQFXmjp2VBAwDvESEpK40v1G
-         FTHC1V8/3kJjR0p0vc71aKg6tCSka3DOK08d8gYhw3Teeu9M++3a8StGOm+We1s5CcVl
-         qJJJP9WeckPZ/+xczr9g/A+XbY3EYVL9HwTGf8KSo/0t3nMtKnDuAgW38PQnLf01yj27
-         9NwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=kCvkiarFiXJ9jD4jJ8Afsozfi7HxwB9THrkLcggctw4=;
-        b=ywaLm7/H0s1aHwRsLrNuS2FvYBWm11Hs4SP6Ec67s81CnVA9GnLiUR5a934ANqvojc
-         sIu0djikAeaiL6rmN7PwnMDYvLAUYgQbsy/4BvB+9oDr9JMUeQGOVd4gxliK5uOuMcZ6
-         E6lKtempe3qfYGIRnIhxH34O4M9wizE2bcM8+eMq2zaA+208rfWjrk1HGVCHuAXU0P6+
-         vn8fMzTCcGhWXY/S67ROsjGC12F9ySTmHACrjWdcBmuq/X0tBaa2dWXtQWpUGW+GSrxn
-         5rHrG2kVUq4rfACxRcZCBPC14GP/z9ktiIOmU63q38XEFIckcI6+mciNLM57f39/3Km+
-         EQCw==
-X-Gm-Message-State: ACgBeo0FXKnV+tf8d9fDePt6qPg/r3ytPJdfTJGcO19pBRepH3ady8pP
-        5vrBfBqf8nNzjUnuW3lils8=
-X-Google-Smtp-Source: AA6agR6vwLwj+I7j2yf59mXO9TKSSxRcoAHHO+NJPd7nraHZKpg3XBjAEEjv6P756ndUX1js76Pnrg==
-X-Received: by 2002:a05:6000:716:b0:225:3f1a:a9a3 with SMTP id bs22-20020a056000071600b002253f1aa9a3mr9478491wrb.526.1661243673768;
-        Tue, 23 Aug 2022 01:34:33 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05600c3ac700b003a5ad7f6de2sm16355305wms.15.2022.08.23.01.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 01:34:33 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 09:34:31 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        torvalds@linux-foundation.org, loongarch@lists.linux.dev
-Subject: mainline build failure for loongarch allmodconfig with gcc-12
-Message-ID: <YwSRFzQQKAXP2ncp@debian>
+        Tue, 23 Aug 2022 05:30:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF15992F62;
+        Tue, 23 Aug 2022 01:37:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D650D20F15;
+        Tue, 23 Aug 2022 08:36:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661243775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GQ02uGY4LaDgfuC0EhK53ZvKSS1XQwJHJ3fflLYmAjg=;
+        b=cFE5YYpE9evSSKSJipAkRPfcz4A+d9gBKDJiEO/9R3S8iyIw0VuSlrAuELwxRULshwDWtf
+        y4B7TJLPyl0RvCl65sLFFLblBcZw4v6lI0KigGg0mFZXDeVi99q3aSc7CHZw+G1jpvbDcg
+        j9widh2Ih6uLGUegCaae2cVUgj40qRA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3E6713A89;
+        Tue, 23 Aug 2022 08:36:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qJIaL3+RBGPnWQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 23 Aug 2022 08:36:15 +0000
+Date:   Tue, 23 Aug 2022 10:36:15 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
+        Christoph Hellwig <hch@infradead.org>, oleg@redhat.com,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
+Message-ID: <YwSRf3LZ7gXwWaNN@dhcp22.suse.cz>
+References: <20220531223100.510392-1-surenb@google.com>
+ <20220531223100.510392-2-surenb@google.com>
+ <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
+ <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com>
+ <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
+ <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
+ <20220822161603.9e19edfe2daaea3bf591910a@linux-foundation.org>
+ <CAOUHufbyWwkOAJTD4G82sLcwE_33Yy=s4Q+gGBujwXvEBZ8iqA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAOUHufbyWwkOAJTD4G82sLcwE_33Yy=s4Q+gGBujwXvEBZ8iqA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Mon 22-08-22 17:20:17, Yu Zhao wrote:
+> On Mon, Aug 22, 2022 at 5:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > On Mon, 22 Aug 2022 16:59:29 -0600 Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > > > > @@ -4109,7 +4109,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned
+> > > > > long start, unsigned long end,
+> > > > >
+> > > > >                 walk_pmd_range(&val, addr, next, args);
+> > > > >
+> > > > > -               if (mm_is_oom_victim(args->mm))
+> > > > > +               if (test_bit(MMF_OOM_REAP_QUEUED, &args->mm->flags))
+> > > > >                         return 1;
+> > > > >
+> > > > >                 /* a racy check to curtail the waiting time */
+> > > >
+> > > > Oh.  Why?  What does this change do?
+> > >
+> > > The MMF_OOM_REAP_QUEUED flag is similar to the deleted MMF_OOM_VICTIM
+> > > flag, but it's set at a later stage during an OOM kill.
+> > >
+> > > When either is set, the OOM reaper is probably already freeing the
+> > > memory of this mm_struct, or at least it's going to. So there is no
+> > > need to dwell on it in the reclaim path, hence not about correctness.
+> >
+> > Thanks.  That sounds worthy of some code comments?
+> 
+> Will do. Thanks.
 
-I have been trying to build loongarch as part of my nightly builds, and
-I can build loongson3_defconfig without any error. But allmodconfig fails
-with the error:
-
-In function '__cmpxchg',
-    inlined from 'ssh_seq_next' at drivers/platform/surface/aggregator/controller.c:61:9,
-    inlined from 'ssam_request_write_data' at drivers/platform/surface/aggregator/controller.c:1483:8,
-    inlined from 'ssam_request_sync_with_buffer' at drivers/platform/surface/aggregator/controller.c:1761:8:
-././include/linux/compiler_types.h:354:45: error: call to '__compiletime_assert_9' declared with attribute error: BUILD_BUG failed
-  354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |                                             ^
-././include/linux/compiler_types.h:335:25: note: in definition of macro '__compiletime_assert'
-  335 |                         prefix ## suffix();                             \
-      |                         ^~~~~~
-././include/linux/compiler_types.h:354:9: note: in expansion of macro '_compiletime_assert'
-  354 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |         ^~~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-      |                                     ^~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-      |                     ^~~~~~~~~~~~~~~~
-./arch/loongarch/include/asm/cmpxchg.h:83:17: note: in expansion of macro 'BUILD_BUG'
-   83 |                 BUILD_BUG();
-      |                 ^~~~~~~~~
-
-I will be happy to test any patch or provide any extra log if needed.
-
+I would rather not see this abuse. You cannot really make any
+assumptions about oom_reaper and how quickly it is going to free the
+memory. If this is really worth it (and I have to say I doubt it) then
+it should be a separate patch with numbers justifying it.
 
 -- 
-Regards
-Sudip
+Michal Hocko
+SUSE Labs

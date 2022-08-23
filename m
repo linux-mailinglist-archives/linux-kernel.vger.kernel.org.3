@@ -2,47 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB6C59E83D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334C459E87B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245646AbiHWRBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S1343514AbiHWQ64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245328AbiHWQ66 (ORCPT
+        with ESMTP id S245232AbiHWQ6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:58:58 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939919E0E5
+        Tue, 23 Aug 2022 12:58:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13CB7675C
         for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:15:00 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1661264077t2rkxezi
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 22:14:36 +0800 (CST)
-X-QQ-SSF: 0100000000200040B000B00A0000000
-X-QQ-FEAT: ILHsT53NKPjxA3QUZ9443L6fJYtCysqDGp9BXbgtj0Cl63dZj5uG64ljGVgft
-        RZfQip6bWFR2Gfo+tVqZEOs5H0zRPwdaJHYD5qzETmgwU9/jS5RVikRPKhqQbeEvmgDZJUd
-        Y4+otmSNh8zyccLJl2ACciZrnj+x0HfwgevgVe5r9BQu0PU8xbJZA21gfeg7Uhs1fvrOk2x
-        WXhpF9bpaq3dfFWkEmj2lI+01KvbDA3XDBkF86b/+gpN+FLavewBSmoNc+yfIBeH/e6/Q3P
-        rPagfR1D4AAu3I0hjeBr1uI9bsFu1KPVEtH2tjCpz+wJjrcC7oRVeYOgJzwELcTRLyvJ3RZ
-        YxeQPsqbmnuMkULJp6FV51kolBHeAZGMze1D3k+g+PfH4At/AVwNEOKJEvzZw==
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] i915/display: fix repeated words in comments
-Date:   Tue, 23 Aug 2022 22:14:29 +0800
-Message-Id: <20220823141429.11598-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661264099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=34PbuF0eVwU1fZKmyxntLGj0oriQwCLeUvgJJbU6faI=;
+        b=gPDHTqxComfuxYHBM3hqAdRbNvAeCGf6NLqKiGQluW0tuGiDVM07HlC1b030JbiWFSbZHy
+        PpD2rNsmWMJQh1kf/grYGWCFwsOsB4YIpO0Kw1Rcge4K8F5YkC2PR9lykmRGlGnSWoof0d
+        iDD1Qc67o9TlNRNRS6y6UyUeposKgSI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-327-Q7bLziqjNHmD9kYI60vzyg-1; Tue, 23 Aug 2022 10:14:56 -0400
+X-MC-Unique: Q7bLziqjNHmD9kYI60vzyg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 229909682A2;
+        Tue, 23 Aug 2022 14:14:56 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 013C81415138;
+        Tue, 23 Aug 2022 14:14:54 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <YwTfPRDq04/DGTVT@casper.infradead.org>
+References: <YwTfPRDq04/DGTVT@casper.infradead.org> <166126004083.548536.11195647088995116235.stgit@warthog.procyon.org.uk> <166126006184.548536.12909933168251738646.stgit@warthog.procyon.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, sfrench@samba.org, linux-cifs@vger.kernel.org,
+        lsahlber@redhat.com, jlayton@kernel.org, dchinner@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        samba-technical@lists.samba.org
+Subject: Re: [PATCH 3/5] smb3: fix temporary data corruption in collapse range
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <714207.1661264094.1@warthog.procyon.org.uk>
+Date:   Tue, 23 Aug 2022 15:14:54 +0100
+Message-ID: <714208.1661264094@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,26 +66,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+Matthew Wilcox <willy@infradead.org> wrote:
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- drivers/gpu/drm/i915/display/intel_crt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>         truncate_pagecache_range(inode, start, end);
+> 
+> ... and presumably, you'd also want the error check?
 
-diff --git a/drivers/gpu/drm/i915/display/intel_crt.c b/drivers/gpu/drm/i915/display/intel_crt.c
-index 6a3893c8ff22..fead011c87b5 100644
---- a/drivers/gpu/drm/i915/display/intel_crt.c
-+++ b/drivers/gpu/drm/i915/display/intel_crt.c
-@@ -1102,7 +1102,7 @@ void intel_crt_init(struct drm_i915_private *dev_priv)
- 	drm_connector_helper_add(connector, &intel_crt_connector_helper_funcs);
- 
- 	/*
--	 * TODO: find a proper way to discover whether we need to set the the
-+	 * TODO: find a proper way to discover whether we need to set the
- 	 * polarity and link reversal bits or not, instead of relying on the
- 	 * BIOS.
- 	 */
--- 
-2.36.1
+truncate_pagecache_range() is void.
+
+David
 

@@ -2,512 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C51159EBB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC7B59EBAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbiHWS7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S230466AbiHWS7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbiHWS7G (ORCPT
+        with ESMTP id S229518AbiHWS6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:59:06 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABF4BC800;
-        Tue, 23 Aug 2022 10:28:44 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-334dc616f86so397597737b3.8;
-        Tue, 23 Aug 2022 10:28:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Fei1rF3NSSQKgbs5Sd7HsXB5+dr1affULk4oDxJiBOE=;
-        b=ZBnwl3y8fcGwei0P+Rp3YAXz8tYaOuAKa7MT1WTdmbOaQxQ9Ra8YWfVAi1zHX7X8UK
-         LWNzp8pXPT0WM+DPg/vaoDtH4/8gVWhQx087U49EMRSpQRyst41ahlSqFv2Rw8sAPBVI
-         rh5W59uoxjKQay+/YTwJAdkXlHt3ddbDRWKQMhoH7Q3Iq2d7cwNFQxCwb/Nsl+eArjCC
-         BTof/mMB4rwaabClXNFNf/fq1We5dA3xfOPlxZkF4hKubbq69rdQqy+giDieESXxDFmV
-         DPeGgtMpwA3IV1AD0SMFpYS07nsqB5Wz/yd+m+bnbehhFcUz9TZXy0mhiT8+yO5y8Zrz
-         gk3w==
-X-Gm-Message-State: ACgBeo3z6XkJoLvQolgkwSVPUmvv2opyIrVSZT9AtPEdy+ZwMUV8IxWy
-        U5fCKcoz4TRrRd6cx3XqT+XPJMjexMWWTbGwQVI=
-X-Google-Smtp-Source: AA6agR7FIn0NECcITTBddzAU8V8XttOQLQP3QOcQLh9bCaJ42BvX86wNTXLVeXX2/1RE3HQt9pcsubuzy7LrC7QfUGA=
-X-Received: by 2002:a25:c204:0:b0:692:72b9:a778 with SMTP id
- s4-20020a25c204000000b0069272b9a778mr25314309ybf.81.1661275517030; Tue, 23
- Aug 2022 10:25:17 -0700 (PDT)
+        Tue, 23 Aug 2022 14:58:48 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BEBAA4EE;
+        Tue, 23 Aug 2022 10:28:16 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NHPSlK001959;
+        Tue, 23 Aug 2022 17:25:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=B8OtPkQCqW4GY3t+wVQBjSAHRne1GVNAweZ0iiNNC/8=;
+ b=mbubZknl2ssYg4XU11ocuX20xGHkVaTEstrwAHgfMR+gN5j7Tfv7BcJ0cZHNMHU81+d+
+ 8zgptuvc5gM/HM3OZ0EH/P68K3RvKnwAoEjWnoGxx14bptH5fJayv+0avqjihfrULCFq
+ yUUjatLnInNI5+dAvbtPZNanRD/1wajLzwjkuhQ9l24PPvA0JKw3f6Ic64YVo0Et1YzT
+ HIfB0Xono8TlhbHIczPWnBEKMf5VndFrhuc7mVBJD7LL35Y/uQOvSYRl3wkMlYe0ym5o
+ llEn17G6dX1XbghSyNRdNGQ11VGXqejOXnDHLI9OdKUCYwCRvQajvUpJRkF+tYqKPXSP dA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4e8c2ywd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 17:25:33 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27NFvEF5036971;
+        Tue, 23 Aug 2022 17:25:33 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2049.outbound.protection.outlook.com [104.47.57.49])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mkhmggm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 17:25:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G8VzvGzrXBqnHSk9LwMB0BcS+2Mifzqn7P8Nv/HeHNsAk2xIfj6LvgO1iUCdJCQXeEVMKB5BSAtYnU8TgFkgww6MXSSq7ibJC8Q3Sz9AJk/60VzwOPY4C/NKxW0KvLYF7i8wzaS4iFNB6yeo9y3sL/EGn2lHcy9XGW24S61jjjN8lp7l4xIlXco1ZRG+H0L34xYbYWw910HFBAnmAhlmCkD3jaojJt/5hbZBfizL/8veQZdyCBWdDDDW06rLEoZCFFLFW5mGHoJHjSHg/4Z0LP4yOQJP6isXWTHteU9r4OCZ57mWcGrhMwvIy8GygKzlAvh/GywGt5hCmeavDheVVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B8OtPkQCqW4GY3t+wVQBjSAHRne1GVNAweZ0iiNNC/8=;
+ b=HsowwjH7kdEvPiqkOgF3p/dBxp0LZVbZB6Lw2OrN9qsMKP2GM1n+jbCS6ErYaBHVsUR53G+RqwRoYL/kdVRGfG3VIsVX752MVU+OBtIpiu4YFoQUyLUc3ZDBVFUUd+qCcn0yMCkRyPhWpiisdnluWX8izhjqCwu2IGq5LX1pHHMVTT1j7SbacgPD9JtKGaaMbEshPAxqQG6zyosJsMqnaoJbxnAeBRTG56b4JMTydQb4FTnuo6qeZaGjzzKn1d4LEad0DoFQrOa35TwtKbruUC36u6ai16Yb/9cwvjigJDo31JlR9iOmJxD1gD3/lNawVFHqfxlkcm5nrPlNyK4Lpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B8OtPkQCqW4GY3t+wVQBjSAHRne1GVNAweZ0iiNNC/8=;
+ b=fsotHGHoeV3fsx+MXwIwelOOpWhlaJfN/GnSoOFXZ8JhKw/WDgiKaZltnzZuSmmiptXOnYX8VTV3xC3xrmHA0WZ8S+pzlxskvZflDdRItyM/DjwZe7XzjCI2h++IEcMOioqyr97gt9NApv+YBRnYBrETj+L+Q6u9WeTTuE8Iy/Q=
+Received: from BN7PR10MB2659.namprd10.prod.outlook.com (2603:10b6:406:c5::18)
+ by MN0PR10MB5936.namprd10.prod.outlook.com (2603:10b6:208:3cc::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Tue, 23 Aug
+ 2022 17:25:31 +0000
+Received: from BN7PR10MB2659.namprd10.prod.outlook.com
+ ([fe80::e0f6:5b20:2ab3:fcce]) by BN7PR10MB2659.namprd10.prod.outlook.com
+ ([fe80::e0f6:5b20:2ab3:fcce%4]) with mapi id 15.20.5546.019; Tue, 23 Aug 2022
+ 17:25:31 +0000
+Subject: Re: [PATCH 5.19 319/365] swiotlb: panic if nslabs is too small
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Yu Zhao <yuzhao@google.com>
+Cc:     stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev
+References: <20220823080118.128342613@linuxfoundation.org>
+ <20220823080131.532813281@linuxfoundation.org>
+From:   Dongli Zhang <dongli.zhang@oracle.com>
+Message-ID: <c49d3b2b-9f5a-4257-9085-f7ac107cff40@oracle.com>
+Date:   Tue, 23 Aug 2022 10:25:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+In-Reply-To: <20220823080131.532813281@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR07CA0050.namprd07.prod.outlook.com
+ (2603:10b6:a03:60::27) To BN7PR10MB2659.namprd10.prod.outlook.com
+ (2603:10b6:406:c5::18)
 MIME-Version: 1.0
-References: <20220822111816.760285417@infradead.org> <20220822114648.725003428@infradead.org>
-In-Reply-To: <20220822114648.725003428@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 19:25:06 +0200
-Message-ID: <CAJZ5v0hGinW8STisx0Wb9DgtcPj+rYVAja4dW-+Bo=MCKu-DNg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] freezer: Have {,un}lock_system_sleep()
- save/restore flags
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c63b7082-fc8f-4912-1c3d-08da852c7a90
+X-MS-TrafficTypeDiagnostic: MN0PR10MB5936:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tAcwmWHFevHCwQdOemD7vC+MzwX3gHMvATrkOtD761GUPW2o9xbgUQ5ivzrmesNDXA4CGlnJBjlvfryXBgdpoBDnC6dWB0VmwlFdIuFy7dXKELBFmWHyYVUNJ818hXQNgC3T+jNXAIo3LKdGcOU6vhd+496SNCOfN6Q1icmSGbv6559yR64s+UEGELWsgF6MqtpTN6rh27Jlzb5Xt/BBjKco4evcgqjdCEByxv3P9J9S35GoPEHvGh4lgagH0bRRfYy9RXgPx3NgX5eqoows9Rk0P4XylzTR2I+v5suMThalH+ijP9wYqQHujHHVLP7voqRVf6DcMoFZIJH7m9I7bf+122jiAJYRiK9fbkp7d9wZYqVjvWOcJKYpWlZEJHbFOIkRQi6DBAlTo5XzeQvC7nfPYMYLmPOyQ5QL4aSuCggTucNAPqvfuDG/Nkw6dl17zo5R7N+v8gxK1Np3kV4yl687TVu87W+JNrzvB1KFF9HN/cYPYoxpAVsGsaDw4Jk9RlUF9/eqMXn+tf/G57uz0334ULgGaMWYtl6KxozLDEMorByqAucgyaTzfNSqRST2Vp6vuJbTurfb/oTDUnKiEVvb8hiTToSFdDb/Am2Qdv0C21wTpdDus1mjwXj6zqrGVzhuhekNkKc8AVaxL/jKqjq9Ex2MJOx/nK7uH8vqXQtfpvMiO7Fws+duGeJUs93Z4pH1Rl3WuHxPDLU/n1d1se7KgGGBd3nV30EVeFacNSBFmeZPkwpkbd/VjzJnggWi2xo8v8ZUMQPELxKnZU4mYnoODMr7I4MM0GqjzDXMhrhrzTioW7nhOsJBSiL9SBBNd0jgXgreiMGJ7epeZWquUM1tZFnQb0u+r18ZWhPOWg18b4h0SnKggxfg3Aohhkeg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR10MB2659.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(366004)(136003)(396003)(346002)(36756003)(31696002)(66476007)(6666004)(41300700001)(66946007)(44832011)(4326008)(66556008)(8676002)(6486002)(316002)(478600001)(53546011)(6506007)(110136005)(966005)(31686004)(6512007)(2616005)(2906002)(38100700002)(186003)(86362001)(83380400001)(5660300002)(8936002)(160913001)(15963001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEJncXFPR08zbTg0Y1p1cjdNbXFBbFB2WlRMaTlCTjJPcDlSK2JIYTVLQVU0?=
+ =?utf-8?B?UStNVkdiTnNwaVpVK2RYR0NmQThMRmlxMzQ1bGNsWGdLc2YrVlVTbUNxdnB5?=
+ =?utf-8?B?ZWVZeDlJL0dqLzRUSzJGc2FVbDhIQ0tVS0FVNGVqQVM1RVRNUW1SM0gvYnht?=
+ =?utf-8?B?UzlUMGt4TTMrUVpyRkw4TVFKOWhvS0lWSnVMazV2WStEaDNaRDlmUnpJbU9h?=
+ =?utf-8?B?SG9XSjlPOWJZSDh3clU3VkRzcFlQK1NBVUt2UEVLYkxKcjM0SlBCSEdJcFVG?=
+ =?utf-8?B?RDZtdkh1YndsSXVqckV3Z3JCMi92UmE1czE1MGdsd29rdWNjZ3BWQnIvNlhL?=
+ =?utf-8?B?TE85QTQ2bFMwOURvb3VxRFZwYzNKZFpyMEJDM2dRS014cXpuZWF5S2JTd1Bs?=
+ =?utf-8?B?azRIMjRVQkhibGVsNEI0S0lFbkpUVkRtYjV6L1dMQTVqN1pSQ29sSkg3eS93?=
+ =?utf-8?B?YVlMMHIxbXVQWStZczdGdFJjQm1XM3ZaanhtZ1cvYUNoL1BqS1hSRWt6VG13?=
+ =?utf-8?B?cjFNMzM0b0xzdnFXVzJ0N3ZISGZIay9nUk9FeXRQZzhaSGQ5QXFadUZnTnFF?=
+ =?utf-8?B?V0pwN2R6cFIzV3crWGxnZGpFcjlMMnBXZmlNMXJkc1dVY1RyRUc4UWtvbnl0?=
+ =?utf-8?B?UnlVcUlRVk0xVWxzQU4rNWVzaDZaUHJ5ckNBcUxCZDRPanBTYjErbThYVERi?=
+ =?utf-8?B?VUV4cElTNnU2M3gvY041dVY2WVFlUXQ1eDlTV3NUcWpGUFB1WXZET1VHMWZq?=
+ =?utf-8?B?QjZZVzhuQnhnOUlqM1NIKzZFS1FkSEtwaEZZVW1ldU1aMnFCK1VEaWJJZ09l?=
+ =?utf-8?B?dHhWdENxYXptVy9IOUkxVHBtS3R4aG9WTmhUSmZvM1FMZlYvRjBQL01vRlZG?=
+ =?utf-8?B?SVBtS0psWjNWKzg0Si8xc2tpanc3bVdtOHgzbGlRRDhBaGVqOVZTT0ZRY1hP?=
+ =?utf-8?B?dUhDK2VCRXRBMkNBZlhMcUF5SjdFdkEzbFFDNDY2bjAzTlphOVZVK2I0SEF4?=
+ =?utf-8?B?SUJhelRvUGxYdWZHbWpTdVFnem1ncW9jYmlZS043cFpmc1lENit4bWNvTjlX?=
+ =?utf-8?B?Nzl5bzd0NVRUVWY5ZXovTzQxWG54ZFBZVWY2N1JOMEJHWlI5dzVYaGlYODBa?=
+ =?utf-8?B?VmlQZ2k4YVJWbFhVYmVDRDVFc2ptMlhvOTQ1MlBNMGluckdSVWlCNkJydmlG?=
+ =?utf-8?B?dEl5dy9zakJ5UmpuVzBzWHJHK0lyNlY1QnhOOS9jRjhsVEJxKy9hRzBsenc1?=
+ =?utf-8?B?d2ZZZmhhRnYxWTc4OXBhbm5TdmJIMGpJZXhzblo1T2NiaXYvSmVJaEV4Q3VF?=
+ =?utf-8?B?UTgvNWlYK2ZicHMxMy9sWXNuZkZsODBDYUFYam53UnRhMVMrQVJGcWRoN1pz?=
+ =?utf-8?B?Q1cvZ0FzWDJXbXNUSzhMRzFjSzd4Rzdwa1ZNWGoweFNTbkszRm9XaFhnaXpG?=
+ =?utf-8?B?d3BUSTl5eDFRcWFHcnpyaFJYb0tFQys3UnZBc3A2Zld1ejEzc20wbDJlNjVM?=
+ =?utf-8?B?b1R3WlQ3YnZnblFnUU1XYTBlZmF4SVAyeXdUSlVrVHdwSUVqVjd3c0pxVzVw?=
+ =?utf-8?B?QnA5M2ZMY014OEwwWDVNdGhWVk5aOWxpVjRPeEk5RWg4TUhWRXFCSDVKbW5q?=
+ =?utf-8?B?NCt5MG9OQWVkOHo2TlhQWG8zMXRaR1h5RzZaS0tJZDJ5Q0gzM2R3TDF5cEgy?=
+ =?utf-8?B?VmllVGJuTHNoL2ovS2VQYmttSU01MWRQck9kSmZIcHRhRGZpd28wSWlGanQ1?=
+ =?utf-8?B?U2V1emNtYlByeHE5U04wRGR0a3E5Y0xta3cwaEhxZVRDNHQxUU44MDJ2Vyts?=
+ =?utf-8?B?Zmx6N0F0QjBXU3hMaS9BVHBjNmVTZlVjMkkxUkdQd0l6eTZ6ZCtneXhHTGRk?=
+ =?utf-8?B?TnNhb3ZaL2gyY3p5ZFljWWlmZzZzdVJQUTBkNFEwZEZiWkpLS2c2NHZGVktE?=
+ =?utf-8?B?WWhOR3FXRjd2VHh1WkszMDY0ZksrWGRQc3Y3REZLMEUyYlMwclVMeitLS0g2?=
+ =?utf-8?B?M0NCUExWUXQ4R211eTc2YndYZ3czQ1hlcldLZzcyL29GWC9aa0M1WG9XMWZl?=
+ =?utf-8?B?MnpWa3FFdnJURXh2YTQ3UU1KcURicWMydTNNZVFzS2FlTFNQbllYaGxTdjFk?=
+ =?utf-8?B?RVp4UE1leFByWVdQK0VvK2dtRm9ON1RseEFOaTFjT1VTRCtXYW5ORTdEdTl6?=
+ =?utf-8?Q?dGu5blzqftnDt1AsJb8cZKE=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c63b7082-fc8f-4912-1c3d-08da852c7a90
+X-MS-Exchange-CrossTenant-AuthSource: BN7PR10MB2659.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 17:25:31.0010
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hj2ComiIX7t+WMuPJDzp6B6l2bfm1cadY7cqeeMPqUrHSA3xWb0B1UwwkJgyWFW9na7+dR0+uMHFFD3OKOfAHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5936
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-23_07,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208230069
+X-Proofpoint-GUID: BkWyTMQmlpbAeNyTie5UEK-HlxKR38qV
+X-Proofpoint-ORIG-GUID: BkWyTMQmlpbAeNyTie5UEK-HlxKR38qV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 1:48 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Rafael explained that the reason for having both PF_NOFREEZE and
-> PF_FREEZER_SKIP is that {,un}lock_system_sleep() is callable from
-> kthread context that has previously called set_freezable().
->
-> In preparation of merging the flags, have {,un}lock_system_slee() save
-> and restore current->flags.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Adding Robin, Yu and swiotlb list.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Greg,
 
+There is an on-going discussion whether to revert this patch, because it breaks
+a corner case in MIPS when many kernel CONFIGs are not enabled (related to PCI
+and device). As a result, MIPS pre-allocates only PAGE_SIZE buffer as swiotlb.
+
+https://lore.kernel.org/all/20220820012031.1285979-1-yuzhao@google.com/
+
+However, the core idea of the patch is to panic on purpose if the swiotlb is
+configured with <1MB memory, in order to sync with the remap failure handler in
+swiotlb_init_remap().
+
+Therefore, I am waiting for suggestion from Christoph whether (1) to revert this
+patch, or (2) enforce the restriction to disallow <1MB allocation.
+
+Thank you very much!
+
+Dongli Zhang
+
+On 8/23/22 1:03 AM, Greg Kroah-Hartman wrote:
+> From: Dongli Zhang <dongli.zhang@oracle.com>
+> 
+> [ Upstream commit 0bf28fc40d89b1a3e00d1b79473bad4e9ca20ad1 ]
+> 
+> Panic on purpose if nslabs is too small, in order to sync with the remap
+> retry logic.
+> 
+> In addition, print the number of bytes for tlb alloc failure.
+> 
+> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  drivers/acpi/x86/s2idle.c         |   12 ++++++++----
->  drivers/scsi/scsi_transport_spi.c |    7 ++++---
->  include/linux/suspend.h           |    8 ++++----
->  kernel/power/hibernate.c          |   35 ++++++++++++++++++++++-------------
->  kernel/power/main.c               |   16 ++++++++++------
->  kernel/power/suspend.c            |   12 ++++++++----
->  kernel/power/user.c               |   24 ++++++++++++++----------
->  7 files changed, 70 insertions(+), 44 deletions(-)
->
-> --- a/drivers/acpi/x86/s2idle.c
-> +++ b/drivers/acpi/x86/s2idle.c
-> @@ -541,12 +541,14 @@ void acpi_s2idle_setup(void)
->
->  int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg)
->  {
-> +       unsigned int sleep_flags;
+>  kernel/dma/swiotlb.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> index 5830dce6081b..f5304e2f6a35 100644
+> --- a/kernel/dma/swiotlb.c
+> +++ b/kernel/dma/swiotlb.c
+> @@ -242,6 +242,9 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+>  	if (swiotlb_force_disable)
+>  		return;
+>  
+> +	if (nslabs < IO_TLB_MIN_SLABS)
+> +		panic("%s: nslabs = %lu too small\n", __func__, nslabs);
 > +
->         if (!lps0_device_handle || sleep_no_lps0)
->                 return -ENODEV;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->         list_add(&arg->list_node, &lps0_s2idle_devops_head);
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->
->         return 0;
->  }
-> @@ -554,12 +556,14 @@ EXPORT_SYMBOL_GPL(acpi_register_lps0_dev
->
->  void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg)
->  {
-> +       unsigned int sleep_flags;
-> +
->         if (!lps0_device_handle || sleep_no_lps0)
->                 return;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->         list_del(&arg->list_node);
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->  }
->  EXPORT_SYMBOL_GPL(acpi_unregister_lps0_dev);
->
-> --- a/drivers/scsi/scsi_transport_spi.c
-> +++ b/drivers/scsi/scsi_transport_spi.c
-> @@ -998,8 +998,9 @@ void
->  spi_dv_device(struct scsi_device *sdev)
->  {
->         struct scsi_target *starget = sdev->sdev_target;
-> -       u8 *buffer;
->         const int len = SPI_MAX_ECHO_BUFFER_SIZE*2;
-> +       unsigned int sleep_flags;
-> +       u8 *buffer;
->
->         /*
->          * Because this function and the power management code both call
-> @@ -1007,7 +1008,7 @@ spi_dv_device(struct scsi_device *sdev)
->          * while suspend or resume is in progress. Hence the
->          * lock/unlock_system_sleep() calls.
->          */
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->
->         if (scsi_autopm_get_device(sdev))
->                 goto unlock_system_sleep;
-> @@ -1058,7 +1059,7 @@ spi_dv_device(struct scsi_device *sdev)
->         scsi_autopm_put_device(sdev);
->
->  unlock_system_sleep:
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->  }
->  EXPORT_SYMBOL(spi_dv_device);
->
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -510,8 +510,8 @@ extern bool pm_save_wakeup_count(unsigne
->  extern void pm_wakep_autosleep_enabled(bool set);
->  extern void pm_print_active_wakeup_sources(void);
->
-> -extern void lock_system_sleep(void);
-> -extern void unlock_system_sleep(void);
-> +extern unsigned int lock_system_sleep(void);
-> +extern void unlock_system_sleep(unsigned int);
->
->  #else /* !CONFIG_PM_SLEEP */
->
-> @@ -534,8 +534,8 @@ static inline void pm_system_wakeup(void
->  static inline void pm_wakeup_clear(bool reset) {}
->  static inline void pm_system_irq_wakeup(unsigned int irq_number) {}
->
-> -static inline void lock_system_sleep(void) {}
-> -static inline void unlock_system_sleep(void) {}
-> +static inline unsigned int lock_system_sleep(void) { return 0; }
-> +static inline void unlock_system_sleep(unsigned int flags) {}
->
->  #endif /* !CONFIG_PM_SLEEP */
->
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -92,20 +92,24 @@ bool hibernation_available(void)
->   */
->  void hibernation_set_ops(const struct platform_hibernation_ops *ops)
->  {
-> +       unsigned int sleep_flags;
-> +
->         if (ops && !(ops->begin && ops->end &&  ops->pre_snapshot
->             && ops->prepare && ops->finish && ops->enter && ops->pre_restore
->             && ops->restore_cleanup && ops->leave)) {
->                 WARN_ON(1);
->                 return;
->         }
-> -       lock_system_sleep();
-> +
-> +       sleep_flags = lock_system_sleep();
-> +
->         hibernation_ops = ops;
->         if (ops)
->                 hibernation_mode = HIBERNATION_PLATFORM;
->         else if (hibernation_mode == HIBERNATION_PLATFORM)
->                 hibernation_mode = HIBERNATION_SHUTDOWN;
->
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->  }
->  EXPORT_SYMBOL_GPL(hibernation_set_ops);
->
-> @@ -713,6 +717,7 @@ static int load_image_and_restore(void)
->  int hibernate(void)
->  {
->         bool snapshot_test = false;
-> +       unsigned int sleep_flags;
->         int error;
->
->         if (!hibernation_available()) {
-> @@ -720,7 +725,7 @@ int hibernate(void)
->                 return -EPERM;
->         }
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->         /* The snapshot device should not be opened while we're running */
->         if (!hibernate_acquire()) {
->                 error = -EBUSY;
-> @@ -794,7 +799,7 @@ int hibernate(void)
->         pm_restore_console();
->         hibernate_release();
->   Unlock:
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->         pr_info("hibernation exit\n");
->
->         return error;
-> @@ -809,9 +814,10 @@ int hibernate(void)
->   */
->  int hibernate_quiet_exec(int (*func)(void *data), void *data)
->  {
-> +       unsigned int sleep_flags;
->         int error;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->
->         if (!hibernate_acquire()) {
->                 error = -EBUSY;
-> @@ -891,7 +897,7 @@ int hibernate_quiet_exec(int (*func)(voi
->         hibernate_release();
->
->  unlock:
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->
->         return error;
->  }
-> @@ -1100,11 +1106,12 @@ static ssize_t disk_show(struct kobject
->  static ssize_t disk_store(struct kobject *kobj, struct kobj_attribute *attr,
->                           const char *buf, size_t n)
->  {
-> +       int mode = HIBERNATION_INVALID;
-> +       unsigned int sleep_flags;
->         int error = 0;
-> -       int i;
->         int len;
->         char *p;
-> -       int mode = HIBERNATION_INVALID;
-> +       int i;
->
->         if (!hibernation_available())
->                 return -EPERM;
-> @@ -1112,7 +1119,7 @@ static ssize_t disk_store(struct kobject
->         p = memchr(buf, '\n', n);
->         len = p ? p - buf : n;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->         for (i = HIBERNATION_FIRST; i <= HIBERNATION_MAX; i++) {
->                 if (len == strlen(hibernation_modes[i])
->                     && !strncmp(buf, hibernation_modes[i], len)) {
-> @@ -1142,7 +1149,7 @@ static ssize_t disk_store(struct kobject
->         if (!error)
->                 pm_pr_dbg("Hibernation mode set to '%s'\n",
->                                hibernation_modes[mode]);
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->         return error ? error : n;
->  }
->
-> @@ -1158,9 +1165,10 @@ static ssize_t resume_show(struct kobjec
->  static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
->                             const char *buf, size_t n)
->  {
-> -       dev_t res;
-> +       unsigned int sleep_flags;
->         int len = n;
->         char *name;
-> +       dev_t res;
->
->         if (len && buf[len-1] == '\n')
->                 len--;
-> @@ -1173,9 +1181,10 @@ static ssize_t resume_store(struct kobje
->         if (!res)
->                 return -EINVAL;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->         swsusp_resume_device = res;
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
-> +
->         pm_pr_dbg("Configured hibernation resume from disk to %u\n",
->                   swsusp_resume_device);
->         noresume = 0;
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -21,14 +21,16 @@
->
->  #ifdef CONFIG_PM_SLEEP
->
-> -void lock_system_sleep(void)
-> +unsigned int lock_system_sleep(void)
->  {
-> +       unsigned int flags = current->flags;
->         current->flags |= PF_FREEZER_SKIP;
->         mutex_lock(&system_transition_mutex);
-> +       return flags;
->  }
->  EXPORT_SYMBOL_GPL(lock_system_sleep);
->
-> -void unlock_system_sleep(void)
-> +void unlock_system_sleep(unsigned int flags)
->  {
->         /*
->          * Don't use freezer_count() because we don't want the call to
-> @@ -46,7 +48,8 @@ void unlock_system_sleep(void)
->          * Which means, if we use try_to_freeze() here, it would make them
->          * enter the refrigerator, thus causing hibernation to lockup.
->          */
-> -       current->flags &= ~PF_FREEZER_SKIP;
-> +       if (!(flags & PF_FREEZER_SKIP))
-> +               current->flags &= ~PF_FREEZER_SKIP;
->         mutex_unlock(&system_transition_mutex);
->  }
->  EXPORT_SYMBOL_GPL(unlock_system_sleep);
-> @@ -263,16 +266,17 @@ static ssize_t pm_test_show(struct kobje
->  static ssize_t pm_test_store(struct kobject *kobj, struct kobj_attribute *attr,
->                                 const char *buf, size_t n)
->  {
-> +       unsigned int sleep_flags;
->         const char * const *s;
-> +       int error = -EINVAL;
->         int level;
->         char *p;
->         int len;
-> -       int error = -EINVAL;
->
->         p = memchr(buf, '\n', n);
->         len = p ? p - buf : n;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->
->         level = TEST_FIRST;
->         for (s = &pm_tests[level]; level <= TEST_MAX; s++, level++)
-> @@ -282,7 +286,7 @@ static ssize_t pm_test_store(struct kobj
->                         break;
->                 }
->
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->
->         return error ? error : n;
->  }
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -75,9 +75,11 @@ EXPORT_SYMBOL_GPL(pm_suspend_default_s2i
->
->  void s2idle_set_ops(const struct platform_s2idle_ops *ops)
->  {
-> -       lock_system_sleep();
-> +       unsigned int sleep_flags;
-> +
-> +       sleep_flags = lock_system_sleep();
->         s2idle_ops = ops;
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->  }
->
->  static void s2idle_begin(void)
-> @@ -200,7 +202,9 @@ __setup("mem_sleep_default=", mem_sleep_
->   */
->  void suspend_set_ops(const struct platform_suspend_ops *ops)
->  {
-> -       lock_system_sleep();
-> +       unsigned int sleep_flags;
-> +
-> +       sleep_flags = lock_system_sleep();
->
->         suspend_ops = ops;
->
-> @@ -216,7 +220,7 @@ void suspend_set_ops(const struct platfo
->                         mem_sleep_current = PM_SUSPEND_MEM;
->         }
->
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->  }
->  EXPORT_SYMBOL_GPL(suspend_set_ops);
->
-> --- a/kernel/power/user.c
-> +++ b/kernel/power/user.c
-> @@ -47,12 +47,13 @@ int is_hibernate_resume_dev(dev_t dev)
->  static int snapshot_open(struct inode *inode, struct file *filp)
->  {
->         struct snapshot_data *data;
-> +       unsigned int sleep_flags;
->         int error;
->
->         if (!hibernation_available())
->                 return -EPERM;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->
->         if (!hibernate_acquire()) {
->                 error = -EBUSY;
-> @@ -98,7 +99,7 @@ static int snapshot_open(struct inode *i
->         data->dev = 0;
->
->   Unlock:
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->
->         return error;
->  }
-> @@ -106,8 +107,9 @@ static int snapshot_open(struct inode *i
->  static int snapshot_release(struct inode *inode, struct file *filp)
->  {
->         struct snapshot_data *data;
-> +       unsigned int sleep_flags;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->
->         swsusp_free();
->         data = filp->private_data;
-> @@ -124,7 +126,7 @@ static int snapshot_release(struct inode
->                         PM_POST_HIBERNATION : PM_POST_RESTORE);
->         hibernate_release();
->
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->
->         return 0;
->  }
-> @@ -132,11 +134,12 @@ static int snapshot_release(struct inode
->  static ssize_t snapshot_read(struct file *filp, char __user *buf,
->                               size_t count, loff_t *offp)
->  {
-> +       loff_t pg_offp = *offp & ~PAGE_MASK;
->         struct snapshot_data *data;
-> +       unsigned int sleep_flags;
->         ssize_t res;
-> -       loff_t pg_offp = *offp & ~PAGE_MASK;
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->
->         data = filp->private_data;
->         if (!data->ready) {
-> @@ -157,7 +160,7 @@ static ssize_t snapshot_read(struct file
->                 *offp += res;
->
->   Unlock:
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->
->         return res;
->  }
-> @@ -165,16 +168,17 @@ static ssize_t snapshot_read(struct file
->  static ssize_t snapshot_write(struct file *filp, const char __user *buf,
->                                size_t count, loff_t *offp)
->  {
-> +       loff_t pg_offp = *offp & ~PAGE_MASK;
->         struct snapshot_data *data;
-> +       unsigned long sleep_flags;
->         ssize_t res;
-> -       loff_t pg_offp = *offp & ~PAGE_MASK;
->
->         if (need_wait) {
->                 wait_for_device_probe();
->                 need_wait = false;
->         }
->
-> -       lock_system_sleep();
-> +       sleep_flags = lock_system_sleep();
->
->         data = filp->private_data;
->
-> @@ -196,7 +200,7 @@ static ssize_t snapshot_write(struct fil
->         if (res > 0)
->                 *offp += res;
->  unlock:
-> -       unlock_system_sleep();
-> +       unlock_system_sleep(sleep_flags);
->
->         return res;
->  }
->
->
+>  	/*
+>  	 * By default allocate the bounce buffer memory from low memory, but
+>  	 * allow to pick a location everywhere for hypervisors with guest
+> @@ -254,7 +257,8 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+>  	else
+>  		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
+>  	if (!tlb) {
+> -		pr_warn("%s: failed to allocate tlb structure\n", __func__);
+> +		pr_warn("%s: Failed to allocate %zu bytes tlb structure\n",
+> +			__func__, bytes);
+>  		return;
+>  	}
+>  
+> 

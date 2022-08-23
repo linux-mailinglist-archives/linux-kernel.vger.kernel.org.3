@@ -2,142 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FD159E42E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E92059E43E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240990AbiHWMy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S243526AbiHWMwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240467AbiHWMyd (ORCPT
+        with ESMTP id S243156AbiHWMwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:54:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459AD11F745
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661248740;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eNgzriyywXL9TuuKIudqOgLv5q07dltNhohdSXbABsY=;
-        b=cKrQGK4HZF6rrOCz5cdq+XsryKxLFjHzZk5IHmxdiT6bS3ztFUHSlUHd3Pvo3OpG+PkV2h
-        dxrWcp+LHpm0qlup6RnOlJyuagqtP5xq3+AIjWegi2hUs8cNBvCdOrxZHHBkhCFDELnZdF
-        rhvYNzz2y7K94laQdt0uJKi5fqKGqqY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-610-dtSz7GQ0OMmNv-QoChmFAA-1; Tue, 23 Aug 2022 05:55:01 -0400
-X-MC-Unique: dtSz7GQ0OMmNv-QoChmFAA-1
-Received: by mail-wm1-f69.google.com with SMTP id 203-20020a1c02d4000000b003a5f5bce876so10015158wmc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:55:01 -0700 (PDT)
+        Tue, 23 Aug 2022 08:52:30 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05C26325
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:58:15 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so9243621wma.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=BbqAlWYfZGsyfPLY71apTq3nIwqXzvuPF15BxrlLdaw=;
+        b=MByJSC+DhVZo4v7UMC9BN4C3Ekn0xjud697Z7uxkms5N3Wp8X1tiX7L2YteroRiMZm
+         Tty7jqW0+nS6dq8odTqzz9w5y0IusBhMIyCijuhNIP/Gl/vQMPpvdEWEltpHTUEjFZ/F
+         cNKX+Mv/G8OP+1ZR6NBPB3rW9GJZJ5+Ziw+LrVryAORNPM3jfR06KGZf5MyB69OAH9Cu
+         AZ24f4qfEZyWvgiqJHF5AtorvsYi2hzrlBcGzZiA9z956emS+mOfRvkX4MlVk5zsJnYd
+         eWDOjWrxFN8RxPXAXAPWVnaRzoSanR6wdgs5/K2h2Y/Bpr/Po6rEEpbgBwHwijUhGtJ2
+         LIhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=eNgzriyywXL9TuuKIudqOgLv5q07dltNhohdSXbABsY=;
-        b=jmnmHHvjtMkbn7eu1L3E6gKH9KxLANrfSRSoApBbugnB/XfbZ0krgynmxbAEep0geV
-         UUdhRzycSXFNy0/UOJ5EURzGjaqqjfwrrmF3lPRNzbYGV2nsq/HEu+KEGkH0jzHsEFA0
-         54qMYUwQAyyk11fQkO9348VrUbUSOrUU1o/LhAqoJF/szPUJq8i0uE+1dX4KB+UGg0Zu
-         PuPzIhlqQSijSMS1oANPjlq+5LPTFcNP/RQea5lBBz34TjU64leN+H9XSU41POBzgxF2
-         EaOOrQWBtmcHZRWVR3ImcAgbozPRqj5fNGonvgM9nJSMi6263VqEarEo+Ix4plOPi8TZ
-         X49Q==
-X-Gm-Message-State: ACgBeo39earu7cEhTzctY4WIjdbCrzZ1JVHkrYgGDZLXVcbAbkbbewDz
-        lSUG/A8GS2QbAFXyVBR4/Xq0z60t0V2JrBoh9FoGWbd7/VAq7Aoyp1s4RzVjFZT8iUpobqOOFhY
-        HWqV5svGs/hMgR+E4LaJIiDw/
-X-Received: by 2002:a05:600c:3ac6:b0:3a5:c03f:510d with SMTP id d6-20020a05600c3ac600b003a5c03f510dmr1627260wms.120.1661248500588;
-        Tue, 23 Aug 2022 02:55:00 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR65Jq1hO7F3LQ7a1IOP4qhQdMKQbbjgZXrDqYYser19vNBXf0fVzg1beAiFRcgPcWCQF4arLw==
-X-Received: by 2002:a05:600c:3ac6:b0:3a5:c03f:510d with SMTP id d6-20020a05600c3ac600b003a5c03f510dmr1627249wms.120.1661248500265;
-        Tue, 23 Aug 2022 02:55:00 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:1600:c48b:1fab:a330:5182? (p200300cbc70b1600c48b1faba3305182.dip0.t-ipconnect.de. [2003:cb:c70b:1600:c48b:1fab:a330:5182])
-        by smtp.gmail.com with ESMTPSA id n17-20020a5d4851000000b0021eff2ecb31sm13784512wrs.95.2022.08.23.02.54.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 02:54:59 -0700 (PDT)
-Message-ID: <c9536f33-2f66-af0a-472a-c982a2341738@redhat.com>
-Date:   Tue, 23 Aug 2022 11:54:59 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=BbqAlWYfZGsyfPLY71apTq3nIwqXzvuPF15BxrlLdaw=;
+        b=TD98emWaGfDqQoYrgW9OXV6QM1Mn2KQbw0+MURyELH7EYhMy1dtnKNLtqvg3RJZvkm
+         85hQmPuY9uWAc2wvN6JD5jw4CTiekNiVDlnGPrZLrKwuC+sCq80uu669ilIWicgp3JaC
+         N0NUYsOxLaouC1jGN9l7AAdpV2RySfHtgafKX53B5fJOfc2Uo031a7flq61UXCnnH4Qu
+         bmUib+WDACLx8KzbZwrjSM8tE67aGknlSRDABxLIjDBXiHP5EJYgnhNIx8+qATVsHKB4
+         ENlLcne7sTdN5hLGWmemtzm+4BdezLMXDgoIEygyVX1IUlXfCcHnNAgFs9yGB7QpoFzp
+         Epkg==
+X-Gm-Message-State: ACgBeo1SRkp7rNztFfzT4nChscQ0W6yZi2amK4LoaOTXg8IHsTkH1mIV
+        +3FCPu6x4YH667rCgCqUJ5nmd5rupyT8GLSv
+X-Google-Smtp-Source: AA6agR7KCCEiVwgbungNN9V/KW365pmudGRPb1bTDOxB0xPshfGIMwdaZoc/y8laIo0cKC1R2SsmNg==
+X-Received: by 2002:a05:600c:19c8:b0:3a5:ec6a:8d16 with SMTP id u8-20020a05600c19c800b003a5ec6a8d16mr1592882wmq.182.1661248693717;
+        Tue, 23 Aug 2022 02:58:13 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id y9-20020adff149000000b0022549ecba02sm8462201wro.19.2022.08.23.02.58.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 02:58:13 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 10:58:10 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: Re: [PATCH 4.19 026/287] selftests/bpf: Fix "dubious pointer
+ arithmetic" test
+Message-ID: <YwSksjAucU2zwo0y@myrica>
+References: <20220823080100.268827165@linuxfoundation.org>
+ <20220823080101.156298170@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 8/8] memblock tests: add tests for memblock_trim_memory
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1660897732.git.remckee0@gmail.com>
- <4157021eecdd3abb503d4b1d1449844baac2d7b9.1660897732.git.remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <4157021eecdd3abb503d4b1d1449844baac2d7b9.1660897732.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823080101.156298170@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.08.22 10:34, Rebecca Mckeever wrote:
-> Add tests for memblock_trim_memory() for the following scenarios:
-> - all regions aligned
-> - one region unalign that is smaller than the alignment
+Hi,
 
-s/region unalign/unaligned region/
+On Tue, Aug 23, 2022 at 10:23:15AM +0200, Greg Kroah-Hartman wrote:
+> From: Ovidiu Panait <ovidiu.panait@windriver.com>
+> 
+> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> 
+> commit 3615bdf6d9b19db12b1589861609b4f1c6a8d303 upstream.
 
-> - one region unaligned at the base
-> - one region unaligned at the end
+This shouldn't be backported to 4.19, because it adjusts the selftest due
+to commit b02709587ea3 ("bpf: Fix propagation of 32-bit signed bounds from
+64-bit bounds."), which wasn't backported further than 5.9.
 
-"unaligned region" ?
+See [1] for the report about these BPF backports to v5.4, which we are
+still trying to unravel. Given how painful building the BPF tests used to
+be even on 5.4, I'd rather not do the same on 4.19!
 
-[...]
+[1] https://lore.kernel.org/lkml/CAPXMrf-C5XEUfOJd3GCtgtHOkc8DxDGbLxE5=GFmr+Py0zKxJA@mail.gmail.com/
 
->  
-> +/*
-> + * A test that tries to trim memory when both ends of the memory region are
-> + * aligned. Expect that the memory will not be trimmed. Expect the counter to
-> + * not be updated.
-> + */
-> +static int memblock_trim_memory_aligned_check(void)
-> +{
-> +	struct memblock_region *rgn;
-> +	phys_addr_t alignment = SMP_CACHE_BYTES;
-
-Could make that "const" -- same applies to other functions.
-
-> +
-> +	rgn = &memblock.memory.regions[0];
-> +
-> +	struct region r = {
-> +		.base = alignment,
-> +		.size = alignment * 4
-> +	};
-> +
-
-[[[.]
-
-> +static int memblock_trim_memory_checks(void)
-> +{
-> +	prefix_reset();
-> +	prefix_push(FUNC_TRIM);
-> +	test_print("Running %s tests...\n", FUNC_TRIM);
-
-Just a note that this could have been
-
-test_print("Running " FUNC_TRIM " tests...\n");
-
-But it's good to keep this consistent for all tests.
-
-
-Nice test cases!
-
--- 
 Thanks,
+Jean
 
-David / dhildenb
-
+> 
+> The verifier trace changed following a bugfix. After checking the 64-bit
+> sign, only the upper bit mask is known, not bit 31. Update the test
+> accordingly.
+> 
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> [OP: adjust for 4.19 selftests]
+> Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  tools/testing/selftests/bpf/test_align.c |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> --- a/tools/testing/selftests/bpf/test_align.c
+> +++ b/tools/testing/selftests/bpf/test_align.c
+> @@ -475,10 +475,10 @@ static struct bpf_align_test tests[] = {
+>  			 */
+>  			{7, "R5=inv(id=0,smin_value=-9223372036854775806,smax_value=9223372036854775806,umin_value=2,umax_value=18446744073709551614,var_off=(0x2; 0xfffffffffffffffc)"},
+>  			/* Checked s>=0 */
+> -			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
+> +			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
+>  			/* packet pointer + nonnegative (4n+2) */
+> -			{11, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
+> -			{13, "R4=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
+> +			{11, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
+> +			{13, "R4=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
+>  			/* NET_IP_ALIGN + (4n+2) == (4n), alignment is fine.
+>  			 * We checked the bounds, but it might have been able
+>  			 * to overflow if the packet pointer started in the
+> @@ -486,7 +486,7 @@ static struct bpf_align_test tests[] = {
+>  			 * So we did not get a 'range' on R6, and the access
+>  			 * attempt will fail.
+>  			 */
+> -			{15, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
+> +			{15, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc)"},
+>  		}
+>  	},
+>  	{
+> 
+> 

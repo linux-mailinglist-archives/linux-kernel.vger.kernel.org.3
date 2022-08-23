@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8982259DD28
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8855459E056
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241765AbiHWMMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S1356923AbiHWK4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359327AbiHWML0 (ORCPT
+        with ESMTP id S1355718AbiHWKuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:11:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC02EE0FFC;
-        Tue, 23 Aug 2022 02:39:22 -0700 (PDT)
+        Tue, 23 Aug 2022 06:50:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC2CAB1B7;
+        Tue, 23 Aug 2022 02:12:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C6DAB81C53;
-        Tue, 23 Aug 2022 09:37:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5111C433C1;
-        Tue, 23 Aug 2022 09:37:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C7D34CE1B55;
+        Tue, 23 Aug 2022 09:12:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5587C433C1;
+        Tue, 23 Aug 2022 09:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247472;
-        bh=9pALSKMLn+fRZb6k9Le6LFFrcfVLYUuYMzrfmZuBViE=;
+        s=korg; t=1661245954;
+        bh=OGw3oPz10IqjYMxRUxCHGCBX+uIvqJJ1DbIfwwhwO/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xK/1yuMK/5gaOQzWzhGafgxip7cqdeP2B41g1HjWQMcQCYk+FczhI3l0fyuviXvSg
-         GupojXCjukKfq1bwMAiEXYdQGASkHZfMwFR4gNi8afn67scVmxk9KPXmXGfOmenKuy
-         5XE95yqY9jXZw+Q/yOFLTov6tAQnb6sLXMTB61IU=
+        b=b+wVhStmQs2VNjHr5jisZ9OTj6wB/ATG6qVTdyRib8d7bZ0BjD7WsRgXpBnam8xuW
+         zYQegmOcxzTWdefjmzy/oSkf0DC/d4igdAuBWK2kfQqf8mqNb6UpgJ8NbTD0PJAPNm
+         2105++qccEhffNR3UGm+L+rvEIwI6uVJ/5btC1IU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
-Subject: [PATCH 5.10 048/158] vsock: Fix memory leak in vsock_connect()
+        stable@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 211/287] net_sched: cls_route: disallow handle of 0
 Date:   Tue, 23 Aug 2022 10:26:20 +0200
-Message-Id: <20220823080048.034289837@linuxfoundation.org>
+Message-Id: <20220823080108.037249281@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,83 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
 
-commit 7e97cfed9929eaabc41829c395eb0d1350fccb9d upstream.
+commit 02799571714dc5dd6948824b9d080b44a295f695 upstream.
 
-An O_NONBLOCK vsock_connect() request may try to reschedule
-@connect_work.  Imagine the following sequence of vsock_connect()
-requests:
+Follows up on:
+https://lore.kernel.org/all/20220809170518.164662-1-cascardo@canonical.com/
 
-  1. The 1st, non-blocking request schedules @connect_work, which will
-     expire after 200 jiffies.  Socket state is now SS_CONNECTING;
+handle of 0 implies from/to of universe realm which is not very
+sensible.
 
-  2. Later, the 2nd, blocking request gets interrupted by a signal after
-     a few jiffies while waiting for the connection to be established.
-     Socket state is back to SS_UNCONNECTED, but @connect_work is still
-     pending, and will expire after 100 jiffies.
+Lets see what this patch will do:
+$sudo tc qdisc add dev $DEV root handle 1:0 prio
 
-  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
-     again.  Since @connect_work is already scheduled,
-     schedule_delayed_work() silently returns.  sock_hold() is called
-     twice, but sock_put() will only be called once in
-     vsock_connect_timeout(), causing a memory leak reported by syzbot:
+//lets manufacture a way to insert handle of 0
+$sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 \
+route to 0 from 0 classid 1:10 action ok
 
-  BUG: memory leak
-  unreferenced object 0xffff88810ea56a40 (size 1232):
-    comm "syz-executor756", pid 3604, jiffies 4294947681 (age 12.350s)
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-      28 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  (..@............
-    backtrace:
-      [<ffffffff837c830e>] sk_prot_alloc+0x3e/0x1b0 net/core/sock.c:1930
-      [<ffffffff837cbe22>] sk_alloc+0x32/0x2e0 net/core/sock.c:1989
-      [<ffffffff842ccf68>] __vsock_create.constprop.0+0x38/0x320 net/vmw_vsock/af_vsock.c:734
-      [<ffffffff842ce8f1>] vsock_create+0xc1/0x2d0 net/vmw_vsock/af_vsock.c:2203
-      [<ffffffff837c0cbb>] __sock_create+0x1ab/0x2b0 net/socket.c:1468
-      [<ffffffff837c3acf>] sock_create net/socket.c:1519 [inline]
-      [<ffffffff837c3acf>] __sys_socket+0x6f/0x140 net/socket.c:1561
-      [<ffffffff837c3bba>] __do_sys_socket net/socket.c:1570 [inline]
-      [<ffffffff837c3bba>] __se_sys_socket net/socket.c:1568 [inline]
-      [<ffffffff837c3bba>] __x64_sys_socket+0x1a/0x20 net/socket.c:1568
-      [<ffffffff84512815>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-      [<ffffffff84512815>] do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
-      [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-  <...>
+//gets rejected...
+Error: handle of 0 is not valid.
+We have an error talking to the kernel, -1
 
-Use mod_delayed_work() instead: if @connect_work is already scheduled,
-reschedule it, and undo sock_hold() to keep the reference count
-balanced.
+//lets create a legit entry..
+sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 route from 10 \
+classid 1:10 action ok
 
-Reported-and-tested-by: syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
-Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
-Co-developed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+//what did the kernel insert?
+$sudo tc filter ls dev $DEV parent 1:0
+filter protocol ip pref 100 route chain 0
+filter protocol ip pref 100 route chain 0 fh 0x000a8000 flowid 1:10 from 10
+	action order 1: gact action pass
+	 random type none pass val 0
+	 index 1 ref 1 bind 1
+
+//Lets try to replace that legit entry with a handle of 0
+$ sudo tc filter replace dev $DEV parent 1:0 protocol ip prio 100 \
+handle 0x000a8000 route to 0 from 0 classid 1:10 action drop
+
+Error: Replacing with handle of 0 is invalid.
+We have an error talking to the kernel, -1
+
+And last, lets run Cascardo's POC:
+$ ./poc
+0
+0
+-22
+-22
+-22
+
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Acked-by: Stephen Hemminger <stephen@networkplumber.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/vmw_vsock/af_vsock.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ net/sched/cls_route.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1347,7 +1347,14 @@ static int vsock_stream_connect(struct s
- 			 * timeout fires.
- 			 */
- 			sock_hold(sk);
--			schedule_delayed_work(&vsk->connect_work, timeout);
-+
-+			/* If the timeout function is already scheduled,
-+			 * reschedule it, then ungrab the socket refcount to
-+			 * keep it balanced.
-+			 */
-+			if (mod_delayed_work(system_wq, &vsk->connect_work,
-+					     timeout))
-+				sock_put(sk);
+--- a/net/sched/cls_route.c
++++ b/net/sched/cls_route.c
+@@ -427,6 +427,11 @@ static int route4_set_parms(struct net *
+ 			return -EINVAL;
+ 	}
  
- 			/* Skip ahead to preserve error code set above. */
- 			goto out_wait;
++	if (!nhandle) {
++		NL_SET_ERR_MSG(extack, "Replacing with handle of 0 is invalid");
++		return -EINVAL;
++	}
++
+ 	h1 = to_hash(nhandle);
+ 	b = rtnl_dereference(head->table[h1]);
+ 	if (!b) {
+@@ -480,6 +485,11 @@ static int route4_change(struct net *net
+ 	int err;
+ 	bool new = true;
+ 
++	if (!handle) {
++		NL_SET_ERR_MSG(extack, "Creating with handle of 0 is invalid");
++		return -EINVAL;
++	}
++
+ 	if (opt == NULL)
+ 		return handle ? -EINVAL : 0;
+ 
 
 

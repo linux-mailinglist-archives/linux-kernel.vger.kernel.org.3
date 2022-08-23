@@ -2,72 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D81559E86B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A5E59E868
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343916AbiHWRD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S1343928AbiHWRED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245431AbiHWRBl (ORCPT
+        with ESMTP id S1343790AbiHWRBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:01:41 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD4A89819
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:09:12 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1661263742t9yhkbf8
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 22:09:01 +0800 (CST)
-X-QQ-SSF: 0100000000200040B000B00A0000000
-X-QQ-FEAT: 7jw2iSiCazoA2CrqQzokZA/mgo4Jlhw0CJqSq4DNXNufw5oX8LuejuTp7IYpJ
-        FIs2fiQaJ/SeQUTGibUx6g0cwM6pbaMkoQ5rnaF0hDwKRCQR/yiMAe0EyXGQiW8nKpssBf3
-        7Epy3HILmQ/zzxE4zCKN11KVxYHz2ffoW7MAPGAiy/u2hn2qvXGeKl7L6RFv/yCMbBQUSe+
-        A9IA1RYusTO4xKN85ZRGvA8y7wh5Cwj0APfXFYIfOKSMFhmwbN2VXYjnNVeYV3nsABxdZlN
-        YwmXxdlivp/Maw9izMq+kx/Ug6JZg2UvXuZP6Y5jOlW2HTQQQN7svidDDy23o4erTTP2nWO
-        uGHBzhtIvr7lNYb9gN8DBXlpGv2TOaa9+64qgxRc8jw8TekGwY=
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     patrik.r.jakobsson@gmail.com, airlied@linux.ie, aniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] drm/gma500: fix repeated words in comments
-Date:   Tue, 23 Aug 2022 22:08:54 +0800
-Message-Id: <20220823140854.8045-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 23 Aug 2022 13:01:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461313E36
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:08:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5DC9E1F8FF;
+        Tue, 23 Aug 2022 14:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661263738; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qqt+sqPfQ5YZMyDpqRmx3/6lQYTEzFiEGh9Y/BPZ7oo=;
+        b=tSjKqvrTKocvq6Ylkq3q678K3+RuzZy1LqQ+Tzu7rWhrbJIZ3lUEYbE+TaqPz+UnptO6fe
+        gITrAy1pOEdpca1l/xVR8Cwz6DODiRJ6FuFTVRvdOhsig4WpOuSbSj9xMUD8FMQQo+MWP4
+        174oM7DibqY0+fa0HXhaCt7pzyKtsxw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661263738;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qqt+sqPfQ5YZMyDpqRmx3/6lQYTEzFiEGh9Y/BPZ7oo=;
+        b=CvyHJyKm8vmChdO4dt4xvi7pyckLkFDrGvCgONpTO312QxH6+nlaZ1KVWtV+z84D3FlxBM
+        pA4vQy39x/rbRACg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0479A13AB7;
+        Tue, 23 Aug 2022 14:08:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jed6OnnfBGO5dwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 23 Aug 2022 14:08:57 +0000
+Message-ID: <42323fe6-3ac1-4dff-cf49-6e97525df837@suse.cz>
+Date:   Tue, 23 Aug 2022 16:08:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH linux-next v2] mm/slub: Remove the unneeded result
+ variable
+Content-Language: en-US
+To:     cgel.zte@gmail.com, 42.hyeyoo@gmail.com
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org,
+        roman.gushchin@linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220822013830.199836-1-ye.xingchen@zte.com.cn>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220822013830.199836-1-ye.xingchen@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+On 8/22/22 03:38, cgel.zte@gmail.com wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Return the value from attribute->store(s, buf, len) and
+> attribute->show(s, buf) directly instead of storing it in
+> another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- drivers/gpu/drm/gma500/cdv_intel_dp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, added to slab.git for-6.1/trivial
 
-diff --git a/drivers/gpu/drm/gma500/cdv_intel_dp.c b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-index 9ee99a7d4fbe..a286861ffa3f 100644
---- a/drivers/gpu/drm/gma500/cdv_intel_dp.c
-+++ b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-@@ -114,7 +114,7 @@ i2c_algo_dp_aux_stop(struct i2c_adapter *adapter, bool reading)
- 
- /*
-  * Write a single byte to the current I2C address, the
-- * the I2C link must be running or this returns -EIO
-+ * I2C link must be running or this returns -EIO
-  */
- static int
- i2c_algo_dp_aux_put_byte(struct i2c_adapter *adapter, u8 byte)
--- 
-2.36.1
+> ---
+> v1 -> v2
+> Add the whitespace between subsystem and summary in subject line.
+>  mm/slub.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 6953c3367bc2..7bea010a20ff 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -5852,7 +5852,6 @@ static ssize_t slab_attr_show(struct kobject *kobj,
+>  {
+>  	struct slab_attribute *attribute;
+>  	struct kmem_cache *s;
+> -	int err;
+>  
+>  	attribute = to_slab_attr(attr);
+>  	s = to_slab(kobj);
+> @@ -5860,9 +5859,7 @@ static ssize_t slab_attr_show(struct kobject *kobj,
+>  	if (!attribute->show)
+>  		return -EIO;
+>  
+> -	err = attribute->show(s, buf);
+> -
+> -	return err;
+> +	return attribute->show(s, buf);
+>  }
+>  
+>  static ssize_t slab_attr_store(struct kobject *kobj,
+> @@ -5871,7 +5868,6 @@ static ssize_t slab_attr_store(struct kobject *kobj,
+>  {
+>  	struct slab_attribute *attribute;
+>  	struct kmem_cache *s;
+> -	int err;
+>  
+>  	attribute = to_slab_attr(attr);
+>  	s = to_slab(kobj);
+> @@ -5879,8 +5875,7 @@ static ssize_t slab_attr_store(struct kobject *kobj,
+>  	if (!attribute->store)
+>  		return -EIO;
+>  
+> -	err = attribute->store(s, buf, len);
+> -	return err;
+> +	return attribute->store(s, buf, len);
+>  }
+>  
+>  static void kmem_cache_release(struct kobject *k)
 

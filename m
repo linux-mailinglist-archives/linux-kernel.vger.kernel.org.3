@@ -2,38 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2910059E812
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92F759E797
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244760AbiHWQ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S245062AbiHWQit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343503AbiHWQz2 (ORCPT
+        with ESMTP id S245007AbiHWQh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:55:28 -0400
-X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 06:25:47 PDT
-Received: from luna.linkmauve.fr (82-65-109-163.subs.proxad.net [82.65.109.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7CD883CA;
-        Tue, 23 Aug 2022 06:25:46 -0700 (PDT)
-Received: by luna.linkmauve.fr (Postfix, from userid 1000)
-        id DBE46F41DDA; Tue, 23 Aug 2022 15:07:05 +0200 (CEST)
-From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Ash Logan <ash@heyquark.com>,
-        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.ne@posteo.net>
-Subject: [PATCH] rtc: gamecube: Always reset HW_SRNPROT after read
-Date:   Tue, 23 Aug 2022 15:07:02 +0200
-Message-Id: <20220823130702.1046-1-linkmauve@linkmauve.fr>
-X-Mailer: git-send-email 2.37.2
+        Tue, 23 Aug 2022 12:37:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300F34D24A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661260047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5XBOIH3pNVedUwFsOXAIjq4Jvv7g7DjLTpjlFUvS39Y=;
+        b=HEXeZwm1dWoMYzZJXPxNcOx3sW3GdZ8oHvNccfx9tYtagDeZ36WiKmDTfY3QwdT6KNeZmj
+        Szcjpya8+WyyTGqT7w19KlsYLDLU3zF2W1UGdD/noT0uze9jBIkWUxC6JNVdBdvhKqmKNX
+        trVZTQ0QSjVbzHXkR5tqM/fflCRCdu4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-652-tNCRk7prMsyJhm6rhXGLfg-1; Tue, 23 Aug 2022 09:07:23 -0400
+X-MC-Unique: tNCRk7prMsyJhm6rhXGLfg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3EAE80A0BC;
+        Tue, 23 Aug 2022 13:07:22 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 84A1DC15BB3;
+        Tue, 23 Aug 2022 13:07:21 +0000 (UTC)
+Subject: [PATCH 0/5] smb3: Fix missing locks and invalidation in fallocate
+From:   David Howells <dhowells@redhat.com>
+To:     sfrench@samba.org, linux-cifs@vger.kernel.org
+Cc:     lsahlber@redhat.com, jlayton@kernel.org, dchinner@redhat.com,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, samba-technical@lists.samba.org
+Date:   Tue, 23 Aug 2022 14:07:20 +0100
+Message-ID: <166126004083.548536.11195647088995116235.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_DUL,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,45 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This register would fail to be reset if reading the RTC bias failed for
-whichever reason.  This commit reorganises the code around to
-unconditionally write it back to its previous value, unmap it, and
-return the result of regmap_read(), which makes it both simpler and more
-correct in the error case.
 
-Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+Here are some patches to fix locking and invalidation in the smb3/cifs
+fallocate, in particular in zero_range, punch_hole, collapse_range and
+insert_range.
+
+Those four operations were, for the most part, missing calls to inode_lock(),
+filemap_invalidate_lock() and truncate_pagecache_range(), the last of which
+was causing generic/031 to show data corruption.
+
+David
 ---
- drivers/rtc/rtc-gamecube.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+David Howells (4):
+      smb3: Move the flush out of smb2_copychunk_range() into its callers
+      smb3: missing inode locks in zero range
+      smb3: missing inode locks in punch hole
+      smb3: fix temporary data corruption in insert range
 
-diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
-index c2717bb52b2b..c828bc8e05b9 100644
---- a/drivers/rtc/rtc-gamecube.c
-+++ b/drivers/rtc/rtc-gamecube.c
-@@ -265,18 +265,17 @@ static int gamecube_rtc_read_offset_from_sram(struct priv *d)
- 	 * SRAM address as on previous consoles.
- 	 */
- 	ret = regmap_read(d->regmap, RTC_SRAM_BIAS, &d->rtc_bias);
--	if (ret) {
--		pr_err("failed to get the RTC bias\n");
--		iounmap(hw_srnprot);
--		return -1;
--	}
- 
- 	/* Reset SRAM access to how it was before, our job here is done. */
- 	if (old != 0x7bf)
- 		iowrite32be(old, hw_srnprot);
-+
- 	iounmap(hw_srnprot);
- 
--	return 0;
-+	if (ret)
-+		pr_err("failed to get the RTC bias\n");
-+
-+	return ret;
- }
- 
- static const struct regmap_range rtc_rd_ranges[] = {
--- 
-2.37.2
+Steve French (1):
+      smb3: fix temporary data corruption in collapse range
+
+
+ fs/cifs/cifsfs.c  |   2 +
+ fs/cifs/smb2ops.c | 131 ++++++++++++++++++++++++++--------------------
+ 2 files changed, 75 insertions(+), 58 deletions(-)
+
 

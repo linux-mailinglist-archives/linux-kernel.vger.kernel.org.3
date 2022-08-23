@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1923959DF38
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D6559DD63
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353233AbiHWKNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S1355798AbiHWKo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352708AbiHWKGI (ORCPT
+        with ESMTP id S1355112AbiHWKed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:08 -0400
+        Tue, 23 Aug 2022 06:34:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4B8323;
-        Tue, 23 Aug 2022 01:52:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95887A5C65;
+        Tue, 23 Aug 2022 02:06:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E08A3B81C3B;
-        Tue, 23 Aug 2022 08:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2D2C433D6;
-        Tue, 23 Aug 2022 08:52:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A06D6B81C95;
+        Tue, 23 Aug 2022 09:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B99C433B5;
+        Tue, 23 Aug 2022 09:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244750;
-        bh=3agTiGGPSeveg7MES/sVEGH2c78Dw29TGthGj9XVZyo=;
+        s=korg; t=1661245616;
+        bh=lNOn6QaHW8plvFamaLgqEtt38KC5LSM6pyNKcHZruUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WC/9+XQ6a8nwH14d1oTE99k25s80OCLpg+OZXYMmaa3kX2CfJUrf7za1QaC/vMo0v
-         IsiE/Zgxabh4//o9vz/6K86F5X2m16w5y/z4VDJoal1gGSohHmT+InB62VgC6UFN/N
-         GStmgp1ajd/ksolOpEyX7NFhOC7bGEBx5O8nL4NM=
+        b=h/E991gOiGGa09gYyIViMFa3mshBUa/ZA/SaaK4SLHktBddEvHuF+hpIVWsgMDIvg
+         ZPR3XPEUgxyb5x3hGpF4NQatCo43FqINz1z/Hr1kSTn2lrLS6rm28Ry5gMfZgvALPz
+         xhyA9Twofs/CONdEiY5s6oXLpHqpNT3wqgBfrauA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Rustam Subkhankulov <subkhankulov@ispras.ru>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 143/244] net: dsa: sja1105: fix buffer overflow in sja1105_setup_devlink_regions()
+        Raviteja Garimella <raviteja.garimella@broadcom.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 133/287] usb: gadget: udc: amd5536 depends on HAS_DMA
 Date:   Tue, 23 Aug 2022 10:25:02 +0200
-Message-Id: <20220823080103.948882163@linuxfoundation.org>
+Message-Id: <20220823080104.909987977@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rustam Subkhankulov <subkhankulov@ispras.ru>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit fd8e899cdb5ecaf8e8ee73854a99e10807eef1de upstream.
+[ Upstream commit 8097cf2fb3b2205257f1c76f4808e3398d66b6d9 ]
 
-If an error occurs in dsa_devlink_region_create(), then 'priv->regions'
-array will be accessed by negative index '-1'.
+USB_AMD5536UDC should depend on HAS_DMA since it selects USB_SNP_CORE,
+which depends on HAS_DMA and since 'select' does not follow any
+dependency chains.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Fixes this kconfig warning:
 
-Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
-Fixes: bf425b82059e ("net: dsa: sja1105: expose static config as devlink region")
-Link: https://lore.kernel.org/r/20220817003845.389644-1-subkhankulov@ispras.ru
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+WARNING: unmet direct dependencies detected for USB_SNP_CORE
+  Depends on [n]: USB_SUPPORT [=y] && USB_GADGET [=y] && (USB_AMD5536UDC [=y] || USB_SNP_UDC_PLAT [=n]) && HAS_DMA [=n]
+  Selected by [y]:
+  - USB_AMD5536UDC [=y] && USB_SUPPORT [=y] && USB_GADGET [=y] && USB_PCI [=y]
+
+Fixes: 97b3ffa233b9 ("usb: gadget: udc: amd5536: split core and PCI layer")
+Cc: Raviteja Garimella <raviteja.garimella@broadcom.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20220709013601.7536-1-rdunlap@infradead.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/sja1105/sja1105_devlink.c |    2 +-
+ drivers/usb/gadget/udc/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/dsa/sja1105/sja1105_devlink.c
-+++ b/drivers/net/dsa/sja1105/sja1105_devlink.c
-@@ -93,7 +93,7 @@ static int sja1105_setup_devlink_regions
+diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+index d83d93c6ef9e..33b5648b2819 100644
+--- a/drivers/usb/gadget/udc/Kconfig
++++ b/drivers/usb/gadget/udc/Kconfig
+@@ -309,7 +309,7 @@ source "drivers/usb/gadget/udc/bdc/Kconfig"
  
- 		region = dsa_devlink_region_create(ds, ops, 1, size);
- 		if (IS_ERR(region)) {
--			while (i-- >= 0)
-+			while (--i >= 0)
- 				dsa_devlink_region_destroy(priv->regions[i]);
- 			return PTR_ERR(region);
- 		}
+ config USB_AMD5536UDC
+ 	tristate "AMD5536 UDC"
+-	depends on USB_PCI
++	depends on USB_PCI && HAS_DMA
+ 	select USB_SNP_CORE
+ 	help
+ 	   The AMD5536 UDC is part of the AMD Geode CS5536, an x86 southbridge.
+-- 
+2.35.1
+
 
 

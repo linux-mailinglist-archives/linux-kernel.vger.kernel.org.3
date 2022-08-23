@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DF959E1F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D0859E036
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243150AbiHWLfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        id S1353367AbiHWKPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357317AbiHWLbg (ORCPT
+        with ESMTP id S1352809AbiHWKGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:31:36 -0400
+        Tue, 23 Aug 2022 06:06:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFC58F956;
-        Tue, 23 Aug 2022 02:25:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E387027166;
+        Tue, 23 Aug 2022 01:53:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C3D9612B5;
-        Tue, 23 Aug 2022 09:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 330BDC433C1;
-        Tue, 23 Aug 2022 09:25:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76FE461377;
+        Tue, 23 Aug 2022 08:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76AC6C433D6;
+        Tue, 23 Aug 2022 08:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246734;
-        bh=YcBMqvhV+F0IBf4JpO7+0HnjAx/i8V8xOh8U7HuEtzY=;
+        s=korg; t=1661244786;
+        bh=UlzcKidXqLG4HmGSEd5gPKAWOKksFX8ym+DBmzhofjk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1CWgHwdHRwdDUpKRqdvVNJCdotxws6wnR3cpZe6GjYbLaT2j4R826ZIUj31/7Dqtw
-         pEwvAJiWOIOyoZAMJHmODimk3P8f6k6ycbHn92zGBlHiEPoJ6Ta+270IAjSJyIQTHF
-         x/q5+s089P/OTUSPki8AJAcixn9l3mB4NznDNc8E=
+        b=DGY3A5P+4Z+2xhE9/2R04DPXjp+R0wuoSJfGe6hEO2GQsBlX9iBFaQYbL3518zUPJ
+         JK8Z47fVyvcGM3EBGaxrcJU9eA36kiHgED3HyzYZgxF+tkGn+BcvFJMgBXxMjHSuvf
+         /sjj9mA3m5pFmVYTiS8qBJyp8+aAKZVY47Fxeomk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 195/389] platform/olpc: Fix uninitialized data in debugfs write
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.15 114/244] nios2: add force_successful_syscall_return()
 Date:   Tue, 23 Aug 2022 10:24:33 +0200
-Message-Id: <20220823080123.780375921@linuxfoundation.org>
+Message-Id: <20220823080102.823419744@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-[ Upstream commit 40ec787e1adf302c11668d4cc69838f4d584187d ]
+commit fd0c153daad135d0ec1a53c5dbe6936a724d6ae1 upstream.
 
-The call to:
+If we use the ancient SysV syscall ABI, we'd better have tell the
+kernel how to claim that a negative return value is a success.
+Use ->orig_r2 for that - it's inaccessible via ptrace, so it's
+a fair game for changes and it's normally[*] non-negative on return
+from syscall.  Set to -1; syscall is not going to be restart-worthy
+by definition, so we won't interfere with that use either.
 
-	size = simple_write_to_buffer(cmdbuf, sizeof(cmdbuf), ppos, buf, size);
+[*] the only exception is rt_sigreturn(), where we skip the entire
+messing with r1/r2 anyway.
 
-will succeed if at least one byte is written to the "cmdbuf" buffer.
-The "*ppos" value controls which byte is written.  Another problem is
-that this code does not check for errors so it's possible for the entire
-buffer to be uninitialized.
-
-Inintialize the struct to zero to prevent reading uninitialized stack
-data.
-
-Debugfs is normally only writable by root so the impact of this bug is
-very minimal.
-
-Fixes: 6cca83d498bd ("Platform: OLPC: move debugfs support from x86 EC driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YthIKn+TfZSZMEcM@kili
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 82ed08dd1b0e ("nios2: Exception handling")
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/olpc/olpc-ec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/nios2/include/asm/ptrace.h |    2 ++
+ arch/nios2/kernel/entry.S       |    6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/drivers/platform/olpc/olpc-ec.c b/drivers/platform/olpc/olpc-ec.c
-index 2db7113383fd..89d9fca02fe9 100644
---- a/drivers/platform/olpc/olpc-ec.c
-+++ b/drivers/platform/olpc/olpc-ec.c
-@@ -265,7 +265,7 @@ static ssize_t ec_dbgfs_cmd_write(struct file *file, const char __user *buf,
- 	int i, m;
- 	unsigned char ec_cmd[EC_MAX_CMD_ARGS];
- 	unsigned int ec_cmd_int[EC_MAX_CMD_ARGS];
--	char cmdbuf[64];
-+	char cmdbuf[64] = "";
- 	int ec_cmd_bytes;
+--- a/arch/nios2/include/asm/ptrace.h
++++ b/arch/nios2/include/asm/ptrace.h
+@@ -74,6 +74,8 @@ extern void show_regs(struct pt_regs *);
+ 	((struct pt_regs *)((unsigned long)current_thread_info() + THREAD_SIZE)\
+ 		- 1)
  
- 	mutex_lock(&ec_dbgfs_lock);
--- 
-2.35.1
-
++#define force_successful_syscall_return() (current_pt_regs()->orig_r2 = -1)
++
+ int do_syscall_trace_enter(void);
+ void do_syscall_trace_exit(void);
+ #endif /* __ASSEMBLY__ */
+--- a/arch/nios2/kernel/entry.S
++++ b/arch/nios2/kernel/entry.S
+@@ -213,6 +213,9 @@ local_restart:
+ translate_rc_and_ret:
+ 	movi	r1, 0
+ 	bge	r2, zero, 3f
++	ldw	r1, PT_ORIG_R2(sp)
++	addi	r1, r1, 1
++	beq	r1, zero, 3f
+ 	sub	r2, zero, r2
+ 	movi	r1, 1
+ 3:
+@@ -276,6 +279,9 @@ traced_system_call:
+ translate_rc_and_ret2:
+ 	movi	r1, 0
+ 	bge	r2, zero, 4f
++	ldw	r1, PT_ORIG_R2(sp)
++	addi	r1, r1, 1
++	beq	r1, zero, 4f
+ 	sub	r2, zero, r2
+ 	movi	r1, 1
+ 4:
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C8059D75E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353D059D582
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiHWJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S243531AbiHWI2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349686AbiHWJQM (ORCPT
+        with ESMTP id S243032AbiHWIWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:16:12 -0400
+        Tue, 23 Aug 2022 04:22:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1264E870BD;
-        Tue, 23 Aug 2022 01:32:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52685719A1;
+        Tue, 23 Aug 2022 01:13:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D094B81C4C;
-        Tue, 23 Aug 2022 08:32:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6414C433D6;
-        Tue, 23 Aug 2022 08:32:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53B62B81C25;
+        Tue, 23 Aug 2022 08:12:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBF7C433C1;
+        Tue, 23 Aug 2022 08:12:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243545;
-        bh=MrWX07tsnUvzSzDyKHxZReNNiPHWtCGNB4A0lNM0qb0=;
+        s=korg; t=1661242361;
+        bh=+4mqkUOQ6qxlFBMqnZ3APWQWTom/BEONGf/ObWlgZYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=16Cpz7SX72askWAFOgS9C3s5MwRffoD/DuK+SsVaL0xxEfSjOKqKYzRzI0PhLhdlD
-         1LZLYjDlw3jP46ice7A9OL0tKkOZm/CK/yGEEUE2O0a1XXsqvvQfEcbYuEqHx5hOs/
-         Fj2KZMd9IY5uMzEWLkTIPGyMXi0Bm5rgLgAOCAjQ=
+        b=dCIzdXWbUwqf5aPPghHjomZdjF3FAvciZmJOVVMiTJ9BQ0Q5qUIOTIaxxo/pN3B6j
+         lCBE3FKaz9tQvC7bpCLyLwIOzK4u+n1QOc+5sAkKkcAUEpB4yL5ouUV3wEcjVylBc/
+         HusDCgSv7/VVe/GQpj04Bt2MNl63nGekGug6l+o0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 311/365] md: Notify sysfs sync_completed in md_reap_sync_thread()
-Date:   Tue, 23 Aug 2022 10:03:32 +0200
-Message-Id: <20220823080131.186923522@linuxfoundation.org>
+        stable@vger.kernel.org, Douglas Gilbert <dgilbert@interlog.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 4.9 060/101] scsi: sg: Allow waiting for commands to complete on removed device
+Date:   Tue, 23 Aug 2022 10:03:33 +0200
+Message-Id: <20220823080036.885931244@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Logan Gunthorpe <logang@deltatee.com>
+From: Tony Battersby <tonyb@cybernetics.com>
 
-[ Upstream commit 9973f0fa7d20269fe6fefe6333997fb5914449c1 ]
+commit 3455607fd7be10b449f5135c00dc306b85dc0d21 upstream.
 
-The mdadm test 07layouts randomly produces a kernel hung task deadlock.
-The deadlock is caused by the suspend_lo/suspend_hi files being set by
-the mdadm background process during reshape and not being cleared
-because the process hangs. (Leaving aside the issue of the fragility of
-freezing kernel tasks by buggy userspace processes...)
+When a SCSI device is removed while in active use, currently sg will
+immediately return -ENODEV on any attempt to wait for active commands that
+were sent before the removal.  This is problematic for commands that use
+SG_FLAG_DIRECT_IO since the data buffer may still be in use by the kernel
+when userspace frees or reuses it after getting ENODEV, leading to
+corrupted userspace memory (in the case of READ-type commands) or corrupted
+data being sent to the device (in the case of WRITE-type commands).  This
+has been seen in practice when logging out of a iscsi_tcp session, where
+the iSCSI driver may still be processing commands after the device has been
+marked for removal.
 
-When the background mdadm process hangs it, is waiting (without a
-timeout) on a change to the sync_completed file signalling that the
-reshape has completed. The process is woken up a couple times when
-the reshape finishes but it is woken up before MD_RECOVERY_RUNNING
-is cleared so sync_completed_show() reports 0 instead of "none".
+Change the policy to allow userspace to wait for active sg commands even
+when the device is being removed.  Return -ENODEV only when there are no
+more responses to read.
 
-To fix this, notify the sysfs file in md_reap_sync_thread() after
-MD_RECOVERY_RUNNING has been cleared. This wakes up mdadm and causes
-it to continue and write to suspend_lo/suspend_hi to allow IO to
-continue.
-
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Song Liu <song@kernel.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/5ebea46f-fe83-2d0b-233d-d0dcb362dd0a@cybernetics.com
+Cc: <stable@vger.kernel.org>
+Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/md.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/sg.c |   57 ++++++++++++++++++++++++++++++++----------------------
+ 1 file changed, 34 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 660c52d48256..522b3d6b8c46 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -9466,6 +9466,7 @@ void md_reap_sync_thread(struct mddev *mddev)
- 	wake_up(&resync_wait);
- 	/* flag recovery needed just to double check */
- 	set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
-+	sysfs_notify_dirent_safe(mddev->sysfs_completed);
- 	sysfs_notify_dirent_safe(mddev->sysfs_action);
- 	md_new_event();
- 	if (mddev->event_work.func)
--- 
-2.35.1
-
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -196,7 +196,7 @@ static void sg_link_reserve(Sg_fd * sfp,
+ static void sg_unlink_reserve(Sg_fd * sfp, Sg_request * srp);
+ static Sg_fd *sg_add_sfp(Sg_device * sdp);
+ static void sg_remove_sfp(struct kref *);
+-static Sg_request *sg_get_rq_mark(Sg_fd * sfp, int pack_id);
++static Sg_request *sg_get_rq_mark(Sg_fd * sfp, int pack_id, bool *busy);
+ static Sg_request *sg_add_request(Sg_fd * sfp);
+ static int sg_remove_request(Sg_fd * sfp, Sg_request * srp);
+ static Sg_device *sg_get_dev(int dev);
+@@ -418,6 +418,7 @@ sg_read(struct file *filp, char __user *
+ 	Sg_fd *sfp;
+ 	Sg_request *srp;
+ 	int req_pack_id = -1;
++	bool busy;
+ 	sg_io_hdr_t *hp;
+ 	struct sg_header *old_hdr = NULL;
+ 	int retval = 0;
+@@ -465,25 +466,19 @@ sg_read(struct file *filp, char __user *
+ 		} else
+ 			req_pack_id = old_hdr->pack_id;
+ 	}
+-	srp = sg_get_rq_mark(sfp, req_pack_id);
++	srp = sg_get_rq_mark(sfp, req_pack_id, &busy);
+ 	if (!srp) {		/* now wait on packet to arrive */
+-		if (atomic_read(&sdp->detaching)) {
+-			retval = -ENODEV;
+-			goto free_old_hdr;
+-		}
+ 		if (filp->f_flags & O_NONBLOCK) {
+ 			retval = -EAGAIN;
+ 			goto free_old_hdr;
+ 		}
+ 		retval = wait_event_interruptible(sfp->read_wait,
+-			(atomic_read(&sdp->detaching) ||
+-			(srp = sg_get_rq_mark(sfp, req_pack_id))));
+-		if (atomic_read(&sdp->detaching)) {
+-			retval = -ENODEV;
+-			goto free_old_hdr;
+-		}
+-		if (retval) {
+-			/* -ERESTARTSYS as signal hit process */
++			((srp = sg_get_rq_mark(sfp, req_pack_id, &busy)) ||
++			(!busy && atomic_read(&sdp->detaching))));
++		if (!srp) {
++			/* signal or detaching */
++			if (!retval)
++				retval = -ENODEV;
+ 			goto free_old_hdr;
+ 		}
+ 	}
+@@ -936,9 +931,7 @@ sg_ioctl(struct file *filp, unsigned int
+ 		if (result < 0)
+ 			return result;
+ 		result = wait_event_interruptible(sfp->read_wait,
+-			(srp_done(sfp, srp) || atomic_read(&sdp->detaching)));
+-		if (atomic_read(&sdp->detaching))
+-			return -ENODEV;
++			srp_done(sfp, srp));
+ 		write_lock_irq(&sfp->rq_list_lock);
+ 		if (srp->done) {
+ 			srp->done = 2;
+@@ -2095,19 +2088,28 @@ sg_unlink_reserve(Sg_fd * sfp, Sg_reques
+ }
+ 
+ static Sg_request *
+-sg_get_rq_mark(Sg_fd * sfp, int pack_id)
++sg_get_rq_mark(Sg_fd * sfp, int pack_id, bool *busy)
+ {
+ 	Sg_request *resp;
+ 	unsigned long iflags;
+ 
++	*busy = false;
+ 	write_lock_irqsave(&sfp->rq_list_lock, iflags);
+ 	list_for_each_entry(resp, &sfp->rq_list, entry) {
+-		/* look for requests that are ready + not SG_IO owned */
+-		if ((1 == resp->done) && (!resp->sg_io_owned) &&
++		/* look for requests that are not SG_IO owned */
++		if ((!resp->sg_io_owned) &&
+ 		    ((-1 == pack_id) || (resp->header.pack_id == pack_id))) {
+-			resp->done = 2;	/* guard against other readers */
+-			write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
+-			return resp;
++			switch (resp->done) {
++			case 0: /* request active */
++				*busy = true;
++				break;
++			case 1: /* request done; response ready to return */
++				resp->done = 2;	/* guard against other readers */
++				write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
++				return resp;
++			case 2: /* response already being returned */
++				break;
++			}
+ 		}
+ 	}
+ 	write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
+@@ -2161,6 +2163,15 @@ sg_remove_request(Sg_fd * sfp, Sg_reques
+ 		res = 1;
+ 	}
+ 	write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
++
++	/*
++	 * If the device is detaching, wakeup any readers in case we just
++	 * removed the last response, which would leave nothing for them to
++	 * return other than -ENODEV.
++	 */
++	if (unlikely(atomic_read(&sfp->parentdp->detaching)))
++		wake_up_interruptible_all(&sfp->read_wait);
++
+ 	return res;
+ }
+ 
 
 

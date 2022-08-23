@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD42F59E7CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B7159E7CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243567AbiHWQr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S245451AbiHWQrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344056AbiHWQqi (ORCPT
+        with ESMTP id S1343904AbiHWQqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:46:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FE213DCC;
-        Tue, 23 Aug 2022 07:26:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36E8AB81E30;
-        Tue, 23 Aug 2022 14:26:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C57CFC433C1;
-        Tue, 23 Aug 2022 14:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661264796;
-        bh=/XRdScOVs0rz6Z1PqdGicykzKyHwkRLXRdw1F9grXUM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=co7q30XrHvJLqNW+RIc2a9P4mQ0G19iE7019+Bxcoiro1qynBSICXiOGGuGsnCusr
-         nOc5UG6ABXoGYcQsQR+HnEg4XktIV38yLIrA86Fa1ec07kONEf08VGIKZyvpmnWiYv
-         sAtJvh4lze4Zs9sfELafJBLavN+VJaWtCMh0IWJJmVDmgvllSa0q0MdVRz94sE1WIo
-         IlgED3wVV85xDQeH504kXcK3VpwN0qVxYRKS4xHUpRkBd5m9NYy+MOY6T4FNHl521s
-         tXbjyxk61N8Axxv0OY5h06+vX0UaBL7YjNeb/IbWS6XpXiWbK8KW9GbkXclkiEs/hb
-         ZwlrD39bQOwHw==
-Date:   Tue, 23 Aug 2022 07:26:36 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] xfs: remove redundant else for clean code
-Message-ID: <YwTjnM/vvzTKLQWk@magnolia>
-References: <20220823014745.4156948-1-zengheng4@huawei.com>
+        Tue, 23 Aug 2022 12:46:23 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF05642D4;
+        Tue, 23 Aug 2022 07:27:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661264835; x=1692800835;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o03KNF4optRGN8k8KrM3fNHOVsntLtSO9eiF32f+P90=;
+  b=XNBttPnebLQGcpd4Zg14yZ67I2V5r9gu6d7NYYuA9vbNL5VOKtJt4mIx
+   9BrspBgM/axhFt+62VKEmj71So8nPOz/az6PEN9eof5Gfu5L762Yhx6BI
+   O1mybXgjFA6YkvFGljJgSW+V3aHd2z8DHAEGhVWM99Y+CKQ9tuF7s8fOZ
+   BO5QBV5w6vaBD4XXPVcC2dqVzNurzM8eZLz9VBF1tVXAu/YpvlrZUbUBz
+   4Ddr7LL/4Wgpe8cxNDKWKnYHyn1hX4JXbXJYt67nqJnxClc0kBqdJV5xV
+   vN6TQrCXXKJUbbAeYAGtMFPkoGC3oBM/Qed9e2NU5HbVF8IpUqIoKjPcm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="273452600"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="273452600"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:27:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="612422383"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:26:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oQUro-002TUD-01;
+        Tue, 23 Aug 2022 17:26:56 +0300
+Date:   Tue, 23 Aug 2022 17:26:55 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Luca Ellero <l.ellero@asem.it>
+Cc:     dmitry.torokhov@gmail.com, daniel@zonque.org,
+        m.felsch@pengutronix.de, u.kleine-koenig@pengutronix.de,
+        mkl@pengutronix.de, miquel.raynal@bootlin.com, imre.deak@nokia.com,
+        luca.ellero@brickedbrain.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] ads7846: fix support for ADS7845
+Message-ID: <YwTjr3091RYewcgp@smile.fi.intel.com>
+References: <20220812084248.9270-1-l.ellero@asem.it>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823014745.4156948-1-zengheng4@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220812084248.9270-1-l.ellero@asem.it>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 09:47:45AM +0800, Zeng Heng wrote:
-> "else" is not generally useful after a return, so remove it for clean code.
-> 
-> There is no logical changes.
-> 
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> ---
->  fs/xfs/xfs_log.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_log.c b/fs/xfs/xfs_log.c
-> index 386b0307aed8..f6e7e4fd72ae 100644
-> --- a/fs/xfs/xfs_log.c
-> +++ b/fs/xfs/xfs_log.c
-> @@ -226,12 +226,12 @@ xlog_ticket_reservation(
->  	if (head == &log->l_write_head) {
->  		ASSERT(tic->t_flags & XLOG_TIC_PERM_RESERV);
->  		return tic->t_unit_res;
-> -	} else {
-> -		if (tic->t_flags & XLOG_TIC_PERM_RESERV)
-> -			return tic->t_unit_res * tic->t_cnt;
-> -		else
-> -			return tic->t_unit_res;
->  	}
-> +
-> +	if (tic->t_flags & XLOG_TIC_PERM_RESERV)
-> +		return tic->t_unit_res * tic->t_cnt;
-> +
-> +	return tic->t_unit_res;
+On Fri, Aug 12, 2022 at 10:42:45AM +0200, Luca Ellero wrote:
+> ADS7845 support is buggy in this driver.
+> These patches fix various issues to get it work properly.
 
-I think this looks correct
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Don't remember if I given a tag already (note, it's contributor's
+responsibility to carry tags if received), so here it is:
 
---D
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
->  }
+> Changes for v2:
+>  - add missing period in patch 0001 message
+>  - elaborate comment in patch 0002
 >  
->  STATIC bool
+> Changes for v3:
+>  - send from the same email address of "Signed-off"
+> 
+> Luca Ellero (3):
+>   ads7846: don't report pressure for ads7845
+>   ads7846: always set last command to PWRDOWN
+>   ads7846: don't check penirq immediately for 7845
+> 
+>  drivers/input/touchscreen/ads7846.c | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+> 
 > -- 
 > 2.25.1
 > 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

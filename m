@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E8D59E2C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628E059DE43
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354668AbiHWKfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S235876AbiHWL3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354114AbiHWKU0 (ORCPT
+        with ESMTP id S242737AbiHWLXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:20:26 -0400
+        Tue, 23 Aug 2022 07:23:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783684F1A9;
-        Tue, 23 Aug 2022 02:02:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8387B71BC2;
+        Tue, 23 Aug 2022 02:23:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E56396153D;
-        Tue, 23 Aug 2022 09:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8617C433C1;
-        Tue, 23 Aug 2022 09:02:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D59F26098A;
+        Tue, 23 Aug 2022 09:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C282EC433C1;
+        Tue, 23 Aug 2022 09:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245326;
-        bh=rSEzHNXqm8pHZ+x8zbV44v6My3VXDzjSN1WlrWy8fdE=;
+        s=korg; t=1661246624;
+        bh=NOfUXmPqSk1PmDgPrBf/kn0GN7etkIuaEtAbPGOg2Ns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vSzBZoNT3yVLGe+LfcU3FISjIsNvHyCyTkXhuXYrUZ83NkrojbiPadbzlDNzrkXW/
-         ccLL2pa1SZw0BceZs8EchIuecUGBAYQhZYwrp0te1gSU5dDYItTpltlsGdYrsYNWv7
-         EtQb/Hz9b22Wn0oYdJjvsZP94wZxZm5KN2Gl47R8=
+        b=DaEYlyhEF4gIS/DMoCwQHTmumzIsUrUWC9U6Zis/KgqfKsyNyJN3tklybzduh5czA
+         NT4flHWro19vaXIbyE1SnZlwEjWUSZVTSDe/GmfG02Npdky1gHjdndGOjDMkd8csy/
+         CgcOlmkCx7sqJMC02+M60QZTTVgyeE9LZqpPAKdc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Subject: [PATCH 4.19 036/287] USB: HCD: Fix URB giveback issue in tasklet function
-Date:   Tue, 23 Aug 2022 10:23:25 +0200
-Message-Id: <20220823080101.490987018@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christian Lamparter <chunkeey@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 128/389] wifi: p54: Fix an error handling path in p54spi_probe()
+Date:   Tue, 23 Aug 2022 10:23:26 +0200
+Message-Id: <20220823080120.975379508@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,124 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit 26c6c2f8a907c9e3a2f24990552a4d77235791e6 upstream.
+[ Upstream commit 83781f0162d080fec7dcb911afd1bc2f5ad04471 ]
 
-Usb core introduce the mechanism of giveback of URB in tasklet context to
-reduce hardware interrupt handling time. On some test situation(such as
-FIO with 4KB block size), when tasklet callback function called to
-giveback URB, interrupt handler add URB node to the bh->head list also.
-If check bh->head list again after finish all URB giveback of local_list,
-then it may introduce a "dynamic balance" between giveback URB and add URB
-to bh->head list. This tasklet callback function may not exit for a long
-time, which will cause other tasklet function calls to be delayed. Some
-real-time applications(such as KB and Mouse) will see noticeable lag.
+If an error occurs after a successful call to p54spi_request_firmware(), it
+must be undone by a corresponding release_firmware() as already done in
+the error handling path of p54spi_request_firmware() and in the .remove()
+function.
 
-In order to prevent the tasklet function from occupying the cpu for a long
-time at a time, new URBS will not be added to the local_list even though
-the bh->head list is not empty. But also need to ensure the left URB
-giveback to be processed in time, so add a member high_prio for structure
-giveback_urb_bh to prioritize tasklet and schelule this tasklet again if
-bh->head list is not empty.
+Add the missing call in the error handling path and remove it from
+p54spi_request_firmware() now that it is the responsibility of the caller
+to release the firmware
 
-At the same time, we are able to prioritize tasklet through structure
-member high_prio. So, replace the local high_prio_bh variable with this
-structure member in usb_hcd_giveback_urb.
-
-Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
-Cc: stable <stable@kernel.org>
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Link: https://lore.kernel.org/r/20220726074918.5114-1-WeitaoWang-oc@zhaoxin.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: cd8d3d321285 ("p54spi: p54spi driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/297d2547ff2ee627731662abceeab9dbdaf23231.1655068321.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hcd.c  |   26 +++++++++++++++-----------
- include/linux/usb/hcd.h |    1 +
- 2 files changed, 16 insertions(+), 11 deletions(-)
+ drivers/net/wireless/intersil/p54/p54spi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1805,7 +1805,6 @@ static void usb_giveback_urb_bh(unsigned
+diff --git a/drivers/net/wireless/intersil/p54/p54spi.c b/drivers/net/wireless/intersil/p54/p54spi.c
+index ab0fe8565851..cdb57819684a 100644
+--- a/drivers/net/wireless/intersil/p54/p54spi.c
++++ b/drivers/net/wireless/intersil/p54/p54spi.c
+@@ -164,7 +164,7 @@ static int p54spi_request_firmware(struct ieee80211_hw *dev)
  
- 	spin_lock_irq(&bh->lock);
- 	bh->running = true;
-- restart:
- 	list_replace_init(&bh->head, &local_list);
- 	spin_unlock_irq(&bh->lock);
- 
-@@ -1819,10 +1818,17 @@ static void usb_giveback_urb_bh(unsigned
- 		bh->completing_ep = NULL;
+ 	ret = p54_parse_firmware(dev, priv->firmware);
+ 	if (ret) {
+-		release_firmware(priv->firmware);
++		/* the firmware is released by the caller */
+ 		return ret;
  	}
  
--	/* check if there are new URBs to giveback */
-+	/*
-+	 * giveback new URBs next time to prevent this function
-+	 * from not exiting for a long time.
-+	 */
- 	spin_lock_irq(&bh->lock);
--	if (!list_empty(&bh->head))
--		goto restart;
-+	if (!list_empty(&bh->head)) {
-+		if (bh->high_prio)
-+			tasklet_hi_schedule(&bh->bh);
-+		else
-+			tasklet_schedule(&bh->bh);
-+	}
- 	bh->running = false;
- 	spin_unlock_irq(&bh->lock);
- }
-@@ -1847,7 +1853,7 @@ static void usb_giveback_urb_bh(unsigned
- void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
- {
- 	struct giveback_urb_bh *bh;
--	bool running, high_prio_bh;
-+	bool running;
+@@ -659,6 +659,7 @@ static int p54spi_probe(struct spi_device *spi)
+ 	return 0;
  
- 	/* pass status to tasklet via unlinked */
- 	if (likely(!urb->unlinked))
-@@ -1858,13 +1864,10 @@ void usb_hcd_giveback_urb(struct usb_hcd
- 		return;
- 	}
- 
--	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
-+	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
- 		bh = &hcd->high_prio_bh;
--		high_prio_bh = true;
--	} else {
-+	else
- 		bh = &hcd->low_prio_bh;
--		high_prio_bh = false;
--	}
- 
- 	spin_lock(&bh->lock);
- 	list_add_tail(&urb->urb_list, &bh->head);
-@@ -1873,7 +1876,7 @@ void usb_hcd_giveback_urb(struct usb_hcd
- 
- 	if (running)
- 		;
--	else if (high_prio_bh)
-+	else if (bh->high_prio)
- 		tasklet_hi_schedule(&bh->bh);
- 	else
- 		tasklet_schedule(&bh->bh);
-@@ -2881,6 +2884,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
- 
- 	/* initialize tasklets */
- 	init_giveback_urb_bh(&hcd->high_prio_bh);
-+	hcd->high_prio_bh.high_prio = true;
- 	init_giveback_urb_bh(&hcd->low_prio_bh);
- 
- 	/* enable irqs just before we start the controller,
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -66,6 +66,7 @@
- 
- struct giveback_urb_bh {
- 	bool running;
-+	bool high_prio;
- 	spinlock_t lock;
- 	struct list_head  head;
- 	struct tasklet_struct bh;
+ err_free_common:
++	release_firmware(priv->firmware);
+ 	free_irq(gpio_to_irq(p54spi_gpio_irq), spi);
+ err_free_gpio_irq:
+ 	gpio_free(p54spi_gpio_irq);
+-- 
+2.35.1
+
 
 

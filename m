@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF6459D6F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F8759D791
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243977AbiHWJsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S241293AbiHWJtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352128AbiHWJp6 (ORCPT
+        with ESMTP id S1352506AbiHWJqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:45:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C6343E71;
-        Tue, 23 Aug 2022 01:43:41 -0700 (PDT)
+        Tue, 23 Aug 2022 05:46:30 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81199C234;
+        Tue, 23 Aug 2022 01:44:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D89466153A;
-        Tue, 23 Aug 2022 08:43:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB05DC433C1;
-        Tue, 23 Aug 2022 08:43:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 01BEFCE1B2C;
+        Tue, 23 Aug 2022 08:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D614BC433C1;
+        Tue, 23 Aug 2022 08:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244196;
-        bh=nBECbFiTYqDWMZnWshLEHrVJOnspAGOnYPScHv5uORA=;
+        s=korg; t=1661244223;
+        bh=7BvALsoWs5iJliUehLucGEc6+Br7a+GqGnGcUgeAe0w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TDuL+OvOtzGIkc5IuOXl9p+1TsISBmgxdz75d499W9UerZjssb5Kj3rqZMLLCB/Kw
-         lZ9LdacHZMHu6kWhJdE71oD4Q+F0rz3DYUP2c/ZlVQpwu8wlvgk4QGqQye6GvdN10Z
-         PDEunl9F4x2uUCgyo2NhcJFF49zlh08eIE+7KUpQ=
+        b=gDJDdVZ7dWChtrORvG/62huSTS1qbgC9QEbnIdHB0p9ZJQnYZXfl9jCI8XKLNpc+V
+         MsD3LPRxEAFAPAA0OAq8OkWhLZWdcYClDgycneZ9r7nYWLC5//NpIAmJ9QxLqF6Z67
+         1g/FFWa5r4rOiKWyqCQD2QwrmsDJlVyeFyGN0zNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Karl Olsen <karl@micro-technic.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 101/229] misc: rtsx: Fix an error handling path in rtsx_pci_probe()
-Date:   Tue, 23 Aug 2022 10:24:22 +0200
-Message-Id: <20220823080057.306630618@linuxfoundation.org>
+Subject: [PATCH 4.14 105/229] mmc: sdhci-of-at91: fix set_uhs_signaling rewriting of MC1R
+Date:   Tue, 23 Aug 2022 10:24:26 +0200
+Message-Id: <20220823080057.440384775@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,49 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit 44fd1917314e9d4f53dd95dd65df1c152f503d3a ]
+[ Upstream commit 5987e6ded29d52e42fc7b06aa575c60a25eee38e ]
 
-If an error occurs after a successful idr_alloc() call, the corresponding
-resource must be released with idr_remove() as already done in the .remove
-function.
+In set_uhs_signaling, the DDR bit is being set by fully writing the MC1R
+register.
+This can lead to accidental erase of certain bits in this register.
+Avoid this by doing a read-modify-write operation.
 
-Update the error handling path to add the missing idr_remove() call.
-
-Fixes: ada8a8a13b13 ("mfd: Add realtek pcie card reader driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/e8dc41716cbf52fb37a12e70d8972848e69df6d6.1655271216.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d0918764c17b ("mmc: sdhci-of-at91: fix MMC_DDR_52 timing selection")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Tested-by: Karl Olsen <karl@micro-technic.com>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Link: https://lore.kernel.org/r/20220630090926.15061-1-eugen.hristev@microchip.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/rtsx_pcr.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-of-at91.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/rtsx_pcr.c b/drivers/mfd/rtsx_pcr.c
-index c9e45b6befac..1c7afd9a14e3 100644
---- a/drivers/mfd/rtsx_pcr.c
-+++ b/drivers/mfd/rtsx_pcr.c
-@@ -1223,7 +1223,7 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
- 	pcr->remap_addr = ioremap_nocache(base, len);
- 	if (!pcr->remap_addr) {
- 		ret = -ENOMEM;
--		goto free_handle;
-+		goto free_idr;
- 	}
+diff --git a/drivers/mmc/host/sdhci-of-at91.c b/drivers/mmc/host/sdhci-of-at91.c
+index 78c9ac33b562..8a5f87bbe393 100644
+--- a/drivers/mmc/host/sdhci-of-at91.c
++++ b/drivers/mmc/host/sdhci-of-at91.c
+@@ -116,8 +116,13 @@ static void sdhci_at91_set_power(struct sdhci_host *host, unsigned char mode,
  
- 	pcr->rtsx_resv_buf = dma_alloc_coherent(&(pcidev->dev),
-@@ -1285,6 +1285,10 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
- 			pcr->rtsx_resv_buf, pcr->rtsx_resv_buf_addr);
- unmap:
- 	iounmap(pcr->remap_addr);
-+free_idr:
-+	spin_lock(&rtsx_pci_lock);
-+	idr_remove(&rtsx_pci_idr, pcr->id);
-+	spin_unlock(&rtsx_pci_lock);
- free_handle:
- 	kfree(handle);
- free_pcr:
+ void sdhci_at91_set_uhs_signaling(struct sdhci_host *host, unsigned int timing)
+ {
+-	if (timing == MMC_TIMING_MMC_DDR52)
+-		sdhci_writeb(host, SDMMC_MC1R_DDR, SDMMC_MC1R);
++	u8 mc1r;
++
++	if (timing == MMC_TIMING_MMC_DDR52) {
++		mc1r = sdhci_readb(host, SDMMC_MC1R);
++		mc1r |= SDMMC_MC1R_DDR;
++		sdhci_writeb(host, mc1r, SDMMC_MC1R);
++	}
+ 	sdhci_set_uhs_signaling(host, timing);
+ }
+ 
 -- 
 2.35.1
 

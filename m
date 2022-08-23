@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF9459DEA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B168659E32D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359114AbiHWL4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S241147AbiHWMSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358674AbiHWLwl (ORCPT
+        with ESMTP id S1355155AbiHWMPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:52:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9ADD5717;
-        Tue, 23 Aug 2022 02:32:55 -0700 (PDT)
+        Tue, 23 Aug 2022 08:15:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0796598D12;
+        Tue, 23 Aug 2022 02:41:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC423B81C50;
-        Tue, 23 Aug 2022 09:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37911C433D7;
-        Tue, 23 Aug 2022 09:32:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDF2961460;
+        Tue, 23 Aug 2022 09:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1ECAC433C1;
+        Tue, 23 Aug 2022 09:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247170;
-        bh=ndWiiY4NeHQG8/CTphvxdicS3nDa17lUBfCluKN6RgE=;
+        s=korg; t=1661247607;
+        bh=oyDLGCSu9zgousUVgIFHeW73Sm2SW2iFyiH40jFxiGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ywI+qmKp2uHq2OlYYNc0W+Ww/e83mNIcfJXs/9xQNH+rGREWutL9uE7o8jdQkAx2T
-         ddlTB0hWnVKsjpzlJwPyMEAC2Y/O7DdyOquMhA50YrWcUzMlnCBrCdtduwvcWLQtyP
-         RoQSUa9NKPekgDyfcTNiE5mgA/BOYrlhF8R9+KdQ=
+        b=Nthw3chWYzwpGgYnBOclz8KXuhZ5qI1s9XwFLtmea0dVw6cVJE8Umpkgd5M13Xqln
+         EfQ1HkDT3vPCTsdZUHV3Lw3oEEd0PdCzRdar9uf+oNq8Gr1tTiyT/Ps2kgUdY2dopS
+         8ENJL0T7ixfdHG4R2BWoEhl13IO2ARz2Prm94yEI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 341/389] net: dsa: microchip: ksz9477: fix fdb_dump last invalid entry
-Date:   Tue, 23 Aug 2022 10:26:59 +0200
-Message-Id: <20220823080129.781184318@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>
+Subject: [PATCH 5.10 088/158] regulator: pca9450: Remove restrictions for regulator-name
+Date:   Tue, 23 Aug 2022 10:27:00 +0200
+Message-Id: <20220823080049.607876277@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Ramadoss <arun.ramadoss@microchip.com>
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-commit 36c0d935015766bf20d621c18313f17691bda5e3 upstream.
+commit b0de7fa706506bf0591037908376351beda8c5d6 upstream.
 
-In the ksz9477_fdb_dump function it reads the ALU control register and
-exit from the timeout loop if there is valid entry or search is
-complete. After exiting the loop, it reads the alu entry and report to
-the user space irrespective of entry is valid. It works till the valid
-entry. If the loop exited when search is complete, it reads the alu
-table. The table returns all ones and it is reported to user space. So
-bridge fdb show gives ff:ff:ff:ff:ff:ff as last entry for every port.
-To fix it, after exiting the loop the entry is reported only if it is
-valid one.
+The device bindings shouldn't put any constraints on the regulator-name
+property specified in the generic bindings. This allows using arbitrary
+and descriptive names for the regulators.
 
-Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20220816105516.18350-1-arun.ramadoss@microchip.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Suggested-by: Mark Brown <broonie@kernel.org>
+Fixes: 7ae9e3a6bf3f ("dt-bindings: regulator: add pca9450 regulator yaml")
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Link: https://lore.kernel.org/r/20220802064335.8481-1-frieder@fris.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/microchip/ksz9477.c |    3 +++
- 1 file changed, 3 insertions(+)
+ .../bindings/regulator/nxp,pca9450-regulator.yaml     | 11 -----------
+ 1 file changed, 11 deletions(-)
 
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -766,6 +766,9 @@ static int ksz9477_port_fdb_dump(struct
- 			goto exit;
- 		}
+diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+index b539781e39aa..835b53302db8 100644
+--- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
+@@ -47,12 +47,6 @@ properties:
+         description:
+           Properties for single LDO regulator.
  
-+		if (!(ksz_data & ALU_VALID))
-+			continue;
-+
- 		/* read ALU table */
- 		ksz9477_read_table(dev, alu_table);
+-        properties:
+-          regulator-name:
+-            pattern: "^LDO[1-5]$"
+-            description:
+-              should be "LDO1", ..., "LDO5"
+-
+         unevaluatedProperties: false
  
+       "^BUCK[1-6]$":
+@@ -62,11 +56,6 @@ properties:
+           Properties for single BUCK regulator.
+ 
+         properties:
+-          regulator-name:
+-            pattern: "^BUCK[1-6]$"
+-            description:
+-              should be "BUCK1", ..., "BUCK6"
+-
+           nxp,dvs-run-voltage:
+             $ref: "/schemas/types.yaml#/definitions/uint32"
+             minimum: 600000
+-- 
+2.37.2
+
 
 

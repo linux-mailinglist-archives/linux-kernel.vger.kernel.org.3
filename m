@@ -2,280 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321DB59E439
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD0C59E433
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241031AbiHWNYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 09:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S237136AbiHWNYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 09:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240625AbiHWNX0 (ORCPT
+        with ESMTP id S236657AbiHWNYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 09:23:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC23C8D3C3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661250211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1Kxt05L7z1d52ImlEEC1KlrDepPenx6fSSchHejx0uM=;
-        b=b/+Kuq80ojUrqIdwryjmFfw1fETOXBiOLqxe7+7k9O8jpWf73Qo2tXljVzI6eHMkbsC5cs
-        0k2sLbAZ0imGhVl8WeNZtRAaagqImCHjRgsTDHwD1mFAEYoyCSQlpzkmr8Ch64kjfB1WHH
-        y8qv2uWnxJH62QLHw5Ej2bLmoARHH3c=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-166-ZBl-HP_aP6S_NA5VTpePtQ-1; Tue, 23 Aug 2022 06:23:30 -0400
-X-MC-Unique: ZBl-HP_aP6S_NA5VTpePtQ-1
-Received: by mail-wm1-f70.google.com with SMTP id b16-20020a05600c4e1000b003a5a47762c3so7736546wmq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:23:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=1Kxt05L7z1d52ImlEEC1KlrDepPenx6fSSchHejx0uM=;
-        b=L+P4EbmMh8x601xzPj8gJaDzYNUDw3TqN4L4879XYs3w+XMNMLvNtEv/ty6ALRS8UJ
-         cXQ3mCY+DDVbXqqAr+TQ2NwysmFkGKn5s57sn8QdmfLYAxpKeGf8GqinpaMjr8SBYGI+
-         24SmMRU8yoJ3uccVXeqCv52FpCffWxOzg91uXFrc020CIAr00/Y6AODY1oe2ara8utuo
-         OIwiAa04zWLhilBZwQsyZWAEQIu4oiYwnhs632g6Tja0cMG21O2J/XorRRfGNIgWu1to
-         MQbuQg+K5ByNARoghpo2j4iUVoSux35EMsnAp/RFxVEmlEcbqFMZ/Yh31y3Ybp4tHZyq
-         b1+g==
-X-Gm-Message-State: ACgBeo2yIGK/QPc+eOxZtCkZxOWPf2EDtDbhNI5x3mtRPoet1k0zmDiz
-        dGD35LEP5TOCur5DEEwodNrznQThtzNXQgDVmZGW26fpCHMJME5uKHNfXQvQv1PzgdajccVo7Lx
-        h5P2NjZ4am+SOUwyUo0XDN8wy
-X-Received: by 2002:adf:a30d:0:b0:225:2656:235d with SMTP id c13-20020adfa30d000000b002252656235dmr13914323wrb.716.1661250209397;
-        Tue, 23 Aug 2022 03:23:29 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7ENOYRDpGYMJbVEqOdw1Ty7+mKWBtH4vVkatfoFbGnxmW3tLacNmkRMzq7t1cgGU6El8m0Og==
-X-Received: by 2002:adf:a30d:0:b0:225:2656:235d with SMTP id c13-20020adfa30d000000b002252656235dmr13914311wrb.716.1661250209077;
-        Tue, 23 Aug 2022 03:23:29 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:1600:c48b:1fab:a330:5182? (p200300cbc70b1600c48b1faba3305182.dip0.t-ipconnect.de. [2003:cb:c70b:1600:c48b:1fab:a330:5182])
-        by smtp.gmail.com with ESMTPSA id p30-20020a1c545e000000b003a500b612fcsm20693564wmi.12.2022.08.23.03.23.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 03:23:28 -0700 (PDT)
-Message-ID: <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com>
-Date:   Tue, 23 Aug 2022 12:23:27 +0200
+        Tue, 23 Aug 2022 09:24:23 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70048.outbound.protection.outlook.com [40.107.7.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2EB14CC8E;
+        Tue, 23 Aug 2022 03:24:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NW2+F2CG8xtb60hPwPGZAJSAwHMW5OhdUaZ//DzmmEq0CkMaYYqeN1vfu/+reBzvBDaC11hCEfFkdiGXL/ADeo7ldlLwFKENaErdsYvoSTxSu/Emzq4wt9yHisw5pTGHKWN/pEGFk832rPhvaIgTD6z9RnfiqFijkFR+o/Yn8272IFB3WwwfjHpLcCc/6s7xGev7YzCP2ww8+Fr9agLyXToRR8XCziIWMsofbZ//w5R3gIYgfJXdkHqb9QixMfvVAVHlz1cPSkQUlN3QJlPB7In2N/FBKV+CFsZZunLBpD1hmx+54+IuUzO1bfp2/SeLkxOLtDV/kl1spgVn81V+xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZUxd4LIlSiTfTs00Gmo01pSj1lIPGR4vWCPB6u2GTWA=;
+ b=nLzT8F5Z0TI790AxisfDfwOPmYVmgOmxbB+AnF9+H9o1M3c4DyeRAVNJ+tuefsOlbW3xNCKHcl513yBJHccjUrwFHXew2MTN5um271bneYJajjienvluwKoCfzD+aHLaHagTAa1moM02Qw26EoBW3OGd2Dx5pKtgDb1qz2nUl5d+7a+tAjhjnhT2dWKpknKLahgRo3Q/20v+OiHGxhVmqU51zJNsEerjM7Knje2F36lEKc5i4YsSCeXuYFxjePaZs+oBWd7qKwE8pVgLIpfOjwBlq+BbmddrL0ZvEYiuCqm7u4nWE8Bkon1J1DAiOn4ojh1cbSA9fNEJMsX+x7NFng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=linaro.org smtp.mailfrom=siemens.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZUxd4LIlSiTfTs00Gmo01pSj1lIPGR4vWCPB6u2GTWA=;
+ b=lfbQtbYrnGsjPtoFot2TUxx07NFmiyKJtThvfcS7301QDo8kMrfKycH+yXj7j0e4vDJZjppoN7R2whrybCSvbMWoyoo8fgGRsoXZe9VleUpn+DJkEQtwapgghxN8U/wVbrleelUbjY650ZybTNzn6yQABCic2rekf3QU8jBGptdqE4Kuf27UqKuvz7Pse1rXpsPnVbFJFDR6aelIKaM69B23iUef4MKTXlJTBYVkvTLNhxnLDZDG9EG9/YPyEsRnSPhffzUqFNYClvSOhAAMd8qszKTSsknP3+V4iQWKiCnmVa6JGWvnYzpIBwYSC3ceDrpkY4ipdouCsdOlvJNvyw==
+Received: from DU2PR04CA0175.eurprd04.prod.outlook.com (2603:10a6:10:2b0::30)
+ by AM0PR10MB3090.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:15a::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Tue, 23 Aug
+ 2022 10:23:54 +0000
+Received: from DB5EUR01FT075.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:2b0:cafe::10) by DU2PR04CA0175.outlook.office365.com
+ (2603:10a6:10:2b0::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.24 via Frontend
+ Transport; Tue, 23 Aug 2022 10:23:54 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=siemens.com;
+Received-SPF: Fail (protection.outlook.com: domain of siemens.com does not
+ designate 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.76) by
+ DB5EUR01FT075.mail.protection.outlook.com (10.152.5.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5546.15 via Frontend Transport; Tue, 23 Aug 2022 10:23:54 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.9; Tue, 23 Aug 2022 12:23:54 +0200
+Received: from md1za8fc.ad001.siemens.net (139.25.0.80) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.9; Tue, 23 Aug 2022 12:23:53 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee@kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>
+CC:     Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>,
+        <simon.guinot@sequanux.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v4 0/5] add support for another simatic board
+Date:   Tue, 23 Aug 2022 12:23:39 +0200
+Message-ID: <20220823102344.17624-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
- size hugetlb page
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
- <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
- <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
- <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [139.25.0.80]
+X-ClientProxiedBy: DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4af70b20-eb12-4ea3-0988-08da84f194cc
+X-MS-TrafficTypeDiagnostic: AM0PR10MB3090:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xmCXc+dJHj/pMvSl/Zy9w51OmokDtKuEqQrz6SJgfNX2JiH+jgxGldAs7WmxQDvgew3to0LoEfvhxi2dRK0SeLs8JTrHwq70FhmOeYXkDITFUZCGVm/R6ch5yhhLd20c9gWy7wYVghYNq7QXIHna0FmHQv/HogvKBCsJNgF16Sc7r38KBzfMKAIQN/eAsUa6+e7zOxV0Lsj698rGdwx11W+dOlS6xJDguPy/HAgM/WrNL/U6d5lZVOLwj/0pfkjj6wBZu9Lv2qbWb1rWhxihZX5i7Iz/AwTMDd2+oSTTzq2mxKxbApM5FkQpJM1Ef1Gs87rMXWr2cd2HgZT+K5Sx6E6ytMp9JLm7nbZNO4bLfVsVTmIcFO7meQZ6/x2jwE1moTSKgmJD1C/96mAaPInU2wml0e93j/vuGcWXth6Y6sgpBwMKwSXjr1x7ACUfmwFVuekBxX++Ursly2qo/zUSn3k8ue4ovBScHQzCT3b1M6DiwWUNvithWI9VIQfEK6ywCUp1YKr8u5ax9J9uxT/o7ee3lR7KODDiESGRtbXGfE9R0GAdi9XTZ5fe3VWrrIVHpa0/OelpcDtd4L/4XH3ZamuaKfT2F1THD6G3s8cfOyt/6uuQkYv78UEU8L3+QinL4ja4D55e3jz9J6BK51jE1NdTORQudQqN2qk7uaavD3eFbjk9V0vmrG/Nzvwqdhtyn0lSIEOWWg9uTl2WPhLNl3TnwJh0+XrbRIP6q7YLXk19B5EsINISMD/AdVzdcP6YzDBHy31gecVOQIKgaYE0kK3KXPiCm/9GG9KZ3gUmoSIBhfgqh8py5GcWbJx3RVrDgrZLLSGDD0bu4rv+3NJ0iqMmryKD66Kq6OGz9WKIm7sNdMZ4MO+u0shjxW7DT8RAT05ehohPC79L7BgtHYxJ8A==
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(396003)(136003)(40470700004)(36840700001)(46966006)(34020700004)(316002)(40460700003)(478600001)(36860700001)(47076005)(70586007)(36756003)(8676002)(4326008)(70206006)(7416002)(110136005)(41300700001)(44832011)(5660300002)(8936002)(54906003)(956004)(6666004)(82740400003)(2906002)(86362001)(2616005)(82310400005)(107886003)(1076003)(82960400001)(921005)(356005)(83380400001)(16526019)(186003)(336012)(40480700001)(26005)(81166007)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 10:23:54.4002
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4af70b20-eb12-4ea3-0988-08da84f194cc
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT075.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3090
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.08.22 12:02, Baolin Wang wrote:
-> 
-> 
-> On 8/23/2022 4:29 PM, David Hildenbrand wrote:
->> On 23.08.22 09:50, Baolin Wang wrote:
->>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
->>> hugetlb, which means it can support not only PMD/PUD size hugetlb
->>> (2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
->>> specified.
->>>
->>> So when looking up a CONT-PTE size hugetlb page by follow_page(), it
->>> will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
->>> size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
->>> for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
->>> get the correct lock, which is mm->page_table_lock.
->>>
->>> That means the pte entry of the CONT-PTE size hugetlb under current
->>> pte lock is unstable in follow_page_pte(), we can continue to migrate
->>> or poison the pte entry of the CONT-PTE size hugetlb, which can cause
->>> some potential race issues, and following pte_xxx() validation is also
->>> unstable in follow_page_pte(), even though they are under the 'pte lock'.
->>>
->>> Moreover we should use huge_ptep_get() to get the pte entry value of
->>> the CONT-PTE size hugetlb, which already takes into account the subpages'
->>> dirty or young bits in case we missed the dirty or young state of the
->>> CONT-PTE size hugetlb.
->>>
->>> To fix above issues, introducing a new helper follow_huge_pte() to look
->>> up a CONT-PTE size hugetlb page, which uses huge_pte_lock() to get the
->>> correct pte entry lock to make the pte entry stable, as well as
->>> supporting non-present pte handling.
->>>
->>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>> ---
->>>   include/linux/hugetlb.h |  8 ++++++++
->>>   mm/gup.c                | 11 ++++++++++
->>>   mm/hugetlb.c            | 53 +++++++++++++++++++++++++++++++++++++++++++++++++
->>>   3 files changed, 72 insertions(+)
->>>
->>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
->>> index 3ec981a..d491138 100644
->>> --- a/include/linux/hugetlb.h
->>> +++ b/include/linux/hugetlb.h
->>> @@ -207,6 +207,8 @@ struct page *follow_huge_addr(struct mm_struct *mm, unsigned long address,
->>>   struct page *follow_huge_pd(struct vm_area_struct *vma,
->>>   			    unsigned long address, hugepd_t hpd,
->>>   			    int flags, int pdshift);
->>> +struct page *follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
->>> +			     pmd_t *pmd, int flags);
->>>   struct page *follow_huge_pmd(struct mm_struct *mm, unsigned long address,
->>>   				pmd_t *pmd, int flags);
->>>   struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
->>> @@ -312,6 +314,12 @@ static inline struct page *follow_huge_pd(struct vm_area_struct *vma,
->>>   	return NULL;
->>>   }
->>>   
->>> +static inline struct page *follow_huge_pte(struct vm_area_struct *vma,
->>> +				unsigned long address, pmd_t *pmd, int flags)
->>> +{
->>> +	return NULL;
->>> +}
->>> +
->>>   static inline struct page *follow_huge_pmd(struct mm_struct *mm,
->>>   				unsigned long address, pmd_t *pmd, int flags)
->>>   {
->>> diff --git a/mm/gup.c b/mm/gup.c
->>> index 3b656b7..87a94f5 100644
->>> --- a/mm/gup.c
->>> +++ b/mm/gup.c
->>> @@ -534,6 +534,17 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->>>   	if (unlikely(pmd_bad(*pmd)))
->>>   		return no_page_table(vma, flags);
->>>   
->>> +	/*
->>> +	 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
->>> +	 * ARM64 architecture.
->>> +	 */
->>> +	if (is_vm_hugetlb_page(vma)) {
->>> +		page = follow_huge_pte(vma, address, pmd, flags);
->>> +		if (page)
->>> +			return page;
->>> +		return no_page_table(vma, flags);
->>> +	}
->>> +
->>>   	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
->>>   	pte = *ptep;
->>>   	if (!pte_present(pte)) {
->>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->>> index 6c00ba1..cf742d1 100644
->>> --- a/mm/hugetlb.c
->>> +++ b/mm/hugetlb.c
->>> @@ -6981,6 +6981,59 @@ struct page * __weak
->>>   	return NULL;
->>>   }
->>>   
->>> +/* Support looking up a CONT-PTE size hugetlb page. */
->>> +struct page * __weak
->>> +follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
->>> +		pmd_t *pmd, int flags)
->>> +{
->>> +	struct mm_struct *mm = vma->vm_mm;
->>> +	struct hstate *hstate = hstate_vma(vma);
->>> +	unsigned long size = huge_page_size(hstate);
->>> +	struct page *page = NULL;
->>> +	spinlock_t *ptl;
->>> +	pte_t *ptep, pte;
->>> +
->>> +	/*
->>> +	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
->>> +	 * follow_hugetlb_page().
->>> +	 */
->>> +	if (WARN_ON_ONCE(flags & FOLL_PIN))
->>> +		return NULL;
->>> +
->>> +	ptep = huge_pte_offset(mm, address, size);
->>> +	if (!ptep)
->>> +		return NULL;
->>> +
->>> +retry:
->>> +	ptl = huge_pte_lock(hstate, mm, ptep);
->>> +	pte = huge_ptep_get(ptep);
->>> +	if (pte_present(pte)) {
->>> +		page = pte_page(pte);
->>> +		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
->>> +			page = NULL;
->>> +			goto out;
->>> +		}
->>> +	} else {
->>> +		if (!(flags & FOLL_MIGRATION)) {
->>> +			page = NULL;
->>> +			goto out;
->>> +		}
->>> +
->>> +		if (is_hugetlb_entry_migration(pte)) {
->>> +			spin_unlock(ptl);
->>> +			__migration_entry_wait_huge(ptep, ptl);
->>> +			goto retry;
->>> +		}
->>> +		/*
->>> +		 * hwpoisoned entry is treated as no_page_table in
->>> +		 * follow_page_mask().
->>> +		 */
->>> +	}
->>> +out:
->>> +	spin_unlock(ptl);
->>> +	return page;
->>> +}
->>> +
->>>   struct page * __weak
->>>   follow_huge_pmd(struct mm_struct *mm, unsigned long address,
->>>   		pmd_t *pmd, int flags)
->>
->>
->> Can someone explain why:
->> * follow_page() goes via follow_page_mask() for hugetlb
->> * __get_user_pages() goes via follow_hugetlb_page() and never via
->>    follow_page_mask() for hugetlb?
->>
->> IOW, why can't we make follow_page_mask() just not handle hugetlb and
->> route everything via follow_hugetlb_page() -- we primarily only have to
->> teach it to not trigger faults.
-> 
-> IMHO, these follow_huge_xxx() functions are arch-specified at first and 
-> were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm: 
-> hugetlb: Copy general hugetlb code from x86 to mm"), and now there are 
-> still some arch-specified follow_huge_xxx() definition, for example:
-> ia64: follow_huge_addr
-> powerpc: follow_huge_pd
-> s390: follow_huge_pud
-> 
-> What I mean is that follow_hugetlb_page() is a common and 
-> not-arch-specified function, is it suitable to change it to be 
-> arch-specified?
-> And thinking more, can we rename follow_hugetlb_page() as 
-> hugetlb_page_faultin() and simplify it to only handle the page faults of 
-> hugetlb like the faultin_page() for normal page? That means we can make 
-> sure only follow_page_mask() can handle hugetlb.
-> 
+changes since v3:
+  - update Kconfig as well
+  - drop chip names from comment in driver header
+  - add manufacturer check for Fintek again, Nuvoton not possible
+  - drop revision printing for Nuvoton
+  - restructure defines again
+  - add new model 427G
 
-If follow_hugetlb_page() can be arch-independent, why do we need the
-other arch-dependent functions?
+changes since v2: (p1 only)
+  - rename macros that change behavior
+  - use chip type not device id in the macros
+  - reorder defines a bit
 
-It all looks a bit weird to have two functions that walk page tables and
-are hugetlb aware.
+changes since v1:
+  - remove unused define
+  - fix bug where (base + 2) was used as second data bit
+  - add macros for "inverted" and "single data bit"
 
-Either this screams for a cleanup or I am missing something fundamental.
+This series first enables a SuperIO GPIO driver to support a chip from
+the vendor Nuvoton, the driver is for Fintek devices but those just are
+very similar. And in watchdog and hwmon subsystems these SuperIO drivers
+also share code and are sometimes called a family.
+
+In another step the individual banks receive a label to tell them apart,
+a step which potentially changes an interface to legacy users that might
+rely on all banks having the same label, or an exact label. But since a
+later patch wants to use GPIO_LOOKUP unique labels are needed and i
+decided to assign them for all supported chips.
+
+In a following patch the Simatic GPIO LED driver is extended to provide
+LEDs in case that SuperIO GPIO driver can be loaded.
+
+Last but not least the watchdog module of that same SuperIO gets loaded
+on a best effort basis.
+
+Note similar patches have appreared before as
+  "[PATCH v3 0/1] add device driver for Nuvoton SIO gpio function"
+The main difference here is that i added chip support to an existing
+driver instead of creating a new one. And that i actually propose all
+patches and do not just have the LED patch for Simatic as an example.
+Also note that the patches are based on
+  "[PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper"
+
+Henning Schild (5):
+  gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+  gpio-f7188x: use unique labels for banks/chips
+  leds: simatic-ipc-leds-gpio: add new model 227G
+  platform/x86: simatic-ipc: enable watchdog for 227G
+  platform/x86: simatic-ipc: add new model 427G
+
+ drivers/gpio/Kconfig                          |   3 +-
+ drivers/gpio/gpio-f7188x.c                    | 229 +++++++++++-------
+ drivers/leds/simple/simatic-ipc-leds-gpio.c   |  42 +++-
+ drivers/platform/x86/simatic-ipc.c            |  10 +-
+ .../platform_data/x86/simatic-ipc-base.h      |   1 +
+ include/linux/platform_data/x86/simatic-ipc.h |   2 +
+ 6 files changed, 194 insertions(+), 93 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.35.1
 

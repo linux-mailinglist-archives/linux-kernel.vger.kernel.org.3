@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A13559E03C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A42959E1C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353325AbiHWKOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        id S1354536AbiHWKpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352800AbiHWKGR (ORCPT
+        with ESMTP id S1355686AbiHWKgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A8C32E;
-        Tue, 23 Aug 2022 01:53:01 -0700 (PDT)
+        Tue, 23 Aug 2022 06:36:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0383085F86;
+        Tue, 23 Aug 2022 02:07:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 436C361377;
-        Tue, 23 Aug 2022 08:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43BEFC433C1;
-        Tue, 23 Aug 2022 08:53:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 77BF3CE1B5C;
+        Tue, 23 Aug 2022 09:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76FF8C433C1;
+        Tue, 23 Aug 2022 09:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244780;
-        bh=0RH08DlYaBDEIvYoq52VEKqDG4diNbNpOF8jgqGa704=;
+        s=korg; t=1661245637;
+        bh=dY5yYAc4TF4/LkVrqeL+lzkmkOuVcol4Dx4A8WuudUk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c2kgCilD/Bd7VQYjGQmxPQ75/7cw4vyCfzOYpTl5tg/CSutfNnkeic3VugEsLVu1z
-         pMpf3WoiXLZxxEvBycFoDm/ECQbmMv5NyxLd87xIZPv99P3C00ug8zoOg0eiTcLyLU
-         arau9qEuNERKvM4SPpUKnmZWEQFDjleLxGfBtLvM=
+        b=0UsEuYJ0lvVkBO4v9qtFQewQldoNAtmMmJomz3NSxCzB9dJvPYY8CiyPfkLcLBHfi
+         mbXSbwNwpKOz2j1WiAsTQ6fUCr8CweUfjTLzLIl2e8Xf9n082kn8hgwhboW5RC/EqP
+         qL0UoA+SbYatvHA1RCGLKigTyZ7yM4siXxdK10fc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 119/244] ASoC: tas2770: Allow mono streams
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 109/287] net/mlx5e: Fix the value of MLX5E_MAX_RQ_NUM_MTTS
 Date:   Tue, 23 Aug 2022 10:24:38 +0200
-Message-Id: <20220823080103.004658234@linuxfoundation.org>
+Message-Id: <20220823080104.047596959@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-commit bf54d97a835dfe62d4d29e245e170c63d0089be7 upstream.
+[ Upstream commit 562696c3c62c7c23dd896e9447252ce9268cb812 ]
 
-The part is a mono speaker amp, but it can do downmix and switch between
-left and right channel, so the right channel range is 1 to 2.
+MLX5E_MAX_RQ_NUM_MTTS should be the maximum value, so that
+MLX5_MTT_OCTW(MLX5E_MAX_RQ_NUM_MTTS) fits into u16. The current value of
+1 << 17 results in MLX5_MTT_OCTW(1 << 17) = 1 << 16, which doesn't fit
+into u16. This commit replaces it with the maximum value that still
+fits u16.
 
-Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220808141246.5749-3-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 73281b78a37a ("net/mlx5e: Derive Striding RQ size from MTU")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tas2770.c |    2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -507,7 +507,7 @@ static struct snd_soc_dai_driver tas2770
- 		.id = 0,
- 		.playback = {
- 			.stream_name    = "ASI1 Playback",
--			.channels_min   = 2,
-+			.channels_min   = 1,
- 			.channels_max   = 2,
- 			.rates      = TAS2770_RATES,
- 			.formats    = TAS2770_FORMATS,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index d79e177f8990..ec303d4d2d7a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -95,7 +95,7 @@ struct page_pool;
+ #define MLX5E_LOG_ALIGNED_MPWQE_PPW	(ilog2(MLX5E_REQUIRED_WQE_MTTS))
+ #define MLX5E_REQUIRED_MTTS(wqes)	(wqes * MLX5E_REQUIRED_WQE_MTTS)
+ #define MLX5E_MAX_RQ_NUM_MTTS	\
+-	((1 << 16) * 2) /* So that MLX5_MTT_OCTW(num_mtts) fits into u16 */
++	(ALIGN_DOWN(U16_MAX, 4) * 2) /* So that MLX5_MTT_OCTW(num_mtts) fits into u16 */
+ #define MLX5E_ORDER2_MAX_PACKET_MTU (order_base_2(10 * 1024))
+ #define MLX5E_PARAMS_MAXIMUM_LOG_RQ_SIZE_MPW	\
+ 		(ilog2(MLX5E_MAX_RQ_NUM_MTTS / MLX5E_REQUIRED_WQE_MTTS))
+-- 
+2.35.1
+
 
 

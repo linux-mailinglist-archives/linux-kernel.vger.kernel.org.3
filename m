@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0675759DEE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61E159DB7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359160AbiHWMDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S1355309AbiHWKXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359563AbiHWMBz (ORCPT
+        with ESMTP id S1353464AbiHWKLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:01:55 -0400
+        Tue, 23 Aug 2022 06:11:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31678591;
-        Tue, 23 Aug 2022 02:36:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F33D7F08A;
+        Tue, 23 Aug 2022 01:56:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B007AB81C63;
-        Tue, 23 Aug 2022 09:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1104EC433C1;
-        Tue, 23 Aug 2022 09:36:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE395B81C3A;
+        Tue, 23 Aug 2022 08:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CBBCC433D6;
+        Tue, 23 Aug 2022 08:56:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247367;
-        bh=QQ3eWDx/UzEsjdEWteiakKgZ4UiJlFvdIgg8vViaTng=;
+        s=korg; t=1661245011;
+        bh=/kf6leDDat9iGfpuXzG3nE4ya93dzuwnGVGMI2FfBsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LhqUufxuA7fMjWcOBErhSmnoukzafkOpfxEmnfsfJN/Pd6nzIAJjxlCNqtLKv7e7w
-         0xfVJf8FouLmxpKybZHgXpA4UwZ3T1lovP8l3Vv1vClLN06UYE6UqUwRtgNChrnQhl
-         dh+Nn4HGd9xZi5xtc7+NL6ehyUukKxruiMM67F1Y=
+        b=CcnagHrDo0kdGi5RTCwjZrm0xX5ORZXB9qR3uXd1Qf7XVeKd9v0PeBemeXvDC2wUo
+         e0ZiI0kJ+/3T2TF+dRAQZpQKbfex3nTG0dTWKUdHDExK47ibJ5bFtwqFO94iji8ft+
+         zfEZRQMTiaCxuFTeBoxDvsXHajwTud3wQl2y57mw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 5.10 014/158] apparmor: fix absroot causing audited secids to begin with =
-Date:   Tue, 23 Aug 2022 10:25:46 +0200
-Message-Id: <20220823080046.648897715@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 188/244] mmc: tmio: avoid glitches when resetting
+Date:   Tue, 23 Aug 2022 10:25:47 +0200
+Message-Id: <20220823080105.652528097@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,76 +57,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Johansen <john.johansen@canonical.com>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-commit 511f7b5b835726e844a5fc7444c18e4b8672edfd upstream.
+[ Upstream commit 2e586f8a5b0ed4a525014a692923ac96f6647816 ]
 
-AppArmor is prefixing secids that are converted to secctx with the =
-to indicate the secctx should only be parsed from an absolute root
-POV. This allows catching errors where secctx are reparsed back into
-internal labels.
+If we reset because of an error, we need to preserve values for the
+clock frequency. Otherwise, glitches may be seen on the bus.
 
-Unfortunately because audit is using secid to secctx conversion this
-means that subject and object labels can result in a very unfortunate
-== that can break audit parsing.
+To achieve that, we introduce a 'preserve' parameter to the reset
+function and the IP core specific reset callbacks to handle everything
+accordingly.
 
-eg. the subj==unconfined term in the below audit message
-
-type=USER_LOGIN msg=audit(1639443365.233:160): pid=1633 uid=0 auid=1000
-ses=3 subj==unconfined msg='op=login id=1000 exe="/usr/sbin/sshd"
-hostname=192.168.122.1 addr=192.168.122.1 terminal=/dev/pts/1 res=success'
-
-Fix this by switch the prepending of = to a _. This still works as a
-special character to flag this case without breaking audit. Also move
-this check behind debug as it should not be needed during normal
-operqation.
-
-Fixes: 26b7899510ae ("apparmor: add support for absolute root view based labels")
-Reported-by: Casey Schaufler <casey@schaufler-ca.com>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Link: https://lore.kernel.org/r/20220625131722.1397-1-wsa@kernel.org
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/apparmor/include/lib.h |    5 +++++
- security/apparmor/label.c       |    7 ++++---
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ drivers/mmc/host/renesas_sdhi_core.c | 29 ++++++++++++++--------------
+ drivers/mmc/host/tmio_mmc.c          |  2 +-
+ drivers/mmc/host/tmio_mmc.h          |  6 +++++-
+ drivers/mmc/host/tmio_mmc_core.c     | 28 +++++++++++++++++++++------
+ 4 files changed, 42 insertions(+), 23 deletions(-)
 
---- a/security/apparmor/include/lib.h
-+++ b/security/apparmor/include/lib.h
-@@ -22,6 +22,11 @@
-  */
+diff --git a/drivers/mmc/host/renesas_sdhi_core.c b/drivers/mmc/host/renesas_sdhi_core.c
+index 791e180a0617..387f2a4f693a 100644
+--- a/drivers/mmc/host/renesas_sdhi_core.c
++++ b/drivers/mmc/host/renesas_sdhi_core.c
+@@ -51,9 +51,6 @@
+ #define HOST_MODE_GEN3_32BIT	(HOST_MODE_GEN3_WMODE | HOST_MODE_GEN3_BUSWIDTH)
+ #define HOST_MODE_GEN3_64BIT	0
  
- #define DEBUG_ON (aa_g_debug)
-+/*
-+ * split individual debug cases out in preparation for finer grained
-+ * debug controls in the future.
-+ */
-+#define AA_DEBUG_LABEL DEBUG_ON
- #define dbg_printk(__fmt, __args...) pr_debug(__fmt, ##__args)
- #define AA_DEBUG(fmt, args...)						\
- 	do {								\
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -1632,9 +1632,9 @@ int aa_label_snxprint(char *str, size_t
- 	AA_BUG(!str && size != 0);
- 	AA_BUG(!label);
+-#define CTL_SDIF_MODE	0xe6
+-#define SDIF_MODE_HS400		BIT(0)
+-
+ #define SDHI_VER_GEN2_SDR50	0x490c
+ #define SDHI_VER_RZ_A1		0x820b
+ /* very old datasheets said 0x490c for SDR104, too. They are wrong! */
+@@ -550,23 +547,25 @@ static void renesas_sdhi_scc_reset(struct tmio_mmc_host *host, struct renesas_sd
+ }
  
--	if (flags & FLAG_ABS_ROOT) {
-+	if (AA_DEBUG_LABEL && (flags & FLAG_ABS_ROOT)) {
- 		ns = root_ns;
--		len = snprintf(str, size, "=");
-+		len = snprintf(str, size, "_");
- 		update_for_len(total, len, size, str);
- 	} else if (!ns) {
- 		ns = labels_ns(label);
-@@ -1896,7 +1896,8 @@ struct aa_label *aa_label_strn_parse(str
- 	AA_BUG(!str);
+ /* only populated for TMIO_MMC_MIN_RCAR2 */
+-static void renesas_sdhi_reset(struct tmio_mmc_host *host)
++static void renesas_sdhi_reset(struct tmio_mmc_host *host, bool preserve)
+ {
+ 	struct renesas_sdhi *priv = host_to_priv(host);
+ 	int ret;
+ 	u16 val;
  
- 	str = skipn_spaces(str, n);
--	if (str == NULL || (*str == '=' && base != &root_ns->unconfined->label))
-+	if (str == NULL || (AA_DEBUG_LABEL && *str == '_' &&
-+			    base != &root_ns->unconfined->label))
- 		return ERR_PTR(-EINVAL);
+-	if (priv->rstc) {
+-		reset_control_reset(priv->rstc);
+-		/* Unknown why but without polling reset status, it will hang */
+-		read_poll_timeout(reset_control_status, ret, ret == 0, 1, 100,
+-				  false, priv->rstc);
+-		/* At least SDHI_VER_GEN2_SDR50 needs manual release of reset */
+-		sd_ctrl_write16(host, CTL_RESET_SD, 0x0001);
+-		priv->needs_adjust_hs400 = false;
+-		renesas_sdhi_set_clock(host, host->clk_cache);
+-	} else if (priv->scc_ctl) {
+-		renesas_sdhi_scc_reset(host, priv);
++	if (!preserve) {
++		if (priv->rstc) {
++			reset_control_reset(priv->rstc);
++			/* Unknown why but without polling reset status, it will hang */
++			read_poll_timeout(reset_control_status, ret, ret == 0, 1, 100,
++					  false, priv->rstc);
++			/* At least SDHI_VER_GEN2_SDR50 needs manual release of reset */
++			sd_ctrl_write16(host, CTL_RESET_SD, 0x0001);
++			priv->needs_adjust_hs400 = false;
++			renesas_sdhi_set_clock(host, host->clk_cache);
++		} else if (priv->scc_ctl) {
++			renesas_sdhi_scc_reset(host, priv);
++		}
+ 	}
  
- 	len = label_count_strn_entries(str, end - str);
+ 	if (sd_ctrl_read16(host, CTL_VERSION) >= SDHI_VER_GEN3_SD) {
+diff --git a/drivers/mmc/host/tmio_mmc.c b/drivers/mmc/host/tmio_mmc.c
+index b55a29c53d9c..53a2ad9a24b8 100644
+--- a/drivers/mmc/host/tmio_mmc.c
++++ b/drivers/mmc/host/tmio_mmc.c
+@@ -75,7 +75,7 @@ static void tmio_mmc_set_clock(struct tmio_mmc_host *host,
+ 	tmio_mmc_clk_start(host);
+ }
+ 
+-static void tmio_mmc_reset(struct tmio_mmc_host *host)
++static void tmio_mmc_reset(struct tmio_mmc_host *host, bool preserve)
+ {
+ 	sd_ctrl_write16(host, CTL_RESET_SDIO, 0x0000);
+ 	usleep_range(10000, 11000);
+diff --git a/drivers/mmc/host/tmio_mmc.h b/drivers/mmc/host/tmio_mmc.h
+index f936aad945ce..da63193dd45b 100644
+--- a/drivers/mmc/host/tmio_mmc.h
++++ b/drivers/mmc/host/tmio_mmc.h
+@@ -42,6 +42,7 @@
+ #define CTL_DMA_ENABLE 0xd8
+ #define CTL_RESET_SD 0xe0
+ #define CTL_VERSION 0xe2
++#define CTL_SDIF_MODE 0xe6 /* only known on R-Car 2+ */
+ 
+ /* Definitions for values the CTL_STOP_INTERNAL_ACTION register can take */
+ #define TMIO_STOP_STP		BIT(0)
+@@ -98,6 +99,9 @@
+ /* Definitions for values the CTL_DMA_ENABLE register can take */
+ #define DMA_ENABLE_DMASDRW	BIT(1)
+ 
++/* Definitions for values the CTL_SDIF_MODE register can take */
++#define SDIF_MODE_HS400		BIT(0) /* only known on R-Car 2+ */
++
+ /* Define some IRQ masks */
+ /* This is the mask used at reset by the chip */
+ #define TMIO_MASK_ALL           0x837f031d
+@@ -181,7 +185,7 @@ struct tmio_mmc_host {
+ 	int (*multi_io_quirk)(struct mmc_card *card,
+ 			      unsigned int direction, int blk_size);
+ 	int (*write16_hook)(struct tmio_mmc_host *host, int addr);
+-	void (*reset)(struct tmio_mmc_host *host);
++	void (*reset)(struct tmio_mmc_host *host, bool preserve);
+ 	bool (*check_retune)(struct tmio_mmc_host *host, struct mmc_request *mrq);
+ 	void (*fixup_request)(struct tmio_mmc_host *host, struct mmc_request *mrq);
+ 	unsigned int (*get_timeout_cycles)(struct tmio_mmc_host *host);
+diff --git a/drivers/mmc/host/tmio_mmc_core.c b/drivers/mmc/host/tmio_mmc_core.c
+index a5850d83908b..437048bb8027 100644
+--- a/drivers/mmc/host/tmio_mmc_core.c
++++ b/drivers/mmc/host/tmio_mmc_core.c
+@@ -179,8 +179,17 @@ static void tmio_mmc_set_bus_width(struct tmio_mmc_host *host,
+ 	sd_ctrl_write16(host, CTL_SD_MEM_CARD_OPT, reg);
+ }
+ 
+-static void tmio_mmc_reset(struct tmio_mmc_host *host)
++static void tmio_mmc_reset(struct tmio_mmc_host *host, bool preserve)
+ {
++	u16 card_opt, clk_ctrl, sdif_mode;
++
++	if (preserve) {
++		card_opt = sd_ctrl_read16(host, CTL_SD_MEM_CARD_OPT);
++		clk_ctrl = sd_ctrl_read16(host, CTL_SD_CARD_CLK_CTL);
++		if (host->pdata->flags & TMIO_MMC_MIN_RCAR2)
++			sdif_mode = sd_ctrl_read16(host, CTL_SDIF_MODE);
++	}
++
+ 	/* FIXME - should we set stop clock reg here */
+ 	sd_ctrl_write16(host, CTL_RESET_SD, 0x0000);
+ 	usleep_range(10000, 11000);
+@@ -190,7 +199,7 @@ static void tmio_mmc_reset(struct tmio_mmc_host *host)
+ 	tmio_mmc_abort_dma(host);
+ 
+ 	if (host->reset)
+-		host->reset(host);
++		host->reset(host, preserve);
+ 
+ 	sd_ctrl_write32_as_16_and_16(host, CTL_IRQ_MASK, host->sdcard_irq_mask_all);
+ 	host->sdcard_irq_mask = host->sdcard_irq_mask_all;
+@@ -206,6 +215,13 @@ static void tmio_mmc_reset(struct tmio_mmc_host *host)
+ 		sd_ctrl_write16(host, CTL_TRANSACTION_CTL, 0x0001);
+ 	}
+ 
++	if (preserve) {
++		sd_ctrl_write16(host, CTL_SD_MEM_CARD_OPT, card_opt);
++		sd_ctrl_write16(host, CTL_SD_CARD_CLK_CTL, clk_ctrl);
++		if (host->pdata->flags & TMIO_MMC_MIN_RCAR2)
++			sd_ctrl_write16(host, CTL_SDIF_MODE, sdif_mode);
++	}
++
+ 	if (host->mmc->card)
+ 		mmc_retune_needed(host->mmc);
+ }
+@@ -248,7 +264,7 @@ static void tmio_mmc_reset_work(struct work_struct *work)
+ 
+ 	spin_unlock_irqrestore(&host->lock, flags);
+ 
+-	tmio_mmc_reset(host);
++	tmio_mmc_reset(host, true);
+ 
+ 	/* Ready for new calls */
+ 	host->mrq = NULL;
+@@ -961,7 +977,7 @@ static void tmio_mmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		tmio_mmc_power_off(host);
+ 		/* For R-Car Gen2+, we need to reset SDHI specific SCC */
+ 		if (host->pdata->flags & TMIO_MMC_MIN_RCAR2)
+-			tmio_mmc_reset(host);
++			tmio_mmc_reset(host, false);
+ 
+ 		host->set_clock(host, 0);
+ 		break;
+@@ -1189,7 +1205,7 @@ int tmio_mmc_host_probe(struct tmio_mmc_host *_host)
+ 		_host->sdcard_irq_mask_all = TMIO_MASK_ALL;
+ 
+ 	_host->set_clock(_host, 0);
+-	tmio_mmc_reset(_host);
++	tmio_mmc_reset(_host, false);
+ 
+ 	spin_lock_init(&_host->lock);
+ 	mutex_init(&_host->ios_lock);
+@@ -1285,7 +1301,7 @@ int tmio_mmc_host_runtime_resume(struct device *dev)
+ 	struct tmio_mmc_host *host = dev_get_drvdata(dev);
+ 
+ 	tmio_mmc_clk_enable(host);
+-	tmio_mmc_reset(host);
++	tmio_mmc_reset(host, false);
+ 
+ 	if (host->clk_cache)
+ 		host->set_clock(host, host->clk_cache);
+-- 
+2.35.1
+
 
 

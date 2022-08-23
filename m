@@ -2,131 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A69F59E9A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45C859E756
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbiHWRZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
+        id S244764AbiHWQeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbiHWRWh (ORCPT
+        with ESMTP id S244638AbiHWQde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:22:37 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAFD98C8F
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:58:42 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sd33so6632957ejc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:58:42 -0700 (PDT)
+        Tue, 23 Aug 2022 12:33:34 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD00EE58B5;
+        Tue, 23 Aug 2022 07:50:47 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w10so6229926edc.3;
+        Tue, 23 Aug 2022 07:50:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5HbW8uko2vZ7AfwOU8eshl0aSQHKvNNaKtmoLv6rUEM=;
-        b=JVJ/J+80rmibqknLI2dl4D/IfJ9EQwbBZSfvxG712BBjzT3yS+x3AVpptqWtAIaoP5
-         6AoLaaLRByrmJMtY636D5RKtuqEryU2Ox4VkD9HvYVOmuivp45RYryYXmKDqEJApQVWi
-         nDj+k2TQWI9jk0P895iLQrG5xjpJylgYK15ms=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=9FkbKWfrE7syTvjgVRfTfp1QVZS5uNWK2l9/kYxbDIo=;
+        b=VqXQUoqNkfeNZyklgLrRt9wOSiknNhjeL9iSJXyh8uVPqmoM5JVXSZG7SfNasI+hwu
+         49/sW/PGdPuNWBLvLI/o5KGRWsw+vcWBIXbx0P7VHyKNERqOBBmUtWfGJUYUPwFImMX0
+         g9a7uAnzZVlSJc+n20RQ79RB56freCTS9pTrgQFwomdMcdjx/QDf4WAlPQBBemRqFXSZ
+         JbMX3xpc4C9HY9eu/RS6u0obRvUC0NjoeZjJ1nGt51Ytm9CV9UX8ZD8kXM8URhhWmEpL
+         2XAZm0uu0wRAjRr/DaNu+GzyK60zS2BUtxNodeoW2dHBsvASAI6QEkHmN3E7Qxq1ifF0
+         yApg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5HbW8uko2vZ7AfwOU8eshl0aSQHKvNNaKtmoLv6rUEM=;
-        b=lPvMp9TMnIFrB51zRiktyfXSZBQVKH/oOA0e/SdS17gVeRdxkGPdHBmBfQK1KiUDKQ
-         EmpYAha6YrZmVqzHYB3q/KQ7gr5Zga9QE2kP504g5rKBNidI/KjMjkYWz2+osfYDR7wo
-         nZZJYbi/ZxakQgJvHw6REe0CJH2X+9QCh0mdYsuup8zT5sSb+0jBWDeyjWWsP1fY8W3u
-         f/U+QnCPoY8qoBt5x1uufozjsJNOjFj4dxGP7xWxQYL9HyZ6Y+PBOyvxYHgpa4Kj3pAo
-         0FyITfKkHFJjWOgcqVArwHhkRis2s4tfnKhQ0RoNfQHpFtaFX5yfx2ytRIbw3QqJOQLb
-         dtVw==
-X-Gm-Message-State: ACgBeo3TTAvsf/DbhLiIjvFO1jqJ3WRC5oEGiiThNmxN/zB2IXKQKMaG
-        328yzqErYsiPJW/lSHLaQJsFd85PFhDpTJrEceg=
-X-Google-Smtp-Source: AA6agR6NYtdIj7miEyj/bGL6mK1rAekDsIcC9ESGpcAbw68MqC8vV7qXX9H3RMQ6cKswrRXnMWk0jA==
-X-Received: by 2002:a17:907:2e01:b0:730:9ecc:cd28 with SMTP id ig1-20020a1709072e0100b007309ecccd28mr9543ejc.360.1661266721292;
-        Tue, 23 Aug 2022 07:58:41 -0700 (PDT)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id l5-20020a170906a40500b0073100dfa7b0sm5999ejz.8.2022.08.23.07.58.41
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9FkbKWfrE7syTvjgVRfTfp1QVZS5uNWK2l9/kYxbDIo=;
+        b=7FGz/EpxzdKPq2/NOtpPvCF2lRBSmsiT/z4SKOpes5Vviu1HZt4chcvf6IyWEjCCjs
+         TD3w2jnfvYU+YjzT8FBbHZS4SnHNu3MGIQvZKJ+Mryd6mnSGERCOpBkyBucqchOYdui/
+         qGtpIxtpDXLsNtFJKtbXZmq67rtQmOCGxZOIa/U0vQYngyvQnpgqTvJJaYQyLPPOTiNt
+         bKddA57IOcVOGq6qeE9T0wOCtzLn8RZ3JxbNzNKumldmKeKV5KEB5LCQcYjOi3gwymR9
+         PnfjdZuOSssmr9LeSdRUGFhF01OW2MNI3uO7dsqDDNcJT9OxxV2t1GFvdo+7ZhlZt9Z8
+         CLoA==
+X-Gm-Message-State: ACgBeo0Jj9TXqnv/gZDN+TNZ1lL7sjB3S6Y3PlDwrZdckeu16CCYuSUc
+        3ckKFZYxjPGg8qYj7xsJBMM=
+X-Google-Smtp-Source: AA6agR4fZaRj2PGPD9O/XDdU/NGZNcNJidhVlJtmFWx0E3P96etNLFWDppzqcmKdWMvosJjO67UJWg==
+X-Received: by 2002:aa7:ce0f:0:b0:445:f488:51ca with SMTP id d15-20020aa7ce0f000000b00445f48851camr408017edv.6.1661266246401;
+        Tue, 23 Aug 2022 07:50:46 -0700 (PDT)
+Received: from ?IPV6:2a04:241e:502:a09c:f5c4:cca0:9b39:e8aa? ([2a04:241e:502:a09c:f5c4:cca0:9b39:e8aa])
+        by smtp.gmail.com with ESMTPSA id w21-20020a1709061f1500b0072eddcc807fsm7589047ejj.155.2022.08.23.07.50.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 07:58:41 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id h22so17710711ejk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:58:41 -0700 (PDT)
-X-Received: by 2002:a5d:6881:0:b0:225:28cb:332f with SMTP id
- h1-20020a5d6881000000b0022528cb332fmr13686062wru.405.1661266236928; Tue, 23
- Aug 2022 07:50:36 -0700 (PDT)
+        Tue, 23 Aug 2022 07:50:45 -0700 (PDT)
+Message-ID: <01f8616c-2904-42f1-1e59-ca4c71f7a9bd@gmail.com>
+Date:   Tue, 23 Aug 2022 17:50:43 +0300
 MIME-Version: 1.0
-References: <20220726173824.1166873-1-dianders@chromium.org>
- <20220726103631.v2.4.Ie85f68215ada39f502a96dcb8a1f3ad977e3f68a@changeid>
- <CAMSo37XsawRxTnJriLUAwJAj0+ZzpACtMiR_3V7H1H9WXg3T_Q@mail.gmail.com>
- <CAD=FV=V5c0bCOCBvdnqVJ6Sa1XKeg+d7kTEL2Okh4GAL66MGiw@mail.gmail.com>
- <CAMSo37Uve4qrAA81zrO9eOGc4y7vjg-OZ9L7m9xWM7UkQ6PzmQ@mail.gmail.com> <CAMSo37U1uxUFkn4Jda5E+nDiz0wp8_ERbNa9BUgWttZ6dEssAg@mail.gmail.com>
-In-Reply-To: <CAMSo37U1uxUFkn4Jda5E+nDiz0wp8_ERbNa9BUgWttZ6dEssAg@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 23 Aug 2022 07:50:23 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WNNAYtdoocp_ShyNBOBmqSSr79=x_2UKq+yfA+HiOo9w@mail.gmail.com>
-Message-ID: <CAD=FV=WNNAYtdoocp_ShyNBOBmqSSr79=x_2UKq+yfA+HiOo9w@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] regulator: core: Allow specifying an initial load
- w/ the bulk API
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        John Stultz <jstultz@google.com>,
-        Alistair Delva <alistair.delva@linaro.org>,
-        Todd Kjos <tkjos@google.com>, Steve Muckle <smuckle@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 19/31] net/tcp: Add TCP-AO SNE support
+Content-Language: en-US
+To:     Dmitry Safonov <dima@arista.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+References: <20220818170005.747015-1-dima@arista.com>
+ <20220818170005.747015-20-dima@arista.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+In-Reply-To: <20220818170005.747015-20-dima@arista.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 8/18/22 19:59, Dmitry Safonov wrote:
+> Add Sequence Number Extension (SNE) extension for TCP-AO.
+> This is needed to protect long-living TCP-AO connections from replaying
+> attacks after sequence number roll-over, see RFC5925 (6.2).
 
-On Mon, Aug 22, 2022 at 11:23 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
->
-> Hi, Douglas
->
-> Just an update on the fix you pointed out previously here:
-> > > [1] https://lore.kernel.org/r/20220809142738.1.I91625242f137c707bb345c51c80c5ecee02eeff3@changeid
->
-> With it I could boot the hikey960 build to the home screen if it does
-> not use the GKI kernel.
-> but the problem will be reproduced if it uses the GKI kernel.
->
-> And if this change is reverted, then it could boot with the GKI kernel as well.
->
-> I am not sure what's the reason there, but there seems to be some
-> difference with the fix above and the workaround of revert.
-> Not sure if you have any idea about that.
->
-> Regarding the GKI kernel(Android Generic Kernel Image)[2], it's built
-> from the android-mainline tree(f51334eac4de) without any workaround.
-> (Neither the revert, nor the fix applied), and the regulator modules
-> used for the hikey960 build are hi6421v530-regulator.ko and
-> hi655x-regulator.ko
->
-> I am still not sure if it would work with the GKI kernel that has the
-> fix that you pointed out in. the case that both the GKI kernel and
-> vendor tree have the fix.
-> Will update here when I have some results.
->
-> [2]: https://source.android.com/docs/core/architecture/kernel/generic-kernel-image?hl=en
+> +#ifdef CONFIG_TCP_AO
+> +	ao = rcu_dereference_protected(tp->ao_info,
+> +				       lockdep_sock_is_held((struct sock *)tp));
+> +	if (ao) {
+> +		if (ack < ao->snd_sne_seq)
+> +			ao->snd_sne++;
+> +		ao->snd_sne_seq = ack;
+> +	}
+> +#endif
+>   	tp->snd_una = ack;
+>   }
 
-That's not too surprising. The broken patch is in the core kernel so
-you need the fix in the core kernel. I think that means you'll have to
-wait until `android-mainline` gets the fix. I don't work on Android,
-so if there's some other route to get an expedited fix into
-android-mainline I'm not aware of it.
+... snip ...
 
--Doug
+> +#ifdef CONFIG_TCP_AO
+> +	ao = rcu_dereference_protected(tp->ao_info,
+> +				       lockdep_sock_is_held((struct sock *)tp));
+> +	if (ao) {
+> +		if (seq < ao->rcv_sne_seq)
+> +			ao->rcv_sne++;
+> +		ao->rcv_sne_seq = seq;
+> +	}
+> +#endif
+>   	WRITE_ONCE(tp->rcv_nxt, seq);
 
--Doug
+It should always be the case that (rcv_nxt == rcv_sne_seq) and (snd_una 
+== snd_sne_seq) so the _sne_seq fields are redundant. It's possible to 
+avoid those extra fields.
+
+However 8 bytes per TCP-AO socket is inconsequential.
+
+--
+Regards,
+Leonard

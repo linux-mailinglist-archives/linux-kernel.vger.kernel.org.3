@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925BB59EF0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C614059EF12
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbiHWW0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S230306AbiHWW0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233635AbiHWWZv (ORCPT
+        with ESMTP id S233435AbiHWWZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:25:51 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3E17D78C;
-        Tue, 23 Aug 2022 15:25:47 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id b5so14327742wrr.5;
-        Tue, 23 Aug 2022 15:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=0KiyNC174zzIjrp1GQzwkUvnQfE9zdtStKGjmTOoAis=;
-        b=ISOAaZjBLHcybcp4uPVGbXkobnssTpHtkw01HnsIkvCOXnpw0/0LwaIbeXccRKCQ0M
-         JKTK29tVl3uxvOrLEEfvBYrHm+cjw8F1x0eBXsQjDQKqE5di3ZMDFVqaQ7i6oS3xeTOy
-         McKs03C2T5MNpFnSZw7g/0fM4sFGLp8WtHnfMXFFK1hN7wABEa1w6M8g0mgCbDt7weSS
-         41xaeJvRF1ZAyjpxLi0/3Qh88jiIgM64CTkN5KVXoLNt5qtZDStaC9hJrrsNLuGvrWzK
-         akMDScEddIA2fx0iToXHjyt//hg4dUKZ1sF2TBFvOtWQB+zblWRHviWhK5d7jeKuIryJ
-         7O3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=0KiyNC174zzIjrp1GQzwkUvnQfE9zdtStKGjmTOoAis=;
-        b=tvIDlvs314LcGwFxy0ulf1rhFdyznY7USDQL1R1tbX8rxA9an4mED+nBaTrSPBtmaB
-         fYxNB3FkEXylHYWRJHcArzz2xLInsxOv1cg92oBTGaVj3Y3rTnf4GEF7jCv++mMqkWZR
-         1l62zP4cjQJRW4Awixv/1qI5SS1+xS1HWRnHa9AkekJkxF2t0tLpTJSDOdj9vI3Vvcy0
-         BIzxsoNRjTXwvVDB9CXg6kUDy11vAXGJ9HgSCf7VoSs0464cy9cmdwGZLslaWJD/wiTL
-         6wxCgEB6WbRp7OEJqMWrJf10pTtL+3Utwc5zM8ThiIb/pnWacIfj+XlfZ1HQtmci+eSI
-         LqvQ==
-X-Gm-Message-State: ACgBeo3BBBSDnOne+uUZuh6myhpOVIt/a8uwSSLKySq1C4+aerhxPTbU
-        CqOjaV7DID9xYp+OAgfem48=
-X-Google-Smtp-Source: AA6agR4y17yGEPfUjNos3CS9FizMNvtc29TAVoyBBkCY/cph1Sh1OwBFkf27OS+J6CbR5P851Ny8bw==
-X-Received: by 2002:a5d:594a:0:b0:225:3606:da33 with SMTP id e10-20020a5d594a000000b002253606da33mr12411231wri.60.1661293545431;
-        Tue, 23 Aug 2022 15:25:45 -0700 (PDT)
-Received: from localhost.localdomain ([84.255.184.228])
-        by smtp.gmail.com with ESMTPSA id g11-20020a05600c4ecb00b003a4c6e67f01sm26522607wmq.6.2022.08.23.15.25.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 15:25:44 -0700 (PDT)
-From:   Mazin Al Haddad <mazinalhaddad05@gmail.com>
-To:     pontus.fuchs@gmail.com
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        skhan@linuxfoundation.org, paskripkin@gmail.com,
-        Mazin Al Haddad <mazinalhaddad05@gmail.com>,
-        syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
-Subject: [PATCH] ar5523: check endpoints type and direction in probe()
-Date:   Wed, 24 Aug 2022 01:24:38 +0300
-Message-Id: <20220823222436.514204-1-mazinalhaddad05@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 23 Aug 2022 18:25:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC20870B0;
+        Tue, 23 Aug 2022 15:25:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 907001F8A4;
+        Tue, 23 Aug 2022 22:25:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661293540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FE2Al3t7IgXV7i658F8wCx+Pqa+fMKLd8YrmqYyjo2c=;
+        b=Q8gYMSsjemD43l+fHVukhYF+p5VRwHuwy5zy3Z1Y1vPTh5o6FIc+a/PSpQguOzy6uydL3h
+        BBARFegh4V6Xpilsra7Mbe7ZJ28h0POtsHebNM1hpK1qKdeXl5Aq5vuoZEI49hixlX9usF
+        45/ruW2liXm17FeQdAvoqBLEwUwjr8M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661293540;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FE2Al3t7IgXV7i658F8wCx+Pqa+fMKLd8YrmqYyjo2c=;
+        b=95Q12KkjJZdTEM7YMhnQyCV8dNijN9rMkjz2xVhuBNxLQruqJU6pchIWCDC9TliBDFTLzt
+        ZqqcH6RHJETiDBDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7EBAF13A89;
+        Tue, 23 Aug 2022 22:25:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TMt4DuFTBWMmKAAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 23 Aug 2022 22:25:37 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Dave Chinner" <david@fromorbit.com>,
+        "Mimi Zohar" <zohar@linux.ibm.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org,
+        "Trond Myklebust" <trondmy@hammerspace.com>
+Subject: Re: [PATCH] iversion: update comments with info about atime updates
+In-reply-to: <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>
+References: <20220822133309.86005-1-jlayton@kernel.org>,
+ <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>,
+ <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>,
+ <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>,
+ <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>,
+ <20220822233231.GJ3600936@dread.disaster.area>,
+ <6cbcb33d33613f50dd5e485ecbf6ce7e305f3d6f.camel@kernel.org>,
+ <166125468756.23264.2859374883806269821@noble.neil.brown.name>,
+ <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>
+Date:   Wed, 24 Aug 2022 08:24:47 +1000
+Message-id: <166129348704.23264.10381335282721356873@noble.neil.brown.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,82 +82,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes a bug reported by syzbot, where a warning occurs in usb_submit_urb()
-due to the wrong endpoint type. There is no check for both the number
-of endpoints and the type which causes an error as the code tries to
-send a URB to the wrong endpoint.
+On Tue, 23 Aug 2022, Jeff Layton wrote:
+> On Tue, 2022-08-23 at 21:38 +1000, NeilBrown wrote:
+> > On Tue, 23 Aug 2022, Jeff Layton wrote:
+> > > So, we can refer to that and simply say:
+> > > 
+> > > "If the function updates the mtime or ctime on the inode, then the
+> > > i_version should be incremented. If only the atime is being updated,
+> > > then the i_version should not be incremented. The exception to this rule
+> > > is explicit atime updates via utimes() or similar mechanism, which
+> > > should result in the i_version being incremented."
+> > 
+> > Is that exception needed?  utimes() updates ctime.
+> > 
+> > https://man7.org/linux/man-pages/man2/utimes.2.html
+> > 
+> > doesn't say that, but
+> > 
+> > https://pubs.opengroup.org/onlinepubs/007904875/functions/utimes.html
+> > 
+> > does, as does the code.
+> > 
+> 
+> Oh, good point! I think we can leave that out. Even better!
 
-Fix it by adding a check for the number of endpoints and the
-direction/type of the endpoints. If the endpoints do not match the 
-expected configuration -ENODEV is returned.
+Further, implicit mtime updates (file_update_time()) also update ctime.
+So all you need is
+   If the function updates the ctime, then i_version should be
+   incremented.
 
-Syzkaller report:
+and I have to ask - why not just use the ctime?  Why have another number
+that is parallel?
 
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 1 PID: 71 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
-Modules linked in:
-CPU: 1 PID: 71 Comm: kworker/1:2 Not tainted 5.19.0-rc7-syzkaller-00150-g32f02a211b0a #0
-Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- ar5523_cmd+0x420/0x790 drivers/net/wireless/ath/ar5523/ar5523.c:275
- ar5523_cmd_read drivers/net/wireless/ath/ar5523/ar5523.c:302 [inline]
- ar5523_host_available drivers/net/wireless/ath/ar5523/ar5523.c:1376 [inline]
- ar5523_probe+0xc66/0x1da0 drivers/net/wireless/ath/ar5523/ar5523.c:1655
+Timestamps are updated at HZ (ktime_get_course) which is at most every
+millisecond.
+xfs stores nanosecond resolution, so about 20 bits are currently wasted.
+We could put a counter like i_version in there that only increments
+after it is viewed, then we can get all the precision we need but with
+exactly ctime semantics.
 
+The 64 change-id could comprise
+ 35 bits of seconds (nearly a millenium)
+ 16 bits of sub-seconds (just in case a higher precision time was wanted
+                         one day)
+ 13 bits of counter. - 8192 changes per tick
 
-Link: https://syzkaller.appspot.com/bug?extid=1bc2c2afd44f820a669f
-Reported-and-tested-by: syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
-Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
----
- drivers/net/wireless/ath/ar5523/ar5523.c | 31 ++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+The value exposed in i_ctime would hide the counter and just show the
+timestamp portion of what the filesystem stores.  This would ensure we
+never get changes on different files that happen in one order leaving
+timestamps with the reversed order (the timestamps could be the same,
+but that is expected).
 
-diff --git a/drivers/net/wireless/ath/ar5523/ar5523.c b/drivers/net/wireless/ath/ar5523/ar5523.c
-index 6f937d2cc126..5451bf9ab9fb 100644
---- a/drivers/net/wireless/ath/ar5523/ar5523.c
-+++ b/drivers/net/wireless/ath/ar5523/ar5523.c
-@@ -1581,8 +1581,39 @@ static int ar5523_probe(struct usb_interface *intf,
- 	struct usb_device *dev = interface_to_usbdev(intf);
- 	struct ieee80211_hw *hw;
- 	struct ar5523 *ar;
-+	struct usb_host_interface *host = intf->cur_altsetting;
- 	int error = -ENOMEM;
- 
-+	if (host->desc.bNumEndpoints != 4) {
-+		dev_err(&dev->dev, "Wrong number of endpoints\n");
-+		return -ENODEV;
-+	}
-+
-+	for (int i = 0; i < host->desc.bNumEndpoints; ++i) {
-+		struct usb_endpoint_descriptor *ep = &host->endpoint[i].desc;
-+		// Check for type of endpoint and direction.
-+		switch (i) {
-+		case 0:
-+		case 1:
-+			if ((ep->bEndpointAddress & USB_DIR_OUT) &&
-+			    ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-+			     == USB_ENDPOINT_XFER_BULK)){
-+				dev_err(&dev->dev, "Wrong type of endpoints\n");
-+				return -ENODEV;
-+			}
-+			break;
-+		case 2:
-+		case 3:
-+			if ((ep->bEndpointAddress & USB_DIR_IN) &&
-+			    ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-+			     == USB_ENDPOINT_XFER_BULK)){
-+				dev_err(&dev->dev, "Wrong type of endpoints\n");
-+				return -ENODEV;
-+			}
-+			break;
-+		}
-+	}
-+
- 	/*
- 	 * Load firmware if the device requires it.  This will return
- 	 * -ENXIO on success and we'll get called back afer the usb
--- 
-2.37.2
+This scheme could be made to handle a sustained update rate of 1
+increment every 8 nanoseconds (if the counter were allowed to overflow
+into unused bits of the sub-second field).  This is one ever 24 CPU
+cycles.  Incrementing a counter and making it visible to all CPUs can
+probably be done in 24 cycles.  Accessing it and setting the "seen" flag
+as well might just fit with faster memory.  Getting any other useful
+work done while maintaining that rate on a single file seems unlikely.
 
+NeilBrown

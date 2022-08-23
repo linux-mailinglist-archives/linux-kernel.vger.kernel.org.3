@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA7159DEF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E9759DEC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354110AbiHWKQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S1358107AbiHWLkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352327AbiHWKH0 (ORCPT
+        with ESMTP id S245319AbiHWLfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:07:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10453D597;
-        Tue, 23 Aug 2022 01:53:55 -0700 (PDT)
+        Tue, 23 Aug 2022 07:35:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AEEC6E8C;
+        Tue, 23 Aug 2022 02:27:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D579B81C1C;
-        Tue, 23 Aug 2022 08:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9878C433C1;
-        Tue, 23 Aug 2022 08:53:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84FF661227;
+        Tue, 23 Aug 2022 09:27:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445A6C433D6;
+        Tue, 23 Aug 2022 09:27:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244833;
-        bh=w2DxzNtSYjlJOxq37XuAFn4T5Dj04nIDkze7xtUTYpg=;
+        s=korg; t=1661246848;
+        bh=3PkGHcka/DfFwtOsUWVB+ZlnkYOjRyZCig8SvtQSvBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EDc39UpLcRBWhDuMzNyyw2pXjUSvqBhPHYxqp4v7Sjy7iyyJHhPOr9gq3Gh7qxMSl
-         N8oppXNu6eDzH8g2bhkEzfV2IQOCZa4aQf11xPHDrzb0Gp8xH5eOWOz7AlNxvFyLdk
-         kf8SuRHTiia9d5WFtxUWZosHft4ZzSjmz123JQ4Y=
+        b=xihmgdn3ahcWHcXVdfnkFPnZnQbxQ47MHxR21DDlGQkc9zXEwuHZxrtqbt7AcJm3m
+         RkCVH6ezJzzQUoEhJjgdW1TeFo8olb0Oef1zAX/ucqKQiqLRKUw+raf0Zx7GCDgLqk
+         Z1X8a21oaM5YVhSfMhB4LGM7Cr/ENzWUcGw+mY2E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Kochetkov <fido_max@inbox.ru>,
-        Hemant Kumar <quic_hemantk@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?=E8=B0=AD=E6=A2=93=E7=85=8A?= <tanzixuan.me@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 159/244] net: qrtr: start MHI channel after endpoit creation
+Subject: [PATCH 5.4 240/389] genelf: Use HAVE_LIBCRYPTO_SUPPORT, not the never defined HAVE_LIBCRYPTO
 Date:   Tue, 23 Aug 2022 10:25:18 +0200
-Message-Id: <20220823080104.499836386@linuxfoundation.org>
+Message-Id: <20220823080125.588289313@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,78 +65,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Kochetkov <fido_max@inbox.ru>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-[ Upstream commit 68a838b84effb7b57ba7d50b1863fc6ae35a54ce ]
+[ Upstream commit 91cea6be90e436c55cde8770a15e4dac9d3032d0 ]
 
-MHI channel may generates event/interrupt right after enabling.
-It may leads to 2 race conditions issues.
+When genelf was introduced it tested for HAVE_LIBCRYPTO not
+HAVE_LIBCRYPTO_SUPPORT, which is the define the feature test for openssl
+defines, fix it.
 
-1)
-Such event may be dropped by qcom_mhi_qrtr_dl_callback() at check:
+This also adds disables the deprecation warning, someone has to fix this
+to build with openssl 3.0 before the warning becomes a hard error.
 
-	if (!qdev || mhi_res->transaction_status)
-		return;
-
-Because dev_set_drvdata(&mhi_dev->dev, qdev) may be not performed at
-this moment. In this situation qrtr-ns will be unable to enumerate
-services in device.
----------------------------------------------------------------
-
-2)
-Such event may come at the moment after dev_set_drvdata() and
-before qrtr_endpoint_register(). In this case kernel will panic with
-accessing wrong pointer at qcom_mhi_qrtr_dl_callback():
-
-	rc = qrtr_endpoint_post(&qdev->ep, mhi_res->buf_addr,
-				mhi_res->bytes_xferd);
-
-Because endpoint is not created yet.
---------------------------------------------------------------
-So move mhi_prepare_for_transfer_autoqueue after endpoint creation
-to fix it.
-
-Fixes: a2e2cc0dbb11 ("net: qrtr: Start MHI channels during init")
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Reviewed-by: Hemant Kumar <quic_hemantk@quicinc.com>
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 9b07e27f88b9cd78 ("perf inject: Add jitdump mmap injection support")
+Reported-by: 谭梓煊 <tanzixuan.me@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Nick Terrell <terrelln@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Link: http://lore.kernel.org/lkml/YulpPqXSOG0Q4J1o@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/qrtr/mhi.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ tools/perf/util/genelf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/net/qrtr/mhi.c b/net/qrtr/mhi.c
-index fa611678af05..49e7cab43d24 100644
---- a/net/qrtr/mhi.c
-+++ b/net/qrtr/mhi.c
-@@ -78,11 +78,6 @@ static int qcom_mhi_qrtr_probe(struct mhi_device *mhi_dev,
- 	struct qrtr_mhi_dev *qdev;
- 	int rc;
+diff --git a/tools/perf/util/genelf.c b/tools/perf/util/genelf.c
+index f9f18b8b1df9..17b74aba8b9a 100644
+--- a/tools/perf/util/genelf.c
++++ b/tools/perf/util/genelf.c
+@@ -35,7 +35,11 @@
  
--	/* start channels */
--	rc = mhi_prepare_for_transfer(mhi_dev);
--	if (rc)
--		return rc;
--
- 	qdev = devm_kzalloc(&mhi_dev->dev, sizeof(*qdev), GFP_KERNEL);
- 	if (!qdev)
- 		return -ENOMEM;
-@@ -96,6 +91,13 @@ static int qcom_mhi_qrtr_probe(struct mhi_device *mhi_dev,
- 	if (rc)
- 		return rc;
+ #define BUILD_ID_URANDOM /* different uuid for each run */
  
-+	/* start channels */
-+	rc = mhi_prepare_for_transfer(mhi_dev);
-+	if (rc) {
-+		qrtr_endpoint_unregister(&qdev->ep);
-+		return rc;
-+	}
+-#ifdef HAVE_LIBCRYPTO
++// FIXME, remove this and fix the deprecation warnings before its removed and
++// We'll break for good here...
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +
- 	dev_dbg(qdev->dev, "Qualcomm MHI QRTR driver probed\n");
++#ifdef HAVE_LIBCRYPTO_SUPPORT
  
- 	return 0;
+ #define BUILD_ID_MD5
+ #undef BUILD_ID_SHA	/* does not seem to work well when linked with Java */
 -- 
 2.35.1
 

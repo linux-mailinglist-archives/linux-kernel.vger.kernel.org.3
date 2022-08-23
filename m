@@ -2,104 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6ED659E4D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D4A59E4DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241921AbiHWOEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 10:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S241344AbiHWODc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 10:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242560AbiHWOAh (ORCPT
+        with ESMTP id S244614AbiHWOCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 10:00:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BEA23A4AD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661252814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9vFwWtlaXBJfhkm+20Q4BimLsKsx1b4GpBGhXdNHVUg=;
-        b=UgHO9k/cLIFkdC9FQMzGD5E0HrriR51EyG7NjOj5ufDT2F0ZreGbnXbFaoYZhYBCWZJF6Y
-        y4k6PIoj5xfFj0JpOg0kjVuDJ/31h4yU3TaRAIfRHrvjHxysCBfoiiFx2J6Bec9mGgp7ya
-        SQoQHElxC9ybaTuB/CCh+DOnVQ/JnXk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-584-PWv75rylNQiZ-c4OAsANWA-1; Tue, 23 Aug 2022 07:06:53 -0400
-X-MC-Unique: PWv75rylNQiZ-c4OAsANWA-1
-Received: by mail-wm1-f70.google.com with SMTP id n7-20020a1c2707000000b003a638356355so5607058wmn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:06:52 -0700 (PDT)
+        Tue, 23 Aug 2022 10:02:17 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235819A9CC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:10:21 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id y4so10244430qvp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:10:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=+XqOaRoy1y4JBfRqyfC9QYWSmLvu18qQOjiXWzEmCVM=;
+        b=QttMrLHBm0dAZodMMTbB/uIOgvV41Y6zMp2O/9BIhfVfW/sC8IBXhP1ySJBdAFw4lu
+         QpKBKYGFT0gw0U2c6HW8PI+0n6R22wWtBfuJOFL5V3eI+gAEO3ElkCcsAQrSv5pOp9UQ
+         kdonnBDtrMkr5qcNr6o1cE8N7afY3KWUF5wnAIMwWtXF5AlTtD2LLmQLs0VvFyJxogZC
+         Qy93Wqn+gHduYz+7BGYmQHbpVOTjiQsZycQVovJE+nuc+aRdscZ7MBj816XPsARFZ0XG
+         NnpfSAzMakiJVxMs4/rarMOvWBTTUDyhLsbfDfSiQnxFKbg+dENLmRe9W5hiuzG8Qk1w
+         yiOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=9vFwWtlaXBJfhkm+20Q4BimLsKsx1b4GpBGhXdNHVUg=;
-        b=eb459yDQSHbgOe4nu0YxidogYVBc6AtDyxCAEjzV+I2iro0DAxLis2fw56wBxp8Iw5
-         qmVdsMiFOkpfLwKZYY8p+R6HqDdOMcCC+/yerlxwM0yP5gyWLL99ix7Mw+I8JxzSt2Xi
-         AZkAa7IVvJXXaftcBPcvrai63/gSBk8bFV8Gpt61iYaR3to0UJ/OvpMOJfCM0H76+1jA
-         iYK7rERVRHJhoGhzrASOMQhw5QVSc1waQ/6vgrON4OsYf5YMb9K+PnxIKw39k7SAOWkt
-         IIpfnDVo65PTmkAbvLP9We85YFDa+/KabUkzTAFKONPo4qCdN0bnPQtYcGHf1rwmaXkR
-         wMiw==
-X-Gm-Message-State: ACgBeo1TQqbJfcVxU6sPHARURGml0MGm0boIB4B41g9TCYNGJFEuyR74
-        H/dNSUvUV8gtlCy3MzM3B3IM2bAiDOF9kPZFcEWfE7WyxprdmE96yOlibqXecgnAz9X5qgk1F8v
-        WOJiU2yABl5UCO5BhUN2dn4Sp
-X-Received: by 2002:a05:600c:384f:b0:3a6:603c:4338 with SMTP id s15-20020a05600c384f00b003a6603c4338mr1822491wmr.192.1661252811619;
-        Tue, 23 Aug 2022 04:06:51 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5DCT0OQblrn5cXEd8HIrkGgjZmmi8yFbjusnd23J8AN0pMS1n6Obdq1k352nw99irqcnP1SQ==
-X-Received: by 2002:a05:600c:384f:b0:3a6:603c:4338 with SMTP id s15-20020a05600c384f00b003a6603c4338mr1822481wmr.192.1661252811386;
-        Tue, 23 Aug 2022 04:06:51 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-97-176.dyn.eolo.it. [146.241.97.176])
-        by smtp.gmail.com with ESMTPSA id i6-20020a5d4386000000b0022159d92004sm8043071wrq.82.2022.08.23.04.06.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 04:06:50 -0700 (PDT)
-Message-ID: <6e47d3d9f8cc73c6baf26d2b5f320d51f67d9a04.camel@redhat.com>
-Subject: Re: [kernel PATCH v2 1/1] Bluetooth: hci_sync: hold hdev->lock when
- cleanup hci_conn
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Zhengping Jiang <jiangzp@google.com>,
-        linux-bluetooth@vger.kernel.org, marcel@holtmann.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Date:   Tue, 23 Aug 2022 13:06:49 +0200
-In-Reply-To: <20220822214430.kernel.v2.1.I1d10fc551cadae988dcf2fc66ad8c9eec2d7026b@changeid>
-References: <20220823044434.3402413-1-jiangzp@google.com>
-         <20220822214430.kernel.v2.1.I1d10fc551cadae988dcf2fc66ad8c9eec2d7026b@changeid>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+XqOaRoy1y4JBfRqyfC9QYWSmLvu18qQOjiXWzEmCVM=;
+        b=xoIiz4zlH3nR3y+oBIJ9y/hzSNiz8/+9kB6Ff7OXX5XqXJKCTo+VCm6AW1OaNsWANI
+         RnSkMa59zIuuBF8vEGEVI7iaCbBmIR0b9+iB4KPPd3qI7K1Q+GnzDXWToZc9OtNCmjbL
+         6KKIqABfJXv2FjmGuDoL1SSmbw/FYs7+hlYMG4pcZM5lsSnBianja7Zye/yZ5Iwch4ZF
+         w089TEjwXBcPTkV0nH48zsJsjvb2/+QcoxH1n8/+KsBuw1IhInnoZxCIvITsYBWNgAXa
+         5JfbPg07lraMrnxGIIL/AvFFGoO7SwZpPUaiNuAdJcvimVzhTEKA4uUoOz1ts3S2p18R
+         G4Rw==
+X-Gm-Message-State: ACgBeo122LjmANya9kIDntH4ghVmyIqpnR1iB64lNVkeOYJpM6O0Xp2l
+        T91S8soMNJV/nHXocZQr2rNqqdvktKd3Tp71sRPpb0ZciuSMSg==
+X-Google-Smtp-Source: AA6agR65NtY7xtJzjSXhhq4X5U5zcsS7oy5L7P2tT2koYwqF5eAIY/GgnWIdHTikiqfJxfOtSycI0+0wGe5QEmKvgS8=
+X-Received: by 2002:a0c:aa16:0:b0:496:cfac:217d with SMTP id
+ d22-20020a0caa16000000b00496cfac217dmr11872610qvb.121.1661252933588; Tue, 23
+ Aug 2022 04:08:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <202208221331.71C50A6F@keescook> <a5df4929-24aa-79bf-c5d0-98efbf323132@intel.com>
+In-Reply-To: <a5df4929-24aa-79bf-c5d0-98efbf323132@intel.com>
+From:   =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
+Date:   Tue, 23 Aug 2022 13:08:42 +0200
+Message-ID: <CAEAAPHa3g0QwU=DZ2zVCqTCSh-+n2TtVKrQ07LvpwDjQ-F09gA@mail.gmail.com>
+Subject: Re: PKU usage improvements for threads
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000003cf8a05e6e69722"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-22 at 21:44 -0700, Zhengping Jiang wrote:
-> When disconnecting all devices, hci_conn_failed is used to cleanup
-> hci_conn object when the hci_conn object cannot be aborted.
-> The function hci_conn_failed requires the caller holds hdev->lock.
-> 
-> Fixes: 9b3628d79b46f ("Bluetooth: hci_sync: Cleanup hci_conn if it cannot be aborted")
-> 
-> Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+--00000000000003cf8a05e6e69722
+Content-Type: text/plain; charset="UTF-8"
 
-For the records, you should avoid empty lines between the 'fixes' tag
-and your SoB.
+Hey Dave,
 
-Cheers,
+> I'd love to hear more why this behavior is useful and how it will be used.
 
-Paolo
+The background is that we want to build a way to temporarily isolate threads
+from each other, which we then want to use for CFI for V8 (Chrome's
+JavaScript engine).
 
+One of the main challenges we have is to protect the JIT compiled code from
+an attacker with an arbitrary read/write primitive. For that, we're
+planning to use PKU
+to have access to some trusted memory, i.e. memory that can't be
+corrupted by the
+attacker.
+You can find more details on our plans here:
+https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit?usp=sharing
+
+While designing this mitigation, we came up with two attack vectors for which we
+believe we need help from the kernel to fix them, which are the two cases Kees
+mentioned:
+1) an attacker controlling some argument to certain VMA operations
+like munmap().
+2) an attacker corrupting the saved signal context on a signal handler stack.
+
+On Mon, Aug 22, 2022 at 11:11 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 8/22/22 13:40, Kees Cook wrote:
+> > 1) It appears to be a bug that a thread without the correct PK can make
+> > VMAs covered by a separate PK, out from under other threads. (e.g. mmap
+> > a new mapping to wipe out the defined PK for it.) It seems that PK checks
+> > should be made when modifying VMAs.
+>
+> Hi Kees,
+>
+> Could you give an example of this?  Is this something along the lines of
+> a mmap(MAP_FIXED) wiping out an earlier mapping?  Or, is it more subtle
+> than that?
+
+Yes, that's one example. And the same applies to other operations on the
+VMA. E.g. another case we'd like to prevent would be munmap(addr) where
+addr is covered by a pkey to which the calling thread doesn't have access
+permissions to.
+You can find more details in this doc:
+https://docs.google.com/document/d/1qqVoVfRiF2nRylL3yjZyCQvzQaej1HRPh3f5wj1AS9I/edit?usp=sharing
+
+> > 2) It would be very helpful to have a mechanism for the signal stack to
+> > be PK aware, in the sense that the kernel would switch to a predefined
+> > PK. i.e. having a new interface to sigaltstack() which includes a PK.
+>
+> Are you thinking that when switching to the sigaltstack that it would
+> also pick up a specific PKRU value?  Or, that it would ensure that PKRU
+> allows access to the sigaltstack's pkey?
+
+Either of those would work for us.
+
+> Logically something like this:
+>
+>         stack_t sas = {
+>                 ss_sp = stack_ptr;
+>                 ss_flags = ... flags;
+>                 ss_size = ...;
+>                 ss_pkey = 12;
+>         };
+>
+> Then the kernel would set up RSP to point to ss_sp, and do (logically):
+>
+>    pkkru &= ~(3<<(12*2)); // clear Write and Access-disable for pkey-12
+>
+> before building the signal frame running the signal handler?
+
+Yeah, that would work for our use case.
+We also have a doc discussing this in more detail :) :
+https://docs.google.com/document/d/1OlnJbR5TMoaOAJsf4hHOc-FdTmYK2aDUI7d2hfCZSOo/edit?usp=sharing&resourcekey=0-v9UJXONYsnG5PlCBbcYqIw
+
+--00000000000003cf8a05e6e69722
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPoQYJKoZIhvcNAQcCoIIPkjCCD44CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz7MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+1Xnj+ucP771ZQkdCPPi3x0wwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYm
+aHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYI
+KwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2Nh
+L2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei
+6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNv
+bS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBADYMYgn8YeSC
+2azHCuUUELdSMX6zHgtp7pnHsAiW/DcbzNyWqavhuxKjDZGVqBEL8XslGKMHroyP9GLRYy3fOG6K
+lTeSsnfQOkON4y/SaN6ew/5jl46udymNieA3FhCFrpqt5VD+LvUmSxF/8WBTTp3vfiWfymRY+CaH
+4BqizkeEPW9WLDJVTu/65GqHNNG37YRMjRJI88mM3vQeNHiAXyxsGtK9AihqMu0hEx9eXLQudQNV
+XwfOaOvZENWKMhRgnYwvv2v1wFu92T8vxPqdCXMhGnhaUMtLSnOx8ootxQxQ47AXJmXkDvTfT/LL
+kpP0rI1cT2p1cY52eOyHtAHIZtQxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
+ExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENB
+IDIwMjACEAEzs8uGCAkxDfyX6SyV9lkwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIE
+IA59aUSAHQoq1fWFZvrMA0mLtIjuPBVgJV2mC6yR5Ds1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
+BwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDgyMzExMDg1NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
+ZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQow
+CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCkq8eTzU8O+vbm8Kal
+MX/jDSR84A6rCdDyPOdcjxO56DDzjbWH+70K7TyuDL/iVdAsCwx7doW6Guamv8ffYYZzRVK/NH/g
+GNLabMR9khSDek3JVCLff1dcsaWC4mMTkDHdFvb34liFoygLEFMlAETZFKw9mdgyof8bqEPdvLn3
+1fr8Inb1PktbybMaqXdS1X7FPWFeZKdh/RQWJiX2gtJs0lfsaHUkAv0f5TOOJnCRx1lAYh7WjMmI
+tSdgq0NTCx19Stlevbf78xwuy7WePOXpSivKh6WN4xag2VIsyN/m9KULx/c4nwV/VZa9UZfhse2r
+mV5qiP236lv98HvZ9yj1
+--00000000000003cf8a05e6e69722--

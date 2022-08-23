@@ -2,123 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7E259EE40
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2872659EE41
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbiHWVcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S231238AbiHWVca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiHWVcO (ORCPT
+        with ESMTP id S229831AbiHWVc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:32:14 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F3F65839;
-        Tue, 23 Aug 2022 14:32:13 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NLW7bS011625;
-        Tue, 23 Aug 2022 21:32:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=h0aO62+G+YfcVYCThJzkvFqcAo2TIB8hzkh/wXB67Fk=;
- b=Ehj15mU2m4+GO7Cr41oSHXS/zytgF+n2ZuJBz+mIHV+BhWWov4oLfK0836ME/istwzim
- m0nWwCt2vn+9C3yJQVweMV0NM8JF55MkRBw/vZFufGqHJ84Vx1EFi0LldE8O6JAwmwtO
- d1FzTG0unf8UsbzUF2D1+VAWQ7ShgT0CH91LnbJmT4ircH1XLB9AVoGz1BTHTqDj2Eor
- dgAWmY5fRT00/1n7AkjrTT5gf9CN17qs0zubbV/PG2MfhpQJoqHAPEDxQeSSwmEm382S
- qxlpVb6P2O8jgcN1cjgnb7cLU+X9timIDH7mwRQ3oS/q0Nlo5opdNKycH3M6/jyMFMa6 hg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52pjgtj6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 21:32:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27NLW5ug018321
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 21:32:05 GMT
-Received: from [10.216.10.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 23 Aug
- 2022 14:32:00 -0700
-Message-ID: <d67c4007-5d76-71e3-265f-701951be311a@quicinc.com>
-Date:   Wed, 24 Aug 2022 03:01:56 +0530
+        Tue, 23 Aug 2022 17:32:27 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0533F7B791
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:32:25 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso15779022pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=9Tyv/HjGt+kTjHUdJpqzUz7hlqhqn6nz07i1wBSdcbE=;
+        b=JJpoekHIwEOPtlFjvUifgeyZ4xG06w29FzXSUvKRjB4FUkO7GrtmJZQFl3D/OQKJiD
+         eM8aqGg+O7ONgMqFzDMWoPgMsMA26qqrI8PKcABs+EXPRkdMVA9n2oqlKGjU7qRRgXGO
+         YEhnhWEPA8IoVaiiQ9rJjdDMARUcfZWX1P6c5OAeF9Mpt74wEkftvT9AwsP+yPw0oQ2k
+         2vBigX/9W+ZVwjkfLTYFYuFm8+T74lB5A64oObWHz4ZSKvb7fRezV93OonDPOtVdBBQd
+         0eWL6sN10RkE5UyK2hQMDB2aLSo3c1jMqVzqEct+zpzfrswUhYiksW3nXHbJFjL576JC
+         KxTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9Tyv/HjGt+kTjHUdJpqzUz7hlqhqn6nz07i1wBSdcbE=;
+        b=bN6uENC50mdZDAf1X/xffreUPBOTf67GH6207682I9gFy1IH8J03x6AY2JDenHWN6O
+         VrVP9DgYl7tJkBg8DHSJam6b+dlulNThZU3UvvFsR1fD8MnQuY872LCad3I6l6BrMymH
+         5PzQNp3JP1Zgy86P+nXwaeSQJbMlSU5GkAOeMO+R8k2Gc+hBTa5Q/+n9F/Rs6+C6Q3WZ
+         khsMuvTB/cJpNpm6S089L9dK8r+EAkzEV0X1mZvvuC3I/v9/1S7lya1lCPGuSigvNkZP
+         iDFE/VQ7c60QAmiY1MHUna9Vd3F0ogf4I6gTBZeAKksowRooD8icB+a/9QFR83NC84NT
+         dveg==
+X-Gm-Message-State: ACgBeo01sQxfKPX7JEoCd5mhxXdiuVps+ux4beZ3FZwCT9z3nAKGgyFI
+        J2KLHeSt75i0InOr3l8bzMKy0A==
+X-Google-Smtp-Source: AA6agR7aPxzoh7iUSiuk4HHIHeu/lkhIEPudRf53d8nKUbpXo0mZZmRJu+VQtJVnVAPQNEFyYH+yEQ==
+X-Received: by 2002:a17:90a:6001:b0:1fa:e851:3480 with SMTP id y1-20020a17090a600100b001fae8513480mr5098001pji.153.1661290345218;
+        Tue, 23 Aug 2022 14:32:25 -0700 (PDT)
+Received: from ?IPV6:2406:3400:213:70c0:5c76:4280:5b6b:9ce0? ([2406:3400:213:70c0:5c76:4280:5b6b:9ce0])
+        by smtp.gmail.com with ESMTPSA id i62-20020a626d41000000b0052d27ccea39sm11712035pfc.19.2022.08.23.14.32.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 14:32:24 -0700 (PDT)
+Message-ID: <38754fa6-5d1f-ed9b-9c31-7a443c968cad@flatmax.com>
+Date:   Wed, 24 Aug 2022 07:32:18 +1000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v4 5/6] dt-bindings: drm/msm/gpu: Add optional resets
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Douglas Anderson <dianders@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1660927246-11327-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220819221017.v4.5.Ieffadd08a071a233213ced4406bf84bb5922ab9a@changeid>
- <e8a02030-d114-fa4b-1978-15327501b7e9@linaro.org>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <e8a02030-d114-fa4b-1978-15327501b7e9@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] ASoC: codes: src4xxx: Avoid clang
+ -Wsometimes-uninitialized in src4xxx_hw_params()
+Content-Language: en-AU
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+References: <20220823151939.2493697-1-nathan@kernel.org>
+From:   Matt Flax <flatmax@flatmax.com>
+In-Reply-To: <20220823151939.2493697-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VfNAwgDg6H3IO-xF8qFb4dY-up1gInch
-X-Proofpoint-GUID: VfNAwgDg6H3IO-xF8qFb4dY-up1gInch
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-23_08,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
- suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208230081
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/2022 4:41 PM, Krzysztof Kozlowski wrote:
-> On 19/08/2022 19:40, Akhil P Oommen wrote:
->>   Documentation/devicetree/bindings/display/msm/gpu.yaml | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/display/msm/gpu.yaml b/Documentation/devicetree/bindings/display/msm/gpu.yaml
->> index 3397bc3..4576b31 100644
->> --- a/Documentation/devicetree/bindings/display/msm/gpu.yaml
->> +++ b/Documentation/devicetree/bindings/display/msm/gpu.yaml
->> @@ -109,6 +109,13 @@ properties:
->>         For GMU attached devices a phandle to the GMU device that will
->>         control the power for the GPU.
->>   
->> +  resets:
->> +    maxItems: 1
->> +
->> +  reset-names:
->> +    items:
->> +      - const: cx_collapse
->> +
-> Just one blank line, not two. You can keep Rob's ack with that change.
-Sure.
+This patch looks good.
 
--Akhil.
->>   required:
->>     - compatible
+On 24/8/22 01:19, Nathan Chancellor wrote:
+> Clang warns:
 >
-> Best regards,
-> Krzysztof
-
+>    sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                    default:
+>                    ^~~~~~~
+>    sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
+>                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+>                                                                            ^
+>    sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
+>            int val, pj, jd, d;
+>                              ^
+>                              = 0
+>    sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                    default:
+>                    ^~~~~~~
+>    sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
+>                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
+>                                                                            ^~
+>    sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
+>            int val, pj, jd, d;
+>                          ^
+>                            = 0
+>    sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                    default:
+>                    ^~~~~~~
+>    sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
+>                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+>                                                                            ^~
+>    sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
+>            int val, pj, jd, d;
+>                      ^
+>                        = 0
+>    3 errors generated.
+>
+> The datasheet does not have any default values for these regmap values
+> so pick some arbitrary values and print to the user that this is the
+> case to silence the warnings.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1691
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+> Suggested-by: Matt Flax <flatmax@flatmax.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>
+> v1 -> v2: https://lore.kernel.org/20220822183101.1115095-1-nathan@kernel.org/
+>
+> * Don't return early, just initialize the values to some arbitrary
+>    numbers and try to hobble along, as other parts of the chip may be
+>    functional.
+>
+> * Add message and comment to describe this situation.
+>
+>   sound/soc/codecs/src4xxx.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/sound/soc/codecs/src4xxx.c b/sound/soc/codecs/src4xxx.c
+> index a8f143057b41..db4e280dd055 100644
+> --- a/sound/soc/codecs/src4xxx.c
+> +++ b/sound/soc/codecs/src4xxx.c
+> @@ -280,9 +280,14 @@ static int src4xxx_hw_params(struct snd_pcm_substream *substream,
+>   		default:
+>   			/* don't error out here,
+>   			 * other parts of the chip are still functional
+> +			 * Dummy initialize variables to avoid
+> +			 * -Wsometimes-uninitialized from clang.
+>   			 */
+>   			dev_info(component->dev,
+> -				"Couldn't set the RCV PLL as this master clock rate is unknown\n");
+> +				"Couldn't set the RCV PLL as this master clock rate is unknown. Chosen regmap values may not match real world values.\n");
+> +			pj = 0x0;
+> +			jd = 0xff;
+> +			d = 0xff;
+>   			break;
+>   		}
+>   		ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
+>
+> base-commit: 94f072748337424c9cf92cd018532a34db3a5516

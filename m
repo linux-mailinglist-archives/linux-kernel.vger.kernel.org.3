@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC0459EC7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DECF59EC7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbiHWThr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S232211AbiHWThB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiHWThV (ORCPT
+        with ESMTP id S231438AbiHWTgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:37:21 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65CF98367
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:33:57 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so10077742wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:33:57 -0700 (PDT)
+        Tue, 23 Aug 2022 15:36:36 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0D9F23E0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:33:21 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id u22so13545017plq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:33:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=SXjC+1eAipiwLVckozeddO7uqjToKvtGjqOQeotcMjA=;
-        b=KbX0skZMzo1dHORnO1cN91HQwYl5fklrhtHhR2L7O0pjBR2WQcmbC6+6QCsRSVABqj
-         suGNDT5zgBvkiN83Nia7Fxsj/GUe4ZrlfG1UmMEwbcLoXEmvZ6cUjQlSkDHA5N85GJ7D
-         MXdfh/3k36Gh681xIxzhAcU5D3VniKUKc7tEsODBfWdS6vC/28mqYdr0qmBYnIIijOqQ
-         6o4C9Z6SGB/f+JumjLGTtaD8bu4/rwOJUdJ+qMjZPi23lOHvE9w6+/bt9ug4xdsaXDcL
-         0nTVKQhWqBAP3808O62VC5jQ8sGAcXbvQgO/aibQ4HwTyaZ5rV1mI4kilaKf0RQQhBgU
-         q44A==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=h0fZBa4RIPV1lUQU8KdlmL0X2qjbCYHqc2je/hll2RI=;
+        b=Voh+qKavx7B3jK+RcBLlhE6kqdY9ZA1VYViVd6oI3FoyRAcRgrXOVZKsZstrHGbjQv
+         ZyboF85ngechUBZmkWDQc0vZzdPcYFzrcBGMxHcm+Qdd3QhmZdH48fd1r0xlfWp8vkCE
+         +OMv0KFrlH1rhxqCfNnT76KBStIwiZxNnUM/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=SXjC+1eAipiwLVckozeddO7uqjToKvtGjqOQeotcMjA=;
-        b=YcH53LzPbXfamfv9InWZp01u72GbF7M/d5vIrlDBDj8LNDEQlbVGpvBir1qdJXtRKs
-         Cw0gGntptrnkExpU9nkAxsQsVFfd3JohjZms00YW9mF/tsKRYKiFwF5DeBE79ZzLFhtM
-         IZpsylKB2ndl1Gl84pL1miHDHoDZ3dslzEBym42heB3eDO2jB+ZP27zT1LL8vptOxnxh
-         ksiSLbODbqmVKB/zA+dYdWblQEkydr7o3mINCswAAQj7N3L12MWO93OeoyXSOUGxF9QG
-         yAP+t2cwGrclrfCsg/AdO/gnndc6X9K/BFfWJvDtdDktzmD9gjdNs6BhanD8f9cskCD7
-         gOQA==
-X-Gm-Message-State: ACgBeo3Gy+4duOMU+hHKh8c20fTXk1Fqpz2ZzAs8EOeb6d/N7j7+R977
-        UfJ5So3IKLBuWyXxtIsEYlyg5Q==
-X-Google-Smtp-Source: AA6agR5q5Ekkbe1X55VNXuzYGucNAP21vgIbfd9u4MP8ILX9K+hq65/YrNIaCt5ZG3XgVMMwVoDaHA==
-X-Received: by 2002:a05:600c:2c47:b0:3a6:4623:4ccf with SMTP id r7-20020a05600c2c4700b003a646234ccfmr3142126wmg.85.1661279636305;
-        Tue, 23 Aug 2022 11:33:56 -0700 (PDT)
-Received: from henark71.. ([51.37.149.245])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c1d9000b003a5fcae64d4sm19396556wms.29.2022.08.23.11.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 11:33:55 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 2/4] dt-bindings: interrupt-controller: sifive,plic: add legacy riscv compatible
-Date:   Tue, 23 Aug 2022 19:33:18 +0100
-Message-Id: <20220823183319.3314940-3-mail@conchuod.ie>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220823183319.3314940-1-mail@conchuod.ie>
-References: <20220823183319.3314940-1-mail@conchuod.ie>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=h0fZBa4RIPV1lUQU8KdlmL0X2qjbCYHqc2je/hll2RI=;
+        b=lSUrqYF7pyUuGUI6BJjXhD5h89LUtdBnLw5wI1kuAfaN5MzDVGvgJko9xOl7Cs85Ss
+         QUA6s0laqdGwxZUzvbnLqLUvYGP93LXD+T6k7pn4SVmFa/aj+zUN+P3mrua9JH6SycaN
+         xfsagj/gtkPkGatysf3D+IIQUqcYwi2NGflfbLmIapKBYBtdxO4enfAIHqqrNj1T6d2p
+         uYxscLtqz9SMS3Sq65fS+q3zWZk1KODeKCDp/zndh9P4+w+iKkGVBZcUE0G4tQWRc7Jk
+         +7CmAjzuhdpqm34pWYaP5ienKcEuolCXop9VXx3UgVBrAmZlpb741wJ0QW0JGXFtVsPf
+         9nnA==
+X-Gm-Message-State: ACgBeo0EP6lTR3/U5RCWxsDPEQ7e4hBMojPvE+IiPHy+OwAZ7Bpqgnjr
+        ztZSyqjVy2totMWN4Ol4k/v1SA==
+X-Google-Smtp-Source: AA6agR6AKcCS1DcwchHgXQr7Id/ZYfcJPfbgIw53jD4US0Kc8wG1Esq72w3z7Qj7/BA+V5CseIZKaQ==
+X-Received: by 2002:a17:902:d50b:b0:172:d4f4:91aa with SMTP id b11-20020a170902d50b00b00172d4f491aamr16155779plg.53.1661279600756;
+        Tue, 23 Aug 2022 11:33:20 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:fee6:a961:5d1d:553])
+        by smtp.gmail.com with UTF8SMTPSA id x11-20020aa7956b000000b00535da15a252sm10784457pfq.165.2022.08.23.11.33.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 11:33:20 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 11:33:18 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: keep PHYs disabled during suspend
+Message-ID: <YwUdbkyL8GgvLQJA@google.com>
+References: <20220823124047.14634-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220823124047.14634-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,44 +74,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hi Johan,
 
-While "real" hardware might not use the compatible string "riscv,plic0"
-it is present in the driver & QEMU uses it for automatically generated
-virt machine dtbs. To avoid dt-validate problems with QEMU produced
-dtbs, such as the following, add it to the binding.
+On Tue, Aug 23, 2022 at 02:40:47PM +0200, Johan Hovold wrote:
+> Commit 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system
+> suspend") started leaving the PHYs enabled during suspend for
+> wakeup-capable controllers even though it turns out this had nothing to
+> do with wakeup.
+> 
+> Rather, the wakeup capability flag was (ab-)used as a proxy to configure
+> the suspend behaviour in an attempt to reduce power leakage on some
+> platforms.
+> 
+> Stop abusing the wakeup configuration and restore the 5.19 behaviour of
+> keeping the PHYs powered off during suspend. If needed, a dedicated
+> mechanism for configuring the PHY power state during suspend can be
+> added later.
+> 
+> Fixes: 649f5c842ba3 ("usb: dwc3: core: Host wake up support from system suspend")
+> Link: https://lore.kernel.org/r/Yuv7AM/5jtO/pgcm@google.com
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/usb/dwc3/core.c      | 4 ++--
+>  drivers/usb/dwc3/dwc3-qcom.c | 1 -
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 8c8e32651473..0cdb6be720e1 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1983,7 +1983,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> +		if (!PMSG_IS_AUTO(msg)) {
 
-riscv-virt.dtb: plic@c000000: compatible: 'oneOf' conditional failed, one must be fixed:
-        'sifive,plic-1.0.0' is not one of ['sifive,fu540-c000-plic', 'starfive,jh7100-plic', 'canaan,k210-plic']
-        'sifive,plic-1.0.0' is not one of ['allwinner,sun20i-d1-plic']
-        'sifive,plic-1.0.0' was expected
-        'thead,c900-plic' was expected
-riscv-virt.dtb: plic@c000000: '#address-cells' is a required property
+My assumption was that the PHYs need to be powered for wakeup to work, but
+apparently that isn't the case, wakeup still works on sc7x80 with this part
+of this patch.
 
-Reported-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml     | 5 +++++
- 1 file changed, 5 insertions(+)
+>  			dwc3_core_exit(dwc);
+>  			break;
+>  		}
+> @@ -2044,7 +2044,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>  		spin_unlock_irqrestore(&dwc->lock, flags);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+> +		if (!PMSG_IS_AUTO(msg)) {
+>  			ret = dwc3_core_init_for_resume(dwc);
+>  			if (ret)
+>  				return ret;
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 9a94b1ab8f7a..9995395baa12 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -904,7 +904,6 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  
+>  	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
+>  	device_init_wakeup(&pdev->dev, wakeup_source);
+> -	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-index 92e0f8c3eff2..99e01f4d0a69 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-@@ -66,6 +66,11 @@ properties:
-           - enum:
-               - allwinner,sun20i-d1-plic
-           - const: thead,c900-plic
-+      - items:
-+          - const: sifive,plic-1.0.0
-+          - const: riscv,plic0
-+        deprecated: true
-+        description: For the QEMU virt machine only
- 
-   reg:
-     maxItems: 1
--- 
-2.37.1
-
+Surprisingly this part breaks wakeup on sc7x80, with the above removal
+of the device_may_wakeup() checks it is not clear to me why wakeup needs
+to be enabled for the core.

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0981459E30E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5563B59E309
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358572AbiHWLmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
+        id S1354053AbiHWKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358047AbiHWLgl (ORCPT
+        with ESMTP id S1352960AbiHWKGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:36:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28EE915D1;
-        Tue, 23 Aug 2022 02:27:54 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F011BE94;
+        Tue, 23 Aug 2022 01:53:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F025B81C99;
-        Tue, 23 Aug 2022 09:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAB1C43140;
-        Tue, 23 Aug 2022 09:27:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 905216153D;
+        Tue, 23 Aug 2022 08:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88DB3C433D6;
+        Tue, 23 Aug 2022 08:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246870;
-        bh=wF1A5vtd8tvVocO+QjQ6jbB4zTb2fIRPK/24cR2VM5c=;
+        s=korg; t=1661244824;
+        bh=KBS0Bw+5URDBqS6bBdmXuY9kF7ZqSJW7N+F4TsqBqPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CBhRv4CmhJrFkacCsnsw5FZZEksGzYQ/FC1iRcNJy/a8uJK7ZyBavNtxBwER99hAR
-         86Dr7AOkJZh1Gb8iagk6KGzHZi4chjroB0JBV9Po1gsGa7kzuyp8UqS0DQuzVrx2Wg
-         67K+slFuG/c9SyVMROFeedVyYZmniMZ4MaN7eyrk=
+        b=n7ZfCEnexg8GzjMApSEtDf3VuhL62kZZfHzZ4RytmG7LBJoyoRPZ7z6xeDNHIaONL
+         lBnjABUY3lFODzxRfAGoBOobyylv1YXr+Gm6+Ey29UXCq1Lb2GvXecbo9Uf5E09hSA
+         1FVwAZr17Mkq7bm1gXXq40WZpkJo5rlH8IT9NBG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hacash Robot <hacashRobot@santino.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Marek Beh=C3=BAn <kabel@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 229/389] watchdog: armada_37xx_wdt: check the return value of devm_ioremap() in armada_37xx_wdt_probe()
-Date:   Tue, 23 Aug 2022 10:25:07 +0200
-Message-Id: <20220823080125.164292444@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 149/244] stmmac: intel: Add a missing clk_disable_unprepare() call in intel_eth_pci_remove()
+Date:   Tue, 23 Aug 2022 10:25:08 +0200
+Message-Id: <20220823080104.141086166@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,41 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 2d27e52841092e5831dd41f313028c668d816eb0 ]
+commit 5c23d6b717e4e956376f3852b90f58e262946b50 upstream.
 
-The function devm_ioremap() in armada_37xx_wdt_probe() can fail, so
-its return value should be checked.
+Commit 09f012e64e4b ("stmmac: intel: Fix clock handling on error and remove
+paths") removed this clk_disable_unprepare()
 
-Fixes: 54e3d9b518c8a ("watchdog: Add support for Armada 37xx CPU watchdog")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
-Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220722030938.2925156-1-williamsukatube@163.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This was partly revert by commit ac322f86b56c ("net: stmmac: Fix clock
+handling on remove path") which removed this clk_disable_unprepare()
+because:
+"
+   While unloading the dwmac-intel driver, clk_disable_unprepare() is
+   being called twice in stmmac_dvr_remove() and
+   intel_eth_pci_remove(). This causes kernel panic on the second call.
+"
+
+However later on, commit 5ec55823438e8 ("net: stmmac: add clocks management
+for gmac driver") has updated stmmac_dvr_remove() which do not call
+clk_disable_unprepare() anymore.
+
+So this call should now be called from intel_eth_pci_remove().
+
+Fixes: 5ec55823438e8 ("net: stmmac: add clocks management for gmac driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/d7c8c1dadf40df3a7c9e643f76ffadd0ccc1ad1b.1660659689.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/watchdog/armada_37xx_wdt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/watchdog/armada_37xx_wdt.c b/drivers/watchdog/armada_37xx_wdt.c
-index e5dcb26d85f0..dcb3ffda3fad 100644
---- a/drivers/watchdog/armada_37xx_wdt.c
-+++ b/drivers/watchdog/armada_37xx_wdt.c
-@@ -274,6 +274,8 @@ static int armada_37xx_wdt_probe(struct platform_device *pdev)
- 	if (!res)
- 		return -ENODEV;
- 	dev->reg = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-+	if (!dev->reg)
-+		return -ENOMEM;
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+@@ -1098,6 +1098,7 @@ static void intel_eth_pci_remove(struct
  
- 	/* init clock */
- 	dev->clk = devm_clk_get(&pdev->dev, NULL);
--- 
-2.35.1
-
+ 	stmmac_dvr_remove(&pdev->dev);
+ 
++	clk_disable_unprepare(priv->plat->stmmac_clk);
+ 	clk_unregister_fixed_rate(priv->plat->stmmac_clk);
+ 
+ 	pcim_iounmap_regions(pdev, BIT(0));
 
 

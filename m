@@ -2,52 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBD859EAF5
+	by mail.lfdr.de (Postfix) with ESMTP id DE1C459EAF7
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiHWS12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        id S229688AbiHWS1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbiHWS1J (ORCPT
+        with ESMTP id S230407AbiHWS1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:27:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882B94CA13
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:47:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFFA3616EC
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE086C43470;
-        Tue, 23 Aug 2022 16:47:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661273233;
-        bh=RIh85e4avEVrE67f7p7cpqft653q9Drb4EcgsFrnCKw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=TyTL6TuxDzfJTwlzoBVdx1ND/a+jcTAvLz79f/1sbW9v4k4BsNT5VApe1zQua9lPB
-         tmkDcEWXTjQ58liHeUf7VMoK4rqd+lUCcGN9kA750Gak6lvDGfZgP//TxmjOncRy4/
-         2OfXSCc23Nx/o7pLd1Mu5qokBF+467aFsis/56Ki+js1HGZvAohJhc/PcaNdWPICZQ
-         c50K08dAsryvbm0r54JuOxMRWDYphBtXpTjT6oHwVS0eKHpdvMK47nTrv3q/0cRWx3
-         bJkYpSpmjXuGdT5SgGpHdZWC1MDLj1uPgCEbpOopMACRB0tmne1Y4VjMNSO2K0pil/
-         x0QPRq2WBZndQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        andy.shevchenko@gmail.com, rafael@kernel.org, jic23@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     kernel <kernel@sberdevices.ru>, linux-kernel@vger.kernel.org
-In-Reply-To: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
-References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
-Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk operations
-Message-Id: <166127323148.445898.2568312423434118605.b4-ty@kernel.org>
-Date:   Tue, 23 Aug 2022 17:47:11 +0100
+        Tue, 23 Aug 2022 14:27:14 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F2D3B964;
+        Tue, 23 Aug 2022 09:47:27 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oQX3l-0005u0-IL; Tue, 23 Aug 2022 18:47:25 +0200
+Message-ID: <7c41dd25-8bfa-c7b0-a430-1b115e8ee375@leemhuis.info>
+Date:   Tue, 23 Aug 2022 18:47:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-0c1df
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: Bug 216320 - KSZ8794 operation broken #forregzbot
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+References: <967ef480-2fac-9724-61c7-2d5e69c26ec3@leemhuis.info>
+In-Reply-To: <967ef480-2fac-9724-61c7-2d5e69c26ec3@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661273247;2e013e76;
+X-HE-SMSGID: 1oQX3l-0005u0-IL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,40 +44,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 18:14:48 +0000, Dmitry Rokosov wrote:
-> Currently, only one-register io operations support tracepoints with
-> value logging. For the regmap bulk operations developer can view
-> hw_start/hw_done tracepoints with starting reg number and registers
-> count to be reading or writing. This patch injects tracepoints with
-> dumping registers values in the hex format to regmap bulk reading
-> and writing.
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
+
+On 17.08.22 15:36, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker.
+>
+> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+> acted upon since it was reported. That's why I decided to forward it by
+> mail to those that afaics should handle this.
 > 
-> [...]
+> To quote from https://bugzilla.kernel.org/show_bug.cgi?id=216320 :
+> 
+>> After upgrading a Yocto build system from kernel 5.4 to 5.15, I found KSZ8794 switch operation was no longer functional. I got errors such as:
+>>
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.770912] ksz8795-switch spi2.0: Unsupported interface: gmii, port: 0
+>> Aug  1 22:23:17 tv999996 kern.warn kernel: [   10.777562] ksz8795-switch spi2.0 wan (uninitialized): validation of gmii with support 0000000,00000000,000062cf and advertisement 0000000,00000000,000062cf failed: -22
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.792874] ksz8795-switch spi2.0 wan (uninitialized): failed to connect to PHY: -EINVAL
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.800978] ksz8795-switch spi2.0 wan (uninitialized): error -22 setting up PHY for tree 0, switch 0, port 0
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.829188] ksz8795-switch spi2.0: Unsupported interface: gmii, port: 1
+>> Aug  1 22:23:17 tv999996 kern.warn kernel: [   10.835821] ksz8795-switch spi2.0 lan2 (uninitialized): validation of gmii with support 0000000,00000000,000062cf and advertisement 0000000,00000000,000062cf failed: -22
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.851156] ksz8795-switch spi2.0 lan2 (uninitialized): failed to connect to PHY: -EINVAL
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.859358] ksz8795-switch spi2.0 lan2 (uninitialized): error -22 setting up PHY for tree 0, switch 0, port 1
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.892821] ksz8795-switch spi2.0: Unsupported interface: gmii, port: 2
+>> Aug  1 22:23:17 tv999996 kern.warn kernel: [   10.899466] ksz8795-switch spi2.0 lan1 (uninitialized): validation of gmii with support 0000000,00000000,000062cf and advertisement 0000000,00000000,000062cf failed: -22
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.914845] ksz8795-switch spi2.0 lan1 (uninitialized): failed to connect to PHY: -EINVAL
+>> Aug  1 22:23:17 tv999996 kern.err kernel: [   10.923052] ksz8795-switch spi2.0 lan1 (uninitialized): error -22 setting up PHY for tree 0, switch 0, port 2
+>>
+>> I found that if I reverted commit 2c709e0bdad4d996ec8925b9ee6d5b97458708f1, "net: dsa: microchip: ksz8795: add phylink support", then it worked properly again. The errors I saw were due to the checks in ksz8_validate() that were added in the above commit.
+> Could somebody please take a look, especially if you're among the main
+> recipients of this mail and not just CCed?
+> 
+> Anyway, to ensure this is not forgotten I'll add it to the Linux kernel
+> regression tracking bot:
+> 
+> #regzbot introduced: 2c709e0bdad4d996ec8925b9ee6d5b97458708f1
+> https://bugzilla.kernel.org/show_bug.cgi?id=216320
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
-
-Thanks!
-
-[1/1] regmap: introduce value tracing for regmap bulk operations
-      commit: 026c99b508f060d3c85fda06b21e010683ef5590
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+#regzbot fixed-by: 5fbb08eb7f945c7e88

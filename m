@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2145159D8D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D4659D871
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351107AbiHWJfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S1351782AbiHWJpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350897AbiHWJeJ (ORCPT
+        with ESMTP id S1352341AbiHWJlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:34:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3458C94EDA;
-        Tue, 23 Aug 2022 01:39:10 -0700 (PDT)
+        Tue, 23 Aug 2022 05:41:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F5B79A64;
+        Tue, 23 Aug 2022 01:42:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9FF761446;
-        Tue, 23 Aug 2022 08:39:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE26C433D6;
-        Tue, 23 Aug 2022 08:39:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4318B81C20;
+        Tue, 23 Aug 2022 08:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85DBC433D7;
+        Tue, 23 Aug 2022 08:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243949;
-        bh=4X2N5YLZivTElO/vwNdZbZrGvbTCeJ9ZbtX65VpGyDY=;
+        s=korg; t=1661244118;
+        bh=+fiLNvK/jrxtzfqvF1MMl97JGRcM/wzb8f52HN2rxYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LTzHoro25J7UgTLDN4iWveIY2YJ7ov34+cykJJG/QighiwlIIuNjgrChLaBEilajh
-         kCFAmYCwq5GeeUq4BwjcOCnknppylWSybJ/1B3trgRGHoVe0A9zTEChnWeMw8FQIQW
-         waIhpyXMmndIi1IYIyAhFdUsTmJzmoA1Eazb1vhk=
+        b=qIMb5VTLGjBD2i/m6QvyseBZLk/IFLPOK1nEz6YaitNdGYxRZ26mW+i/3daXClX+4
+         bCxvOl3YOIXVPJOwMJsg+1M6DCk/+2/C7jEhc9J4VWmBvE6BaFiWLtetWPuVGEGuZB
+         A4Zlbm8jxpDY7bDdniEcmKfOlq5Eqavu1jwpPPq0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 4.14 036/229] MIPS: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-Date:   Tue, 23 Aug 2022 10:23:17 +0200
-Message-Id: <20220823080054.849049647@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.15 039/244] NFSv4: Fix races in the legacy idmapper upcall
+Date:   Tue, 23 Aug 2022 10:23:18 +0200
+Message-Id: <20220823080100.362988229@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +54,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huacai Chen <chenhuacai@loongson.cn>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit e1a534f5d074db45ae5cbac41d8912b98e96a006 upstream.
+commit 51fd2eb52c0ca8275a906eed81878ef50ae94eb0 upstream.
 
-When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-cpu_max_bits_warn() generates a runtime warning similar as below while
-we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-instead of NR_CPUS to iterate CPUs.
+nfs_idmap_instantiate() will cause the process that is waiting in
+request_key_with_auxdata() to wake up and exit. If there is a second
+process waiting for the idmap->idmap_mutex, then it may wake up and
+start a new call to request_key_with_auxdata(). If the call to
+idmap_pipe_downcall() from the first process has not yet finished
+calling nfs_idmap_complete_pipe_upcall_locked(), then we may end up
+triggering the WARN_ON_ONCE() in nfs_idmap_prepare_pipe_upcall().
 
-[    3.052463] ------------[ cut here ]------------
-[    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-[    3.070072] Modules linked in: efivarfs autofs4
-[    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-[    3.084034] Hardware name: Loongson Loongson-3A4000-7A1000-1w-V0.1-CRB/Loongson-LS3A4000-7A1000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V2.0.04082-beta7 04/27
-[    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-[    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-[    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-[    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-[    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-[    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-[    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-[    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-[    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-[    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-[    3.195868]         ...
-[    3.199917] Call Trace:
-[    3.203941] [<98000000002086d8>] show_stack+0x38/0x14c
-[    3.210666] [<9800000000cf846c>] dump_stack_lvl+0x60/0x88
-[    3.217625] [<980000000023d268>] __warn+0xd0/0x100
-[    3.223958] [<9800000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-[    3.231150] [<9800000000210220>] show_cpuinfo+0x5e8/0x5f0
-[    3.238080] [<98000000004f578c>] seq_read_iter+0x354/0x4b4
-[    3.245098] [<98000000004c2e90>] new_sync_read+0x17c/0x1c4
-[    3.252114] [<98000000004c5174>] vfs_read+0x138/0x1d0
-[    3.258694] [<98000000004c55f8>] ksys_read+0x70/0x100
-[    3.265265] [<9800000000cfde9c>] do_syscall+0x7c/0x94
-[    3.271820] [<9800000000202fe4>] handle_syscall+0xc4/0x160
-[    3.281824] ---[ end trace 8b484262b4b8c24c ]---
+The fix is to ensure that we clear idmap->idmap_upcall_data before
+calling nfs_idmap_instantiate().
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: e9ab41b620e4 ("NFSv4: Clean up the legacy idmapper upcall")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/kernel/proc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nfs/nfs4idmap.c |   46 ++++++++++++++++++++++++----------------------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
 
---- a/arch/mips/kernel/proc.c
-+++ b/arch/mips/kernel/proc.c
-@@ -164,7 +164,7 @@ static void *c_start(struct seq_file *m,
- {
- 	unsigned long i = *pos;
- 
--	return i < NR_CPUS ? (void *) (i + 1) : NULL;
-+	return i < nr_cpu_ids ? (void *) (i + 1) : NULL;
+--- a/fs/nfs/nfs4idmap.c
++++ b/fs/nfs/nfs4idmap.c
+@@ -561,22 +561,20 @@ nfs_idmap_prepare_pipe_upcall(struct idm
+ 	return true;
  }
  
- static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+-static void
+-nfs_idmap_complete_pipe_upcall_locked(struct idmap *idmap, int ret)
++static void nfs_idmap_complete_pipe_upcall(struct idmap_legacy_upcalldata *data,
++					   int ret)
+ {
+-	struct key *authkey = idmap->idmap_upcall_data->authkey;
+-
+-	kfree(idmap->idmap_upcall_data);
+-	idmap->idmap_upcall_data = NULL;
+-	complete_request_key(authkey, ret);
+-	key_put(authkey);
++	complete_request_key(data->authkey, ret);
++	key_put(data->authkey);
++	kfree(data);
+ }
+ 
+-static void
+-nfs_idmap_abort_pipe_upcall(struct idmap *idmap, int ret)
++static void nfs_idmap_abort_pipe_upcall(struct idmap *idmap,
++					struct idmap_legacy_upcalldata *data,
++					int ret)
+ {
+-	if (idmap->idmap_upcall_data != NULL)
+-		nfs_idmap_complete_pipe_upcall_locked(idmap, ret);
++	if (cmpxchg(&idmap->idmap_upcall_data, data, NULL) == data)
++		nfs_idmap_complete_pipe_upcall(data, ret);
+ }
+ 
+ static int nfs_idmap_legacy_upcall(struct key *authkey, void *aux)
+@@ -613,7 +611,7 @@ static int nfs_idmap_legacy_upcall(struc
+ 
+ 	ret = rpc_queue_upcall(idmap->idmap_pipe, msg);
+ 	if (ret < 0)
+-		nfs_idmap_abort_pipe_upcall(idmap, ret);
++		nfs_idmap_abort_pipe_upcall(idmap, data, ret);
+ 
+ 	return ret;
+ out2:
+@@ -669,6 +667,7 @@ idmap_pipe_downcall(struct file *filp, c
+ 	struct request_key_auth *rka;
+ 	struct rpc_inode *rpci = RPC_I(file_inode(filp));
+ 	struct idmap *idmap = (struct idmap *)rpci->private;
++	struct idmap_legacy_upcalldata *data;
+ 	struct key *authkey;
+ 	struct idmap_msg im;
+ 	size_t namelen_in;
+@@ -678,10 +677,11 @@ idmap_pipe_downcall(struct file *filp, c
+ 	 * will have been woken up and someone else may now have used
+ 	 * idmap_key_cons - so after this point we may no longer touch it.
+ 	 */
+-	if (idmap->idmap_upcall_data == NULL)
++	data = xchg(&idmap->idmap_upcall_data, NULL);
++	if (data == NULL)
+ 		goto out_noupcall;
+ 
+-	authkey = idmap->idmap_upcall_data->authkey;
++	authkey = data->authkey;
+ 	rka = get_request_key_auth(authkey);
+ 
+ 	if (mlen != sizeof(im)) {
+@@ -703,18 +703,17 @@ idmap_pipe_downcall(struct file *filp, c
+ 	if (namelen_in == 0 || namelen_in == IDMAP_NAMESZ) {
+ 		ret = -EINVAL;
+ 		goto out;
+-}
++	}
+ 
+-	ret = nfs_idmap_read_and_verify_message(&im,
+-			&idmap->idmap_upcall_data->idmap_msg,
+-			rka->target_key, authkey);
++	ret = nfs_idmap_read_and_verify_message(&im, &data->idmap_msg,
++						rka->target_key, authkey);
+ 	if (ret >= 0) {
+ 		key_set_timeout(rka->target_key, nfs_idmap_cache_timeout);
+ 		ret = mlen;
+ 	}
+ 
+ out:
+-	nfs_idmap_complete_pipe_upcall_locked(idmap, ret);
++	nfs_idmap_complete_pipe_upcall(data, ret);
+ out_noupcall:
+ 	return ret;
+ }
+@@ -728,7 +727,7 @@ idmap_pipe_destroy_msg(struct rpc_pipe_m
+ 	struct idmap *idmap = data->idmap;
+ 
+ 	if (msg->errno)
+-		nfs_idmap_abort_pipe_upcall(idmap, msg->errno);
++		nfs_idmap_abort_pipe_upcall(idmap, data, msg->errno);
+ }
+ 
+ static void
+@@ -736,8 +735,11 @@ idmap_release_pipe(struct inode *inode)
+ {
+ 	struct rpc_inode *rpci = RPC_I(inode);
+ 	struct idmap *idmap = (struct idmap *)rpci->private;
++	struct idmap_legacy_upcalldata *data;
+ 
+-	nfs_idmap_abort_pipe_upcall(idmap, -EPIPE);
++	data = xchg(&idmap->idmap_upcall_data, NULL);
++	if (data)
++		nfs_idmap_complete_pipe_upcall(data, -EPIPE);
+ }
+ 
+ int nfs_map_name_to_uid(const struct nfs_server *server, const char *name, size_t namelen, kuid_t *uid)
 
 

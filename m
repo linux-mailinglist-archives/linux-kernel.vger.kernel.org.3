@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C979959EBFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7E559EBFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbiHWTOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
+        id S232208AbiHWTPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbiHWTOR (ORCPT
+        with ESMTP id S231617AbiHWTO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:14:17 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BAF123782
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:45 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id h22so10974921qtu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:51:45 -0700 (PDT)
+        Tue, 23 Aug 2022 15:14:56 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07918E9B7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:52:19 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id i129so7490686vke.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=UIzDP5vwti9FmU1AI9oaSSCd8EVdsxXrvtKhWPii6Ls=;
-        b=n9EyyFTG/4qV8hBj/xZT7cxhDCcCzWUnXlR28oIo8BqRbO+yb4WdH3fOZBTkuSvL1W
-         XThcrSdj/+NAkxDa8Uc2/svIiL8VWEik9zFt7182JEFTajKgOFWXVAE9EU03/VhoVTnX
-         jrtysU+h9taVmG9fYTKKNqip/XsM03qFL9tLw=
+        bh=Es/SKRV3OFmw44FXdjOkfiW1qF34GTyugA5yXeHJg1o=;
+        b=Htyr6zgvLeb7VOm7M8YiX0MsuKqOQFg/1Dp9MRFHsmMgRGKEd9WwyKRrcHeLFHDm29
+         nM/bfzgL5k3eFrWzgPUgctn35VeUeDiJtJePnx7M8C0hWVKT2REkwMdmxOUxw1i9Lfw/
+         CbaaQ7uMsAT/X0Ph7VPdpGckzFqaPwgU378K5NGCsUHDagyqlzkGONXRTiXCOcBGYWCI
+         q+YsgKQhl5xhXQB8Pc+6yWmSx4zaOylSieaKP7lpCxr22IPB5+DWeJotUqS+aEZLUsRo
+         lVTqqaXDT5t9QEmcI+bIRPwSAPgzInt39jLGTIsGH1dQuSP7u56N7t5qOqn2Fr4w4b5y
+         /Ucw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=UIzDP5vwti9FmU1AI9oaSSCd8EVdsxXrvtKhWPii6Ls=;
-        b=0gtj9DqNOMNnQfZigeb8iHa8QPPqtQ5YeOKtXRIpypZaUxFFFDedGWDRfceXkAbxl+
-         gpVeNSFxFlhSMQGI6RQfxp5PxN4d2ulJIjPBOXK1VQQPKJ4JXxcerYRTnPlcdwpm9br1
-         5KsEmFsoUqEmYVGt7dJHoBeBANTR1B/zxk+5yTRjECHU6PwlJ5fDQOTqcD6UH985wz4e
-         Sm8qZjfyZoacEji3AAj5QLJRYV+Nwmb+FJRJDl4tJBVyCNz0MRuDdkccu4tCPoYtaWXc
-         8Arpq1AfdYsa6VNYwOYty9zCP8IIH91LBvhQFjh2OCQkwalwS71xMgZcqsuUOtRm2szg
-         Wq2Q==
-X-Gm-Message-State: ACgBeo0/yzF6HMiEJ/WBMM2T9lYjP+4hKWllCNlvflxsKKFaQMFJjfFQ
-        +Nd+1ITM3pBfPBOwzoR0dj35ShgXqGN3BA51mizs3g==
-X-Google-Smtp-Source: AA6agR730EhiRgym3AI3/b6SGv53XnXR1qB8rLkxcwKm55lfnHnwCeRBZkbhjbDTZoObhYPD5IgkvjoUGi8OhYwlX64=
-X-Received: by 2002:a05:622a:15d6:b0:344:6a92:d8ca with SMTP id
- d22-20020a05622a15d600b003446a92d8camr20584786qty.540.1661277070554; Tue, 23
- Aug 2022 10:51:10 -0700 (PDT)
+        bh=Es/SKRV3OFmw44FXdjOkfiW1qF34GTyugA5yXeHJg1o=;
+        b=QFyHiHkHZHroWyVZHbD6BcDbtYP90ixQRvuGyS68ggSEZMIxdrgOuBNI+KOnNpb6Cs
+         p6jNhJoI4tzW3bLjd+L8m+zjjel3E3/TXh0Hfug4TP/Bp/QghwEN9vtygOMRaIEFIjjw
+         ozuKKkkYAJ+GTZTqF6LE4EHkU7OZAAHE2fBWY2/rUfdp5D4uAxReNujmiSjTJhET0Isy
+         NQe5zvpsRwTfZ5NFXwgv8FAmsrzvMvezaWnuQpA4C5PUY9n1bveLNR+YXga3KrfyltEL
+         BUIM+UVsN4i6q+bQG8Txw7ERtJdgPG044bc85LvTIOJYbton+XnLOBvmyJ9l9niKtKyK
+         kW1g==
+X-Gm-Message-State: ACgBeo2CA7nI/2dA9zz43KddRcpIf+FiOM9wgUV7DNqxUagAvQJdq4Pn
+        m7zhYyofcenjT5b78LaR9Uk+dMeadziq8NCe9dJnPg==
+X-Google-Smtp-Source: AA6agR5LT5c2oH4HlSHea9+vMd6hW5j0wL9NLrJYmoLqS7f6O+74rga8DGg+9ywWJM7NvmxoN1meBCLo0cewOr+i/3A=
+X-Received: by 2002:a1f:9b07:0:b0:378:7c48:c6c with SMTP id
+ d7-20020a1f9b07000000b003787c480c6cmr9890448vke.32.1661277112758; Tue, 23 Aug
+ 2022 10:51:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220819190807.1275937-1-pmalani@chromium.org>
- <20220819190807.1275937-5-pmalani@chromium.org> <YwRbCvOy8WXUEphH@google.com>
-In-Reply-To: <YwRbCvOy8WXUEphH@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 23 Aug 2022 10:50:58 -0700
-Message-ID: <CACeCKaduPJuBqwnLbaaEfvxiVrJ0qmVkcWsvbDarCJi0u8-TBw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] platform/chrome: cros_ec_typec: Use Type-C driver data
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        bleung@chromium.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+References: <20220823080118.128342613@linuxfoundation.org> <20220823080131.532813281@linuxfoundation.org>
+ <c49d3b2b-9f5a-4257-9085-f7ac107cff40@oracle.com>
+In-Reply-To: <c49d3b2b-9f5a-4257-9085-f7ac107cff40@oracle.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 23 Aug 2022 11:51:16 -0600
+Message-ID: <CAOUHufagA1x4jyjH9Q0RX65fwF3SyYHUTkNnB0S_t-2GqbiC2A@mail.gmail.com>
+Subject: Re: [PATCH 5.19 319/365] swiotlb: panic if nslabs is too small
+To:     Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        stable <stable@vger.kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tzung-Bi,
-
-Thanks for reviewing the series.
-
-On Mon, Aug 22, 2022 at 9:43 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> > index 7daf4207c11e..e3f75440030d 100644
-> > --- a/drivers/platform/chrome/cros_ec_typec.c
-> > +++ b/drivers/platform/chrome/cros_ec_typec.c
-> > @@ -379,6 +379,7 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
-> >               ret = cros_typec_parse_port_props(cap, fwnode, dev);
-> >               if (ret < 0)
-> >                       goto unregister_ports;
-> > +             cap->driver_data = cros_port;
+On Tue, Aug 23, 2022 at 11:25 AM Dongli Zhang <dongli.zhang@oracle.com> wrote:
 >
-> Same as previous patch.  I would suggest to send it in later series.  For
-> example, I have no knowledge to judge if `cap` is a correct place to save
-> the driver data.
+> Adding Robin, Yu and swiotlb list.
+
+Thanks.
+
+> There is an on-going discussion whether to revert this patch, because it breaks
+> a corner case in MIPS
+
+I wouldn't call it a corner case. Cavium Octeon is the major platform
+we use to test Debian MIPS ports [1], and 4 out of 5 best-selling
+Wi-Fi routers are MIPS-based [2].
+
+[1] https://wiki.debian.org/MIPSPort
+[2] https://www.amazon.com/bestsellers/pc/300189
+
+> when many kernel CONFIGs are not enabled (related to PCI
+> and device). As a result, MIPS pre-allocates only PAGE_SIZE buffer as swiotlb.
 >
-> For example, I'm wondering: is the `cap` "the Type-C port's driver"?
+> https://lore.kernel.org/all/20220820012031.1285979-1-yuzhao@google.com/
+>
+> However, the core idea of the patch is to panic on purpose if the swiotlb is
+> configured with <1MB memory, in order to sync with the remap failure handler in
+> swiotlb_init_remap().
+>
+> Therefore, I am waiting for suggestion from Christoph whether (1) to revert this
+> patch, or (2) enforce the restriction to disallow <1MB allocation.
 
-The Type-C framework uses [1] the cap->driver_data while creating the
-port device.
-
-That said, sure, I can resend patch 3 and 4 when I upload the alt mode series.
-
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/usb/typec/class.c#L2098
+There are other archs (arm, ppc, riscv, s390, etc.) that call
+swiotlb_init(). Have you verified them all?

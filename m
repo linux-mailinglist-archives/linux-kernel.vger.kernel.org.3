@@ -2,98 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A5859ECEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4C359ECF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiHWT47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        id S233759AbiHWUBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 16:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbiHWT4i (ORCPT
+        with ESMTP id S234187AbiHWUAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:56:38 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A7A62C0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:05:34 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 12so13070701pga.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:05:34 -0700 (PDT)
+        Tue, 23 Aug 2022 16:00:43 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759111B781
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:13:24 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id a4so18156606wrq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:13:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Kdb8TxBwkoe3B83ftbWvI5bDuEon4/Ru3EI6rNbmWGQ=;
-        b=Z43eXf7sSp1pEmvfjoOW73lKT1LlllQnMFnv9B3dxhgO56wTdDsGRHhL+uMhTwxJxe
-         6hNMX3LPN8+gR924uesklbfSY7g4v3CrRBOEhPQPmQprz2riJgnmlZV6S1ItTsUk6p0f
-         Yai/xfjAr7wSQXab8eWRJEHot/0yLlRO3HyYU=
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=5HEozkN1eNSdRGMPEViSDPwooyUds18YjrCvv9Tq5PM=;
+        b=JcEA4IBNP7ncyTN3CDgegKfm8PDRnp7A2SQsupOGwRFzoXrMkEjkRPXhsyEQUXtmc0
+         uH80uPGU93JVu0ihwsF+XUqvG9Wv5BmDO6pfOyZOqBvaEUv8jl2eCzC828kLenl1lBza
+         KqN6wEy/4S5mGi3tXtdUe6STKwVw5+cUeJQs2681POnzYwP5W74w3K5ZMBJPbJ7Qf/xY
+         5L80FOve8JgO7nEiyy3MkQ6EqXx8fNgn+yUqvJbOTIo5Q3knkzN1z5RAHgnNnecHroSj
+         3kNmjtRbztx8c+XzyT24BA7SDtzTMdNy9Qw8JlA8+wBrsqRs+ajUh5ufpZBJ6s5dpuL6
+         aBsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Kdb8TxBwkoe3B83ftbWvI5bDuEon4/Ru3EI6rNbmWGQ=;
-        b=dh1UJ54rQMstCnc7EBbWcLGIifFvjokZJgnIfsA3Z/vm63h8Q4BP04XEcjFLKxFF56
-         Mo8k7DVnyVKaDLOLCG8b7MpTNN7a4PuIFFJvSGTT0WDuDY7qQqGR52BOT16ZT5iN3+Ne
-         o6Dh8CIJR2yK3X0DDuqHovw6W4dNPRyxMf8glDNQupYhgSRQWHRTPLQ2UNyigVsyRlty
-         gMmnQFSntRRODP7fPKxJDtocWR9/h+QhIb2Kt6MIRyOGPNHiAmW//noFl5W4c5fR6bst
-         vKO8oeCdrhPrQ2KJKZ9VbOF9YJBsOqBksdkF3xBl7mVWJ/0nvfUHbqchLZhWUMgK6BMj
-         Hvxg==
-X-Gm-Message-State: ACgBeo2lJ6YSd7bDTIwTsL74dLZ3l92jgqzdB1oNl03NVboRa7g+1AVD
-        xA1ZKFepQUhbaAt/RKL/rTfPoA==
-X-Google-Smtp-Source: AA6agR6IieQ04uStZ7vlgwdj4aRqXinsIAlMP+KbxaXdW2rId0+ARMMoqZr7isvwnxHsH3I//9epxw==
-X-Received: by 2002:a63:5418:0:b0:42a:d773:cbd6 with SMTP id i24-20020a635418000000b0042ad773cbd6mr5543100pgb.106.1661281533664;
-        Tue, 23 Aug 2022 12:05:33 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:fee6:a961:5d1d:553])
-        by smtp.gmail.com with UTF8SMTPSA id e3-20020a170902784300b00172de80fec4sm5824250pln.69.2022.08.23.12.05.32
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=5HEozkN1eNSdRGMPEViSDPwooyUds18YjrCvv9Tq5PM=;
+        b=gRvsMgf63HBYTiTO93W30l1BqUDzvapNCHkhvKlm/4X+aglUhxTDr4n1jcfD8Kqhb4
+         tecjGrcINzfmJMVCK/qdLrn6juukbt7a7bA7poVAiH9PIBfOSpflm2EYZwLvMJGcRvMK
+         9HhnMk4NZxgCTc65xAI2wyp+TAaf2WROpfOvAL1KJHLPghkjqGihHgkILU9yI0/R823l
+         RylPSyLmTF7C4ZIfe/gJyXoM5cCyMVRafGHoZy4NvyGWA6WFheq05XrJAadMTqTPOmi8
+         ZkC9S7z2dO4DnrO/tKzfQzzl2zq/0vNRgixwNQAsg3mqqYLGXPn0sKfEmoKvIN++tJZo
+         ojTg==
+X-Gm-Message-State: ACgBeo35+bfKp6sMB3DoH1IpPaKmmFtbfXlCXED09LHJ+yIbeMxSt0KZ
+        eCPqbkh+z8xj0lF92dKODPV6jesHQMd+8Cw/
+X-Google-Smtp-Source: AA6agR53ishkcncmQIKDj+9xe5xiVe6/2+ifQ+YB9Hqp1Fv0TSHoNuYxqGR/AucFKxKXXpbdTJMvQA==
+X-Received: by 2002:a5d:660d:0:b0:225:59cc:9ad9 with SMTP id n13-20020a5d660d000000b0022559cc9ad9mr6140863wru.14.1661282002968;
+        Tue, 23 Aug 2022 12:13:22 -0700 (PDT)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id r1-20020a0560001b8100b002253d865715sm11781738wru.87.2022.08.23.12.13.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 12:05:33 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 12:05:31 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 1/2] clk: qcom: gcc-sc7180: Keep USB GDSC power domain on
- when USB wakeup is enabled
-Message-ID: <YwUk+ymRUdwzBTnX@google.com>
-References: <20220822115246.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid>
- <20220822235207.A4D8EC433D6@smtp.kernel.org>
+        Tue, 23 Aug 2022 12:13:22 -0700 (PDT)
+Message-ID: <4e46e053-5240-aaa1-91c7-7aabdc7a2db3@arista.com>
+Date:   Tue, 23 Aug 2022 20:13:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220822235207.A4D8EC433D6@smtp.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 00/23] Add generic vdso_base tracking
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <20210611180242.711399-1-dima@arista.com>
+ <8bba9ed8-ae1f-7c98-fde5-808927935447@csgroup.eu>
+ <6b2513db-7c31-8da4-38ec-0b9898c6589c@arista.com>
+ <ad912d91-c6e8-12ab-f309-d52b8cd9a92a@csgroup.eu>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <ad912d91-c6e8-12ab-f309-d52b8cd9a92a@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+Hi Christophe,
 
-On Mon, Aug 22, 2022 at 04:52:05PM -0700, Stephen Boyd wrote:
-> Quoting Matthias Kaehlcke (2022-08-22 11:53:10)
-> > Set GENPD_FLAG_ACTIVE_WAKEUP for the USB GDSC power domain of SC7180.
+On 8/19/22 10:17, Christophe Leroy wrote:
+> Hi Dmitry,
 > 
-> Why? Does it fix something? Please add details to the commit text so we
-> know how urgent of a patch it is and why it is important.
+> Le 10/03/2022 à 22:17, Dmitry Safonov a écrit :
+>> Hi Christophe,
+>>
+>> On 3/9/22 15:41, Christophe Leroy wrote:
+>>> Hi Dmitry,
+>>>
+>>> I'm wondering the status of this series.
+>>
+>> Yeah, I plan to work on v4 addressing the reviews.
+>> WFH has quite affected my work on side-projects and I've laid aside for
+>> a while this patch set that touches every architecture and is besides
+>> a bit challenging to upstream.
+> 
+> Any progress ?
 
-Without it USB is broken after resume when the PHYs remain enabled
-during suspend.
+Yeah, I'm back to the office, so will spend some time on v4, thanks for
+pinging.
 
-Johan just sent a patch [1] that always disables the PHYs (again)
-during system suspend, with that this series shouldn't be needed.
-It is possible that in the future we add a mechanism to keep the
-PHYs on depending on some config option (quick, kconfig, ...). If
-that happens we'll have to revisit this series, for now it
-shouldn't be needed assuming Johan's patch gets landed.
-
-[1] https://patchwork.kernel.org/project/linux-usb/patch/20220823124047.14634-1-johan+linaro@kernel.org/
+Thank you,
+          Dmitry

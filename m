@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF3659E0F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2412059DE3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358647AbiHWLzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S1358746AbiHWL53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359243AbiHWLwQ (ORCPT
+        with ESMTP id S1358820AbiHWLyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:52:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D752CCBF;
-        Tue, 23 Aug 2022 02:32:47 -0700 (PDT)
+        Tue, 23 Aug 2022 07:54:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37977E0FD;
+        Tue, 23 Aug 2022 02:33:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2DD5B81C50;
-        Tue, 23 Aug 2022 09:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272E6C433D6;
-        Tue, 23 Aug 2022 09:32:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B40EB81C89;
+        Tue, 23 Aug 2022 09:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC73FC4347C;
+        Tue, 23 Aug 2022 09:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247164;
-        bh=Eo7wBNqteKhPhzdsWBcbvvGzJRFw5CORrIOTRgPMyE4=;
+        s=korg; t=1661247167;
+        bh=5YsuL1rXMFxHroUtJboMymafT37h5Z12yG4GQBInd8Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rFDdAEiFSU+lA4GfVLdrM1c8VrVbqHtx/5Ch5FHuYHeOvGDe3RKLu1uoTR70U14/k
-         WynQOLOQBjYsji8A4snA6s1VXcQV+MNOCmupY/TDfOo35erOycWiLeyGYNRFYN8HTq
-         hzmJ6nsTekGDgr5kRwaWY3j7jxGnfPF9KcBAqO78=
+        b=IJ1M4DCTcOB8LldiqnjMN8fraQEIG9rPuyEMRPHWtxELvkGWXLyEaWtkp0ob0BFct
+         IqesnqNA6KmQQ6Gp+aeNfaPHR2Nyj6n0mvrYXKfqRLVy9GojMJqoi1Q3lRwber0dQe
+         KbNpPw389cgPoYn1ejuOm9oUJuWZWj5bgMtrBLp4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@savoirfairelinux.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sergei Antonov <saproj@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 339/389] net: dsa: mv88e6060: prevent crash on an unused port
-Date:   Tue, 23 Aug 2022 10:26:57 +0200
-Message-Id: <20220823080129.685813087@linuxfoundation.org>
+        stable@vger.kernel.org, Sergei Antonov <saproj@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 340/389] net: moxa: pass pdev instead of ndev to DMA functions
+Date:   Tue, 23 Aug 2022 10:26:58 +0200
+Message-Id: <20220823080129.732696842@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -60,51 +56,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sergei Antonov <saproj@gmail.com>
 
-commit 246bbf2f977ea36aaf41f5d24370fef433250728 upstream.
+commit 3a12df22a8f68954a4ba48435c06b3d1791c87c4 upstream.
 
-If the port isn't a CPU port nor a user port, 'cpu_dp'
-is a null pointer and a crash happened on dereferencing
-it in mv88e6060_setup_port():
+dma_map_single() calls fail in moxart_mac_setup_desc_ring() and
+moxart_mac_start_xmit() which leads to an incessant output of this:
 
-[    9.575872] Unable to handle kernel NULL pointer dereference at virtual address 00000014
-...
-[    9.942216]  mv88e6060_setup from dsa_register_switch+0x814/0xe84
-[    9.948616]  dsa_register_switch from mdio_probe+0x2c/0x54
-[    9.954433]  mdio_probe from really_probe.part.0+0x98/0x2a0
-[    9.960375]  really_probe.part.0 from driver_probe_device+0x30/0x10c
-[    9.967029]  driver_probe_device from __device_attach_driver+0xb8/0x13c
-[    9.973946]  __device_attach_driver from bus_for_each_drv+0x90/0xe0
-[    9.980509]  bus_for_each_drv from __device_attach+0x110/0x184
-[    9.986632]  __device_attach from bus_probe_device+0x8c/0x94
-[    9.992577]  bus_probe_device from deferred_probe_work_func+0x78/0xa8
-[    9.999311]  deferred_probe_work_func from process_one_work+0x290/0x73c
-[   10.006292]  process_one_work from worker_thread+0x30/0x4b8
-[   10.012155]  worker_thread from kthread+0xd4/0x10c
-[   10.017238]  kthread from ret_from_fork+0x14/0x3c
+[   16.043925] moxart-ethernet 92000000.mac eth0: DMA mapping error
+[   16.050957] moxart-ethernet 92000000.mac eth0: DMA mapping error
+[   16.058229] moxart-ethernet 92000000.mac eth0: DMA mapping error
 
-Fixes: 0abfd494deef ("net: dsa: use dedicated CPU port")
-CC: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-CC: Florian Fainelli <f.fainelli@gmail.com>
+Passing pdev to DMA is a common approach among net drivers.
+
+Fixes: 6c821bd9edc9 ("net: Add MOXA ART SoCs ethernet driver")
 Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20220811070939.1717146-1-saproj@gmail.com
+Suggested-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220812171339.2271788-1-saproj@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/mv88e6060.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/moxa/moxart_ether.c |   20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
---- a/drivers/net/dsa/mv88e6060.c
-+++ b/drivers/net/dsa/mv88e6060.c
-@@ -117,6 +117,9 @@ static int mv88e6060_setup_port(struct m
- 	int addr = REG_PORT(p);
- 	int ret;
+--- a/drivers/net/ethernet/moxa/moxart_ether.c
++++ b/drivers/net/ethernet/moxa/moxart_ether.c
+@@ -77,7 +77,7 @@ static void moxart_mac_free_memory(struc
+ 	int i;
  
-+	if (dsa_is_unused_port(priv->ds, p))
-+		return 0;
-+
- 	/* Do not force flow control, disable Ingress and Egress
- 	 * Header tagging, disable VLAN tunneling, and set the port
- 	 * state to Forwarding.  Additionally, if this is the CPU
+ 	for (i = 0; i < RX_DESC_NUM; i++)
+-		dma_unmap_single(&ndev->dev, priv->rx_mapping[i],
++		dma_unmap_single(&priv->pdev->dev, priv->rx_mapping[i],
+ 				 priv->rx_buf_size, DMA_FROM_DEVICE);
+ 
+ 	if (priv->tx_desc_base)
+@@ -147,11 +147,11 @@ static void moxart_mac_setup_desc_ring(s
+ 		       desc + RX_REG_OFFSET_DESC1);
+ 
+ 		priv->rx_buf[i] = priv->rx_buf_base + priv->rx_buf_size * i;
+-		priv->rx_mapping[i] = dma_map_single(&ndev->dev,
++		priv->rx_mapping[i] = dma_map_single(&priv->pdev->dev,
+ 						     priv->rx_buf[i],
+ 						     priv->rx_buf_size,
+ 						     DMA_FROM_DEVICE);
+-		if (dma_mapping_error(&ndev->dev, priv->rx_mapping[i]))
++		if (dma_mapping_error(&priv->pdev->dev, priv->rx_mapping[i]))
+ 			netdev_err(ndev, "DMA mapping error\n");
+ 
+ 		moxart_desc_write(priv->rx_mapping[i],
+@@ -240,7 +240,7 @@ static int moxart_rx_poll(struct napi_st
+ 		if (len > RX_BUF_SIZE)
+ 			len = RX_BUF_SIZE;
+ 
+-		dma_sync_single_for_cpu(&ndev->dev,
++		dma_sync_single_for_cpu(&priv->pdev->dev,
+ 					priv->rx_mapping[rx_head],
+ 					priv->rx_buf_size, DMA_FROM_DEVICE);
+ 		skb = netdev_alloc_skb_ip_align(ndev, len);
+@@ -294,7 +294,7 @@ static void moxart_tx_finished(struct ne
+ 	unsigned int tx_tail = priv->tx_tail;
+ 
+ 	while (tx_tail != tx_head) {
+-		dma_unmap_single(&ndev->dev, priv->tx_mapping[tx_tail],
++		dma_unmap_single(&priv->pdev->dev, priv->tx_mapping[tx_tail],
+ 				 priv->tx_len[tx_tail], DMA_TO_DEVICE);
+ 
+ 		ndev->stats.tx_packets++;
+@@ -357,9 +357,9 @@ static int moxart_mac_start_xmit(struct
+ 
+ 	len = skb->len > TX_BUF_SIZE ? TX_BUF_SIZE : skb->len;
+ 
+-	priv->tx_mapping[tx_head] = dma_map_single(&ndev->dev, skb->data,
++	priv->tx_mapping[tx_head] = dma_map_single(&priv->pdev->dev, skb->data,
+ 						   len, DMA_TO_DEVICE);
+-	if (dma_mapping_error(&ndev->dev, priv->tx_mapping[tx_head])) {
++	if (dma_mapping_error(&priv->pdev->dev, priv->tx_mapping[tx_head])) {
+ 		netdev_err(ndev, "DMA mapping error\n");
+ 		goto out_unlock;
+ 	}
+@@ -378,7 +378,7 @@ static int moxart_mac_start_xmit(struct
+ 		len = ETH_ZLEN;
+ 	}
+ 
+-	dma_sync_single_for_device(&ndev->dev, priv->tx_mapping[tx_head],
++	dma_sync_single_for_device(&priv->pdev->dev, priv->tx_mapping[tx_head],
+ 				   priv->tx_buf_size, DMA_TO_DEVICE);
+ 
+ 	txdes1 = TX_DESC1_LTS | TX_DESC1_FTS | (len & TX_DESC1_BUF_SIZE_MASK);
+@@ -498,7 +498,7 @@ static int moxart_mac_probe(struct platf
+ 	priv->tx_buf_size = TX_BUF_SIZE;
+ 	priv->rx_buf_size = RX_BUF_SIZE;
+ 
+-	priv->tx_desc_base = dma_alloc_coherent(&pdev->dev, TX_REG_DESC_SIZE *
++	priv->tx_desc_base = dma_alloc_coherent(p_dev, TX_REG_DESC_SIZE *
+ 						TX_DESC_NUM, &priv->tx_base,
+ 						GFP_DMA | GFP_KERNEL);
+ 	if (!priv->tx_desc_base) {
+@@ -506,7 +506,7 @@ static int moxart_mac_probe(struct platf
+ 		goto init_fail;
+ 	}
+ 
+-	priv->rx_desc_base = dma_alloc_coherent(&pdev->dev, RX_REG_DESC_SIZE *
++	priv->rx_desc_base = dma_alloc_coherent(p_dev, RX_REG_DESC_SIZE *
+ 						RX_DESC_NUM, &priv->rx_base,
+ 						GFP_DMA | GFP_KERNEL);
+ 	if (!priv->rx_desc_base) {
 
 

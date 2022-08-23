@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EF859E146
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3769C59E1CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358711AbiHWLyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S1352848AbiHWKcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358976AbiHWLv0 (ORCPT
+        with ESMTP id S1353565AbiHWKNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:51:26 -0400
+        Tue, 23 Aug 2022 06:13:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCE3D3985;
-        Tue, 23 Aug 2022 02:32:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B2A6C121;
+        Tue, 23 Aug 2022 01:59:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 309AFB81C95;
-        Tue, 23 Aug 2022 09:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B62C433D6;
-        Tue, 23 Aug 2022 09:32:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5B66B81C3A;
+        Tue, 23 Aug 2022 08:59:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36504C433C1;
+        Tue, 23 Aug 2022 08:59:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247130;
-        bh=g50zDTVcQS08LAu01kQ31YSa+m5euRa8lzIjKbTqsww=;
+        s=korg; t=1661245185;
+        bh=lhcGVfedXLvlZmgQ5jX75/1UekAf+1RD+VFUn9Vc6Ro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QUKm3LaJwmiZd0ujsoA38NYH+lKBDLAjd/+TW3YPwiiBuhSIOu4chR0I2CYDuTQAY
-         SkLCGmnJFAnAyeFwF531r4SXAPg79hnwwa75nR/4+R4X5cPUVWx3TkFs7yw7ptkN9F
-         uX35pGjKZ66Py4ImzVxTDEbcflioYkcu3XMm2UEA=
+        b=BngnfUD+WcRJaZMi7UBztfHxpazAvrkZl2Z3ptJ5BhE64/HM4tjDKSPyUsgsjE6BJ
+         XORWfisui738hhVPNtdJg8cjW34qG8R96YkCLS+/slByxNyyITMjSk0eQ2Cibqd3oa
+         V+x8levffI+NcGYbY7QizEt8JHpDLN67UENEtvNk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 5.4 297/389] apparmor: fix aa_label_asxprint return check
+        stable@vger.kernel.org, Brice Goglin <Brice.Goglin@inria.fr>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 216/244] riscv: dts: canaan: Add k210 topology information
 Date:   Tue, 23 Aug 2022 10:26:15 +0200
-Message-Id: <20220823080127.964405043@linuxfoundation.org>
+Message-Id: <20220823080106.726302489@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Conor Dooley <conor.dooley@microchip.com>
 
-commit 3e2a3a0830a2090e766d0d887d52c67de2a6f323 upstream.
+[ Upstream commit d9d193dea8666bbf69fc21c5bdcdabaa34a466e3 ]
 
-Clang static analysis reports this issue
-label.c:1802:3: warning: 2nd function call argument
-  is an uninitialized value
-  pr_info("%s", str);
-  ^~~~~~~~~~~~~~~~~~
+The k210 has no cpu-map node, so tools like hwloc cannot correctly
+parse the topology. Add the node using the existing node labels.
 
-str is set from a successful call to aa_label_asxprint(&str, ...)
-On failure a negative value is returned, not a -1.  So change
-the check.
-
-Fixes: f1bd904175e8 ("apparmor: add the base fns() for domain labels")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
+Link: https://github.com/open-mpi/hwloc/issues/536
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Link: https://lore.kernel.org/r/20220705190435.1790466-6-mail@conchuod.ie
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/apparmor/label.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/riscv/boot/dts/canaan/k210.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -1750,7 +1750,7 @@ void aa_label_xaudit(struct audit_buffer
- 	if (!use_label_hname(ns, label, flags) ||
- 	    display_mode(ns, label, flags)) {
- 		len  = aa_label_asxprint(&name, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
-@@ -1778,7 +1778,7 @@ void aa_label_seq_xprint(struct seq_file
- 		int len;
+diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
+index 780416d489aa..fa9162e3afa3 100644
+--- a/arch/riscv/boot/dts/canaan/k210.dtsi
++++ b/arch/riscv/boot/dts/canaan/k210.dtsi
+@@ -65,6 +65,18 @@
+ 				compatible = "riscv,cpu-intc";
+ 			};
+ 		};
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++
++				core1 {
++					cpu = <&cpu1>;
++				};
++			};
++		};
+ 	};
  
- 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
-@@ -1801,7 +1801,7 @@ void aa_label_xprintk(struct aa_ns *ns,
- 		int len;
- 
- 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
+ 	sram: memory@80000000 {
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7AB59E2BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D221F59DCD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240062AbiHWKrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S1354806AbiHWKWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356138AbiHWKlc (ORCPT
+        with ESMTP id S1352642AbiHWKJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:41:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E4BA7AB4;
-        Tue, 23 Aug 2022 02:08:57 -0700 (PDT)
+        Tue, 23 Aug 2022 06:09:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3057E013;
+        Tue, 23 Aug 2022 01:55:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EEF5B81C8B;
-        Tue, 23 Aug 2022 09:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E8AC433C1;
-        Tue, 23 Aug 2022 09:08:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BC97614E7;
+        Tue, 23 Aug 2022 08:55:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38F9C433D6;
+        Tue, 23 Aug 2022 08:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245731;
-        bh=aHBXp4XfQr4lkXOsVrb8FYiuGkySIOY+7VE1gZCkiG4=;
+        s=korg; t=1661244957;
+        bh=zWkpsM+SDxRe9i4P1nc7g3lxW/BQ0Z1ag1r4NHSl9aI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L10orHisT8QR4gynho09Bdr2lVz+NOV+6Lp+1i8krOymkUaFgh3uhIDz/eB3WUkn4
-         4hBZleBmuH7+kXr5pNaQF0QVHP8c0ABOc4XoJVrFoMklZv1e6+2Pe808HzaHY9sEAu
-         9/iXjDVo6FVyCkNFZ/iX7aR8D8e1yyPStMbhZGQA=
+        b=iaSCFF7hnYrLMSi+jXXASnWBNgphoDFYH0jRETMfJTc0894A3XTYGvyamT3EKTmw7
+         ffClKEmeQ6BmnKadqOtT+YdFfCjTyN7JYa9ukXrTzW/Ol9R0Vjbu2HVqiUWSrLFmkG
+         howf+YaLrrWRqwbaMebmfnfK91zhQhVhi6HNaDvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 141/287] mm/mmap.c: fix missing call to vm_unacct_memory in mmap_region
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 5.15 151/244] kbuild: fix the modules order between drivers and libs
 Date:   Tue, 23 Aug 2022 10:25:10 +0200
-Message-Id: <20220823080105.246310483@linuxfoundation.org>
+Message-Id: <20220823080104.219938671@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +53,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaohe Lin <linmiaohe@huawei.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 7f82f922319ede486540e8746769865b9508d2c2 ]
+commit 113147510b48e764e624e3d0e6707a1e48bc05a9 upstream.
 
-Since the beginning, charged is set to 0 to avoid calling vm_unacct_memory
-twice because vm_unacct_memory will be called by above unmap_region.  But
-since commit 4f74d2c8e827 ("vm: remove 'nr_accounted' calculations from
-the unmap_vmas() interfaces"), unmap_region doesn't call vm_unacct_memory
-anymore.  So charged shouldn't be set to 0 now otherwise the calling to
-paired vm_unacct_memory will be missed and leads to imbalanced account.
+Commit b2c885549122 ("kbuild: update modules.order only when contained
+modules are updated") accidentally changed the modules order.
 
-Link: https://lkml.kernel.org/r/20220618082027.43391-1-linmiaohe@huawei.com
-Fixes: 4f74d2c8e827 ("vm: remove 'nr_accounted' calculations from the unmap_vmas() interfaces")
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Prior to that commit, the modules order was determined based on
+vmlinux-dirs, which lists core-y/m, drivers-y/m, libs-y/m, in this order.
+
+Now, subdir-modorder lists them in a different order: core-y/m, libs-y/m,
+drivers-y/m.
+
+Presumably, there was no practical issue because the modules in drivers
+and libs are orthogonal, but there is no reason to have this distortion.
+
+Get back to the original order.
+
+Fixes: b2c885549122 ("kbuild: update modules.order only when contained modules are updated")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmap.c | 1 -
- 1 file changed, 1 deletion(-)
+ Makefile |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index bb8ba3258945..590840c3a3b5 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1821,7 +1821,6 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+--- a/Makefile
++++ b/Makefile
+@@ -1155,13 +1155,11 @@ vmlinux-alldirs	:= $(sort $(vmlinux-dirs
+ 		     $(patsubst %/,%,$(filter %/, $(core-) \
+ 			$(drivers-) $(libs-))))
  
- 	/* Undo any partial mapping done by a device driver. */
- 	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
--	charged = 0;
- 	if (vm_flags & VM_SHARED)
- 		mapping_unmap_writable(file->f_mapping);
- allow_write_and_free_vma:
--- 
-2.35.1
-
+-subdir-modorder := $(addsuffix modules.order,$(filter %/, \
+-			$(core-y) $(core-m) $(libs-y) $(libs-m) \
+-			$(drivers-y) $(drivers-m)))
+-
+ build-dirs	:= $(vmlinux-dirs)
+ clean-dirs	:= $(vmlinux-alldirs)
+ 
++subdir-modorder := $(addsuffix /modules.order, $(build-dirs))
++
+ # Externally visible symbols (used by link-vmlinux.sh)
+ KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
+ KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
 
 

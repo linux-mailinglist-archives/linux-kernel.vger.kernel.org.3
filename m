@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F6559D813
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5380159DA6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243202AbiHWJwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S1352618AbiHWKIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351690AbiHWJuv (ORCPT
+        with ESMTP id S1352506AbiHWKCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:50:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9AA6DF9A;
-        Tue, 23 Aug 2022 01:45:14 -0700 (PDT)
+        Tue, 23 Aug 2022 06:02:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4185F7C500;
+        Tue, 23 Aug 2022 01:49:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0720761338;
-        Tue, 23 Aug 2022 08:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B7FEC433D6;
-        Tue, 23 Aug 2022 08:44:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD116B81B90;
+        Tue, 23 Aug 2022 08:49:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E005C433D6;
+        Tue, 23 Aug 2022 08:49:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244274;
-        bh=aolZgR12PUzxTi1PxC82EDK5N5Y8ZmpIPPwJr1pSbSA=;
+        s=korg; t=1661244591;
+        bh=X6jgYWZ4Mu4BRn1XVD+JQfc78HmS4SDy8hx0sB+nn/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rkmck8acNBP9tHM7vZbYO8TDsrh/QBB/azb9mhtrCNM5nr674F9JOgMaCBmAwrwaX
-         PfWvQTytkWIcd399g2QucmN5k53MeGeycGvV5xhIKFt+ZRKRY8Ayj3vLLKeDiUtsCJ
-         X1peLc0aSqRe2r9voQvRkvQNoPZy7aX3N9Ml2/t4=
+        b=GdoemA72jeiWJn7anC3QowU7ye370EJdbOZGZD5hHKurmmYSSdoZAuWI2u232Foc5
+         vfHN1F90dvhWfs1mKv0X86pnU3afu+cC4n1Y6fI4d+Xj+21Q8F+uNCPZUEbRmqZxlk
+         GIKloLbuA2Rw0bUqJDnTNJZf2XU9oZhVZmpvYID8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 112/229] USB: serial: fix tty-port initialized comments
-Date:   Tue, 23 Aug 2022 10:24:33 +0200
-Message-Id: <20220823080057.677023084@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
+        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
+        Marek Szlosek <marek.szlosek@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.15 115/244] iavf: Fix adminq error handling
+Date:   Tue, 23 Aug 2022 10:24:34 +0200
+Message-Id: <20220823080102.854229679@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,66 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
 
-[ Upstream commit 688ee1d1785c1359f9040f615dd8e6054962bce2 ]
+commit 419831617ed349992c84344dbd9e627f9e68f842 upstream.
 
-Fix up the tty-port initialized comments which got truncated and
-obfuscated when replacing the old ASYNCB_INITIALIZED flag.
+iavf_alloc_asq_bufs/iavf_alloc_arq_bufs allocates with dma_alloc_coherent
+memory for VF mailbox.
+Free DMA regions for both ASQ and ARQ in case error happens during
+configuration of ASQ/ARQ registers.
+Without this change it is possible to see when unloading interface:
+74626.583369: dma_debug_device_change: device driver has pending DMA allocations while released from device [count=32]
+One of leaked entries details: [device address=0x0000000b27ff9000] [size=4096 bytes] [mapped with DMA_BIDIRECTIONAL] [mapped as coherent]
 
-Fixes: d41861ca19c9 ("tty: Replace ASYNC_INITIALIZED bit and update atomically")
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d358aa9a7a2d ("i40evf: init code and hardware support")
+Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+Tested-by: Marek Szlosek <marek.szlosek@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/sierra.c     | 3 ++-
- drivers/usb/serial/usb-serial.c | 2 +-
- drivers/usb/serial/usb_wwan.c   | 3 ++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/iavf/iavf_adminq.c |   15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
-index a9c5564b6b65..fcbe8a9d2650 100644
---- a/drivers/usb/serial/sierra.c
-+++ b/drivers/usb/serial/sierra.c
-@@ -759,7 +759,8 @@ static void sierra_close(struct usb_serial_port *port)
+--- a/drivers/net/ethernet/intel/iavf/iavf_adminq.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_adminq.c
+@@ -324,6 +324,7 @@ static enum iavf_status iavf_config_arq_
+ static enum iavf_status iavf_init_asq(struct iavf_hw *hw)
+ {
+ 	enum iavf_status ret_code = 0;
++	int i;
  
- 	/*
- 	 * Need to take susp_lock to make sure port is not already being
--	 * resumed, but no need to hold it due to initialized
-+	 * resumed, but no need to hold it due to the tty-port initialized
-+	 * flag.
- 	 */
- 	spin_lock_irq(&intfdata->susp_lock);
- 	if (--intfdata->open_ports == 0)
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index 3dc3464626fb..731bae05d7e5 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -254,7 +254,7 @@ static int serial_open(struct tty_struct *tty, struct file *filp)
-  *
-  * Shut down a USB serial port. Serialized against activate by the
-  * tport mutex and kept to matching open/close pairs
-- * of calls by the initialized flag.
-+ * of calls by the tty-port initialized flag.
-  *
-  * Not called if tty is console.
-  */
-diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
-index 4fab7ec9cd3f..bb05c9ea9190 100644
---- a/drivers/usb/serial/usb_wwan.c
-+++ b/drivers/usb/serial/usb_wwan.c
-@@ -465,7 +465,8 @@ void usb_wwan_close(struct usb_serial_port *port)
+ 	if (hw->aq.asq.count > 0) {
+ 		/* queue already initialized */
+@@ -354,12 +355,17 @@ static enum iavf_status iavf_init_asq(st
+ 	/* initialize base registers */
+ 	ret_code = iavf_config_asq_regs(hw);
+ 	if (ret_code)
+-		goto init_adminq_free_rings;
++		goto init_free_asq_bufs;
  
- 	/*
- 	 * Need to take susp_lock to make sure port is not already being
--	 * resumed, but no need to hold it due to initialized
-+	 * resumed, but no need to hold it due to the tty-port initialized
-+	 * flag.
- 	 */
- 	spin_lock_irq(&intfdata->susp_lock);
- 	if (--intfdata->open_ports == 0)
--- 
-2.35.1
-
+ 	/* success! */
+ 	hw->aq.asq.count = hw->aq.num_asq_entries;
+ 	goto init_adminq_exit;
+ 
++init_free_asq_bufs:
++	for (i = 0; i < hw->aq.num_asq_entries; i++)
++		iavf_free_dma_mem(hw, &hw->aq.asq.r.asq_bi[i]);
++	iavf_free_virt_mem(hw, &hw->aq.asq.dma_head);
++
+ init_adminq_free_rings:
+ 	iavf_free_adminq_asq(hw);
+ 
+@@ -383,6 +389,7 @@ init_adminq_exit:
+ static enum iavf_status iavf_init_arq(struct iavf_hw *hw)
+ {
+ 	enum iavf_status ret_code = 0;
++	int i;
+ 
+ 	if (hw->aq.arq.count > 0) {
+ 		/* queue already initialized */
+@@ -413,12 +420,16 @@ static enum iavf_status iavf_init_arq(st
+ 	/* initialize base registers */
+ 	ret_code = iavf_config_arq_regs(hw);
+ 	if (ret_code)
+-		goto init_adminq_free_rings;
++		goto init_free_arq_bufs;
+ 
+ 	/* success! */
+ 	hw->aq.arq.count = hw->aq.num_arq_entries;
+ 	goto init_adminq_exit;
+ 
++init_free_arq_bufs:
++	for (i = 0; i < hw->aq.num_arq_entries; i++)
++		iavf_free_dma_mem(hw, &hw->aq.arq.r.arq_bi[i]);
++	iavf_free_virt_mem(hw, &hw->aq.arq.dma_head);
+ init_adminq_free_rings:
+ 	iavf_free_adminq_arq(hw);
+ 
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E971A59E0C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1166559DD59
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243390AbiHWMMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
+        id S1353595AbiHWK2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359844AbiHWMLS (ORCPT
+        with ESMTP id S1352908AbiHWKMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:11:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975C3E2C5A;
-        Tue, 23 Aug 2022 02:39:15 -0700 (PDT)
+        Tue, 23 Aug 2022 06:12:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B124BD24;
+        Tue, 23 Aug 2022 01:58:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C7D16148E;
-        Tue, 23 Aug 2022 09:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDD2C433D6;
-        Tue, 23 Aug 2022 09:38:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93F0DB81C28;
+        Tue, 23 Aug 2022 08:58:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01658C433C1;
+        Tue, 23 Aug 2022 08:58:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247497;
-        bh=JqwqA8K/Bi/JlYaxPGlyPEUe8HAVD/tfbTEB5pz8NI4=;
+        s=korg; t=1661245135;
+        bh=iX9bfe+ORv3IQGMdd+YgIjHQjRAB9HYr5kNWTyjhKAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kvVTtg0s6OyjH7QHREFlS5+ag8/5mpZCoH/wm+aXp9kTyJ2PCOvjmpuFjasXdAysB
-         Qx43LdsInjBBK4MggClG/+5Xc9svm7m2rp2r1ANZ7H33xc2AsFroJ4xYOCCO3+PPf/
-         AOUdLIP+Od5bn4+9na7M7tjFjjgHjR/NV1h5FkEA=
+        b=XhhqX99r4Y6vwycKtERexj9BRnIKkiY8MFQ73ol0y1YC/iElwdL7wXa7ofapbJEyp
+         QbOAK1WgEJN3H1D5Wo0yRyr4ZMjoOE1VKBIKH27K7OtDmC77Lrs0Z8VHQSyMJR7SHT
+         q2YhKwcI9ecegTMpkVqDdyq/sz29Uui9/dezc/FI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Mosnacek <omosnace@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 5.10 055/158] kbuild: dummy-tools: avoid tmpdir leak in dummy gcc
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
+        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 228/244] f2fs: fix to do sanity check on segment type in build_sit_entries()
 Date:   Tue, 23 Aug 2022 10:26:27 +0200
-Message-Id: <20220823080048.307327393@linuxfoundation.org>
+Message-Id: <20220823080107.164193772@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Mosnacek <omosnace@redhat.com>
+From: Chao Yu <chao.yu@oppo.com>
 
-commit aac289653fa5adf9e9985e4912c1d24a3e8cbab2 upstream.
+[ Upstream commit 09beadf289d6e300553e60d6e76f13c0427ecab3 ]
 
-When passed -print-file-name=plugin, the dummy gcc script creates a
-temporary directory that is never cleaned up. To avoid cluttering
-$TMPDIR, instead use a static directory included in the source tree.
+As Wenqing Liu <wenqingliu0120@gmail.com> reported in bugzilla:
 
-Fixes: 76426e238834 ("kbuild: add dummy toolchains to enable all cc-option etc. in Kconfig")
-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+https://bugzilla.kernel.org/show_bug.cgi?id=216285
+
+RIP: 0010:memcpy_erms+0x6/0x10
+ f2fs_update_meta_page+0x84/0x570 [f2fs]
+ change_curseg.constprop.0+0x159/0xbd0 [f2fs]
+ f2fs_do_replace_block+0x5c7/0x18a0 [f2fs]
+ f2fs_replace_block+0xeb/0x180 [f2fs]
+ recover_data+0x1abd/0x6f50 [f2fs]
+ f2fs_recover_fsync_data+0x12ce/0x3250 [f2fs]
+ f2fs_fill_super+0x4459/0x6190 [f2fs]
+ mount_bdev+0x2cf/0x3b0
+ legacy_get_tree+0xed/0x1d0
+ vfs_get_tree+0x81/0x2b0
+ path_mount+0x47e/0x19d0
+ do_mount+0xce/0xf0
+ __x64_sys_mount+0x12c/0x1a0
+ do_syscall_64+0x38/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The root cause is segment type is invalid, so in f2fs_do_replace_block(),
+f2fs accesses f2fs_sm_info::curseg_array with out-of-range segment type,
+result in accessing invalid curseg->sum_blk during memcpy in
+f2fs_update_meta_page(). Fix this by adding sanity check on segment type
+in build_sit_entries().
+
+Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../dummy-tools/dummy-plugin-dir/include/plugin-version.h | 0
- scripts/dummy-tools/gcc |    8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
- create mode 100644 scripts/dummy-tools/dummy-plugin-dir/include/plugin-version.h
+ fs/f2fs/segment.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
---- a/scripts/dummy-tools/gcc
-+++ b/scripts/dummy-tools/gcc
-@@ -77,12 +77,8 @@ fi
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 841a978da083..e98c90bd8ef6 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4537,6 +4537,12 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 				return err;
+ 			seg_info_from_raw_sit(se, &sit);
  
- # To set GCC_PLUGINS
- if arg_contain -print-file-name=plugin "$@"; then
--	plugin_dir=$(mktemp -d)
--
--	mkdir -p $plugin_dir/include
--	touch $plugin_dir/include/plugin-version.h
--
--	echo $plugin_dir
-+	# Use $0 to find the in-tree dummy directory
-+	echo "$(dirname "$(readlink -f "$0")")/dummy-plugin-dir"
- 	exit 0
- fi
++			if (se->type >= NR_PERSISTENT_LOG) {
++				f2fs_err(sbi, "Invalid segment type: %u, segno: %u",
++							se->type, start);
++				return -EFSCORRUPTED;
++			}
++
+ 			sit_valid_blocks[SE_PAGETYPE(se)] += se->valid_blocks;
  
+ 			if (f2fs_block_unit_discard(sbi)) {
+@@ -4585,6 +4591,13 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 			break;
+ 		seg_info_from_raw_sit(se, &sit);
+ 
++		if (se->type >= NR_PERSISTENT_LOG) {
++			f2fs_err(sbi, "Invalid segment type: %u, segno: %u",
++							se->type, start);
++			err = -EFSCORRUPTED;
++			break;
++		}
++
+ 		sit_valid_blocks[SE_PAGETYPE(se)] += se->valid_blocks;
+ 
+ 		if (f2fs_block_unit_discard(sbi)) {
+-- 
+2.35.1
+
 
 

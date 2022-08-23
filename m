@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A7459D055
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 07:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AC459D05A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 07:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbiHWFPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 01:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S235781AbiHWFQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 01:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239315AbiHWFPP (ORCPT
+        with ESMTP id S236060AbiHWFQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 01:15:15 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF5C402C3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:15:14 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo16072840pjd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:15:14 -0700 (PDT)
+        Tue, 23 Aug 2022 01:16:05 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F764B490
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:16:04 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id x15so11526869pfp.4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=7CbX3vi42ZGOMPpEOi1rGvmX1pkFnmfkswzcsMu8F9g=;
-        b=IP23OU1H2oHfzax5Zpb+rmZuLU0x4qGPU0go1jT7eiz/80hf0Rzs94X17vA/NlU/KM
-         O5VzBWxZEqGDlfLw7jbIfOvCBaMF7dQVoD3SXUeBIrOf9Icim5uUyQMzMKG84U51ncd2
-         rp6LqyYBccf7UAmjTZhndl+2zO7IbuXKPVKZifMCLf+iZvRYw59F7/PlaoL9uIj2cXhX
-         D9ULBeA6T1SNgg44kZk858ZDnIvr2bTxnmYgQlXoIyJBSNMzCvhkMN08DnY8CkINwDRj
-         4jBgRo6dNBWIhvcZvFX4JFNG98IUSLM3c8sL1xb3POdsqEtTadC73RB+5oAz9pmp1yqw
-         wz/w==
+        bh=MXPT1lY8hsrBMANrjrg5CqtErhku/jy7GXIWUn5wzuU=;
+        b=4KSc1T/mHWBDCwzaDm+z0AtdLesPLctv+jklMmsoTTMH7ugk35S6xm61XUV9owsGb9
+         aJ4+cVdfXoh8pC/gsgiO5CQteJrU9P4EkTZGZv26Ul5tpvfI3o5o2g37R6gZQlor8pp8
+         qlZ8XangLoxwUhCUhvPeCZLWNyhyRIoveVRSmlYAiocUyJut17MKEgL7/jRzmaDkUuCt
+         sLCEJriD4iPtBOTPu6gXL3er47v88Xzp07/DQPe0mp+PODHmXUs/R47Yyx6UN+ztMHvu
+         K1dPTwdToqt9gttl7FqqMe69uT8Dpf6MDR+zpjEzf+6+aOJNZo92anHl5Z6VzYLmxLtI
+         UNMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=7CbX3vi42ZGOMPpEOi1rGvmX1pkFnmfkswzcsMu8F9g=;
-        b=XLQly7UGyqpfxn61mV2imn8QyKDgLkQYsTUHlFKyVp7nzv7o9AH8h0ChEfXsl1p13f
-         lPXnGkXX98qxyHvXAaAXo6Y80x3ZJ9oK9DcdvShTI9rflIBJ5nOr7AxQ18mbrMU3mt9C
-         nrFCuTJDDiKGMt2M4cM6VNAasjG2W00xSFzs7uQ7rdQ9B6KrP44NiStYrZW4CWa9sJi3
-         Z49mH0m4vaM4mSa7vLOYPdhvn79ckDn/HeVmx/285FF+wEEw5eY4gYXSDkY/quJz6gk0
-         YGHQ/qtBzCRZTKH0kuDYHB+chfcauZbFMd6wcReW2F6fDPKUalEGAWlSXiuaJMRBnnVc
-         CzEg==
-X-Gm-Message-State: ACgBeo0D8nN1YcLYIJMCJp8VeRWkRIbluHm7Ehui2TZOV7G1cQJTFCJQ
-        Ag933Bulmql+PO8VG+KXGwyKcQ==
-X-Google-Smtp-Source: AA6agR4jUE9KX/eVg+ify06PCyMTZ8AQgGHY1+TzKuNlZgnwdClieyo5ucmnluvh5LC/4VwOs8k1Xw==
-X-Received: by 2002:a17:902:c945:b0:16d:d425:324a with SMTP id i5-20020a170902c94500b0016dd425324amr22469171pla.7.1661231713837;
-        Mon, 22 Aug 2022 22:15:13 -0700 (PDT)
+        bh=MXPT1lY8hsrBMANrjrg5CqtErhku/jy7GXIWUn5wzuU=;
+        b=2gSa0xMM5/rENG7X7CivNXkGs/x/DC+8uAR0DMW71o6cfkKBD4SmjMmhhDFFkji6aT
+         nszVcd/Wdl9FHtEvpB7MT/jcMA3x+ZmeVbKwelvC8k0GURAUe4pqrVdDTN4ZkOhOHsaH
+         9lG6/MosSQnkHo+XtlpiV86AjOJ26w0E9Q38YhBGpvGkALS82hQV9Y7N4uNRzTIK2Tx3
+         yBVplQQWRmkVrqv8gZV6i6p6Fmweiwfrx7tbNMmF0wzGMJ95XxXK3PRgTVvAFZjs5e3o
+         0MTDxNQsee+YKbGLcU7N0vjo8/a7n6uBz89mx2LWcu9Y7VTqvcuzVg7ybchu450lUj0d
+         RsHw==
+X-Gm-Message-State: ACgBeo294h8kZ6pjJr3AyJyE5LHR9p6npxRRFN48eY6gq3QMAdqS7Gzi
+        cdqNkeDrZYpaJfOpos24JW/Spg==
+X-Google-Smtp-Source: AA6agR7lpQwjA64GSeFOM7sRG8qwpHOPVH+MqbS4Ub3ir2mJ5/fgurfX2B8/lNbN8ywD66yCw05ZmA==
+X-Received: by 2002:a05:6a00:1996:b0:52e:b0f7:8c83 with SMTP id d22-20020a056a00199600b0052eb0f78c83mr24049056pfl.59.1661231763948;
+        Mon, 22 Aug 2022 22:16:03 -0700 (PDT)
 Received: from [10.4.208.12] ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id c14-20020a17090a020e00b001f22647cb56sm10908810pjc.27.2022.08.22.22.15.10
+        by smtp.gmail.com with ESMTPSA id z17-20020aa79591000000b0052aaff953aesm9654401pfj.115.2022.08.22.22.16.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 22:15:13 -0700 (PDT)
-Message-ID: <c615cfd1-9a80-a753-ceef-116cfbc70ceb@bytedance.com>
-Date:   Tue, 23 Aug 2022 13:15:05 +0800
+        Mon, 22 Aug 2022 22:16:03 -0700 (PDT)
+Message-ID: <1c295aaa-6977-d41c-c7eb-61cc398961e5@bytedance.com>
+Date:   Tue, 23 Aug 2022 13:15:56 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH 1/7] kernfs: Simply by replacing kernfs_deref_open_node()
- with of_on()
+Subject: Re: [PATCH 2/7] kernfs: Drop unnecessary "mutex" local variable
+ initialization
 Content-Language: en-US
 To:     Tejun Heo <tj@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -64,9 +64,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         Johannes Weiner <hannes@cmpxchg.org>,
         Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
 References: <20220820000550.367085-1-tj@kernel.org>
- <20220820000550.367085-2-tj@kernel.org>
+ <20220820000550.367085-3-tj@kernel.org>
 From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <20220820000550.367085-2-tj@kernel.org>
+In-Reply-To: <20220820000550.367085-3-tj@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,163 +79,60 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 2022/8/20 08:05, Tejun Heo wrote:
-> kernfs_node->attr.open is an RCU pointer to kernfs_open_node. However, RCU
-> dereference is currently only used in kernfs_notify(). Everywhere else,
-> either we're holding the lock which protects it or know that the
-> kernfs_open_node is pinned becaused we have a pointer to a kernfs_open_file
-> which is hanging off of it.
+> These are unnecessary and unconventional. Remove them. Also move variable
+> declaration into the block that it's used. No functional changes.
 > 
-> kernfs_deref_open_node() is used for the latter case - accessing
-> kernfs_open_node from kernfs_open_file. The lifetime and visibility rules
-> are simple and clear here. To someone who can access a kernfs_open_file, its
-> kernfs_open_node is pinned and visible through of->kn->attr.open.
-> 
-> Replace kernfs_deref_open_node() which simpler of_on(). The former takes
-> both @kn and @of and RCU deref @kn->attr.open while sanity checking with
-> @of. The latter takes @of and uses protected deref on of->kn->attr.open.
-> 
-> As the return value can't be NULL, remove the error handling in the callers
-> too.
-> 
-> This shouldn't cause any functional changes.
 
 Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
 
 Thanks.
 
-> 
 > Signed-off-by: Tejun Heo <tj@kernel.org>
 > Cc: Imran Khan <imran.f.khan@oracle.com>
 > ---
->  fs/kernfs/file.c | 56 +++++++++++-------------------------------------
->  1 file changed, 13 insertions(+), 43 deletions(-)
+>  fs/kernfs/file.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
 > diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-> index b3ec34386b43..32b16fe00a9e 100644
+> index 32b16fe00a9e..6437f7c7162d 100644
 > --- a/fs/kernfs/file.c
 > +++ b/fs/kernfs/file.c
-> @@ -57,31 +57,17 @@ static inline struct mutex *kernfs_open_file_mutex_lock(struct kernfs_node *kn)
->  }
->  
->  /**
-> - * kernfs_deref_open_node - Get kernfs_open_node corresponding to @kn.
-> - *
-> - * @of: associated kernfs_open_file instance.
-> - * @kn: target kernfs_node.
-> - *
-> - * Fetch and return ->attr.open of @kn if @of->list is non empty.
-> - * If @of->list is not empty we can safely assume that @of is on
-> - * @kn->attr.open->files list and this guarantees that @kn->attr.open
-> - * will not vanish i.e. dereferencing outside RCU read-side critical
-> - * section is safe here.
-> - *
-> - * The caller needs to make sure that @of->list is not empty.
-> + * of_on - Return the kernfs_open_node of the specified kernfs_open_file
-> + * @of: taret kernfs_open_file
->   */
-> -static struct kernfs_open_node *
-> -kernfs_deref_open_node(struct kernfs_open_file *of, struct kernfs_node *kn)
-> +static struct kernfs_open_node *of_on(struct kernfs_open_file *of)
+> @@ -555,7 +555,7 @@ static int kernfs_get_open_node(struct kernfs_node *kn,
+>  				struct kernfs_open_file *of)
 >  {
-> -	struct kernfs_open_node *on;
-> -
-> -	on = rcu_dereference_check(kn->attr.open, !list_empty(&of->list));
-> -
-> -	return on;
-> +	return rcu_dereference_protected(of->kn->attr.open,
-> +					 !list_empty(&of->list));
->  }
->  
->  /**
-> - * kernfs_deref_open_node_protected - Get kernfs_open_node corresponding to @kn
-> + * kernfs_deref_open_node_locked - Get kernfs_open_node corresponding to @kn
->   *
->   * @kn: target kernfs_node.
->   *
-> @@ -96,7 +82,7 @@ kernfs_deref_open_node(struct kernfs_open_file *of, struct kernfs_node *kn)
->   * The caller needs to make sure that kernfs_open_file_mutex is held.
->   */
->  static struct kernfs_open_node *
-> -kernfs_deref_open_node_protected(struct kernfs_node *kn)
-> +kernfs_deref_open_node_locked(struct kernfs_node *kn)
->  {
->  	return rcu_dereference_protected(kn->attr.open,
->  				lockdep_is_held(kernfs_open_file_mutex_ptr(kn)));
-> @@ -207,12 +193,8 @@ static void kernfs_seq_stop(struct seq_file *sf, void *v)
->  static int kernfs_seq_show(struct seq_file *sf, void *v)
->  {
->  	struct kernfs_open_file *of = sf->private;
-> -	struct kernfs_open_node *on = kernfs_deref_open_node(of, of->kn);
-> -
-> -	if (!on)
-> -		return -EINVAL;
->  
-> -	of->event = atomic_read(&on->event);
-> +	of->event = atomic_read(&of_on(of)->event);
->  
->  	return of->kn->attr.ops->seq_show(sf, v);
->  }
-> @@ -235,7 +217,6 @@ static ssize_t kernfs_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
->  	struct kernfs_open_file *of = kernfs_of(iocb->ki_filp);
->  	ssize_t len = min_t(size_t, iov_iter_count(iter), PAGE_SIZE);
->  	const struct kernfs_ops *ops;
-> -	struct kernfs_open_node *on;
->  	char *buf;
->  
->  	buf = of->prealloc_buf;
-> @@ -257,14 +238,7 @@ static ssize_t kernfs_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
->  		goto out_free;
->  	}
->  
-> -	on = kernfs_deref_open_node(of, of->kn);
-> -	if (!on) {
-> -		len = -EINVAL;
-> -		mutex_unlock(&of->mutex);
-> -		goto out_free;
-> -	}
-> -
-> -	of->event = atomic_read(&on->event);
-> +	of->event = atomic_read(&of_on(of)->event);
->  
->  	ops = kernfs_ops(of->kn);
->  	if (ops->read)
-> @@ -584,7 +558,7 @@ static int kernfs_get_open_node(struct kernfs_node *kn,
->  	struct mutex *mutex = NULL;
+>  	struct kernfs_open_node *on, *new_on = NULL;
+> -	struct mutex *mutex = NULL;
+> +	struct mutex *mutex;
 >  
 >  	mutex = kernfs_open_file_mutex_lock(kn);
-> -	on = kernfs_deref_open_node_protected(kn);
-> +	on = kernfs_deref_open_node_locked(kn);
->  
->  	if (on) {
->  		list_add_tail(&of->list, &on->files);
-> @@ -629,7 +603,7 @@ static void kernfs_unlink_open_file(struct kernfs_node *kn,
+>  	on = kernfs_deref_open_node_locked(kn);
+> @@ -599,7 +599,7 @@ static void kernfs_unlink_open_file(struct kernfs_node *kn,
+>  				 struct kernfs_open_file *of)
+>  {
+>  	struct kernfs_open_node *on;
+> -	struct mutex *mutex = NULL;
+> +	struct mutex *mutex;
 >  
 >  	mutex = kernfs_open_file_mutex_lock(kn);
 >  
-> -	on = kernfs_deref_open_node_protected(kn);
-> +	on = kernfs_deref_open_node_locked(kn);
->  	if (!on) {
+> @@ -776,9 +776,10 @@ static int kernfs_fop_release(struct inode *inode, struct file *filp)
+>  {
+>  	struct kernfs_node *kn = inode->i_private;
+>  	struct kernfs_open_file *of = kernfs_of(filp);
+> -	struct mutex *mutex = NULL;
+>  
+>  	if (kn->flags & KERNFS_HAS_RELEASE) {
+> +		struct mutex *mutex;
+> +
+>  		mutex = kernfs_open_file_mutex_lock(kn);
+>  		kernfs_release_file(kn, of);
 >  		mutex_unlock(mutex);
->  		return;
-> @@ -839,7 +813,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
->  		return;
->  
->  	mutex = kernfs_open_file_mutex_lock(kn);
-> -	on = kernfs_deref_open_node_protected(kn);
-> +	on = kernfs_deref_open_node_locked(kn);
->  	if (!on) {
->  		mutex_unlock(mutex);
->  		return;
-> @@ -874,11 +848,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
->   */
->  __poll_t kernfs_generic_poll(struct kernfs_open_file *of, poll_table *wait)
+> @@ -796,7 +797,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
 >  {
-> -	struct kernfs_node *kn = kernfs_dentry_node(of->file->f_path.dentry);
-> -	struct kernfs_open_node *on = kernfs_deref_open_node(of, kn);
-> -
-> -	if (!on)
-> -		return EPOLLERR;
-> +	struct kernfs_open_node *on = of_on(of);
+>  	struct kernfs_open_node *on;
+>  	struct kernfs_open_file *of;
+> -	struct mutex *mutex = NULL;
+> +	struct mutex *mutex;
 >  
->  	poll_wait(of->file, &on->poll, wait);
->  
+>  	if (!(kn->flags & (KERNFS_HAS_MMAP | KERNFS_HAS_RELEASE)))
+>  		return;

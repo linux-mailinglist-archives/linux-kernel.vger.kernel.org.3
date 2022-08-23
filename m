@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EC659DD44
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD3359E16E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351312AbiHWLi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S1351993AbiHWKM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358013AbiHWLcP (ORCPT
+        with ESMTP id S1352427AbiHWKFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:32:15 -0400
+        Tue, 23 Aug 2022 06:05:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B144E614;
-        Tue, 23 Aug 2022 02:26:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27272A3448;
+        Tue, 23 Aug 2022 01:52:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3736F61227;
-        Tue, 23 Aug 2022 09:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15552C433B5;
-        Tue, 23 Aug 2022 09:26:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FC08611DD;
+        Tue, 23 Aug 2022 08:52:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE2DC433C1;
+        Tue, 23 Aug 2022 08:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246789;
-        bh=Md5RQ6iHQPX4e7LRHADrQoCMdtevRuFoWjv4ghAxn0k=;
+        s=korg; t=1661244722;
+        bh=Lj3vgTIfpEYlX7Q9QBsnBXWw2WeUak/ATk2ICgEljuo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N9zJ85aknlucM0VTIPEVz/++PcKJg3XppMqREVZOZ7wm5WBEneWMO1+xNqHSdOh87
-         BPby9tGXiwFtFf3NbC19MPtetUG63VrnJedigcxrrWCAIxI/LUcQlDI4aOIElieu39
-         ROZPTlsBkzfPAszBpz5iXhQ4NXFILrBVEwfhAolc=
+        b=KCew92kTEalx7DJ4Qk5J6lgAnd/abseY9v6S5UHwlgjl9jLi0RSeZzXI7uCddWOt8
+         pQtAxWFr4eFMdnFtzuwU7SpUNLT3Jd5lUTL6GzIggL8q4aw4czY4Pr0EZcXZ3oCfYg
+         yIJ0wHVGY6qt+xoYB+PYP3e2ZraICF2CdFUCSmag=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 220/389] rpmsg: qcom_smd: Fix refcount leak in qcom_smd_parse_edge
+        stable@vger.kernel.org,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 139/244] net: dsa: microchip: ksz9477: fix fdb_dump last invalid entry
 Date:   Tue, 23 Aug 2022 10:24:58 +0200
-Message-Id: <20220823080124.774737556@linuxfoundation.org>
+Message-Id: <20220823080103.795969863@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Arun Ramadoss <arun.ramadoss@microchip.com>
 
-[ Upstream commit 65382585f067d4256ba087934f30f85c9b6984de ]
+commit 36c0d935015766bf20d621c18313f17691bda5e3 upstream.
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+In the ksz9477_fdb_dump function it reads the ALU control register and
+exit from the timeout loop if there is valid entry or search is
+complete. After exiting the loop, it reads the alu entry and report to
+the user space irrespective of entry is valid. It works till the valid
+entry. If the loop exited when search is complete, it reads the alu
+table. The table returns all ones and it is reported to user space. So
+bridge fdb show gives ff:ff:ff:ff:ff:ff as last entry for every port.
+To fix it, after exiting the loop the entry is reported only if it is
+valid one.
 
-Fixes: 53e2822e56c7 ("rpmsg: Introduce Qualcomm SMD backend")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220511120737.57374-1-linmq006@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Link: https://lore.kernel.org/r/20220816105516.18350-1-arun.ramadoss@microchip.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rpmsg/qcom_smd.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/dsa/microchip/ksz9477.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-index a4db9f6100d2..0b1e853d8c91 100644
---- a/drivers/rpmsg/qcom_smd.c
-+++ b/drivers/rpmsg/qcom_smd.c
-@@ -1364,6 +1364,7 @@ static int qcom_smd_parse_edge(struct device *dev,
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -759,6 +759,9 @@ static int ksz9477_port_fdb_dump(struct
+ 			goto exit;
  		}
  
- 		edge->ipc_regmap = syscon_node_to_regmap(syscon_np);
-+		of_node_put(syscon_np);
- 		if (IS_ERR(edge->ipc_regmap)) {
- 			ret = PTR_ERR(edge->ipc_regmap);
- 			goto put_node;
--- 
-2.35.1
-
++		if (!(ksz_data & ALU_VALID))
++			continue;
++
+ 		/* read ALU table */
+ 		ksz9477_read_table(dev, alu_table);
+ 
 
 

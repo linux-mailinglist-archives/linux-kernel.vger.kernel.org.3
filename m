@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93A359DD26
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3DE59DF8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354446AbiHWKZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S1358343AbiHWLr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353595AbiHWKLl (ORCPT
+        with ESMTP id S1358604AbiHWLmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA4215A0B;
-        Tue, 23 Aug 2022 01:57:37 -0700 (PDT)
+        Tue, 23 Aug 2022 07:42:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266F8D0210;
+        Tue, 23 Aug 2022 02:29:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 798E76155D;
-        Tue, 23 Aug 2022 08:57:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8009EC433D6;
-        Tue, 23 Aug 2022 08:57:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B378161174;
+        Tue, 23 Aug 2022 09:29:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE70DC433D6;
+        Tue, 23 Aug 2022 09:29:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245056;
-        bh=dA6ZEuwj7DPqjItnEoT4QchiUOKqV/ohRsxC0LHDOW0=;
+        s=korg; t=1661246985;
+        bh=BPjRKYlZVVLcttuktKVhBBeZgURIhOTGAyf0WJJ+PiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N1b+F7fNB8tWrLbVNpxaLlzkxg5iPt3gLA4KkK+FcoCGGarPgVe7Acp6bxM7SALHG
-         liy0b9Z8G57ab4G4lVuZWtxUcyRe5BK+Fi3hDYNseViYGRXBk2b93G5qla0AdZCamT
-         8UAydrWp7prprXg9E4z4V2cQwl7rjn33ujD7Gw+E=
+        b=ZJfWnMaBHPmXLm9PEjhmpXV4B+5miqytblPjerM1wABrG6zmnmK5H0igneoyX4t+K
+         kMFLZBbxGwKurOlH6P/34ntmBUmf/wL4xFPu88DYvYN5F5QhzqhgC5tHuxz4VnGVLi
+         6KrW2XbunLHgP2E2AxDLUxHoRy3+WsVf9EJ0UfNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 200/244] phy: samsung: phy-exynos-pcie: sanitize init/power_on callbacks
+        stable@vger.kernel.org, Douglas Gilbert <dgilbert@interlog.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.4 281/389] scsi: sg: Allow waiting for commands to complete on removed device
 Date:   Tue, 23 Aug 2022 10:25:59 +0200
-Message-Id: <20220823080106.152465127@linuxfoundation.org>
+Message-Id: <20220823080127.282757799@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,87 +55,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Tony Battersby <tonyb@cybernetics.com>
 
-[ Upstream commit f2812227bb07e2eaee74253f11cea1576945df31 ]
+commit 3455607fd7be10b449f5135c00dc306b85dc0d21 upstream.
 
-The exynos-pcie driver called phy_power_on() before phy_init() for some
-historical reasons. However the generic PHY framework assumes that the
-proper sequence is to call phy_init() first, then phy_power_on(). The
-operations done by both functions should be considered as one action and as
-such they are called by the exynos-pcie driver (without doing anything
-between them). The initialization is just a sequence of register writes,
-which cannot be altered without breaking the hardware operation.
+When a SCSI device is removed while in active use, currently sg will
+immediately return -ENODEV on any attempt to wait for active commands that
+were sent before the removal.  This is problematic for commands that use
+SG_FLAG_DIRECT_IO since the data buffer may still be in use by the kernel
+when userspace frees or reuses it after getting ENODEV, leading to
+corrupted userspace memory (in the case of READ-type commands) or corrupted
+data being sent to the device (in the case of WRITE-type commands).  This
+has been seen in practice when logging out of a iscsi_tcp session, where
+the iSCSI driver may still be processing commands after the device has been
+marked for removal.
 
-To match the generic PHY framework requirement, simply move all register
-writes to the phy_init()/phy_exit() and drop power_on()/power_off()
-callbacks. This way the driver will also work with the old (incorrect)
-PHY initialization call sequence.
+Change the policy to allow userspace to wait for active sg commands even
+when the device is being removed.  Return -ENODEV only when there are no
+more responses to read.
 
-Link: https://lore.kernel.org/r/20220628220409.26545-1-m.szyprowski@samsung.com
-Reported-by: Bjorn Helgaas <helgaas@kernel.org>
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-By: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/5ebea46f-fe83-2d0b-233d-d0dcb362dd0a@cybernetics.com
+Cc: <stable@vger.kernel.org>
+Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/phy/samsung/phy-exynos-pcie.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+ drivers/scsi/sg.c |   57 ++++++++++++++++++++++++++++++++----------------------
+ 1 file changed, 34 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/phy/samsung/phy-exynos-pcie.c b/drivers/phy/samsung/phy-exynos-pcie.c
-index 578cfe07d07a..53c9230c2907 100644
---- a/drivers/phy/samsung/phy-exynos-pcie.c
-+++ b/drivers/phy/samsung/phy-exynos-pcie.c
-@@ -51,6 +51,13 @@ static int exynos5433_pcie_phy_init(struct phy *phy)
- {
- 	struct exynos_pcie_phy *ep = phy_get_drvdata(phy);
- 
-+	regmap_update_bits(ep->pmureg, EXYNOS5433_PMU_PCIE_PHY_OFFSET,
-+			   BIT(0), 1);
-+	regmap_update_bits(ep->fsysreg, PCIE_EXYNOS5433_PHY_GLOBAL_RESET,
-+			   PCIE_APP_REQ_EXIT_L1_MODE, 0);
-+	regmap_update_bits(ep->fsysreg, PCIE_EXYNOS5433_PHY_L1SUB_CM_CON,
-+			   PCIE_REFCLK_GATING_EN, 0);
-+
- 	regmap_update_bits(ep->fsysreg,	PCIE_EXYNOS5433_PHY_COMMON_RESET,
- 			   PCIE_PHY_RESET, 1);
- 	regmap_update_bits(ep->fsysreg, PCIE_EXYNOS5433_PHY_MAC_RESET,
-@@ -109,20 +116,7 @@ static int exynos5433_pcie_phy_init(struct phy *phy)
- 	return 0;
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -190,7 +190,7 @@ static void sg_link_reserve(Sg_fd * sfp,
+ static void sg_unlink_reserve(Sg_fd * sfp, Sg_request * srp);
+ static Sg_fd *sg_add_sfp(Sg_device * sdp);
+ static void sg_remove_sfp(struct kref *);
+-static Sg_request *sg_get_rq_mark(Sg_fd * sfp, int pack_id);
++static Sg_request *sg_get_rq_mark(Sg_fd * sfp, int pack_id, bool *busy);
+ static Sg_request *sg_add_request(Sg_fd * sfp);
+ static int sg_remove_request(Sg_fd * sfp, Sg_request * srp);
+ static Sg_device *sg_get_dev(int dev);
+@@ -412,6 +412,7 @@ sg_read(struct file *filp, char __user *
+ 	Sg_fd *sfp;
+ 	Sg_request *srp;
+ 	int req_pack_id = -1;
++	bool busy;
+ 	sg_io_hdr_t *hp;
+ 	struct sg_header *old_hdr = NULL;
+ 	int retval = 0;
+@@ -459,25 +460,19 @@ sg_read(struct file *filp, char __user *
+ 		} else
+ 			req_pack_id = old_hdr->pack_id;
+ 	}
+-	srp = sg_get_rq_mark(sfp, req_pack_id);
++	srp = sg_get_rq_mark(sfp, req_pack_id, &busy);
+ 	if (!srp) {		/* now wait on packet to arrive */
+-		if (atomic_read(&sdp->detaching)) {
+-			retval = -ENODEV;
+-			goto free_old_hdr;
+-		}
+ 		if (filp->f_flags & O_NONBLOCK) {
+ 			retval = -EAGAIN;
+ 			goto free_old_hdr;
+ 		}
+ 		retval = wait_event_interruptible(sfp->read_wait,
+-			(atomic_read(&sdp->detaching) ||
+-			(srp = sg_get_rq_mark(sfp, req_pack_id))));
+-		if (atomic_read(&sdp->detaching)) {
+-			retval = -ENODEV;
+-			goto free_old_hdr;
+-		}
+-		if (retval) {
+-			/* -ERESTARTSYS as signal hit process */
++			((srp = sg_get_rq_mark(sfp, req_pack_id, &busy)) ||
++			(!busy && atomic_read(&sdp->detaching))));
++		if (!srp) {
++			/* signal or detaching */
++			if (!retval)
++				retval = -ENODEV;
+ 			goto free_old_hdr;
+ 		}
+ 	}
+@@ -928,9 +923,7 @@ sg_ioctl(struct file *filp, unsigned int
+ 		if (result < 0)
+ 			return result;
+ 		result = wait_event_interruptible(sfp->read_wait,
+-			(srp_done(sfp, srp) || atomic_read(&sdp->detaching)));
+-		if (atomic_read(&sdp->detaching))
+-			return -ENODEV;
++			srp_done(sfp, srp));
+ 		write_lock_irq(&sfp->rq_list_lock);
+ 		if (srp->done) {
+ 			srp->done = 2;
+@@ -2074,19 +2067,28 @@ sg_unlink_reserve(Sg_fd * sfp, Sg_reques
  }
  
--static int exynos5433_pcie_phy_power_on(struct phy *phy)
--{
--	struct exynos_pcie_phy *ep = phy_get_drvdata(phy);
--
--	regmap_update_bits(ep->pmureg, EXYNOS5433_PMU_PCIE_PHY_OFFSET,
--			   BIT(0), 1);
--	regmap_update_bits(ep->fsysreg, PCIE_EXYNOS5433_PHY_GLOBAL_RESET,
--			   PCIE_APP_REQ_EXIT_L1_MODE, 0);
--	regmap_update_bits(ep->fsysreg, PCIE_EXYNOS5433_PHY_L1SUB_CM_CON,
--			   PCIE_REFCLK_GATING_EN, 0);
--	return 0;
--}
--
--static int exynos5433_pcie_phy_power_off(struct phy *phy)
-+static int exynos5433_pcie_phy_exit(struct phy *phy)
+ static Sg_request *
+-sg_get_rq_mark(Sg_fd * sfp, int pack_id)
++sg_get_rq_mark(Sg_fd * sfp, int pack_id, bool *busy)
  {
- 	struct exynos_pcie_phy *ep = phy_get_drvdata(phy);
+ 	Sg_request *resp;
+ 	unsigned long iflags;
  
-@@ -135,8 +129,7 @@ static int exynos5433_pcie_phy_power_off(struct phy *phy)
++	*busy = false;
+ 	write_lock_irqsave(&sfp->rq_list_lock, iflags);
+ 	list_for_each_entry(resp, &sfp->rq_list, entry) {
+-		/* look for requests that are ready + not SG_IO owned */
+-		if ((1 == resp->done) && (!resp->sg_io_owned) &&
++		/* look for requests that are not SG_IO owned */
++		if ((!resp->sg_io_owned) &&
+ 		    ((-1 == pack_id) || (resp->header.pack_id == pack_id))) {
+-			resp->done = 2;	/* guard against other readers */
+-			write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
+-			return resp;
++			switch (resp->done) {
++			case 0: /* request active */
++				*busy = true;
++				break;
++			case 1: /* request done; response ready to return */
++				resp->done = 2;	/* guard against other readers */
++				write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
++				return resp;
++			case 2: /* response already being returned */
++				break;
++			}
+ 		}
+ 	}
+ 	write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
+@@ -2140,6 +2142,15 @@ sg_remove_request(Sg_fd * sfp, Sg_reques
+ 		res = 1;
+ 	}
+ 	write_unlock_irqrestore(&sfp->rq_list_lock, iflags);
++
++	/*
++	 * If the device is detaching, wakeup any readers in case we just
++	 * removed the last response, which would leave nothing for them to
++	 * return other than -ENODEV.
++	 */
++	if (unlikely(atomic_read(&sfp->parentdp->detaching)))
++		wake_up_interruptible_all(&sfp->read_wait);
++
+ 	return res;
+ }
  
- static const struct phy_ops exynos5433_phy_ops = {
- 	.init		= exynos5433_pcie_phy_init,
--	.power_on	= exynos5433_pcie_phy_power_on,
--	.power_off	= exynos5433_pcie_phy_power_off,
-+	.exit		= exynos5433_pcie_phy_exit,
- 	.owner		= THIS_MODULE,
- };
- 
--- 
-2.35.1
-
 
 

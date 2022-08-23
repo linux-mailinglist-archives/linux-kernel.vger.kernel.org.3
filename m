@@ -2,416 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0E359EEF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F6959EEEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiHWWX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S232681AbiHWWTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiHWWXZ (ORCPT
+        with ESMTP id S231559AbiHWWT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:23:25 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D310C9FC4;
-        Tue, 23 Aug 2022 15:23:23 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NLrSjm006810;
-        Tue, 23 Aug 2022 22:23:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=FUhXifoEgl3kcFSjGM45I4VymI/dEwRxen3q8TQrHzI=;
- b=AK4BCulOVuNZ2QzMOx1hlpej8gITRHrHo9enh90JMS02ysZD+Ip+66VkFgkrNtpg2z6/
- nZrSV60wPHDUAKpZN2iItOV9j9+Q8yBF5jJfJp1IajFuuxh6wqpr+wI0K8ubZHVTEbHw
- ZVMioFzsUAih926f+PLnFVCBeP1mrSApI984aHNWgUCXC5kL2sqv3cjA1GjciWjX5OG5
- x4zpjXcqc8AP+cqjjisGIlu6WUb0QNYUFIIUhfECTsYJs5J3BZ5PZWZxab3iZZXQiPng
- 2lJtzHSf4fEf4ayvfisMJAa4ZhQRPq/8qQf2cl2tkyyCIQEX9ZU1OcNWZ39yXnO0GRUa 3A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52pjgwxu-1
+        Tue, 23 Aug 2022 18:19:28 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD21780F7C;
+        Tue, 23 Aug 2022 15:19:26 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NJkaQT008019;
+        Tue, 23 Aug 2022 15:19:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=dDjavq2niKmX31TWVeHKSFPAcxSWjgfC8vW2OTRYEzs=;
+ b=gR9nAONSuNdYw3w5GJqg4x+KvZi/QTfasm7kSHGMErahhtW7KTl2vbzaAW+KllfMa+io
+ feCjsn6K9mST849I02rO0yzmjNRCzQr49X5Ttasl3E2/t57bJu+g7zaMnkmnLT78LrJX
+ LfZ08FWwvCimhZ4wi0lHYxZC17n2RPBExVs= 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j4ywnbv94-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 22:23:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27NMIFUu030694
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 22:18:16 GMT
-Received: from [10.111.161.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 23 Aug
- 2022 15:18:12 -0700
-Message-ID: <6c080829-b3c1-8217-37e5-7f515118d840@quicinc.com>
-Date:   Tue, 23 Aug 2022 15:18:10 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dp: add atomic_check to bridge ops
+        Tue, 23 Aug 2022 15:19:25 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WUsXYCW5QAjwbGpTYo8+gGyL1/8mFsWVnwQoahPGFTXWZE61njGETYUafyXVPn/YbJxeCHZ3QXhdAV+7WkB+NGKXpaXH+1E8h+S9wZMoq8Gntp2Ymg90rkvQFyq03z4DjIljSKQpU8qEWbPqB7u8qF2lWZeupSw8iZVEF53+eEGpcTR+VSCmMlse2DEGlcDV0R2cvGLz1VBvlGuj5R3kJvtpb8aqFinHO2DvFfZVRgmEsXBwsszDfk9zhL/+F8mFMaNGefyQCAIscJ0bV246JjIXbhpaNw/lxA/tyqRXzXQHYxLZdTTw8GNHuRe0HI48MzP2DL2AqDOudaUHp1hjdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dDjavq2niKmX31TWVeHKSFPAcxSWjgfC8vW2OTRYEzs=;
+ b=JoeEODcoVRQX9fYeKfQlaxMWPBvKRoDuexEIEetnInC6Gb8fQY9C9sbB9Io21bv+fZ7KA26m0UWJMTW3KucZHAAsOogWcLt9bQv5lVVP+D6wu8qvOxqT5RhEM0KeH4aq8eMvkd+/L0ZsjnjBawMkPG2hFO+dV1Bq3sb2Xwjic1J+WoKl7i/XmoEITr8kf6220398MiG8kq252PaLlO8caBZX7tOPLWhBb4uP/JvJP8gn6T0AmpGu6trxVOyKPbMyzk0M2k3zw7sUMF361edU/RudReBuhq/y6c2xC1XQ5uoQtk4hLJbj9PMxa4cwCdnzxAE3IKjyoqm3L6AjpNhdIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by DM6PR15MB3260.namprd15.prod.outlook.com (2603:10b6:5:169::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Tue, 23 Aug
+ 2022 22:19:19 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::c488:891f:57b:d5da]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::c488:891f:57b:d5da%8]) with mapi id 15.20.5546.024; Tue, 23 Aug 2022
+ 22:19:19 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+Thread-Topic: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
+Thread-Index: AQHYtzPeWFYcAGzsN0Wstq4jJDfNwK29Dl6A
+Date:   Tue, 23 Aug 2022 22:19:19 +0000
+Message-ID: <95708205-66EA-4622-A580-FD234E6CE2DA@fb.com>
+References: <20220823210354.1407473-1-namhyung@kernel.org>
+In-Reply-To: <20220823210354.1407473-1-namhyung@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_sbillaka@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <quic_aravindh@quicinc.com>, <freedreno@lists.freedesktop.org>
-References: <1660759314-28088-1-git-send-email-quic_khsieh@quicinc.com>
- <f211520a-cb9c-1202-0752-7bb200726ae8@linaro.org>
- <d4b3c303-fc20-537d-0e69-6e19826b6e59@quicinc.com>
- <266c0531-344e-5589-2143-02ab1fe9b276@linaro.org>
- <724d695d-0293-db81-7014-57cb96bd6d4b@quicinc.com>
- <bb153360-6567-c4d5-dc23-8586549df8c8@linaro.org>
- <13509c06-cf2b-e37b-d8ec-b5cc5370f566@quicinc.com>
-In-Reply-To: <13509c06-cf2b-e37b-d8ec-b5cc5370f566@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: I5VvvElnn9VXzXHNRcgwfQ_e-Rapo9h5
-X-Proofpoint-GUID: I5VvvElnn9VXzXHNRcgwfQ_e-Rapo9h5
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 132e4804-d85d-4269-9119-08da85558637
+x-ms-traffictypediagnostic: DM6PR15MB3260:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZQZdSMeDateV8nLmcjSzT1d366D7McVMTT8t+a++lEmuke2Itqu5T9qr842SVTtGaxafD2Fr5rghrMvOoTNvKIfmX0KEjM+RknnUmNhxsaDE4cvE1bdc418+1cN304zNBKTmSHXBBwTIZ9kFPfbXGHa3Mf5kJrknIAhySbYKi8NM0/gqVwwNGLzu5X2h6izCp46jxtI1ekT7F16MPExCmYlmqBa3brKa8/jZSCNJ3CCMz/1HJiSsubScAEI+LgfCIUEHApGDGDIMXaXeIzi7HO6JqEQjH3/bgN9tN/wb1owJtQ+6iCDgSLHnEKBkpsmK6ynAyIbGs1FAdX4VsqLBotyY1pwYR0XhiOBq/yUdRH/FIpMXLH04jaco5YdoUsdusnN+s3QlAkZHxOM9wGHrlBU/0AS2DlymtQLXmEYq/JjVkCd8eCAcGJnSHXdbwqQMqsnu65gw1qmaQQTS3l6CNTTx/sHNYf/i4lz+KVAo9j6dwDpnT+1alnrpJJr8Qmck2mPm49Rqdjr+0aGTONTAVpHW6thK+pgstNmaXWRQY+BK5hAOjAOd954Duv8X+XZ0fEUABYk/wvyTGrPNx6rBHa33nqee2h7n/bF7AR/PzPIVJD/sX5BpX3tBOCuwh5g1sMlOJQbWr6RcffSt7KPrAvXZxCsx7hVkN5t4u/Acn0t4yMH8Bgpa8YvX0XcwLnIp23YoTUS66Aoc3gE9QeIuxfysHnAw00o26yWd41iAh8glAYkFOTqzmAssYrn6Blz0MWiQ/eeA92zEyG0s4lUyaMNRTt3ZREeh13hU2JC0VXo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(83380400001)(53546011)(6512007)(2616005)(33656002)(186003)(2906002)(6506007)(38070700005)(86362001)(38100700002)(122000001)(66946007)(7416002)(6486002)(66556008)(66446008)(76116006)(5660300002)(41300700001)(316002)(6916009)(36756003)(54906003)(8676002)(8936002)(478600001)(66476007)(71200400001)(64756008)(4326008)(91956017)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7of3HnzbLgNR7sl3FwCgHpXZhr2LDQsrITwDzbd777o+DBDLRaorAoYFhpz0?=
+ =?us-ascii?Q?GjVT7Gmx0TMh9Sn4QWanmW2DUwzo86UHK4OV7RTMr+xa+llNhC24sGGvqnqp?=
+ =?us-ascii?Q?0shNrWSH03gEIratfPOm9b+tFFQ2LHqXjXUl0YzWc8fzPezHO/Emd8bgt8BO?=
+ =?us-ascii?Q?ItOEQ5m4TJJJQl0dqeqdgD9h0DVggjpKjUL0ioxFw1Sfp92d5vU9nHaiIPPj?=
+ =?us-ascii?Q?x0fOSEw4moJ16jml0PYHeSDKdg9mfqTM/vhfPa25dcn3YOK3aexUnSGJYSbk?=
+ =?us-ascii?Q?5kuGDojdeGVhcEYxU81GZ2JLUsBu3niphXluz0rlafb8kX+aLBRlDtTSUf6x?=
+ =?us-ascii?Q?JlE595dbh1ESWiYuZsnWHJdQqF4BmRoWfWzUs6D8zilTknt7s0KEaOPKRYwI?=
+ =?us-ascii?Q?lKJ1vjsPnsn9aVI/9bOMvcgGG7zniF0NCJX/2D/pOYlBodJ3cz0ksZ3jwm8c?=
+ =?us-ascii?Q?ak3mCkF/wJZZikGDw3DOFIaTFx5voJFf6Zv8MV8a112WMVD+4tgeTWkceoKu?=
+ =?us-ascii?Q?c2mr+DTzu9ArYJ4Dp0ksX+kW8wBhNwI6XKgT8O49cplIyRMCJSaEC1EEmdLo?=
+ =?us-ascii?Q?auYtCrxaIvDacDM+1IyERjRXFV2cbBa0+YjwY5uhfUnXnQWhBR0eOb5j6eUV?=
+ =?us-ascii?Q?RizgtvXgHaHBozEADP9iObGHBu6mqSHVHYIP6dX2iPb2hrtuMe7vlBklVNJ0?=
+ =?us-ascii?Q?k44wXSn7peCMCxIHbq9L03x4JedqUbRdSQjIwIue26X1Yz0DaVkG0t53vSWN?=
+ =?us-ascii?Q?+0yw5yIW6B2jQZwcn1Q4nIfAmnV1YaKtS3h1IYdJsX9Ljk6BVsuaFaR86Z2S?=
+ =?us-ascii?Q?QEbHhuxonweHATXYNHBgPWQ9/B6VyIILM0KVwjbLdgi/TZVhZjqo8fKJt2Z+?=
+ =?us-ascii?Q?RM3HPEglciWnZ5+rKYA1IFap0l+9cH3LLvMnVexFYHipxsbbJ+sLj426RdpB?=
+ =?us-ascii?Q?X+flL7sv2z0986SNiV0+Fv9HuySHbi9clVhmV4R6t1EFAGN94JXwjAiRz4D0?=
+ =?us-ascii?Q?7v37vYQmC/lYzu3kwRVktRu5PRRGmSUNlpSCVcmEAZGeKH9OJfbOOYUFjhvn?=
+ =?us-ascii?Q?8PP9enZJuQfly4oS0susu7qLzu7t1azrLoXwDsgKtEp1/GN9KdVYFeAwdNRK?=
+ =?us-ascii?Q?d/aHzd2t2RfjhaoEhZ0V3wV8iMNCiGpL2w8G3Z0UaKwU10k9PNmTohKJcunG?=
+ =?us-ascii?Q?O0FVY5xFpXRtnrkGSaE63dr6bfoNJ+TKe1fTalds6aB40NRTpfF6sneh5UPa?=
+ =?us-ascii?Q?8DL/+m9ntlRnDqtxQP9d7Srw4ccuRfa+1Ox07P5hXzGKl6T/jVgZdEsKWba3?=
+ =?us-ascii?Q?kIFnbqIBnfzb3nqLfifSTtsC8BNY03IKszHA7LxQiDETtZEW3lgH7G982DO9?=
+ =?us-ascii?Q?Q3BG8fUZzrtqpU80H3HACiM7N/MdLqwOGacNFePe7sTkMvx/Ah7Em6aYN1bL?=
+ =?us-ascii?Q?NQcDxmSimNTs5ksDZvrFePH8G6ArspEIRRpi8byqJkeCpYqPSJrsXo5PBEsp?=
+ =?us-ascii?Q?dbZmqK4RFCpwW7Rh6au+3jqJnXC5oy8M9B8CrYgVlWMuYmXGCXaIWEp5OLkC?=
+ =?us-ascii?Q?dxLSiJyNDqaX3dGWHXJ0E4UVNfWutjs21OTlQ0LPKXml8YOG6rXMcGs0lXqc?=
+ =?us-ascii?Q?IrU9OvI9xjNw49WWjfkcej4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F733428D8A721B4FABA859396540780F@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 132e4804-d85d-4269-9119-08da85558637
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2022 22:19:19.6693
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jFi1UrrACnfc63i+I2T8rw7tzqEVqtNS9KHk0LSxW83TwG9zt1kXs/OJyFO0R8/aHmOKeAzJbeFxFoGr+uDtHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3260
+X-Proofpoint-ORIG-GUID: NEjeUtA9Rwc21xtbt7ZHbAMAyyLr6KyH
+X-Proofpoint-GUID: NEjeUtA9Rwc21xtbt7ZHbAMAyyLr6KyH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-23_09,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
- suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208230083
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry missed one response,
 
-On 8/23/2022 3:07 PM, Abhinav Kumar wrote:
-> 
-> 
-> On 8/22/2022 11:33 AM, Dmitry Baryshkov wrote:
->> On 22/08/2022 20:32, Abhinav Kumar wrote:
->>>
->>>
->>> On 8/22/2022 9:49 AM, Dmitry Baryshkov wrote:
->>>> On 22/08/2022 19:38, Abhinav Kumar wrote:
->>>>> Hi Dmitry
->>>>>
->>>>> On 8/22/2022 9:18 AM, Dmitry Baryshkov wrote:
->>>>>> On 17/08/2022 21:01, Kuogee Hsieh wrote:
->>>>>>> DRM commit_tails() will disable downstream crtc/encoder/bridge if
->>>>>>> both disable crtc is required and crtc->active is set before pushing
->>>>>>> a new frame downstream.
->>>>>>>
->>>>>>> There is a rare case that user space display manager issue an extra
->>>>>>> screen update immediately followed by close DRM device while down
->>>>>>> stream display interface is disabled. This extra screen update will
->>>>>>> timeout due to the downstream interface is disabled but will cause
->>>>>>> crtc->active be set. Hence the followed commit_tails() called by
->>>>>>> drm_release() will pass the disable downstream crtc/encoder/bridge
->>>>>>> conditions checking even downstream interface is disabled.
->>>>>>> This cause the crash to happen at dp_bridge_disable() due to it 
->>>>>>> trying
->>>>>>> to access the main link register to push the idle pattern out 
->>>>>>> while main
->>>>>>> link clocks is disabled.
->>>>>>>
->>>>>>> This patch adds atomic_check to prevent the extra frame will not
->>>>>>> be pushed down if display interface is down so that crtc->active
->>>>>>> will not be set neither. This will fail the conditions checking
->>>>>>> of disabling down stream crtc/encoder/bridge which prevent
->>>>>>> drm_release() from calling dp_bridge_disable() so that crash
->>>>>>> at dp_bridge_disable() prevented.
->>>>>>
->>>>>> I must admit I had troubles parsing this description. However if I 
->>>>>> got you right, I think the check that the main link clock is 
->>>>>> running in the dp_bridge_disable() or dp_ctrl_push_idle() would be 
->>>>>> a better fix.
->>>>>
->>>>> Originally, thats what was posted 
->>>>> https://patchwork.freedesktop.org/patch/496984/.
->>>>
->>>> This patch is also not so correct from my POV. It checks for the hpd 
->>>> status, while in reality it should check for main link clocks being 
->>>> enabled.
->>>>
->>>
->>> We can push another fix to check for the clk state instead of the hpd 
->>> status. But I must say we are again just masking something which the 
->>> fwk should have avoided isnt it?
->>>
->>> As per the doc in the include/drm/drm_bridge.h it says,
->>>
->>> "*
->>>   * The bridge can assume that the display pipe (i.e. clocks and timing
->>>   * signals) feeding it is still running when this callback is called.
->>>   *"
->>
->> Yes, that's what I meant about this chunk begging to go to the core. 
->> In my opinion, if we are talking about the disconnected sinks, it is 
->> the framework who should disallow submitting the frames to the 
->> disconnected sinks.
->>
->>>
->>> By adding an extra layers of protection in the driver, we are just 
->>> avoiding another issue but the commit should not have been issued in 
->>> the first place.
->>>
->>> So shouldnt we do both then? That is add protection to check if clock 
->>> is ON and also, reject commits when display is disconnected.
->>>
->>>>>
->>>>> Then it seemed like we were just protecting against an issue in the 
->>>>> framework which was allowing the frames to be pushed even after the 
->>>>> display was disconnected. The DP driver did send out the disconnect 
->>>>> event correctly and as per the logs, this frame came down after 
->>>>> that and the DRM fwk did allow it.
->>>>>
->>>>> So after discussing on IRC with Rob, we came up with this approach 
->>>>> that
->>>>> if the display is not connected, then atomic_check should fail. 
->>>>> That way the commit will not happen.
->>>>>
->>>>> Just seemed a bit cleaner instead of adding all our protections.
->>>>
->>>> The check to fail atomic_check if display is not connected seems out 
->>>> of place. In its current way it begs go to the upper layer, 
->>>> forbidding using disconnected sinks for all the drivers. There is 
->>>> nothing special in the MSM DP driver with respect to the HPD events 
->>>> processing and failing atomic_check() based on that.
->>>>
->>>
->>> Why all the drivers? This is only for MSM DP bridge.
->>
->> Yes, we change the MSM DRM driver. But the check is generic enough. 
->> I'm not actually insisting on pushing the check to the core, just 
->> trying to understand the real cause here.
->>
->>>
-> 
-> I actually wanted to push this to the core and thats what I had 
-> originally asked on IRC because it does seem to be generic enough that 
-> it should belong to the core but after discussion with Rob on freedreno, 
-> he felt this was a better approach because for some of the legacy 
-> connectors like VGA, this need not belong to the DRM core, hence we went 
-> with this approach.
-> 
->>>>>
->>>>>>
->>>>>>>
->>>>>>> SError Interrupt on CPU7, code 0x00000000be000411 -- SError
->>>>>>> CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
->>>>>>> Hardware name: Google Lazor (rev3 - 8) (DT)
->>>>>>> pstate: a04000c9 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>>>>>> pc : __cmpxchg_case_acq_32+0x14/0x2c
->>>>>>> lr : do_raw_spin_lock+0xa4/0xdc
->>>>>>> sp : ffffffc01092b6a0
->>>>>>> x29: ffffffc01092b6a0 x28: 0000000000000028 x27: 0000000000000038
->>>>>>> x26: 0000000000000004 x25: ffffffd2973dce48 x24: 0000000000000000
->>>>>>> x23: 00000000ffffffff x22: 00000000ffffffff x21: ffffffd2978d0008
->>>>>>> x20: ffffffd2978d0008 x19: ffffff80ff759fc0 x18: 0000000000000000
->>>>>>> x17: 004800a501260460 x16: 0441043b04600438 x15: 04380000089807d0
->>>>>>> x14: 07b0089807800780 x13: 0000000000000000 x12: 0000000000000000
->>>>>>> x11: 0000000000000438 x10: 00000000000007d0 x9 : ffffffd2973e09e4
->>>>>>> x8 : ffffff8092d53300 x7 : ffffff808902e8b8 x6 : 0000000000000001
->>>>>>> x5 : ffffff808902e880 x4 : 0000000000000000 x3 : ffffff80ff759fc0
->>>>>>> x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffffff80ff759fc0
->>>>>>> Kernel panic - not syncing: Asynchronous SError Interrupt
->>>>>>> CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
->>>>>>> Hardware name: Google Lazor (rev3 - 8) (DT)
->>>>>>> Call trace:
->>>>>>>   dump_backtrace.part.0+0xbc/0xe4
->>>>>>>   show_stack+0x24/0x70
->>>>>>>   dump_stack_lvl+0x68/0x84
->>>>>>>   dump_stack+0x18/0x34
->>>>>>>   panic+0x14c/0x32c
->>>>>>>   nmi_panic+0x58/0x7c
->>>>>>>   arm64_serror_panic+0x78/0x84
->>>>>>>   do_serror+0x40/0x64
->>>>>>>   el1h_64_error_handler+0x30/0x48
->>>>>>>   el1h_64_error+0x68/0x6c
->>>>>>>   __cmpxchg_case_acq_32+0x14/0x2c
->>>>>>>   _raw_spin_lock_irqsave+0x38/0x4c
->>
->> You know, after re-reading the trace, I could not help but notice that 
->> the issue seems to be related to completion/timer/spinlock memory 
->> becoming unavailable rather than disabling the main link clock.
->> See, the SError comes in the spin_lock path, not during register read.
->>
->> Thus I think the commit message is a bit misleading.
->>
-> 
-> No, this issue is due to unclocked access. Please check this part of the 
-> stack:
-> 
->  >>>>>>   wait_for_completion_timeout+0x2c/0x54
->  >>>>>>   dp_ctrl_push_idle+0x40/0x88
->  >>>>>>   dp_bridge_disable+0x24/0x30
->  >>>>>>   drm_atomic_bridge_chain_disable+0x90/0xbc
->  >>>>>>   drm_atomic_helper_commit_modeset_disables+0x198/0x444
->  >>>>>>   msm_atomic_commit_tail+0x1d0/0x374
->  >>>>>>   commit_tail+0x80/0x108
->  >>>>>>   drm_atomic_helper_commit+0x118/0x11c
->  >>>>>>   drm_atomic_commit+0xb4/0xe0
->  >>>>>>   drm_client_modeset_commit_atomic+0x184/0x224
->  >>>>>>   drm_client_modeset_commit_locked+0x58/0x160
->  >>>>>>   drm_client_modeset_commit+0x3c/0x64
-> 
->> Can we please get a trace checking which calls were actually made for 
->> the dp bridge and if the dp/dp->ctrl memory pointers are correct?
->>
->> I do not see the dp_display_disable() being called. Maybe I just 
->> missed the call.
->>
-> 
-> Yes it is called, please refer to the above part of the stack that I 
-> have pasted.
-> 
->>
->>>>>>>   lock_timer_base+0x40/0x78
->>>>>>>   __mod_timer+0xf4/0x25c
->>>>>>>   schedule_timeout+0xd4/0xfc
->>>>>>>   __wait_for_common+0xac/0x140
->>>>>>>   wait_for_completion_timeout+0x2c/0x54
->>>>>>>   dp_ctrl_push_idle+0x40/0x88
->>>>>>>   dp_bridge_disable+0x24/0x30
->>>>>>>   drm_atomic_bridge_chain_disable+0x90/0xbc
->>>>>>>   drm_atomic_helper_commit_modeset_disables+0x198/0x444
->>>>>>>   msm_atomic_commit_tail+0x1d0/0x374
->>>>>>>   commit_tail+0x80/0x108
->>>>>>>   drm_atomic_helper_commit+0x118/0x11c
->>>>>>>   drm_atomic_commit+0xb4/0xe0
->>>>>>>   drm_client_modeset_commit_atomic+0x184/0x224
->>>>>>>   drm_client_modeset_commit_locked+0x58/0x160
->>>>>>>   drm_client_modeset_commit+0x3c/0x64
->>>>>>>   __drm_fb_helper_restore_fbdev_mode_unlocked+0x98/0xac
->>>>>>>   drm_fb_helper_set_par+0x74/0x80
->>>>>>>   drm_fb_helper_hotplug_event+0xdc/0xe0
->>>>>>>   __drm_fb_helper_restore_fbdev_mode_unlocked+0x7c/0xac
->>>>>>>   drm_fb_helper_restore_fbdev_mode_unlocked+0x20/0x2c
->>>>>>>   drm_fb_helper_lastclose+0x20/0x2c
->>>>>>>   drm_lastclose+0x44/0x6c
->>>>>>>   drm_release+0x88/0xd4
->>>>>>>   __fput+0x104/0x220
->>>>>>>   ____fput+0x1c/0x28
->>>>>>>   task_work_run+0x8c/0x100
->>>>>>>   do_exit+0x450/0x8d0
->>>>>>>   do_group_exit+0x40/0xac
->>>>>>>   __wake_up_parent+0x0/0x38
->>>>>>>   invoke_syscall+0x84/0x11c
->>>>>>>   el0_svc_common.constprop.0+0xb8/0xe4
->>>>>>>   do_el0_svc+0x8c/0xb8
->>>>>>>   el0_svc+0x2c/0x54
->>>>>>>   el0t_64_sync_handler+0x120/0x1c0
->>>>>>>   el0t_64_sync+0x190/0x194
->>>>>>> SMP: stopping secondary CPUs
->>>>>>> Kernel Offset: 0x128e800000 from 0xffffffc008000000
->>>>>>> PHYS_OFFSET: 0x80000000
->>>>>>> CPU features: 0x800,00c2a015,19801c82
->>>>>>> Memory Limit: none
->>>>>>>
->>>>>>> Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for 
->>>>>>> display enable and disable")
->>>>>>> Reported-by: Leonard Lausen <leonard@lausen.nl>
->>>>>>> Suggested-by: Rob Clark <robdclark@gmail.com>
->>>>>>> Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/17
->>>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>>>> ---
->>>>>>>   drivers/gpu/drm/msm/dp/dp_drm.c | 23 +++++++++++++++++++++++
->>>>>>>   1 file changed, 23 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c 
->>>>>>> b/drivers/gpu/drm/msm/dp/dp_drm.c
->>>>>>> index 6df25f7..c682588 100644
->>>>>>> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
->>>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
->>>>>>> @@ -31,6 +31,25 @@ static enum drm_connector_status 
->>>>>>> dp_bridge_detect(struct drm_bridge *bridge)
->>>>>>>                       connector_status_disconnected;
->>>>>>>   }
->>>>>>> +static int dp_bridge_atomic_check(struct drm_bridge *bridge,
->>>>>>> +                struct drm_bridge_state *bridge_state,
->>>>>>> +                struct drm_crtc_state *crtc_state,
->>>>>>> +                struct drm_connector_state *conn_state)
->>>>>>> +{
->>>>>>> +    struct msm_dp *dp;
->>>>>>> +
->>>>>>> +    dp = to_dp_bridge(bridge)->dp_display;
->>>>>>> +
->>>>>>> +    drm_dbg_dp(dp->drm_dev, "is_connected = %s\n",
->>>>>>> +        (dp->is_connected) ? "true" : "false");
->>>>>>> +
->>>>>>> +    if (bridge->ops & DRM_BRIDGE_OP_HPD)
->>>>>>> +        return (dp->is_connected) ? 0 : -ENOTCONN;
->>>>
->>>> This raises questions if this will work for the configurations when 
->>>> other bridge is used for HPD events.
->>>>
->>>> Let's not mix the levels of processing. If we should not disable the 
->>>> link because it is already disabled, let's just do so rather than 
->>>> failing the atomic_check().
->>>>
->>>
->>> This is only for MSM DP's bridge. If we use another bridge which is 
->>> capable of handling its own HPD, then that time MSM DP's bridge 
->>> shouldnt set this flag.
->>
->> Not quite. The bridges set the ops to describe the ops that they 
->> support themselves. Then the drm_bridge_connectors selects the bridge 
->> handling hpd, etc. So the DRM_BRIDGE_OP_HPD is always set for DP 
->> sources. But the question is quite the opposite: if we have the next 
->> bridge (e.g. the usb-c-connector or the display-connector), will the 
->> is_connected field be set correctly?
->>
 
-Ah I got your concern now, I would say Yes because looking at Bjorn's 
-change https://patchwork.freedesktop.org/patch/496925/, I can see that
-the next bridge would call into dp_bridge_hpd_notify() which calls 
-dp_display_send_hpd_notification() finally setting 
-dp->dp_display.is_connected to true.
+> On Aug 23, 2022, at 2:03 PM, Namhyung Kim <namhyung@kernel.org> wrote:
+> 
+> The helper is for BPF programs attached to perf_event in order to read
+> event-specific raw data.  I followed the convention of the
+> bpf_read_branch_records() helper so that it can tell the size of
+> record using BPF_F_GET_RAW_RECORD flag.
+> 
+> The use case is to filter perf event samples based on the HW provided
+> data which have more detailed information about the sample.
+> 
+> Note that it only reads the first fragment of the raw record.  But it
+> seems mostly ok since all the existing PMU raw data have only single
+> fragment and the multi-fragment records are only for BPF output attached
+> to sockets.  So unless it's used with such an extreme case, it'd work
+> for most of tracing use cases.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> I don't know how to test this.  As the raw data is available on some
+> hardware PMU only (e.g. AMD IBS).  I tried a tracepoint event but it was
+> rejected by the verifier.  Actually it needs a bpf_perf_event_data
+> context so that's not an option IIUC.
 
->>>
->>> We can even replace this check with just checking if connector_type 
->>> is DP but that would again open the discussion of having DP/eDP 
->>> specific checks so we did it this way.
->>>
->>>
->>>>>>> +
->>>>>>> +    return 0;
->>>>>>> +}
->>>>>>> +
->>>>>>> +
->>>>>>>   /**
->>>>>>>    * dp_bridge_get_modes - callback to add drm modes via 
->>>>>>> drm_mode_probed_add()
->>>>>>>    * @bridge: Poiner to drm bridge
->>>>>>> @@ -61,6 +80,9 @@ static int dp_bridge_get_modes(struct 
->>>>>>> drm_bridge *bridge, struct drm_connector *
->>>>>>>   }
->>>>>>>   static const struct drm_bridge_funcs dp_bridge_ops = {
->>>>>>> +    .atomic_duplicate_state = 
->>>>>>> drm_atomic_helper_bridge_duplicate_state,
->>>>>>> +    .atomic_destroy_state   = 
->>>>>>> drm_atomic_helper_bridge_destroy_state,
->>>>>>> +    .atomic_reset           = drm_atomic_helper_bridge_reset,
->>>>>>>       .enable       = dp_bridge_enable,
->>>>>>>       .disable      = dp_bridge_disable,
->>>>>>>       .post_disable = dp_bridge_post_disable,
->>>>>>> @@ -68,6 +90,7 @@ static const struct drm_bridge_funcs 
->>>>>>> dp_bridge_ops = {
->>>>>>>       .mode_valid   = dp_bridge_mode_valid,
->>>>>>>       .get_modes    = dp_bridge_get_modes,
->>>>>>>       .detect       = dp_bridge_detect,
->>>>>>> +    .atomic_check = dp_bridge_atomic_check,
->>>>>>>   };
->>>>>>>   struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, 
->>>>>>> struct drm_device *dev,
->>>>>>
->>>>
->>
+Can we add a software event that generates raw data for testing? 
+
+Thanks,
+Song
+
+
+> 
+> include/uapi/linux/bpf.h | 23 ++++++++++++++++++++++
+> kernel/trace/bpf_trace.c | 41 ++++++++++++++++++++++++++++++++++++++++
+> 2 files changed, 64 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 934a2a8beb87..af7f70564819 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5355,6 +5355,23 @@ union bpf_attr {
+>  *	Return
+>  *		Current *ktime*.
+>  *
+> + * long bpf_read_raw_record(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
+> + *	Description
+> + *		For an eBPF program attached to a perf event, retrieve the
+> + *		raw record associated to *ctx* and store it in the buffer
+> + *		pointed by *buf* up to size *size* bytes.
+> + *	Return
+> + *		On success, number of bytes written to *buf*. On error, a
+> + *		negative value.
+> + *
+> + *		The *flags* can be set to **BPF_F_GET_RAW_RECORD_SIZE** to
+> + *		instead return the number of bytes required to store the raw
+> + *		record. If this flag is set, *buf* may be NULL.
+> + *
+> + *		**-EINVAL** if arguments invalid or **size** not a multiple
+> + *		of **sizeof**\ (u64\ ).
+> + *
+> + *		**-ENOENT** if the event does not have raw records.
+>  */
+> #define __BPF_FUNC_MAPPER(FN)		\
+> 	FN(unspec),			\
+> @@ -5566,6 +5583,7 @@ union bpf_attr {
+> 	FN(tcp_raw_check_syncookie_ipv4),	\
+> 	FN(tcp_raw_check_syncookie_ipv6),	\
+> 	FN(ktime_get_tai_ns),		\
+> +	FN(read_raw_record),		\
+> 	/* */
+> 
+> /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> @@ -5749,6 +5767,11 @@ enum {
+> 	BPF_F_EXCLUDE_INGRESS	= (1ULL << 4),
+> };
+> 
+> +/* BPF_FUNC_read_raw_record flags. */
+> +enum {
+> +	BPF_F_GET_RAW_RECORD_SIZE	= (1ULL << 0),
+> +};
+> +
+> #define __bpf_md_ptr(type, name)	\
+> union {					\
+> 	type name;			\
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 68e5cdd24cef..db172b12e5f8 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -20,6 +20,7 @@
+> #include <linux/fprobe.h>
+> #include <linux/bsearch.h>
+> #include <linux/sort.h>
+> +#include <linux/perf_event.h>
+> 
+> #include <net/bpf_sk_storage.h>
+> 
+> @@ -1532,6 +1533,44 @@ static const struct bpf_func_proto bpf_read_branch_records_proto = {
+> 	.arg4_type      = ARG_ANYTHING,
+> };
+> 
+> +BPF_CALL_4(bpf_read_raw_record, struct bpf_perf_event_data_kern *, ctx,
+> +	   void *, buf, u32, size, u64, flags)
+> +{
+> +	struct perf_raw_record *raw = ctx->data->raw;
+> +	struct perf_raw_frag *frag;
+> +	u32 to_copy;
+> +
+> +	if (unlikely(flags & ~BPF_F_GET_RAW_RECORD_SIZE))
+> +		return -EINVAL;
+> +
+> +	if (unlikely(!raw))
+> +		return -ENOENT;
+> +
+> +	if (flags & BPF_F_GET_RAW_RECORD_SIZE)
+> +		return raw->size;
+> +
+> +	if (!buf || (size % sizeof(u32) != 0))
+> +		return -EINVAL;
+> +
+> +	frag = &raw->frag;
+> +	WARN_ON_ONCE(!perf_raw_frag_last(frag));
+> +
+> +	to_copy = min_t(u32, frag->size, size);
+> +	memcpy(buf, frag->data, to_copy);
+> +
+> +	return to_copy;
+> +}
+> +
+> +static const struct bpf_func_proto bpf_read_raw_record_proto = {
+> +	.func           = bpf_read_raw_record,
+> +	.gpl_only       = true,
+> +	.ret_type       = RET_INTEGER,
+> +	.arg1_type      = ARG_PTR_TO_CTX,
+> +	.arg2_type      = ARG_PTR_TO_MEM_OR_NULL,
+> +	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
+> +	.arg4_type      = ARG_ANYTHING,
+> +};
+> +
+> static const struct bpf_func_proto *
+> pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> {
+> @@ -1548,6 +1587,8 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> 		return &bpf_read_branch_records_proto;
+> 	case BPF_FUNC_get_attach_cookie:
+> 		return &bpf_get_attach_cookie_proto_pe;
+> +	case BPF_FUNC_read_raw_record:
+> +		return &bpf_read_raw_record_proto;
+> 	default:
+> 		return bpf_tracing_func_proto(func_id, prog);
+> 	}
+> -- 
+> 2.37.2.609.g9ff673ca1a-goog
+> 
+

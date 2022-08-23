@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940D159DD18
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4E959DC82
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356026AbiHWKqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S1353350AbiHWKOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355495AbiHWKij (ORCPT
+        with ESMTP id S1352806AbiHWKGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:38:39 -0400
+        Tue, 23 Aug 2022 06:06:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334401EEF5;
-        Tue, 23 Aug 2022 02:07:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDCF25C59;
+        Tue, 23 Aug 2022 01:53:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCB9F6159E;
-        Tue, 23 Aug 2022 09:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57E0C433C1;
-        Tue, 23 Aug 2022 09:07:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51E6461377;
+        Tue, 23 Aug 2022 08:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BF5C433C1;
+        Tue, 23 Aug 2022 08:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245669;
-        bh=boTzLUsBAj1F2wZ4ou4VPjMXnGttbkrUw1RUr52Rtk0=;
+        s=korg; t=1661244783;
+        bh=Wm76leAtdAQRADGFxpYZND+YCExrA9wLWggAG8r2BQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JG0Jtf+re1XvJnpW2gquyZUiSIg0EBTfTLEmL1a8gwzPjB1b3c+RNzhDXLQLvqyi2
-         NsReil7pCmrgm1m9L5cT4ctsBRpnVU9a13r78SnS6GXNV4XUEM+xt6SwRPhQiJNbxJ
-         Ph44O/kChSlvgSRZbrRzC0nXPgxVqcP6yKEYOPLY=
+        b=jNdW4woIuuMuxxiNnfbcA+w3E6Uv0/zAru4vTU/iaE5bN7fvsjozSWx0Fl3BqVn5M
+         sepbMt6xNomyeCOQUovuuL2OA1pM/7vLLIE5A8XhaVFpW9aMHyl+vqLFxMH3zPWrmp
+         3ELoGx/AB4cDBiJ8Gv090+W24t33XsruUpki5ZFM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 152/287] tty: n_gsm: fix non flow control frames during mux flow off
-Date:   Tue, 23 Aug 2022 10:25:21 +0200
-Message-Id: <20220823080105.730518417@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable <stable@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Subject: [PATCH 4.14 161/229] intel_th: pci: Add Meteor Lake-P support
+Date:   Tue, 23 Aug 2022 10:25:22 +0200
+Message-Id: <20220823080059.422115503@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,116 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 
-[ Upstream commit bec0224816d19abe4fe503586d16d51890540615 ]
+commit 802a9a0b1d91274ef10d9fe429b4cc1e8c200aef upstream.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.4.6.3.6 states that FCoff stops the
-transmission on all channels except the control channel. This is already
-implemented in gsm_data_kick(). However, chapter 5.4.8.1 explains that this
-shall result in the same behavior as software flow control on the ldisc in
-advanced option mode. That means only flow control frames shall be sent
-during flow off. The current implementation does not consider this case.
+Add support for the Trace Hub in Meteor Lake-P.
 
-Change gsm_data_kick() to send only flow control frames if constipated to
-abide the standard. gsm_read_ea_val() and gsm_is_flow_ctrl_msg() are
-introduced as helper functions for this.
-It is planned to use gsm_read_ea_val() in later code cleanups for other
-functions, too.
-
-Fixes: c01af4fec2c8 ("n_gsm : Flow control handling in Mux driver")
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220701061652.39604-5-daniel.starke@siemens.com
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Link: https://lore.kernel.org/r/20220705082637.59979-5-alexander.shishkin@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c | 54 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 53 insertions(+), 1 deletion(-)
+ drivers/hwtracing/intel_th/pci.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 5d2bb4d95186..baadac224c8d 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -410,6 +410,27 @@ static int gsm_read_ea(unsigned int *val, u8 c)
- 	return c & EA;
- }
- 
-+/**
-+ *	gsm_read_ea_val	-	read a value until EA
-+ *	@val: variable holding value
-+ *	@data: buffer of data
-+ *	@dlen: length of data
-+ *
-+ *	Processes an EA value. Updates the passed variable and
-+ *	returns the processed data length.
-+ */
-+static unsigned int gsm_read_ea_val(unsigned int *val, const u8 *data, int dlen)
-+{
-+	unsigned int len = 0;
-+
-+	for (; dlen > 0; dlen--) {
-+		len++;
-+		if (gsm_read_ea(val, *data++))
-+			break;
-+	}
-+	return len;
-+}
-+
- /**
-  *	gsm_encode_modem	-	encode modem data bits
-  *	@dlci: DLCI to encode from
-@@ -657,6 +678,37 @@ static struct gsm_msg *gsm_data_alloc(struct gsm_mux *gsm, u8 addr, int len,
- 	return m;
- }
- 
-+/**
-+ *	gsm_is_flow_ctrl_msg	-	checks if flow control message
-+ *	@msg: message to check
-+ *
-+ *	Returns true if the given message is a flow control command of the
-+ *	control channel. False is returned in any other case.
-+ */
-+static bool gsm_is_flow_ctrl_msg(struct gsm_msg *msg)
-+{
-+	unsigned int cmd;
-+
-+	if (msg->addr > 0)
-+		return false;
-+
-+	switch (msg->ctrl & ~PF) {
-+	case UI:
-+	case UIH:
-+		cmd = 0;
-+		if (gsm_read_ea_val(&cmd, msg->data + 2, msg->len - 2) < 1)
-+			break;
-+		switch (cmd & ~PF) {
-+		case CMD_FCOFF:
-+		case CMD_FCON:
-+			return true;
-+		}
-+		break;
-+	}
-+
-+	return false;
-+}
-+
- /**
-  *	gsm_data_kick		-	poke the queue
-  *	@gsm: GSM Mux
-@@ -675,7 +727,7 @@ static void gsm_data_kick(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 	int len;
- 
- 	list_for_each_entry_safe(msg, nmsg, &gsm->tx_list, list) {
--		if (gsm->constipated && msg->addr)
-+		if (gsm->constipated && !gsm_is_flow_ctrl_msg(msg))
- 			continue;
- 		if (gsm->encoding != 0) {
- 			gsm->txframe[0] = GSM1_SOF;
--- 
-2.35.1
-
+--- a/drivers/hwtracing/intel_th/pci.c
++++ b/drivers/hwtracing/intel_th/pci.c
+@@ -264,6 +264,11 @@ static const struct pci_device_id intel_
+ 		.driver_data = (kernel_ulong_t)&intel_th_2x,
+ 	},
+ 	{
++		/* Meteor Lake-P */
++		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x7e24),
++		.driver_data = (kernel_ulong_t)&intel_th_2x,
++	},
++	{
+ 		/* Rocket Lake CPU */
+ 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x4c19),
+ 		.driver_data = (kernel_ulong_t)&intel_th_2x,
 
 

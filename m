@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F4659DB74
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C901D59E363
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354560AbiHWKaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S1354501AbiHWMU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353299AbiHWKON (ORCPT
+        with ESMTP id S1359619AbiHWMQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:14:13 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE54972FE6;
-        Tue, 23 Aug 2022 01:59:54 -0700 (PDT)
+        Tue, 23 Aug 2022 08:16:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F71679EFE;
+        Tue, 23 Aug 2022 02:41:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3F24CCE1B2C;
-        Tue, 23 Aug 2022 08:59:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F40CC433D6;
-        Tue, 23 Aug 2022 08:59:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A63BB81C9A;
+        Tue, 23 Aug 2022 09:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A38C433C1;
+        Tue, 23 Aug 2022 09:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245191;
-        bh=nJdKeWgqbwSrC1zoMSnCLvplncVpAtSgrQGy4V7rxN0=;
+        s=korg; t=1661247646;
+        bh=mTvSXMU+FqVYUEjrCpZyNd5/4xWQ8kzPmC4oXbY4SGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T4fN/GcmafdOrofZIY+h4OaBD3K3xRQl0a/hAVw24golU+X5LbXw9ok76wbpPYi+h
-         HxOMJLus1rwqkbrd0hQjeXce6LhHL45hqeD0USRn9sbSAw/u87YKwdfDVf8zpHuYs9
-         Aar56weC+gO9Wkyc6wP2BKffv3nzsTVCl0ApDDZM=
+        b=1dJtnoM3vdlM5KSmNP0qgIPoD28UPoiZdnQTrW0f6Ht9JwCyIAVLfMtTop2vt3L0t
+         D20TvYrBS/8QHTwx4vWLxPl+J+GBOntXeNSgvT2RAU3lDjaRfO+I+j+R1GwmprYLIR
+         6GPoOkbCi2Oz2MWMYMx1j17cH1f0BWae4OMlpiQs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Allison Henderson <allison.henderson@oracle.com>,
-        Catherine Hoang <catherine.hoang@oracle.com>,
-        Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 5.15 244/244] xfs: reject crazy array sizes being fed to XFS_IOC_GETBMAP*
+        stable@vger.kernel.org,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 071/158] ASoC: tas2770: Set correct FSYNC polarity
 Date:   Tue, 23 Aug 2022 10:26:43 +0200
-Message-Id: <20220823080107.796989859@linuxfoundation.org>
+Message-Id: <20220823080048.945485744@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Darrick J. Wong" <djwong@kernel.org>
+From: Martin Povišer <povik+lin@cutebit.org>
 
-[ Upstream commit 29d650f7e3ab55283b89c9f5883d0c256ce478b5 ]
+commit e9ac31f0a5d0e246b046c20348954519f91a297f upstream.
 
-Syzbot tripped over the following complaint from the kernel:
+Fix setting of FSYNC polarity for DAI formats other than I2S. Also
+add support for polarity inversion.
 
-WARNING: CPU: 2 PID: 15402 at mm/util.c:597 kvmalloc_node+0x11e/0x125 mm/util.c:597
-
-While trying to run XFS_IOC_GETBMAP against the following structure:
-
-struct getbmap fubar = {
-	.bmv_count	= 0x22dae649,
-};
-
-Obviously, this is a crazy huge value since the next thing that the
-ioctl would do is allocate 37GB of memory.  This is enough to make
-kvmalloc mad, but isn't large enough to trip the validation functions.
-In other words, I'm fussing with checks that were **already sufficient**
-because that's easier than dealing with 644 internal bug reports.  Yes,
-that's right, six hundred and forty-four.
-
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Allison Henderson <allison.henderson@oracle.com>
-Reviewed-by: Catherine Hoang <catherine.hoang@oracle.com>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+Link: https://lore.kernel.org/r/20220808141246.5749-2-povik+lin@cutebit.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_ioctl.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/tas2770.c |   20 +++++++++++++++++++-
+ sound/soc/codecs/tas2770.h |    3 +++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
---- a/fs/xfs/xfs_ioctl.c
-+++ b/fs/xfs/xfs_ioctl.c
-@@ -1545,7 +1545,7 @@ xfs_ioc_getbmap(
+--- a/sound/soc/codecs/tas2770.c
++++ b/sound/soc/codecs/tas2770.c
+@@ -337,7 +337,7 @@ static int tas2770_set_fmt(struct snd_so
+ 	struct snd_soc_component *component = dai->component;
+ 	struct tas2770_priv *tas2770 =
+ 			snd_soc_component_get_drvdata(component);
+-	u8 tdm_rx_start_slot = 0, asi_cfg_1 = 0;
++	u8 tdm_rx_start_slot = 0, invert_fpol = 0, fpol_preinv = 0, asi_cfg_1 = 0;
+ 	int ret;
  
- 	if (bmx.bmv_count < 2)
- 		return -EINVAL;
--	if (bmx.bmv_count > ULONG_MAX / recsize)
-+	if (bmx.bmv_count >= INT_MAX / recsize)
- 		return -ENOMEM;
+ 	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
+@@ -349,9 +349,15 @@ static int tas2770_set_fmt(struct snd_so
+ 	}
  
- 	buf = kvzalloc(bmx.bmv_count * sizeof(*buf), GFP_KERNEL);
+ 	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
++	case SND_SOC_DAIFMT_NB_IF:
++		invert_fpol = 1;
++		fallthrough;
+ 	case SND_SOC_DAIFMT_NB_NF:
+ 		asi_cfg_1 |= TAS2770_TDM_CFG_REG1_RX_RSING;
+ 		break;
++	case SND_SOC_DAIFMT_IB_IF:
++		invert_fpol = 1;
++		fallthrough;
+ 	case SND_SOC_DAIFMT_IB_NF:
+ 		asi_cfg_1 |= TAS2770_TDM_CFG_REG1_RX_FALING;
+ 		break;
+@@ -369,15 +375,19 @@ static int tas2770_set_fmt(struct snd_so
+ 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+ 	case SND_SOC_DAIFMT_I2S:
+ 		tdm_rx_start_slot = 1;
++		fpol_preinv = 0;
+ 		break;
+ 	case SND_SOC_DAIFMT_DSP_A:
+ 		tdm_rx_start_slot = 0;
++		fpol_preinv = 1;
+ 		break;
+ 	case SND_SOC_DAIFMT_DSP_B:
+ 		tdm_rx_start_slot = 1;
++		fpol_preinv = 1;
+ 		break;
+ 	case SND_SOC_DAIFMT_LEFT_J:
+ 		tdm_rx_start_slot = 0;
++		fpol_preinv = 1;
+ 		break;
+ 	default:
+ 		dev_err(tas2770->dev,
+@@ -391,6 +401,14 @@ static int tas2770_set_fmt(struct snd_so
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = snd_soc_component_update_bits(component, TAS2770_TDM_CFG_REG0,
++					    TAS2770_TDM_CFG_REG0_FPOL_MASK,
++					    (fpol_preinv ^ invert_fpol)
++					     ? TAS2770_TDM_CFG_REG0_FPOL_RSING
++					     : TAS2770_TDM_CFG_REG0_FPOL_FALING);
++	if (ret < 0)
++		return ret;
++
+ 	return 0;
+ }
+ 
+--- a/sound/soc/codecs/tas2770.h
++++ b/sound/soc/codecs/tas2770.h
+@@ -41,6 +41,9 @@
+ #define TAS2770_TDM_CFG_REG0_31_44_1_48KHZ  0x6
+ #define TAS2770_TDM_CFG_REG0_31_88_2_96KHZ  0x8
+ #define TAS2770_TDM_CFG_REG0_31_176_4_192KHZ  0xa
++#define TAS2770_TDM_CFG_REG0_FPOL_MASK  BIT(0)
++#define TAS2770_TDM_CFG_REG0_FPOL_RSING  0
++#define TAS2770_TDM_CFG_REG0_FPOL_FALING  1
+     /* TDM Configuration Reg1 */
+ #define TAS2770_TDM_CFG_REG1  TAS2770_REG(0X0, 0x0B)
+ #define TAS2770_TDM_CFG_REG1_MASK	GENMASK(5, 1)
 
 

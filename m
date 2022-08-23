@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEC659D2EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DAC59D687
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241732AbiHWIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S1348552AbiHWJKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241541AbiHWIC4 (ORCPT
+        with ESMTP id S1348009AbiHWJJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:02:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16001659E0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:54 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrt-0002vf-Oc; Tue, 23 Aug 2022 10:02:38 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrr-001Sv1-5S; Tue, 23 Aug 2022 10:02:35 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrp-00ALXd-07; Tue, 23 Aug 2022 10:02:33 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v3 00/17] net: dsa: microchip: add error handling and register access validation
-Date:   Tue, 23 Aug 2022 10:02:14 +0200
-Message-Id: <20220823080231.2466017-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Tue, 23 Aug 2022 05:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83405868A1;
+        Tue, 23 Aug 2022 01:30:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A2F761338;
+        Tue, 23 Aug 2022 08:29:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26467C433C1;
+        Tue, 23 Aug 2022 08:29:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661243388;
+        bh=bpP3v+DcvV2AxMnSmPB9/sNRdImi4ZKRLo9adOSSbiM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YhvolnvbPIzW7ZlSt/ikqR6/PqDz1HLG+KSsvvDDo7AyIz0mLtPdiv++4am1+vngq
+         cHZW06OEj1FkyUC+8daB0bcPWC5Uo74Dox1TPYILxhC5dXz94a+nt8pkA0Ulo288EV
+         8L5Gg+KTJF2FOK+UhKHqf9/TUIftE16bJ+CPpY9c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Ben Hutchings <benh@debian.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.19 234/365] tools/rtla: Fix command symlinks
+Date:   Tue, 23 Aug 2022 10:02:15 +0200
+Message-Id: <20220823080128.020429824@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,59 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-changes v3:
-- fix build error in the middle of the patch stack.
+From: Ben Hutchings <benh@debian.org>
 
-changes v2:
-- add regmap_ranges for KSZ9477
-- drop output clock devicetree in driver validation patches. DTs need
-  some more refactoring and can be done in a separate patch set.
-- remove some unused variables.
+commit ff5a55dcdb343e3db9b9fb08795b78544b032773 upstream.
 
-This patch series adds error handling for the PHY read/write path and optional
-register access validation.
-After adding regmap_ranges for KSZ8563 some bugs was detected, so
-critical bug fixes are sorted before ragmap_range patch.
+"ln -s" stores the next argument directly as the symlink target, so
+it needs to be a relative path.  In this case, just "rtla".
 
-Potentially this bug fixes can be ported to stable kernels, but need to be
-reworked.
+Link: https://lore.kernel.org/linux-trace-devel/YtLBXMI6Ui4HLIF1@decadent.org.uk
 
-Oleksij Rempel (17):
-  net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563
-    chip
-  net: dsa: microchip: do per-port Gbit detection instead of per-chip
-  net: dsa: microchip: don't announce extended register support on non
-    Gbit chips
-  net: dsa: microchip: allow to pass return values for PHY read/write
-    accesses
-  net: dsa: microchip: forward error value on all ksz_pread/ksz_pwrite
-    functions
-  net: dsa: microchip: ksz9477: add error handling to ksz9477_r/w_phy
-  net: dsa: microchip: ksz8795: add error handling to ksz8_r/w_phy
-  net: dsa: microchip: KSZ9893: do not write to not supported Output
-    Clock Control Register
-  net: dsa: microchip: add support for regmap_access_tables
-  net: dsa: microchip: add regmap_range for KSZ8563 chip
-  net: dsa: microchip: ksz9477: remove MII_CTRL1000 check from
-    ksz9477_w_phy()
-  net: dsa: microchip: add regmap_range for KSZ9477 chip
-  net: dsa: microchip: ksz9477: use internal_phy instead of phy_port_cnt
-  net: dsa: microchip: remove unused port phy variable
-  net: dsa: microchip: ksz9477: remove unused "on" variable
-  net: dsa: microchip: remove unused sgmii variable
-  net: dsa: microchip: remove IS_9893 flag
+Fixes: 0605bf009f18 ("rtla: Add osnoise tool")
+Fixes: a828cd18bc4a ("rtla: Add timerlat tool and timelart top mode")
+Signed-off-by: Ben Hutchings <benh@debian.org>
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ tools/tracing/rtla/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/net/dsa/microchip/ksz8.h         |   4 +-
- drivers/net/dsa/microchip/ksz8795.c      | 111 ++++--
- drivers/net/dsa/microchip/ksz9477.c      |  86 ++---
- drivers/net/dsa/microchip/ksz9477.h      |   4 +-
- drivers/net/dsa/microchip/ksz_common.c   | 450 ++++++++++++++++++++++-
- drivers/net/dsa/microchip/ksz_common.h   |  90 +++--
- drivers/net/dsa/microchip/ksz_spi.c      |   5 +-
- drivers/net/dsa/microchip/lan937x.h      |   4 +-
- drivers/net/dsa/microchip/lan937x_main.c |   8 +-
- 9 files changed, 646 insertions(+), 116 deletions(-)
-
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+index 1bea2d16d4c1..b8fe10d941ce 100644
+--- a/tools/tracing/rtla/Makefile
++++ b/tools/tracing/rtla/Makefile
+@@ -108,9 +108,9 @@ install: doc_install
+ 	$(INSTALL) rtla -m 755 $(DESTDIR)$(BINDIR)
+ 	$(STRIP) $(DESTDIR)$(BINDIR)/rtla
+ 	@test ! -f $(DESTDIR)$(BINDIR)/osnoise || rm $(DESTDIR)$(BINDIR)/osnoise
+-	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/osnoise
++	ln -s rtla $(DESTDIR)$(BINDIR)/osnoise
+ 	@test ! -f $(DESTDIR)$(BINDIR)/timerlat || rm $(DESTDIR)$(BINDIR)/timerlat
+-	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/timerlat
++	ln -s rtla $(DESTDIR)$(BINDIR)/timerlat
+ 
+ .PHONY: clean tarball
+ clean: doc_clean
 -- 
-2.30.2
+2.37.2
+
+
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D80A59DDC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4957959E31C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348856AbiHWLep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S1356150AbiHWKld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349834AbiHWLa4 (ORCPT
+        with ESMTP id S1354859AbiHWK0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:30:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0DC59D0;
-        Tue, 23 Aug 2022 02:25:44 -0700 (PDT)
+        Tue, 23 Aug 2022 06:26:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D6183F2D;
+        Tue, 23 Aug 2022 02:05:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFD35B81C65;
-        Tue, 23 Aug 2022 09:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D121C433D6;
-        Tue, 23 Aug 2022 09:25:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 134D5B81C53;
+        Tue, 23 Aug 2022 09:05:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FBAC433C1;
+        Tue, 23 Aug 2022 09:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246740;
-        bh=gAP38tcAj7LlaKrsijqfJ1GSUGU8jMf8tiBpQP4uIZ0=;
+        s=korg; t=1661245548;
+        bh=gXJeB+CKeDu7TiKFHWZPHO1BsLZegk9X3IBL5reKvkk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wJwr6/qdnVVO5OFbiLD64mmayKjIEfJS7hgZyV8NhaqpgBDriST9jUAWpj0K7yvee
-         fkhFxCWOlYr22nwkbc94Kn4TJiPlkM3SF2+GNpgX/Rx0PFXl8cctZNqUrEstYfKJZW
-         GA+IS7TC0V3ak44hqQEvaaMkPP455WU2bllxk7Jw=
+        b=ML0v913R0zmyW9YZ/KLVBqzMqdDKuC3EFnDwz37x/NVatVOVDZsi+tzEqDN048dYU
+         VdyAGgRdAjIwVJ2mGL91UfEqpDKpPQltAzcc0zhOFzGso8JE8Qz/eJIoq70fcHoeDB
+         45N/4d6OxylNo84njDuF6yAJKUv5P2KQzbjnAGko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 205/389] ASoC: codecs: da7210: add check for i2c_add_driver
+Subject: [PATCH 4.19 114/287] mtd: maps: Fix refcount leak in of_flash_probe_versatile
 Date:   Tue, 23 Aug 2022 10:24:43 +0200
-Message-Id: <20220823080124.203829375@linuxfoundation.org>
+Message-Id: <20220823080104.218462230@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 82fa8f581a954ddeec1602bed9f8b4a09d100e6e ]
+[ Upstream commit 33ec82a6d2b119938f26e5c8040ed5d92378eb54 ]
 
-As i2c_add_driver could return error if fails, it should be
-better to check the return value.
-However, if the CONFIG_I2C and CONFIG_SPI_MASTER are both true,
-the return value of i2c_add_driver will be covered by
-spi_register_driver.
-Therefore, it is necessary to add check and return error if fails.
+of_find_matching_node_and_match() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: aa0e25caafb7 ("ASoC: da7210: Add support for spi regmap")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220531094712.2376759-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b0afd44bc192 ("mtd: physmap_of: add a hook for Versatile write protection")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220523140205.48625-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/da7210.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/mtd/maps/physmap_of_versatile.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/da7210.c b/sound/soc/codecs/da7210.c
-index e172913d04a4..efc5049c0796 100644
---- a/sound/soc/codecs/da7210.c
-+++ b/sound/soc/codecs/da7210.c
-@@ -1333,6 +1333,8 @@ static int __init da7210_modinit(void)
- 	int ret = 0;
- #if IS_ENABLED(CONFIG_I2C)
- 	ret = i2c_add_driver(&da7210_i2c_driver);
-+	if (ret)
-+		return ret;
- #endif
- #if defined(CONFIG_SPI_MASTER)
- 	ret = spi_register_driver(&da7210_spi_driver);
+diff --git a/drivers/mtd/maps/physmap_of_versatile.c b/drivers/mtd/maps/physmap_of_versatile.c
+index 03f2b6e7bc7e..961704228dd2 100644
+--- a/drivers/mtd/maps/physmap_of_versatile.c
++++ b/drivers/mtd/maps/physmap_of_versatile.c
+@@ -221,6 +221,7 @@ int of_flash_probe_versatile(struct platform_device *pdev,
+ 
+ 		versatile_flashprot = (enum versatile_flashprot)devid->data;
+ 		rmap = syscon_node_to_regmap(sysnp);
++		of_node_put(sysnp);
+ 		if (IS_ERR(rmap))
+ 			return PTR_ERR(rmap);
+ 
 -- 
 2.35.1
 

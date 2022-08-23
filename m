@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7BA59E112
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D5A59E334
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357070AbiHWK4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S243685AbiHWMSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356953AbiHWKwr (ORCPT
+        with ESMTP id S1356004AbiHWMPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:52:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F08CABD49;
-        Tue, 23 Aug 2022 02:12:53 -0700 (PDT)
+        Tue, 23 Aug 2022 08:15:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774B079697;
+        Tue, 23 Aug 2022 02:41:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10772B81C88;
-        Tue, 23 Aug 2022 09:12:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B7B1C433B5;
-        Tue, 23 Aug 2022 09:12:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 49880CE1B58;
+        Tue, 23 Aug 2022 09:39:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F61C433C1;
+        Tue, 23 Aug 2022 09:39:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245969;
-        bh=fy9Hbiarz6gfSjxp30zSLiolvV9NwPqMSdgxPIu22Qs=;
+        s=korg; t=1661247594;
+        bh=jCgrNFOMkzIfQkvmFRUBShrSXcsnNAqOEKWnP3VWncU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S8CIR7ln1k86wYiPUvcb+vpD0Pl+vkuxPMqekDmyFYhYHtq7VPkYB2Hl+5oFkjjbp
-         9P1pAk2sNLHOkeFN5Kcf/UGVAx5VAMBZeU8UhXuYbTberHU+x2ToUhMl/78GuQHx+l
-         eXKkuzl893qq10PEi9xemu/LDDH9sArVBZe3KdAk=
+        b=JXcRUu1HicTvymdVdM7DRf9O0EpoUaWhuOeR0wcqFVehnsjPhKU1loFhNaf1c3l3K
+         ozoXUskWeQer3PrlIfCOj2o0GXuq4L4dgOvcImrAVqWtaXHZab5WzfGm9QBVe2ZMXJ
+         Fvu4q7f/GoONM6qX7ARnJ2n23l4g9ltzB/XspN5k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 4.19 248/287] nios2: restarts apply only to the first sigframe we build...
+        stable@vger.kernel.org,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 085/158] net: dsa: sja1105: fix buffer overflow in sja1105_setup_devlink_regions()
 Date:   Tue, 23 Aug 2022 10:26:57 +0200
-Message-Id: <20220823080109.514944814@linuxfoundation.org>
+Message-Id: <20220823080049.491475845@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,27 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Rustam Subkhankulov <subkhankulov@ispras.ru>
 
-commit 411a76b7219555c55867466c82d70ce928d6c9e1 upstream.
+commit fd8e899cdb5ecaf8e8ee73854a99e10807eef1de upstream.
 
-Fixes: b53e906d255d ("nios2: Signal handling support")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+If an error occurs in dsa_devlink_region_create(), then 'priv->regions'
+array will be accessed by negative index '-1'.
+
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+Fixes: bf425b82059e ("net: dsa: sja1105: expose static config as devlink region")
+Link: https://lore.kernel.org/r/20220817003845.389644-1-subkhankulov@ispras.ru
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/kernel/signal.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/dsa/sja1105/sja1105_devlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/nios2/kernel/signal.c
-+++ b/arch/nios2/kernel/signal.c
-@@ -261,6 +261,7 @@ static int do_signal(struct pt_regs *reg
- 			regs->ea = restart_addr;
- 			break;
- 		}
-+		regs->orig_r2 = -1;
- 	}
+diff --git a/drivers/net/dsa/sja1105/sja1105_devlink.c b/drivers/net/dsa/sja1105/sja1105_devlink.c
+index 0569ff066634..10c6fea1227f 100644
+--- a/drivers/net/dsa/sja1105/sja1105_devlink.c
++++ b/drivers/net/dsa/sja1105/sja1105_devlink.c
+@@ -93,7 +93,7 @@ static int sja1105_setup_devlink_regions(struct dsa_switch *ds)
  
- 	if (get_signal(&ksig)) {
+ 		region = dsa_devlink_region_create(ds, ops, 1, size);
+ 		if (IS_ERR(region)) {
+-			while (i-- >= 0)
++			while (--i >= 0)
+ 				dsa_devlink_region_destroy(priv->regions[i]);
+ 			return PTR_ERR(region);
+ 		}
+-- 
+2.37.2
+
 
 

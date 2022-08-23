@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE77D59DB65
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F3F59DD9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354092AbiHWKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S1356736AbiHWKvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352812AbiHWKI7 (ORCPT
+        with ESMTP id S1355598AbiHWKnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:08:59 -0400
+        Tue, 23 Aug 2022 06:43:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38EE7D7B7;
-        Tue, 23 Aug 2022 01:54:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C413374BB6;
+        Tue, 23 Aug 2022 02:10:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96D02B81C39;
-        Tue, 23 Aug 2022 08:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F8AC433C1;
-        Tue, 23 Aug 2022 08:54:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62D81B81C4E;
+        Tue, 23 Aug 2022 09:10:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C83C433D7;
+        Tue, 23 Aug 2022 09:10:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244896;
-        bh=R9WSvWCXx76BsI8euW0jKufvJkvEvjle4/TwJ7m2w88=;
+        s=korg; t=1661245825;
+        bh=gmvdW3wPd9G0O8DYp9xNM6Xhq5HzkLbnYLkfmeqK8aQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rZcXDAF6LatjQAn7IBTSx3aEF/Z3a8NeoQ1lQ29JSo820zohGqHOtcW6zVHjBMa47
-         xPz4SZEd0r9Y4uRrnCZpE57o7QsTAeUu6mum8w8uJpVNcpPfqQPb/sMMjFEdfEKSaQ
-         JWHc46iqpxbn7Z97+4MfGOa036YQMxrQ+3KIOxf0=
+        b=LolUBoTPnLwKDPHcUkRj43VcVihyVe0Fcde1DUb2BH5+wNldA7RKXuF00qv7zRD5q
+         R6X0uORSwmsyvfNoPeRuojb8X/wT1IjpblDi+WCr5AdPE4/hMxLVaC3qxUajFKX3Td
+         ESsnRdizbNyGtUVk5qQhsPxsLprFlVtejoYCqEqM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Nicolas Pitre <nico@linaro.org>
-Subject: [PATCH 4.14 208/229] kbuild: clear LDFLAGS in the top Makefile
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 4.19 200/287] ACPI: CPPC: Do not prevent CPPC from working in the future
 Date:   Tue, 23 Aug 2022 10:26:09 +0200
-Message-Id: <20220823080101.073098690@linuxfoundation.org>
+Message-Id: <20220823080107.590260014@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-commit ce99d0bf312daf0178e640da9e3c93b773a67e7d upstream.
+commit 4f4179fcf420873002035cf1941d844c9e0e7cb3 upstream.
 
-Currently LDFLAGS is not cleared, so same flags are accumulated in
-LDFLAGS when the top Makefile is recursively invoked.
+There is a problem with the current revision checks in
+is_cppc_supported() that they essentially prevent the CPPC support
+from working if a new _CPC package format revision being a proper
+superset of the v3 and only causing _CPC to return a package with more
+entries (while retaining the types and meaning of the entries defined by
+the v3) is introduced in the future and used by the platform firmware.
 
-I found unneeded rebuild for ARCH=arm64 when CONFIG_TRIM_UNUSED_KSYMS
-is enabled.  If include/generated/autoksyms.h is updated, the top
-Makefile is recursively invoked, then arch/arm64/Makefile adds one
-more '-maarch64linux'.  Due to the command line change, modules are
-rebuilt needlessly.
+In that case, as long as the number of entries in the _CPC return
+package is at least CPPC_V3_NUM_ENT, it should be perfectly fine to
+use the v3 support code and disregard the additional package entries
+added by the new package format revision.
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-Acked-by: Nicolas Pitre <nico@linaro.org>
+For this reason, drop is_cppc_supported() altogether, put the revision
+checks directly into acpi_cppc_processor_probe() so they are easier to
+follow and rework them to take the case mentioned above into account.
+
+Fixes: 4773e77cdc9b ("ACPI / CPPC: Add support for CPPC v3")
+Cc: 4.18+ <stable@vger.kernel.org> # 4.18+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Makefile |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/acpi/cppc_acpi.c |   54 ++++++++++++++++++++---------------------------
+ include/acpi/cppc_acpi.h |    2 -
+ 2 files changed, 25 insertions(+), 31 deletions(-)
 
---- a/Makefile
-+++ b/Makefile
-@@ -426,6 +426,7 @@ KBUILD_CFLAGS_KERNEL :=
- KBUILD_AFLAGS_MODULE  := -DMODULE
- KBUILD_CFLAGS_MODULE  := -DMODULE
- KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
-+LDFLAGS :=
- GCC_PLUGINS_CFLAGS :=
- CLANG_FLAGS :=
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -630,33 +630,6 @@ int pcc_data_alloc(int pcc_ss_id)
+ 	return 0;
+ }
  
+-/* Check if CPPC revision + num_ent combination is supported */
+-static bool is_cppc_supported(int revision, int num_ent)
+-{
+-	int expected_num_ent;
+-
+-	switch (revision) {
+-	case CPPC_V2_REV:
+-		expected_num_ent = CPPC_V2_NUM_ENT;
+-		break;
+-	case CPPC_V3_REV:
+-		expected_num_ent = CPPC_V3_NUM_ENT;
+-		break;
+-	default:
+-		pr_debug("Firmware exports unsupported CPPC revision: %d\n",
+-			revision);
+-		return false;
+-	}
+-
+-	if (expected_num_ent != num_ent) {
+-		pr_debug("Firmware exports %d entries. Expected: %d for CPPC rev:%d\n",
+-			num_ent, expected_num_ent, revision);
+-		return false;
+-	}
+-
+-	return true;
+-}
+-
+ /*
+  * An example CPC table looks like the following.
+  *
+@@ -752,7 +725,6 @@ int acpi_cppc_processor_probe(struct acp
+ 				cpc_obj->type);
+ 		goto out_free;
+ 	}
+-	cpc_ptr->num_entries = num_ent;
+ 
+ 	/* Second entry should be revision. */
+ 	cpc_obj = &out_obj->package.elements[1];
+@@ -763,10 +735,32 @@ int acpi_cppc_processor_probe(struct acp
+ 				cpc_obj->type);
+ 		goto out_free;
+ 	}
+-	cpc_ptr->version = cpc_rev;
+ 
+-	if (!is_cppc_supported(cpc_rev, num_ent))
++	if (cpc_rev < CPPC_V2_REV) {
++		pr_debug("Unsupported _CPC Revision (%d) for CPU:%d\n", cpc_rev,
++			 pr->id);
+ 		goto out_free;
++	}
++
++	/*
++	 * Disregard _CPC if the number of entries in the return pachage is not
++	 * as expected, but support future revisions being proper supersets of
++	 * the v3 and only causing more entries to be returned by _CPC.
++	 */
++	if ((cpc_rev == CPPC_V2_REV && num_ent != CPPC_V2_NUM_ENT) ||
++	    (cpc_rev == CPPC_V3_REV && num_ent != CPPC_V3_NUM_ENT) ||
++	    (cpc_rev > CPPC_V3_REV && num_ent <= CPPC_V3_NUM_ENT)) {
++		pr_debug("Unexpected number of _CPC return package entries (%d) for CPU:%d\n",
++			 num_ent, pr->id);
++		goto out_free;
++	}
++	if (cpc_rev > CPPC_V3_REV) {
++		num_ent = CPPC_V3_NUM_ENT;
++		cpc_rev = CPPC_V3_REV;
++	}
++
++	cpc_ptr->num_entries = num_ent;
++	cpc_ptr->version = cpc_rev;
+ 
+ 	/* Iterate through remaining entries in _CPC */
+ 	for (i = 2; i < num_ent; i++) {
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -20,7 +20,7 @@
+ #include <acpi/pcc.h>
+ #include <acpi/processor.h>
+ 
+-/* Support CPPCv2 and CPPCv3  */
++/* CPPCv2 and CPPCv3 support */
+ #define CPPC_V2_REV	2
+ #define CPPC_V3_REV	3
+ #define CPPC_V2_NUM_ENT	21
 
 

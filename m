@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8663059E33C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A7B59DE8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352177AbiHWMRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        id S1356815AbiHWKy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350694AbiHWMO4 (ORCPT
+        with ESMTP id S1355685AbiHWKr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:14:56 -0400
+        Tue, 23 Aug 2022 06:47:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A41E990A;
-        Tue, 23 Aug 2022 02:40:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9269F86C18;
+        Tue, 23 Aug 2022 02:12:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EE216138B;
-        Tue, 23 Aug 2022 09:39:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF97C433C1;
-        Tue, 23 Aug 2022 09:39:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E31E60F85;
+        Tue, 23 Aug 2022 09:12:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9A7C433D6;
+        Tue, 23 Aug 2022 09:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247563;
-        bh=P8ClimO+H2U7s8xsr2RV/hjyQfg0HAP3IMy45wBgbco=;
+        s=korg; t=1661245919;
+        bh=Q4K1n/gCWk4R0nhTBAqldyQaNxCFu9Nsl2oB7WC7y1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j84pOUWX+Q/iXecPgipOs5pgK5iIsSTkgteOZcvfBZvxzTKxFwIi7hprVVBVzC1c/
-         AJGJbrXuKoF4OoQN0Deu4JRoz9QA+j7ZyF+Mfhxxe1PvFOP50KJG6oKarHCsNUmnpc
-         ph40umj9Uni+U8trfU2bHe7oFTmTymcJ0/XpLvN4=
+        b=ZOIAnN82wYLjoMcd4aUCezzxB1EvcMSgv9qAkTJ5dj3WoBi5Wf9vrPOcF9dw24BO+
+         TCT7orQYMetlCN/BwoxbyCT0ooL1pyTxLno/lLUsoYW75UHPLfzYqcFCwUfcLZT8WT
+         DOkhBrSbTiRwPys9eFywYt03EGGad7CR2ET3Xvro=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.10 068/158] nios2: restarts apply only to the first sigframe we build...
+        stable@vger.kernel.org, Zhang Xianwei <zhang.xianwei8@zte.com.cn>,
+        Yi Wang <wang.yi59@zte.com.cn>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.19 231/287] NFSv4.1: RECLAIM_COMPLETE must handle EACCES
 Date:   Tue, 23 Aug 2022 10:26:40 +0200
-Message-Id: <20220823080048.827052312@linuxfoundation.org>
+Message-Id: <20220823080108.814584086@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,27 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
 
-commit 411a76b7219555c55867466c82d70ce928d6c9e1 upstream.
+commit e35a5e782f67ed76a65ad0f23a484444a95f000f upstream.
 
-Fixes: b53e906d255d ("nios2: Signal handling support")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+A client should be able to handle getting an EACCES error while doing
+a mount operation to reclaim state due to NFS4CLNT_RECLAIM_REBOOT
+being set. If the server returns RPC_AUTH_BADCRED because authentication
+failed when we execute "exportfs -au", then RECLAIM_COMPLETE will go a
+wrong way. After mount succeeds, all OPEN call will fail due to an
+NFS4ERR_GRACE error being returned. This patch is to fix it by resending
+a RPC request.
+
+Signed-off-by: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+Fixes: aa5190d0ed7d ("NFSv4: Kill nfs4_async_handle_error() abuses by NFSv4.1")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/kernel/signal.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/nfs/nfs4proc.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/nios2/kernel/signal.c
-+++ b/arch/nios2/kernel/signal.c
-@@ -264,6 +264,7 @@ static int do_signal(struct pt_regs *reg
- 			regs->ea = restart_addr;
- 			break;
- 		}
-+		regs->orig_r2 = -1;
- 	}
- 
- 	if (get_signal(&ksig)) {
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -8701,6 +8701,9 @@ static int nfs41_reclaim_complete_handle
+ 		rpc_delay(task, NFS4_POLL_RETRY_MAX);
+ 		/* fall through */
+ 	case -NFS4ERR_RETRY_UNCACHED_REP:
++	case -EACCES:
++		dprintk("%s: failed to reclaim complete error %d for server %s, retrying\n",
++			__func__, task->tk_status, clp->cl_hostname);
+ 		return -EAGAIN;
+ 	case -NFS4ERR_BADSESSION:
+ 	case -NFS4ERR_DEADSESSION:
 
 

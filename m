@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F16959D708
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B1459D78D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347940AbiHWJLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S1348339AbiHWJLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348324AbiHWJJZ (ORCPT
+        with ESMTP id S1348017AbiHWJJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:09:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011C7868B9;
+        Tue, 23 Aug 2022 05:09:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE8386040;
         Tue, 23 Aug 2022 01:30:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 461A7B81C4B;
-        Tue, 23 Aug 2022 08:29:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A092DC433C1;
-        Tue, 23 Aug 2022 08:29:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD3AC6132D;
+        Tue, 23 Aug 2022 08:29:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A46C433C1;
+        Tue, 23 Aug 2022 08:29:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243357;
-        bh=8xUMIArOW/4IiPvkqpo2CnRg7A2HIRsEk0ozSnmCl/0=;
+        s=korg; t=1661243360;
+        bh=3vRw/BXbTpCY3pAOH5G0TmoFZPMnb7qpDQLIiyyHYBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qLXQ0mEeMU74Hu3hc91UYYkXuy5Ybia++e4Pp+ZldXB8W7ndcdODSjb1QZSVjJ4y8
-         wxM9H1HO8Lu1fS/BQWZ03emAzoDypdFagxnCbEnsCJwKbbLEfa6+Apn2l3PbKPJ/GE
-         hS13+YL+nMqv6P2J/I7NTyBHj48f7p54+Wpzk1aE=
+        b=hGOLD5lkdNG8dD57ye2Tea8uLD5Vl2TB9ESXIlkryG+NLQ/rn24puih4JD8mObYJd
+         X1/tqNmgdzUnww3h4Xtbh0cET+g7v/EQ2HNOegm9VA8fenFWHwFM7ml8DXubmP9Ewj
+         wf8+CFAXgC6yZzqw/engf/SuJYtBLQKGoz9LIt1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 251/365] net: mscc: ocelot: turn stats_lock into a spinlock
-Date:   Tue, 23 Aug 2022 10:02:32 +0200
-Message-Id: <20220823080128.688845638@linuxfoundation.org>
+Subject: [PATCH 5.19 252/365] net: mscc: ocelot: fix race between ndo_get_stats64 and ocelot_check_stats_work
+Date:   Tue, 23 Aug 2022 10:02:33 +0200
+Message-Id: <20220823080128.729548690@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -57,113 +57,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 22d842e3efe56402c33b5e6e303bb71ce9bf9334 ]
+[ Upstream commit 18d8e67df184081bc6ce6220a2dd965cfd3d7e6b ]
 
-ocelot_get_stats64() currently runs unlocked and therefore may collide
-with ocelot_port_update_stats() which indirectly accesses the same
-counters. However, ocelot_get_stats64() runs in atomic context, and we
-cannot simply take the sleepable ocelot->stats_lock mutex. We need to
-convert it to an atomic spinlock first. Do that as a preparatory change.
+The 2 methods can run concurrently, and one will change the window of
+counters (SYS_STAT_CFG_STAT_VIEW) that the other sees. The fix is
+similar to what commit 7fbf6795d127 ("net: mscc: ocelot: fix mutex lock
+error during ethtool stats read") has done for ethtool -S.
 
+Fixes: a556c76adc05 ("net: mscc: Add initial Ocelot switch support")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/ocelot/felix_vsc9959.c |  4 ++--
- drivers/net/ethernet/mscc/ocelot.c     | 11 +++++------
- include/soc/mscc/ocelot.h              |  2 +-
- 3 files changed, 8 insertions(+), 9 deletions(-)
+ drivers/net/ethernet/mscc/ocelot_net.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
-index 61b1bf4399c4..601fae886b26 100644
---- a/drivers/net/dsa/ocelot/felix_vsc9959.c
-+++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
-@@ -2177,7 +2177,7 @@ static void vsc9959_psfp_sgi_table_del(struct ocelot *ocelot,
- static void vsc9959_psfp_counters_get(struct ocelot *ocelot, u32 index,
- 				      struct felix_stream_filter_counters *counters)
- {
--	mutex_lock(&ocelot->stats_lock);
-+	spin_lock(&ocelot->stats_lock);
+diff --git a/drivers/net/ethernet/mscc/ocelot_net.c b/drivers/net/ethernet/mscc/ocelot_net.c
+index 9d8cea16245e..6b9d37138844 100644
+--- a/drivers/net/ethernet/mscc/ocelot_net.c
++++ b/drivers/net/ethernet/mscc/ocelot_net.c
+@@ -726,6 +726,8 @@ static void ocelot_get_stats64(struct net_device *dev,
+ 	struct ocelot *ocelot = priv->port.ocelot;
+ 	int port = priv->port.index;
  
- 	ocelot_rmw(ocelot, SYS_STAT_CFG_STAT_VIEW(index),
- 		   SYS_STAT_CFG_STAT_VIEW_M,
-@@ -2194,7 +2194,7 @@ static void vsc9959_psfp_counters_get(struct ocelot *ocelot, u32 index,
- 		     SYS_STAT_CFG_STAT_CLEAR_SHOT(0x10),
++	spin_lock(&ocelot->stats_lock);
++
+ 	/* Configure the port to read the stats from */
+ 	ocelot_write(ocelot, SYS_STAT_CFG_STAT_VIEW(port),
  		     SYS_STAT_CFG);
- 
--	mutex_unlock(&ocelot->stats_lock);
+@@ -758,6 +760,8 @@ static void ocelot_get_stats64(struct net_device *dev,
+ 	stats->tx_dropped = ocelot_read(ocelot, SYS_COUNT_TX_DROPS) +
+ 			    ocelot_read(ocelot, SYS_COUNT_TX_AGING);
+ 	stats->collisions = ocelot_read(ocelot, SYS_COUNT_TX_COLLISION);
++
 +	spin_unlock(&ocelot->stats_lock);
  }
  
- static int vsc9959_psfp_filter_add(struct ocelot *ocelot, int port,
-diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
-index d4649e4ee0e7..c67f162f8ab5 100644
---- a/drivers/net/ethernet/mscc/ocelot.c
-+++ b/drivers/net/ethernet/mscc/ocelot.c
-@@ -1906,13 +1906,13 @@ static void ocelot_check_stats_work(struct work_struct *work)
- 					     stats_work);
- 	int i, err;
- 
--	mutex_lock(&ocelot->stats_lock);
-+	spin_lock(&ocelot->stats_lock);
- 	for (i = 0; i < ocelot->num_phys_ports; i++) {
- 		err = ocelot_port_update_stats(ocelot, i);
- 		if (err)
- 			break;
- 	}
--	mutex_unlock(&ocelot->stats_lock);
-+	spin_unlock(&ocelot->stats_lock);
- 
- 	if (err)
- 		dev_err(ocelot->dev, "Error %d updating ethtool stats\n",  err);
-@@ -1925,7 +1925,7 @@ void ocelot_get_ethtool_stats(struct ocelot *ocelot, int port, u64 *data)
- {
- 	int i, err;
- 
--	mutex_lock(&ocelot->stats_lock);
-+	spin_lock(&ocelot->stats_lock);
- 
- 	/* check and update now */
- 	err = ocelot_port_update_stats(ocelot, port);
-@@ -1934,7 +1934,7 @@ void ocelot_get_ethtool_stats(struct ocelot *ocelot, int port, u64 *data)
- 	for (i = 0; i < ocelot->num_stats; i++)
- 		*data++ = ocelot->stats[port * ocelot->num_stats + i];
- 
--	mutex_unlock(&ocelot->stats_lock);
-+	spin_unlock(&ocelot->stats_lock);
- 
- 	if (err)
- 		dev_err(ocelot->dev, "Error %d updating ethtool stats\n", err);
-@@ -3363,7 +3363,7 @@ int ocelot_init(struct ocelot *ocelot)
- 	if (!ocelot->stats)
- 		return -ENOMEM;
- 
--	mutex_init(&ocelot->stats_lock);
-+	spin_lock_init(&ocelot->stats_lock);
- 	mutex_init(&ocelot->ptp_lock);
- 	mutex_init(&ocelot->mact_lock);
- 	mutex_init(&ocelot->fwd_domain_lock);
-@@ -3511,7 +3511,6 @@ void ocelot_deinit(struct ocelot *ocelot)
- 	cancel_delayed_work(&ocelot->stats_work);
- 	destroy_workqueue(ocelot->stats_queue);
- 	destroy_workqueue(ocelot->owq);
--	mutex_destroy(&ocelot->stats_lock);
- }
- EXPORT_SYMBOL(ocelot_deinit);
- 
-diff --git a/include/soc/mscc/ocelot.h b/include/soc/mscc/ocelot.h
-index e7e5b06deb2d..72b9474391da 100644
---- a/include/soc/mscc/ocelot.h
-+++ b/include/soc/mscc/ocelot.h
-@@ -752,7 +752,7 @@ struct ocelot {
- 	struct ocelot_psfp_list		psfp;
- 
- 	/* Workqueue to check statistics for overflow with its lock */
--	struct mutex			stats_lock;
-+	spinlock_t			stats_lock;
- 	u64				*stats;
- 	struct delayed_work		stats_work;
- 	struct workqueue_struct		*stats_queue;
+ static int ocelot_port_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
 -- 
 2.35.1
 

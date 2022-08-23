@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE2E59EC92
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404D259EC8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbiHWTkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S233364AbiHWTkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiHWTkA (ORCPT
+        with ESMTP id S233392AbiHWTkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 15:40:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA6010E4FB;
-        Tue, 23 Aug 2022 11:37:16 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC34E68FA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:37:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75305B82052;
-        Tue, 23 Aug 2022 18:37:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD021C433B5;
-        Tue, 23 Aug 2022 18:37:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F2E0616FE
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E6CC433D6;
+        Tue, 23 Aug 2022 18:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661279834;
-        bh=DSpae36fXxOyMZuan/4/6KolNH5h3bBOf50hVyPoyAs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eMQXMPjH/uFtyjrmlaTeRitp32JIDRmrDKtD+gWYPOmd8u9GXVvdf6SSJfUSQZTsC
-         2azgkVjO/641BjhkUs3TUcLk6XuB08Irc4e/IqnGa7cddIwD5Gm7wnGP6oYWd2rH7s
-         xXHQeL2mgdaoxXZV0c7tEwusRk8uv3k5DhSFNEFRfAzLxoHV98JdJXZTLC85FV6h0f
-         znVsMaZDUFXZFUxO/USlT3w2H41XuYA3iNXonkL56LjfsU2QB6VWaAOqSiCvJCPvOs
-         mSmQBPj70rFNXIEkZqQh3eHM3/6vOlcB6UgeSxn2g9BBP/+KlWSOkdqX3ov53PVzT6
-         2YGCWxUB4LV0w==
-Date:   Tue, 23 Aug 2022 11:37:12 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Frank <Frank.Sae@motor-comm.com>, Peter Geis <pgwipeout@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4.4] net: phy: Add driver for Motorcomm yt8521 gigabit
- ethernet phy
-Message-ID: <20220823113712.4c530516@kernel.org>
-In-Reply-To: <YwTguA0azox3j5vi@lunn.ch>
-References: <20220817112554.383-1-Frank.Sae@motor-comm.com>
-        <20220822202147.4be904de@kernel.org>
-        <YwTguA0azox3j5vi@lunn.ch>
+        s=k20201202; t=1661279839;
+        bh=6b52WSZ0j72XRJq6uFTsXCAQc695XrtImOHOm6npeI0=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=fCGqvlzlZe5Fih2wiCo9XuQ6bZuWQpS4Fkb5U9T0AaZAfFtnkTftjnL8OvWZ29Asp
+         WRTPf0O0fPAGBPJx6q1Lv0Z3hmboFJvyaFxbs5z0MTX/b7o74pGWz5HeJxdiwfy9n6
+         ZkXthBYrOmT36MUgDa8PmrF/903ZpdwLG2J8uQPi89h7asbfIvWVJ9ryQAlVk0mQOa
+         c+otNUMpaonl6T8AeR9I1YBiYmlcds+u4+kAwMC6BEo5L4/EGngyhSpy/Y/7kHtljd
+         YM4G4eG7gDn1nVmor3ffibw/eIgQJdh2yKIOlnhYLF89o8KCBTHv+jgxZlM2IIKrhQ
+         WZM6LZLiIS6Nw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        alsa-devel@alsa-project.org, llvm@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tom Rix <trix@redhat.com>, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220810010809.2024482-1-nathan@kernel.org>
+References: <20220810010809.2024482-1-nathan@kernel.org>
+Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+Message-Id: <166127983640.711152.15279532246364775048.b4-ty@kernel.org>
+Date:   Tue, 23 Aug 2022 19:37:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-0c1df
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,59 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 16:14:16 +0200 Andrew Lunn wrote:
-> On Mon, Aug 22, 2022 at 08:21:47PM -0700, Jakub Kicinski wrote:
-> > On Wed, 17 Aug 2022 19:25:54 +0800 Frank wrote:  
-> > > +static int yt8521_fiber_config_aneg(struct phy_device *phydev)
-> > > +{
-> > > +	int err, changed;
-> > > +	u16 adv;
-> > > +
-> > > +	if (phydev->autoneg != AUTONEG_ENABLE)
-> > > +		return yt8521_fiber_setup_forced(phydev);
-> > > +
-> > > +	err =  ytphy_modify_ext_with_lock(phydev, YTPHY_MISC_CONFIG_REG,
-> > > +					  YTPHY_MCR_FIBER_SPEED_MASK,
-> > > +					  YTPHY_MCR_FIBER_1000BX);
-> > > +	if (err < 0)
-> > > +		return err;
-> > > +
-> > > +	/* enable Fiber auto sensing */
-> > > +	err =  ytphy_modify_ext_with_lock(phydev, YT8521_LINK_TIMER_CFG2_REG,
-> > > +					  0, YT8521_LTCR_EN_AUTOSEN);
-> > > +	if (err < 0)
-> > > +		return err;
-> > > +
-> > > +	/* Setup fiber advertisement */
-> > > +	adv = ADVERTISE_1000XFULL | ADVERTISE_1000XPAUSE |
-> > > +	      ADVERTISE_1000XPSE_ASYM;  
-> > 
-> > Is it okay to ignore phydev->advertising and always set the same mask?  
+On Tue, 9 Aug 2022 18:08:09 -0700, Nathan Chancellor wrote:
+> A recent change in clang strengthened its -Wbitfield-constant-conversion
+> to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
+> only be 0 or -1, not 1:
 > 
-> The user could of changed the pause settings, which are going to be
-> ignored here. Also, you should not assume the MAC can actually do
-> asymmetric pause, not all can. phydev->advertising will be set to only
-> include what the MAC can actually do.
+>   sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
+>           dev->gclk_enabled = 1;
+>                             ^ ~
+>   1 error generated.
 > 
-> The whole concept of having two line sides connected to one MAC and
-> seeing which gets link first is unsupported in Linux. In theory, you
-> want to be able to configure each line side differently. Maybe you
-> want autoneg on copper, but fixed on fibre, asymmetric pause with
-> fibre, but symmetric pause on copper, etc. Since there is only one
-> instance of phydev here, you don't have anywhere to store two sets of
-> configuration, nor any sort of kAPI to deal with two phydev structures
-> etc. So the user experience is not so great.
-> 
-> With the Marvell Switches which also have this capability, i actually
-> ignore it, use the phy-mode it decide which should be used, either
-> copper or fibre, and leave the other powered off so it can never get
-> link. There is at least one Marvell PHY which does however support
-> first up wins, so this behaviour is not new. I just don't recommend
-> it.
-> 
-> And it gets even more interesting when the SFP is actually copper. But
-> since the integration with phylink is missing in this driver, that is
-> not supported here.
+> [...]
 
-Interesting. Just to confirm - regardless of the two-sided design..
--edness.. IIUC my question has merit and we need v5?
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+      commit: 5c5c2baad2b55cc0a4b190266889959642298f79
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F98359DC5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E971A59E0C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355156AbiHWKXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S243390AbiHWMMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353316AbiHWKLO (ORCPT
+        with ESMTP id S1359844AbiHWMLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:14 -0400
+        Tue, 23 Aug 2022 08:11:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793A610A;
-        Tue, 23 Aug 2022 01:56:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975C3E2C5A;
+        Tue, 23 Aug 2022 02:39:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16602614E7;
-        Tue, 23 Aug 2022 08:56:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D408C433D6;
-        Tue, 23 Aug 2022 08:56:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C7D16148E;
+        Tue, 23 Aug 2022 09:38:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDD2C433D6;
+        Tue, 23 Aug 2022 09:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244990;
-        bh=aYnBnfGUaEEa3RlKev2F+dQui8GePYWC7nN4kwgsqF0=;
+        s=korg; t=1661247497;
+        bh=JqwqA8K/Bi/JlYaxPGlyPEUe8HAVD/tfbTEB5pz8NI4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DrbMX9IYej7wZHvaSrZVjF1Vq/Y4N2jxdLrELV1YVD2xQ6OAdiReHpXNSpYf7cxa0
-         iPlvEEOAdd9x/Ztyxyg3NYdMi/2VKNUPLoK1rVgdus+1jYey/McE4q2OTVBLLXmzZr
-         K3J40xmBc9v3hcTCz3TJ1DnQcOU/edpOloE1XpMo=
+        b=kvVTtg0s6OyjH7QHREFlS5+ag8/5mpZCoH/wm+aXp9kTyJ2PCOvjmpuFjasXdAysB
+         Qx43LdsInjBBK4MggClG/+5Xc9svm7m2rp2r1ANZ7H33xc2AsFroJ4xYOCCO3+PPf/
+         AOUdLIP+Od5bn4+9na7M7tjFjjgHjR/NV1h5FkEA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 226/229] smb3: check xattr value length earlier
+        stable@vger.kernel.org, Ondrej Mosnacek <omosnace@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 5.10 055/158] kbuild: dummy-tools: avoid tmpdir leak in dummy gcc
 Date:   Tue, 23 Aug 2022 10:26:27 +0200
-Message-Id: <20220823080101.714839062@linuxfoundation.org>
+Message-Id: <20220823080048.307327393@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Ondrej Mosnacek <omosnace@redhat.com>
 
-[ Upstream commit 5fa2cffba0b82336a2244d941322eb1627ff787b ]
+commit aac289653fa5adf9e9985e4912c1d24a3e8cbab2 upstream.
 
-Coverity complains about assigning a pointer based on
-value length before checking that value length goes
-beyond the end of the SMB.  Although this is even more
-unlikely as value length is a single byte, and the
-pointer is not dereferenced until laterm, it is clearer
-to check the lengths first.
+When passed -print-file-name=plugin, the dummy gcc script creates a
+temporary directory that is never cleaned up. To avoid cluttering
+$TMPDIR, instead use a static directory included in the source tree.
 
-Addresses-Coverity: 1467704 ("Speculative execution data leak")
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 76426e238834 ("kbuild: add dummy toolchains to enable all cc-option etc. in Kconfig")
+Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/smb2ops.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../dummy-tools/dummy-plugin-dir/include/plugin-version.h | 0
+ scripts/dummy-tools/gcc |    8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+ create mode 100644 scripts/dummy-tools/dummy-plugin-dir/include/plugin-version.h
 
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 3280a801b1d7..069eb2533e7f 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -463,9 +463,7 @@ move_smb2_ea_to_cifs(char *dst, size_t dst_size,
- 	size_t name_len, value_len, user_name_len;
+--- a/scripts/dummy-tools/gcc
++++ b/scripts/dummy-tools/gcc
+@@ -77,12 +77,8 @@ fi
  
- 	while (src_size > 0) {
--		name = &src->ea_data[0];
- 		name_len = (size_t)src->ea_name_length;
--		value = &src->ea_data[src->ea_name_length + 1];
- 		value_len = (size_t)le16_to_cpu(src->ea_value_length);
+ # To set GCC_PLUGINS
+ if arg_contain -print-file-name=plugin "$@"; then
+-	plugin_dir=$(mktemp -d)
+-
+-	mkdir -p $plugin_dir/include
+-	touch $plugin_dir/include/plugin-version.h
+-
+-	echo $plugin_dir
++	# Use $0 to find the in-tree dummy directory
++	echo "$(dirname "$(readlink -f "$0")")/dummy-plugin-dir"
+ 	exit 0
+ fi
  
- 		if (name_len == 0) {
-@@ -478,6 +476,9 @@ move_smb2_ea_to_cifs(char *dst, size_t dst_size,
- 			goto out;
- 		}
- 
-+		name = &src->ea_data[0];
-+		value = &src->ea_data[src->ea_name_length + 1];
-+
- 		if (ea_name) {
- 			if (ea_name_len == name_len &&
- 			    memcmp(ea_name, name, name_len) == 0) {
--- 
-2.35.1
-
 
 

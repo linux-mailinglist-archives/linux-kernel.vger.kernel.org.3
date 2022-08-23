@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D7159D68B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A739959D39A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243295AbiHWJMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S241846AbiHWINO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348448AbiHWJKE (ORCPT
+        with ESMTP id S241997AbiHWIK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:10:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DEF74DFA;
-        Tue, 23 Aug 2022 01:30:59 -0700 (PDT)
+        Tue, 23 Aug 2022 04:10:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522FF66A4C;
+        Tue, 23 Aug 2022 01:06:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A791B81C48;
-        Tue, 23 Aug 2022 08:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F18C433C1;
-        Tue, 23 Aug 2022 08:29:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED5EBB81C20;
+        Tue, 23 Aug 2022 08:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C48C433D6;
+        Tue, 23 Aug 2022 08:06:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243376;
-        bh=ebo6kPnfZ6o+Q1fsjAA8jeQY9HT8MUugEfOa0/b02xE=;
+        s=korg; t=1661242012;
+        bh=oVWkrboSkv9Bnu5R4qvw2tZvMFAhnopG10Deyehvyss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VkZaIoRMmjUMK/JN87Wl8jcjS2Jgx8Aqrb8Em0EM20fpK5I3xeIAdcCDzGP8Jkzm0
-         r3CPDaoG1yF+wYzkEtl+7Pn7+YguL8pQvWkBx5wijqRnp+ha+uUzsVJpyuc+CHY/0P
-         F92xqy9yRYZ5Ax4Vf5ciKu1Ub/1uPYT3EGmXLfB4=
+        b=tGalO4DRbtG+fp27SwhzI5kz7QvXz6At3RvoOPAgvJvn4uysBWULP9SackP5nF0bT
+         f+4qDKxPhjM54Uum7Lif1WAkOBIv7y+jubYS2/qGUPlfLVSkGufBNIR2I6/rb8dixK
+         Dzy4rIBUZSEdx2QNMFeIpI8gHEinBvoGEXCyFur8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gil Fine <gil.fine@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        stable@vger.kernel.org,
+        Domingo Dirutigliano <pwnzer0tt1@proton.me>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 257/365] thunderbolt: Change downstream routers TMU rate in both TMU uni/bidir mode
-Date:   Tue, 23 Aug 2022 10:02:38 +0200
-Message-Id: <20220823080128.954306927@linuxfoundation.org>
+Subject: [PATCH 4.9 006/101] netfilter: nf_queue: do not allow packet truncation below transport header offset
+Date:   Tue, 23 Aug 2022 10:02:39 +0200
+Message-Id: <20220823080034.838634482@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gil Fine <gil.fine@intel.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 5fd6b9a5cbe63fea4c490fee8af34144a139a266 ]
+[ Upstream commit 99a63d36cb3ed5ca3aa6fcb64cffbeaf3b0fb164 ]
 
-In case of uni-directional time sync, TMU handshake is
-initiated by upstream router. In case of bi-directional
-time sync, TMU handshake is initiated by downstream router.
-In order to handle correctly the case of uni-directional mode,
-we avoid changing the upstream router's rate to off,
-because it might have another downstream router plugged that is set to
-uni-directional mode (and we don't want to change its mode).
-Instead, we always change downstream router's rate.
+Domingo Dirutigliano and Nicola Guerrera report kernel panic when
+sending nf_queue verdict with 1-byte nfta_payload attribute.
 
-Signed-off-by: Gil Fine <gil.fine@intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+The IP/IPv6 stack pulls the IP(v6) header from the packet after the
+input hook.
+
+If user truncates the packet below the header size, this skb_pull() will
+result in a malformed skb (skb->len < 0).
+
+Fixes: 7af4cc3fa158 ("[NETFILTER]: Add "nfnetlink_queue" netfilter queue handler over nfnetlink")
+Reported-by: Domingo Dirutigliano <pwnzer0tt1@proton.me>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Reviewed-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thunderbolt/tmu.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ net/netfilter/nfnetlink_queue.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-index e4a07a26f693..93ba1d00335b 100644
---- a/drivers/thunderbolt/tmu.c
-+++ b/drivers/thunderbolt/tmu.c
-@@ -359,13 +359,14 @@ int tb_switch_tmu_disable(struct tb_switch *sw)
- 		 * In case of uni-directional time sync, TMU handshake is
- 		 * initiated by upstream router. In case of bi-directional
- 		 * time sync, TMU handshake is initiated by downstream router.
--		 * Therefore, we change the rate to off in the respective
--		 * router.
-+		 * We change downstream router's rate to off for both uni/bidir
-+		 * cases although it is needed only for the bi-directional mode.
-+		 * We avoid changing upstream router's mode since it might
-+		 * have another downstream router plugged, that is set to
-+		 * uni-directional mode and we don't want to change it's TMU
-+		 * mode.
- 		 */
--		if (unidirectional)
--			tb_switch_tmu_rate_write(parent, TB_SWITCH_TMU_RATE_OFF);
--		else
--			tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
-+		tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
+diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
+index 66814a9d030c..80715b495d7c 100644
+--- a/net/netfilter/nfnetlink_queue.c
++++ b/net/netfilter/nfnetlink_queue.c
+@@ -807,11 +807,16 @@ nfqnl_enqueue_packet(struct nf_queue_entry *entry, unsigned int queuenum)
+ }
  
- 		tb_port_tmu_time_sync_disable(up);
- 		ret = tb_port_tmu_time_sync_disable(down);
+ static int
+-nfqnl_mangle(void *data, int data_len, struct nf_queue_entry *e, int diff)
++nfqnl_mangle(void *data, unsigned int data_len, struct nf_queue_entry *e, int diff)
+ {
+ 	struct sk_buff *nskb;
+ 
+ 	if (diff < 0) {
++		unsigned int min_len = skb_transport_offset(e->skb);
++
++		if (data_len < min_len)
++			return -EINVAL;
++
+ 		if (pskb_trim(e->skb, data_len))
+ 			return -ENOMEM;
+ 	} else if (diff > 0) {
 -- 
 2.35.1
 

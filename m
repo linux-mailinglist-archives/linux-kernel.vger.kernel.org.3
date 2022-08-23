@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D8059D4D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F209659D797
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244499AbiHWIdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S1350238AbiHWJ3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245696AbiHWIbI (ORCPT
+        with ESMTP id S1350719AbiHWJ0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:31:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BA36D9E9;
-        Tue, 23 Aug 2022 01:15:57 -0700 (PDT)
+        Tue, 23 Aug 2022 05:26:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F6276764;
+        Tue, 23 Aug 2022 01:36:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72CA06134C;
-        Tue, 23 Aug 2022 08:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BDEC433D7;
-        Tue, 23 Aug 2022 08:15:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94EFB6132D;
+        Tue, 23 Aug 2022 08:35:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08B0C433D6;
+        Tue, 23 Aug 2022 08:35:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242508;
-        bh=fy9Hbiarz6gfSjxp30zSLiolvV9NwPqMSdgxPIu22Qs=;
+        s=korg; t=1661243715;
+        bh=q4e5RPgusHolD8fcDqoi4kybf9uPxbFOEi5uXMdW6QA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p5GpuMdOFj+DsGEJpRjzQKo1PW+xjtU2khuXDVcH+QpBWDVPqeRgMaRkK4Q/P3xlm
-         RhJjgb63LsmWiIGWHRZZQ/ZA6JYTPbcYBsv+MG33wWoLNkTpBfT0nFD9qGJko8CyLI
-         06HdPHXZEEHcRqJSWNQ1dO6t6VCHoY2UwcgbdW4w=
+        b=L3XigLwJA8a+fsIwKhEaIhL7mGFePqQJLCkPPWE6DP87nS/5iINKQsIoU0rgighLO
+         3Uh+JrywlsCXXU7jwniHPNwvNL6eO/mG3n5OaIGgmmlxrYT3wjT9WC2o3rLxdfr1bJ
+         Nx2xfueRKKV8mxIZPx/FjhxD7ArTjg/L+Pz9xfB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 4.9 082/101] nios2: restarts apply only to the first sigframe we build...
+        stable@vger.kernel.org, Brice Goglin <Brice.Goglin@inria.fr>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 334/365] riscv: dts: canaan: Add k210 topology information
 Date:   Tue, 23 Aug 2022 10:03:55 +0200
-Message-Id: <20220823080037.691744892@linuxfoundation.org>
+Message-Id: <20220823080132.189132574@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,27 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Conor Dooley <conor.dooley@microchip.com>
 
-commit 411a76b7219555c55867466c82d70ce928d6c9e1 upstream.
+[ Upstream commit d9d193dea8666bbf69fc21c5bdcdabaa34a466e3 ]
 
-Fixes: b53e906d255d ("nios2: Signal handling support")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The k210 has no cpu-map node, so tools like hwloc cannot correctly
+parse the topology. Add the node using the existing node labels.
+
+Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
+Link: https://github.com/open-mpi/hwloc/issues/536
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Link: https://lore.kernel.org/r/20220705190435.1790466-6-mail@conchuod.ie
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/nios2/kernel/signal.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/boot/dts/canaan/k210.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/arch/nios2/kernel/signal.c
-+++ b/arch/nios2/kernel/signal.c
-@@ -261,6 +261,7 @@ static int do_signal(struct pt_regs *reg
- 			regs->ea = restart_addr;
- 			break;
- 		}
-+		regs->orig_r2 = -1;
- 	}
+diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
+index 44d338514761..ec944d1537dc 100644
+--- a/arch/riscv/boot/dts/canaan/k210.dtsi
++++ b/arch/riscv/boot/dts/canaan/k210.dtsi
+@@ -65,6 +65,18 @@
+ 				compatible = "riscv,cpu-intc";
+ 			};
+ 		};
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++
++				core1 {
++					cpu = <&cpu1>;
++				};
++			};
++		};
+ 	};
  
- 	if (get_signal(&ksig)) {
+ 	sram: memory@80000000 {
+-- 
+2.35.1
+
 
 

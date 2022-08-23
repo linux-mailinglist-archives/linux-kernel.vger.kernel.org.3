@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EB059D704
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E844559D7A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242786AbiHWJtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S240796AbiHWJjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352489AbiHWJq3 (ORCPT
+        with ESMTP id S1351386AbiHWJig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:46:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763909080D;
-        Tue, 23 Aug 2022 01:43:59 -0700 (PDT)
+        Tue, 23 Aug 2022 05:38:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86DB42ADC;
+        Tue, 23 Aug 2022 01:40:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F93361377;
-        Tue, 23 Aug 2022 08:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DDD5C433D6;
-        Tue, 23 Aug 2022 08:43:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63153B81C4F;
+        Tue, 23 Aug 2022 08:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC38C433C1;
+        Tue, 23 Aug 2022 08:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244219;
-        bh=MKtkNLnOpsU+iTzTYMESxp1iv6KPokCGsvYIOzSz0VY=;
+        s=korg; t=1661243933;
+        bh=xrT7sCDqJzbwaabInFSOooM42pz6YylOw5GrLACf6Gk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iuSnnJ9ana6Bf9BjQ0Hv7b1WxSZCZCchijVrFoihWazp9Y2+1itKBjZPHS0pq/d71
-         +tojy+f0Ft3WJUdMfeGxM9/hQijg+0GBLIkkRfvBcMt8+M/uQdRjTXsu01BChgOTQW
-         fbSXC+Z3nFiBZVbgLqbVEPLT7wG4TaI2EiXlhkpw=
+        b=OU1qev2kDNnTFj3Pj1fXjLrlVNrTmORpkIxoW56SSAyduxNzElvGxuvx9PL2sw5lq
+         FW9UYM6GV5X1LNEO2V+9CINW1/MLV2trBj/1tDFQDQZI/sITG9XltBT6CLmyUPcyur
+         CVyUuaX0mBooTMj6HSKpZeKJyg/6Q2qZGjqSyj/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 058/244] net: phy: Warn about incorrect mdio_bus_phy_resume() state
-Date:   Tue, 23 Aug 2022 10:23:37 +0200
-Message-Id: <20220823080101.009863270@linuxfoundation.org>
+        stable@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= 
+        <alejandro.gonzalez.correo@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 058/229] thermal/tools/tmon: Include pthread and time headers in tmon.h
+Date:   Tue, 23 Aug 2022 10:23:39 +0200
+Message-Id: <20220823080055.799080088@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
 
-commit 744d23c71af39c7dc77ac7c3cac87ae86a181a85 upstream.
+[ Upstream commit 0cf51bfe999524377fbb71becb583b4ca6d07cfc ]
 
-Calling mdio_bus_phy_resume() with neither the PHY state machine set to
-PHY_HALTED nor phydev->mac_managed_pm set to true is a good indication
-that we can produce a race condition looking like this:
+Include sys/time.h and pthread.h in tmon.h, so that types
+"pthread_mutex_t" and "struct timeval tv" are known when tmon.h
+references them.
 
-CPU0						CPU1
-bcmgenet_resume
- -> phy_resume
-   -> phy_init_hw
- -> phy_start
-   -> phy_resume
-                                                phy_start_aneg()
-mdio_bus_phy_resume
- -> phy_resume
-    -> phy_write(..., BMCR_RESET)
-     -> usleep()                                  -> phy_read()
+Without these headers, compiling tmon against musl-libc will fail with
+these errors:
 
-with the phy_resume() function triggering a PHY behavior that might have
-to be worked around with (see bf8bfc4336f7 ("net: phy: broadcom: Fix
-brcm_fet_config_init()") for instance) that ultimately leads to an error
-reading from the PHY.
+In file included from sysfs.c:31:0:
+tmon.h:47:8: error: unknown type name 'pthread_mutex_t'
+ extern pthread_mutex_t input_lock;
+        ^~~~~~~~~~~~~~~
+make[3]: *** [<builtin>: sysfs.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from tui.c:31:0:
+tmon.h:54:17: error: field 'tv' has incomplete type
+  struct timeval tv;
+                 ^~
+make[3]: *** [<builtin>: tui.o] Error 1
+make[2]: *** [Makefile:83: tmon] Error 2
 
-Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220801233403.258871-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Acked-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
+Tested-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
+Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal  subsystem")
+Link: https://lore.kernel.org/r/20220718031040.44714-1-f.fainelli@gmail.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/phy_device.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/thermal/tmon/tmon.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -315,6 +315,12 @@ static __maybe_unused int mdio_bus_phy_r
+diff --git a/tools/thermal/tmon/tmon.h b/tools/thermal/tmon/tmon.h
+index 9e3c49c547ac..7b090a6c95b6 100644
+--- a/tools/thermal/tmon/tmon.h
++++ b/tools/thermal/tmon/tmon.h
+@@ -36,6 +36,9 @@
+ #define NR_LINES_TZDATA 1
+ #define TMON_LOG_FILE "/var/tmp/tmon.log"
  
- 	phydev->suspended_by_mdio_bus = 0;
- 
-+	/* If we managed to get here with the PHY state machine in a state other
-+	 * than PHY_HALTED this is an indication that something went wrong and
-+	 * we should most likely be using MAC managed PM and we are not.
-+	 */
-+	WARN_ON(phydev->state != PHY_HALTED && !phydev->mac_managed_pm);
++#include <sys/time.h>
++#include <pthread.h>
 +
- 	ret = phy_init_hw(phydev);
- 	if (ret < 0)
- 		return ret;
+ extern unsigned long ticktime;
+ extern double time_elapsed;
+ extern unsigned long target_temp_user;
+-- 
+2.35.1
+
 
 

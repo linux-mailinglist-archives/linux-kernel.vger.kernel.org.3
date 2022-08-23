@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA99B59DF0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7966A59E040
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358278AbiHWLo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S1354903AbiHWK0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358277AbiHWLlY (ORCPT
+        with ESMTP id S1353714AbiHWKLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:41:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E58CACAA;
-        Tue, 23 Aug 2022 02:29:07 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B98D2701;
+        Tue, 23 Aug 2022 01:58:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B38F5B81C85;
-        Tue, 23 Aug 2022 09:29:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E332EC433C1;
-        Tue, 23 Aug 2022 09:29:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39A026155E;
+        Tue, 23 Aug 2022 08:58:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29BF5C433D6;
+        Tue, 23 Aug 2022 08:58:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246944;
-        bh=Nglrtbc6ZxP9VMKhf1z/sBxfdb47WdpNo/Z79mDaEjg=;
+        s=korg; t=1661245099;
+        bh=yCu+hAZ3eXWNMUToH6jwIasEDtNCAS4aIAONapDsSKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sOxfmqgPiv/UWueld349rL986V4Sis4cTYwiEctvsJv9tnM2qXPZQyMT++xuLBu/+
-         m7OzDi6oMPhcaSHwB5c04QnkY+rRzF1AZsBMj08tE/g5ByrQvUvNBJNK0lxgwcWk6C
-         jbNSCYPFz25ymXUM88OqQRkG5frjYrHttx86j7O4=
+        b=VISuK310I8VHK+zH0S6ejOJzT6WxRmFxnMxLkGrx/84qxSu2MUXpPEZWe62J8tqg6
+         iwuVd2IH2zsulm6WEt1AKtAyBBcCokKcsGGgleEW6rcg9WAK1w3dxvTB/YfKiPhSMI
+         UUNSEwAH02AM9O6ndY+qJmjKTVqiO02pWDNhbA1s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Ye Bin <yebin10@huawei.com>, Eric Whitney <enwlinux@gmail.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 261/389] ext4: fix extent status tree race in writeback error recovery path
-Date:   Tue, 23 Aug 2022 10:25:39 +0200
-Message-Id: <20220823080126.486005521@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 181/244] clk: qcom: clk-alpha-pll: fix clk_trion_pll_configure description
+Date:   Tue, 23 Aug 2022 10:25:40 +0200
+Message-Id: <20220823080105.374730340@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Whitney <enwlinux@gmail.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-commit 7f0d8e1d607c1a4fa9a27362a108921d82230874 upstream.
+[ Upstream commit 94bed9bb05c7850ff5d80b87cc29004901f37956 ]
 
-A race can occur in the unlikely event ext4 is unable to allocate a
-physical cluster for a delayed allocation in a bigalloc file system
-during writeback.  Failure to allocate a cluster forces error recovery
-that includes a call to mpage_release_unused_pages().  That function
-removes any corresponding delayed allocated blocks from the extent
-status tree.  If a new delayed write is in progress on the same cluster
-simultaneously, resulting in the addition of an new extent containing
-one or more blocks in that cluster to the extent status tree, delayed
-block accounting can be thrown off if that delayed write then encounters
-a similar cluster allocation failure during future writeback.
+After merging lucid and trion pll functions in commit 0b01489475c6
+("clk: qcom: clk-alpha-pll: same regs and ops for trion and lucid")
+the function clk_trion_pll_configure() is left with an old description
+header, which results in a W=2 compile time warning, fix it.
 
-Write lock the i_data_sem in mpage_release_unused_pages() to fix this
-problem.  Ext4's block/cluster accounting code for bigalloc relies on
-i_data_sem for mutual exclusion, as is found in the delayed write path,
-and the locking in mpage_release_unused_pages() is missing.
-
-Cc: stable@kernel.org
-Reported-by: Ye Bin <yebin10@huawei.com>
-Signed-off-by: Eric Whitney <enwlinux@gmail.com>
-Link: https://lore.kernel.org/r/20220615160530.1928801-1-enwlinux@gmail.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Stephen Boyd <sboyd@kernel.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220701062711.2757855-1-vladimir.zapolskiy@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inode.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/clk/qcom/clk-alpha-pll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1717,7 +1717,14 @@ static void mpage_release_unused_pages(s
- 		ext4_lblk_t start, last;
- 		start = index << (PAGE_SHIFT - inode->i_blkbits);
- 		last = end << (PAGE_SHIFT - inode->i_blkbits);
-+
-+		/*
-+		 * avoid racing with extent status tree scans made by
-+		 * ext4_insert_delayed_block()
-+		 */
-+		down_write(&EXT4_I(inode)->i_data_sem);
- 		ext4_es_remove_extent(inode, start, last - start + 1);
-+		up_write(&EXT4_I(inode)->i_data_sem);
- 	}
+diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+index 8f65b9bdafce..5e44ceb730ad 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.c
++++ b/drivers/clk/qcom/clk-alpha-pll.c
+@@ -1420,7 +1420,7 @@ const struct clk_ops clk_alpha_pll_postdiv_fabia_ops = {
+ EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_fabia_ops);
  
- 	pagevec_init(&pvec);
+ /**
+- * clk_lucid_pll_configure - configure the lucid pll
++ * clk_trion_pll_configure - configure the trion pll
+  *
+  * @pll: clk alpha pll
+  * @regmap: register map
+-- 
+2.35.1
+
 
 

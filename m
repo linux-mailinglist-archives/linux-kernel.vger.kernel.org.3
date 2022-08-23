@@ -2,366 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A3859CE63
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 04:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC8359CE6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 04:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235419AbiHWCTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 22:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S239309AbiHWCUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 22:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiHWCTd (ORCPT
+        with ESMTP id S239297AbiHWCUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 22:19:33 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CB757235;
-        Mon, 22 Aug 2022 19:19:31 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 9A5E33200A27;
-        Mon, 22 Aug 2022 22:19:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 22 Aug 2022 22:19:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661221168; x=1661307568; bh=TLwpmg8vHO
-        B4GXzZydz9UyD4FFMxizILcM5xJmtqCLo=; b=RGhXHmVIwEwXgAOQlm0+TOtraL
-        SgSIrGOcy27P9hIo47PPNmnjp0QB1hOB3TY9IXJB+NDAiTwi0FRAiXsY1XqlLvUU
-        WW/3OSbo1+xvpP6QdtQLJeY88fnEcbSUWENahCwbHlXOnbq1CcmQ1nwKoBHZ7+6F
-        iaTGcArdWbaFAftWeugFbIWdb/48hpCc+iCRK3yUIr1btEFz1zGZda8hJo2/s93N
-        Vo5qy30Okzn0Bz8rLkKWd47JG12mzNkR3xyyGGi0Ra/BwldiDyj+I+HGHIHZ1z8Y
-        ZIoSMpdgjPdOhkI/+2ucjtwOR8FeQqon4f6gJQER6PoYq7w/dr+8QOzb3fjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661221168; x=1661307568; bh=TLwpmg8vHOB4GXzZydz9UyD4FFMx
-        izILcM5xJmtqCLo=; b=PDRCDqbP0cfj6D9e/XgnRaHoVf+KaqvF/bgiY330x+sl
-        Hginuge/ZtLKGPkYO1xsyoTOKgINxW2I20X0kle5y/MF6fGsIakTDtz26R3H85kc
-        bhqJpMo2PSStBDvUugAy8DlkqWqng1loesvEDdEPsy/Eacaa1r0m8WXTBNds5KoS
-        AejhbzAs7Ti7pZncOzxssEoYDc5oSB5oBx13NmwinVbr7u9+wmIO5bRPUIDmRFjp
-        yJaubk+YsFnLspH4PcWrQdhtHH59alsql8xdMUlW1r7At5EzyEmagH31/XfRXRzB
-        7NXoUXeD4Xkdc4t/yXV5w10H57FVLLOFgs2swjN/Aw==
-X-ME-Sender: <xms:LzkEYyCjaZlrr3rb1gXCwNEjQDIUgm0vOYrAGEkpumFt4KLPP8SejA>
-    <xme:LzkEY8hQ_6Owodujg1qsD6MUOeBOOgqARq-B5RRpqqXrMAH1xLaoG01Sff4YKMp7q
-    U_Ibg9AIMnfkLdN9A>
-X-ME-Received: <xmr:LzkEY1ltCRb2uwEqfa5b5kqIs8_h7FGplE5ycoLr_sXAfKxffHafPSZTNjKqgAfzil4WXzR2e4Gwt61NRMebrqu4m9OZqSBUNX-q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeikedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpeffhf
-    fvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepveduudegiefhtdffhe
-    fggfdugeeggeehtefgvefhkeekieelueeijeelkeeivdfgnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:LzkEYwzxMBvZyDw2OzdGwCzsPTrtrgm5I3rwYoZ1wzkFBMD5-H-zGg>
-    <xmx:LzkEY3Quu2cn8eCcgjxs3-ioH5YHYkVgsmZkGCJEw0aH6HHmmiM7xg>
-    <xmx:LzkEY7abRUIvQOQ5HZCU0dUZNRzHpjzcywRfKl09FK3b3PcPjKeYeg>
-    <xmx:MDkEY8JF2ul_8MRFOxk8EVhKLV7LUO7qU1yAtyaFA7jCO7g8hs0njg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 22 Aug 2022 22:19:26 -0400 (EDT)
-Date:   Mon, 22 Aug 2022 20:19:23 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, pablo@netfilter.org, fw@strlen.de,
-        toke@kernel.org, martin.lau@linux.dev,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 4/5] bpf: Add support for writing to
- nf_conn:mark
-Message-ID: <20220823021923.vmhp5r76dvgwvh2j@kashmir.localdomain>
-References: <cover.1661192455.git.dxu@dxuuu.xyz>
- <073173502d762faf87bde0ca23e609c84848dd7e.1661192455.git.dxu@dxuuu.xyz>
- <CAP01T74XK_6wMi+tzReTkBqmZkKbUqCmV6pVwcbCMrHrv0X0SA@mail.gmail.com>
+        Mon, 22 Aug 2022 22:20:03 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77095AC70
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 19:20:01 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27N1Q9UT029806
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 19:20:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=82Vs1lYtKUi+Kjp7/o0CxrQlH2pZDEjvB2i0zPCgNjk=;
+ b=RM6N64TGL/Nuryhi63N/aW1aCM/WjPNNrOs+dNClDiGRhpNF0UQ8CzkTC5b1Kc+sa9bk
+ /vU7iMKwKNCf3+KJA3ZXftAl0tGpQAlCZPNRuzjt5rBOAF+Z+RBRm94UZJep0LDEFjOG
+ AxeXIlveMm9cZJUJo/m7XqLy0ktWYihQdB8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3j4dka01md-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 19:20:00 -0700
+Received: from twshared6447.05.prn5.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 22 Aug 2022 19:19:59 -0700
+Received: by devvm301.eag0.facebook.com (Postfix, from userid 352741)
+        id 024D3356647F; Mon, 22 Aug 2022 19:19:49 -0700 (PDT)
+From:   <alexlzhu@fb.com>
+To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Kernel-team@fb.com>, <bagasdotme@gmail.com>
+CC:     Alexander Zhu <alexlzhu@fb.com>
+Subject: [PATCH v4] docs: admin-guide/mm: Improve grammar on MM concepts documentation
+Date:   Mon, 22 Aug 2022 19:19:41 -0700
+Message-ID: <20220823021941.4021897-1-alexlzhu@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP01T74XK_6wMi+tzReTkBqmZkKbUqCmV6pVwcbCMrHrv0X0SA@mail.gmail.com>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: Nq4DuXS1guTKRUYTX1kWOvceV7JLelgf
+X-Proofpoint-ORIG-GUID: Nq4DuXS1guTKRUYTX1kWOvceV7JLelgf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_16,2022-08-22_02,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 02:16:42AM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Mon, 22 Aug 2022 at 20:26, Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> > Support direct writes to nf_conn:mark from TC and XDP prog types. This
-> > is useful when applications want to store per-connection metadata. This
-> > is also particularly useful for applications that run both bpf and
-> > iptables/nftables because the latter can trivially access this metadata.
-> >
-> > One example use case would be if a bpf prog is responsible for advanced
-> > packet classification and iptables/nftables is later used for routing
-> > due to pre-existing/legacy code.
-> >
-> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > ---
-> >  include/net/netfilter/nf_conntrack_bpf.h | 22 ++++++
-> >  net/core/filter.c                        | 34 +++++++++
-> >  net/netfilter/nf_conntrack_bpf.c         | 91 +++++++++++++++++++++++-
-> >  net/netfilter/nf_conntrack_core.c        |  1 +
-> >  4 files changed, 147 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/net/netfilter/nf_conntrack_bpf.h b/include/net/netfilter/nf_conntrack_bpf.h
-> > index a473b56842c5..6fc03066846b 100644
-> > --- a/include/net/netfilter/nf_conntrack_bpf.h
-> > +++ b/include/net/netfilter/nf_conntrack_bpf.h
-> > @@ -3,6 +3,7 @@
-> >  #ifndef _NF_CONNTRACK_BPF_H
-> >  #define _NF_CONNTRACK_BPF_H
-> >
-> > +#include <linux/bpf.h>
-> >  #include <linux/btf.h>
-> >  #include <linux/kconfig.h>
-> >
-> > @@ -10,6 +11,13 @@
-> >      (IS_MODULE(CONFIG_NF_CONNTRACK) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
-> >
-> >  extern int register_nf_conntrack_bpf(void);
-> > +extern void cleanup_nf_conntrack_bpf(void);
-> > +extern int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
-> > +                                         const struct btf *btf,
-> > +                                         const struct btf_type *t, int off,
-> > +                                         int size, enum bpf_access_type atype,
-> > +                                         u32 *next_btf_id,
-> > +                                         enum bpf_type_flag *flag);
-> >
-> >  #else
-> >
-> > @@ -18,6 +26,20 @@ static inline int register_nf_conntrack_bpf(void)
-> >         return 0;
-> >  }
-> >
-> > +static inline void cleanup_nf_conntrack_bpf(void)
-> > +{
-> > +}
-> > +
-> > +static inline int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
-> > +                                                const struct btf *btf,
-> > +                                                const struct btf_type *t, int off,
-> > +                                                int size, enum bpf_access_type atype,
-> > +                                                u32 *next_btf_id,
-> > +                                                enum bpf_type_flag *flag)
-> > +{
-> > +       return -EACCES;
-> > +}
-> > +
-> >  #endif
-> >
-> >  #endif /* _NF_CONNTRACK_BPF_H */
-> > diff --git a/net/core/filter.c b/net/core/filter.c
-> > index 1acfaffeaf32..25bdbf6dc76b 100644
-> > --- a/net/core/filter.c
-> > +++ b/net/core/filter.c
-> > @@ -18,6 +18,7 @@
-> >   */
-> >
-> >  #include <linux/atomic.h>
-> > +#include <linux/bpf_verifier.h>
-> >  #include <linux/module.h>
-> >  #include <linux/types.h>
-> >  #include <linux/mm.h>
-> > @@ -55,6 +56,7 @@
-> >  #include <net/sock_reuseport.h>
-> >  #include <net/busy_poll.h>
-> >  #include <net/tcp.h>
-> > +#include <net/netfilter/nf_conntrack_bpf.h>
-> >  #include <net/xfrm.h>
-> >  #include <net/udp.h>
-> >  #include <linux/bpf_trace.h>
-> > @@ -8628,6 +8630,21 @@ static bool tc_cls_act_is_valid_access(int off, int size,
-> >         return bpf_skb_is_valid_access(off, size, type, prog, info);
-> >  }
-> >
-> > +static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
-> > +                                       const struct btf *btf,
-> > +                                       const struct btf_type *t, int off,
-> > +                                       int size, enum bpf_access_type atype,
-> > +                                       u32 *next_btf_id,
-> > +                                       enum bpf_type_flag *flag)
-> > +{
-> > +       if (atype == BPF_READ)
-> > +               return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-> > +                                        flag);
-> > +
-> > +       return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
-> > +                                             next_btf_id, flag);
-> > +}
-> > +
-> >  static bool __is_valid_xdp_access(int off, int size)
-> >  {
-> >         if (off < 0 || off >= sizeof(struct xdp_md))
-> > @@ -8687,6 +8704,21 @@ void bpf_warn_invalid_xdp_action(struct net_device *dev, struct bpf_prog *prog,
-> >  }
-> >  EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
-> >
-> > +static int xdp_btf_struct_access(struct bpf_verifier_log *log,
-> > +                                const struct btf *btf,
-> > +                                const struct btf_type *t, int off,
-> > +                                int size, enum bpf_access_type atype,
-> > +                                u32 *next_btf_id,
-> > +                                enum bpf_type_flag *flag)
-> > +{
-> > +       if (atype == BPF_READ)
-> > +               return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-> > +                                        flag);
-> > +
-> > +       return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
-> > +                                             next_btf_id, flag);
-> > +}
-> > +
-> >  static bool sock_addr_is_valid_access(int off, int size,
-> >                                       enum bpf_access_type type,
-> >                                       const struct bpf_prog *prog,
-> > @@ -10581,6 +10613,7 @@ const struct bpf_verifier_ops tc_cls_act_verifier_ops = {
-> >         .convert_ctx_access     = tc_cls_act_convert_ctx_access,
-> >         .gen_prologue           = tc_cls_act_prologue,
-> >         .gen_ld_abs             = bpf_gen_ld_abs,
-> > +       .btf_struct_access      = tc_cls_act_btf_struct_access,
-> >  };
-> >
-> >  const struct bpf_prog_ops tc_cls_act_prog_ops = {
-> > @@ -10592,6 +10625,7 @@ const struct bpf_verifier_ops xdp_verifier_ops = {
-> >         .is_valid_access        = xdp_is_valid_access,
-> >         .convert_ctx_access     = xdp_convert_ctx_access,
-> >         .gen_prologue           = bpf_noop_prologue,
-> > +       .btf_struct_access      = xdp_btf_struct_access,
-> >  };
-> >
-> >  const struct bpf_prog_ops xdp_prog_ops = {
-> > diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
-> > index 1cd87b28c9b0..da54355927d4 100644
-> > --- a/net/netfilter/nf_conntrack_bpf.c
-> > +++ b/net/netfilter/nf_conntrack_bpf.c
-> > @@ -6,8 +6,10 @@
-> >   * are exposed through to BPF programs is explicitly unstable.
-> >   */
-> >
-> > +#include <linux/bpf_verifier.h>
-> >  #include <linux/bpf.h>
-> >  #include <linux/btf.h>
-> > +#include <linux/mutex.h>
-> >  #include <linux/types.h>
-> >  #include <linux/btf_ids.h>
-> >  #include <linux/net_namespace.h>
-> > @@ -184,6 +186,79 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
-> >         return ct;
-> >  }
-> >
-> > +BTF_ID_LIST(btf_nf_conn_ids)
-> > +BTF_ID(struct, nf_conn)
-> > +BTF_ID(struct, nf_conn___init)
-> > +
-> > +static DEFINE_MUTEX(btf_access_lock);
-> > +static int (*nfct_bsa)(struct bpf_verifier_log *log,
-> > +                      const struct btf *btf,
-> > +                      const struct btf_type *t, int off,
-> > +                      int size, enum bpf_access_type atype,
-> > +                      u32 *next_btf_id,
-> > +                      enum bpf_type_flag *flag);
-> > +
-> > +/* Check writes into `struct nf_conn` */
-> > +static int _nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
-> > +                                          const struct btf *btf,
-> > +                                          const struct btf_type *t, int off,
-> > +                                          int size, enum bpf_access_type atype,
-> > +                                          u32 *next_btf_id,
-> > +                                          enum bpf_type_flag *flag)
-> > +{
-> > +       const struct btf_type *ncit;
-> > +       const struct btf_type *nct;
-> > +       size_t end;
-> > +
-> > +       ncit = btf_type_by_id(btf, btf_nf_conn_ids[1]);
-> > +       nct = btf_type_by_id(btf, btf_nf_conn_ids[0]);
-> > +
-> > +       if (t != nct && t != ncit) {
-> > +               bpf_log(log, "only read is supported\n");
-> > +               return -EACCES;
-> > +       }
-> > +
-> > +       /* `struct nf_conn` and `struct nf_conn___init` have the same layout
-> > +        * so we are safe to simply merge offset checks here
-> > +        */
-> > +       switch (off) {
-> > +#if defined(CONFIG_NF_CONNTRACK_MARK)
-> > +       case offsetof(struct nf_conn, mark):
-> > +               end = offsetofend(struct nf_conn, mark);
-> > +               break;
-> > +#endif
-> > +       default:
-> > +               bpf_log(log, "no write support to nf_conn at off %d\n", off);
-> > +               return -EACCES;
-> > +       }
-> > +
-> > +       if (off + size > end) {
-> > +               bpf_log(log,
-> > +                       "write access at off %d with size %d beyond the member of nf_conn ended at %zu\n",
-> > +                       off, size, end);
-> > +               return -EACCES;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
-> > +                                  const struct btf *btf,
-> > +                                  const struct btf_type *t, int off,
-> > +                                  int size, enum bpf_access_type atype,
-> > +                                  u32 *next_btf_id,
-> > +                                  enum bpf_type_flag *flag)
-> > +{
-> > +       int ret = -EACCES;
-> > +
-> > +       mutex_lock(&btf_access_lock);
-> > +       if (nfct_bsa)
-> > +               ret = nfct_bsa(log, btf, t, off, size, atype, next_btf_id, flag);
-> > +       mutex_unlock(&btf_access_lock);
-> > +
-> > +       return ret;
-> > +}
-> 
-> Did you test this for CONFIG_NF_CONNTRACK=m? For me it isn't building :P.
-> 
-> It won't work like this. When nf_conntrack is a module, the vmlinux.o
-> of the kernel isn't linked to the object file nf_conntrack_bpf.o.
-> Hence it would be an undefined reference error. You don't see it in
-> BPF CI as we set CONFIG_NF_CONNTRACK=y (to simplify testing).
+From: Alexander Zhu <alexlzhu@fb.com>
 
-Sorry about that. Will make sure to test that config setting.
+Improve grammar on MM concepts documentation.
 
-> So you need to have code that locks and checks the cb pointer when
-> calling it outside the module, which means the global lock variable
-> and global cb pointer also need to be in the kernel. The module then
-> takes the same lock and sets cb pointer when loading. During unload,
-> it takes the same lock and sets it back to NULL.
-> 
-> You can have global variables in vmlinux that you reference from
-> modules. The compiler will emit a relocation for the module object
-> file which will be handled by the kernel during module load.
+Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
+---
+Changelog:=20
 
-Sure, I'll take a look. I was trying to keep conntrack symbols out of
-the core object files as much as possible but looks like that won't be
-possible.
+Changes in v4:
+-Adjust changelog to be below the dashes
 
-However, I think to keep the globals symbols in vmlinux we'll need to
-EXPORT_SYMBOL_GPL() some symbols. Hopefully that is OK.
+Changes in v3:
+-Correct punctuation based on previous comment
 
-There's also some other issues I'm uncovering with duplicate BTF IDs for
-nf_conn. Might have to do a lookup by name instead of the BTF_ID_LIST().
+Changes in v2:
+-Correct the subject
+-Adjust the description
 
-> So please test it once with nf_conntrack built as a module before
-> sending the next revision. The only thing you need to do before
-> running ./test_progs -t bpf_nf is loading the module nf_conntrack.ko
-> (and its dependencies, nf_defrag_ipv{4,6}.ko).
+ Documentation/admin-guide/mm/concepts.rst | 142 +++++++++++-----------
+ 1 file changed, 70 insertions(+), 72 deletions(-)
 
-Will do.
+diff --git a/Documentation/admin-guide/mm/concepts.rst b/Documentation/ad=
+min-guide/mm/concepts.rst
+index c79f1e336222..9291508bcdd6 100644
+--- a/Documentation/admin-guide/mm/concepts.rst
++++ b/Documentation/admin-guide/mm/concepts.rst
+@@ -4,14 +4,13 @@
+ Concepts overview
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The memory management in Linux is a complex system that evolved over the
+-years and included more and more functionality to support a variety of
+-systems from MMU-less microcontrollers to supercomputers. The memory
+-management for systems without an MMU is called ``nommu`` and it
+-definitely deserves a dedicated document, which hopefully will be
+-eventually written. Yet, although some of the concepts are the same,
+-here we assume that an MMU is available and a CPU can translate a virtua=
+l
+-address to a physical address.
++The memory management subsystem is a complex codebase that evolved over =
+the
++years to support a variety of systems from MMU-less microcontrollers to
++supercomputers. The memory management subsystem for systems without an
++MMU is called ``nommu`` and it deserves a dedicated document, which
++hopefully will be written at some point. Although some of the concepts
++are the same, here we assume that an MMU is available and a CPU can
++translate a virtual address to a physical address.
+=20
+ .. contents:: :local:
+=20
+@@ -29,89 +28,88 @@ of how these address ranges are defined.
+ All this makes dealing directly with physical memory quite complex and
+ to avoid this complexity a concept of virtual memory was developed.
+=20
+-The virtual memory abstracts the details of physical memory from the
+-application software, allows to keep only needed information in the
++Virtual memory abstracts the details of physical memory from the
++application software, allows for keeping only needed information in
+ physical memory (demand paging) and provides a mechanism for the
+ protection and controlled sharing of data between processes.
+=20
+ With virtual memory, each and every memory access uses a virtual
+ address. When the CPU decodes an instruction that reads (or
+-writes) from (or to) the system memory, it translates the `virtual`
++writes) from (or to) system memory, it translates the `virtual`
+ address encoded in that instruction to a `physical` address that the
+ memory controller can understand.
+=20
+ The physical system memory is divided into page frames, or pages. The
+ size of each page is architecture specific. Some architectures allow
+-selection of the page size from several supported values; this
+-selection is performed at the kernel build time by setting an
++selection of page size from several supported values; this
++selection is performed at kernel build time by setting an
+ appropriate kernel configuration option.
+=20
+-Each physical memory page can be mapped as one or more virtual
++Each page in physical memory can be mapped as one or more virtual
+ pages. These mappings are described by page tables that allow
+ translation from a virtual address used by programs to the physical
+-memory address. The page tables are organized hierarchically.
++address. The page tables are organized hierarchically.
+=20
+ The tables at the lowest level of the hierarchy contain physical
+ addresses of actual pages used by the software. The tables at higher
+-levels contain physical addresses of the pages belonging to the lower
++levels contain physical addresses of pages belonging to lower
+ levels. The pointer to the top level page table resides in a
+-register. When the CPU performs the address translation, it uses this
++register. When the CPU performs address translation, it uses this
+ register to access the top level page table. The high bits of the
+ virtual address are used to index an entry in the top level page
+ table. That entry is then used to access the next level in the
+-hierarchy with the next bits of the virtual address as the index to
+-that level page table. The lowest bits in the virtual address define
++hierarchy with the next bits of the virtual address as the index into
++the page table at that level. The lowest bits in the virtual address def=
+ine
+ the offset inside the actual page.
+=20
+ Huge Pages
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The address translation requires several memory accesses and memory
+-accesses are slow relatively to CPU speed. To avoid spending precious
+-processor cycles on the address translation, CPUs maintain a cache of
+-such translations called Translation Lookaside Buffer (or
+-TLB). Usually TLB is pretty scarce resource and applications with
+-large memory working set will experience performance hit because of
+-TLB misses.
++Address translation requires several memory accesses and memory
++accesses are slow relative to CPU speed. To avoid spending precious
++processor cycles on address translation, CPUs maintain a cache of
++such translations called the Translation Lookaside Buffer (or
++TLB). Usually TLB is a scarce resource and applications with a
++large in-memory working set will experience performance hit due to
++TLB miss.
+=20
+ Many modern CPU architectures allow mapping of the memory pages
+ directly by the higher levels in the page table. For instance, on x86,
+ it is possible to map 2M and even 1G pages using entries in the second
+ and the third level page tables. In Linux such pages are called
+-`huge`. Usage of huge pages significantly reduces pressure on TLB,
++`huge`. Usage of huge pages significantly reduces pressure on the TLB,
+ improves TLB hit-rate and thus improves overall system performance.
+=20
+-There are two mechanisms in Linux that enable mapping of the physical
+-memory with the huge pages. The first one is `HugeTLB filesystem`, or
++There are two mechanisms in Linux that enable mapping of physical
++memory with huge pages. The first one is `HugeTLB filesystem`, or
+ hugetlbfs. It is a pseudo filesystem that uses RAM as its backing
+-store. For the files created in this filesystem the data resides in
+-the memory and mapped using huge pages. The hugetlbfs is described at
++store. For files created in this filesystem the data resides in
++memory and is mapped with huge pages. hugetlbfs is described at
+ :ref:`Documentation/admin-guide/mm/hugetlbpage.rst <hugetlbpage>`.
+=20
+-Another, more recent, mechanism that enables use of the huge pages is
+-called `Transparent HugePages`, or THP. Unlike the hugetlbfs that
+-requires users and/or system administrators to configure what parts of
+-the system memory should and can be mapped by the huge pages, THP
+-manages such mappings transparently to the user and hence the
+-name. See
++Another mechanism that enables use of huge pages is called
++`Transparent HugePages`, or THP. Unlike hugetlbfs that requires
++users and/or system administrators to configure what parts of
++system memory can and should be mapped by huge pages, THP
++manages such mappings transparently to the user, hence the name. See
+ :ref:`Documentation/admin-guide/mm/transhuge.rst <admin_guide_transhuge>=
+`
+-for more details about THP.
++for more details on THP.
+=20
+ Zones
+ =3D=3D=3D=3D=3D
+=20
+ Often hardware poses restrictions on how different physical memory
+ ranges can be accessed. In some cases, devices cannot perform DMA to
+-all the addressable memory. In other cases, the size of the physical
++all the addressable memory. In other cases, the size of physical
+ memory exceeds the maximal addressable size of virtual memory and
+-special actions are required to access portions of the memory. Linux
++special actions are required to access portions of memory. Linux
+ groups memory pages into `zones` according to their possible
+ usage. For example, ZONE_DMA will contain memory that can be used by
+ devices for DMA, ZONE_HIGHMEM will contain memory that is not
+ permanently mapped into kernel's address space and ZONE_NORMAL will
+ contain normally addressed pages.
+=20
+-The actual layout of the memory zones is hardware dependent as not all
++The actual layout of memory zones is hardware dependent as not all
+ architectures define all zones, and requirements for DMA are different
+ for different platforms.
+=20
+@@ -131,10 +129,10 @@ counters. You can find more details about NUMA in
+ Page cache
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-The physical memory is volatile and the common case for getting data
+-into the memory is to read it from files. Whenever a file is read, the
++Physical memory is volatile and the common case for getting data
++into memory is to read it from files. Whenever a file is read, the
+ data is put into the `page cache` to avoid expensive disk access on
+-the subsequent reads. Similarly, when one writes to a file, the data
++subsequent reads. Similarly, when one writes to a file, the data
+ is placed in the page cache and eventually gets into the backing
+ storage device. The written pages are marked as `dirty` and when Linux
+ decides to reuse them for other purposes, it makes sure to synchronize
+@@ -145,10 +143,10 @@ Anonymous Memory
+=20
+ The `anonymous memory` or `anonymous mappings` represent memory that
+ is not backed by a filesystem. Such mappings are implicitly created
+-for program's stack and heap or by explicit calls to mmap(2) system
+-call. Usually, the anonymous mappings only define virtual memory areas
++for the program's stack and heap or by explicit calls to the mmap(2) sys=
+tem
++call. Usually, anonymous mappings only define virtual memory areas
+ that the program is allowed to access. The read accesses will result
+-in creation of a page table entry that references a special physical
++in the creation of a page table entry that references a special physical
+ page filled with zeroes. When the program performs a write, a regular
+ physical page will be allocated to hold the written data. The page
+ will be marked dirty and if the kernel decides to repurpose it,
+@@ -158,47 +156,47 @@ Reclaim
+ =3D=3D=3D=3D=3D=3D=3D
+=20
+ Throughout the system lifetime, a physical page can be used for storing
+-different types of data. It can be kernel internal data structures,
+-DMA'able buffers for device drivers use, data read from a filesystem,
++different types of data. It can be for storing kernel internal data stru=
+ctures,
++DMA'able buffers for device drivers to use, data read from a filesystem,
+ memory allocated by user space processes etc.
+=20
+-Depending on the page usage it is treated differently by the Linux
+-memory management. The pages that can be freed at any time, either
+-because they cache the data available elsewhere, for instance, on a
+-hard disk, or because they can be swapped out, again, to the hard
++Depending on page usage it is treated differently by the Linux
++memory management subsystem. Pages that can be freed at any time,
++either because they cache the data available elsewhere
++(i.e., on a hard disk) or because they can be swapped out to the hard
+ disk, are called `reclaimable`. The most notable categories of the
+ reclaimable pages are page cache and anonymous memory.
+=20
+ In most cases, the pages holding internal kernel data and used as DMA
+ buffers cannot be repurposed, and they remain pinned until freed by
+ their user. Such pages are called `unreclaimable`. However, in certain
+-circumstances, even pages occupied with kernel data structures can be
++circumstances, even pages occupied by kernel data structures can be
+ reclaimed. For instance, in-memory caches of filesystem metadata can
+-be re-read from the storage device and therefore it is possible to
+-discard them from the main memory when system is under memory
++be re-read from the storage device and thus it is possible to
++discard them from main memory when the system is under memory
+ pressure.
+=20
+-The process of freeing the reclaimable physical memory pages and
+-repurposing them is called (surprise!) `reclaim`. Linux can reclaim
+-pages either asynchronously or synchronously, depending on the state
+-of the system. When the system is not loaded, most of the memory is free
++The process of freeing and repurposing reclaimable physical pages
++is called (surprise!) `reclaim`. Linux can reclaim pages either
++synchronously or asynchronously, depending on the state of the
++system. When system load is light, most of the memory is free
+ and allocation requests will be satisfied immediately from the free
+-pages supply. As the load increases, the amount of the free pages goes
++page supply. As the load increases, the number of the free pages goes
+ down and when it reaches a certain threshold (low watermark), an
+ allocation request will awaken the ``kswapd`` daemon. It will
+-asynchronously scan memory pages and either just free them if the data
+-they contain is available elsewhere, or evict to the backing storage
+-device (remember those dirty pages?). As memory usage increases even
+-more and reaches another threshold - min watermark - an allocation
+-will trigger `direct reclaim`. In this case allocation is stalled
+-until enough memory pages are reclaimed to satisfy the request.
++asynchronously scan memory pages and either free them if the data
++they contain is available elsewhere, or evict them to the backing
++storage device (remember those dirty pages?). As memory usage
++increases even more and reaches another threshold - min watermark - an
++allocation will trigger `direct reclaim`. In this case allocation is
++stalled until enough memory pages are reclaimed to satisfy the request.
+=20
+ Compaction
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-As the system runs, tasks allocate and free the memory and it becomes
++As the system runs, tasks allocate and free memory. Memory thus becomes
+ fragmented. Although with virtual memory it is possible to present
+-scattered physical pages as virtually contiguous range, sometimes it is
++scattered physical pages as a virtually contiguous range, sometimes it i=
+s
+ necessary to allocate large physically contiguous memory areas. Such
+ need may arise, for instance, when a device driver requires a large
+ buffer for DMA, or when THP allocates a huge page. Memory `compaction`
+@@ -214,10 +212,10 @@ daemon or synchronously as a result of a memory all=
+ocation request.
+ OOM killer
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-It is possible that on a loaded machine memory will be exhausted and the
++It is possible that under heavy load memory will be exhausted and the
+ kernel will be unable to reclaim enough memory to continue to operate. I=
+n
+ order to save the rest of the system, it invokes the `OOM killer`.
+=20
+-The `OOM killer` selects a task to sacrifice for the sake of the overall
+-system health. The selected task is killed in a hope that after it exits
++The `OOM killer` selects a task to sacrifice for the sake of overall
++system health. The selected task is killed in the hope that after it exi=
+ts
+ enough memory will be freed to continue normal operation.
+--=20
+2.30.2
 
-Thanks again for the reviews,
-Daniel

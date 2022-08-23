@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A53559D725
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D07B59D7EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbiHWJbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S1350744AbiHWJcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350215AbiHWJ2u (ORCPT
+        with ESMTP id S1351019AbiHWJbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:28:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4071077541;
-        Tue, 23 Aug 2022 01:37:29 -0700 (PDT)
+        Tue, 23 Aug 2022 05:31:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A37B9351B;
+        Tue, 23 Aug 2022 01:38:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D0A614F5;
-        Tue, 23 Aug 2022 08:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CF6C433D6;
-        Tue, 23 Aug 2022 08:36:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0621061538;
+        Tue, 23 Aug 2022 08:36:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03FCDC43140;
+        Tue, 23 Aug 2022 08:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243807;
-        bh=38z5+1E7HVbT6HeQjqkDPqJFtUVE6OakjVGr/qrHk+k=;
+        s=korg; t=1661243816;
+        bh=MSkgAf1zIqW/oIhnY3v5vqHnCfp7wiwThy3eGepHuUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FHK0OQQInPAIudxUQ6fZtPJbDZgU/kicBVQIEu5GBp+m1W362TXaGjXjlZyvyPPlr
-         Jeq18MTVwvswR+mR/T4ZESbvjoBzSPF5VcRyw6F1soYnNf42rGMAFULDDEClJoMKGW
-         B+9U/HBhYVMz7q2M77EY1aZjwyG7jrSo1rDEc+vc=
+        b=F6+9y8Np4FzyzxkmC5PO2s4kEeJcSjJrs831dzxQ/LLjObXweHxV+q2ZtqHemvwsB
+         v1WtbaWPNugrZKrlet1guTPmJbKrS5Gmew1cVV8TJNmyN2IfOgDiAx5Rrw/XGJXPt5
+         dHDSpYp76omHIpg+b/eomWry6I49Awl6Zaax+EEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Timur Tabi <ttabi@nvidia.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>
-Subject: [PATCH 4.14 027/229] drm/nouveau: fix another off-by-one in nvbios_addr
-Date:   Tue, 23 Aug 2022 10:23:08 +0200
-Message-Id: <20220823080054.440387469@linuxfoundation.org>
+        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>
+Subject: [PATCH 4.14 030/229] fuse: limit nsec
+Date:   Tue, 23 Aug 2022 10:23:11 +0200
+Message-Id: <20220823080054.572703405@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -55,35 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Timur Tabi <ttabi@nvidia.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-commit c441d28945fb113220d48d6c86ebc0b090a2b677 upstream.
+commit 47912eaa061a6a81e4aa790591a1874c650733c0 upstream.
 
-This check determines whether a given address is part of
-image 0 or image 1.  Image 1 starts at offset image0_size,
-so that address should be included.
+Limit nanoseconds to 0..999999999.
 
-Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
-Cc: <stable@vger.kernel.org> # v4.8+
-Signed-off-by: Timur Tabi <ttabi@nvidia.com>
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220511163716.3520591-1-ttabi@nvidia.com
+Fixes: d8a5ba45457e ("[PATCH] FUSE - core")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/fuse/inode.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
-@@ -33,7 +33,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
- {
- 	u32 p = *addr;
- 
--	if (*addr > bios->image0_size && bios->imaged_addr) {
-+	if (*addr >= bios->image0_size && bios->imaged_addr) {
- 		*addr -= bios->image0_size;
- 		*addr += bios->imaged_addr;
- 	}
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -174,6 +174,12 @@ void fuse_change_attributes_common(struc
+ 	inode->i_uid     = make_kuid(&init_user_ns, attr->uid);
+ 	inode->i_gid     = make_kgid(&init_user_ns, attr->gid);
+ 	inode->i_blocks  = attr->blocks;
++
++	/* Sanitize nsecs */
++	attr->atimensec = min_t(u32, attr->atimensec, NSEC_PER_SEC - 1);
++	attr->mtimensec = min_t(u32, attr->mtimensec, NSEC_PER_SEC - 1);
++	attr->ctimensec = min_t(u32, attr->ctimensec, NSEC_PER_SEC - 1);
++
+ 	inode->i_atime.tv_sec   = attr->atime;
+ 	inode->i_atime.tv_nsec  = attr->atimensec;
+ 	/* mtime from server may be stale due to local buffered write */
 
 

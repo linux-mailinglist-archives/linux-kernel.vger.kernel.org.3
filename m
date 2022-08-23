@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C55259E12D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B6A59E237
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241784AbiHWLVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S1355457AbiHWKcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357957AbiHWLRb (ORCPT
+        with ESMTP id S1354082AbiHWKQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:17:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D31895F0;
-        Tue, 23 Aug 2022 02:20:53 -0700 (PDT)
+        Tue, 23 Aug 2022 06:16:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0617FFBE;
+        Tue, 23 Aug 2022 02:01:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E76776098A;
-        Tue, 23 Aug 2022 09:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED15EC433C1;
-        Tue, 23 Aug 2022 09:20:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DCA161459;
+        Tue, 23 Aug 2022 09:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93125C433D6;
+        Tue, 23 Aug 2022 09:01:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246452;
-        bh=H6VhL8qotYmtJ91VYskkXpMtTV64KmzIgEHD48+wouM=;
+        s=korg; t=1661245264;
+        bh=HU8LdLjlTrM1fgLXiOr0vT/1ta2kx9f8bTvGJqxv43Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h3BXLm1I/RIaL7P6nzrBxopPqlNWemRhH2XV1QLLh8EymB6G0DDy8UVTu7HHtGVc4
-         3t+Y1bXyJzivYN3jMajxCO/VrmtN4abaAWwFX86APw45yiyT5b1mnr4aC3L9SGQKoC
-         BtOeermyIEy5yQf0waYnU8JzSQu6xn+892CvhTbo=
+        b=H2vqFjU4lAtvFiHGUxiouGjHyxcgXf84gmMqm3mMLn7tuNQWSccYmUD+90a3CxVhN
+         6/pkLdDtWns98awPI/WH5DrMlx9PoQkY54cIk2I4+qdifJwp1KglWE2mPqkOegFg8C
+         a8eGh6M57H7ucZZurwZ21csdP5D+iNbqH7gUWJ0c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 114/389] drm/mediatek: dpi: Remove output format of YUV
+        stable@vger.kernel.org, Leo Li <sunpeng.li@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Subject: [PATCH 4.19 023/287] drm/amdgpu: Check BOs requested pinning domains against its preferred_domains
 Date:   Tue, 23 Aug 2022 10:23:12 +0200
-Message-Id: <20220823080120.385445508@linuxfoundation.org>
+Message-Id: <20220823080101.054648420@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,73 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+From: Leo Li <sunpeng.li@amd.com>
 
-[ Upstream commit c9ed0713b3c35fc45677707ba47f432cad95da56 ]
+commit f5ba14043621f4afdf3ad5f92ee2d8dbebbe4340 upstream.
 
-DPI is not support output format as YUV, but there is the setting of
-configuring output YUV. Therefore, remove them in this patch.
+When pinning a buffer, we should check to see if there are any
+additional restrictions imposed by bo->preferred_domains. This will
+prevent the BO from being moved to an invalid domain when pinning.
 
-Fixes: 9e629c17aa8d ("drm/mediatek: Add DPI sub driver")
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Link: https://patchwork.kernel.org/project/linux-mediatek/patch/20220701035845.16458-5-rex-bc.chen@mediatek.com/
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+For example, this can happen if the user requests to create a BO in GTT
+domain for display scanout. amdgpu_dm will allow pinning to either VRAM
+or GTT domains, since DCN can scanout from either or. However, in
+amdgpu_bo_pin_restricted(), pinning to VRAM is preferred if there is
+adequate carveout. This can lead to pinning to VRAM despite the user
+requesting GTT placement for the BO.
+
+v2: Allow the kernel to override the domain, which can happen when
+    exporting a BO to a V4L camera (for example).
+
+Signed-off-by: Leo Li <sunpeng.li@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/mediatek/mtk_dpi.c | 31 ++++++------------------------
- 1 file changed, 6 insertions(+), 25 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 48de07e9059e..8f4a9f245a9a 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -50,13 +50,7 @@ enum mtk_dpi_out_channel_swap {
- };
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
+@@ -883,6 +883,10 @@ int amdgpu_bo_pin_restricted(struct amdg
+ 	if (WARN_ON_ONCE(min_offset > max_offset))
+ 		return -EINVAL;
  
- enum mtk_dpi_out_color_format {
--	MTK_DPI_COLOR_FORMAT_RGB,
--	MTK_DPI_COLOR_FORMAT_RGB_FULL,
--	MTK_DPI_COLOR_FORMAT_YCBCR_444,
--	MTK_DPI_COLOR_FORMAT_YCBCR_422,
--	MTK_DPI_COLOR_FORMAT_XV_YCC,
--	MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL,
--	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
-+	MTK_DPI_COLOR_FORMAT_RGB
- };
- 
- struct mtk_dpi {
-@@ -355,24 +349,11 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
- static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
- 					enum mtk_dpi_out_color_format format)
- {
--	if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_444) ||
--	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
--		mtk_dpi_config_yuv422_enable(dpi, false);
--		mtk_dpi_config_csc_enable(dpi, true);
--		mtk_dpi_config_swap_input(dpi, false);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_BGR);
--	} else if ((format == MTK_DPI_COLOR_FORMAT_YCBCR_422) ||
--		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
--		mtk_dpi_config_yuv422_enable(dpi, true);
--		mtk_dpi_config_csc_enable(dpi, true);
--		mtk_dpi_config_swap_input(dpi, true);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
--	} else {
--		mtk_dpi_config_yuv422_enable(dpi, false);
--		mtk_dpi_config_csc_enable(dpi, false);
--		mtk_dpi_config_swap_input(dpi, false);
--		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
--	}
-+	/* only support RGB888 */
-+	mtk_dpi_config_yuv422_enable(dpi, false);
-+	mtk_dpi_config_csc_enable(dpi, false);
-+	mtk_dpi_config_swap_input(dpi, false);
-+	mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
- }
- 
- static void mtk_dpi_power_off(struct mtk_dpi *dpi)
--- 
-2.35.1
-
++	/* Check domain to be pinned to against preferred domains */
++	if (bo->preferred_domains & domain)
++		domain = bo->preferred_domains & domain;
++
+ 	/* A shared bo cannot be migrated to VRAM */
+ 	if (bo->prime_shared_count) {
+ 		if (domain & AMDGPU_GEM_DOMAIN_GTT)
 
 

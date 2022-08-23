@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0038159EC20
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A351559EC25
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiHWTWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S229791AbiHWTWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiHWTVr (ORCPT
+        with ESMTP id S231739AbiHWTVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:21:47 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1C1306A9;
-        Tue, 23 Aug 2022 11:02:14 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 18:02:10 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661277731;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2RC0sxKMivGTVluKWaMxuJ3KPssF3MfXxyKVUs8ULFc=;
-        b=ccXCKyVPEnFRSlF8yjJfyDz38ZZGzlIlmxd0aue1eFRniZvbAw7aql6036TPzAGQchFMzW
-        svATwxhZcyhBq4Tz/+KX3Y/JqrK9qeTltdfw/DJSrdUFiJ2I+EPFRJdqVRDSIQ7UFEkSiM
-        wniJHxH9fYkWaQdOClBVdHeyFImEXPce6/1VUhUYMz22XMXukj4CqY/4wj4Iev/iaVXKdQ
-        OgAfbktLxAhDKlAY+WSG9wjeU961WnPGebs1Ot3YXatETQaCJIRxqxrbOVacNvG2xsCshS
-        nmZacoEzObq074mwYb1Bs2PEkFBTVTCay28VwQDEoeYPw524GwHSpPeXVsKpaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661277731;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2RC0sxKMivGTVluKWaMxuJ3KPssF3MfXxyKVUs8ULFc=;
-        b=TXGQY3z36yqPOAJgdmnt2JhYWkLwR5uu4Kv3LedFy3wpOMVGUzHnNE4oKMRWD+T13aOESW
-        nW5MBYmQYETScnCA==
-From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/cpu: Add new Raptor Lake CPU model number
-Cc:     Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220823174819.223941-1-tony.luck@intel.com>
-References: <20220823174819.223941-1-tony.luck@intel.com>
+        Tue, 23 Aug 2022 15:21:52 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAED2B4425;
+        Tue, 23 Aug 2022 11:02:26 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-335624d1e26so400762497b3.4;
+        Tue, 23 Aug 2022 11:02:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=tPcD7EUnD6n/pd4xrlexLo0BVKkP6oVxoQ1jP9+QRfY=;
+        b=dq9+DvYQEAGYeySAObrB8Sm77zs6J7I6OSPa27SGS/yS4RAYbRed2bRDS/7d+jegoq
+         qe1H8p1ZNBguBnZvjfS+acDWhra3fZGYhwidlnImLGYfRoJZwk+f0De5rXoZGDY8Wx0i
+         a393wIDbJYrM/zbh4V+G0KiFUptIpbl3rXDP4wqyQOLb9ExSfVqHB4/9r1wv4RImmWSo
+         H/VshsFStlMxDMoZIQOIlbkb++zZ1aV8yB78GhKyKBCsAFqlYsYvHC6hDeVqZX4hw0Xp
+         nJU6PfbMTHx7TRU0LsQccUXw1SO6pcPn+Uu2WGOhmxgXctem/yeeOVg5KmHJRhU82H81
+         8tEA==
+X-Gm-Message-State: ACgBeo2NMY4ZDm/8g1T+j6IGYMLzx3E6CL9XfHXZhW+leZwWQ0EYTS7k
+        2lUNxtVUiVqHOF2CLNtErm7oN2fT0MerfNILOuI=
+X-Google-Smtp-Source: AA6agR5itvcF2Towl5AH63xFZtsUG0OaVdX2gTPo9+tM4SABhEni3hBBXSHi+BCwk1FN1PKjRJ+1exKhcsqOiQuDcYI=
+X-Received: by 2002:a25:ec0c:0:b0:690:d092:2d56 with SMTP id
+ j12-20020a25ec0c000000b00690d0922d56mr23726786ybh.622.1661277745810; Tue, 23
+ Aug 2022 11:02:25 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166127773014.401.12112620191231972274.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220816120157.24455-1-lukasz.luba@arm.com>
+In-Reply-To: <20220816120157.24455-1-lukasz.luba@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Aug 2022 20:02:14 +0200
+Message-ID: <CAJZ5v0jQpEL7SMjj83fbm-Afz7D7Wj41g5AFa2-8zoeehnRppg@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: check only freq_table in __resolve_freq()
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Tue, Aug 16, 2022 at 2:02 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> There is no need to check if the cpufreq driver implements callback
+> cpufreq_driver::target_index. The logic in the __resolve_freq uses
+> the frequency table available in the policy. It doesn't matter if the
+> driver provides 'target_index' or 'target' callback. It just has to
+> populate the 'policy->freq_table'.
+>
+> Thus, check only frequency table during the frequency resolving call.
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+> Changes:
+> v2:
+> - collected ACK from Viresh
+> - corrected patch description (Viresh)
+>
+>
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 7820c4e74289..69b3d61852ac 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -532,7 +532,7 @@ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
+>
+>         target_freq = clamp_val(target_freq, policy->min, policy->max);
+>
+> -       if (!cpufreq_driver->target_index)
+> +       if (!policy->freq_table)
+>                 return target_freq;
+>
+>         idx = cpufreq_frequency_table_target(policy, target_freq, relation);
+> --
 
-Commit-ID:     ea902bcc1943f7539200ec464de3f54335588774
-Gitweb:        https://git.kernel.org/tip/ea902bcc1943f7539200ec464de3f54335588774
-Author:        Tony Luck <tony.luck@intel.com>
-AuthorDate:    Tue, 23 Aug 2022 10:48:19 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 23 Aug 2022 10:58:21 -07:00
-
-x86/cpu: Add new Raptor Lake CPU model number
-
-Note1: Model 0xB7 already claimed the "no suffix" #define for a regular
-client part, so add (yet another) suffix "S" to distinguish this new
-part from the earlier one.
-
-Note2: the RAPTORLAKE* and ALDERLAKE* processors are very similar from a
-software enabling point of view.  There are no known features that have
-model-specific enabling and also differ between the two.  In other words,
-every single place that list *one* or more RAPTORLAKE* or ALDERLAKE*
-processors should list all of them.
-
-Note3: This is being merged before there is an in-tree user.  Merging
-this provides an "anchor" so that the different folks can update their
-subsystems (like perf) in parallel to use this define and test it.
-
-[ dhansen: add a note about why this has no in-tree users yet ]
-
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220823174819.223941-1-tony.luck@intel.com
----
- arch/x86/include/asm/intel-family.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index def6ca1..aeb3802 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -27,6 +27,7 @@
-  *		_X	- regular server parts
-  *		_D	- micro server parts
-  *		_N,_P	- other mobile parts
-+ *		_S	- other client parts
-  *
-  *		Historical OPTDIFFs:
-  *
-@@ -112,6 +113,7 @@
- 
- #define INTEL_FAM6_RAPTORLAKE		0xB7
- #define INTEL_FAM6_RAPTORLAKE_P		0xBA
-+#define INTEL_FAM6_RAPTORLAKE_S		0xBF
- 
- /* "Small Core" Processors (Atom) */
- 
+Applied as 6.0-rc material, thanks!

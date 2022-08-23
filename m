@@ -2,159 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3889659CD16
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9696C59CD14
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 02:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238751AbiHWAQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 20:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S239024AbiHWAQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 20:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239122AbiHWAQ0 (ORCPT
+        with ESMTP id S232371AbiHWAQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 20:16:26 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2844A18C
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:15:55 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id p9so10830314pfq.13
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 17:15:55 -0700 (PDT)
+        Mon, 22 Aug 2022 20:16:40 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DEA1AE;
+        Mon, 22 Aug 2022 17:16:38 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id p13so3431pld.6;
+        Mon, 22 Aug 2022 17:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=5ONLOfjRsoyPNCSm/9MdBrJPI+jYBbaqSy2BAfAUm/Q=;
-        b=OkDfM0p2XEu+RyEIar6eQhsqQQAAvfk5Y2ZPxRZvU28SOe4SV20koCjbQp5WYjV4MV
-         10gDz1F5TcGWIN808P9wVGirnJYR45Bt4Z2T8MsF5VvTDh3GS7EPh28GF/ta2jmIFGss
-         PzvrdDz10j8/IoefmrDSD23meeYWgxV+B2YhU+mtXDNWT805kwcHSOoo/HlFxaP40rnz
-         poybFV1BbAE1QkifbrdVRWaYUv0wow4JkyiN//9CoBd0Ck0hBgIxi0BPjRKFNFYQE05+
-         dvEIvK/A/DjdDqToAX2Iwx4TDgN1D7VmcjolXuL/ucnPneinOEZEWKKUksBc44dV3BI3
-         Ml4Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=p1/Bx0oP8nfnziMM2cHICkhjDAldqcEDoIF6YYzpP1o=;
+        b=NJsqi8t9JuDzgLorWS8OUEYtWroALCU5iEBR/k94kjGD/goNE/LwojsVJXeyEu2k6w
+         PfQ5F3B/jdDVhkO62gzKB4qaEX8PfmYue/W654KE2Ieb+snr5nNYQxozb5O2zmdkVt0G
+         v4GvAUq5PIux/9e5b3fTHx5qH0gtF/OnAWANFsQMgiCKrgMGIUh42lXkTayvYDunBi6E
+         YtrRRCT8Ac/ur+g1mInow7eAPzKIEgfsokJ+BCtLE0lBM4+BqbUzYn0wvQlJMPEbaWf/
+         Y04M2Wa1bl0sSQU0EB+SjGmJrlZMyIDmiTLNjLhx6gNz/ygCoYCOvhqF4i5kMkyqjKWS
+         D8lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=5ONLOfjRsoyPNCSm/9MdBrJPI+jYBbaqSy2BAfAUm/Q=;
-        b=aIhW9ncbREaJcgkAJXjoQtqO0A4XFuHsPqafiyC6O3VGv4wAxUDNWH3ow12d0+zTqV
-         +n1OLNohgNc0iM7drQZPvza/2bVmQoDtRcN6Tuqok/sLAbYmFba9fTdZQqlDbq/voY5J
-         O+jwKIym1TzzH/3tmAKaXR1X6QPFtpL85bOe24ZdeEbTmX5SzOFmH584UqGwdPIldz65
-         D8bQlo1lbM3pftbXQa26qqhVG/AVg7xsNvfdrE/MNwn/KNk2ek5GR3EhoUOcd0HqZLAT
-         H889qZbgzl3nyl50U19la7TKjkWKWvqlXUzT7T0ykjd7Larzhma6pFTsHc+Y8uyv5iqZ
-         HSnw==
-X-Gm-Message-State: ACgBeo0q+xOKUVO0GQxWsWqnf3yg/i2F0mshicPTaFlYE+0Tq0dghgZk
-        dkS1qY/9wkqybt5yBnbOi5CgBQ==
-X-Google-Smtp-Source: AA6agR5bcsmhKNFUmJDECvCD72+wAIOTlxVXT6dxVHmC9aW2Q+UHWDFuOGMUuBSeKiY0xtcD2Gl16Q==
-X-Received: by 2002:a63:1208:0:b0:423:c60e:ed09 with SMTP id h8-20020a631208000000b00423c60eed09mr18237602pgl.385.1661213755177;
-        Mon, 22 Aug 2022 17:15:55 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m11-20020a170902db0b00b001637529493esm9055688plx.66.2022.08.22.17.15.54
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=p1/Bx0oP8nfnziMM2cHICkhjDAldqcEDoIF6YYzpP1o=;
+        b=GEMFnvhBtisG5U5JHjM6ai0+JaoEKfVAv5wCEW1zqkl8qTqatDi2OQtYGcCQI5v11V
+         N44e7u7bp6UvJ/c466UW6HaC/H70ck/GSq3PwlUQOhkAbCMchW7reXVJD9tXExNQpUAc
+         optpQwRXyiprRwItKQvo6a8EKckf2qcsi6RCNsowFDFPTMiGs8btd6GfQi3STkNsMql5
+         0CJu59iNk3QmmLekEQuPDyftJ9amAtDzgTAhUvcI/+CMPhcvvT105kw2JCuQ0rL9QkqE
+         MfdwudMOqAqWq+s9vZSw5aSjEy/5q27es3lZ5ag6yIFYOwtrPDuBaz7WCx/J00yVfv/2
+         /vGQ==
+X-Gm-Message-State: ACgBeo0FmbKFoylLhgi5hvlWGX/PM2ghJHTnP0HCC1LfDGg99qlSy35J
+        tSfVTEoFRheHmICtFVP8Fc8=
+X-Google-Smtp-Source: AA6agR7i1SuMRSIVdkZ0AMbM7HprFkT8aUzTOpkc/abCrzIOvPUZZuH+UuGXP1VVtsO7BAGimBjGCg==
+X-Received: by 2002:a17:903:228a:b0:172:ea8f:f2fd with SMTP id b10-20020a170903228a00b00172ea8ff2fdmr7101197plh.33.1661213798265;
+        Mon, 22 Aug 2022 17:16:38 -0700 (PDT)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id jj9-20020a170903048900b0016d785ef6d2sm8903695plb.223.2022.08.22.17.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 17:15:54 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 00:15:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
-        leobras@redhat.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org
-Subject: Re: [PATCH] KVM: x86: Always enable legacy fp/sse
-Message-ID: <YwQcN0GKMeZXNmhF@google.com>
-References: <20220816175936.23238-1-dgilbert@redhat.com>
- <YvwODUu/rdzjzDjk@google.com>
- <YvzK+slWoAvm0/Wn@work-vm>
+        Mon, 22 Aug 2022 17:16:37 -0700 (PDT)
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: [PATCH v4] HID: amd_sfh: Add a DMI quirk entry for Chromebooks
+Date:   Tue, 23 Aug 2022 09:16:30 +0900
+Message-Id: <20220823001630.3973-1-akihiko.odaki@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvzK+slWoAvm0/Wn@work-vm>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022, Dr. David Alan Gilbert wrote:
-> * Sean Christopherson (seanjc@google.com) wrote:
-> > On Tue, Aug 16, 2022, Dr. David Alan Gilbert (git) wrote:
-> > > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> > > index de6d44e07e34..3b2319cecfd1 100644
-> > > --- a/arch/x86/kvm/cpuid.c
-> > > +++ b/arch/x86/kvm/cpuid.c
-> > > @@ -298,7 +298,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
-> > >  	guest_supported_xcr0 =
-> > >  		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
-> > >  
-> > > -	vcpu->arch.guest_fpu.fpstate->user_xfeatures = guest_supported_xcr0;
-> > > +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = guest_supported_xcr0 |
-> > > +		XFEATURE_MASK_FPSSE;
-> 
-> Hi Sean,
->   Thanks for the reply,
-> 
-> > I don't think this is correct.  This will allow the guest to set the SSE bit
-> > even when XSAVE isn't supported due to kvm_guest_supported_xcr0() returning
-> > user_xfeatures.
-> > 
-> >   static inline u64 kvm_guest_supported_xcr0(struct kvm_vcpu *vcpu)
-> >   {
-> > 	return vcpu->arch.guest_fpu.fpstate->user_xfeatures;
-> >   }
-> > 
-> > I believe the right place to fix this is in validate_user_xstate_header().  It's
-> > reachable if and only if XSAVE is supported in the host, and when XSAVE is _not_
-> > supported, the kernel unconditionally allows FP+SSE.  So it follows that the kernel
-> > should also allow FP+SSE when using XSAVE too.  That would also align the logic
-> > with fpu_copy_guest_fpstate_to_uabi(), which fordces the FPSSE flags.  Ditto for
-> > the non-KVM save_xstate_epilog().
-> 
-> OK, yes, I'd followed the check that failed down to this test; although
-> by itself this test works until Leo's patch came along later; so I
-> wasn't sure where to fix it.
-> 
-> > Aha!  And fpu__init_system_xstate() ensure the host supports FP+SSE when XSAVE
-> > is enabled (knew their had to be a sanity check somewhere).
-> > 
-> > ---
-> >  arch/x86/kernel/fpu/xstate.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> > index c8340156bfd2..83b9a9653d47 100644
-> > --- a/arch/x86/kernel/fpu/xstate.c
-> > +++ b/arch/x86/kernel/fpu/xstate.c
-> > @@ -399,8 +399,13 @@ int xfeature_size(int xfeature_nr)
-> >  static int validate_user_xstate_header(const struct xstate_header *hdr,
-> >  				       struct fpstate *fpstate)
-> >  {
-> > -	/* No unknown or supervisor features may be set */
-> > -	if (hdr->xfeatures & ~fpstate->user_xfeatures)
-> > +	/*
-> > +	 * No unknown or supervisor features may be set.  Userspace is always
-> > +	 * allowed to restore FP+SSE state (XSAVE/XRSTOR are used by the kernel
-> > +	 * if and only if FP+SSE are supported in xstate).
-> > +	 */
-> > +	if (hdr->xfeatures & ~fpstate->user_xfeatures &
-> > +	    ~(XFEATURE_MASK_FP | XFEATURE_MASK_SSE))
-> >  		return -EINVAL;
-> > 
-> >  	/* Userspace must use the uncompacted format */
-> 
-> That passes the small smoke test for me; will you repost that then?
+Google Chromebooks use Chrome OS Embedded Controller Sensor Hub instead
+of Sensor Hub Fusion and leaves MP2 uninitialized, which disables all
+functionalities, even including the registers necessary for feature
+detections.
 
-*sigh*
+The behavior was observed with Lenovo ThinkPad C13 Yoga.
 
-The bug is more subtle than just failing to restore.  Saving can also "fail".  If
-XSAVE is hidden from the guest on an XSAVE-capable host, __copy_xstate_to_uabi_buf()
-will happily reinitialize FP+SSE state and thus corrupt guest FPU state on migration.
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+---
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-And not that it matters now, but before realizing that KVM_GET_XSAVE is also broken,
-I decided I like Dave's patch better because KVM really should separate what userspace
-can save/restore from what the guest can access.
+diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+index 4b90c86ee5f8..47774b9ab3de 100644
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+@@ -288,11 +288,29 @@ int amd_sfh_irq_init(struct amd_mp2_dev *privdata)
+ 	return 0;
+ }
+ 
++static const struct dmi_system_id dmi_nodevs[] = {
++	{
++		/*
++		 * Google Chromebooks use Chrome OS Embedded Controller Sensor
++		 * Hub instead of Sensor Hub Fusion and leaves MP2
++		 * uninitialized, which disables all functionalities, even
++		 * including the registers necessary for feature detections.
++		 */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Google"),
++		},
++	},
++	{ }
++};
++
+ static int amd_mp2_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ {
+ 	struct amd_mp2_dev *privdata;
+ 	int rc;
+ 
++	if (dmi_first_match(dmi_nodevs))
++		return -ENODEV;
++
+ 	privdata = devm_kzalloc(&pdev->dev, sizeof(*privdata), GFP_KERNEL);
+ 	if (!privdata)
+ 		return -ENOMEM;
+-- 
+2.37.2
 
-Amusingly, there's actually another bug lurking with respect to usurping user_xfeatures
-to represent supported_guest_xcr0.  The latter is zero-initialized, whereas
-user_xfeatures is set to the "default" features on initialization, i.e. migrating a
-VM without ever doing KVM_SET_CPUID2 would do odd things.
-
-Sending a v2 shortly to reinstate guest_supported_xcr0 before landing Dave's patch.

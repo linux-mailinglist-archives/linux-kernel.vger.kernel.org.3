@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0864A59E84D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB6C59E83D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245689AbiHWQ72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S245646AbiHWRBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343592AbiHWQ6s (ORCPT
+        with ESMTP id S245328AbiHWQ66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:58:48 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF11F7695A;
-        Tue, 23 Aug 2022 07:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=FhxKkGuRSJCPS19swjGEpnaR6PB5g9G56uDDnI2exs8=; b=qBS8PF3KUObRGOHxSsX/YZs/JT
-        oPZPmI2danpk1ls93Xk7LLn78aiRupWSJa4LhoN9kfVoqsHp72lhYjr38lFER1XwSa9YqNEbpzb50
-        3bVClJu5cbnGW8I6bY0N8L/8ZwwCuiB/uQOzJ3gZfM7S6cL/mlTkpwgIhpG8zfZ3dh/U=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oQUfY-00EMAk-OF; Tue, 23 Aug 2022 16:14:16 +0200
-Date:   Tue, 23 Aug 2022 16:14:16 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Frank <Frank.Sae@motor-comm.com>, Peter Geis <pgwipeout@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4.4] net: phy: Add driver for Motorcomm yt8521 gigabit
- ethernet phy
-Message-ID: <YwTguA0azox3j5vi@lunn.ch>
-References: <20220817112554.383-1-Frank.Sae@motor-comm.com>
- <20220822202147.4be904de@kernel.org>
+        Tue, 23 Aug 2022 12:58:58 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939919E0E5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:15:00 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1661264077t2rkxezi
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 23 Aug 2022 22:14:36 +0800 (CST)
+X-QQ-SSF: 0100000000200040B000B00A0000000
+X-QQ-FEAT: ILHsT53NKPjxA3QUZ9443L6fJYtCysqDGp9BXbgtj0Cl63dZj5uG64ljGVgft
+        RZfQip6bWFR2Gfo+tVqZEOs5H0zRPwdaJHYD5qzETmgwU9/jS5RVikRPKhqQbeEvmgDZJUd
+        Y4+otmSNh8zyccLJl2ACciZrnj+x0HfwgevgVe5r9BQu0PU8xbJZA21gfeg7Uhs1fvrOk2x
+        WXhpF9bpaq3dfFWkEmj2lI+01KvbDA3XDBkF86b/+gpN+FLavewBSmoNc+yfIBeH/e6/Q3P
+        rPagfR1D4AAu3I0hjeBr1uI9bsFu1KPVEtH2tjCpz+wJjrcC7oRVeYOgJzwELcTRLyvJ3RZ
+        YxeQPsqbmnuMkULJp6FV51kolBHeAZGMze1D3k+g+PfH4At/AVwNEOKJEvzZw==
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] i915/display: fix repeated words in comments
+Date:   Tue, 23 Aug 2022 22:14:29 +0800
+Message-Id: <20220823141429.11598-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822202147.4be904de@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 08:21:47PM -0700, Jakub Kicinski wrote:
-> On Wed, 17 Aug 2022 19:25:54 +0800 Frank wrote:
-> > +static int yt8521_fiber_config_aneg(struct phy_device *phydev)
-> > +{
-> > +	int err, changed;
-> > +	u16 adv;
-> > +
-> > +	if (phydev->autoneg != AUTONEG_ENABLE)
-> > +		return yt8521_fiber_setup_forced(phydev);
-> > +
-> > +	err =  ytphy_modify_ext_with_lock(phydev, YTPHY_MISC_CONFIG_REG,
-> > +					  YTPHY_MCR_FIBER_SPEED_MASK,
-> > +					  YTPHY_MCR_FIBER_1000BX);
-> > +	if (err < 0)
-> > +		return err;
-> > +
-> > +	/* enable Fiber auto sensing */
-> > +	err =  ytphy_modify_ext_with_lock(phydev, YT8521_LINK_TIMER_CFG2_REG,
-> > +					  0, YT8521_LTCR_EN_AUTOSEN);
-> > +	if (err < 0)
-> > +		return err;
-> > +
-> > +	/* Setup fiber advertisement */
-> > +	adv = ADVERTISE_1000XFULL | ADVERTISE_1000XPAUSE |
-> > +	      ADVERTISE_1000XPSE_ASYM;
-> 
-> Is it okay to ignore phydev->advertising and always set the same mask?
+ Delete the redundant word 'the'.
 
-The user could of changed the pause settings, which are going to be
-ignored here. Also, you should not assume the MAC can actually do
-asymmetric pause, not all can. phydev->advertising will be set to only
-include what the MAC can actually do.
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/gpu/drm/i915/display/intel_crt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The whole concept of having two line sides connected to one MAC and
-seeing which gets link first is unsupported in Linux. In theory, you
-want to be able to configure each line side differently. Maybe you
-want autoneg on copper, but fixed on fibre, asymmetric pause with
-fibre, but symmetric pause on copper, etc. Since there is only one
-instance of phydev here, you don't have anywhere to store two sets of
-configuration, nor any sort of kAPI to deal with two phydev structures
-etc. So the user experience is not so great.
-
-With the Marvell Switches which also have this capability, i actually
-ignore it, use the phy-mode it decide which should be used, either
-copper or fibre, and leave the other powered off so it can never get
-link. There is at least one Marvell PHY which does however support
-first up wins, so this behaviour is not new. I just don't recommend
-it.
-
-And it gets even more interesting when the SFP is actually copper. But
-since the integration with phylink is missing in this driver, that is
-not supported here.
-
-	Andrew
+diff --git a/drivers/gpu/drm/i915/display/intel_crt.c b/drivers/gpu/drm/i915/display/intel_crt.c
+index 6a3893c8ff22..fead011c87b5 100644
+--- a/drivers/gpu/drm/i915/display/intel_crt.c
++++ b/drivers/gpu/drm/i915/display/intel_crt.c
+@@ -1102,7 +1102,7 @@ void intel_crt_init(struct drm_i915_private *dev_priv)
+ 	drm_connector_helper_add(connector, &intel_crt_connector_helper_funcs);
+ 
+ 	/*
+-	 * TODO: find a proper way to discover whether we need to set the the
++	 * TODO: find a proper way to discover whether we need to set the
+ 	 * polarity and link reversal bits or not, instead of relying on the
+ 	 * BIOS.
+ 	 */
+-- 
+2.36.1
 

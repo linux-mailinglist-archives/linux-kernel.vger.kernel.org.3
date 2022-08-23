@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FD659D99D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D606759D84C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245515AbiHWJ6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S1351197AbiHWJeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243947AbiHWJxP (ORCPT
+        with ESMTP id S1351068AbiHWJeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:53:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F2B9F773;
-        Tue, 23 Aug 2022 01:46:25 -0700 (PDT)
+        Tue, 23 Aug 2022 05:34:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C050E83BC7;
+        Tue, 23 Aug 2022 01:39:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A852B81C39;
-        Tue, 23 Aug 2022 08:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E9AC433D6;
-        Tue, 23 Aug 2022 08:46:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1547A61544;
+        Tue, 23 Aug 2022 08:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17294C433C1;
+        Tue, 23 Aug 2022 08:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244378;
-        bh=qbghJcHm0gVRjNPJv+owcXxInm53demoP6ZbyBNgN08=;
+        s=korg; t=1661243893;
+        bh=UNiwTXmjdQ6KGQtbGIn0zAj/bX+4Qo6BgYbbX6UQpYQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nY/7UeakdRWQrSd263jPpSw20inCKdIp3NDE2PrlzvXBeiLlykeeIyGS7cauhUnYh
-         kZOkcD9zWzVrW8YbTtrYdQAq/BMvVgoazArnrrALQa+fsUFdE/s66Bx3eEeiHbCydX
-         mI4BVN3tQrPKe+7ZUy5BRKa8hv15/3st418TJT+E=
+        b=TkTm9lt1Bp0bjjJAQXEI56mlMBZf1PwtC0ZudCSxomLeiFg7BaX52vG3DHw69k0lr
+         GRgJ6BdMqLSf5KHmcaw58/CYXHdJTVyo6Mf+460usX6xqdsajz55yY359O2EQSlfS8
+         u0d+/PbrQLQjgd9619nTIk+7o/PNKdVOEi5lXZC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Aloni <dan.aloni@vastdata.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.15 053/244] sunrpc: fix expiry of auth creds
-Date:   Tue, 23 Aug 2022 10:23:32 +0200
-Message-Id: <20220823080100.837107068@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 052/229] ARM: dts: ast2500-evb: fix board compatible
+Date:   Tue, 23 Aug 2022 10:23:33 +0200
+Message-Id: <20220823080055.562379798@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Aloni <dan.aloni@vastdata.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit f1bafa7375c01ff71fb7cb97c06caadfcfe815f3 upstream.
+[ Upstream commit 30b276fca5c0644f3cb17bceb1bd6a626c670184 ]
 
-Before this commit, with a large enough LRU of expired items (100), the
-loop skipped all the expired items and was entirely ineffectual in
-trimming the LRU list.
+The AST2500 EVB board should have dedicated compatible.
 
-Fixes: 95cd623250ad ('SUNRPC: Clean up the AUTH cache code')
-Signed-off-by: Dan Aloni <dan.aloni@vastdata.com>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 02440622656d ("arm/dst: Add Aspeed ast2500 device tree")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220529104928.79636-4-krzysztof.kozlowski@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/auth.c |    2 +-
+ arch/arm/boot/dts/aspeed-ast2500-evb.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/sunrpc/auth.c
-+++ b/net/sunrpc/auth.c
-@@ -445,7 +445,7 @@ rpcauth_prune_expired(struct list_head *
- 		 * Enforce a 60 second garbage collection moratorium
- 		 * Note that the cred_unused list must be time-ordered.
- 		 */
--		if (!time_in_range(cred->cr_expire, expired, jiffies))
-+		if (time_in_range(cred->cr_expire, expired, jiffies))
- 			continue;
- 		if (!rpcauth_unhash_cred(cred))
- 			continue;
+diff --git a/arch/arm/boot/dts/aspeed-ast2500-evb.dts b/arch/arm/boot/dts/aspeed-ast2500-evb.dts
+index c971cc93f42d..b7ee74a1fd94 100644
+--- a/arch/arm/boot/dts/aspeed-ast2500-evb.dts
++++ b/arch/arm/boot/dts/aspeed-ast2500-evb.dts
+@@ -5,7 +5,7 @@
+ 
+ / {
+ 	model = "AST2500 EVB";
+-	compatible = "aspeed,ast2500";
++	compatible = "aspeed,ast2500-evb", "aspeed,ast2500";
+ 
+ 	aliases {
+ 		serial4 = &uart5;
+-- 
+2.35.1
+
 
 

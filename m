@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E53059DFC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B7659DEE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350940AbiHWKt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S1359403AbiHWMIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356551AbiHWKme (ORCPT
+        with ESMTP id S1359331AbiHWMDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:42:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0189E86716;
-        Tue, 23 Aug 2022 02:10:04 -0700 (PDT)
+        Tue, 23 Aug 2022 08:03:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4431BDCFFA;
+        Tue, 23 Aug 2022 02:37:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 904A860DF6;
-        Tue, 23 Aug 2022 09:10:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BFAC433C1;
-        Tue, 23 Aug 2022 09:10:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D840161467;
+        Tue, 23 Aug 2022 09:37:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B71C433D7;
+        Tue, 23 Aug 2022 09:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245803;
-        bh=Vq/CxUdZbrRnISxfatH6tOi54rpnqIkg0lWLUJUzXew=;
+        s=korg; t=1661247426;
+        bh=SZ+/sgtHqCsEHpNeUbek1EZlYk4KcpR5xLQujRwlQ7g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jDgIJSjEf4Fh2vESOXHXcA60BhBuPq0Y0KXk2gbc8SK2J9WFwpZ6k6U7uQrcJSiCd
-         wDg6PA42UPtjFIXPE5uSOhVMVYTvJk3Zomp7+KZ9vkqoyjQ8WDL0GYy8X8jtaAaizl
-         RsP0CTWsqoO/1mTyuT4EVnRYi4OeVXedh5eroLQI=
+        b=0B3Dp8DhHRTMG96pa+poYz+aID5Gr6v6dfwV6TL3ERfLr7POyDpDUlJv2ZPuUZRvg
+         WJ5De3W2Hn3NzPIvRaK6kRu3Dwtt58S3yWx16LfsM+Hgmknq4lIa8bV76C3Z1PivEu
+         Ym2hwU8kzYN1nhx4McQ8DSGYk7YHO6AFTqrc4XpE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        stable <stable@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [PATCH 4.19 194/287] intel_th: pci: Add Raptor Lake-S CPU support
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.10 031/158] bpf: Check the validity of max_rdwr_access for sock local storage map iterator
 Date:   Tue, 23 Aug 2022 10:26:03 +0200
-Message-Id: <20220823080107.373235923@linuxfoundation.org>
+Message-Id: <20220823080047.340687367@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+From: Hou Tao <houtao1@huawei.com>
 
-commit ff46a601afc5a66a81c3945b83d0a2caeb88e8bc upstream.
+commit 52bd05eb7c88e1ad8541a48873188ccebca9da26 upstream.
 
-Add support for the Trace Hub in Raptor Lake-S CPU.
+The value of sock local storage map is writable in map iterator, so check
+max_rdwr_access instead of max_rdonly_access.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Link: https://lore.kernel.org/r/20220705082637.59979-7-alexander.shishkin@linux.intel.com
+Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/r/20220810080538.1845898-6-houtao@huaweicloud.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwtracing/intel_th/pci.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ net/core/bpf_sk_storage.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/hwtracing/intel_th/pci.c
-+++ b/drivers/hwtracing/intel_th/pci.c
-@@ -246,6 +246,11 @@ static const struct pci_device_id intel_
- 		.driver_data = (kernel_ulong_t)&intel_th_2x,
- 	},
- 	{
-+		/* Raptor Lake-S CPU */
-+		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0xa76f),
-+		.driver_data = (kernel_ulong_t)&intel_th_2x,
-+	},
-+	{
- 		/* Rocket Lake CPU */
- 		PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x4c19),
- 		.driver_data = (kernel_ulong_t)&intel_th_2x,
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -823,7 +823,7 @@ static int bpf_iter_attach_map(struct bp
+ 	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
+ 		goto put_map;
+ 
+-	if (prog->aux->max_rdonly_access > map->value_size) {
++	if (prog->aux->max_rdwr_access > map->value_size) {
+ 		err = -EACCES;
+ 		goto put_map;
+ 	}
 
 

@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074EC59D318
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B93359D628
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241576AbiHWIDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S1347670AbiHWJHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241490AbiHWICw (ORCPT
+        with ESMTP id S1346279AbiHWJGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:02:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909B2659D0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:51 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrt-0002vz-O0; Tue, 23 Aug 2022 10:02:37 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrs-001Sva-AW; Tue, 23 Aug 2022 10:02:36 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrp-00ALZW-8n; Tue, 23 Aug 2022 10:02:33 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v3 13/17] net: dsa: microchip: ksz9477: use internal_phy instead of phy_port_cnt
+        Tue, 23 Aug 2022 05:06:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC93185F9B;
+        Tue, 23 Aug 2022 01:29:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D33BE614C2;
+        Tue, 23 Aug 2022 08:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C2CC433D6;
+        Tue, 23 Aug 2022 08:28:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661243338;
+        bh=P3egnqUA6ktWyvgwGA+OKZtXZmA0Wg8B7BsVUmsHoUw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=0sqMs1IWECNXUVTNltDtq3Yq9aA0N75+Cis2sYghkAGYi3yVmGig3SNqpX58ux9f5
+         VcFk6nH1oQVf4iONanwANwM4SrHlhTCsKGKfKwsfBt9DMsnR9MJbcEk8g8wmGZ5EEe
+         8bSBADDFeyajfCHhXx8EUAAWDINUx6MU6MkEJUpg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 246/365] drm/bridge: lvds-codec: Fix error checking of drm_of_lvds_get_data_mapping()
 Date:   Tue, 23 Aug 2022 10:02:27 +0200
-Message-Id: <20220823080231.2466017-14-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220823080231.2466017-1-o.rempel@pengutronix.de>
-References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+Message-Id: <20220823080128.500334591@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,89 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With code refactoring was introduced new variable internal_phy. Let's
-use it.
+From: Marek Vasut <marex@denx.de>
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+[ Upstream commit 2bba782002c5dab6ca8d608b778b386fb912adff ]
+
+The drm_of_lvds_get_data_mapping() returns either negative value on
+error or MEDIA_BUS_FMT_* otherwise. The check for 'ret' would also
+catch the positive case of MEDIA_BUS_FMT_* and lead to probe failure
+every time 'data-mapping' DT property is specified.
+
+Fixes: 7c4dd0a266527 ("drm: of: Add drm_of_lvds_get_data_mapping")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+To: dri-devel@lists.freedesktop.org
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220801125419.167562-1-marex@denx.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/microchip/ksz9477.c | 20 +++++++-------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+ drivers/gpu/drm/bridge/lvds-codec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index cb5bd0ceb8df4..2982c8cb0983c 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -291,7 +291,7 @@ int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
- 	 * For RGMII PHY there is no way to access it so the fixed PHY should
- 	 * be used.  For SGMII PHY the supporting code will be added later.
- 	 */
--	if (addr >= dev->phy_port_cnt) {
-+	if (!dev->info->internal_phy[addr]) {
- 		struct ksz_port *p = &dev->ports[addr];
- 
- 		switch (reg) {
-@@ -339,7 +339,7 @@ int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
- int ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
- {
- 	/* No real PHY after this. */
--	if (addr >= dev->phy_port_cnt)
-+	if (!dev->info->internal_phy[addr])
- 		return 0;
- 
- 	return ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
-@@ -888,7 +888,7 @@ static phy_interface_t ksz9477_get_interface(struct ksz_device *dev, int port)
- 	phy_interface_t interface;
- 	bool gbit;
- 
--	if (port < dev->phy_port_cnt)
-+	if (dev->info->internal_phy[port])
- 		return PHY_INTERFACE_MODE_NA;
- 
- 	gbit = ksz_get_gbit(dev, port);
-@@ -995,7 +995,7 @@ void ksz9477_port_setup(struct ksz_device *dev, int port, bool cpu_port)
- 	/* enable 802.1p priority */
- 	ksz_port_cfg(dev, port, P_PRIO_CTRL, PORT_802_1P_PRIO_ENABLE, true);
- 
--	if (port < dev->phy_port_cnt) {
-+	if (dev->info->internal_phy[port]) {
- 		/* do not force flow control */
- 		ksz_port_cfg(dev, port, REG_PORT_CTRL_0,
- 			     PORT_FORCE_TX_FLOW_CTRL | PORT_FORCE_RX_FLOW_CTRL,
-@@ -1018,7 +1018,7 @@ void ksz9477_port_setup(struct ksz_device *dev, int port, bool cpu_port)
- 	ksz9477_cfg_port_member(dev, port, member);
- 
- 	/* clear pending interrupts */
--	if (port < dev->phy_port_cnt)
-+	if (dev->info->internal_phy[port])
- 		ksz_pread16(dev, port, REG_PORT_PHY_INT_ENABLE, &data16);
- }
- 
-@@ -1081,7 +1081,7 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
- 
- 		ksz_port_stp_state_set(ds, i, BR_STATE_DISABLED);
- 		p->on = 1;
--		if (i < dev->phy_port_cnt)
-+		if (dev->info->internal_phy[i])
- 			p->phy = 1;
- 		if (dev->chip_id == 0x00947700 && i == 6) {
- 			p->sgmii = 1;
-@@ -1177,15 +1177,9 @@ int ksz9477_switch_init(struct ksz_device *dev)
- 	if (ret)
- 		return ret;
- 
--	/* Number of ports can be reduced depending on chip. */
--	dev->phy_port_cnt = 5;
--
--	if (dev->chip_id == KSZ9893_CHIP_ID) {
-+	if (dev->chip_id == KSZ9893_CHIP_ID)
- 		dev->features |= IS_9893;
- 
--		dev->phy_port_cnt = 2;
--	}
--
- 	return 0;
- }
- 
+diff --git a/drivers/gpu/drm/bridge/lvds-codec.c b/drivers/gpu/drm/bridge/lvds-codec.c
+index 702ea803a743..39e7004de720 100644
+--- a/drivers/gpu/drm/bridge/lvds-codec.c
++++ b/drivers/gpu/drm/bridge/lvds-codec.c
+@@ -180,7 +180,7 @@ static int lvds_codec_probe(struct platform_device *pdev)
+ 		of_node_put(bus_node);
+ 		if (ret == -ENODEV) {
+ 			dev_warn(dev, "missing 'data-mapping' DT property\n");
+-		} else if (ret) {
++		} else if (ret < 0) {
+ 			dev_err(dev, "invalid 'data-mapping' DT property\n");
+ 			return ret;
+ 		} else {
 -- 
-2.30.2
+2.35.1
+
+
 

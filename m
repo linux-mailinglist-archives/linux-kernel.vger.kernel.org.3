@@ -2,232 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671AD59E7D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4308959E7FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238688AbiHWQrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
+        id S244076AbiHWQrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344135AbiHWQqu (ORCPT
+        with ESMTP id S1344147AbiHWQqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:46:50 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C68C6E9C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:25:05 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id c21-20020a17090ae11500b001fab6a5be8aso6239630pjz.7
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:25:05 -0700 (PDT)
+        Tue, 23 Aug 2022 12:46:51 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4501C6FC6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:25:08 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id bf3-20020a17090b0b0300b001fb29d80046so2507447pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=pCH+0+WgsyXCYOEIW3yqb1d5hzYj9lEXIljmIvf1UF4=;
-        b=GKnHlleymq6aVUseYQkCkYJTcj3+Hllew3xD3cBBcATPMgtQht5r0zd6CNdNPkGZ2E
-         cIuhwPujGAJbEIybRkp5h8BCUG05Ni7Aqy5hlvyeV7ytytijPlGF0ML4yLsdbnxBlT7O
-         v/Q4vYjT27cq8xCAfXaMxibDaCtMD0R+Wg8Xg6fxszjEq+5wNeGHhC8zjOk5uvyfOqWx
-         ekWKec3iTLIBe1ko+sjdYz7CP8xzuVD0fcU/rY0CuNqyMJxQWRUIVOZfQDeldrSLAVCe
-         KMOYtyEW1xBRTqndO+xaq0kjGZY0s5akiv1QJ/rF2MLw2HQZL7Ju5l7pMQIyVe7WlRjl
-         6/CA==
+        bh=QWKuLGeQgOwRURxq7JoMTU3dLzHqHHHK1oS3f4BccKo=;
+        b=GrRVd//5LW1PqHd4+nmw6iQxSDEv6SZl5rq7HvG1ZJxkWdbroNR0IQv8QL0Ed2zy2Z
+         XS84YhajnhHij1m6VLGokiI4brAmotcy4aU9GAHbjNRHu9oBai/BGZOVsHo05UwBQG/t
+         DT9BwpLi9hZP9gRnX6seb5nEuJSf+RB0AnnlqoHS/kQp50pVUaKGGK/H3pC1JeY0I5bd
+         5GerYP1n64mD7BCQimQCl8T/9JMDBQT/r3nNdE8DpBOqR5445aSzh3U0nLHwsqlRWAvb
+         y+Hkp3MQklnI9vQcisuFfVEd1nvAAqK7tWeo1RwG9Nh5gA9jiQu5y0hP87d1B8tXblgP
+         3GXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=pCH+0+WgsyXCYOEIW3yqb1d5hzYj9lEXIljmIvf1UF4=;
-        b=QKrdtuK41RHW8ob+ZfptvgzD2pYuOYcl/yYoBF2O2nevNcl/HmEtBlRO+v5/s16S5x
-         U1PcrBnQu08ITVtI7nmIhpLAeGyqVSA8JQwrQsSDCo/dxHTkbStkr8gLekHjYQHZldjZ
-         Ah18o+s1BinTR7bhvXVA1dy4sS7l0+zDqe6/MBtKTznfMXQfa3m9E6eZLRj0LFu6gq8K
-         acERWiXiXg/cnrWoz1jkXx4to1qFBtuhQPSnJblrz8DLTYvmg10JZ82d8BNHliD507+h
-         PmBpRNLHRpnmu4HPZCrOShKHwOOX0ko7ncSXTFr89hcYTYkPptjGr524SOzx4+chHjLk
-         +D1w==
-X-Gm-Message-State: ACgBeo2I8D4oPls08u1m9YzTfgwxj+aN+0kp0nr3id5fy0prBq3jo/F1
-        eV9l7m7RUW7jGrn3G5L6pmNk5GgWe901YzE=
-X-Google-Smtp-Source: AA6agR6nYNAxXcwgvNFnFPYMJnYjm6NiVtfJwycgVCE4j79759ovERhuyFxKEVo91melnqmvoQrKMdCuAiJDSamH
+        bh=QWKuLGeQgOwRURxq7JoMTU3dLzHqHHHK1oS3f4BccKo=;
+        b=MuUkMqFT5AyTXaXZc42l+Wr2PlNHwlkOo7GcfLQBO7MbN/FryvbAb3f+4wATIuKEpL
+         iWJTQQAz0c/0A0q5GNepPjhwHwlSgD+RNeHgK031hZMNXx1DRAf6lWkJvARz6e23v7tZ
+         MPoD2cfg67V76Ovs5lF/w1i4xbuIFl2Rt7AA8J8rQ03vuucNEBFxNRlxRi89wZta/UxE
+         xBu1yUCaPW5nDm2X/GTkfc5cjyvZYk6SK10s6iVkZepxZ7Vx0Y3vp4agH5M2Gwlg3Q8b
+         3l9bKSfjsGOaR8jprLDg3wNU6OxT7/3NBHB91XIotW3ESP3PmEaYELL/IGnq0ckY1IHw
+         dzjw==
+X-Gm-Message-State: ACgBeo21KFd1TgxfLZnrSSqSEnY1AISLy0Jimi0r6bOXz1xF88gnHqiF
+        Q0skdZtcI2YLSNu5D0H6pxuLFJLMkbPw854=
+X-Google-Smtp-Source: AA6agR7/i5co66jtp2HCxpHPVsfI+WFBs/BqAssIQ+wYlUCD1tfwcs4GkOkSfZf6nev2LPSvgvuPF9Dk/9obk25L
 X-Received: from joefradley-custom-96.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:831])
- (user=joefradley job=sendgmr) by 2002:aa7:8430:0:b0:536:5173:a2c6 with SMTP
- id q16-20020aa78430000000b005365173a2c6mr15526807pfn.4.1661264704758; Tue, 23
- Aug 2022 07:25:04 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 07:24:54 -0700
+ (user=joefradley job=sendgmr) by 2002:a17:902:7003:b0:172:cbb0:9af8 with SMTP
+ id y3-20020a170902700300b00172cbb09af8mr17254972plk.57.1661264708208; Tue, 23
+ Aug 2022 07:25:08 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 07:24:55 -0700
 In-Reply-To: <20220823142456.3977086-1-joefradley@google.com>
-Message-Id: <20220823142456.3977086-2-joefradley@google.com>
+Message-Id: <20220823142456.3977086-3-joefradley@google.com>
 Mime-Version: 1.0
 References: <20220823142456.3977086-1-joefradley@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2 1/2] kunit: add kunit.enable to enable/disable KUnit test
+Subject: [PATCH v2 2/2] kunit: no longer call module_info(test, "Y") for kunit modules
 From:   Joe Fradley <joefradley@google.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         David Gow <davidgow@google.com>
 Cc:     Joe Fradley <joefradley@google.com>, kernel-team@android.com,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the kunit.enable module parameter that will need to be
-set to true in addition to KUNIT being enabled for KUnit tests to run.
-The default value is true giving backwards compatibility. However, for
-the production+testing use case the new config option
-KUNIT_DEFAULT_ENABLED can be set to N requiring the tester to opt-in
-by passing kunit.enable=1 to the kernel.
+Because KUnit test execution is not a guarantee with the kunit.enable
+parameter we want to be careful to only taint the kernel when actual
+tests run. Calling module_info(test, "Y") for every KUnit module
+automatically causes the kernel to be tainted upon module load. Therefore,
+we're removing this call and relying on the KUnit framework to taint the
+kernel or not.
 
 Signed-off-by: Joe Fradley <joefradley@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
 Changes since v1:
-- Created a function to get kunit enable state
-- Check kunit enable state in kunit_run_all_tests() in executor.c
-- Load test module even if KUnit is disabled but still don't execute
-  tests
-- Simplified kunit disable message and kunit.enable parameter
-  description
-- Flipped around logic of new config to be KUNIT_DEFAULT_ENABLED
-- kunit_tool.py now passes kunit.enable=1 to kernel
+- Added David's and Brendan's Reviewed-by for tags.
 
- .../admin-guide/kernel-parameters.txt         |  6 +++++
- include/kunit/test.h                          |  2 ++
- lib/kunit/Kconfig                             | 11 +++++++++
- lib/kunit/executor.c                          |  4 ++++
- lib/kunit/test.c                              | 24 +++++++++++++++++++
- tools/testing/kunit/kunit_kernel.py           |  1 +
- 6 files changed, 48 insertions(+)
+ include/kunit/test.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index adfda56b2691..7aa3abd7f1c5 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2432,6 +2432,12 @@
- 			0: force disabled
- 			1: force enabled
- 
-+	kunit.enable=	[KUNIT] Enable executing KUnit tests. Requires
-+			CONFIG_KUNIT to be set to be fully enabled. The
-+			default value can be overridden via
-+			KUNIT_DEFAULT_ENABLED.
-+			Default is 1 (enabled)
-+
- 	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
- 			Default is 0 (don't ignore, but inject #GP)
- 
 diff --git a/include/kunit/test.h b/include/kunit/test.h
-index c958855681cc..ee6bf4ecbd89 100644
+index ee6bf4ecbd89..512089e5ce4e 100644
 --- a/include/kunit/test.h
 +++ b/include/kunit/test.h
-@@ -228,6 +228,8 @@ static inline void kunit_set_failure(struct kunit *test)
- 	WRITE_ONCE(test->status, KUNIT_FAILURE);
- }
+@@ -253,7 +253,6 @@ static inline int kunit_run_all_tests(void)
+ #endif /* IS_BUILTIN(CONFIG_KUNIT) */
  
-+bool kunit_enabled(void);
-+
- void kunit_init_test(struct kunit *test, const char *name, char *log);
- 
- int kunit_run_tests(struct kunit_suite *suite);
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 0b5dfb001bac..626719b95bad 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -59,4 +59,15 @@ config KUNIT_ALL_TESTS
- 
- 	  If unsure, say N.
- 
-+config KUNIT_DEFAULT_ENABLED
-+	bool "Default value of kunit.enable"
-+	default y
-+	help
-+	  Sets the default value of kunit.enable. If set to N then KUnit
-+	  tests will not execute unless kunit.enable=1 is passed to the
-+	  kernel command line.
-+
-+	  In most cases this should be left as Y. Only if additional opt-in
-+	  behavior is needed should this be set to N.
-+
- endif # KUNIT
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 5e223327196a..9bbc422c284b 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -190,6 +190,10 @@ int kunit_run_all_tests(void)
- {
- 	struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
- 	int err = 0;
-+	if (!kunit_enabled()) {
-+		pr_info("kunit: disabled\n");
-+		goto out;
-+	}
- 
- 	if (filter_glob_param) {
- 		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index b73d5bb5c473..1e54373309a4 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -54,6 +54,17 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
- EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
- #endif
- 
-+/*
-+ * Enable KUnit tests to run.
-+ */
-+#ifdef CONFIG_KUNIT_DEFAULT_ENABLED
-+static bool enable_param = true;
-+#else
-+static bool enable_param;
-+#endif
-+module_param_named(enable, enable_param, bool, 0);
-+MODULE_PARM_DESC(enable, "Enable KUnit tests");
-+
- /*
-  * KUnit statistic mode:
-  * 0 - disabled
-@@ -586,10 +597,20 @@ static void kunit_init_suite(struct kunit_suite *suite)
- 	suite->suite_init_err = 0;
- }
- 
-+bool kunit_enabled(void)
-+{
-+	return enable_param;
-+}
-+
- int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites)
- {
- 	unsigned int i;
- 
-+	if (!kunit_enabled() && num_suites > 0) {
-+		pr_info("kunit: disabled\n");
-+		return 0;
-+	}
-+
- 	for (i = 0; i < num_suites; i++) {
- 		kunit_init_suite(suites[i]);
- 		kunit_run_tests(suites[i]);
-@@ -607,6 +628,9 @@ void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites)
- {
- 	unsigned int i;
- 
-+	if (!kunit_enabled())
-+		return;
-+
- 	for (i = 0; i < num_suites; i++)
- 		kunit_exit_suite(suites[i]);
- 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index f5c26ea89714..ef794da420d7 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -359,6 +359,7 @@ class LinuxSourceTree:
- 			args = []
- 		if filter_glob:
- 			args.append('kunit.filter_glob='+filter_glob)
-+		args.append('kunit.enable=1')
- 
- 		process = self._ops.start(args, build_dir)
- 		assert process.stdout is not None  # tell mypy it's set
+ #define __kunit_test_suites(unique_array, ...)				       \
+-	MODULE_INFO(test, "Y");						       \
+ 	static struct kunit_suite *unique_array[]			       \
+ 	__aligned(sizeof(struct kunit_suite *))				       \
+ 	__used __section(".kunit_test_suites") = { __VA_ARGS__ }
 -- 
 2.37.1.595.g718a3a8f04-goog
 

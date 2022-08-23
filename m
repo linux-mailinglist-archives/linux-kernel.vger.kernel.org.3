@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839E759DE8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E16359E1FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241444AbiHWLkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S1353130AbiHWKNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348544AbiHWLdY (ORCPT
+        with ESMTP id S1352745AbiHWKGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:33:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45F09109D;
-        Tue, 23 Aug 2022 02:26:58 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FE37D1DF;
+        Tue, 23 Aug 2022 01:52:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D32CE61227;
-        Tue, 23 Aug 2022 09:26:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8EDC433C1;
-        Tue, 23 Aug 2022 09:26:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D59F1B81C3B;
+        Tue, 23 Aug 2022 08:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DB5C433C1;
+        Tue, 23 Aug 2022 08:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246817;
-        bh=XRMX3midtATI9hujgoxy0IUHmmmKv8GdcEeUHf6Ogcw=;
+        s=korg; t=1661244762;
+        bh=mTvSXMU+FqVYUEjrCpZyNd5/4xWQ8kzPmC4oXbY4SGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QD60Pk0WZewdIYmrRwHpNgyITz6RNZUT3Zqt32YNxbQXVxdhqPFMRuXEy0LPU6QsT
-         NWQiUqvwrZdiVYheddjy5Z+ZEh2KnOCwzvc9WG0azTo9Sq6ouBNGivjAL2NzqRgMHP
-         Ta1lmVreS3X0enZ4Kxp604UshQAaWNX6q4PCyUfY=
+        b=AGJ+Ukm9luCKS1uMs/PnUY6PGIt27cY1BaMktiMYQYqLOd2SdLQr7iwb+qWczQMmp
+         QqbDt2OmX9mBAUO/9RbbJj5vTWAXaK/KAwIQOiqs50XVw8VlQ1MMDlsHceeZfySN1v
+         x/du1tquA4keQBo9YEC0ZmkvzvphhJQhejgYYMR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 199/389] jbd2: fix outstanding credits assert in jbd2_journal_commit_transaction()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 118/244] ASoC: tas2770: Set correct FSYNC polarity
 Date:   Tue, 23 Aug 2022 10:24:37 +0200
-Message-Id: <20220823080123.957197290@linuxfoundation.org>
+Message-Id: <20220823080102.960633658@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yi <yi.zhang@huawei.com>
+From: Martin Povišer <povik+lin@cutebit.org>
 
-[ Upstream commit a89573ce4ad32f19f43ec669771726817e185be0 ]
+commit e9ac31f0a5d0e246b046c20348954519f91a297f upstream.
 
-We catch an assert problem in jbd2_journal_commit_transaction() when
-doing fsstress and request falut injection tests. The problem is
-happened in a race condition between jbd2_journal_commit_transaction()
-and ext4_end_io_end(). Firstly, ext4_writepages() writeback dirty pages
-and start reserved handle, and then the journal was aborted due to some
-previous metadata IO error, jbd2_journal_abort() start to commit current
-running transaction, the committing procedure could be raced by
-ext4_end_io_end() and lead to subtract j_reserved_credits twice from
-commit_transaction->t_outstanding_credits, finally the
-t_outstanding_credits is mistakenly smaller than t_nr_buffers and
-trigger assert.
+Fix setting of FSYNC polarity for DAI formats other than I2S. Also
+add support for polarity inversion.
 
-kjournald2           kworker
-
-jbd2_journal_commit_transaction()
- write_unlock(&journal->j_state_lock);
- atomic_sub(j_reserved_credits, t_outstanding_credits); //sub once
-
-     	             jbd2_journal_start_reserved()
-     	              start_this_handle()  //detect aborted journal
-     	              jbd2_journal_free_reserved()  //get running transaction
-                       read_lock(&journal->j_state_lock)
-     	                __jbd2_journal_unreserve_handle()
-     	               atomic_sub(j_reserved_credits, t_outstanding_credits);
-                       //sub again
-                       read_unlock(&journal->j_state_lock);
-
- journal->j_running_transaction = NULL;
- J_ASSERT(t_nr_buffers <= t_outstanding_credits) //bomb!!!
-
-Fix this issue by using journal->j_state_lock to protect the subtraction
-in jbd2_journal_commit_transaction().
-
-Fixes: 96f1e0974575 ("jbd2: avoid long hold times of j_state_lock while committing a transaction")
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220611130426.2013258-1-yi.zhang@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+Link: https://lore.kernel.org/r/20220808141246.5749-2-povik+lin@cutebit.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/jbd2/commit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/tas2770.c |   20 +++++++++++++++++++-
+ sound/soc/codecs/tas2770.h |    3 +++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/fs/jbd2/commit.c b/fs/jbd2/commit.c
-index d45ceb2e2149..8d5aced7ed0c 100644
---- a/fs/jbd2/commit.c
-+++ b/fs/jbd2/commit.c
-@@ -514,13 +514,13 @@ void jbd2_journal_commit_transaction(journal_t *journal)
- 	 */
- 	jbd2_journal_switch_revoke_table(journal);
+--- a/sound/soc/codecs/tas2770.c
++++ b/sound/soc/codecs/tas2770.c
+@@ -337,7 +337,7 @@ static int tas2770_set_fmt(struct snd_so
+ 	struct snd_soc_component *component = dai->component;
+ 	struct tas2770_priv *tas2770 =
+ 			snd_soc_component_get_drvdata(component);
+-	u8 tdm_rx_start_slot = 0, asi_cfg_1 = 0;
++	u8 tdm_rx_start_slot = 0, invert_fpol = 0, fpol_preinv = 0, asi_cfg_1 = 0;
+ 	int ret;
  
-+	write_lock(&journal->j_state_lock);
- 	/*
- 	 * Reserved credits cannot be claimed anymore, free them
- 	 */
- 	atomic_sub(atomic_read(&journal->j_reserved_credits),
- 		   &commit_transaction->t_outstanding_credits);
+ 	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
+@@ -349,9 +349,15 @@ static int tas2770_set_fmt(struct snd_so
+ 	}
  
--	write_lock(&journal->j_state_lock);
- 	trace_jbd2_commit_flushing(journal, commit_transaction);
- 	stats.run.rs_flushing = jiffies;
- 	stats.run.rs_locked = jbd2_time_diff(stats.run.rs_locked,
--- 
-2.35.1
-
+ 	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
++	case SND_SOC_DAIFMT_NB_IF:
++		invert_fpol = 1;
++		fallthrough;
+ 	case SND_SOC_DAIFMT_NB_NF:
+ 		asi_cfg_1 |= TAS2770_TDM_CFG_REG1_RX_RSING;
+ 		break;
++	case SND_SOC_DAIFMT_IB_IF:
++		invert_fpol = 1;
++		fallthrough;
+ 	case SND_SOC_DAIFMT_IB_NF:
+ 		asi_cfg_1 |= TAS2770_TDM_CFG_REG1_RX_FALING;
+ 		break;
+@@ -369,15 +375,19 @@ static int tas2770_set_fmt(struct snd_so
+ 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+ 	case SND_SOC_DAIFMT_I2S:
+ 		tdm_rx_start_slot = 1;
++		fpol_preinv = 0;
+ 		break;
+ 	case SND_SOC_DAIFMT_DSP_A:
+ 		tdm_rx_start_slot = 0;
++		fpol_preinv = 1;
+ 		break;
+ 	case SND_SOC_DAIFMT_DSP_B:
+ 		tdm_rx_start_slot = 1;
++		fpol_preinv = 1;
+ 		break;
+ 	case SND_SOC_DAIFMT_LEFT_J:
+ 		tdm_rx_start_slot = 0;
++		fpol_preinv = 1;
+ 		break;
+ 	default:
+ 		dev_err(tas2770->dev,
+@@ -391,6 +401,14 @@ static int tas2770_set_fmt(struct snd_so
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = snd_soc_component_update_bits(component, TAS2770_TDM_CFG_REG0,
++					    TAS2770_TDM_CFG_REG0_FPOL_MASK,
++					    (fpol_preinv ^ invert_fpol)
++					     ? TAS2770_TDM_CFG_REG0_FPOL_RSING
++					     : TAS2770_TDM_CFG_REG0_FPOL_FALING);
++	if (ret < 0)
++		return ret;
++
+ 	return 0;
+ }
+ 
+--- a/sound/soc/codecs/tas2770.h
++++ b/sound/soc/codecs/tas2770.h
+@@ -41,6 +41,9 @@
+ #define TAS2770_TDM_CFG_REG0_31_44_1_48KHZ  0x6
+ #define TAS2770_TDM_CFG_REG0_31_88_2_96KHZ  0x8
+ #define TAS2770_TDM_CFG_REG0_31_176_4_192KHZ  0xa
++#define TAS2770_TDM_CFG_REG0_FPOL_MASK  BIT(0)
++#define TAS2770_TDM_CFG_REG0_FPOL_RSING  0
++#define TAS2770_TDM_CFG_REG0_FPOL_FALING  1
+     /* TDM Configuration Reg1 */
+ #define TAS2770_TDM_CFG_REG1  TAS2770_REG(0X0, 0x0B)
+ #define TAS2770_TDM_CFG_REG1_MASK	GENMASK(5, 1)
 
 

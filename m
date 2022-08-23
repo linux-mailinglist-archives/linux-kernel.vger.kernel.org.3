@@ -2,85 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D6959E692
+	by mail.lfdr.de (Postfix) with ESMTP id 7740459E693
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244177AbiHWQFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S243243AbiHWQEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243857AbiHWQEk (ORCPT
+        with ESMTP id S244001AbiHWQEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:04:40 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CEC99250
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 05:16:25 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1661256953tey1azri
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 23 Aug 2022 20:15:51 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: XBN7tc9DADKOu7nqgEn/xfy1ddb7BNa8BsdiV45GuuyAjUHAfmb3VhwZRoVY6
-        PGj/QHiiaJX0zblpPzgPPoVCIfjPDCuT5+5SyPVeqczjxvxlvSg7mmVk8EVLuiIxeaSkQIX
-        YtU89wfeK4/D/9jwOWgNA9UZFukNGpJIWb5tx962ANkF+0exmusw8ZfvG57TdRh+Uz4J3JZ
-        Hxs8JfKCkzlAUvP1pRDQwSHgw5QtXCRR1xh1sUmECJVlevMdaxnhURSdJvT8YucasJHAGhI
-        J+Ix95SaLzIoAeDPUzZJa/zUKRlCFCfyVqeTbY7u/6av/zCE/fmWye68vapIASTi1THtjgk
-        DyGt7NHNAujs64dxBzOYY1xvXwkgrk6ablIRkUj7FfJ2wGc5iail7bttd2OulRhikMMhFed
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] gpu/drm: fix repeated words in comments
-Date:   Tue, 23 Aug 2022 20:15:44 +0800
-Message-Id: <20220823121544.9082-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 23 Aug 2022 12:04:14 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77100B7EF3;
+        Tue, 23 Aug 2022 05:16:13 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id y187so10734380iof.0;
+        Tue, 23 Aug 2022 05:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qnlJbX7XO6SmNHU1bkg4hqymkER7fnKUTpqUuxqDC9Q=;
+        b=YvkTldU56/KpYM/Q8lcjGj20r11xH73ScpVMfAJtufI/U10FglJMjHhHHXenufeP6H
+         vwJF4VKfMLUOGuN/Ua9u/Pe2ldy5pEc0aOkanmbjmDEC0Fat0o9y72yF4o3KnaIuBvYX
+         oox9tOffcxVjxvPm6v058yOrWSq9WziZzVJ89/og/LnYTqDPeN6o6irdH+dmnaTByX2G
+         dVqo6nJhGl2YcKwW+g2mhGsbX8jcnWI3lTJuKlVci6IRshzUlRKxlIDtpx4HvS8Ggpj9
+         ZWFLZKmO3B5TzTaJvbCBk7J+zga3aOc9LO6sA7oFd6sJhZXjX6qmoUIwrbaNFo7ACftp
+         yMNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qnlJbX7XO6SmNHU1bkg4hqymkER7fnKUTpqUuxqDC9Q=;
+        b=o5YvyFhPKJP8D1kkjs2JTT6qJCks4/w78wyY8r+STvfCMw8pdFKSQPhrHtCo/alr7B
+         KGXAy0ux4eFZx87VgYrs6AzunA6OXXBCg0biBf5KGsmbx6fioZUYHE4OwxL6mfHvhmB+
+         12WxaqA5hWH8vNCUM89i+vyN6lHslWJNNbSLiVOBF6Znax3rWmNO53zpTJ/IbXeF8S6B
+         0n7xOv7b4gGpmWmiYTO2vuBzvqOE1XaO27kBzCrnbIuHk0jHEAVyazHSXq+1YM7noOvM
+         FHlP4smixv2u5MhPisLGuBrkp3c7wAxoGPVOUnLw/nNxpE9G1c+ttky7msaoy+xYS+z/
+         HYrw==
+X-Gm-Message-State: ACgBeo1alse8daDOX5GnzoVVLJ+I0hcouxLV8W0rrHa0mGJNMTMTaotK
+        kvKa+hwwKH7tMRx3wFtOYEDxj0tOMSycxN2NCj8=
+X-Google-Smtp-Source: AA6agR65nLgIPp9dQRo/ThNtejGzyHMH3W7NSoUePFPp3ZDLsb4T5keII5Ok366GmAN6alr6UifMSJMIdk3AEK609RA=
+X-Received: by 2002:a5d:8953:0:b0:67c:aa4c:2b79 with SMTP id
+ b19-20020a5d8953000000b0067caa4c2b79mr11241778iot.172.1661256971635; Tue, 23
+ Aug 2022 05:16:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220805154231.31257-1-ojeda@kernel.org> <20220805154231.31257-21-ojeda@kernel.org>
+ <CAKwvOdndYxQ+KgVhC8F3vWnHDT8pD3px8cKjinu-khn25_FSYw@mail.gmail.com> <CANiq72nA0WwfnSaNxxz27iM5LXPELQVzTAQGBE30SXeLGVEf1A@mail.gmail.com>
+In-Reply-To: <CANiq72nA0WwfnSaNxxz27iM5LXPELQVzTAQGBE30SXeLGVEf1A@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 23 Aug 2022 14:16:00 +0200
+Message-ID: <CANiq72mZ6eiKRP59uFgPh=nV-_GavpuEM0zwPwM9BhtytmQbqw@mail.gmail.com>
+Subject: Re: [PATCH v9 20/27] scripts: add `rust_is_available.sh`
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Finn Behrens <me@kloenk.de>, Miguel Cano <macanroj@gmail.com>,
+        Tiago Lam <tiagolam@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'old'.
- Delete the redundant word 'new'.
+On Tue, Aug 23, 2022 at 2:12 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> For instance, using the test header to print the libclang version,
+> this works for me:
+>
+>     $ bindgen scripts/rust_is_available_bindgen_libclang.h
+>     ... clang version 14.0.6 (https://github.com/llvm/llvm-project.git ...
+>
+>     $ LIBCLANG_PATH=.../libclang-6.0.so.1 \
+>       bindgen scripts/rust_is_available_bindgen_libclang.h
+>     ... clang version 6.0.0 (tags/RELEASE_600/final) ...
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/gpu/drm/drm_context.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+By the way, a while ago I requested an easier way to check the
+libclang version directly from bindgen, and Emilio quickly added it
+(thanks a lot!): since `bindgen` 0.60.0 you can do:
 
-diff --git a/drivers/gpu/drm/drm_context.c b/drivers/gpu/drm/drm_context.c
-index c6e6a3e7219a..2d871159162b 100644
---- a/drivers/gpu/drm/drm_context.c
-+++ b/drivers/gpu/drm/drm_context.c
-@@ -267,8 +267,8 @@ int drm_legacy_setsareactx(struct drm_device *dev, void *data,
-  * Switch context.
-  *
-  * \param dev DRM device.
-- * \param old old context handle.
-- * \param new new context handle.
-+ * \param old context handle.
-+ * \param new context handle.
-  * \return zero on success or a negative number on failure.
-  *
-  * Attempt to set drm_device::context_flag.
-@@ -294,7 +294,7 @@ static int drm_context_switch(struct drm_device * dev, int old, int new)
-  * Complete context switch.
-  *
-  * \param dev DRM device.
-- * \param new new context handle.
-+ * \param new context handle.
-  * \return zero on success or a negative number on failure.
-  *
-  * Updates drm_device::last_context and drm_device::last_switch. Verifies the
--- 
-2.36.1
+    $ bindgen --version --verbose
+    bindgen 0.60.0
+    Clang: clang version 14.0.6 (https://github.com/llvm/ ...
 
+Cheers,
+Miguel

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE8B59D4E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3C059D543
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243995AbiHWIfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S1344854AbiHWIhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346666AbiHWIcB (ORCPT
+        with ESMTP id S1344853AbiHWIfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:32:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871F06D9DF;
-        Tue, 23 Aug 2022 01:16:10 -0700 (PDT)
+        Tue, 23 Aug 2022 04:35:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2324D75FC2;
+        Tue, 23 Aug 2022 01:16:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 321F661242;
-        Tue, 23 Aug 2022 08:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24786C433C1;
-        Tue, 23 Aug 2022 08:16:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF1FBB81C29;
+        Tue, 23 Aug 2022 08:16:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D67C433D6;
+        Tue, 23 Aug 2022 08:16:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242569;
-        bh=YKgSrZytelvA7qH/EzilkzPS+8jp+NvQH+QwQtyN6Zk=;
+        s=korg; t=1661242578;
+        bh=nKTuBtM4erHTsf5Z3wnlxZdKoymi6bvTtcHKXHd7hkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cVfvlp5StC1WZmwopAWQMI3XUFKcAR2zLwZWIOiEUGqezlWZFMCO1pFBqiwshSMlP
-         IP4QhN53PoUApJqvNOh7TpmtMCLMOazk2HaChm82XHNk9y8VbsHtyNThW0+xhzcPcC
-         t3XcCgEaGwxmpQtK61D90NzvOEGSH3F48hymrmFA=
+        b=nvNl2VA8ZfxuAwTtlEUYVHRROWXpl+aEwRW9IekVi8Nh8WIpqOyVbzNn3uk2yPmuj
+         9id3AT3LTjN8wIYPYaAVjEMEtyl4AOiWA2IqaeWiOeadRY5IPSHxSMmqFM84QOdzDf
+         ztfVhIHuHtBWSk1N4KqCHKVUqasc6n4+XpfamsBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleg Kiselev <okiselev@amazon.com>,
-        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 093/101] ext4: avoid resizing to a partial cluster size
-Date:   Tue, 23 Aug 2022 10:04:06 +0200
-Message-Id: <20220823080038.112097785@linuxfoundation.org>
+        stable@vger.kernel.org, Timur Tabi <timur@kernel.org>,
+        Liang He <windhl@126.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 094/101] tty: serial: Fix refcount leak bug in ucc_uart.c
+Date:   Tue, 23 Aug 2022 10:04:07 +0200
+Message-Id: <20220823080038.148330039@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
 References: <20220823080034.579196046@linuxfoundation.org>
@@ -54,45 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kiselev, Oleg <okiselev@amazon.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 69cb8e9d8cd97cdf5e293b26d70a9dee3e35e6bd ]
+[ Upstream commit d24d7bb2cd947676f9b71fb944d045e09b8b282f ]
 
-This patch avoids an attempt to resize the filesystem to an
-unaligned cluster boundary.  An online resize to a size that is not
-integral to cluster size results in the last iteration attempting to
-grow the fs by a negative amount, which trips a BUG_ON and leaves the fs
-with a corrupted in-memory superblock.
+In soc_info(), of_find_node_by_type() will return a node pointer
+with refcount incremented. We should use of_node_put() when it is
+not used anymore.
 
-Signed-off-by: Oleg Kiselev <okiselev@amazon.com>
-Link: https://lore.kernel.org/r/0E92A0AB-4F16-4F1A-94B7-702CC6504FDE@amazon.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Acked-by: Timur Tabi <timur@kernel.org>
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220618060850.4058525-1-windhl@126.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/resize.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/tty/serial/ucc_uart.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
-index 60984bc54d55..e4f02572f69d 100644
---- a/fs/ext4/resize.c
-+++ b/fs/ext4/resize.c
-@@ -1941,6 +1941,16 @@ int ext4_resize_fs(struct super_block *sb, ext4_fsblk_t n_blocks_count)
- 	}
- 	brelse(bh);
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index 481eb2989a1e..ed1658b61e54 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -1143,6 +1143,8 @@ static unsigned int soc_info(unsigned int *rev_h, unsigned int *rev_l)
+ 		/* No compatible property, so try the name. */
+ 		soc_string = np->name;
  
-+	/*
-+	 * For bigalloc, trim the requested size to the nearest cluster
-+	 * boundary to avoid creating an unusable filesystem. We do this
-+	 * silently, instead of returning an error, to avoid breaking
-+	 * callers that blindly resize the filesystem to the full size of
-+	 * the underlying block device.
-+	 */
-+	if (ext4_has_feature_bigalloc(sb))
-+		n_blocks_count &= ~((1 << EXT4_CLUSTER_BITS(sb)) - 1);
++	of_node_put(np);
 +
- retry:
- 	o_blocks_count = ext4_blocks_count(es);
- 
+ 	/* Extract the SOC number from the "PowerPC," string */
+ 	if ((sscanf(soc_string, "PowerPC,%u", &soc) != 1) || !soc)
+ 		return 0;
 -- 
 2.35.1
 

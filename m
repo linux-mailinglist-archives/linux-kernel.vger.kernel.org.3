@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD8E59DE57
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1918259E0DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359364AbiHWMDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S1353311AbiHWKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359559AbiHWMBy (ORCPT
+        with ESMTP id S1353520AbiHWKLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:01:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E813EA3;
-        Tue, 23 Aug 2022 02:36:16 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7298B719A4;
+        Tue, 23 Aug 2022 01:57:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B1F161468;
-        Tue, 23 Aug 2022 09:36:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5C3C433C1;
-        Tue, 23 Aug 2022 09:36:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ADB8B81C3A;
+        Tue, 23 Aug 2022 08:57:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E6FC433D6;
+        Tue, 23 Aug 2022 08:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247373;
-        bh=LP5BzgqKsxL6/kCUIrjEs8eLaEKoR1gKWjg9bD0cpqg=;
+        s=korg; t=1661245019;
+        bh=YJQdeheKy3hP9l/pnqJdEujrSGFaTCm5AvS8wFuLOtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=II2BHzS2oCdQzJtEJmyKUYtFG5NlH0iI8zmrccdLPGwoLQ2yqmjt8cGvDoMXV4Zyj
-         sOhI84SImGQrO7IKeM3i4PB/0eRm/WSazhriodHwmLaXAirSgtFn0oNA1VKoY6zTd5
-         A7W2Qtdvt+Iz3qkZRL6UhHYZFig1mrtaHsAac3bI=
+        b=RsAId4ko1dVEtFqPuT9Q341ELRHu1Deub/QPvXcTUCpfTbHZV+rnaMZHdzGLAt/bf
+         VDbvD4W4lG6MbzDWEFvSdoGV2bBC9Dyc4PDfNAxC5qN7c3UYS7WA9Ddkheqllq86po
+         35ttCMeB6YhdYYzL0QfKuxAzNf5WV8+W4AtZZiu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 5.10 016/158] apparmor: fix aa_label_asxprint return check
+        stable@vger.kernel.org,
+        Henning Schild <henning.schild@siemens.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 189/244] pinctrl: intel: Check against matching data instead of ACPI companion
 Date:   Tue, 23 Aug 2022 10:25:48 +0200
-Message-Id: <20220823080046.720533447@linuxfoundation.org>
+Message-Id: <20220823080105.692228947@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +59,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit 3e2a3a0830a2090e766d0d887d52c67de2a6f323 upstream.
+[ Upstream commit c551bd81d198bf1dcd4398d5454acdc0309dbe77 ]
 
-Clang static analysis reports this issue
-label.c:1802:3: warning: 2nd function call argument
-  is an uninitialized value
-  pr_info("%s", str);
-  ^~~~~~~~~~~~~~~~~~
+In some cases we may get a platform device that has ACPI companion
+which is different to the pin control described in the ACPI tables.
+This is primarily happens when device is instantiated by board file.
 
-str is set from a successful call to aa_label_asxprint(&str, ...)
-On failure a negative value is returned, not a -1.  So change
-the check.
+In order to allow this device being enumerated, refactor
+intel_pinctrl_get_soc_data() to check the matching data instead of
+ACPI companion.
 
-Fixes: f1bd904175e8 ("apparmor: add the base fns() for domain labels")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Henning Schild <henning.schild@siemens.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Henning Schild <henning.schild@siemens.com>
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/apparmor/label.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/pinctrl/intel/pinctrl-intel.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -1745,7 +1745,7 @@ void aa_label_xaudit(struct audit_buffer
- 	if (!use_label_hname(ns, label, flags) ||
- 	    display_mode(ns, label, flags)) {
- 		len  = aa_label_asxprint(&name, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
-@@ -1773,7 +1773,7 @@ void aa_label_seq_xprint(struct seq_file
- 		int len;
+diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
+index 826d494f3cc6..48f55991ae8c 100644
+--- a/drivers/pinctrl/intel/pinctrl-intel.c
++++ b/drivers/pinctrl/intel/pinctrl-intel.c
+@@ -1626,16 +1626,14 @@ EXPORT_SYMBOL_GPL(intel_pinctrl_probe_by_uid);
  
- 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
-@@ -1796,7 +1796,7 @@ void aa_label_xprintk(struct aa_ns *ns,
- 		int len;
+ const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_device *pdev)
+ {
++	const struct intel_pinctrl_soc_data * const *table;
+ 	const struct intel_pinctrl_soc_data *data = NULL;
+-	const struct intel_pinctrl_soc_data **table;
+-	struct acpi_device *adev;
+-	unsigned int i;
  
- 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
--		if (len == -1) {
-+		if (len < 0) {
- 			AA_DEBUG("label print error");
- 			return;
- 		}
+-	adev = ACPI_COMPANION(&pdev->dev);
+-	if (adev) {
+-		const void *match = device_get_match_data(&pdev->dev);
++	table = device_get_match_data(&pdev->dev);
++	if (table) {
++		struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
++		unsigned int i;
+ 
+-		table = (const struct intel_pinctrl_soc_data **)match;
+ 		for (i = 0; table[i]; i++) {
+ 			if (!strcmp(adev->pnp.unique_id, table[i]->uid)) {
+ 				data = table[i];
+@@ -1649,7 +1647,7 @@ const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_
+ 		if (!id)
+ 			return ERR_PTR(-ENODEV);
+ 
+-		table = (const struct intel_pinctrl_soc_data **)id->driver_data;
++		table = (const struct intel_pinctrl_soc_data * const *)id->driver_data;
+ 		data = table[pdev->id];
+ 	}
+ 
+-- 
+2.35.1
+
 
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C7459DDF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654AD59DE7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240995AbiHWMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S1356961AbiHWK4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352485AbiHWMMq (ORCPT
+        with ESMTP id S1355934AbiHWKuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:12:46 -0400
+        Tue, 23 Aug 2022 06:50:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8417E68C1;
-        Tue, 23 Aug 2022 02:39:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60DEAB422;
+        Tue, 23 Aug 2022 02:12:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F5AC612D6;
-        Tue, 23 Aug 2022 09:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5073AC433D6;
-        Tue, 23 Aug 2022 09:39:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F03660959;
+        Tue, 23 Aug 2022 09:12:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA49DC4314A;
+        Tue, 23 Aug 2022 09:12:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247542;
-        bh=8CmxgCYmN7CuAnJkg+oksYBTsGEpAazn0mrXZaAWCg0=;
+        s=korg; t=1661245960;
+        bh=zxMU5M7V9EV3mg2BiGOuDh/F4BgS2+RFP7ltmtDtjfQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pbmigzh5pbW4MWKYN78i5FMS2ZeGneq0p2s38CaEctnsDLB6ILSzcvh63SEBhi4py
-         d7wG/nUh/VCSlsWsHnzoRuR7bCI4nJD+VHVdXJoWNmah5e/ZW9govh2RrD1MMAlJGA
-         6r316KJBAYaQO5Xqp2gxrSbaNPubr5QNlsvZ+4+U=
+        b=AYB0oVADk76UmTF4huxbkvwLUBEan61Usm42HxkGATiEa2fQ6MMLwcAnm4OMqXwjM
+         46JbY/VSi3GngUp8W27ZcdutAfWJXA8dMA44CFEGlwJJ4WkIZ2Ssom0QS8myXTb5XA
+         k+1K6zQ0rMOCnYAvZEK1daKuxaM1NRbN7hjJ3KZg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.10 040/158] pinctrl: qcom: msm8916: Allow CAMSS GP clocks to be muxed
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Ghinea <stefan.ghinea@windriver.com>
+Subject: [PATCH 4.19 203/287] KVM: Add infrastructure and macro to mark VM as bugged
 Date:   Tue, 23 Aug 2022 10:26:12 +0200
-Message-Id: <20220823080047.680185996@linuxfoundation.org>
+Message-Id: <20220823080107.717504439@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +56,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikita Travkin <nikita@trvn.ru>
+From: Sean Christopherson <sean.j.christopherson@intel.com>
 
-commit 44339391c666e46cba522d19c65a6ad1071c68b7 upstream.
+commit 0b8f11737cffc1a406d1134b58687abc29d76b52 upstream
 
-GPIO 31, 32 can be muxed to GCC_CAMSS_GP(1,2)_CLK respectively but the
-function was never assigned to the pingroup (even though the function
-exists already).
-
-Add this mode to the related pins.
-
-Fixes: 5373a2c5abb6 ("pinctrl: qcom: Add msm8916 pinctrl driver")
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-Link: https://lore.kernel.org/r/20220612145955.385787-4-nikita@trvn.ru
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Message-Id: <3a0998645c328bf0895f1290e61821b70f048549.1625186503.git.isaku.yamahata@intel.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+[SG: Adjusted context for kernel version 4.19]
+Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/qcom/pinctrl-msm8916.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/kvm_host.h |   28 +++++++++++++++++++++++++++-
+ virt/kvm/kvm_main.c      |   10 +++++-----
+ 2 files changed, 32 insertions(+), 6 deletions(-)
 
---- a/drivers/pinctrl/qcom/pinctrl-msm8916.c
-+++ b/drivers/pinctrl/qcom/pinctrl-msm8916.c
-@@ -844,8 +844,8 @@ static const struct msm_pingroup msm8916
- 	PINGROUP(28, pwr_modem_enabled_a, NA, NA, NA, NA, NA, qdss_tracedata_b, NA, atest_combodac),
- 	PINGROUP(29, cci_i2c, NA, NA, NA, NA, NA, qdss_tracedata_b, NA, atest_combodac),
- 	PINGROUP(30, cci_i2c, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
--	PINGROUP(31, cci_timer0, NA, NA, NA, NA, NA, NA, NA, NA),
--	PINGROUP(32, cci_timer1, NA, NA, NA, NA, NA, NA, NA, NA),
-+	PINGROUP(31, cci_timer0, flash_strobe, NA, NA, NA, NA, NA, NA, NA),
-+	PINGROUP(32, cci_timer1, flash_strobe, NA, NA, NA, NA, NA, NA, NA),
- 	PINGROUP(33, cci_async, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
- 	PINGROUP(34, pwr_nav_enabled_a, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
- 	PINGROUP(35, pwr_crypto_enabled_a, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -128,6 +128,7 @@ static inline bool is_error_page(struct
+ #define KVM_REQ_MMU_RELOAD        (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQ_PENDING_TIMER     2
+ #define KVM_REQ_UNHALT            3
++#define KVM_REQ_VM_BUGGED         (4 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQUEST_ARCH_BASE     8
+ 
+ #define KVM_ARCH_REQ_FLAGS(nr, flags) ({ \
+@@ -482,6 +483,7 @@ struct kvm {
+ 	struct srcu_struct srcu;
+ 	struct srcu_struct irq_srcu;
+ 	pid_t userspace_pid;
++	bool vm_bugged;
+ };
+ 
+ #define kvm_err(fmt, ...) \
+@@ -510,6 +512,31 @@ struct kvm {
+ #define vcpu_err(vcpu, fmt, ...)					\
+ 	kvm_err("vcpu%i " fmt, (vcpu)->vcpu_id, ## __VA_ARGS__)
+ 
++bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
++static inline void kvm_vm_bugged(struct kvm *kvm)
++{
++	kvm->vm_bugged = true;
++	kvm_make_all_cpus_request(kvm, KVM_REQ_VM_BUGGED);
++}
++
++#define KVM_BUG(cond, kvm, fmt...)				\
++({								\
++	int __ret = (cond);					\
++								\
++	if (WARN_ONCE(__ret && !(kvm)->vm_bugged, fmt))		\
++		kvm_vm_bugged(kvm);				\
++	unlikely(__ret);					\
++})
++
++#define KVM_BUG_ON(cond, kvm)					\
++({								\
++	int __ret = (cond);					\
++								\
++	if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))		\
++		kvm_vm_bugged(kvm);				\
++	unlikely(__ret);					\
++})
++
+ static inline struct kvm_io_bus *kvm_get_bus(struct kvm *kvm, enum kvm_bus idx)
+ {
+ 	return srcu_dereference_check(kvm->buses[idx], &kvm->srcu,
+@@ -770,7 +797,6 @@ void kvm_reload_remote_mmus(struct kvm *
+ 
+ bool kvm_make_vcpus_request_mask(struct kvm *kvm, unsigned int req,
+ 				 unsigned long *vcpu_bitmap, cpumask_var_t tmp);
+-bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
+ 
+ long kvm_arch_dev_ioctl(struct file *filp,
+ 			unsigned int ioctl, unsigned long arg);
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2820,7 +2820,7 @@ static long kvm_vcpu_ioctl(struct file *
+ 	struct kvm_fpu *fpu = NULL;
+ 	struct kvm_sregs *kvm_sregs = NULL;
+ 
+-	if (vcpu->kvm->mm != current->mm)
++	if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_bugged)
+ 		return -EIO;
+ 
+ 	if (unlikely(_IOC_TYPE(ioctl) != KVMIO))
+@@ -3026,7 +3026,7 @@ static long kvm_vcpu_compat_ioctl(struct
+ 	void __user *argp = compat_ptr(arg);
+ 	int r;
+ 
+-	if (vcpu->kvm->mm != current->mm)
++	if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_bugged)
+ 		return -EIO;
+ 
+ 	switch (ioctl) {
+@@ -3081,7 +3081,7 @@ static long kvm_device_ioctl(struct file
+ {
+ 	struct kvm_device *dev = filp->private_data;
+ 
+-	if (dev->kvm->mm != current->mm)
++	if (dev->kvm->mm != current->mm || dev->kvm->vm_bugged)
+ 		return -EIO;
+ 
+ 	switch (ioctl) {
+@@ -3244,7 +3244,7 @@ static long kvm_vm_ioctl(struct file *fi
+ 	void __user *argp = (void __user *)arg;
+ 	int r;
+ 
+-	if (kvm->mm != current->mm)
++	if (kvm->mm != current->mm || kvm->vm_bugged)
+ 		return -EIO;
+ 	switch (ioctl) {
+ 	case KVM_CREATE_VCPU:
+@@ -3422,7 +3422,7 @@ static long kvm_vm_compat_ioctl(struct f
+ 	struct kvm *kvm = filp->private_data;
+ 	int r;
+ 
+-	if (kvm->mm != current->mm)
++	if (kvm->mm != current->mm || kvm->vm_bugged)
+ 		return -EIO;
+ 	switch (ioctl) {
+ 	case KVM_GET_DIRTY_LOG: {
 
 

@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B93359D628
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59E559D308
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347670AbiHWJHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S241533AbiHWICz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346279AbiHWJGf (ORCPT
+        with ESMTP id S240841AbiHWICw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:06:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC93185F9B;
-        Tue, 23 Aug 2022 01:29:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D33BE614C2;
-        Tue, 23 Aug 2022 08:28:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C2CC433D6;
-        Tue, 23 Aug 2022 08:28:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243338;
-        bh=P3egnqUA6ktWyvgwGA+OKZtXZmA0Wg8B7BsVUmsHoUw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0sqMs1IWECNXUVTNltDtq3Yq9aA0N75+Cis2sYghkAGYi3yVmGig3SNqpX58ux9f5
-         VcFk6nH1oQVf4iONanwANwM4SrHlhTCsKGKfKwsfBt9DMsnR9MJbcEk8g8wmGZ5EEe
-         8bSBADDFeyajfCHhXx8EUAAWDINUx6MU6MkEJUpg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 246/365] drm/bridge: lvds-codec: Fix error checking of drm_of_lvds_get_data_mapping()
-Date:   Tue, 23 Aug 2022 10:02:27 +0200
-Message-Id: <20220823080128.500334591@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 23 Aug 2022 04:02:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E37659CF
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:51 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrt-0002w0-OX; Tue, 23 Aug 2022 10:02:37 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrs-001Svc-Au; Tue, 23 Aug 2022 10:02:36 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrp-00ALZf-9J; Tue, 23 Aug 2022 10:02:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v3 14/17] net: dsa: microchip: remove unused port phy variable
+Date:   Tue, 23 Aug 2022 10:02:28 +0200
+Message-Id: <20220823080231.2466017-15-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,42 +60,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+This variable is unused. So, drop it.
 
-[ Upstream commit 2bba782002c5dab6ca8d608b778b386fb912adff ]
-
-The drm_of_lvds_get_data_mapping() returns either negative value on
-error or MEDIA_BUS_FMT_* otherwise. The check for 'ret' would also
-catch the positive case of MEDIA_BUS_FMT_* and lead to probe failure
-every time 'data-mapping' DT property is specified.
-
-Fixes: 7c4dd0a266527 ("drm: of: Add drm_of_lvds_get_data_mapping")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-To: dri-devel@lists.freedesktop.org
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220801125419.167562-1-marex@denx.de
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/gpu/drm/bridge/lvds-codec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/dsa/microchip/ksz8795.c    | 1 -
+ drivers/net/dsa/microchip/ksz9477.c    | 5 -----
+ drivers/net/dsa/microchip/ksz_common.h | 1 -
+ 3 files changed, 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/lvds-codec.c b/drivers/gpu/drm/bridge/lvds-codec.c
-index 702ea803a743..39e7004de720 100644
---- a/drivers/gpu/drm/bridge/lvds-codec.c
-+++ b/drivers/gpu/drm/bridge/lvds-codec.c
-@@ -180,7 +180,7 @@ static int lvds_codec_probe(struct platform_device *pdev)
- 		of_node_put(bus_node);
- 		if (ret == -ENODEV) {
- 			dev_warn(dev, "missing 'data-mapping' DT property\n");
--		} else if (ret) {
-+		} else if (ret < 0) {
- 			dev_err(dev, "invalid 'data-mapping' DT property\n");
- 			return ret;
- 		} else {
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index f020d9f402845..bd3b133e7085b 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -1251,7 +1251,6 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
+ 		if (i == dev->phy_port_cnt)
+ 			break;
+ 		p->on = 1;
+-		p->phy = 1;
+ 	}
+ 	for (i = 0; i < dev->phy_port_cnt; i++) {
+ 		p = &dev->ports[i];
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 2982c8cb0983c..bfefb60ec91bf 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -1081,13 +1081,8 @@ void ksz9477_config_cpu_port(struct dsa_switch *ds)
+ 
+ 		ksz_port_stp_state_set(ds, i, BR_STATE_DISABLED);
+ 		p->on = 1;
+-		if (dev->info->internal_phy[i])
+-			p->phy = 1;
+ 		if (dev->chip_id == 0x00947700 && i == 6) {
+ 			p->sgmii = 1;
+-
+-			/* SGMII PHY detection code is not implemented yet. */
+-			p->phy = 0;
+ 		}
+ 	}
+ }
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index 769b3ec45a3b5..5b4970072c380 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -72,7 +72,6 @@ struct ksz_port {
+ 	struct phy_device phydev;
+ 
+ 	u32 on:1;			/* port is not disabled by hardware */
+-	u32 phy:1;			/* port has a PHY */
+ 	u32 fiber:1;			/* port is fiber */
+ 	u32 sgmii:1;			/* port is SGMII */
+ 	u32 force:1;
 -- 
-2.35.1
-
-
+2.30.2
 

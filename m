@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D6C59E33A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B323859DF25
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345012AbiHWMTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S1359093AbiHWL7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356148AbiHWMPl (ORCPT
+        with ESMTP id S1359266AbiHWL4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:15:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBED4F653;
-        Tue, 23 Aug 2022 02:41:10 -0700 (PDT)
+        Tue, 23 Aug 2022 07:56:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30CC844C4;
+        Tue, 23 Aug 2022 02:34:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B12EB81C97;
-        Tue, 23 Aug 2022 09:39:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00186C433D7;
-        Tue, 23 Aug 2022 09:39:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D83286146E;
+        Tue, 23 Aug 2022 09:34:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84E7C433C1;
+        Tue, 23 Aug 2022 09:34:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247576;
-        bh=AIm+iPxsLuS8cHO7rgsgO4mYB1yWFzEMV0ofdqrskFI=;
+        s=korg; t=1661247244;
+        bh=fy9Hbiarz6gfSjxp30zSLiolvV9NwPqMSdgxPIu22Qs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hPqmkMEKrcT2Lk3XEGQAUQRTuIXHK8HmQob0VGh/WUtwwG+ZITGGnPzzV8pG5tP2J
-         V4ZSsezcTtXXPv24L41dMTeM0m+vuDbSoyf7/3SlVpHqh/aYr5uwEIIdRSZ50Vh7UG
-         +eESfSw9a9qeHfqbMDtMHQrbI4ypiN78jzx2Whqs=
+        b=QupQEscY90MmE3zSGsSq54TdzggXwFSXQyfHMTtgZk8GrHdW3p1BvgqJLTF0V2ccF
+         MC4FR1inkjUdtpgxjyTdylE4bNvPccc7/HocMGXdhQHSbp6JgCbCYYjuhobGaYN76U
+         4RqqnWrrtOjDlhTGaWPhR/Z1ZdkqBraKngbsCWZ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Da Xue <da@libre.computer>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 079/158] spi: meson-spicc: add local pow2 clock ops to preserve rate between messages
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.4 333/389] nios2: restarts apply only to the first sigframe we build...
 Date:   Tue, 23 Aug 2022 10:26:51 +0200
-Message-Id: <20220823080049.238382310@linuxfoundation.org>
+Message-Id: <20220823080129.426286082@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,255 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neil Armstrong <narmstrong@baylibre.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-commit 09992025dacd258c823f50e82db09d7ef06cdac4 upstream.
+commit 411a76b7219555c55867466c82d70ce928d6c9e1 upstream.
 
-At the end of a message, the HW gets a reset in meson_spicc_unprepare_transfer(),
-this resets the SPICC_CONREG register and notably the value set by the
-Common Clock Framework.
-
-This is problematic because:
-- the register value CCF can be different from the corresponding CCF cached rate
-- CCF is allowed to change the clock rate whenever the HW state
-
-This introduces:
-- local pow2 clock ops checking the HW state before allowing a clock operation
-- separation of legacy pow2 clock patch and new enhanced clock path
-- SPICC_CONREG datarate value is now value kepts across messages
-
-It has been checked that:
-- SPICC_CONREG datarate value is kept across messages
-- CCF is only allowed to change the SPICC_CONREG datarate value when busy
-- SPICC_CONREG datarate value is correct for each transfer
-
-This didn't appear before commit 3e0cf4d3fc29 ("spi: meson-spicc: add a linear clock divider support")
-because we recalculated and wrote the rate for each xfer.
-
-Fixes: 3e0cf4d3fc29 ("spi: meson-spicc: add a linear clock divider support")
-Reported-by: Da Xue <da@libre.computer>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220811134445.678446-1-narmstrong@baylibre.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b53e906d255d ("nios2: Signal handling support")
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-meson-spicc.c |  129 ++++++++++++++++++++++++++++++++----------
- 1 file changed, 101 insertions(+), 28 deletions(-)
+ arch/nios2/kernel/signal.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -156,6 +156,7 @@ struct meson_spicc_device {
- 	void __iomem			*base;
- 	struct clk			*core;
- 	struct clk			*pclk;
-+	struct clk_divider		pow2_div;
- 	struct clk			*clk;
- 	struct spi_message		*message;
- 	struct spi_transfer		*xfer;
-@@ -168,6 +169,8 @@ struct meson_spicc_device {
- 	unsigned long			xfer_remain;
- };
- 
-+#define pow2_clk_to_spicc(_div) container_of(_div, struct meson_spicc_device, pow2_div)
-+
- static void meson_spicc_oen_enable(struct meson_spicc_device *spicc)
- {
- 	u32 conf;
-@@ -421,7 +424,7 @@ static int meson_spicc_prepare_message(s
- {
- 	struct meson_spicc_device *spicc = spi_master_get_devdata(master);
- 	struct spi_device *spi = message->spi;
--	u32 conf = 0;
-+	u32 conf = readl_relaxed(spicc->base + SPICC_CONREG) & SPICC_DATARATE_MASK;
- 
- 	/* Store current message */
- 	spicc->message = message;
-@@ -458,8 +461,6 @@ static int meson_spicc_prepare_message(s
- 	/* Select CS */
- 	conf |= FIELD_PREP(SPICC_CS_MASK, spi->chip_select);
- 
--	/* Default Clock rate core/4 */
--
- 	/* Default 8bit word */
- 	conf |= FIELD_PREP(SPICC_BITLENGTH_MASK, 8 - 1);
- 
-@@ -476,12 +477,16 @@ static int meson_spicc_prepare_message(s
- static int meson_spicc_unprepare_transfer(struct spi_master *master)
- {
- 	struct meson_spicc_device *spicc = spi_master_get_devdata(master);
-+	u32 conf = readl_relaxed(spicc->base + SPICC_CONREG) & SPICC_DATARATE_MASK;
- 
- 	/* Disable all IRQs */
- 	writel(0, spicc->base + SPICC_INTREG);
- 
- 	device_reset_optional(&spicc->pdev->dev);
- 
-+	/* Set default configuration, keeping datarate field */
-+	writel_relaxed(conf, spicc->base + SPICC_CONREG);
-+
- 	return 0;
- }
- 
-@@ -518,14 +523,60 @@ static void meson_spicc_cleanup(struct s
-  * Clk path for G12A series:
-  *    pclk -> pow2 fixed div -> pow2 div -> mux -> out
-  *    pclk -> enh fixed div -> enh div -> mux -> out
-+ *
-+ * The pow2 divider is tied to the controller HW state, and the
-+ * divider is only valid when the controller is initialized.
-+ *
-+ * A set of clock ops is added to make sure we don't read/set this
-+ * clock rate while the controller is in an unknown state.
-  */
- 
--static int meson_spicc_clk_init(struct meson_spicc_device *spicc)
-+static unsigned long meson_spicc_pow2_recalc_rate(struct clk_hw *hw,
-+						  unsigned long parent_rate)
-+{
-+	struct clk_divider *divider = to_clk_divider(hw);
-+	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
-+
-+	if (!spicc->master->cur_msg || !spicc->master->busy)
-+		return 0;
-+
-+	return clk_divider_ops.recalc_rate(hw, parent_rate);
-+}
-+
-+static int meson_spicc_pow2_determine_rate(struct clk_hw *hw,
-+					   struct clk_rate_request *req)
-+{
-+	struct clk_divider *divider = to_clk_divider(hw);
-+	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
-+
-+	if (!spicc->master->cur_msg || !spicc->master->busy)
-+		return -EINVAL;
-+
-+	return clk_divider_ops.determine_rate(hw, req);
-+}
-+
-+static int meson_spicc_pow2_set_rate(struct clk_hw *hw, unsigned long rate,
-+				     unsigned long parent_rate)
-+{
-+	struct clk_divider *divider = to_clk_divider(hw);
-+	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
-+
-+	if (!spicc->master->cur_msg || !spicc->master->busy)
-+		return -EINVAL;
-+
-+	return clk_divider_ops.set_rate(hw, rate, parent_rate);
-+}
-+
-+const struct clk_ops meson_spicc_pow2_clk_ops = {
-+	.recalc_rate = meson_spicc_pow2_recalc_rate,
-+	.determine_rate = meson_spicc_pow2_determine_rate,
-+	.set_rate = meson_spicc_pow2_set_rate,
-+};
-+
-+static int meson_spicc_pow2_clk_init(struct meson_spicc_device *spicc)
- {
- 	struct device *dev = &spicc->pdev->dev;
--	struct clk_fixed_factor *pow2_fixed_div, *enh_fixed_div;
--	struct clk_divider *pow2_div, *enh_div;
--	struct clk_mux *mux;
-+	struct clk_fixed_factor *pow2_fixed_div;
- 	struct clk_init_data init;
- 	struct clk *clk;
- 	struct clk_parent_data parent_data[2];
-@@ -560,31 +611,45 @@ static int meson_spicc_clk_init(struct m
- 	if (WARN_ON(IS_ERR(clk)))
- 		return PTR_ERR(clk);
- 
--	pow2_div = devm_kzalloc(dev, sizeof(*pow2_div), GFP_KERNEL);
--	if (!pow2_div)
--		return -ENOMEM;
--
- 	snprintf(name, sizeof(name), "%s#pow2_div", dev_name(dev));
- 	init.name = name;
--	init.ops = &clk_divider_ops;
--	init.flags = CLK_SET_RATE_PARENT;
-+	init.ops = &meson_spicc_pow2_clk_ops;
-+	/*
-+	 * Set NOCACHE here to make sure we read the actual HW value
-+	 * since we reset the HW after each transfer.
-+	 */
-+	init.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE;
- 	parent_data[0].hw = &pow2_fixed_div->hw;
- 	init.num_parents = 1;
- 
--	pow2_div->shift = 16,
--	pow2_div->width = 3,
--	pow2_div->flags = CLK_DIVIDER_POWER_OF_TWO,
--	pow2_div->reg = spicc->base + SPICC_CONREG;
--	pow2_div->hw.init = &init;
-+	spicc->pow2_div.shift = 16,
-+	spicc->pow2_div.width = 3,
-+	spicc->pow2_div.flags = CLK_DIVIDER_POWER_OF_TWO,
-+	spicc->pow2_div.reg = spicc->base + SPICC_CONREG;
-+	spicc->pow2_div.hw.init = &init;
- 
--	clk = devm_clk_register(dev, &pow2_div->hw);
--	if (WARN_ON(IS_ERR(clk)))
--		return PTR_ERR(clk);
-+	spicc->clk = devm_clk_register(dev, &spicc->pow2_div.hw);
-+	if (WARN_ON(IS_ERR(spicc->clk)))
-+		return PTR_ERR(spicc->clk);
- 
--	if (!spicc->data->has_enhance_clk_div) {
--		spicc->clk = clk;
--		return 0;
--	}
-+	return 0;
-+}
-+
-+static int meson_spicc_enh_clk_init(struct meson_spicc_device *spicc)
-+{
-+	struct device *dev = &spicc->pdev->dev;
-+	struct clk_fixed_factor *enh_fixed_div;
-+	struct clk_divider *enh_div;
-+	struct clk_mux *mux;
-+	struct clk_init_data init;
-+	struct clk *clk;
-+	struct clk_parent_data parent_data[2];
-+	char name[64];
-+
-+	memset(&init, 0, sizeof(init));
-+	memset(&parent_data, 0, sizeof(parent_data));
-+
-+	init.parent_data = parent_data;
- 
- 	/* algorithm for enh div: rate = freq / 2 / (N + 1) */
- 
-@@ -637,7 +702,7 @@ static int meson_spicc_clk_init(struct m
- 	snprintf(name, sizeof(name), "%s#sel", dev_name(dev));
- 	init.name = name;
- 	init.ops = &clk_mux_ops;
--	parent_data[0].hw = &pow2_div->hw;
-+	parent_data[0].hw = &spicc->pow2_div.hw;
- 	parent_data[1].hw = &enh_div->hw;
- 	init.num_parents = 2;
- 	init.flags = CLK_SET_RATE_PARENT;
-@@ -754,12 +819,20 @@ static int meson_spicc_probe(struct plat
- 
- 	meson_spicc_oen_enable(spicc);
- 
--	ret = meson_spicc_clk_init(spicc);
-+	ret = meson_spicc_pow2_clk_init(spicc);
- 	if (ret) {
--		dev_err(&pdev->dev, "clock registration failed\n");
-+		dev_err(&pdev->dev, "pow2 clock registration failed\n");
- 		goto out_clk;
+--- a/arch/nios2/kernel/signal.c
++++ b/arch/nios2/kernel/signal.c
+@@ -261,6 +261,7 @@ static int do_signal(struct pt_regs *reg
+ 			regs->ea = restart_addr;
+ 			break;
+ 		}
++		regs->orig_r2 = -1;
  	}
  
-+	if (spicc->data->has_enhance_clk_div) {
-+		ret = meson_spicc_enh_clk_init(spicc);
-+		if (ret) {
-+			dev_err(&pdev->dev, "clock registration failed\n");
-+			goto out_clk;
-+		}
-+	}
-+
- 	ret = devm_spi_register_master(&pdev->dev, master);
- 	if (ret) {
- 		dev_err(&pdev->dev, "spi master registration failed\n");
+ 	if (get_signal(&ksig)) {
 
 

@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65CB59D8B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E94159D8AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243360AbiHWJON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S1349135AbiHWJOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348981AbiHWJLE (ORCPT
+        with ESMTP id S243401AbiHWJLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:11:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B8786B7B;
-        Tue, 23 Aug 2022 01:31:16 -0700 (PDT)
+        Tue, 23 Aug 2022 05:11:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499156D54C;
+        Tue, 23 Aug 2022 01:31:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F9016148F;
-        Tue, 23 Aug 2022 08:31:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB6EC433D7;
-        Tue, 23 Aug 2022 08:31:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0568661360;
+        Tue, 23 Aug 2022 08:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B8BC433D6;
+        Tue, 23 Aug 2022 08:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243476;
-        bh=sKiCDr2+rFLbZVPMxLPNCZjeW042ncbG+hqCMa4nj3U=;
+        s=korg; t=1661243482;
+        bh=fNAOU3nn93Lkm95oCUBoM40Bm7uOivsDjII/2NQw4E8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wj33+jL0xrhAf4H/BqeKmElZ9E+3N/Uy9V2DPl4v0bBkvo0dqMe00oK2qEf1vazOP
-         lnuWF+bL1Vzf+XNveyAhFDQkXXmiOhgenu5HrltWEmBILd4fuHYJbL4JxGh4Yxu3Kn
-         h83Po7ZBKtnWxQ7j9y32KdVB0FJ+JIjAIbUpr4Lk=
+        b=X83ELeEn35/C0RXbyx9OJijG/o+pnjT8Vln4XdQkGTHmlzmLKseOwogWNlZMouv0M
+         7p+4LFXL8VDS9mavGt0cQzOcSbAtO0dRMBtL4E4iTn3Hy2+tKMxvojweNcZjtwt4EK
+         IcGX5bgCbQBtLtUSJqwUhcrN0WnS6HmAO8FdjIzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tal Cohen <talcohen@habana.ai>,
-        Oded Gabbay <ogabbay@kernel.org>,
+        stable@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 289/365] habanalabs/gaudi: invoke device reset from one code block
-Date:   Tue, 23 Aug 2022 10:03:10 +0200
-Message-Id: <20220823080130.294328482@linuxfoundation.org>
+Subject: [PATCH 5.19 291/365] habanalabs/gaudi: mask constant value before cast
+Date:   Tue, 23 Aug 2022 10:03:12 +0200
+Message-Id: <20220823080130.375272491@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -55,86 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tal Cohen <talcohen@habana.ai>
+From: Oded Gabbay <ogabbay@kernel.org>
 
-[ Upstream commit be572e67dafbf8004d46a2c9d97338c107efb60e ]
+[ Upstream commit e3f49437a2e0221a387ecd192d742ae1434e1e3a ]
 
-In order to prepare the driver code for device reset event
-notification, change the event handler function flow to call
-device reset from one code block.
+This fixes a sparse warning of
+"cast truncates bits from constant value"
 
-In addition, the commit fixes an issue that reset was performed
-w/o checking the 'hard_reset_on_fw_event' state and w/o setting
-the HL_DRV_RESET_DELAY flag.
-
-Signed-off-by: Tal Cohen <talcohen@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ drivers/misc/habanalabs/gaudi/gaudi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 25d735aee6a3..e6bfaf55c6b6 100644
+index 3fb221f2e393..b33616aacb33 100644
 --- a/drivers/misc/habanalabs/gaudi/gaudi.c
 +++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -7717,10 +7717,10 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
- 	struct gaudi_device *gaudi = hdev->asic_specific;
- 	u64 data = le64_to_cpu(eq_entry->data[0]);
- 	u32 ctl = le32_to_cpu(eq_entry->hdr.ctl);
--	u32 fw_fatal_err_flag = 0;
-+	u32 fw_fatal_err_flag = 0, flags = 0;
- 	u16 event_type = ((ctl & EQ_CTL_EVENT_TYPE_MASK)
- 			>> EQ_CTL_EVENT_TYPE_SHIFT);
--	bool reset_required;
-+	bool reset_required, reset_direct = false;
- 	u8 cause;
- 	int rc;
+@@ -3339,19 +3339,19 @@ static void gaudi_init_nic_qman(struct hl_device *hdev, u32 nic_offset,
+ 	u32 nic_qm_err_cfg, irq_handler_offset;
+ 	u32 q_off;
  
-@@ -7808,7 +7808,8 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
- 			dev_err(hdev->dev, "reset required due to %s\n",
- 				gaudi_irq_map_table[event_type].name);
- 
--			hl_device_reset(hdev, 0);
-+			reset_direct = true;
-+			goto reset_device;
- 		} else {
- 			hl_fw_unmask_irq(hdev, event_type);
- 		}
-@@ -7830,7 +7831,8 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
- 			dev_err(hdev->dev, "reset required due to %s\n",
- 				gaudi_irq_map_table[event_type].name);
- 
--			hl_device_reset(hdev, 0);
-+			reset_direct = true;
-+			goto reset_device;
- 		} else {
- 			hl_fw_unmask_irq(hdev, event_type);
- 		}
-@@ -7981,12 +7983,17 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
- 	return;
- 
- reset_device:
--	if (hdev->asic_prop.fw_security_enabled)
--		hl_device_reset(hdev, HL_DRV_RESET_HARD
--					| HL_DRV_RESET_BYPASS_REQ_TO_FW
--					| fw_fatal_err_flag);
-+	reset_required = true;
-+
-+	if (hdev->asic_prop.fw_security_enabled && !reset_direct)
-+		flags = HL_DRV_RESET_HARD | HL_DRV_RESET_BYPASS_REQ_TO_FW | fw_fatal_err_flag;
- 	else if (hdev->hard_reset_on_fw_events)
--		hl_device_reset(hdev, HL_DRV_RESET_HARD | HL_DRV_RESET_DELAY | fw_fatal_err_flag);
-+		flags = HL_DRV_RESET_HARD | HL_DRV_RESET_DELAY | fw_fatal_err_flag;
-+	else
-+		reset_required = false;
-+
-+	if (reset_required)
-+		hl_device_reset(hdev, flags);
- 	else
- 		hl_fw_unmask_irq(hdev, event_type);
- }
+-	mtr_base_en_lo = lower_32_bits(CFG_BASE +
++	mtr_base_en_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 			mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+ 	mtr_base_en_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+-	so_base_en_lo = lower_32_bits(CFG_BASE +
++	so_base_en_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_SOB_OBJ_0);
+ 	so_base_en_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_SOB_OBJ_0);
+-	mtr_base_ws_lo = lower_32_bits(CFG_BASE +
++	mtr_base_ws_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+ 	mtr_base_ws_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
+-	so_base_ws_lo = lower_32_bits(CFG_BASE +
++	so_base_ws_lo = lower_32_bits((CFG_BASE & U32_MAX) +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_SOB_OBJ_0);
+ 	so_base_ws_hi = upper_32_bits(CFG_BASE +
+ 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_SOB_OBJ_0);
 -- 
 2.35.1
 

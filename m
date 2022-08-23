@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FC959D723
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812A659D2EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239207AbiHWJLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S241681AbiHWIE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347573AbiHWJJW (ORCPT
+        with ESMTP id S241611AbiHWIDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:09:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0D074DE7;
-        Tue, 23 Aug 2022 01:30:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 23 Aug 2022 04:03:13 -0400
+Received: from proxima.lasnet.de (proxima.lasnet.de [78.47.171.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF56566103;
+        Tue, 23 Aug 2022 01:03:04 -0700 (PDT)
+Received: from [192.168.2.51] (p4fe710fb.dip0.t-ipconnect.de [79.231.16.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D22EC6148E;
-        Tue, 23 Aug 2022 08:30:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D11C433D6;
-        Tue, 23 Aug 2022 08:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243441;
-        bh=zuynUB4qvXHwuhHt93KM7PDIxN+C9d44hf1QyZClopY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b0MQ4AEURpDx6h5I3+0r/tPnlPrhJ6Kp7RLYSOV7jn2URfysZ5/vNc6RnFurksURb
-         b6IgMNRlvefYJZELsGLncetxYdc8wfgCxr9S9ycj10ZLOXHmN9XinhTSN1xQzfGZgL
-         6HEfcQ+bj9taXEcRF2jsdp4eyum2P+QH8pC2TQcg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Pascal Terjan <pterjan@google.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 279/365] vboxguest: Do not use devm for irq
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 1A8D5C0147;
+        Tue, 23 Aug 2022 10:03:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1661241781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+8Fm13M6bb9Zs5x+jl2TGTj24WEqkmrVC9YUrmCGNjg=;
+        b=j4lytk4G4lljIXQiFLB2W2kRJ1+rWaibru3c/aD1CEKFJrHYS3kQSr54vs0jw0JVLUTGFU
+        23YQbY2J5WX+BLTdA9fP9vL9J1q4qLnCwLntOf/nzwvwpd4gsJjkb1zFpJi1AWrN53Bb8X
+        ybsKvw4vUxAODfpHjjqZ7AwC+0U9tHMKNrceLkkUdFNQ3x78mpX6xMkMi7HZJ8bFwJpxRv
+        RDE7GOzTWyeQC3+R/KNpwbAiRasD+YpwT1CWhV0zI+YlCMAcvDmENq83Sxmiw0s4t3zBeg
+        fFfBgw54NPtbWn+KTd0Uqq+h3tS8UMKRP2omuNs0j+yWTmxEB+Ypbl5zQiMaLA==
+Message-ID: <4325be90-eeb3-2bdb-5ee5-7e567d633aa6@datenfreihafen.org>
 Date:   Tue, 23 Aug 2022 10:03:00 +0200
-Message-Id: <20220823080129.845516787@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v0] ieee802154/adf7242: defer destroy_workqueue call
+Content-Language: en-US
+To:     Lin Ma <linma@zju.edu.cn>, michael.hennerich@analog.com,
+        alex.aring@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220808034224.12642-1-linma@zju.edu.cn>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20220808034224.12642-1-linma@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,81 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pascal Terjan <pterjan@google.com>
+Hello.
 
-[ Upstream commit 6169525b76764acb81918aa387ac168fb9a55575 ]
-
-When relying on devm it doesn't get freed early enough which causes the
-following warning when unloading the module:
-
-[249348.837181] remove_proc_entry: removing non-empty directory 'irq/20', leaking at least 'vboxguest'
-[249348.837219] WARNING: CPU: 0 PID: 6708 at fs/proc/generic.c:715 remove_proc_entry+0x119/0x140
-
-[249348.837379] Call Trace:
-[249348.837385]  unregister_irq_proc+0xbd/0xe0
-[249348.837392]  free_desc+0x23/0x60
-[249348.837396]  irq_free_descs+0x4a/0x70
-[249348.837401]  irq_domain_free_irqs+0x160/0x1a0
-[249348.837452]  mp_unmap_irq+0x5c/0x60
-[249348.837458]  acpi_unregister_gsi_ioapic+0x29/0x40
-[249348.837463]  acpi_unregister_gsi+0x17/0x30
-[249348.837467]  acpi_pci_irq_disable+0xbf/0xe0
-[249348.837473]  pcibios_disable_device+0x20/0x30
-[249348.837478]  pci_disable_device+0xef/0x120
-[249348.837482]  vbg_pci_remove+0x6c/0x70 [vboxguest]
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Pascal Terjan <pterjan@google.com>
-Link: https://lore.kernel.org/r/20220612133744.4030602-1-pterjan@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/virt/vboxguest/vboxguest_linux.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
-index 73eb34849eab..4ccfd30c2a30 100644
---- a/drivers/virt/vboxguest/vboxguest_linux.c
-+++ b/drivers/virt/vboxguest/vboxguest_linux.c
-@@ -356,8 +356,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 		goto err_vbg_core_exit;
- 	}
- 
--	ret = devm_request_irq(dev, pci->irq, vbg_core_isr, IRQF_SHARED,
--			       DEVICE_NAME, gdev);
-+	ret = request_irq(pci->irq, vbg_core_isr, IRQF_SHARED, DEVICE_NAME,
-+			  gdev);
- 	if (ret) {
- 		vbg_err("vboxguest: Error requesting irq: %d\n", ret);
- 		goto err_vbg_core_exit;
-@@ -367,7 +367,7 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	if (ret) {
- 		vbg_err("vboxguest: Error misc_register %s failed: %d\n",
- 			DEVICE_NAME, ret);
--		goto err_vbg_core_exit;
-+		goto err_free_irq;
- 	}
- 
- 	ret = misc_register(&gdev->misc_device_user);
-@@ -403,6 +403,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	misc_deregister(&gdev->misc_device_user);
- err_unregister_misc_device:
- 	misc_deregister(&gdev->misc_device);
-+err_free_irq:
-+	free_irq(pci->irq, gdev);
- err_vbg_core_exit:
- 	vbg_core_exit(gdev);
- err_disable_pcidev:
-@@ -419,6 +421,7 @@ static void vbg_pci_remove(struct pci_dev *pci)
- 	vbg_gdev = NULL;
- 	mutex_unlock(&vbg_gdev_mutex);
- 
-+	free_irq(pci->irq, gdev);
- 	device_remove_file(gdev->dev, &dev_attr_host_features);
- 	device_remove_file(gdev->dev, &dev_attr_host_version);
- 	misc_deregister(&gdev->misc_device_user);
--- 
-2.35.1
+On 08.08.22 05:42, Lin Ma wrote:
+> There is a possible race condition (use-after-free) like below
+> 
+>    (FREE)                     |  (USE)
+>    adf7242_remove             |  adf7242_channel
+>     cancel_delayed_work_sync  |
+>      destroy_workqueue (1)    |   adf7242_cmd_rx
+>                               |    mod_delayed_work (2)
+>                               |
+> 
+> The root cause for this race is that the upper layer (ieee802154) is
+> unaware of this detaching event and the function adf7242_channel can
+> be called without any checks.
+> 
+> To fix this, we can add a flag write at the beginning of adf7242_remove
+> and add flag check in adf7242_channel. Or we can just defer the
+> destructive operation like other commit 3e0588c291d6 ("hamradio: defer
+> ax25 kfree after unregister_netdev") which let the
+> ieee802154_unregister_hw() to handle the synchronization. This patch
+> takes the second option.
+> 
+> Fixes: 58e9683d1475 ("net: ieee802154: adf7242: Fix OCL calibration
+> runs")
+> Signed-off-by: Lin Ma <linma@zju.edu.cn>
 
 
+This patch has been applied to the wpan tree and will be
+part of the next pull request to net. Thanks!
 
+regards
+Stefan Schmidt

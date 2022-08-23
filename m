@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF9959D626
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFDB59D4E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242353AbiHWI7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S241489AbiHWJAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242396AbiHWI7Q (ORCPT
+        with ESMTP id S242746AbiHWI7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:59:16 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A090872848;
-        Tue, 23 Aug 2022 01:26:37 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id q18so11800449ljg.12;
-        Tue, 23 Aug 2022 01:26:37 -0700 (PDT)
+        Tue, 23 Aug 2022 04:59:34 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB4580F5E
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:26:54 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id l23so1770398lji.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:26:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=INFiREuc8tsqsS8aIeq0sv6L+CLqHoDlQnC1BP60eqw=;
-        b=B42M+pKRB4ohHIy8nIxLiSRgc9jG1RBhSbh1D9TVeitjtgZrRyQz9UW35CFAWV3wEp
-         tWTMllOQHMXwnbxt2vUie0VD1Rd2GoHLGdDufOpzmD5WAH0oa3wGchYYWziTZmDVVwuM
-         uGR9cw/OZ4bXu6vnKkoYXNhsxD3hIGS7s3+Ce9U+RFlMHE7yUrJ6iesGXQdhkGQDt7DV
-         /WJ7gLDggNUyvLk2S12bpgCEyC7HacTy2UskAxRWhJQ/C2BoI+u+YHP0l5lGfmu/Na+6
-         h4380FDniPHBHb4NXRA0xEFljxLT6FrdZhjzhxDe0RkG4M0wKdE6eXyoc0+Qnv7O0B23
-         l0UA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=IS4Gc+TW6Ax9uye5L+Ds92oOy3Kyy05ShRdkS4te/ZY=;
+        b=GKZkJ3VMpMNWQ6jlCiB93Ao9kLAkjPR3kJOq9UDspAnH8/JkFK6QNoOPt+iKe5Qoz0
+         aE6Q12iy5cmuMmINeCr4d9GkLYNkbd5P04eJ6akCQvccrlghyqVpTZDElJrFBwCQqp4Q
+         dXBhjW8IuxGS2TqdTT84VKvOau830OBuTuitUbLo/LfdSWKPlV2WXr8yI526WZr1Y2Fy
+         RPM74RWkxzgy3Ufzq0m09hhaqFRJ+cv+avcZlHFnPmTvCfpVwF9I5pQZb9i74bBICgqb
+         3AgWLNp+gQNLY/2lpTH/uQbkK0M62PLI946E0/Zxay5bBC8VVLJmr4fwyH/OAKTzImoc
+         F4zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=INFiREuc8tsqsS8aIeq0sv6L+CLqHoDlQnC1BP60eqw=;
-        b=qJpSeSu74uaN6njGgEyTfdvJvISY1fBui3eBQRfnFZhuxBU0iFWYsAxel5lcJvx1L/
-         YBrZKBGmkSInyB5DxT1MlHICgnb2Sn+vKGfFX/jb7+9Ip6qpN0/54nnENQTM0pjWqPAG
-         xHWW0fZy28D5YvYUBAf5Ma82x7gMcEp4zr9k2Li76filfTC+QyOF/St6MhmtTEtkmAk3
-         avEPSJcB1MSVYzVXhNyzstfdcWuPIgNsw6WQXBibKWPzzpHKapt16eNcuXUXipvSW0TP
-         J8pd7O1TdQxtu1JUZPtp3vFA59q7ExD077VD+siKr+WHap0OrTkQRfYNTSeL/p/oz4Q1
-         lsOA==
-X-Gm-Message-State: ACgBeo0e03DZQHTSckE9/P2q3tKngdq5NkMdpYTMPhwCcFAxPFaWHqVO
-        DQN5y3gsmpikbqStI13rlFE=
-X-Google-Smtp-Source: AA6agR5Y6dLqZK4sNhaxcRwxDwyvypLkJXmZRN8Qcs1Fy/yZuE7/O7iNlqrScaudcfqaVAre1/8i0A==
-X-Received: by 2002:a2e:934f:0:b0:250:a7bc:2b8f with SMTP id m15-20020a2e934f000000b00250a7bc2b8fmr6733479ljh.512.1661243135386;
-        Tue, 23 Aug 2022 01:25:35 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id d12-20020a056512368c00b00492ce573726sm1908764lfs.47.2022.08.23.01.25.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 01:25:34 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 11:25:32 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=IS4Gc+TW6Ax9uye5L+Ds92oOy3Kyy05ShRdkS4te/ZY=;
+        b=ex/+b10gZ9uDP7L6q7mkFX/jRFh7n3sXlRlDmf9h8vWhSxdzlZUZUwLr7ULWNQDff7
+         Oj+vRXI6Y1ZWdsQSj65VP2b3DY/WphevL3RRUAsgvo6LJGZKuPrumlIyQ7OBAap4TSk6
+         qbK8WJneGj4HolD39aJJYg9eQkb1Rc2HjNSgs6NMG44tHl9HbZ95OycrRArkp5cPyUx9
+         rEZWG0lAhmr+qFL59KQtSba2x/4gIOxDhucScnRh2UOx6sjmLG/9pA2QZgLvmXMr59cr
+         u4OrIL8Mi644uT5f7VI8M+lHHoRI3QM5oRgUlIgyNjT3NG3Ux+Ozwd8jZagPSqWRbv7+
+         w+6Q==
+X-Gm-Message-State: ACgBeo2ZdrTqnVgrMDeOznPH3hJGdmfRANkMPjElcfwnLsERQVDed4hc
+        wb6mmzFHjily2RG73F+9L8yPBA==
+X-Google-Smtp-Source: AA6agR7C2k986Ln6dFDCy4ImpK4mVQlexAtn6mm+LIt1nnOi53wB00n4rm8/vHN8ljFafME9dOfKVQ==
+X-Received: by 2002:a2e:824e:0:b0:261:bdfd:f9c3 with SMTP id j14-20020a2e824e000000b00261bdfdf9c3mr5001453ljh.347.1661243178039;
+        Tue, 23 Aug 2022 01:26:18 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id v20-20020a056512349400b0047f6b4f82d1sm2385866lfr.250.2022.08.23.01.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 01:26:17 -0700 (PDT)
+Message-ID: <ab7e2816-8b57-2b25-e2cf-738c1baa5a5e@linaro.org>
+Date:   Tue, 23 Aug 2022 11:26:15 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
+Content-Language: en-US
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Rob Herring <robh@kernel.org>,
         Michal Simek <michal.simek@xilinx.com>,
         Borislav Petkov <bp@alien8.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
+        Manish Narani <manish.narani@xilinx.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
@@ -69,69 +77,44 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Robert Richter <rric@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
- controller support
-Message-ID: <20220823082532.gf3m6466rzfxmtns@mobilestation>
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
 References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
  <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
- <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 11:17:23AM +0300, Krzysztof Kozlowski wrote:
-> On 22/08/2022 22:07, Serge Semin wrote:
-> > The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
-> > the CSRs layout is absolutely different and it doesn't has IRQ unlike DW
-> > uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there is
-> > no any reason to have these controllers described by the same bindings.
-> > Thus let's split them up.
-> > 
-> > While at it rename the original Synopsys uMCTL2 DT-schema file to a more
-> > descriptive - snps,dw-umctl2-ddrc.yaml and add a more detailed title and
-> > description of the device bindings.
-> 
-> Filename should be based on compatible, so if renaming then
-> snps,ddrc-3.80a.yaml or snps,ddrc.yaml... which leads to original
-> filename anyway. Therefore nack for rename.
-> 
-> BTW, if you perform renames, generate patches with proper -M/-C/-B
-> arguments so this is detected.
-> 
-> 
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > --->  .../snps,dw-umctl2-ddrc.yaml                  | 51 +++++++++++++
-> 
+On 22/08/2022 22:07, Serge Semin wrote:
+> -
+> -allOf:
+> -  - if:
+> -      properties:
+> -        compatible:
+> -          contains:
+> -            enum:
+> -              - snps,ddrc-3.80a
+> -              - xlnx,zynqmp-ddrc-2.40a
+> -    then:
+> -      required:
+> -        - interrupts
+> -    else:
+> -      properties:
+> -        interrupts: false
 
-> This is a mess. I did not get any cover letters, any other patches any
-> description of relation between this and your other one.
-> 
-> It seems you make independent and conflicting changes to the same file,
-> so this has to be properly organized.
+This is not a pure "rename"... Organize your patches so only one thing
+is done at a time. Rename does not change the functional parts of the
+binding...
 
-Don't hurry with the judgement. Have a better look at your DT-related
-inbox.
-Link: https://lore.kernel.org/linux-devicetree/20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru/
-
--Sergey
-
-> 
-> Send entire patchset with cover letter with description of all
-> dependencies to all maintainers.
-> 
-> This is unreviewable now, so a no.
-> 
-> Best regards,
-> Krzysztof
+Best regards,
+Krzysztof

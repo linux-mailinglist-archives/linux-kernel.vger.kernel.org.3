@@ -2,175 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6552859D291
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7B259D293
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241194AbiHWHsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S241220AbiHWHtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241186AbiHWHsF (ORCPT
+        with ESMTP id S241211AbiHWHtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:48:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E4E647FC
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:48:03 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MBh9M36H9znThn;
-        Tue, 23 Aug 2022 15:45:43 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 15:48:01 +0800
-CC:     <yangyicong@hisilicon.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <tim.c.chen@linux.intel.com>,
-        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
-        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
-        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
-        <john.garry@huawei.com>, <shenyang39@huawei.com>,
-        <kprateek.nayak@amd.com>, <wuyun.abel@bytedance.com>
-Subject: Re: [PATCH v7 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     Chen Yu <yu.c.chen@intel.com>
-References: <20220822073610.27205-1-yangyicong@huawei.com>
- <20220822073610.27205-3-yangyicong@huawei.com>
- <YwRNXrBG9iq1jGZW@chenyu5-mobl1>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <53b1fc3c-b6a9-a4cb-433a-c5c6af1d1dac@huawei.com>
-Date:   Tue, 23 Aug 2022 15:48:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 23 Aug 2022 03:49:10 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558765303B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:49:09 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3375488624aso328593447b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=gkTv/YGwhJTqg/p3oOyoM/xZAMhxT0emHgJFd/ZlWrw=;
+        b=J1mdr+Q5/cVen63OGc+HWdVQlrO7HB6b5Rrs7uP96aARfyhzvtCb+74Bessg5Zo3Vo
+         Z8lcKD6fXNdyVnFWMnoSeOPmvrgfPfM3C7ohVwZpUficL4acI8at9z5oQaUXc+pVjbgM
+         RU3fbcWFd/rHgv2Lm3/Iv7q5671HXpf1KhKzVObKD3Jxk8BvA8oSbkQ/0FcAK9/RTdkb
+         hJWAARIkpkpbUBvqeK+JkT348O6RsSX707uwtkm+nAWao/XOdI11MYnHDqriKFtLKv/w
+         r8caJaPKHKEDKJQi9JEEpk+0ug/iJ4k2ck9asxddo2RCaB00ASv/vwckYrG4UYBYhzpF
+         uPFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=gkTv/YGwhJTqg/p3oOyoM/xZAMhxT0emHgJFd/ZlWrw=;
+        b=54FoadXAVaU+agbIVL2oju0Ig04Jy+gv3MoiGrkDvceqe3IILX9DFyK7cJ3rhLjGvu
+         q6lhkfdinb1xZrjVcpeMtaa24YaiTxu7FIvGGKkHq5BHS8z1nJf+K5UCyLk4a/CgxNCj
+         HVNvP3q/1Zky4NBjtkRd/APerizK0qpsBlf+fw/1lQXYgLnM+pgpxj3E7X6c0uZni9vO
+         98OeEP7+7SY4POqfcAZNRE+aG23pAybEUaWcPRVDLeaUSNWmt7QbNG4BMt4TQvxGqYQ5
+         C3W9n6F4ulVdRY7425PrpY3HrVHelaJLpXoQaDAi03FvLyIrXjNDia5pfwsPW1/GkAI9
+         +uYg==
+X-Gm-Message-State: ACgBeo1JBC4ypA+N8DKvvzmYr9fMLQj/Nr4v9hsjLMe9nWk1prGQbpm7
+        aORKIN6vJZOMTZ5vtnrB6deu+eUA2jCUzlAsGvvFQQ==
+X-Google-Smtp-Source: AA6agR6DS/h4oR9B1CJsG8XWGAPHcBewErV/nGrsYtjvSaNyAdxVtePB65KE1ytP14DJEVKlkUX55ktRabrT6IZ8e7w=
+X-Received: by 2002:a05:6902:1105:b0:695:c284:a76b with SMTP id
+ o5-20020a056902110500b00695c284a76bmr6697273ybu.300.1661240948491; Tue, 23
+ Aug 2022 00:49:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YwRNXrBG9iq1jGZW@chenyu5-mobl1>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220818124805.601-1-zhouchengming@bytedance.com> <20220818124805.601-9-zhouchengming@bytedance.com>
+In-Reply-To: <20220818124805.601-9-zhouchengming@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 23 Aug 2022 09:48:56 +0200
+Message-ID: <CAKfTPtBV76BwzLiNbubOzzk94W=+7+7abKY18tmmxNaEvd192g@mail.gmail.com>
+Subject: Re: [PATCH v6 8/9] sched/fair: move task sched_avg attach to enqueue_task_fair()
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     dietmar.eggemann@arm.com, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/23 11:45, Chen Yu wrote:
-> On 2022-08-22 at 15:36:10 +0800, Yicong Yang wrote:
->> From: Barry Song <song.bao.hua@hisilicon.com>
->>
->> For platforms having clusters like Kunpeng920, CPUs within the same cluster
->> have lower latency when synchronizing and accessing shared resources like
->> cache. Thus, this patch tries to find an idle cpu within the cluster of the
->> target CPU before scanning the whole LLC to gain lower latency.
->>
->> Testing has been done on Kunpeng920 by pinning tasks to one numa and two
->> numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
->>
->> With this patch, We noticed enhancement on tbench within one numa or cross
->> two numa.
->>
->> On numa 0:
->>                              6.0-rc1                patched
->> Hmean     1        351.20 (   0.00%)      396.45 *  12.88%*
->> Hmean     2        700.43 (   0.00%)      793.76 *  13.32%*
->> Hmean     4       1404.42 (   0.00%)     1583.62 *  12.76%*
->> Hmean     8       2833.31 (   0.00%)     3147.85 *  11.10%*
->> Hmean     16      5501.90 (   0.00%)     6089.89 *  10.69%*
->> Hmean     32     10428.59 (   0.00%)    10619.63 *   1.83%*
->> Hmean     64      8223.39 (   0.00%)     8306.93 *   1.02%*
->> Hmean     128     7042.88 (   0.00%)     7068.03 *   0.36%*
->>
->> On numa 0-1:
->>                              6.0-rc1                patched
->> Hmean     1        363.06 (   0.00%)      397.13 *   9.38%*
->> Hmean     2        721.68 (   0.00%)      789.84 *   9.44%*
->> Hmean     4       1435.15 (   0.00%)     1566.01 *   9.12%*
->> Hmean     8       2776.17 (   0.00%)     3007.05 *   8.32%*
->> Hmean     16      5471.71 (   0.00%)     6103.91 *  11.55%*
->> Hmean     32     10164.98 (   0.00%)    11531.81 *  13.45%*
->> Hmean     64     17143.28 (   0.00%)    20078.68 *  17.12%*
->> Hmean     128    14552.70 (   0.00%)    15156.41 *   4.15%*
->> Hmean     256    12827.37 (   0.00%)    13326.86 *   3.89%*
->>
->> Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so the SMT branch
->> in the code has not been tested but it supposed to work.
->>
->> Suggested-by: Peter Zijlstra <peterz@infradead.org>
->> [https://lore.kernel.org/lkml/Ytfjs+m1kUs0ScSn@worktop.programming.kicks-ass.net]
->> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
->> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
->> ---
->>  kernel/sched/fair.c     | 30 +++++++++++++++++++++++++++---
->>  kernel/sched/sched.h    |  2 ++
->>  kernel/sched/topology.c | 10 ++++++++++
->>  3 files changed, 39 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 914096c5b1ae..6fa77610d0f5 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -6437,6 +6437,30 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>  		}
->>  	}
->>  
->> +	if (static_branch_unlikely(&sched_cluster_active)) {
->> +		struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
->> +
->> +		if (sdc) {
->> +			for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
-> Looks good to me. One minor question, why don't we use
-> cpumask_and(cpus, sched_domain_span(sdc), cpus);
->> +				if (!cpumask_test_cpu(cpu, cpus))
->> +					continue;
-> so above check can be removed in each loop?
+On Thu, 18 Aug 2022 at 14:48, Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
+>
+> When wake_up_new_task(), we use post_init_entity_util_avg() to init
+> util_avg/runnable_avg based on cpu's util_avg at that time, and
+> attach task sched_avg to cfs_rq.
+>
+> Since enqueue_task_fair() -> enqueue_entity() -> update_load_avg()
+> loop will do attach, we can move this work to update_load_avg().
+>
+> wake_up_new_task(p)
+>   post_init_entity_util_avg(p)
+>     attach_entity_cfs_rq()  --> (1)
+>   activate_task(rq, p)
+>     enqueue_task() := enqueue_task_fair()
+>       enqueue_entity() loop
+>         update_load_avg(cfs_rq, se, UPDATE_TG | DO_ATTACH)
+>           if (!se->avg.last_update_time && (flags & DO_ATTACH))
+>             attach_entity_load_avg()  --> (2)
+>
+> This patch move attach from (1) to (2), update related comments too.
+>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-Since we'll need to recalculate the mask of rest CPUs to test in the LLC after scanning the cluster CPUs.
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-> Besides may I know what version this patch
-> is based on? since I failed to apply the patch on v6.0-rc2. Other than that:
-> 
-
-It's on 6.0-rc1 when sent but can be cleanly rebased on rc2:
-
-yangyicong@ubuntu:~/mainline_linux/linux_sub_workspace$ git log --oneline -3
-0079c27ba265 (HEAD -> topost-cls-v7, topost-cls-v6) sched/fair: Scan cluster before scanning LLC in wake-up path
-1ecb9e322bd7 sched: Add per_cpu cluster domain info and cpus_share_lowest_cache API
-1c23f9e627a7 (tag: v6.0-rc2, origin/master, origin/HEAD, master) Linux 6.0-rc2
-
-So I'm not sure where's the problem...
-
-> Reviewed-by: Chen Yu <yu.c.chen@intel.com>
-> 
-
-Thanks!
-
-> thanks,
-> Chenyu
->> +
->> +				if (has_idle_core) {
->> +					i = select_idle_core(p, cpu, cpus, &idle_cpu);
->> +					if ((unsigned int)i < nr_cpumask_bits)
->> +						return i;
->> +				} else {
->> +					if (--nr <= 0)
->> +						return -1;
->> +					idle_cpu = __select_idle_cpu(cpu, p);
->> +					if ((unsigned int)idle_cpu < nr_cpumask_bits)
->> +						return idle_cpu;
->> +				}
->> +			}
->> +			cpumask_andnot(cpus, cpus, sched_domain_span(sdc));
->> +		}
->> +	}
-> .
-> 
+> ---
+>  kernel/sched/fair.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index c319b0bd2bc1..93d7c7b110dd 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -799,8 +799,6 @@ void init_entity_runnable_average(struct sched_entity *se)
+>         /* when this task enqueue'ed, it will contribute to its cfs_rq's load_avg */
+>  }
+>
+> -static void attach_entity_cfs_rq(struct sched_entity *se);
+> -
+>  /*
+>   * With new tasks being created, their initial util_avgs are extrapolated
+>   * based on the cfs_rq's current util_avg:
+> @@ -863,8 +861,6 @@ void post_init_entity_util_avg(struct task_struct *p)
+>                 se->avg.last_update_time = cfs_rq_clock_pelt(cfs_rq);
+>                 return;
+>         }
+> -
+> -       attach_entity_cfs_rq(se);
+>  }
+>
+>  #else /* !CONFIG_SMP */
+> @@ -4002,8 +3998,7 @@ static void migrate_se_pelt_lag(struct sched_entity *se) {}
+>   * @cfs_rq: cfs_rq to update
+>   *
+>   * The cfs_rq avg is the direct sum of all its entities (blocked and runnable)
+> - * avg. The immediate corollary is that all (fair) tasks must be attached, see
+> - * post_init_entity_util_avg().
+> + * avg. The immediate corollary is that all (fair) tasks must be attached.
+>   *
+>   * cfs_rq->avg is used for task_h_load() and update_cfs_share() for example.
+>   *
+> @@ -4236,8 +4231,8 @@ static void remove_entity_load_avg(struct sched_entity *se)
+>
+>         /*
+>          * tasks cannot exit without having gone through wake_up_new_task() ->
+> -        * post_init_entity_util_avg() which will have added things to the
+> -        * cfs_rq, so we can remove unconditionally.
+> +        * enqueue_task_fair() which will have added things to the cfs_rq,
+> +        * so we can remove unconditionally.
+>          */
+>
+>         sync_entity_load_avg(se);
+> --
+> 2.37.2
+>

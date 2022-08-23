@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAC259D540
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6781B59D30A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241067AbiHWJHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
+        id S241676AbiHWIDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240664AbiHWJGB (ORCPT
+        with ESMTP id S241520AbiHWICy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:06:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF6885F83;
-        Tue, 23 Aug 2022 01:29:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5042B81C55;
-        Tue, 23 Aug 2022 08:28:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52295C433D6;
-        Tue, 23 Aug 2022 08:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243328;
-        bh=K7ahQAN1O3DYTL9J9OrKOMX8MgIAfw6ui3rxdDEwoMA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qcNwR7KMhVgi9bQg89hKUo46GlDe9ZWAuhKlot2AgtZ5tnpwXYkkdDWO5EBvLMcjh
-         zXaWllFuq27xLiDgM2NwFf6ap3UROE1Pr+FN1avAFnACHwpgG/g95bcRNanKAxQbrx
-         cnM4Bnn4KGROI1yBgMpcq/Pqkugi7vkWAfwEhhvc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 243/365] drm/meson: Fix refcount bugs in meson_vpu_has_available_connectors()
-Date:   Tue, 23 Aug 2022 10:02:24 +0200
-Message-Id: <20220823080128.399413304@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 23 Aug 2022 04:02:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF51A659E6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:52 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrt-0002vl-Nz; Tue, 23 Aug 2022 10:02:37 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrr-001Sv9-Jl; Tue, 23 Aug 2022 10:02:35 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrp-00ALZE-7g; Tue, 23 Aug 2022 10:02:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v3 11/17] net: dsa: microchip: ksz9477: remove MII_CTRL1000 check from ksz9477_w_phy()
+Date:   Tue, 23 Aug 2022 10:02:25 +0200
+Message-Id: <20220823080231.2466017-12-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,46 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+The reason why PHYlib may access MII_CTRL1000 on the chip without GBit
+support is only if chip provides wrong information about extended caps
+register. This issue is now handled by ksz9477_r_phy_quirks()
 
-[ Upstream commit 91b3c8dbe898df158fd2a84675f3a284ff6666f7 ]
+With proper regmap_ranges provided for all chips we will be able to catch this
+kind of bugs any way. So, remove this sanity check.
 
-In this function, there are two refcount leak bugs:
-(1) when breaking out of for_each_endpoint_of_node(), we need call
-the of_node_put() for the 'ep';
-(2) we should call of_node_put() for the reference returned by
-of_graph_get_remote_port() when it is not used anymore.
-
-Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controller")
-Signed-off-by: Liang He <windhl@126.com>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220726010722.1319416-1-windhl@126.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/gpu/drm/meson/meson_drv.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/dsa/microchip/ksz9477.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
-index 1b70938cfd2c..bd4ca11d3ff5 100644
---- a/drivers/gpu/drm/meson/meson_drv.c
-+++ b/drivers/gpu/drm/meson/meson_drv.c
-@@ -115,8 +115,11 @@ static bool meson_vpu_has_available_connectors(struct device *dev)
- 	for_each_endpoint_of_node(dev->of_node, ep) {
- 		/* If the endpoint node exists, consider it enabled */
- 		remote = of_graph_get_remote_port(ep);
--		if (remote)
-+		if (remote) {
-+			of_node_put(remote);
-+			of_node_put(ep);
- 			return true;
-+		}
- 	}
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 54514c9e6e003..cb5bd0ceb8df4 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -342,10 +342,6 @@ int ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
+ 	if (addr >= dev->phy_port_cnt)
+ 		return 0;
  
- 	return false;
+-	/* No gigabit support.  Do not write to this register. */
+-	if (!dev->info->gbit_capable[addr] && reg == MII_CTRL1000)
+-		return -ENXIO;
+-
+ 	return ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
+ }
+ 
 -- 
-2.35.1
-
-
+2.30.2
 

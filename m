@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C091359D84E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65CB59D8B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243556AbiHWJPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S243360AbiHWJON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348671AbiHWJMW (ORCPT
+        with ESMTP id S1348981AbiHWJLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:12:22 -0400
+        Tue, 23 Aug 2022 05:11:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0796D576;
-        Tue, 23 Aug 2022 01:31:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B8786B7B;
+        Tue, 23 Aug 2022 01:31:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19CF76147B;
-        Tue, 23 Aug 2022 08:31:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 250DDC433C1;
-        Tue, 23 Aug 2022 08:31:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F9016148F;
+        Tue, 23 Aug 2022 08:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB6EC433D7;
+        Tue, 23 Aug 2022 08:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243469;
-        bh=mDDod5hoK9zUIp4GLrFxdxCIQSI8HzlisO5aPIIpYBk=;
+        s=korg; t=1661243476;
+        bh=sKiCDr2+rFLbZVPMxLPNCZjeW042ncbG+hqCMa4nj3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=weXUF9jGuxizLED8U2nYYGYAH8rBGyk4ZRrlil22bAqMKnWaqfs9mU6T9zHz7+a8c
-         eR7Hl9u3JQNeqHLGVyfwqFpFhsjgQQeEO2+sJtSI4hyGU71H3Tj15M2X9v9sFhnxyz
-         hGEzNZK/GJ5kR547Ua+vObm8HPNRmrU/nwLeyQHE=
+        b=Wj33+jL0xrhAf4H/BqeKmElZ9E+3N/Uy9V2DPl4v0bBkvo0dqMe00oK2qEf1vazOP
+         lnuWF+bL1Vzf+XNveyAhFDQkXXmiOhgenu5HrltWEmBILd4fuHYJbL4JxGh4Yxu3Kn
+         h83Po7ZBKtnWxQ7j9y32KdVB0FJ+JIjAIbUpr4Lk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        stable@vger.kernel.org, Tal Cohen <talcohen@habana.ai>,
+        Oded Gabbay <ogabbay@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 287/365] coresight: etm4x: avoid build failure with unrolled loops
-Date:   Tue, 23 Aug 2022 10:03:08 +0200
-Message-Id: <20220823080130.208107606@linuxfoundation.org>
+Subject: [PATCH 5.19 289/365] habanalabs/gaudi: invoke device reset from one code block
+Date:   Tue, 23 Aug 2022 10:03:10 +0200
+Message-Id: <20220823080130.294328482@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -58,114 +55,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+From: Tal Cohen <talcohen@habana.ai>
 
-[ Upstream commit 4d45bc82df667ad9e9cb8361830e54fc1264e993 ]
+[ Upstream commit be572e67dafbf8004d46a2c9d97338c107efb60e ]
 
-When the following configs are enabled:
-* CORESIGHT
-* CORESIGHT_SOURCE_ETM4X
-* UBSAN
-* UBSAN_TRAP
+In order to prepare the driver code for device reset event
+notification, change the event handler function flow to call
+device reset from one code block.
 
-Clang fails assemble the kernel with the error:
-<instantiation>:1:7: error: expected constant expression in '.inst' directive
-.inst (0xd5200000|((((2) << 19) | ((1) << 16) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 7) & 0x7)) << 12) | ((((((((((0x160 + (i * 4))))) >> 2))) & 0xf)) << 8) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 4) & 0x7)) << 5)))|(.L__reg_num_x8))
-      ^
-drivers/hwtracing/coresight/coresight-etm4x-core.c:702:4: note: while in
-macro instantiation
-etm4x_relaxed_read32(csa, TRCCNTVRn(i));
-^
-drivers/hwtracing/coresight/coresight-etm4x.h:403:4: note: expanded from
-macro 'etm4x_relaxed_read32'
-read_etm4x_sysreg_offset((offset), false)))
-^
-drivers/hwtracing/coresight/coresight-etm4x.h:383:12: note: expanded
-from macro 'read_etm4x_sysreg_offset'
-__val = read_etm4x_sysreg_const_offset((offset));       \
-        ^
-drivers/hwtracing/coresight/coresight-etm4x.h:149:2: note: expanded from
-macro 'read_etm4x_sysreg_const_offset'
-READ_ETM4x_REG(ETM4x_OFFSET_TO_REG(offset))
-^
-drivers/hwtracing/coresight/coresight-etm4x.h:144:2: note: expanded from
-macro 'READ_ETM4x_REG'
-read_sysreg_s(ETM4x_REG_NUM_TO_SYSREG((reg)))
-^
-arch/arm64/include/asm/sysreg.h:1108:15: note: expanded from macro
-'read_sysreg_s'
-asm volatile(__mrs_s("%0", r) : "=r" (__val));                  \
-             ^
-arch/arm64/include/asm/sysreg.h:1074:2: note: expanded from macro '__mrs_s'
-"       mrs_s " v ", " __stringify(r) "\n"                      \
- ^
+In addition, the commit fixes an issue that reset was performed
+w/o checking the 'hard_reset_on_fw_event' state and w/o setting
+the HL_DRV_RESET_DELAY flag.
 
-Consider the definitions of TRCSSCSRn and TRCCNTVRn:
-drivers/hwtracing/coresight/coresight-etm4x.h:56
- #define TRCCNTVRn(n)      (0x160 + (n * 4))
-drivers/hwtracing/coresight/coresight-etm4x.h:81
- #define TRCSSCSRn(n)      (0x2A0 + (n * 4))
-
-Where the macro parameter is expanded to i; a loop induction variable
-from etm4_disable_hw.
-
-When any compiler can determine that loops may be unrolled, then the
-__builtin_constant_p check in read_etm4x_sysreg_offset() defined in
-drivers/hwtracing/coresight/coresight-etm4x.h may evaluate to true. This
-can lead to the expression `(0x160 + (i * 4))` being passed to
-read_etm4x_sysreg_const_offset. Via the trace above, this is passed
-through READ_ETM4x_REG, read_sysreg_s, and finally to __mrs_s where it
-is string-ified and used directly in inline asm.
-
-Regardless of which compiler or compiler options determine whether a
-loop can or can't be unrolled, which determines whether
-__builtin_constant_p evaluates to true when passed an expression using a
-loop induction variable, it is NEVER safe to allow the preprocessor to
-construct inline asm like:
-  asm volatile (".inst (0x160 + (i * 4))" : "=r"(__val));
-                                 ^ expected constant expression
-
-Instead of read_etm4x_sysreg_offset() using __builtin_constant_p(), use
-__is_constexpr from include/linux/const.h instead to ensure only
-expressions that are valid integer constant expressions get passed
-through to read_sysreg_s().
-
-This is not a bug in clang; it's a potentially unsafe use of the macro
-arguments in read_etm4x_sysreg_offset dependent on __builtin_constant_p.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1310
-Reported-by: Arnd Bergmann <arnd@kernel.org>
-Reported-by: Tao Zhang <quic_taozha@quicinc.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Link: https://lore.kernel.org/r/20220708231520.3958391-1-ndesaulniers@google.com
+Signed-off-by: Tal Cohen <talcohen@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwtracing/coresight/coresight-etm4x.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/misc/habanalabs/gaudi/gaudi.c | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-index 33869c1d20c3..a7bfea31f7d8 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x.h
-+++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-@@ -7,6 +7,7 @@
- #define _CORESIGHT_CORESIGHT_ETM_H
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index 25d735aee6a3..e6bfaf55c6b6 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -7717,10 +7717,10 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 	struct gaudi_device *gaudi = hdev->asic_specific;
+ 	u64 data = le64_to_cpu(eq_entry->data[0]);
+ 	u32 ctl = le32_to_cpu(eq_entry->hdr.ctl);
+-	u32 fw_fatal_err_flag = 0;
++	u32 fw_fatal_err_flag = 0, flags = 0;
+ 	u16 event_type = ((ctl & EQ_CTL_EVENT_TYPE_MASK)
+ 			>> EQ_CTL_EVENT_TYPE_SHIFT);
+-	bool reset_required;
++	bool reset_required, reset_direct = false;
+ 	u8 cause;
+ 	int rc;
  
- #include <asm/local.h>
-+#include <linux/const.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
- #include "coresight-priv.h"
-@@ -515,7 +516,7 @@
- 	({									\
- 		u64 __val;							\
- 										\
--		if (__builtin_constant_p((offset)))				\
-+		if (__is_constexpr((offset)))					\
- 			__val = read_etm4x_sysreg_const_offset((offset));	\
- 		else								\
- 			__val = etm4x_sysreg_read((offset), true, (_64bit));	\
+@@ -7808,7 +7808,8 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 			dev_err(hdev->dev, "reset required due to %s\n",
+ 				gaudi_irq_map_table[event_type].name);
+ 
+-			hl_device_reset(hdev, 0);
++			reset_direct = true;
++			goto reset_device;
+ 		} else {
+ 			hl_fw_unmask_irq(hdev, event_type);
+ 		}
+@@ -7830,7 +7831,8 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 			dev_err(hdev->dev, "reset required due to %s\n",
+ 				gaudi_irq_map_table[event_type].name);
+ 
+-			hl_device_reset(hdev, 0);
++			reset_direct = true;
++			goto reset_device;
+ 		} else {
+ 			hl_fw_unmask_irq(hdev, event_type);
+ 		}
+@@ -7981,12 +7983,17 @@ static void gaudi_handle_eqe(struct hl_device *hdev,
+ 	return;
+ 
+ reset_device:
+-	if (hdev->asic_prop.fw_security_enabled)
+-		hl_device_reset(hdev, HL_DRV_RESET_HARD
+-					| HL_DRV_RESET_BYPASS_REQ_TO_FW
+-					| fw_fatal_err_flag);
++	reset_required = true;
++
++	if (hdev->asic_prop.fw_security_enabled && !reset_direct)
++		flags = HL_DRV_RESET_HARD | HL_DRV_RESET_BYPASS_REQ_TO_FW | fw_fatal_err_flag;
+ 	else if (hdev->hard_reset_on_fw_events)
+-		hl_device_reset(hdev, HL_DRV_RESET_HARD | HL_DRV_RESET_DELAY | fw_fatal_err_flag);
++		flags = HL_DRV_RESET_HARD | HL_DRV_RESET_DELAY | fw_fatal_err_flag;
++	else
++		reset_required = false;
++
++	if (reset_required)
++		hl_device_reset(hdev, flags);
+ 	else
+ 		hl_fw_unmask_irq(hdev, event_type);
+ }
 -- 
 2.35.1
 

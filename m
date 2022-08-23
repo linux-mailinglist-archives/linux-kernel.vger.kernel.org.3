@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600A659E24B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD52959DB95
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351022AbiHWKna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S1353448AbiHWKPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353768AbiHWKcx (ORCPT
+        with ESMTP id S1352646AbiHWKGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:32:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C04A59A4;
-        Tue, 23 Aug 2022 02:06:50 -0700 (PDT)
+        Tue, 23 Aug 2022 06:06:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB56308;
+        Tue, 23 Aug 2022 01:52:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EDD91CE1B55;
-        Tue, 23 Aug 2022 09:06:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1AB9C433B5;
-        Tue, 23 Aug 2022 09:06:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E626B8105C;
+        Tue, 23 Aug 2022 08:52:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85167C433C1;
+        Tue, 23 Aug 2022 08:52:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245607;
-        bh=cJuu4ZZl0EdtOSaY9llk/P3EaNJAf4mMjEgnCGzH9V0=;
+        s=korg; t=1661244737;
+        bh=f6OXRID0uCEqVUMBcp3Ki0tg3pVmjI2z9M8ylE8p0OY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DDBGSm1megKgwGYpUdHVSTZriqaur8vVDdCkQuf8YgU6zxVzQxE1LGMoFHLOkgDgw
-         ghaacQa6KpyyKbg0VFMGnvf8NEaq7L2Pf3/PO0FAc2ezWuYTtNDYSyLclsOjU4+Kkf
-         O9ccLGVK+dIhtkEKTOdFpEToW34EzHT/LEMD/j5M=
+        b=QJo5bn2c7MGKGiGbzif5OiF05wMd5hvpH56CdH3YWQWGLBlkng3s5A5peQmsMY8cc
+         FSdajP7FkQbj8UiVq5G56Dwo8tC3/lTa+Qs077m99O+p0QXCtOWc9TduH2FxlqIcJg
+         XpHPlTf+IUyUMQbkQmFjh4tZcu7FzTBs0B6G6TFo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Roese <sr@denx.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        Naveen Naidu <naveennaidu479@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 131/287] PCI/portdrv: Dont disable AER reporting in get_port_device_capability()
+        stable@vger.kernel.org,
+        syzbot+dc54d9ba8153b216cae0@syzkaller.appspotmail.com,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 141/244] net: genl: fix error path memory leak in policy dumping
 Date:   Tue, 23 Aug 2022 10:25:00 +0200
-Message-Id: <20220823080104.822064956@linuxfoundation.org>
+Message-Id: <20220823080103.868849234@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,102 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Roese <sr@denx.de>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
+commit 249801360db3dec4f73768c502192020bfddeacc upstream.
 
-AER reporting is currently disabled in the DevCtl registers of all non Root
-Port PCIe devices on systems using pcie_ports_native || host->native_aer,
-disabling AER completely in such systems. This is because 2bd50dd800b5
-("PCI: PCIe: Disable PCIe port services during port initialization"), added
-a call to pci_disable_pcie_error_reporting() *after* the AER setup was
-completed for the PCIe device tree.
+If construction of the array of policies fails when recording
+non-first policy we need to unwind.
 
-Here a longer analysis about the current status of AER enabling /
-disabling upon bootup provided by Bjorn:
+netlink_policy_dump_add_policy() itself also needs fixing as
+it currently gives up on error without recording the allocated
+pointer in the pstate pointer.
 
-  pcie_portdrv_probe
-    pcie_port_device_register
-      get_port_device_capability
-        pci_disable_pcie_error_reporting
-          clear CERE NFERE FERE URRE               # <-- disable for RP USP DSP
-      pcie_device_init
-        device_register                            # new AER service device
-          aer_probe
-            aer_enable_rootport                    # RP only
-              set_downstream_devices_error_reporting
-                set_device_error_reporting         # self (RP)
-                  if (RP || USP || DSP)
-                    pci_enable_pcie_error_reporting
-                      set CERE NFERE FERE URRE     # <-- enable for RP
-                pci_walk_bus
-                  set_device_error_reporting
-                    if (RP || USP || DSP)
-                      pci_enable_pcie_error_reporting
-                        set CERE NFERE FERE URRE   # <-- enable for USP DSP
-
-In a typical Root Port -> Endpoint hierarchy, the above:
-  - Disables Error Reporting for the Root Port,
-  - Enables Error Reporting for the Root Port,
-  - Does NOT enable Error Reporting for the Endpoint because it is not a
-    Root Port or Switch Port.
-
-In a deeper Root Port -> Upstream Switch Port -> Downstream Switch
-Port -> Endpoint hierarchy:
-  - Disables Error Reporting for the Root Port,
-  - Enables Error Reporting for the Root Port,
-  - Enables Error Reporting for both Switch Ports,
-  - Does NOT enable Error Reporting for the Endpoint because it is not a
-    Root Port or Switch Port,
-  - Disables Error Reporting for the Switch Ports when pcie_portdrv_probe()
-    claims them.  AER does not re-enable it because these are not Root
-    Ports.
-
-Remove this call to pci_disable_pcie_error_reporting() from
-get_port_device_capability(), leaving the already enabled AER configuration
-intact. With this change, AER is enabled in the Root Port and the PCIe
-switch upstream and downstream ports. Only the PCIe Endpoints don't have
-AER enabled yet. A follow-up patch will take care of this Endpoint
-enabling.
-
-Fixes: 2bd50dd800b5 ("PCI: PCIe: Disable PCIe port services during port initialization")
-Link: https://lore.kernel.org/r/20220125071820.2247260-3-sr@denx.de
-Signed-off-by: Stefan Roese <sr@denx.de>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Pali Rohár <pali@kernel.org>
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Yao Hongbo <yaohongbo@linux.alibaba.com>
-Cc: Naveen Naidu <naveennaidu479@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: syzbot+dc54d9ba8153b216cae0@syzkaller.appspotmail.com
+Fixes: 50a896cf2d6f ("genetlink: properly support per-op policy dumping")
+Link: https://lore.kernel.org/r/20220816161939.577583-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/pcie/portdrv_core.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ net/netlink/genetlink.c |    6 +++++-
+ net/netlink/policy.c    |   14 ++++++++++++--
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
-index 7c37d815229e..216dd6e61624 100644
---- a/drivers/pci/pcie/portdrv_core.c
-+++ b/drivers/pci/pcie/portdrv_core.c
-@@ -218,15 +218,8 @@ static int get_port_device_capability(struct pci_dev *dev)
+--- a/net/netlink/genetlink.c
++++ b/net/netlink/genetlink.c
+@@ -1174,13 +1174,17 @@ static int ctrl_dumppolicy_start(struct
+ 							     op.policy,
+ 							     op.maxattr);
+ 			if (err)
+-				return err;
++				goto err_free_state;
+ 		}
+ 	}
  
- #ifdef CONFIG_PCIEAER
- 	if (dev->aer_cap && pci_aer_available() &&
--	    (pcie_ports_native || host->native_aer)) {
-+	    (pcie_ports_native || host->native_aer))
- 		services |= PCIE_PORT_SERVICE_AER;
--
--		/*
--		 * Disable AER on this port in case it's been enabled by the
--		 * BIOS (the AER service driver will enable it when necessary).
--		 */
--		pci_disable_pcie_error_reporting(dev);
--	}
- #endif
+ 	if (!ctx->state)
+ 		return -ENODATA;
+ 	return 0;
++
++err_free_state:
++	netlink_policy_dump_free(ctx->state);
++	return err;
+ }
  
- 	/*
--- 
-2.35.1
-
+ static void *ctrl_dumppolicy_prep(struct sk_buff *skb,
+--- a/net/netlink/policy.c
++++ b/net/netlink/policy.c
+@@ -144,7 +144,7 @@ int netlink_policy_dump_add_policy(struc
+ 
+ 	err = add_policy(&state, policy, maxtype);
+ 	if (err)
+-		return err;
++		goto err_try_undo;
+ 
+ 	for (policy_idx = 0;
+ 	     policy_idx < state->n_alloc && state->policies[policy_idx].policy;
+@@ -164,7 +164,7 @@ int netlink_policy_dump_add_policy(struc
+ 						 policy[type].nested_policy,
+ 						 policy[type].len);
+ 				if (err)
+-					return err;
++					goto err_try_undo;
+ 				break;
+ 			default:
+ 				break;
+@@ -174,6 +174,16 @@ int netlink_policy_dump_add_policy(struc
+ 
+ 	*pstate = state;
+ 	return 0;
++
++err_try_undo:
++	/* Try to preserve reasonable unwind semantics - if we're starting from
++	 * scratch clean up fully, otherwise record what we got and caller will.
++	 */
++	if (!*pstate)
++		netlink_policy_dump_free(state);
++	else
++		*pstate = state;
++	return err;
+ }
+ 
+ static bool
 
 

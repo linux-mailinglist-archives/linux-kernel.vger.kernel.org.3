@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2423F59D8DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175F859D8DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240783AbiHWJxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S1344716AbiHWJsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352024AbiHWJvJ (ORCPT
+        with ESMTP id S1352177AbiHWJqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:51:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CD09E2DA;
-        Tue, 23 Aug 2022 01:45:41 -0700 (PDT)
+        Tue, 23 Aug 2022 05:46:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136992CE16;
+        Tue, 23 Aug 2022 01:43:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B348614E7;
-        Tue, 23 Aug 2022 08:44:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12153C433D6;
-        Tue, 23 Aug 2022 08:44:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DADB661485;
+        Tue, 23 Aug 2022 08:43:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDB6BC433D6;
+        Tue, 23 Aug 2022 08:43:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244277;
-        bh=yMB+nDLTD/CtAiCCGvVNDEAEOnYChjmtyxH/gkHlNcw=;
+        s=korg; t=1661244190;
+        bh=FnF15LZwNDPxhljz7cmUOV0fzoKOxDGUuWynoWR/aTM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RMVocivEfS3XOKQxK+DV5pyZAG3wwIT87OZic8gD0aEiDQ8dKDq3cYwN0+mE7d1LN
-         bnxjEq6iu9rDH/YIJ8w6+PUkDBEP8+CaGWnn4yLqCskGNsjDzMdAFRkaV1jKwMoyuu
-         tmHkaicekXJ0Ymv8jZXYT+lRkdr1eWisWHahxO7Y=
+        b=F2mjt2gxKGOYDEGBKCnyboElcNdJIpHxdsICEZNd3KRvp2Wmo5ZMssnW4/i55M/+8
+         DzyKxhDf3JveabyneIFRKqzn15fa1LFf1wy/iOSFDqObDnuv6xa85TBuCAa+NIwf4W
+         6F2yETregWS+uZkkTSPr51T3DPaPY8dXpwLB0dwM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.15 066/244] pinctrl: sunxi: Add I/O bias setting for H6 R-PIO
-Date:   Tue, 23 Aug 2022 10:23:45 +0200
-Message-Id: <20220823080101.285051026@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 065/229] drm: bridge: adv7511: Add check for mipi_dsi_driver_register
+Date:   Tue, 23 Aug 2022 10:23:46 +0200
+Message-Id: <20220823080056.049597945@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit fc153c8f283bf5925615195fc9d4056414d7b168 upstream.
+[ Upstream commit 831463667b5f4f1e5bce9c3b94e9e794d2bc8923 ]
 
-H6 requires I/O bias configuration on both of its PIO devices.
-Previously it was only done for the main PIO.
+As mipi_dsi_driver_register could return error if fails,
+it should be better to check the return value and return error
+if fails.
+Moreover, if i2c_add_driver fails,  mipi_dsi_driver_register
+should be reverted.
 
-The setting for Port L is at bit 0, so the bank calculation needs to
-account for the pin base. Otherwise the wrong bit is used.
-
-Fixes: cc62383fcebe ("pinctrl: sunxi: Support I/O bias voltage setting on H6")
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Link: https://lore.kernel.org/r/20220713025233.27248-3-samuel@sholland.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220602103401.2980938-1-jiasheng@iscas.ac.cn
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c |    1 +
- drivers/pinctrl/sunxi/pinctrl-sunxi.c       |    7 ++++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
---- a/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c
-@@ -107,6 +107,7 @@ static const struct sunxi_pinctrl_desc s
- 	.npins = ARRAY_SIZE(sun50i_h6_r_pins),
- 	.pin_base = PL_BASE,
- 	.irq_banks = 2,
-+	.io_bias_cfg_variant = BIAS_VOLTAGE_PIO_POW_MODE_SEL,
- };
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index 3c94d838863e..f5195d9841f8 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -1213,10 +1213,21 @@ static struct i2c_driver adv7511_driver = {
  
- static int sun50i_h6_r_pinctrl_probe(struct platform_device *pdev)
---- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-@@ -624,7 +624,7 @@ static int sunxi_pinctrl_set_io_bias_cfg
- 					 unsigned pin,
- 					 struct regulator *supply)
+ static int __init adv7511_init(void)
  {
--	unsigned short bank = pin / PINS_PER_BANK;
-+	unsigned short bank;
- 	unsigned long flags;
- 	u32 val, reg;
- 	int uV;
-@@ -640,6 +640,9 @@ static int sunxi_pinctrl_set_io_bias_cfg
- 	if (uV == 0)
- 		return 0;
- 
-+	pin -= pctl->desc->pin_base;
-+	bank = pin / PINS_PER_BANK;
+-	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
+-		mipi_dsi_driver_register(&adv7533_dsi_driver);
++	int ret;
 +
- 	switch (pctl->desc->io_bias_cfg_variant) {
- 	case BIAS_VOLTAGE_GRP_CONFIG:
- 		/*
-@@ -657,8 +660,6 @@ static int sunxi_pinctrl_set_io_bias_cfg
- 		else
- 			val = 0xD; /* 3.3V */
++	if (IS_ENABLED(CONFIG_DRM_MIPI_DSI)) {
++		ret = mipi_dsi_driver_register(&adv7533_dsi_driver);
++		if (ret)
++			return ret;
++	}
  
--		pin -= pctl->desc->pin_base;
--
- 		reg = readl(pctl->membase + sunxi_grp_config_reg(pin));
- 		reg &= ~IO_BIAS_MASK;
- 		writel(reg | val, pctl->membase + sunxi_grp_config_reg(pin));
+-	return i2c_add_driver(&adv7511_driver);
++	ret = i2c_add_driver(&adv7511_driver);
++	if (ret) {
++		if (IS_ENABLED(CONFIG_DRM_MIPI_DSI))
++			mipi_dsi_driver_unregister(&adv7533_dsi_driver);
++	}
++
++	return ret;
+ }
+ module_init(adv7511_init);
+ 
+-- 
+2.35.1
+
 
 

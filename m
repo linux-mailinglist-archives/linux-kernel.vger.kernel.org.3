@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD52959DB95
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3518259E23E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353448AbiHWKPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S1355551AbiHWKnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352646AbiHWKGE (ORCPT
+        with ESMTP id S1354964AbiHWKdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB56308;
-        Tue, 23 Aug 2022 01:52:20 -0700 (PDT)
+        Tue, 23 Aug 2022 06:33:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD67EA5C51;
+        Tue, 23 Aug 2022 02:06:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E626B8105C;
-        Tue, 23 Aug 2022 08:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85167C433C1;
-        Tue, 23 Aug 2022 08:52:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99C7361596;
+        Tue, 23 Aug 2022 09:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EFEC433D7;
+        Tue, 23 Aug 2022 09:06:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244737;
-        bh=f6OXRID0uCEqVUMBcp3Ki0tg3pVmjI2z9M8ylE8p0OY=;
+        s=korg; t=1661245613;
+        bh=F+sRpFZxN66/xatrsdfd4GAqMNuPg/Ab7EFMa+nq+KQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QJo5bn2c7MGKGiGbzif5OiF05wMd5hvpH56CdH3YWQWGLBlkng3s5A5peQmsMY8cc
-         FSdajP7FkQbj8UiVq5G56Dwo8tC3/lTa+Qs077m99O+p0QXCtOWc9TduH2FxlqIcJg
-         XpHPlTf+IUyUMQbkQmFjh4tZcu7FzTBs0B6G6TFo=
+        b=RQZcyOyc0axBdcnfb5gzQcJTDTni7UQfI+qdJk6GhMbPiELvXxig/dfkJUMn9PaLb
+         rENtKmoShPGrO7irwDnvE+RyOD+J601IpLKhkPjvoOcMjEHHfoEDJRIzzxAIC0XK7T
+         ZByshuC8lAKAZwOLJkBXmpeqDdio3NVJg2H3eF2M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+dc54d9ba8153b216cae0@syzkaller.appspotmail.com,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 141/244] net: genl: fix error path memory leak in policy dumping
-Date:   Tue, 23 Aug 2022 10:25:00 +0200
-Message-Id: <20220823080103.868849234@linuxfoundation.org>
+        stable@vger.kernel.org, Scott Benesh <scott.benesh@microchip.com>,
+        Scott Teel <scott.teel@microchip.com>,
+        Mike McGowen <mike.mcgowen@microchip.com>,
+        Kevin Barnett <kevin.barnett@microchip.com>,
+        Mahesh Rajashekhara <Mahesh.Rajashekhara@microchip.com>,
+        Don Brace <don.brace@microchip.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 132/287] scsi: smartpqi: Fix DMA direction for RAID requests
+Date:   Tue, 23 Aug 2022 10:25:01 +0200
+Message-Id: <20220823080104.868916164@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,84 +60,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Mahesh Rajashekhara <Mahesh.Rajashekhara@microchip.com>
 
-commit 249801360db3dec4f73768c502192020bfddeacc upstream.
+[ Upstream commit 69695aeaa6621bc49cdd7a8e5a8d1042461e496e ]
 
-If construction of the array of policies fails when recording
-non-first policy we need to unwind.
+Correct a SOP READ and WRITE DMA flags for some requests.
 
-netlink_policy_dump_add_policy() itself also needs fixing as
-it currently gives up on error without recording the allocated
-pointer in the pstate pointer.
+This update corrects DMA direction issues with SCSI commands removed from
+the controller's internal lookup table.
 
-Reported-by: syzbot+dc54d9ba8153b216cae0@syzkaller.appspotmail.com
-Fixes: 50a896cf2d6f ("genetlink: properly support per-op policy dumping")
-Link: https://lore.kernel.org/r/20220816161939.577583-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Currently, SCSI READ BLOCK LIMITS (0x5) was removed from the controller
+lookup table and exposed a DMA direction flag issue.
+
+SCSI READ BLOCK LIMITS was recently removed from our controller lookup
+table so the controller uses the respective IU flag field to set the DMA
+data direction. Since the DMA direction is incorrect the FW never completes
+the request causing a hang.
+
+Some SCSI commands which use SCSI READ BLOCK LIMITS
+
+      * sg_map
+      * mt -f /dev/stX status
+
+After updating controller firmware, users may notice their tape units
+failing. This patch resolves the issue.
+
+Also, the AIO path DMA direction is correct.
+
+The DMA direction flag is a day-one bug with no reported BZ.
+
+Fixes: 6c223761eb54 ("smartpqi: initial commit of Microsemi smartpqi driver")
+Link: https://lore.kernel.org/r/165730605618.177165.9054223644512926624.stgit@brunhilda
+Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
+Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Signed-off-by: Mahesh Rajashekhara <Mahesh.Rajashekhara@microchip.com>
+Signed-off-by: Don Brace <don.brace@microchip.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlink/genetlink.c |    6 +++++-
- net/netlink/policy.c    |   14 ++++++++++++--
- 2 files changed, 17 insertions(+), 3 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/netlink/genetlink.c
-+++ b/net/netlink/genetlink.c
-@@ -1174,13 +1174,17 @@ static int ctrl_dumppolicy_start(struct
- 							     op.policy,
- 							     op.maxattr);
- 			if (err)
--				return err;
-+				goto err_free_state;
- 		}
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 98f2d076f938..b86cc0342ae3 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -4638,10 +4638,10 @@ static int pqi_raid_submit_scsi_cmd_with_io_request(
  	}
  
- 	if (!ctx->state)
- 		return -ENODATA;
- 	return 0;
-+
-+err_free_state:
-+	netlink_policy_dump_free(ctx->state);
-+	return err;
- }
- 
- static void *ctrl_dumppolicy_prep(struct sk_buff *skb,
---- a/net/netlink/policy.c
-+++ b/net/netlink/policy.c
-@@ -144,7 +144,7 @@ int netlink_policy_dump_add_policy(struc
- 
- 	err = add_policy(&state, policy, maxtype);
- 	if (err)
--		return err;
-+		goto err_try_undo;
- 
- 	for (policy_idx = 0;
- 	     policy_idx < state->n_alloc && state->policies[policy_idx].policy;
-@@ -164,7 +164,7 @@ int netlink_policy_dump_add_policy(struc
- 						 policy[type].nested_policy,
- 						 policy[type].len);
- 				if (err)
--					return err;
-+					goto err_try_undo;
- 				break;
- 			default:
- 				break;
-@@ -174,6 +174,16 @@ int netlink_policy_dump_add_policy(struc
- 
- 	*pstate = state;
- 	return 0;
-+
-+err_try_undo:
-+	/* Try to preserve reasonable unwind semantics - if we're starting from
-+	 * scratch clean up fully, otherwise record what we got and caller will.
-+	 */
-+	if (!*pstate)
-+		netlink_policy_dump_free(state);
-+	else
-+		*pstate = state;
-+	return err;
- }
- 
- static bool
+ 	switch (scmd->sc_data_direction) {
+-	case DMA_TO_DEVICE:
++	case DMA_FROM_DEVICE:
+ 		request->data_direction = SOP_READ_FLAG;
+ 		break;
+-	case DMA_FROM_DEVICE:
++	case DMA_TO_DEVICE:
+ 		request->data_direction = SOP_WRITE_FLAG;
+ 		break;
+ 	case DMA_NONE:
+-- 
+2.35.1
+
 
 

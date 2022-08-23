@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F21059DF1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F52E59DE1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353958AbiHWKQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S1355949AbiHWKp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241254AbiHWKGf (ORCPT
+        with ESMTP id S1355160AbiHWKiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:35 -0400
+        Tue, 23 Aug 2022 06:38:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8823205B;
-        Tue, 23 Aug 2022 01:53:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C4185FD6;
+        Tue, 23 Aug 2022 02:07:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DBA8B8105C;
-        Tue, 23 Aug 2022 08:53:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A0AC433C1;
-        Tue, 23 Aug 2022 08:53:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E3DDB81C53;
+        Tue, 23 Aug 2022 09:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE07C433C1;
+        Tue, 23 Aug 2022 09:07:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244827;
-        bh=4xd33p/pVu1mA6EQYzbUK+uFzqw0xRsu7Ph4j4WK9e4=;
+        s=korg; t=1661245660;
+        bh=XCWrOtA6JVIrnzbvAzoqMSzzJ8Y5EaAEADFa+Y7b03g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Up3Xp/Mb+ACTUhDUj2tCllOm89mocLaZAFDOz7E6bQSAtdptyBwtvmtqUlFYLPIvU
-         pp34HF+KQD4OwonfioHg9Cgv53ya3KPlzAa3vZNskb/hLDnyAKaoXnKSHMbdmLGBL+
-         uxdTjTJypLB02iMuHAjNdMcfXUrR042VudyVvodg=
+        b=QbNFUHY5a9o2MGVUTuIxUuTETcqt/Isnn7gTVi/wBISfShr+wbocAu+yUiuOUORBI
+         np742zc9w4I75vefTrc+UwppXABUKN8QjfHovAs4FtzSdyo92Tyx+deiUxlfWQGHWU
+         9XRNt3gmQSzQgXGHwRLaztuZ9nuCfo0/GL5VXjp0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 158/244] drm/sun4i: dsi: Prevent underflow when computing packet sizes
-Date:   Tue, 23 Aug 2022 10:25:17 +0200
-Message-Id: <20220823080104.469108091@linuxfoundation.org>
+Subject: [PATCH 4.19 149/287] ASoC: mediatek: mt8173-rt5650: Fix refcount leak in mt8173_rt5650_dev_probe
+Date:   Tue, 23 Aug 2022 10:25:18 +0200
+Message-Id: <20220823080105.596353725@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 82a1356a933d8443139f8886f11b63c974a09a67 ]
+[ Upstream commit efe2178d1a32492f99e7f1f2568eea5c88a85729 ]
 
-Currently, the packet overhead is subtracted using unsigned arithmetic.
-With a short sync pulse, this could underflow and wrap around to near
-the maximal u16 value. Fix this by using signed subtraction. The call to
-max() will correctly handle any negative numbers that are produced.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Fix refcount leak in some error paths.
 
-Apply the same fix to the other timings, even though those subtractions
-are less likely to underflow.
-
-Fixes: 133add5b5ad4 ("drm/sun4i: Add Allwinner A31 MIPI-DSI controller support")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220812031623.34057-1-samuel@sholland.org
+Fixes: 0f83f9296d5c ("ASoC: mediatek: Add machine driver for ALC5650 codec")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220603124243.31358-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ sound/soc/mediatek/mt8173/mt8173-rt5650.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
-index 4f5efcace68e..51edb4244af7 100644
---- a/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
-+++ b/drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c
-@@ -531,7 +531,7 @@ static void sun6i_dsi_setup_timings(struct sun6i_dsi *dsi,
- 				    struct drm_display_mode *mode)
- {
- 	struct mipi_dsi_device *device = dsi->device;
--	unsigned int Bpp = mipi_dsi_pixel_format_to_bpp(device->format) / 8;
-+	int Bpp = mipi_dsi_pixel_format_to_bpp(device->format) / 8;
- 	u16 hbp = 0, hfp = 0, hsa = 0, hblk = 0, vblk = 0;
- 	u32 basic_ctl = 0;
- 	size_t bytes;
-@@ -555,7 +555,7 @@ static void sun6i_dsi_setup_timings(struct sun6i_dsi *dsi,
- 		 * (4 bytes). Its minimal size is therefore 10 bytes
- 		 */
- #define HSA_PACKET_OVERHEAD	10
--		hsa = max((unsigned int)HSA_PACKET_OVERHEAD,
-+		hsa = max(HSA_PACKET_OVERHEAD,
- 			  (mode->hsync_end - mode->hsync_start) * Bpp - HSA_PACKET_OVERHEAD);
+diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+index 14011a70bcc4..8b613f8627fa 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
++++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+@@ -260,7 +260,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 	if (!mt8173_rt5650_codecs[0].of_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	mt8173_rt5650_codecs[1].of_node = mt8173_rt5650_codecs[0].of_node;
  
- 		/*
-@@ -564,7 +564,7 @@ static void sun6i_dsi_setup_timings(struct sun6i_dsi *dsi,
- 		 * therefore 6 bytes
- 		 */
- #define HBP_PACKET_OVERHEAD	6
--		hbp = max((unsigned int)HBP_PACKET_OVERHEAD,
-+		hbp = max(HBP_PACKET_OVERHEAD,
- 			  (mode->htotal - mode->hsync_end) * Bpp - HBP_PACKET_OVERHEAD);
+@@ -272,7 +273,7 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"%s codec_capture_dai name fail %d\n",
+ 				__func__, ret);
+-			return ret;
++			goto put_platform_node;
+ 		}
+ 		mt8173_rt5650_codecs[1].dai_name = codec_capture_dai;
+ 	}
+@@ -293,7 +294,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 	if (!mt8173_rt5650_dais[DAI_LINK_HDMI_I2S].codec_of_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	card->dev = &pdev->dev;
  
- 		/*
-@@ -574,7 +574,7 @@ static void sun6i_dsi_setup_timings(struct sun6i_dsi *dsi,
- 		 * 16 bytes
- 		 */
- #define HFP_PACKET_OVERHEAD	16
--		hfp = max((unsigned int)HFP_PACKET_OVERHEAD,
-+		hfp = max(HFP_PACKET_OVERHEAD,
- 			  (mode->hsync_start - mode->hdisplay) * Bpp - HFP_PACKET_OVERHEAD);
+@@ -302,6 +304,7 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
  
- 		/*
-@@ -583,7 +583,7 @@ static void sun6i_dsi_setup_timings(struct sun6i_dsi *dsi,
- 		 * bytes). Its minimal size is therefore 10 bytes.
- 		 */
- #define HBLK_PACKET_OVERHEAD	10
--		hblk = max((unsigned int)HBLK_PACKET_OVERHEAD,
-+		hblk = max(HBLK_PACKET_OVERHEAD,
- 			   (mode->htotal - (mode->hsync_end - mode->hsync_start)) * Bpp -
- 			   HBLK_PACKET_OVERHEAD);
- 
++put_platform_node:
+ 	of_node_put(platform_node);
+ 	return ret;
+ }
 -- 
 2.35.1
 

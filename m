@@ -2,351 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E18359D26C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433ED59D26F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240688AbiHWHlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S241100AbiHWHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236517AbiHWHlK (ORCPT
+        with ESMTP id S241079AbiHWHlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:41:10 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568D932043;
-        Tue, 23 Aug 2022 00:41:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HoI+tWJnr+0LNlIX1Gu5gX+0IglPpxSiIEfUZxcJe54hk634j07oo7QtUP2bVdqXQhjBJqtjAKsDcYNsHiQMr8cz9jqQt/5HHHI7cK7u5vj5ZJtYOdfEFg1C+1xTtnFXRuq9pbPoOZu70s+def2p6zRpHN1K+UeW88hRYZNfL30EjoJyw2fm/YN1ny4Kwj3g5QweecFhRbPyyKvt9OMynbhnOC/bVUwPmmhdXo/1JcUJKCo9MSY7nD43oFmEfsfx82vsy1APG2DOLxYgm11J2qYNyfM2c0CRTudYuHd+nASQ7P+6oOz9xEgatGzfyVZSEsWeMAZahLHYHxLR+DmCCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8BT0Vx0vg88O3c9BWt69mHvVz0Z60w7RZsBU3MGcTX0=;
- b=XZvxptPJvfBBnaJhvA9QhZQN02shEDbS57ie2r7iahHpvDk+VEFwW88qfOAxm5pjS5HAILoN5kIXfI9YIRHqbm02AbLAAUon/USnhvrhImVmjIq2Vi0c5TAo5qeP0G2cdXHUMbICfN4qZy6eIHGgFLUpfNPGDaehBSW59bYti7WimVtqtdgdTTKIrDa4z00LgA0ut5M0251WSFjrH3GRAu+WadjBw2hahYMBhhCCwp8t3Is6uPlugLExMtTHv4xcU9pijG7vjXGvxQkXzd9cKpDC17JT0Xg8UbyGzar5PYJf3+nodvGIRlVpb8DZyQkinYV4I1EJHeBlxrdCUFkuJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8BT0Vx0vg88O3c9BWt69mHvVz0Z60w7RZsBU3MGcTX0=;
- b=a4yz8fjM9STGUSOWDgUTy91vcngzQ+TXDE2ag0h6+ErilD8GVdO1hWqCmbA+A1RHeVzH4Gx4C3+HdRGW2q6RCCC00I7BP+odk7jV12hFyLnnP8M5SbjE4JvWqacft+H2pSvNMiTvht7BlMo6R5CnHa0WlhkESL/oOAg2Pjzvy10=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by BLAPR03MB5604.namprd03.prod.outlook.com (2603:10b6:208:29a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Tue, 23 Aug
- 2022 07:41:06 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::c832:eea0:1883:a19c]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::c832:eea0:1883:a19c%3]) with mapi id 15.20.5566.014; Tue, 23 Aug 2022
- 07:41:06 +0000
-Message-ID: <2f3c8f6d-fc01-353e-fb74-b7f9af1ed2c4@synaptics.com>
-Date:   Tue, 23 Aug 2022 15:40:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/2] [WIP]: media: Add Synaptics compressed tiled format
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Tomasz Figa <tfiga@chromium.org>, dri-devel@lists.freedesktop.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
-        ribalda@chromium.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sebastian.hesselbarth@gmail.com, jszhang@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220808162750.828001-1-randy.li@synaptics.com>
- <20220808162750.828001-3-randy.li@synaptics.com>
- <CAAFQd5AKjpJ+fPAeCqdNnJbS4R7SdaHkfyW4qG1xXr-sE801pQ@mail.gmail.com>
- <13d37c15-79f3-4e16-8cf4-fc37846f4a04@synaptics.com>
- <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
- <6da7faf329128312f0862f555d1a855437ae99f3.camel@ndufresne.ca>
- <50dd9b7a-8f48-0799-57f6-048d20de8dcc@synaptics.com>
- <2662ac698898f71f60b9b7e0ad4703854de1d012.camel@ndufresne.ca>
- <1f926989-eb13-14ee-e30d-ac6d01b86c52@synaptics.com>
- <e15165f60ce801dd502bfe1992ea430fe37c5a91.camel@ndufresne.ca>
-From:   Hsia-Jun Li <Randy.Li@synaptics.com>
-In-Reply-To: <e15165f60ce801dd502bfe1992ea430fe37c5a91.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR01CA0058.prod.exchangelabs.com (2603:10b6:a03:94::35)
- To DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+        Tue, 23 Aug 2022 03:41:24 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2282491E9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661240482; x=1692776482;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eBUDp/rDp/TuKW82oc+oRAUoN3+jwli0qyESIDxf7Ps=;
+  b=L0n9EmWFOIHItFAts2KpOu5VqPfnzvbh52wcovdMfbgzDyXGe+cVsFC2
+   4Wz/XM6xbFEysNOzMrCUePrFqfUStG/KEX3NbmvoLT7DvBtEbwGJAa7rs
+   3MXE0hnsh0y3LrLhJSJ33N+w4De9AdUCz9CUHz66a4ASZuXMj7ko1icCr
+   Qyy1Nz4nvjPjYdIfHF2NryXJrGmkYqdxuxk1gMvnUbDUt1DcY3F15cmcY
+   awaR/VgaYrlZJGlH6yykcN5Ef+Ihet0Vx51ULbVxST2gqI6pAcvp4SIlZ
+   8ltO4uwIeY7n8josL/d92e7Z27fd/rjiwjrsivTDfUZLVMUNnBJrIX1eF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294406947"
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="294406947"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 00:41:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="669909829"
+Received: from lkp-server01.sh.intel.com (HELO 5b31f6010e99) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Aug 2022 00:41:19 -0700
+Received: from kbuild by 5b31f6010e99 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQOXG-0000Bu-2m;
+        Tue, 23 Aug 2022 07:41:18 +0000
+Date:   Tue, 23 Aug 2022 15:41:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Chunming Zhou <david1.zhou@amd.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>
+Subject: [jsarha:topic/chromeos-4.19-s0ix 7536/9999]
+ drivers/gpu/drm/i915/i915_gem.c:3202:30: error: format specifies type 'int'
+ but the argument has type 'u64' (aka 'unsigned long long')
+Message-ID: <202208231552.C5IkgSE2-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 053ebc16-ecd8-4738-aeb8-08da84dad67d
-X-MS-TrafficTypeDiagnostic: BLAPR03MB5604:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EDrnaG1Ynu3khegpFdoT1ZDpmO8uMTxAEnNlyO43+9oew/MCiJUaQYsz2kkXnt+vaay23/JCw+EKaxJcBB97eE3GL4CiUcX8mq7BRNPvBunG9nWJgYc4VlRzrVMgywZ3MK+lLe0ZaN0Kh3RU1UhxITzfLzKeb6U80zm68sDnQwQ9VHd05tPJhGr0IIiFya22ISL7CH71hgFXvYghOWhJbwY/KyZiqTbds5Wcgl+zvyWqc6oV/mUcqG3iQLyhObBETFDv5bWCi/wwP2wvsCO0J0DQpkHNFbLacgoRDs1tYgsNtE6uawaKTUEOfu6zrtuZWGYoHh0nOMRhi9G6wlUm9+yE1rt4/jN9IAvIuqpnHPjNeXnEpvrwWw/uQDFIWFU3mEYP5YzeaImGCmLgR096ARotAMbRm2rpkNe1uUwhdsRBr0MIJxlD9XMOebbL3KPyEFjmQEKPtLfhWBnHfH1PR4Z9g1ZLAbttyKTLmwjImN0xv17CaiRxt65YR7lmLngVmcsrV7GDCF/ZWfkAoR3g+4U9BsmVsUG3VUG5BIjiUSamJBYsMIzUig7Z0iSB/W1sDispSTHDETFxf9JZnbLNqI5Han2ajp3zRGGc4w/KXbeS2YSB5B7rO7lqfjjfJ8Jf0BuVU/nuPQ+mNOcTQWP/hg/jS+PC9epKeZX3yCS4sJIdRcOHv69vYOc/ogLprF+ivrjcZ0qeftsDmw0lisCNzoqOxuhD9a581BPQc2rtoxhdmFL+Sg3wNYh9TfK6uT0wRRuG6i6tFuzUNiW+Z+gFgY1M52QOugQkXWdVUBNssfiI8XLpAtylyhkUzmpydEqOUf6rvQer9gDxQEsx/+11yIMv+3CJYK50HSFo4m1gC+8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(39850400004)(376002)(346002)(396003)(6666004)(478600001)(31686004)(53546011)(52116002)(6486002)(966005)(2906002)(5660300002)(4326008)(7416002)(66476007)(8676002)(66556008)(83380400001)(6512007)(316002)(26005)(66946007)(6916009)(36756003)(41300700001)(86362001)(186003)(38350700002)(31696002)(6506007)(8936002)(66574015)(30864003)(2616005)(54906003)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TjFuSnBnT2h2V0FlSEQyZGRLVktNVFRxYWpJUEl5WGhuaU5tRU1yVFFlTFls?=
- =?utf-8?B?UGdRQzAwOUhLbWFpUlFxdDlPYTVDRGxFeThKZmNtM2Zpamw0c2x4ZDVsaGxH?=
- =?utf-8?B?d0s5YWhxOE5NN2k1YWVuVnZ0ZFBSVHlQRktoT1IvZDRpaHA4dkFycW8vZVRW?=
- =?utf-8?B?ZDc3d1ZQNzVVOVlRV3VXa083ZlVpcnMxcDNSZXhxM1BqNjRibENwejA4eWg5?=
- =?utf-8?B?Sm1obThWQWNSNCt4cTNEaUdJMTFIdDZFc2dyMUlKZndwdEp6TGd1SHUxMCtl?=
- =?utf-8?B?SlFJd1FqQ2lXMUlkTTJNYWVKRVlaSXN1VjNkZmtFWC8zMUo4Z3p1SVNhOVEv?=
- =?utf-8?B?RklIK2NnTmdFL1JiTGs2MEpFbStiV1JnVWdndEJEQ0FESDFXSFJRSE5zbnB2?=
- =?utf-8?B?bXpJMFF6M08rS2FOYTVTMmM2Y0tueTZwQUhKdkRwSFBmMFplUG1NUkhtYzAv?=
- =?utf-8?B?QSszSjNlcTZiSE9ka1lRK2dZOE52RGNsTnAvRUFwY1BySlJuVlQ0NURqTlZJ?=
- =?utf-8?B?blY3d014MnVwT1IxRTcvMVZvajlITTA3UG5vRHZ6dHVLaE1aS1lTTFZIY1Fu?=
- =?utf-8?B?SEhBSUJ1NTF2VzIrTFFyUzc4bElxMnNNcUd1Rkd6TlNtWjFmaG1FVzN1RVBu?=
- =?utf-8?B?TUV3cjBzNDk1NDMxenlIdmZqSmpXTUJJbWlyTmYzTzZZU3ZSbXgxKzUrSUk1?=
- =?utf-8?B?WGJrMFkrQklSMDIwTVo5Um1ORUhJY3g0ZGMxZzBRNWpTZmZrenhtMjA2d0ZL?=
- =?utf-8?B?SGV5emI0SnFDTldQN2N3MEl5UDROdVAyK0lxVXdxZlI5REdzU0NHeUFPV2lK?=
- =?utf-8?B?MHhSd3FJM3VQUVpjSTdrbG5pUzYvTnNHckFjL0RkLzJ4WUFneEtmSERIZjhu?=
- =?utf-8?B?Y3dxMUlhV2VSUWpaQmg2dmlDMjJBSm9jYUtGWXkxVUd0dkhZcU4wRFdGNVM0?=
- =?utf-8?B?Y0xmbGpRUm5FK0UwWDRES1dOSEY1ZDQ0U0FvNHhDSk5QbmlUY2VCaTV5TTY5?=
- =?utf-8?B?WUY5MzJlOXRQY1J0Z3UxZVlvbUVtS0s5em41TG1GNnFFbWdmZVVHbnFWaTZq?=
- =?utf-8?B?T2Y3TFBhSCtaaDBNRVB2bXZXK1ROcTRGbk96V0NiRm03Z1FIS0gvak5mN2ZN?=
- =?utf-8?B?Z2t6cTRpa0Jlancxb1J0YmJEd1NlUGxkdnlCd1A2V1BNVU9IVlVySGNKWVVY?=
- =?utf-8?B?NDlrbCtPdXVYeFBLc1Bod3pFUHFDWTRobDZZOWtxOFA1MU5vOUtkQVZibVo4?=
- =?utf-8?B?aXIxU2F1ZE00TTV6dmNCakdFcDljbVB2M09mTEYwL0V1aHo3b1lhWC82eWw5?=
- =?utf-8?B?THd5SXRIUUJTV2ZwSmsxN3hyR1lpNkJiTSttemVhdWFObEhlQlpqc3IzSStp?=
- =?utf-8?B?aHdMK21iZ29xTFU1WGVQTC9jNHdrNHMwY2Q5cm1rdjZ4Y0JQN3FKNEVQMGJM?=
- =?utf-8?B?L2kvVUsxQ0VBREVlNnl5VEs1Wi91Mkx3L1FZc1ZkWTMzZ1VUSndoVlYvbVlu?=
- =?utf-8?B?ZXNhYklKMEdkRUFuMUFBMlF2aS9tMnN4QjJvM3FDVkpkZVRUSzI0VkQ4ZEFM?=
- =?utf-8?B?ckZ3SWVSdThYWnhhT21MK0dRSVhleHFTaGk5VExqRzZyQ01ZaVluMGNsaDBO?=
- =?utf-8?B?L2RaWDAyMk1FUEVWRCt4WEhsVFZGTjd2bm1VRlJMclVsTDR0aXRPeFhUT0VN?=
- =?utf-8?B?RFFhYW9lZDMwazA3d041UGc4cGU3SnBCZ3JHbDBad1AwYThmeHM1YUpncjYv?=
- =?utf-8?B?TFFINkNwZWsrNWNhamhrSi9FQVJ6RC9PTk50TEZGeGtiYmMveEFaKy9ReWxI?=
- =?utf-8?B?RjVLMW9mb01RZEx0NjlZcTV3ZUVEM0NHbVBrTGd1QWR3N0U2RkJnOXBKbWp0?=
- =?utf-8?B?RHcyRDhWc1FPVE1McjVWK0hKdjRkTjhyb2FYZldYNXdBNVFIWW1pci9KOFpK?=
- =?utf-8?B?c2NaMUtDSk1JUUxwTDNlcEE3cHNBZWJtbXZaa1Vkc0Q3djZlM0ZPYUQ0dUky?=
- =?utf-8?B?bDZsTnRaNGJlSGJyK1BvYXNlWnpWV3BYNkxqUHJIVy9jV1lXNkxFZXZZZXRI?=
- =?utf-8?B?UkhOdzhXT1Y5dkQ2V05ia0krWlcyVkJjOTdITEc5cXVpN1cwVFg0ckhGWTgr?=
- =?utf-8?Q?oStVO4DEhO/KqUMb9ONe4bnhu?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 053ebc16-ecd8-4738-aeb8-08da84dad67d
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 07:41:06.5613
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mUdYoMS4biBN1M6eSvyjiS11xZ4tL5tfAfPj1F+vXMPSujoXk6h4IBIqVS0iS97jqTVCkWdaX7k+Xqp4RkwfkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR03MB5604
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christian,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
+head:   430bdaa0a8c38697780f45a148964d71951df11f
+commit: 88445be194e93603d722c82108ed8c47c3f60e65 [7536/9999] UPSTREAM: dma-buf: make fence sequence numbers 64 bit v2
+config: x86_64-randconfig-a005-20220822 (https://download.01.org/0day-ci/archive/20220823/202208231552.C5IkgSE2-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jsarha/linux/commit/88445be194e93603d722c82108ed8c47c3f60e65
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
+        git checkout 88445be194e93603d722c82108ed8c47c3f60e65
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/ drivers/gpu/drm/i915/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/thread_info.h:38:
+   arch/x86/include/asm/thread_info.h:229:13: error: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
+           oldframe = __builtin_frame_address(1);
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/thread_info.h:231:11: error: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
+                   frame = __builtin_frame_address(2);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/i915/i915_gem.c:31:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:44:
+   In file included from include/linux/perf_event.h:48:
+   include/linux/ftrace.h:706:9: error: calling '__builtin_return_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
+           addr = CALLER_ADDR1;
+                  ^~~~~~~~~~~~
+   include/linux/ftrace.h:693:38: note: expanded from macro 'CALLER_ADDR1'
+   #define CALLER_ADDR1 ((unsigned long)ftrace_return_address(1))
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/ftrace.h:686:36: note: expanded from macro 'ftrace_return_address'
+   #  define ftrace_return_address(n) __builtin_return_address(n)
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/ftrace.h:709:9: error: calling '__builtin_return_address' with a nonzero argument is unsafe [-Werror,-Wframe-address]
+           return CALLER_ADDR2;
+                  ^~~~~~~~~~~~
+   include/linux/ftrace.h:694:38: note: expanded from macro 'CALLER_ADDR2'
+   #define CALLER_ADDR2 ((unsigned long)ftrace_return_address(2))
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/ftrace.h:686:36: note: expanded from macro 'ftrace_return_address'
+   #  define ftrace_return_address(n) __builtin_return_address(n)
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/i915/i915_gem.c:31:
+   drivers/gpu/drm/i915/i915_drv.h:3199:9: error: use of bitwise '|' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+           return i915_reset_backoff(error) | i915_terminally_wedged(error);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                            ||
+   drivers/gpu/drm/i915/i915_drv.h:3199:9: note: cast one or both operands to int to silence this warning
+   drivers/gpu/drm/i915/i915_gem.c:142:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("\n");
+           ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.c:142:2: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   drivers/gpu/drm/i915/i915_gem.c:186:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("\n");
+           ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.c:186:2: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   drivers/gpu/drm/i915/i915_gem.c:200:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("\n");
+           ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.c:200:2: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+>> drivers/gpu/drm/i915/i915_gem.c:3202:30: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
+                             request->fence.context, request->fence.seqno,
+                                                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                                       ^~~~~~~~~~~
+   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:730:37: note: expanded from macro 'do_trace_printk'
+           __trace_printk_check_format(fmt, ##args);                       \
+                                       ~~~    ^~~~
+   include/linux/kernel.h:682:40: note: expanded from macro '__trace_printk_check_format'
+                   ____trace_printk_check_format(fmt, ##args);             \
+                                                 ~~~    ^~~~
+>> drivers/gpu/drm/i915/i915_gem.c:3202:30: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
+                             request->fence.context, request->fence.seqno,
+                                                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                                       ^~~~~~~~~~~
+   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:735:36: note: expanded from macro 'do_trace_printk'
+                   __trace_printk(_THIS_IP_, fmt, ##args);                 \
+                                             ~~~    ^~~~
+   drivers/gpu/drm/i915/i915_gem.c:3324:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
+                     request->fence.context, request->fence.seqno);
+                                             ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                                       ^~~~~~~~~~~
+   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:730:37: note: expanded from macro 'do_trace_printk'
+           __trace_printk_check_format(fmt, ##args);                       \
+                                       ~~~    ^~~~
+   include/linux/kernel.h:682:40: note: expanded from macro '__trace_printk_check_format'
+                   ____trace_printk_check_format(fmt, ##args);             \
+                                                 ~~~    ^~~~
+   drivers/gpu/drm/i915/i915_gem.c:3324:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
+                     request->fence.context, request->fence.seqno);
+                                             ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                                       ^~~~~~~~~~~
+   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:735:36: note: expanded from macro 'do_trace_printk'
+                   __trace_printk(_THIS_IP_, fmt, ##args);                 \
+                                             ~~~    ^~~~
+   drivers/gpu/drm/i915/i915_gem.c:3336:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
+                     request->fence.context, request->fence.seqno);
+                                             ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                                       ^~~~~~~~~~~
+   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:730:37: note: expanded from macro 'do_trace_printk'
+           __trace_printk_check_format(fmt, ##args);                       \
+                                       ~~~    ^~~~
+   include/linux/kernel.h:682:40: note: expanded from macro '__trace_printk_check_format'
+                   ____trace_printk_check_format(fmt, ##args);             \
+                                                 ~~~    ^~~~
+   drivers/gpu/drm/i915/i915_gem.c:3336:29: error: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Werror,-Wformat]
+                     request->fence.context, request->fence.seqno);
+                                             ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:37: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                                       ^~~~~~~~~~~
+   include/linux/kernel.h:719:26: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/kernel.h:735:36: note: expanded from macro 'do_trace_printk'
+                   __trace_printk(_THIS_IP_, fmt, ##args);                 \
+                                             ~~~    ^~~~
+   drivers/gpu/drm/i915/i915_gem.c:3350:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("start\n");
+           ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.c:3350:2: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   drivers/gpu/drm/i915/i915_gem.c:3421:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("end\n");
+           ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:64:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:719:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:733:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.c:3421:2: note: treat the string as an argument to avoid this
 
 
-On 8/22/22 22:15, Nicolas Dufresne wrote:
-> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
-> 
-> 
-> Le samedi 20 août 2022 à 08:10 +0800, Hsia-Jun Li a écrit :
->>
->> On 8/20/22 03:17, Nicolas Dufresne wrote:
->>> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
->>>
->>>
->>> Le vendredi 19 août 2022 à 23:44 +0800, Hsia-Jun Li a écrit :
->>>>
->>>> On 8/19/22 23:28, Nicolas Dufresne wrote:
->>>>> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
->>>>>
->>>>>
->>>>> Le vendredi 19 août 2022 à 02:13 +0300, Laurent Pinchart a écrit :
->>>>>> On Thu, Aug 18, 2022 at 02:33:42PM +0800, Hsia-Jun Li wrote:
->>>>>>> On 8/18/22 14:06, Tomasz Figa wrote:
->>>>>>>> On Tue, Aug 9, 2022 at 1:28 AM Hsia-Jun Li <randy.li@synaptics.com> wrote:
->>>>>>>>>
->>>>>>>>> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
->>>>>>>>>
->>>>>>>>> The most of detail has been written in the drm.
->>>>>>
->>>>>> This patch still needs a description of the format, which should go to
->>>>>> Documentation/userspace-api/media/v4l/.
->>>>>>
->>>>>>>>> Please notice that the tiled formats here request
->>>>>>>>> one more plane for storing the motion vector metadata.
->>>>>>>>> This buffer won't be compressed, so you can't append
->>>>>>>>> it to luma or chroma plane.
->>>>>>>>
->>>>>>>> Does the motion vector buffer need to be exposed to userspace? Is the
->>>>>>>> decoder stateless (requires userspace to specify the reference frames)
->>>>>>>> or stateful (manages the entire decoding process internally)?
->>>>>>>
->>>>>>> No, users don't need to access them at all. Just they need a different
->>>>>>> dma-heap.
->>>>>>>
->>>>>>> You would only get the stateful version of both encoder and decoder.
->>>>>>
->>>>>> Shouldn't the motion vectors be stored in a separate V4L2 buffer,
->>>>>> submitted through a different queue then ?
->>>>>
->>>>> Imho, I believe these should be invisible to users and pooled separately to
->>>>> reduce the overhead. The number of reference is usually lower then the number of
->>>>> allocated display buffers.
->>>>>
->>>> You can't. The motion vector buffer can't share with the luma and chroma
->>>> data planes, nor the data plane for the compression meta data.
->>>>
->>>> You could consider this as a security requirement(the memory region for
->>>> the MV could only be accessed by the decoder) or hardware limitation.
->>>>
->>>> It is also not very easy to manage such a large buffer that would change
->>>> when the resolution changed.
->>>
->>> Your argument are just aiming toward the fact that you should not let the user
->>> allocate these in the first place. They should not be bound to the v4l2 buffer.
->>> Allocate these in your driver, and leave to your user the pixel buffer (and
->>> compress meta) allocation work.
->>>
->> What I want to say is that userspace could allocate buffers then make
->> the v4l2 decoder import these buffers, but each planes should come from
->> the right DMA-heaps. Usually the userspace would know better the memory
->> occupation, it would bring some flexibility here.
->>
->> Currently, they are another thing bothers me, I need to allocate a small
->> piece of memory(less than 128KiB) as the compression metadata buffers as
->> I mentioned here. And these pieces of memory should be located in a
->> small region, or the performance could be badly hurt, besides, we don't
->> support IOMMU for this kind of data.
->>
->> Any idea about assign a small piece of memory from a pre-allocated
->> memory or select region(I don't think I could reserve them in a
->> DMA-heap) for a plane in the MMAP type buffer ?
-> 
-> A V4L2 driver should first implement the V4L2 semantic before adding optional
-> use case like buffer importation. For this reason, your V4L2 driver should know
-> all the memory requirements and how to allocate that memory. 
-Yes, that is what I intend to. Or I just smuggle those things somewhere.
-Later on, your
-> importing driver will have to validate that the userland did it right at
-> importation. This is to follow V4L2 semantic and security model. If you move
-> simply trust the userland (gralloc), you are not doing it right.
-> 
-Yes, that is what I try to describe in the other thread
-https://lore.kernel.org/linux-media/B4B3306F-C3B4-4594-BDF9-4BBC59C628C9@soulik.info/
-I don't have the problem that let the userspace decided where and how to 
-allocate the memory, but we need a new protocol here to let the 
-userspace do it right.
->>
->> Besides, I am not very satisfied with the dynamic resolution change
->> steps if I understand it correct. Buffers reallocation should happen
->> when we receive the event not until the drain is done. A resolution
->> rising is very common when you are playing a network stream, it would be
->> better that the decoder decided how many buffers it need for the
->> previous sequence while the userspace could reallocate the reset of
->> buffers in the CAPTURE queue.
->>> Other driver handle this just fine, if your v4l2 driver implement the v4l2
->>> resolution change mechanism, is should be very simple to manage.
-> 
-> This is a limitation of the queue design of V4L2. While streaming the buffers
-> associated with the queue must currently be large enough to support the selected
-> format. "large enough" in your case is complex, and validation must be
-> programmed in your driver.
-> 
-> There was discussion on perhaps extending on CREATE_BUFS feature, that let you
-> allocate at run-time for a different format/resolution (no drivers currently
-> allow that). The rules around that aren't specified (and will have to be defined
-> before a driver starts making use of that). Note that to be usable, a
-> DELETE_BUF(s) ioctl would probably be needed too.
-> 
-> In current state, If your driver can support it, userland does not strictly need
-> to re-allocate if the resolution is changed to smaller. In most SVC scenarios,
-> the largest resolution is known in advance, so pre-allocation can happen to the
-When you play a video from Youtube, you may notice that starting 
-resolution is low, then after it received more data knowning the 
-bandwidth is enough, it would switch to a higher resolution. I don't 
-think it would inform the codecs2 or OMX there is a higher target 
-resolution.
+vim +3202 drivers/gpu/drm/i915/i915_gem.c
 
-Besides, for the case of SVC in a conference system, the remote(gatway) 
-would not tell you there is a higer resolution or frame rate because you 
-can't receive it in negotiate stage, it could be permanently(device 
-capability) or just bandwidth problem. Whether we know there is a higher 
-requirement video depends on the transport protocols used here.
+36193acd54bdf1 Mika Kuoppala 2017-01-17  3171  
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3172  /* Returns the request if it was guilty of the hang */
+e61e0f51ba7974 Chris Wilson  2018-02-21  3173  static struct i915_request *
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3174  i915_gem_reset_request(struct intel_engine_cs *engine,
+bba0869b18e44f Chris Wilson  2018-04-06  3175  		       struct i915_request *request,
+bba0869b18e44f Chris Wilson  2018-04-06  3176  		       bool stalled)
+61da536204ca0d Mika Kuoppala 2017-01-17  3177  {
+71895a085879d7 Mika Kuoppala 2017-01-17  3178  	/* The guilty request will get skipped on a hung engine.
+71895a085879d7 Mika Kuoppala 2017-01-17  3179  	 *
+71895a085879d7 Mika Kuoppala 2017-01-17  3180  	 * Users of client default contexts do not rely on logical
+71895a085879d7 Mika Kuoppala 2017-01-17  3181  	 * state preserved between batches so it is safe to execute
+71895a085879d7 Mika Kuoppala 2017-01-17  3182  	 * queued requests following the hang. Non default contexts
+71895a085879d7 Mika Kuoppala 2017-01-17  3183  	 * rely on preserved state, so skipping a batch loses the
+71895a085879d7 Mika Kuoppala 2017-01-17  3184  	 * evolution of the state and it needs to be considered corrupted.
+71895a085879d7 Mika Kuoppala 2017-01-17  3185  	 * Executing more queued batches on top of corrupted state is
+71895a085879d7 Mika Kuoppala 2017-01-17  3186  	 * risky. But we take the risk by trying to advance through
+71895a085879d7 Mika Kuoppala 2017-01-17  3187  	 * the queued requests in order to make the client behaviour
+71895a085879d7 Mika Kuoppala 2017-01-17  3188  	 * more predictable around resets, by not throwing away random
+71895a085879d7 Mika Kuoppala 2017-01-17  3189  	 * amount of batches it has prepared for execution. Sophisticated
+71895a085879d7 Mika Kuoppala 2017-01-17  3190  	 * clients can use gem_reset_stats_ioctl and dma fence status
+71895a085879d7 Mika Kuoppala 2017-01-17  3191  	 * (exported via sync_file info ioctl on explicit fences) to observe
+71895a085879d7 Mika Kuoppala 2017-01-17  3192  	 * when it loses the context state and should rebuild accordingly.
+71895a085879d7 Mika Kuoppala 2017-01-17  3193  	 *
+71895a085879d7 Mika Kuoppala 2017-01-17  3194  	 * The context ban, and ultimately the client ban, mechanism are safety
+71895a085879d7 Mika Kuoppala 2017-01-17  3195  	 * valves if client submission ends up resulting in nothing more than
+71895a085879d7 Mika Kuoppala 2017-01-17  3196  	 * subsequent hangs.
+71895a085879d7 Mika Kuoppala 2017-01-17  3197  	 */
+71895a085879d7 Mika Kuoppala 2017-01-17  3198  
+bba0869b18e44f Chris Wilson  2018-04-06  3199  	if (i915_request_completed(request)) {
+bba0869b18e44f Chris Wilson  2018-04-06  3200  		GEM_TRACE("%s pardoned global=%d (fence %llx:%d), current %d\n",
+bba0869b18e44f Chris Wilson  2018-04-06  3201  			  engine->name, request->global_seqno,
+bba0869b18e44f Chris Wilson  2018-04-06 @3202  			  request->fence.context, request->fence.seqno,
+bba0869b18e44f Chris Wilson  2018-04-06  3203  			  intel_engine_get_seqno(engine));
+bba0869b18e44f Chris Wilson  2018-04-06  3204  		stalled = false;
+bba0869b18e44f Chris Wilson  2018-04-06  3205  	}
+bba0869b18e44f Chris Wilson  2018-04-06  3206  
+bba0869b18e44f Chris Wilson  2018-04-06  3207  	if (stalled) {
+4e0d64dba816ad Chris Wilson  2018-05-17  3208  		i915_gem_context_mark_guilty(request->gem_context);
+6dd7526f6f6c73 Chris Wilson  2018-07-06  3209  		i915_request_skip(request, -EIO);
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3210  
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3211  		/* If this context is now banned, skip all pending requests. */
+4e0d64dba816ad Chris Wilson  2018-05-17  3212  		if (i915_gem_context_is_banned(request->gem_context))
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3213  			engine_skip_context(request);
+61da536204ca0d Mika Kuoppala 2017-01-17  3214  	} else {
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3215  		/*
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3216  		 * Since this is not the hung engine, it may have advanced
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3217  		 * since the hang declaration. Double check by refinding
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3218  		 * the active request at the time of the reset.
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3219  		 */
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3220  		request = i915_gem_find_active_request(engine);
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3221  		if (request) {
+042ed2dbe5b294 Chris Wilson  2018-06-15  3222  			unsigned long flags;
+042ed2dbe5b294 Chris Wilson  2018-06-15  3223  
+4e0d64dba816ad Chris Wilson  2018-05-17  3224  			i915_gem_context_mark_innocent(request->gem_context);
+61da536204ca0d Mika Kuoppala 2017-01-17  3225  			dma_fence_set_error(&request->fence, -EAGAIN);
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3226  
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3227  			/* Rewind the engine to replay the incomplete rq */
+042ed2dbe5b294 Chris Wilson  2018-06-15  3228  			spin_lock_irqsave(&engine->timeline.lock, flags);
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3229  			request = list_prev_entry(request, link);
+a89d1f921c1593 Chris Wilson  2018-05-02  3230  			if (&request->link == &engine->timeline.requests)
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3231  				request = NULL;
+042ed2dbe5b294 Chris Wilson  2018-06-15  3232  			spin_unlock_irqrestore(&engine->timeline.lock, flags);
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3233  		}
+61da536204ca0d Mika Kuoppala 2017-01-17  3234  	}
+61da536204ca0d Mika Kuoppala 2017-01-17  3235  
+d1d1ebf4120db0 Chris Wilson  2017-07-21  3236  	return request;
+61da536204ca0d Mika Kuoppala 2017-01-17  3237  }
+61da536204ca0d Mika Kuoppala 2017-01-17  3238  
 
-The basic idea of SVC is that the low layer didn't depends on the upper 
-layer, we can't tell how the bitstream usually.
-> appropriate resolution and queue size. Re-allocation is then rarely triggered at
-> run time. Unlike your system, IOMMU system are not as affected by allocation
-> latency and manages to do gapless transition despite this inefficiency.
-> 
-> Note that all this is pure recommendation. What I'm seeing here is a pixel
-> format documented with Android assumptions rather then mainline, and sent
-> without the associated implementation. This simply raises some question on the
-Because this implementation is very complex as you could see now, I 
-didn't see the exist implementation here could decode DRM video or has 
-the security restriction here.
+:::::: The code at line 3202 was first introduced by commit
+:::::: bba0869b18e44ff2f713c98575ddad8c7c5e9b10 drm/i915: Treat i915_reset_engine() as guilty until proven innocent
 
-And you see even before this decoder driver is done, we have had enough 
-problems, even just the definition of pixel formats and data exchange 
-mechanism.
-> viability of the whole. This is not a critic but just some verification that
-> ensure you are following the V4L2 spec.
-I really want to those recommendations here, I want to make everything 
-right at the first place. Or we would make a driver we would know it 
-won't follow the v4l2 spec.
-> 
->>>
->>>>>>
->>>>>>>>> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
->>>>>>>>> ---
->>>>>>>>>      drivers/media/v4l2-core/v4l2-common.c | 1 +
->>>>>>>>>      drivers/media/v4l2-core/v4l2-ioctl.c  | 2 ++
->>>>>>>>>      include/uapi/linux/videodev2.h        | 2 ++
->>>>>>>>>      3 files changed, 5 insertions(+)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
->>>>>>>>> index e0fbe6ba4b6c..f645278b3055 100644
->>>>>>>>> --- a/drivers/media/v4l2-core/v4l2-common.c
->>>>>>>>> +++ b/drivers/media/v4l2-core/v4l2-common.c
->>>>>>>>> @@ -314,6 +314,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->>>>>>>>>                     { .format = V4L2_PIX_FMT_SGBRG12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->>>>>>>>>                     { .format = V4L2_PIX_FMT_SGRBG12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->>>>>>>>>                     { .format = V4L2_PIX_FMT_SRGGB12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->>>>>>>>> +               { .format = V4L2_PIX_FMT_NV12M_V4H1C, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 5, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2, .block_w = { 128, 128 }, .block_h = { 128, 128 } },
->>>>>>>>>             };
->>>>>>>>>             unsigned int i;
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->>>>>>>>> index e6fd355a2e92..8f65964aff08 100644
->>>>>>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->>>>>>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->>>>>>>>> @@ -1497,6 +1497,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->>>>>>>>>                     case V4L2_PIX_FMT_MT21C:        descr = "Mediatek Compressed Format"; break;
->>>>>>>>>                     case V4L2_PIX_FMT_QC08C:        descr = "QCOM Compressed 8-bit Format"; break;
->>>>>>>>>                     case V4L2_PIX_FMT_QC10C:        descr = "QCOM Compressed 10-bit Format"; break;
->>>>>>>>> +               case V4L2_PIX_FMT_NV12M_V4H1C:  descr = "Synaptics Compressed 8-bit tiled Format";break;
->>>>>>>>> +               case V4L2_PIX_FMT_NV12M_10_V4H3P8C:     descr = "Synaptics Compressed 10-bit tiled Format";break;
->>>>>>>>>                     default:
->>>>>>>>>                             if (fmt->description[0])
->>>>>>>>>                                     return;
->>>>>>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->>>>>>>>> index 01e630f2ec78..7e928cb69e7c 100644
->>>>>>>>> --- a/include/uapi/linux/videodev2.h
->>>>>>>>> +++ b/include/uapi/linux/videodev2.h
->>>>>>>>> @@ -661,6 +661,8 @@ struct v4l2_pix_format {
->>>>>>>>>      #define V4L2_PIX_FMT_NV12MT_16X16 v4l2_fourcc('V', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 16x16 tiles */
->>>>>>>>>      #define V4L2_PIX_FMT_NV12M_8L128      v4l2_fourcc('N', 'A', '1', '2') /* Y/CbCr 4:2:0 8x128 tiles */
->>>>>>>>>      #define V4L2_PIX_FMT_NV12M_10BE_8L128 v4l2_fourcc_be('N', 'T', '1', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
->>>>>>>>> +#define V4L2_PIX_FMT_NV12M_V4H1C v4l2_fourcc('S', 'Y', '1', '2')   /* 12  Y/CbCr 4:2:0 tiles */
->>>>>>>>> +#define V4L2_PIX_FMT_NV12M_10_V4H3P8C v4l2_fourcc('S', 'Y', '1', '0')   /* 12  Y/CbCr 4:2:0 10-bits tiles */
->>>>>>>>>
->>>>>>>>>      /* Bayer formats - see https://urldefense.proofpoint.com/v2/url?u=http-3A__www.siliconimaging.com_RGB-2520Bayer.htm&d=DwIFaQ&c=7dfBJ8cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=P4xb2_7biqBxD4LGGPrSV6j-jf3C3xlR7PXU-mLTeZE&m=lkQiuhx0yMAYHGcW-0WaHlF3e2etMHsu-FoNIBdZILGH6FPigwSAmel2vAdcVLkp&s=JKsBzpb_3u9xv52MaMuT4U3T1pPqcObYkpHDBxvcx_4&e=   */
->>>>>>>>>      #define V4L2_PIX_FMT_SBGGR8  v4l2_fourcc('B', 'A', '8', '1') /*  8  BGBG.. GRGR.. */
->>>>>>
->>>>>
->>>>
->>>
->>
-> 
+:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
+:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
 
 -- 
-Hsia-Jun(Randy) Li
+0-DAY CI Kernel Test Service
+https://01.org/lkp

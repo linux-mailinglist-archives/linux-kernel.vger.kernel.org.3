@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9FF59D232
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F94F59D244
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240520AbiHWHdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S241011AbiHWHbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237115AbiHWHdK (ORCPT
+        with ESMTP id S241010AbiHWHbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:33:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D45562ABA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:33:08 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MBgnm01NMzXdnp;
-        Tue, 23 Aug 2022 15:28:43 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 15:33:00 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <sudeep.holla@arm.com>, <vincent.guittot@linaro.org>,
-        <ionela.voinescu@arm.com>, <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <21cnbao@gmail.com>, <jonathan.cameron@huawei.com>,
-        <linuxarm@huawei.com>, <prime.zeng@huawei.com>,
-        <yangyicong@hisilicon.com>
-Subject: [PATCH] arch_topology: Make cluster topology span at least SMT CPUs
-Date:   Tue, 23 Aug 2022 15:30:44 +0800
-Message-ID: <20220823073044.58697-1-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Tue, 23 Aug 2022 03:31:34 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620C162AA8;
+        Tue, 23 Aug 2022 00:31:25 -0700 (PDT)
+X-UUID: c791e7c7010e4ab199112539f59a0b9c-20220823
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0XpZgLgvQIhzD9OrA/D2oRDjY+6u93V0EFGksJPqrXM=;
+        b=KI2iq0XbXSNL0G5QRHRPveIHTalEMzyTV4rbUwnhR684meDxcvWsYhkUMbugWhf/JxiVmIT1A2c9LPJlRVy0QDN5wHISl9MhABe8lriKvguYgzw+SfCOZpO6W7YF4jVnIkCbRuERDWvVETvOA5OuruMmolGoGQk/kaR7RXRTlH4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:1575b6a8-cd33-41c5-8670-9716c2af8626,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Releas
+        e_Ham,ACTION:release,TS:100
+X-CID-INFO: VERSION:1.1.10,REQID:1575b6a8-cd33-41c5-8670-9716c2af8626,OB:0,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS9
+        81B3D,ACTION:quarantine,TS:100
+X-CID-META: VersionHash:84eae18,CLOUDID:5b780668-a9d9-4672-a3c8-12721739a220,C
+        OID:e516b1b4fe73,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c791e7c7010e4ab199112539f59a0b9c-20220823
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1186259843; Tue, 23 Aug 2022 15:31:21 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 23 Aug 2022 15:31:19 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Tue, 23 Aug 2022 15:31:17 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-pwm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH 0/2] Fix mtk_disp_pwm_get_state function disp_pwm enabled flag
+Date:   Tue, 23 Aug 2022 15:31:13 +0800
+Message-ID: <1661239875-19841-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-Currently cpu_clustergroup_mask() will return CPU mask if cluster span
-more or the same CPUs as cpu_coregroup_mask(). This will result topology
-borken on non-Cluster SMT machines.
+Base on the branch of Linux-next/master.
 
-Test with:
-qemu-system-aarch64 -enable-kvm -machine virt \
- -net none \
- -cpu host \
- -bios ./QEMU_EFI.fd \
- -m 2G \
- -smp 48,sockets=2,cores=12,threads=2 \
- -kernel $Image \
- -initrd $Rootfs \
- -nographic
- -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
+The series mainly completes:
+1. Add compatible for MediaTek MT8188 in the dt-bindings file.
+2. Fix the parameters calculated by the enabled flag of disp_pwm in the
+mtk_disp_pwm_get_state function;
 
-We'll get below error:
-[    3.084568] BUG: arch topology borken
-[    3.084570]      the SMT domain not a subset of the CLS domain
+xinlei lee (2):
+  dt-bindings: pwm: Add compatible for Mediatek MT8188
+  drivers: pwm: Add disp_pwm compatiable for MT8188
 
-Since cluster is a level higher than SMT, fix this by making cluster
-spans at least SMT CPUs.
+ Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml | 1 +
+ drivers/pwm/pwm-mtk-disp.c                                   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/base/arch_topology.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 0424b59b695e..0056a1273275 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
- 	 */
- 	if (cpumask_subset(cpu_coregroup_mask(cpu),
- 			   &cpu_topology[cpu].cluster_sibling))
--		return get_cpu_mask(cpu);
-+		return cpu_smt_mask(cpu);
- 
- 	return &cpu_topology[cpu].cluster_sibling;
- }
 -- 
-2.24.0
+2.18.0
 

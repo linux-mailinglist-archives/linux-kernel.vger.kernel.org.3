@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760AD59D710
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B4859D7E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242569AbiHWJo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
+        id S242306AbiHWJoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352263AbiHWJlI (ORCPT
+        with ESMTP id S1352165AbiHWJk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:41:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D2B98D3D;
-        Tue, 23 Aug 2022 01:42:02 -0700 (PDT)
+        Tue, 23 Aug 2022 05:40:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605DA79A57;
+        Tue, 23 Aug 2022 01:41:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23F71B81C62;
-        Tue, 23 Aug 2022 08:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 700BFC433D6;
-        Tue, 23 Aug 2022 08:41:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72EFDB81C6B;
+        Tue, 23 Aug 2022 08:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22A9C433D7;
+        Tue, 23 Aug 2022 08:41:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244080;
-        bh=iYhJD2UgRJR95NPqJWe+oX3OQWhXxLif3i/DPaAugS0=;
+        s=korg; t=1661244093;
+        bh=xmnsuXtUw8sGw9bxdWq+/4tnHuPDrOAAJeRf/dZAQZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P7k0Fjq/90i8A4Yw5xGHl+Yy0HymfByh0zT6hybYIP0BxgobgtimJ6OREgZ+cD/uJ
-         hTnY7eMIOpjP8c9S51ktTfejQjcRECe4xgJkFHgWG/TPsVLyma3jQP0wwnUREistbv
-         8yquOLRv3dmDY+t1ps2fNhjgCfx9iq4iYZiARydw=
+        b=co78bTfTD5idZAGbZogxZsT2A2gUKo7D/8iM6xWOQZLLGeD5ni5I9CPWi5jN2u0Sn
+         ppAB8IrTUIV9TLRnN/SjcU9cove7oLKo4U874mTCN1zJe1BisWOHo82vfK+vH6cjcb
+         9fyAGlTwBVlx2vLJOSuaXMPBbmpq6SA64R/ZPvwQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        stable@vger.kernel.org,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 083/229] can: sun4i_can: do not report txerr and rxerr during bus-off
-Date:   Tue, 23 Aug 2022 10:24:04 +0200
-Message-Id: <20220823080056.698887887@linuxfoundation.org>
+Subject: [PATCH 4.14 085/229] can: error: specify the values of data[5..7] of CAN error frames
+Date:   Tue, 23 Aug 2022 10:24:06 +0200
+Message-Id: <20220823080056.762652145@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -58,48 +58,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-[ Upstream commit 0ac15a8f661b941519379831d09bfb12271b23ee ]
+[ Upstream commit e70a3263a7eed768d5f947b8f2aff8d2a79c9d97 ]
 
-During bus off, the error count is greater than 255 and can not fit in
-a u8.
+Currently, data[5..7] of struct can_frame, when used as a CAN error
+frame, are defined as being "controller specific". Device specific
+behaviours are problematic because it prevents someone from writing
+code which is portable between devices.
 
-Fixes: 0738eff14d81 ("can: Allwinner A10/A20 CAN Controller support - Kernel module")
-Link: https://lore.kernel.org/all/20220719143550.3681-7-mailhol.vincent@wanadoo.fr
-CC: Chen-Yu Tsai <wens@csie.org>
+As a matter of fact, data[5] is never used, data[6] is always used to
+report TX error counter and data[7] is always used to report RX error
+counter. can-utils also relies on this.
+
+This patch updates the comment in the uapi header to specify that
+data[5] is reserved (and thus should not be used) and that data[6..7]
+are used for error counters.
+
+Fixes: 0d66548a10cb ("[CAN]: Add PF_CAN core module")
+Link: https://lore.kernel.org/all/20220719143550.3681-11-mailhol.vincent@wanadoo.fr
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/sun4i_can.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ include/uapi/linux/can/error.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/sun4i_can.c b/drivers/net/can/sun4i_can.c
-index 1ac2090a1721..fea82be623b3 100644
---- a/drivers/net/can/sun4i_can.c
-+++ b/drivers/net/can/sun4i_can.c
-@@ -525,11 +525,6 @@ static int sun4i_can_err(struct net_device *dev, u8 isrc, u8 status)
- 	rxerr = (errc >> 16) & 0xFF;
- 	txerr = errc & 0xFF;
+diff --git a/include/uapi/linux/can/error.h b/include/uapi/linux/can/error.h
+index bfc4b5d22a5e..383f3d508a53 100644
+--- a/include/uapi/linux/can/error.h
++++ b/include/uapi/linux/can/error.h
+@@ -120,6 +120,9 @@
+ #define CAN_ERR_TRX_CANL_SHORT_TO_GND  0x70 /* 0111 0000 */
+ #define CAN_ERR_TRX_CANL_SHORT_TO_CANH 0x80 /* 1000 0000 */
  
--	if (skb) {
--		cf->data[6] = txerr;
--		cf->data[7] = rxerr;
--	}
--
- 	if (isrc & SUN4I_INT_DATA_OR) {
- 		/* data overrun interrupt */
- 		netdev_dbg(dev, "data overrun interrupt\n");
-@@ -560,6 +555,10 @@ static int sun4i_can_err(struct net_device *dev, u8 isrc, u8 status)
- 		else
- 			state = CAN_STATE_ERROR_ACTIVE;
- 	}
-+	if (skb && state != CAN_STATE_BUS_OFF) {
-+		cf->data[6] = txerr;
-+		cf->data[7] = rxerr;
-+	}
- 	if (isrc & SUN4I_INT_BUS_ERR) {
- 		/* bus error interrupt */
- 		netdev_dbg(dev, "bus error interrupt\n");
+-/* controller specific additional information / data[5..7] */
++/* data[5] is reserved (do not use) */
++
++/* TX error counter / data[6] */
++/* RX error counter / data[7] */
+ 
+ #endif /* _UAPI_CAN_ERROR_H */
 -- 
 2.35.1
 

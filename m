@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AF259EE92
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02E159EE94
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiHWWBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S231827AbiHWWD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiHWWBI (ORCPT
+        with ESMTP id S229778AbiHWWDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:01:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4C75C974;
-        Tue, 23 Aug 2022 15:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661292067; x=1692828067;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+KpCMWzGfyKPK9D4bSvPtB37EM6LUxlpcX427rSatZY=;
-  b=ADnlVU0PKMCZwP09AUm8n+yD1QRiFae4ZrzmjN+IQ3rAZatbPG8ONyND
-   bwG+jvYhw0HFTffQUqeyJaXIoRiQsZoE/Wssla/zPq4fmf+FgPFPVPCl1
-   MLflP7uVwpUN4EssL/curCZoS/gGkFutBKi18k5G5btlpH3WI6Bu2FvSM
-   mEUgNe0VcYg0Lp6/d2NAXaT6DmuK+VAHHiNcXQ2B4dcDREiJGFkA6oXQq
-   tbMwRXOV+jzeJBsJdGq8Vmf8LT6mf16Kb0NzCIG3B4pwoST7fFZ6Hc9EH
-   NtsrWERdbykA7nrx7Q/aYAfczjsn4dIK68XVIauy5STeyhNAuv++qU479
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293804067"
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="293804067"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 15:01:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="751835195"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Aug 2022 15:01:06 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQbxJ-0000bX-1Q;
-        Tue, 23 Aug 2022 22:01:05 +0000
-Date:   Wed, 24 Aug 2022 06:00:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
- unused variable 'mtk_mdp_comp_dt_ids'
-Message-ID: <202208240558.1wT7kygx-lkp@intel.com>
+        Tue, 23 Aug 2022 18:03:55 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A513D71
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:03:51 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id n11-20020a4aa7cb000000b0044b3583d373so589923oom.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=XgjUPoYbteTJSFK5trDNYbEc67FboLDVoKN4OKyAxFY=;
+        b=Ku+Fu5Ayvzh0zXpjv8bDVq7swHTjr+TJGPKsq+lEMz+7ZYeBAxqd07lU/wuRywMQ4X
+         w3RgjBk+yNDGrXStDgUMS/z51pOy8xtmqKzaETzMCpYlpoYguYVCMSF4ZHe6P5pBJ51I
+         dnFSyv4czrvGNEvyNQ5kkhbiNIKZkvnkZEyco=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=XgjUPoYbteTJSFK5trDNYbEc67FboLDVoKN4OKyAxFY=;
+        b=foFQWjwaJPCdYem5y8Jg2wgTOPmy1jNWl3ABv/gmn6YV+9EmpkgSWpkVvkzyyvhWJr
+         MTqTq1tIiPLyfLXIeRs3pvx3shMQw/o9OF07Hf29us/JkX7I8t6nx+8wKhSRoqVka7Ih
+         nHT+Knnq2Z68VbS+dbRne23SWDhWaYT0DuSCm+1yJl5L1R7hbFQe7oNc2I39si02ChqC
+         V6+KvKHlleounGpUN9rI5yrbBgH399APHV/kHTXhKIPro4qv3Zl0MUo7/iVOpwOZwnyu
+         /rSnmfPe05pI3GUq7WY5PR5mxa9Ke041/4iLNMz3pTLmyLv0VJtBfmgEuKglay2Xz8K5
+         PlTw==
+X-Gm-Message-State: ACgBeo0YXK6nj8M9LRlHe/E4O+KHgSRfUMMo8tz15AKzfd0lz8KEwOGz
+        J9f+xj2saxbOLD3Yej8tK1flqiv472CuRg==
+X-Google-Smtp-Source: AA6agR6iV5XjigRyxhI6uHsO6B5njoDoDy81UG2PpWj9kgaLmMQy49Ld+mYJWcKi2CYP7+uMIqmOaw==
+X-Received: by 2002:a4a:abcf:0:b0:428:47bc:4bc0 with SMTP id o15-20020a4aabcf000000b0042847bc4bc0mr8700404oon.15.1661292230823;
+        Tue, 23 Aug 2022 15:03:50 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x10-20020a4ae78a000000b00443abbc1f3csm2727169oov.24.2022.08.23.15.03.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 15:03:50 -0700 (PDT)
+Subject: Re: [PATCH 5.4 000/389] 5.4.211-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c99b635a-dc6d-e8f2-5255-136e4f3b0e94@linuxfoundation.org>
+Date:   Tue, 23 Aug 2022 16:03:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On 8/23/22 2:21 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.211 release.
+> There are 389 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.211-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-First bad commit (maybe != root cause):
+Compiled and booted on my test system. No dmesg regressions.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   df0219d11b6f04251d38e345db4f9780cb32e2e2
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   5 months ago
-config: hexagon-buildonly-randconfig-r005-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240558.1wT7kygx-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
-
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
-55d80506c5f7c3a drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
-55d80506c5f7c3a drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
-c8eb2d7e8202fd9 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
-
-:::::: The code at line 31 was first introduced by commit
-:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
-
-:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks,
+-- Shuah

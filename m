@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EF459DB79
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D833259E13E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358682AbiHWLww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S1352818AbiHWKXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358584AbiHWLt5 (ORCPT
+        with ESMTP id S1353420AbiHWKL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:49:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DAC77EB0;
-        Tue, 23 Aug 2022 02:31:15 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92A46B8C4;
+        Tue, 23 Aug 2022 01:56:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB36B81C66;
-        Tue, 23 Aug 2022 09:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA4BC433D6;
-        Tue, 23 Aug 2022 09:31:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66E0D614E7;
+        Tue, 23 Aug 2022 08:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73641C433D6;
+        Tue, 23 Aug 2022 08:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247072;
-        bh=IOsgaTxVBzA63oEuZIQOdrHHKRDvYavH/H8To3RGHZs=;
+        s=korg; t=1661245002;
+        bh=QJRKZeqWyHOAMgpIQr673Jjz8RQb1Y0LVJw0ylK1rRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o08S1V/ClCCbakgLGCZOUtAvYrVU5BvbnSqIO/IxBNjgp61AoODA9Y31mOGggMxqd
-         Ds4Hptcd7YUy/qpH+YGNBdb3xC+UiqDqvduBY2OpBm6h/3UkFw5rOl4MpDaNprP8OU
-         CYnZcvuq5+uy7AwVeBs0EZVeqVLudEcgulwVj8/w=
+        b=uZjzfcVj17Q2NjcWjUd6657A6LQhoLhdtZiOVMBRVbyuHxxp0D18XeMmzEASClMXM
+         XXQFWDEK0iT9VZAdn3Tg5XzoeiR6NSC8SvPVFkCntd1ZjnHQktAulmS8zj7T4zi0Or
+         XTd149syJ47LdE7B7rEFOfre7UsoCbN4FRut+3PQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
-        Jiri Pirko <jiri@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 310/389] devlink: Fix use-after-free after a failed reload
-Date:   Tue, 23 Aug 2022 10:26:28 +0200
-Message-Id: <20220823080128.524086837@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 228/229] video: fbdev: i740fb: Check the argument of i740_calc_vclk()
+Date:   Tue, 23 Aug 2022 10:26:29 +0200
+Message-Id: <20220823080101.775619886@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,105 +54,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ido Schimmel <idosch@nvidia.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-commit 6b4db2e528f650c7fb712961aac36455468d5902 upstream.
+[ Upstream commit 40bf722f8064f50200b8c4f8946cd625b441dda9 ]
 
-After a failed devlink reload, devlink parameters are still registered,
-which means user space can set and get their values. In the case of the
-mlxsw "acl_region_rehash_interval" parameter, these operations will
-trigger a use-after-free [1].
+Since the user can control the arguments of the ioctl() from the user
+space, under special arguments that may result in a divide-by-zero bug.
 
-Fix this by rejecting set and get operations while in the failed state.
-Return the "-EOPNOTSUPP" error code which does not abort the parameters
-dump, but instead causes it to skip over the problematic parameter.
+If the user provides an improper 'pixclock' value that makes the argumet
+of i740_calc_vclk() less than 'I740_RFREQ_FIX', it will cause a
+divide-by-zero bug in:
+    drivers/video/fbdev/i740fb.c:353 p_best = min(15, ilog2(I740_MAX_VCO_FREQ / (freq / I740_RFREQ_FIX)));
 
-Another possible fix is to perform these checks in the mlxsw parameter
-callbacks, but other drivers might be affected by the same problem and I
-am not aware of scenarios where these stricter checks will cause a
-regression.
+The following log can reveal it:
 
-[1]
-mlxsw_spectrum3 0000:00:10.0: Port 125: Failed to register netdev
-mlxsw_spectrum3 0000:00:10.0: Failed to create ports
-
-==================================================================
-BUG: KASAN: use-after-free in mlxsw_sp_acl_tcam_vregion_rehash_intrvl_get+0xbd/0xd0 drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_tcam.c:904
-Read of size 4 at addr ffff8880099dcfd8 by task kworker/u4:4/777
-
-CPU: 1 PID: 777 Comm: kworker/u4:4 Not tainted 5.19.0-rc7-custom-126601-gfe26f28c586d #1
-Hardware name: QEMU MSN4700, BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
-Workqueue: netns cleanup_net
+divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+RIP: 0010:i740_calc_vclk drivers/video/fbdev/i740fb.c:353 [inline]
+RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:646 [inline]
+RIP: 0010:i740fb_set_par+0x163f/0x3b70 drivers/video/fbdev/i740fb.c:742
 Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x92/0xbd lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:313 [inline]
- print_report.cold+0x5e/0x5cf mm/kasan/report.c:429
- kasan_report+0xb9/0xf0 mm/kasan/report.c:491
- __asan_report_load4_noabort+0x14/0x20 mm/kasan/report_generic.c:306
- mlxsw_sp_acl_tcam_vregion_rehash_intrvl_get+0xbd/0xd0 drivers/net/ethernet/mellanox/mlxsw/spectrum_acl_tcam.c:904
- mlxsw_sp_acl_region_rehash_intrvl_get+0x49/0x60 drivers/net/ethernet/mellanox/mlxsw/spectrum_acl.c:1106
- mlxsw_sp_params_acl_region_rehash_intrvl_get+0x33/0x80 drivers/net/ethernet/mellanox/mlxsw/spectrum.c:3854
- devlink_param_get net/core/devlink.c:4981 [inline]
- devlink_nl_param_fill+0x238/0x12d0 net/core/devlink.c:5089
- devlink_param_notify+0xe5/0x230 net/core/devlink.c:5168
- devlink_ns_change_notify net/core/devlink.c:4417 [inline]
- devlink_ns_change_notify net/core/devlink.c:4396 [inline]
- devlink_reload+0x15f/0x700 net/core/devlink.c:4507
- devlink_pernet_pre_exit+0x112/0x1d0 net/core/devlink.c:12272
- ops_pre_exit_list net/core/net_namespace.c:152 [inline]
- cleanup_net+0x494/0xc00 net/core/net_namespace.c:582
- process_one_work+0x9fc/0x1710 kernel/workqueue.c:2289
- worker_thread+0x675/0x10b0 kernel/workqueue.c:2436
- kthread+0x30c/0x3d0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+ fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1034
+ do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+ fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
 
-The buggy address belongs to the physical page:
-page:ffffea0000267700 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x99dc
-flags: 0x100000000000000(node=0|zone=1)
-raw: 0100000000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+Fix this by checking the argument of i740_calc_vclk() first.
 
-Memory state around the buggy address:
- ffff8880099dce80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880099dcf00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff8880099dcf80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                                    ^
- ffff8880099dd000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880099dd080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-Fixes: 98bbf70c1c41 ("mlxsw: spectrum: add "acl_region_rehash_interval" devlink param")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/devlink.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/video/fbdev/i740fb.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/net/core/devlink.c
-+++ b/net/core/devlink.c
-@@ -2953,7 +2953,7 @@ static int devlink_param_get(struct devl
- 			     const struct devlink_param *param,
- 			     struct devlink_param_gset_ctx *ctx)
- {
--	if (!param->get)
-+	if (!param->get || devlink->reload_failed)
- 		return -EOPNOTSUPP;
- 	return param->get(devlink, param->id, ctx);
- }
-@@ -2962,7 +2962,7 @@ static int devlink_param_set(struct devl
- 			     const struct devlink_param *param,
- 			     struct devlink_param_gset_ctx *ctx)
- {
--	if (!param->set)
-+	if (!param->set || devlink->reload_failed)
- 		return -EOPNOTSUPP;
- 	return param->set(devlink, param->id, ctx);
- }
+diff --git a/drivers/video/fbdev/i740fb.c b/drivers/video/fbdev/i740fb.c
+index 7bc5f6056c77..4147a9534179 100644
+--- a/drivers/video/fbdev/i740fb.c
++++ b/drivers/video/fbdev/i740fb.c
+@@ -399,7 +399,7 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
+ 	u32 xres, right, hslen, left, xtotal;
+ 	u32 yres, lower, vslen, upper, ytotal;
+ 	u32 vxres, xoffset, vyres, yoffset;
+-	u32 bpp, base, dacspeed24, mem;
++	u32 bpp, base, dacspeed24, mem, freq;
+ 	u8 r7;
+ 	int i;
+ 
+@@ -641,7 +641,12 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
+ 	par->atc[VGA_ATC_OVERSCAN] = 0;
+ 
+ 	/* Calculate VCLK that most closely matches the requested dot clock */
+-	i740_calc_vclk((((u32)1e9) / var->pixclock) * (u32)(1e3), par);
++	freq = (((u32)1e9) / var->pixclock) * (u32)(1e3);
++	if (freq < I740_RFREQ_FIX) {
++		fb_dbg(info, "invalid pixclock\n");
++		freq = I740_RFREQ_FIX;
++	}
++	i740_calc_vclk(freq, par);
+ 
+ 	/* Since we program the clocks ourselves, always use VCLK2. */
+ 	par->misc |= 0x0C;
+-- 
+2.35.1
+
 
 

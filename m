@@ -2,140 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A5E59E868
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72D859E89A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343928AbiHWRED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S242462AbiHWRHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343790AbiHWRBi (ORCPT
+        with ESMTP id S1343816AbiHWRDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:01:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461313E36
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:08:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5DC9E1F8FF;
-        Tue, 23 Aug 2022 14:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661263738; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qqt+sqPfQ5YZMyDpqRmx3/6lQYTEzFiEGh9Y/BPZ7oo=;
-        b=tSjKqvrTKocvq6Ylkq3q678K3+RuzZy1LqQ+Tzu7rWhrbJIZ3lUEYbE+TaqPz+UnptO6fe
-        gITrAy1pOEdpca1l/xVR8Cwz6DODiRJ6FuFTVRvdOhsig4WpOuSbSj9xMUD8FMQQo+MWP4
-        174oM7DibqY0+fa0HXhaCt7pzyKtsxw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661263738;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qqt+sqPfQ5YZMyDpqRmx3/6lQYTEzFiEGh9Y/BPZ7oo=;
-        b=CvyHJyKm8vmChdO4dt4xvi7pyckLkFDrGvCgONpTO312QxH6+nlaZ1KVWtV+z84D3FlxBM
-        pA4vQy39x/rbRACg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0479A13AB7;
-        Tue, 23 Aug 2022 14:08:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jed6OnnfBGO5dwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 23 Aug 2022 14:08:57 +0000
-Message-ID: <42323fe6-3ac1-4dff-cf49-6e97525df837@suse.cz>
-Date:   Tue, 23 Aug 2022 16:08:57 +0200
+        Tue, 23 Aug 2022 13:03:05 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B2A89937;
+        Tue, 23 Aug 2022 07:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661263787; x=1692799787;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Bi4jdslH1XmMlExJRJY2zoC8ta2OhPcunCg0oaSmBRI=;
+  b=akrrD9Im9E3kyEtTN174wjK1qizLG0gq2jFqKsVzHhOWpLDs+EHisf84
+   tnfJtI0REdgA1Sj0oYFZyetREmM6GTgAGmdT6ATACe11/TkG8Zzmvy/FV
+   jN1LRzVa8WgV6IKi3nhDmDK1mffHGGigxhfco16if2WbDXbFRybyo2J4j
+   wODzdv7cnW2Dd3RznXttY3+dZkesJ9kntKXehx8g89VWSDNZq6r8jpvYd
+   0xL47s7f2D/KoPySm+h2/tN4EON+G6ztLOSDT5CLYELDROM0a4cO7Sy+E
+   USiYo9c7dCKpFhNW3zCZq5RVEuHs8lx4Kbitw3qi2jbytv+cxi+AQf9+M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="319742310"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="319742310"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:09:47 -0700
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="638667953"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:09:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oQUb9-002T5h-09;
+        Tue, 23 Aug 2022 17:09:43 +0300
+Date:   Tue, 23 Aug 2022 17:09:42 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Keith Busch <kbusch@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v1 1/1] asm-generic: Make parameter types consisten in
+ _unaligned_be48()
+Message-ID: <YwTfpu13CibZNS4a@smile.fi.intel.com>
+References: <20220726082908.71341-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH linux-next v2] mm/slub: Remove the unneeded result
- variable
-Content-Language: en-US
-To:     cgel.zte@gmail.com, 42.hyeyoo@gmail.com
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org,
-        roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220822013830.199836-1-ye.xingchen@zte.com.cn>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220822013830.199836-1-ye.xingchen@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726082908.71341-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/22/22 03:38, cgel.zte@gmail.com wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Return the value from attribute->store(s, buf, len) and
-> attribute->show(s, buf) directly instead of storing it in
-> another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+On Tue, Jul 26, 2022 at 11:29:08AM +0300, Andy Shevchenko wrote:
+> There is a convention to use internal kernel types, hence replace
+> __u8 by u8.
 
-Thanks, added to slab.git for-6.1/trivial
+Any comments on this? Otherwise I may push it through different tree.
 
-> ---
-> v1 -> v2
-> Add the whitespace between subsystem and summary in subject line.
->  mm/slub.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 6953c3367bc2..7bea010a20ff 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5852,7 +5852,6 @@ static ssize_t slab_attr_show(struct kobject *kobj,
->  {
->  	struct slab_attribute *attribute;
->  	struct kmem_cache *s;
-> -	int err;
->  
->  	attribute = to_slab_attr(attr);
->  	s = to_slab(kobj);
-> @@ -5860,9 +5859,7 @@ static ssize_t slab_attr_show(struct kobject *kobj,
->  	if (!attribute->show)
->  		return -EIO;
->  
-> -	err = attribute->show(s, buf);
-> -
-> -	return err;
-> +	return attribute->show(s, buf);
->  }
->  
->  static ssize_t slab_attr_store(struct kobject *kobj,
-> @@ -5871,7 +5868,6 @@ static ssize_t slab_attr_store(struct kobject *kobj,
->  {
->  	struct slab_attribute *attribute;
->  	struct kmem_cache *s;
-> -	int err;
->  
->  	attribute = to_slab_attr(attr);
->  	s = to_slab(kobj);
-> @@ -5879,8 +5875,7 @@ static ssize_t slab_attr_store(struct kobject *kobj,
->  	if (!attribute->store)
->  		return -EIO;
->  
-> -	err = attribute->store(s, buf, len);
-> -	return err;
-> +	return attribute->store(s, buf, len);
->  }
->  
->  static void kmem_cache_release(struct kobject *k)
+-- 
+With Best Regards,
+Andy Shevchenko
+
 

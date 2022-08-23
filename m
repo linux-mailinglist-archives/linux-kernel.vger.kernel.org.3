@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363CB59D98A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E2859D8F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350090AbiHWJZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S1348539AbiHWJMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349781AbiHWJY2 (ORCPT
+        with ESMTP id S1348263AbiHWJKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:24:28 -0400
+        Tue, 23 Aug 2022 05:10:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C474490805;
-        Tue, 23 Aug 2022 01:35:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F016674E0C;
+        Tue, 23 Aug 2022 01:31:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4123BB81C4F;
-        Tue, 23 Aug 2022 08:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC131C433C1;
-        Tue, 23 Aug 2022 08:18:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47597B81C3E;
+        Tue, 23 Aug 2022 08:18:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1BEC433B5;
+        Tue, 23 Aug 2022 08:18:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242716;
-        bh=+Z2c0OxS9hfS3VZxv8oMBN/X8wfE6XIeSWU42oMqx5g=;
+        s=korg; t=1661242737;
+        bh=v5/YKtomldikhe/i3h6gjddah5wV/t0Qwoy5NR3BAPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DnvO1XDR/pMEl79/YFpUmiXmcx0Sm36gvoNb8rbDnB4OnWCc/V2eJtCUZ69EfkfiQ
-         Is5mHwKMCowINxnCmWHoZreVJcRWVTS9iL4ie+2ViT+gj7KZ05LL/fSHNh+n/H9FKV
-         vhcy2kR4s1gCghVzhl3ZLjHCRP/6OER8hZ9Pls00=
+        b=qj3HGkjwGSyeVQ0S2U3jJuo01kGAvwwwyJpuRx+Xm/gT2bD1P1GSH6yBeY3fZsFSF
+         Fc+zhCZyDWnFTed93V0lKYrskH7XTn+vOqRjpr6YSSGILDsWAFz6t625NpsZkH9cep
+         pX9TIw4fJmM+gvfN/Qs0KoQtwl2z6CvF8A9Fg+vc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.19 178/365] ASoC: SOF: Intel: hda: Fix potential buffer overflow by snprintf()
-Date:   Tue, 23 Aug 2022 10:01:19 +0200
-Message-Id: <20220823080125.671237572@linuxfoundation.org>
+Subject: [PATCH 5.19 184/365] ASoC: codec: tlv320aic32x4: fix mono playback via I2S
+Date:   Tue, 23 Aug 2022 10:01:25 +0200
+Message-Id: <20220823080125.922323509@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -54,36 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Philipp Zabel <p.zabel@pengutronix.de>
 
-commit 94c1ceb043c1a002de9649bb630c8e8347645982 upstream.
+commit b4b5f29a076e52181f63e45a2ad1bc88593072e3 upstream.
 
-snprintf() returns the would-be-filled size when the string overflows
-the given buffer size, hence using this value may result in the buffer
-overflow (although it's unrealistic).
+The two commits referenced below break mono playback via I2S DAI because
+they set BCLK to half the required speed. For PCM transport over I2S, the
+number of transmitted channels is always 2, even for mono playback.
 
-This patch replaces with a safer version, scnprintf() for papering
-over such a potential issue.
-
-Fixes: 29c8e4398f02 ("ASoC: SOF: Intel: hda: add extended rom status dump to error log")
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/20220801165420.25978-4-tiwai@suse.de
+Fixes: dcd79364bff3 ("ASoC: codec: tlv3204: Enable 24 bit audio support")
+Fixes: 40b37136287b ("ASoC: tlv320aic32x4: Fix bdiv clock rate derivation")
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Link: https://lore.kernel.org/r/20220810104156.665452-1-p.zabel@pengutronix.de
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sof/intel/hda.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/tlv320aic32x4.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -467,7 +467,7 @@ static void hda_dsp_dump_ext_rom_status(
- 	chip = get_chip_info(sdev->pdata);
- 	for (i = 0; i < HDA_EXT_ROM_STATUS_SIZE; i++) {
- 		value = snd_sof_dsp_read(sdev, HDA_DSP_BAR, chip->rom_status_reg + i * 0x4);
--		len += snprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
-+		len += scnprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
+--- a/sound/soc/codecs/tlv320aic32x4.c
++++ b/sound/soc/codecs/tlv320aic32x4.c
+@@ -49,6 +49,8 @@ struct aic32x4_priv {
+ 	struct aic32x4_setup_data *setup;
+ 	struct device *dev;
+ 	enum aic32x4_type type;
++
++	unsigned int fmt;
+ };
+ 
+ static int aic32x4_reset_adc(struct snd_soc_dapm_widget *w,
+@@ -611,6 +613,7 @@ static int aic32x4_set_dai_sysclk(struct
+ static int aic32x4_set_dai_fmt(struct snd_soc_dai *codec_dai, unsigned int fmt)
+ {
+ 	struct snd_soc_component *component = codec_dai->component;
++	struct aic32x4_priv *aic32x4 = snd_soc_component_get_drvdata(component);
+ 	u8 iface_reg_1 = 0;
+ 	u8 iface_reg_2 = 0;
+ 	u8 iface_reg_3 = 0;
+@@ -654,6 +657,8 @@ static int aic32x4_set_dai_fmt(struct sn
+ 		return -EINVAL;
  	}
  
- 	dev_printk(level, sdev->dev, "extended rom status: %s", msg);
++	aic32x4->fmt = fmt;
++
+ 	snd_soc_component_update_bits(component, AIC32X4_IFACE1,
+ 				AIC32X4_IFACE1_DATATYPE_MASK |
+ 				AIC32X4_IFACE1_MASTER_MASK, iface_reg_1);
+@@ -758,6 +763,10 @@ static int aic32x4_setup_clocks(struct s
+ 		return -EINVAL;
+ 	}
+ 
++	/* PCM over I2S is always 2-channel */
++	if ((aic32x4->fmt & SND_SOC_DAIFMT_FORMAT_MASK) == SND_SOC_DAIFMT_I2S)
++		channels = 2;
++
+ 	madc = DIV_ROUND_UP((32 * adc_resource_class), aosr);
+ 	max_dosr = (AIC32X4_MAX_DOSR_FREQ / sample_rate / dosr_increment) *
+ 			dosr_increment;
 
 

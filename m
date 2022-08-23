@@ -2,98 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB76259ED0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492F159ED08
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiHWUFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 16:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S233954AbiHWUE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 16:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233642AbiHWUEm (ORCPT
+        with ESMTP id S233911AbiHWUED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:04:42 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF149BB48
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:19:20 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id t140so8297576oie.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=so3WdZSQ2eXeaaIN/ZeTDUPvU8ksUXfaJlhvSOwutR4=;
-        b=zjmFEogk2oGNq73zWJMUogAbsyKIqCwVhX+da2VoQCFIqnkYFx5C/VQdhgnU/4x2BY
-         8MXiSyJOEX9OR6ZODkpC9V0sYMIRB+k48NVVLimG6eMIzuuA0+07TBqHFjGbExJhf0Do
-         0wu/lS4mKD/JgCeHRnMQSqmhjwoLHhVQNX6F9Z3rF/oDW+L9Qutv8nJMuOX84NsdvTPt
-         wPWGMcVOq1n8aDsJiTqjD/GNdVl2C8nCq/EeFn3jW4Hpa95tLaaQ+mS7dhuIYJLb2zG3
-         y894s+cPizSFP7jNuxf1yC0PX5YIjtrzrOOOUUN/V2k2DCu03rn5c1E4yZ69Ol2VGH/x
-         mhHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=so3WdZSQ2eXeaaIN/ZeTDUPvU8ksUXfaJlhvSOwutR4=;
-        b=rVbLKyK4t25rwx5z/MRNY/fr0DAc0+Uy0ZGjGo8PlKZqlYXTWd6BCj7i0FmwSh+MiG
-         uCzYDNA6ra3xOB4ZfXMmGzqFZXsYRQxvyYvFU0zimSOc9skR4QZYcHuqKoYDYNxTOeUk
-         fSgFf1Pe7DLAkq8+YIaoEqrjroBAkJ+3pbP1C3eoZELRD3Jb6bfEvx6DLuE7o6v+3L8g
-         sMsC7OP3mE/yiGJIRWp7fxU8DbHYoi+wo2fQvzZ0PLjmODxIzdACBLlnX0DrqagwmV9X
-         RDOjbRjHjzufxt0nwC6+ls2x7+dqaCF6KLwBxGcb+RH3Zn1y6aKlnWWgCEv4+SKCKQyN
-         anbQ==
-X-Gm-Message-State: ACgBeo2HSpI3vkKh49MNSpY7+FUEwtsjYAuHwrZYuj62Lscxy+xzrV2M
-        vcGeOZvkmo/hRi7oXQEWMDniv/DWY0oIZn5XlI0b
-X-Google-Smtp-Source: AA6agR5v1Km44i0hrjO0fXev40AHQ+sMtKqQj/EheZkrT9/R2FdVAnbybqnDPRYV+j49VGyHPVGSBkhcfz2jWREIinM=
-X-Received: by 2002:a05:6808:3a9:b0:343:4b14:ccce with SMTP id
- n9-20020a05680803a900b003434b14cccemr1932886oie.41.1661282360270; Tue, 23 Aug
- 2022 12:19:20 -0700 (PDT)
+        Tue, 23 Aug 2022 16:04:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B03E084;
+        Tue, 23 Aug 2022 12:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661282278; x=1692818278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=od9EKCDhRArRaGPV2RxuCjiGWzeVGL06v4Tyo/Ik6Ls=;
+  b=TMy7qufY/YNWxZ1Tfohep6rWZSi5WMlwyh/QBGCVT/8ylsO1FAMQX20B
+   iEND5axQAKeVmDPnSAN5acEFJBbra9GYwtbGsRzKJdy5XCxH1sgVfBLXH
+   wgvaRPsu68WnDvr41T0HWtktERkikmf/xvQFtghBGSF4KiwsYXK01qBiK
+   42GKozRxtaWIKJwhbvSY5glMH04TvMKWIjYP+XqMZm2R6EOr4F/UfqrFm
+   qq3mleOGV5qaWuTsF3cVpSIOu+RdoxnyoYWLM9lEF6jSlltxnkNn7/Jcx
+   NzyV21WAxKdR+6VhHQOxNPOy9j5P7ngkY3OVfO473V9j/O9uxnaB8zVKj
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="187761601"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Aug 2022 12:17:57 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 23 Aug 2022 12:17:56 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Tue, 23 Aug 2022 12:17:56 -0700
+Date:   Tue, 23 Aug 2022 21:22:10 +0200
+From:   Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
+To:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "soc@kernel.org" <soc@kernel.org>,
+        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
+        UNGLinuxDriver <UNGLinuxDriver@microchip.com>,
+        "maxime.chevallier@bootlin.com" <maxime.chevallier@bootlin.com>
+Subject: Re: [PATCH] ARM: dts: lan966x: add support for pcb8290
+Message-ID: <20220823192210.cnkxmdb2eryg4hnz@soft-dev3-1.localhost>
+References: <20220817190027.1632721-1-horatiu.vultur@microchip.com>
+ <8e6c780e-28ee-1f37-c14c-f0ca5f590743@microchip.com>
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 23 Aug 2022 15:19:09 -0400
-Message-ID: <CAHC9VhRVFNy06XjVzd7BbPgMOxGYo4hV7bh5t73qFV_AQTrUPg@mail.gmail.com>
-Subject: [GIT PULL] Audit fixes for v6.0 (#1)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-audit@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <8e6c780e-28ee-1f37-c14c-f0ca5f590743@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+The 08/23/2022 07:11, Claudiu Beznea - M18063 wrote:
 
-A single audit patch to fix a potential double-free on a fsnotify
-error path.  Please merge for v6.0.
+Hi Claudiu,
 
-Thanks,
--Paul
+> > +&gpio {
+> > +	miim_a_pins: mdio-pins {
+> > +		/* MDC, MDIO */
+> > +		pins =  "GPIO_28", "GPIO_29";
+> > +		function = "miim_a";
+> > +	};
+> > +
+> > +	pps_out_pins: pps-out-pins {
+> 
+> Can you also document this one as well? I can do it while applying if you
+> provide the strings.
 
---
-The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+Yes, I will do that.
+I will send a new version because I have seen that there is also a small
+error in the commit message.
 
- Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
-
-are available in the Git repository at:
-
- git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-   tags/audit-pr-20220823
-
-for you to fetch changes up to ad982c3be4e60c7d39c03f782733503cbd88fd2a:
-
- audit: fix potential double free on error path from
-        fsnotify_add_inode_mark (2022-08-22 18:50:06 -0400)
-
-----------------------------------------------------------------
-audit/stable-6.0 PR 20220823
-
-----------------------------------------------------------------
-Gaosheng Cui (1):
-     audit: fix potential double free on error path from
-            fsnotify_add_inode_mark
-
-kernel/audit_fsnotify.c | 1 +
-1 file changed, 1 insertion(+)
+> 
+> > +		pins = "GPIO_38";
+> > +		function = "ptpsync_3";
+> > +	};
+> > +
+> > +	ptp_ext_pins: ptp-ext-pins {
+> 
+> Ditto
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> > +		pins = "GPIO_35";
+> > +		function = "ptpsync_0";
+> > +	};
+> > +
+> > +	udc_pins: ucd-pins {
+> > +		/* VBUS_DET B */
+> > +		pins = "GPIO_8";
+> > +		function = "usb_slave_b";
+> > +	};
+> > +};
+> > +
+> > +&mdio0 {
+> > +	pinctrl-0 = <&miim_a_pins>;
+> > +	pinctrl-names = "default";
+> > +	status = "okay";
+> > +
+> > +	ext_phy0: ethernet-phy@7 {
+> > +		reg = <7>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy1: ethernet-phy@8 {
+> > +		reg = <8>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy2: ethernet-phy@9 {
+> > +		reg = <9>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy3: ethernet-phy@10 {
+> > +		reg = <10>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy4: ethernet-phy@15 {
+> > +		reg = <15>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy5: ethernet-phy@16 {
+> > +		reg = <16>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy6: ethernet-phy@17 {
+> > +		reg = <17>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy7: ethernet-phy@18 {
+> > +		reg = <18>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +};
+> > +
+> > +&port0 {
+> > +	reg = <2>;
+> > +	phy-handle = <&ext_phy2>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 0 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port1 {
+> > +	reg = <3>;
+> > +	phy-handle = <&ext_phy3>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 1 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port2 {
+> > +	reg = <0>;
+> > +	phy-handle = <&ext_phy0>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 2 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port3 {
+> > +	reg = <1>;
+> > +	phy-handle = <&ext_phy1>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 3 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port4 {
+> > +	reg = <6>;
+> > +	phy-handle = <&ext_phy6>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 4 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port5 {
+> > +	reg = <7>;
+> > +	phy-handle = <&ext_phy7>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 5 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port6 {
+> > +	reg = <4>;
+> > +	phy-handle = <&ext_phy4>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 6 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port7 {
+> > +	reg = <5>;
+> > +	phy-handle = <&ext_phy5>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 7 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&serdes {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&switch {
+> > +	pinctrl-0 = <&pps_out_pins>, <&ptp_ext_pins>;
+> > +	pinctrl-names = "default";
+> > +	status = "okay";
+> > +};
+> > +
+> > +&udc {
+> > +	pinctrl-0 = <&udc_pins>;
+> > +	pinctrl-names = "default";
+> > +	atmel,vbus-gpio = <&gpio 8 GPIO_ACTIVE_HIGH>;
+> > +	status = "okay";
+> > +};
+> 
 
 -- 
-paul-moore.com
+/Horatiu

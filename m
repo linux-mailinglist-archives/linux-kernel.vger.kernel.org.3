@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A351559EC25
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB5159EC2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiHWTWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S231996AbiHWTX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiHWTVw (ORCPT
+        with ESMTP id S232438AbiHWTXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:21:52 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAED2B4425;
-        Tue, 23 Aug 2022 11:02:26 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-335624d1e26so400762497b3.4;
-        Tue, 23 Aug 2022 11:02:26 -0700 (PDT)
+        Tue, 23 Aug 2022 15:23:05 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D56C134CA2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:04:27 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u9so21779ejy.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=67k58vrmy+9FIi/LCbLSxCkdQUH+mazDNft/DJM09r8=;
+        b=jjdr3CxnZZ2nnl1lgZKU61f1YPEPiDYdZARx4aack1uaM/twqyItxiDZJsJCdOERZK
+         izstXZVd5o8tAKv3nDr0yD444ZR4EtUcZI4DPj/w7oX6XaoL2IOFnA3l9KfKhqiJlVHT
+         ejYXDUcWzd/NVn2IleTUxLG/ydfTY0q1/mOrU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=tPcD7EUnD6n/pd4xrlexLo0BVKkP6oVxoQ1jP9+QRfY=;
-        b=dq9+DvYQEAGYeySAObrB8Sm77zs6J7I6OSPa27SGS/yS4RAYbRed2bRDS/7d+jegoq
-         qe1H8p1ZNBguBnZvjfS+acDWhra3fZGYhwidlnImLGYfRoJZwk+f0De5rXoZGDY8Wx0i
-         a393wIDbJYrM/zbh4V+G0KiFUptIpbl3rXDP4wqyQOLb9ExSfVqHB4/9r1wv4RImmWSo
-         H/VshsFStlMxDMoZIQOIlbkb++zZ1aV8yB78GhKyKBCsAFqlYsYvHC6hDeVqZX4hw0Xp
-         nJU6PfbMTHx7TRU0LsQccUXw1SO6pcPn+Uu2WGOhmxgXctem/yeeOVg5KmHJRhU82H81
-         8tEA==
-X-Gm-Message-State: ACgBeo2NMY4ZDm/8g1T+j6IGYMLzx3E6CL9XfHXZhW+leZwWQ0EYTS7k
-        2lUNxtVUiVqHOF2CLNtErm7oN2fT0MerfNILOuI=
-X-Google-Smtp-Source: AA6agR5itvcF2Towl5AH63xFZtsUG0OaVdX2gTPo9+tM4SABhEni3hBBXSHi+BCwk1FN1PKjRJ+1exKhcsqOiQuDcYI=
-X-Received: by 2002:a25:ec0c:0:b0:690:d092:2d56 with SMTP id
- j12-20020a25ec0c000000b00690d0922d56mr23726786ybh.622.1661277745810; Tue, 23
- Aug 2022 11:02:25 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=67k58vrmy+9FIi/LCbLSxCkdQUH+mazDNft/DJM09r8=;
+        b=QU9Vh7SunmVrYwWRu9mxS51y6H3Df+j5BwMo4tHNJZ7d+F6l4ClwLaDpmKWpfSNQcB
+         LwRm8iAFmOrWwq4UlL1FKlOiQbo+2xjlJ/+k0MrQiz52vpMMrmEYdyAiNmabsGzmb4vn
+         dosJy7k/b4OiLliverGg5kE83jkyn9kOFtI4iGU/pvI64hRb8LUD6Z/Ho2zkRxt1ra/m
+         V+hPyHULhyoSiYaIcl2XYvaBRyMP+vHXHal7CViOEPX7VjOFcVs/dKkJMvR7g6l87lkP
+         Q7RO7RK74J6vhFDvpmBEEfPA1BADepLsw0OaGmDPc+KOD5iMA+cok78IgkIK3NkEcNjA
+         gYAQ==
+X-Gm-Message-State: ACgBeo3FhLrujnGOw6gHhEvACQnDnUqYuIpsOAiNPIY6noAcrCR/9iIA
+        C4g5lkKIm/jbq79y3D6qjHQhwA==
+X-Google-Smtp-Source: AA6agR6YmHWbickuoP9FVYkGjc1CJsOhfxrHnw0q3VOyzKBBCTM6aKgrpmN2gAw5QifkOdzir1T05Q==
+X-Received: by 2002:a17:906:f88f:b0:731:463d:4b15 with SMTP id lg15-20020a170906f88f00b00731463d4b15mr493141ejb.299.1661277866159;
+        Tue, 23 Aug 2022 11:04:26 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-57-252.cust.vodafonedsl.it. [188.217.57.252])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b0072f1d8e7301sm172237ejo.66.2022.08.23.11.04.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 11:04:25 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 20:04:23 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pci/saa7164: fix repeated words in comments
+Message-ID: <20220823180423.GC1277033@tom-ThinkPad-T14s-Gen-2i>
+References: <20220823145709.46069-1-wangjianli@cdjrlc.com>
 MIME-Version: 1.0
-References: <20220816120157.24455-1-lukasz.luba@arm.com>
-In-Reply-To: <20220816120157.24455-1-lukasz.luba@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Aug 2022 20:02:14 +0200
-Message-ID: <CAJZ5v0jQpEL7SMjj83fbm-Afz7D7Wj41g5AFa2-8zoeehnRppg@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: check only freq_table in __resolve_freq()
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823145709.46069-1-wangjianli@cdjrlc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 2:02 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> There is no need to check if the cpufreq driver implements callback
-> cpufreq_driver::target_index. The logic in the __resolve_freq uses
-> the frequency table available in the policy. It doesn't matter if the
-> driver provides 'target_index' or 'target' callback. It just has to
-> populate the 'policy->freq_table'.
->
-> Thus, check only frequency table during the frequency resolving call.
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
-> Changes:
-> v2:
-> - collected ACK from Viresh
-> - corrected patch description (Viresh)
->
->
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 7820c4e74289..69b3d61852ac 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -532,7 +532,7 @@ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
->
->         target_freq = clamp_val(target_freq, policy->min, policy->max);
->
-> -       if (!cpufreq_driver->target_index)
-> +       if (!policy->freq_table)
->                 return target_freq;
->
->         idx = cpufreq_frequency_table_target(policy, target_freq, relation);
-> --
+Hi,
 
-Applied as 6.0-rc material, thanks!
+On Tue, Aug 23, 2022 at 10:57:09PM +0800, wangjianli wrote:
+> Delete the redundant word 'the'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/media/pci/saa7164/saa7164-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+> index 7973ae42873a..d5f32e3ff544 100644
+> --- a/drivers/media/pci/saa7164/saa7164-core.c
+> +++ b/drivers/media/pci/saa7164/saa7164-core.c
+> @@ -626,7 +626,7 @@ static irqreturn_t saa7164_irq(int irq, void *dev_id)
+>  	portf = &dev->ports[SAA7164_PORT_VBI2];
+>  
+>  	/* Check that the hardware is accessible. If the status bytes are
+> -	 * 0xFF then the device is not accessible, the the IRQ belongs
+> +	 * 0xFF then the device is not accessible, the IRQ belongs
+>  	 * to another driver.
+>  	 * 4 x u32 interrupt registers.
+>  	 */
+> -- 
+> 2.36.1
+> 
+
+All your patches about "repeated words in comments" looks good but maybe
+is better to put all these fixes on a series? I think for maintainers
+it's easier to manage
+
+Regards,
+Tommaso
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

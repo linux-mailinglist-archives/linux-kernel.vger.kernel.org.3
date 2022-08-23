@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E49459DB2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DF959E1F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358041AbiHWLkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S243150AbiHWLfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241903AbiHWLet (ORCPT
+        with ESMTP id S1357317AbiHWLbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:34:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AE5C6E8B;
-        Tue, 23 Aug 2022 02:27:14 -0700 (PDT)
+        Tue, 23 Aug 2022 07:31:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFC58F956;
+        Tue, 23 Aug 2022 02:25:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 747FC61321;
-        Tue, 23 Aug 2022 09:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64437C433D6;
-        Tue, 23 Aug 2022 09:27:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C3D9612B5;
+        Tue, 23 Aug 2022 09:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 330BDC433C1;
+        Tue, 23 Aug 2022 09:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246832;
-        bh=06WiK+Q++lIczkn7ND7xiLRX3czC6B9CkexQnaYSWdA=;
+        s=korg; t=1661246734;
+        bh=YcBMqvhV+F0IBf4JpO7+0HnjAx/i8V8xOh8U7HuEtzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1RuCOaJqagkQ1QejaEk2YjpC7QwjavfshaZCAxzDVe3/YpJ/7RPiZxgC8/U3+isXn
-         uGEC+hMvvXoJAewvQHXaaYRdeAn19K0wtTjmQDkUkC7X3UoIhmmrdJ3eofC1hSG0y5
-         BbdEwcokHjfWFuuQZeJs0oGQFEL0o3wIZ+eZLRvQ=
+        b=1CWgHwdHRwdDUpKRqdvVNJCdotxws6wnR3cpZe6GjYbLaT2j4R826ZIUj31/7Dqtw
+         pEwvAJiWOIOyoZAMJHmODimk3P8f6k6ycbHn92zGBlHiEPoJ6Ta+270IAjSJyIQTHF
+         x/q5+s089P/OTUSPki8AJAcixn9l3mB4NznDNc8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 194/389] USB: serial: fix tty-port initialized comments
-Date:   Tue, 23 Aug 2022 10:24:32 +0200
-Message-Id: <20220823080123.729112581@linuxfoundation.org>
+Subject: [PATCH 5.4 195/389] platform/olpc: Fix uninitialized data in debugfs write
+Date:   Tue, 23 Aug 2022 10:24:33 +0200
+Message-Id: <20220823080123.780375921@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
 References: <20220823080115.331990024@linuxfoundation.org>
@@ -54,64 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 688ee1d1785c1359f9040f615dd8e6054962bce2 ]
+[ Upstream commit 40ec787e1adf302c11668d4cc69838f4d584187d ]
 
-Fix up the tty-port initialized comments which got truncated and
-obfuscated when replacing the old ASYNCB_INITIALIZED flag.
+The call to:
 
-Fixes: d41861ca19c9 ("tty: Replace ASYNC_INITIALIZED bit and update atomically")
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
+	size = simple_write_to_buffer(cmdbuf, sizeof(cmdbuf), ppos, buf, size);
+
+will succeed if at least one byte is written to the "cmdbuf" buffer.
+The "*ppos" value controls which byte is written.  Another problem is
+that this code does not check for errors so it's possible for the entire
+buffer to be uninitialized.
+
+Inintialize the struct to zero to prevent reading uninitialized stack
+data.
+
+Debugfs is normally only writable by root so the impact of this bug is
+very minimal.
+
+Fixes: 6cca83d498bd ("Platform: OLPC: move debugfs support from x86 EC driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YthIKn+TfZSZMEcM@kili
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/sierra.c     | 3 ++-
- drivers/usb/serial/usb-serial.c | 2 +-
- drivers/usb/serial/usb_wwan.c   | 3 ++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/platform/olpc/olpc-ec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
-index a43263a0edd8..891e52bc5002 100644
---- a/drivers/usb/serial/sierra.c
-+++ b/drivers/usb/serial/sierra.c
-@@ -757,7 +757,8 @@ static void sierra_close(struct usb_serial_port *port)
+diff --git a/drivers/platform/olpc/olpc-ec.c b/drivers/platform/olpc/olpc-ec.c
+index 2db7113383fd..89d9fca02fe9 100644
+--- a/drivers/platform/olpc/olpc-ec.c
++++ b/drivers/platform/olpc/olpc-ec.c
+@@ -265,7 +265,7 @@ static ssize_t ec_dbgfs_cmd_write(struct file *file, const char __user *buf,
+ 	int i, m;
+ 	unsigned char ec_cmd[EC_MAX_CMD_ARGS];
+ 	unsigned int ec_cmd_int[EC_MAX_CMD_ARGS];
+-	char cmdbuf[64];
++	char cmdbuf[64] = "";
+ 	int ec_cmd_bytes;
  
- 	/*
- 	 * Need to take susp_lock to make sure port is not already being
--	 * resumed, but no need to hold it due to initialized
-+	 * resumed, but no need to hold it due to the tty-port initialized
-+	 * flag.
- 	 */
- 	spin_lock_irq(&intfdata->susp_lock);
- 	if (--intfdata->open_ports == 0)
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index dc7a65b9ec98..2a2469b76cc5 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -254,7 +254,7 @@ static int serial_open(struct tty_struct *tty, struct file *filp)
-  *
-  * Shut down a USB serial port. Serialized against activate by the
-  * tport mutex and kept to matching open/close pairs
-- * of calls by the initialized flag.
-+ * of calls by the tty-port initialized flag.
-  *
-  * Not called if tty is console.
-  */
-diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
-index b2285d5a869d..628a75d1232a 100644
---- a/drivers/usb/serial/usb_wwan.c
-+++ b/drivers/usb/serial/usb_wwan.c
-@@ -435,7 +435,8 @@ void usb_wwan_close(struct usb_serial_port *port)
- 
- 	/*
- 	 * Need to take susp_lock to make sure port is not already being
--	 * resumed, but no need to hold it due to initialized
-+	 * resumed, but no need to hold it due to the tty-port initialized
-+	 * flag.
- 	 */
- 	spin_lock_irq(&intfdata->susp_lock);
- 	if (--intfdata->open_ports == 0)
+ 	mutex_lock(&ec_dbgfs_lock);
 -- 
 2.35.1
 

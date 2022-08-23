@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD1159E51D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCEE59E650
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241202AbiHWObi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 10:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S243865AbiHWPrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 11:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242150AbiHWObO (ORCPT
+        with ESMTP id S243751AbiHWPqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 10:31:14 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6D32AAD47;
-        Tue, 23 Aug 2022 04:46:55 -0700 (PDT)
-Received: from localhost.localdomain (unknown [125.160.110.187])
-        by gnuweeb.org (Postfix) with ESMTPSA id BB87A80A73;
-        Tue, 23 Aug 2022 11:46:12 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1661255175;
-        bh=pGX4zsckZwOQDvfSpRX0gdS/uZ+Tg3WOPnrOcP57hxA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uDy5c5XLGAw+LVwg1HTeXn9+XvfRJSQahgt84S30RZu+l+6QJzVPPP8BKSd97hlHc
-         Fe1ThsesfAIkQam0uvA2iXZh9k8ZQnv37pBKG6pdqYuRmCr37YRF86w0TLt30HqNJw
-         E8cXiViBT0VZ/+oX7+/+32MHkN7LHYcKL8vK4m7yWVpBZBgeMKvtfZV4dF2Pw12cjl
-         Q1NEhxnASE8DvjkeJSnZFjJS/cEQ3JBClIckUoek7WaMCkzn3wzEGHEbg8tgwJ56yC
-         kGPhQC2I362o2ACY84xu35iVfJmK2mvAy8Y3EXmDaNEwzK6/+NGB9AXIezbaaIZ8Jh
-         k9Z52qxnd5J4Q==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Dylan Yudaken <dylany@fb.com>,
-        Facebook Kernel Team <kernel-team@fb.com>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>
-Subject: [PATCH 2/2] io_uring: uapi: Add `extern "C"` in io_uring.h for liburing
-Date:   Tue, 23 Aug 2022 18:45:49 +0700
-Message-Id: <20220823114337.2858669-3-ammar.faizi@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220823114337.2858669-1-ammar.faizi@intel.com>
-References: <20220823114337.2858669-1-ammar.faizi@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 23 Aug 2022 11:46:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CE02AB3C2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:47:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F3E5A2249F;
+        Tue, 23 Aug 2022 11:46:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661255197; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9o5iSdVTRwCUBgwkGJPpuGhtLCLbWfRwPX9fK6q7WKU=;
+        b=oQtudiJdms3SmnDi5sa5DnPCU57m9UeixY3Xdmh1Mlfw9rwYTdx/Y8QmKWs3oKC2JvuWoT
+        v4zGdfNnP4hGJSv0n8/1oiWEN/6i74OzjzaMI0EMmx4XlhxIjoqET9pLqPB2WWfet49QZ2
+        J4iy10FMb+nwaopI+K2MZjLYls5WSHo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661255197;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9o5iSdVTRwCUBgwkGJPpuGhtLCLbWfRwPX9fK6q7WKU=;
+        b=e/lU9SYExuOuyeB4j/bQaW92vLIhHMDHPPo1CUTPDe64WM2ACKDI0pSDprkbVkVQB80aZ/
+        U4Ku1BAYIl5+jlCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA6D713AB7;
+        Tue, 23 Aug 2022 11:46:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ClWrLBy+BGOlMwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 23 Aug 2022 11:46:36 +0000
+Date:   Tue, 23 Aug 2022 13:46:36 +0200
+Message-ID: <87ilmjqj1f.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION 5.19.x] AMD HD-audio devices missing on 5.19
+In-Reply-To: <87h723sdde.wl-tiwai@suse.de>
+References: <874jy4cqok.wl-tiwai@suse.de>
+        <20220823010021.GA5967@nvidia.com>
+        <87h723sdde.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,45 +75,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Tue, 23 Aug 2022 08:06:05 +0200,
+Takashi Iwai wrote:
+> 
+> On Tue, 23 Aug 2022 03:00:21 +0200,
+> Jason Gunthorpe wrote:
+> > 
+> > On Mon, Aug 22, 2022 at 04:12:59PM +0200, Takashi Iwai wrote:
+> > > Hi,
+> > > 
+> > > we've received regression reports about the missing HD-audio devices
+> > > on AMD platforms, and this turned out to be caused by the commit
+> > > 512881eacfa72c2136b27b9934b7b27504a9efc2
+> > >     bus: platform,amba,fsl-mc,PCI: Add device DMA ownership management
+> > > 
+> > > The details are found in openSUSE bugzilla:
+> > >   https://bugzilla.suse.com/show_bug.cgi?id=1202492
+> > > 
+> > > The problem seems to be that HD-audio (both onboard analog and HDMI)
+> > > PCI devices are assigned to the same IOMMU group as AMD graphics PCI
+> > > device, and once after the AMDGPU is initialized beforehand, those
+> > > audio devices can't be probed since iommu_device_use_default_domain()
+> > > returns -EBUSY.
+> > 
+> > Can you describe exactly what drivers are involved in this? If it is
+> > the above commit then several devices are sharing an iommu group and
+> > one of them (well, the only one already attached, I suppose) has made
+> > the group unsharable.
+> > 
+> > With grep I don't see an obvious place where the AMDGPU driver would
+> > mess with the iommu configuration, so I have no guess.
+> 
+> I have also no concrete clue, either :)
+> At least, drivers/gpu/drm/amd/amdkfd/kfd_iommu.c calls
+> amd_iommu_init_device(), and this invokes iommu_attach_group(), which
+> may change group->domain.  But it was just my wild guess, and it might
+> be others, indeed.
+> 
+> > It would be good to have some debugging to confirm if it is
+> > group->owner (should be impossible, suggests memory corruption if it
+> > is) or group->domain != group->default_domain.
+> >
+> > Most likely it is the later, but I can't see how that could happen on
+> > a system like this.. There is no obvious manipulation in AMDGPU, for
+> > instance.
+> > 
+> > So debugging to find the backtrace for exactly when 
+> >  group->domain != group->default_domain
+> > Occurs for the troubled group would be necessary.
+> 
+> OK, will try to build a test kernel with some debug prints and ask the
+> reporters.  It may take some time.
 
-Make it easy for liburing to integrate uapi header with the kernel.
-Previously, when this header changes, the liburing side can't directly
-copy this header file due to some small differences. Sync them.
+It was tested now and confirmed that the call path is via AMDGPU, as
+expected:
+  amdgpu_pci_probe ->
+  amdgpu_driver_load_kms ->
+  amdgpu_device_init ->
+  amdgpu_amdkfd_device_init ->
+  kgd2kfd_device_init ->
+  kgd2kfd_resume_iommu ->
+  kfd_iommu_resume ->
+  amd_iommu_init_device ->
+  iommu_attach_group ->
+  __iommu_attach_group
 
-Link: https://lore.kernel.org/io-uring/f1feef16-6ea2-0653-238f-4aaee35060b6@kernel.dk
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: Dylan Yudaken <dylany@fb.com>
-Cc: Facebook Kernel Team <kernel-team@fb.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- include/uapi/linux/io_uring.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+At first AMDGPU driver is probed, and the iommu_attach_group() call
+above changes the assigned group->domain.  Afterwards, when HD-audio
+devices are probed, it fails because:
+- Both HD-audio PCI devices belong to the very same IOMMU group as the
+  AMD graphics PCI device
+- PCI core calls iommu_device_use_default_domain() and the check
+  fails there because group->domain != group->default_domain
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 1463cfecb56b..9e0b5c8d92ce 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -12,6 +12,10 @@
- #include <linux/types.h>
- #include <linux/time_types.h>
- 
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
- /*
-  * IO submission data structure (Submission Queue Entry)
-  */
-@@ -661,4 +665,8 @@ struct io_uring_recvmsg_out {
- 	__u32 flags;
- };
- 
-+#ifdef __cplusplus
-+}
-+#endif
-+
- #endif
--- 
-Ammar Faizi
-
+Takashi

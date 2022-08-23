@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7795B59D9B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E53059D9A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348700AbiHWJ7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
+        id S239885AbiHWJ7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351787AbiHWJzz (ORCPT
+        with ESMTP id S1347534AbiHWJzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:55:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2E54C603;
-        Tue, 23 Aug 2022 01:46:58 -0700 (PDT)
+        Tue, 23 Aug 2022 05:55:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506739FAB7;
+        Tue, 23 Aug 2022 01:46:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 501D3B81C39;
-        Tue, 23 Aug 2022 08:46:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809F4C433C1;
-        Tue, 23 Aug 2022 08:46:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 06FC5CE1B44;
+        Tue, 23 Aug 2022 08:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4E9C433D6;
+        Tue, 23 Aug 2022 08:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244399;
-        bh=zB3vcfByeeRaNK19bHJNOfxahrTKbnldYjcp2+CARZI=;
+        s=korg; t=1661244405;
+        bh=idwXDovuJudcRH2ebDa2NMriVeD5uSVEG3fLcuZQ+s0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uqpIXsMFSsOkOYM7h55uHmyW7ReiUEoalITM7pzU8zbqAPDGUcc4IjhtXj/bngVFf
-         Pa6oLdz9Dtj4+sVw431kAPQcNZjZ3fNNHAvyrjrJwvnzCFkTuuAb9v8nSwX5Gdu9Ka
-         cyc3tm+Iz5oiyLoadeHU4bMN+K3KUnMuGgICiQ4s=
+        b=tz0e6PbaZ4NyO34N0Ocuiwzql/cb9L0GJFqLUPkI+yndZGlRofULCX13eOln5JYn4
+         u7zbrejoZmk7wozAzHlyd6jFP9V2S/KXZTDiWNxFmqyXaVj/p6wN/oSSJevR2FpwEa
+         vcrd+3cG0HyEZi1bRE6WSxIsz5FKq1s7/XlJymX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michal Simek <michal.simek@amd.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 088/244] spi: dt-bindings: zynqmp-qspi: add missing required
-Date:   Tue, 23 Aug 2022 10:24:07 +0200
-Message-Id: <20220823080101.965367455@linuxfoundation.org>
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>
+Subject: [PATCH 5.15 089/244] ceph: use correct index when encoding client supported features
+Date:   Tue, 23 Aug 2022 10:24:08 +0200
+Message-Id: <20220823080101.995858671@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -56,42 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Luís Henriques <lhenriques@suse.de>
 
-commit acfc34f008c3e66bbcb7b9162c80c8327b6e800f upstream.
+commit fea013e020e6ecc7be75bea0d61697b7e916b44d upstream.
 
-During the conversion the bindings lost list of required properties.
+Feature bits have to be encoded into the correct locations.  This hasn't
+been an issue so far because the only hole in the feature bits was in bit
+10 (CEPHFS_FEATURE_RECLAIM_CLIENT), which is located in the 2nd byte.  When
+adding more bits that go beyond the this 2nd byte, the bug will show up.
 
-Fixes: c58db2abb19f ("spi: convert Xilinx Zynq UltraScale+ MPSoC GQSPI bindings to YAML")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Michal Simek <michal.simek@amd.com>
-Link: https://lore.kernel.org/r/20220704130618.199231-2-krzysztof.kozlowski@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+[xiubli: remove incorrect comment for CEPHFS_FEATURES_CLIENT_SUPPORTED]
+
+Fixes: 9ba1e224538a ("ceph: allocate the correct amount of extra bytes for the session features")
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/ceph/mds_client.c |    7 +++++--
+ fs/ceph/mds_client.h |    6 ------
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-index ea72c8001256..fafde1c06be6 100644
---- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-@@ -30,6 +30,13 @@ properties:
-   clocks:
-     maxItems: 2
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -1196,14 +1196,17 @@ static int encode_supported_features(voi
+ 	if (count > 0) {
+ 		size_t i;
+ 		size_t size = FEATURE_BYTES(count);
++		unsigned long bit;
  
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clock-names
-+  - clocks
-+
- unevaluatedProperties: false
+ 		if (WARN_ON_ONCE(*p + 4 + size > end))
+ 			return -ERANGE;
  
- examples:
--- 
-2.37.2
-
+ 		ceph_encode_32(p, size);
+ 		memset(*p, 0, size);
+-		for (i = 0; i < count; i++)
+-			((unsigned char*)(*p))[i / 8] |= BIT(feature_bits[i] % 8);
++		for (i = 0; i < count; i++) {
++			bit = feature_bits[i];
++			((unsigned char *)(*p))[bit / 8] |= BIT(bit % 8);
++		}
+ 		*p += size;
+ 	} else {
+ 		if (WARN_ON_ONCE(*p + 4 > end))
+--- a/fs/ceph/mds_client.h
++++ b/fs/ceph/mds_client.h
+@@ -33,10 +33,6 @@ enum ceph_feature_type {
+ 	CEPHFS_FEATURE_MAX = CEPHFS_FEATURE_METRIC_COLLECT,
+ };
+ 
+-/*
+- * This will always have the highest feature bit value
+- * as the last element of the array.
+- */
+ #define CEPHFS_FEATURES_CLIENT_SUPPORTED {	\
+ 	0, 1, 2, 3, 4, 5, 6, 7,			\
+ 	CEPHFS_FEATURE_MIMIC,			\
+@@ -45,8 +41,6 @@ enum ceph_feature_type {
+ 	CEPHFS_FEATURE_MULTI_RECONNECT,		\
+ 	CEPHFS_FEATURE_DELEG_INO,		\
+ 	CEPHFS_FEATURE_METRIC_COLLECT,		\
+-						\
+-	CEPHFS_FEATURE_MAX,			\
+ }
+ #define CEPHFS_FEATURES_CLIENT_REQUIRED {}
+ 
 
 

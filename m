@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3A159D78E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3038359D7AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351514AbiHWJhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
+        id S1350916AbiHWJdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351904AbiHWJgH (ORCPT
+        with ESMTP id S1351163AbiHWJbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:36:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B153A98582;
-        Tue, 23 Aug 2022 01:40:18 -0700 (PDT)
+        Tue, 23 Aug 2022 05:31:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63BCBCBF;
+        Tue, 23 Aug 2022 01:38:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3F6961540;
-        Tue, 23 Aug 2022 08:38:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2515C433C1;
-        Tue, 23 Aug 2022 08:38:55 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B5C20CE1B4A;
+        Tue, 23 Aug 2022 08:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB040C43470;
+        Tue, 23 Aug 2022 08:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243936;
-        bh=gAdVwi5b46D9uvxjWOaMgLJiK7BOtIW4GyeExVWcIaw=;
+        s=korg; t=1661243841;
+        bh=yXd7a1cUrnNABJJH7d5iVOcQbSOFbG5yvXQbf4pNum4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1jTi6qxBfb/OKD9rWDRX/5/IIJ9xt6CVY0zeW4zh+oRYrlGiw9MdynqsHmdhyUO/Y
-         7FFxL7uFfcboQbDLDDr94fgB2HoAsSHiy9iMpuh1Icir8P27BQKPJE13DwRVrtGkj5
-         98GuEV/1sVkgZZW+BfWyWILpr7W9/hLvlO6JbhVM=
+        b=MwfrYdlcxO4rG4d7sWQ/6csI7nBDSuXN60EYB7bCUwpb//DIeX+54MfKzj4B5IFtG
+         x2sF+OmIXlM12WXf3VMFExHs7J/33zbtfzGHn+Rc7tl6jW879rPulQhRTdoO//0jQo
+         1mH4aDG+u9BG0QtTAEfEBsr0ETUs1d2SgyyEV1gY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.15 011/244] mmc: pxamci: Fix another error handling path in pxamci_probe()
-Date:   Tue, 23 Aug 2022 10:22:50 +0200
-Message-Id: <20220823080059.464051090@linuxfoundation.org>
+        stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 4.14 011/229] ACPI: video: Shortening quirk list by identifying Clevo by board_name only
+Date:   Tue, 23 Aug 2022 10:22:52 +0200
+Message-Id: <20220823080053.774935680@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Werner Sembach <wse@tuxedocomputers.com>
 
-commit b886f54c300d31c109d2e4336b22922b64e7ba7d upstream.
+commit f0341e67b3782603737f7788e71bd3530012a4f4 upstream.
 
-The commit in Fixes: has introduced an new error handling without branching
-to the existing error handling path.
+Taking a recent change in the i8042 quirklist to this one: Clevo
+board_names are somewhat unique, and if not: The generic Board_-/Sys_Vendor
+string "Notebook" doesn't help much anyway. So identifying the devices just
+by the board_name helps keeping the list significantly shorter and might
+even hit more devices requiring the fix.
 
-Update it now and release some resources if pxamci_init_ocr() fails.
-
-Fixes: 61951fd6cb49 ("mmc: pxamci: let mmc core handle regulators")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/07a2dcebf8ede69b484103de8f9df043f158cffd.1658862932.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+Fixes: c844d22fe0c0 ("ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU")
+Cc: All applicable <stable@vger.kernel.org>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/pxamci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/video_detect.c |   34 ----------------------------------
+ 1 file changed, 34 deletions(-)
 
---- a/drivers/mmc/host/pxamci.c
-+++ b/drivers/mmc/host/pxamci.c
-@@ -672,7 +672,7 @@ static int pxamci_probe(struct platform_
- 
- 	ret = pxamci_init_ocr(host);
- 	if (ret < 0)
--		return ret;
-+		goto out;
- 
- 	mmc->caps = 0;
- 	host->cmdat = 0;
+--- a/drivers/acpi/video_detect.c
++++ b/drivers/acpi/video_detect.c
+@@ -371,23 +371,6 @@ static const struct dmi_system_id video_
+ 	.callback = video_detect_force_native,
+ 	.ident = "Clevo NL5xRU",
+ 	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xRU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xRU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
+ 		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+ 		},
+ 	},
+@@ -411,23 +394,6 @@ static const struct dmi_system_id video_
+ 	.callback = video_detect_force_native,
+ 	.ident = "Clevo NL5xNU",
+ 	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xNU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xNU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
+ 		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
+ 		},
+ 	},
 
 

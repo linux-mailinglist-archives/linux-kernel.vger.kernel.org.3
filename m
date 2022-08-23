@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2619359DE63
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A3259DC91
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243912AbiHWKHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S1348362AbiHWLdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352410AbiHWKBw (ORCPT
+        with ESMTP id S1358242AbiHWL1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:01:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BE77C197;
-        Tue, 23 Aug 2022 01:49:40 -0700 (PDT)
+        Tue, 23 Aug 2022 07:27:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53C9C5799;
+        Tue, 23 Aug 2022 02:25:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42A45B8105C;
-        Tue, 23 Aug 2022 08:49:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9563EC433C1;
-        Tue, 23 Aug 2022 08:49:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7F6F61220;
+        Tue, 23 Aug 2022 09:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E815DC433C1;
+        Tue, 23 Aug 2022 09:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244578;
-        bh=/8UyoVEL/6prq7euy3iXui/QYxwtGVXrnVvgQbV3Lk0=;
+        s=korg; t=1661246719;
+        bh=ZNZaOr0SVDgl3V8pirBghodlvPKv/+4PSMralCoFxrA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RxB/875abvlubRq1mqJHzHupD3Zl97qrD4fH61ZpqEp5JmKKDCzlkzh4jo2dUVm7Q
-         ZHoesvKl2Cixyt8eX7dlcVAbX70MlFZG64ESecnCHE7x1BzQ9xcu7G/U95reeKhcGW
-         n2DMmjTn6dDvkew8iY2ZnudDFBqQTSbThOWVKS6U=
+        b=KxFFVocUT+GKzaJrLSZ0fmdiKGhtmRhlXIq3FMu/emNca6YSEF58xwzExs3fafBIg
+         6/3+27DXKO6UBYQASF7L1kLNa+Z2yr0kVBAcZDZjkkU2GoMEZE8r1y1gr1nLOQJBUo
+         F/4e0g5PgFuSSnZPT3FI4OPX242j9Tl34AKGA0Wk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.15 086/244] dt-bindings: clock: qcom,gcc-msm8996: add more GCC clock sources
+        stable@vger.kernel.org, Zhang Wensheng <zhangwensheng5@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 167/389] driver core: fix potential deadlock in __driver_attach
 Date:   Tue, 23 Aug 2022 10:24:05 +0200
-Message-Id: <20220823080101.904782940@linuxfoundation.org>
+Message-Id: <20220823080122.604356055@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +54,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Zhang Wensheng <zhangwensheng5@huawei.com>
 
-commit 2b4e75a7a7c8d3531a40ebb103b92f88ff693f79 upstream.
+[ Upstream commit 70fe758352cafdee72a7b13bf9db065f9613ced8 ]
 
-Add additional GCC clock sources. This includes PCIe and USB PIPE and
-UFS symbol clocks.
+In __driver_attach function, There are also AA deadlock problem,
+like the commit b232b02bf3c2 ("driver core: fix deadlock in
+__device_attach").
 
-Fixes: 2a8aa18c1131 ("dt-bindings: clk: qcom: Fix self-validation, split, and clean cruft")
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220620071936.1558906-2-dmitry.baryshkov@linaro.org
+stack like commit b232b02bf3c2 ("driver core: fix deadlock in
+__device_attach").
+list below:
+    In __driver_attach function, The lock holding logic is as follows:
+    ...
+    __driver_attach
+    if (driver_allows_async_probing(drv))
+      device_lock(dev)      // get lock dev
+        async_schedule_dev(__driver_attach_async_helper, dev); // func
+          async_schedule_node
+            async_schedule_node_domain(func)
+              entry = kzalloc(sizeof(struct async_entry), GFP_ATOMIC);
+              /* when fail or work limit, sync to execute func, but
+                 __driver_attach_async_helper will get lock dev as
+                 will, which will lead to A-A deadlock.  */
+              if (!entry || atomic_read(&entry_count) > MAX_WORK) {
+                func;
+              else
+                queue_work_node(node, system_unbound_wq, &entry->work)
+      device_unlock(dev)
+
+    As above show, when it is allowed to do async probes, because of
+    out of memory or work limit, async work is not be allowed, to do
+    sync execute instead. it will lead to A-A deadlock because of
+    __driver_attach_async_helper getting lock dev.
+
+Reproduce:
+and it can be reproduce by make the condition
+(if (!entry || atomic_read(&entry_count) > MAX_WORK)) untenable, like
+below:
+
+[  370.785650] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
+this message.
+[  370.787154] task:swapper/0       state:D stack:    0 pid:    1 ppid:
+0 flags:0x00004000
+[  370.788865] Call Trace:
+[  370.789374]  <TASK>
+[  370.789841]  __schedule+0x482/0x1050
+[  370.790613]  schedule+0x92/0x1a0
+[  370.791290]  schedule_preempt_disabled+0x2c/0x50
+[  370.792256]  __mutex_lock.isra.0+0x757/0xec0
+[  370.793158]  __mutex_lock_slowpath+0x1f/0x30
+[  370.794079]  mutex_lock+0x50/0x60
+[  370.794795]  __device_driver_lock+0x2f/0x70
+[  370.795677]  ? driver_probe_device+0xd0/0xd0
+[  370.796576]  __driver_attach_async_helper+0x1d/0xd0
+[  370.797318]  ? driver_probe_device+0xd0/0xd0
+[  370.797957]  async_schedule_node_domain+0xa5/0xc0
+[  370.798652]  async_schedule_node+0x19/0x30
+[  370.799243]  __driver_attach+0x246/0x290
+[  370.799828]  ? driver_allows_async_probing+0xa0/0xa0
+[  370.800548]  bus_for_each_dev+0x9d/0x130
+[  370.801132]  driver_attach+0x22/0x30
+[  370.801666]  bus_add_driver+0x290/0x340
+[  370.802246]  driver_register+0x88/0x140
+[  370.802817]  ? virtio_scsi_init+0x116/0x116
+[  370.803425]  scsi_register_driver+0x1a/0x30
+[  370.804057]  init_sd+0x184/0x226
+[  370.804533]  do_one_initcall+0x71/0x3a0
+[  370.805107]  kernel_init_freeable+0x39a/0x43a
+[  370.805759]  ? rest_init+0x150/0x150
+[  370.806283]  kernel_init+0x26/0x230
+[  370.806799]  ret_from_fork+0x1f/0x30
+
+To fix the deadlock, move the async_schedule_dev outside device_lock,
+as we can see, in async_schedule_node_domain, the parameter of
+queue_work_node is system_unbound_wq, so it can accept concurrent
+operations. which will also not change the code logic, and will
+not lead to deadlock.
+
+Fixes: ef0ff68351be ("driver core: Probe devices asynchronously instead of the driver")
+Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
+Link: https://lore.kernel.org/r/20220622074327.497102-1-zhangwensheng5@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml |   16 ++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/base/dd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml
-@@ -22,16 +22,32 @@ properties:
-     const: qcom,gcc-msm8996
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 6f85280fef8d..4e45c87ed177 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -1037,6 +1037,7 @@ static void __driver_attach_async_helper(void *_dev, async_cookie_t cookie)
+ static int __driver_attach(struct device *dev, void *data)
+ {
+ 	struct device_driver *drv = data;
++	bool async = false;
+ 	int ret;
  
-   clocks:
-+    minItems: 3
-     items:
-       - description: XO source
-       - description: Second XO source
-       - description: Sleep clock source
-+      - description: PCIe 0 PIPE clock (optional)
-+      - description: PCIe 1 PIPE clock (optional)
-+      - description: PCIe 2 PIPE clock (optional)
-+      - description: USB3 PIPE clock (optional)
-+      - description: UFS RX symbol 0 clock (optional)
-+      - description: UFS RX symbol 1 clock (optional)
-+      - description: UFS TX symbol 0 clock (optional)
+ 	/*
+@@ -1074,9 +1075,11 @@ static int __driver_attach(struct device *dev, void *data)
+ 		if (!dev->driver) {
+ 			get_device(dev);
+ 			dev->p->async_driver = drv;
+-			async_schedule_dev(__driver_attach_async_helper, dev);
++			async = true;
+ 		}
+ 		device_unlock(dev);
++		if (async)
++			async_schedule_dev(__driver_attach_async_helper, dev);
+ 		return 0;
+ 	}
  
-   clock-names:
-+    minItems: 3
-     items:
-       - const: cxo
-       - const: cxo2
-       - const: sleep_clk
-+      - const: pcie_0_pipe_clk_src
-+      - const: pcie_1_pipe_clk_src
-+      - const: pcie_2_pipe_clk_src
-+      - const: usb3_phy_pipe_clk_src
-+      - const: ufs_rx_symbol_0_clk_src
-+      - const: ufs_rx_symbol_1_clk_src
-+      - const: ufs_tx_symbol_0_clk_src
- 
-   '#clock-cells':
-     const: 1
+-- 
+2.35.1
+
 
 

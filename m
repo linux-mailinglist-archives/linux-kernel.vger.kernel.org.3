@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5687259D54F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8C059D7F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243876AbiHWIaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S1350490AbiHWJaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344319AbiHWI0w (ORCPT
+        with ESMTP id S1350022AbiHWJ1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:26:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB64D6C770;
-        Tue, 23 Aug 2022 01:14:43 -0700 (PDT)
+        Tue, 23 Aug 2022 05:27:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D394491D16;
+        Tue, 23 Aug 2022 01:37:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B6F0B81C20;
-        Tue, 23 Aug 2022 08:14:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC8EC433D6;
-        Tue, 23 Aug 2022 08:14:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9C361446;
+        Tue, 23 Aug 2022 08:35:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C8EC433C1;
+        Tue, 23 Aug 2022 08:35:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242474;
-        bh=29gV5ywJ765JIYijCbxFwS+rCez41jCO8sOYnCHIWMc=;
+        s=korg; t=1661243730;
+        bh=14BEbwuS/9GtFKmOQR6ugEwfl0StUNmna3JofOg1vEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LfNYlUZj6hskW+Kt0OeEuEzLDQQYNyCe/MtsKOumv2Xad8TTp7Fdo/X2iAAZvurb8
-         ELeihNlhz5Q1wypMXWcnSv36E0xysqtKGGv2Bp9xQETTszBRdvxytZWVyu3UwjdOZS
-         piXeH4bOpr1A3ZehU2FpAJs87i9Ujd88tPxguf1g=
+        b=GObWW9G1aLMD9JW9XcGKZMpUQQco8IiIMg3gqksQ4n0F4pIDmedvbTm7tdnbQz+Ej
+         3hO62cSuBF06XI1hot6bKOoHxBYIzwnCgz4IEkFtaBsOADO1vCyrkgqHKbfncsZgNf
+         ovw+qj4nttJ1lYj7tK4bToC8ec+njFLEPkhqhjEs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 077/101] atm: idt77252: fix use-after-free bugs caused by tst_timer
+        stable@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 329/365] ASoC: SOF: Intel: hda-ipc: Do not process IPC reply before firmware boot
 Date:   Tue, 23 Aug 2022 10:03:50 +0200
-Message-Id: <20220823080037.518434534@linuxfoundation.org>
+Message-Id: <20220823080131.971138228@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +59,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-commit 3f4093e2bf4673f218c0bf17d8362337c400e77b upstream.
+[ Upstream commit 499cc881b09c8283ab5e75b0d6d21cb427722161 ]
 
-There are use-after-free bugs caused by tst_timer. The root cause
-is that there are no functions to stop tst_timer in idt77252_exit().
-One of the possible race conditions is shown below:
+It is not yet clear, but it is possible to create a firmware so broken
+that it will send a reply message before a FW_READY message (it is not
+yet clear if FW_READY will arrive later).
+Since the reply_data is allocated only after the FW_READY message, this
+will lead to a NULL pointer dereference if not filtered out.
 
-    (thread 1)          |        (thread 2)
-                        |  idt77252_init_one
-                        |    init_card
-                        |      fill_tst
-                        |        mod_timer(&card->tst_timer, ...)
-idt77252_exit           |  (wait a time)
-                        |  tst_timer
-                        |
-                        |    ...
-  kfree(card) // FREE   |
-                        |    card->soft_tst[e] // USE
+The issue was reported with IPC4 firmware but the same condition is present
+for IPC3.
 
-The idt77252_dev is deallocated in idt77252_exit() and used in
-timer handler.
-
-This patch adds del_timer_sync() in idt77252_exit() in order that
-the timer handler could be stopped before the idt77252_dev is
-deallocated.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220805070008.18007-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220712122357.31282-3-peter.ujfalusi@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/atm/idt77252.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/sof/intel/hda-ipc.c | 39 ++++++++++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 14 deletions(-)
 
---- a/drivers/atm/idt77252.c
-+++ b/drivers/atm/idt77252.c
-@@ -3777,6 +3777,7 @@ static void __exit idt77252_exit(void)
- 		card = idt77252_chain;
- 		dev = card->atmdev;
- 		idt77252_chain = card->next;
-+		del_timer_sync(&card->tst_timer);
+diff --git a/sound/soc/sof/intel/hda-ipc.c b/sound/soc/sof/intel/hda-ipc.c
+index f08011249955..65e688f749ea 100644
+--- a/sound/soc/sof/intel/hda-ipc.c
++++ b/sound/soc/sof/intel/hda-ipc.c
+@@ -148,17 +148,23 @@ irqreturn_t hda_dsp_ipc4_irq_thread(int irq, void *context)
  
- 		if (dev->phy->stop)
- 			dev->phy->stop(dev);
+ 		if (primary & SOF_IPC4_MSG_DIR_MASK) {
+ 			/* Reply received */
+-			struct sof_ipc4_msg *data = sdev->ipc->msg.reply_data;
++			if (likely(sdev->fw_state == SOF_FW_BOOT_COMPLETE)) {
++				struct sof_ipc4_msg *data = sdev->ipc->msg.reply_data;
+ 
+-			data->primary = primary;
+-			data->extension = extension;
++				data->primary = primary;
++				data->extension = extension;
+ 
+-			spin_lock_irq(&sdev->ipc_lock);
++				spin_lock_irq(&sdev->ipc_lock);
+ 
+-			snd_sof_ipc_get_reply(sdev);
+-			snd_sof_ipc_reply(sdev, data->primary);
++				snd_sof_ipc_get_reply(sdev);
++				snd_sof_ipc_reply(sdev, data->primary);
+ 
+-			spin_unlock_irq(&sdev->ipc_lock);
++				spin_unlock_irq(&sdev->ipc_lock);
++			} else {
++				dev_dbg_ratelimited(sdev->dev,
++						    "IPC reply before FW_READY: %#x|%#x\n",
++						    primary, extension);
++			}
+ 		} else {
+ 			/* Notification received */
+ 
+@@ -225,16 +231,21 @@ irqreturn_t hda_dsp_ipc_irq_thread(int irq, void *context)
+ 		 * place, the message might not yet be marked as expecting a
+ 		 * reply.
+ 		 */
+-		spin_lock_irq(&sdev->ipc_lock);
++		if (likely(sdev->fw_state == SOF_FW_BOOT_COMPLETE)) {
++			spin_lock_irq(&sdev->ipc_lock);
+ 
+-		/* handle immediate reply from DSP core */
+-		hda_dsp_ipc_get_reply(sdev);
+-		snd_sof_ipc_reply(sdev, msg);
++			/* handle immediate reply from DSP core */
++			hda_dsp_ipc_get_reply(sdev);
++			snd_sof_ipc_reply(sdev, msg);
+ 
+-		/* set the done bit */
+-		hda_dsp_ipc_dsp_done(sdev);
++			/* set the done bit */
++			hda_dsp_ipc_dsp_done(sdev);
+ 
+-		spin_unlock_irq(&sdev->ipc_lock);
++			spin_unlock_irq(&sdev->ipc_lock);
++		} else {
++			dev_dbg_ratelimited(sdev->dev, "IPC reply before FW_READY: %#x\n",
++					    msg);
++		}
+ 
+ 		ipc_irq = true;
+ 	}
+-- 
+2.35.1
+
 
 

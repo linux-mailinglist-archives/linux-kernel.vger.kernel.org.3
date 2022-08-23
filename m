@@ -2,115 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6A959CF07
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259AB59CF1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239826AbiHWDC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 23:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S239892AbiHWDGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 23:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239553AbiHWDB4 (ORCPT
+        with ESMTP id S239861AbiHWDGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 23:01:56 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2042.outbound.protection.outlook.com [40.107.21.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F4F5C96C;
-        Mon, 22 Aug 2022 20:01:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FTktVvVq3FpxZso7vzyoyM0NkdNuvUkpMxjdGuSe57/13kB2Ea82DlLgB7lm5hrzsmgyl9jm+mZI1BzhptH+9REN0SfcOsm2i2WQck160KkreAtT2REUVQ3Wvc2yQ/1QGbaZ+wmgheFJRotG3JJ3VjPT1a0TmS5sU01cmlZgExDJFfSPDqrFX4byHE/sljHBBL+j3QOyHKqXBb3cxfuBK2yk6VTFG6o7TCIjMmFpA5Xondahfd8tqOeTe1XwsyzDJxJKW4oAvyjpYhAv0yr+Q1yRl9cbJfnzvR3PVqdPmh6wTtlVNYuOMnTjJ3FLLMFnw/32BajkWGyUCyLaoWN6UA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u0VjgKPKfTWwpo07WBTL1LvzeeJqa1eCpQgZ13h3sTk=;
- b=hX9sefA9mVa6T9frU+CH0M2+K8gCIhw3NULaO+NLWIKWPH989r7uMbAYSEFkow4WVEqdiQ2IZImcTXlN7vkSDQ+okfhIcCdP22n1nzzDmgvsCACuCEotuEnrv28iCRZ4MoVumaisb9/b+UrQDYhcMyxAWMTHHfPKI2HlB95C2jPkDHO6mJFNcvJNye9YgyAeMetG4yTymLwtUpyh2iNMBEYzkIXBhUlM6IVYT6a+Yed1EwK2O/3pdj9WGUqaSg4/FOJpCYndWm/1fUCLhOJd+O85/ASJyZQ/JsODm8/m3RStj/R+eToOk8FyeQRbH0bfjcd5E1eLHPQUt3gUY/jAnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u0VjgKPKfTWwpo07WBTL1LvzeeJqa1eCpQgZ13h3sTk=;
- b=ZdURIi+vumQv+s2RXELRn3gQkn3z4y0mN5AWss7wHXarWtWwNCDe4sxAehGg9XEYF/OReoRwjU9TDPOOI8TR4xb26uCy2+Yf3tjfOLFVjCdviitg0yc8STAwwDnGW014TFp4a07CxiISUiOkDeH4okJIKfM2CGLpjJx4iStfrPQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB8824.eurprd04.prod.outlook.com (2603:10a6:10:2e3::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 23 Aug
- 2022 03:01:18 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5546.023; Tue, 23 Aug 2022
- 03:01:18 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     wsa@kernel.org, aisheng.dong@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        xiaoning.wang@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V3 7/7] i2c: imx-lpi2c: use bulk clk API
-Date:   Tue, 23 Aug 2022 11:02:15 +0800
-Message-Id: <20220823030215.870414-8-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220823030215.870414-1-peng.fan@oss.nxp.com>
-References: <20220823030215.870414-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGXP274CA0024.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::36)
- To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+        Mon, 22 Aug 2022 23:06:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7F42CC93;
+        Mon, 22 Aug 2022 20:03:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E8558CE188A;
+        Tue, 23 Aug 2022 03:03:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE77C433D6;
+        Tue, 23 Aug 2022 03:03:32 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2] LoongArch: Use TLB for ioremap()
+Date:   Tue, 23 Aug 2022 11:03:19 +0800
+Message-Id: <20220823030319.3872957-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aa0e6e7b-36f4-4e8f-34d7-08da84b3c015
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8824:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jAosWXJivaVhcQP3XUmGMibsHj+wBqtX97lL2SJuKCr05dgfDEnioaItqKtcnw/rtjX3jwaA3tNZGGJa1EfsILS4vALyx3fw+bydq7ElwF5tBxw3vbD8C3oVuhPImL2TzL4+cZWj+SA7BRZR49a/3qsK7JAG+x14zR1weDQ37DXtxM5brPuUzJbiXE0dAV4ArmWGwkikdcz6ZMb89UKlVNu9BrCcVxtrLrGjYLwBBDroZfz6OZvBMC8R/xR3MOGxl5w+QxkyKObEN9fyjXcyZ4HBXfHzGFEjFd6XVPBEkkzXcQm0pTrP3CYDPkPB8uKcr8NJflCUuVqSSUt4Kxyrl6QiMz/8zbNJ/fWRfJHlJB7cuSOAx3Fyw2ljTq+sb+eVEa4h5kC4uio2uMvdzLephLCFh1jxKUmBx7CCcjL98nDrGCzfgxK2F3ac6yXFgat8sOJKpHvZ9eDUsTfrIsD+W+2lJjIPJr/YLMVuZZlr6D3VucmqDI7j3/ZjVWXXzdJRk5LyZYIJkgo+NJDiMaqR4tVW5PPlh5N1aevGTSThiaosztL+TU28K0FgpIUlVrRjoYKmCWjd7+ow+UHIkpXhDlSqCOTMPKmeU8g6ZQTOgsBnepCq/1LgKfkzCPfkE8BDVhjXjhGZ+8BJMG1QmNMEO24zz3RW+u6J2217HLh97OP39Laud5vJx6VvuxDA6+Vz/8VSR0EIZcT9Yd21kv/n0XIYx71yaVdVMjpx3Pf+KN+p6CDT/XFuqvvYqLGFhGrZDHy2QjJSeiYNz9Lkk17Umw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(83380400001)(38350700002)(8676002)(38100700002)(5660300002)(4326008)(66556008)(66476007)(66946007)(186003)(52116002)(8936002)(6486002)(478600001)(7416002)(316002)(26005)(6512007)(6666004)(41300700001)(1076003)(2616005)(6506007)(86362001)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q9XRFm3l6i0E/I+QOLnQSTEHNYgRI8QWRTOWq0VVOW/7q+LlAggjQ3ynjDgo?=
- =?us-ascii?Q?hXKH/Dho8sOlASKn/0wkqDjkaYQ4em7NEbz7zEVTAimBwhzI20pfHVeyUtgj?=
- =?us-ascii?Q?KNAv/9yTI1FuVDZ0ZSN/b2+WNuEdryufeU8yn05k5BIvoU6yjDHZQerPWkK7?=
- =?us-ascii?Q?/q4Bl4sXpDkzyBRZ3k4W9lJ09qLgVf3jxpXIAT7uriJ8QcO57KoQLQ9bv74o?=
- =?us-ascii?Q?677nYzcb+r6IXaGBPXmOksKxz4w8ttxRs8z2OAz0u7I2Bxdy8LwfGjA63ngw?=
- =?us-ascii?Q?r3lIzLLW3yoJ0z/EO0DXyi6rNjvG0eiXuL8/pLDWEozYyl9HX42ADfyPGhTI?=
- =?us-ascii?Q?nTxefvS+mb75e49XssSCXPJP1sjtaC4Ei4Sn0h2QupUz2/YWjKbLBeG9KS+C?=
- =?us-ascii?Q?QdSB5cm9/27Cwrn981hAo6QuPLAxz9+JKOshwCvAdzdTEKGsdYHfguLgssEg?=
- =?us-ascii?Q?wjOJziAnubZiK2ja+euisiy3fid4j0pT5pids17HRv8FYQ7mjCFexmivYkT7?=
- =?us-ascii?Q?HK8ouiJfm3U9G40/csxVIwP7sgZgxoWTtUPcmmTfNe2F9NjA+jKI0qBwrfXS?=
- =?us-ascii?Q?W//5vMvt4ONEnp9/7JJMTHJ+ul8PRos/0Nn/LZJ0wLFAwQ0pXhPGVgHc+/ff?=
- =?us-ascii?Q?DrwsYugNVp4v1d3J2zg30mVRywQj/1Xts6PcN4jafVhCZ/bmSeSOn03yO97M?=
- =?us-ascii?Q?nZL9JE9B/3FUmUudukP3iIjisftv19xJxizoetVv1su0dBm2zk1PRRkaHpVn?=
- =?us-ascii?Q?BZI1E/rTCOMueFi5orl8chRMQmVvU0b/uRpn2LgLXWJDxPryL87cpq2ylVcX?=
- =?us-ascii?Q?R3XJK4vVyVb4QrmFecRWIbFe4PeqThGoltTl3hXHirqYuJonyVOF9h3efDco?=
- =?us-ascii?Q?3ZLFJ+MwDh9g52Uct9itgaO/4Ic8EPMVeLX7LP6Avvz7j9faz8y8h5KI5oA5?=
- =?us-ascii?Q?M+NIHGnPS9foJ9++7sigAAJ4UZk13fYawsGRTMf3Ywy3jciZSpBg6E/jd9rq?=
- =?us-ascii?Q?PaxzYEX6GnS2YmmwHM3QOgpjSO6byHlRHGKnyRkXNTMc1k3BDJs5w7DqjURE?=
- =?us-ascii?Q?daiRU/mDwp7MTh+ZKqgYw6tZB/4z6msLN3OQFKy0nT4tffbxcor2ezdWRDGn?=
- =?us-ascii?Q?YmJZQOQ38r54bccIQ7d0Q533cRKgbPHIT//iNnrZHbReoglHVrhqPLPJv0Aq?=
- =?us-ascii?Q?lA3VJNQjThnnTQ+EG8TgYmKZAFNTV2SQKwTpt+zt9cqholDeLasZ5VYXhqOY?=
- =?us-ascii?Q?wecjh6nWGGW/tuLtHwiVyQc3Uk1fJ11lSFpyK0HCwom6l5H44cJ9Q1ZPDg4d?=
- =?us-ascii?Q?x/UFm5FlEmHN694hAMl271Eg1MrBEPC+e2MJ+jOujhL6ti7+Z29Mck3WuEIg?=
- =?us-ascii?Q?BlJtEhqPLwnV0FnyC9WVrYMlKTMYDiK+PdNoILSfDfY7fCWcrxvrhbnzld1F?=
- =?us-ascii?Q?SZcrgzZBvhlVnb7tXEKrNR/Meyjykf373bklUlFeFnDa6Ay2YQYlwxh+47Xy?=
- =?us-ascii?Q?g+o9qKTYbBhOKEWXc2gKPBuZXsZaQFVe71TtH948F9f+Cu4/XbGPcd37SkiU?=
- =?us-ascii?Q?AcIJJnnaym8nJliBn5480RgwdBfeeepLi3p82Gfw?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa0e6e7b-36f4-4e8f-34d7-08da84b3c015
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 03:01:18.5005
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1q3yJZxJQqAVQCYQ2FBM+Fdiihmj84wgOlvGCA0uyf6V5PA36u5kKxMaZ/Jrc1m5V/KcmM5sdGGwX4rVlW/lAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8824
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,92 +44,382 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+We can support more cache attributes (e.g., CC, SUC and WUC) and page
+protection when we use TLB for ioremap(). The implementation is based
+on GENERIC_IOREMAP.
 
-The current driver only support one clock, however LPI2C requires
-two clocks: PER and IPG.
+The existing simple ioremap() implementation has better performance so
+we keep it and introduce ARCH_IOREMAP to control the selection.
 
-To make sure old dts could work with newer kernel, use bulk clk
-API.
+We move pagetable_init() earlier to make early ioremap() works, and we
+modify the PCI ecam mapping because the TLB-based version of ioremap()
+will actually take the size into account.
 
-Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- drivers/i2c/busses/i2c-imx-lpi2c.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+V2: Based on GENERIC_IOREMAP.
 
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index b51ab3cad2b1..188f2a36d2fd 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -94,7 +94,8 @@ enum lpi2c_imx_pincfg {
+ arch/loongarch/Kconfig                    |  7 +++
+ arch/loongarch/include/asm/fixmap.h       | 15 +++++
+ arch/loongarch/include/asm/io.h           | 69 ++++++--------------
+ arch/loongarch/include/asm/pgtable-bits.h |  3 +
+ arch/loongarch/kernel/setup.c             |  2 +-
+ arch/loongarch/mm/init.c                  | 64 +++++++++++++++++++
+ arch/loongarch/pci/acpi.c                 | 76 +++++++++++++++++++++--
+ 7 files changed, 180 insertions(+), 56 deletions(-)
+
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 3594f0ba7581..5b89386d6972 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -61,6 +61,7 @@ config LOONGARCH
+ 	select GENERIC_CPU_AUTOPROBE
+ 	select GENERIC_ENTRY
+ 	select GENERIC_GETTIMEOFDAY
++	select GENERIC_IOREMAP if !ARCH_IOREMAP
+ 	select GENERIC_IRQ_MULTI_HANDLER
+ 	select GENERIC_IRQ_PROBE
+ 	select GENERIC_IRQ_SHOW
+@@ -168,6 +169,9 @@ config MACH_LOONGSON32
+ config MACH_LOONGSON64
+ 	def_bool 64BIT
  
- struct lpi2c_imx_struct {
- 	struct i2c_adapter	adapter;
--	struct clk		*clk;
-+	int			num_clks;
-+	struct clk_bulk_data	*clks;
- 	void __iomem		*base;
- 	__u8			*rx_buf;
- 	__u8			*tx_buf;
-@@ -207,7 +208,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
++config FIX_EARLYCON_MEM
++	def_bool y
++
+ config PAGE_SIZE_4KB
+ 	bool
  
- 	lpi2c_imx_set_mode(lpi2c_imx);
+@@ -421,6 +425,9 @@ config SECCOMP
  
--	clk_rate = clk_get_rate(lpi2c_imx->clk);
-+	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
- 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
- 		filt = 0;
- 	else
-@@ -561,11 +562,12 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	strscpy(lpi2c_imx->adapter.name, pdev->name,
- 		sizeof(lpi2c_imx->adapter.name));
+ endmenu
  
--	lpi2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(lpi2c_imx->clk)) {
--		dev_err(&pdev->dev, "can't get I2C peripheral clock\n");
--		return PTR_ERR(lpi2c_imx->clk);
-+	ret = devm_clk_bulk_get_all(&pdev->dev, &lpi2c_imx->clks);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "can't get I2C peripheral clock, ret=%d\n", ret);
-+		return ret;
- 	}
-+	lpi2c_imx->num_clks = ret;
++config ARCH_IOREMAP
++	bool
++
+ config ARCH_SELECT_MEMORY_MODEL
+ 	def_bool y
  
- 	ret = of_property_read_u32(pdev->dev.of_node,
- 				   "clock-frequency", &lpi2c_imx->bitrate);
-@@ -582,11 +584,9 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	i2c_set_adapdata(&lpi2c_imx->adapter, lpi2c_imx);
- 	platform_set_drvdata(pdev, lpi2c_imx);
+diff --git a/arch/loongarch/include/asm/fixmap.h b/arch/loongarch/include/asm/fixmap.h
+index b3541dfa2013..d2e55ae55bb9 100644
+--- a/arch/loongarch/include/asm/fixmap.h
++++ b/arch/loongarch/include/asm/fixmap.h
+@@ -10,4 +10,19 @@
  
--	ret = clk_prepare_enable(lpi2c_imx->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "clk enable failed %d\n", ret);
-+	ret = clk_bulk_prepare_enable(lpi2c_imx->num_clks, lpi2c_imx->clks);
-+	if (ret)
- 		return ret;
--	}
+ #define NR_FIX_BTMAPS 64
  
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(&pdev->dev);
-@@ -633,7 +633,7 @@ static int __maybe_unused lpi2c_runtime_suspend(struct device *dev)
++enum fixed_addresses {
++	FIX_HOLE,
++	FIX_EARLYCON_MEM_BASE,
++	__end_of_fixed_addresses
++};
++
++#define FIXADDR_SIZE	(__end_of_fixed_addresses << PAGE_SHIFT)
++#define FIXADDR_START	(FIXADDR_TOP - FIXADDR_SIZE)
++#define FIXMAP_PAGE_IO	PAGE_KERNEL_SUC
++
++extern void __set_fixmap(enum fixed_addresses idx,
++			 phys_addr_t phys, pgprot_t flags);
++
++#include <asm-generic/fixmap.h>
++
+ #endif
+diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
+index 999944ea1cea..87a88eb792c1 100644
+--- a/arch/loongarch/include/asm/io.h
++++ b/arch/loongarch/include/asm/io.h
+@@ -27,71 +27,38 @@ extern void __init early_iounmap(void __iomem *addr, unsigned long size);
+ #define early_memremap early_ioremap
+ #define early_memunmap early_iounmap
+ 
++#ifdef CONFIG_ARCH_IOREMAP
++
+ static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+ 					 unsigned long prot_val)
  {
- 	struct lpi2c_imx_struct *lpi2c_imx = dev_get_drvdata(dev);
+-	if (prot_val == _CACHE_CC)
++	if (prot_val & _CACHE_CC)
+ 		return (void __iomem *)(unsigned long)(CACHE_BASE + offset);
+ 	else
+ 		return (void __iomem *)(unsigned long)(UNCACHE_BASE + offset);
+ }
  
--	clk_disable_unprepare(lpi2c_imx->clk);
-+	clk_bulk_disable_unprepare(lpi2c_imx->num_clks, lpi2c_imx->clks);
- 	pinctrl_pm_select_sleep_state(dev);
+-/*
+- * ioremap -   map bus memory into CPU space
+- * @offset:    bus address of the memory
+- * @size:      size of the resource to map
+- *
+- * ioremap performs a platform specific sequence of operations to
+- * make bus memory CPU accessible via the readb/readw/readl/writeb/
+- * writew/writel functions and the other mmio helpers. The returned
+- * address is not guaranteed to be usable directly as a virtual
+- * address.
+- */
+-#define ioremap(offset, size)					\
+-	ioremap_prot((offset), (size), _CACHE_SUC)
++#define ioremap(offset, size)		\
++	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL_SUC))
  
+-/*
+- * ioremap_wc - map bus memory into CPU space
+- * @offset:     bus address of the memory
+- * @size:       size of the resource to map
+- *
+- * ioremap_wc performs a platform specific sequence of operations to
+- * make bus memory CPU accessible via the readb/readw/readl/writeb/
+- * writew/writel functions and the other mmio helpers. The returned
+- * address is not guaranteed to be usable directly as a virtual
+- * address.
+- *
+- * This version of ioremap ensures that the memory is marked uncachable
+- * but accelerated by means of write-combining feature. It is specifically
+- * useful for PCIe prefetchable windows, which may vastly improve a
+- * communications performance. If it was determined on boot stage, what
+- * CPU CCA doesn't support WUC, the method shall fall-back to the
+- * _CACHE_SUC option (see cpu_probe() method).
+- */
+-#define ioremap_wc(offset, size)				\
+-	ioremap_prot((offset), (size), _CACHE_WUC)
++#define iounmap(addr) 			do { } while (0)
++
++#endif
+ 
+ /*
+- * ioremap_cache -  map bus memory into CPU space
+- * @offset:	    bus address of the memory
+- * @size:	    size of the resource to map
+- *
+- * ioremap_cache performs a platform specific sequence of operations to
+- * make bus memory CPU accessible via the readb/readw/readl/writeb/
+- * writew/writel functions and the other mmio helpers. The returned
+- * address is not guaranteed to be usable directly as a virtual
+- * address.
++ * On LoongArch, ioremap() has two variants, ioremap_wc() and ioremap_cache().
++ * They map bus memory into CPU space, the mapped memory is marked uncachable
++ * (_CACHE_SUC), uncachable but accelerated by write-combine (_CACHE_WUC) and
++ * cachable (_CACHE_CC) respectively for CPU access.
+  *
+- * This version of ioremap ensures that the memory is marked cachable by
+- * the CPU.  Also enables full write-combining.	 Useful for some
+- * memory-like regions on I/O busses.
++ * @offset:    bus address of the memory
++ * @size:      size of the resource to map
+  */
+-#define ioremap_cache(offset, size)				\
+-	ioremap_prot((offset), (size), _CACHE_CC)
++#define ioremap_wc(offset, size)	\
++	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL_WUC))
+ 
+-static inline void iounmap(const volatile void __iomem *addr)
+-{
+-}
++#define ioremap_cache(offset, size)	\
++	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL))
+ 
+ #define mmiowb() asm volatile ("dbar 0" ::: "memory")
+ 
+diff --git a/arch/loongarch/include/asm/pgtable-bits.h b/arch/loongarch/include/asm/pgtable-bits.h
+index 9ca147a29bab..3d1e0a69975a 100644
+--- a/arch/loongarch/include/asm/pgtable-bits.h
++++ b/arch/loongarch/include/asm/pgtable-bits.h
+@@ -83,8 +83,11 @@
+ 				 _PAGE_GLOBAL | _PAGE_KERN |  _CACHE_SUC)
+ #define PAGE_KERNEL_WUC __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
+ 				 _PAGE_GLOBAL | _PAGE_KERN |  _CACHE_WUC)
++
+ #ifndef __ASSEMBLY__
+ 
++#define _PAGE_IOREMAP		pgprot_val(PAGE_KERNEL_SUC)
++
+ #define pgprot_noncached pgprot_noncached
+ 
+ static inline pgprot_t pgprot_noncached(pgprot_t _prot)
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index 2b4e98170bc1..f938aae3e92c 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -349,10 +349,10 @@ void __init setup_arch(char **cmdline_p)
+ 
+ 	init_environ();
+ 	memblock_init();
++	pagetable_init();
+ 	parse_early_param();
+ 
+ 	platform_init();
+-	pagetable_init();
+ 	arch_mem_init(cmdline_p);
+ 
+ 	resource_init();
+diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+index 88c935344034..63e19b7a6644 100644
+--- a/arch/loongarch/mm/init.c
++++ b/arch/loongarch/mm/init.c
+@@ -201,6 +201,70 @@ void vmemmap_free(unsigned long start, unsigned long end,
+ #endif
+ #endif
+ 
++static pte_t *fixmap_pte(unsigned long addr)
++{
++	pgd_t *pgd;
++	p4d_t *p4d;
++	pud_t *pud;
++	pmd_t *pmd;
++
++	pgd = pgd_offset_k(addr);
++	p4d = p4d_offset(pgd, addr);
++
++	if (pgd_none(*pgd)) {
++		pud_t *new;
++
++		new = memblock_alloc_low(PAGE_SIZE, PAGE_SIZE);
++		pgd_populate(&init_mm, pgd, new);
++#ifndef __PAGETABLE_PUD_FOLDED
++		pud_init(new);
++#endif
++	}
++
++	pud = pud_offset(p4d, addr);
++	if (pud_none(*pud)) {
++		pmd_t *new;
++
++		new = memblock_alloc_low(PAGE_SIZE, PAGE_SIZE);
++		pud_populate(&init_mm, pud, new);
++#ifndef __PAGETABLE_PMD_FOLDED
++		pmd_init(new);
++#endif
++	}
++
++	pmd = pmd_offset(pud, addr);
++	if (pmd_none(*pmd)) {
++		pte_t *new;
++
++		new = memblock_alloc_low(PAGE_SIZE, PAGE_SIZE);
++		pmd_populate_kernel(&init_mm, pmd, new);
++	}
++
++	return pte_offset_kernel(pmd, addr);
++}
++
++void __init __set_fixmap(enum fixed_addresses idx,
++			       phys_addr_t phys, pgprot_t flags)
++{
++	unsigned long addr = __fix_to_virt(idx);
++	pte_t *ptep;
++
++	BUG_ON(idx <= FIX_HOLE || idx >= __end_of_fixed_addresses);
++
++	ptep = fixmap_pte(addr);
++	if (!pte_none(*ptep)) {
++		pte_ERROR(*ptep);
++		return;
++	}
++
++	if (pgprot_val(flags))
++		set_pte(ptep, pfn_pte(phys >> PAGE_SHIFT, flags));
++	else {
++		pte_clear(&init_mm, addr, ptep);
++		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++	}
++}
++
+ /*
+  * Align swapper_pg_dir in to 64K, allows its address to be loaded
+  * with a single LUI instruction in the TLB handlers.  If we used
+diff --git a/arch/loongarch/pci/acpi.c b/arch/loongarch/pci/acpi.c
+index bf921487333c..ac18ca7a900a 100644
+--- a/arch/loongarch/pci/acpi.c
++++ b/arch/loongarch/pci/acpi.c
+@@ -82,6 +82,69 @@ static int acpi_prepare_root_resources(struct acpi_pci_root_info *ci)
  	return 0;
-@@ -645,7 +645,7 @@ static int __maybe_unused lpi2c_runtime_resume(struct device *dev)
- 	int ret;
+ }
  
- 	pinctrl_pm_select_default_state(dev);
--	ret = clk_prepare_enable(lpi2c_imx->clk);
-+	ret = clk_bulk_prepare_enable(lpi2c_imx->num_clks, lpi2c_imx->clks);
- 	if (ret) {
- 		dev_err(dev, "failed to enable I2C clock, ret=%d\n", ret);
- 		return ret;
++/*
++ * Create a PCI config space window
++ *  - reserve mem region
++ *  - alloc struct pci_config_window with space for all mappings
++ *  - ioremap the config space
++ */
++struct pci_config_window *arch_pci_ecam_create(struct device *dev,
++		struct resource *cfgres, struct resource *busr, const struct pci_ecam_ops *ops)
++{
++	int bsz, bus_range, err;
++	struct resource *conflict;
++	struct pci_config_window *cfg;
++
++	if (busr->start > busr->end)
++		return ERR_PTR(-EINVAL);
++
++	cfg = kzalloc(sizeof(*cfg), GFP_KERNEL);
++	if (!cfg)
++		return ERR_PTR(-ENOMEM);
++
++	cfg->parent = dev;
++	cfg->ops = ops;
++	cfg->busr.start = busr->start;
++	cfg->busr.end = busr->end;
++	cfg->busr.flags = IORESOURCE_BUS;
++	bus_range = resource_size(cfgres) >> ops->bus_shift;
++
++	bsz = 1 << ops->bus_shift;
++
++	cfg->res.start = cfgres->start;
++	cfg->res.end = cfgres->end;
++	cfg->res.flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++	cfg->res.name = "PCI ECAM";
++
++	conflict = request_resource_conflict(&iomem_resource, &cfg->res);
++	if (conflict) {
++		err = -EBUSY;
++		dev_err(dev, "can't claim ECAM area %pR: address conflict with %s %pR\n",
++			&cfg->res, conflict->name, conflict);
++		goto err_exit;
++	}
++
++	cfg->win = pci_remap_cfgspace(cfgres->start, bus_range * bsz);
++	if (!cfg->win)
++		goto err_exit_iomap;
++
++	if (ops->init) {
++		err = ops->init(cfg);
++		if (err)
++			goto err_exit;
++	}
++	dev_info(dev, "ECAM at %pR for %pR\n", &cfg->res, &cfg->busr);
++
++	return cfg;
++
++err_exit_iomap:
++	err = -ENOMEM;
++	dev_err(dev, "ECAM ioremap failed\n");
++err_exit:
++	pci_ecam_free(cfg);
++	return ERR_PTR(err);
++}
++
+ /*
+  * Lookup the bus range for the domain in MCFG, and set up config space
+  * mapping.
+@@ -106,11 +169,16 @@ pci_acpi_setup_ecam_mapping(struct acpi_pci_root *root)
+ 
+ 	bus_shift = ecam_ops->bus_shift ? : 20;
+ 
+-	cfgres.start = root->mcfg_addr + (bus_res->start << bus_shift);
+-	cfgres.end = cfgres.start + (resource_size(bus_res) << bus_shift) - 1;
+-	cfgres.flags = IORESOURCE_MEM;
++	if (bus_shift == 20)
++		cfg = pci_ecam_create(dev, &cfgres, bus_res, ecam_ops);
++	else {
++		cfgres.start = root->mcfg_addr + (bus_res->start << bus_shift);
++		cfgres.end = cfgres.start + (resource_size(bus_res) << bus_shift) - 1;
++		cfgres.end |= BIT(28) + (((PCI_CFG_SPACE_EXP_SIZE - 1) & 0xf00) << 16);
++		cfgres.flags = IORESOURCE_MEM;
++		cfg = arch_pci_ecam_create(dev, &cfgres, bus_res, ecam_ops);
++	}
+ 
+-	cfg = pci_ecam_create(dev, &cfgres, bus_res, ecam_ops);
+ 	if (IS_ERR(cfg)) {
+ 		dev_err(dev, "%04x:%pR error %ld mapping ECAM\n", seg, bus_res, PTR_ERR(cfg));
+ 		return NULL;
 -- 
-2.37.1
+2.31.1
 

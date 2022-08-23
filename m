@@ -2,167 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D58659D101
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C6459D110
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240455AbiHWGDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 02:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S240536AbiHWGK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 02:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240391AbiHWGDg (ORCPT
+        with ESMTP id S240330AbiHWGKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 02:03:36 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE6141998;
-        Mon, 22 Aug 2022 23:03:34 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id u24so6972152lji.0;
-        Mon, 22 Aug 2022 23:03:34 -0700 (PDT)
+        Tue, 23 Aug 2022 02:10:54 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F52E58DCD
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:10:53 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so9186526oti.9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:10:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=E62vcG6bv2NNKCtD/xZSrhG3tjB/Yn/YnvPEoQsQ9jU=;
-        b=i9pQ/jlf23urfzZGcT78wq4iwrCpsCF/RBEu56tcMGOPHmkNCYJyLUlDhCzToM/tns
-         VXlAupSv9gmHQiLAijfbheKjUISV7fLTvvwCc/Bq099q1/FKTE3B5yvgGOjyDi4oaVR1
-         2MUmxB34Ls2U41/lrPnegBKEhxSrDoU3rHrUMgRPe2O7JLkd0Uw0EbRcmV663aAdE9J2
-         XyRs3+ZuOQcfs5fEi6Yv1O32zi/7ALmMyDLGatsIrJCDHEZLD95v5/WDa1I7j9D+dtPS
-         CveXtZXWpglnln7WRxUW2BurJCt+giTZ3gowKTC9U4Z4jRjmGbHjOc5hrhGukOza0LoD
-         jkow==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=43IBXBukEMZBKHMY65bP6l6zHy53lFBv8pp6iM6iFtQ=;
+        b=WJ1Qj/Jv832SskSyFIV8J8wTY+IaV31ImleU35pKbc1aVg2IjbYQZIC61Ug4eR2TGw
+         OYinxYvz34GsRtgC/CpH6nRTWaZmV40L6zRMlg9z0vs7JBdJpf0xGe/XySsxPjq6jW8k
+         m8JvpHbdzR3PDzK/iENMv48OlTAGCK1+MScEI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=E62vcG6bv2NNKCtD/xZSrhG3tjB/Yn/YnvPEoQsQ9jU=;
-        b=2Lu3KA/bj6sNR7vMHB1wGdylfAp9+MyzpFYOpb8GYeNfDKOX9mgVVaSAVEvk3TOhYi
-         bGdcX5ehd1pr+n7zLnRyam25Mr/ERcRYqemkZ1iUzLKgloMUg8Sex9lnrcevoYAY1bHn
-         hC71/k3gWLK69kDlxna4FC24a/HFiFSGb2xPTHJ4q91bsC/IFczf7ZWX3jG2izUvO4u+
-         CbDKHED4x19jiIs1/wdGPIaL9YMdnxAkK3TVGoD+MwSAwp2PDZhwqT9I1emCgRk8f0/9
-         SKxAlwmKa78n0Gm6IpLKCtQS0b2jaNnoXOAAZNiG/r0Wm5NnuChlWiZLI5Ck5Ay2kgUS
-         fWsA==
-X-Gm-Message-State: ACgBeo2E0WpvydJ47f1nliL5ShePqbsFz9E7e0S2XYKBwrBHijH6nlZr
-        0ZEvXwgfqGT8i0o6yVoECuti6T3cs9ohotJZKgQ=
-X-Google-Smtp-Source: AA6agR6zN9oIh9MYRCAAGDxl0xMdUfhVW/LqXRolx5mCBjnzeCCMkmhYgnVODUm5K8SWlRonG7SrNkD1K8Aa/nul9bU=
-X-Received: by 2002:a05:651c:2311:b0:261:d3d9:52e6 with SMTP id
- bi17-20020a05651c231100b00261d3d952e6mr1267222ljb.392.1661234613072; Mon, 22
- Aug 2022 23:03:33 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=43IBXBukEMZBKHMY65bP6l6zHy53lFBv8pp6iM6iFtQ=;
+        b=XtRitcXsn3d6ieBl4aYXSct2NXqew+2WVZrvtmSikUW9HADzms4WSr5eNZzVNoWnUN
+         o4Tm9NCrwh/eQzlu0FLA0KkJS2k61riaZDwuciLWFee50aXx7KmRdmoPmHGcPB7osh3U
+         yTcOHoWHQmqxQc3yPYuo0Thf87iNkGcp0hIbrmz/xpHOrb2kQ6DwpuDwsWduukMbdhfP
+         RkSDQm4lS89wKEpBeB8O9S+dBefJK6XIQlcCUh4UjMmNvS7VG6XqPk432PRi7yz/E4ON
+         yNwuHTgrX5lC4Mc5d0vEIuO+YwFfxm0sKqRP2pbjJMNddwUFV9XCrIuewqrxjplgeIKJ
+         XPeQ==
+X-Gm-Message-State: ACgBeo0dYEKQNBk/dbBBH+oUo0mhqj39QsJ1QmzS9r182SJDHbvaQ95s
+        NyT28rKK0CKNiKra7/WBTkYetRzRJR2IujkJ
+X-Google-Smtp-Source: AA6agR7PLyAPSc9zuwUwRG5xCOTEUFuPmSOyA1MYb/koKxnGnpY1R1ybL0CttgB61ofxXFUHuteu4g==
+X-Received: by 2002:a9d:5544:0:b0:637:1d63:f1fe with SMTP id h4-20020a9d5544000000b006371d63f1femr8692900oti.136.1661235052573;
+        Mon, 22 Aug 2022 23:10:52 -0700 (PDT)
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com. [209.85.161.47])
+        by smtp.gmail.com with ESMTPSA id b23-20020a056830105700b006373175cde0sm3535943otp.44.2022.08.22.23.10.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 23:10:52 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id u3-20020a4ab5c3000000b0044b125e5d9eso1480051ooo.12
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:10:51 -0700 (PDT)
+X-Received: by 2002:a81:1117:0:b0:336:45a1:221b with SMTP id
+ 23-20020a811117000000b0033645a1221bmr25033845ywr.229.1661234716981; Mon, 22
+ Aug 2022 23:05:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <1660908562-17409-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Yv+6YjaGAv52yvq9@slm.duckdns.org> <CALvZod7QdLSMdBoD2WztL72qS8kJe7F79JuCH6t19rRcw6Pn1w@mail.gmail.com>
- <Yv/EArPDTcCrGqJh@slm.duckdns.org> <YwNpI1ydy0yDnBH0@dhcp22.suse.cz>
- <CAGWkznEB+R0YBaBFBL7dPqs8R=qKC6+ixTWEGCYy2PaczXkaPA@mail.gmail.com> <YwRjyx6wFLk8WTDe@dhcp22.suse.cz>
-In-Reply-To: <YwRjyx6wFLk8WTDe@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Tue, 23 Aug 2022 14:03:04 +0800
-Message-ID: <CAGWkznGaYTv4u4kOo-rupfyWzDNJXNKTchwP6dbUK-=UXWm47w@mail.gmail.com>
-Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
+References: <20220808162750.828001-1-randy.li@synaptics.com>
+ <20220808162750.828001-3-randy.li@synaptics.com> <CAAFQd5AKjpJ+fPAeCqdNnJbS4R7SdaHkfyW4qG1xXr-sE801pQ@mail.gmail.com>
+ <13d37c15-79f3-4e16-8cf4-fc37846f4a04@synaptics.com> <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
+ <6da7faf329128312f0862f555d1a855437ae99f3.camel@ndufresne.ca> <50dd9b7a-8f48-0799-57f6-048d20de8dcc@synaptics.com>
+In-Reply-To: <50dd9b7a-8f48-0799-57f6-048d20de8dcc@synaptics.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Tue, 23 Aug 2022 15:05:05 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5D-eG-1cHvRX2nF0nKv6Zz3vVq6_KJ7HV0zZjADV9v1Zg@mail.gmail.com>
+Message-ID: <CAAFQd5D-eG-1cHvRX2nF0nKv6Zz3vVq6_KJ7HV0zZjADV9v1Zg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] [WIP]: media: Add Synaptics compressed tiled format
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        dri-devel@lists.freedesktop.org, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
+        daniel@ffwll.ch, mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
+        ribalda@chromium.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sebastian.hesselbarth@gmail.com, jszhang@kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 1:21 PM Michal Hocko <mhocko@suse.com> wrote:
+On Sat, Aug 20, 2022 at 12:44 AM Hsia-Jun Li <Randy.Li@synaptics.com> wrote=
+:
 >
-> On Tue 23-08-22 10:31:57, Zhaoyang Huang wrote:
-> > On Mon, Aug 22, 2022 at 7:31 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Fri 19-08-22 07:10:26, Tejun Heo wrote:
-> > > > On Fri, Aug 19, 2022 at 10:08:59AM -0700, Shakeel Butt wrote:
-> > > > > On Fri, Aug 19, 2022 at 9:29 AM Tejun Heo <tj@kernel.org> wrote:
-> > > > > >
-> > > > > > On Fri, Aug 19, 2022 at 07:29:22PM +0800, zhaoyang.huang wrote:
-> > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > > >
-> > > > > > > It is observed in android system where per-app cgroup is demanded by freezer
-> > > > > > > subsys and part of groups require memory control. The hierarchy could be simplized
-> > > > > > > as bellowing where memory charged on group B abserved while we only want have
-> > > > > > > group E's memory be controlled and B's descendants compete freely for memory.
-> > > > > > > This should be the consequences of unified hierarchy.
-> > > > > > > Under this scenario, less efficient memory reclaim is observed when comparing
-> > > > > > > with no memory control. It is believed that multi LRU scanning introduces some
-> > > > > > > of the overhead. Furthermore, page thrashing is also heavier than global LRU
-> > > > > > > which could be the consequences of partial failure of WORKINGSET mechanism as
-> > > > > > > LRU is too short to protect the active pages.
-> > > > > > >
-> > > > > > > A(subtree_control = memory) - B(subtree_control = NULL) - C()
-> > > > > > >                                                       \ D()
-> > > > > > >                           - E(subtree_control = memory) - F()
-> > > > > > >                                                         \ G()
-> > > > > > >
-> > > > > > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > >
-> > > > > > Just in case it wasn't clear.
-> > > > > >
-> > > > > > Nacked-by: Tejun Heo <tj@kernel.org>
-> > > > > >
-> > > > > > Thanks.
-> > > > > >
-> > > > >
-> > > > > Was there a previous discussion on this? The commit message is unreadable.
-> > > >
-> > > > http://lkml.kernel.org/r/1660298966-11493-1-git-send-email-zhaoyang.huang@unisoc.com
-> > >
-> > > Even that discussion doesn't really explain the real underlying problem.
-> > > There are statements about inefficiency and trashing without any further
-> > > details or clarifications.
-> > I would like to quote the comments from google side for more details
-> > which can also be observed from different vendors.
-> > "Also be advised that when you enable memcg v2 you will be using
-> > per-app memcg configuration which implies noticeable overhead because
-> > every app will have its own group. For example pagefault path will
-> > regress by about 15%. And obviously there will be some memory overhead
-> > as well. That's the reason we don't enable them in Android by
-> > default."
 >
-> This should be reported and investigated. Because per-application memcg
-> vs. memcg in general shouldn't make much of a difference from the
-> performance side. I can see a potential performance impact for no-memcg
-> vs. memcg case but even then 15% is quite a lot.
-Less efficiency on memory reclaim caused by multi-LRU should be one of
-the reason, which has been proved by comparing per-app memcg on/off.
-Besides, theoretically workingset could also broken as LRU is too
-short to compose workingset.
 >
-> > > My very vague understanding is that the Android system would like to
-> > > freeze specific applications and for that it requires each application
-> > > to live in its own cgroup. This clashes with a requirement to age and
-> > > reclaim memory on a different granularity (aka no per process reclaim).
-> > > So in fact something that cgroup v1 would achieve by having 2
-> > > hierarchies, one for the freezer which would have a dedicated cgroup for
-> > > each application and the other for the memory controller where tasks are
-> > > grouped by a different criteria. This would rule out that a global (or
-> > > any external memory pressure) reclaim would age LRUs that contain a mix
-> > > bag of application pages rather than iterate over per-application LRUs.
-> > > Is that understanding correct?
-> > Correct, this is just our confusion. Besides, we believe that charge
-> > the pages to implicit memory enabled parent control group doesn't make
-> > sense as the memory cannot be managed at all.
+> On 8/19/22 23:28, Nicolas Dufresne wrote:
+> > CAUTION: Email originated externally, do not click links or open attach=
+ments unless you recognize the sender and know the content is safe.
+> >
+> >
+> > Le vendredi 19 ao=C3=BBt 2022 =C3=A0 02:13 +0300, Laurent Pinchart a =
+=C3=A9crit :
+> >> On Thu, Aug 18, 2022 at 02:33:42PM +0800, Hsia-Jun Li wrote:
+> >>> On 8/18/22 14:06, Tomasz Figa wrote:
+> >>>> On Tue, Aug 9, 2022 at 1:28 AM Hsia-Jun Li <randy.li@synaptics.com> =
+wrote:
+> >>>>>
+> >>>>> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+> >>>>>
+> >>>>> The most of detail has been written in the drm.
+> >>
+> >> This patch still needs a description of the format, which should go to
+> >> Documentation/userspace-api/media/v4l/.
+> >>
+> >>>>> Please notice that the tiled formats here request
+> >>>>> one more plane for storing the motion vector metadata.
+> >>>>> This buffer won't be compressed, so you can't append
+> >>>>> it to luma or chroma plane.
+> >>>>
+> >>>> Does the motion vector buffer need to be exposed to userspace? Is th=
+e
+> >>>> decoder stateless (requires userspace to specify the reference frame=
+s)
+> >>>> or stateful (manages the entire decoding process internally)?
+> >>>
+> >>> No, users don't need to access them at all. Just they need a differen=
+t
+> >>> dma-heap.
+> >>>
+> >>> You would only get the stateful version of both encoder and decoder.
+> >>
+> >> Shouldn't the motion vectors be stored in a separate V4L2 buffer,
+> >> submitted through a different queue then ?
+> >
+> > Imho, I believe these should be invisible to users and pooled separatel=
+y to
+> > reduce the overhead. The number of reference is usually lower then the =
+number of
+> > allocated display buffers.
+> >
+> You can't. The motion vector buffer can't share with the luma and chroma
+> data planes, nor the data plane for the compression meta data.
+
+I believe what Nicolas is suggesting is to just keep the MV buffer
+handling completely separate from video buffers. Just keep a map
+between frame buffer and MV buffer in the driver and use the right
+buffer when triggering a decode.
+
 >
-> I do not get that part. The parent can manange and control the memory
-> usage so how come it cannot be managed at all?
-What I mean is the kind of parent which is enabled implicitly by
-enabling on its sibling group like belowing hierarchy. Imagine that C
-has no intention of memory control but has to be enabled as B would
-have it. IMO, it doesn't make sense to charge C1's memory.current to C
-until an explicitly echo "+memory" >  C/subtree_control.
-A----B---B1
-     \ C---C1
+> You could consider this as a security requirement(the memory region for
+> the MV could only be accessed by the decoder) or hardware limitation.
+>
+> It is also not very easy to manage such a large buffer that would change
+> when the resolution changed.
+
+How does it differ from managing additional planes of video buffers?
+
+Best regards,
+Tomasz
+
+> >>
+> >>>>> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+> >>>>> ---
+> >>>>>    drivers/media/v4l2-core/v4l2-common.c | 1 +
+> >>>>>    drivers/media/v4l2-core/v4l2-ioctl.c  | 2 ++
+> >>>>>    include/uapi/linux/videodev2.h        | 2 ++
+> >>>>>    3 files changed, 5 insertions(+)
+> >>>>>
+> >>>>> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/=
+v4l2-core/v4l2-common.c
+> >>>>> index e0fbe6ba4b6c..f645278b3055 100644
+> >>>>> --- a/drivers/media/v4l2-core/v4l2-common.c
+> >>>>> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> >>>>> @@ -314,6 +314,7 @@ const struct v4l2_format_info *v4l2_format_info=
+(u32 format)
+> >>>>>                   { .format =3D V4L2_PIX_FMT_SGBRG12,       .pixel_=
+enc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
+=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> >>>>>                   { .format =3D V4L2_PIX_FMT_SGRBG12,       .pixel_=
+enc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
+=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> >>>>>                   { .format =3D V4L2_PIX_FMT_SRGGB12,       .pixel_=
+enc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
+=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> >>>>> +               { .format =3D V4L2_PIX_FMT_NV12M_V4H1C, .pixel_enc =
+=3D V4L2_PIXEL_ENC_YUV, .mem_planes =3D 5, .comp_planes =3D 2, .bpp =3D { 1=
+, 2, 0, 0 }, .hdiv =3D 2, .vdiv =3D 2, .block_w =3D { 128, 128 }, .block_h =
+=3D { 128, 128 } },
+> >>>>>           };
+> >>>>>           unsigned int i;
+> >>>>>
+> >>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v=
+4l2-core/v4l2-ioctl.c
+> >>>>> index e6fd355a2e92..8f65964aff08 100644
+> >>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> >>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> >>>>> @@ -1497,6 +1497,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtd=
+esc *fmt)
+> >>>>>                   case V4L2_PIX_FMT_MT21C:        descr =3D "Mediat=
+ek Compressed Format"; break;
+> >>>>>                   case V4L2_PIX_FMT_QC08C:        descr =3D "QCOM C=
+ompressed 8-bit Format"; break;
+> >>>>>                   case V4L2_PIX_FMT_QC10C:        descr =3D "QCOM C=
+ompressed 10-bit Format"; break;
+> >>>>> +               case V4L2_PIX_FMT_NV12M_V4H1C:  descr =3D "Synaptic=
+s Compressed 8-bit tiled Format";break;
+> >>>>> +               case V4L2_PIX_FMT_NV12M_10_V4H3P8C:     descr =3D "=
+Synaptics Compressed 10-bit tiled Format";break;
+> >>>>>                   default:
+> >>>>>                           if (fmt->description[0])
+> >>>>>                                   return;
+> >>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/vi=
+deodev2.h
+> >>>>> index 01e630f2ec78..7e928cb69e7c 100644
+> >>>>> --- a/include/uapi/linux/videodev2.h
+> >>>>> +++ b/include/uapi/linux/videodev2.h
+> >>>>> @@ -661,6 +661,8 @@ struct v4l2_pix_format {
+> >>>>>    #define V4L2_PIX_FMT_NV12MT_16X16 v4l2_fourcc('V', 'M', '1', '2'=
+) /* 12  Y/CbCr 4:2:0 16x16 tiles */
+> >>>>>    #define V4L2_PIX_FMT_NV12M_8L128      v4l2_fourcc('N', 'A', '1',=
+ '2') /* Y/CbCr 4:2:0 8x128 tiles */
+> >>>>>    #define V4L2_PIX_FMT_NV12M_10BE_8L128 v4l2_fourcc_be('N', 'T', '=
+1', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
+> >>>>> +#define V4L2_PIX_FMT_NV12M_V4H1C v4l2_fourcc('S', 'Y', '1', '2')  =
+ /* 12  Y/CbCr 4:2:0 tiles */
+> >>>>> +#define V4L2_PIX_FMT_NV12M_10_V4H3P8C v4l2_fourcc('S', 'Y', '1', '=
+0')   /* 12  Y/CbCr 4:2:0 10-bits tiles */
+> >>>>>
+> >>>>>    /* Bayer formats - see https://urldefense.proofpoint.com/v2/url?=
+u=3Dhttp-3A__www.siliconimaging.com_RGB-2520Bayer.htm&d=3DDwIFaQ&c=3D7dfBJ8=
+cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=3DP4xb2_7biqBxD4LGGPrSV6j-jf3C3xlR7=
+PXU-mLTeZE&m=3DlkQiuhx0yMAYHGcW-0WaHlF3e2etMHsu-FoNIBdZILGH6FPigwSAmel2vAdc=
+VLkp&s=3DJKsBzpb_3u9xv52MaMuT4U3T1pPqcObYkpHDBxvcx_4&e=3D   */
+> >>>>>    #define V4L2_PIX_FMT_SBGGR8  v4l2_fourcc('B', 'A', '8', '1') /* =
+ 8  BGBG.. GRGR.. */
+> >>
+> >
+>
 > --
-> Michal Hocko
-> SUSE Labs
+> Hsia-Jun(Randy) Li

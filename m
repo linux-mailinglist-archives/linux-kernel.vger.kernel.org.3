@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A9359ECB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E88A59ECB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiHWTrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S233594AbiHWTrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbiHWTqd (ORCPT
+        with ESMTP id S233556AbiHWTqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 15:46:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7DD2770
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:50:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F34D1E14
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:50:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1077F61711
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA23C433D7;
-        Tue, 23 Aug 2022 18:50:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 141B561704
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:50:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92FFC433C1;
+        Tue, 23 Aug 2022 18:50:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661280602;
-        bh=fNT/ML6CsNqu6evXVhQ1GENE4bqQBehy5fIvG9sMLLI=;
+        s=k20201202; t=1661280605;
+        bh=mtEmXoG1/qwtxZCLtpWfBQdyoqhvKwZ1HGbxl8n0VV4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=vAcy88Zbsbm73QG9RIBN7kLheKv9zuhvbQlRaY7AIi5FEIXCshoGeECGld6vuQkAY
-         JmT92EdCP5kYMFzPBE/2Bekz1REZJwBuLdTvusoJJv1wRln5cQkXR3wC2NgwKXBx1D
-         pyFyPB8IDBVWU8XRQKXBcD+pbHW+As9qsWwsyQEEfpWW/LqfnbZQVCMaJ/DeU1c6Pt
-         yfhCKb250jG3LHHYURi4HiQU+Wkg3CWVFs4mtAnPCgjD/TGnKpQJNtmtDEZuDv0Zzh
-         ddKlSjcQV8wjpaWD/td+90Vxa3CZuJ9bdtvwrPl0II4b0CMojmeMfWPTvm5pM0RW+t
-         TJnFTafdyU06w==
+        b=mP9deo43+f6dw1Q3G2HmJkMvJ9R7mrHyPm8bllirJQoA6bgw/Gri1EXTSDz0QqPhe
+         hwsZd6c9WiabbUhdQbMJkNMNXAPhHpEVEnowsmEqTNFoyGo2tQ40CQmB/M5ccLLI8X
+         QV28o3A21I/GYSkYmIdTRmvLQJPGaU4DB+zSsvyI0hj51BZE2glDe3h3+rx999f99N
+         ajeG7ZPVlZ33SSKG5SQztcpftURZdIkQ5tKtMucloAJiamBQSnhGqdK6jbQXcodpda
+         fkrDMx5aMt14gG+b5Qr8r1RmthU1jeLOweT4P6apqPh7PrjajbbCDOAS6kSpXshoU+
+         Eb6uQAJToLKVg==
 From:   Mark Brown <broonie@kernel.org>
-To:     tiwai@suse.com, shengjiu.wang@gmail.com, lgirdwood@gmail.com,
-        Xiubo.Lee@gmail.com, perex@perex.cz, alsa-devel@alsa-project.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>, nicoleotsuka@gmail.com,
-        festevam@gmail.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-In-Reply-To: <1661218573-2154-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1661218573-2154-1-git-send-email-shengjiu.wang@nxp.com>
-Subject: Re: [RESEND PATCH] ASoC: fsl_sai: Add support multi fifo sdma script
-Message-Id: <166128060004.1031684.56373454264278530.b4-ty@kernel.org>
-Date:   Tue, 23 Aug 2022 19:50:00 +0100
+To:     linux-kernel@vger.kernel.org, cgel.zte@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, claudiu.beznea@microchip.com,
+        tiwai@suse.com, lgirdwood@gmail.com,
+        Zeal Robot <zealci@zte.com.cn>,
+        codrin.ciubotariu@microchip.com, alexandre.belloni@bootlin.com,
+        perex@perex.cz, alsa-devel@alsa-project.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        nicolas.ferre@microchip.com
+In-Reply-To: <20220823075335.209072-1-ye.xingchen@zte.com.cn>
+References: <20220823075335.209072-1-ye.xingchen@zte.com.cn>
+Subject: Re: [PATCH linux-next] ASoC: atmel_ssc_dai: Remove the unneeded result variable
+Message-Id: <166128060268.1031684.14434690087050758502.b4-ty@kernel.org>
+Date:   Tue, 23 Aug 2022 19:50:02 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,15 +60,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 09:36:13 +0800, Shengjiu Wang wrote:
-> With disabling combine mode, the multiple successive
-> FIFO registers or non successive FIFO registers of SAI module
-> can work with the sdma multi fifo script.
+On Tue, 23 Aug 2022 07:53:35 +0000, cgel.zte@gmail.com wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> This patch is to configure the necessary information to
-> the SDMA engine driver for support multi fifo script.
+> Return the value from asoc_ssc_init() directly instead of storing it
+> in another redundant variable.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -73,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: fsl_sai: Add support multi fifo sdma script
-      commit: 88630575406fdf2a7853545a884484bd55dab8a0
+[1/1] ASoC: atmel_ssc_dai: Remove the unneeded result variable
+      commit: 62bd431bac942c90d908b1681d04f0c577f6c70f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4D259E937
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB7359E944
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbiHWRWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S229731AbiHWRXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241767AbiHWRVS (ORCPT
+        with ESMTP id S241803AbiHWRVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 13:21:18 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C266AC251;
-        Tue, 23 Aug 2022 07:57:29 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id s199so16320760oie.3;
-        Tue, 23 Aug 2022 07:57:29 -0700 (PDT)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C867AC253;
+        Tue, 23 Aug 2022 07:57:31 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-11cb3c811d9so15414890fac.1;
+        Tue, 23 Aug 2022 07:57:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=FAI+J/BAzIOCuYieqj21rHdsHuRaSuJ4Vj8kHpJSNAE=;
-        b=Bguy5gXkBeLZqFWOQeDUzyvG2Dh1lvWQ5M1H3lAWbE8AeicHVgTcaeWv9P0JvKC750
-         Gzr3ibcGK71O2EP+ihg6zRki7XD5NK6bVl0pxo8rFk7n+6xaH6pwSNLePhBalIf/j6do
-         NZHLYH2uZUap4VEBxI1rnY7ImPaXe3PalgnoM984VJyXLz/9+BIINGt4RKGjkDhKvfxF
-         x8BKI8XayQ3u3gHLmVSsjoI4VNW+XGbcep0j4xY9jl9tPpAfCMVwCJ7FX03Cnu+rNy46
-         aLBSYCns9D1BUaU0sUG17eJgITTMZCl3mHHcGCvj11LcKoPh5Dp7fWsxraQ8W8a8E2Lj
-         4ppA==
-X-Gm-Message-State: ACgBeo3jpUgCtT7s9lWaZShSa36wPutKFi+YYKJxiW9ebI2VhFUFPanE
-        ZYeq2R1KX23penPSt1gsYg==
-X-Google-Smtp-Source: AA6agR4hSJQAGxX3KN7ayKSxhwLdWv6s8/qh4bhvrE5yHsP9wzSBH+Rc0HRRZkXNGG1/4mMLZExhJw==
-X-Received: by 2002:aca:3056:0:b0:345:64e9:7435 with SMTP id w83-20020aca3056000000b0034564e97435mr1417894oiw.19.1661266648690;
-        Tue, 23 Aug 2022 07:57:28 -0700 (PDT)
+        bh=E/n8+ANvvCKxMrSrOzblZTP/tD99uJWGC/nHupfAwYo=;
+        b=E+pfZ3tJr1FZeXPLVk1bJpMl+9N8QcPKUrE2JKh/r3ur4KVA2A/0nD09h+5QZm4UQt
+         DqUkUn+WyHaTuVPESupRsiX0w3SS5kbKt+6eaHUHt4apn9h2CkqUezINQ4W0HMcD+m2v
+         xLMQe6ePi7qQs9pw0RlHqvJ+H2WG7oUR9GvukuYifn40Z1HJD0HV6Pb+QbusbnRxT5sc
+         5VUqXDr9ojE4nAtlrchh00ok34R3/cSDfJC4PKB7E0MNkitm0JQ/V1R6jAJYuw44/HPz
+         2MMJ60f/PtCDX+3slxILen9GJM+AD2o4I7hwKZzd1sXwUSJVj+lF3k/OSDgkazps6fGA
+         4jTQ==
+X-Gm-Message-State: ACgBeo2IDIYaTP407r52OmdclNZO8gaSMVJmgPBEYdnVDEEkVmn//XEP
+        i835zPwr6RP3+ww7B783mA==
+X-Google-Smtp-Source: AA6agR5lMb2hvsauCXLU1ijbcXQY+dQlE0/NaS2H77wDnbGqI8QJsLlxfEIGjr6TYMdtd3ranumubw==
+X-Received: by 2002:a05:6870:c0c8:b0:101:b3c3:abc3 with SMTP id e8-20020a056870c0c800b00101b3c3abc3mr1568061oad.144.1661266650452;
+        Tue, 23 Aug 2022 07:57:30 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.27
+        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 07:57:28 -0700 (PDT)
+        Tue, 23 Aug 2022 07:57:29 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Xin Ji <xji@analogixsemi.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org
-Subject: [PATCH] dt-bindings: usb: Add missing (unevaluated|additional)Properties on child nodes
-Date:   Tue, 23 Aug 2022 09:56:40 -0500
-Message-Id: <20220823145649.3118479-9-robh@kernel.org>
+        Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: remoteproc: Add missing (unevaluated|additional)Properties on child nodes
+Date:   Tue, 23 Aug 2022 09:56:41 -0500
+Message-Id: <20220823145649.3118479-10-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,87 +69,47 @@ must have unevaluatedProperties or additionalProperties set to false
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/usb/analogix,anx7411.yaml    |  2 ++
- .../devicetree/bindings/usb/aspeed,usb-vhub.yaml     |  2 ++
- .../devicetree/bindings/usb/st,stusb160x.yaml        | 12 +++++++++---
- .../devicetree/bindings/usb/willsemi,wusb3801.yaml   |  1 +
- 4 files changed, 14 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml      | 1 +
+ .../devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml      | 1 +
+ .../devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml     | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-index ee436308e5dc..0e72c08e6566 100644
---- a/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-+++ b/Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
-@@ -23,6 +23,8 @@ properties:
-   connector:
-     type: object
-     $ref: ../connector/usb-connector.yaml
-+    unevaluatedProperties: false
-+
-     description:
-       Properties for usb c connector.
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
+index e76c861165dd..e4a7da8020f4 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
+@@ -140,6 +140,7 @@ properties:
  
-diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-index 8b019ac05bbe..a86bcd95100e 100644
---- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-+++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-@@ -67,6 +67,7 @@ properties:
- 
-   vhub-strings:
-     type: object
-+    additionalProperties: false
- 
-     properties:
-       '#address-cells':
-@@ -78,6 +79,7 @@ properties:
-     patternProperties:
-       '^string@[0-9a-f]+$':
-         type: object
-+        additionalProperties: false
-         description: string descriptors of the specific language
- 
-         properties:
-diff --git a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
-index b5a8c9814dd3..b8974807b666 100644
---- a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
-+++ b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
-@@ -33,6 +33,7 @@ properties:
-   connector:
-     type: object
-     $ref: /schemas/connector/usb-connector.yaml#
-+    unevaluatedProperties: false
- 
-     properties:
-       compatible:
-@@ -74,9 +75,14 @@ examples:
-                 data-role = "dual";
-                 typec-power-opmode = "default";
- 
--                port {
--                    typec_con_ep: endpoint {
--                        remote-endpoint = <&usbotg_hs_ep>;
-+                ports {
-+                    #address-cells = <1>;
-+                    #size-cells = <0>;
-+                    port@0 {
-+                        reg = <0>;
-+                        typec_con_ep: endpoint {
-+                            remote-endpoint = <&usbotg_hs_ep>;
-+                        };
-                     };
-                 };
-             };
-diff --git a/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml b/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
-index c2b2243c7892..5aa4ffd67119 100644
---- a/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
-+++ b/Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
-@@ -28,6 +28,7 @@ properties:
-   connector:
-     type: object
-     $ref: ../connector/usb-connector.yaml#
+   glink-edge:
+     $ref: qcom,glink-edge.yaml#
 +    unevaluatedProperties: false
      description:
-       The managed USB Type-C connector. Since WUSB3801 does not support
-       Power Delivery, the node should have the "pd-disable" property.
+       Qualcomm G-Link subnode which represents communication edge, channels
+       and devices related to the DSP.
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+index da1a5de3d38b..b4de0521a89d 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+@@ -154,6 +154,7 @@ properties:
+ 
+   glink-edge:
+     $ref: qcom,glink-edge.yaml#
++    unevaluatedProperties: false
+     description:
+       Qualcomm G-Link subnode which represents communication edge, channels
+       and devices related to the DSP.
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
+index 3f06d66cbe47..b6bd33438584 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
+@@ -107,6 +107,7 @@ properties:
+ 
+   glink-edge:
+     $ref: qcom,glink-edge.yaml#
++    unevaluatedProperties: false
+     description:
+       Qualcomm G-Link subnode which represents communication edge, channels
+       and devices related to the ADSP.
 -- 
 2.34.1
 

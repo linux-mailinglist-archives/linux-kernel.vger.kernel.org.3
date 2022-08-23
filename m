@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFCB59DB32
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C6D59DD4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237151AbiHWMPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S1357114AbiHWKxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351991AbiHWMO2 (ORCPT
+        with ESMTP id S1355875AbiHWKpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:14:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC75B78BD7;
-        Tue, 23 Aug 2022 02:40:34 -0700 (PDT)
+        Tue, 23 Aug 2022 06:45:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCFC6CD2A;
+        Tue, 23 Aug 2022 02:11:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 152FCB81C9E;
-        Tue, 23 Aug 2022 09:38:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A7E6C433C1;
-        Tue, 23 Aug 2022 09:38:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A82660F50;
+        Tue, 23 Aug 2022 09:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32AB5C433C1;
+        Tue, 23 Aug 2022 09:11:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247484;
-        bh=QzuS+zibgBHIua63orsBTnoVD11S59/bNENzzt3DNMA=;
+        s=korg; t=1661245864;
+        bh=IKMkzTsYh/OjMKBcBRBsOD5re4x3laIipvrW/22RXUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I776AsuoL7F9vSKQd9NmnpTxRgQ9AImjoiL7KXaqxYQxUYJdk2Mr8u/zGGjj/XhpI
-         8qWOj2FBVXTCkTF3e7yV/N+5b1gaz39nuQHGQ5ZEuDjVK+s6JFf35FCqbSmw/fG0pQ
-         diEwE2uwD5FNJJXcFaevgkK4Jfu7iaUAVRiirZOw=
+        b=P1mRuirHwOvxQGn/iy6/b7Fef6bsum68rQG38W0kR2TQJIQw+EPu+LlYtSyBNaq5n
+         J4sRNmYe/pOGxQBttWrmB0igiTnb3VcvuJ+MhzHWllq6z2anfkLLYdt021xgLbeDGM
+         pe19LVImlqsBV3/BHbjjV2AK7lIuJQYl36/6+wd0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Subject: [PATCH 5.10 052/158] ceph: use correct index when encoding client supported features
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 215/287] ALSA: info: Fix llseek return value when using callback
 Date:   Tue, 23 Aug 2022 10:26:24 +0200
-Message-Id: <20220823080048.199431718@linuxfoundation.org>
+Message-Id: <20220823080108.194251665@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luís Henriques <lhenriques@suse.de>
+From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
 
-commit fea013e020e6ecc7be75bea0d61697b7e916b44d upstream.
+commit 9be080edcca330be4af06b19916c35227891e8bc upstream.
 
-Feature bits have to be encoded into the correct locations.  This hasn't
-been an issue so far because the only hole in the feature bits was in bit
-10 (CEPHFS_FEATURE_RECLAIM_CLIENT), which is located in the 2nd byte.  When
-adding more bits that go beyond the this 2nd byte, the bug will show up.
+When using callback there was a flow of
 
-[xiubli: remove incorrect comment for CEPHFS_FEATURES_CLIENT_SUPPORTED]
+	ret = -EINVAL
+	if (callback) {
+		offset = callback();
+		goto out;
+	}
+	...
+	offset = some other value in case of no callback;
+	ret = offset;
+out:
+	return ret;
 
-Fixes: 9ba1e224538a ("ceph: allocate the correct amount of extra bytes for the session features")
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
+which causes the snd_info_entry_llseek() to return -EINVAL when there is
+callback handler. Fix this by setting "ret" directly to callback return
+value before jumping to "out".
+
+Fixes: 73029e0ff18d ("ALSA: info - Implement common llseek for binary mode")
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220817124924.3974577-1-amadeuszx.slawinski@linux.intel.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ceph/mds_client.c |    7 +++++--
- fs/ceph/mds_client.h |    6 ------
- 2 files changed, 5 insertions(+), 8 deletions(-)
+ sound/core/info.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/fs/ceph/mds_client.c
-+++ b/fs/ceph/mds_client.c
-@@ -1184,14 +1184,17 @@ static int encode_supported_features(voi
- 	if (count > 0) {
- 		size_t i;
- 		size_t size = FEATURE_BYTES(count);
-+		unsigned long bit;
- 
- 		if (WARN_ON_ONCE(*p + 4 + size > end))
- 			return -ERANGE;
- 
- 		ceph_encode_32(p, size);
- 		memset(*p, 0, size);
--		for (i = 0; i < count; i++)
--			((unsigned char*)(*p))[i / 8] |= BIT(feature_bits[i] % 8);
-+		for (i = 0; i < count; i++) {
-+			bit = feature_bits[i];
-+			((unsigned char *)(*p))[bit / 8] |= BIT(bit % 8);
-+		}
- 		*p += size;
- 	} else {
- 		if (WARN_ON_ONCE(*p + 4 > end))
---- a/fs/ceph/mds_client.h
-+++ b/fs/ceph/mds_client.h
-@@ -33,10 +33,6 @@ enum ceph_feature_type {
- 	CEPHFS_FEATURE_MAX = CEPHFS_FEATURE_METRIC_COLLECT,
- };
- 
--/*
-- * This will always have the highest feature bit value
-- * as the last element of the array.
-- */
- #define CEPHFS_FEATURES_CLIENT_SUPPORTED {	\
- 	0, 1, 2, 3, 4, 5, 6, 7,			\
- 	CEPHFS_FEATURE_MIMIC,			\
-@@ -45,8 +41,6 @@ enum ceph_feature_type {
- 	CEPHFS_FEATURE_MULTI_RECONNECT,		\
- 	CEPHFS_FEATURE_DELEG_INO,		\
- 	CEPHFS_FEATURE_METRIC_COLLECT,		\
--						\
--	CEPHFS_FEATURE_MAX,			\
- }
- #define CEPHFS_FEATURES_CLIENT_REQUIRED {}
+--- a/sound/core/info.c
++++ b/sound/core/info.c
+@@ -127,9 +127,9 @@ static loff_t snd_info_entry_llseek(stru
+ 	entry = data->entry;
+ 	mutex_lock(&entry->access);
+ 	if (entry->c.ops->llseek) {
+-		offset = entry->c.ops->llseek(entry,
+-					      data->file_private_data,
+-					      file, offset, orig);
++		ret = entry->c.ops->llseek(entry,
++					   data->file_private_data,
++					   file, offset, orig);
+ 		goto out;
+ 	}
  
 
 

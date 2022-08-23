@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0734F59D243
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F33A59D247
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240456AbiHWHbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S241088AbiHWHb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241009AbiHWHbe (ORCPT
+        with ESMTP id S241033AbiHWHbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:31:34 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A2463F11;
-        Tue, 23 Aug 2022 00:31:31 -0700 (PDT)
-X-UUID: e2279ca205e5400bbac2001b09fcc192-20220823
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=aVdx2hN420cu+4Ovamm5y5Q9yoBGLcQi5iBtHMgF9S8=;
-        b=qS4vOfNhDLbYyDOAV6BFR4xKOdv8ZNHvZ+IXfVOgqdZ/NkfSFoAAzdYyW76IE4PQsTqxYIhkdkSSTeLqJNEy/ICUWCilEwXcHdacpj3RuuYmDhUDa3dh+wtBAA6eSE/4eAwZTVk/7NwnBfJ5thAd0ot3Sd67awpDD1h2EKvufug=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:a71b8cea-dfd7-4606-9714-90186e26c2c5,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Releas
-        e_Ham,ACTION:release,TS:100
-X-CID-INFO: VERSION:1.1.10,REQID:a71b8cea-dfd7-4606-9714-90186e26c2c5,OB:0,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS9
-        81B3D,ACTION:quarantine,TS:100
-X-CID-META: VersionHash:84eae18,CLOUDID:164983c9-6b09-4f60-bf82-12f039f5d530,C
-        OID:910bc39e7dd8,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: e2279ca205e5400bbac2001b09fcc192-20220823
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1054897088; Tue, 23 Aug 2022 15:31:26 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 23 Aug 2022 15:31:25 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Tue, 23 Aug 2022 15:31:24 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <matthias.bgg@gmail.com>
-CC:     <linux-pwm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        xinlei lee <xinlei.lee@mediatek.com>
-Subject: [PATCH,2/2] pwm: mtk-disp: Fix the parameters calculated by the enabled flag of disp_pwm.
-Date:   Tue, 23 Aug 2022 15:31:15 +0800
-Message-ID: <1661239875-19841-3-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1661239875-19841-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1661239875-19841-1-git-send-email-xinlei.lee@mediatek.com>
+        Tue, 23 Aug 2022 03:31:41 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F40163F2D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:31:40 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id x25so12690697ljm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=LMfa0g4iXajYSsq7G/GJjCw48iziR27HSljCF4whntw=;
+        b=sWZVI0duRZy6+VSu2/gbHRkb8m9W+UfstMbvXlE8WFEOVWsPIE3QJobZv7VXJXvnmp
+         dE2H4KN1fIGFMeAA43u/OgQw1t/0FAYn5QEnOY9JcWG4FHwMF8I9UY/DCUSldfhTMXAK
+         9NYwEO+UtDcBtWCJHXSgmC58I0IXPSJjNkW5ff0pY+UXeR+b/o95lTPwxSmmScUgKAkK
+         PPxiyu47AL1Gf9VB+pRwHurkUoAywLdinc5tGY+SP8Nw4YZ8FH2lUVdCy1B0RxWFOu0H
+         nG392sW3vRd8ejbCVmhuaKaxRzldrEkjYN32tfeYE0giX+EdHPdfl2KNOiHDyJInN80W
+         Z8zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=LMfa0g4iXajYSsq7G/GJjCw48iziR27HSljCF4whntw=;
+        b=y6z30Lmx8KeTy9bpOrx5AfUy9HkbGrj3GhDmmWdlqSTBjzLt9FbDqY7AMJE3HttOq1
+         u55k1B3+ZuersZd86tUlfgTY6MpHz5uBAJ6jjU/k8kI5fqlMWvsax+rBVwr2MQoxd2dV
+         tZMcYW3AL4SJudxil8oOKbEqINt/U8zh9rx9JKzGc3d3l+7+GdwdccMpzzT7NWqW0Loc
+         t/k5dJ+JXOvENQz1arV8kXYXNduNpSu1D1kcM2JNgN3njTn4WBdz0PLF7mbcwnH5IzvB
+         QWyPL2Vci/wmVt7CAqr++cq+ruqFQu17wX0kN7ab99qzawKPe54bAL0dMIw3pYNT70qr
+         CkyA==
+X-Gm-Message-State: ACgBeo1sNuaTAKeaM7ePdtlg1vEn1pBDnogXJ8dnrZOFToSSK0JzpuBs
+        dIT75iYnBb8uem8ecGlC3bfyog==
+X-Google-Smtp-Source: AA6agR5ZiE2iR7OITJAmUSXeFVJVKHlOku91yjT7bxk6l+HmPGlr36uB3C/mcMlUH8N/ps0Zs/nEaw==
+X-Received: by 2002:a05:651c:a04:b0:25e:753b:db42 with SMTP id k4-20020a05651c0a0400b0025e753bdb42mr6594777ljq.529.1661239898975;
+        Tue, 23 Aug 2022 00:31:38 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id w8-20020a056512098800b0048b1ab313b2sm2363642lft.60.2022.08.23.00.31.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 00:31:38 -0700 (PDT)
+Message-ID: <d5beeb47-3b50-c41d-2176-d4b46811c5cb@linaro.org>
+Date:   Tue, 23 Aug 2022 10:31:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] arm64: dts: exynos: Add SysMMU nodes for Exynos850
+Content-Language: en-US
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>
+References: <20220823073006.358764-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220823073006.358764-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,32 +81,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xinlei lee <xinlei.lee@mediatek.com>
+On 23/08/2022 10:30, Krzysztof Kozlowski wrote:
+> From: Sam Protsenko <semen.protsenko@linaro.org>
+> 
+> Add all SysMMU nodes to Exynos850 SoC device tree.
 
-In the original mtk_disp_pwm_get_state() function, the result of reading
-con0 & BIT(0) is enabled as disp_pwm. 
-In order to conform to the register table, we should use the disp_pwm 
-base address as the enabled judgment.
+Apologies, that was a mistake to send.
 
-Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
-Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
----
- drivers/pwm/pwm-mtk-disp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index c605013e4114..50425cd1de61 100644
---- a/drivers/pwm/pwm-mtk-disp.c
-+++ b/drivers/pwm/pwm-mtk-disp.c
-@@ -197,7 +197,7 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *chip,
- 	rate = clk_get_rate(mdp->clk_main);
- 	con0 = readl(mdp->base + mdp->data->con0);
- 	con1 = readl(mdp->base + mdp->data->con1);
--	state->enabled = !!(con0 & BIT(0));
-+	state->enabled = !!(readl(mdp->base) & BIT(0));
- 	clk_div = FIELD_GET(PWM_CLKDIV_MASK, con0);
- 	period = FIELD_GET(PWM_PERIOD_MASK, con1);
- 	/*
--- 
-2.18.0
-
+Best regards,
+Krzysztof

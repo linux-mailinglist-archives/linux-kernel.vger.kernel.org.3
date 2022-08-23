@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F7059D6DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4F459D6DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237224AbiHWJWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S1348356AbiHWJRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350349AbiHWJVm (ORCPT
+        with ESMTP id S1347542AbiHWJPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:21:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75F56DF84;
-        Tue, 23 Aug 2022 01:34:44 -0700 (PDT)
+        Tue, 23 Aug 2022 05:15:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437646DAE1;
+        Tue, 23 Aug 2022 01:32:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2668E614E9;
-        Tue, 23 Aug 2022 08:33:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B2DC433B5;
-        Tue, 23 Aug 2022 08:33:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79B4CB81C4D;
+        Tue, 23 Aug 2022 08:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B204CC433C1;
+        Tue, 23 Aug 2022 08:32:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243626;
-        bh=DDeFuJF+/jJw8oszRdDIPDDVt6JZ7zvbZcQR2zC/mkY=;
+        s=korg; t=1661243528;
+        bh=lNsKvYULFuuzdlBwjeh6X66QvKsJxp5dxnGGth5+T8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lndspGLdjuTdRA/rDt2Fi8ATC7qo1NFU90qexq0kj9Xd6/UOmySKhNoL2CuFlLmjV
-         Q8dxIH10ohUkEf5a6V2/bvAvrUmyE8jAdEFmckdlv0rPwhpeTJqINYQKSUyRWd0SIz
-         RMrJSNSDVuvpNvKM742BZuuloMWUIFi+/I3uv/2I=
+        b=DhYs0J5YdFDA1qT2WLL/asf73ma/wDOmYHoPNv55wDFj+iBFz1vJVI2E92eQpGidg
+         YhS3D8W1WVSvkRe+ce7qrpBWSlzwc4KTL5XI0ZI176B32kXNbLjxrqedRQgbGSY5hi
+         Bocct2XlUHUyo9gYn3oCEFPlDJvgz+DoKkO17KpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 297/365] um: add "noreboot" command line option for PANIC_TIMEOUT=-1 setups
-Date:   Tue, 23 Aug 2022 10:03:18 +0200
-Message-Id: <20220823080130.606552627@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Frank Rowand <frank.rowand@sony.com>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 298/365] of: overlay: Move devicetree_corrupt() check up
+Date:   Tue, 23 Aug 2022 10:03:19 +0200
+Message-Id: <20220823080130.638816561@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -55,61 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit dda520d07b95072a0b63f6c52a8eb566d08ea897 ]
+[ Upstream commit e385b0ba6a137f34953e746d70d543660c2de1a0 ]
 
-QEMU has a -no-reboot option, which halts instead of reboots when the
-guest asks to reboot. This is invaluable when used with
-CONFIG_PANIC_TIMEOUT=-1 (and panic_on_warn), because it allows panics
-and warnings to be caught immediately in CI. Implement this in UML too,
-by way of a basic setup param.
+There is no point in doing several preparatory steps in
+of_overlay_fdt_apply(), only to see of_overlay_apply() return early
+because of a corrupt device tree.
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Move the check for a corrupt device tree from of_overlay_apply() to
+of_overlay_fdt_apply(), to check for this as early as possible.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Tested-by: Frank Rowand <frank.rowand@sony.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/c91ce7112eb5167ea46a43d8a980e76b920010ba.1657893306.git.geert+renesas@glider.be
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/os-Linux/skas/process.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/of/overlay.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/arch/um/os-Linux/skas/process.c b/arch/um/os-Linux/skas/process.c
-index c316c993a949..b24db6017ded 100644
---- a/arch/um/os-Linux/skas/process.c
-+++ b/arch/um/os-Linux/skas/process.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <stdlib.h>
-+#include <stdbool.h>
- #include <unistd.h>
- #include <sched.h>
- #include <errno.h>
-@@ -707,10 +708,24 @@ void halt_skas(void)
- 	UML_LONGJMP(&initial_jmpbuf, INIT_JMP_HALT);
- }
- 
-+static bool noreboot;
-+
-+static int __init noreboot_cmd_param(char *str, int *add)
-+{
-+	noreboot = true;
-+	return 0;
-+}
-+
-+__uml_setup("noreboot", noreboot_cmd_param,
-+"noreboot\n"
-+"    Rather than rebooting, exit always, akin to QEMU's -no-reboot option.\n"
-+"    This is useful if you're using CONFIG_PANIC_TIMEOUT in order to catch\n"
-+"    crashes in CI\n");
-+
- void reboot_skas(void)
+diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+index 4044ddcb02c6..84a8d402009c 100644
+--- a/drivers/of/overlay.c
++++ b/drivers/of/overlay.c
+@@ -903,12 +903,6 @@ static int of_overlay_apply(struct overlay_changeset *ovcs)
  {
- 	block_signals_trace();
--	UML_LONGJMP(&initial_jmpbuf, INIT_JMP_REBOOT);
-+	UML_LONGJMP(&initial_jmpbuf, noreboot ? INIT_JMP_HALT : INIT_JMP_REBOOT);
- }
+ 	int ret = 0, ret_revert, ret_tmp;
  
- void __switch_mm(struct mm_id *mm_idp)
+-	if (devicetree_corrupt()) {
+-		pr_err("devicetree state suspect, refuse to apply overlay\n");
+-		ret = -EBUSY;
+-		goto out;
+-	}
+-
+ 	ret = of_resolve_phandles(ovcs->overlay_root);
+ 	if (ret)
+ 		goto out;
+@@ -983,6 +977,11 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+ 
+ 	*ret_ovcs_id = 0;
+ 
++	if (devicetree_corrupt()) {
++		pr_err("devicetree state suspect, refuse to apply overlay\n");
++		return -EBUSY;
++	}
++
+ 	if (overlay_fdt_size < sizeof(struct fdt_header) ||
+ 	    fdt_check_header(overlay_fdt)) {
+ 		pr_err("Invalid overlay_fdt header\n");
 -- 
 2.35.1
 

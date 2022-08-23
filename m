@@ -2,171 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6D059D28D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA2059D289
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241123AbiHWHn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S236310AbiHWHoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241066AbiHWHny (ORCPT
+        with ESMTP id S241066AbiHWHoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:43:54 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46475A16B
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:43:48 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220823074343epoutp03e1ea435b39d21f3291e94aa2851495c7~N6YuF4TXE0522405224epoutp034
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:43:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220823074343epoutp03e1ea435b39d21f3291e94aa2851495c7~N6YuF4TXE0522405224epoutp034
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1661240623;
-        bh=JU5y7oM6osxoQzFh2Yz2BBlu4xGSfLBnAAkEbsV7ssA=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=C6IhTSb5/5BKs9kT/tfz3MJiXcU172eQPEDwEXesClv/na09agmfjnu2gtE4NLXQW
-         4tQj+bQOsNh008HxckzXgYpPha/Yr7S347/ugy2Yr1xh6c/XmSiYpvibwbe92DniJ7
-         x7W19hSGuReOatKA4AC85bSeTxuq/x+9MfPMv8vA=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220823074342epcas2p2bab7e98c5ff666ff946f6d8754c43a9b~N6YtNkfcv2781527815epcas2p2T;
-        Tue, 23 Aug 2022 07:43:42 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4MBh7145mcz4x9Q0; Tue, 23 Aug
-        2022 07:43:41 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4B.63.18083.D2584036; Tue, 23 Aug 2022 16:43:41 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220823074341epcas2p13a52fa12dac940c1a42e5fa4c19e7a78~N6YsRZuHg2218622186epcas2p1G;
-        Tue, 23 Aug 2022 07:43:41 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220823074341epsmtrp2ad037bf286d79d9beeead84168e4ee5f~N6YsQmGcc2119021190epsmtrp2H;
-        Tue, 23 Aug 2022 07:43:41 +0000 (GMT)
-X-AuditID: b6c32a46-cb3ff700000046a3-19-6304852d65f3
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DA.AF.14392.C2584036; Tue, 23 Aug 2022 16:43:40 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220823074340epsmtip1afb6b57ecf6d0d69f8ead50336e3618a~N6YsDzPG71713717137epsmtip1O;
-        Tue, 23 Aug 2022 07:43:40 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Sam Protsenko'" <semen.protsenko@linaro.org>
-Cc:     "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        "'Tomasz Figa'" <tomasz.figa@gmail.com>,
-        "'Michael Turquette'" <mturquette@baylibre.com>,
-        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
-        "'Stephen Boyd'" <sboyd@kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <6b5730d7-997e-518b-e0dd-2a20045242c1@linaro.org>
-Subject: RE: [PATCH] clk: samsung: MAINTAINERS: add Krzysztof Kozlowski
-Date:   Tue, 23 Aug 2022 16:43:40 +0900
-Message-ID: <013f01d8b6c4$1036ed30$30a4c790$@samsung.com>
+        Tue, 23 Aug 2022 03:44:18 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2050.outbound.protection.outlook.com [40.92.99.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D40642F1;
+        Tue, 23 Aug 2022 00:44:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BOVONaTwF+RwCihyRyGUrvgez/agsohVyz7tCIV9RdjX6LCBnfYGU4UhPYBsNJErsCxeq/eRUqa1BQU4tMfEqcrqu3t7HAqiKuEykV//Z5xWXquksFRpnzNbr9k/2KdTjPNXZwPUD/WWEKkKUmlMcXfE5nze1yg9eIN/A91AJx5bsFm9VzeFpsGGKMecpwO0cjVx9ICkOcJhMnRytl799cL7ydRIIj2qPdSV2JFs8jxU2q5V2TKZ3yGKyzR/whnQ14PhaCHtCaOonbDPS+++rvtCTdARlIFx4bWNH1F3d5QBTT0LsGji3XzzeBWrevkBY1fxea3IQXPSh/lR5BqRog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dYWqBtU45I4EQkd+Dbg4pnygsbhlRMw7LJlSRTag6Fk=;
+ b=CXHCWlRQrNsosllUgIoMyP9+tpK6wup/waerDoFVSRnq2PNeH9+6KXWB6HAOsu9vqU1ZzLHj09wi6+YyQRf/ZNvftV87Z1fAUY245fibKKVvXsnsD2NX7ogrQZiSNSK4NZJrPESC+dHPOJxAcDnnY4v+wGdIhTTDisySOKkUcf3Ui9FnyHb0y6hrcXsIPFz8JPG0Q+YMtR6n9Rz9dv9ftGWiHxWztpGZQzw023Z7C6WrYDpv3GhH6m0wtqa/20JvVmiKwFJwwma/ybC9lDlUVLeAJFnRvLApzz8muZ8/OM0xsqmLch3KaM2mjFYWBEExbLlj3Kfn71tqhkT5sUgf2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dYWqBtU45I4EQkd+Dbg4pnygsbhlRMw7LJlSRTag6Fk=;
+ b=MttYetpuk4FJTU0XZOJ/n/sjfrwy/K0Pq8hdNRZAWxd6xFeda9HIiZjkUP7kdT6AZRDZdja5++gE9H8SKPm8jDFIqI3GgQ8q0r1cF8QyCQ0hK/L5uceMTDU0o+/wNsgWGfCpvVlOgfxcprTjt4IRrp3oO4Z+VeH2eHMBBQBSv6MOVmtPIVwLbeKuLbjF+4J7ygJAa708BFePmoQLmbSvfpS+OFR5iW4UmJZtVAFce2zLepaGPhyIslyFMqBcrpNobrsR+muFPJRf6VKIg/HxrzgTbLhW+ElnAINFVmVgKow0kls4lxlrEGWEDrQ6YodZIWm2uqdDYqAw44jz7xHPvg==
+Received: from TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:248::14)
+ by TYAP286MB0281.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:8040::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Tue, 23 Aug
+ 2022 07:44:14 +0000
+Received: from TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::45d6:a31c:aef3:a3e2]) by TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::45d6:a31c:aef3:a3e2%4]) with mapi id 15.20.5546.023; Tue, 23 Aug 2022
+ 07:44:14 +0000
+From:   Riwen Lu <luriwen@hotmail.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, lenb@kernel.org,
+        jeremy.linton@arm.com
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Riwen Lu <luriwen@kylinos.cn>,
+        Jeremy Linton <Jeremy.Linton@arm.com>
+Subject: [PATCH v1] ACPI: processor: Remove freq Qos request for all CPUs
+Date:   Tue, 23 Aug 2022 15:43:42 +0800
+Message-ID: <TYWP286MB2601183235622B29FAF707B5B1709@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [qpx019S2UVF9r51+UW40f+C0o4Aku9XsQoCDB5Zel5Q=]
+X-ClientProxiedBy: SG2PR06CA0222.apcprd06.prod.outlook.com
+ (2603:1096:4:68::30) To TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:248::14)
+X-Microsoft-Original-Message-ID: <20220823074342.425830-1-luriwen@hotmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQF1SOsaNiex7/NfbpzpvZw644fnlQKLnxwnAeCRjYWuX5QYEA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHJsWRmVeSWpSXmKPExsWy7bCmqa5uK0uywYpn8hYP5m1js7j+5Tmr
-        xd7XW9ktPvbcY7W4vGsOm8WM8/uYLC6ecrU4/Kad1eLftY0sFs/7gEKrdv1hdOD2eH+jld1j
-        56y77B6bVnWyedy5tofNo2/LKkaPz5vkAtiism0yUhNTUosUUvOS81My89JtlbyD453jTc0M
-        DHUNLS3MlRTyEnNTbZVcfAJ03TJzgM5TUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak
-        5BSYF+gVJ+YWl+al6+WlllgZGhgYmQIVJmRn3LuygaXgM0fFkdUfmRsY+9m7GDk5JARMJFYf
-        WsXUxcjFISSwg1Fi2drFzBDOJ0aJHe9XMYNUCQl8Y5TYvNmui5EDrGPiB2+Imr2MEkcOvYJq
-        eMEosWvPS0aQBjYBfYmXHdtYQWwRgTyJ6Tc3s4AUMQt8ZpL48Goq2G5OATuJG/uaWEBsYQF3
-        iabpL5hANrAIqErMnREPEuYVsJR4cuECI4QtKHFy5hOwcmYBeYntb+cwQ7ygIPHz6TKoXU4S
-        G7v+sUPUiEjM7mwDO05CYA+HxOJt31kgGlwkvkxZCmULS7w6vgUaFlISn9/tZYOwiyWWzvrE
-        BNHcwChxedsvqISxxKxn7YwghzILaEqs36UPCRVliSO3oG7jk+g4/JcdIswr0dEmBNGoLnFg
-        +3SorbIS3XM+s05gVJqF5LNZSD6bheSDWQi7FjCyrGIUSy0ozk1PLTYqMILHdXJ+7iZGcMLV
-        ctvBOOXtB71DjEwcjIcYJTiYlUR4qy8yJAvxpiRWVqUW5ccXleakFh9iNAUG9URmKdHkfGDK
-        zyuJNzSxNDAxMzM0NzI1MFcS53XRZkwWEkhPLEnNTk0tSC2C6WPi4JRqYFokP6Nm+6/US3dk
-        U19N9IngkrrWceiL9JL3UX8nCBkcm1ZULx35WGzR+eCWhjWHC42Tn5rdt402XvepOOdda7uY
-        dYfPxObgh1Y9qy9khSp5fV2suql86+c5okVZvMukvHgKXtjevC0r5sXzJn32v9iLB+8Wb/m9
-        c3rLDf+sAplpqbvkl/yOs13F8qxCjSWgLWVv5ueSk+Iyqi42HPd+qDY5JS4xDAsMXe2qy/L3
-        aXLDwp5pFsfOWe1dIFSncn4dT6nmpHXfubfOSSqLNF5w8+RPhlptq93udgFz5lh+9eo67F6f
-        dqN8Xe2a37ejvby9gm6nzNnmqy35u1x50un738Q39cSoJQVrPNA43HdWRImlOCPRUIu5qDgR
-        AGrLwsFBBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSnK5OK0uywd+vlhYP5m1js7j+5Tmr
-        xd7XW9ktPvbcY7W4vGsOm8WM8/uYLC6ecrU4/Kad1eLftY0sFs/7gEKrdv1hdOD2eH+jld1j
-        56y77B6bVnWyedy5tofNo2/LKkaPz5vkAtiiuGxSUnMyy1KL9O0SuDLuXdnAUvCZo+LI6o/M
-        DYz97F2MHBwSAiYSEz94dzFycQgJ7GaUuHP3NGsXIydQXFbi2bsd7BC2sMT9liOsEEXPGCX+
-        nuhnAkmwCehLvOzYBtYgIpAnce3IRrAiZoGfTBLbjv9hBEkICZxglJg/F6yIU8BO4sa+JhYQ
-        W1jAXaJp+gsmkCtYBFQl5s6IBwnzClhKPLlwgRHCFpQ4OfMJWDmzgLbE05tPoWx5ie1v5zBD
-        HKcg8fPpMqgbnCQ2dv1jh6gRkZjd2cY8gVF4FpJRs5CMmoVk1CwkLQsYWVYxSqYWFOem5xYb
-        FhjmpZbrFSfmFpfmpesl5+duYgRHn5bmDsbtqz7oHWJk4mA8xCjBwawkwlt9kSFZiDclsbIq
-        tSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqY9Gy/bzuz5v5fveW3d
-        Vp5ZQd8O3lrYK+sUwfZI+EfMim8nY+KyRf9kFt/zfb6t6MrXfomZ57pLVrjtvVE24295/cql
-        M+6/YOSKepN/YasQ89nFPxYuSHtSZnOxdO+rd8XKC/6E3/C2379W2cfVnevLgf8C0jNSMyZJ
-        nGtX4dD3UZrlvd4p4KtLvfuF8x+aO5TTjaRe/5sS2VfwcY0ei0TF3jq/KxP7FVT/73/7cqmJ
-        xIFIrQy1c27PutfdeDOJ+aufxYtDvpzf011mcgZKp+m3ORiq/Lg1x73+Qdv9wGbh7tnFi3dG
-        8hhsmpzkp/gq0vJu8Iu0zTNVPu3x0pHoXW/+8nDDjUWN4ZcEOysTl65TYinOSDTUYi4qTgQA
-        22uvYy0DAAA=
-X-CMS-MailID: 20220823074341epcas2p13a52fa12dac940c1a42e5fa4c19e7a78
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220823073610epcas2p2783d4c70dc57be186822b7ef12fc586a
-References: <20220823073154.359090-1-krzysztof.kozlowski@linaro.org>
-        <CGME20220823073610epcas2p2783d4c70dc57be186822b7ef12fc586a@epcas2p2.samsung.com>
-        <6b5730d7-997e-518b-e0dd-2a20045242c1@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 75babf41-0838-4294-261d-08da84db4654
+X-MS-TrafficTypeDiagnostic: TYAP286MB0281:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JYtZHdbt5zxD7CYSB6lBkQXLpfkdjdofPIYiZ+fPv/5e1Szf5vkOruHkXEcDUSUPE6Ts2MOHXWLdcVSD2BmOnhDUIHbNSXgjmlNnB4MrW/A31+zjR9N04gq7FRfdi7Hplzj7eNUcMjNiLaxnrgaxtDtr9R83rfbWcpeFpuA68qH5P53bEbnedhHBzjG5g7h0Mbv8xT1OWInN0eX7Yr7cRlcS1b+4MzTq0NVe2Z0JimrV5LqsQALYOhrFOcBVtou9UJgKK7wfTAJF3vtVfNBe41A2/w0cuPcYEYbwr7NUfpem/IyMyi4eIaJeQwq3O58Ulz8hc7okyuQ5rb9hptLHyI2U+bcvJikGCGNlUF780RO89R9W2uA1DZG5iAzH9fX9WF8feAx36PVCcbc/3UHXE6+K1pGdsMSFFc/7EBCi/ljwDLD8Hgw9ZV0bj/TiZRaE2Ie56t/LLOhPpZgoiB01ffcZUkwaO5ZffW9h7XRUpuGFM+wpTt4/mKOicmAeNKcB7oAh7VHleT9Lt3x3+lRdeCNRcEIs2gsNj042QADuUGoaVF0V08rVM9tE3qxKhXYWOA9s5TSAH2u8IIKZLJfzFIxE5nC4vW8Wl93Rx+OugISTRgG9TL81cK28qcolWVYeehuov4QrfY3kC+DgEF2Vtg==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OBUsMaa7t2THVHhqCN2tZEDY/2yl1ocaxUa8MfmAX+qokxIjgQ4KA+szLdQu?=
+ =?us-ascii?Q?JjW94CunACfE8EsLOA7Iutzxk8BJf0DLZR2jUbs794oMhpYUcDyFbQIzhe9N?=
+ =?us-ascii?Q?ZqKVKJm3MdfU1P/xcVLjI79L+/QGmKDI87QmysTfzUAnSsT2xrzw1sNxeDEO?=
+ =?us-ascii?Q?/16/jZaogLVRQaVXC9+AebVNFd10twNvp20ivLoGjgnpLMhFQuvij3dy+4rM?=
+ =?us-ascii?Q?x4BFdrCqi29H4rEWqH9BA13n6oizXLgmae0FvOkwqWDD3ql4bgScJw7lglYb?=
+ =?us-ascii?Q?x8EM7/vSxpUE9mwSTkuXsWqK4VZ0/1HQkb6kRb1ETXl2UPniRL/R/P7XNW22?=
+ =?us-ascii?Q?PP/WX2vNOtcLe0cogCRTtfNKe3KBhGPEvLQfUvmemlZrmLGVy5yPcm0k7JKo?=
+ =?us-ascii?Q?Y6Yf+U2o64s7gMYHsk6o6gGFBmkBA/vc5umdYvfKhKk0spBY1xMomQfJ6byT?=
+ =?us-ascii?Q?a+PsveDxtYRXNS/r7o4cW4R7exxdfmMbpwQ4e453DpYMf8/lVyV9syKLyahB?=
+ =?us-ascii?Q?DvxQeV9dJ8GT6hd0NkTyhPAmhP/INBoi06bDAJIyeYFrqY+IDYJ9ZTNt5jkI?=
+ =?us-ascii?Q?8VgT6O0ie4E5EhYG/64KFKwmGkpqW3Y+ULqHV+C87dF3vUoz/+oqYn3QYxro?=
+ =?us-ascii?Q?ne+eiuSkTBDfS8mHGDbygzJYotHoSRnOAGOtmWaa6Ed+qqwTi8CQPdlN5GpY?=
+ =?us-ascii?Q?35Pnr+dVWp7HD/uKqjPfNeWRVoXlPwtaTcS4IcgvVnvUwbJhBDoXBoZYyXQ5?=
+ =?us-ascii?Q?rzZW3u+v7Xat3XTLwrzcNzGeUN6NyIeZuTNRhPGn2y95YHt6BU5AmaYW/apQ?=
+ =?us-ascii?Q?9LOvSRC0LhRwau/JPcZGs07gqwWaTA9w+c9xO8d0Dx8JvY7aftuJS7OR++al?=
+ =?us-ascii?Q?ec+XVn5Lj/z8kyI/3E1lYve1os7NI0tIyoVDpeQ7DQ/KiTCwr3gMcBetnmWX?=
+ =?us-ascii?Q?YwVyIt/eKRv9Hv+OXPfFpcXcdwpZvNlc4rYFzKnmiM0sSVbd6oIO8Fdqt+UC?=
+ =?us-ascii?Q?M5Bi4bDIWXbCAhcEPlEw8NeLiQM02o0NvdaV1rzZf7faU3ccrdUoJhJadY/F?=
+ =?us-ascii?Q?3c9wPzKkl9k/yBJ7ci2emc1kMfetjpCidMrRRzjcFBdJ6jhnHIZfstRjjejo?=
+ =?us-ascii?Q?lZysnFsoSN9qGt9dvlNRlZcTNB1XtPU8vwA9MG2mQY7fYlRzTZuqomI+5q/d?=
+ =?us-ascii?Q?QepQZdkmo+IDaRcsNbDdV29FbFZCtiA0I053zbH1ILNCltQt4Mv0p5uqrm4o?=
+ =?us-ascii?Q?4wC1poBL370wi/qjwZ5TSJDsgN3GK6ebtYrZ7yaXXg=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75babf41-0838-4294-261d-08da84db4654
+X-MS-Exchange-CrossTenant-AuthSource: TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 07:44:14.1626
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAP286MB0281
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Add Krzysztof Kozlowski (already Samsung SoC maintainer) as Samsung
-> > SoC clock maintainer to handle the patches.
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> > ---
-> >
-> > Agreed with Sylwester who is recently busy. Let me handle some patches
-> > as I already handle rest of Samsung SoC.
-> >
-> > I plan to send pulls the same way Sylwester did - to Stephen.
-> 
-> 
-> Hi Sam and Chanho,
-> 
-> Please accept our apologies for any delays in handling the patches.
+From: Riwen Lu <luriwen@kylinos.cn>
 
-No problem :)
+The freq Qos request would be removed repeatedly if the cpufreq policy
+relates to more than one CPU. Then, it would cause the "called for unknown
+object" warning.
 
-> 
-> I went through archives and grabbed few remaining Samsung clk patchsets:
-> 1. bindings:
-> https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-
-> v6.0/samsung-clk-dt-bindings
-> 
-> 2. clk:
-> https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=next
-> /clk
-> 
-> 3. and DTS via my regular branches.
-> 
-> Everything should pop-up in next linux-next.
-> 
-> If something is still missing/pending/lost, please kindly resend.
-> 
-> Also thanks for your upstream Samsung contributions!
+Remove the freq Qos request for each CPU relates to the cpufreq policy,
+instead of removing repeatedly for the last CPU of it.
 
-Great. Thanks for your support.
+Fixes: a1bb46c36ce3 ("ACPI: processor: Add QoS requests for all CPUs")
+Reported-by: Jeremy Linton <Jeremy.Linton@arm.com>
+Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+---
+ drivers/acpi/processor_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best Regards,
-Chanho Park
+diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
+index db6ac540e924..e534fd49a67e 100644
+--- a/drivers/acpi/processor_thermal.c
++++ b/drivers/acpi/processor_thermal.c
+@@ -151,7 +151,7 @@ void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy)
+ 	unsigned int cpu;
+ 
+ 	for_each_cpu(cpu, policy->related_cpus) {
+-		struct acpi_processor *pr = per_cpu(processors, policy->cpu);
++		struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
+ 		if (pr)
+ 			freq_qos_remove_request(&pr->thermal_req);
+-- 
+2.25.1
 

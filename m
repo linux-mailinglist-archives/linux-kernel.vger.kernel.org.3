@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB3F59DD71
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD8E59DE57
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353336AbiHWKN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S1359364AbiHWMDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352759AbiHWKGP (ORCPT
+        with ESMTP id S1359559AbiHWMBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DCCB1C4;
-        Tue, 23 Aug 2022 01:52:51 -0700 (PDT)
+        Tue, 23 Aug 2022 08:01:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E813EA3;
+        Tue, 23 Aug 2022 02:36:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2E95B81C28;
-        Tue, 23 Aug 2022 08:52:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CBAC433C1;
-        Tue, 23 Aug 2022 08:52:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B1F161468;
+        Tue, 23 Aug 2022 09:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5C3C433C1;
+        Tue, 23 Aug 2022 09:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244768;
-        bh=OQlvZM+K22KXk20z/y80Vu43gP5UH4g2hFg4EP4s7Wc=;
+        s=korg; t=1661247373;
+        bh=LP5BzgqKsxL6/kCUIrjEs8eLaEKoR1gKWjg9bD0cpqg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XVGVL3PilQvNhE0Tef1DKIM5ZEtOvW7dZm/fnQRYC58h+A4WDvNDIxA8gvXP7ZpA+
-         FG1MN/d9g3n+lwi719CH4gNz3d1ZRpiElhAY/2rh5Pyq2bavA2rziokC291BfbJ6pU
-         yrG6NFs2gMmH8/NqOH2DJM8zQZO09sljfON8+o5Y=
+        b=II2BHzS2oCdQzJtEJmyKUYtFG5NlH0iI8zmrccdLPGwoLQ2yqmjt8cGvDoMXV4Zyj
+         sOhI84SImGQrO7IKeM3i4PB/0eRm/WSazhriodHwmLaXAirSgtFn0oNA1VKoY6zTd5
+         A7W2Qtdvt+Iz3qkZRL6UhHYZFig1mrtaHsAac3bI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 4.14 187/229] SUNRPC: Reinitialise the backchannel request buffers before reuse
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        John Johansen <john.johansen@canonical.com>
+Subject: [PATCH 5.10 016/158] apparmor: fix aa_label_asxprint return check
 Date:   Tue, 23 Aug 2022 10:25:48 +0200
-Message-Id: <20220823080100.290060127@linuxfoundation.org>
+Message-Id: <20220823080046.720533447@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Tom Rix <trix@redhat.com>
 
-commit 6622e3a73112fc336c1c2c582428fb5ef18e456a upstream.
+commit 3e2a3a0830a2090e766d0d887d52c67de2a6f323 upstream.
 
-When we're reusing the backchannel requests instead of freeing them,
-then we should reinitialise any values of the send/receive xdr_bufs so
-that they reflect the available space.
+Clang static analysis reports this issue
+label.c:1802:3: warning: 2nd function call argument
+  is an uninitialized value
+  pr_info("%s", str);
+  ^~~~~~~~~~~~~~~~~~
 
-Fixes: 0d2a970d0ae5 ("SUNRPC: Fix a backchannel race")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+str is set from a successful call to aa_label_asxprint(&str, ...)
+On failure a negative value is returned, not a -1.  So change
+the check.
+
+Fixes: f1bd904175e8 ("apparmor: add the base fns() for domain labels")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: John Johansen <john.johansen@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sunrpc/backchannel_rqst.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ security/apparmor/label.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/net/sunrpc/backchannel_rqst.c
-+++ b/net/sunrpc/backchannel_rqst.c
-@@ -69,6 +69,17 @@ static void xprt_free_allocation(struct
- 	kfree(req);
- }
+--- a/security/apparmor/label.c
++++ b/security/apparmor/label.c
+@@ -1745,7 +1745,7 @@ void aa_label_xaudit(struct audit_buffer
+ 	if (!use_label_hname(ns, label, flags) ||
+ 	    display_mode(ns, label, flags)) {
+ 		len  = aa_label_asxprint(&name, ns, label, flags, gfp);
+-		if (len == -1) {
++		if (len < 0) {
+ 			AA_DEBUG("label print error");
+ 			return;
+ 		}
+@@ -1773,7 +1773,7 @@ void aa_label_seq_xprint(struct seq_file
+ 		int len;
  
-+static void xprt_bc_reinit_xdr_buf(struct xdr_buf *buf)
-+{
-+	buf->head[0].iov_len = PAGE_SIZE;
-+	buf->tail[0].iov_len = 0;
-+	buf->pages = NULL;
-+	buf->page_len = 0;
-+	buf->flags = 0;
-+	buf->len = 0;
-+	buf->buflen = PAGE_SIZE;
-+}
-+
- static int xprt_alloc_xdr_buf(struct xdr_buf *buf, gfp_t gfp_flags)
- {
- 	struct page *page;
-@@ -291,6 +302,9 @@ void xprt_free_bc_rqst(struct rpc_rqst *
- 	 */
- 	spin_lock_bh(&xprt->bc_pa_lock);
- 	if (xprt_need_to_requeue(xprt)) {
-+		xprt_bc_reinit_xdr_buf(&req->rq_snd_buf);
-+		xprt_bc_reinit_xdr_buf(&req->rq_rcv_buf);
-+		req->rq_rcv_buf.len = PAGE_SIZE;
- 		list_add_tail(&req->rq_bc_pa_list, &xprt->bc_pa_list);
- 		xprt->bc_alloc_count++;
- 		req = NULL;
+ 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
+-		if (len == -1) {
++		if (len < 0) {
+ 			AA_DEBUG("label print error");
+ 			return;
+ 		}
+@@ -1796,7 +1796,7 @@ void aa_label_xprintk(struct aa_ns *ns,
+ 		int len;
+ 
+ 		len = aa_label_asxprint(&str, ns, label, flags, gfp);
+-		if (len == -1) {
++		if (len < 0) {
+ 			AA_DEBUG("label print error");
+ 			return;
+ 		}
 
 

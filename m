@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746B559ECC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442B359ECCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiHWTrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S231502AbiHWTra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiHWTqu (ORCPT
+        with ESMTP id S231156AbiHWTqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:46:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D629D87CA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:50:15 -0700 (PDT)
+        Tue, 23 Aug 2022 15:46:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FF2D9EB3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:50:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0843E61716
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87473C433D6;
-        Tue, 23 Aug 2022 18:50:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8FB2B82075
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD378C433C1;
+        Tue, 23 Aug 2022 18:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661280614;
-        bh=koJ6rzVdomfaX6woLpwAmnTIiggmEx7bd6R+PBkBeJE=;
+        s=k20201202; t=1661280618;
+        bh=/xv4OXPsvPMkUzwbd/AWtLyj0uWi/jiA2ATVA8TWE4k=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=khbOK72XLBDeOqniHglLFaV9Rzz0QuCWnvInfb0uyGxyUXuf/RCp8P5YfsklJMw4C
-         z756LyMUOdLbx0TKYbJbq+EAtASfSMDA5q3TV3qESe+0D8+SedqoZOrg+dpmmJbfbb
-         tT6IS3vKh5Tw1malONmOwDlqkpbw68RrlG+tAtRjUOhbgsLYq1zKg/7ygMsxIoO2d0
-         hlzoraEm+x/x1KkGuYan1Apc0mu+ZnRGhBC56pBlpikNMEfGgkGEKeL+nT9V2p61TX
-         GaPi55rpu705WVW/mkjtvXBA6ItQ7SZhtJZCbk7ipamdTPjUB6dllq6WfPyBleDzjh
-         yFh8wx/mM8+iw==
+        b=mpNJ/EG/TqO3lfmwvJTa7aGTqPMHdTXS3Rf+ENbEj92mySCtv0t/twhfGz5xNNDy5
+         f7Vn8WmmA7jF9lCC+6daoPf0Y367FNpoNvhELxLR0NGvnwilpT6GUFoCDQm81yjcvn
+         neagGHcDTXf0y5g9O9WqgEW0wmHYBXyhrmn/vfOadkpdTfTWwMruT6AyYOvxgZN0a8
+         gTj4pOcxwJfY38OXPHNqf4WAjCKltR4A4cppObItZjKgBGPShoUpqsxFKstnZPqgSu
+         0nzzy53pxh7bgbKGwIW5QbBsexPBNokJtAc6AfMW8YmkgO4WZbDQzkKerVsXEX+b6E
+         9ZSwFuCBMxfQQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     pierre-louis.bossart@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, daniel.baluta@nxp.com,
-        angelogioacchino.delregno@collabora.com, lgirdwood@gmail.com,
-        Chunxu Li <chunxu.li@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
-        sound-open-firmware@alsa-project.org, tinghan.shen@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        project_global_chrome_upstream_group@mediatek.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        yc.hung@mediatek.com
-In-Reply-To: <20220805070449.6611-1-chunxu.li@mediatek.com>
-References: <20220805070449.6611-1-chunxu.li@mediatek.com>
-Subject: Re: [PATCH v2 0/2] Introduce sof_of_machine_select
-Message-Id: <166128061023.1031684.5884182401063110421.b4-ty@kernel.org>
-Date:   Tue, 23 Aug 2022 19:50:10 +0100
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+In-Reply-To: <20220823135700.265019-1-linus.walleij@linaro.org>
+References: <20220823135700.265019-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH] regmap: check right noinc bounds in debug print
+Message-Id: <166128061762.1031868.7908972361165797075.b4-ty@kernel.org>
+Date:   Tue, 23 Aug 2022 19:50:17 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,27 +55,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 Aug 2022 15:04:47 +0800, Chunxu Li wrote:
-> From: "chunxu.li" <chunxu.li@mediatek.com>
+On Tue, 23 Aug 2022 15:57:00 +0200, Linus Walleij wrote:
+> We were using the wrong bound in the debug prints: this
+> needs to be the number of elements, not the number of bytes,
+> since we're indexing into an element-size typed array.
 > 
-> Change since v1:
->   - remove the callback of_machine_select defined in sof-priv.h
->   - move sof_of_machine_select to common code, and called in
->     sof_machine_check
->   - rename .board field to .compatible in structure snd_sof_of_mach
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
 Thanks!
 
-[1/2] ASoC: SOF: Introduce function sof_of_machine_select
-      commit: 6ace85b9838dc0162b474dbbbb6b388e7561f6a7
-[2/2] ASoC: SOF: mediatek: Add sof_mt8186_machs for mt8186
-      commit: 2dec9e09e955dfc4b7843fa4f9c09e7ee8931b1d
+[1/1] regmap: check right noinc bounds in debug print
+      commit: b7059927c3e32c96d2ff50c206549d8fac0ba69e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

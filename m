@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB7359DDA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC4E59DCE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357570AbiHWL0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S1355577AbiHWKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357694AbiHWLUv (ORCPT
+        with ESMTP id S1354541AbiHWKVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:20:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AA18C456;
-        Tue, 23 Aug 2022 02:22:47 -0700 (PDT)
+        Tue, 23 Aug 2022 06:21:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C845582749;
+        Tue, 23 Aug 2022 02:03:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC6460F91;
-        Tue, 23 Aug 2022 09:22:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF5DC433C1;
-        Tue, 23 Aug 2022 09:22:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 658B06157B;
+        Tue, 23 Aug 2022 09:03:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6687FC433D7;
+        Tue, 23 Aug 2022 09:02:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246565;
-        bh=EIQDczlUsFr93qzTTKiSq1vVOgh6UgqC2s8V7cuUAqU=;
+        s=korg; t=1661245379;
+        bh=JLgT1YjRQoCyfhyImHJaeFjmVBeCtSn+RgWnOxdaFZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CoI50iagdDY/6oMzV/0BccHAh+tkgbQZ4RHTzrXQEQmlEXHz574TyivtuSvC5p9jg
-         8Mc9ZbWexYtYoBmZBRaNruwQ6394GxA5D+NbhGrhi+C8d3ZQnANaTR61N0BwUvu4+j
-         lemsvKw3oByo19BiZqAAJVuHCgHuoFDhD79RCS8c=
+        b=Lrzhf91LgIeMFUPEZW5Us2GBLPSrEZDMKV/S8hp4kQGMxLaKS/VrXE1Wwpku0kJRM
+         P5DR3Cyvvcb0Ae4F7sUgu5PWAzNjwrkD+/QVzFsWm8MpBSuCY2gL9ZqWUu6W1JtBor
+         EuP26b/9Efb+DVroZmSMjg7VTUP+8jDZ/57XLi0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Michal Simek <michal.simek@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 150/389] netdevsim: Avoid allocation warnings triggered from user space
-Date:   Tue, 23 Aug 2022 10:23:48 +0200
-Message-Id: <20220823080121.869067858@linuxfoundation.org>
+Subject: [PATCH 4.19 060/287] cpufreq: zynq: Fix refcount leak in zynq_get_revision
+Date:   Tue, 23 Aug 2022 10:23:49 +0200
+Message-Id: <20220823080102.259960163@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit d0b80a9edb1a029ff913e81b47540e57ad034329 ]
+[ Upstream commit d1ff2559cef0f6f8d97fba6337b28adb10689e16 ]
 
-We need to suppress warnings from sily map sizes. Also switch
-from GFP_USER to GFP_KERNEL_ACCOUNT, I'm pretty sure I misunderstood
-the flags when writing this code.
+of_find_compatible_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 395cacb5f1a0 ("netdevsim: bpf: support fake map offload")
-Reported-by: syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220726213605.154204-1-kuba@kernel.org
+Fixes: 00f7dc636366 ("ARM: zynq: Add support for SOC_BUS")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220605082807.21526-1-linmq006@gmail.com
+Signed-off-by: Michal Simek <michal.simek@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/netdevsim/bpf.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/arm/mach-zynq/common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-index e0a4acc6144b..8e47755cc159 100644
---- a/drivers/net/netdevsim/bpf.c
-+++ b/drivers/net/netdevsim/bpf.c
-@@ -347,10 +347,12 @@ nsim_map_alloc_elem(struct bpf_offloaded_map *offmap, unsigned int idx)
- {
- 	struct nsim_bpf_bound_map *nmap = offmap->dev_priv;
+diff --git a/arch/arm/mach-zynq/common.c b/arch/arm/mach-zynq/common.c
+index 6aba9ebf8041..a8b1b9c6626e 100644
+--- a/arch/arm/mach-zynq/common.c
++++ b/arch/arm/mach-zynq/common.c
+@@ -84,6 +84,7 @@ static int __init zynq_get_revision(void)
+ 	}
  
--	nmap->entry[idx].key = kmalloc(offmap->map.key_size, GFP_USER);
-+	nmap->entry[idx].key = kmalloc(offmap->map.key_size,
-+				       GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
- 	if (!nmap->entry[idx].key)
- 		return -ENOMEM;
--	nmap->entry[idx].value = kmalloc(offmap->map.value_size, GFP_USER);
-+	nmap->entry[idx].value = kmalloc(offmap->map.value_size,
-+					 GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
- 	if (!nmap->entry[idx].value) {
- 		kfree(nmap->entry[idx].key);
- 		nmap->entry[idx].key = NULL;
-@@ -492,7 +494,7 @@ nsim_bpf_map_alloc(struct netdevsim *ns, struct bpf_offloaded_map *offmap)
- 	if (offmap->map.map_flags)
- 		return -EINVAL;
- 
--	nmap = kzalloc(sizeof(*nmap), GFP_USER);
-+	nmap = kzalloc(sizeof(*nmap), GFP_KERNEL_ACCOUNT);
- 	if (!nmap)
- 		return -ENOMEM;
- 
+ 	zynq_devcfg_base = of_iomap(np, 0);
++	of_node_put(np);
+ 	if (!zynq_devcfg_base) {
+ 		pr_err("%s: Unable to map I/O memory\n", __func__);
+ 		return -1;
 -- 
 2.35.1
 

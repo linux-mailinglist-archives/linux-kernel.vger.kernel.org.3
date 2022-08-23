@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D798059E9CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB75B59E9DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbiHWRhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S231600AbiHWRhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiHWRhA (ORCPT
+        with ESMTP id S231935AbiHWRhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:37:00 -0400
-Received: from ixit.cz (ip-94-112-206-30.bb.vodafone.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0D8816A9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:20:41 -0700 (PDT)
-Received: from newone.lan (_gateway [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id B03DF2007F;
-        Tue, 23 Aug 2022 17:20:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1661268038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EFtFu5utQxl/cbAQO+lEXnvl78vZetgkEfJeBBZqMJA=;
-        b=ztgcNeWbwutbuVNPd2GAZJVvaYGjfTr0xNxzy9GSbhy9zwzm4legDGRx8/01fxRwCPyncY
-        DD6T8GKDEQoW3gGb6mdtXaqPgWtON2waFSaBUKVsx0bTAvo8x4kNKz2l7eVxwpKRpI9rZ8
-        D+bsPLkzm9zOK/kqryfe2R6nbx1M0O8=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: remove EXPERIMENTAL flag for zswap
-Date:   Tue, 23 Aug 2022 17:20:33 +0200
-Message-Id: <20220823152033.66682-1-david@ixit.cz>
+        Tue, 23 Aug 2022 13:37:11 -0400
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E6C844DA;
+        Tue, 23 Aug 2022 08:21:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1661268069; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=A8R8WP4pX54ShsjmNzGakU44eL/5AJc9TPNKzOiMEVAnU3l9xngOjxB4jdeZvShYmcZ/g/PCyMI9mjFFJaulybsx6frGRyastXKZMkyWcv4BppV/aXlpxe8Xq/ntH4RAhTaGamPJ4CLMhUjrQzuI+6ob4XkHl7tFNcUqN9LzeXk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1661268069; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=dDz9V3Znq8yZ15TOlRARYvw+VZde7mrsNRQSC5a6arE=; 
+        b=TyrWcohKxMEsCxq2x395JALlX8+ubeLUlMXVbZ3lrWH2eTjl1hvridLouQZzuRLNo87xO1yyfVSQozPJE+CKLWbDQuIAb/Vbk5twbISQWFNvBHNkrAMiEHHxMA5FYILQaUfIuJbeCIcqfhrj5/Kw4i2qimNtMT+DNmdwJo2QinU=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661268069;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=dDz9V3Znq8yZ15TOlRARYvw+VZde7mrsNRQSC5a6arE=;
+        b=OwGrEVfSBRHeToglwMkvZuq9ze9Cid6OCQKcqaorKTt3zP4y9ICKnWWRhmJHxUEN
+        IsQ0Gbp+L63Se8YfpcPrG9c0A7qJt60yYHtqxXztzHb4T+QzN2StURUL0jN9slXQ3BL
+        IEWBzERqgGJrKuPq1qD6gjsR8suM4oCrFntM7dAg=
+Received: from localhost.localdomain (103.249.234.81 [103.249.234.81]) by mx.zoho.in
+        with SMTPS id 1661268067258201.55463256934252; Tue, 23 Aug 2022 20:51:07 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     code@siddh.me
+Cc:     david@fromorbit.com, djwong@kernel.org, fgheet255t@gmail.com,
+        hch@infradead.org, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, riteshh@linux.ibm.com,
+        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Message-ID: <20220823152101.165538-1-code@siddh.me>
+Subject: Re: [syzbot] WARNING in iomap_iter
+Date:   Tue, 23 Aug 2022 20:51:01 +0530
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <182c6137693.20a934d213186.5712495322312393662@siddh.me>
+References: <182c6137693.20a934d213186.5712495322312393662@siddh.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-zswap has been with us since 2013, and it's widely used in many products.
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- mm/Kconfig | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/block/loop.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 96cd3ae25c6f..ceec438c0741 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -23,7 +23,7 @@ menuconfig SWAP
- 	  in your computer.  If unsure say Y.
- 
- config ZSWAP
--	bool "Compressed cache for swap pages (EXPERIMENTAL)"
-+	bool "Compressed cache for swap pages"
- 	depends on SWAP
- 	select FRONTSWAP
- 	select CRYPTO
-@@ -36,12 +36,6 @@ config ZSWAP
- 	  in the case where decompressing from RAM is faster than swap device
- 	  reads, can also improve workload performance.
- 
--	  This is marked experimental because it is a new feature (as of
--	  v3.11) that interacts heavily with memory reclaim.  While these
--	  interactions don't cause any known issues on simple memory setups,
--	  they have not be fully explored on the large set of potential
--	  configurations and workloads that exist.
--
- config ZSWAP_DEFAULT_ON
- 	bool "Enable the compressed cache for swap pages by default"
- 	depends on ZSWAP
--- 
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index e3c0ba93c1a3..e1fe8eda020f 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -979,6 +979,11 @@ loop_set_status_from_info(struct loop_device *lo,
+=20
+ =09lo->lo_offset =3D info->lo_offset;
+ =09lo->lo_sizelimit =3D info->lo_sizelimit;
++
++=09/* loff_t vars have been assigned __u64 */
++=09if (lo->lo_offset < 0 || lo->lo_sizelimit < 0 || lo->lo_flags < 0)
++=09=09return -EOVERFLOW;
++
+ =09memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
+ =09lo->lo_file_name[LO_NAME_SIZE-1] =3D 0;
+ =09lo->lo_flags =3D info->lo_flags;
+--=20
 2.35.1
+
 

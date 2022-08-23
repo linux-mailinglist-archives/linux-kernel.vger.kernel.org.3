@@ -2,223 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B30059EDF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9020259EDF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiHWVEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
+        id S231145AbiHWVFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiHWVEA (ORCPT
+        with ESMTP id S231163AbiHWVFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:04:00 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9102C121;
-        Tue, 23 Aug 2022 14:03:58 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id 20so13891345plo.10;
-        Tue, 23 Aug 2022 14:03:58 -0700 (PDT)
+        Tue, 23 Aug 2022 17:05:38 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC06D7C775;
+        Tue, 23 Aug 2022 14:05:36 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id g21so11289878qka.5;
+        Tue, 23 Aug 2022 14:05:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc;
-        bh=cHRKNBYKG3xOANZ6kQFhVpqVJ5L+ueZJ9Jdjp1L40rk=;
-        b=E3+WEPxKj4HxRkV70dmExf/Tz2+s9dV7G4PaLZIsgQkCjPruXMnKR2eIYwO2iHBVI6
-         qntA+JylLJLA9n/AdZclpvxps3wRZNn6xQjDzrMtIQDYzFlsnIDD2MDgxx9Fznv5y1Ri
-         hizD601ZaUzj24mAxL3iYNmAtaK3y6MuIZxJdX8nq6Kftzq47lKKE3gyyXYvK6aqHIXS
-         9pfT98oxI+yEeaXW4hE2e0tUYZFom3KkIlzOCVQz82eF8KSnjVxw9LDaWD7uRTdyABNI
-         gZAadCTkPXL+uZRpViiIF6pqXSQ9HpB2D2A8vbSiOtXyoOqCj24o5izy4JVDjf0FVYAr
-         kukQ==
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc;
+        bh=3cCXr8Wd/Y2HhMKIaqg0LsBk5BUYC7YkYkFrfstD7bU=;
+        b=gNk2m7TGW1WnBFr0mCRq60sD3lnXI7qGLRNSMgkh0toUeNn294q8m5Z9Dfn4Gil3xI
+         i0yIQNJlU0PYdVsy8xbzwQr4ducda0DDX50cSUDNjH5HyVm0Y4aPDZIKxZMgLtb3m9oE
+         wiRfUqf2tuATlPTiq879D/Z8gyq45poiHibo0R8iIIO/fSOzquXf4F9i9Cg2gt7aJmfW
+         1zoOQxmN1v1Fzleh0mG6GH+KOY2OFuZnxHlr5Wa9CLWFAcGw+yLzs4s/npXt+AUcMGaW
+         bThZJsneaphuSCVHF2NO6CT+fx0lM7AqCyXZHsVc4lUZoDx/gXRrt2YqqBDOlI/wTCCF
+         zsDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc;
-        bh=cHRKNBYKG3xOANZ6kQFhVpqVJ5L+ueZJ9Jdjp1L40rk=;
-        b=ZKgyGJTEC9O7JGxFKnLTckUdPlPF13/jnKrvW/sJFfZAcByxdW4wBGlcpjWgbYzDU5
-         1KG53Eg/Ef480W9bo2sURj9HeciEi5KZS+G9yEmVW+9no6xIAVFO0d4I1Hr8Lr/6JJvR
-         iqv9FGngZq97Mii6lAsoe1vDW2+3hCJggMB31I36HNRFOMY0JHQGifRRFCuTXDE8ZHCi
-         pYcY7dYddV6jk733FlPjKx4pDnDzdGRwc24iQ0Sg5tIP0Iv09R9P/0ajcA13O7+Bzqqt
-         IcRV1vO9e0M394eOlchz0Ik6ml7RJnp8Ahk/sf9scIHEpyUlIR3XvH5KjX3PtMnmF7Jz
-         dNAQ==
-X-Gm-Message-State: ACgBeo0x5rXVHcjmq/ydLfcJLLEIqVSWF3LRDt2LDBWuqepgbJ1AoNh0
-        sWKikre4OsQ1urB0o51sBbw=
-X-Google-Smtp-Source: AA6agR67hhYfAwhqhOZCJYEOZFHAw67F6AN1sn1ho3gkR0V3iW1cuIAlaltrsb9wzAhaLGwaLYSR7w==
-X-Received: by 2002:a17:90a:4805:b0:1f5:39ab:29a9 with SMTP id a5-20020a17090a480500b001f539ab29a9mr4929745pjh.202.1661288637690;
-        Tue, 23 Aug 2022 14:03:57 -0700 (PDT)
-Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:c356:cd91:38b5:bb7])
-        by smtp.gmail.com with ESMTPSA id e62-20020a621e41000000b0052da33fe7d2sm11485603pfe.95.2022.08.23.14.03.55
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=3cCXr8Wd/Y2HhMKIaqg0LsBk5BUYC7YkYkFrfstD7bU=;
+        b=osOvOtN0BI/tY+E96y+rRUlzM940Mj8OTWpBP/m1Ez8rbep06sStDliiKwgwwMQUJZ
+         SFR545N2cIVL0s8m6pXP38nmEMWaBcM6J/yvTXuieU6qkSVRliYHdslIwei+ayB6fcBt
+         Ft5aYUzLRqTdR21WTfA5rOfbgYN2DAdaJrGvpU9HPpJGV9EKCsULYvM7ozmjjh120YsB
+         SV3YDEsa7UaXqc4YpLp+FRlCeLOGaaNMCobTbahRjHoFeRlBOOGzjewVF4Evuj2ooCIO
+         rUELAfUQEYEmdNpQY7dOSzXdUOX9caQs6K4RFA7n0Y3NYWKyAjBb1DRMAr5xm9s3Keti
+         iYNA==
+X-Gm-Message-State: ACgBeo2tS0uWyrqdIzmPrCjgrakXeNcpHNBa++qm5cBqYTdevodBfPeU
+        WjfUEgBZq5MrccBgk4p0+IU=
+X-Google-Smtp-Source: AA6agR5Ut86YONNsGhkN1YJJgYuaka93UP4z143jRVHXbk2Kb/pKkWRBlLAHrpOJDcqkFHS+dpR+tg==
+X-Received: by 2002:a05:620a:4442:b0:6b2:844e:ee67 with SMTP id w2-20020a05620a444200b006b2844eee67mr17323680qkp.625.1661288735234;
+        Tue, 23 Aug 2022 14:05:35 -0700 (PDT)
+Received: from valhalla (2603-7081-5203-61c3-0000-0000-0000-1449.res6.spectrum.com. [2603:7081:5203:61c3::1449])
+        by smtp.gmail.com with ESMTPSA id 11-20020ac8574b000000b003435bb7fe9csm12309573qtx.78.2022.08.23.14.05.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:03:57 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, bpf@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
-Date:   Tue, 23 Aug 2022 14:03:54 -0700
-Message-Id: <20220823210354.1407473-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
+        Tue, 23 Aug 2022 14:05:34 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 17:05:32 -0400
+From:   Christopher Carbone <chris.m.carbone@gmail.com>
+To:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        gregkh@linuxfoundation.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] staging: sm750fb: split multiple assignments to lines
+Message-ID: <YwVBHM3z0QExtuXr@valhalla>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The helper is for BPF programs attached to perf_event in order to read
-event-specific raw data.  I followed the convention of the
-bpf_read_branch_records() helper so that it can tell the size of
-record using BPF_F_GET_RAW_RECORD flag.
+Adhere to Linux kernel coding style.
 
-The use case is to filter perf event samples based on the HW provided
-data which have more detailed information about the sample.
+Reported by checkpatch:
 
-Note that it only reads the first fragment of the raw record.  But it
-seems mostly ok since all the existing PMU raw data have only single
-fragment and the multi-fragment records are only for BPF output attached
-to sockets.  So unless it's used with such an extreme case, it'd work
-for most of tracing use cases.
+CHECK: multiple assignments should be avoided
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Christopher Carbone <chris.m.carbone@gmail.com>
 ---
-I don't know how to test this.  As the raw data is available on some
-hardware PMU only (e.g. AMD IBS).  I tried a tracepoint event but it was
-rejected by the verifier.  Actually it needs a bpf_perf_event_data
-context so that's not an option IIUC.
+Changes since v2:
+ - Remove extra space in variable assignment
 
- include/uapi/linux/bpf.h | 23 ++++++++++++++++++++++
- kernel/trace/bpf_trace.c | 41 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+)
+Changes since v1:
+ - Assign literal value to both variables
+---
+ drivers/staging/sm750fb/sm750.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 934a2a8beb87..af7f70564819 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5355,6 +5355,23 @@ union bpf_attr {
-  *	Return
-  *		Current *ktime*.
-  *
-+ * long bpf_read_raw_record(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
-+ *	Description
-+ *		For an eBPF program attached to a perf event, retrieve the
-+ *		raw record associated to *ctx* and store it in the buffer
-+ *		pointed by *buf* up to size *size* bytes.
-+ *	Return
-+ *		On success, number of bytes written to *buf*. On error, a
-+ *		negative value.
-+ *
-+ *		The *flags* can be set to **BPF_F_GET_RAW_RECORD_SIZE** to
-+ *		instead return the number of bytes required to store the raw
-+ *		record. If this flag is set, *buf* may be NULL.
-+ *
-+ *		**-EINVAL** if arguments invalid or **size** not a multiple
-+ *		of **sizeof**\ (u64\ ).
-+ *
-+ *		**-ENOENT** if the event does not have raw records.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5566,6 +5583,7 @@ union bpf_attr {
- 	FN(tcp_raw_check_syncookie_ipv4),	\
- 	FN(tcp_raw_check_syncookie_ipv6),	\
- 	FN(ktime_get_tai_ns),		\
-+	FN(read_raw_record),		\
- 	/* */
+diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
+index dbd1159a2ef0..3e09e56d3930 100644
+--- a/drivers/staging/sm750fb/sm750.c
++++ b/drivers/staging/sm750fb/sm750.c
+@@ -386,7 +386,8 @@ static int lynxfb_ops_set_par(struct fb_info *info)
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-@@ -5749,6 +5767,11 @@ enum {
- 	BPF_F_EXCLUDE_INGRESS	= (1ULL << 4),
- };
+ 	ret = lynxfb_set_color_offsets(info);
  
-+/* BPF_FUNC_read_raw_record flags. */
-+enum {
-+	BPF_F_GET_RAW_RECORD_SIZE	= (1ULL << 0),
-+};
-+
- #define __bpf_md_ptr(type, name)	\
- union {					\
- 	type name;			\
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 68e5cdd24cef..db172b12e5f8 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -20,6 +20,7 @@
- #include <linux/fprobe.h>
- #include <linux/bsearch.h>
- #include <linux/sort.h>
-+#include <linux/perf_event.h>
+-	var->height = var->width = -1;
++	var->height = -1;
++	var->width = -1;
+ 	var->accel_flags = 0;/*FB_ACCELF_TEXT;*/
  
- #include <net/bpf_sk_storage.h>
- 
-@@ -1532,6 +1533,44 @@ static const struct bpf_func_proto bpf_read_branch_records_proto = {
- 	.arg4_type      = ARG_ANYTHING,
- };
- 
-+BPF_CALL_4(bpf_read_raw_record, struct bpf_perf_event_data_kern *, ctx,
-+	   void *, buf, u32, size, u64, flags)
-+{
-+	struct perf_raw_record *raw = ctx->data->raw;
-+	struct perf_raw_frag *frag;
-+	u32 to_copy;
-+
-+	if (unlikely(flags & ~BPF_F_GET_RAW_RECORD_SIZE))
-+		return -EINVAL;
-+
-+	if (unlikely(!raw))
-+		return -ENOENT;
-+
-+	if (flags & BPF_F_GET_RAW_RECORD_SIZE)
-+		return raw->size;
-+
-+	if (!buf || (size % sizeof(u32) != 0))
-+		return -EINVAL;
-+
-+	frag = &raw->frag;
-+	WARN_ON_ONCE(!perf_raw_frag_last(frag));
-+
-+	to_copy = min_t(u32, frag->size, size);
-+	memcpy(buf, frag->data, to_copy);
-+
-+	return to_copy;
-+}
-+
-+static const struct bpf_func_proto bpf_read_raw_record_proto = {
-+	.func           = bpf_read_raw_record,
-+	.gpl_only       = true,
-+	.ret_type       = RET_INTEGER,
-+	.arg1_type      = ARG_PTR_TO_CTX,
-+	.arg2_type      = ARG_PTR_TO_MEM_OR_NULL,
-+	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
-+	.arg4_type      = ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1548,6 +1587,8 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_read_branch_records_proto;
- 	case BPF_FUNC_get_attach_cookie:
- 		return &bpf_get_attach_cookie_proto_pe;
-+	case BPF_FUNC_read_raw_record:
-+		return &bpf_read_raw_record_proto;
- 	default:
- 		return bpf_tracing_func_proto(func_id, prog);
+ 	if (ret) {
+@@ -498,7 +499,8 @@ static int lynxfb_ops_check_var(struct fb_var_screeninfo *var,
+ 		return ret;
  	}
+ 
+-	var->height = var->width = -1;
++	var->height = -1;
++	var->width = -1;
+ 	var->accel_flags = 0;/* FB_ACCELF_TEXT; */
+ 
+ 	/* check if current fb's video memory big enough to hold the onscreen*/
+@@ -723,7 +725,8 @@ static int lynxfb_set_fbinfo(struct fb_info *info, int index)
+ 		0x800f0 + (int)crtc->channel * 0x140;
+ 
+ 	pr_info("crtc->cursor.mmio = %p\n", crtc->cursor.mmio);
+-	crtc->cursor.max_h = crtc->cursor.max_w = 64;
++	crtc->cursor.max_h = 64;
++	crtc->cursor.max_w = 64;
+ 	crtc->cursor.size = crtc->cursor.max_h * crtc->cursor.max_w * 2 / 8;
+ 	crtc->cursor.vstart = sm750_dev->pvMem + crtc->cursor.offset;
+ 
+@@ -1027,7 +1030,8 @@ static int lynxfb_pci_probe(struct pci_dev *pdev,
+ 	if (!sm750_dev)
+ 		return err;
+ 
+-	sm750_dev->fbinfo[0] = sm750_dev->fbinfo[1] = NULL;
++	sm750_dev->fbinfo[0] = NULL;
++	sm750_dev->fbinfo[1] = NULL;
+ 	sm750_dev->devid = pdev->device;
+ 	sm750_dev->revid = pdev->revision;
+ 	sm750_dev->pdev = pdev;
 -- 
-2.37.2.609.g9ff673ca1a-goog
+2.37.2
 

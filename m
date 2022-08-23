@@ -2,132 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C5859EB00
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACCD59EAFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbiHWS15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S229494AbiHWS1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiHWS1V (ORCPT
+        with ESMTP id S231714AbiHWS1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:27:21 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90044.outbound.protection.outlook.com [40.107.9.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2396B786D5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:47:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/rsztYQMtQya2L/zhyA6xWxXAmAaJxUZw1eP+nEggR0tMtBckA1HUH4kpUcbys/l68uI2krgtV+s39tv3G8GHS2iwoGQgVio9qDtPs0baCwKmAQycB7ZVQOb4Kqlnmthf7FJMPcvpES6YQ7oinEEqkOpG2K3tdwqXowjLG2vLM1JN0MLDTy6nbvTWRC1+Vr7NbKnjir3o8CQAp68KtPbzhh4vh9puqZF6sh47lzqCB6tuTp/L1c9h+2JVgp+W27wCQfHOzx8CwxcVCcgjR1oxmiiOvnkSw9ev7w2kptGkfz2k4mdVuwNpVjm4qiPr6+UUKjNVZIM2l4SO9+0PaaxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QkLE7hQTzDORMRS/Q6FBjHSL91/+NxCXA5zbb0zp4pI=;
- b=Z89lPAUWnNrcx2M96iNQNm04tP8i2bOGtOr0UvQUp4XvTCyuPCr2rKSdHB7WCiFYGMonpuQtd3No86yDGnzHs286Rr8NDs7W50Y4W36c+/4UmQIbniOCKmmGPONX622ZO51WLxv2vHhR+Bzi7kOUhYoqpQRnckogWQuEopH8+hDgWzKaldTwE3YTMPJp6l91hHdsMZ6EopRCIFI6eMvPebmzJI205Q9Zb8JoTynYTno7icYC0xEYyVE5PF6RxltOB69MjQ1s4+T0Vy4AuAh65JNzYPkIo5mFAfr1ewtHUxTJdBQFZmAPZNzPK+szAiGGRxYr7NE1+kP9wytMUPf3uA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QkLE7hQTzDORMRS/Q6FBjHSL91/+NxCXA5zbb0zp4pI=;
- b=k/L2Yq/RyZ/D9GllP1tJZFh68iGKnW3+VkTTgvar45FM6KUBo7uU8LB4bN14Cj3RWacMND2xdSYnzO93xJWkiiJNEv4UTcW9DYkjXGKV11QeykhEIkZH+RN0OYEZO+o7/v9MRjdxBCrCruDdlVlhDCvmV2ULV0g7PS6AGUcsb+m0xjrj2Zgz4ikmeiiZroAN2hZB/yUMngLJLiC1F9ppGmkUTIL+KXw4jwEOsf2sTua2lLY/OAdF/cZdC8uszuehYvzzLw1yu13jwfFKjmQL0mo+fjBcHgaiEiD7nrxTVLPhbnAeWqZ6ECWM0PR+JrSDAaUVmTeBkkixx0am9LmC0A==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB3886.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:d8::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Tue, 23 Aug
- 2022 16:47:53 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::888e:a92e:a4ee:ce9e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::888e:a92e:a4ee:ce9e%5]) with mapi id 15.20.5546.024; Tue, 23 Aug 2022
- 16:47:53 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "bp@suse.de" <bp@suse.de>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "sv@linux.ibm.com" <sv@linux.ibm.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] objtool: replace _ASM_PTR with quad in macros
-Thread-Topic: [PATCH] objtool: replace _ASM_PTR with quad in macros
-Thread-Index: AQHYtvUie9Tb4ifm4U+obaGmnHiQz628skEA
-Date:   Tue, 23 Aug 2022 16:47:53 +0000
-Message-ID: <27c6906c-baf3-6802-9843-50b27df74a71@csgroup.eu>
-References: <20220823133124.55914-1-chenzhongjin@huawei.com>
-In-Reply-To: <20220823133124.55914-1-chenzhongjin@huawei.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4a898d4c-8aeb-4e6d-b085-08da8527395a
-x-ms-traffictypediagnostic: PAZP264MB3886:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xcDklRb3plQnqFjk1sWjDtfw7KAwNOXlUJ5vNhTfeVlzWJ1G9TRo3nEL9EQ/CK7qeBlsmKqv1rE4r2O+F48hhSP24l4IFcBZaCG8kHtcqhr571mifPagDLxsZzyIcq73g4ZLLXTyIYo0MKzoNGptpMK2naUx6+dG8CDtmW0xx9csBetYAmr4NeR1+ZAgvRowbl19ajmP/XaHtJfW5k5vpY7dggOUn1ZzU7zHpxcfL0e4asupYggy87cJip34Hsqa9ifIt8RWA+m8xRRtSwnJ7NSLZoqXjg+RqpzaMp4uyy0NdXsrl2H+kFW+EQm+7E2JcdMyaIyyYMgnQKotltXaR3uO8l9YFlxLjAjbueT/YrGfxPNQutLDmpIqURaDI2jSBE5+jJsTqdeLo/mY5KDsxlnaj/u4yTgHiEa6p7tGJcqg2Dh5FfEeS1UT0luM75+A5bpKwng65PB7q+9+GI4sjbmtzo6MFzwe/0wI+/ZIhTOkJt+6eeASqEYIE6iJq/pnD090l8I/ayc4ar5TdMJwPA1KoI7AS1/BeSV8GYVCPyW25w2A3rZwoS+IPYIcpgxqZC7F7rUQHILliskcnwG9FYYyNPQigvWwjW5SF+VPrmYAvw+A76xgN1L+oOTEdAAJJ4FuXj6UIao4R29h0X5fYd8ByAITE7EuufSlrc2lyL9vmhV5zfb0wFgc8MkJrVedUrhn5p91C+GFglgUtkiDlKH8qUN0gOLXE3s57z5T48WfjTAryFtymia3Klo0sztyG0BLavUhVhLj+NQPJ65KQ/nwPy/78BbhNFlpw4cmjoUOAR5H0Z4mDR0F8bwzeYMF149BPtdtkxOqvelDX21IOFC1/oo459TmM9KJZj5IJmM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(366004)(346002)(39850400004)(71200400001)(966005)(6506007)(6486002)(2616005)(41300700001)(478600001)(83380400001)(186003)(6512007)(26005)(2906002)(8936002)(44832011)(316002)(5660300002)(110136005)(54906003)(66556008)(64756008)(4326008)(8676002)(66446008)(91956017)(66946007)(86362001)(76116006)(38100700002)(31686004)(38070700005)(31696002)(122000001)(36756003)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QTVOZVBHQnprMkNHMDZlbkFlcW94TTgxaXNmREh0dXdzOGlROEFtZmNZU0p0?=
- =?utf-8?B?b0xVYk4rRi83dEFqb3pqRkZpcGE3ZDNMRjJLQnZEL01FUXNNSUx2QlFIcDhI?=
- =?utf-8?B?YnZucG5OQUNDVHFJOHM4bXpOU25wWmRWcFpIbVR6ekd1ZVZveTM5USttNFZC?=
- =?utf-8?B?QjU1VTFkMXJxcldtREhIbHQxbFFQc0VHaWE5dW4za1NpY0tUOVA3Rm12R3Zk?=
- =?utf-8?B?bzJJZGxIMWZqckRMREpGOFRiV0hZVXZHV3Nkckt1WWk1YzBRRzlHR3k3RW96?=
- =?utf-8?B?YlpyekxjWHk4UjdFWEtwakRJc0xrZVAra00zUDVmSmNaeW5pN3lpMGdmWUhC?=
- =?utf-8?B?bDZpL2lwZ1hyait5MStudlBPMFpvKzNzSnd4N0JHb3lhTHlGR0NvQVUrZUdJ?=
- =?utf-8?B?Y2lOS0lrL1U3VDBpRllyQmZNWkF3TzFZcjRjN205QjEwRVh5T1FMY3cwdXFG?=
- =?utf-8?B?aFo0V09icElqMFNtQXBnRXQxNEhNdnpScEVHY2NFR2VnRi9vOXFiQmxYNGp4?=
- =?utf-8?B?aUdkWElnM1VTVllUZlp2U0hka3o4N2Z0bUFFcWlFRXZmbmZSYTRuY3ZmNEF1?=
- =?utf-8?B?QnBUME04SDFMbVBNMFJrK1VkZ253OU9FTm5VQW1TdTNiZWIxOVJXV0FzaVNB?=
- =?utf-8?B?ajZMYXJhVDY3USs5YkpGRVYvK2dDbVdoeHUrWW96UjE1ckNyTFl5SDJJWnp6?=
- =?utf-8?B?ZmFiRkQwOFQ0MTFBWmJJMnA0QU9HazEwTThub1FzMWpqSzdOcGQwMXljMlRH?=
- =?utf-8?B?ZDhkckVRM0N2NmlhKzZ2aDQ3amljTjZ3K2RabGduVHpwNDRlOFloM0dlQmhs?=
- =?utf-8?B?NjFzcWVZS0c0NU9zOFhXOERmaVVtQ1lDVUlHL3dObTVlOWRwNTRWbzl3UndF?=
- =?utf-8?B?R250bm5ISGFCcEVzTUZ1QWhrRm5wZ1BSTjd1WEh3bHFGd2F0Q0dmWTBIZ2RZ?=
- =?utf-8?B?YUpnV0xHMEsyY2pTRURKQk1PU1ZMYnZhWjlpeUhVeTV2Sm02a0NWQU41WWtM?=
- =?utf-8?B?LytMdGkwVkhGL0NvL2UzR0UzanBYdk8wREZJK2N0UlZwYitpb2FSRTN5bVE0?=
- =?utf-8?B?YVIxNHptTWJKdnlBZUJ1S1VoakNwTWhHdTMrM1dTVDNQYzhUQzhEU2NPYVhw?=
- =?utf-8?B?U21ZZjRUQTdVQm12b1paU01vdENYV29IOGVhQW9YaHdPQjNtUVcyM2twSnB0?=
- =?utf-8?B?VGpOSk1DdG1MMWV6MkVuckloOUc4c3lvaHBON3hlaHNFSXRhd0NnbG1kYWFn?=
- =?utf-8?B?ODNIem9BempYRHdBSVZuaVViU251Njh2VlUrbmY4L2RUQ2FmVmVQR3NMdzFs?=
- =?utf-8?B?cVc1RVdTdnh3WkxEODNibHp0ek5Nc1AvenYzcUx0bldYOE45cHhJMGE5V3BU?=
- =?utf-8?B?UCtuSGJVbXZIWmJrdXd6WTIrc1p3emppTUVyU01VYW9maTdzeFBZU2dlamkw?=
- =?utf-8?B?RmFMYzZ3OFFtay84U084N3VoQjBMaDdNUUt3RWRJajRYOFAyVTRBcEt3ckFs?=
- =?utf-8?B?c3VFY0JlQ3kvSVdiVXJIcHdJWjNIL2NrS21Zck92eTFXbUMyblBqYnFpME1H?=
- =?utf-8?B?RUFoM004Q25XRENTOVBha2VKL3YvZlgwWVAxRU95VFhZcGZMYXBsWVg5SUJk?=
- =?utf-8?B?SUNNY2ZrTzk3Y3lHczZ0VER1YnZ4aEV1Tm9GMmtZU0JPYmR1bTdkbEJ4NlAz?=
- =?utf-8?B?TVFHdmF4VEN3WG9tNmZLMFVuT2lmcEh5VkpTWmUxMkxZWlQ2L0NubEhyaU1l?=
- =?utf-8?B?QktIZndua0JtVVVKbDJSWkJCc1gzeVdNSlcxS3ZZd3hpUWMyY21XbVVMUGhK?=
- =?utf-8?B?aHJFUXRTWkhEdERuekQ4MFdKQU41b2FmOFdEeDlKTmR1RVFZOGQzR0NHYmxN?=
- =?utf-8?B?a2h2b1lIYWZjWkpzRGE4VERLVE5nZlorcjBHZ0psNms4MWFXT1VYbDV4ZGIw?=
- =?utf-8?B?QkpPUTRCVEJGMmdncmRsa2ZFTGtHMHVVMWdLZjlFZ3lVd3o0dnlHc3drVGc5?=
- =?utf-8?B?MGN2UDJyNUNLc2RGaXVGTFVRWm9TNzZza2ZjMWt6cmNVTWhtTnBNSmF1VG1M?=
- =?utf-8?B?VUpYMDAzNFBLWlNSS0M2ZUllaW54ZEkrSkVKdlBCdmhPeWVyZkZrbmppc0U4?=
- =?utf-8?B?WXBwS21KRWVzSEhKMnQ3dXNUanVWcm1WSnpYZGlsZmdoaEsvTkhUenNPbU1L?=
- =?utf-8?Q?OlR7ZFxOkRqLpeMewWhtbr4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <81EF413FA9C1E04CBBBA76AFE137F590@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 23 Aug 2022 14:27:10 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D415A4B0D8;
+        Tue, 23 Aug 2022 09:47:20 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id v125so16737179oie.0;
+        Tue, 23 Aug 2022 09:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=F8aKSZv1NL2MA13LWlrkZ0pyLx1poLLo5+Y2auoHrrU=;
+        b=P8Rb6AIUe0BqjayXQEF1C99U0H8YdtTbPpCkW0bERtLUXN9fooVIer4M3R47yIez/U
+         5go1SSUpqQGPaOv6AsSeoRoo8SSXNjtCuLMuvgFbBFBYml0t9Zq+e/kHUBIQ0wfa8LYs
+         0fCx1wsNmzKkwaquNleJdBdp/70ylcTVBYNrU8zsojU/8KiNhBozHLIiD/2vU3pbT1wu
+         StvBfAQHmAvHRbTuuK1wfmyQdce5xlUhPz7Wu2Sg+hL+upMM0Ba5GeaTuFECDP5vlgsZ
+         YyBmWB3oQyTquXWCh6CmFcUYquSC+NBylzyFgiUJ+4/FyXltqM8D6PhNC6TwsFN+ykfp
+         1FEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=F8aKSZv1NL2MA13LWlrkZ0pyLx1poLLo5+Y2auoHrrU=;
+        b=imTmjnlgp7XAz6NZ4y7cee8Lm2aEEqNIJbVPgWBQBgN2kgFBdt1LEe2kkuGllDW47y
+         8IbxgLMtCtu62EPCpSKeRrLbjI2HsroMke7aZ9bkreKBp7oic8lfHyLAyz1lIbUbT83U
+         QgQYLh7y2re9ko0CSxa+TvANlNZvtS98JxyABC4X61BdCKehvfXikAs7D5BXtFCWoSG8
+         b+yydJzIWU1+IKfMJ/1kL7FTORWymWh8A4hj6YbbJIny3lTuIUvorVJPO6JqT4lsxuie
+         tlr8HzENzVYdRa7sx726Z/ZfrMUDHNemXT2AFbZic+kkASVw4kGFQ6oMSp2fUijDfjZf
+         mtuQ==
+X-Gm-Message-State: ACgBeo3rgRuj1EU92w5FsKqUJxuWqBjyAYs5Lodx5XpZKwe27WyEJKdU
+        X5ygXT9958PSes5e2Y/iQKwJqoeAUV8Hl7I5S1E=
+X-Google-Smtp-Source: AA6agR7cQ1HWOR/GP2rtEG15PGZ/r+13Je3nF5uNZRRMMJwUkE+V9G7UTyql1pmHzDQiRGHyVzqd9qmK0bsICHBqrYU=
+X-Received: by 2002:a05:6808:238d:b0:344:e5f9:db34 with SMTP id
+ bp13-20020a056808238d00b00344e5f9db34mr1650387oib.183.1661273240141; Tue, 23
+ Aug 2022 09:47:20 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a898d4c-8aeb-4e6d-b085-08da8527395a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2022 16:47:53.8341
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hxQ2VsOciYK/GA+JNMA2YFbp5rzLGNf+nl/lU2OtlZQsB3ksUZcTlgjjr/wMO4khLZSyydVB5zYigHzViL/tkp4/rjw8tRDO3Nlak1XL3p0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3886
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+ <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com> <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
+ <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com> <YvOav/vF2awVWIu0@phenom.ffwll.local>
+ <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
+ <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com> <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
+ <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com> <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
+ <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com> <CAF6AEGuR1cRQYaQBYGnMBzy=XJUcN2o2gzabZaGO2Dj62Uq1DA@mail.gmail.com>
+ <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
+ <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com> <2ce5ff0a-9ab2-d146-04db-487a64714fce@gmail.com>
+ <cf8cd8da-08d2-5e70-a239-2a67da37c9ea@collabora.com> <e9bde303-6474-aa0b-7880-cf7d8b163983@collabora.com>
+ <5988bf07-dd2e-a7ad-1ed9-831a402c3c5d@gmail.com>
+In-Reply-To: <5988bf07-dd2e-a7ad-1ed9-831a402c3c5d@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 23 Aug 2022 09:47:53 -0700
+Message-ID: <CAF6AEGvnqV4ySs6rNWu0pkeSNJMhgN1rvind8dC-nV1Sv3kk8g@mail.gmail.com>
+Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,51 +92,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDIzLzA4LzIwMjIgw6AgMTU6MzEsIENoZW4gWmhvbmdqaW4gYSDDqWNyaXTCoDoNCj4g
-TWFjcm9zIFNUQUNLX0ZSQU1FX05PTl9TVEFOREFSRCBhbmQgQU5OT1RBVEVfTk9FTkRCUiB1c2Vz
-DQo+IF9BU01fUFRSLiBJdCBzd2l0Y2ggYmV0d2VlbiAubG9uZyBhbmQgLnF1YWQgYmFzZWQgb24g
-MzJiaXQNCj4gb3IgNjRiaXQuIEhvd2V2ZXIgb2JqdG9vbCBkb2Vzbid0IHdvcmsgZm9yIDMyYml0
-LCBzbyBfQVNNX1BUUg0KPiBtYWtlcyBubyBzZW5zZS4NCj4gDQo+IENvbnNpZGVyaW5nIHRoYXQg
-X0FTTV9QVFIgY29tZXMgZnJvbSBhc20uaCwgd2hpY2ggaXMgeDg2DQo+IHNwZWNpZmljIGhlYWQg
-ZmlsZSwgd2hpbGUgb2JqdG9vbC5oIGlzIGdlbmVyaWMuIFJlcGxhY2UNCj4gX0FTTV9QVFIgd2l0
-aCBxdWFkIGFuZCByZW1vdmUgYXNtLmggcmVmZXJlbmNlLg0KDQpvYmp0b29sIGlzIGFib3V0IHRv
-IGJlIHVzZWQgb24gcG93ZXJwYyBvbiBib3RoIFBQQzMyIGFuZCBQUEM2NCwgc2VlIA0KaHR0cHM6
-Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4cHBjLWRldi9saXN0Lz9zZXJpZXM9
-MzEyOTU1JnN0YXRlPSoNCg0KU28gaWYgdGhpcyBwYXJ0IGlzIG1lYW50IHRvIGJlIHVzZWQgYnkg
-YWxsIGFyY2hpdGVjdHVyZXMsIHdlIG5lZWQgDQpub3RoaW5nIHRoYXQgYWxzbyB3b3JrcyBvbiAz
-MiBiaXRzLCBkb24ndCB3ZSA/DQoNCkNocmlzdG9waGUNCg0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
-OiBDaGVuIFpob25namluIDxjaGVuemhvbmdqaW5AaHVhd2VpLmNvbT4NCj4gLS0tDQo+ICAgaW5j
-bHVkZS9saW51eC9vYmp0b29sLmggICAgICAgfCA2ICsrLS0tLQ0KPiAgIHRvb2xzL2luY2x1ZGUv
-bGludXgvb2JqdG9vbC5oIHwgNiArKy0tLS0NCj4gICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0
-aW9ucygrKSwgOCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4
-L29ianRvb2wuaCBiL2luY2x1ZGUvbGludXgvb2JqdG9vbC5oDQo+IGluZGV4IDYyYzU0ZmZiZWVh
-YS4uZDI0MTNjYjc4MDM3IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L29ianRvb2wuaA0K
-PiArKysgYi9pbmNsdWRlL2xpbnV4L29ianRvb2wuaA0KPiBAQCAtNDUsOCArNDUsNiBAQCBzdHJ1
-Y3QgdW53aW5kX2hpbnQgew0KPiAgIA0KPiAgICNpZmRlZiBDT05GSUdfT0JKVE9PTA0KPiAgIA0K
-PiAtI2luY2x1ZGUgPGFzbS9hc20uaD4NCj4gLQ0KPiAgICNpZm5kZWYgX19BU1NFTUJMWV9fDQo+
-ICAgDQo+ICAgI2RlZmluZSBVTldJTkRfSElOVChzcF9yZWcsIHNwX29mZnNldCwgdHlwZSwgZW5k
-KQkJXA0KPiBAQCAtODcsNyArODUsNyBAQCBzdHJ1Y3QgdW53aW5kX2hpbnQgew0KPiAgICNkZWZp
-bmUgQU5OT1RBVEVfTk9FTkRCUgkJCQkJXA0KPiAgIAkiOTg2OiBcblx0IgkJCQkJCVwNCj4gICAJ
-Ii5wdXNoc2VjdGlvbiAuZGlzY2FyZC5ub2VuZGJyXG5cdCIJCQlcDQo+IC0JX0FTTV9QVFIgIiA5
-ODZiXG5cdCIJCQkJCVwNCj4gKwkiLnF1YWQgOTg2YlxuXHQiCQkJCQlcDQo+ICAgCSIucG9wc2Vj
-dGlvblxuXHQiDQo+ICAgDQo+ICAgI2RlZmluZSBBU01fUkVBQ0hBQkxFCQkJCQkJCVwNCj4gQEAg
-LTE0NCw3ICsxNDIsNyBAQCBzdHJ1Y3QgdW53aW5kX2hpbnQgew0KPiAgIA0KPiAgIC5tYWNybyBT
-VEFDS19GUkFNRV9OT05fU1RBTkRBUkQgZnVuYzpyZXENCj4gICAJLnB1c2hzZWN0aW9uIC5kaXNj
-YXJkLmZ1bmNfc3RhY2tfZnJhbWVfbm9uX3N0YW5kYXJkLCAiYXciDQo+IC0JX0FTTV9QVFIgXGZ1
-bmMNCj4gKwkucXVhZCBcZnVuYw0KPiAgIAkucG9wc2VjdGlvbg0KPiAgIC5lbmRtDQo+ICAgDQo+
-IGRpZmYgLS1naXQgYS90b29scy9pbmNsdWRlL2xpbnV4L29ianRvb2wuaCBiL3Rvb2xzL2luY2x1
-ZGUvbGludXgvb2JqdG9vbC5oDQo+IGluZGV4IDYyYzU0ZmZiZWVhYS4uZDI0MTNjYjc4MDM3IDEw
-MDY0NA0KPiAtLS0gYS90b29scy9pbmNsdWRlL2xpbnV4L29ianRvb2wuaA0KPiArKysgYi90b29s
-cy9pbmNsdWRlL2xpbnV4L29ianRvb2wuaA0KPiBAQCAtNDUsOCArNDUsNiBAQCBzdHJ1Y3QgdW53
-aW5kX2hpbnQgew0KPiAgIA0KPiAgICNpZmRlZiBDT05GSUdfT0JKVE9PTA0KPiAgIA0KPiAtI2lu
-Y2x1ZGUgPGFzbS9hc20uaD4NCj4gLQ0KPiAgICNpZm5kZWYgX19BU1NFTUJMWV9fDQo+ICAgDQo+
-ICAgI2RlZmluZSBVTldJTkRfSElOVChzcF9yZWcsIHNwX29mZnNldCwgdHlwZSwgZW5kKQkJXA0K
-PiBAQCAtODcsNyArODUsNyBAQCBzdHJ1Y3QgdW53aW5kX2hpbnQgew0KPiAgICNkZWZpbmUgQU5O
-T1RBVEVfTk9FTkRCUgkJCQkJXA0KPiAgIAkiOTg2OiBcblx0IgkJCQkJCVwNCj4gICAJIi5wdXNo
-c2VjdGlvbiAuZGlzY2FyZC5ub2VuZGJyXG5cdCIJCQlcDQo+IC0JX0FTTV9QVFIgIiA5ODZiXG5c
-dCIJCQkJCVwNCj4gKwkiLnF1YWQgOTg2YlxuXHQiCQkJCQlcDQo+ICAgCSIucG9wc2VjdGlvblxu
-XHQiDQo+ICAgDQo+ICAgI2RlZmluZSBBU01fUkVBQ0hBQkxFCQkJCQkJCVwNCj4gQEAgLTE0NCw3
-ICsxNDIsNyBAQCBzdHJ1Y3QgdW53aW5kX2hpbnQgew0KPiAgIA0KPiAgIC5tYWNybyBTVEFDS19G
-UkFNRV9OT05fU1RBTkRBUkQgZnVuYzpyZXENCj4gICAJLnB1c2hzZWN0aW9uIC5kaXNjYXJkLmZ1
-bmNfc3RhY2tfZnJhbWVfbm9uX3N0YW5kYXJkLCAiYXciDQo+IC0JX0FTTV9QVFIgXGZ1bmMNCj4g
-KwkucXVhZCBcZnVuYw0KPiAgIAkucG9wc2VjdGlvbg0KPiAgIC5lbmRtDQo+ICAg
+On Tue, Aug 23, 2022 at 3:01 AM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Am 22.08.22 um 19:26 schrieb Dmitry Osipenko:
+> > On 8/16/22 22:55, Dmitry Osipenko wrote:
+> >> On 8/16/22 15:03, Christian K=C3=B6nig wrote:
+> >>> Am 16.08.22 um 13:44 schrieb Dmitry Osipenko:
+> >>>> [SNIP]
+> >>>>> The other complication I noticed is that we don't seem to keep arou=
+nd
+> >>>>> the fd after importing to a GEM handle.  And I could imagine that
+> >>>>> doing so could cause issues with too many fd's.  So I guess the bes=
+t
+> >>>>> thing is to keep the status quo and let drivers that cannot mmap
+> >>>>> imported buffers just fail mmap?
+> >>>> That actually should be all the drivers excluding those that use
+> >>>> DRM-SHMEM because only DRM-SHMEM uses dma_buf_mmap(), that's why it
+> >>>> works for Panfrost. I'm pretty sure mmaping of imported GEMs doesn't
+> >>>> work for the MSM driver, isn't it?
+> >>>>
+> >>>> Intel and AMD drivers don't allow to map the imported dma-bufs. Both
+> >>>> refuse to do the mapping.
+> >>>>
+> >>>> Although, AMDGPU "succeeds" to do the mapping using
+> >>>> AMDGPU_GEM_DOMAIN_GTT, but then touching the mapping causes bus faul=
+t,
+> >>>> hence mapping actually fails. I think it might be the AMDGPU
+> >>>> driver/libdrm bug, haven't checked yet.
+> >>> That's then certainly broken somehow. Amdgpu should nerve ever have
+> >>> allowed to mmap() imported DMA-bufs and the last time I check it didn=
+'t.
+> >> I'll take a closer look. So far I can only tell that it's a kernel
+> >> driver issue because once I re-applied this "Don't map imported GEMs"
+> >> patch, AMDGPU began to refuse mapping AMDGPU_GEM_DOMAIN_GTT.
+> >>
+> >>>> So we're back to the point that neither of DRM drivers need to map
+> >>>> imported dma-bufs and this was never tested. In this case this patch=
+ is
+> >>>> valid, IMO.
+> >> Actually, I'm now looking at Etnaviv and Nouveau and seems they should
+> >> map imported dma-buf properly. I know that people ran Android on
+> >> Etnaviv. So maybe devices with a separated GPU/display need to map
+> >> imported display BO for Android support. Wish somebody who ran Android
+> >> on one of these devices using upstream drivers could give a definitive
+> >> answer. I may try to test Nouveau later on.
+> >>
+> > Nouveau+Intel combo doesn't work because of [1] that says:
+> >
+> > "Refuse to fault imported pages. This should be handled (if at all) by
+> > redirecting mmap to the exporter."
+> >
+> > [1]
+> > https://elixir.bootlin.com/linux/v5.19/source/drivers/gpu/drm/ttm/ttm_b=
+o_vm.c#L154
+> >
+> > Interestingly, I noticed that there are IGT tests which check prime
+> > mmaping of Nouveau+Intel [2] (added 9 years ago), but they fail as well=
+,
+> > as expected. The fact that IGT has such tests is interesting because it
+> > suggests that the mapping worked in the past. It's also surprising that
+> > nobody cared to fix the failing tests. For the reference, I checked
+> > v5.18 and today's linux-next.
+> >
+> > [2]
+> > https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/pr=
+ime_nv_test.c#L132
+> >
+> > Starting subtest: nv_write_i915_cpu_mmap_read
+> > Received signal SIGBUS.
+> > Stack trace:
+> >   #0 [fatal_sig_handler+0x163]
+> >   #1 [__sigaction+0x50]
+> >   #2 [__igt_unique____real_main354+0x406]
+> >   #3 [main+0x23]
+> >   #4 [__libc_start_call_main+0x80]
+> >   #5 [__libc_start_main+0x89]
+> >   #6 [_start+0x25]
+> > Subtest nv_write_i915_cpu_mmap_read: CRASH (0,005s)
+> >
+> > Starting subtest: nv_write_i915_gtt_mmap_read
+> > Received signal SIGBUS.
+> > Stack trace:
+> >   #0 [fatal_sig_handler+0x163]
+> >   #1 [__sigaction+0x50]
+> >   #2 [__igt_unique____real_main354+0x33d]
+> >   #3 [main+0x23]
+> >   #4 [__libc_start_call_main+0x80]
+> >   #5 [__libc_start_main+0x89]
+> >   #6 [_start+0x25]
+> > Subtest nv_write_i915_gtt_mmap_read: CRASH (0,004s)
+> >
+> > I'm curious about the Etnaviv driver because it uses own shmem
+> > implementation and maybe it has a working mmaping of imported GEMs sinc=
+e
+> > it imports the dma-buf pages into Entaviv BO. Although, it should be
+> > risking to map pages using a different caching attributes (WC) from the
+> > exporter, which is prohibited on ARM ad then one may try to map importe=
+d
+> > udmabuf.
+> >
+> > Apparently, the Intel DG TTM driver should be able to map imported
+> > dma-buf because it sets TTM_TT_FLAG_EXTERNAL_MAPPABLE.
+>
+> Even with that flag set it is illegal to map the pages directly by an
+> importer.
+>
+> If that ever worked then the only real solution is to redirect mmap()
+> calls on importer BOs to dma_buf_mmap().
+
+Yeah, I think this is the best option.  Forcing userspace to hang on
+to the fd just in case someone calls readpix would be pretty harsh.
+
+BR,
+-R
+
+> Regards,
+> Christian.
+>
+> >
+> > Overall, it still questionable to me whether it's worthwhile to allow
+> > the mmaping of imported GEMs since only Panfrost/Lima can do it out of
+> > all drivers and h/w that I tested. Feels like drivers that can do the
+> > mapping have it just because they can and not because they need.
+> >
+>

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C334659E031
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB17859DE9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352640AbiHWKJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S1355679AbiHWKpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352511AbiHWKCB (ORCPT
+        with ESMTP id S1355711AbiHWKg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71037A223B;
-        Tue, 23 Aug 2022 01:49:57 -0700 (PDT)
+        Tue, 23 Aug 2022 06:36:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D279A6C22;
+        Tue, 23 Aug 2022 02:07:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EB088CE1B44;
-        Tue, 23 Aug 2022 08:49:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D60FC433C1;
-        Tue, 23 Aug 2022 08:49:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FE4E6158D;
+        Tue, 23 Aug 2022 09:07:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B16C433D6;
+        Tue, 23 Aug 2022 09:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244594;
-        bh=HWPvRsRbImhp+mxkyDgXuQ+z0w/UFpkDqwsXmE51S2M=;
+        s=korg; t=1661245641;
+        bh=kEJ44uGQhbsnlEsOnJCVVttPofYwKWyYENYgbKrdolw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cZi5STJr8EQyrXV39dOuUZdt3MT3xvjHligxuzrbzuvaZJY3w0kCNdcZqcRyyTYo9
-         dnQfOwf1roZTO/B0WcUdHFCkzhS0p9ItwCV/U1/SDc3upv3mP4FMfII3YJiTxP1bnP
-         KnaMGQvDNKOhLqpd8lgcfuuPCM2W47213h2OKvYg=
+        b=QJz0a/n4O7lY0E4L4toPKQmTHVz+OnY2avEqTSTvTCO2vCiw9IJgDb0LUGbQJ+k5/
+         106HjGUZI0PdR9AFnvdDpAx4E1V0Iu7d3++pZxXU1Htd+x8QuRjDYPUu7zSwULFtYY
+         KlrueIFIILBodMra+xgVskGpTFB5GBPy0xNvSdm8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 120/244] ASoC: tas2770: Drop conflicting set_bias_level power setting
+        syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 110/287] netdevsim: Avoid allocation warnings triggered from user space
 Date:   Tue, 23 Aug 2022 10:24:39 +0200
-Message-Id: <20220823080103.043380931@linuxfoundation.org>
+Message-Id: <20220823080104.076774622@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Jakub Kicinski <kuba@kernel.org>
 
-commit 482c23fbc7e9bf5a7a74defd0735d5346215db58 upstream.
+[ Upstream commit d0b80a9edb1a029ff913e81b47540e57ad034329 ]
 
-The driver is setting the PWR_CTRL field in both the set_bias_level
-callback and on DAPM events of the DAC widget (and also in the
-mute_stream method). Drop the set_bias_level callback altogether as the
-power setting it does is in conflict with the other code paths.
+We need to suppress warnings from sily map sizes. Also switch
+from GFP_USER to GFP_KERNEL_ACCOUNT, I'm pretty sure I misunderstood
+the flags when writing this code.
 
-Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220808141246.5749-4-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 395cacb5f1a0 ("netdevsim: bpf: support fake map offload")
+Reported-by: syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220726213605.154204-1-kuba@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tas2770.c |   33 ---------------------------------
- 1 file changed, 33 deletions(-)
+ drivers/net/netdevsim/bpf.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -46,38 +46,6 @@ static void tas2770_reset(struct tas2770
- 	usleep_range(1000, 2000);
- }
- 
--static int tas2770_set_bias_level(struct snd_soc_component *component,
--				 enum snd_soc_bias_level level)
--{
--	struct tas2770_priv *tas2770 =
--			snd_soc_component_get_drvdata(component);
--
--	switch (level) {
--	case SND_SOC_BIAS_ON:
--		snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
--					      TAS2770_PWR_CTRL_MASK,
--					      TAS2770_PWR_CTRL_ACTIVE);
--		break;
--	case SND_SOC_BIAS_STANDBY:
--	case SND_SOC_BIAS_PREPARE:
--		snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
--					      TAS2770_PWR_CTRL_MASK,
--					      TAS2770_PWR_CTRL_MUTE);
--		break;
--	case SND_SOC_BIAS_OFF:
--		snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
--					      TAS2770_PWR_CTRL_MASK,
--					      TAS2770_PWR_CTRL_SHUTDOWN);
--		break;
--
--	default:
--		dev_err(tas2770->dev, "wrong power level setting %d\n", level);
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
- #ifdef CONFIG_PM
- static int tas2770_codec_suspend(struct snd_soc_component *component)
+diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
+index 12f100392ed1..ca9042ddb6d7 100644
+--- a/drivers/net/netdevsim/bpf.c
++++ b/drivers/net/netdevsim/bpf.c
+@@ -330,10 +330,12 @@ nsim_map_alloc_elem(struct bpf_offloaded_map *offmap, unsigned int idx)
  {
-@@ -555,7 +523,6 @@ static const struct snd_soc_component_dr
- 	.probe			= tas2770_codec_probe,
- 	.suspend		= tas2770_codec_suspend,
- 	.resume			= tas2770_codec_resume,
--	.set_bias_level = tas2770_set_bias_level,
- 	.controls		= tas2770_snd_controls,
- 	.num_controls		= ARRAY_SIZE(tas2770_snd_controls),
- 	.dapm_widgets		= tas2770_dapm_widgets,
+ 	struct nsim_bpf_bound_map *nmap = offmap->dev_priv;
+ 
+-	nmap->entry[idx].key = kmalloc(offmap->map.key_size, GFP_USER);
++	nmap->entry[idx].key = kmalloc(offmap->map.key_size,
++				       GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+ 	if (!nmap->entry[idx].key)
+ 		return -ENOMEM;
+-	nmap->entry[idx].value = kmalloc(offmap->map.value_size, GFP_USER);
++	nmap->entry[idx].value = kmalloc(offmap->map.value_size,
++					 GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+ 	if (!nmap->entry[idx].value) {
+ 		kfree(nmap->entry[idx].key);
+ 		nmap->entry[idx].key = NULL;
+@@ -475,7 +477,7 @@ nsim_bpf_map_alloc(struct netdevsim *ns, struct bpf_offloaded_map *offmap)
+ 	if (offmap->map.map_flags)
+ 		return -EINVAL;
+ 
+-	nmap = kzalloc(sizeof(*nmap), GFP_USER);
++	nmap = kzalloc(sizeof(*nmap), GFP_KERNEL_ACCOUNT);
+ 	if (!nmap)
+ 		return -ENOMEM;
+ 
+-- 
+2.35.1
+
 
 

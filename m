@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981DA59DB4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E269A59DD4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359046AbiHWME1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S1358597AbiHWLuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359539AbiHWMBw (ORCPT
+        with ESMTP id S1358489AbiHWLtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:01:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612A87822F;
-        Tue, 23 Aug 2022 02:36:14 -0700 (PDT)
+        Tue, 23 Aug 2022 07:49:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACDAD25DE;
+        Tue, 23 Aug 2022 02:30:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 33983CE1B58;
-        Tue, 23 Aug 2022 09:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3141AC433C1;
-        Tue, 23 Aug 2022 09:36:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD54E61381;
+        Tue, 23 Aug 2022 09:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30BEDC433D7;
+        Tue, 23 Aug 2022 09:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247370;
-        bh=pq5jl0liAQqHiKcuVEOGf6QiN0IET6PLiMh34kv50FY=;
+        s=korg; t=1661247040;
+        bh=ACoImR6W7EWMDucrtFWpbZUx7o4KsqUX9cagvLNoOK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xaW7NTjEg5xAyawa+YVZ8zJ0mGk9tDsk9OYgTIOqk8QX+ajS0Lq5K9icvodqYpdcV
-         sTGy7gngx9Fdm7JzryLg+57W2mxCRaBhYa9RZ30I5Y1qrjKTYD4XJ/7JoNe2pWlvjx
-         FATc8/KkeytlkvD1PFmX7cfA7XAMlD7s6uBpLTNk=
+        b=cdPRurHxUKK+JaX/bQtgU3opEqmMJtrMMwGNQymx5H2bzKMPIDFdBWlnwtE1DW77j
+         mwB+raHg5FAEenh47E/1gS5cmm7uIfwY+/7ZNBEGP6wOrhF1Y+eds5THH5RrhEWDys
+         a5vLp7VeQz5rW8dVRPuBWDgoGG4cnkbNgEd0j0zQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 5.10 015/158] apparmor: Fix failed mount permission check error message
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Luo Meng <luomeng12@huawei.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.4 269/389] dm thin: fix use-after-free crash in dm_sm_register_threshold_callback
 Date:   Tue, 23 Aug 2022 10:25:47 +0200
-Message-Id: <20220823080046.680873844@linuxfoundation.org>
+Message-Id: <20220823080126.798951833@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,45 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Johansen <john.johansen@canonical.com>
+From: Luo Meng <luomeng12@huawei.com>
 
-commit ec240b5905bbb09a03dccffee03062cf39e38dc2 upstream.
+commit 3534e5a5ed2997ca1b00f44a0378a075bd05e8a3 upstream.
 
-When the mount check fails due to a permission check failure instead
-of explicitly at one of the subcomponent checks, AppArmor is reporting
-a failure in the flags match. However this is not true and AppArmor
-can not attribute the error at this point to any particular component,
-and should only indicate the mount failed due to missing permissions.
+Fault inject on pool metadata device reports:
+  BUG: KASAN: use-after-free in dm_pool_register_metadata_threshold+0x40/0x80
+  Read of size 8 at addr ffff8881b9d50068 by task dmsetup/950
 
-Fixes: 2ea3ffb7782a ("apparmor: add mount mediation")
-Signed-off-by: John Johansen <john.johansen@canonical.com>
+  CPU: 7 PID: 950 Comm: dmsetup Tainted: G        W         5.19.0-rc6 #1
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-1.fc33 04/01/2014
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x34/0x44
+   print_address_description.constprop.0.cold+0xeb/0x3f4
+   kasan_report.cold+0xe6/0x147
+   dm_pool_register_metadata_threshold+0x40/0x80
+   pool_ctr+0xa0a/0x1150
+   dm_table_add_target+0x2c8/0x640
+   table_load+0x1fd/0x430
+   ctl_ioctl+0x2c4/0x5a0
+   dm_ctl_ioctl+0xa/0x10
+   __x64_sys_ioctl+0xb3/0xd0
+   do_syscall_64+0x35/0x80
+   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+This can be easily reproduced using:
+  echo offline > /sys/block/sda/device/state
+  dd if=/dev/zero of=/dev/mapper/thin bs=4k count=10
+  dmsetup load pool --table "0 20971520 thin-pool /dev/sda /dev/sdb 128 0 0"
+
+If a metadata commit fails, the transaction will be aborted and the
+metadata space maps will be destroyed. If a DM table reload then
+happens for this failed thin-pool, a use-after-free will occur in
+dm_sm_register_threshold_callback (called from
+dm_pool_register_metadata_threshold).
+
+Fix this by in dm_pool_register_metadata_threshold() by returning the
+-EINVAL error if the thin-pool is in fail mode. Also fail pool_ctr()
+with a new error message: "Error registering metadata threshold".
+
+Fixes: ac8c3f3df65e4 ("dm thin: generate event when metadata threshold passed")
+Cc: stable@vger.kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Luo Meng <luomeng12@huawei.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/apparmor/mount.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/md/dm-thin-metadata.c |    7 +++++--
+ drivers/md/dm-thin.c          |    4 +++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
---- a/security/apparmor/mount.c
-+++ b/security/apparmor/mount.c
-@@ -229,7 +229,8 @@ static const char * const mnt_info_table
- 	"failed srcname match",
- 	"failed type match",
- 	"failed flags match",
--	"failed data match"
-+	"failed data match",
-+	"failed perms check"
- };
+--- a/drivers/md/dm-thin-metadata.c
++++ b/drivers/md/dm-thin-metadata.c
+@@ -2060,10 +2060,13 @@ int dm_pool_register_metadata_threshold(
+ 					dm_sm_threshold_fn fn,
+ 					void *context)
+ {
+-	int r;
++	int r = -EINVAL;
  
- /*
-@@ -284,8 +285,8 @@ static int do_match_mnt(struct aa_dfa *d
- 			return 0;
- 	}
+ 	pmd_write_lock_in_core(pmd);
+-	r = dm_sm_register_threshold_callback(pmd->metadata_sm, threshold, fn, context);
++	if (!pmd->fail_io) {
++		r = dm_sm_register_threshold_callback(pmd->metadata_sm,
++						      threshold, fn, context);
++	}
+ 	pmd_write_unlock(pmd);
  
--	/* failed at end of flags match */
--	return 4;
-+	/* failed at perms check, don't confuse with flags match */
-+	return 6;
- }
+ 	return r;
+--- a/drivers/md/dm-thin.c
++++ b/drivers/md/dm-thin.c
+@@ -3425,8 +3425,10 @@ static int pool_ctr(struct dm_target *ti
+ 						calc_metadata_threshold(pt),
+ 						metadata_low_callback,
+ 						pool);
+-	if (r)
++	if (r) {
++		ti->error = "Error registering metadata threshold";
+ 		goto out_flags_changed;
++	}
  
- 
+ 	pt->callbacks.congested_fn = pool_is_congested;
+ 	dm_table_add_target_callbacks(ti->table, &pt->callbacks);
 
 

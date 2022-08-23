@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7E159DF88
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D1959DE05
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355964AbiHWKsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S1353928AbiHWKMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356340AbiHWKmA (ORCPT
+        with ESMTP id S1352252AbiHWKFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:42:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CB8A927D;
-        Tue, 23 Aug 2022 02:09:28 -0700 (PDT)
+        Tue, 23 Aug 2022 06:05:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC577CB5E;
+        Tue, 23 Aug 2022 01:51:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 117B96153D;
-        Tue, 23 Aug 2022 09:09:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E48FC433D6;
-        Tue, 23 Aug 2022 09:09:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39F516150F;
+        Tue, 23 Aug 2022 08:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED85C433D6;
+        Tue, 23 Aug 2022 08:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245753;
-        bh=grUTRLlYxf0QguzYoFcDN2EGtAKUrN0epPX1iavpqto=;
+        s=korg; t=1661244712;
+        bh=l1hHllYzgE1Bcw27PDIeyRbRqgXZ1yIg4OE0bNPY3QE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=embiuZEV0rNEI+t5Ua6o0BfTedwb3f61j6Gv71i6U3eU3ABO1L7w+hiR6t/xAg4+q
-         supAhXuY/EBHuNJ6f9V9/Ae9pEpF5JpgBq6Vl9XjdcqaoYkModdBdIR6Q7uaCfbBw+
-         IsYLY9KekN4EKur7QUqDcmA4JP2ktiJx/4BXXWmc=
+        b=qtBtKD8P56WqTsBtGD9/zPKl9Qx5K/7elZmvcwi5uJmglXefJ+vnsSzX8F/mtpXIQ
+         j5gupnDa7MBHNSCkneFfsFu/qFDU18UK0R2ElYooY7ZBMCmhps9S4jOgR7ljjTZjF9
+         WFy5yZBFn7x9L4seW5snyy2fBfHe3d1WJ3bqT170=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 171/287] powerpc/spufs: Fix refcount leak in spufs_init_isolated_loader
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 4.14 179/229] btrfs: fix lost error handling when looking up extended ref on log replay
 Date:   Tue, 23 Aug 2022 10:25:40 +0200
-Message-Id: <20220823080106.526245435@linuxfoundation.org>
+Message-Id: <20220823080100.012041778@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Filipe Manana <fdmanana@suse.com>
 
-[ Upstream commit 6ac059dacffa8ab2f7798f20e4bd3333890c541c ]
+commit 7a6b75b79902e47f46328b57733f2604774fa2d9 upstream.
 
-of_find_node_by_path() returns remote device nodepointer with
-refcount incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+During log replay, when processing inode references, if we get an error
+when looking up for an extended reference at __add_inode_ref(), we ignore
+it and proceed, returning success (0) if no other error happens after the
+lookup. This is obviously wrong because in case an extended reference
+exists and it encodes some name not in the log, we need to unlink it,
+otherwise the filesystem state will not match the state it had after the
+last fsync.
 
-Fixes: 0afacde3df4c ("[POWERPC] spufs: allow isolated mode apps by starting the SPE loader")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220603121543.22884-1-linmq006@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So just make __add_inode_ref() return an error it gets from the extended
+reference lookup.
+
+Fixes: f186373fef005c ("btrfs: extended inode refs")
+CC: stable@vger.kernel.org # 4.9+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/cell/spufs/inode.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/btrfs/tree-log.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/cell/spufs/inode.c b/arch/powerpc/platforms/cell/spufs/inode.c
-index db329d4bf1c3..8b664d9cfcd4 100644
---- a/arch/powerpc/platforms/cell/spufs/inode.c
-+++ b/arch/powerpc/platforms/cell/spufs/inode.c
-@@ -684,6 +684,7 @@ spufs_init_isolated_loader(void)
- 		return;
- 
- 	loader = of_get_property(dn, "loader", &size);
-+	of_node_put(dn);
- 	if (!loader)
- 		return;
- 
--- 
-2.35.1
-
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -1100,7 +1100,9 @@ again:
+ 	extref = btrfs_lookup_inode_extref(NULL, root, path, name, namelen,
+ 					   inode_objectid, parent_objectid, 0,
+ 					   0);
+-	if (!IS_ERR_OR_NULL(extref)) {
++	if (IS_ERR(extref)) {
++		return PTR_ERR(extref);
++	} else if (extref) {
+ 		u32 item_size;
+ 		u32 cur_offset = 0;
+ 		unsigned long base;
 
 

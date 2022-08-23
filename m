@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E6659CF74
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C46959CF7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239595AbiHWDY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 23:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S240043AbiHWDYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 23:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiHWDYW (ORCPT
+        with ESMTP id S239205AbiHWDYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 Aug 2022 23:24:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A1252092
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CDE520A6
         for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 20:24:21 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MBZHl13FYzgYpg;
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MBZHl73ZJz1N7YB;
         Tue, 23 Aug 2022 11:20:51 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH v2 1/6] mm, hwpoison: fix page refcnt leaking in try_memory_failure_hugetlb()
-Date:   Tue, 23 Aug 2022 11:23:41 +0800
-Message-ID: <20220823032346.4260-2-linmiaohe@huawei.com>
+Subject: [PATCH v2 2/6] mm, hwpoison: fix page refcnt leaking in unpoison_memory()
+Date:   Tue, 23 Aug 2022 11:23:42 +0800
+Message-ID: <20220823032346.4260-3-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220823032346.4260-1-linmiaohe@huawei.com>
 References: <20220823032346.4260-1-linmiaohe@huawei.com>
@@ -48,34 +48,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When hwpoison_filter() refuses to hwpoison a hugetlb page, the refcnt of
-the page would have been incremented if res == 1. Using put_page() to fix
-the refcnt leaking in this case.
+When free_raw_hwp_pages() fails its work, the refcnt of the hugetlb page
+would have been incremented if ret > 0. Using put_page() to fix refcnt
+leaking in this case.
 
-Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
+Fixes: debb6b9c3fdd ("mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage")
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 ---
- mm/memory-failure.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ mm/memory-failure.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 5b368124956d..9d1ebfef04ee 100644
+index 9d1ebfef04ee..ecd42d717c6f 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -1860,8 +1860,10 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
- 
- 	if (hwpoison_filter(p)) {
- 		hugetlb_clear_page_hwpoison(head);
--		res = -EOPNOTSUPP;
--		goto out;
-+		unlock_page(head);
-+		if (res == 1)
-+			put_page(head);
-+		return -EOPNOTSUPP;
- 	}
- 
- 	/*
+@@ -2378,6 +2378,7 @@ int unpoison_memory(unsigned long pfn)
+ 			count = free_raw_hwp_pages(page, false);
+ 			if (count == 0) {
+ 				ret = -EBUSY;
++				put_page(page);
+ 				goto unlock_mutex;
+ 			}
+ 		}
 -- 
 2.23.0
 

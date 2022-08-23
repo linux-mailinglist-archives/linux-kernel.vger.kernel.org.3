@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9075E59D80F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE54D59D894
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351381AbiHWJhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S243891AbiHWJjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351685AbiHWJfy (ORCPT
+        with ESMTP id S238703AbiHWJjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:35:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FC097D6F;
-        Tue, 23 Aug 2022 01:40:10 -0700 (PDT)
+        Tue, 23 Aug 2022 05:39:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7173F71719;
+        Tue, 23 Aug 2022 01:41:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3FA4B81C66;
-        Tue, 23 Aug 2022 08:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D0AC433C1;
-        Tue, 23 Aug 2022 08:40:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D3061555;
+        Tue, 23 Aug 2022 08:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329A1C433C1;
+        Tue, 23 Aug 2022 08:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244008;
-        bh=NjBoIts4ftHS3FHOf3IvpJrjsZCLRUUI6NkDYNIikfw=;
+        s=korg; t=1661244014;
+        bh=yXT7p9wh4HXbnK7OLAUNhB3dmPOuBMTo6K5JG9vx2iU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A94Eu3t6kWDZO75NgxfrBeZ+90vqXN/vaQKPrHHjae/PM3KLAyfIK9awPL0Rx8AGp
-         fpLf3NxlkVX1D/ftLqzuBHlQfgGL+wedhMLrZm28poe9QhCTmFmW1A+7T4cL9mDxux
-         HuG9AEtqqVCItdAnmwWPw0ircAwOnbbOzhritZ1w=
+        b=maxa2Fz9UJIUiDMYXC87Ou1qna6n4ViNIGkYDg1qw8S0lZJ2c7nvIP5XsPBt8HaRH
+         2C1Vqesnne+tqmNykHUNP9gWX/EYslbGwLHOUZd7IjhJdl+Eov2Bi1SCa14zah8CnA
+         IuW8imjCHgo+gC+TmmwWCcOdTtHzLUy97/MgF+fA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,9 +38,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tom Zanussi <zanussi@kernel.org>,
         "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.15 023/244] tracing/probes: Have kprobes and uprobes use $COMM too
-Date:   Tue, 23 Aug 2022 10:23:02 +0200
-Message-Id: <20220823080059.836940240@linuxfoundation.org>
+Subject: [PATCH 5.15 024/244] tracing: Have filter accept "common_cpu" to be consistent
+Date:   Tue, 23 Aug 2022 10:23:03 +0200
+Message-Id: <20220823080059.865776107@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -60,51 +60,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit ab8384442ee512fc0fc72deeb036110843d0e7ff upstream.
+commit b2380577d4fe1c0ef3fa50417f1e441c016e4cbe upstream.
 
-Both $comm and $COMM can be used to get current->comm in eprobes and the
-filtering and histogram logic. Make kprobes and uprobes consistent in this
-regard and allow both $comm and $COMM as well. Currently kprobes and
-uprobes only handle $comm, which is inconsistent with the other utilities,
-and can be confusing to users.
+Make filtering consistent with histograms. As "cpu" can be a field of an
+event, allow for "common_cpu" to keep it from being confused with the
+"cpu" field of the event.
 
-Link: https://lkml.kernel.org/r/20220820134401.317014913@goodmis.org
-Link: https://lore.kernel.org/all/20220820220442.776e1ddaf8836e82edb34d01@kernel.org/
+Link: https://lkml.kernel.org/r/20220820134401.513062765@goodmis.org
+Link: https://lore.kernel.org/all/20220820220920.e42fa32b70505b1904f0a0ad@kernel.org/
 
 Cc: stable@vger.kernel.org
 Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
 Cc: Tom Zanussi <zanussi@kernel.org>
-Fixes: 533059281ee5 ("tracing: probeevent: Introduce new argument fetching code")
+Fixes: 1e3bac71c5053 ("tracing/histogram: Rename "cpu" to "common_cpu"")
 Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_probe.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/trace/trace_events.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -310,7 +310,7 @@ static int parse_probe_vars(char *arg, c
- 			}
- 		} else
- 			goto inval_var;
--	} else if (strcmp(arg, "comm") == 0) {
-+	} else if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
- 		code->op = FETCH_OP_COMM;
- #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
- 	} else if (((flags & TPARG_FL_MASK) ==
-@@ -621,7 +621,8 @@ static int traceprobe_parse_probe_arg_bo
- 	 * we can find those by strcmp. But ignore for eprobes.
- 	 */
- 	if (!(flags & TPARG_FL_TPOINT) &&
--	    (strcmp(arg, "$comm") == 0 || strncmp(arg, "\\\"", 2) == 0)) {
-+	    (strcmp(arg, "$comm") == 0 || strcmp(arg, "$COMM") == 0 ||
-+	     strncmp(arg, "\\\"", 2) == 0)) {
- 		/* The type of $comm must be "string", and not an array. */
- 		if (parg->count || (t && strcmp(t, "string")))
- 			goto out;
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -176,6 +176,7 @@ static int trace_define_generic_fields(v
+ 
+ 	__generic_field(int, CPU, FILTER_CPU);
+ 	__generic_field(int, cpu, FILTER_CPU);
++	__generic_field(int, common_cpu, FILTER_CPU);
+ 	__generic_field(char *, COMM, FILTER_COMM);
+ 	__generic_field(char *, comm, FILTER_COMM);
+ 
 
 

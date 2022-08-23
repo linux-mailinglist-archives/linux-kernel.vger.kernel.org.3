@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC4959EE4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F73059EE52
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiHWViI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S229576AbiHWVkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiHWViG (ORCPT
+        with ESMTP id S229545AbiHWVkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:38:06 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B838C80F4D;
-        Tue, 23 Aug 2022 14:38:05 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id p185so203082pfb.13;
-        Tue, 23 Aug 2022 14:38:05 -0700 (PDT)
+        Tue, 23 Aug 2022 17:40:04 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CF31400C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:40:03 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id e28so11434766qts.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=suVFZUiH+3jPS7TxFttlvvIx/tSdJhHFOZyoNEZStBs=;
-        b=IpgID6Q56dQ9xzFm+VkQaGxOI7+kNAdFg5/rGlg1HZH6UOqme6NOixn2Tk0jKLjrnr
-         wi+cFRci+ToRKQWGS5jhzpfXntVWjBGQJ0sjyZEXYlxodG7tfgpRNDMuNBKkTZtlgbtP
-         pFDjowUxm2wn27dBaYZBvUeQwM+3FfGUE5E8B4Z68KLrJLc8G6uqLZsJUmZWIEydRMK0
-         UqpCf/3pAUd81jfBbOPVQdKelILf7wVjEqbgt6GZRUUho6RayIQtyRwDH5H8SYaSJYtc
-         foJWVkm2X7EsyMAhMoGNSWQHworXAZJt72CS265IRAsDv42ivPlN/2JBKs7U3zzGlris
-         xiXg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=G86WRHJEnsOSMJyR+HIgPOCKLJ1FrfHPzigB3+KgUQA=;
+        b=C6xtHq1NXPIMU5uiq5f8U0DS283aZaaUpCRuevskmzyHBlLjarhhQ4fJDZMI0/2W/x
+         EC8gJu0aCTLkvueynaa8kDQMlCit6NrmK02gU7NZ7SFKQWjf7uiUo5LKIECjZDwqF/sT
+         6UR54omum44/yPn132xscEFqF2nmEyZboXR/ZVbpcfa57YJRbNT4REnxUHfP33deAzrv
+         +KzxpGd8WQKG3dc4Y5Rrl8Il1geRlEFvXWrWsbYTcrH1/2xz6NvVP5JQ7pGmn6LIP4HQ
+         XqbCK/zYqEUr4jdAYPucRWHibKNZBB7ZyfwI9Ds2UGVH3uB+hRXu+wX2MaetjJPkjq70
+         FXMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=suVFZUiH+3jPS7TxFttlvvIx/tSdJhHFOZyoNEZStBs=;
-        b=dVv46UnaBNom5mAS/ALEpSjRfousLPpp7wb2q0kfkcIkz/Gt5dIBbVGFEoyw8HtWYT
-         08kCmsdYHLwf8YeeIgIS4A50Xr+XDk63GxSmUhdNCD4eJQBcE9tfE5LPMTDtJmFzAGFr
-         khv2F1W70wzi4W72mvOCQzHoZRfFTgTqF+dwwV0XfphmThbaT6IGELzaCJlDSL7Qrimk
-         AX/5xSHsBrZEnywu77UoITBIgCH7JrEYDIYe0TCCQLd8DkdvJTlo1RIqVgnrTkVa8JJd
-         tPhJgxY51XZCYEpusXWuCvs/aHDy/oUZLfb8CJW44lBEFVzMCQ9ntl2ljjrMOA9E+ton
-         MD7Q==
-X-Gm-Message-State: ACgBeo1jyzhn05w+ft0HqXn2iQ3huxUW8yyWgB+SOt3kFOubMrnLppcO
-        mVqglmgx8rECwadQZr6Avy0=
-X-Google-Smtp-Source: AA6agR4XbLuiEWAoG3mwSUn2b47KbLdv+9WetxY4EF4al0r89Bk/bx66tBpPf+nQXpKehI/c5WwldQ==
-X-Received: by 2002:a63:5f92:0:b0:41d:f447:76f1 with SMTP id t140-20020a635f92000000b0041df44776f1mr22156959pgb.456.1661290685149;
-        Tue, 23 Aug 2022 14:38:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r143-20020a632b95000000b0040d1eb90d67sm9619746pgr.93.2022.08.23.14.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:38:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 23 Aug 2022 14:38:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/159] 5.10.138-rc2 review
-Message-ID: <20220823213803.GD2439282@roeck-us.net>
-References: <20220823083146.854628728@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=G86WRHJEnsOSMJyR+HIgPOCKLJ1FrfHPzigB3+KgUQA=;
+        b=JVRBdRN1OVONdXpRoyyKd1JicCPqJL4FWEqvvvHFf+ZBb8zObPISozK+tEb2zdr3Zm
+         I7NQQB9UQL6hw4sWfSMUw5jPdRmFftnRAuXkU6yAsV7qQw+O/ThFudiw8yEBqJwIEhsQ
+         O4sx1r3zPncCXQEKi0f78JOQzA6OqOLbvCA04fXVkAYO0yIl4BAInZJ4xCZiu5rOVAix
+         +ihIu1bCqeRjr2fnPpR/RiFfgVsJ0QrmcQszxH8V3Po7ncQXfJcHS1/lchRbOSsFrKJ/
+         I1fhlkcNef1pnTlNQQUfV5lJhV0n0o+dBpO3gUHf2knLaC9P9ZbsIHdI3frHekgmO6aB
+         7lSw==
+X-Gm-Message-State: ACgBeo1RV9YXOnWLP9wstZZY+jY31Gaa3fZHDx6Zt8EZ0emyrWz3uVya
+        9zH/C/BNbU9IuvC6AI/L63bf7VqQRCf1EHLM5tpVb4Zjjrc=
+X-Google-Smtp-Source: AA6agR6XVm0mZhUNaQyuRLIRo3tTZ5Ozm5DTMfBOZ0xWzt+L/60JErk4kr0UwBvEdk5ofdoDMObkW43aLKr+PuUhZJo=
+X-Received: by 2002:ac8:7f92:0:b0:344:8cd8:59a1 with SMTP id
+ z18-20020ac87f92000000b003448cd859a1mr22124846qtj.384.1661290802614; Tue, 23
+ Aug 2022 14:40:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823083146.854628728@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 24 Aug 2022 00:39:26 +0300
+Message-ID: <CAHp75VfSOL5R1JdH-RS4PEXT1dEwuFGsmUPfkAp7zdDEMGzzjw@mail.gmail.com>
+Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk operations
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "broonie@kernel.org" <broonie@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:32:19AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.138 release.
-> There are 159 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 25 Aug 2022 08:31:16 +0000.
-> Anything received after that time might be too late.
-> 
+On Tue, Aug 16, 2022 at 9:14 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+>
+> Currently, only one-register io operations support tracepoints with
+> value logging. For the regmap bulk operations developer can view
+> hw_start/hw_done tracepoints with starting reg number and registers
+> count to be reading or writing. This patch injects tracepoints with
+> dumping registers values in the hex format to regmap bulk reading
+> and writing.
 
-Build results:
-	total: 163 pass: 162 fail: 1
-Failed builds:
-	um:defconfig
-Qemu test results:
-	total: 474 pass: 474 fail: 0
+Since it's applied, below might be considered for follow-ups.
 
-Building um:defconfig ... failed
---------------
-Error log:
-arch/um/kernel/um_arch.c:370:6: error: redefinition of 'apply_returns'
+...
 
-Guenter
+> +               if (val)
+> +                       memcpy(__get_dynamic_array(buf), val, val_len);
+
+I'm probably missing something, but what this condition prevents from?
+
+...
+
+> +       TP_printk("%s reg=%x val=%s", __get_str(name),
+> +                 (unsigned int)__entry->reg,
+
+Why do you need casting?
+
+-- 
+With Best Regards,
+Andy Shevchenko

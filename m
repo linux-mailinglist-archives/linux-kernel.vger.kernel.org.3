@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E880959DFF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED9159DC26
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbiHWKdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S1354928AbiHWKd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354334AbiHWKRI (ORCPT
+        with ESMTP id S1354342AbiHWKRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:17:08 -0400
+        Tue, 23 Aug 2022 06:17:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B4374BB3;
-        Tue, 23 Aug 2022 02:01:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25C580B5A;
+        Tue, 23 Aug 2022 02:01:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C58561576;
-        Tue, 23 Aug 2022 09:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783DCC433B5;
-        Tue, 23 Aug 2022 09:01:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98D5C61459;
+        Tue, 23 Aug 2022 09:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2EFC433D6;
+        Tue, 23 Aug 2022 09:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245280;
-        bh=30MAri+rhxUHrgjZnI2YujfjWyEN/ZHjt5LHygb/svM=;
+        s=korg; t=1661245283;
+        bh=k99rQfAN/Lt2RYkkU5H2EoGW+vQy2MUMH4d2va9jXms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aniY1XOcMFkV1yq1WcdXyHTept98S8frBewUu8Ch/oW/tA0RbcztTlxl0W1Mm686R
-         mBTJShFiOh8nasYoo82elzOW69mZH1AHMBsXV9jALvthq+YaRnryVOO4SRWcQGrfxv
-         hHsHcui9ZHVq632jmO5tXQM+mjSO1GIKr/PWPf4g=
+        b=oKFkLDk1w3mGccHmsXwpBa9OrTrXLiV/b6zDXoaMFK7Y3/Og8YVCaLDiWhoo4pEE9
+         /cRSk/p7kopfOTRWKRf7YPWv0lhhrxrfqxG92+AhD4BmvYqQNjXjns7MsEOUu2/RX0
+         +2cTAxiGWOFXYykoacA1ovu30HjVTHGf6nITrgLE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 4.19 028/287] fuse: limit nsec
-Date:   Tue, 23 Aug 2022 10:23:17 +0200
-Message-Id: <20220823080101.226424778@linuxfoundation.org>
+        stable@vger.kernel.org, Yi Guo <yi.guo@cavium.com>,
+        Nadav Haklai <nadavh@marvell.com>,
+        Narendra Hadke <nhadke@marvell.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+Subject: [PATCH 4.19 029/287] serial: mvebu-uart: uart2 error bits clearing
+Date:   Tue, 23 Aug 2022 10:23:18 +0200
+Message-Id: <20220823080101.256900175@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -53,34 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miklos Szeredi <mszeredi@redhat.com>
+From: Narendra Hadke <nhadke@marvell.com>
 
-commit 47912eaa061a6a81e4aa790591a1874c650733c0 upstream.
+commit a7209541239e5dd44d981289e5f9059222d40fd1 upstream.
 
-Limit nanoseconds to 0..999999999.
+For mvebu uart2, error bits are not cleared on buffer read.
+This causes interrupt loop and system hang.
 
-Fixes: d8a5ba45457e ("[PATCH] FUSE - core")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Yi Guo <yi.guo@cavium.com>
+Reviewed-by: Nadav Haklai <nadavh@marvell.com>
+Signed-off-by: Narendra Hadke <nhadke@marvell.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Link: https://lore.kernel.org/r/20220726091221.12358-1-pali@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fuse/inode.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/tty/serial/mvebu-uart.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -174,6 +174,12 @@ void fuse_change_attributes_common(struc
- 	inode->i_uid     = make_kuid(fc->user_ns, attr->uid);
- 	inode->i_gid     = make_kgid(fc->user_ns, attr->gid);
- 	inode->i_blocks  = attr->blocks;
+--- a/drivers/tty/serial/mvebu-uart.c
++++ b/drivers/tty/serial/mvebu-uart.c
+@@ -237,6 +237,7 @@ static void mvebu_uart_rx_chars(struct u
+ 	struct tty_port *tport = &port->state->port;
+ 	unsigned char ch = 0;
+ 	char flag = 0;
++	int ret;
+ 
+ 	do {
+ 		if (status & STAT_RX_RDY(port)) {
+@@ -249,6 +250,16 @@ static void mvebu_uart_rx_chars(struct u
+ 				port->icount.parity++;
+ 		}
+ 
++		/*
++		 * For UART2, error bits are not cleared on buffer read.
++		 * This causes interrupt loop and system hang.
++		 */
++		if (IS_EXTENDED(port) && (status & STAT_BRK_ERR)) {
++			ret = readl(port->membase + UART_STAT);
++			ret |= STAT_BRK_ERR;
++			writel(ret, port->membase + UART_STAT);
++		}
 +
-+	/* Sanitize nsecs */
-+	attr->atimensec = min_t(u32, attr->atimensec, NSEC_PER_SEC - 1);
-+	attr->mtimensec = min_t(u32, attr->mtimensec, NSEC_PER_SEC - 1);
-+	attr->ctimensec = min_t(u32, attr->ctimensec, NSEC_PER_SEC - 1);
-+
- 	inode->i_atime.tv_sec   = attr->atime;
- 	inode->i_atime.tv_nsec  = attr->atimensec;
- 	/* mtime from server may be stale due to local buffered write */
+ 		if (status & STAT_BRK_DET) {
+ 			port->icount.brk++;
+ 			status &= ~(STAT_FRM_ERR | STAT_PAR_ERR);
 
 

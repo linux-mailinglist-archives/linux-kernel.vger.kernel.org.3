@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFDF59D4E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4F159D7E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243493AbiHWI2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S1349338AbiHWJWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243243AbiHWIX6 (ORCPT
+        with ESMTP id S243671AbiHWJUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:23:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045A465F7;
-        Tue, 23 Aug 2022 01:13:23 -0700 (PDT)
+        Tue, 23 Aug 2022 05:20:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03109895FB;
+        Tue, 23 Aug 2022 01:33:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B85566134B;
-        Tue, 23 Aug 2022 08:13:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A1AC433D6;
-        Tue, 23 Aug 2022 08:13:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51CB1B81C20;
+        Tue, 23 Aug 2022 08:32:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9CBC433D6;
+        Tue, 23 Aug 2022 08:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242401;
-        bh=IKMkzTsYh/OjMKBcBRBsOD5re4x3laIipvrW/22RXUE=;
+        s=korg; t=1661243573;
+        bh=uVE2rYO/FwoZI6CHQRFOhSMx6E4j3S4MrjD6MhJyUfg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yrn5uY1+JX7LDq7Xbb2WtgBqLw7TZf9OSDu9OjA23Nmgh0J4I23BgdNHkE43EHki8
-         NJW97zFeelfG4YotrPDO2DRJug+95pjmf7k0lKy/21Mt8qg3monv7DO2kWrS2inZKZ
-         Vs7HTOEYCorvsvIzG8Fhpih239sTUzYWlqjKiiJM=
+        b=WxWzT9sy1MDBQoEr0eBtf3ZI/Ehv8UnInir7NwKLSwZwaOdJItWKpIeKncZfEfS0s
+         o1rhxmdtwVQk5+j7ymOANGTkxRPcrbsv2JTUVCXqD8utxoBTRLt8fTLxUd+gn3LQzc
+         uDuWkob2usXZhiUt0c9sMBglsaKlwpWy8Bpbpv5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.9 066/101] ALSA: info: Fix llseek return value when using callback
-Date:   Tue, 23 Aug 2022 10:03:39 +0200
-Message-Id: <20220823080037.095268727@linuxfoundation.org>
+        stable@vger.kernel.org, Dongli Zhang <dongli.zhang@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 319/365] swiotlb: panic if nslabs is too small
+Date:   Tue, 23 Aug 2022 10:03:40 +0200
+Message-Id: <20220823080131.532813281@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+From: Dongli Zhang <dongli.zhang@oracle.com>
 
-commit 9be080edcca330be4af06b19916c35227891e8bc upstream.
+[ Upstream commit 0bf28fc40d89b1a3e00d1b79473bad4e9ca20ad1 ]
 
-When using callback there was a flow of
+Panic on purpose if nslabs is too small, in order to sync with the remap
+retry logic.
 
-	ret = -EINVAL
-	if (callback) {
-		offset = callback();
-		goto out;
-	}
-	...
-	offset = some other value in case of no callback;
-	ret = offset;
-out:
-	return ret;
+In addition, print the number of bytes for tlb alloc failure.
 
-which causes the snd_info_entry_llseek() to return -EINVAL when there is
-callback handler. Fix this by setting "ret" directly to callback return
-value before jumping to "out".
-
-Fixes: 73029e0ff18d ("ALSA: info - Implement common llseek for binary mode")
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220817124924.3974577-1-amadeuszx.slawinski@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/info.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/dma/swiotlb.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/sound/core/info.c
-+++ b/sound/core/info.c
-@@ -127,9 +127,9 @@ static loff_t snd_info_entry_llseek(stru
- 	entry = data->entry;
- 	mutex_lock(&entry->access);
- 	if (entry->c.ops->llseek) {
--		offset = entry->c.ops->llseek(entry,
--					      data->file_private_data,
--					      file, offset, orig);
-+		ret = entry->c.ops->llseek(entry,
-+					   data->file_private_data,
-+					   file, offset, orig);
- 		goto out;
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index 5830dce6081b..f5304e2f6a35 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -242,6 +242,9 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+ 	if (swiotlb_force_disable)
+ 		return;
+ 
++	if (nslabs < IO_TLB_MIN_SLABS)
++		panic("%s: nslabs = %lu too small\n", __func__, nslabs);
++
+ 	/*
+ 	 * By default allocate the bounce buffer memory from low memory, but
+ 	 * allow to pick a location everywhere for hypervisors with guest
+@@ -254,7 +257,8 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
+ 	else
+ 		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
+ 	if (!tlb) {
+-		pr_warn("%s: failed to allocate tlb structure\n", __func__);
++		pr_warn("%s: Failed to allocate %zu bytes tlb structure\n",
++			__func__, bytes);
+ 		return;
  	}
  
+-- 
+2.35.1
+
 
 

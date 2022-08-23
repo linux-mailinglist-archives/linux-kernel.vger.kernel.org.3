@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D579D59DC95
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CC059DC68
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356263AbiHWKuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S1358217AbiHWLoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356004AbiHWKlQ (ORCPT
+        with ESMTP id S1357979AbiHWLkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:41:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CC2A74DF;
-        Tue, 23 Aug 2022 02:08:48 -0700 (PDT)
+        Tue, 23 Aug 2022 07:40:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE01792D2;
+        Tue, 23 Aug 2022 02:28:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B5B52CE1B5D;
-        Tue, 23 Aug 2022 09:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED82C433C1;
-        Tue, 23 Aug 2022 09:08:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63CC561321;
+        Tue, 23 Aug 2022 09:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B291C433C1;
+        Tue, 23 Aug 2022 09:28:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245725;
-        bh=2gIMAlHBijR6NYq4wraQ4wNTunf1yxbOHYK0ZS1AzLE=;
+        s=korg; t=1661246917;
+        bh=P5zsGTLjzAISYbxpTaeLg4BjhrF3FWX6sCFB2Kc6raA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yuN1Al0JPYhYDt993eOuwr4FhauFqT/etv181SM35POKxSVtlFxxv9DoiexvArl09
-         Y1plXgCCDrn4G7lyUHincGAeF0ei57J+h8dOmXDpx43in/mFVcN2nr1Khcpi5x36cm
-         i/gow8dJIZUHdjkQFcguvSQJ9F51MxcaYK/YrBjg=
+        b=EBF7Di38uiNTZJiQISTGUA85qJZguQOIkBcK4g4KmZ8wfFVhF7oOWcQWk7SFZhx+R
+         ahUnTXhQiHxnoeVTsuvw2VjKxsRVscGDrKDoNO0jSuhdETlSP9OhtifNYSfkzVMlUj
+         +gbQeadLh22NwYyMzqsd8HvovvZzAgvv7038Azgs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Rustam Subkhankulov <subkhankulov@ispras.ru>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 168/287] video: fbdev: sis: fix typos in SiS_GetModeID()
+        stable@vger.kernel.org, stable@kernel.org,
+        Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.4 259/389] ext4: fix use-after-free in ext4_xattr_set_entry
 Date:   Tue, 23 Aug 2022 10:25:37 +0200
-Message-Id: <20220823080106.415660211@linuxfoundation.org>
+Message-Id: <20220823080126.406961120@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +57,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rustam Subkhankulov <subkhankulov@ispras.ru>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 3eb8fccc244bfb41a7961969e4db280d44911226 ]
+commit 67d7d8ad99beccd9fe92d585b87f1760dc9018e3 upstream.
 
-The second operand of a '&&' operator has no impact on expression
-result for cases 400 and 512 in SiS_GetModeID().
+Hulk Robot reported a issue:
+==================================================================
+BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x18ab/0x3500
+Write of size 4105 at addr ffff8881675ef5f4 by task syz-executor.0/7092
 
-Judging by the logic and the names of the variables, in both cases a
-typo was made.
+CPU: 1 PID: 7092 Comm: syz-executor.0 Not tainted 4.19.90-dirty #17
+Call Trace:
+[...]
+ memcpy+0x34/0x50 mm/kasan/kasan.c:303
+ ext4_xattr_set_entry+0x18ab/0x3500 fs/ext4/xattr.c:1747
+ ext4_xattr_ibody_inline_set+0x86/0x2a0 fs/ext4/xattr.c:2205
+ ext4_xattr_set_handle+0x940/0x1300 fs/ext4/xattr.c:2386
+ ext4_xattr_set+0x1da/0x300 fs/ext4/xattr.c:2498
+ __vfs_setxattr+0x112/0x170 fs/xattr.c:149
+ __vfs_setxattr_noperm+0x11b/0x2a0 fs/xattr.c:180
+ __vfs_setxattr_locked+0x17b/0x250 fs/xattr.c:238
+ vfs_setxattr+0xed/0x270 fs/xattr.c:255
+ setxattr+0x235/0x330 fs/xattr.c:520
+ path_setxattr+0x176/0x190 fs/xattr.c:539
+ __do_sys_lsetxattr fs/xattr.c:561 [inline]
+ __se_sys_lsetxattr fs/xattr.c:557 [inline]
+ __x64_sys_lsetxattr+0xc2/0x160 fs/xattr.c:557
+ do_syscall_64+0xdf/0x530 arch/x86/entry/common.c:298
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x459fe9
+RSP: 002b:00007fa5e54b4c08 EFLAGS: 00000246 ORIG_RAX: 00000000000000bd
+RAX: ffffffffffffffda RBX: 000000000051bf60 RCX: 0000000000459fe9
+RDX: 00000000200003c0 RSI: 0000000020000180 RDI: 0000000020000140
+RBP: 000000000051bf60 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000001009 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc73c93fc0 R14: 000000000051bf60 R15: 00007fa5e54b4d80
+[...]
+==================================================================
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Above issue may happen as follows:
+-------------------------------------
+ext4_xattr_set
+  ext4_xattr_set_handle
+    ext4_xattr_ibody_find
+      >> s->end < s->base
+      >> no EXT4_STATE_XATTR
+      >> xattr_check_inode is not executed
+    ext4_xattr_ibody_set
+      ext4_xattr_set_entry
+       >> size_t min_offs = s->end - s->base
+       >> UAF in memcpy
 
-Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+we can easily reproduce this problem with the following commands:
+    mkfs.ext4 -F /dev/sda
+    mount -o debug_want_extra_isize=128 /dev/sda /mnt
+    touch /mnt/file
+    setfattr -n user.cat -v `seq -s z 4096|tr -d '[:digit:]'` /mnt/file
+
+In ext4_xattr_ibody_find, we have the following assignment logic:
+  header = IHDR(inode, raw_inode)
+         = raw_inode + EXT4_GOOD_OLD_INODE_SIZE + i_extra_isize
+  is->s.base = IFIRST(header)
+             = header + sizeof(struct ext4_xattr_ibody_header)
+  is->s.end = raw_inode + s_inode_size
+
+In ext4_xattr_set_entry
+  min_offs = s->end - s->base
+           = s_inode_size - EXT4_GOOD_OLD_INODE_SIZE - i_extra_isize -
+	     sizeof(struct ext4_xattr_ibody_header)
+  last = s->first
+  free = min_offs - ((void *)last - s->base) - sizeof(__u32)
+       = s_inode_size - EXT4_GOOD_OLD_INODE_SIZE - i_extra_isize -
+         sizeof(struct ext4_xattr_ibody_header) - sizeof(__u32)
+
+In the calculation formula, all values except s_inode_size and
+i_extra_size are fixed values. When i_extra_size is the maximum value
+s_inode_size - EXT4_GOOD_OLD_INODE_SIZE, min_offs is -4 and free is -8.
+The value overflows. As a result, the preceding issue is triggered when
+memcpy is executed.
+
+Therefore, when finding xattr or setting xattr, check whether
+there is space for storing xattr in the inode to resolve this issue.
+
+Cc: stable@kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220616021358.2504451-3-libaokun1@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/sis/init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ext4/xattr.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/sis/init.c b/drivers/video/fbdev/sis/init.c
-index fde27feae5d0..d6b2ce95a859 100644
---- a/drivers/video/fbdev/sis/init.c
-+++ b/drivers/video/fbdev/sis/init.c
-@@ -355,12 +355,12 @@ SiS_GetModeID(int VGAEngine, unsigned int VBFlags, int HDisplay, int VDisplay,
- 		}
- 		break;
- 	case 400:
--		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 800) && (LCDwidth >= 600))) {
-+		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 800) && (LCDheight >= 600))) {
- 			if(VDisplay == 300) ModeIndex = ModeIndex_400x300[Depth];
- 		}
- 		break;
- 	case 512:
--		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 1024) && (LCDwidth >= 768))) {
-+		if((!(VBFlags & CRT1_LCDA)) || ((LCDwidth >= 1024) && (LCDheight >= 768))) {
- 			if(VDisplay == 384) ModeIndex = ModeIndex_512x384[Depth];
- 		}
- 		break;
--- 
-2.35.1
-
+--- a/fs/ext4/xattr.c
++++ b/fs/ext4/xattr.c
+@@ -2184,8 +2184,9 @@ int ext4_xattr_ibody_find(struct inode *
+ 	struct ext4_inode *raw_inode;
+ 	int error;
+ 
+-	if (EXT4_I(inode)->i_extra_isize == 0)
++	if (!EXT4_INODE_HAS_XATTR_SPACE(inode))
+ 		return 0;
++
+ 	raw_inode = ext4_raw_inode(&is->iloc);
+ 	header = IHDR(inode, raw_inode);
+ 	is->s.base = is->s.first = IFIRST(header);
+@@ -2213,8 +2214,9 @@ int ext4_xattr_ibody_inline_set(handle_t
+ 	struct ext4_xattr_search *s = &is->s;
+ 	int error;
+ 
+-	if (EXT4_I(inode)->i_extra_isize == 0)
++	if (!EXT4_INODE_HAS_XATTR_SPACE(inode))
+ 		return -ENOSPC;
++
+ 	error = ext4_xattr_set_entry(i, s, handle, inode, false /* is_block */);
+ 	if (error)
+ 		return error;
 
 

@@ -2,131 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1FA59EFA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFD459EF96
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbiHWXYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 19:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
+        id S231147AbiHWXS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 19:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbiHWXXu (ORCPT
+        with ESMTP id S230316AbiHWXSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 19:23:50 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AA5895EB;
-        Tue, 23 Aug 2022 16:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661297029; x=1692833029;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=4B/TRj1BZONwzy5151e2R6Dce0IveHMSY69LyGwAY6I=;
-  b=TpazPvRMWKrwvnNdnSGQczRw4h4Bvcdq1x2sn6xRJZqWjUwFjzRrm457
-   3FBQjbFC8Ua67nIVF5sZTefqtTB7yNnA13fRsMUbPpx7Y5SB4wNuxalL/
-   k4BnjUpixB4wfRy3VfIITHZRSY0/Fbx//EJQtiUVWmZEHTy0O9bKSfNHF
-   agvq4CDzbAlcV96lPhRtfExVoFxgD7/ZQjSKbj8hSv9vV9tY2SN1g+g8e
-   tt3Br9Si3+UeDnqFaR9hHzL7FOaJGbjG79n9IEQ+sHcwgUQWRg/SJDT/M
-   XxkzA+dIfN6pkLNaoB919mra81kl58f3Y3Q1wpjoyok6Nc9trdQSlpInr
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="355547572"
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="355547572"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 16:23:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="605831224"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga007.jf.intel.com with ESMTP; 23 Aug 2022 16:23:47 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     kvm@vger.kernel.org, pbonzini@redhat.com
-Cc:     linux-kernel@vger.kernel.org, yang.zhong@intel.com,
-        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 2/2] selftests: kvm: Use the KVM API to enable dynamic XSTATE features
-Date:   Tue, 23 Aug 2022 16:14:02 -0700
-Message-Id: <20220823231402.7839-3-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220823231402.7839-1-chang.seok.bae@intel.com>
-References: <20220823231402.7839-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 19:18:55 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1396C10F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:18:54 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bj12so13293614ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=hBa9qDJUyTV6Ehu6X/BwAoxzXggaaMleeqnMPZw9DiQ=;
+        b=Qz1frpeISJqOpi7kKQ0gWUZJKJMN9sHyhFBsx72nR0jLL5foIzUtejoXAj40MhoWK7
+         AxVf9aWJkX+29ZeR0fFlsFOhNBsUq2EJgAWUxZ8VOFYVc7avE0GNcDoPFsTa+VLAprna
+         e8NNpkBL9GEhZVv1gyNs1VVlniREq9b9Wu62g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=hBa9qDJUyTV6Ehu6X/BwAoxzXggaaMleeqnMPZw9DiQ=;
+        b=SieVB0jGuQD/4PxBEQZ1+xOkYWfWdSZ7EalzGYWtYjj80S6PiVlDvoBNZyA/MyNURI
+         dKhMOJ6iS1cYo2BywgxzUYZzxsjEWCSVWhYpfGFs1tRjvoCCUgJdoukG2xHyow4/7cv8
+         DF+TM2Yx+/yblWSTPkcZ6ba/yOKRGmzIfDWVSE0ahZWQ8uxCMzsFniUiM+KiJ1QxfV87
+         2MM4HwtgTatMcRaeX2rn6GvqazPpOkwVCEm4PZkV4rnEpfJYgpTulEia0lnzNFqyb+vd
+         Q0AQf2jh5WMz2GkIh48vDdTvKxCPxkMk4cSetV/nWqHhHxaZQ9yXmGPS6EzxbXQwCBly
+         DAdg==
+X-Gm-Message-State: ACgBeo3AnU+3is4mJvLuDbLSFgFHYDlw2adtaYO/myfIaGT18s6FwCJz
+        7+OOefHdrb0YShjL8rxKAl8VQmcyC8JrbQhm
+X-Google-Smtp-Source: AA6agR7fof6/NlrmXHzgZ42b5+7OqkH80XlP3v4DKAhcKHj/tVf+gfe250BH1B7cdnW7/8RWCg9zpA==
+X-Received: by 2002:a17:907:7610:b0:73d:afe8:9837 with SMTP id jx16-20020a170907761000b0073dafe89837mr1177940ejc.606.1661296732645;
+        Tue, 23 Aug 2022 16:18:52 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id gn36-20020a1709070d2400b00738467f743dsm467853ejc.5.2022.08.23.16.18.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 16:18:51 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id h5so17912973wru.7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:18:51 -0700 (PDT)
+X-Received: by 2002:adf:e843:0:b0:225:221f:262 with SMTP id
+ d3-20020adfe843000000b00225221f0262mr14764393wrn.193.1661296730943; Tue, 23
+ Aug 2022 16:18:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220821000737.328590235@goodmis.org> <20220821000844.510643400@goodmis.org>
+ <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
+ <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org> <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
+ <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk> <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+In-Reply-To: <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 23 Aug 2022 16:18:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
+Message-ID: <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
+Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
+ triggered by is_signed_type()
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the KVM_X86_XCOMP_GUEST_PERM attribute, instead of the x86-specific prctl()
-options.
+On Tue, Aug 23, 2022 at 3:05 PM Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> Thank you Rasmus for having shared this information. Since sparse will
+> have to be modified anyway, how about extending it such that the bitwise
+> attribute can be removed from a type, e.g. via a new no_bitwise
+> attribute?
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Yang Zhong <yang.zhong@intel.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: kvm@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- tools/arch/x86/include/uapi/asm/kvm.h         |  1 +
- .../selftests/kvm/lib/x86_64/processor.c      | 22 ++++++++++++++-----
- 2 files changed, 17 insertions(+), 6 deletions(-)
+I think it's actually easier to just make sparse happy.
 
-diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
-index 46de10a809ec..6ab9a2b38061 100644
---- a/tools/arch/x86/include/uapi/asm/kvm.h
-+++ b/tools/arch/x86/include/uapi/asm/kvm.h
-@@ -461,6 +461,7 @@ struct kvm_sync_regs {
- 
- /* attributes for system fd (group 0) */
- #define KVM_X86_XCOMP_GUEST_SUPP	0
-+#define KVM_X86_XCOMP_GUEST_PERM	1
- 
- struct kvm_vmx_nested_state_data {
- 	__u8 vmcs12[KVM_STATE_NESTED_VMX_VMCS_SIZE];
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 2e6e61bbe81b..b67f28676d15 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -593,8 +593,6 @@ void __vm_xsave_require_permission(int bit, const char *name)
- 
- 	kvm_fd = open_kvm_dev_path_or_exit();
- 	rc = __kvm_ioctl(kvm_fd, KVM_GET_DEVICE_ATTR, &attr);
--	close(kvm_fd);
--
- 	if (rc == -1 && (errno == ENXIO || errno == EINVAL))
- 		__TEST_REQUIRE(0, "KVM_X86_XCOMP_GUEST_SUPP not supported");
- 
-@@ -603,13 +601,25 @@ void __vm_xsave_require_permission(int bit, const char *name)
- 	__TEST_REQUIRE(bitmask & (1ULL << bit),
- 		       "Required XSAVE feature '%s' not supported", name);
- 
--	TEST_REQUIRE(!syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_GUEST_PERM, bit));
-+	attr.attr = KVM_X86_XCOMP_GUEST_PERM;
-+	attr.addr = (unsigned long) bit;
-+	rc = __kvm_ioctl(kvm_fd, KVM_SET_DEVICE_ATTR, &attr);
-+	if (rc == -1 && (errno == ENXIO || errno == EINVAL))
-+		__TEST_REQUIRE(0, "KVM_X86_XCOMP_GUEST_PERM not supported");
- 
--	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_GUEST_PERM, &bitmask);
--	TEST_ASSERT(rc == 0, "prctl(ARCH_GET_XCOMP_GUEST_PERM) error: %ld", rc);
-+	TEST_ASSERT(rc == 0, "KVM_SET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_PERM) error: %ld", rc);
-+
-+	attr.addr = (unsigned long) &bitmask;
-+	rc = __kvm_ioctl(kvm_fd, KVM_GET_DEVICE_ATTR, &attr);
-+	if (rc == -1 && (errno == ENXIO || errno == EINVAL))
-+		__TEST_REQUIRE(0, "KVM_X86_XCOMP_GUEST_PERM not supported");
-+
-+	TEST_ASSERT(rc == 0, "KVM_GET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_PERM) error: %ld", rc);
- 	TEST_ASSERT(bitmask & (1ULL << bit),
--		    "prctl(ARCH_REQ_XCOMP_GUEST_PERM) failure bitmask=0x%lx",
-+		    "KVM_GET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_PERM) failure bitmask=0x%lx",
- 		    bitmask);
-+
-+	close(kvm_fd);
- }
- 
- struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
--- 
-2.17.1
+Can you try the sparse version at
 
+   git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/sparse.git
+
+which I just set up temporarily with some patches of mine. It also
+makes that '__cond_acquires' thing work that refcount_dec_and_lock()
+uses.
+
+It does require that kernel change to make
+
+  #define is_signed_type(type)   (((type)(-1)) <= (type)0)
+
+in both places, since only "no bits set" and "all bits set" are
+special values for bitwise types.
+
+Those patches of mine are fairly hacky, and I think Luc would probably
+do it differently, but apart from the very last one, they aren't
+actively disgusting.
+
+                Linus

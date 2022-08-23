@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841F359E215
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5BB59DBC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359515AbiHWMJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S1354840AbiHWKWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359295AbiHWMHk (ORCPT
+        with ESMTP id S1352717AbiHWKJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:07:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D126647F;
-        Tue, 23 Aug 2022 02:38:21 -0700 (PDT)
+        Tue, 23 Aug 2022 06:09:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076927E022;
+        Tue, 23 Aug 2022 01:56:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3A236138B;
-        Tue, 23 Aug 2022 09:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF2AC433C1;
-        Tue, 23 Aug 2022 09:37:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D74AB81C28;
+        Tue, 23 Aug 2022 08:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F94C433D6;
+        Tue, 23 Aug 2022 08:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247469;
-        bh=FCtL1a3iorZK6PRbgbZ2Lj1dgI9Q4zlRLjuHCMNyOZQ=;
+        s=korg; t=1661244963;
+        bh=9+9TAGae0fTA/X972osI2oujsoHgyW6Ylmjy3Vai+/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QkRvsVRYAGIfKiQYsYxbng6wXVvRPFNjjXcgx/iI6c7BxpDe8UF1LBAhjFxn4Dbo8
-         LU+N4bAXRnMDVqBhTJ04ETa5feevODQBpiZalYrwEZf/YTv5VumEpndsxRSyuEbuWg
-         f5HNi+VOXHy1foP+Gd1QjwTPoxCM0q7oXgLJwRGI=
+        b=t2ToNMwaudLlzle8Ttqe+SCy0YjY1gvdsO4HghECzGttD4lRoB93c7KNcFsi4Wzru
+         4lGtfCdNdbVxGyHtvI3w0dccKg1plvKDuaYhteCt9qdo4jFE+Ii7SMw05YhDYODmFz
+         XgazA3jAu2x6Y5lb89qt7z3Go3QEcoKLMYLXcw9s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Florian Westphal <fw@strlen.de>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 047/158] plip: avoid rcu debug splat
+        stable@vger.kernel.org, Wentao_Liang <Wentao_Liang_g@163.com>,
+        Song Liu <song@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 218/229] drivers:md:fix a potential use-after-free bug
 Date:   Tue, 23 Aug 2022 10:26:19 +0200
-Message-Id: <20220823080047.993408142@linuxfoundation.org>
+Message-Id: <20220823080101.432971186@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Wentao_Liang <Wentao_Liang_g@163.com>
 
-commit bc3c8fe3c79bcdae4d90e3726054fac5cca8ac32 upstream.
+[ Upstream commit 104212471b1c1817b311771d817fb692af983173 ]
 
-WARNING: suspicious RCU usage
-5.2.0-rc2-00605-g2638eb8b50cfc #1 Not tainted
-drivers/net/plip/plip.c:1110 suspicious rcu_dereference_check() usage!
+In line 2884, "raid5_release_stripe(sh);" drops the reference to sh and
+may cause sh to be released. However, sh is subsequently used in lines
+2886 "if (sh->batch_head && sh != sh->batch_head)". This may result in an
+use-after-free bug.
 
-plip_open is called with RTNL held, switch to the correct helper.
+It can be fixed by moving "raid5_release_stripe(sh);" to the bottom of
+the function.
 
-Fixes: 2638eb8b50cf ("net: ipv4: provide __rcu annotation for ifa_list")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Link: https://lore.kernel.org/r/20220807115304.13257-1-fw@strlen.de
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/plip/plip.c |    2 +-
+ drivers/md/raid5.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/plip/plip.c
-+++ b/drivers/net/plip/plip.c
-@@ -1103,7 +1103,7 @@ plip_open(struct net_device *dev)
- 		/* Any address will do - we take the first. We already
- 		   have the first two bytes filled with 0xfc, from
- 		   plip_init_dev(). */
--		const struct in_ifaddr *ifa = rcu_dereference(in_dev->ifa_list);
-+		const struct in_ifaddr *ifa = rtnl_dereference(in_dev->ifa_list);
- 		if (ifa != NULL) {
- 			memcpy(dev->dev_addr+2, &ifa->ifa_local, 4);
- 		}
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 1e52443f3aca..866ba1743f9f 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -2668,10 +2668,10 @@ static void raid5_end_write_request(struct bio *bi)
+ 	if (!test_and_clear_bit(R5_DOUBLE_LOCKED, &sh->dev[i].flags))
+ 		clear_bit(R5_LOCKED, &sh->dev[i].flags);
+ 	set_bit(STRIPE_HANDLE, &sh->state);
+-	raid5_release_stripe(sh);
+ 
+ 	if (sh->batch_head && sh != sh->batch_head)
+ 		raid5_release_stripe(sh->batch_head);
++	raid5_release_stripe(sh);
+ }
+ 
+ static void raid5_error(struct mddev *mddev, struct md_rdev *rdev)
+-- 
+2.35.1
+
 
 

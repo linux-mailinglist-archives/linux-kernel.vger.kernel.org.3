@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F54759DFE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D80A59DDC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356094AbiHWKl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S1348856AbiHWLep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354224AbiHWK0g (ORCPT
+        with ESMTP id S1349834AbiHWLa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:26:36 -0400
+        Tue, 23 Aug 2022 07:30:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD9783BD6;
-        Tue, 23 Aug 2022 02:05:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0DC59D0;
+        Tue, 23 Aug 2022 02:25:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E332DB81C65;
-        Tue, 23 Aug 2022 09:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E64C433C1;
-        Tue, 23 Aug 2022 09:05:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFD35B81C65;
+        Tue, 23 Aug 2022 09:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D121C433D6;
+        Tue, 23 Aug 2022 09:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245545;
-        bh=vhTZXx3XlzR/oqCUMJod53DzesE6knwy2xhxKkg2TDE=;
+        s=korg; t=1661246740;
+        bh=gAP38tcAj7LlaKrsijqfJ1GSUGU8jMf8tiBpQP4uIZ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yf0Pdhf+L8424Ank4G66evK5nsPT1IFcmRPwFIGqRPVpV91On8O7Ol71Y767vYrFG
-         WgR2SCM9l9GXOnEcOZuyCC6r/x/0C+5n6sMAUPfGc8JlTXacZh2NeX8sz+xMUnIvmR
-         pq/P8228feHHA9REdvpJtDGT3CfDCzOheKri/1OM=
+        b=wJwr6/qdnVVO5OFbiLD64mmayKjIEfJS7hgZyV8NhaqpgBDriST9jUAWpj0K7yvee
+         fkhFxCWOlYr22nwkbc94Kn4TJiPlkM3SF2+GNpgX/Rx0PFXl8cctZNqUrEstYfKJZW
+         GA+IS7TC0V3ak44hqQEvaaMkPP455WU2bllxk7Jw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ralph Siemsen <ralph.siemsen@linaro.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 113/287] clk: renesas: r9a06g032: Fix UART clkgrp bitsel
-Date:   Tue, 23 Aug 2022 10:24:42 +0200
-Message-Id: <20220823080104.180473298@linuxfoundation.org>
+Subject: [PATCH 5.4 205/389] ASoC: codecs: da7210: add check for i2c_add_driver
+Date:   Tue, 23 Aug 2022 10:24:43 +0200
+Message-Id: <20220823080124.203829375@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ralph Siemsen <ralph.siemsen@linaro.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 2dee50ab9e72a3cae75b65e5934c8dd3e9bf01bc ]
+[ Upstream commit 82fa8f581a954ddeec1602bed9f8b4a09d100e6e ]
 
-There are two UART clock groups, each having a mux to select its
-upstream clock source. The register/bit definitions for accessing these
-two muxes appear to have been reversed since introduction. Correct them
-so as to match the hardware manual.
+As i2c_add_driver could return error if fails, it should be
+better to check the return value.
+However, if the CONFIG_I2C and CONFIG_SPI_MASTER are both true,
+the return value of i2c_add_driver will be covered by
+spi_register_driver.
+Therefore, it is necessary to add check and return error if fails.
 
-Fixes: 4c3d88526eba ("clk: renesas: Renesas R9A06G032 clock driver")
-
-Signed-off-by: Ralph Siemsen <ralph.siemsen@linaro.org>
-Reviewed-by: Phil Edworthy <phil.edworthy@renesas.com>
-Link: https://lore.kernel.org/r/20220518182527.1693156-1-ralph.siemsen@linaro.org
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixes: aa0e25caafb7 ("ASoC: da7210: Add support for spi regmap")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220531094712.2376759-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/renesas/r9a06g032-clocks.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/soc/codecs/da7210.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/renesas/r9a06g032-clocks.c b/drivers/clk/renesas/r9a06g032-clocks.c
-index 6e03b467395b..ec48b5516e17 100644
---- a/drivers/clk/renesas/r9a06g032-clocks.c
-+++ b/drivers/clk/renesas/r9a06g032-clocks.c
-@@ -277,8 +277,8 @@ static const struct r9a06g032_clkdesc r9a06g032_clocks[] __initconst = {
- 		.name = "uart_group_012",
- 		.type = K_BITSEL,
- 		.source = 1 + R9A06G032_DIV_UART,
--		/* R9A06G032_SYSCTRL_REG_PWRCTRL_PG1_PR2 */
--		.dual.sel = ((0xec / 4) << 5) | 24,
-+		/* R9A06G032_SYSCTRL_REG_PWRCTRL_PG0_0 */
-+		.dual.sel = ((0x34 / 4) << 5) | 30,
- 		.dual.group = 0,
- 	},
- 	{
-@@ -286,8 +286,8 @@ static const struct r9a06g032_clkdesc r9a06g032_clocks[] __initconst = {
- 		.name = "uart_group_34567",
- 		.type = K_BITSEL,
- 		.source = 1 + R9A06G032_DIV_P2_PG,
--		/* R9A06G032_SYSCTRL_REG_PWRCTRL_PG0_0 */
--		.dual.sel = ((0x34 / 4) << 5) | 30,
-+		/* R9A06G032_SYSCTRL_REG_PWRCTRL_PG1_PR2 */
-+		.dual.sel = ((0xec / 4) << 5) | 24,
- 		.dual.group = 1,
- 	},
- 	D_UGATE(CLK_UART0, "clk_uart0", UART_GROUP_012, 0, 0, 0x1b2, 0x1b3, 0x1b4, 0x1b5),
+diff --git a/sound/soc/codecs/da7210.c b/sound/soc/codecs/da7210.c
+index e172913d04a4..efc5049c0796 100644
+--- a/sound/soc/codecs/da7210.c
++++ b/sound/soc/codecs/da7210.c
+@@ -1333,6 +1333,8 @@ static int __init da7210_modinit(void)
+ 	int ret = 0;
+ #if IS_ENABLED(CONFIG_I2C)
+ 	ret = i2c_add_driver(&da7210_i2c_driver);
++	if (ret)
++		return ret;
+ #endif
+ #if defined(CONFIG_SPI_MASTER)
+ 	ret = spi_register_driver(&da7210_spi_driver);
 -- 
 2.35.1
 

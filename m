@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F1059E65C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD5459E564
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242793AbiHWPvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S242726AbiHWOxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 10:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244030AbiHWPua (ORCPT
+        with ESMTP id S242741AbiHWOxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:50:30 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42DB21FA3D;
-        Tue, 23 Aug 2022 04:55:19 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oQSTe-0004TT-EA; Tue, 23 Aug 2022 13:53:50 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Chris Ruehl <chris.ruehl@gtsys.com.hk>,
-        Jensen Huang <jensenhuang@friendlyarm.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     Jensen Huang <jensenhuang@friendlyarm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: add enable-strobe-pulldown to emmc phy on rk3399
-Date:   Tue, 23 Aug 2022 13:53:49 +0200
-Message-ID: <23552842.6Emhk5qWAg@diego>
-In-Reply-To: <20220822074139.3810-1-jensenhuang@friendlyarm.com>
-References: <20220822074139.3810-1-jensenhuang@friendlyarm.com>
+        Tue, 23 Aug 2022 10:53:09 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7411695D9;
+        Tue, 23 Aug 2022 05:18:16 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1661255821tgysc78a
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 23 Aug 2022 19:57:00 +0800 (CST)
+X-QQ-SSF: 01000000002000C0D000B00A0000000
+X-QQ-FEAT: ElntjVByhgVQv4+GOszWIo/B50C+UxqZL1+AmKuizmDK1uH7z+g2iiryx0hmA
+        1G1WEJ0FlHyuGSgfekId81w8IBsTH6wo69LieT81SqIGNNViyOkOyK5t9kAOamiHOmn2ygY
+        7fWy2UyDXHCroky5EP/pOeCQ0RxbKWLoXWssXWY4Clvy+xXfhX4qB3yHNrGuH7KBE+eSvYU
+        3n8KuwB5FRrCIGf9QJR+8DzVNDUSVQmhdTzIojoeZULgcuiJ7F9CjRNOUaRx4i+dCAf7cXT
+        L7aSWqCYEp/+nTWuD5qpHT/2GVZ/VEqiYycduTsEAx6wFQdRoaOiUKIylh3TTjSx/IDu09J
+        YGxTfhfRTACWyMUA2+b8uK9/6sVn2IcftTifnC9d7xGhLud3L7INJeNqISxqQzRpj+rr8r7
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, airlied@linux.ie, daniel@ffwll.ch
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] msm/adreno: fix repeated words in comments
+Date:   Tue, 23 Aug 2022 19:56:54 +0800
+Message-Id: <20220823115654.58725-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,35 +50,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 22. August 2022, 09:41:39 CEST schrieb Jensen Huang:
-> Internal pull-down for strobe line (GRF_EMMCPHY_CON2[9]) was disabled
-> by commit 8b5c2b45b8f0, which causes I/O error in HS400 mode.
-> 
-> Tested on NanoPC-T4.
-> 
-> Fixes: 8b5c2b45b8f0 ("phy: rockchip: set pulldown for strobe line in dts")
-> Signed-off-by: Jensen Huang <jensenhuang@friendlyarm.com>
+ Delete the redundant word 'power'.
+ Delete the redundant word 'in'.
+ Delete the redundant word 'for'.
 
-ok, so this looks like it restores previous functionality.
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I'm just wondering as the "offending" patch is from 2020, why this
-only turns up now. Any ideas?
-
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> index 9d5b0e8c9cca..9491cafbbaa3 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> @@ -1561,6 +1561,7 @@ emmc_phy: phy@f780 {
->  			clock-names = "emmcclk";
->  			drive-impedance-ohm = <50>;
->  			#phy-cells = <0>;
-> +			rockchip,enable-strobe-pulldown;
->  			status = "disabled";
->  		};
->  
-> 
-
-
-
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index 9f76f5b15759..32ecb783c3c1 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -352,7 +352,7 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state)
+ 	gmu_write(gmu, REG_A6XX_GMU_HOST2GMU_INTR_SET, 1 << bit);
+ }
+ 
+-/* Enable CPU control of SPTP power power collapse */
++/* Enable CPU control of SPTP power collapse */
+ static int a6xx_sptprac_enable(struct a6xx_gmu *gmu)
+ {
+ 	int ret;
+@@ -374,7 +374,7 @@ static int a6xx_sptprac_enable(struct a6xx_gmu *gmu)
+ 	return 0;
+ }
+ 
+-/* Disable CPU control of SPTP power power collapse */
++/* Disable CPU control of SPTP power collapse */
+ static void a6xx_sptprac_disable(struct a6xx_gmu *gmu)
+ {
+ 	u32 val;
+@@ -1277,7 +1277,7 @@ static int a6xx_gmu_rpmh_arc_votes_init(struct device *dev, u32 *votes,
+ 		}
+ 
+ 		/*
+-		 * Look for a level in in the secondary list that matches. If
++		 * Look for a level in the secondary list that matches. If
+ 		 * nothing fits, use the maximum non zero vote
+ 		 */
+ 
+@@ -1559,7 +1559,7 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+ 			goto err_memory;
+ 	}
+ 
+-	/* Allocate memory for for the HFI queues */
++	/* Allocate memory for the HFI queues */
+ 	ret = a6xx_gmu_memory_alloc(gmu, &gmu->hfi, SZ_16K, 0, "hfi");
+ 	if (ret)
+ 		goto err_memory;
+-- 
+2.36.1
 

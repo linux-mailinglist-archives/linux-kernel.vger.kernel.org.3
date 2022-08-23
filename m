@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31ED59D18E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B586C59D239
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbiHWGzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 02:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        id S240982AbiHWHaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiHWGzB (ORCPT
+        with ESMTP id S240956AbiHWHaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 02:55:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E771C939
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:54:59 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MBg065l5lznTmP;
-        Tue, 23 Aug 2022 14:52:38 +0800 (CST)
-Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 23 Aug 2022 14:54:38 +0800
-Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
- (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 23 Aug
- 2022 14:54:37 +0800
-From:   shangxiaojing <shangxiaojing@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
-CC:     <shangxiaojing@huawei.com>, <cj.chengjian@huawei.com>
-Subject: [PATCH -next] sched: Add dequeue_and_put_task and enqueue_and_set_task helper
-Date:   Tue, 23 Aug 2022 15:29:47 +0800
-Message-ID: <20220823072947.16720-1-shangxiaojing@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 23 Aug 2022 03:30:14 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B647562A93
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:30:12 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id x10so12709602ljq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=31EpOHbl+nrYiysahic+51blRSoZd90XSQRkgmuZH8Q=;
+        b=L3txLJbzNASJ23txY0RNdj71aCCiDk/ZgPs0vd6IuBr9Jv6qjFsL+DguB2evwx37e7
+         qo4/+MYuYGWPNLgSL57Rm2eeWZ0HZ679AAcpgNEiFasaUq9yWOO1vzzYHiv66AA+BpOR
+         q3iJj0TRj0U6/9X3QnNeitZxTTQebAAcJncBbhkUsEraYO3eM+aSY59qlihVBwx5nzOk
+         94AX7APlauoQ9znqABTxQg9Mzq4dUkgFtJPUmGf9CWyI/yxlEgcUxsz7IB/MJMoz6HFj
+         /mKsPjjmnBKxWQr7rHvftyc/piBxizSgIumInoNChwp9dy3mD42mvjbK8o5G6lpeATl2
+         UL7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=31EpOHbl+nrYiysahic+51blRSoZd90XSQRkgmuZH8Q=;
+        b=jko+iADFkDNyVla2CuqrumCQjDaf2sxTPxsKgIddW0GXUOu+p3/mozcCIqjlYbsjBg
+         wuB94/B1JQkBLANcxK2pqPc3R6dCvE/zofYQAgZ3BRx1SDIgQwFJWc07O3uh0ECNiXLE
+         ls1bRzoRhAGvcqhzjrvYMBVI6Y1mQu4OXOmJyC/Qr+4KG9Qvk04aRF+UY92jToPJTkjV
+         qgVV37RPJuzf7f+3EEXyOXX3UjOP0QDn7lCdxwofqDPZBTxMI1ophxogv5hi90nhVh0j
+         Gb/lCPZRKDbF0DTE8baoywSlUKl8fKSR77+IdmdhKicNtT9GCo2H/9heNDKh8xG1wuoz
+         7TbQ==
+X-Gm-Message-State: ACgBeo3v5CNknklaloBkRO5saiYPXZdbtfQC3+PIV9TXXpRr2jwylG9p
+        mn29WZs39YZWXiBfMSOkz95Ijw==
+X-Google-Smtp-Source: AA6agR7UsstB+zMX2Ji4pK97oKYfHBo72sTQaY6/pQpWOeEaDcMW0YiVsuF5zXcBH40oxBMg2GQp0A==
+X-Received: by 2002:a2e:a593:0:b0:25f:e6ac:c28e with SMTP id m19-20020a2ea593000000b0025fe6acc28emr7003949ljp.485.1661239811099;
+        Tue, 23 Aug 2022 00:30:11 -0700 (PDT)
+Received: from krzk-bin.. (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05651220d300b0048a7ef09b22sm2361230lfr.274.2022.08.23.00.30.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 00:30:10 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: exynos: Add SysMMU nodes for Exynos850
+Date:   Tue, 23 Aug 2022 10:30:06 +0300
+Message-Id: <20220823073006.358764-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.100.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600008.china.huawei.com (7.193.23.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,225 +75,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wrap repeated code in helper functions dequeue_and_put_task and
-enqueue_and_set_task, note that dequeue_and_put_task is not
-applyed in __do_set_cpus_allowed cause the lock assert.
+From: Sam Protsenko <semen.protsenko@linaro.org>
 
-Signed-off-by: shangxiaojing <shangxiaojing@huawei.com>
+Add all SysMMU nodes to Exynos850 SoC device tree.
+
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220809113323.29965-10-semen.protsenko@linaro.org
 ---
- kernel/sched/core.c | 103 ++++++++++++++++++--------------------------
- 1 file changed, 42 insertions(+), 61 deletions(-)
+ arch/arm64/boot/dts/exynos/exynos850.dtsi | 45 +++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 61436b8e0337..46d6ba551e04 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2540,6 +2540,28 @@ void set_cpus_allowed_common(struct task_struct *p, const struct cpumask *new_ma
- 	p->nr_cpus_allowed = cpumask_weight(new_mask);
- }
+diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
+index 8e78b50416d8..c61441f3a89a 100644
+--- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
+@@ -503,6 +503,51 @@ i2c_6: i2c@13890000 {
+ 			status = "disabled";
+ 		};
  
-+static __always_inline
-+void dequeue_and_put_task(struct rq *rq, struct task_struct *p, int flags,
-+			  bool *queued, bool *running)
-+{
-+	*queued = task_on_rq_queued(p);
-+	*running = task_current(rq, p);
-+	if (*queued)
-+		dequeue_task(rq, p, flags);
-+	if (*running)
-+		put_prev_task(rq, p);
-+}
++		sysmmu_mfcmscl: sysmmu@12c50000 {
++			compatible = "samsung,exynos-sysmmu";
++			reg = <0x12c50000 0x9000>;
++			interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
++			clock-names = "sysmmu";
++			clocks = <&cmu_mfcmscl CLK_GOUT_MFCMSCL_SYSMMU_CLK>;
++			#iommu-cells = <0>;
++		};
 +
-+static __always_inline
-+void enqueue_and_set_task(struct rq *rq, struct task_struct *p, int flags,
-+			  bool queued, bool running)
-+{
-+	if (queued)
-+		enqueue_task(rq, p, flags);
-+	if (running)
-+		set_next_task(rq, p);
-+}
++		sysmmu_dpu: sysmmu@130c0000 {
++			compatible = "samsung,exynos-sysmmu";
++			reg = <0x130c0000 0x9000>;
++			interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
++			clock-names = "sysmmu";
++			clocks = <&cmu_dpu CLK_GOUT_DPU_SMMU_CLK>;
++			#iommu-cells = <0>;
++		};
 +
- static void
- __do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask, u32 flags)
- {
-@@ -2579,10 +2601,7 @@ __do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask, u32
- 
- 	p->sched_class->set_cpus_allowed(p, new_mask, flags);
- 
--	if (queued)
--		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
--	if (running)
--		set_next_task(rq, p);
-+	enqueue_and_set_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK, queued, running);
- }
- 
- void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
-@@ -6876,8 +6895,9 @@ static inline int rt_effective_prio(struct task_struct *p, int prio)
-  */
- void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- {
--	int prio, oldprio, queued, running, queue_flag =
-+	int prio, oldprio, queue_flag =
- 		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
-+	bool queued, running;
- 	const struct sched_class *prev_class;
- 	struct rq_flags rf;
- 	struct rq *rq;
-@@ -6936,12 +6956,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- 		queue_flag &= ~DEQUEUE_MOVE;
- 
- 	prev_class = p->sched_class;
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
--	if (queued)
--		dequeue_task(rq, p, queue_flag);
--	if (running)
--		put_prev_task(rq, p);
-+	dequeue_and_put_task(rq, p, queue_flag, &queued, &running);
- 
- 	/*
- 	 * Boosting condition are:
-@@ -6975,10 +6990,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- 
- 	__setscheduler_prio(p, prio);
- 
--	if (queued)
--		enqueue_task(rq, p, queue_flag);
--	if (running)
--		set_next_task(rq, p);
-+	enqueue_and_set_task(rq, p, queue_flag, queued, running);
- 
- 	check_class_changed(rq, p, prev_class, oldprio);
- out_unlock:
-@@ -7024,22 +7036,14 @@ void set_user_nice(struct task_struct *p, long nice)
- 		p->static_prio = NICE_TO_PRIO(nice);
- 		goto out_unlock;
- 	}
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
--	if (queued)
--		dequeue_task(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK);
--	if (running)
--		put_prev_task(rq, p);
-+	dequeue_and_put_task(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK, &queued, &running);
- 
- 	p->static_prio = NICE_TO_PRIO(nice);
- 	set_load_weight(p, true);
- 	old_prio = p->prio;
- 	p->prio = effective_prio(p);
- 
--	if (queued)
--		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
--	if (running)
--		set_next_task(rq, p);
-+	enqueue_and_set_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK, queued, running);
- 
- 	/*
- 	 * If the task increased its priority or is running and
-@@ -7423,7 +7427,8 @@ static int __sched_setscheduler(struct task_struct *p,
- 				bool user, bool pi)
- {
- 	int oldpolicy = -1, policy = attr->sched_policy;
--	int retval, oldprio, newprio, queued, running;
-+	int retval, oldprio, newprio;
-+	bool queued, running;
- 	const struct sched_class *prev_class;
- 	struct callback_head *head;
- 	struct rq_flags rf;
-@@ -7588,12 +7593,7 @@ static int __sched_setscheduler(struct task_struct *p,
- 			queue_flags &= ~DEQUEUE_MOVE;
- 	}
- 
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
--	if (queued)
--		dequeue_task(rq, p, queue_flags);
--	if (running)
--		put_prev_task(rq, p);
-+	dequeue_and_put_task(rq, p, queue_flags, &queued, &running);
- 
- 	prev_class = p->sched_class;
- 
-@@ -7603,18 +7603,15 @@ static int __sched_setscheduler(struct task_struct *p,
- 	}
- 	__setscheduler_uclamp(p, attr);
- 
--	if (queued) {
-+	if (queued & (oldprio < p->prio)) {
- 		/*
- 		 * We enqueue to tail when the priority of a task is
- 		 * increased (user space view).
- 		 */
--		if (oldprio < p->prio)
--			queue_flags |= ENQUEUE_HEAD;
--
--		enqueue_task(rq, p, queue_flags);
-+		queue_flags |= ENQUEUE_HEAD;
- 	}
--	if (running)
--		set_next_task(rq, p);
++		sysmmu_is0: sysmmu@14550000 {
++			compatible = "samsung,exynos-sysmmu";
++			reg = <0x14550000 0x9000>;
++			interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
++			clock-names = "sysmmu";
++			clocks = <&cmu_is CLK_GOUT_IS_SYSMMU_IS0_CLK>;
++			#iommu-cells = <0>;
++		};
 +
-+	enqueue_and_set_task(rq, p, queue_flags, queued, running);
- 
- 	check_class_changed(rq, p, prev_class, oldprio);
- 
-@@ -9094,20 +9091,12 @@ void sched_setnuma(struct task_struct *p, int nid)
- 	struct rq *rq;
- 
- 	rq = task_rq_lock(p, &rf);
--	queued = task_on_rq_queued(p);
--	running = task_current(rq, p);
- 
--	if (queued)
--		dequeue_task(rq, p, DEQUEUE_SAVE);
--	if (running)
--		put_prev_task(rq, p);
-+	dequeue_and_put_task(rq, p, DEQUEUE_SAVE, &queued, &running);
- 
- 	p->numa_preferred_nid = nid;
- 
--	if (queued)
--		enqueue_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK);
--	if (running)
--		set_next_task(rq, p);
-+	enqueue_and_set_task(rq, p, ENQUEUE_RESTORE | ENQUEUE_NOCLOCK, queued, running);
- 	task_rq_unlock(rq, p, &rf);
- }
- #endif /* CONFIG_NUMA_BALANCING */
-@@ -10198,28 +10187,20 @@ static void sched_change_group(struct task_struct *tsk, int type)
-  */
- void sched_move_task(struct task_struct *tsk)
- {
--	int queued, running, queue_flags =
--		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
-+	int queue_flags = DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
-+	bool queued, running;
- 	struct rq_flags rf;
- 	struct rq *rq;
- 
- 	rq = task_rq_lock(tsk, &rf);
- 	update_rq_clock(rq);
- 
--	running = task_current(rq, tsk);
--	queued = task_on_rq_queued(tsk);
--
--	if (queued)
--		dequeue_task(rq, tsk, queue_flags);
--	if (running)
--		put_prev_task(rq, tsk);
-+	dequeue_and_put_task(rq, tsk, queue_flags, &queued, &running);
- 
- 	sched_change_group(tsk, TASK_MOVE_GROUP);
- 
--	if (queued)
--		enqueue_task(rq, tsk, queue_flags);
-+	enqueue_and_set_task(rq, tsk, queue_flags, queued, running);
- 	if (running) {
--		set_next_task(rq, tsk);
- 		/*
- 		 * After changing group, the running task may have joined a
- 		 * throttled one but it's still the running task. Trigger a
++		sysmmu_is1: sysmmu@14570000 {
++			compatible = "samsung,exynos-sysmmu";
++			reg = <0x14570000 0x9000>;
++			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
++			clock-names = "sysmmu";
++			clocks = <&cmu_is CLK_GOUT_IS_SYSMMU_IS1_CLK>;
++			#iommu-cells = <0>;
++		};
++
++		sysmmu_aud: sysmmu@14850000 {
++			compatible = "samsung,exynos-sysmmu";
++			reg = <0x14850000 0x9000>;
++			interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
++			clock-names = "sysmmu";
++			clocks = <&cmu_aud CLK_GOUT_AUD_SYSMMU_CLK>;
++			#iommu-cells = <0>;
++		};
++
+ 		sysreg_peri: syscon@10020000 {
+ 			compatible = "samsung,exynos850-sysreg", "syscon";
+ 			reg = <0x10020000 0x10000>;
 -- 
-2.17.1
+2.34.1
 

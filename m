@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622BE59E390
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D3559E38C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiHWMXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S241299AbiHWMXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376363AbiHWMQ5 (ORCPT
+        with ESMTP id S1376430AbiHWMRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:16:57 -0400
+        Tue, 23 Aug 2022 08:17:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29D27AC1B;
-        Tue, 23 Aug 2022 02:42:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B474299254;
+        Tue, 23 Aug 2022 02:42:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E90A66148E;
-        Tue, 23 Aug 2022 09:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0594C433D6;
-        Tue, 23 Aug 2022 09:41:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22AE7614C7;
+        Tue, 23 Aug 2022 09:42:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BE2EC433D6;
+        Tue, 23 Aug 2022 09:42:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247720;
-        bh=QueCjxHMA4r1uCGTLX+Zuc00mP9QzA7Dxm10f7BgXZw=;
+        s=korg; t=1661247723;
+        bh=t1roUgaSTodrFE5Q67YXj8K4EuRG/7oWKG6ZxMhzEgA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XVviHDueh1BCbJrz3XG7tFu1QCPSs66u1Yc5b/KMYobxe4+IHRT/S8n0w0RaCmNO1
-         O6qtm3o2gnl3ZuRVnJ5YfZY3591bz5qxYtZlZ3Ox9E6jTrLZsgQoIWWkIghGxXTIFz
-         HDfSL01vUo3e4iOCbR1vE1OvCzZSSXUo8lRyNhug=
+        b=MhuX+QungUmmPiJs+JswsPm0wgj7MpuTAw9B1lKI6OzD0ii9gkkIthPm+nBM6fTjc
+         5WYDT5VUw6uhXKcQx/6k336hptswP+nLKstaNRGa4Zyhoa1qaOvrXBKQ4+r7YE+gMW
+         1fzgeoq1h0KOGZ67engmLcc2dLVKnOgqw2oJBLqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 125/158] selftests/kprobe: Do not test for GRP/ without event failures
-Date:   Tue, 23 Aug 2022 10:27:37 +0200
-Message-Id: <20220823080050.948675058@linuxfoundation.org>
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 126/158] dmaengine: sprd: Cleanup in .remove() after pm_runtime_get_sync() failed
+Date:   Tue, 23 Aug 2022 10:27:38 +0200
+Message-Id: <20220823080050.988301001@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
 References: <20220823080046.056825146@linuxfoundation.org>
@@ -55,48 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit f5eab65ff2b76449286d18efc7fee3e0b72f7d9b ]
+[ Upstream commit 1e42f82cbec7b2cc4873751e7791e6611901c5fc ]
 
-A new feature is added where kprobes (and other probes) do not need to
-explicitly state the event name when creating a probe. The event name will
-come from what is being attached.
+It's not allowed to quit remove early without cleaning up completely.
+Otherwise this results in resource leaks that probably yield graver
+problems later. Here for example some tasklets might survive the lifetime
+of the sprd-dma device and access sdev which is freed after .remove()
+returns.
 
-That is:
+As none of the device freeing requires an active device, just ignore the
+return value of pm_runtime_get_sync().
 
-  # echo 'p:foo/ vfs_read' > kprobe_events
-
-Will no longer error, but instead create an event:
-
-  # cat kprobe_events
- p:foo/p_vfs_read_0 vfs_read
-
-This should not be tested as an error case anymore. Remove it from the
-selftest as now this feature "breaks" the selftest as it no longer fails
-as expected.
-
-Link: https://lore.kernel.org/all/1656296348-16111-1-git-send-email-quic_linyyuan@quicinc.com/
-Link: https://lkml.kernel.org/r/20220712161707.6dc08a14@gandalf.local.home
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+Link: https://lore.kernel.org/r/20220721204054.323602-1-u.kleine-koenig@pengutronix.de
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc       | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/dma/sprd-dma.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index fa928b431555..7c02509c71d0 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -21,7 +21,6 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
- check_error 'p:^12345678901234567890123456789012345678901234567890123456789012345/bar vfs_read'	# GROUP_TOO_LONG
+diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
+index 4357d2395e6b..60115d8d4083 100644
+--- a/drivers/dma/sprd-dma.c
++++ b/drivers/dma/sprd-dma.c
+@@ -1236,11 +1236,8 @@ static int sprd_dma_remove(struct platform_device *pdev)
+ {
+ 	struct sprd_dma_dev *sdev = platform_get_drvdata(pdev);
+ 	struct sprd_dma_chn *c, *cn;
+-	int ret;
  
- check_error 'p:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
--check_error 'p:foo/^ vfs_read'		# NO_EVENT_NAME
- check_error 'p:foo/^12345678901234567890123456789012345678901234567890123456789012345 vfs_read'	# EVENT_TOO_LONG
- check_error 'p:foo/^bar.1 vfs_read'	# BAD_EVENT_NAME
+-	ret = pm_runtime_get_sync(&pdev->dev);
+-	if (ret < 0)
+-		return ret;
++	pm_runtime_get_sync(&pdev->dev);
  
+ 	/* explicitly free the irq */
+ 	if (sdev->irq > 0)
 -- 
 2.35.1
 

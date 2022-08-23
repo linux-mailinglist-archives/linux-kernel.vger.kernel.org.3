@@ -2,43 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B12459CE08
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 03:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8024959CE51
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 04:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239235AbiHWBsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 21:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S239505AbiHWCIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 22:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiHWBsG (ORCPT
+        with ESMTP id S232437AbiHWCIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 21:48:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A4A5A832;
-        Mon, 22 Aug 2022 18:48:05 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MBX8z19J8zlWJL;
-        Tue, 23 Aug 2022 09:44:51 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 23 Aug
- 2022 09:48:03 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <clm@fb.com>, <josef@toxicpanda.com>, <dsterba@suse.com>,
-        <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <yebin10@huawei.com>
-Subject: [PATCH -next] btrfs: fix use-after-free in btrfs_get_global_root
-Date:   Tue, 23 Aug 2022 09:59:31 +0800
-Message-ID: <20220823015931.421355-1-yebin10@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 22 Aug 2022 22:08:43 -0400
+X-Greylist: delayed 1871 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 Aug 2022 19:08:40 PDT
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69D3F33A10;
+        Mon, 22 Aug 2022 19:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=VcjBr
+        x5NcRDcCtos/TPNCVqfav4qyE7ow6dAU7IPv8M=; b=a4S5z2YVX3o9E+XpAyh6Y
+        68/5o/XbgsAlg7PsdMjogmE2/RqIQTsHiUC2kinOmuesKZDbPToW86DQ4hzVpC5y
+        KVGUtfATz0iJJrhAbhSq6aAS/r5VD3uRoUksaY0SBTe+hIQt7MetuN+t3akDk1no
+        wi7w+fVS7sxC+5tzjNw1Gs=
+Received: from fedora.. (unknown [123.52.27.102])
+        by smtp3 (Coremail) with SMTP id DcmowAC33o49LwRj8lDqAQ--.42709S2;
+        Tue, 23 Aug 2022 09:37:02 +0800 (CST)
+From:   zhaomzhao@126.com
+To:     djwong@kernel.org, corbet@lwn.net
+Cc:     linux-xfs@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+Subject: [PATCH v1] Documentation: filesystems: xfs: update pseudocode and typo fixes
+Date:   Mon, 22 Aug 2022 21:36:53 -0400
+Message-Id: <20220823013653.203469-1-zhaomzhao@126.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowAC33o49LwRj8lDqAQ--.42709S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF18WrW3CryrCFWDWr48Zwb_yoWrAw1Upr
+        Za9r1rJw1kJry8Ars2qw45XryF9anYqrWUGrWqy3s3Zws8K3Zayr13tr1Y9F1kXr4ru3WY
+        vr1j9rn8Za47Ca7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jplk3UUUUU=
+X-Originating-IP: [123.52.27.102]
+X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/1tbijB9md1pEJE5iSwAAsf
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,171 +53,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reported UAF as follows:
-==================================================================
-BUG: KASAN: use-after-free in btrfs_get_global_root+0x663/0xa10
-Read of size 4 at addr ffff88811ddbb3c0 by task kworker/u16:1/11
+From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 
-CPU: 4 PID: 11 Comm: kworker/u16:1 Not tainted 6.0.0-rc1-next-20220822+ #2
-Workqueue: btrfs-qgroup-rescan btrfs_work_helper
-Call Trace:
- <TASK>
- dump_stack_lvl+0x6e/0x91
- print_report.cold+0xb2/0x6bb
- kasan_report+0xa8/0x130
- kasan_check_range+0x13f/0x1d0
- btrfs_get_global_root+0x663/0xa10
- btrfs_get_fs_root_commit_root+0xa5/0x150
- find_parent_nodes+0x92f/0x2990
- btrfs_find_all_roots_safe+0x12d/0x220
- btrfs_find_all_roots+0xbb/0xd0
- btrfs_qgroup_rescan_worker+0x600/0xc30
- btrfs_work_helper+0xff/0x750
- process_one_work+0x52c/0x930
- worker_thread+0x352/0x8c0
- kthread+0x1b9/0x200
- ret_from_fork+0x22/0x30
- </TASK>
+According to the implementation of xfs_trans_roll(), it calls
+xfs_trans_reserve(), which reserves not only log space, but also
+free disk blocks. In short, the "transaction stuff". So change
+xfs_log_reserve() to xfs_trans_reserve().
 
-Allocated by task 1895:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0xa9/0xe0
- btrfs_alloc_root+0x40/0x820
- btrfs_create_tree+0xf8/0x500
- btrfs_quota_enable+0x30a/0x1120
- btrfs_ioctl+0x50a3/0x59f0
- __x64_sys_ioctl+0x130/0x170
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Besides, fix several typo issues.
 
-Freed by task 1895:
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x21/0x30
- kasan_set_free_info+0x20/0x40
- __kasan_slab_free+0x127/0x1c0
- kfree+0xa8/0x2d0
- btrfs_put_root+0x1ca/0x230
- btrfs_quota_enable+0x87c/0x1120
- btrfs_ioctl+0x50a3/0x59f0
- __x64_sys_ioctl+0x130/0x170
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-==================================================================
-
-Above issue may happens as follows:
-          p1                                  p2
-btrfs_quota_enable
-  spin_lock(&fs_info->qgroup_lock);
-  fs_info->quota_root = quota_root;
-  spin_unlock(&fs_info->qgroup_lock);
-
-  ret = qgroup_rescan_init -> return error
-  if (ret)
-    btrfs_put_root(quota_root);
-     kfree(root);
-
-  if (ret) {
-   ulist_free(fs_info->qgroup_ulist);
-   fs_info->qgroup_ulist = NULL;
-   btrfs_sysfs_del_qgroups(fs_info);
-  }                                btrfs_qgroup_rescan_worker
-                                     btrfs_find_all_roots
-				       btrfs_find_all_roots_safe
-				         find_parent_nodes
-					   btrfs_get_fs_root_commit_root
-					     btrfs_grab_root(fs_info->quota_root)
-	                                  -> quota_root already freed
-
-Syzkaller also reported another issue:
-==================================================================
-BUG: KASAN: use-after-free in ulist_release+0x30/0xb3
-Read of size 8 at addr ffff88811413d048 by task rep/2921
-
-CPU: 3 PID: 2921 Comm: rep Not tainted 6.0.0-rc1-next-20220822+ #3
-rep[2921] cmdline: ./rep
-Call Trace:
- <TASK>
- dump_stack_lvl+0x6e/0x91
- print_report.cold+0xb2/0x6bb
- kasan_report+0xa8/0x130
- ulist_release+0x30/0xb3
- ulist_reinit+0x16/0x56
- btrfs_qgroup_free_refroot+0x288/0x3f0
- btrfs_qgroup_free_meta_all_pertrans+0xed/0x1e0
- commit_fs_roots+0x28c/0x430
- btrfs_commit_transaction+0x9a6/0x1b40
- btrfs_qgroup_rescan+0x7e/0x130
- btrfs_ioctl+0x48ed/0x59f0
- __x64_sys_ioctl+0x130/0x170
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
- </TASK>
-
-Allocated by task 2900:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0xa9/0xe0
- ulist_alloc+0x5c/0xe0
- btrfs_quota_enable+0x1b2/0x1160
- btrfs_ioctl+0x50a3/0x59f0
- __x64_sys_ioctl+0x130/0x170
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 2900:
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x21/0x30
- kasan_set_free_info+0x20/0x40
- __kasan_slab_free+0x127/0x1c0
- kfree+0xa8/0x2d0
- ulist_free.cold+0x15/0x1a
- btrfs_quota_enable+0x8bf/0x1160
- btrfs_ioctl+0x50a3/0x59f0
- __x64_sys_ioctl+0x130/0x170
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-==================================================================
-
-To solve above issues just set 'fs_info->quota_root' after qgroup_rescan_init
-return success.
-
-Signed-off-by: Ye Bin <yebin10@huawei.com>
+Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 ---
- fs/btrfs/qgroup.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ .../filesystems/xfs-delayed-logging-design.rst       | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
-index db723c0026bd..16f0b038295a 100644
---- a/fs/btrfs/qgroup.c
-+++ b/fs/btrfs/qgroup.c
-@@ -1158,18 +1158,18 @@ int btrfs_quota_enable(struct btrfs_fs_info *fs_info)
- 	if (ret)
- 		goto out_free_path;
+diff --git a/Documentation/filesystems/xfs-delayed-logging-design.rst b/Documentation/filesystems/xfs-delayed-logging-design.rst
+index 4ef419f54663..02b32030bab3 100644
+--- a/Documentation/filesystems/xfs-delayed-logging-design.rst
++++ b/Documentation/filesystems/xfs-delayed-logging-design.rst
+@@ -100,7 +100,7 @@ transactions together::
  
--	/*
--	 * Set quota enabled flag after committing the transaction, to avoid
--	 * deadlocks on fs_info->qgroup_ioctl_lock with concurrent snapshot
--	 * creation.
--	 */
--	spin_lock(&fs_info->qgroup_lock);
--	fs_info->quota_root = quota_root;
--	set_bit(BTRFS_FS_QUOTA_ENABLED, &fs_info->flags);
--	spin_unlock(&fs_info->qgroup_lock);
--
- 	ret = qgroup_rescan_init(fs_info, 0, 1);
- 	if (!ret) {
-+		/*
-+		 * Set quota enabled flag after committing the transaction, to
-+		 * avoid deadlocks on fs_info->qgroup_ioctl_lock with concurrent
-+		 * snapshot creation.
-+		 */
-+		spin_lock(&fs_info->qgroup_lock);
-+		fs_info->quota_root = quota_root;
-+		set_bit(BTRFS_FS_QUOTA_ENABLED, &fs_info->flags);
-+		spin_unlock(&fs_info->qgroup_lock);
-+
- 	        qgroup_rescan_zero_tracking(fs_info);
- 		fs_info->qgroup_rescan_running = true;
- 	        btrfs_queue_work(fs_info->qgroup_rescan_workers,
+ 	ntp = xfs_trans_dup(tp);
+ 	xfs_trans_commit(tp);
+-	xfs_log_reserve(ntp);
++	xfs_trans_reserve(ntp);
+ 
+ This results in a series of "rolling transactions" where the inode is locked
+ across the entire chain of transactions.  Hence while this series of rolling
+@@ -191,7 +191,7 @@ transaction rolling mechanism to re-reserve space on every transaction roll. We
+ know from the implementation of the permanent transactions how many transaction
+ rolls are likely for the common modifications that need to be made.
+ 
+-For example, and inode allocation is typically two transactions - one to
++For example, an inode allocation is typically two transactions - one to
+ physically allocate a free inode chunk on disk, and another to allocate an inode
+ from an inode chunk that has free inodes in it.  Hence for an inode allocation
+ transaction, we might set the reservation log count to a value of 2 to indicate
+@@ -200,7 +200,7 @@ chain. Each time a permanent transaction rolls, it consumes an entire unit
+ reservation.
+ 
+ Hence when the permanent transaction is first allocated, the log space
+-reservation is increases from a single unit reservation to multiple unit
++reservation is increased from a single unit reservation to multiple unit
+ reservations. That multiple is defined by the reservation log count, and this
+ means we can roll the transaction multiple times before we have to re-reserve
+ log space when we roll the transaction. This ensures that the common
+@@ -259,7 +259,7 @@ the next transaction in the sequeunce, but we have none remaining. We cannot
+ sleep during the transaction commit process waiting for new log space to become
+ available, as we may end up on the end of the FIFO queue and the items we have
+ locked while we sleep could end up pinning the tail of the log before there is
+-enough free space in the log to fulfil all of the pending reservations and
++enough free space in the log to fulfill all of the pending reservations and
+ then wake up transaction commit in progress.
+ 
+ To take a new reservation without sleeping requires us to be able to take a
+@@ -615,7 +615,7 @@ those changes into the current checkpoint context. We then initialise a new
+ context and attach that to the CIL for aggregation of new transactions.
+ 
+ This allows us to unlock the CIL immediately after transfer of all the
+-committed items and effectively allow new transactions to be issued while we
++committed items and effectively allows new transactions to be issued while we
+ are formatting the checkpoint into the log. It also allows concurrent
+ checkpoints to be written into the log buffers in the case of log force heavy
+ workloads, just like the existing transaction commit code does. This, however,
+@@ -886,7 +886,7 @@ can be multiple outstanding checkpoint contexts, we can still see elevated pin
+ counts, but as each checkpoint completes the pin count will retain the correct
+ value according to it's context.
+ 
+-Just to make matters more slightly more complex, this checkpoint level context
++Just to make matters slightly more complex, this checkpoint level context
+ for the pin count means that the pinning of an item must take place under the
+ CIL commit/flush lock. If we pin the object outside this lock, we cannot
+ guarantee which context the pin count is associated with. This is because of
 -- 
-2.31.1
+2.37.1
 

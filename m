@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B323859DF25
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9312159E0E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359093AbiHWL7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
+        id S1347639AbiHWLEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359266AbiHWL4a (ORCPT
+        with ESMTP id S1357427AbiHWLCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:56:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30CC844C4;
-        Tue, 23 Aug 2022 02:34:05 -0700 (PDT)
+        Tue, 23 Aug 2022 07:02:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C4FB2489;
+        Tue, 23 Aug 2022 02:14:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D83286146E;
-        Tue, 23 Aug 2022 09:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84E7C433C1;
-        Tue, 23 Aug 2022 09:34:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3ABB7B81C97;
+        Tue, 23 Aug 2022 09:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88088C433C1;
+        Tue, 23 Aug 2022 09:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247244;
-        bh=fy9Hbiarz6gfSjxp30zSLiolvV9NwPqMSdgxPIu22Qs=;
+        s=korg; t=1661246054;
+        bh=BcWBC/MwhJc8WD0lLAzvzWux7J51PZtC2jJpLFzKH1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QupQEscY90MmE3zSGsSq54TdzggXwFSXQyfHMTtgZk8GrHdW3p1BvgqJLTF0V2ccF
-         MC4FR1inkjUdtpgxjyTdylE4bNvPccc7/HocMGXdhQHSbp6JgCbCYYjuhobGaYN76U
-         4RqqnWrrtOjDlhTGaWPhR/Z1ZdkqBraKngbsCWZ4=
+        b=qVXg+DHI3T8/USlRXNDJN/SIvXSFA2GtxoKroJg4GAlAPClwte8b8y4CaigKjBT8K
+         eeOnSIaSE9PSagOdgnzT8R6NbAfcoCwqQ7+YeRx5hdAyQ2P5Tb94ogJ2iS2EO45Z5C
+         taodEKe9bO3mk8QB1b0V77eMAJJ9qM2XNt+2LbiA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.4 333/389] nios2: restarts apply only to the first sigframe we build...
-Date:   Tue, 23 Aug 2022 10:26:51 +0200
-Message-Id: <20220823080129.426286082@linuxfoundation.org>
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 243/287] atm: idt77252: fix use-after-free bugs caused by tst_timer
+Date:   Tue, 23 Aug 2022 10:26:52 +0200
+Message-Id: <20220823080109.291866469@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,27 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 411a76b7219555c55867466c82d70ce928d6c9e1 upstream.
+commit 3f4093e2bf4673f218c0bf17d8362337c400e77b upstream.
 
-Fixes: b53e906d255d ("nios2: Signal handling support")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+There are use-after-free bugs caused by tst_timer. The root cause
+is that there are no functions to stop tst_timer in idt77252_exit().
+One of the possible race conditions is shown below:
+
+    (thread 1)          |        (thread 2)
+                        |  idt77252_init_one
+                        |    init_card
+                        |      fill_tst
+                        |        mod_timer(&card->tst_timer, ...)
+idt77252_exit           |  (wait a time)
+                        |  tst_timer
+                        |
+                        |    ...
+  kfree(card) // FREE   |
+                        |    card->soft_tst[e] // USE
+
+The idt77252_dev is deallocated in idt77252_exit() and used in
+timer handler.
+
+This patch adds del_timer_sync() in idt77252_exit() in order that
+the timer handler could be stopped before the idt77252_dev is
+deallocated.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220805070008.18007-1-duoming@zju.edu.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/kernel/signal.c |    1 +
+ drivers/atm/idt77252.c |    1 +
  1 file changed, 1 insertion(+)
 
---- a/arch/nios2/kernel/signal.c
-+++ b/arch/nios2/kernel/signal.c
-@@ -261,6 +261,7 @@ static int do_signal(struct pt_regs *reg
- 			regs->ea = restart_addr;
- 			break;
- 		}
-+		regs->orig_r2 = -1;
- 	}
+--- a/drivers/atm/idt77252.c
++++ b/drivers/atm/idt77252.c
+@@ -3767,6 +3767,7 @@ static void __exit idt77252_exit(void)
+ 		card = idt77252_chain;
+ 		dev = card->atmdev;
+ 		idt77252_chain = card->next;
++		del_timer_sync(&card->tst_timer);
  
- 	if (get_signal(&ksig)) {
+ 		if (dev->phy->stop)
+ 			dev->phy->stop(dev);
 
 

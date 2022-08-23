@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D4859E946
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F6D59E928
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiHWRXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S231726AbiHWRWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242224AbiHWRVV (ORCPT
+        with ESMTP id S242294AbiHWRVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 13:21:21 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB82753B8;
-        Tue, 23 Aug 2022 07:57:35 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 92-20020a9d0be5000000b0063946111607so635538oth.10;
-        Tue, 23 Aug 2022 07:57:35 -0700 (PDT)
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A1BAC254;
+        Tue, 23 Aug 2022 07:57:38 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id g5-20020a4ac4c5000000b0044af7c8c4b3so2383350ooq.1;
+        Tue, 23 Aug 2022 07:57:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=SoxR8vPzLaBakuJXKDdianHW1mSlEURniSqJ7NDAlUg=;
-        b=vEC9XB7LPFGWWtwVJBlVoGtQ8ysJWKOvKUXOC62xnCSCbs4PIXAEKW1hbNpMqmjdWy
-         AIIQiEmdJ1/cyectG26rUckgKWj5A3OHHwjhI4+mpu1luEuPjMICpLrDNZQHGbFmTgVp
-         YEMga5V8HXXpqOSLtwUfjkHLztFikISj/GCwb7n9YVbbJp9GAR0Awh+HiWxlyZ8Isrzb
-         dZZTr9HT9M/YchzrJVBfPHNtfXylu4ULE8fOeVM4sCBppHSelXN3vEZHFBGMeVTxTJCn
-         dxZ7lCeOlo+5mRNHn6+TwcMWwLcZOGWDAKkWAqwIiESCUBwRj6fHys5FEU9ZCRwdNdyV
-         H+7w==
-X-Gm-Message-State: ACgBeo1INKM1xkr+k43eBoP302Vz2vhTFOU8i5o1Yn+a/H7KpDUR8qyD
-        8cmqeNNv+WqkKe1KTFdfUA==
-X-Google-Smtp-Source: AA6agR5N7GHMyhg7l4FvWbI4JGFC1eej18e7AwJEywr4KeELvJ0Jqd/978BcWS1D2O0v3c+0E/EU2w==
-X-Received: by 2002:a05:6830:2646:b0:638:b172:92d5 with SMTP id f6-20020a056830264600b00638b17292d5mr9226824otu.75.1661266654515;
-        Tue, 23 Aug 2022 07:57:34 -0700 (PDT)
+        bh=ZKzyS+QHTXVC7BDw1OAebS/EBaC9dZMOK/D2B0whWOI=;
+        b=DpSgolFuedOKR7ZeH9ZgOox03O3VKsuxPuiIxXhModRrJIjInHEpw2rjoSYmQVyTrk
+         CgCdHiQKlQc2guHHGMExs1HbSd6uAMame403DMkl5NK3pyKHymyRtXd3kX43/aZExINa
+         +QFkODTnjTje10kTU1Bslovr9ioBhOQQCbOhbPygG7CBQDXDOYv3QtyhJdX8hdVvhC66
+         RfgFl2Rai12+VjZXNqp/+Dz+qTgGzQ+AVmWCoX6Vt0Lb8jetwkYRbew9uSpN2TDodRbf
+         G5namBWj9tDDVormW6/dXXIYVb5Fbf7/ZUG7MwKAuXvNBn6Q3QLrFYY0/H6Wa0miJfwW
+         OIjw==
+X-Gm-Message-State: ACgBeo1P6JU7117ZIb82T/Wx6Z5hs/RDwUtjY+pS8px54gzEmDhZqG8E
+        nCETKAgeVv/8Zka6Ie+fWq2tQYR3UQ==
+X-Google-Smtp-Source: AA6agR7IHw/8Bk3ruADMSCqp1/dFX6q7yLZ/8KGTPHZ0Fm3Cc51EjnpGlEW/s13N0YY5zenpVebTeg==
+X-Received: by 2002:a4a:5e82:0:b0:44a:fe22:baff with SMTP id h124-20020a4a5e82000000b0044afe22baffmr7600316oob.86.1661266657256;
+        Tue, 23 Aug 2022 07:57:37 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.33
+        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 07:57:34 -0700 (PDT)
+        Tue, 23 Aug 2022 07:57:36 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+To:     Pavel Machek <pavel@ucw.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Nikita Travkin <nikitos.tr@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Yi Xin <Yixin.zhu@intel.com>,
+        Mallikarjuna reddy <mallikarjunax.reddy@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        - NeilBrown <neilb@suse.de>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: display: adi,adv75xx: Add missing graph schema references
-Date:   Tue, 23 Aug 2022 09:56:43 -0500
-Message-Id: <20220823145649.3118479-12-robh@kernel.org>
+Subject: [PATCH] dt-bindings: leds: Add missing (unevaluated|additional)Properties on child nodes
+Date:   Tue, 23 Aug 2022 09:56:44 -0500
+Message-Id: <20220823145649.3118479-13-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,86 +69,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT bindings using the graph binding must have references to the graph
-binding schema. These are missing from the adi,adv7511 and adi,adv7533
-bindings, so add them.
+In order to ensure only documented properties are present, node schemas
+must have unevaluatedProperties or additionalProperties set to false
+(typically).
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/display/bridge/adi,adv7511.yaml       | 14 ++++++--------
- .../bindings/display/bridge/adi,adv7533.yaml       | 14 ++++++--------
- 2 files changed, 12 insertions(+), 16 deletions(-)
+ .../bindings/leds/issi,is31fl319x.yaml           |  1 +
+ .../devicetree/bindings/leds/leds-aw2013.yaml    |  1 +
+ .../devicetree/bindings/leds/leds-gpio.yaml      |  1 +
+ .../devicetree/bindings/leds/leds-lgm.yaml       | 10 +++++++---
+ .../devicetree/bindings/leds/leds-max77650.yaml  |  9 ++-------
+ .../devicetree/bindings/leds/leds-pwm.yaml       |  1 +
+ .../devicetree/bindings/leds/leds-qcom-lpg.yaml  |  6 ++++++
+ .../bindings/leds/rohm,bd71828-leds.yaml         | 16 +++-------------
+ .../devicetree/bindings/leds/ti,tca6507.yaml     |  1 +
+ 9 files changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/adi,adv7511.yaml b/Documentation/devicetree/bindings/display/bridge/adi,adv7511.yaml
-index f08a01dfedf3..5bbe81862c8f 100644
---- a/Documentation/devicetree/bindings/display/bridge/adi,adv7511.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/adi,adv7511.yaml
-@@ -117,23 +117,21 @@ properties:
+diff --git a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
+index 940333f2d69c..2929382625b6 100644
+--- a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
++++ b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
+@@ -57,6 +57,7 @@ patternProperties:
+   "^led@[1-9]$":
+     type: object
+     $ref: common.yaml#
++    unevaluatedProperties: false
  
-   ports:
-     description:
--      The ADV7511(W)/13 has two video ports and one audio port. This node
--      models their connections as documented in
--      Documentation/devicetree/bindings/media/video-interfaces.txt
--      Documentation/devicetree/bindings/graph.txt
+     properties:
+       reg:
+diff --git a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
+index e24b0d15ef01..6c3ea0f06cef 100644
+--- a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
+@@ -33,6 +33,7 @@ patternProperties:
+   "^led@[0-2]$":
+     type: object
+     $ref: common.yaml#
++    unevaluatedProperties: false
+ 
+     properties:
+       reg:
+diff --git a/Documentation/devicetree/bindings/leds/leds-gpio.yaml b/Documentation/devicetree/bindings/leds/leds-gpio.yaml
+index 7ad2baeda0b0..f156d3e47b71 100644
+--- a/Documentation/devicetree/bindings/leds/leds-gpio.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-gpio.yaml
+@@ -25,6 +25,7 @@ patternProperties:
+     type: object
+ 
+     $ref: common.yaml#
++    unevaluatedProperties: false
+ 
+     properties:
+       gpios:
+diff --git a/Documentation/devicetree/bindings/leds/leds-lgm.yaml b/Documentation/devicetree/bindings/leds/leds-lgm.yaml
+index f8d7963c3a13..8b3b3bf1eaf2 100644
+--- a/Documentation/devicetree/bindings/leds/leds-lgm.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-lgm.yaml
+@@ -56,7 +56,8 @@ properties:
+ 
+     patternProperties:
+       "^led@[0-2]$":
+-        type: object
++        $ref: common.yaml#
++        unevaluatedProperties: false
+ 
+         properties:
+           reg:
+@@ -64,6 +65,9 @@ properties:
+             minimum: 0
+             maximum: 2
+ 
++          led-gpios:
++            maxItems: 1
++
+           intel,sso-hw-trigger:
+             type: boolean
+             description: This property indicates Hardware driven/control LED.
+@@ -118,14 +122,14 @@ examples:
+           reg = <0>;
+           function = "gphy";
+           color = <LED_COLOR_ID_GREEN>;
+-          led-gpio = <&ssogpio 0 0>;
++          led-gpios = <&ssogpio 0 0>;
+         };
+ 
+         led@2 {
+           reg = <2>;
+           function = LED_FUNCTION_POWER;
+           color = <LED_COLOR_ID_GREEN>;
+-          led-gpio = <&ssogpio 23 0>;
++          led-gpios = <&ssogpio 23 0>;
+         };
+       };
+     };
+diff --git a/Documentation/devicetree/bindings/leds/leds-max77650.yaml b/Documentation/devicetree/bindings/leds/leds-max77650.yaml
+index c6f96cabd4d1..fdb08f44a45d 100644
+--- a/Documentation/devicetree/bindings/leds/leds-max77650.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-max77650.yaml
+@@ -30,9 +30,8 @@ properties:
+ 
+ patternProperties:
+   "^led@[0-2]$":
 -    type: object
-+      The ADV7511(W)/13 has two video ports and one audio port.
-+    $ref: /schemas/graph.yaml#/properties/ports
+-    description: |
+-      Properties for a single LED.
++    $ref: common.yaml#
++    unevaluatedProperties: false
+ 
+     properties:
+       reg:
+@@ -41,10 +40,6 @@ patternProperties:
+         minimum: 0
+         maximum: 2
+ 
+-      label: true
+-
+-      linux,default-trigger: true
+-
+ required:
+   - compatible
+   - "#address-cells"
+diff --git a/Documentation/devicetree/bindings/leds/leds-pwm.yaml b/Documentation/devicetree/bindings/leds/leds-pwm.yaml
+index fe4d5fd25913..e60009863d07 100644
+--- a/Documentation/devicetree/bindings/leds/leds-pwm.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-pwm.yaml
+@@ -22,6 +22,7 @@ patternProperties:
+     type: object
+ 
+     $ref: common.yaml#
++    unevaluatedProperties: false
+ 
+     properties:
+       pwms:
+diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+index 497db289169d..6f43aadea3be 100644
+--- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+@@ -72,11 +72,17 @@ properties:
+       "^led@[0-9a-f]$":
+         type: object
+         $ref: common.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          reg:
++            maxItems: 1
+ 
+ patternProperties:
+   "^led@[0-9a-f]$":
+     type: object
+     $ref: common.yaml#
++    unevaluatedProperties: false
+ 
+     properties:
+       reg: true
+diff --git a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+index 86a37c92b834..ca92cea56a6f 100644
+--- a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
++++ b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+@@ -26,26 +26,16 @@ properties:
+ 
+ patternProperties:
+   "^led-[1-2]$":
+-    type: object
+-    description:
+-      Properties for a single LED.
++    $ref: common.yaml#
++    unevaluatedProperties: false
 +
      properties:
-       port@0:
-         description: Video port for the RGB or YUV input.
--        type: object
-+        $ref: /schemas/graph.yaml#/properties/port
- 
-       port@1:
-         description: Video port for the HDMI output.
--        type: object
-+        $ref: /schemas/graph.yaml#/properties/port
- 
-       port@2:
-         description: Audio port for the HDMI output.
--        type: object
-+        $ref: /schemas/graph.yaml#/properties/port
- 
- # adi,input-colorspace and adi,input-clock are required except in
- # "rgb 1x" and "yuv444 1x" modes, in which case they must not be
-diff --git a/Documentation/devicetree/bindings/display/bridge/adi,adv7533.yaml b/Documentation/devicetree/bindings/display/bridge/adi,adv7533.yaml
-index f36209137c8a..987aa83c2649 100644
---- a/Documentation/devicetree/bindings/display/bridge/adi,adv7533.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/adi,adv7533.yaml
-@@ -91,25 +91,23 @@ properties:
- 
-   ports:
-     description:
--      The ADV7533/35 has two video ports and one audio port. This node
--      models their connections as documented in
--      Documentation/devicetree/bindings/media/video-interfaces.txt
--      Documentation/devicetree/bindings/graph.txt
--    type: object
-+      The ADV7533/35 has two video ports and one audio port.
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-     properties:
-       port@0:
-         description:
-           Video port for the DSI input. The remote endpoint phandle
-           should be a reference to a valid mipi_dsi_host_device.
--        type: object
-+        $ref: /schemas/graph.yaml#/properties/port
- 
-       port@1:
-         description: Video port for the HDMI output.
--        type: object
-+        $ref: /schemas/graph.yaml#/properties/port
- 
-       port@2:
-         description: Audio port for the HDMI output.
--        type: object
-+        $ref: /schemas/graph.yaml#/properties/port
+-      #allOf:
+-        #- $ref: "common.yaml#"
+       rohm,led-compatible:
+         description: LED identification string
+         $ref: "/schemas/types.yaml#/definitions/string"
+         enum:
+           - bd71828-ambled
+           - bd71828-grnled
+-      function:
+-        description:
+-          Purpose of LED as defined in dt-bindings/leds/common.h
+-        $ref: "/schemas/types.yaml#/definitions/string"
+-      color:
+-        description:
+-          LED colour as defined in dt-bindings/leds/common.h
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
  
  required:
    - compatible
+diff --git a/Documentation/devicetree/bindings/leds/ti,tca6507.yaml b/Documentation/devicetree/bindings/leds/ti,tca6507.yaml
+index 32c600387895..e83964600993 100644
+--- a/Documentation/devicetree/bindings/leds/ti,tca6507.yaml
++++ b/Documentation/devicetree/bindings/leds/ti,tca6507.yaml
+@@ -40,6 +40,7 @@ patternProperties:
+     type: object
+ 
+     $ref: common.yaml#
++    unevaluatedProperties: false
+ 
+     properties:
+       reg:
 -- 
 2.34.1
 

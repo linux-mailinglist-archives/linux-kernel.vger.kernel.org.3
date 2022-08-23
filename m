@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8461C59D7E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AF859D769
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350953AbiHWJdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        id S1351005AbiHWJd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351231AbiHWJb0 (ORCPT
+        with ESMTP id S1350344AbiHWJb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:31:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA818275F1;
-        Tue, 23 Aug 2022 01:38:38 -0700 (PDT)
+        Tue, 23 Aug 2022 05:31:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B4943E52;
+        Tue, 23 Aug 2022 01:38:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39DDB61547;
-        Tue, 23 Aug 2022 08:37:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29CF5C433C1;
-        Tue, 23 Aug 2022 08:37:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 416A1B81C6B;
+        Tue, 23 Aug 2022 08:37:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 552E5C433C1;
+        Tue, 23 Aug 2022 08:37:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243828;
-        bh=yMu/+1FFUxvoYGpo6+tLh1Im8+eo2FszMBiGdkHivVk=;
+        s=korg; t=1661243831;
+        bh=ljrqwzOrbT0JrmQUw2UjpfLFC5dyyN3a2eOKGBHBJcM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WnKYaV/zKw0R+Hpua2nqq8w3L79HSzbZ1ikOsrSE4YjV60IsNcaEwTN1lVnd2KOVo
-         b2IgBi7h5lLZNr/cU9ZKWs3DZmBrTtWcyGHGYB6BiWaV8cRXDYaPSGaMPrWtgTNFRU
-         Y6bMdyw5buT8LWcRK25pEWTlAizY1n++0rymH0ws=
+        b=xkcNuQtU1zq65TlSGZjzB+Y4xYOPQUMz6jM5u7r8HFlyDM/Mhih+q2pGciBE6C5Ct
+         Hb0/A644C3is/CmTxdSncEdblduoSXpHD5wvXhJEZ6bGQenaHYOJZm/7MreTx0OgPw
+         mcX+nOuBug1J9f+EFs8ksnbPdaaEpR4QdbuWWcak=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Domingo Dirutigliano <pwnzer0tt1@proton.me>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 007/229] netfilter: nf_queue: do not allow packet truncation below transport header offset
-Date:   Tue, 23 Aug 2022 10:22:48 +0200
-Message-Id: <20220823080053.580178437@linuxfoundation.org>
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Nicolas Pitre <nico@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH 4.14 008/229] ARM: crypto: comment out gcc warning that breaks clang builds
+Date:   Tue, 23 Aug 2022 10:22:49 +0200
+Message-Id: <20220823080053.626188301@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -57,52 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit 99a63d36cb3ed5ca3aa6fcb64cffbeaf3b0fb164 ]
+The gcc build warning prevents all clang-built kernels from working
+properly, so comment it out to fix the build.
 
-Domingo Dirutigliano and Nicola Guerrera report kernel panic when
-sending nf_queue verdict with 1-byte nfta_payload attribute.
+This is a -stable kernel only patch for now, it will be resolved
+differently in mainline releases in the future.
 
-The IP/IPv6 stack pulls the IP(v6) header from the packet after the
-input hook.
-
-If user truncates the packet below the header size, this skb_pull() will
-result in a malformed skb (skb->len < 0).
-
-Fixes: 7af4cc3fa158 ("[NETFILTER]: Add "nfnetlink_queue" netfilter queue handler over nfnetlink")
-Reported-by: Domingo Dirutigliano <pwnzer0tt1@proton.me>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Reviewed-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: "Justin M. Forbes" <jforbes@fedoraproject.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Nicolas Pitre <nico@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nfnetlink_queue.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/arm/lib/xor-neon.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
-index ba74bb2d6341..369f1634afe9 100644
---- a/net/netfilter/nfnetlink_queue.c
-+++ b/net/netfilter/nfnetlink_queue.c
-@@ -827,11 +827,16 @@ nfqnl_enqueue_packet(struct nf_queue_entry *entry, unsigned int queuenum)
- }
+--- a/arch/arm/lib/xor-neon.c
++++ b/arch/arm/lib/xor-neon.c
+@@ -29,8 +29,9 @@ MODULE_LICENSE("GPL");
+  * While older versions of GCC do not generate incorrect code, they fail to
+  * recognize the parallel nature of these functions, and emit plain ARM code,
+  * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
++ *
++ * #warning This code requires at least version 4.6 of GCC
+  */
+-#warning This code requires at least version 4.6 of GCC
+ #endif
  
- static int
--nfqnl_mangle(void *data, int data_len, struct nf_queue_entry *e, int diff)
-+nfqnl_mangle(void *data, unsigned int data_len, struct nf_queue_entry *e, int diff)
- {
- 	struct sk_buff *nskb;
- 
- 	if (diff < 0) {
-+		unsigned int min_len = skb_transport_offset(e->skb);
-+
-+		if (data_len < min_len)
-+			return -EINVAL;
-+
- 		if (pskb_trim(e->skb, data_len))
- 			return -ENOMEM;
- 	} else if (diff > 0) {
--- 
-2.35.1
-
+ #pragma GCC diagnostic ignored "-Wunused-variable"
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D0959E11F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FDF59E02E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353805AbiHWKP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
+        id S1358156AbiHWLlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352910AbiHWKG1 (ORCPT
+        with ESMTP id S1355734AbiHWLfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:27 -0400
+        Tue, 23 Aug 2022 07:35:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7765411172;
-        Tue, 23 Aug 2022 01:53:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C3277561;
+        Tue, 23 Aug 2022 02:27:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 221B7B81C1C;
-        Tue, 23 Aug 2022 08:53:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845CBC433D6;
-        Tue, 23 Aug 2022 08:53:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBE7AB81C86;
+        Tue, 23 Aug 2022 09:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F28C433D6;
+        Tue, 23 Aug 2022 09:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244811;
-        bh=y2Uk6kUiCZrxv1Byz5ipE9DsC/gbpMLsnOK3xfZGDSI=;
+        s=korg; t=1661246842;
+        bh=ny41RisFgH2lXvSY1az4/VFPso6COSCs+418G2y4p4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WEhtXVTATTJWd9gyKaVnlNiDWnb4wxNn9OCd0AEqFAoVbyfyfqc48PCtG/Pc+6IN9
-         oRTbfszIua9BRRpAMsjcrbthvXZsLPxekzG1emiAUMJWRduOroHIkv6fKGKGl4HOvK
-         uROl5Hc1faL8EaEqYAmqXRl2fx1W+IwMqVDHCE4E=
+        b=JwztcuajnhSe14CbMYBT4/bSPUyI/L+2BU4k8TIQIITufpd/vuQH+8IFpJu1tA7Um
+         PKzzDkc14a8p5WwM64RAlNrQf+E8jtTwg6QQGCdqBtIb4Vq6S0APAfsE+J7vH2+zeK
+         xnVv+TEHvhfv6eGWdGADsUMsykVKTNvXx4d/oQi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Chen Zhongjin <chenzhongjin@huawei.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 156/244] ASoC: SOF: Intel: hda: Fix potential buffer overflow by snprintf()
-Date:   Tue, 23 Aug 2022 10:25:15 +0200
-Message-Id: <20220823080104.402123475@linuxfoundation.org>
+Subject: [PATCH 5.4 238/389] kprobes: Forbid probing on trampoline and BPF code areas
+Date:   Tue, 23 Aug 2022 10:25:16 +0200
+Message-Id: <20220823080125.507143076@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chen Zhongjin <chenzhongjin@huawei.com>
 
-[ Upstream commit 94c1ceb043c1a002de9649bb630c8e8347645982 ]
+[ Upstream commit 28f6c37a2910f565b4f5960df52b2eccae28c891 ]
 
-snprintf() returns the would-be-filled size when the string overflows
-the given buffer size, hence using this value may result in the buffer
-overflow (although it's unrealistic).
+kernel_text_address() treats ftrace_trampoline, kprobe_insn_slot
+and bpf_text_address as valid kprobe addresses - which is not ideal.
 
-This patch replaces with a safer version, scnprintf() for papering
-over such a potential issue.
+These text areas are removable and changeable without any notification
+to kprobes, and probing on them can trigger unexpected behavior:
 
-Fixes: 29c8e4398f02 ("ASoC: SOF: Intel: hda: add extended rom status dump to error log")
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/20220801165420.25978-4-tiwai@suse.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
+  https://lkml.org/lkml/2022/7/26/1148
+
+Considering that jump_label and static_call text are already
+forbiden to probe, kernel_text_address() should be replaced with
+core_kernel_text() and is_module_text_address() to check other text
+areas which are unsafe to kprobe.
+
+[ mingo: Rewrote the changelog. ]
+
+Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
+Fixes: 74451e66d516 ("bpf: make jited programs visible in traces")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Link: https://lore.kernel.org/r/20220801033719.228248-1-chenzhongjin@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/intel/hda.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/kprobes.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index e733c401562f..35cbef171f4a 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -413,7 +413,7 @@ static void hda_dsp_dump_ext_rom_status(struct snd_sof_dev *sdev, u32 flags)
- 	chip = get_chip_info(sdev->pdata);
- 	for (i = 0; i < HDA_EXT_ROM_STATUS_SIZE; i++) {
- 		value = snd_sof_dsp_read(sdev, HDA_DSP_BAR, chip->rom_status_reg + i * 0x4);
--		len += snprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
-+		len += scnprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
- 	}
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index c93340bae3ac..671b51782182 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1594,7 +1594,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+ 	preempt_disable();
  
- 	sof_dev_dbg_or_err(sdev->dev, flags & SOF_DBG_DUMP_FORCE_ERR_LEVEL,
+ 	/* Ensure it is not in reserved area nor out of text */
+-	if (!kernel_text_address((unsigned long) p->addr) ||
++	if (!(core_kernel_text((unsigned long) p->addr) ||
++	    is_module_text_address((unsigned long) p->addr)) ||
+ 	    within_kprobe_blacklist((unsigned long) p->addr) ||
+ 	    jump_label_text_reserved(p->addr, p->addr) ||
+ 	    find_bug((unsigned long)p->addr)) {
 -- 
 2.35.1
 

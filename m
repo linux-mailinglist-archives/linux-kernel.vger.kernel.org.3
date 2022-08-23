@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D245A59ED8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ECE59ED8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiHWUli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 16:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
+        id S233911AbiHWUlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 16:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiHWUlC (ORCPT
+        with ESMTP id S233734AbiHWUlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:41:02 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901E01014
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 13:31:32 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-335624d1e26so410455737b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 13:31:32 -0700 (PDT)
+        Tue, 23 Aug 2022 16:41:16 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF63A45061;
+        Tue, 23 Aug 2022 13:31:56 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 202so13228908pgc.8;
+        Tue, 23 Aug 2022 13:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=JMXz8A2xJ91prAWbdCfT0dCK746jNn15pml4FJddUZ8=;
+        b=lmkye2UN1b4Q7U05sYHomO8ANCWbC2gTBnpPjVRELIc6kfHqRd/Vo/Ccvxpv/f4gLm
+         +WwN6KKqBz8qjtaRwUT2A6TuvAy6OlihkwWkGZasqLipMS7io4ukK9q5rEJ2UxmvMdfE
+         S6V8ukVXGO1bgoCMj5x/71nv9WjCe94IbSeslxVVvuayrxoUeRNDJAPWAmQ1YHCdVcLu
+         OpLgC2x08A6PfttMb9GmavnM9gqqjYDaizZhUYznFUnHc0QQFysHPpFCg2orUP4SWR8w
+         +fVbObx5l7fOvs04vUAzq+fEddctQCCLBMSFqtuVpcPR4D+kjNG0XXXlK5ZF7KUvCHmM
+         yOvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=FvOQiT0TsbXNUArqe4thB3SqDZo6X/Lj2phpd0Hb6sc=;
-        b=tsUki6rLVe8OJMkrVaW2RbKF20cfN9cd+DVRnoWuMuIJ9ybwhjRmbxome3lclrjolT
-         HvF5SzKGpxkmjscEdc6LYSjWcXQ71HZVrHJvhfAWN3lEUNZhwjOyRRRbCcimjWf5Vv/a
-         Nk8m75nTB7lGMyp6U4vyVNM2J6umDdxq8qbrHDV5xjzbhkIL35NE0R9s+I0YwAz6063x
-         dlf8Hc8/D7SG6iISN7Ic4ffsbM/kr/gCph/9NY+OaRRDe0sq2VIRgIJmRJ3dLnW5Gvq6
-         NVFLMVj8KtS7cUypmU052vVRbF8P2wcg8R3P3cHifjyhucqqhaoSmj3QYidDaZN26qq7
-         gXtA==
-X-Gm-Message-State: ACgBeo0qEz+MzbI0JDceodzoN2dGl0s52ashicnDbbPp7UIex0IGp8tr
-        6xzBUZaq/t93FMuRzvA8fMFtikPMv0BjMWt6/9g=
-X-Google-Smtp-Source: AA6agR6q56i0cQRjgvbMl29HdVBJzNz3wM0i/Vh6AJG7KbArhisaujcGwstd41SPk7iZmpWjD50jFAxmXzZlQ2jes1o=
-X-Received: by 2002:a25:7455:0:b0:68e:e73f:5fd5 with SMTP id
- p82-20020a257455000000b0068ee73f5fd5mr24329275ybc.20.1661286691491; Tue, 23
- Aug 2022 13:31:31 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=JMXz8A2xJ91prAWbdCfT0dCK746jNn15pml4FJddUZ8=;
+        b=HChtXyWM+5NLOqQfMcgAy+L4e+zBwIiRupYjHbzfWEle5A/OP25vruxgcEPIcUsz62
+         M2psmHotqUmdk5/NDRlJWQpTilh95JHE5DPyHS0M20QLhQN/fsI1s1BBkZPzhMRNDA8z
+         5qyyDRDsr12W1vRjRAa6w2+andqmp4wLyer8ZEFgsU0jOFBUiaVWI63schhmHR4GHZzQ
+         FYQDPXbiE2IVXu3i1g5MvuMKcA+LJtypfTu4DPhio5+9vFGkAJszTY/AI0q+G/uKd2D5
+         /p5+9N72MwDNM7u7lpcef4R3cdOPzIKOsyJ7Tz6nz/eLCv/fR98z5CDTnnOguB7p13hq
+         5a9A==
+X-Gm-Message-State: ACgBeo2GI4Y7h3XnbApKmpfwyHL3XIrzk/J3w9nEAFCx4KW+Mz5MPm82
+        tjmOTidNB7pZjgm046wFdyo=
+X-Google-Smtp-Source: AA6agR6eFGJtDbMiDfSBHxH2zYgfAXTpySXUYD6g0Jr7+0wSy/Y0lHWU6h+PUxJv7wehoXRH4GX42A==
+X-Received: by 2002:a63:fc50:0:b0:427:a666:bfe3 with SMTP id r16-20020a63fc50000000b00427a666bfe3mr20980312pgk.547.1661286716094;
+        Tue, 23 Aug 2022 13:31:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:90fa])
+        by smtp.gmail.com with ESMTPSA id j7-20020a170903024700b00172ea8ff334sm5075633plh.7.2022.08.23.13.31.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 13:31:55 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 Aug 2022 10:31:54 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
+Subject: Re: [PATCH 6/7] kernfs: Allow kernfs nodes to be deactivated and
+ re-activated
+Message-ID: <YwU5Ou78/WVqrYwS@slm.duckdns.org>
+References: <20220820000550.367085-1-tj@kernel.org>
+ <20220820000550.367085-7-tj@kernel.org>
+ <d918a1f5-40f4-c90c-a7f5-720dcfddb89b@bytedance.com>
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220812114438.1574-1-mailhol.vincent@wanadoo.fr> <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
- <YwT+5GGCOKoTjfQZ@zn.tnic> <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
- <YwUR35I7+5JbLvMM@zn.tnic>
-In-Reply-To: <YwUR35I7+5JbLvMM@zn.tnic>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 24 Aug 2022 05:31:20 +0900
-Message-ID: <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d918a1f5-40f4-c90c-a7f5-720dcfddb89b@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 24 Aug. 2022 at 02:43, Borislav Petkov <bp@alien8.de> wrote:
-> On Tue, Aug 23, 2022 at 10:12:17AM -0700, Nick Desaulniers wrote:
-> > Callers of these need to guard against zero input, as the pre-existing
-> > comment notes:
-> >
-> > >> Undefined if no bit exists, so code should check against 0 first.
+Hello,
 
-If the fact that __ffs(0) is undefined is a concern, I can add a safety net:
+On Tue, Aug 23, 2022 at 01:49:07PM +0800, Chengming Zhou wrote:
+> > -		if (pos->flags & KERNFS_ACTIVATED)
+> > +		if (kernfs_active(pos) || (kn->flags & KERNFS_REMOVING))
+> 
+> May I ask a question, what's the difference between kernfs_active() and KERNFS_ACTIVATED?
+> 
+> KERNFS_ACTIVATED is always set when kernfs_activate() and never clear, so I think it means:
+> 
+> 1. !KERNFS_ACTIVATED : allocated but not activated
+> 2. KERNFS_ACTIVATED && !kernfs_active() : make deactivated by kernfs_deactivate_locked()
+> 
+> I see most code check kernfs_active(), but two places check KERNFS_ACTIVATED, I'm not sure where
+> should check KERNFS_ACTIVATED, or is there any chance we can remove KERNFS_ACTIVATED?
 
-  #define __ffs(word) \
-          (__builtin_constant_p(word) ? \
-                  (unsigned long)__builtin_ctzl(word) +
-BUILD_BUG_ON_ZERO(word): \
-                  variable___ffs(word))
+Yeah, ACTIVATED means taht created but never activated while kernfs_active()
+means currently active. I tried to substitute all ACTIVATED tests with
+kernfs_active() and remove the former but I wasn't sure about changing
+kernfs_add_one() behavior.
 
-It will only catch the constant expression but still better than
-nothing (this comment also applies to the other functions undefined
-when the argument is zero).
+I think it's too confusing to combine the initial activated state with
+user-requested show/hide state and causes other problems like
+kernfs_activate() used to activate newly created files unhiding files
+explicitly deactivated. Lemme separate out show/hide state into something
+separate so that the distinction is clear.
 
-Also, if this aspect was unclear, I can add a comment in the commit
-log to explain.
+Thanks.
 
-> This is just silly.
->
-> And then there's
->
->  * ffs(value) returns 0 if value is 0 or the position of the first
->  * set bit if value is nonzero. The first (least significant) bit
->  * is at position 1.
->  */
-> static __always_inline int ffs(int x)
->
-> Can we unify the two and move the guard against 0 inside the function
-> or, like ffs() does, have it return 0 if value is 0?
-
-There is an index issue. __ffs() starts at 0 but ffs() starts at one.
-i.e.: __ffs(0x01) is 0 but ffs(0x01) is 1.
-Aside from the zero edge case, ffs(x) equals __ffs(x) + 1. This
-explains why __fss(0) is undefined.
-
-
-Yours sincerely,
-Vincent Mailhol
+-- 
+tejun

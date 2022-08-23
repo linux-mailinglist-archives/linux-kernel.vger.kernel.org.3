@@ -2,122 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92A759EC29
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7AD59EBD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbiHWTWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S230105AbiHWTJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiHWTWD (ORCPT
+        with ESMTP id S231919AbiHWTIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:22:03 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123671322F4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:03:02 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 5EB662A12D4;
-        Tue, 23 Aug 2022 18:03:01 +0000 (UTC)
-Received: from pdx1-sub0-mail-a212.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 30D362A1E7B;
-        Tue, 23 Aug 2022 18:02:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661277779; a=rsa-sha256;
-        cv=none;
-        b=1w1EdcQ371jtiZE5ssyXEy5vEAlE0ICcJTJV8VbDpfNJYJzTcpuKB3jYeINBGpjf0H+JwG
-        XK1lFBjmR5b2nGYq7CIL/qYlgIeQbNgXLs/jMToRKx4qSExoUbO4lAhMLOq7Ovfrnnh8Tq
-        vr/L4LKDjc+HM+Rv5O1M/gbeqSIuTh452Q+gXERoOOoQ2bXrCJU1i7Lec1rF1Dm37EzOXY
-        rV3V4liTFNjJ1KRMOLmFF0eEow8hn5jDwkj0Wchfo3nderlTGdK7QBW2nx9sc4pUpHppbk
-        XmBcehPbertTRB/z7MOda0G1aQnQt5hQ892i0KIxozOJ8ZZWZEtIFBoYrnwVwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661277779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=3YD8UxhoVF/0CdPFuuWxAVwema5lF831lGxRQpQLviU=;
-        b=slTNJFpEAUiEk5ksFEmllc9CiE+1z+ivdSgvW8/pWGv48GmPBdC+A/gzzTYicRchzTDI1t
-        8wiJoCsJQsket7hotSaTY0lHvJV6nWT+suHUPquY/pRY5S+uk/Fz02MMFcHikrY2Q91e8U
-        zpdLITawLPIsyi7ha/FMFWmCwH5Kulg1B7O1ReH8C5LF52qexAvTlSmcfK5YC6lqW/qIqR
-        RT5L/sDILAIwedeAKohmbR5aILSDrQGoQC6j+xnua6a8yIliJFs/noy2U0d1vw5RaSqZSm
-        4Ex4E5bfehNfChhAAea9/hGdTLqhZy0HIGUJTjJ6w6pSMY7EbqRd4ioovTZagA==
-ARC-Authentication-Results: i=1;
-        rspamd-79945fd77c-6r7td;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Trail-Rock: 109bada36d217795_1661277779684_1833396601
-X-MC-Loop-Signature: 1661277779684:3521180439
-X-MC-Ingress-Time: 1661277779683
-Received: from pdx1-sub0-mail-a212.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.38.149 (trex/6.7.1);
-        Tue, 23 Aug 2022 18:02:59 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a212.dreamhost.com (Postfix) with ESMTPSA id 4MBxsV208vz1PZ;
-        Tue, 23 Aug 2022 11:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1661277774;
-        bh=3YD8UxhoVF/0CdPFuuWxAVwema5lF831lGxRQpQLviU=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=dm4tTMhqjgm+Qp5pgxAZLTdXJKdLu6mY8mIPx+RBSiU1bEPQlqeLkHoiYcM8df0a0
-         OlIzzNOdxe2ZhZVEgkjcWJDHqv28283A8/VwJ/KUBTz8qE2MiHFGUiUaFJSbe129Qf
-         bYSR3OfjP/kUi53ck3AEf0DuTvxgB6B47x1E8l8UYnqdt9mk1+DA1m716YnEU9dypN
-         4W18xAMKwPQV9tV/Kq223SqH2RRD4AlXt+m1NphwDdDceUeWu07GVMLsf0a6rXpCi7
-         48tD/1LBlhPhOkrPCT0xTaxsruFL9RbDDmbm/6tDYAB0gBgpkq87j6ffRC/N48PdLh
-         KBTDFLjqkq89g==
-Date:   Tue, 23 Aug 2022 10:44:51 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v13 47/70] perf: use VMA iterator
-Message-ID: <20220823174451.lgdxhow6fkrdorva@offworld>
-Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
- <20220822150128.1562046-48-Liam.Howlett@oracle.com>
+        Tue, 23 Aug 2022 15:08:51 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022D665D5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 10:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661276848; x=1692812848;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=g3N8QaZ47KTjxRr1VmyrexxfaDyUTuIj7D/06GMA7EQ=;
+  b=R+PRJTZKLawuzOW9r3UW+c/kNIIzP/XsxOgZfkoTI2FqjdpiczW3wNBc
+   n+tTLDNkW17M0RTUS8j/hAqX94xBcs82G0RiVHwWpm+TZ1X6XmgibeuUh
+   Z2n4+5VYVDN4Wm4WaHCYqOiC8wac5t7JnrJ5mIzZJ5pGnMB5VV7eCiBko
+   RutXd269LGJ1U4q7KAII3s287vaMT+n7VfEhQ0UVnsB5U/X5i+QZH4mD3
+   3X5u0u3fj3kfROBJkFX750hnIBgALG4gW1Gd9s6sXbNzFanf4jlhMcSJ+
+   WufSm1jswTbwx98whceWyjDZKUJ+zL2/JTMpe0ZtiV6su31U7kiS7grrY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="319806585"
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="319806585"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:45:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="642530901"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 10:45:43 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] x86/cpu: Add yet another Raptorlake CPU model number
+Date:   Tue, 23 Aug 2022 10:45:30 -0700
+Message-Id: <20220823174530.223914-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220822150128.1562046-48-Liam.Howlett@oracle.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022, Liam Howlett wrote:
+There is a second model number used by Raptorlake client CPUs.
 
->From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
->
->The VMA iterator is faster than the linked list and removing the linked
->list will shrink the vm_area_struct.
->
->Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
->Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/include/asm/intel-family.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
+index def6ca121111..c4e316921dd5 100644
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -22,6 +22,7 @@
+  *		Common OPTDIFFs:
+  *
+  *			- regular client parts
++ *		_S	- other client parts
+  *		_L	- regular mobile parts
+  *		_G	- parts with extra graphics on
+  *		_X	- regular server parts
+@@ -112,6 +113,7 @@
+ 
+ #define INTEL_FAM6_RAPTORLAKE		0xB7
+ #define INTEL_FAM6_RAPTORLAKE_P		0xBA
++#define INTEL_FAM6_RAPTORLAKE_S		0xBF
+ 
+ /* "Small Core" Processors (Atom) */
+ 
+-- 
+2.35.3
+

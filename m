@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38E059E9D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D798059E9CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbiHWRha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S232354AbiHWRhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiHWRgy (ORCPT
+        with ESMTP id S229594AbiHWRhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:36:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93FC80B64;
-        Tue, 23 Aug 2022 08:20:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 23 Aug 2022 13:37:00 -0400
+Received: from ixit.cz (ip-94-112-206-30.bb.vodafone.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0D8816A9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:20:41 -0700 (PDT)
+Received: from newone.lan (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 685F4B81E07;
-        Tue, 23 Aug 2022 15:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C2FC433B5;
-        Tue, 23 Aug 2022 15:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661268038;
-        bh=OCV4SD7jf1gl8FJIP/MP717c/wV/sjJ2VFg21xqMHf0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DVPWX5/bnlhjHSOiLI5Z0zKIy2IUYmuXKLGztHQ/Tw8cKRfvq6NyBRK9E4roe3LNz
-         bsFdBePCGoj5PI1TMme33d1MnHNF9B26lfMraMm6kPIdujzoLRf3T6oAOXQ22eN5Vy
-         OmQ+E6BqHkkISV1QwrSMiKo1mzNGHvGt2bX/XYeWfhmajGf5x+3IXte5wupLrFz2FO
-         SG5ecZBo2rVDgG9DYTby+V4ErK3I5PIH1qImziJwLEAZJz2YUcfEcuIKz+ikxS499w
-         hybrAsi2AOJx68vBmZTgP4Wyl+rS/YF5QVc9YShNE1zynAx9szX/cFyNG8OP7CdcfP
-         U8r9lcRN9RGvA==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/2] rv/monitors: Make monitor's automata definition static
-Date:   Tue, 23 Aug 2022 17:20:29 +0200
-Message-Id: <a50e27c3738d6ef809f4201857229fed64799234.1661266564.git.bristot@kernel.org>
+        by ixit.cz (Postfix) with ESMTPSA id B03DF2007F;
+        Tue, 23 Aug 2022 17:20:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1661268038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EFtFu5utQxl/cbAQO+lEXnvl78vZetgkEfJeBBZqMJA=;
+        b=ztgcNeWbwutbuVNPd2GAZJVvaYGjfTr0xNxzy9GSbhy9zwzm4legDGRx8/01fxRwCPyncY
+        DD6T8GKDEQoW3gGb6mdtXaqPgWtON2waFSaBUKVsx0bTAvo8x4kNKz2l7eVxwpKRpI9rZ8
+        D+bsPLkzm9zOK/kqryfe2R6nbx1M0O8=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: remove EXPERIMENTAL flag for zswap
+Date:   Tue, 23 Aug 2022 17:20:33 +0200
+Message-Id: <20220823152033.66682-1-david@ixit.cz>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <ffbb92010f643307766c9307fd42f416e5b85fa0.1661266564.git.bristot@kernel.org>
-References: <ffbb92010f643307766c9307fd42f416e5b85fa0.1661266564.git.bristot@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Monitor's automata definition is only used locally, so make
-them static for all existing monitors.
+zswap has been with us since 2013, and it's widely used in many products.
 
-Link: https://lore.kernel.org/all/202208210332.gtHXje45-lkp@intel.com
-Link: https://lore.kernel.org/all/202208210358.6HH3OrVs-lkp@intel.com
-
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Fixes: ccc319dcb450 ("rv/monitor: Add the wwnr monitor")
-Fixes: 8812d21219b9 ("rv/monitor: Add the wip monitor skeleton created by dot2k")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- kernel/trace/rv/monitors/wip/wip.h   | 2 +-
- kernel/trace/rv/monitors/wwnr/wwnr.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ mm/Kconfig | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/kernel/trace/rv/monitors/wip/wip.h b/kernel/trace/rv/monitors/wip/wip.h
-index c1c47e2305ef..dacc37b62a2c 100644
---- a/kernel/trace/rv/monitors/wip/wip.h
-+++ b/kernel/trace/rv/monitors/wip/wip.h
-@@ -27,7 +27,7 @@ struct automaton_wip {
- 	bool final_states[state_max_wip];
- };
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 96cd3ae25c6f..ceec438c0741 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -23,7 +23,7 @@ menuconfig SWAP
+ 	  in your computer.  If unsure say Y.
  
--struct automaton_wip automaton_wip = {
-+static struct automaton_wip automaton_wip = {
- 	.state_names = {
- 		"preemptive",
- 		"non_preemptive"
-diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.h b/kernel/trace/rv/monitors/wwnr/wwnr.h
-index d1afe55cdd4c..118e576b91b4 100644
---- a/kernel/trace/rv/monitors/wwnr/wwnr.h
-+++ b/kernel/trace/rv/monitors/wwnr/wwnr.h
-@@ -27,7 +27,7 @@ struct automaton_wwnr {
- 	bool final_states[state_max_wwnr];
- };
+ config ZSWAP
+-	bool "Compressed cache for swap pages (EXPERIMENTAL)"
++	bool "Compressed cache for swap pages"
+ 	depends on SWAP
+ 	select FRONTSWAP
+ 	select CRYPTO
+@@ -36,12 +36,6 @@ config ZSWAP
+ 	  in the case where decompressing from RAM is faster than swap device
+ 	  reads, can also improve workload performance.
  
--struct automaton_wwnr automaton_wwnr = {
-+static struct automaton_wwnr automaton_wwnr = {
- 	.state_names = {
- 		"not_running",
- 		"running"
+-	  This is marked experimental because it is a new feature (as of
+-	  v3.11) that interacts heavily with memory reclaim.  While these
+-	  interactions don't cause any known issues on simple memory setups,
+-	  they have not be fully explored on the large set of potential
+-	  configurations and workloads that exist.
+-
+ config ZSWAP_DEFAULT_ON
+ 	bool "Enable the compressed cache for swap pages by default"
+ 	depends on ZSWAP
 -- 
 2.35.1
 

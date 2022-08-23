@@ -2,122 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3D159ED1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44A159ECFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 22:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbiHWUI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 16:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S233874AbiHWUDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 16:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiHWUIh (ORCPT
+        with ESMTP id S233725AbiHWUCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:08:37 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BB7B72A2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 12:26:07 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id B73C9760992;
-        Tue, 23 Aug 2022 19:26:05 +0000 (UTC)
-Received: from pdx1-sub0-mail-a212.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id F34E7760990;
-        Tue, 23 Aug 2022 19:26:04 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661282765; a=rsa-sha256;
-        cv=none;
-        b=v3SjIk+7BTTK2x3QunsdQKweLzerC1rkGrPcX0rqe/MX9R9FJZP00DsurjiEtLLtkKZ5la
-        um5KXmP4OtzQbDHwaraHhO5M8d5LG1+vPkxz6qHqsCbSmzfpUMopIWeoZLNeDXd27r3ngj
-        xOS2WN+7auj/fRGA9FxTbo7VLadndBwyP89RLLBaLVphP34kPH4+DDMw6Y5hlgVAl2yh1K
-        U1936FBB4P06SQ/ytpNut0bgLx/dGms0FXRSU9IaYMT+qsf3A8MnXT5oazQl6ghJHaRN+P
-        rTG7jbUPHZro0DMF1E1U15l8Qpt5dTXbffX5N5n3nV2FJCi8bFj0rNszTZ2hyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661282765;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=KA64pA0DH1EGqcQRpI8y0V/oDzrbveA11q1ujgABL90=;
-        b=8JeJc8grHC834yW2AbLXazj12OKKw00onhq0pcvUgJu237Nx3GlNtFyBtjJbbgfo8ixgs9
-        KK8lTZxU/TKggG7xh0Wji31yTqT4kPTu/68ey6vqp7A32Tb8HUZlxCPaJ9ejsxLLd5vumn
-        eENwao6SCOL7hfaG+Bqs8ondVAuav6yEvw00Y8YFPSu1XBE/pqgvHWmwMptm7qfTch7F1X
-        +JNHGpaR14bFghziFuXcStfRESyqdBbNyz9uJu96O+Y+6kYFyf9Udf8QLRJGBqb0+/ANaN
-        ugU+Yl4waypCrEybJX1dy1oJSCwmjO3QKu8LIsIyoHaNbZMSm/uMPlJjDHOmhg==
-ARC-Authentication-Results: i=1;
-        rspamd-5bc49f8989-45qtk;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Arch-Continue: 4a69d02274ba9850_1661282765505_3289755232
-X-MC-Loop-Signature: 1661282765505:4250622656
-X-MC-Ingress-Time: 1661282765505
-Received: from pdx1-sub0-mail-a212.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.127.95.100 (trex/6.7.1);
-        Tue, 23 Aug 2022 19:26:05 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a212.dreamhost.com (Postfix) with ESMTPSA id 4MBzjH4Z8mz1Pg;
-        Tue, 23 Aug 2022 12:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1661282756;
-        bh=KA64pA0DH1EGqcQRpI8y0V/oDzrbveA11q1ujgABL90=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=AFjXoczX7kZdNXlNM2j+L8htj9RGOINSq/bAHXkiM8/1aBOh44OF7LdMzpUFg5AHG
-         /l6ckv1u2gM9UGz5CxUL7gf/q8dScr3o8c4EkVAXgPFFSXtqR3njqUj3v5FjDS5UEL
-         tB++k4KcHj25wc1JiHaPHHGKfmXOQ1tQRyHpbU8HdPifjab4/xE/aR7iG3VLk04Pzf
-         gWbYwyJkK9VlVaqQENsRXuPRGZStuSmenw48X3LBmtmbUpo3bomdcch6N4gG6oqLdy
-         KjOPe7i2/GbI325eApKuJ8IERngrajrhZz8zW1NWhJV5in4owSUPbE6iAJDEir4vnE
-         REQVt2z/tRuHQ==
-Date:   Tue, 23 Aug 2022 12:07:51 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v13 32/70] parisc: remove mmap linked list from cache
- handling
-Message-ID: <20220823190751.aafh755d7stfvlb6@offworld>
-Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
- <20220822150128.1562046-33-Liam.Howlett@oracle.com>
+        Tue, 23 Aug 2022 16:02:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1847659CC;
+        Tue, 23 Aug 2022 12:15:56 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NJ80L4002055;
+        Tue, 23 Aug 2022 19:15:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Z7PPnzf5UZUCsiIde7u3HQqbRxYcT3GG1b46xAdBYag=;
+ b=Hpx6PHNA0aPZii/HuZTPBX65z+/3SwgaoypGQM126ai43Sgowny6AwWhRJSilpxwyUyY
+ dv/iRbnxqq8KIGvid4qdG4FuQWkq8ry0eFErHXIi4OBbjmqpapA05hAx3TDkIOWBvlYK
+ O2H/LjAptf3XRhgm8Y/9ZJJnJ/YJ9fJVVSpG/m7X56GUBYvjWFptZQjxMhLauD0UvqjP
+ WI5FdyybdqY9hptafeSw29tTEXz4+BGpe3wNJVY0kACnrKNpeJeciZQQB8VJZS4tsFOg
+ hMZ2QnsxCUkiFq9JpOjCdZQg79U/mKrWCdlggsholThm8iJnoq1i7tcqs7jq0+KP08gE LQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j54sg87fg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 19:15:55 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27NJ82U4002263;
+        Tue, 23 Aug 2022 19:15:55 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j54sg87ej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 19:15:55 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27NIox1B027102;
+        Tue, 23 Aug 2022 19:15:53 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 3j2q89cvd6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 19:15:53 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27NJFqAe40239640
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 19:15:52 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF05CC6059;
+        Tue, 23 Aug 2022 19:15:52 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 588ABC6055;
+        Tue, 23 Aug 2022 19:15:51 +0000 (GMT)
+Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.112.122])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 23 Aug 2022 19:15:51 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     linux-s390@vger.kernel.org
+Cc:     farman@linux.ibm.com, schnelle@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] KVM: s390: pci: fix plain integer as NULL pointer warnings
+Date:   Tue, 23 Aug 2022 15:15:48 -0400
+Message-Id: <20220823191548.77526-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220822150128.1562046-33-Liam.Howlett@oracle.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: LrgG7JGjKvAxGeQOt_tE1jZgLm1gljv_
+X-Proofpoint-GUID: Dl0sUvzjmqbPUQJHA4M6lAPP796x8tK8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-23_07,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=920
+ mlxscore=0 phishscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208230072
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022, Liam Howlett wrote:
+Fix some sparse warnings that a plain integer 0 is being used instead of
+NULL.
 
->From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
->
->Use the VMA iterator instead.
->
->Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
->Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+---
+ arch/s390/kvm/pci.c | 4 ++--
+ arch/s390/kvm/pci.h | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+index bb8c335d17b9..3c12637ce08c 100644
+--- a/arch/s390/kvm/pci.c
++++ b/arch/s390/kvm/pci.c
+@@ -58,7 +58,7 @@ static int zpci_setup_aipb(u8 nisc)
+ 	if (!zpci_aipb)
+ 		return -ENOMEM;
+ 
+-	aift->sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, 0);
++	aift->sbv = airq_iv_create(ZPCI_NR_DEVICES, AIRQ_IV_ALLOC, NULL);
+ 	if (!aift->sbv) {
+ 		rc = -ENOMEM;
+ 		goto free_aipb;
+@@ -373,7 +373,7 @@ static int kvm_s390_pci_aif_disable(struct zpci_dev *zdev, bool force)
+ 		gaite->gisc = 0;
+ 		gaite->aisbo = 0;
+ 		gaite->gisa = 0;
+-		aift->kzdev[zdev->aisb] = 0;
++		aift->kzdev[zdev->aisb] = NULL;
+ 		/* Clear zdev info */
+ 		airq_iv_free_bit(aift->sbv, zdev->aisb);
+ 		airq_iv_release(zdev->aibv);
+diff --git a/arch/s390/kvm/pci.h b/arch/s390/kvm/pci.h
+index 3a3606c3a0fe..7be5568d8bd2 100644
+--- a/arch/s390/kvm/pci.h
++++ b/arch/s390/kvm/pci.h
+@@ -46,9 +46,9 @@ extern struct zpci_aift *aift;
+ static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
+ 						 unsigned long si)
+ {
+-	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == 0 ||
+-	    aift->kzdev[si] == 0)
+-		return 0;
++	if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == NULL ||
++	    aift->kzdev[si] == NULL)
++		return NULL;
+ 	return aift->kzdev[si]->kvm;
+ };
+ 
+-- 
+2.31.1
+

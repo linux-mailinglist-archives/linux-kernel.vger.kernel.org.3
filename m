@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2163A59D720
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4908F59D775
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiHWJcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S1351683AbiHWJil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350706AbiHWJao (ORCPT
+        with ESMTP id S1351460AbiHWJhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:30:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1556F91D3F;
-        Tue, 23 Aug 2022 01:37:52 -0700 (PDT)
+        Tue, 23 Aug 2022 05:37:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEE129C8C;
+        Tue, 23 Aug 2022 01:40:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D4A2B81C48;
-        Tue, 23 Aug 2022 08:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8651FC433D6;
-        Tue, 23 Aug 2022 08:36:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 160F761377;
+        Tue, 23 Aug 2022 08:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA985C433C1;
+        Tue, 23 Aug 2022 08:40:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243770;
-        bh=mfyyL8DMutEJjf4ziH8V3LsgaPzBtQTeXlYzsqiDMag=;
+        s=korg; t=1661244002;
+        bh=X8v8KkcwcX5ObVqicD2o6pK97cQKiy5IBBKsBJQ6ZT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oDALQdg0bMNSo1MO2NPnAQyKbHziPkS5RBb6qpRDR0cyPL1uBDvYvWRfcHSiQ5oEQ
-         t6/uge9oGzaim+3frYN+DXVL57jnW2y12Nrm0bzFvAGDXrH2UcwlMDQ379CdtZJD7Z
-         IZnmylzbCGX0OBwGjf5gf0X98FzpLsQaxhX31W9I=
+        b=Rn+MPGCvBu9fqAQxuZw0gk302p+8WEAdy+T+kRoxiU1kVx7qGVlm8lxOMy1j3xIu1
+         xy0HTCJ+FoOZA+/yk2y8/iI6GmwBibOWt3wBXPAOPXEvpudEjIMg2SUMm/gEM0Vyh1
+         6erusAvD2Uuth0DRlbgfq3FzRayYlKiwUZ0vyAbk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.14 016/229] add barriers to buffer_uptodate and set_buffer_uptodate
-Date:   Tue, 23 Aug 2022 10:22:57 +0200
-Message-Id: <20220823080053.992559325@linuxfoundation.org>
+        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.15 022/244] tracing/eprobes: Have event probes be consistent with kprobes and uprobes
+Date:   Tue, 23 Aug 2022 10:23:01 +0200
+Message-Id: <20220823080059.805774797@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,77 +58,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit d4252071b97d2027d246f6a82cbee4d52f618b47 upstream.
+commit 6a832ec3d680b3a4f4fad5752672827d71bae501 upstream.
 
-Let's have a look at this piece of code in __bread_slow:
+Currently, if a symbol "@" is attempted to be used with an event probe
+(eprobes), it will cause a NULL pointer dereference crash.
 
-	get_bh(bh);
-	bh->b_end_io = end_buffer_read_sync;
-	submit_bh(REQ_OP_READ, 0, bh);
-	wait_on_buffer(bh);
-	if (buffer_uptodate(bh))
-		return bh;
+Both kprobes and uprobes can reference data other than the main registers.
+Such as immediate address, symbols and the current task name. Have eprobes
+do the same thing.
 
-Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
-Consequently, if someone calls sb_bread and then reads the buffer data,
-the read of buffer data may be executed before wait_on_buffer(bh) on
-architectures with weak memory ordering and it may return invalid data.
+For "comm", if "comm" is used and the event being attached to does not
+have the "comm" field, then make it the "$comm" that kprobes has. This is
+consistent to the way histograms and filters work.
 
-Fix this bug by adding a memory barrier to set_buffer_uptodate and an
-acquire barrier to buffer_uptodate (in a similar way as
-folio_test_uptodate and folio_mark_uptodate).
+Link: https://lkml.kernel.org/r/20220820134401.136924220@goodmis.org
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 Cc: stable@vger.kernel.org
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/buffer_head.h |   25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ kernel/trace/trace_eprobe.c |   70 ++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 64 insertions(+), 6 deletions(-)
 
---- a/include/linux/buffer_head.h
-+++ b/include/linux/buffer_head.h
-@@ -114,7 +114,6 @@ static __always_inline int test_clear_bu
-  * of the form "mark_buffer_foo()".  These are higher-level functions which
-  * do something in addition to setting a b_state bit.
-  */
--BUFFER_FNS(Uptodate, uptodate)
- BUFFER_FNS(Dirty, dirty)
- TAS_BUFFER_FNS(Dirty, dirty)
- BUFFER_FNS(Lock, locked)
-@@ -132,6 +131,30 @@ BUFFER_FNS(Meta, meta)
- BUFFER_FNS(Prio, prio)
- BUFFER_FNS(Defer_Completion, defer_completion)
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -226,6 +226,7 @@ static int trace_eprobe_tp_arg_update(st
+ 	struct probe_arg *parg = &ep->tp.args[i];
+ 	struct ftrace_event_field *field;
+ 	struct list_head *head;
++	int ret = -ENOENT;
  
-+static __always_inline void set_buffer_uptodate(struct buffer_head *bh)
-+{
+ 	head = trace_get_fields(ep->event);
+ 	list_for_each_entry(field, head, link) {
+@@ -235,9 +236,20 @@ static int trace_eprobe_tp_arg_update(st
+ 			return 0;
+ 		}
+ 	}
++
 +	/*
-+	 * make it consistent with folio_mark_uptodate
-+	 * pairs with smp_load_acquire in buffer_uptodate
++	 * Argument not found on event. But allow for comm and COMM
++	 * to be used to get the current->comm.
 +	 */
-+	smp_mb__before_atomic();
-+	set_bit(BH_Uptodate, &bh->b_state);
-+}
++	if (strcmp(parg->code->data, "COMM") == 0 ||
++	    strcmp(parg->code->data, "comm") == 0) {
++		parg->code->op = FETCH_OP_COMM;
++		ret = 0;
++	}
 +
-+static __always_inline void clear_buffer_uptodate(struct buffer_head *bh)
-+{
-+	clear_bit(BH_Uptodate, &bh->b_state);
-+}
-+
-+static __always_inline int buffer_uptodate(const struct buffer_head *bh)
-+{
-+	/*
-+	 * make it consistent with folio_test_uptodate
-+	 * pairs with smp_mb__before_atomic in set_buffer_uptodate
-+	 */
-+	return (smp_load_acquire(&bh->b_state) & (1UL << BH_Uptodate)) != 0;
-+}
-+
- #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
+ 	kfree(parg->code->data);
+ 	parg->code->data = NULL;
+-	return -ENOENT;
++	return ret;
+ }
  
- /* If we *know* page->private refers to buffer_heads */
+ static int eprobe_event_define_fields(struct trace_event_call *event_call)
+@@ -339,16 +351,38 @@ static unsigned long get_event_field(str
+ 
+ static int get_eprobe_size(struct trace_probe *tp, void *rec)
+ {
++	struct fetch_insn *code;
+ 	struct probe_arg *arg;
+ 	int i, len, ret = 0;
+ 
+ 	for (i = 0; i < tp->nr_args; i++) {
+ 		arg = tp->args + i;
+-		if (unlikely(arg->dynamic)) {
++		if (arg->dynamic) {
+ 			unsigned long val;
+ 
+-			val = get_event_field(arg->code, rec);
+-			len = process_fetch_insn_bottom(arg->code + 1, val, NULL, NULL);
++			code = arg->code;
++ retry:
++			switch (code->op) {
++			case FETCH_OP_TP_ARG:
++				val = get_event_field(code, rec);
++				break;
++			case FETCH_OP_IMM:
++				val = code->immediate;
++				break;
++			case FETCH_OP_COMM:
++				val = (unsigned long)current->comm;
++				break;
++			case FETCH_OP_DATA:
++				val = (unsigned long)code->data;
++				break;
++			case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
++				code++;
++				goto retry;
++			default:
++				continue;
++			}
++			code++;
++			len = process_fetch_insn_bottom(code, val, NULL, NULL);
+ 			if (len > 0)
+ 				ret += len;
+ 		}
+@@ -366,8 +400,28 @@ process_fetch_insn(struct fetch_insn *co
+ {
+ 	unsigned long val;
+ 
+-	val = get_event_field(code, rec);
+-	return process_fetch_insn_bottom(code + 1, val, dest, base);
++ retry:
++	switch (code->op) {
++	case FETCH_OP_TP_ARG:
++		val = get_event_field(code, rec);
++		break;
++	case FETCH_OP_IMM:
++		val = code->immediate;
++		break;
++	case FETCH_OP_COMM:
++		val = (unsigned long)current->comm;
++		break;
++	case FETCH_OP_DATA:
++		val = (unsigned long)code->data;
++		break;
++	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
++		code++;
++		goto retry;
++	default:
++		return -EILSEQ;
++	}
++	code++;
++	return process_fetch_insn_bottom(code, val, dest, base);
+ }
+ NOKPROBE_SYMBOL(process_fetch_insn)
+ 
+@@ -849,6 +903,10 @@ static int trace_eprobe_tp_update_arg(st
+ 	if (ep->tp.args[i].code->op == FETCH_OP_TP_ARG)
+ 		ret = trace_eprobe_tp_arg_update(ep, i);
+ 
++	/* Handle symbols "@" */
++	if (!ret)
++		ret = traceprobe_update_arg(&ep->tp.args[i]);
++
+ 	return ret;
+ }
+ 
 
 

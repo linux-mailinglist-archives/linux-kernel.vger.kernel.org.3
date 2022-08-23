@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8855459E056
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAD759DB7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356923AbiHWK4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S1355086AbiHWKWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355718AbiHWKuE (ORCPT
+        with ESMTP id S1353286AbiHWKLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:50:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC2CAB1B7;
-        Tue, 23 Aug 2022 02:12:37 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADF87E83D;
+        Tue, 23 Aug 2022 01:56:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C7D34CE1B55;
-        Tue, 23 Aug 2022 09:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5587C433C1;
-        Tue, 23 Aug 2022 09:12:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B835B81C3E;
+        Tue, 23 Aug 2022 08:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C256BC433C1;
+        Tue, 23 Aug 2022 08:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245954;
-        bh=OGw3oPz10IqjYMxRUxCHGCBX+uIvqJJ1DbIfwwhwO/A=;
+        s=korg; t=1661244981;
+        bh=EKvWYv2oRvwWVhIgF6Am3ZkEka/EGkblTHkR/o9hnYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b+wVhStmQs2VNjHr5jisZ9OTj6wB/ATG6qVTdyRib8d7bZ0BjD7WsRgXpBnam8xuW
-         zYQegmOcxzTWdefjmzy/oSkf0DC/d4igdAuBWK2kfQqf8mqNb6UpgJ8NbTD0PJAPNm
-         2105++qccEhffNR3UGm+L+rvEIwI6uVJ/5btC1IU=
+        b=kLCJqtpsf9rymknU6mpEGEka4n/vvo5m5hRLXdoJweM7ojHO8hBvKXXdaZX8Z1Bst
+         RfrUvtnBhlnqiRKvATzGLSYGzEO4Q2ugw9PTatnZeAmH0YXsM8cd3YTQwsBlDgcMd+
+         3Ce2nrEXHeZQGyPJ93luzNLAQAn5fEv33wrd/HSA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 211/287] net_sched: cls_route: disallow handle of 0
-Date:   Tue, 23 Aug 2022 10:26:20 +0200
-Message-Id: <20220823080108.037249281@linuxfoundation.org>
+        stable@vger.kernel.org, Oleg Kiselev <okiselev@amazon.com>,
+        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 220/229] ext4: avoid resizing to a partial cluster size
+Date:   Tue, 23 Aug 2022 10:26:21 +0200
+Message-Id: <20220823080101.500040103@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,87 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jamal Hadi Salim <jhs@mojatatu.com>
+From: Kiselev, Oleg <okiselev@amazon.com>
 
-commit 02799571714dc5dd6948824b9d080b44a295f695 upstream.
+[ Upstream commit 69cb8e9d8cd97cdf5e293b26d70a9dee3e35e6bd ]
 
-Follows up on:
-https://lore.kernel.org/all/20220809170518.164662-1-cascardo@canonical.com/
+This patch avoids an attempt to resize the filesystem to an
+unaligned cluster boundary.  An online resize to a size that is not
+integral to cluster size results in the last iteration attempting to
+grow the fs by a negative amount, which trips a BUG_ON and leaves the fs
+with a corrupted in-memory superblock.
 
-handle of 0 implies from/to of universe realm which is not very
-sensible.
-
-Lets see what this patch will do:
-$sudo tc qdisc add dev $DEV root handle 1:0 prio
-
-//lets manufacture a way to insert handle of 0
-$sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 \
-route to 0 from 0 classid 1:10 action ok
-
-//gets rejected...
-Error: handle of 0 is not valid.
-We have an error talking to the kernel, -1
-
-//lets create a legit entry..
-sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 route from 10 \
-classid 1:10 action ok
-
-//what did the kernel insert?
-$sudo tc filter ls dev $DEV parent 1:0
-filter protocol ip pref 100 route chain 0
-filter protocol ip pref 100 route chain 0 fh 0x000a8000 flowid 1:10 from 10
-	action order 1: gact action pass
-	 random type none pass val 0
-	 index 1 ref 1 bind 1
-
-//Lets try to replace that legit entry with a handle of 0
-$ sudo tc filter replace dev $DEV parent 1:0 protocol ip prio 100 \
-handle 0x000a8000 route to 0 from 0 classid 1:10 action drop
-
-Error: Replacing with handle of 0 is invalid.
-We have an error talking to the kernel, -1
-
-And last, lets run Cascardo's POC:
-$ ./poc
-0
-0
--22
--22
--22
-
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Acked-by: Stephen Hemminger <stephen@networkplumber.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Oleg Kiselev <okiselev@amazon.com>
+Link: https://lore.kernel.org/r/0E92A0AB-4F16-4F1A-94B7-702CC6504FDE@amazon.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/cls_route.c |   10 ++++++++++
+ fs/ext4/resize.c | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
---- a/net/sched/cls_route.c
-+++ b/net/sched/cls_route.c
-@@ -427,6 +427,11 @@ static int route4_set_parms(struct net *
- 			return -EINVAL;
+diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
+index a50eabffa411..30b2798244fa 100644
+--- a/fs/ext4/resize.c
++++ b/fs/ext4/resize.c
+@@ -1951,6 +1951,16 @@ int ext4_resize_fs(struct super_block *sb, ext4_fsblk_t n_blocks_count)
  	}
+ 	brelse(bh);
  
-+	if (!nhandle) {
-+		NL_SET_ERR_MSG(extack, "Replacing with handle of 0 is invalid");
-+		return -EINVAL;
-+	}
++	/*
++	 * For bigalloc, trim the requested size to the nearest cluster
++	 * boundary to avoid creating an unusable filesystem. We do this
++	 * silently, instead of returning an error, to avoid breaking
++	 * callers that blindly resize the filesystem to the full size of
++	 * the underlying block device.
++	 */
++	if (ext4_has_feature_bigalloc(sb))
++		n_blocks_count &= ~((1 << EXT4_CLUSTER_BITS(sb)) - 1);
 +
- 	h1 = to_hash(nhandle);
- 	b = rtnl_dereference(head->table[h1]);
- 	if (!b) {
-@@ -480,6 +485,11 @@ static int route4_change(struct net *net
- 	int err;
- 	bool new = true;
+ retry:
+ 	o_blocks_count = ext4_blocks_count(es);
  
-+	if (!handle) {
-+		NL_SET_ERR_MSG(extack, "Creating with handle of 0 is invalid");
-+		return -EINVAL;
-+	}
-+
- 	if (opt == NULL)
- 		return handle ? -EINVAL : 0;
- 
+-- 
+2.35.1
+
 
 

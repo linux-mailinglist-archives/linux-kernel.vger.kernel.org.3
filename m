@@ -2,75 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710F959E608
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0B759E4D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 16:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242977AbiHWPcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
+        id S238320AbiHWOEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 10:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238336AbiHWPcB (ORCPT
+        with ESMTP id S244606AbiHWOCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:32:01 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FFB250D83
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:17:45 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id b16so17587757edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=MrLxb4E2DjxfMfHqX0aKpuYkCzfN45dEHvfq2u/Glfc=;
-        b=oMu9LroE0RFKYUnrnUWRhbLqwE9SXGBkir2MBGkEE7vrSFbD1xoFjCFMdpG2eTJQq8
-         GpWfKMT1LLuh0BLCNuyWdS35eZ+BbWTHta3HmqkrPOXvdth/lE7EhwIL7TL1dieNQI5u
-         OhlZY3yoAKcJCmjiRKB7vWei+EB5dlzhS6au8bsxgqgLHKO2XnM1/ioP15HhbEQJlz93
-         M5ZW7Fmu47MTlftRuoeWk2DqzbXvaatLwOl/NyauE9Gcv5TbFw0SBa7vOcLs3sS2rVEn
-         Uuo0Zuy8gQUg7RiiWjfryxeinpc5E+uyw4sOGHaZgKTHRyCpEzE6jT5ep29j867EkRVJ
-         bCFQ==
+        Tue, 23 Aug 2022 10:02:16 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9443888DDC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:10:33 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id l15-20020a0566022dcf00b00688e70a26deso7185197iow.12
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 04:10:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc;
-        bh=MrLxb4E2DjxfMfHqX0aKpuYkCzfN45dEHvfq2u/Glfc=;
-        b=4SvD6Kb6GYlcOfZ2O2eOsiyexzIrzRLrVkCkbjI2arj5Tez4fkEM8IZWv/+gaNo1+M
-         d6NEK8B2aZZ5y2i+ibhrGV/NKGLA44jXDXyUpVbG1von65sD0wMAqrut38odhgf5pEyJ
-         3OUPquCYBucB2z48xK61Ycw5unXAJdZFbdr0I/yEt4IVjNYWN2sCylhtBegUXYOe2D6E
-         I+vBIA2BFfntNwgsC4k5niyYjr8C2RzPcg0VT62sN650S2DWiHJSlVj9+w6nlkHAn6Am
-         8VV5Kdog5r4iqWb35HkSUFV6jSIatClueP2wGTwfUcfZncfb28CEFWrNMfpeIar/2/5W
-         t2nw==
-X-Gm-Message-State: ACgBeo3D1oIESPTf4PnltzwNJ86p5/U6Rc2sBPrHegpTpU1AN1MSjdZH
-        BG3IdEcqtHsGFK05hhPGfM23ACohF60xreXB
-X-Google-Smtp-Source: AA6agR5tvu9knEhQdwzyYF2Q1oGh+SSN0iH2VVVvmeqNz9MLv8SEOAHKU+FHbuM9D26qpMR1MObYRw==
-X-Received: by 2002:a2e:505d:0:b0:261:ce76:52b7 with SMTP id v29-20020a2e505d000000b00261ce7652b7mr2327656ljd.286.1661252943789;
-        Tue, 23 Aug 2022 04:09:03 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id q9-20020a056512210900b0048b1d92991asm2375015lfr.303.2022.08.23.04.09.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 04:09:03 -0700 (PDT)
-Message-ID: <2c14cc93-ae8d-365d-ac58-2e615d359fd7@linaro.org>
-Date:   Tue, 23 Aug 2022 14:09:02 +0300
+        bh=Owuo97PjQ6IqN5nnDnXto1MWa8iee+gPMJsJz7pxwt0=;
+        b=aHF7NKe9BMXLkyuV0xPDWP0ScjFl2yFrPa3NymM17a5fPkWx8ijkwQZHdCzM0gHhd9
+         4W27+jeRpC6VKQ4Xsk7B2OiRkZ8Sik60/Cs8T3Ku+Ynl8Lye0pn6f13+DVKe4PDxUHJX
+         ql5AzBT8wubdjRljzQkDyjc3CU2fopGDg2JiLFeVS/qJmIri5a80RzUa9DKuMkI4AiM0
+         KXVh/gPSq5QakA81z0FJieoP6aE7MD7HcnhFMC3DqwXRSa3gX4OuUo3JfaRhzGA8wOtL
+         XvmPIsxwWfuMRXSeXjsLI6decNvfU40ZmsuSqF6O31tZhvToQD4rgWngpg1UXduTVtkO
+         fL8w==
+X-Gm-Message-State: ACgBeo26R3jITzbeiEHNFiveMCbcLVeNwyPOnqXK3P0tjBivkgUGzj8N
+        XvO7ysvYef3XIrtrBOZm7EJvStRM1YIf73bo4kEiIqCjq9jG
+X-Google-Smtp-Source: AA6agR6BIU5uMrxeIjQH7oWm38wwmSgKTj6Ale7fSOWFmiJGRFVmUv/DZ0Wv9c1lPolo+npOcd0H3iMGxs1m8xFBx9T8EadjPVZ+
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 3/3] drivers: iio: adc: Rename the LTC249x iio device
-Content-Language: en-US
-To:     Ciprian Regus <ciprian.regus@analog.com>, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     u.kleine-koenig@pengutronix.de
-References: <20220822125106.1106798-1-ciprian.regus@analog.com>
- <20220822125106.1106798-4-ciprian.regus@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220822125106.1106798-4-ciprian.regus@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6638:45:b0:349:b71c:af7d with SMTP id
+ a5-20020a056638004500b00349b71caf7dmr7073777jap.181.1661252953729; Tue, 23
+ Aug 2022 04:09:13 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 04:09:13 -0700
+In-Reply-To: <20220823105218.2270-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000306f3905e6e69820@google.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in blocking_notifier_chain_unregister
+From:   syzbot <syzbot+2fd9312f3ff65d22d06f@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/08/2022 15:51, Ciprian Regus wrote:
+Hello,
 
-(...)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
->  
-> diff --git a/drivers/iio/adc/ltc2497.h b/drivers/iio/adc/ltc2497.h
-> index f4d939cfd48b..0e86e38248ee 100644
-> --- a/drivers/iio/adc/ltc2497.h
-> +++ b/drivers/iio/adc/ltc2497.h
-> @@ -12,6 +12,7 @@ enum chip_type {
->  
->  struct chip_info {
->  	u32 resolution;
-> +	char *name;
+Reported-and-tested-by: syzbot+2fd9312f3ff65d22d06f@syzkaller.appspotmail.com
 
-const char *
+Tested on:
 
+commit:         7ebfc85e Merge tag 'net-6.0-rc1' of git://git.kernel.o..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=11aafb47080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=924833c12349a8c0
+dashboard link: https://syzkaller.appspot.com/bug?extid=2fd9312f3ff65d22d06f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10e11a3d080000
 
-Best regards,
-Krzysztof
+Note: testing is done by a robot and is best-effort only.

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A37259DA42
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334EF59DA5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352130AbiHWKG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S1352334AbiHWKH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352379AbiHWKBt (ORCPT
+        with ESMTP id S1352419AbiHWKBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:01:49 -0400
+        Tue, 23 Aug 2022 06:01:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796A49AFB3;
-        Tue, 23 Aug 2022 01:49:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803518689D;
+        Tue, 23 Aug 2022 01:49:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31C5461377;
-        Tue, 23 Aug 2022 08:49:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25230C433C1;
-        Tue, 23 Aug 2022 08:49:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89FC361377;
+        Tue, 23 Aug 2022 08:49:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C835C433C1;
+        Tue, 23 Aug 2022 08:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244565;
-        bh=sxbDryvPEIEmBnIz8HeE+kR0f8qisaLYYvklp0l/9+8=;
+        s=korg; t=1661244581;
+        bh=qg+/edhD8Dj7xYw7+5T+IE/jl2tVylbiDANkfdB+QyI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fKGGTZ0Pt6e6UtMOnmI/YXvyKbzIbRK8oCNztkkwF4QQHPa3MqxBNZEho+oSChKWr
-         CZ4oDzz0LlMVw27X9stBFRHDeWphwzKF9QGPA/2lwMzUqsGmfJnK7cf1EG7AOiRp43
-         AL87kq0TvHhePUg8aQaETIOFtiLLvUKKbtCVOnmw=
+        b=XWActTxssoXAYItvce5FDiHp084N0SO/fLQzjev1KwE4YE3bBvfQ6BD/Uv31Toyss
+         Mj3EvA1JMi0oFP+t4CtLMYreIyyPINwR8McAmpz3swzIhmtbLvhX8hbpdqDy6B0C9j
+         Hjv2ovIn0XNsvsfky/UOLDfuPmA2vIZH2Qp9J42g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 129/229] iommu/exynos: Handle failed IOMMU device registration properly
-Date:   Tue, 23 Aug 2022 10:24:50 +0200
-Message-Id: <20220823080058.330949128@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Stefani Seibold <stefani@seibold.net>,
+        Randy Dunlap <randy.dunlap@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 130/229] kfifo: fix kfifo_to_user() return type
+Date:   Tue, 23 Aug 2022 10:24:51 +0200
+Message-Id: <20220823080058.362416018@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -56,49 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sam Protsenko <semen.protsenko@linaro.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit fce398d2d02c0a9a2bedf7c7201b123e153e8963 ]
+[ Upstream commit 045ed31e23aea840648c290dbde04797064960db ]
 
-If iommu_device_register() fails in exynos_sysmmu_probe(), the previous
-calls have to be cleaned up. In this case, the iommu_device_sysfs_add()
-should be cleaned up, by calling its remove counterpart call.
+The kfifo_to_user() macro is supposed to return zero for success or
+negative error codes.  Unfortunately, there is a signedness bug so it
+returns unsigned int.  This only affects callers which try to save the
+result in ssize_t and as far as I can see the only place which does that
+is line6_hwdep_read().
 
-Fixes: d2c302b6e8b1 ("iommu/exynos: Make use of iommu_device_register interface")
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/20220714165550.8884-3-semen.protsenko@linaro.org
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+TL;DR: s/_uint/_int/.
+
+Link: https://lkml.kernel.org/r/YrVL3OJVLlNhIMFs@kili
+Fixes: 144ecf310eb5 ("kfifo: fix kfifo_alloc() to return a signed int value")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: Stefani Seibold <stefani@seibold.net>
+Cc: Randy Dunlap <randy.dunlap@oracle.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/exynos-iommu.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/linux/kfifo.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
-index f4ebef29c644..b1b797fd9d3b 100644
---- a/drivers/iommu/exynos-iommu.c
-+++ b/drivers/iommu/exynos-iommu.c
-@@ -638,7 +638,7 @@ static int __init exynos_sysmmu_probe(struct platform_device *pdev)
- 
- 	ret = iommu_device_register(&data->iommu);
- 	if (ret)
--		return ret;
-+		goto err_iommu_register;
- 
- 	platform_set_drvdata(pdev, data);
- 
-@@ -665,6 +665,10 @@ static int __init exynos_sysmmu_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 
- 	return 0;
-+
-+err_iommu_register:
-+	iommu_device_sysfs_remove(&data->iommu);
-+	return ret;
- }
- 
- static int __maybe_unused exynos_sysmmu_suspend(struct device *dev)
+diff --git a/include/linux/kfifo.h b/include/linux/kfifo.h
+index 86b5fb08e96c..d1781f35dea4 100644
+--- a/include/linux/kfifo.h
++++ b/include/linux/kfifo.h
+@@ -629,7 +629,7 @@ __kfifo_uint_must_check_helper( \
+  * writer, you don't need extra locking to use these macro.
+  */
+ #define	kfifo_to_user(fifo, to, len, copied) \
+-__kfifo_uint_must_check_helper( \
++__kfifo_int_must_check_helper( \
+ ({ \
+ 	typeof((fifo) + 1) __tmp = (fifo); \
+ 	void __user *__to = (to); \
 -- 
 2.35.1
 

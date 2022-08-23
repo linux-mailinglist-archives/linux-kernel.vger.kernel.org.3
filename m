@@ -2,144 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4E759CE93
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 04:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DDD59CEB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 04:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239119AbiHWCcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 22:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
+        id S239666AbiHWCgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 22:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239218AbiHWCc2 (ORCPT
+        with ESMTP id S238930AbiHWCgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 22:32:28 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAF85C343;
-        Mon, 22 Aug 2022 19:32:27 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id s1so15045536lfp.6;
-        Mon, 22 Aug 2022 19:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=azDpKc6FmKTWyiu0fmvIHIHwLpZTiSK1Vlo7KGhRPTI=;
-        b=mOKeqhKYQhMwTLb/MJ8y4BKHtrVT0tL2CLpCqVd982RWh8CKypL1YXMQXH9RXkOYQr
-         svAS8E3tjh/3TZXskHT6eiLzVii7BtFjyyzENE09sgcCl7PJOTZQWNQD8oFDmCLcPXxa
-         R/SMm/X+qEvkdwTnfYLBoFOyLKxMa7H4tewBNQKxpr2iMRa4oHMf6GfZsxsD05kpWw6K
-         L/savuxwWhzpBfzVfVKYEpe6LpvurZbJQkwKDJE7yHE72w3Ud+yG4pGeBHqQHKtM7eGC
-         4y4R1fkzSDJznz1sFG8M7pcRZw1BIJ/Zv3f9VGj0uvD2h7jmIDOaTWdLm9GEI9Yyev0m
-         4fOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=azDpKc6FmKTWyiu0fmvIHIHwLpZTiSK1Vlo7KGhRPTI=;
-        b=JAYRxH3ruUM+Tzk7cEfLyjp/wWYpr0T87q4PZbpZ0lxEZkW4tpJvY4+Ms8rX5M6kYQ
-         cfnyNNIcZEkxyr+hyVbazcxuwS41J4Nbzc7+KFb/udjlKmZ6JaksGawMIlkN0wuxNT8m
-         sUEJGc2EvuqnFViRdaxV2XBifJCC2Z/jbBW0fkdMh5OvpIiU8Rq6fJoVisFuLMGHUZ2a
-         5eox/0MwjB79SngpsyZPdP2SvT1KVioq/nwGKjL4uD+m/UdUxDdT9iNKxyWJ6ZgGOrYv
-         48q0iGtOn+yLUcp3UgD4sgrmQ3dLNbNeFAzSaPyum93aom/d5j2Je47c53hmPmIuwUOk
-         myiA==
-X-Gm-Message-State: ACgBeo2rcfcuaLz99kWyjrIe5FqkuvTZTdCN+BCveDLUFU1Ze9iCZ8Iz
-        Sc35KH1BS7ZUBXRgqngt7cUV9wS4F24WFMRlkqU=
-X-Google-Smtp-Source: AA6agR7n7DYHM3nnCy3WsU33BTmDevHz36ukTKY/dIEFVwM+0Xllyb5Tl//2wtM9CLs3Zive755sFqin5YU2aVXNPCY=
-X-Received: by 2002:a05:6512:1527:b0:48b:99:f3ff with SMTP id
- bq39-20020a056512152700b0048b0099f3ffmr7843690lfb.81.1661221945792; Mon, 22
- Aug 2022 19:32:25 -0700 (PDT)
+        Mon, 22 Aug 2022 22:36:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1972B59266
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 19:36:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9ED5B81979
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 02:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F54AC433C1;
+        Tue, 23 Aug 2022 02:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661222210;
+        bh=6wsJ41sHNLsMsXirAriX8n0KL0bqxfpTRhGqSzaOOkU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=TAu1sYMHIw6+nWyAxRCuDYSTirbCavQ2ci8Cg+AdxrYT9orXPagMVpJBl3VkpXzo1
+         J3EUEEvqErjwBuuuyW4EU7qFY28sifxwWyWKQt7QKmNBs4NrrE7yEXUJ2byWFB87ac
+         vlezC4OljyFnRb7ywE8YBK8Lkq2XOMM1lUV+xuCzsX62vg5KkDsFr+VpwchKhUL/7f
+         H+avGDqX2hdUP1rl/pNR3OVbLLoPQunz5q0wV0HDRkBhHAa6QsemL1eaGWHJY+ztrO
+         +2SZp52aw7mhcH+yL6wnvnHATRVqg0DG62ePAUHC88KCCDWFDLJ+V83RJLpoUvCvQ6
+         Uft3NGwR+92wA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 22E525C05A0; Mon, 22 Aug 2022 19:36:49 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 19:36:49 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [BUG v6.0-rc2] lockdep splat on ct_kernel_enter()
+Message-ID: <20220823023649.GI6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220822164404.57952727@gandalf.local.home>
+ <20220822182850.32f91017@gandalf.local.home>
+ <20220822183836.6b80976f@gandalf.local.home>
+ <20220822204825.3e88b1a4@rorschach.local.home>
+ <20220822214024.216fa85d@rorschach.local.home>
+ <20220822220134.5d91f3db@rorschach.local.home>
 MIME-Version: 1.0
-References: <1660908562-17409-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Yv+6YjaGAv52yvq9@slm.duckdns.org> <CALvZod7QdLSMdBoD2WztL72qS8kJe7F79JuCH6t19rRcw6Pn1w@mail.gmail.com>
- <Yv/EArPDTcCrGqJh@slm.duckdns.org> <YwNpI1ydy0yDnBH0@dhcp22.suse.cz>
-In-Reply-To: <YwNpI1ydy0yDnBH0@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Tue, 23 Aug 2022 10:31:57 +0800
-Message-ID: <CAGWkznEB+R0YBaBFBL7dPqs8R=qKC6+ixTWEGCYy2PaczXkaPA@mail.gmail.com>
-Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
-To:     Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Shakeel Butt <shakeelb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822220134.5d91f3db@rorschach.local.home>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 7:31 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Fri 19-08-22 07:10:26, Tejun Heo wrote:
-> > On Fri, Aug 19, 2022 at 10:08:59AM -0700, Shakeel Butt wrote:
-> > > On Fri, Aug 19, 2022 at 9:29 AM Tejun Heo <tj@kernel.org> wrote:
-> > > >
-> > > > On Fri, Aug 19, 2022 at 07:29:22PM +0800, zhaoyang.huang wrote:
-> > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > >
-> > > > > It is observed in android system where per-app cgroup is demanded by freezer
-> > > > > subsys and part of groups require memory control. The hierarchy could be simplized
-> > > > > as bellowing where memory charged on group B abserved while we only want have
-> > > > > group E's memory be controlled and B's descendants compete freely for memory.
-> > > > > This should be the consequences of unified hierarchy.
-> > > > > Under this scenario, less efficient memory reclaim is observed when comparing
-> > > > > with no memory control. It is believed that multi LRU scanning introduces some
-> > > > > of the overhead. Furthermore, page thrashing is also heavier than global LRU
-> > > > > which could be the consequences of partial failure of WORKINGSET mechanism as
-> > > > > LRU is too short to protect the active pages.
-> > > > >
-> > > > > A(subtree_control = memory) - B(subtree_control = NULL) - C()
-> > > > >                                                       \ D()
-> > > > >                           - E(subtree_control = memory) - F()
-> > > > >                                                         \ G()
-> > > > >
-> > > > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > >
-> > > > Just in case it wasn't clear.
-> > > >
-> > > > Nacked-by: Tejun Heo <tj@kernel.org>
-> > > >
-> > > > Thanks.
-> > > >
-> > >
-> > > Was there a previous discussion on this? The commit message is unreadable.
-> >
-> > http://lkml.kernel.org/r/1660298966-11493-1-git-send-email-zhaoyang.huang@unisoc.com
->
-> Even that discussion doesn't really explain the real underlying problem.
-> There are statements about inefficiency and trashing without any further
-> details or clarifications.
-I would like to quote the comments from google side for more details
-which can also be observed from different vendors.
-"Also be advised that when you enable memcg v2 you will be using
-per-app memcg configuration which implies noticeable overhead because
-every app will have its own group. For example pagefault path will
-regress by about 15%. And obviously there will be some memory overhead
-as well. That's the reason we don't enable them in Android by
-default."
->
-> My very vague understanding is that the Android system would like to
-> freeze specific applications and for that it requires each application
-> to live in its own cgroup. This clashes with a requirement to age and
-> reclaim memory on a different granularity (aka no per process reclaim).
-> So in fact something that cgroup v1 would achieve by having 2
-> hierarchies, one for the freezer which would have a dedicated cgroup for
-> each application and the other for the memory controller where tasks are
-> grouped by a different criteria. This would rule out that a global (or
-> any external memory pressure) reclaim would age LRUs that contain a mix
-> bag of application pages rather than iterate over per-application LRUs.
-> Is that understanding correct?
-Correct, this is just our confusion. Besides, we believe that charge
-the pages to implicit memory enabled parent control group doesn't make
-sense as the memory cannot be managed at all.
-> --
-> Michal Hocko
-> SUSE Labs
+On Mon, Aug 22, 2022 at 10:01:34PM -0400, Steven Rostedt wrote:
+> On Mon, 22 Aug 2022 21:40:24 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > And this patch (which is wrong, but will at least let my tests finish
+> > testing my code) makes the warning go away.
+> 
+> Well that patch was against the broken commit, but this patch against
+> 6.0-rc2 works for me, albeit, it's still wrong ;-)
+
+It does sort of defeat the original purpose.  But maybe it is what is
+needed in the near term?
+
+Frederic, thoughts?
+
+							Thanx, Paul
+
+> -- Steve
+> 
+> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+> index 77978e372377..17201159f3df 100644
+> --- a/kernel/context_tracking.c
+> +++ b/kernel/context_tracking.c
+> @@ -330,13 +330,13 @@ EXPORT_SYMBOL_GPL(ct_idle_enter);
+>   * If you add or remove a call to ct_idle_exit(), be sure to test with
+>   * CONFIG_RCU_EQS_DEBUG=y.
+>   */
+> -void noinstr ct_idle_exit(void)
+> +void ct_idle_exit(void)
+>  {
+>  	unsigned long flags;
+>  
+> -	raw_local_irq_save(flags);
+> +	local_irq_save(flags);
+>  	ct_kernel_enter(false, RCU_DYNTICKS_IDX - CONTEXT_IDLE);
+> -	raw_local_irq_restore(flags);
+> +	local_irq_restore(flags);
+>  }
+>  EXPORT_SYMBOL_GPL(ct_idle_exit);
+>  

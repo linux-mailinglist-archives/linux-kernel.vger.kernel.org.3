@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4F159D7E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A67B59D524
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349338AbiHWJWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
+        id S243553AbiHWI23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243671AbiHWJUI (ORCPT
+        with ESMTP id S243281AbiHWIYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:20:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03109895FB;
-        Tue, 23 Aug 2022 01:33:51 -0700 (PDT)
+        Tue, 23 Aug 2022 04:24:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5371F26E8;
+        Tue, 23 Aug 2022 01:13:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51CB1B81C20;
-        Tue, 23 Aug 2022 08:32:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9CBC433D6;
-        Tue, 23 Aug 2022 08:32:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B16D8B81C20;
+        Tue, 23 Aug 2022 08:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D4BC433C1;
+        Tue, 23 Aug 2022 08:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243573;
-        bh=uVE2rYO/FwoZI6CHQRFOhSMx6E4j3S4MrjD6MhJyUfg=;
+        s=korg; t=1661242407;
+        bh=2YyPwhEPNlXy6bkw80TQrnvTxmp42HXmghTdlFH98xE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WxWzT9sy1MDBQoEr0eBtf3ZI/Ehv8UnInir7NwKLSwZwaOdJItWKpIeKncZfEfS0s
-         o1rhxmdtwVQk5+j7ymOANGTkxRPcrbsv2JTUVCXqD8utxoBTRLt8fTLxUd+gn3LQzc
-         uDuWkob2usXZhiUt0c9sMBglsaKlwpWy8Bpbpv5I=
+        b=AnbFxEB8ara9zZEBaSoKm2cvdmgInE2wm1UTuX73u0XwzlBveORA5kgrsokDBJBQi
+         RofvVj7/5SODyypMC9BOztnBN+mN/5M5qYxCempiNhInvz/hE9lut5tqyRRnbGU/CQ
+         jXREonfl5BCRwmeQeuSvRih+47QB99DG4fcTpkEk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongli Zhang <dongli.zhang@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 319/365] swiotlb: panic if nslabs is too small
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.9 067/101] rds: add missing barrier to release_refill
 Date:   Tue, 23 Aug 2022 10:03:40 +0200
-Message-Id: <20220823080131.532813281@linuxfoundation.org>
+Message-Id: <20220823080037.128726077@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongli Zhang <dongli.zhang@oracle.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-[ Upstream commit 0bf28fc40d89b1a3e00d1b79473bad4e9ca20ad1 ]
+commit 9f414eb409daf4f778f011cf8266d36896bb930b upstream.
 
-Panic on purpose if nslabs is too small, in order to sync with the remap
-retry logic.
+The functions clear_bit and set_bit do not imply a memory barrier, thus it
+may be possible that the waitqueue_active function (which does not take
+any locks) is moved before clear_bit and it could miss a wakeup event.
 
-In addition, print the number of bytes for tlb alloc failure.
+Fix this bug by adding a memory barrier after clear_bit.
 
-Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/dma/swiotlb.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ net/rds/ib_recv.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index 5830dce6081b..f5304e2f6a35 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -242,6 +242,9 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 	if (swiotlb_force_disable)
- 		return;
+--- a/net/rds/ib_recv.c
++++ b/net/rds/ib_recv.c
+@@ -356,6 +356,7 @@ static int acquire_refill(struct rds_con
+ static void release_refill(struct rds_connection *conn)
+ {
+ 	clear_bit(RDS_RECV_REFILL, &conn->c_flags);
++	smp_mb__after_atomic();
  
-+	if (nslabs < IO_TLB_MIN_SLABS)
-+		panic("%s: nslabs = %lu too small\n", __func__, nslabs);
-+
- 	/*
- 	 * By default allocate the bounce buffer memory from low memory, but
- 	 * allow to pick a location everywhere for hypervisors with guest
-@@ -254,7 +257,8 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 	else
- 		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
- 	if (!tlb) {
--		pr_warn("%s: failed to allocate tlb structure\n", __func__);
-+		pr_warn("%s: Failed to allocate %zu bytes tlb structure\n",
-+			__func__, bytes);
- 		return;
- 	}
- 
--- 
-2.35.1
-
+ 	/* We don't use wait_on_bit()/wake_up_bit() because our waking is in a
+ 	 * hot path and finding waiters is very rare.  We don't want to walk
 
 

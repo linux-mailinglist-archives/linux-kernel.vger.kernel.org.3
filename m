@@ -2,192 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DE159D297
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6552859D291
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241183AbiHWHrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
+        id S241194AbiHWHsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241110AbiHWHrr (ORCPT
+        with ESMTP id S241186AbiHWHsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:47:47 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7DF647D3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:47:46 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 2so8917720edx.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=BYIdG9zoxzlJrcwnEQC3uPCB8wf/8dgeUZMVUqHrFso=;
-        b=r/ygoMH4PmOcKkRHWKGLm4IJsjvq7jQQvgR8f0yM8XfPlucwO7274qaI+UOtzXCcgi
-         +Rn5qDcqdr53GXGjAwkE1WU0NGsaCc4fIe23izlDzWN/gJib6IHg5uP+Wgzu2uz4F8zM
-         Qa+1JOclWTMrk6wFRCar84pDpAnUeCeBUHnnLzNkjm8kpBjpnUOu3r3jSrvpyUHlSWcH
-         QdPTuvHjK7KkQd4nILuQ5mupXY4PR5hz/Lq9xe7WPwqqmpUGTbBX5Qo6Fe16FpsXUW/T
-         AmH7Dv+xDbm8lPhe/wqpvTQbTflDAd9ceUHVm6HvNys/WAPxxIrseYdTTSuNUuseZvMn
-         Y7pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=BYIdG9zoxzlJrcwnEQC3uPCB8wf/8dgeUZMVUqHrFso=;
-        b=gKGuRW1XD3AAR1e8U/j5c1QEpvEoQKXmmBJBusJIw92tya/x3oX4JxmEw9OePDmLb0
-         AUgF0+HlKegHXFLILI047zAFzmaRVfX3tsBuGpMoz4PyReDBX5fXHeb5qWLdixvNcWAS
-         o304S42sTCikOUEhXzNdQ65oHWfJWMtnUTZt95CcHDlKjP/NDfbSYEskZsEFonyFBrjj
-         aRzP33RqJ74Y/0zLR56QgKkQJojKzE/N6RWKTs+FpjV26lFEpJoOl/m7v+edlOLEi/mz
-         /DlMAOoz/zFMswFchTb+CE0YWpsrPGUIFq+MW6L5oyqSC7A2JR98M5WEYy1rGKrnTj9q
-         lzow==
-X-Gm-Message-State: ACgBeo2b/aqg12pIhO8uY+LcISv5PeiLcKn4I6a0Gv9yueymC9unOMky
-        8opFtCeQzA9SWT8NxrtuH1uiGfp47c12hHFlgZV8WNqljg==
-X-Google-Smtp-Source: AA6agR5rF1UelnTaKi7EozwOAA/BkqIZaLPDGwyCS+1GcJkzZ/CKZXyYqgNOUU9xEwZ/jVzg1riK+C3nxR3AskhtSUI=
-X-Received: by 2002:a05:6402:40cb:b0:446:fd02:f03b with SMTP id
- z11-20020a05640240cb00b00446fd02f03bmr2470245edb.405.1661240865088; Tue, 23
- Aug 2022 00:47:45 -0700 (PDT)
+        Tue, 23 Aug 2022 03:48:05 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E4E647FC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:48:03 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MBh9M36H9znThn;
+        Tue, 23 Aug 2022 15:45:43 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 23 Aug 2022 15:48:01 +0800
+CC:     <yangyicong@hisilicon.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <tim.c.chen@linux.intel.com>,
+        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
+        <john.garry@huawei.com>, <shenyang39@huawei.com>,
+        <kprateek.nayak@amd.com>, <wuyun.abel@bytedance.com>
+Subject: Re: [PATCH v7 2/2] sched/fair: Scan cluster before scanning LLC in
+ wake-up path
+To:     Chen Yu <yu.c.chen@intel.com>
+References: <20220822073610.27205-1-yangyicong@huawei.com>
+ <20220822073610.27205-3-yangyicong@huawei.com>
+ <YwRNXrBG9iq1jGZW@chenyu5-mobl1>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <53b1fc3c-b6a9-a4cb-433a-c5c6af1d1dac@huawei.com>
+Date:   Tue, 23 Aug 2022 15:48:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-References: <20220201153354.11971-1-lukasz.bartosik@semihalf.com> <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
-In-Reply-To: <YwPoCqvQ02kUl9tP@dev-arch.thelio-3990X>
-From:   =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>
-Date:   Tue, 23 Aug 2022 09:47:33 +0200
-Message-ID: <CAK8ByeL=1EtgBRGh9hhHofgpRqB--CQgih+tAJwFv_MchDhcSw@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v1] drm/i915: fix null pointer dereference
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>, keescook@chromium.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, upstream@semihalf.com,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YwRNXrBG9iq1jGZW@chenyu5-mobl1>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Hi all,
->
-> Apologies in advance if you see this twice. I did not see the original
-> make it to either lore.kernel.org or the freedesktop.org archives so I
-> figured it might have been sent into the void.
->
-> On Tue, Feb 01, 2022 at 04:33:54PM +0100, Lukasz Bartosik wrote:
-> > From: =C5=81ukasz Bartosik <lb@semihalf.com>
-> >
-> > Asus chromebook CX550 crashes during boot on v5.17-rc1 kernel.
-> > The root cause is null pointer defeference of bi_next
-> > in tgl_get_bw_info() in drivers/gpu/drm/i915/display/intel_bw.c.
-> >
-> > BUG: kernel NULL pointer dereference, address: 000000000000002e
-> > PGD 0 P4D 0
-> > Oops: 0002 [#1] PREEMPT SMP NOPTI
-> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G     U            5.17.0-rc1
-> > Hardware name: Google Delbin/Delbin, BIOS Google_Delbin.13672.156.3 05/=
-14/2021
-> > RIP: 0010:tgl_get_bw_info+0x2de/0x510
-> > ...
-> > [    2.554467] Call Trace:
-> > [    2.554467]  <TASK>
-> > [    2.554467]  intel_bw_init_hw+0x14a/0x434
-> > [    2.554467]  ? _printk+0x59/0x73
-> > [    2.554467]  ? _dev_err+0x77/0x91
-> > [    2.554467]  i915_driver_hw_probe+0x329/0x33e
-> > [    2.554467]  i915_driver_probe+0x4c8/0x638
-> > [    2.554467]  i915_pci_probe+0xf8/0x14e
-> > [    2.554467]  ? _raw_spin_unlock_irqrestore+0x12/0x2c
-> > [    2.554467]  pci_device_probe+0xaa/0x142
-> > [    2.554467]  really_probe+0x13f/0x2f4
-> > [    2.554467]  __driver_probe_device+0x9e/0xd3
-> > [    2.554467]  driver_probe_device+0x24/0x7c
-> > [    2.554467]  __driver_attach+0xba/0xcf
-> > [    2.554467]  ? driver_attach+0x1f/0x1f
-> > [    2.554467]  bus_for_each_dev+0x8c/0xc0
-> > [    2.554467]  bus_add_driver+0x11b/0x1f7
-> > [    2.554467]  driver_register+0x60/0xea
-> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
-> > [    2.554467]  i915_init+0x2c/0xb9
-> > [    2.554467]  ? mipi_dsi_bus_init+0x16/0x16
-> > [    2.554467]  do_one_initcall+0x12e/0x2b3
-> > [    2.554467]  do_initcall_level+0xd6/0xf3
-> > [    2.554467]  do_initcalls+0x4e/0x79
-> > [    2.554467]  kernel_init_freeable+0xed/0x14d
-> > [    2.554467]  ? rest_init+0xc1/0xc1
-> > [    2.554467]  kernel_init+0x1a/0x120
-> > [    2.554467]  ret_from_fork+0x1f/0x30
-> > [    2.554467]  </TASK>
-> > ...
-> > Kernel panic - not syncing: Fatal exception
-> >
-> > Fixes: c64a9a7c05be ("drm/i915: Update memory bandwidth formulae")
-> > Signed-off-by: =C5=81ukasz Bartosik <lb@semihalf.com>
-> > ---
-> >  drivers/gpu/drm/i915/display/intel_bw.c | 16 +++++++++-------
-> >  1 file changed, 9 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/i915/display/intel_bw.c b/drivers/gpu/drm/=
-i915/display/intel_bw.c
-> > index 2da4aacc956b..bd0ed68b7faa 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_bw.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_bw.c
-> > @@ -404,15 +404,17 @@ static int tgl_get_bw_info(struct drm_i915_privat=
-e *dev_priv, const struct intel
-> >               int clpchgroup;
-> >               int j;
-> >
-> > -             if (i < num_groups - 1)
-> > -                     bi_next =3D &dev_priv->max_bw[i + 1];
-> > -
-> >               clpchgroup =3D (sa->deburst * qi.deinterleave / num_chann=
-els) << i;
-> >
-> > -             if (i < num_groups - 1 && clpchgroup < clperchgroup)
-> > -                     bi_next->num_planes =3D (ipqdepth - clpchgroup) /=
- clpchgroup + 1;
-> > -             else
-> > -                     bi_next->num_planes =3D 0;
-> > +             if (i < num_groups - 1) {
-> > +                     bi_next =3D &dev_priv->max_bw[i + 1];
-> > +
-> > +                     if (clpchgroup < clperchgroup)
-> > +                             bi_next->num_planes =3D (ipqdepth - clpch=
-group) /
-> > +                                                    clpchgroup + 1;
-> > +                     else
-> > +                             bi_next->num_planes =3D 0;
-> > +             }
-> >
-> >               bi->num_qgv_points =3D qi.num_points;
-> >               bi->num_psf_gv_points =3D qi.num_psf_points;
-> > --
-> > 2.35.0.rc2.247.g8bbb082509-goog
-> >
-> >
->
-> Was this patch ever applied or was the issue fixed in a different way?
-> If CONFIG_INIT_STACK_ALL_ZERO is enabled (it is on by default when the
-> compiler supports it), bi_next will be deterministically initialized to
-> NULL, which means 'bi_next->num_planes =3D 0' will crash when the first i=
-f
-> statement is not taken (i.e. 'i > num_groups - 1'). This was reported to
-> us at [1] so it impacts real users (and I have been applying this change
-> locally for six months). I see some discussion in this thread, was it
-> ever resolved?
->
-> [1]: https://github.com/ClangBuiltLinux/linux/issues/1626
->
-> Cheers,
-> Nathan
+On 2022/8/23 11:45, Chen Yu wrote:
+> On 2022-08-22 at 15:36:10 +0800, Yicong Yang wrote:
+>> From: Barry Song <song.bao.hua@hisilicon.com>
+>>
+>> For platforms having clusters like Kunpeng920, CPUs within the same cluster
+>> have lower latency when synchronizing and accessing shared resources like
+>> cache. Thus, this patch tries to find an idle cpu within the cluster of the
+>> target CPU before scanning the whole LLC to gain lower latency.
+>>
+>> Testing has been done on Kunpeng920 by pinning tasks to one numa and two
+>> numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
+>>
+>> With this patch, We noticed enhancement on tbench within one numa or cross
+>> two numa.
+>>
+>> On numa 0:
+>>                              6.0-rc1                patched
+>> Hmean     1        351.20 (   0.00%)      396.45 *  12.88%*
+>> Hmean     2        700.43 (   0.00%)      793.76 *  13.32%*
+>> Hmean     4       1404.42 (   0.00%)     1583.62 *  12.76%*
+>> Hmean     8       2833.31 (   0.00%)     3147.85 *  11.10%*
+>> Hmean     16      5501.90 (   0.00%)     6089.89 *  10.69%*
+>> Hmean     32     10428.59 (   0.00%)    10619.63 *   1.83%*
+>> Hmean     64      8223.39 (   0.00%)     8306.93 *   1.02%*
+>> Hmean     128     7042.88 (   0.00%)     7068.03 *   0.36%*
+>>
+>> On numa 0-1:
+>>                              6.0-rc1                patched
+>> Hmean     1        363.06 (   0.00%)      397.13 *   9.38%*
+>> Hmean     2        721.68 (   0.00%)      789.84 *   9.44%*
+>> Hmean     4       1435.15 (   0.00%)     1566.01 *   9.12%*
+>> Hmean     8       2776.17 (   0.00%)     3007.05 *   8.32%*
+>> Hmean     16      5471.71 (   0.00%)     6103.91 *  11.55%*
+>> Hmean     32     10164.98 (   0.00%)    11531.81 *  13.45%*
+>> Hmean     64     17143.28 (   0.00%)    20078.68 *  17.12%*
+>> Hmean     128    14552.70 (   0.00%)    15156.41 *   4.15%*
+>> Hmean     256    12827.37 (   0.00%)    13326.86 *   3.89%*
+>>
+>> Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so the SMT branch
+>> in the code has not been tested but it supposed to work.
+>>
+>> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+>> [https://lore.kernel.org/lkml/Ytfjs+m1kUs0ScSn@worktop.programming.kicks-ass.net]
+>> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+>> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+>> ---
+>>  kernel/sched/fair.c     | 30 +++++++++++++++++++++++++++---
+>>  kernel/sched/sched.h    |  2 ++
+>>  kernel/sched/topology.c | 10 ++++++++++
+>>  3 files changed, 39 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 914096c5b1ae..6fa77610d0f5 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -6437,6 +6437,30 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>  		}
+>>  	}
+>>  
+>> +	if (static_branch_unlikely(&sched_cluster_active)) {
+>> +		struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
+>> +
+>> +		if (sdc) {
+>> +			for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
+> Looks good to me. One minor question, why don't we use
+> cpumask_and(cpus, sched_domain_span(sdc), cpus);
+>> +				if (!cpumask_test_cpu(cpu, cpus))
+>> +					continue;
+> so above check can be removed in each loop?
 
-The patch was not accepted by upstream. I gave up after sending two reminde=
-rs
-that the issue is still present which resulted in no upstream reaction.
-I have been also applying that patch locally for a few months.
-Thanks for bringing it up to upstream attention again.
+Since we'll need to recalculate the mask of rest CPUs to test in the LLC after scanning the cluster CPUs.
+
+> Besides may I know what version this patch
+> is based on? since I failed to apply the patch on v6.0-rc2. Other than that:
+> 
+
+It's on 6.0-rc1 when sent but can be cleanly rebased on rc2:
+
+yangyicong@ubuntu:~/mainline_linux/linux_sub_workspace$ git log --oneline -3
+0079c27ba265 (HEAD -> topost-cls-v7, topost-cls-v6) sched/fair: Scan cluster before scanning LLC in wake-up path
+1ecb9e322bd7 sched: Add per_cpu cluster domain info and cpus_share_lowest_cache API
+1c23f9e627a7 (tag: v6.0-rc2, origin/master, origin/HEAD, master) Linux 6.0-rc2
+
+So I'm not sure where's the problem...
+
+> Reviewed-by: Chen Yu <yu.c.chen@intel.com>
+> 
+
+Thanks!
+
+> thanks,
+> Chenyu
+>> +
+>> +				if (has_idle_core) {
+>> +					i = select_idle_core(p, cpu, cpus, &idle_cpu);
+>> +					if ((unsigned int)i < nr_cpumask_bits)
+>> +						return i;
+>> +				} else {
+>> +					if (--nr <= 0)
+>> +						return -1;
+>> +					idle_cpu = __select_idle_cpu(cpu, p);
+>> +					if ((unsigned int)idle_cpu < nr_cpumask_bits)
+>> +						return idle_cpu;
+>> +				}
+>> +			}
+>> +			cpumask_andnot(cpus, cpus, sched_domain_span(sdc));
+>> +		}
+>> +	}
+> .
+> 

@@ -2,77 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334C459E87B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AE659E877
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343514AbiHWQ64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S1343622AbiHWQ7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245232AbiHWQ6b (ORCPT
+        with ESMTP id S245734AbiHWQ6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:58:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13CB7675C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 07:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661264099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=34PbuF0eVwU1fZKmyxntLGj0oriQwCLeUvgJJbU6faI=;
-        b=gPDHTqxComfuxYHBM3hqAdRbNvAeCGf6NLqKiGQluW0tuGiDVM07HlC1b030JbiWFSbZHy
-        PpD2rNsmWMJQh1kf/grYGWCFwsOsB4YIpO0Kw1Rcge4K8F5YkC2PR9lykmRGlGnSWoof0d
-        iDD1Qc67o9TlNRNRS6y6UyUeposKgSI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-327-Q7bLziqjNHmD9kYI60vzyg-1; Tue, 23 Aug 2022 10:14:56 -0400
-X-MC-Unique: Q7bLziqjNHmD9kYI60vzyg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 229909682A2;
-        Tue, 23 Aug 2022 14:14:56 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 013C81415138;
-        Tue, 23 Aug 2022 14:14:54 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YwTfPRDq04/DGTVT@casper.infradead.org>
-References: <YwTfPRDq04/DGTVT@casper.infradead.org> <166126004083.548536.11195647088995116235.stgit@warthog.procyon.org.uk> <166126006184.548536.12909933168251738646.stgit@warthog.procyon.org.uk>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com, sfrench@samba.org, linux-cifs@vger.kernel.org,
-        lsahlber@redhat.com, jlayton@kernel.org, dchinner@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: Re: [PATCH 3/5] smb3: fix temporary data corruption in collapse range
+        Tue, 23 Aug 2022 12:58:35 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61A87331E;
+        Tue, 23 Aug 2022 07:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661264119; x=1692800119;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=05QrM+J42tkTyLvNaEQHtLHqDI6Al9GqhyxNcFXt604=;
+  b=IZ0Ocvag80KP4lf9bTnb9YTVeJ9FNtknZ0aMn2XGIXLSUb7SRCc0i/n1
+   lAgq+JiONACnlPoOUu76mhy01q8rZQJe4ZgIObxdthhGh7vN2QvfVJygD
+   m0e9fLSOXNL48NQE4mpvyIcJCjbiLIcYsIEu2uJ5HZ1m/SkwACRZ1PNnx
+   j4632sH+MotVZBX6obZKrRk2TmkpQrCEbcPj6kVgGZRiVffKbKhUilh02
+   Y7iw7OVKskJRoiOuKK0pOjk0GsYgsDHglbO9MONVkicG+7ln0QW8mLqS3
+   Ocr1u/wvQ+m4Npx9D4TrN7nw2AtcOeYc0xMlSivCzbhreHOOqJA28kXVr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="355426788"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="355426788"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:15:19 -0700
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="677635626"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:15:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oQUgV-002TD2-1c;
+        Tue, 23 Aug 2022 17:15:15 +0300
+Date:   Tue, 23 Aug 2022 17:15:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] leds: simatic-ipc-leds-gpio: make sure we have the GPIO
+ providing driver
+Message-ID: <YwTg86pKFtT0gax0@smile.fi.intel.com>
+References: <20220805120343.5027-1-henning.schild@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <714207.1661264094.1@warthog.procyon.org.uk>
-Date:   Tue, 23 Aug 2022 15:14:54 +0100
-Message-ID: <714208.1661264094@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805120343.5027-1-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> wrote:
-
->         truncate_pagecache_range(inode, start, end);
+On Fri, Aug 05, 2022 at 02:03:43PM +0200, Henning Schild wrote:
+> If we register a "leds-gpio" platform device for GPIO pins that do not
+> exist we get a -EPROBE_DEFER and the probe will be tried again later.
+> If there is not driver to provide that pin we will poll forever and also
+> create a lot of log messages.
 > 
-> ... and presumably, you'd also want the error check?
+> So check if that GPIO driver is configured, if so it will come up
+> eventually. If not we exit our probe function early and do not even
+> bother registering the "leds-gpio". This method was chosen over "Kconfig
+> depends" since this way we can add support for more devices and GPIO
+> backends more easily without "depends"ing on all GPIO backends.
 
-truncate_pagecache_range() is void.
+Not sure what we should do with this patch due to your self-reply on it.
+So, if it's still needed, I would expect a new version / resend.
 
-David
+-- 
+With Best Regards,
+Andy Shevchenko
+
 

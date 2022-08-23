@@ -2,138 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A3559D65C
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C29259D2F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237982AbiHWInq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S241517AbiHWIBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346964AbiHWIkg (ORCPT
+        with ESMTP id S241676AbiHWIBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:40:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A255242ADD;
-        Tue, 23 Aug 2022 01:18:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 752D26132D;
-        Tue, 23 Aug 2022 08:17:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637C0C4347C;
-        Tue, 23 Aug 2022 08:17:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242648;
-        bh=+5grhzWxnc1TKl7dza1qwlywolTWQBQKx7cAp1Gda70=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z+9OBNHnQg7SVYQNfvqTodiMAuKCyZxQtPCMY59JKSCrUsVnZTMCwvifSCPwj6owV
-         h/TrSCW921dz1x4wFHsU1FAVK525B93hHHjPoRNJEgTr/woikTpUDHxuR6OzivZY7i
-         p3/DUSMOEFNE7wVWK3Fo8epXM7nRSnckaGglyXKE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthias May <matthias.may@westermo.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.19 153/365] geneve: fix TOS inheriting for ipv4
-Date:   Tue, 23 Aug 2022 10:00:54 +0200
-Message-Id: <20220823080124.625166031@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 23 Aug 2022 04:01:10 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA366583F;
+        Tue, 23 Aug 2022 01:01:05 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 12so11609176pga.1;
+        Tue, 23 Aug 2022 01:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=HRrhm1OCNU6Rzc/6RElpNPDfHW8dOdiCLMY7G0msAVs=;
+        b=ZSh5LlmpzYLzRJD1ZPCLTefJqXByy4iVoGCBZUJINS+96KTDE6lqkwJUJp4jcJxeBu
+         vz7gnhr4Gppzi5sTcR9GfAUwKKVIQRjn9lDqRg+kgT2O48Hn2o1dxxctH5fxK0YsMAT6
+         jY28uALlLtR/mHVz4nSCq2xP24XhXv/myZgFZlgcKvYL+SRTOKGyfN8AISTfdQfvwWuO
+         Ab7IpmyBusnraHPjycVaMvddrXXT7d7uvvnKE1cvpxkis7Q83HZA05MswILjsZRLROqE
+         +dUOtItweJNIPj+RLIO+JAm8NUEsIwdPy4YUgtVpRqr71AUXZL4pYN1kcUpksV9F8FlD
+         2RkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=HRrhm1OCNU6Rzc/6RElpNPDfHW8dOdiCLMY7G0msAVs=;
+        b=c3VnYHgepVzNF+aUVML7nZ3mmRNsLppoWxoXnfVgN8OUR0dmj5OxvdFZcS3urkJybK
+         GZRdEzX5ngQma6sxwrbwm0juj6krUo1xUYPkUx653+LAXVRkadeWVZP0L5QUebpff2Bh
+         1BMx5BTNcOPXZBGPCwQx6THLNDG/Efc9fcqHVZGzRdY+/X+Eb+jMYNIn80wA6S23IXIc
+         X5tM/4VkweO8dzKh/z2dyt1IONsr4eDowXtzu/Etig37h9cCMog/ScdjX0zs0QE7ismb
+         ttDrlNQkrwSCljzVyGsE6Ln/+1OV1m1cnNLmqmwvcXUKYN1ZyBCE4ckd64J29mrFDiqU
+         uf/Q==
+X-Gm-Message-State: ACgBeo3vBMLeCyOungtdbbYeu9EIqODsh19/qi5aqAOH7Tk6DaWOrrPO
+        l2i3YjlAx/jZxsB9SbYpOQ0=
+X-Google-Smtp-Source: AA6agR75Dmauw0vow8pbc98O1+rJA6RcI+MuCA9MuUn9EtMqwEbLJJnLOVvTxRHtPT7PcrrwTZdMpw==
+X-Received: by 2002:a63:125c:0:b0:427:a637:3414 with SMTP id 28-20020a63125c000000b00427a6373414mr19708574pgs.80.1661241665299;
+        Tue, 23 Aug 2022 01:01:05 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-14.three.co.id. [180.214.232.14])
+        by smtp.gmail.com with ESMTPSA id o16-20020aa79790000000b00535dc0a14d1sm9710471pfp.130.2022.08.23.01.00.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 01:01:02 -0700 (PDT)
+Message-ID: <55ba0c48-d735-07ba-9121-5accec6e31e3@gmail.com>
+Date:   Tue, 23 Aug 2022 15:00:55 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] Documentation: KUnit: Reword kunit_tool guide
+Content-Language: en-US
+To:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, skhan@linuxfoundation.org, corbet@lwn.net
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220822180956.4013497-1-sadiyakazi@google.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220822180956.4013497-1-sadiyakazi@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias May <matthias.may@westermo.com>
+On 8/23/22 01:09, Sadiya Kazi wrote:
+> Updated the kunit_tool.rst guide to streamline it. The following changes
+> were made:
+> 1. Updated headings
+> 2. Reworded content across sections
+> 3. Added a cross reference to full list of command-line args
+> 
 
-commit b4ab94d6adaa5cf842b68bd28f4b50bc774496bd upstream.
+What about this description:?
 
-The current code retrieves the TOS field after the lookup
-on the ipv4 routing table. The routing process currently
-only allows routing based on the original 3 TOS bits, and
-not on the full 6 DSCP bits.
-As a result the retrieved TOS is cut to the 3 bits.
-However for inheriting purposes the full 6 bits should be used.
+"Rework kunit_tool How-To, which includes:
+- grammatical fixes
+- change title to 'Understanding kunit_tool', and
+- add a reference link to command line arguments list."
 
-Extract the full 6 bits before the route lookup and use
-that instead of the cut off 3 TOS bits.
+Thanks.
 
-Fixes: e305ac6cf5a1 ("geneve: Add support to collect tunnel metadata.")
-Signed-off-by: Matthias May <matthias.may@westermo.com>
-Acked-by: Guillaume Nault <gnault@redhat.com>
-Link: https://lore.kernel.org/r/20220805190006.8078-1-matthias.may@westermo.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/geneve.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
---- a/drivers/net/geneve.c
-+++ b/drivers/net/geneve.c
-@@ -797,7 +797,8 @@ static struct rtable *geneve_get_v4_rt(s
- 				       struct geneve_sock *gs4,
- 				       struct flowi4 *fl4,
- 				       const struct ip_tunnel_info *info,
--				       __be16 dport, __be16 sport)
-+				       __be16 dport, __be16 sport,
-+				       __u8 *full_tos)
- {
- 	bool use_cache = ip_tunnel_dst_cache_usable(skb, info);
- 	struct geneve_dev *geneve = netdev_priv(dev);
-@@ -823,6 +824,8 @@ static struct rtable *geneve_get_v4_rt(s
- 		use_cache = false;
- 	}
- 	fl4->flowi4_tos = RT_TOS(tos);
-+	if (full_tos)
-+		*full_tos = tos;
- 
- 	dst_cache = (struct dst_cache *)&info->dst_cache;
- 	if (use_cache) {
-@@ -910,6 +913,7 @@ static int geneve_xmit_skb(struct sk_buf
- 	const struct ip_tunnel_key *key = &info->key;
- 	struct rtable *rt;
- 	struct flowi4 fl4;
-+	__u8 full_tos;
- 	__u8 tos, ttl;
- 	__be16 df = 0;
- 	__be16 sport;
-@@ -920,7 +924,7 @@ static int geneve_xmit_skb(struct sk_buf
- 
- 	sport = udp_flow_src_port(geneve->net, skb, 1, USHRT_MAX, true);
- 	rt = geneve_get_v4_rt(skb, dev, gs4, &fl4, info,
--			      geneve->cfg.info.key.tp_dst, sport);
-+			      geneve->cfg.info.key.tp_dst, sport, &full_tos);
- 	if (IS_ERR(rt))
- 		return PTR_ERR(rt);
- 
-@@ -964,7 +968,7 @@ static int geneve_xmit_skb(struct sk_buf
- 
- 		df = key->tun_flags & TUNNEL_DONT_FRAGMENT ? htons(IP_DF) : 0;
- 	} else {
--		tos = ip_tunnel_ecn_encap(fl4.flowi4_tos, ip_hdr(skb), skb);
-+		tos = ip_tunnel_ecn_encap(full_tos, ip_hdr(skb), skb);
- 		if (geneve->cfg.ttl_inherit)
- 			ttl = ip_tunnel_get_ttl(ip_hdr(skb), skb);
- 		else
-@@ -1148,7 +1152,7 @@ static int geneve_fill_metadata_dst(stru
- 					  1, USHRT_MAX, true);
- 
- 		rt = geneve_get_v4_rt(skb, dev, gs4, &fl4, info,
--				      geneve->cfg.info.key.tp_dst, sport);
-+				      geneve->cfg.info.key.tp_dst, sport, NULL);
- 		if (IS_ERR(rt))
- 			return PTR_ERR(rt);
- 
-
-
+-- 
+An old man doll... just what I always wanted! - Clara

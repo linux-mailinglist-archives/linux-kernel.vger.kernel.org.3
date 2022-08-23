@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701FE59D61F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842A259D6D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241267AbiHWIhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S242778AbiHWJy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345960AbiHWIf5 (ORCPT
+        with ESMTP id S1352279AbiHWJv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:35:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2421275FCE;
-        Tue, 23 Aug 2022 01:16:48 -0700 (PDT)
+        Tue, 23 Aug 2022 05:51:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D399B9F0E9;
+        Tue, 23 Aug 2022 01:45:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8D83B81C20;
-        Tue, 23 Aug 2022 08:16:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04BEAC4347C;
-        Tue, 23 Aug 2022 08:16:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91445B81C63;
+        Tue, 23 Aug 2022 08:35:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52C6C433D7;
+        Tue, 23 Aug 2022 08:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242606;
-        bh=wzYSU7PSI22ZxSnt8HJeG089qUc1YXYvyYmqR9gjY2Y=;
+        s=korg; t=1661243724;
+        bh=4qKoqDDrujEnaXSp0+r96irpj98a/vp4++7pVeIYz/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tqxosq2w+aQ4XNfHYe8RaK9NUhGEfBRD640JjFu+Jds+X8ddEcPIzCaG21s7i6Qgd
-         3T3YSqgsUO16cIoD/i+bn+nC97Dxg8Vo7vpGejk9FaZVTm1UtQ6p+ElA8FIUT1Hs+v
-         7RCbJrLPFWo6Lv7j/QU3/ckIFNLgwjj4qL63m0U4=
+        b=TTDUNKHGPo2N6u3IsP/HyxQ8Bg3mfjEicekAL0vW2Z5ErG6RqLwvCYCBeBOKQijS8
+         Dz2KmnZdLbs9ULaTUCM51kyTsvrGLuWyrBbtzuF8HTdxJLEQmEnyK81oJvHNqgvfT9
+         C47KXKYUXd/+6cS+d6ilnHukfWSrQ+KkNLThBN0I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Cs=C3=B3k=C3=A1s=20Bence?= <csokas.bence@prolan.hu>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 085/101] fec: Fix timer capture timing in `fec_ptp_enable_pps()`
+        stable@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 337/365] RISC-V: Add fast call path of crash_kexec()
 Date:   Tue, 23 Aug 2022 10:03:58 +0200
-Message-Id: <20220823080037.800216144@linuxfoundation.org>
+Message-Id: <20220823080132.317191626@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Csókás Bence <csokas.bence@prolan.hu>
+From: Xianting Tian <xianting.tian@linux.alibaba.com>
 
-commit 61d5e2a251fb20c2c5e998c3f1d52ed6d5360319 upstream.
+[ Upstream commit 3f1901110a89b0e2e13adb2ac8d1a7102879ea98 ]
 
-Code reimplements functionality already in `fec_ptp_read()`,
-but misses check for FEC_QUIRK_BUG_CAPTURE. Replace with function call.
+Currently, almost all archs (x86, arm64, mips...) support fast call
+of crash_kexec() when "regs && kexec_should_crash()" is true. But
+RISC-V not, it can only enter crash system via panic(). However panic()
+doesn't pass the regs of the real accident scene to crash_kexec(),
+it caused we can't get accurate backtrace via gdb,
+	$ riscv64-linux-gnu-gdb vmlinux vmcore
+	Reading symbols from vmlinux...
+	[New LWP 95]
+	#0  console_unlock () at kernel/printk/printk.c:2557
+	2557                    if (do_cond_resched)
+	(gdb) bt
+	#0  console_unlock () at kernel/printk/printk.c:2557
+	#1  0x0000000000000000 in ?? ()
 
-Fixes: 28b5f058cf1d ("net: fec: ptp: fix convergence issue to support LinuxPTP stack")
-Signed-off-by: Csókás Bence <csokas.bence@prolan.hu>
-Link: https://lore.kernel.org/r/20220811101348.13755-1-csokas.bence@prolan.hu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+With the patch we can get the accurate backtrace,
+	$ riscv64-linux-gnu-gdb vmlinux vmcore
+	Reading symbols from vmlinux...
+	[New LWP 95]
+	#0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/test_crash.c:81
+	81             *(int *)p = 0xdead;
+	(gdb)
+	(gdb) bt
+	#0  0xffffffe00064d5c0 in test_thread (data=<optimized out>) at drivers/test_crash.c:81
+	#1  0x0000000000000000 in ?? ()
+
+Test code to produce NULL address dereference in test_crash.c,
+	void *p = NULL;
+	*(int *)p = 0xdead;
+
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Tested-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Link: https://lore.kernel.org/r/20220606082308.2883458-1-xianting.tian@linux.alibaba.com
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/fec_ptp.c |    6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ arch/riscv/kernel/traps.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/ethernet/freescale/fec_ptp.c
-+++ b/drivers/net/ethernet/freescale/fec_ptp.c
-@@ -155,11 +155,7 @@ static int fec_ptp_enable_pps(struct fec
- 		 * NSEC_PER_SEC - ts.tv_nsec. Add the remaining nanoseconds
- 		 * to current timer would be next second.
- 		 */
--		tempval = readl(fep->hwp + FEC_ATIME_CTRL);
--		tempval |= FEC_T_CTRL_CAPTURE;
--		writel(tempval, fep->hwp + FEC_ATIME_CTRL);
--
--		tempval = readl(fep->hwp + FEC_ATIME);
-+		tempval = fep->cc.read(&fep->cc);
- 		/* Convert the ptp local counter to 1588 timestamp */
- 		ns = timecounter_cyc2time(&fep->tc, tempval);
- 		ts = ns_to_timespec64(ns);
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index b40426509244..39d0f8bba4b4 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -16,6 +16,7 @@
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/irq.h>
++#include <linux/kexec.h>
+ 
+ #include <asm/asm-prototypes.h>
+ #include <asm/bug.h>
+@@ -44,6 +45,9 @@ void die(struct pt_regs *regs, const char *str)
+ 
+ 	ret = notify_die(DIE_OOPS, str, regs, 0, regs->cause, SIGSEGV);
+ 
++	if (regs && kexec_should_crash(current))
++		crash_kexec(regs);
++
+ 	bust_spinlocks(0);
+ 	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
+ 	spin_unlock_irq(&die_lock);
+-- 
+2.35.1
+
 
 

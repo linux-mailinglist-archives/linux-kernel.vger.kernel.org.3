@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D218559D72E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8462559D765
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243363AbiHWJlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S242130AbiHWJyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242879AbiHWJj1 (ORCPT
+        with ESMTP id S1352245AbiHWJv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:39:27 -0400
+        Tue, 23 Aug 2022 05:51:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC23322BC2;
-        Tue, 23 Aug 2022 01:41:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CBF9F0D5;
+        Tue, 23 Aug 2022 01:45:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B57E614E7;
-        Tue, 23 Aug 2022 08:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3EEC433C1;
-        Tue, 23 Aug 2022 08:40:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 591CF6123D;
+        Tue, 23 Aug 2022 08:45:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D329C433D6;
+        Tue, 23 Aug 2022 08:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244017;
-        bh=791j+2hWy8TOd/D1gDSC01GR07M5nk56qoSUdhg5FAU=;
+        s=korg; t=1661244350;
+        bh=9b1xcz5ZdzJJW2NlfVI2a27n7SsK5+EFJIyllGw0yIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VIh6GOuSr/7lKgPKH3szZshSvRy3n0eQBEBGdRimYKCEvF4bYP8NrlrzKgWNShkXK
-         T0dFkQ2OTaKe8FVejq0FzxP9uqJhpPEQrcuXZip7ijxrUChUhRGOse3hRfYTppco4E
-         aEmnBAGZ2TH+NmRdEF389Tdv4unUilRMQDoCm3uk=
+        b=RoUv2KeAIZboMqBXJlnfAJxOi56sN8wLjXssDZMObUhkBL9e+FIvOsBAH92+oFyv7
+         qm+/PtPeFcbOTzsy6qqymmrfrT8fA7TuRe8sTryiiwxu5DnHpYjnpsnKbYSdX325Uf
+         x4ZUwW77JyGdkBSftHkdA3nLutkBAOg1OuhU5Kpo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        John Stultz <jstultz@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 073/229] selftests: timers: valid-adjtimex: build fix for newer toolchains
-Date:   Tue, 23 Aug 2022 10:23:54 +0200
-Message-Id: <20220823080056.336287734@linuxfoundation.org>
+        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
+        Matthias May <matthias.may@westermo.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 077/244] mlx5: do not use RT_TOS for IPv6 flowlabel
+Date:   Tue, 23 Aug 2022 10:23:56 +0200
+Message-Id: <20220823080101.624025877@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,39 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+From: Matthias May <matthias.may@westermo.com>
 
-[ Upstream commit 9a162977d20436be5678a8e21a8e58eb4616d86a ]
+commit bcb0da7fffee9464073998b267ce5543da2356d2 upstream.
 
-Toolchains with an include file 'sys/timex.h' based on 3.18 will have a
-'clock_adjtime' definition added, so it can't be static in the code:
+According to Guillaume Nault RT_TOS should never be used for IPv6.
 
-valid-adjtimex.c:43:12: error: static declaration of ‘clock_adjtime’ follows non-static declaration
+Quote:
+RT_TOS() is an old macro used to interprete IPv4 TOS as described in
+the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
+code, although, given the current state of the code, most of the
+existing calls have no consequence.
 
-Fixes: e03a58c320e1 ("kselftests: timers: Add adjtimex SETOFFSET validity tests")
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: John Stultz <jstultz@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
+field to be interpreted the RFC 1349 way. There's no historical
+compatibility to worry about.
+
+Fixes: ce99f6b97fcd ("net/mlx5e: Support SRIOV TC encapsulation offloads for IPv6 tunnels")
+Acked-by: Guillaume Nault <gnault@redhat.com>
+Signed-off-by: Matthias May <matthias.may@westermo.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/timers/valid-adjtimex.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-index 5397de708d3c..48b9a803235a 100644
---- a/tools/testing/selftests/timers/valid-adjtimex.c
-+++ b/tools/testing/selftests/timers/valid-adjtimex.c
-@@ -40,7 +40,7 @@
- #define ADJ_SETOFFSET 0x0100
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
+@@ -497,7 +497,7 @@ int mlx5e_tc_tun_create_header_ipv6(stru
+ 	int err;
  
- #include <sys/syscall.h>
--static int clock_adjtime(clockid_t id, struct timex *tx)
-+int clock_adjtime(clockid_t id, struct timex *tx)
- {
- 	return syscall(__NR_clock_adjtime, id, tx);
- }
--- 
-2.35.1
-
+ 	attr.ttl = tun_key->ttl;
+-	attr.fl.fl6.flowlabel = ip6_make_flowinfo(RT_TOS(tun_key->tos), tun_key->label);
++	attr.fl.fl6.flowlabel = ip6_make_flowinfo(tun_key->tos, tun_key->label);
+ 	attr.fl.fl6.daddr = tun_key->u.ipv6.dst;
+ 	attr.fl.fl6.saddr = tun_key->u.ipv6.src;
+ 
+@@ -611,7 +611,7 @@ int mlx5e_tc_tun_update_header_ipv6(stru
+ 
+ 	attr.ttl = tun_key->ttl;
+ 
+-	attr.fl.fl6.flowlabel = ip6_make_flowinfo(RT_TOS(tun_key->tos), tun_key->label);
++	attr.fl.fl6.flowlabel = ip6_make_flowinfo(tun_key->tos, tun_key->label);
+ 	attr.fl.fl6.daddr = tun_key->u.ipv6.dst;
+ 	attr.fl.fl6.saddr = tun_key->u.ipv6.src;
+ 
 
 

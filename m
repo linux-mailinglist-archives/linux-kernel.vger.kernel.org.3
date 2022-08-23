@@ -2,46 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7949B59DB28
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5276159E107
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353276AbiHWKNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S1356887AbiHWKwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352707AbiHWKGI (ORCPT
+        with ESMTP id S1355846AbiHWKo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:06:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC59B7D785;
-        Tue, 23 Aug 2022 01:52:28 -0700 (PDT)
+        Tue, 23 Aug 2022 06:44:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D1186880;
+        Tue, 23 Aug 2022 02:10:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11C7C6123D;
-        Tue, 23 Aug 2022 08:52:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0304CC433C1;
-        Tue, 23 Aug 2022 08:52:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9336B81C66;
+        Tue, 23 Aug 2022 09:10:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB06C433C1;
+        Tue, 23 Aug 2022 09:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244747;
-        bh=thibkoY1vJoCkfi1Ybho7TQwoOG2KHM67rYyFifPu9s=;
+        s=korg; t=1661245840;
+        bh=rOtT2ckmil5KAQ6B8IHaMvbN4V0Br6QFkFcCFOmDcag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eVJdRCMUxkr2pQlNaDpMo12CkxYlRGTWnaMkm1hZ4c6prE7HCcDssumSPkRCK3hBD
-         y7mjMiUx1DDj0Qv/JRZIGsQDPnFtyIyrgGMdAeCnkiNXkPu2fJhfSrSCFhpd8Upo+Q
-         996cxx19Fdds0n3psGAIX8iNEOzuvrQYvGIUzXpo=
+        b=qoQ/BxU0PipQtjTvZxtNXixlYTax6a4SE9EgIAQyBU5vdN24rPsEAqZ0ubycznK3X
+         MyMFNLTLLzRWiXp4RQHfak2xHoGvRHaTWAU3J5y8OAy8ltH7W6BkVhCGuXlsyzDX6H
+         2zL9rISrqj2cNyvXcpL/6wZY+lf6BudRXQfqgKis=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Xin Xiong <xiongx18@fudan.edu.cn>,
-        John Johansen <john.johansen@canonical.com>
-Subject: [PATCH 4.14 184/229] apparmor: fix reference count leak in aa_pivotroot()
+        stable@vger.kernel.org,
+        =?UTF-8?q?=E8=B0=AD=E6=A2=93=E7=85=8A?= <tanzixuan.me@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 176/287] genelf: Use HAVE_LIBCRYPTO_SUPPORT, not the never defined HAVE_LIBCRYPTO
 Date:   Tue, 23 Aug 2022 10:25:45 +0200
-Message-Id: <20220823080100.177336614@linuxfoundation.org>
+Message-Id: <20220823080106.687592053@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit 11c3627ec6b56c1525013f336f41b79a983b4d46 upstream.
+[ Upstream commit 91cea6be90e436c55cde8770a15e4dac9d3032d0 ]
 
-The aa_pivotroot() function has a reference counting bug in a specific
-path. When aa_replace_current_label() returns on success, the function
-forgets to decrement the reference count of “target”, which is
-increased earlier by build_pivotroot(), causing a reference leak.
+When genelf was introduced it tested for HAVE_LIBCRYPTO not
+HAVE_LIBCRYPTO_SUPPORT, which is the define the feature test for openssl
+defines, fix it.
 
-Fix it by decreasing the refcount of “target” in that path.
+This also adds disables the deprecation warning, someone has to fix this
+to build with openssl 3.0 before the warning becomes a hard error.
 
-Fixes: 2ea3ffb7782a ("apparmor: add mount mediation")
-Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9b07e27f88b9cd78 ("perf inject: Add jitdump mmap injection support")
+Reported-by: 谭梓煊 <tanzixuan.me@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Nick Terrell <terrelln@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Link: http://lore.kernel.org/lkml/YulpPqXSOG0Q4J1o@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/apparmor/mount.c |    1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/genelf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/security/apparmor/mount.c
-+++ b/security/apparmor/mount.c
-@@ -687,6 +687,7 @@ int aa_pivotroot(struct aa_label *label,
- 			aa_put_label(target);
- 			goto out;
- 		}
-+		aa_put_label(target);
- 	} else
- 		/* already audited error */
- 		error = PTR_ERR(target);
+diff --git a/tools/perf/util/genelf.c b/tools/perf/util/genelf.c
+index aafbe54fd3fa..afb8fe3a8e35 100644
+--- a/tools/perf/util/genelf.c
++++ b/tools/perf/util/genelf.c
+@@ -35,7 +35,11 @@
+ 
+ #define BUILD_ID_URANDOM /* different uuid for each run */
+ 
+-#ifdef HAVE_LIBCRYPTO
++// FIXME, remove this and fix the deprecation warnings before its removed and
++// We'll break for good here...
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++
++#ifdef HAVE_LIBCRYPTO_SUPPORT
+ 
+ #define BUILD_ID_MD5
+ #undef BUILD_ID_SHA	/* does not seem to work well when linked with Java */
+-- 
+2.35.1
+
 
 

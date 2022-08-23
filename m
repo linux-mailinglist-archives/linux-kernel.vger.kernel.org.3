@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2915359E425
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2849559E45A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 15:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240940AbiHWNKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 09:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S236644AbiHWNMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 09:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241958AbiHWNJf (ORCPT
+        with ESMTP id S235964AbiHWNLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 09:09:35 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E908133B9B
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:11:24 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bq23so9956182lfb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ZQTlzZhSz/F6Dyvy8ent1rccjYe8xNJQ3KifGL8COg8=;
-        b=xdzD51NB6krEq2oSamBwJSqBmPConyxmXnOPIM2tI2HBKOxUv7620iJReAQX4+6ggD
-         BjzkooN73GabBqwLc+zUjIWz2djjaLSR5UB5D0cBZofADRLsDJnMS4C99xqVHKGF7Rdi
-         Bu8n5tx/Skd2MItQwGQcStTFSXtU+33U3vOxaLqdEzgiWQKCl+waW4MwyIo4lWeHpVz+
-         cirMi9NxZWWm8QbJcRJjbffzrSwpf71cqxPl+MOzKhggBImETjovYgL0GUiwP9N5O7hy
-         FStxMNxqnSzQIhg00KU0PdZU/lSNsw4Du4CkazOCKfkl8fT59Oi1obPyTMPVhNnvjnc7
-         /eug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ZQTlzZhSz/F6Dyvy8ent1rccjYe8xNJQ3KifGL8COg8=;
-        b=pN2XxzHNOQV2/TEUXO21nDMZLSiK1k2AKflxhHmcBHRMD5IYYFZQgLJYxHKwljWWCU
-         G8CxVQBsCnu4oyVh5Ic399gExx0AY1ol1261Z3JVsQP8EeKjQt7wnAfvkqzl44DBPcr8
-         /gTyKNbYJLflhZtBe1y8Fp9kXngFHnO11E46tueaCp9JushXNeTURPTsXMxWXh4osvIa
-         S58/GZZwHO68t/CzFJvX854kSazyshok13E5ZHvrfPIsiqz0+2PcSfiydMmJTQqedjIr
-         UuoRiRHTot9Olof6gkLqgqdcmnEDJfJRI8c7yeupVyjakSShGu+rD0ZHwAerQbDNexIa
-         4gew==
-X-Gm-Message-State: ACgBeo3w9eGHInKpFMakV37pv3ejAuG3owqASG7FsYbobCRDJSQP0n8D
-        ZQCDqx/aXqz35cQ2+GrAleImcw==
-X-Google-Smtp-Source: AA6agR5fDnH2XcXgR+T6xdK3Nc9HZ8ROsCJIQuD4B0AHH6qkWJfXdbFgMHgnduR4NDjt9ZBTuBdLkQ==
-X-Received: by 2002:a05:6512:aca:b0:492:7db6:95f1 with SMTP id n10-20020a0565120aca00b004927db695f1mr8993150lfu.433.1661249435995;
-        Tue, 23 Aug 2022 03:10:35 -0700 (PDT)
-Received: from krzk-bin.. (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056512370f00b0048af39ff3edsm2426771lfr.122.2022.08.23.03.10.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 03:10:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: display: synopsys,dw-hdmi: drop ref from reg-io-width
-Date:   Tue, 23 Aug 2022 13:10:31 +0300
-Message-Id: <20220823101031.387082-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 23 Aug 2022 09:11:55 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3992113491C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 03:12:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VN1TqVf_1661249538;
+Received: from 30.97.48.53(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VN1TqVf_1661249538)
+          by smtp.aliyun-inc.com;
+          Tue, 23 Aug 2022 18:12:19 +0800
+Message-ID: <888605a6-9e33-7485-3c90-94375390ea0b@linux.alibaba.com>
+Date:   Tue, 23 Aug 2022 18:12:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 4/5] mm/hugetlb: use PMD page lock to protect CONT-PTE
+ entries
+To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
+        songmuchun@bytedance.com, mike.kravetz@oracle.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
+ <88c8a8c68d87429f0fc48e81100f19b71f6e664f.1661240170.git.baolin.wang@linux.alibaba.com>
+ <3661415c-6069-24ed-b647-6fe6993bddae@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <3661415c-6069-24ed-b647-6fe6993bddae@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-reg-io-width is a standard property, so no need for defining its type
-with $ref.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml     | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-index b00246faea57..4b7e54a8f037 100644
---- a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-@@ -26,7 +26,6 @@ properties:
-   reg-io-width:
-     description:
-       Width (in bytes) of the registers specified by the reg property.
--    $ref: /schemas/types.yaml#/definitions/uint32
-     enum: [1, 4]
-     default: 1
- 
--- 
-2.34.1
+On 8/23/2022 4:14 PM, David Hildenbrand wrote:
+> On 23.08.22 09:50, Baolin Wang wrote:
+>> Considering the pmd entries of a CONT-PMD hugetlb can not span on
+>> multiple PMDs, we can change to use the PMD page lock, which can
+>> be much finer grain that lock in the mm.
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   include/linux/hugetlb.h | 12 ++++++++++--
+>>   1 file changed, 10 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+>> index 3a96f67..d4803a89 100644
+>> --- a/include/linux/hugetlb.h
+>> +++ b/include/linux/hugetlb.h
+>> @@ -892,9 +892,17 @@ static inline gfp_t htlb_modify_alloc_mask(struct hstate *h, gfp_t gfp_mask)
+>>   static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
+>>   					   struct mm_struct *mm, pte_t *pte)
+>>   {
+>> -	VM_BUG_ON(huge_page_size(h) == PAGE_SIZE);
+>> +	unsigned long hp_size = huge_page_size(h);
+>>   
+>> -	if (huge_page_size(h) == PMD_SIZE) {
+>> +	VM_BUG_ON(hp_size == PAGE_SIZE);
+>> +
+>> +	/*
+>> +	 * Considering CONT-PMD size hugetlb, since the CONT-PMD entry
+>> +	 * can not span multiple PMDs, then we can use the fine grained
+>> +	 * PMD page lock.
+>> +	 */
+>> +	if (hp_size == PMD_SIZE ||
+>> +	    (hp_size > PMD_SIZE && hp_size < PUD_SIZE)) {
+>>   		return pmd_lockptr(mm, (pmd_t *) pte);
+>>   	} else if (huge_page_size(h) < PMD_SIZE) {
+>>   		unsigned long mask = ~(PTRS_PER_PTE * sizeof(pte_t) - 1);
+> 
+> Is there a measurable performance gain? IOW, do we really care?
 
+IMO, It's just a theoretical analysis now:) Let me think about how to 
+measure the performance gain.

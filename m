@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7949A59DC5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8307059DF12
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355238AbiHWKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
+        id S1355272AbiHWKff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354236AbiHWKU7 (ORCPT
+        with ESMTP id S1354299AbiHWKVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:20:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468CFBFB;
-        Tue, 23 Aug 2022 02:02:20 -0700 (PDT)
+        Tue, 23 Aug 2022 06:21:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502181B1B;
+        Tue, 23 Aug 2022 02:02:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D43416153F;
-        Tue, 23 Aug 2022 09:02:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE00FC433D7;
-        Tue, 23 Aug 2022 09:02:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7BA6B81C48;
+        Tue, 23 Aug 2022 09:02:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11628C433C1;
+        Tue, 23 Aug 2022 09:02:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245339;
-        bh=MYOMFbptAUcIePjYdRyu8OSVn7/0hfV7tcqXeEefLR0=;
+        s=korg; t=1661245342;
+        bh=a6/dzNLnl3+ueGSUXifc4gcmQx39zUiZ4KE3nKIegv8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LCye2oUfT//JTqQQ12iLDUL6RwmBNIEa6BuTZk3CZGKKI5wY5eUrngtK+tLHS/JB7
-         /TYJ9VG71lNFxslQmXYDeDg0q+z+xgYaaAU/lbm6vjEAMKfjVIRSS/8h1sr4t4M0q2
-         l77HJRlCeGkTbHyK5+rV9k9RaINErjJsnzWUc5RM=
+        b=V5uU9aoQ5ENuq9JIWbWNLGtQSvi3ILrlM6ocApB8P2F1RTg4i8CgG4XJJDBQlg8om
+         2H7wEdHkDujoEGGB+KrGydf2xDOFKhjPrfxHa1+KAcb5HXtbtYKF0cttff2nrOAeoU
+         wNmtWqkkqNhxjP4OlqkOmG2f7xX+zGkFyXJKQmvk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manyi Li <limanyi@uniontech.com>,
+        stable@vger.kernel.org, huhai <huhai@kylinos.cn>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 048/287] ACPI: PM: save NVS memory for Lenovo G40-45
-Date:   Tue, 23 Aug 2022 10:23:37 +0200
-Message-Id: <20220823080101.870203128@linuxfoundation.org>
+Subject: [PATCH 4.19 049/287] ACPI: LPSS: Fix missing check in register_device_clock()
+Date:   Tue, 23 Aug 2022 10:23:38 +0200
+Message-Id: <20220823080101.899588020@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -55,42 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manyi Li <limanyi@uniontech.com>
+From: huhai <huhai@kylinos.cn>
 
-[ Upstream commit 4b7ef7b05afcde44142225c184bf43a0cd9e2178 ]
+[ Upstream commit b4f1f61ed5928b1128e60e38d0dffa16966f06dc ]
 
-[821d6f0359b0614792ab8e2fb93b503e25a65079] is to make machines
-produced from 2012 to now not saving NVS region to accelerate S3.
+register_device_clock() misses a check for platform_device_register_simple().
+Add a check to fix it.
 
-But, Lenovo G40-45, a platform released in 2015, still needs NVS memory
-saving during S3. A quirk is introduced for this platform.
-
-Signed-off-by: Manyi Li <limanyi@uniontech.com>
+Signed-off-by: huhai <huhai@kylinos.cn>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/sleep.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/acpi/acpi_lpss.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index 847db3edcb5b..a3b4ac97793f 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -359,6 +359,14 @@ static const struct dmi_system_id acpisleep_dmi_table[] __initconst = {
- 		DMI_MATCH(DMI_PRODUCT_NAME, "80E3"),
- 		},
- 	},
-+	{
-+	.callback = init_nvs_save_s3,
-+	.ident = "Lenovo G40-45",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+		DMI_MATCH(DMI_PRODUCT_NAME, "80E1"),
-+		},
-+	},
- 	/*
- 	 * https://bugzilla.kernel.org/show_bug.cgi?id=196907
- 	 * Some Dell XPS13 9360 cannot do suspend-to-idle using the Low Power
+diff --git a/drivers/acpi/acpi_lpss.c b/drivers/acpi/acpi_lpss.c
+index ded6c5c17fd7..144cda7da7ee 100644
+--- a/drivers/acpi/acpi_lpss.c
++++ b/drivers/acpi/acpi_lpss.c
+@@ -401,6 +401,9 @@ static int register_device_clock(struct acpi_device *adev,
+ 	if (!lpss_clk_dev)
+ 		lpt_register_clock_device();
+ 
++	if (IS_ERR(lpss_clk_dev))
++		return PTR_ERR(lpss_clk_dev);
++
+ 	clk_data = platform_get_drvdata(lpss_clk_dev);
+ 	if (!clk_data)
+ 		return -ENODEV;
 -- 
 2.35.1
 

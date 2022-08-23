@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EC059DF65
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBAC59DF47
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353612AbiHWKLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S1359455AbiHWMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352161AbiHWKEh (ORCPT
+        with ESMTP id S1359441AbiHWMFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:04:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4119671724;
-        Tue, 23 Aug 2022 01:51:32 -0700 (PDT)
+        Tue, 23 Aug 2022 08:05:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BC5DF081;
+        Tue, 23 Aug 2022 02:37:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0A086150F;
-        Tue, 23 Aug 2022 08:51:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8494C433D6;
-        Tue, 23 Aug 2022 08:51:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33FD960F50;
+        Tue, 23 Aug 2022 09:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4019EC433D6;
+        Tue, 23 Aug 2022 09:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244691;
-        bh=IKMkzTsYh/OjMKBcBRBsOD5re4x3laIipvrW/22RXUE=;
+        s=korg; t=1661247438;
+        bh=ttTgAKLVKDFniNHKzR7eFovG7oiAWr4Wxjn4pETPQ1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rivc/sPXU4ei2BrY2oMC7jqOgq8fvjvCR23NaPQPnie+yy5nP5Ogx8E/U8TNLV1b8
-         xBUOa4tUe+B2SqBlB8J0B/9PKlPCbqjPls0DRYskrQLusJdHpZS9FTRm8kJ7b4S+GT
-         mKQALecrGHSQ7zn5Lx6AM9Q0LZiVANdtmY1tC9AQ=
+        b=OXes2KRMA44Vb0fenvOngIKpifyXU9/MR0a+SEuYrOVXivbQoVS8Ttw8HYWndctzY
+         haAevLNXjl2Q2ZLvRXNhGYVJvsdWe0920Zk+XZ51dOwMJv9AKEc6a63zIppc0+JJ4Q
+         UxQEeogoS1NXJCtiqrUhXG5JMlkqikKHQjtVqk0U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 176/229] ALSA: info: Fix llseek return value when using callback
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 5.10 005/158] ata: libata-eh: Add missing command name
 Date:   Tue, 23 Aug 2022 10:25:37 +0200
-Message-Id: <20220823080059.901302464@linuxfoundation.org>
+Message-Id: <20220823080046.273602730@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit 9be080edcca330be4af06b19916c35227891e8bc upstream.
+commit d3122bf9aa4c974f5e2c0112f799757b3a2779da upstream.
 
-When using callback there was a flow of
+Add the missing command name for ATA_CMD_NCQ_NON_DATA to
+ata_get_cmd_name().
 
-	ret = -EINVAL
-	if (callback) {
-		offset = callback();
-		goto out;
-	}
-	...
-	offset = some other value in case of no callback;
-	ret = offset;
-out:
-	return ret;
-
-which causes the snd_info_entry_llseek() to return -EINVAL when there is
-callback handler. Fix this by setting "ret" directly to callback return
-value before jumping to "out".
-
-Fixes: 73029e0ff18d ("ALSA: info - Implement common llseek for binary mode")
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220817124924.3974577-1-amadeuszx.slawinski@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 661ce1f0c4a6 ("libata/libsas: Define ATA_CMD_NCQ_NON_DATA")
+Cc: stable@vger.kernel.org
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/info.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/ata/libata-eh.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/core/info.c
-+++ b/sound/core/info.c
-@@ -127,9 +127,9 @@ static loff_t snd_info_entry_llseek(stru
- 	entry = data->entry;
- 	mutex_lock(&entry->access);
- 	if (entry->c.ops->llseek) {
--		offset = entry->c.ops->llseek(entry,
--					      data->file_private_data,
--					      file, offset, orig);
-+		ret = entry->c.ops->llseek(entry,
-+					   data->file_private_data,
-+					   file, offset, orig);
- 		goto out;
- 	}
- 
+--- a/drivers/ata/libata-eh.c
++++ b/drivers/ata/libata-eh.c
+@@ -2131,6 +2131,7 @@ const char *ata_get_cmd_descript(u8 comm
+ 		{ ATA_CMD_WRITE_QUEUED_FUA_EXT, "WRITE DMA QUEUED FUA EXT" },
+ 		{ ATA_CMD_FPDMA_READ,		"READ FPDMA QUEUED" },
+ 		{ ATA_CMD_FPDMA_WRITE,		"WRITE FPDMA QUEUED" },
++		{ ATA_CMD_NCQ_NON_DATA,		"NCQ NON-DATA" },
+ 		{ ATA_CMD_FPDMA_SEND,		"SEND FPDMA QUEUED" },
+ 		{ ATA_CMD_FPDMA_RECV,		"RECEIVE FPDMA QUEUED" },
+ 		{ ATA_CMD_PIO_READ,		"READ SECTOR(S)" },
 
 

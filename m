@@ -2,98 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B737A59D95D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DB759D836
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236009AbiHWJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
+        id S241027AbiHWJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349551AbiHWJQF (ORCPT
+        with ESMTP id S1350134AbiHWJVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:16:05 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7FD86FFE
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:32:25 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id s1so15900800lfp.6
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=F+5yVrf2toWobmjjbMycRUMUYr1HibosAX8wZbYW6I8=;
-        b=ME5pga0xqukFaQ68m0vfi01ZcbRzB6yRE0fmlS7+txX0bQzWcwtEDRVyRioYOwi0MK
-         78InqOKpEzQjwwoKp2jLetMmVf+U5kGfjAGpCioYESzh0Nn7R6NnQEhEpy83phb2wUBE
-         vONvAXl1ssbqNdhWgsw2pgINK15PKwGEugYDYXQ0DvtuYmJnc+kHLoqrcq/t9TBGW18o
-         dZU7d/N5EaKR+aOL8epf9dLFNAFMKp9E+bD7gskVr4SPbXoi96eOAvH4hzX2GgWwnC3o
-         g1IWqumSlGK5va3jXsEv35nL23bMbFlCDl0w5NvXP0nYtKGxRoJwWq/DNhDBDzGG9reA
-         nMpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=F+5yVrf2toWobmjjbMycRUMUYr1HibosAX8wZbYW6I8=;
-        b=aPo9R3yFQEiaqcAe8SmgjLj3RRd43Mapnwm/LvSkUA2YYV/vn58NhFiSxdjj9F/dDr
-         K+4ya9GGM1r+jaJKRCTjdaMsQUJq2YvF6cqy1x0HcK7YZOIYmxBMmZzWeMPgijUaQzep
-         lE2v6EqecMsNukTiWwKcrpQrWinwgA5O2t7l4SXKfc0Wt8dVhWub+j2xIUGgZ7sH9lXX
-         ckS6m6CJxnr6nZx/iEOw1ckMTi8Kh4wOOZtbwE4tEur6+3WvbtIgUPdr7WULlQh/C4n9
-         rMZyUmljuAKdQEyeVK5B+tBaacnDAKKRDrvu9JLhPxoxD43bG+FARwFj2vN4P/n/d5au
-         /ehw==
-X-Gm-Message-State: ACgBeo0guUa2vf9vATiXV1krsRDeY5dZ0qzdIU6kvWEue2TjkX30p4iN
-        fgbvvgqfSNEFP47gPHrErZBDAg==
-X-Google-Smtp-Source: AA6agR5US57wd92jMkSXVjf68U7K8XzRGHmQSa/B4s1jL0IZJ4zZqecKAkNJuoKOArqf5pabIV5IRQ==
-X-Received: by 2002:a05:6512:3d08:b0:48b:123e:fcf3 with SMTP id d8-20020a0565123d0800b0048b123efcf3mr8057965lfv.418.1661243543099;
-        Tue, 23 Aug 2022 01:32:23 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id v20-20020a05651203b400b0048a83ab2d32sm1193907lfp.0.2022.08.23.01.32.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 01:32:22 -0700 (PDT)
-Message-ID: <f621a841-593f-cfed-9560-64c011a00bdd@linaro.org>
-Date:   Tue, 23 Aug 2022 11:32:21 +0300
+        Tue, 23 Aug 2022 05:21:30 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777A48C456;
+        Tue, 23 Aug 2022 01:34:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MBjDH5BJcz4xYS;
+        Tue, 23 Aug 2022 18:33:19 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1661243600;
+        bh=jzL+tYVj4e9+zENm5e4p359zO1COy5i/CDx3a5RuXi0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=DWH/riAmZijXBMyFpMOiCjZL/u14KNbC33rDY2XPlmwRTlIHFZEyB3l4hZ6CutX2M
+         /hxh+Z+F6vNEwwgMah0o1MIoBK/i6qQfhDYcu9Ac4BZf6IxKGhWAcJIfsROANYVH0M
+         2cJCD7cGrgSm+6Hle+5F8DQiDlE3nNy4QRjFvW+n5WL+2Nkq4AKPDtSCDwkc9uk8QA
+         KEzBaddNdy74sR7hw0/y6OjlExq3oBBYjU97e95jCsGLYAR20kqphSEuAqjx6FngzL
+         qNIH2G9b0IyZaSi49GgtXATGN0SmKeTKjGlFe7UyPR4YxQbjQdI+Z1PfSv2CDedkjL
+         cs//ozxWcigLA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, atrajeev@linux.vnet.ibm.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        lance@osuosl.org, paulmck@kernel.org, rcu@vger.kernel.org
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: Re: [PATCH linux-next] powerpc: disable sanitizer in irq_soft_mask_set
+In-Reply-To: <20220821010030.97539-1-zhouzhouyi@gmail.com>
+References: <20220821010030.97539-1-zhouzhouyi@gmail.com>
+Date:   Tue, 23 Aug 2022 18:33:14 +1000
+Message-ID: <87edx7l5px.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH,2/2] pwm: mtk-disp: Fix the parameters calculated by the
- enabled flag of disp_pwm.
-Content-Language: en-US
-To:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1661239875-19841-1-git-send-email-xinlei.lee@mediatek.com>
- <1661239875-19841-3-git-send-email-xinlei.lee@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1661239875-19841-3-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 10:31, xinlei.lee@mediatek.com wrote:
-> From: xinlei lee <xinlei.lee@mediatek.com>
-> 
-> In the original mtk_disp_pwm_get_state() function, the result of reading
-> con0 & BIT(0) is enabled as disp_pwm. 
-> In order to conform to the register table, we should use the disp_pwm 
-> base address as the enabled judgment.
-> 
-> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
-> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+Zhouyi Zhou <zhouzhouyi@gmail.com> writes:
+> In ppc, compiler based sanitizer will generate instrument instructions
+> around statement WRITE_ONCE(local_paca->irq_soft_mask, mask):
+>
+>    0xc000000000295cb0 <+0>:	addis   r2,r12,774
+>    0xc000000000295cb4 <+4>:	addi    r2,r2,16464
+>    0xc000000000295cb8 <+8>:	mflr    r0
+>    0xc000000000295cbc <+12>:	bl      0xc00000000008bb4c <mcount>
+>    0xc000000000295cc0 <+16>:	mflr    r0
+>    0xc000000000295cc4 <+20>:	std     r31,-8(r1)
+>    0xc000000000295cc8 <+24>:	addi    r3,r13,2354
+>    0xc000000000295ccc <+28>:	mr      r31,r13
+>    0xc000000000295cd0 <+32>:	std     r0,16(r1)
+>    0xc000000000295cd4 <+36>:	stdu    r1,-48(r1)
+>    0xc000000000295cd8 <+40>:	bl      0xc000000000609b98 <__asan_store1+8>
+>    0xc000000000295cdc <+44>:	nop
+>    0xc000000000295ce0 <+48>:	li      r9,1
+>    0xc000000000295ce4 <+52>:	stb     r9,2354(r31)
+>    0xc000000000295ce8 <+56>:	addi    r1,r1,48
+>    0xc000000000295cec <+60>:	ld      r0,16(r1)
+>    0xc000000000295cf0 <+64>:	ld      r31,-8(r1)
+>    0xc000000000295cf4 <+68>:	mtlr    r0
+>
+> If there is a context switch before "stb     r9,2354(r31)", r31 may
+> not equal to r13, in such case, irq soft mask will not work.
+>
+> This patch disable sanitizer in irq_soft_mask_set.
+>
+> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> ---
+> Dear PPC developers
+>
+> I found this bug when trying to do rcutorture tests in ppc VM of
+> Open Source Lab of Oregon State University following Paul E. McKenny's guidance.
+>
+> console.log report following bug:
+>
+> [  346.527467][  T100] BUG: using smp_processor_id() in preemptible [00000000] code: rcu_torture_rea/100^M
+> [  346.529416][  T100] caller is rcu_preempt_deferred_qs_irqrestore+0x74/0xed0^M
+> [  346.531157][  T100] CPU: 4 PID: 100 Comm: rcu_torture_rea Tainted: G        W          5.19.0-rc5-next-20220708-dirty #253^M
+> [  346.533620][  T100] Call Trace:^M
+> [  346.534449][  T100] [c0000000094876c0] [c000000000ce2b68] dump_stack_lvl+0xbc/0x108 (unreliable)^M
+> [  346.536632][  T100] [c000000009487710] [c000000001712954] check_preemption_disabled+0x154/0x160^M
+> [  346.538665][  T100] [c0000000094877a0] [c0000000002ce2d4] rcu_preempt_deferred_qs_irqrestore+0x74/0xed0^M
+> [  346.540830][  T100] [c0000000094878b0] [c0000000002cf3c0] __rcu_read_unlock+0x290/0x3b0^M
+> [  346.542746][  T100] [c000000009487910] [c0000000002bb330] rcu_torture_read_unlock+0x30/0xb0^M
+> [  346.544779][  T100] [c000000009487930] [c0000000002b7ff8] rcutorture_one_extend+0x198/0x810^M
+> [  346.546851][  T100] [c000000009487a10] [c0000000002b8bfc] rcu_torture_one_read+0x58c/0xc90^M
+> [  346.548844][  T100] [c000000009487ca0] [c0000000002b942c] rcu_torture_reader+0x12c/0x360^M
+> [  346.550784][  T100] [c000000009487db0] [c0000000001de978] kthread+0x1e8/0x220^M
+> [  346.552555][  T100] [c000000009487e10] [c00000000000cd54] ret_from_kernel_thread+0x5c/0x64^M
+>
+> After 12 days debugging, I finally narrow the problem to irq_soft_mask_set.
 
-This is a fix so not really related with the change adding new device.
-Send them separately in the future.
+Thanks for spending 12 days debugging it! O_o
 
-Best regards,
-Krzysztof
+> diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
+> index 26ede09c521d..a5ae8d82cc9d 100644
+> --- a/arch/powerpc/include/asm/hw_irq.h
+> +++ b/arch/powerpc/include/asm/hw_irq.h
+> @@ -121,7 +121,7 @@ static inline notrace unsigned long irq_soft_mask_return(void)
+>   * for the critical section and as a clobber because
+>   * we changed paca->irq_soft_mask
+>   */
+> -static inline notrace void irq_soft_mask_set(unsigned long mask)
+> +static inline notrace __no_kcsan __no_sanitize_address void irq_soft_mask_set(unsigned long mask)
+>  {
+>  	/*
+>  	 * The irq mask must always include the STD bit if any are set.
+
+My worry is that this will force irq_soft_mask_set() out of line, which
+we would rather avoid. It's meant to be a fast path.
+
+In fact with this applied I see nearly 300 out-of-line copies of the
+function when building a defconfig, and ~1700 calls to it.
+
+Normally it is inlined at every call site.
+
+
+So I think I'm inclined to revert ef5b570d3700 ("powerpc/irq: Don't open
+code irq_soft_mask helpers").
+
+It was a nice looking cleanup, but those loads must not be instrumented
+by KASAN, but we also want them inlined, and AFAICS the only way to
+achieve that is to go back to inline asm.
+
+cheers

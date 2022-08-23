@@ -2,229 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D1159F006
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E576F59F007
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 01:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiHWXy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 19:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        id S229600AbiHWXzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 19:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiHWXyO (ORCPT
+        with ESMTP id S230511AbiHWXzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 19:54:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678137C190
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661298853; x=1692834853;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=vnwNzD/OGhS9A2rD/db9p2DlWjFYLSz/rxqUr11QMbo=;
-  b=YiEEzVXqhhVvlHl9h5al+Juhy4xd9ksVRUPCi7eqgdOrISLfebpWxMoX
-   zGZFKwuYLrqxjjG3rUVvK5t93IKul9hhY2x87AGEHUZODajpWxeNFlJe9
-   7E07ZBgKeAhcN44mdBVCZLJjTpLjCOjJOQiF8T1vu5LyuBP8BGU9aWPGV
-   U19sIQF0k0kg5WdEikHa+m8ZpaY6znT4p+byulQTp/hR6AnIAD15OqEGu
-   P8B6m6h5IqdPaKaahDduX2FO/r/lSTvU2XpmhjCioicKED5unL4bvfpju
-   MzfvAZffekZTzX+DiKw8I16Z75xsm3iPFAIvB/UKM7C7Xb9Nfo4s+6GRh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="295105438"
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="295105438"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 16:54:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="677815656"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2022 16:54:11 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQdik-0000jR-2p;
-        Tue, 23 Aug 2022 23:54:10 +0000
-Date:   Wed, 24 Aug 2022 07:53:11 +0800
-From:   kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        nick johnstone <nicholas.johnstone@intel.com>
-Subject: [mchinth:socwatch_linux_6_0 1/1] drivers/clk/clk.c:867:6: error:
- redefinition of 'clk_unprepare'
-Message-ID: <202208240755.o30qG0I2-lkp@intel.com>
-MIME-Version: 1.0
+        Tue, 23 Aug 2022 19:55:43 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DCD8B9AC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:55:41 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NLE7lZ021877;
+        Tue, 23 Aug 2022 23:55:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=3MaqWG5gVRQ5pyiXsfTlK82WDC42aHn2EQ2M6HUj3XY=;
+ b=P9o0ajthBVW6+a+vg+6uhAZ5RBpYiz2hB2FZNX4qGj80BqjEoQ9ldJB28+jbj9nc8o0s
+ s5NAK4p+66i/0Hjtsy7HMgkGB0jp92/cYCcCQHuVQjoKN3iZFUtWkpentCaHx5aa5Zwd
+ SRidCQAWyhhNeBfSju6hNeP7A8mDLWcC6rGNOABM+phtx8n3/Omj8MC2v1JGe7g0zq+7
+ kRYxE1tPogzLlGChFdOGMt+GqPl+xerShtBhEbpl8lltQ5H/BnHvUYmaBQ23Z4M1ERTJ
+ But4BN+tu9pivlUdJn8sdofqU5BU6T8nZ72NznfTOqwkEq7XZVRpHF1kSRXmZXj+deKH 8Q== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4w25j10w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 23:55:34 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27NKHT0S018242;
+        Tue, 23 Aug 2022 23:55:33 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mjf1bth-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Aug 2022 23:55:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fCcUc9kqKVovVqKIe5/8Tbg6nJvXipRQRaZjGerdwgG2RWKApygvLxn1JhNEIXNpsXaIZ41hL9bChHHZslcsdjcVJN1Yk0wVRUcV6/prZccekfJ1Qz+vcof8F8CD3Jind7fo0O6yaOXOg1obL+iLbEqqjYfx6n6bILjpw+AU/z/IC1lm3YQcKZB0o2unPCvR9G74YaIGe9KVH2JYd4DFkJDRTarY8LPcgQpRHgvi0HvD8lBUsXfsCrqYgk1iwnkDF4PAvvfVmKbvK/SVdGUNWWWpd0cqsxiNUq+2qnB+o7/a/UmhiZuoGnXKpBAsYaYODH41ISg5zkkxLcW1FnhDpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3MaqWG5gVRQ5pyiXsfTlK82WDC42aHn2EQ2M6HUj3XY=;
+ b=CGaAOCbl8sWPiIUsP1PGyijKNsQJvk0k5D/pZ3PGwGoyax0BIuEXyfK5C158K3/NuIfBuyn/HlJuqAiNVRqxc0tmCw9NJNA0KCtXHBgRokSninyMovDGw7SyJWozrNoZMIhrX4AeQHIXbeh546QZSBRrwOWm504V/NIjwL9WMfhQtsru+CUy0L2V/TRsZieERRbsVTayBzw8cLrT+CpifkQiM+QQw+/AiS+s4RU6KaxEdB3cJjlNXzridmIHYde+ePBkCuCNr/Qkf+OoXRufq1E3rEg6ghfZpMEcBD9iloZ5ONl9q6Sr429p9uLnIjRKV3Wnbj4ZAGpeKLtDLpvQ8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3MaqWG5gVRQ5pyiXsfTlK82WDC42aHn2EQ2M6HUj3XY=;
+ b=MP2pess6+dynX/FKKQZLUljDD3NN+NyvFb+FodOYwjhmrXmTr5hH6QmJKKnJjAAkbXPaANT7UpZC7WhXrV8Wo5dkf+MRcBcdSVU/B18HI5xrJw5swyj8ypK6wjKNpKw21VwwgWp2ieu/bx9R8rryzsxy+vnCPuFqxPXkSDVqfUM=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BN6PR1001MB2370.namprd10.prod.outlook.com (2603:10b6:405:31::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Tue, 23 Aug
+ 2022 23:55:31 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0%5]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
+ 23:55:31 +0000
+Date:   Tue, 23 Aug 2022 16:55:27 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
+ size hugetlb page
+Message-ID: <YwVo7xSO+VebkIfQ@monkey>
+References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
+ <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
+ <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
+ <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
+ <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        MISSING_HEADERS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com>
+X-ClientProxiedBy: MW4PR04CA0133.namprd04.prod.outlook.com
+ (2603:10b6:303:84::18) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ec36c4d2-a3c0-49fa-216f-08da8562f626
+X-MS-TrafficTypeDiagnostic: BN6PR1001MB2370:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iy24rB0n3n7fhxQshmPf+CFZVxAeeib8X3f5w34YSvQtZMpeIsuM/h4zNqFE+KTJLdyN2ukauRDsAEyJm8joX2p5nAAIexn0OxcWVNYUpnmqTkGTXbOS8FmJmCd432xLVFjDkDOxPaaCMI+9f4O7ZdXO0nRKGVpKoURWIuJE0eYl6UuLSP905T44lsSmE002mkNGoJCUbN8cJP+Y2sRnHL/wU4S4PaX7UYgHnC9JH0EGaIRNTD9G30nWosU3OcZ8jgJfIb3LXtsKDDkXHhr1dMxOkDx3KRAQHNH7Ysv30or3Mrm/Lc2CP6jNTsmY9WFYqeX8TEgTUYXUCNXWOU6gOM2vrO68tc7271ZYrxgySHJlgl71XPDHi3dEOQtp455R3NkfCKIFpis0Y1ilrmky9gZBseo+Nk4cPva1lzDVPVrKw7qSyZWiKs4MOxpMAHSrqN6Db5G4dW3Oe2PXQXak1MeEd+XWTy8Y4ZbplmHznjE9EfQXThTiSD4WmCxnhN/wLKCj10pIvk9F79or6Bjw6dZa8EyKdTKYZVGB7vppbZpWaMPgwLMVVIc4AaSqf/il2wTnxSXx4ThS2bvXR6nadqHHdPtikqDwMN1VV6uXuKzAWeK9CIcXRaNKG2XOj9mJEcxx/B5sEL9bsAwcO5L16TIwIzuVQVYRTV9PcUo/IrJRypOKBw0F7cDjFdXMPcSl4WFqTq6V9m0TK6iP33WdtDH4G+PYn+sxDfEtxPx+pWl1FDHuoxrBpJF9rAAgNx0+x2oLHfzo+Loy3SMZ8/7krQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(396003)(39860400002)(346002)(136003)(376002)(66946007)(44832011)(8676002)(66476007)(4326008)(66556008)(86362001)(38100700002)(6512007)(53546011)(6506007)(9686003)(6916009)(6666004)(478600001)(6486002)(316002)(8936002)(186003)(5660300002)(2906002)(33716001)(83380400001)(41300700001)(26005)(21314003)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4u4Zb6FjV21hCeOLp8NOV9mW+r34VdlXls4cBLB/w1kGmchz6X4+dKvRuqta?=
+ =?us-ascii?Q?seQ7jnpkuoyD6k/CyGz+eEXA74uzbhwc/ueMuluAHDceImjC1UAJ7ZBnZkgN?=
+ =?us-ascii?Q?rq8lO+HbbT4mMgV1i/uYlF9OcTrZWYVGYHtwuDF1gwptGktQQzbrfh6l77Qd?=
+ =?us-ascii?Q?WivSt/olbwrjT85qKA+u4VuNeuf/Xd2UpuQ9q0Cmwg4gkpA7V6+mdFE9catQ?=
+ =?us-ascii?Q?/8fkX1FIUOPnR/oZ/mz/bbvqNRU13gRFLwR6J8Dax9po6X9u1A2W75A1BHT5?=
+ =?us-ascii?Q?jJYjOOZ3UmpLcztKV2eaTr6zaQYkgxbFz3s4PIY6Es5BBNF5TVDv4RhHAR93?=
+ =?us-ascii?Q?jH0YrQmvwzPFOy8+OSy2FNN4bf1E9g687ttOjJTdN00aQ5ikzdlgg9XIcvMN?=
+ =?us-ascii?Q?WK9SkH0M5GR+CAvg7pjYqU1J61NXQM0v2dRpZlGPOLuc9UCyi81344wJeWuU?=
+ =?us-ascii?Q?BXZ5aW80JWDiO7SrmXIVg+pPm9BtlWjsirg2Ml/ISuewO0CIDNfPkhb5yw7R?=
+ =?us-ascii?Q?i+Zvm+AbFS7Z2bAgqovCjlGh0PhGUtFhi2SREvDiHzSBYqhUyA5yaNADLILi?=
+ =?us-ascii?Q?DYqOavpwgcZi59MDNn36yh8SP41Ab70zMSSM0DoUwj13Ov54NtgbijNhKQjw?=
+ =?us-ascii?Q?Vc4ptVwnq86F7PnPNZD/b/1n0eX43I0t9qebm672ZY9UZbHdDrmuwghEuScA?=
+ =?us-ascii?Q?DqF609MtypL8aHmLU0HkcuUuCq9KadPSEH+I6LeddQtb7b3ZbJhMDWuxFYc5?=
+ =?us-ascii?Q?lIBlcUlRN12tLtCxVMMEYlSzFX+DvnHOgLNBxliG6wdEdjLd5o0jdZ8+IEBX?=
+ =?us-ascii?Q?bjgpFciSoudzTOp1luhyzDD5J9fGhvkbiLCQE4WbXmzUMPwJD+mmczsWsTm6?=
+ =?us-ascii?Q?jOLhX5PSZMgGXrx6HeGuEVBGYgRrR0wkr8t6ypMUasRyh/RoOoPaEy7ZsDte?=
+ =?us-ascii?Q?j7qDdHPVCZR4d8ukXzJHxtfCctEaM/BVqy3QpCHTB2Z0Rpdv1eMdCryOW3/s?=
+ =?us-ascii?Q?tHJAdhQLPplw/Gjfhp7K9M55MaOyGhHLl/eAi9f5uQDlMsOFrjhfj0Neujah?=
+ =?us-ascii?Q?kVpecvFCO58ivOWzfRAx9n/Br3M/w1Er29+zhS6kaGiizNE3sW5i9nT+BjKV?=
+ =?us-ascii?Q?xyC6guoO187F+otnyWCa1n96WXbrFR/mJSN9r8rvOrxy4y7TLgsXc2LqC3lW?=
+ =?us-ascii?Q?8VIAMS8Ka5LELb8Unl7qs9+T1Hf/xHVwgZOldqAuo9aIBi4a53A5ifWPBZuk?=
+ =?us-ascii?Q?S+iwR7G8eTToUWIA20i8VVZd0SYDT006Ifdn8+1Ax6LZP4fkTclPf2CFABiD?=
+ =?us-ascii?Q?dithgTluMFw4lyPZCurq/wjKar3CtrAISGRXJwXgcE3lLcLGLjwKDEAgj5ew?=
+ =?us-ascii?Q?vqgPbOf1cWvyzhGVJ0ZhbYe6nUPKdGhE6BMk3IuuQp0Fcqp16ULvR71A/yi9?=
+ =?us-ascii?Q?kLbimSZDXbTm/f/DLXjkQG96lB1ji2svysjzLa14J9O66kGkV478Rp8/Ce5H?=
+ =?us-ascii?Q?qKg0TCyJildV1uknzeNMVwVJwSVVjdzs2sS5vQrN5NSjjJI8kCN1gicpTlNd?=
+ =?us-ascii?Q?XchJme8TJoRUKwzlqhUf6tSorFPAhh3ejjEC7qDWZkgtI4Qxv1wM4hxviHur?=
+ =?us-ascii?Q?3Q=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec36c4d2-a3c0-49fa-216f-08da8562f626
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 23:55:31.1985
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FfUsmbrmSQ3Yck6p+SLOhl+BDKvGCuxo9IyHQZMPE1GPMBvljQ4xZe3eyljeCdWl4uVJxXd/FPSesHixID33GA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1001MB2370
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-23_10,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208230089
+X-Proofpoint-ORIG-GUID: d7HCALEkNQqVSVbrNnjBi5tVtoeVnUVB
+X-Proofpoint-GUID: d7HCALEkNQqVSVbrNnjBi5tVtoeVnUVB
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi nick,
+On 08/23/22 12:23, David Hildenbrand wrote:
+> On 23.08.22 12:02, Baolin Wang wrote:
+> > 
+> > 
+> > On 8/23/2022 4:29 PM, David Hildenbrand wrote:
+> >> On 23.08.22 09:50, Baolin Wang wrote:
+> >>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> >>> hugetlb, which means it can support not only PMD/PUD size hugetlb
+> >>> (2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
+> >>> specified.
+> >>>
+> >>> So when looking up a CONT-PTE size hugetlb page by follow_page(), it
+> >>> will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
+> >>> size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
+> >>> for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
+> >>> get the correct lock, which is mm->page_table_lock.
+> >>>
+> >>> That means the pte entry of the CONT-PTE size hugetlb under current
+> >>> pte lock is unstable in follow_page_pte(), we can continue to migrate
+> >>> or poison the pte entry of the CONT-PTE size hugetlb, which can cause
+> >>> some potential race issues, and following pte_xxx() validation is also
+> >>> unstable in follow_page_pte(), even though they are under the 'pte lock'.
+> >>>
+> >>> Moreover we should use huge_ptep_get() to get the pte entry value of
+> >>> the CONT-PTE size hugetlb, which already takes into account the subpages'
+> >>> dirty or young bits in case we missed the dirty or young state of the
+> >>> CONT-PTE size hugetlb.
+> >>>
+> >>> To fix above issues, introducing a new helper follow_huge_pte() to look
+> >>> up a CONT-PTE size hugetlb page, which uses huge_pte_lock() to get the
+> >>> correct pte entry lock to make the pte entry stable, as well as
+> >>> supporting non-present pte handling.
+> >>>
+> >>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> >>> ---
+> >>>   include/linux/hugetlb.h |  8 ++++++++
+> >>>   mm/gup.c                | 11 ++++++++++
+> >>>   mm/hugetlb.c            | 53 +++++++++++++++++++++++++++++++++++++++++++++++++
+> >>>   3 files changed, 72 insertions(+)
+> >>>
+> >>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> >>> index 3ec981a..d491138 100644
+> >>> --- a/include/linux/hugetlb.h
+> >>> +++ b/include/linux/hugetlb.h
+> >>> @@ -207,6 +207,8 @@ struct page *follow_huge_addr(struct mm_struct *mm, unsigned long address,
+> >>>   struct page *follow_huge_pd(struct vm_area_struct *vma,
+> >>>   			    unsigned long address, hugepd_t hpd,
+> >>>   			    int flags, int pdshift);
+> >>> +struct page *follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
+> >>> +			     pmd_t *pmd, int flags);
+> >>>   struct page *follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+> >>>   				pmd_t *pmd, int flags);
+> >>>   struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
+> >>> @@ -312,6 +314,12 @@ static inline struct page *follow_huge_pd(struct vm_area_struct *vma,
+> >>>   	return NULL;
+> >>>   }
+> >>>   
+> >>> +static inline struct page *follow_huge_pte(struct vm_area_struct *vma,
+> >>> +				unsigned long address, pmd_t *pmd, int flags)
+> >>> +{
+> >>> +	return NULL;
+> >>> +}
+> >>> +
+> >>>   static inline struct page *follow_huge_pmd(struct mm_struct *mm,
+> >>>   				unsigned long address, pmd_t *pmd, int flags)
+> >>>   {
+> >>> diff --git a/mm/gup.c b/mm/gup.c
+> >>> index 3b656b7..87a94f5 100644
+> >>> --- a/mm/gup.c
+> >>> +++ b/mm/gup.c
+> >>> @@ -534,6 +534,17 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+> >>>   	if (unlikely(pmd_bad(*pmd)))
+> >>>   		return no_page_table(vma, flags);
+> >>>   
+> >>> +	/*
+> >>> +	 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
+> >>> +	 * ARM64 architecture.
+> >>> +	 */
+> >>> +	if (is_vm_hugetlb_page(vma)) {
+> >>> +		page = follow_huge_pte(vma, address, pmd, flags);
+> >>> +		if (page)
+> >>> +			return page;
+> >>> +		return no_page_table(vma, flags);
+> >>> +	}
+> >>> +
+> >>>   	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
+> >>>   	pte = *ptep;
+> >>>   	if (!pte_present(pte)) {
+> >>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> >>> index 6c00ba1..cf742d1 100644
+> >>> --- a/mm/hugetlb.c
+> >>> +++ b/mm/hugetlb.c
+> >>> @@ -6981,6 +6981,59 @@ struct page * __weak
+> >>>   	return NULL;
+> >>>   }
+> >>>   
+> >>> +/* Support looking up a CONT-PTE size hugetlb page. */
+> >>> +struct page * __weak
+> >>> +follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
+> >>> +		pmd_t *pmd, int flags)
+> >>> +{
+> >>> +	struct mm_struct *mm = vma->vm_mm;
+> >>> +	struct hstate *hstate = hstate_vma(vma);
+> >>> +	unsigned long size = huge_page_size(hstate);
+> >>> +	struct page *page = NULL;
+> >>> +	spinlock_t *ptl;
+> >>> +	pte_t *ptep, pte;
+> >>> +
+> >>> +	/*
+> >>> +	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+> >>> +	 * follow_hugetlb_page().
+> >>> +	 */
+> >>> +	if (WARN_ON_ONCE(flags & FOLL_PIN))
+> >>> +		return NULL;
+> >>> +
+> >>> +	ptep = huge_pte_offset(mm, address, size);
+> >>> +	if (!ptep)
+> >>> +		return NULL;
+> >>> +
+> >>> +retry:
+> >>> +	ptl = huge_pte_lock(hstate, mm, ptep);
+> >>> +	pte = huge_ptep_get(ptep);
+> >>> +	if (pte_present(pte)) {
+> >>> +		page = pte_page(pte);
+> >>> +		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+> >>> +			page = NULL;
+> >>> +			goto out;
+> >>> +		}
+> >>> +	} else {
+> >>> +		if (!(flags & FOLL_MIGRATION)) {
+> >>> +			page = NULL;
+> >>> +			goto out;
+> >>> +		}
+> >>> +
+> >>> +		if (is_hugetlb_entry_migration(pte)) {
+> >>> +			spin_unlock(ptl);
+> >>> +			__migration_entry_wait_huge(ptep, ptl);
+> >>> +			goto retry;
+> >>> +		}
+> >>> +		/*
+> >>> +		 * hwpoisoned entry is treated as no_page_table in
+> >>> +		 * follow_page_mask().
+> >>> +		 */
+> >>> +	}
+> >>> +out:
+> >>> +	spin_unlock(ptl);
+> >>> +	return page;
+> >>> +}
+> >>> +
+> >>>   struct page * __weak
+> >>>   follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+> >>>   		pmd_t *pmd, int flags)
+> >>
+> >>
+> >> Can someone explain why:
+> >> * follow_page() goes via follow_page_mask() for hugetlb
+> >> * __get_user_pages() goes via follow_hugetlb_page() and never via
+> >>    follow_page_mask() for hugetlb?
+> >>
+> >> IOW, why can't we make follow_page_mask() just not handle hugetlb and
+> >> route everything via follow_hugetlb_page() -- we primarily only have to
+> >> teach it to not trigger faults.
 
-First bad commit (maybe != root cause):
+I have no idea how we got into this situation, and do agree that it
+makes little sense for both follow_page_mask and follow_hugetlb_page to
+do page table walking differently for hugetlb pages.
 
-tree:   https://github.com/mchinth/linux socwatch_linux_6_0
-head:   d9fa8b4c86d4bc7ccdfcf4ce00a91cbfb5869296
-commit: d9fa8b4c86d4bc7ccdfcf4ce00a91cbfb5869296 [1/1] updated socwatch drivers
-config: m68k-buildonly-randconfig-r005-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240755.o30qG0I2-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/mchinth/linux/commit/d9fa8b4c86d4bc7ccdfcf4ce00a91cbfb5869296
-        git remote add mchinth https://github.com/mchinth/linux
-        git fetch --no-tags mchinth socwatch_linux_6_0
-        git checkout d9fa8b4c86d4bc7ccdfcf4ce00a91cbfb5869296
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/clk/
+I think I have noted elsewhere that all those follow_huge_p*d rotines
+will look the same.  It seems they were just added as needed when the
+follow_page_mask page table walking code was fleshed out.  This also
+needs a cleanup.  If we eliminate hugetlb handling from follow_page_mask,
+perhaps we can get rid of all these?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > IMHO, these follow_huge_xxx() functions are arch-specified at first and 
+> > were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm: 
+> > hugetlb: Copy general hugetlb code from x86 to mm"), and now there are 
+> > still some arch-specified follow_huge_xxx() definition, for example:
+> > ia64: follow_huge_addr
+> > powerpc: follow_huge_pd
+> > s390: follow_huge_pud
+> > 
+> > What I mean is that follow_hugetlb_page() is a common and 
+> > not-arch-specified function, is it suitable to change it to be 
+> > arch-specified?
+> > And thinking more, can we rename follow_hugetlb_page() as 
+> > hugetlb_page_faultin() and simplify it to only handle the page faults of 
+> > hugetlb like the faultin_page() for normal page? That means we can make 
+> > sure only follow_page_mask() can handle hugetlb.
+> > 
 
-All errors (new ones prefixed by >>):
-
->> drivers/clk/clk.c:867:6: error: redefinition of 'clk_unprepare'
-     867 | void clk_unprepare(struct clk *clk)
-         |      ^~~~~~~~~~~~~
-   In file included from drivers/clk/clk.c:9:
-   include/linux/clk.h:303:20: note: previous definition of 'clk_unprepare' with type 'void(struct clk *)'
-     303 | static inline void clk_unprepare(struct clk *clk)
-         |                    ^~~~~~~~~~~~~
->> drivers/clk/clk.c:948:5: error: redefinition of 'clk_prepare'
-     948 | int clk_prepare(struct clk *clk)
-         |     ^~~~~~~~~~~
-   include/linux/clk.h:271:19: note: previous definition of 'clk_prepare' with type 'int(struct clk *)'
-     271 | static inline int clk_prepare(struct clk *clk)
-         |                   ^~~~~~~~~~~
->> drivers/clk/clk.c:1194:6: error: redefinition of 'clk_is_enabled_when_prepared'
-    1194 | bool clk_is_enabled_when_prepared(struct clk *clk)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/clk.h:284:20: note: previous definition of 'clk_is_enabled_when_prepared' with type 'bool(struct clk *)' {aka '_Bool(struct clk *)'}
-     284 | static inline bool clk_is_enabled_when_prepared(struct clk *clk)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for COMMON_CLK
-   Depends on [n]: !HAVE_LEGACY_CLK [=y]
-   Selected by [y]:
-   - PMC_ATOM [=y] && PCI [=y]
-
-
-vim +/clk_unprepare +867 drivers/clk/clk.c
-
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  855  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  856  /**
-4dff95dc9477a34 Stephen Boyd     2015-04-30  857   * clk_unprepare - undo preparation of a clock source
-4dff95dc9477a34 Stephen Boyd     2015-04-30  858   * @clk: the clk being unprepared
-4dff95dc9477a34 Stephen Boyd     2015-04-30  859   *
-4dff95dc9477a34 Stephen Boyd     2015-04-30  860   * clk_unprepare may sleep, which differentiates it from clk_disable.  In a
-4dff95dc9477a34 Stephen Boyd     2015-04-30  861   * simple case, clk_unprepare can be used instead of clk_disable to gate a clk
-4dff95dc9477a34 Stephen Boyd     2015-04-30  862   * if the operation may sleep.  One example is a clk which is accessed over
-4dff95dc9477a34 Stephen Boyd     2015-04-30  863   * I2c.  In the complex case a clk gate operation may require a fast and a slow
-4dff95dc9477a34 Stephen Boyd     2015-04-30  864   * part.  It is this reason that clk_unprepare and clk_disable are not mutually
-4dff95dc9477a34 Stephen Boyd     2015-04-30  865   * exclusive.  In fact clk_disable must be called before clk_unprepare.
-4dff95dc9477a34 Stephen Boyd     2015-04-30  866   */
-4dff95dc9477a34 Stephen Boyd     2015-04-30 @867  void clk_unprepare(struct clk *clk)
-b2476490ef11134 Mike Turquette   2012-03-15  868  {
-4dff95dc9477a34 Stephen Boyd     2015-04-30  869  	if (IS_ERR_OR_NULL(clk))
-4dff95dc9477a34 Stephen Boyd     2015-04-30  870  		return;
-b2476490ef11134 Mike Turquette   2012-03-15  871  
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  872  	clk_core_unprepare_lock(clk->core);
-1e435256d625c20 Olof Johansson   2013-04-27  873  }
-4dff95dc9477a34 Stephen Boyd     2015-04-30  874  EXPORT_SYMBOL_GPL(clk_unprepare);
-1e435256d625c20 Olof Johansson   2013-04-27  875  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  876  static int clk_core_prepare(struct clk_core *core)
-4dff95dc9477a34 Stephen Boyd     2015-04-30  877  {
-4dff95dc9477a34 Stephen Boyd     2015-04-30  878  	int ret = 0;
-b2476490ef11134 Mike Turquette   2012-03-15  879  
-a63347251907d7f Stephen Boyd     2015-05-06  880  	lockdep_assert_held(&prepare_lock);
-a63347251907d7f Stephen Boyd     2015-05-06  881  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  882  	if (!core)
-4dff95dc9477a34 Stephen Boyd     2015-04-30  883  		return 0;
-b2476490ef11134 Mike Turquette   2012-03-15  884  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  885  	if (core->prepare_count == 0) {
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  886  		ret = clk_pm_runtime_get(core);
-4dff95dc9477a34 Stephen Boyd     2015-04-30  887  		if (ret)
-4dff95dc9477a34 Stephen Boyd     2015-04-30  888  			return ret;
-b2476490ef11134 Mike Turquette   2012-03-15  889  
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  890  		ret = clk_core_prepare(core->parent);
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  891  		if (ret)
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  892  			goto runtime_put;
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  893  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  894  		trace_clk_prepare(core);
-1c155b3dfe08351 Ulf Hansson      2013-03-12  895  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  896  		if (core->ops->prepare)
-4dff95dc9477a34 Stephen Boyd     2015-04-30  897  			ret = core->ops->prepare(core->hw);
-1c155b3dfe08351 Ulf Hansson      2013-03-12  898  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  899  		trace_clk_prepare_complete(core);
-b2476490ef11134 Mike Turquette   2012-03-15  900  
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  901  		if (ret)
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  902  			goto unprepare;
-b2476490ef11134 Mike Turquette   2012-03-15  903  	}
-b2476490ef11134 Mike Turquette   2012-03-15  904  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  905  	core->prepare_count++;
-b2476490ef11134 Mike Turquette   2012-03-15  906  
-9461f7b33d11cbb Jerome Brunet    2018-06-19  907  	/*
-9461f7b33d11cbb Jerome Brunet    2018-06-19  908  	 * CLK_SET_RATE_GATE is a special case of clock protection
-9461f7b33d11cbb Jerome Brunet    2018-06-19  909  	 * Instead of a consumer claiming exclusive rate control, it is
-9461f7b33d11cbb Jerome Brunet    2018-06-19  910  	 * actually the provider which prevents any consumer from making any
-9461f7b33d11cbb Jerome Brunet    2018-06-19  911  	 * operation which could result in a rate change or rate glitch while
-9461f7b33d11cbb Jerome Brunet    2018-06-19  912  	 * the clock is prepared.
-9461f7b33d11cbb Jerome Brunet    2018-06-19  913  	 */
-9461f7b33d11cbb Jerome Brunet    2018-06-19  914  	if (core->flags & CLK_SET_RATE_GATE)
-9461f7b33d11cbb Jerome Brunet    2018-06-19  915  		clk_core_rate_protect(core);
-9461f7b33d11cbb Jerome Brunet    2018-06-19  916  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  917  	return 0;
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  918  unprepare:
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  919  	clk_core_unprepare(core->parent);
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  920  runtime_put:
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  921  	clk_pm_runtime_put(core);
-9a34b45397e5a38 Marek Szyprowski 2017-08-21  922  	return ret;
-b2476490ef11134 Mike Turquette   2012-03-15  923  }
-b2476490ef11134 Mike Turquette   2012-03-15  924  
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  925  static int clk_core_prepare_lock(struct clk_core *core)
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  926  {
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  927  	int ret;
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  928  
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  929  	clk_prepare_lock();
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  930  	ret = clk_core_prepare(core);
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  931  	clk_prepare_unlock();
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  932  
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  933  	return ret;
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  934  }
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  935  
-4dff95dc9477a34 Stephen Boyd     2015-04-30  936  /**
-4dff95dc9477a34 Stephen Boyd     2015-04-30  937   * clk_prepare - prepare a clock source
-4dff95dc9477a34 Stephen Boyd     2015-04-30  938   * @clk: the clk being prepared
-4dff95dc9477a34 Stephen Boyd     2015-04-30  939   *
-4dff95dc9477a34 Stephen Boyd     2015-04-30  940   * clk_prepare may sleep, which differentiates it from clk_enable.  In a simple
-4dff95dc9477a34 Stephen Boyd     2015-04-30  941   * case, clk_prepare can be used instead of clk_enable to ungate a clk if the
-4dff95dc9477a34 Stephen Boyd     2015-04-30  942   * operation may sleep.  One example is a clk which is accessed over I2c.  In
-4dff95dc9477a34 Stephen Boyd     2015-04-30  943   * the complex case a clk ungate operation may require a fast and a slow part.
-4dff95dc9477a34 Stephen Boyd     2015-04-30  944   * It is this reason that clk_prepare and clk_enable are not mutually
-4dff95dc9477a34 Stephen Boyd     2015-04-30  945   * exclusive.  In fact clk_prepare must be called before clk_enable.
-4dff95dc9477a34 Stephen Boyd     2015-04-30  946   * Returns 0 on success, -EERROR otherwise.
-4dff95dc9477a34 Stephen Boyd     2015-04-30  947   */
-4dff95dc9477a34 Stephen Boyd     2015-04-30 @948  int clk_prepare(struct clk *clk)
-b2476490ef11134 Mike Turquette   2012-03-15  949  {
-035a61c314eb3da Tomeu Vizoso     2015-01-23  950  	if (!clk)
-4dff95dc9477a34 Stephen Boyd     2015-04-30  951  		return 0;
-035a61c314eb3da Tomeu Vizoso     2015-01-23  952  
-a6adc30ba7bef8d Dong Aisheng     2016-06-30  953  	return clk_core_prepare_lock(clk->core);
-7ef3dcc8145263c James Hogan      2013-07-29  954  }
-4dff95dc9477a34 Stephen Boyd     2015-04-30  955  EXPORT_SYMBOL_GPL(clk_prepare);
-035a61c314eb3da Tomeu Vizoso     2015-01-23  956  
-
-:::::: The code at line 867 was first introduced by commit
-:::::: 4dff95dc9477a34de77d24c59dcf1dc593687fcf clk: Remove forward declared function prototypes
-
-:::::: TO: Stephen Boyd <sboyd@codeaurora.org>
-:::::: CC: Stephen Boyd <sboyd@codeaurora.org>
-
+Something like that might work, but you still have two page table walkers
+for hugetlb.  I like David's idea (if I understand it correctly) of
+using follow_hugetlb_page for both cases.  As noted, it will need to be
+taught how to not trigger faults in the follow_page_mask case.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Mike Kravetz
+
+> 
+> If follow_hugetlb_page() can be arch-independent, why do we need the
+> other arch-dependent functions?
+> 
+> It all looks a bit weird to have two functions that walk page tables and
+> are hugetlb aware.
+> 
+> Either this screams for a cleanup or I am missing something fundamental.
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb

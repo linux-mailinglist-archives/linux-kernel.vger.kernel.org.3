@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3083459DC27
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036AA59DBAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358825AbiHWLyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S1356608AbiHWKzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359014AbiHWLvb (ORCPT
+        with ESMTP id S1356022AbiHWKsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:51:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B3BD39A6;
-        Tue, 23 Aug 2022 02:32:11 -0700 (PDT)
+        Tue, 23 Aug 2022 06:48:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7A4AB071;
+        Tue, 23 Aug 2022 02:12:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 549CC612D6;
-        Tue, 23 Aug 2022 09:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A9DC433D6;
-        Tue, 23 Aug 2022 09:32:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A856FB81C35;
+        Tue, 23 Aug 2022 09:12:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2763C433C1;
+        Tue, 23 Aug 2022 09:12:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247127;
-        bh=w0p436ssZfj/lQdy31bDOBkJyI06WCHkjyGiFQ8EqOQ=;
+        s=korg; t=1661245935;
+        bh=fdew62UuZcMsFie8kfqEEAZhB9kWdQ/7hAK9yJC/+Ls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d2vYTKV2p2p0V29I+cC+czTm1Q9nWdavRNhVQLlTO9w8YwPk+Tv+fpNHdTxNPkE+u
-         SFjOQIfSjbk2in0bSc/IC4hOjc7YS6MqlgFP95PwohVDBY0Kwi3i6sjyueb3PD8gL6
-         3F6cdhcbk37CnV5wwcSnTmBEmT/ewH+gaCYEobZI=
+        b=L2DBiOyFg0knnZEjNxY7U9hANBzsWwwiHWnNFJmDYvd5eUaGcBo8j0/e5jIEOqqmt
+         MCfzQUPK7kDmk+zCT8QdMgF7zJ3ChhkkR4PbzskeUJesXtRKJRem2LhOX/xLJE/Lx0
+         Z8yFa7eQVQb8qhzxXhZm600SQIaCrG+rZXkJQkbU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 5.4 325/389] xen/xenbus: fix return type in xenbus_file_read()
-Date:   Tue, 23 Aug 2022 10:26:43 +0200
-Message-Id: <20220823080129.097332959@linuxfoundation.org>
+        stable@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 4.19 235/287] pinctrl: qcom: msm8916: Allow CAMSS GP clocks to be muxed
+Date:   Tue, 23 Aug 2022 10:26:44 +0200
+Message-Id: <20220823080108.953157961@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Nikita Travkin <nikita@trvn.ru>
 
-commit 32ad11127b95236dfc52375f3707853194a7f4b4 upstream.
+commit 44339391c666e46cba522d19c65a6ad1071c68b7 upstream.
 
-This code tries to store -EFAULT in an unsigned int.  The
-xenbus_file_read() function returns type ssize_t so the negative value
-is returned as a positive value to the user.
+GPIO 31, 32 can be muxed to GCC_CAMSS_GP(1,2)_CLK respectively but the
+function was never assigned to the pingroup (even though the function
+exists already).
 
-This change forces another change to the min() macro.  Originally, the
-min() macro used "unsigned" type which checkpatch complains about.  Also
-unsigned type would break if "len" were not capped at MAX_RW_COUNT.  Use
-size_t for the min().  (No effect on runtime for the min_t() change).
+Add this mode to the related pins.
 
-Fixes: 2fb3683e7b16 ("xen: Add xenbus device driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Link: https://lore.kernel.org/r/YutxJUaUYRG/VLVc@kili
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Fixes: 5373a2c5abb6 ("pinctrl: qcom: Add msm8916 pinctrl driver")
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+Link: https://lore.kernel.org/r/20220612145955.385787-4-nikita@trvn.ru
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/xenbus/xenbus_dev_frontend.c |    4 ++--
+ drivers/pinctrl/qcom/pinctrl-msm8916.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/xen/xenbus/xenbus_dev_frontend.c
-+++ b/drivers/xen/xenbus/xenbus_dev_frontend.c
-@@ -128,7 +128,7 @@ static ssize_t xenbus_file_read(struct f
- {
- 	struct xenbus_file_priv *u = filp->private_data;
- 	struct read_buffer *rb;
--	unsigned i;
-+	ssize_t i;
- 	int ret;
- 
- 	mutex_lock(&u->reply_mutex);
-@@ -148,7 +148,7 @@ again:
- 	rb = list_entry(u->read_buffers.next, struct read_buffer, list);
- 	i = 0;
- 	while (i < len) {
--		unsigned sz = min((unsigned)len - i, rb->len - rb->cons);
-+		size_t sz = min_t(size_t, len - i, rb->len - rb->cons);
- 
- 		ret = copy_to_user(ubuf + i, &rb->msg[rb->cons], sz);
- 
+--- a/drivers/pinctrl/qcom/pinctrl-msm8916.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm8916.c
+@@ -852,8 +852,8 @@ static const struct msm_pingroup msm8916
+ 	PINGROUP(28, pwr_modem_enabled_a, NA, NA, NA, NA, NA, qdss_tracedata_b, NA, atest_combodac),
+ 	PINGROUP(29, cci_i2c, NA, NA, NA, NA, NA, qdss_tracedata_b, NA, atest_combodac),
+ 	PINGROUP(30, cci_i2c, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
+-	PINGROUP(31, cci_timer0, NA, NA, NA, NA, NA, NA, NA, NA),
+-	PINGROUP(32, cci_timer1, NA, NA, NA, NA, NA, NA, NA, NA),
++	PINGROUP(31, cci_timer0, flash_strobe, NA, NA, NA, NA, NA, NA, NA),
++	PINGROUP(32, cci_timer1, flash_strobe, NA, NA, NA, NA, NA, NA, NA),
+ 	PINGROUP(33, cci_async, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
+ 	PINGROUP(34, pwr_nav_enabled_a, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
+ 	PINGROUP(35, pwr_crypto_enabled_a, NA, NA, NA, NA, NA, NA, NA, qdss_tracedata_b),
 
 

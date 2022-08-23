@@ -2,130 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9633159EC5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD0959EC58
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231783AbiHWTcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
+        id S230120AbiHWTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiHWTby (ORCPT
+        with ESMTP id S231258AbiHWTbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:31:54 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817F9BF68;
-        Tue, 23 Aug 2022 11:23:23 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:60738)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oQYYb-0041Dr-Vo; Tue, 23 Aug 2022 12:23:22 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:37014 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oQYYa-00GUYx-1U; Tue, 23 Aug 2022 12:23:21 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Olivier Langlois <olivier@trillion01.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
-        <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
-        <87h7i694ij.fsf_-_@disp2133>
-        <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
-        <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
-        <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
-        <878rw9u6fb.fsf@email.froward.int.ebiederm.org>
-        <303f7772-eb31-5beb-2bd0-4278566591b0@gmail.com>
-        <87ilsg13yz.fsf@email.froward.int.ebiederm.org>
-        <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
-        <a29a1649-5e50-4221-9f44-66a35fbdff80@kernel.dk>
-        <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org>
-        <87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>
-        <61abfb5a517e0ee253b0dc7ba9cd32ebd558bcb0.camel@trillion01.com>
-        <bb423622f97826f483100a1a7f20ce10a9090158.camel@trillion01.com>
-Date:   Tue, 23 Aug 2022 13:22:53 -0500
-In-Reply-To: <bb423622f97826f483100a1a7f20ce10a9090158.camel@trillion01.com>
-        (Olivier Langlois's message of "Mon, 22 Aug 2022 23:35:37 -0400")
-Message-ID: <875yiisttu.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 23 Aug 2022 15:31:53 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8F8501B4;
+        Tue, 23 Aug 2022 11:23:25 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id f4so10939612qkl.7;
+        Tue, 23 Aug 2022 11:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=hl2ZhT5jYud6nqmuitdZrPDQAyGkFVueC+KbleXIJi0=;
+        b=JrIa1OFDqt41Da0UO3IcnulL7dkdWXnYr6hnZMzWYSbcrkSN7ou30SIEnzMbJrKsY6
+         u5CuHohXigZbEbyhpYK9JlS6swj+dpVrb1cli96GwuysoJtnaf2+65TX34uEdUsOtCoN
+         Fr6Njl3SuprVW+ahKp2U4qoTQ3hDUR702g2c1SyBlYjS9leEBj6OQiQj0QI40xwIp8pV
+         juISk+iYdvTEfJSIedYrRpGdJbMj8Zp6RupnPX6dBLSeTZSa1DM96OsTPNrOMaxdFA9J
+         8dbyE9d9W5uHSlC468z302NWFPX5zLLvxWhAtaTmnaK2pV/VKA28fCze7L4vEn2F+6jT
+         7DYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=hl2ZhT5jYud6nqmuitdZrPDQAyGkFVueC+KbleXIJi0=;
+        b=iwSt0Q1Z3B2nElEaomzGS0zsLBw9LmjEal8PNXk0akSMFaMLULx4gFZVi70w+9xDMB
+         Nu4gaWpml0i1DKUhjsu1BD/Iiw0yjuCbvH4ersHr8nJC4oBpyqlzI6YuMMybZuLbsxLF
+         bbzD0XITSVQGdWjwMv5ckZrsz5WJVAYCIDPeEYUOph23/P+q5azWZezb61riBMH0NvkB
+         xCoeYfzpdwO+RZwPffBEVrNL9/ljteeUPkAdl1yZF+aDDaucu2JhNQ9hkihshkUGuF6r
+         2O6XDAl+RsXv3wU8HT0JmllJvHHj3K+b/2uSg6qdpl8mr623M2s6i4aCq8JYCubagJlA
+         ublw==
+X-Gm-Message-State: ACgBeo0UzFEKZF5TuxFS7b5rPdA2diOO+KgHbXz+aNPl8VECl9MVY0uI
+        gyC2x2rmXQJQMX+wMgaqtDmiznFz0w5kd/GVwTQ=
+X-Google-Smtp-Source: AA6agR6uzuFu5gu6+eBn1q09mUSGCdjReoka/EFxwiWXrFCxt/cPbOLXqEiSJanMMVL/Mgl9gFFX4Aap050CjTsOfDM=
+X-Received: by 2002:a37:27c1:0:b0:6bb:41b5:2d89 with SMTP id
+ n184-20020a3727c1000000b006bb41b52d89mr17033459qkn.679.1661279004133; Tue, 23
+ Aug 2022 11:23:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oQYYa-00GUYx-1U;;;mid=<875yiisttu.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/GeEI4Y8IQexfRUNq3YWki9SJ3OxiLRg4=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220823145649.3118479-7-robh@kernel.org>
+In-Reply-To: <20220823145649.3118479-7-robh@kernel.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Tue, 23 Aug 2022 20:23:13 +0200
+Message-ID: <CAOX2RU4u+v9EPAPoxZmL4iGAmt+VuuxNJW-_AE7TZaFHZBTaEA@mail.gmail.com>
+Subject: Re: [PATCH] regulator: dt-bindings: Add missing (unevaluated|additional)Properties
+ on child nodes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Adam Ward <Adam.Ward.opensource@diasemi.com>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *****;Olivier Langlois <olivier@trillion01.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1387 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 11 (0.8%), b_tie_ro: 10 (0.7%), parse: 0.86
-        (0.1%), extract_message_metadata: 11 (0.8%), get_uri_detail_list: 1.19
-        (0.1%), tests_pri_-1000: 9 (0.6%), tests_pri_-950: 1.18 (0.1%),
-        tests_pri_-900: 0.96 (0.1%), tests_pri_-90: 72 (5.2%), check_bayes: 70
-        (5.1%), b_tokenize: 6 (0.4%), b_tok_get_all: 6 (0.4%), b_comp_prob:
-        2.0 (0.1%), b_tok_touch_all: 53 (3.8%), b_finish: 0.79 (0.1%),
-        tests_pri_0: 1254 (90.4%), check_dkim_signature: 0.50 (0.0%),
-        check_dkim_adsp: 2.7 (0.2%), poll_dns_idle: 0.42 (0.0%), tests_pri_10:
-        2.3 (0.2%), tests_pri_500: 21 (1.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 2/2] coredump: Allow coredumps to pipes to work with
- io_uring
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Olivier Langlois <olivier@trillion01.com> writes:
-
-> On Mon, 2022-08-22 at 17:16 -0400, Olivier Langlois wrote:
->> 
->> What is stopping the task calling do_coredump() to be interrupted and
->> call task_work_add() from the interrupt context?
->> 
->> This is precisely what I was experiencing last summer when I did work
->> on this issue.
->> 
->> My understanding of how async I/O works with io_uring is that the
->> task
->> is added to a wait queue without being put to sleep and when the
->> io_uring callback is called from the interrupt context,
->> task_work_add()
->> is called so that the next time io_uring syscall is invoked, pending
->> work is processed to complete the I/O.
->> 
->> So if:
->> 
->> 1. io_uring request is initiated AND the task is in a wait queue
->> 2. do_coredump() is called before the I/O is completed
->> 
->> IMHO, this is how you end up having task_work_add() called while the
->> coredump is generated.
->> 
-> I forgot to add that I have experienced the issue with TCP/IP I/O.
+On Tue, 23 Aug 2022 at 16:57, Rob Herring <robh@kernel.org> wrote:
 >
-> I suspect that with a TCP socket, the race condition window is much
-> larger than if it was disk I/O and this might make it easier to
-> reproduce the issue this way...
+> In order to ensure only documented properties are present, node schemas
+> must have unevaluatedProperties or additionalProperties set to false
+> (typically).
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/regulator/dlg,da9121.yaml           |  1 +
+>  .../bindings/regulator/maxim,max77802.yaml       |  1 +
+>  .../bindings/regulator/maxim,max8997.yaml        |  1 +
+>  .../bindings/regulator/mt6315-regulator.yaml     |  1 +
+>  .../bindings/regulator/qcom,spmi-regulator.yaml  |  1 +
+>  .../regulator/qcom-labibb-regulator.yaml         | 16 ++++++++++++++++
+>  .../regulator/richtek,rt4801-regulator.yaml      |  1 +
+>  .../regulator/rohm,bd71815-regulator.yaml        |  1 +
+>  8 files changed, 23 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+> index 24ace6e1e5ec..63e1161a87de 100644
+> --- a/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/dlg,da9121.yaml
+> @@ -83,6 +83,7 @@ properties:
+>
+>    regulators:
+>      type: object
+> +    additionalProperties: false
+>      description: |
+>        List of regulators provided by the device
+>
+> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml b/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+> index 236348c4710c..71138c611b6c 100644
+> --- a/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+> @@ -79,6 +79,7 @@ patternProperties:
+>      patternProperties:
+>        regulator-state-(standby|mem|disk):
+>          type: object
+> +        additionalProperties: true
+>          properties:
+>            regulator-mode: false
+>
+> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml b/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
+> index 4321f061a7f6..2b266ea43716 100644
+> --- a/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml
+> @@ -111,6 +111,7 @@ properties:
+>
+>    regulators:
+>      type: object
+> +    additionalProperties: false
+>      description:
+>        List of child nodes that specify the regulators.
+>
+> diff --git a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
+> index 37402c370fbb..364b58730be2 100644
+> --- a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
+> @@ -29,6 +29,7 @@ properties:
+>        "^vbuck[1-4]$":
+>          type: object
+>          $ref: "regulator.yaml#"
+> +        unevaluatedProperties: false
+>
+>          properties:
+>            regulator-compatible:
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> index 8b7c4af4b551..3266cd0c580f 100644
+> --- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> @@ -35,6 +35,7 @@ patternProperties:
+>      description: List of regulators and its properties
+>      type: object
+>      $ref: regulator.yaml#
+> +    unevaluatedProperties: false
+>
+>      properties:
+>        qcom,ocp-max-retries:
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
+> index 1ddc1efd19e2..f97b8083678f 100644
+> --- a/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/qcom-labibb-regulator.yaml
+> @@ -20,6 +20,7 @@ properties:
+>
+>    lab:
+>      type: object
+> +    additionalProperties: false
+>
+>      properties:
+>        qcom,soft-start-us:
+> @@ -33,11 +34,19 @@ properties:
+>          description:
+>            Short-circuit and over-current interrupts for lab.
+>
+> +      interrupt-names:
+> +        minItems: 1
+> +        items:
+> +          - const: sc-err
+> +          - const: ocp
+> +
+>      required:
+>        - interrupts
+> +      - interrupt-names
+>
+>    ibb:
+>      type: object
+> +    additionalProperties: false
+>
+>      properties:
+>        qcom,discharge-resistor-kohms:
+> @@ -52,8 +61,15 @@ properties:
+>          description:
+>            Short-circuit and over-current interrupts for ibb.
+>
+> +      interrupt-names:
+> +        minItems: 1
+> +        items:
+> +          - const: sc-err
+> +          - const: ocp
+> +
+>      required:
+>        - interrupts
+> +      - interrupt-names
+>
+>  required:
+>    - compatible
+> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
+> index 091150c4e579..4a8a221bc902 100644
+> --- a/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt4801-regulator.yaml
+> @@ -42,6 +42,7 @@ patternProperties:
+>    "^DSV(P|N)$":
+>      type: object
+>      $ref: regulator.yaml#
+> +    unevaluatedProperties: false
+>      description:
+>        Properties for single display bias regulator.
+>
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
+> index 7d0adb74a396..d61e8675f067 100644
+> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
+> @@ -27,6 +27,7 @@ properties:
+>      description:
+>        properties for wled regulator
+>      $ref: regulator.yaml#
+> +    unevaluatedProperties: false
+>
+>      properties:
+>        regulator-name:
+> --
+> 2.34.1
 
-I was under the apparently mistaken impression that the io_uring
-task_work_add only comes from the io_uring userspace helper threads.
-Those are definitely suppressed by my change.
-
-Do you have any idea in the code where io_uring code is being called in
-an interrupt context?  I would really like to trace that code path so I
-have a better grasp on what is happening.
-
-If task_work_add is being called from interrupt context then something
-additional from what I have proposed certainly needs to be done.
-
-Eric
+For qcom,spmi-regulator.yaml:
+Reviewed-by: Robert Marko <robimarko@gmail.com>
+>

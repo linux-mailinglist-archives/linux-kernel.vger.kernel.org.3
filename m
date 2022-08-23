@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B9759D6FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C0459D434
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243370AbiHWJO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S242905AbiHWITh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349332AbiHWJLa (ORCPT
+        with ESMTP id S242470AbiHWIPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:11:30 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0835386C37;
-        Tue, 23 Aug 2022 01:31:36 -0700 (PDT)
+        Tue, 23 Aug 2022 04:15:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48AA6CF7A;
+        Tue, 23 Aug 2022 01:10:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 09485CE1B34;
-        Tue, 23 Aug 2022 08:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D13C433C1;
-        Tue, 23 Aug 2022 08:31:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8075361298;
+        Tue, 23 Aug 2022 08:10:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FBEC433D6;
+        Tue, 23 Aug 2022 08:10:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243472;
-        bh=skXDE7HoEs1CM7r5+jZrhjl8BpmwHHmVvjU7vqHj44E=;
+        s=korg; t=1661242207;
+        bh=38z5+1E7HVbT6HeQjqkDPqJFtUVE6OakjVGr/qrHk+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GewB7pae6xuQCN6bM2E6RBHQfMhyuvQjVaRlbFJyaAc9ZOvV9GU8vxkfLsGdgS6QR
-         O1/NKMXPda+7o6aa/sCofl5b0U3cyPp5J3L83DoUYxF3WsRD2ti71oTe5ZJSIOtpWt
-         N5W2qydmL8P8eiJM00IPSo/bfFWTpXAU05rei7i8=
+        b=h3iPVD5B+6fizRvEQACLzP6L+nRPB472DH0BCC6LhpMEreHS/6V1K76vbAXNUlb9e
+         WowP4jxkB03c9xrv8hNWgoXI3SDQu1OaTiihYRNkM+gOWgZgieX4+6e3r5XBgzeuR6
+         0GC7AQVsAcwhTD74yxU9eg36XbMFJvqbC5y2i+4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dafna Hirschfeld <dhirschfeld@habana.ai>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 288/365] habanalabs: add terminating NULL to attrs arrays
+        stable@vger.kernel.org, Timur Tabi <ttabi@nvidia.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 4.9 036/101] drm/nouveau: fix another off-by-one in nvbios_addr
 Date:   Tue, 23 Aug 2022 10:03:09 +0200
-Message-Id: <20220823080130.259653833@linuxfoundation.org>
+Message-Id: <20220823080035.956589692@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dafna Hirschfeld <dhirschfeld@habana.ai>
+From: Timur Tabi <ttabi@nvidia.com>
 
-[ Upstream commit 78d503087be190eab36290644ccec050135e7c70 ]
+commit c441d28945fb113220d48d6c86ebc0b090a2b677 upstream.
 
-Arrays of struct attribute are expected to be NULL terminated.
-This is required by API methods such as device_add_groups.
-This fixes a crash when loading the driver for Goya device.
+This check determines whether a given address is part of
+image 0 or image 1.  Image 1 starts at offset image0_size,
+so that address should be included.
 
-Signed-off-by: Dafna Hirschfeld <dhirschfeld@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 4d4e9907ff572 ("drm/nouveau/bios: guard against out-of-bounds accesses to image")
+Cc: <stable@vger.kernel.org> # v4.8+
+Signed-off-by: Timur Tabi <ttabi@nvidia.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220511163716.3520591-1-ttabi@nvidia.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/misc/habanalabs/common/sysfs.c    | 2 ++
- drivers/misc/habanalabs/gaudi/gaudi.c     | 1 +
- drivers/misc/habanalabs/goya/goya_hwmgr.c | 2 ++
- 3 files changed, 5 insertions(+)
+ drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
-index 9ebeb18ab85e..da8181068895 100644
---- a/drivers/misc/habanalabs/common/sysfs.c
-+++ b/drivers/misc/habanalabs/common/sysfs.c
-@@ -73,6 +73,7 @@ static DEVICE_ATTR_RO(clk_cur_freq_mhz);
- static struct attribute *hl_dev_clk_attrs[] = {
- 	&dev_attr_clk_max_freq_mhz.attr,
- 	&dev_attr_clk_cur_freq_mhz.attr,
-+	NULL,
- };
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bios/base.c
+@@ -33,7 +33,7 @@ nvbios_addr(struct nvkm_bios *bios, u32
+ {
+ 	u32 p = *addr;
  
- static ssize_t vrm_ver_show(struct device *dev, struct device_attribute *attr, char *buf)
-@@ -93,6 +94,7 @@ static DEVICE_ATTR_RO(vrm_ver);
- 
- static struct attribute *hl_dev_vrm_attrs[] = {
- 	&dev_attr_vrm_ver.attr,
-+	NULL,
- };
- 
- static ssize_t uboot_ver_show(struct device *dev, struct device_attribute *attr,
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index fba322241096..25d735aee6a3 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -9187,6 +9187,7 @@ static DEVICE_ATTR_RO(infineon_ver);
- 
- static struct attribute *gaudi_vrm_dev_attrs[] = {
- 	&dev_attr_infineon_ver.attr,
-+	NULL,
- };
- 
- static void gaudi_add_device_attr(struct hl_device *hdev, struct attribute_group *dev_clk_attr_grp,
-diff --git a/drivers/misc/habanalabs/goya/goya_hwmgr.c b/drivers/misc/habanalabs/goya/goya_hwmgr.c
-index 6580fc6a486a..b595721751c1 100644
---- a/drivers/misc/habanalabs/goya/goya_hwmgr.c
-+++ b/drivers/misc/habanalabs/goya/goya_hwmgr.c
-@@ -359,6 +359,7 @@ static struct attribute *goya_clk_dev_attrs[] = {
- 	&dev_attr_pm_mng_profile.attr,
- 	&dev_attr_tpc_clk.attr,
- 	&dev_attr_tpc_clk_curr.attr,
-+	NULL,
- };
- 
- static ssize_t infineon_ver_show(struct device *dev, struct device_attribute *attr, char *buf)
-@@ -375,6 +376,7 @@ static DEVICE_ATTR_RO(infineon_ver);
- 
- static struct attribute *goya_vrm_dev_attrs[] = {
- 	&dev_attr_infineon_ver.attr,
-+	NULL,
- };
- 
- void goya_add_device_attr(struct hl_device *hdev, struct attribute_group *dev_clk_attr_grp,
--- 
-2.35.1
-
+-	if (*addr > bios->image0_size && bios->imaged_addr) {
++	if (*addr >= bios->image0_size && bios->imaged_addr) {
+ 		*addr -= bios->image0_size;
+ 		*addr += bios->imaged_addr;
+ 	}
 
 

@@ -2,259 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BBF59D0EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41D659D0FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240428AbiHWF7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 01:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S240464AbiHWGBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 02:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240407AbiHWF7x (ORCPT
+        with ESMTP id S240407AbiHWGBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 01:59:53 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20628.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::628])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BAD5FAED
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 22:59:49 -0700 (PDT)
+        Tue, 23 Aug 2022 02:01:09 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2123.outbound.protection.outlook.com [40.107.243.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E24D5FAC5;
+        Mon, 22 Aug 2022 23:01:08 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cQ9wjMrabvWcE0o/CmoJHntwM9harSXcrl1L8pvQknt1vr8a219kfzPpdBAekQR9fA0QfmMiii7YkvTox5j2zO6IDA95WK4cBMlo1VfSd2Gg7Fhn82AQLaOdmdqoE3021YUoplObTSACwrqSJIwIIRnyJat7g/wbYjgjOZpNezoEkQlgP03GtvQ3lEItrYH+Y2+Pkp6J0/yCrNsew1MhL3XqdRPRb6BGZz0k0Gdj5VGOq+UJ3mj/490SH069+wCMOdsRqytDlFJTW5AIGMcxZLy6pNokc+qoMNQe0V5OiMqBEl73BETABUfhLQmDJuTp+57VJ+kB11rMCQfkKJZYvA==
+ b=C7ng91bZGLBV50amqUpTwZwFFcbejMn9o8m7VCfi+cAmxGx2SlHjIkArCmMW+WpD+UAoEneRaT8wWQH5FKGmI24M3TwyMxnV42Et+vwhhSDkhKsi+jA5NXQTQZDvtLqaPlwgieosgmrP08+2l5ZKRSJMViRkTDxms7p+XkWakCPjYPiYrLotFPeyIJfBffHE+78JXPJ4era8iqlGExQK8wITwlXfLD5B5hlgPd7gnjTizI4SY/SmLBjJPYWqDJB18qOZW+4M5gzyb0NhhOAZgMhqY9QHwViJMoyjFlQdSLMJu1l4ilsmN3xIy7QSYifZki9QXz1TxCs50nIl+Y/YoA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6rNY8cx3d3popkl3XeApsMW4me4N7keMu8agr3L5b04=;
- b=XFzUgSpojKgZXJpfBCEF2bupbXx3f74HbQGyd+MwNwGz5vDBRuat79qIOnoJUA04n5FU2uWH3ZhHLu9nnSpEqhIrCuVbwCME5lnoEOSWY8i0i8fWqm2l5S3PgPSVtFz/DBSDab5DhM/SzH1gOoJ/7gWs+f/vR2W96+YibKPEfOIr5/XTk2ENMOvzK4YBaZdHJ4eVY1lsg3OxJnWuwSAY7EhH+EQ9BphgjNI14mPZKMGubOZekDU6gssDTuy+wHkuwjYS4bhWrUIwKsUrHcAEmBXriA1bvfjO59TVazagCL+atCyVAVWI6hTLeXscYeKx02dOsKUh2NQq+dOi5j92TA==
+ bh=nTI6ERXpUggPlaCF04Mz5GTR5X4F0mYcdg9kdQjA/Uo=;
+ b=HLdwX/k+csXpKnsttOIjYZYTj3iuyi3qBtgnq+Cz3R7UyO4l+xfFuMbOU7kySfIHhXQsov0ieBBrW8bGEVelRmYKc3pAOv20iMTvbgTYOzdA5giV15ro5ZuAirxrROd4TFHai5rzplr8ccrgyYowGQ5w0QL125fmEqNxTqWkVnd/NzXBlR7bfu/SMDcVrqlQ6jUNqqwCpXQQ1ODHFtpAAKc3Xi1CS/GTCddbRrNz3Gs4YYkssQZPrAcJOVis5iCOR27DMwTV1saEdFf9aKcTBMFFjiv5A8aRbgdbHDjcM9UoSX3VMwj/2dxtBD4Hk0pIwxE1Assh8C1mfDKwq3OmBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6rNY8cx3d3popkl3XeApsMW4me4N7keMu8agr3L5b04=;
- b=H0FZEbe6GoRT3gQxu3LR7Wz2Zd3tp+3x40hYFlwuTUvBsb+8D3iHVP3OOIJnSeAInVIbz+Gq855OS8QZt2aD/5fTx02klQ0Yla3zQM6x0JhUuX+Qwpi2RnzE4q9xmPqmkzskhFTdK3TikVMrk4bg3no5yGMCauQ1YzbahoJzCTM=
+ bh=nTI6ERXpUggPlaCF04Mz5GTR5X4F0mYcdg9kdQjA/Uo=;
+ b=Re+8hnpz6tXEQiRcfsljt2QlF7YcsGOIxSrvdPTxFisvxKwm7m45uVY4PMBtlRRaSuGDaOMv8jYTfN2AiIB5jbupDXpFqvfgwKClQsza6HDufyM9ShVUxw5fbFA67UNFU5D76MsQsnZSBjUYLlgZ2wDcjaE9gRBumzACQUTB4eg=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BYAPR12MB3205.namprd12.prod.outlook.com (2603:10b6:a03:134::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.20; Tue, 23 Aug
- 2022 05:59:46 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
- 05:59:46 +0000
-Message-ID: <3112082f-9950-d6d2-34b8-0cf2a044f28b@amd.com>
-Date:   Tue, 23 Aug 2022 07:59:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm: Move radeon and amdgpu Kconfig options into their
- directories
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220823000111.9765-1-afd@ti.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220823000111.9765-1-afd@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BYAPR10MB2984.namprd10.prod.outlook.com
+ (2603:10b6:a03:8f::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Tue, 23 Aug
+ 2022 06:01:04 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b869:6c52:7a8d:ddee]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b869:6c52:7a8d:ddee%4]) with mapi id 15.20.5504.028; Tue, 23 Aug 2022
+ 06:01:04 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: [PATCH v1 0/1] Convert phy-ocelot-serdes documentation to YAML
+Date:   Mon, 22 Aug 2022 23:00:51 -0700
+Message-Id: <20220823060052.3921849-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS9PR06CA0766.eurprd06.prod.outlook.com
- (2603:10a6:20b:484::22) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0024.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::29) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 99b75511-64aa-4019-a3c4-08da84ccae88
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3205:EE_
+X-MS-Office365-Filtering-Correlation-Id: 246cbf13-8080-4776-a82a-08da84ccdcb0
+X-MS-TrafficTypeDiagnostic: BYAPR10MB2984:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZuKGHHsAnDVPmBdpvPrioPIWAGr14AxcpGfApjsaRjNvpr4LgMybiOCe9xZSbfrQbvumu+JTZttz+sJBcGPDviX6+s1ogPfBZ4JDL9DmJ3znH27gxVPJh0QI4tRjyJIE2zuZg6uH5g7eMUOZmAly2HkgDnLqyNwnutBfbCpSHv+F773Npu+6n/mBhfO8QHvDxlfXhYvSyMtaxMSHFcGWhZyk1K5csDawT5ShcL/S10/O1WuyQntOpj8TtkH3A20WlBIik0CCrVRBweIMgsVC1nevs8TRu/wr5wcmVdmSx8ERW6N1+nVUaNw6cQNWA8OPrDQHGMzhOKjj9ifNEJEgftje/nKfFsy2rKEHn6d8gc+8L8XES8vAgYiAI3lNhe8IgYEVYORtzsyCNtQ6ZxeODhnH+Ixlg3ZuOIgMnR8tTWnuE5EV3VCLuJ01ylE8tN57fp2sNqnfcPLxW9v1udMI31nWMp5nW5XNnqu5iAc56ltuOd3soXZaHYRC1G7PguKxNEj/SVyUCLejcABxcNgEgDHF9kasG1wMy4uzcYiprIbT/KapaVa5SYv9Mwf6p3SVjHMoFyzdHJVeiMQY6lhUzK994SqUEsHP9K6thWH+fioXfTft9qwDT6aHItmDk9SfKXJePymqRRqarsKKA9eZz0aMjONyhc27wm6HCPP6sNT/EDqBNQdpFexg9/TkEG7Z4vgY0KpynJNmHFrKYvzsXX5y4XKj5R1WQ3SSP9RQ8XrRIMOnWAN1FqpppfTkfmFBYf0fN9WU5Bw9/OtUaHO2lqQWFcSkmmaRkeruOEy60PY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(186003)(2616005)(31696002)(83380400001)(38100700002)(316002)(66946007)(66476007)(66556008)(8676002)(110136005)(31686004)(2906002)(86362001)(36756003)(5660300002)(8936002)(6486002)(478600001)(26005)(41300700001)(6666004)(6512007)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: e1ymk9EismCzfN2JKPI8ijUgAh+PjkQe7Kd/UBn3t7fQbz7VG/zM8KJwViyh07/Y3Am+zmrw7QszQ0jmLkjrlvHBey1q+/G41l4MdFxpbt8xfWzUTVcsAB4YnbSyAxVLyy5pA9hVlJI1mHYq6I60fueM//aONHEDGOVnc7YroelrRqlf6B8bsB8EgmDC4H0331lsodeTguoQY+B9+iLCAZ8sRKWKqdp0zyK1szGerjMbk39RJVhgT4XJ+5fpFLSXkQA4ab86wd/NHtbpD4AFpc49wWXM8hUcTOfv5w/wObVsJ/75hTVbcYLWprlSRb71wSmXXAMn5hEfNVSKfDuH5cAp/bjkF6LeObBmtTH07w2wu8TIqx4PvNgzsTxCWoTneNiaLpPJZKnMh1c+PJe43wf4and8OhRfv/sfFKc+ixKaMb9my/i6reO1t7vn0qMmpgvnX/eVbFGXZg5nOBqIdpNl6IDw88p6WHRBpD91niOrhnoS1ec3AicurQhWLcw6nswrpja9/pQfFh3g/xUsLdXqwbqTIWj1Cgii30m27lVqNbYmZdJIdbcsoMbbfVTx+Nk+SGfvt/3dpQwlBEK0DTMvKaY025AzBVOE2Pho5STp13m+wxlqwR9BPIZerdHWXsZxAg4tZYJagl2GJ3qU4exwFLHHOy2YY5zUmBgXzuWG6N0DhvoqA90RZWDYwoqHotw6zzxZXnOYxff8DIobjsv18QvkmUKZcGLtwP2uf6fPxtG2JISP+CsiNqQ1Ol1r
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(366004)(39830400003)(396003)(376002)(86362001)(1076003)(186003)(2616005)(38350700002)(38100700002)(83380400001)(4744005)(44832011)(8936002)(7416002)(5660300002)(4326008)(66946007)(66556008)(8676002)(66476007)(2906002)(36756003)(41300700001)(478600001)(6486002)(6512007)(26005)(52116002)(6506007)(6666004)(316002)(54906003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WjNhOTA2dWNuUmhMbTNXWVI4LzZoUDR4bkhITWR4ZFBXZ1pZYVBlUVhJd09N?=
- =?utf-8?B?cURVZkFhUXlNRWhRMGMza0VmV1Q3NDlZak1hZmhGMW5aU1JZcnVpZWxzUThi?=
- =?utf-8?B?NElxdXdHbWRUcEp2a1FSSXNCUlBNZG9rU3BQZTBwMUVPY1ZNMFNDbVZ0MHpC?=
- =?utf-8?B?Zk9iUlFOaUFGQUcrcFdTdWFWV1I1Uy9ITWF0NWgxdlRNUndRQzdiVjh0YXlF?=
- =?utf-8?B?bkxKQkxkejlQYnUyc3M1U0UyWm9hQm41bTNXNDJjaTVPTnVVZnZBNWtzMTdM?=
- =?utf-8?B?aTBZVnZDNTJYaERkYVVJM1ZBZ0hnemJYNDljemxYOG1YM0NYS1BacG9vekRD?=
- =?utf-8?B?VWUyRVZ6blF2RWtjeUx3cXdQNEppUjBuY3o4YzFtZ1EyejNEREhDMk9xYXpZ?=
- =?utf-8?B?cjBheUR4dUVQbFI5VUNmYkJqZWZBRituVU9iWUsybXhmcllmblVzYUZUdElD?=
- =?utf-8?B?dWN6QUpWclBObVBqL1g5bWhpd003Y0hoN2ZpeUZDTXhxbTMrQkU5QUlBS05Z?=
- =?utf-8?B?QTNFUG9TcFI1bjd3dHpFbzVLMlZJV0hXSVBrUlQ2RHVPQklmNDhsVWgrSE1Q?=
- =?utf-8?B?N1VYS21CdFl3KzJ0Y2pzQ3NUMm1DWElFNU9HRi9ydWRXNGVzajdhekFIZHFw?=
- =?utf-8?B?Vyt2b2t5ZFFrZ24ycUNYVnBIQUh5U0laSVNXT2Zmc2UzdU1ueUkrSG1ic1pz?=
- =?utf-8?B?ekdiVUdUNzcxUVhWeVIrVzAyQXorMm1BNFNVTytmRzQzK0NVaGxrOXVXMVVx?=
- =?utf-8?B?MXRQTlNHVGV0MkphQmJRL2pJYzNKTUh3cjRPVlpPOEhJMFc5WlZ3R3RvejFp?=
- =?utf-8?B?NEY1T3UxNXhUUWwrWnpCN1lFTkduWTZCKy9uMTJGT2gzbTdONWlFWmFkdXZQ?=
- =?utf-8?B?OTZkeDhuRVI4TFk4eHF5TUlyVjNHL3EvVG1aSzJGS3oweUZuaTBBNmJxTHNG?=
- =?utf-8?B?Z1E5dVVlaHU2ckhnZkFUMEJhdlJXeDVtSmwzYnAvTHBjc0pJaEJiaHduZUFS?=
- =?utf-8?B?aWw3cTBRYng5aUZtM3B5T1p0ak1USlk1cTRUUm1vaTVEQVY1MjFYYlpKUDU1?=
- =?utf-8?B?RXVkVVR5TUMyTGVzZzRvS09vRWYwcFk5RXBVN01rc1lHMGlHSkI5QmFyRWZ0?=
- =?utf-8?B?NTVoWVRTTU5SZW9nLzV5ZzdpU3Vsc2dhaGJPZ3EwUTV1OWtpMFBpT1VQek53?=
- =?utf-8?B?WGFhNWJSbnhnVDNta2l5ajFuV0M5bEVqL1FBVGJYWlRlaFFIWE9RV0hueS9N?=
- =?utf-8?B?NndLcHhSdy95Z0gxQ2NlaXVTTGd2bnBIdGw3dkg3djhkVTRhZGJIV0c0MSsz?=
- =?utf-8?B?UldrNmxTYU85MU9oaEljVGNEVFFsc1dEVk9sVmtlRThMU2p4bUNwYm5YeHZJ?=
- =?utf-8?B?SnRUTkk1UldJUGp4OVlQNEN5b3ZWM3dHZGhLZjBZRG5DbC9DdGtlZlAvUGlT?=
- =?utf-8?B?Q3FVL09iQ3B5OFQ3dHRXMVhLK1ZxcTJ4N3FqaWdZL0FlY1o4QXROVU9UWlZw?=
- =?utf-8?B?Q29sVXJQd0RXanI5SjhpY3lJU3RVdTZzMjJCRlZoaXFvc20yL1VrT1dHRERn?=
- =?utf-8?B?dDFWUUlQTWdNMVRhRVBFajhub1FEZDROV05hU3A1eTVmR0U1TUJPVzd3YnFD?=
- =?utf-8?B?dkdDdjFzMVQ5ZVg1ZkowaFY4Y3FJNnVDREtCdG1oM1BCMlBCTTludkYrSmFu?=
- =?utf-8?B?RVVlcEhSVGJ1Y09LMGNtQnJ4MDN5WXd2KzJDaEZhaStGTHlMRStUb3BWSE4w?=
- =?utf-8?B?dzBFU3ZYOGF0L3BxSzAwV29lazdoSGJXZDZFVHJBTXVUS3ZyN3VYczA2czhT?=
- =?utf-8?B?VmtEOW94TDVJVktiaTRwMlcyMkorN2RjRGllNnd4R2tQUkZUSzJJWEIrbG5p?=
- =?utf-8?B?S3V0RDFWNkRNNi8yQ0FuYjhrZ3ZuRzBTZzJMTGd0cTJwN3VNKzZlaEJhUlBD?=
- =?utf-8?B?RE1tZzlYejBJRkYrU1pudnpoNG02RlJGWFl2cGh3dkN4MlFBcnUya3FEWmhR?=
- =?utf-8?B?UzBxUFFFNFkzMTJnUStDaXBhaktiY0R6aDBweFJxdE5WVVVVSUF6ZVp6VTB2?=
- =?utf-8?B?clFxbUJsakRZZ2t6QUtKYVYzSkRndDB4UkpyUTVnV2c2MWp0V1M4RXFpZEhT?=
- =?utf-8?Q?wfkhfiH+pLChmkhJRqpoHX+sX?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99b75511-64aa-4019-a3c4-08da84ccae88
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zcykDPyYLbOedI9jqHHPnYkk9ZR6S8OLTidGudVYOcH3w8XK5NER3WkqN8M4?=
+ =?us-ascii?Q?GiKzezj0qrRvYwK1FhfUNRfOU35MgOwWY+COMfg10jxXTW0KghrYWDzT1Cnw?=
+ =?us-ascii?Q?+G5aCdWKnvNGle/2X/aZrdPexmoQ9o6a9soP1VQtcnsXC3N6rNGr+S9EN+vl?=
+ =?us-ascii?Q?m8iNzemObbWXZHIKHmq7KIkp7Y2ZdG7ZSyDBOBae+fUcKuExIyHi4Vd6RxGO?=
+ =?us-ascii?Q?DsB+XT66Bm8KA/BFjkxd7ISno6nSebIxii3Va8Ku4smLTYDkjEHDxVEK7xmY?=
+ =?us-ascii?Q?IvPYzEl7KlnHVCsFzNPEc27vHJiClDPaDGD36J+a+RKuddruUxZr4tNuDmI9?=
+ =?us-ascii?Q?Pq4kae+iu7u05KWIl1An60NehxZukGMVO6dTpC8Zd4YsEaPDM2oWfl9hPsvv?=
+ =?us-ascii?Q?xgK7hOMrJo21b8kWxMcVcuKhtJzq038SlE2pGVa1a91MGkJDYvAe72yMuZ1p?=
+ =?us-ascii?Q?vaCim+QNs0c50khY+XrMDM35e6euDNAfms/073uE1OSb4k/oVHvyj100zFlO?=
+ =?us-ascii?Q?t0fNoMtxQ1cWVCMF7cZ23SRcSDAsTnvEIzFDZ6InfqP/vDJ7S+YZ9nj4A6IJ?=
+ =?us-ascii?Q?FZP3FJ0LKRdDRDQuGa2Gr6h+dyoVTQAsi5I1+/6iZHEN1Hv+E5G6THZXdKH0?=
+ =?us-ascii?Q?TtTWMy85Pqf+GuYUmS8AeQYEsabxOzlEPCqb9KTKQvjhJBiONAXTMwioYG4T?=
+ =?us-ascii?Q?eWXt42PL901VbMjG9tPMAIM5/V/Nzk9219UwiY143TBLgHUUnjcv3vOjsFuQ?=
+ =?us-ascii?Q?ZD/G2bWESWfPqIQN1/yP5FhBvAzRVovpNHeP+nRU/7rZRbwmGcYzJmMY/GxW?=
+ =?us-ascii?Q?LHm0I5/P08Q60E3896mROwDURVlXcofFn8/9zp3H1gSR4MOvID/0xLO7whYq?=
+ =?us-ascii?Q?mV3Ivw0pfHmUwEY4BdWDMPBLTT9SXL/XoVi9Zl2WEjI6GJdXc1mE4gUJbMJ+?=
+ =?us-ascii?Q?sBNFw08gyYYDranVz4679HCtTPxTbRtDQSwBwudtGF3OJQbZXnxitZkRInkA?=
+ =?us-ascii?Q?EhG/FHVFjyPbzfuxr72mVWvjZMyopVdpj48L2dmtInUBBVMgV62PGg4GllGV?=
+ =?us-ascii?Q?k/RoXVAuhGbCF/PEiaDiyyAfh02Q/Jl4k6yt+VW6tWiL1Q9RSS3AkcEPaKV3?=
+ =?us-ascii?Q?B59WqsO8amdgqYB0RMpi/b5C2lVul23ghGfhUCrKQ1fSujp+8gJWGKoPMSIy?=
+ =?us-ascii?Q?8sFqmt8kHAAGtf+xbHLoOCTYOK5/eypsP14aocieW8sSDqTzIzriyHzeP6GF?=
+ =?us-ascii?Q?FyDS4UazUSM5YVGQsV54SO2YuA/Rv29L+ESOj3tpjUJYIvms4+BR2sB1wqF1?=
+ =?us-ascii?Q?huPbVss4Hc7Pm4tslX2BxulgHSjtuYTH50tJgU5vIeAwq/XuaozINhXPSR1S?=
+ =?us-ascii?Q?QYwidl1cfdZsH2kQ72xDICFEMbKSV9HdbtrfBlPB/AjInHlDF/RqXJ4GYzvd?=
+ =?us-ascii?Q?y6d8kD4D+Pc6iApvVZJEryj0RYeNWtXquUw31okCFSAasOEcdO9yfXBer5v5?=
+ =?us-ascii?Q?E8uPl8hoI1Nn9BARStQpP0h2qZoXQAV2vVrnmz430S8HeXJHWKpaGhE/2j3p?=
+ =?us-ascii?Q?ssidPi3GTxFuWBMiA9T1y+x7a7+Jm2zzZkznJNWlhViNxUBfpgL4x1V2QBfT?=
+ =?us-ascii?Q?tw=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 246cbf13-8080-4776-a82a-08da84ccdcb0
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 05:59:46.4762
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 06:01:03.9449
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dOvNrOWTWZ8Onp6F2KnBuCVF9rO0qYsJ9JGN/uHAO1aFI9z3LWknt/qAwIbrsqjL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3205
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8Jc6eQee4bQzvR/xsVgfHZThEDKvO/fFIz9d6MehvS0IBoyAu2cDmdHoxZ+XJwP7RQ4la7QGuwMpvMMYzGCXV/KMVtm9lNUBJwAlR0rXa0I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2984
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 23.08.22 um 02:01 schrieb Andrew Davis:
-> Most Kconfig options to enable a driver are in the Kconfig file
-> inside the relevant directory, move these two to the same.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
+Work is currently being done to add the phy-ocelot-serdes driver to a
+non-syscon configuration. Doing so will require updates to the
+documentation.
 
-With the tab vs. spaces pointed out by Randy fixed the patch is 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+I can certainly wait until that change set to submit this, but I feel
+sooner is better than later for Documentation format updates. Also,
+those updates likely won't be ready before this next merge window.
 
-> ---
->   drivers/gpu/drm/Kconfig            | 42 ------------------------------
->   drivers/gpu/drm/amd/amdgpu/Kconfig | 22 ++++++++++++++++
->   drivers/gpu/drm/radeon/Kconfig     | 22 ++++++++++++++++
->   3 files changed, 44 insertions(+), 42 deletions(-)
->
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index 6c2256e8474b..24fa9ccd92a4 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -234,50 +234,8 @@ source "drivers/gpu/drm/i2c/Kconfig"
->   
->   source "drivers/gpu/drm/arm/Kconfig"
->   
-> -config DRM_RADEON
-> -	tristate "ATI Radeon"
-> -	depends on DRM && PCI && MMU
-> -	depends on AGP || !AGP
-> -	select FW_LOADER
-> -	select DRM_DISPLAY_DP_HELPER
-> -	select DRM_DISPLAY_HELPER
-> -        select DRM_KMS_HELPER
-> -        select DRM_TTM
-> -	select DRM_TTM_HELPER
-> -	select POWER_SUPPLY
-> -	select HWMON
-> -	select BACKLIGHT_CLASS_DEVICE
-> -	select INTERVAL_TREE
-> -	help
-> -	  Choose this option if you have an ATI Radeon graphics card.  There
-> -	  are both PCI and AGP versions.  You don't need to choose this to
-> -	  run the Radeon in plain VGA mode.
-> -
-> -	  If M is selected, the module will be called radeon.
-> -
->   source "drivers/gpu/drm/radeon/Kconfig"
->   
-> -config DRM_AMDGPU
-> -	tristate "AMD GPU"
-> -	depends on DRM && PCI && MMU
-> -	select FW_LOADER
-> -	select DRM_DISPLAY_DP_HELPER
-> -	select DRM_DISPLAY_HDMI_HELPER
-> -	select DRM_DISPLAY_HELPER
-> -	select DRM_KMS_HELPER
-> -	select DRM_SCHED
-> -	select DRM_TTM
-> -	select DRM_TTM_HELPER
-> -	select POWER_SUPPLY
-> -	select HWMON
-> -	select BACKLIGHT_CLASS_DEVICE
-> -	select INTERVAL_TREE
-> -	select DRM_BUDDY
-> -	help
-> -	  Choose this option if you have a recent AMD Radeon graphics card.
-> -
-> -	  If M is selected, the module will be called amdgpu.
-> -
->   source "drivers/gpu/drm/amd/amdgpu/Kconfig"
->   
->   source "drivers/gpu/drm/nouveau/Kconfig"
-> diff --git a/drivers/gpu/drm/amd/amdgpu/Kconfig b/drivers/gpu/drm/amd/amdgpu/Kconfig
-> index 7777d55275de..36b1206124cf 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/Kconfig
-> +++ b/drivers/gpu/drm/amd/amdgpu/Kconfig
-> @@ -1,4 +1,26 @@
->   # SPDX-License-Identifier: MIT
-> +
-> +config DRM_AMDGPU
-> +	tristate "AMD GPU"
-> +	depends on DRM && PCI && MMU
-> +	select FW_LOADER
-> +	select DRM_DISPLAY_DP_HELPER
-> +	select DRM_DISPLAY_HDMI_HELPER
-> +	select DRM_DISPLAY_HELPER
-> +	select DRM_KMS_HELPER
-> +	select DRM_SCHED
-> +	select DRM_TTM
-> +	select DRM_TTM_HELPER
-> +	select POWER_SUPPLY
-> +	select HWMON
-> +	select BACKLIGHT_CLASS_DEVICE
-> +	select INTERVAL_TREE
-> +	select DRM_BUDDY
-> +	help
-> +	  Choose this option if you have a recent AMD Radeon graphics card.
-> +
-> +	  If M is selected, the module will be called amdgpu.
-> +
->   config DRM_AMDGPU_SI
->   	bool "Enable amdgpu support for SI parts"
->   	depends on DRM_AMDGPU
-> diff --git a/drivers/gpu/drm/radeon/Kconfig b/drivers/gpu/drm/radeon/Kconfig
-> index 52819e7f1fca..3248d12c562d 100644
-> --- a/drivers/gpu/drm/radeon/Kconfig
-> +++ b/drivers/gpu/drm/radeon/Kconfig
-> @@ -1,4 +1,26 @@
->   # SPDX-License-Identifier: MIT
-> +
-> +config DRM_RADEON
-> +	tristate "ATI Radeon"
-> +	depends on DRM && PCI && MMU
-> +	depends on AGP || !AGP
-> +	select FW_LOADER
-> +	select DRM_DISPLAY_DP_HELPER
-> +	select DRM_DISPLAY_HELPER
-> +        select DRM_KMS_HELPER
-> +        select DRM_TTM
-> +	select DRM_TTM_HELPER
-> +	select POWER_SUPPLY
-> +	select HWMON
-> +	select BACKLIGHT_CLASS_DEVICE
-> +	select INTERVAL_TREE
-> +	help
-> +	  Choose this option if you have an ATI Radeon graphics card.  There
-> +	  are both PCI and AGP versions.  You don't need to choose this to
-> +	  run the Radeon in plain VGA mode.
-> +
-> +	  If M is selected, the module will be called radeon.
-> +
->   config DRM_RADEON_USERPTR
->   	bool "Always enable userptr support"
->   	depends on DRM_RADEON
+The only liberty I took was adding Alexandre and UNGLinuxDriver as the
+maintainers, otherwise the content should be the same.
+
+Colin Foster (1):
+  dt-bindings: phy: ocelot-serdes: convert to YAML
+
+ .../bindings/phy/phy-ocelot-serdes.txt        | 43 -------------
+ .../bindings/phy/phy-ocelot-serdes.yaml       | 61 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 62 insertions(+), 43 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/phy-ocelot-serdes.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/phy-ocelot-serdes.yaml
+
+-- 
+2.25.1
 

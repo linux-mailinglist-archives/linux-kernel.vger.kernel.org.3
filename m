@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A05459D6CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C9759D7E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350684AbiHWJeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S241947AbiHWJx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350650AbiHWJc3 (ORCPT
+        with ESMTP id S1352079AbiHWJvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:32:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6364B0F8;
-        Tue, 23 Aug 2022 01:38:48 -0700 (PDT)
+        Tue, 23 Aug 2022 05:51:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9339E2C1;
+        Tue, 23 Aug 2022 01:45:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F713B81C62;
-        Tue, 23 Aug 2022 08:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4241C433C1;
-        Tue, 23 Aug 2022 08:37:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C2FAB81C5C;
+        Tue, 23 Aug 2022 08:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2AB2C433C1;
+        Tue, 23 Aug 2022 08:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243866;
-        bh=nNnTUhqNU4YQbcijVe/pezvof71mJ2XPgaNef+hmOY0=;
+        s=korg; t=1661244265;
+        bh=NlMeMbrGkxLWvMZrzHb+gQ5MshQVvwJITmy05HzkXG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jrX2fJVBSB38MPIBb8UNf9rhYMpISbQc0HtGmakpK3RHz+dzsqdh6/YOXbJjg1GWR
-         2IDmaElvpEHHz8Ey67WV5WOuwSd4L+c/VWatfePGXaZ+qwAiHxITDutBkKMBotfeQ+
-         hI96IpWRm9YqrWGs43C66J9MFZTCzUje9o/wvWHQ=
+        b=LHMSswSWZJF+dMZ2BALf4DWNMlcmNrfwyxz814ra0GYcIsZlV9UWq3z3meyW4AvIP
+         TRXpdwSPf13rAqu64iPdThaOnIfNMdLg0YwFxXKVBpVRgudrCrFFCQqO4lg6gMaywZ
+         X1ioJXeFGAwmTXI5N8rFoKJ15oyrAGU6n4215q1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 047/229] PM: hibernate: defer device probing when resuming from hibernation
-Date:   Tue, 23 Aug 2022 10:23:28 +0200
-Message-Id: <20220823080055.346898181@linuxfoundation.org>
+        "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+        Sudarsana Reddy Kalluru <skalluru@marvell.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 051/244] net: atlantic: fix aq_vec index out of range error
+Date:   Tue, 23 Aug 2022 10:23:30 +0200
+Message-Id: <20220823080100.767651306@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,106 +56,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 
-[ Upstream commit 8386c414e27caba8501119948e9551e52b527f59 ]
+commit 2ba5e47fb75fbb8fab45f5c1bc8d5c33d8834bd3 upstream.
 
-syzbot is reporting hung task at misc_open() [1], for there is a race
-window of AB-BA deadlock which involves probe_count variable. Currently
-wait_for_device_probe() from snapshot_open() from misc_open() can sleep
-forever with misc_mtx held if probe_count cannot become 0.
+The final update statement of the for loop exceeds the array range, the
+dereference of self->aq_vec[i] is not checked and then leads to the
+index out of range error.
+Also fixed this kind of coding style in other for loop.
 
-When a device is probed by hub_event() work function, probe_count is
-incremented before the probe function starts, and probe_count is
-decremented after the probe function completed.
+[   97.937604] UBSAN: array-index-out-of-bounds in drivers/net/ethernet/aquantia/atlantic/aq_nic.c:1404:48
+[   97.937607] index 8 is out of range for type 'aq_vec_s *[8]'
+[   97.937608] CPU: 38 PID: 3767 Comm: kworker/u256:18 Not tainted 5.19.0+ #2
+[   97.937610] Hardware name: Dell Inc. Precision 7865 Tower/, BIOS 1.0.0 06/12/2022
+[   97.937611] Workqueue: events_unbound async_run_entry_fn
+[   97.937616] Call Trace:
+[   97.937617]  <TASK>
+[   97.937619]  dump_stack_lvl+0x49/0x63
+[   97.937624]  dump_stack+0x10/0x16
+[   97.937626]  ubsan_epilogue+0x9/0x3f
+[   97.937627]  __ubsan_handle_out_of_bounds.cold+0x44/0x49
+[   97.937629]  ? __scm_send+0x348/0x440
+[   97.937632]  ? aq_vec_stop+0x72/0x80 [atlantic]
+[   97.937639]  aq_nic_stop+0x1b6/0x1c0 [atlantic]
+[   97.937644]  aq_suspend_common+0x88/0x90 [atlantic]
+[   97.937648]  aq_pm_suspend_poweroff+0xe/0x20 [atlantic]
+[   97.937653]  pci_pm_suspend+0x7e/0x1a0
+[   97.937655]  ? pci_pm_suspend_noirq+0x2b0/0x2b0
+[   97.937657]  dpm_run_callback+0x54/0x190
+[   97.937660]  __device_suspend+0x14c/0x4d0
+[   97.937661]  async_suspend+0x23/0x70
+[   97.937663]  async_run_entry_fn+0x33/0x120
+[   97.937664]  process_one_work+0x21f/0x3f0
+[   97.937666]  worker_thread+0x4a/0x3c0
+[   97.937668]  ? process_one_work+0x3f0/0x3f0
+[   97.937669]  kthread+0xf0/0x120
+[   97.937671]  ? kthread_complete_and_exit+0x20/0x20
+[   97.937672]  ret_from_fork+0x22/0x30
+[   97.937676]  </TASK>
 
-There are three cases that can prevent probe_count from dropping to 0.
+v2. fixed "warning: variable 'aq_vec' set but not used"
 
-  (a) A device being probed stopped responding (i.e. broken/malicious
-      hardware).
+v3. simplified a for loop
 
-  (b) A process emulating a USB device using /dev/raw-gadget interface
-      stopped responding for some reason.
-
-  (c) New device probe requests keeps coming in before existing device
-      probe requests complete.
-
-The phenomenon syzbot is reporting is (b). A process which is holding
-system_transition_mutex and misc_mtx is waiting for probe_count to become
-0 inside wait_for_device_probe(), but the probe function which is called
- from hub_event() work function is waiting for the processes which are
-blocked at mutex_lock(&misc_mtx) to respond via /dev/raw-gadget interface.
-
-This patch mitigates (b) by deferring wait_for_device_probe() from
-snapshot_open() to snapshot_write() and snapshot_ioctl(). Please note that
-the possibility of (b) remains as long as any thread which is emulating a
-USB device via /dev/raw-gadget interface can be blocked by uninterruptible
-blocking operations (e.g. mutex_lock()).
-
-Please also note that (a) and (c) are not addressed. Regarding (c), we
-should change the code to wait for only one device which contains the
-image for resuming from hibernation. I don't know how to address (a), for
-use of timeout for wait_for_device_probe() might result in loss of user
-data in the image. Maybe we should require the userland to wait for the
-image device before opening /dev/snapshot interface.
-
-Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
-Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 97bde5c4f909 ("net: ethernet: aquantia: Support for NIC-specific code")
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+Acked-by: Sudarsana Reddy Kalluru <skalluru@marvell.com>
+Link: https://lore.kernel.org/r/20220808081845.42005-1-acelan.kao@canonical.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/power/user.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/aquantia/atlantic/aq_nic.c |   21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 69017a569f30..add4653477fe 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -29,6 +29,7 @@
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+@@ -265,12 +265,10 @@ static void aq_nic_service_timer_cb(stru
+ static void aq_nic_polling_timer_cb(struct timer_list *t)
+ {
+ 	struct aq_nic_s *self = from_timer(self, t, polling_timer);
+-	struct aq_vec_s *aq_vec = NULL;
+ 	unsigned int i = 0U;
  
- #include "power.h"
+-	for (i = 0U, aq_vec = self->aq_vec[0];
+-		self->aq_vecs > i; ++i, aq_vec = self->aq_vec[i])
+-		aq_vec_isr(i, (void *)aq_vec);
++	for (i = 0U; self->aq_vecs > i; ++i)
++		aq_vec_isr(i, (void *)self->aq_vec[i]);
  
-+static bool need_wait;
+ 	mod_timer(&self->polling_timer, jiffies +
+ 		  AQ_CFG_POLLING_TIMER_INTERVAL);
+@@ -872,7 +870,6 @@ int aq_nic_get_regs_count(struct aq_nic_
  
- #define SNAPSHOT_MINOR	231
+ u64 *aq_nic_get_stats(struct aq_nic_s *self, u64 *data)
+ {
+-	struct aq_vec_s *aq_vec = NULL;
+ 	struct aq_stats_s *stats;
+ 	unsigned int count = 0U;
+ 	unsigned int i = 0U;
+@@ -922,11 +919,11 @@ u64 *aq_nic_get_stats(struct aq_nic_s *s
+ 	data += i;
  
-@@ -82,7 +83,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
- 		 * Resuming.  We may need to wait for the image device to
- 		 * appear.
- 		 */
--		wait_for_device_probe();
-+		need_wait = true;
+ 	for (tc = 0U; tc < self->aq_nic_cfg.tcs; tc++) {
+-		for (i = 0U, aq_vec = self->aq_vec[0];
+-		     aq_vec && self->aq_vecs > i;
+-		     ++i, aq_vec = self->aq_vec[i]) {
++		for (i = 0U; self->aq_vecs > i; ++i) {
++			if (!self->aq_vec[i])
++				break;
+ 			data += count;
+-			count = aq_vec_get_sw_stats(aq_vec, tc, data);
++			count = aq_vec_get_sw_stats(self->aq_vec[i], tc, data);
+ 		}
+ 	}
  
- 		data->swap = -1;
- 		data->mode = O_WRONLY;
-@@ -174,6 +175,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 	ssize_t res;
- 	loff_t pg_offp = *offp & ~PAGE_MASK;
+@@ -1240,7 +1237,6 @@ int aq_nic_set_loopback(struct aq_nic_s
  
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	lock_system_sleep();
+ int aq_nic_stop(struct aq_nic_s *self)
+ {
+-	struct aq_vec_s *aq_vec = NULL;
+ 	unsigned int i = 0U;
  
- 	data = filp->private_data;
-@@ -209,6 +215,11 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- 	loff_t size;
- 	sector_t offset;
+ 	netif_tx_disable(self->ndev);
+@@ -1258,9 +1254,8 @@ int aq_nic_stop(struct aq_nic_s *self)
  
-+	if (need_wait) {
-+		wait_for_device_probe();
-+		need_wait = false;
-+	}
-+
- 	if (_IOC_TYPE(cmd) != SNAPSHOT_IOC_MAGIC)
- 		return -ENOTTY;
- 	if (_IOC_NR(cmd) > SNAPSHOT_IOC_MAXNR)
--- 
-2.35.1
-
+ 	aq_ptp_irq_free(self);
+ 
+-	for (i = 0U, aq_vec = self->aq_vec[0];
+-		self->aq_vecs > i; ++i, aq_vec = self->aq_vec[i])
+-		aq_vec_stop(aq_vec);
++	for (i = 0U; self->aq_vecs > i; ++i)
++		aq_vec_stop(self->aq_vec[i]);
+ 
+ 	aq_ptp_ring_stop(self);
+ 
 
 

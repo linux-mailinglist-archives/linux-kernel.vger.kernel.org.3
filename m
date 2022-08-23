@@ -2,103 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248BD59EE44
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E320359EE47
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiHWVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S229831AbiHWVhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiHWVdh (ORCPT
+        with ESMTP id S229533AbiHWVhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:33:37 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E9428E1C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:33:36 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id 62so11966574iov.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=R6TsXaMTO4DJ/Xfoyooc+Twnt1v216EBvqAKqT4U61k=;
-        b=VI4DtEtoIO2A0moQTASUBYqZ4kF10YrwwglSzvjVHHkyoKPoCnBxmZjGRqGYVqctfi
-         ViK2Sv/zBcE4o78B7zORPr1wVYbHhGEY/uHWQKIXEwzuYbGQYLIrO4xAumJ1FU/otS9S
-         33inElQ/RcwvXZXfjfdbpZVMmsQ1SkWgdr2NQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=R6TsXaMTO4DJ/Xfoyooc+Twnt1v216EBvqAKqT4U61k=;
-        b=DGUmgKohZc0In/QUAQlk9/hpwzt2Cozw4DBCivji1LqcPdrgZAz0CpPbpSn7ZffPyu
-         PXDa8AA041MDQz0Ayz8VzKxYJNot9NwKtW3DQSq4UsPjTxy4UqcELVrEXjVX8mSa6DUy
-         N2lRqg+2AFeV7W3+P8l0d4f7uc2nBmQ5Aei4qsWwtRIhWDrVAv37iKosFgSlYpxIsHSn
-         ClMYzeJ0Ll17L4sRO9h595/e8f6nKY8OJeZ/PnfkVqh0vxY/jjzGHLI3C2XNIKRaWTXX
-         qSW8o4/5LTngGJOg17reGjzH5i7D8d9Ga9pGK7262trxyHaXV8meYyPA33zvO62p6bKB
-         SdjQ==
-X-Gm-Message-State: ACgBeo1zW8d7lIecxtl6rxD200Hwj53APTHXK4bWQulUzuiGHyznBs2m
-        RsXAnjZUtQ3XcjYf/DIk4EKrJw==
-X-Google-Smtp-Source: AA6agR5FcOVRzM+xppGAFQu940G8xmdl4E3SmZX4kKyQu7xIHfEWpCxM04twI3KsKbbmyKi66SJWtQ==
-X-Received: by 2002:a05:6638:31c2:b0:32e:167a:d887 with SMTP id n2-20020a05663831c200b0032e167ad887mr12574201jav.197.1661290416118;
-        Tue, 23 Aug 2022 14:33:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f3-20020a02a803000000b0034a0475fb33sm152132jaj.154.2022.08.23.14.33.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 14:33:35 -0700 (PDT)
-Subject: Re: [PATCH 5.19 000/365] 5.19.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <aefd4879-78a5-e142-362d-f2b8ebb9e29d@linuxfoundation.org>
-Date:   Tue, 23 Aug 2022 15:33:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 23 Aug 2022 17:37:06 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2CA82870;
+        Tue, 23 Aug 2022 14:37:05 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NLJFxY025675;
+        Tue, 23 Aug 2022 21:37:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CI3JVAQRIsqISCbm0ZqMNusQmEhT/CFUtIlZncrDFzo=;
+ b=Dn0ZksBK6X7uThbhvDZb8VelfJoE+0Imdg8jxY6VKXuL2PFlg9a3Oi/GE658Ecl+OGLr
+ meuV9rOd+7o69XQOX3LPB8u94ZxeiQ3bZRJ5je3tSkk7K94lgyTutdXvYNMxX5ngFlwY
+ hLCEP7sJ6PeJVRuoJ668wOBqw+JddBiGe52N0Sg+Z7NuXn0z04bhoBXLGB9eVH2pB82n
+ VZd/ampze5gSAPrZPzJ04x/pSoVhv+YhSL5jALxteKT1mPzzO20iyNOLPaiTQvUaU+6L
+ nAkJO4tWXunE0RJNJFc0dB7yPFSH2f7s0rQXtFFY/FNewD7cD3W6t2v/nYZ0lOiIUSca 9g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52ppru0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 21:37:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27NLb0rZ020259
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Aug 2022 21:37:00 GMT
+Received: from [10.216.10.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 23 Aug
+ 2022 14:36:56 -0700
+Message-ID: <8d3c8ae2-f342-b38c-e0d2-9abd357703f5@quicinc.com>
+Date:   Wed, 24 Aug 2022 03:06:48 +0530
 MIME-Version: 1.0
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Freedreno] [PATCH v2] drm/msm/iommu: optimize map/unmap
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
+CC:     Rob Clark <robdclark@chromium.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        <linux-arm-msm@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>, "Daniel Vetter" <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20220823163719.90399-1-robdclark@gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20220823163719.90399-1-robdclark@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dMz0F2sAxj2jjy5LIvUIlQhoynsXnLK6
+X-Proofpoint-GUID: dMz0F2sAxj2jjy5LIvUIlQhoynsXnLK6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-23_09,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 mlxlogscore=999 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208230081
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 1:58 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.4 release.
-> There are 365 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On 8/23/2022 10:07 PM, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Using map_pages/unmap_pages cuts down on the # of pgtable walks needed
+> in the process of finding where to insert/remove an entry.  The end
+> result is ~5-10x faster than mapping a single page at a time.
+>
+> v2: Rename iommu_pgsize(), drop obsolete comments, fix error handling
+>      in msm_iommu_pagetable_map()
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/gpu/drm/msm/msm_iommu.c | 101 +++++++++++++++++++++++++++-----
+>   1 file changed, 86 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
+> index a54ed354578b..5577cea7c009 100644
+> --- a/drivers/gpu/drm/msm/msm_iommu.c
+> +++ b/drivers/gpu/drm/msm/msm_iommu.c
+> @@ -21,6 +21,7 @@ struct msm_iommu_pagetable {
+>   	struct msm_mmu base;
+>   	struct msm_mmu *parent;
+>   	struct io_pgtable_ops *pgtbl_ops;
+> +	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
+>   	phys_addr_t ttbr;
+>   	u32 asid;
+>   };
+> @@ -29,23 +30,84 @@ static struct msm_iommu_pagetable *to_pagetable(struct msm_mmu *mmu)
+>   	return container_of(mmu, struct msm_iommu_pagetable, base);
+>   }
+>   
+> +/* based on iommu_pgsize() in iommu.c: */
+> +static size_t calc_pgsize(struct msm_iommu_pagetable *pagetable,
+> +			   unsigned long iova, phys_addr_t paddr,
+> +			   size_t size, size_t *count)
+> +{
+> +	unsigned int pgsize_idx, pgsize_idx_next;
+> +	unsigned long pgsizes;
+> +	size_t offset, pgsize, pgsize_next;
+> +	unsigned long addr_merge = paddr | iova;
+> +
+> +	/* Page sizes supported by the hardware and small enough for @size */
+> +	pgsizes = pagetable->pgsize_bitmap & GENMASK(__fls(size), 0);
+> +
+> +	/* Constrain the page sizes further based on the maximum alignment */
+> +	if (likely(addr_merge))
+> +		pgsizes &= GENMASK(__ffs(addr_merge), 0);
+> +
+> +	/* Make sure we have at least one suitable page size */
+> +	BUG_ON(!pgsizes);
+> +
+> +	/* Pick the biggest page size remaining */
+> +	pgsize_idx = __fls(pgsizes);
+> +	pgsize = BIT(pgsize_idx);
+> +	if (!count)
+> +		return pgsize;
+> +
+> +	/* Find the next biggest support page size, if it exists */
+> +	pgsizes = pagetable->pgsize_bitmap & ~GENMASK(pgsize_idx, 0);
+> +	if (!pgsizes)
+> +		goto out_set_count;
+> +
+> +	pgsize_idx_next = __ffs(pgsizes);
+> +	pgsize_next = BIT(pgsize_idx_next);
+> +
+> +	/*
+> +	 * There's no point trying a bigger page size unless the virtual
+> +	 * and physical addresses are similarly offset within the larger page.
+> +	 */
+> +	if ((iova ^ paddr) & (pgsize_next - 1))
+> +		goto out_set_count;
+> +
+> +	/* Calculate the offset to the next page size alignment boundary */
+> +	offset = pgsize_next - (addr_merge & (pgsize_next - 1));
+> +
+> +	/*
+> +	 * If size is big enough to accommodate the larger page, reduce
+> +	 * the number of smaller pages.
+> +	 */
+> +	if (offset + pgsize_next <= size)
+> +		size = offset;
+> +
+> +out_set_count:
+> +	*count = size >> pgsize_idx;
+> +	return pgsize;
+> +}
+> +
+Can we keep this in iommu driver? Seems useful to other drivers too.  
+Perhaps implement an sg friendly version of iopgtble ops, like 
+unmap_sg() maybe!
 
-Compiled and booted on my test system. No dmesg regressions.
+-Akhil.
+>   static int msm_iommu_pagetable_unmap(struct msm_mmu *mmu, u64 iova,
+>   		size_t size)
+>   {
+>   	struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
+>   	struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
+> -	size_t unmapped = 0;
+>   
+> -	/* Unmap the block one page at a time */
+>   	while (size) {
+> -		unmapped += ops->unmap(ops, iova, 4096, NULL);
+> -		iova += 4096;
+> -		size -= 4096;
+> +		size_t unmapped, pgsize, count;
+> +
+> +		pgsize = calc_pgsize(pagetable, iova, iova, size, &count);
+> +
+> +		unmapped = ops->unmap_pages(ops, iova, pgsize, count, NULL);
+> +		if (!unmapped)
+> +			break;
+> +
+> +		iova += unmapped;
+> +		size -= unmapped;
+>   	}
+>   
+>   	iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
+>   
+> -	return (unmapped == size) ? 0 : -EINVAL;
+> +	return (size == 0) ? 0 : -EINVAL;
+>   }
+>   
+>   static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
+> @@ -54,7 +116,6 @@ static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
+>   	struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
+>   	struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
+>   	struct scatterlist *sg;
+> -	size_t mapped = 0;
+>   	u64 addr = iova;
+>   	unsigned int i;
+>   
+> @@ -62,17 +123,26 @@ static int msm_iommu_pagetable_map(struct msm_mmu *mmu, u64 iova,
+>   		size_t size = sg->length;
+>   		phys_addr_t phys = sg_phys(sg);
+>   
+> -		/* Map the block one page at a time */
+>   		while (size) {
+> -			if (ops->map(ops, addr, phys, 4096, prot, GFP_KERNEL)) {
+> -				msm_iommu_pagetable_unmap(mmu, iova, mapped);
+> +			size_t pgsize, count, mapped = 0;
+> +			int ret;
+> +
+> +			pgsize = calc_pgsize(pagetable, addr, phys, size, &count);
+> +
+> +			ret = ops->map_pages(ops, addr, phys, pgsize, count,
+> +					     prot, GFP_KERNEL, &mapped);
+> +
+> +			/* map_pages could fail after mapping some of the pages,
+> +			 * so update the counters before error handling.
+> +			 */
+> +			phys += mapped;
+> +			addr += mapped;
+> +			size -= mapped;
+> +
+> +			if (ret) {
+> +				msm_iommu_pagetable_unmap(mmu, iova, addr - iova);
+>   				return -EINVAL;
+>   			}
+> -
+> -			phys += 4096;
+> -			addr += 4096;
+> -			size -= 4096;
+> -			mapped += 4096;
+>   		}
+>   	}
+>   
+> @@ -207,6 +277,7 @@ struct msm_mmu *msm_iommu_pagetable_create(struct msm_mmu *parent)
+>   
+>   	/* Needed later for TLB flush */
+>   	pagetable->parent = parent;
+> +	pagetable->pgsize_bitmap = ttbr0_cfg.pgsize_bitmap;
+>   	pagetable->ttbr = ttbr0_cfg.arm_lpae_s1_cfg.ttbr;
+>   
+>   	/*
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah

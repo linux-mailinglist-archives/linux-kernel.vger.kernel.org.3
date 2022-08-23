@@ -2,89 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED1959EE1D
+	by mail.lfdr.de (Postfix) with ESMTP id 64DC459EE1C
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiHWVUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
+        id S231296AbiHWVVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiHWVUj (ORCPT
+        with ESMTP id S230511AbiHWVVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:20:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D8F7A512
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661289637;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kDxp6lecacjb98wPWPmNSJC/XwpRER4yjzQFhNWbLNM=;
-        b=LapdVoMNAGWTWjgpYmYLQ4vonCfDxnRcX87VFp6LI/MIQza07lHAjkG3gwtlJAYFErD5ZC
-        60BfNaR7hrlV0Fy/hozixRuxTUGU8S9k0b3HbsS/5yq/qcB5cYO4Diaum/llojJurNEnF2
-        6EV0BP1QnUatMkqkNRh0GZoPmsl2x00=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589--gEvpZHyMP-YWObqYxAE9g-1; Tue, 23 Aug 2022 17:20:36 -0400
-X-MC-Unique: -gEvpZHyMP-YWObqYxAE9g-1
-Received: by mail-qt1-f197.google.com with SMTP id h13-20020ac87d4d000000b00342f6c363afso11437863qtb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:20:35 -0700 (PDT)
+        Tue, 23 Aug 2022 17:21:02 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6B46CD0A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:21:00 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-11dca1c9c01so1460889fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=cE/HKSS1gcJ/bSLjCPtdvFIQrahyJdohXOdk9AJy+aE=;
+        b=mdjPFrvRatkM6bSBrHyob39+vqOAM+OJ6yFbe7pKnEtneYvZ3AEyvA06mzPFI6C6xz
+         b7wJf9XlaDnvGBReC4O4PjzPxfIqTp4enKLhhjyhON7LiW7T6rDerkr9nyN5k1uBDb7Y
+         1V6kQ1zGUz+p+3DtkgHtsAB7vf+Cws/EsgFFA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=kDxp6lecacjb98wPWPmNSJC/XwpRER4yjzQFhNWbLNM=;
-        b=Qat7tSdyHeToNdD5/tmOCIem9ZuS2ENvDHKRQSHolIgStM21MYsJWe/ic3S36RCJBD
-         xz0fZJa6UUTXpuimaJPW+cBLMN80RiasDY3B2t6rGBT5MjJAQol/WoKRjOmxEWY77S2p
-         WHS5dkwXE7QS0vBf5GvowxVpFaslLSzOVzw31+R8LtF0Z+Sn6qOPlpM38ec86YE/MxWg
-         cWMf/gtxIyxSd7fOPWh/ahTa2/BpTtM/vWbUZD4HP1FUDTrz9qsZcyTbV3UhlhY038SJ
-         mHrO9pArj/FJP3ZsHL3icYMTdCHGSwrV5uA05RGOFUfZ7PUItSGgJrSqp9ZRGQiHCq+m
-         zC2Q==
-X-Gm-Message-State: ACgBeo273CvqLMU7qfvHs8xaq03/j9q2+LiEv+cKEyXKHC7AbeLe+Zdk
-        +IIEW12UQyrE+MZN+g63Ps9x2fp8SQ1P989gIl0K1xedGAStgDmeKcwtZ6f4WMsqxo9L2vYrGEq
-        PGo9nh/zr5UwszH2xgBEaPrVV
-X-Received: by 2002:a05:6214:260e:b0:496:a6eb:94f8 with SMTP id gu14-20020a056214260e00b00496a6eb94f8mr22195726qvb.85.1661289635335;
-        Tue, 23 Aug 2022 14:20:35 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4GdFOFVsCT3Z0e/Gt12h73jfCtvxPLR/EbAAo1gDtVfbTot9LLeAXrj+uVOfZeMFzXQ4FYkQ==
-X-Received: by 2002:a05:6214:260e:b0:496:a6eb:94f8 with SMTP id gu14-20020a056214260e00b00496a6eb94f8mr22195695qvb.85.1661289634982;
-        Tue, 23 Aug 2022 14:20:34 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id q8-20020a05620a2a4800b006bb756ce754sm14406977qkp.55.2022.08.23.14.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 14:20:34 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 17:20:32 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
-        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-Message-ID: <YwVEoM1pj2MPCELp@xz-m1.local>
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com>
- <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org>
- <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
- <YwTc++Lz6lh3aR4F@xz-m1.local>
- <87bksawz0w.wl-maz@kernel.org>
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=cE/HKSS1gcJ/bSLjCPtdvFIQrahyJdohXOdk9AJy+aE=;
+        b=TZJ0uWgQchW66CrQw5eI0aQYpzIeZw6hctnyWNFFUepuAhEiSLaazV0q81QskAKlwK
+         s99b9nD38OGuGZfjSCtb1PtuCWDN5KxjAUaRh5mZQJ9MqzRPWx6XSi08Zfq3gMET1eBh
+         7vbD+wdfW/Tg5ulygA2tq77FKoFmV4+utVTjf5GJg+SU28db4KaEAjdScNL1/K7pzpYK
+         d2R91onh11T4PWSQBUvy7OVJ0/odSA0At6tTlJN4wV7d0ekcgrluIJD1DgupX9SRLdz5
+         2/8cL4q/xmeCRtmvfhWMzcv/q9Jn0w1+TNn1Yd/dPUSKwEACIMlD8Oj4oe7EVuoNmeSI
+         SA4Q==
+X-Gm-Message-State: ACgBeo3CB+wF9BujSE6zuWzqvrCz+meXqcGOtR0pu+oVA+wlQVou3a6K
+        MjlAhJ/kSQZNyvX1rFYAy8bsHaztaXOU9pRSAtSWnQ==
+X-Google-Smtp-Source: AA6agR4QQoa2UfnPHO//dTdnEb86cOYZdqaGouJSF8NHaTF9PTibAwUV01BupM30k+6j+7cZ0tchO0CNdnY1ihMsSfc=
+X-Received: by 2002:a05:6870:a99c:b0:11c:2c37:3d03 with SMTP id
+ ep28-20020a056870a99c00b0011c2c373d03mr2264277oab.0.1661289658829; Tue, 23
+ Aug 2022 14:20:58 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 23 Aug 2022 16:20:57 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87bksawz0w.wl-maz@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <c8a2f675-4d69-58f7-a603-5e810f0077fe@quicinc.com>
+References: <20220823024356.783318-1-swboyd@chromium.org> <c8a2f675-4d69-58f7-a603-5e810f0077fe@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 23 Aug 2022 16:20:57 -0500
+Message-ID: <CAE-0n50YsdeipC=shDnhyTbHaCctGEmZixLKzcb4DyOng5QhWQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: Silence inconsistent indent warning
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,63 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 08:17:03PM +0100, Marc Zyngier wrote:
-> I don't think we really need this check on the hot path. All we need
-> is to make the request sticky until userspace gets their act together
-> and consumes elements in the ring. Something like:
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 986cee6fbc7f..e8ed5e1af159 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -747,6 +747,14 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
->  
->  		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
->  			return kvm_vcpu_suspend(vcpu);
-> +
-> +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
-> +		    kvm_dirty_ring_soft_full(vcpu)) {
-> +			kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
-> +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
-> +			trace_kvm_dirty_ring_exit(vcpu);
-> +			return 0;
-> +		}
->  	}
->  
->  	return 1;
+Quoting Abhinav Kumar (2022-08-23 10:47:02)
+> link->request.test_lane_count;
+> -       link->dp_link.link_params.rate = link->request.test_link_rate;
+> +       link->dp_link.link_params.rate =
+> +               drm_dp_bw_code_to_link_rate(link->request.test_link_rate);
+>
+>          return 0;
+>
+> Since we are fixing up this commit, can you please fix this too?
+>
 
-Right, this seems working.  We can also use kvm_test_request() here.
-
-> 
-> 
-> However, I'm a bit concerned by the reset side of things. It iterates
-> over the vcpus and expects the view of each ring to be consistent,
-> even if userspace is hacking at it from another CPU. For example, I
-> can't see what guarantees that the kernel observes the writes from
-> userspace in the order they are being performed (the documentation
-> provides no requirements other than "it must collect the dirty GFNs in
-> sequence", which doesn't mean much from an ordering perspective).
-> 
-> I can see that working on a strongly ordered architecture, but on
-> something as relaxed as ARM, the CPUs may^Wwill aggressively reorder
-> stuff that isn't explicitly ordered. I have the feeling that a CAS
-> operation on both sides would be enough, but someone who actually
-> understands how this works should have a look...
-
-I definitely don't think I 100% understand all the ordering things since
-they're complicated.. but my understanding is that the reset procedure
-didn't need memory barrier (unlike pushing, where we have explicit wmb),
-because we assumed the userapp is not hostile so logically it should only
-modify the flags which is a 32bit field, assuming atomicity guaranteed.
-
-IIRC we used to discuss similar questions on "what if the user is hostile
-and wants to hack the process by messing up with the ring", and our
-conclusion was as long as the process wouldn't mess up anything outside
-itself it should be okay. E.g. It should not be able to either cause the
-host to misfunction, or trigger kernel warnings in dmesg, etc..
-
-Thanks,
-
--- 
-Peter Xu
-
+Sure.

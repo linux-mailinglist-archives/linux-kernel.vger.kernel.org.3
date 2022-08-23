@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C0F59DEFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB11459DD48
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356093AbiHWKq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S1353908AbiHWKTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355553AbiHWKjN (ORCPT
+        with ESMTP id S1352668AbiHWKIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:39:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C334A7221;
-        Tue, 23 Aug 2022 02:07:59 -0700 (PDT)
+        Tue, 23 Aug 2022 06:08:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65CD58DF8;
+        Tue, 23 Aug 2022 01:54:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE1FC6159A;
-        Tue, 23 Aug 2022 09:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4304C433C1;
-        Tue, 23 Aug 2022 09:07:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83585B81C3B;
+        Tue, 23 Aug 2022 08:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4ADAC433C1;
+        Tue, 23 Aug 2022 08:54:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245678;
-        bh=RUCb4Wufwc6kH8giP5LlkCfjdRcwlVShfA9Qcx7N+xk=;
+        s=korg; t=1661244878;
+        bh=SAvOhlafPdoVmoH3guJYuNfZGMfWY3Q8a+8odAousBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XxKKaeNzWpKx/XaqopOSBEZN1u/tJFGByi3yfiwJaAnj6PntXYjJjKbw07KDd3EAI
-         9/B8yAIdCrwV+Jr4uqch024GmihVJAzVSa+VeBA6NWJ59yUcO+71nkyazPiay3fjVs
-         FCUYbhBa7k/QE4whNUUMlfTNzuIarq5L7Dy1j52A=
+        b=OAxw3v96oHkBNpr+Km3tCPQ+WoO0MOZtn6JvNAEPCKSousg1IKl1+orLEF5JyMr65
+         WQOT6xH5dD8S1lqQvdWodZe8cgNz+3LANe/xN7QO2Sun8lE4kD0ERGcUyoKti3FRIv
+         XJ1DgExJh/hh4qjecCjCX8bJa3+f23spuSZYkWnk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 155/287] remoteproc: qcom: wcnss: Fix handling of IRQs
-Date:   Tue, 23 Aug 2022 10:25:24 +0200
-Message-Id: <20220823080105.861982236@linuxfoundation.org>
+Subject: [PATCH 5.15 166/244] usb: cdns3: fix random warning message when driver load
+Date:   Tue, 23 Aug 2022 10:25:25 +0200
+Message-Id: <20220823080104.757719724@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sireesh Kodali <sireeshkodali1@gmail.com>
+From: Frank Li <Frank.Li@nxp.com>
 
-[ Upstream commit bed0adac1ded4cb486ba19a3a7e730fbd9a1c9c6 ]
+[ Upstream commit 8659ab3d936fcf0084676f98b75b317017aa8f82 ]
 
-The wcnss_get_irq function is expected to return a value > 0 in the
-event that an IRQ is succssfully obtained, but it instead returns 0.
-This causes the stop and ready IRQs to never actually be used despite
-being defined in the device-tree. This patch fixes that.
+Warning log:
+[    4.141392] Unexpected gfp: 0x4 (GFP_DMA32). Fixing up to gfp: 0xa20 (GFP_ATOMIC). Fix your code!
+[    4.150340] CPU: 1 PID: 175 Comm: 1-0050 Not tainted 5.15.5-00039-g2fd9ae1b568c #20
+[    4.158010] Hardware name: Freescale i.MX8QXP MEK (DT)
+[    4.163155] Call trace:
+[    4.165600]  dump_backtrace+0x0/0x1b0
+[    4.169286]  show_stack+0x18/0x68
+[    4.172611]  dump_stack_lvl+0x68/0x84
+[    4.176286]  dump_stack+0x18/0x34
+[    4.179613]  kmalloc_fix_flags+0x60/0x88
+[    4.183550]  new_slab+0x334/0x370
+[    4.186878]  ___slab_alloc.part.108+0x4d4/0x748
+[    4.191419]  __slab_alloc.isra.109+0x30/0x78
+[    4.195702]  kmem_cache_alloc+0x40c/0x420
+[    4.199725]  dma_pool_alloc+0xac/0x1f8
+[    4.203486]  cdns3_allocate_trb_pool+0xb4/0xd0
 
-Fixes: aed361adca9f ("remoteproc: qcom: Introduce WCNSS peripheral image loader")
-Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220526141740.15834-2-sireeshkodali1@gmail.com
+pool_alloc_page(struct dma_pool *pool, gfp_t mem_flags)
+{
+	...
+	page = kmalloc(sizeof(*page), mem_flags);
+	page->vaddr = dma_alloc_coherent(pool->dev, pool->allocation,
+					 &page->dma, mem_flags);
+	...
+}
+
+kmalloc was called with mem_flags, which is passed down in
+cdns3_allocate_trb_pool() and have GFP_DMA32 flags.
+kmall_fix_flags() report warning.
+
+GFP_DMA32 is not useful at all. dma_alloc_coherent() will handle
+DMA memory region correctly by pool->dev. GFP_DMA32 can be removed
+safely.
+
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Link: https://lore.kernel.org/r/20220609154456.2871672-1-Frank.Li@nxp.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/qcom_wcnss.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/usb/cdns3/cdns3-gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-index 6cc0f9a5533e..63726d8fb332 100644
---- a/drivers/remoteproc/qcom_wcnss.c
-+++ b/drivers/remoteproc/qcom_wcnss.c
-@@ -415,6 +415,7 @@ static int wcnss_request_irq(struct qcom_wcnss *wcnss,
- 			     irq_handler_t thread_fn)
- {
- 	int ret;
-+	int irq_number;
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 4bcaed787c0f..3f1ce8911077 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -220,7 +220,7 @@ int cdns3_allocate_trb_pool(struct cdns3_endpoint *priv_ep)
  
- 	ret = platform_get_irq_byname(pdev, name);
- 	if (ret < 0 && optional) {
-@@ -425,14 +426,19 @@ static int wcnss_request_irq(struct qcom_wcnss *wcnss,
- 		return ret;
- 	}
+ 	if (!priv_ep->trb_pool) {
+ 		priv_ep->trb_pool = dma_pool_alloc(priv_dev->eps_dma_pool,
+-						   GFP_DMA32 | GFP_ATOMIC,
++						   GFP_ATOMIC,
+ 						   &priv_ep->trb_pool_dma);
  
-+	irq_number = ret;
-+
- 	ret = devm_request_threaded_irq(&pdev->dev, ret,
- 					NULL, thread_fn,
- 					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
- 					"wcnss", wcnss);
--	if (ret)
-+	if (ret) {
- 		dev_err(&pdev->dev, "request %s IRQ failed\n", name);
-+		return ret;
-+	}
- 
--	return ret;
-+	/* Return the IRQ number if the IRQ was successfully acquired */
-+	return irq_number;
- }
- 
- static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
+ 		if (!priv_ep->trb_pool)
 -- 
 2.35.1
 

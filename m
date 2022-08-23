@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842A259D6D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7E459D5DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242778AbiHWJy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S1346749AbiHWImg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352279AbiHWJv2 (ORCPT
+        with ESMTP id S241908AbiHWIkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:51:28 -0400
+        Tue, 23 Aug 2022 04:40:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D399B9F0E9;
-        Tue, 23 Aug 2022 01:45:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB60C4D4DF;
+        Tue, 23 Aug 2022 01:18:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91445B81C63;
-        Tue, 23 Aug 2022 08:35:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52C6C433D7;
-        Tue, 23 Aug 2022 08:35:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E14E0B81C36;
+        Tue, 23 Aug 2022 08:17:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39D33C433C1;
+        Tue, 23 Aug 2022 08:17:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243724;
-        bh=4qKoqDDrujEnaXSp0+r96irpj98a/vp4++7pVeIYz/A=;
+        s=korg; t=1661242673;
+        bh=REnsOf1qaq3VcnLbeF/05iGYQcU3+3goKpVVWJlYh0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TTDUNKHGPo2N6u3IsP/HyxQ8Bg3mfjEicekAL0vW2Z5ErG6RqLwvCYCBeBOKQijS8
-         Dz2KmnZdLbs9ULaTUCM51kyTsvrGLuWyrBbtzuF8HTdxJLEQmEnyK81oJvHNqgvfT9
-         C47KXKYUXd/+6cS+d6ilnHukfWSrQ+KkNLThBN0I=
+        b=effRwk9QBqZkC0BZSbW9yhQF6Ce6YL4kCJi2t3Zggzcfdg8BD8ZJrjlFui+vu7FXo
+         9cyk3KR9DkraJGj1QMEH0FOOB5TjJ0NKDzPmgRtl1M4uj4zVA+vE7wQkLUZZ5+4wp0
+         Otx7QwqwfW/kcyvqcd8V30zU/IxaBPua7RIkvsYw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 337/365] RISC-V: Add fast call path of crash_kexec()
-Date:   Tue, 23 Aug 2022 10:03:58 +0200
-Message-Id: <20220823080132.317191626@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Nicolas Pitre <nico@linaro.org>
+Subject: [PATCH 4.9 086/101] kbuild: clear LDFLAGS in the top Makefile
+Date:   Tue, 23 Aug 2022 10:03:59 +0200
+Message-Id: <20220823080037.829968607@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+References: <20220823080034.579196046@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,73 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xianting Tian <xianting.tian@linux.alibaba.com>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
 
-[ Upstream commit 3f1901110a89b0e2e13adb2ac8d1a7102879ea98 ]
+commit ce99d0bf312daf0178e640da9e3c93b773a67e7d upstream.
 
-Currently, almost all archs (x86, arm64, mips...) support fast call
-of crash_kexec() when "regs && kexec_should_crash()" is true. But
-RISC-V not, it can only enter crash system via panic(). However panic()
-doesn't pass the regs of the real accident scene to crash_kexec(),
-it caused we can't get accurate backtrace via gdb,
-	$ riscv64-linux-gnu-gdb vmlinux vmcore
-	Reading symbols from vmlinux...
-	[New LWP 95]
-	#0  console_unlock () at kernel/printk/printk.c:2557
-	2557                    if (do_cond_resched)
-	(gdb) bt
-	#0  console_unlock () at kernel/printk/printk.c:2557
-	#1  0x0000000000000000 in ?? ()
+Currently LDFLAGS is not cleared, so same flags are accumulated in
+LDFLAGS when the top Makefile is recursively invoked.
 
-With the patch we can get the accurate backtrace,
-	$ riscv64-linux-gnu-gdb vmlinux vmcore
-	Reading symbols from vmlinux...
-	[New LWP 95]
-	#0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/test_crash.c:81
-	81             *(int *)p = 0xdead;
-	(gdb)
-	(gdb) bt
-	#0  0xffffffe00064d5c0 in test_thread (data=<optimized out>) at drivers/test_crash.c:81
-	#1  0x0000000000000000 in ?? ()
+I found unneeded rebuild for ARCH=arm64 when CONFIG_TRIM_UNUSED_KSYMS
+is enabled.  If include/generated/autoksyms.h is updated, the top
+Makefile is recursively invoked, then arch/arm64/Makefile adds one
+more '-maarch64linux'.  Due to the command line change, modules are
+rebuilt needlessly.
 
-Test code to produce NULL address dereference in test_crash.c,
-	void *p = NULL;
-	*(int *)p = 0xdead;
-
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Tested-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20220606082308.2883458-1-xianting.tian@linux.alibaba.com
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Acked-by: Nicolas Pitre <nico@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/kernel/traps.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ Makefile |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index b40426509244..39d0f8bba4b4 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -16,6 +16,7 @@
- #include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/irq.h>
-+#include <linux/kexec.h>
+--- a/Makefile
++++ b/Makefile
+@@ -395,6 +395,7 @@ KBUILD_CFLAGS_KERNEL :=
+ KBUILD_AFLAGS_MODULE  := -DMODULE
+ KBUILD_CFLAGS_MODULE  := -DMODULE
+ KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
++LDFLAGS :=
+ GCC_PLUGINS_CFLAGS :=
+ CLANG_FLAGS :=
  
- #include <asm/asm-prototypes.h>
- #include <asm/bug.h>
-@@ -44,6 +45,9 @@ void die(struct pt_regs *regs, const char *str)
- 
- 	ret = notify_die(DIE_OOPS, str, regs, 0, regs->cause, SIGSEGV);
- 
-+	if (regs && kexec_should_crash(current))
-+		crash_kexec(regs);
-+
- 	bust_spinlocks(0);
- 	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
- 	spin_unlock_irq(&die_lock);
--- 
-2.35.1
-
 
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877F959E294
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B03459DBCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354394AbiHWK3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S1358756AbiHWLxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353312AbiHWKNU (ORCPT
+        with ESMTP id S1358710AbiHWLul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:13:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A149A7C31D;
-        Tue, 23 Aug 2022 01:59:24 -0700 (PDT)
+        Tue, 23 Aug 2022 07:50:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD39261;
+        Tue, 23 Aug 2022 02:31:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D3C461524;
-        Tue, 23 Aug 2022 08:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C9FC433C1;
-        Tue, 23 Aug 2022 08:59:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD822B81C97;
+        Tue, 23 Aug 2022 09:31:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E95C433C1;
+        Tue, 23 Aug 2022 09:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245163;
-        bh=cQg3fPWkkIsSmtVG4VO2rLOB3NlOMKkRDjzQ1j4JfCo=;
+        s=korg; t=1661247102;
+        bh=RbCpUvkXSGEZrHwgtGwJOQHwj1HGQp9ZkxMjvqXhvEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LwKzxoX7QSBgzuuGcrOrwYDWMlXXiFGhoiYjy7KWeCjnyO/RG7jh3SxTeorxxE7Xm
-         SUt7hZ6FDYgPi+ep4XoQP5N1RHOEesa0opZsj/3P5Lz0nT12InlKa5hUvy0/xk9cNr
-         2vHyPlsXnbYUj8R8x3PicWSfzMaSaBkKk1/d5thQ=
+        b=bY47zGHyqLF2bXdwlZEiQbTWDHjuY3IZggPP1bZCsnScFnti8gsej4+mkHuaZ8OJx
+         WIgF5bIOHdJEEKUFf0aiIhL/qfdafxPJyr0unbl5QYQ8Ll6TohU2Z4AjLzHUxX8+SP
+         DVfOQfAzGF/51X43gnPxMSnSgLU99HoBySWazHeo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Brian Foster <bfoster@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 5.15 236/244] xfs: flush inodegc workqueue tasks before cancel
-Date:   Tue, 23 Aug 2022 10:26:35 +0200
-Message-Id: <20220823080107.452202766@linuxfoundation.org>
+        stable@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
+Subject: [PATCH 5.4 318/389] vsock: Fix memory leak in vsock_connect()
+Date:   Tue, 23 Aug 2022 10:26:36 +0200
+Message-Id: <20220823080128.824896473@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,118 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Foster <bfoster@redhat.com>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-[ Upstream commit 6191cf3ad59fda5901160633fef8e41b064a5246 ]
+commit 7e97cfed9929eaabc41829c395eb0d1350fccb9d upstream.
 
-The xfs_inodegc_stop() helper performs a high level flush of pending
-work on the percpu queues and then runs a cancel_work_sync() on each
-of the percpu work tasks to ensure all work has completed before
-returning.  While cancel_work_sync() waits for wq tasks to complete,
-it does not guarantee work tasks have started. This means that the
-_stop() helper can queue and instantly cancel a wq task without
-having completed the associated work. This can be observed by
-tracepoint inspection of a simple "rm -f <file>; fsfreeze -f <mnt>"
-test:
+An O_NONBLOCK vsock_connect() request may try to reschedule
+@connect_work.  Imagine the following sequence of vsock_connect()
+requests:
 
-	xfs_destroy_inode: ... ino 0x83 ...
-	xfs_inode_set_need_inactive: ... ino 0x83 ...
-	xfs_inodegc_stop: ...
-	...
-	xfs_inodegc_start: ...
-	xfs_inodegc_worker: ...
-	xfs_inode_inactivating: ... ino 0x83 ...
+  1. The 1st, non-blocking request schedules @connect_work, which will
+     expire after 200 jiffies.  Socket state is now SS_CONNECTING;
 
-The first few lines show that the inode is removed and need inactive
-state set, but the inactivation work has not completed before the
-inodegc mechanism stops. The inactivation doesn't actually occur
-until the fs is unfrozen and the gc mechanism starts back up. Note
-that this test requires fsfreeze to reproduce because xfs_freeze
-indirectly invokes xfs_fs_statfs(), which calls xfs_inodegc_flush().
+  2. Later, the 2nd, blocking request gets interrupted by a signal after
+     a few jiffies while waiting for the connection to be established.
+     Socket state is back to SS_UNCONNECTED, but @connect_work is still
+     pending, and will expire after 100 jiffies.
 
-When this occurs, the workqueue try_to_grab_pending() logic first
-tries to steal the pending bit, which does not succeed because the
-bit has been set by queue_work_on(). Subsequently, it checks for
-association of a pool workqueue from the work item under the pool
-lock. This association is set at the point a work item is queued and
-cleared when dequeued for processing. If the association exists, the
-work item is removed from the queue and cancel_work_sync() returns
-true. If the pwq association is cleared, the remove attempt assumes
-the task is busy and retries (eventually returning false to the
-caller after waiting for the work task to complete).
+  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
+     again.  Since @connect_work is already scheduled,
+     schedule_delayed_work() silently returns.  sock_hold() is called
+     twice, but sock_put() will only be called once in
+     vsock_connect_timeout(), causing a memory leak reported by syzbot:
 
-To avoid this race, we can flush each work item explicitly before
-cancel. However, since the _queue_all() already schedules each
-underlying work item, the workqueue level helpers are sufficient to
-achieve the same ordering effect. E.g., the inodegc enabled flag
-prevents scheduling any further work in the _stop() case. Use the
-drain_workqueue() helper in this particular case to make the intent
-a bit more self explanatory.
+  BUG: memory leak
+  unreferenced object 0xffff88810ea56a40 (size 1232):
+    comm "syz-executor756", pid 3604, jiffies 4294947681 (age 12.350s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      28 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  (..@............
+    backtrace:
+      [<ffffffff837c830e>] sk_prot_alloc+0x3e/0x1b0 net/core/sock.c:1930
+      [<ffffffff837cbe22>] sk_alloc+0x32/0x2e0 net/core/sock.c:1989
+      [<ffffffff842ccf68>] __vsock_create.constprop.0+0x38/0x320 net/vmw_vsock/af_vsock.c:734
+      [<ffffffff842ce8f1>] vsock_create+0xc1/0x2d0 net/vmw_vsock/af_vsock.c:2203
+      [<ffffffff837c0cbb>] __sock_create+0x1ab/0x2b0 net/socket.c:1468
+      [<ffffffff837c3acf>] sock_create net/socket.c:1519 [inline]
+      [<ffffffff837c3acf>] __sys_socket+0x6f/0x140 net/socket.c:1561
+      [<ffffffff837c3bba>] __do_sys_socket net/socket.c:1570 [inline]
+      [<ffffffff837c3bba>] __se_sys_socket net/socket.c:1568 [inline]
+      [<ffffffff837c3bba>] __x64_sys_socket+0x1a/0x20 net/socket.c:1568
+      [<ffffffff84512815>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+      [<ffffffff84512815>] do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+      [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+  <...>
 
-Signed-off-by: Brian Foster <bfoster@redhat.com>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Dave Chinner <dchinner@redhat.com>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+Use mod_delayed_work() instead: if @connect_work is already scheduled,
+reschedule it, and undo sock_hold() to keep the reference count
+balanced.
+
+Reported-and-tested-by: syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
+Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+Co-developed-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_icache.c |   22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+ net/vmw_vsock/af_vsock.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/fs/xfs/xfs_icache.c
-+++ b/fs/xfs/xfs_icache.c
-@@ -1872,28 +1872,20 @@ xfs_inodegc_worker(
- }
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1207,7 +1207,14 @@ static int vsock_stream_connect(struct s
+ 			 * timeout fires.
+ 			 */
+ 			sock_hold(sk);
+-			schedule_delayed_work(&vsk->connect_work, timeout);
++
++			/* If the timeout function is already scheduled,
++			 * reschedule it, then ungrab the socket refcount to
++			 * keep it balanced.
++			 */
++			if (mod_delayed_work(system_wq, &vsk->connect_work,
++					     timeout))
++				sock_put(sk);
  
- /*
-- * Force all currently queued inode inactivation work to run immediately, and
-- * wait for the work to finish. Two pass - queue all the work first pass, wait
-- * for it in a second pass.
-+ * Force all currently queued inode inactivation work to run immediately and
-+ * wait for the work to finish.
-  */
- void
- xfs_inodegc_flush(
- 	struct xfs_mount	*mp)
- {
--	struct xfs_inodegc	*gc;
--	int			cpu;
--
- 	if (!xfs_is_inodegc_enabled(mp))
- 		return;
- 
- 	trace_xfs_inodegc_flush(mp, __return_address);
- 
- 	xfs_inodegc_queue_all(mp);
--
--	for_each_online_cpu(cpu) {
--		gc = per_cpu_ptr(mp->m_inodegc, cpu);
--		flush_work(&gc->work);
--	}
-+	flush_workqueue(mp->m_inodegc_wq);
- }
- 
- /*
-@@ -1904,18 +1896,12 @@ void
- xfs_inodegc_stop(
- 	struct xfs_mount	*mp)
- {
--	struct xfs_inodegc	*gc;
--	int			cpu;
--
- 	if (!xfs_clear_inodegc_enabled(mp))
- 		return;
- 
- 	xfs_inodegc_queue_all(mp);
-+	drain_workqueue(mp->m_inodegc_wq);
- 
--	for_each_online_cpu(cpu) {
--		gc = per_cpu_ptr(mp->m_inodegc, cpu);
--		cancel_work_sync(&gc->work);
--	}
- 	trace_xfs_inodegc_stop(mp, __return_address);
- }
- 
+ 			/* Skip ahead to preserve error code set above. */
+ 			goto out_wait;
 
 

@@ -2,58 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B4B59DD52
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8532C59E2E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358783AbiHWLyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S1354512AbiHWKaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358871AbiHWLvJ (ORCPT
+        with ESMTP id S1353486AbiHWKNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:51:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CCFD347C;
-        Tue, 23 Aug 2022 02:31:58 -0700 (PDT)
+        Tue, 23 Aug 2022 06:13:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04B77333E;
+        Tue, 23 Aug 2022 01:59:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4C48B81C98;
-        Tue, 23 Aug 2022 09:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E569BC433D6;
-        Tue, 23 Aug 2022 09:31:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D854CB81C28;
+        Tue, 23 Aug 2022 08:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E0F3C433D6;
+        Tue, 23 Aug 2022 08:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247115;
-        bh=69ovCRcumfGslh/oGLivZ4DIr8oJgQGwFuXGEqHGW5k=;
+        s=korg; t=1661245179;
+        bh=dlKpSa3x4yoY73lQP0rU57gjhQ+MYqOS71te7t6vVts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NBMv1LGnpeev5Y3mrmaDaqsyMV18S60tPbN1xy2dDsZDuoroyypnJtV6i2p0PkXWN
-         XhNgAdPx1dFtyQnae66pkGRfW1K9QinJJknioaFcJV8iWrJdrMCVE3bjx1Ks7BEIBZ
-         mw66GMI1yrouvPqXRwVM2qk+YvhSkInUuh+bXeJs=
+        b=AyucyXNB0BOrhkw7Dt3Mre8pO6j7vxAvXXK8MOEcntdYfiXZjAT7ZWpvrO6f1G15d
+         YLfQJgKH5pNlN0yOBzaIENQ6lCtiOgSPAmBnsC0yTe7A8vSla/1mSuk1dVn3lpUeQC
+         q4eNgje2Ch8qc9gkCEnt63eLmGh9jFkVpZ2+GbiM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, llvm@lists.linux.dev,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.4 322/389] tools build: Switch to new openssl API for test-libcrypto
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Leah Rumancik <leah.rumancik@gmail.com>
+Subject: [PATCH 5.15 241/244] xfs: fix overfilling of reserve pool
 Date:   Tue, 23 Aug 2022 10:26:40 +0200
-Message-Id: <20220823080128.985378948@linuxfoundation.org>
+Message-Id: <20220823080107.670496251@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,70 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+From: "Darrick J. Wong" <djwong@kernel.org>
 
-commit 5b245985a6de5ac18b5088c37068816d413fb8ed upstream.
+[ Upstream commit 82be38bcf8a2e056b4c99ce79a3827fa743df6ec ]
 
-Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
-error when it encounters the deprecated function MD5_Init() and the others.
+Due to cycling of m_sb_lock, it's possible for multiple callers of
+xfs_reserve_blocks to race at changing the pool size, subtracting blocks
+from fdblocks, and actually putting it in the pool.  The result of all
+this is that we can overfill the reserve pool to hilarious levels.
 
-The error would be interpreted as missing libcrypto, while in reality it is
-not.
+xfs_mod_fdblocks, when called with a positive value, already knows how
+to take freed blocks and either fill the reserve until it's full, or put
+them in fdblocks.  Use that instead of setting m_resblks_avail directly.
 
-Fixes: 6e8ccb4f624a73c5 ("tools/bpf: properly account for libbfd variations")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: llvm@lists.linux.dev
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nick Terrell <terrelln@fb.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Quentin Monnet <quentin@isovalent.com>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Link: https://lore.kernel.org/r/20220719170555.2576993-4-roberto.sassu@huawei.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Dave Chinner <dchinner@redhat.com>
+Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/build/feature/test-libcrypto.c |   15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ fs/xfs/xfs_fsops.c |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
---- a/tools/build/feature/test-libcrypto.c
-+++ b/tools/build/feature/test-libcrypto.c
-@@ -1,16 +1,23 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <openssl/evp.h>
- #include <openssl/sha.h>
- #include <openssl/md5.h>
- 
- int main(void)
- {
--	MD5_CTX context;
-+	EVP_MD_CTX *mdctx;
- 	unsigned char md[MD5_DIGEST_LENGTH + SHA_DIGEST_LENGTH];
- 	unsigned char dat[] = "12345";
-+	unsigned int digest_len;
- 
--	MD5_Init(&context);
--	MD5_Update(&context, &dat[0], sizeof(dat));
--	MD5_Final(&md[0], &context);
-+	mdctx = EVP_MD_CTX_new();
-+	if (!mdctx)
-+		return 0;
-+
-+	EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
-+	EVP_DigestUpdate(mdctx, &dat[0], sizeof(dat));
-+	EVP_DigestFinal_ex(mdctx, &md[0], &digest_len);
-+	EVP_MD_CTX_free(mdctx);
- 
- 	SHA1(&dat[0], sizeof(dat), &md[0]);
- 
+--- a/fs/xfs/xfs_fsops.c
++++ b/fs/xfs/xfs_fsops.c
+@@ -448,18 +448,17 @@ xfs_reserve_blocks(
+ 		 * count or we'll get an ENOSPC.  Don't set the reserved flag
+ 		 * here - we don't want to reserve the extra reserve blocks
+ 		 * from the reserve.
++		 *
++		 * The desired reserve size can change after we drop the lock.
++		 * Use mod_fdblocks to put the space into the reserve or into
++		 * fdblocks as appropriate.
+ 		 */
+ 		fdblks_delta = min(free, delta);
+ 		spin_unlock(&mp->m_sb_lock);
+ 		error = xfs_mod_fdblocks(mp, -fdblks_delta, 0);
+-		spin_lock(&mp->m_sb_lock);
+-
+-		/*
+-		 * Update the reserve counters if blocks have been successfully
+-		 * allocated.
+-		 */
+ 		if (!error)
+-			mp->m_resblks_avail += fdblks_delta;
++			xfs_mod_fdblocks(mp, fdblks_delta, 0);
++		spin_lock(&mp->m_sb_lock);
+ 	}
+ out:
+ 	if (outval) {
 
 

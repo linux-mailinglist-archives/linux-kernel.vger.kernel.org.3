@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC3259D9A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151B359DA1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237003AbiHWJ6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S1351963AbiHWKFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244207AbiHWJxQ (ORCPT
+        with ESMTP id S1351935AbiHWKA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:53:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C52C9E2D1;
-        Tue, 23 Aug 2022 01:46:24 -0700 (PDT)
+        Tue, 23 Aug 2022 06:00:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516D462F7;
+        Tue, 23 Aug 2022 01:48:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8A8611DD;
-        Tue, 23 Aug 2022 08:46:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8087C433C1;
-        Tue, 23 Aug 2022 08:46:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BA90B81C35;
+        Tue, 23 Aug 2022 08:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0641C433C1;
+        Tue, 23 Aug 2022 08:48:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244382;
-        bh=TXrm5cDzcDDv4OSzZzYE5SgfVG6S5vhOnAgTDnaow9o=;
+        s=korg; t=1661244503;
+        bh=Rb8RqMWonuLosEt81hl+n3DDIYofEdVxfe5kXGS+gVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EXETc7c+0UjsHsjRht/JXpVT+J0nIukh9MFBUYSytP6WJSLDe3CtsptGB/J1dWhuI
-         l9TOs5qEBH38opCtothY6vhaNrVsagxxk3DurGR68MsBjiGNDiFGNNHs4jGbERt5L1
-         cl4WhVrb2uAe+D3rg6N06fPIlUMrFjh1IAO2D/ak=
+        b=pLww8JaNb8wYNR290wJQgw0n1z0ZepjMKdsbAW+EEgjU+O1BbpvcUDhcGW4V8Z/BB
+         EK2luMmAxVQ7iBHkRaLv7lJyYwc/lAQZ5b/Mu72QToX2HHbsWam1DQ7pl9kyw/CQR0
+         6DMWYbvMeOb2cnb8r7RjtAf6lANIZ6tYo2ZqSfHI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 100/229] usb: ohci-nxp: Fix refcount leak in ohci_hcd_nxp_probe
-Date:   Tue, 23 Aug 2022 10:24:21 +0200
-Message-Id: <20220823080057.274538251@linuxfoundation.org>
+        stable@vger.kernel.org, Yan Lei <chinayanlei2002@163.com>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH 5.15 103/244] fs/ntfs3: Fix using uninitialized value n when calling indx_read
+Date:   Tue, 23 Aug 2022 10:24:22 +0200
+Message-Id: <20220823080102.463502199@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Yan Lei <chinayanlei2002@163.com>
 
-[ Upstream commit 302970b4cad3ebfda2c05ce06c322ccdc447d17e ]
+commit ae5a4e46916fc307288227b64c1d062352eb93b7 upstream.
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+This value is checked in indx_read, so it must be initialized
+Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
 
-Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220603141231.979-1-linmq006@gmail.com
+Signed-off-by: Yan Lei <chinayanlei2002@163.com>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ohci-nxp.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ntfs3/index.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-index 6df8e2ed40fd..5162038b794e 100644
---- a/drivers/usb/host/ohci-nxp.c
-+++ b/drivers/usb/host/ohci-nxp.c
-@@ -155,6 +155,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
- 	}
- 
- 	isp1301_i2c_client = isp1301_get_client(isp1301_node);
-+	of_node_put(isp1301_node);
- 	if (!isp1301_i2c_client)
- 		return -EPROBE_DEFER;
- 
--- 
-2.35.1
-
+--- a/fs/ntfs3/index.c
++++ b/fs/ntfs3/index.c
+@@ -1994,7 +1994,7 @@ static int indx_free_children(struct ntf
+ 			      const struct NTFS_DE *e, bool trim)
+ {
+ 	int err;
+-	struct indx_node *n;
++	struct indx_node *n = NULL;
+ 	struct INDEX_HDR *hdr;
+ 	CLST vbn = de_get_vbn(e);
+ 	size_t i;
 
 

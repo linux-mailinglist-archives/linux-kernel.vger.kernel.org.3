@@ -2,147 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C1B59D179
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB92959D183
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240365AbiHWGud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 02:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S240124AbiHWGw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 02:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240315AbiHWGuY (ORCPT
+        with ESMTP id S240281AbiHWGwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 02:50:24 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2118.outbound.protection.outlook.com [40.107.255.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081CE2F026
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:50:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GJE4wa6T7tAavbtzuQ84ZWk9ySJ3buLk1TMV5o27seRJnWvo49WxpkifRW6kza06EjrKxYsnNEBTKSu8IaLND7+k2/OdVeJHP81a/C27yVFOxanP3+jgQeDuzL4Q2WRXFzwKeHQjWu39TNyDR2fifC7sgHhVeBmvF1+cUga6ycBW4pi/RdYCwLA4oom1Tht31KF3153qgt/2sQRt4ilCPr4CjPpBxrOGFZ2leyuWpyvt/uhNYRa+QnHyijD9tJ1Y4Xli1BKDH43SL44fJ6j+SdfoI2Pb7/YwKxRHE3GIbjBSDwPh9p4bUdFuhnBW/AsoEFTsx48l/olm64+YO/X8iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nCzERmU4tZLX+SaLWDISqy1obxi2measjENwVuU3dnA=;
- b=SuB3zvoYdoH+8VZNnOIV4SsVlvyZUFfKX1wikw5/6cj5pcDmTucwy5I+ik9mzJcuQWen2GJoFZokrw9unSAyAM1cBcqcFqarOr1j03DsEl7/CERXo6qkI588ZH3XVUR22Ms0tQI+FBeZDSmlVZ6EFKeN88klDS0/laGQT5iAVJu5pxlkWsCbLsveii+L2ypraOzC5z/zHCZLYOLRqC8aOedBqEpA6JZAjdacx2D6LmWmdhI+WTAorRogUMFcAwPU6d6V/gHpEHlx4G7JVdwwiqcwAOfL2H05ac4qRnik8dPl2VM+0p4gO30PMIo6V2Kw+ma2P5hYrzepF04rVYMe4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nCzERmU4tZLX+SaLWDISqy1obxi2measjENwVuU3dnA=;
- b=BYZ2m9cPkC/am8PE8ltGJ9D3f19fevwY6Dz6FveDHBq0+ygpmga8G0FH7Oud0pUJ5KDqiOOxjTYboGA11XPcpXR+zFc7TLFm7rzR0WarKFKN8p7wJGw+5mZNhgjwBkSu9PL3vWocs/HG3qGjCeaTSGZ6qauFx/N9MbXT2vScm+k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com (2603:1096:301:37::11)
- by TYZPR06MB4269.apcprd06.prod.outlook.com (2603:1096:400:71::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Tue, 23 Aug
- 2022 06:50:20 +0000
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::5c66:2101:a7ac:8df0]) by PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::5c66:2101:a7ac:8df0%9]) with mapi id 15.20.5546.023; Tue, 23 Aug 2022
- 06:50:20 +0000
-From:   Bernard Zhao <bernard@vivo.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>,
-        Michael Strauss <michael.strauss@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, Melissa Wen <mwen@igalia.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Tue, 23 Aug 2022 02:52:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4513332EF3;
+        Mon, 22 Aug 2022 23:52:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EFAAA5CE1E;
+        Tue, 23 Aug 2022 06:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661237567; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eYMUmh3kdNOx/JaLg/c+3cGzbIYGUPtDELdhrr+d+x0=;
+        b=dXpummimcpoPVeSiAMUCQVlo0x9m5vOtV1PPAFCoqZnvEXrB3yzpQrWhzG8zcn2ym4vPMv
+        XhB01foh5uB/LHUphrNuPpLS+R1rpbkqQbD+/HDyw3Y4n0i16n07ijUTYwi/beVK5lwq3Y
+        bMwK3GSwQN6IgSmI3imN7hINSb+5ulI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661237567;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eYMUmh3kdNOx/JaLg/c+3cGzbIYGUPtDELdhrr+d+x0=;
+        b=KlncozW2rbC3eoyT8fhyE7DYkujQdEcvPiDQmMbUEF6iF0iougn1Kv2WQjqwqewIPE5MY6
+        pegHOvUvqwU+3aDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C65AE13A89;
+        Tue, 23 Aug 2022 06:52:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2LypLz95BGPTLwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 23 Aug 2022 06:52:47 +0000
+Date:   Tue, 23 Aug 2022 08:52:47 +0200
+Message-ID: <87czcrsb7k.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     zhaojunkui2008@126.com, Bernard Zhao <bernard@vivo.com>
-Subject: [PATCH] drm/amd: fix potential memory leak
-Date:   Mon, 22 Aug 2022 23:49:56 -0700
-Message-Id: <20220823065001.16872-1-bernard@vivo.com>
-X-Mailer: git-send-email 2.33.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0072.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:31a::20) To PSAPR06MB4021.apcprd06.prod.outlook.com
- (2603:1096:301:37::11)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0284e37d-a9f4-4aef-c2de-08da84d3bf16
-X-MS-TrafficTypeDiagnostic: TYZPR06MB4269:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uGb+Gv9Wr3K5hoEwqM6zdlVAMdaAbzpztJzQIsptWfQhysh7kTCS7SOQltYUJua01JICHlKDPRrQ7z8yv7KdqyosYfvXpyw6rx9MjNTBd944OeDxapfU53S/5UGJl5y5K+4F8Y0tG521sjAKRBhfcdQWmCJxBaQBwFNLTYe4pl54VVzYSrLug2aGPpx09hfvuPmDsoXS7Nd5dFLh9zbES431rRlwjK6Gf4d0+WnHznsXeOTucFvf/9G9ju0SN8p+VAaKOpSPWUgeJnrimHvr0bwQ4L4suRGIwVNLYQsbxWBzjK59+WStVod/Fcm66QlG4NX2Fnz04+17dGBvruJqZ0nU6sLVJKjYgi9KQA/d38LR2gkINafKXywB2LLSD6kwrpomqdVDY161Ua2AJiko1Ft0LNWKlefnqEJ1krDFKSiHTpSf5Li7NW7uO8mlmF7qYydk1iLzvCQOOkBXpo9aKYhbonHOtOUUJhcmzmHI578jy7GULqZ+Sm+xB/HAlXz72cSIoeYbNWg7R2TWOimYEKTG/U/fvhkUPbNSQP5rf79NCmzIFLs8i1rVxebpBX6Hwpt7K50NvzhVYJ9iUoj+UmFtjHKqcTbCPtsOLCpBBw7Ii13ljQtPOn3KpIXEYvu56nYmQwpnBUQN8uYpsHkZaF98sKPrmIoyNEVzjYtlpIVS4cZHL/sfDl0aWifyUTAbW2ZzWi11PQ7UTVPmbNmuPBFXsZarEGadefvnJ/1SHJQsDMyDGLcJguvtHer5vYCMsl4w/UYQ3IsxwrbuQLl9ZQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB4021.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(396003)(366004)(346002)(2616005)(1076003)(186003)(921005)(38100700002)(83380400001)(4326008)(38350700002)(8936002)(5660300002)(8676002)(66946007)(66556008)(66476007)(7416002)(4744005)(2906002)(107886003)(6666004)(6506007)(52116002)(41300700001)(6512007)(26005)(110136005)(316002)(6486002)(478600001)(36756003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xtpYPKqDF5St+bbx0Z7y60WFycyVJOdRuDprDf4rt/wDY+FFmsI/LGBGggJV?=
- =?us-ascii?Q?XEjmfs1pyNlN3Pc8GEU/WIhmEkAYZP/COo4F3WIFgVUrmt+adMOH0JatSs2z?=
- =?us-ascii?Q?NmfuLMtL1hyDRZwyW2hkdlAztnRXMWZosmvKuzelGsbmlSjkJCmuPoP9y/rn?=
- =?us-ascii?Q?PvGcHrOE7Y0v61X5ipRtG8iEoC/UtplZercpNBwa3qNQ7fdb9LewtmMH14Yn?=
- =?us-ascii?Q?Bp67oD9dz/pE3ajg4i6JBAfJDyPTRXiJtnqPHPj7uUvxkFc4DP7AeMrgl0CD?=
- =?us-ascii?Q?nyEMej7HUiA1yiqtxV+5Tu6c1qO8sRxxYVWcNMxKYg6XiooZ6tnjEcCxH1Jh?=
- =?us-ascii?Q?EInzZ5Qjx+Az2yEkRT2hYgQUETMo9pdZzzxxRwgFDek/k9ZN5QpHmspnXxMh?=
- =?us-ascii?Q?1tHOfA4Nk2oJYvHDh+8F7i9AUWPRM2mTNiSCF7/A9s8+7ulyKifFilJF0BB3?=
- =?us-ascii?Q?i6TGlhCfIgnxfj9F/rGsiB9BmfgutS8NSyLutCyYnq5UWAtLUg0dRHOfD7oA?=
- =?us-ascii?Q?BNWrVkjkw6wKBPfbw232l1OKSd466aD3N92HaEsN4HAbxBVWxA43VZHm3fMT?=
- =?us-ascii?Q?Mipzc+YM7nhXNPZOFFCiHnavHqMKGgNxONZyt/UQzDnhlKyc7XHdtQxej08w?=
- =?us-ascii?Q?GNjFjvO5HjnyoS452cxj92ZYZ9b5E8qJSqIVUEdp4XVaiA2JvGRdfTABL+rF?=
- =?us-ascii?Q?NlE5+QyyAt6b7vwValfaHh/eXSmEPQAq4JIhVxqD3xyybkWCUPAyw6RTu/a3?=
- =?us-ascii?Q?nMZ7eUAipYmwdp8QSR8GXrSSJ55XysYIeC+Jqz1cQqjZ1zCjcjn2yqLoEAJN?=
- =?us-ascii?Q?mH+r6G13LZ/eSoISYoKsLw8mG2pC6g04C6yJZNbpcu8ZX66nDPgHwmx+H7wS?=
- =?us-ascii?Q?3bzC36Vo2CZ2knVeJ98hOFzi/rofyErBbnvMrRV0SYMr2s9qJySzeXc7DOvm?=
- =?us-ascii?Q?bo2XakkS2ojgH5Oz44uEB0TQX0mFDKTNvmFuj9edwcKG7bRP/hFRIXTm1FcK?=
- =?us-ascii?Q?QFIBkjn5pAJTeeXozynfqhKPtsHIFBqgmokxpCkS/Mk91dNqjCtmmgTH2dAP?=
- =?us-ascii?Q?FGFHfNRiXbs77lRFjl7IU+55+vqr7bdERiQGrju0b+p7zRSLdGbZ2zS0Dteu?=
- =?us-ascii?Q?YOYzzRmoSoXZ7t3elFsb89MSHNK8kG6p0mzYqstow23lWDpZkCD9yJ/ex54j?=
- =?us-ascii?Q?q6v+E+GLCc5mfOFZCT1EXqFlBPMzdn0S2FZCLRVlpHSLMfkeG5zANZ7kc5jt?=
- =?us-ascii?Q?Lh+D13gt6xuwtMFQqg3icDwuYseEpeUrBRcrKVgYRBV0oitQdrnKVchTUnvb?=
- =?us-ascii?Q?Ten64N0CVhCnOTrO2Hok8iGXD+bMSTCkQKWvDrYZqs1urjBGlFR7LxkbsoJP?=
- =?us-ascii?Q?l5VYIBmwtLmlEcTBrUd/tY3IIiq3aymzgELH1/1c2R82wphmkRp1DU69grF7?=
- =?us-ascii?Q?cdkls1egBcbh3Xa8XMzLYUIaYxAuu5g3SRB2spR9/z97K5bR8lLCF4AMQzpn?=
- =?us-ascii?Q?mPtgMakz52isR5IHDzIjp2JK2twOJklzJQblZ0iGlwP3rQdMpIusTiMvZA4p?=
- =?us-ascii?Q?iAZ2u3DvVMC+J+l/4svLAvxuRFD4NuAgBO3EwsGk?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0284e37d-a9f4-4aef-c2de-08da84d3bf16
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4021.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 06:50:20.6970
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qbD12c8tRZxlAxD8jtRsfKKPwO0xI7DV6OIglPA8JGISdvfu0i9SZ3h7ItlHgHInvmUM2Mi+/UnS5m8bK0Fn3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4269
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [REGRESSION 5.19] NULL dereference by ucsi_acpi driver
+In-Reply-To: <YwR2fNA4s0rWX2sL@kroah.com>
+References: <87r11cmbx0.wl-tiwai@suse.de>
+        <YwEqtGB2WldUeiEN@kroah.com>
+        <YwODjnYQD/KjxXdw@kuha.fi.intel.com>
+        <5e17fc89-6056-076c-0c4e-dac7f312792c@quicinc.com>
+        <YwR2fNA4s0rWX2sL@kroah.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fix potential memory leak (clk_src) when function run
-into last return NULL.
+On Tue, 23 Aug 2022 08:41:00 +0200,
+Greg Kroah-Hartman wrote:
+> 
+> On Tue, Aug 23, 2022 at 10:26:59AM +0800, Linyu Yuan wrote:
+> > 
+> > On 8/22/2022 9:24 PM, Heikki Krogerus wrote:
+> > > Hi,
+> > > 
+> > > On Sat, Aug 20, 2022 at 08:40:52PM +0200, Greg Kroah-Hartman wrote:
+> > > > On Fri, Aug 19, 2022 at 06:32:43PM +0200, Takashi Iwai wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > we've got multiple reports about 5.19 kernel starting crashing after
+> > > > > some time, and this turned out to be triggered by ucsi_acpi driver.
+> > > > > The details are found in:
+> > > > >    https://bugzilla.suse.com/show_bug.cgi?id=1202386
+> > > > > 
+> > > > > The culprit seems to be the commit 87d0e2f41b8c
+> > > > >      usb: typec: ucsi: add a common function ucsi_unregister_connectors()
+> > > > Adding Heikki to the thread...
+> > > > 
+> > > > > This commit looks as if it were a harmless cleanup, but this failed in
+> > > > > a subtle way.  Namely, in the error scenario, the driver gets an error
+> > > > > at ucsi_register_altmodes(), and goes to the error handling to release
+> > > > > the resources.  Through this refactoring, the release part was unified
+> > > > > to a funciton ucsi_unregister_connectors().  And there, it has a NULL
+> > > > > check of con->wq, and it bails out the loop if it's NULL.
+> > > > > Meanwhile, ucsi_register_port() itself still calls destroy_workqueue()
+> > > > > and clear con->wq at its error path.  This ended up in the leftover
+> > > > > power supply device with the uninitialized / cleared device.
+> > > > > 
+> > > > > It was confirmed that the problem could be avoided by a simple
+> > > > > revert.
+> > > > I'll be glad to revert this now, unless Heikki thinks:
+> > > > 
+> > > > > I guess another fix could be removing the part clearing con->wq, i.e.
+> > > > > 
+> > > > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > > > @@ -1192,11 +1192,6 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+> > > > >   out_unlock:
+> > > > >   	mutex_unlock(&con->lock);
+> > > > > -	if (ret && con->wq) {
+> > > > > -		destroy_workqueue(con->wq);
+> > > > > -		con->wq = NULL;
+> > > > > -	}
+> > > > > -
+> > > > >   	return ret;
+> > > > >   }
+> > > > > 
+> > > > > ... but it's totally untested and I'm not entirely sure whether it's
+> > > > > better.
+> > > > that is any better?
+> > > No, I don't think that's better. Right now I would prefer that we play
+> > > it safe and revert.
+> > > 
+> > > The conditions are different in the two places where the ports are
+> > > unregistered in this driver. Therefore I don't think it makes sense
+> > > to use a function like ucsi_unregister_connectors() that tries to
+> > > cover both cases. It will always be a little bit fragile.
+> > > 
+> > > Instead we could introduce a function that can be used to remove a
+> > > single port. That would leave the handling of the conditions to the
+> > > callers of the function, but it would still remove the boilerplate.
+> > > That would be much safer IMO.
+> > > 
+> > > But to fix this problem, I think we should revert.
+> > 
+> > but revert will happen on several stable branch, right ?
+> 
+> If someone sends it to me, yes :)
+> 
+> {hint}
 
-Signed-off-by: Bernard Zhao <bernard@vivo.com>
----
- drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c | 1 +
- 1 file changed, 1 insertion(+)
+OK, will submit :)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-index 85f32206a766..76f263846c6b 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-@@ -1715,6 +1715,7 @@ static struct clock_source *dcn30_clock_source_create(
- 	}
- 
- 	BREAK_TO_DEBUGGER();
-+	free(clk_src);
- 	return NULL;
- }
- 
--- 
-2.33.1
 
+Takashi

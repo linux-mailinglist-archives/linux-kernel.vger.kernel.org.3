@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051DF59D306
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CAA59D672
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241599AbiHWIDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
+        id S1348275AbiHWJJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241507AbiHWICx (ORCPT
+        with ESMTP id S241141AbiHWJH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:02:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F99E659E0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:52 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrt-0002vq-OS; Tue, 23 Aug 2022 10:02:37 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrr-001SvI-Tl; Tue, 23 Aug 2022 10:02:35 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrp-00ALYD-3l; Tue, 23 Aug 2022 10:02:33 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v3 04/17] net: dsa: microchip: allow to pass return values for PHY read/write accesses
-Date:   Tue, 23 Aug 2022 10:02:18 +0200
-Message-Id: <20220823080231.2466017-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220823080231.2466017-1-o.rempel@pengutronix.de>
-References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+        Tue, 23 Aug 2022 05:07:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA62885AA6;
+        Tue, 23 Aug 2022 01:30:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 548DB61475;
+        Tue, 23 Aug 2022 08:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503F2C433C1;
+        Tue, 23 Aug 2022 08:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661243410;
+        bh=n+BPvUXVGcOTdQkyt06QT3mIsOQqk3T3tkWc03etIM0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FKzBfhGLsLGf7q7/w9AS+3DmLOC9jz43NSpaY1ub+1/i3yMGhrMyp4BSH452VxJIB
+         qwQw7Y/thM/RoPndrmqtGKr3fIb0gWWvF54Z1xuR6L8WeuBtI1DJlBKdi7E8mXRHXq
+         BGPXQpaQxYFNmgq3IqL7BrK3fv92sw/wGXFNEcT8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.19 238/365] igb: Add lock to avoid data race
+Date:   Tue, 23 Aug 2022 10:02:19 +0200
+Message-Id: <20220823080128.191087768@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,209 +56,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PHY access may end with errors on different levels. So, allow to forward
-return values where possible.
+From: Lin Ma <linma@zju.edu.cn>
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+commit 6faee3d4ee8be0f0367d0c3d826afb3571b7a5e0 upstream.
+
+The commit c23d92b80e0b ("igb: Teardown SR-IOV before
+unregister_netdev()") places the unregister_netdev() call after the
+igb_disable_sriov() call to avoid functionality issue.
+
+However, it introduces several race conditions when detaching a device.
+For example, when .remove() is called, the below interleaving leads to
+use-after-free.
+
+ (FREE from device detaching)      |   (USE from netdev core)
+igb_remove                         |  igb_ndo_get_vf_config
+ igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
+  kfree(adapter->vf_data)          |
+  adapter->vfs_allocated_count = 0 |
+                                   |    memcpy(... adapter->vf_data[vf]
+
+Moreover, the igb_disable_sriov() also suffers from data race with the
+requests from VF driver.
+
+ (FREE from device detaching)      |   (USE from requests)
+igb_remove                         |  igb_msix_other
+ igb_disable_sriov                 |   igb_msg_task
+  kfree(adapter->vf_data)          |    vf < adapter->vfs_allocated_count
+  adapter->vfs_allocated_count = 0 |
+
+To this end, this commit first eliminates the data races from netdev
+core by using rtnl_lock (similar to commit 719479230893 ("dpaa2-eth: add
+MAC/PHY support through phylink")). And then adds a spinlock to
+eliminate races from driver requests. (similar to commit 1e53834ce541
+("ixgbe: Add locking to prevent panic when setting sriov_numvfs to zero")
+
+Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220817184921.735244-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/microchip/ksz8.h         |  4 ++--
- drivers/net/dsa/microchip/ksz8795.c      |  8 ++++++--
- drivers/net/dsa/microchip/ksz9477.c      | 12 ++++++++----
- drivers/net/dsa/microchip/ksz9477.h      |  4 ++--
- drivers/net/dsa/microchip/ksz_common.c   | 10 ++++++++--
- drivers/net/dsa/microchip/ksz_common.h   |  4 ++--
- drivers/net/dsa/microchip/lan937x.h      |  4 ++--
- drivers/net/dsa/microchip/lan937x_main.c |  8 ++++----
- 8 files changed, 34 insertions(+), 20 deletions(-)
+ drivers/net/ethernet/intel/igb/igb.h      |    2 ++
+ drivers/net/ethernet/intel/igb/igb_main.c |   12 +++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
-index 42c50cc4d8536..8582b4b67d989 100644
---- a/drivers/net/dsa/microchip/ksz8.h
-+++ b/drivers/net/dsa/microchip/ksz8.h
-@@ -17,8 +17,8 @@ u32 ksz8_get_port_addr(int port, int offset);
- void ksz8_cfg_port_member(struct ksz_device *dev, int port, u8 member);
- void ksz8_flush_dyn_mac_table(struct ksz_device *dev, int port);
- void ksz8_port_setup(struct ksz_device *dev, int port, bool cpu_port);
--void ksz8_r_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 *val);
--void ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val);
-+int ksz8_r_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 *val);
-+int ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val);
- int ksz8_r_dyn_mac_table(struct ksz_device *dev, u16 addr, u8 *mac_addr,
- 			 u8 *fid, u8 *src_port, u8 *timestamp, u16 *entries);
- int ksz8_r_sta_mac_table(struct ksz_device *dev, u16 addr,
-diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-index c79a5128235f9..f2dd75ee0e075 100644
---- a/drivers/net/dsa/microchip/ksz8795.c
-+++ b/drivers/net/dsa/microchip/ksz8795.c
-@@ -552,7 +552,7 @@ static void ksz8_w_vlan_table(struct ksz_device *dev, u16 vid, u16 vlan)
- 	ksz8_w_table(dev, TABLE_VLAN, addr, buf);
- }
+--- a/drivers/net/ethernet/intel/igb/igb.h
++++ b/drivers/net/ethernet/intel/igb/igb.h
+@@ -664,6 +664,8 @@ struct igb_adapter {
+ 	struct igb_mac_addr *mac_table;
+ 	struct vf_mac_filter vf_macs;
+ 	struct vf_mac_filter *vf_mac_list;
++	/* lock for VF resources */
++	spinlock_t vfs_lock;
+ };
  
--void ksz8_r_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 *val)
-+int ksz8_r_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 *val)
+ /* flags controlling PTP/1588 function */
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -3637,6 +3637,7 @@ static int igb_disable_sriov(struct pci_
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
+ 	struct e1000_hw *hw = &adapter->hw;
++	unsigned long flags;
+ 
+ 	/* reclaim resources allocated to VFs */
+ 	if (adapter->vf_data) {
+@@ -3649,12 +3650,13 @@ static int igb_disable_sriov(struct pci_
+ 			pci_disable_sriov(pdev);
+ 			msleep(500);
+ 		}
+-
++		spin_lock_irqsave(&adapter->vfs_lock, flags);
+ 		kfree(adapter->vf_mac_list);
+ 		adapter->vf_mac_list = NULL;
+ 		kfree(adapter->vf_data);
+ 		adapter->vf_data = NULL;
+ 		adapter->vfs_allocated_count = 0;
++		spin_unlock_irqrestore(&adapter->vfs_lock, flags);
+ 		wr32(E1000_IOVCTL, E1000_IOVCTL_REUSE_VFQ);
+ 		wrfl();
+ 		msleep(100);
+@@ -3814,7 +3816,9 @@ static void igb_remove(struct pci_dev *p
+ 	igb_release_hw_control(adapter);
+ 
+ #ifdef CONFIG_PCI_IOV
++	rtnl_lock();
+ 	igb_disable_sriov(pdev);
++	rtnl_unlock();
+ #endif
+ 
+ 	unregister_netdev(netdev);
+@@ -3974,6 +3978,9 @@ static int igb_sw_init(struct igb_adapte
+ 
+ 	spin_lock_init(&adapter->nfc_lock);
+ 	spin_lock_init(&adapter->stats64_lock);
++
++	/* init spinlock to avoid concurrency of VF resources */
++	spin_lock_init(&adapter->vfs_lock);
+ #ifdef CONFIG_PCI_IOV
+ 	switch (hw->mac.type) {
+ 	case e1000_82576:
+@@ -7924,8 +7931,10 @@ unlock:
+ static void igb_msg_task(struct igb_adapter *adapter)
  {
- 	u8 restart, speed, ctrl, link;
- 	int processed = true;
-@@ -674,9 +674,11 @@ void ksz8_r_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 *val)
+ 	struct e1000_hw *hw = &adapter->hw;
++	unsigned long flags;
+ 	u32 vf;
+ 
++	spin_lock_irqsave(&adapter->vfs_lock, flags);
+ 	for (vf = 0; vf < adapter->vfs_allocated_count; vf++) {
+ 		/* process any reset requests */
+ 		if (!igb_check_for_rst(hw, vf))
+@@ -7939,6 +7948,7 @@ static void igb_msg_task(struct igb_adap
+ 		if (!igb_check_for_ack(hw, vf))
+ 			igb_rcv_ack_from_vf(adapter, vf);
  	}
- 	if (processed)
- 		*val = data;
-+
-+	return 0;
++	spin_unlock_irqrestore(&adapter->vfs_lock, flags);
  }
  
--void ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val)
-+int ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val)
- {
- 	u8 restart, speed, ctrl, data;
- 	const u16 *regs;
-@@ -787,6 +789,8 @@ void ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val)
- 	default:
- 		break;
- 	}
-+
-+	return 0;
- }
- 
- void ksz8_cfg_port_member(struct ksz_device *dev, int port, u8 member)
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index acd4be196b69c..39c9def810e51 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -275,7 +275,7 @@ static void ksz9477_r_phy_quirks(struct ksz_device *dev, u16 addr, u16 reg,
- 		*data &= ~(BMSR_ESTATEN | BMSR_ERCAP);
- }
- 
--void ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
-+int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
- {
- 	u16 val = 0xffff;
- 
-@@ -323,19 +323,23 @@ void ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
- 	}
- 
- 	*data = val;
-+
-+	return 0;
- }
- 
--void ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
-+int ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
- {
- 	/* No real PHY after this. */
- 	if (addr >= dev->phy_port_cnt)
--		return;
-+		return 0;
- 
- 	/* No gigabit support.  Do not write to this register. */
- 	if (!dev->info->gbit_capable[addr] && reg == MII_CTRL1000)
--		return;
-+		return 0;
- 
- 	ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
-+
-+	return 0;
- }
- 
- void ksz9477_cfg_port_member(struct ksz_device *dev, int port, u8 member)
-diff --git a/drivers/net/dsa/microchip/ksz9477.h b/drivers/net/dsa/microchip/ksz9477.h
-index cd278b307b3c7..ce87e4e09ada8 100644
---- a/drivers/net/dsa/microchip/ksz9477.h
-+++ b/drivers/net/dsa/microchip/ksz9477.h
-@@ -16,8 +16,8 @@ u32 ksz9477_get_port_addr(int port, int offset);
- void ksz9477_cfg_port_member(struct ksz_device *dev, int port, u8 member);
- void ksz9477_flush_dyn_mac_table(struct ksz_device *dev, int port);
- void ksz9477_port_setup(struct ksz_device *dev, int port, bool cpu_port);
--void ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data);
--void ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val);
-+int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data);
-+int ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val);
- void ksz9477_r_mib_cnt(struct ksz_device *dev, int port, u16 addr, u64 *cnt);
- void ksz9477_r_mib_pkt(struct ksz_device *dev, int port, u16 addr,
- 		       u64 *dropped, u64 *cnt);
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index 816438d2ed640..089570e18fb7c 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -1117,8 +1117,11 @@ static int ksz_phy_read16(struct dsa_switch *ds, int addr, int reg)
- {
- 	struct ksz_device *dev = ds->priv;
- 	u16 val = 0xffff;
-+	int ret;
- 
--	dev->dev_ops->r_phy(dev, addr, reg, &val);
-+	ret = dev->dev_ops->r_phy(dev, addr, reg, &val);
-+	if (ret)
-+		return ret;
- 
- 	return val;
- }
-@@ -1126,8 +1129,11 @@ static int ksz_phy_read16(struct dsa_switch *ds, int addr, int reg)
- static int ksz_phy_write16(struct dsa_switch *ds, int addr, int reg, u16 val)
- {
- 	struct ksz_device *dev = ds->priv;
-+	int ret;
- 
--	dev->dev_ops->w_phy(dev, addr, reg, val);
-+	ret = dev->dev_ops->w_phy(dev, addr, reg, val);
-+	if (ret)
-+		return ret;
- 
- 	return 0;
- }
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index aaa6a910d0819..baaeb60533faf 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -261,8 +261,8 @@ struct ksz_dev_ops {
- 	void (*flush_dyn_mac_table)(struct ksz_device *dev, int port);
- 	void (*port_cleanup)(struct ksz_device *dev, int port);
- 	void (*port_setup)(struct ksz_device *dev, int port, bool cpu_port);
--	void (*r_phy)(struct ksz_device *dev, u16 phy, u16 reg, u16 *val);
--	void (*w_phy)(struct ksz_device *dev, u16 phy, u16 reg, u16 val);
-+	int (*r_phy)(struct ksz_device *dev, u16 phy, u16 reg, u16 *val);
-+	int (*w_phy)(struct ksz_device *dev, u16 phy, u16 reg, u16 val);
- 	void (*r_mib_cnt)(struct ksz_device *dev, int port, u16 addr,
- 			  u64 *cnt);
- 	void (*r_mib_pkt)(struct ksz_device *dev, int port, u16 addr,
-diff --git a/drivers/net/dsa/microchip/lan937x.h b/drivers/net/dsa/microchip/lan937x.h
-index 4e0b1dccec270..5d78d034a62f1 100644
---- a/drivers/net/dsa/microchip/lan937x.h
-+++ b/drivers/net/dsa/microchip/lan937x.h
-@@ -12,8 +12,8 @@ void lan937x_port_setup(struct ksz_device *dev, int port, bool cpu_port);
- void lan937x_config_cpu_port(struct dsa_switch *ds);
- int lan937x_switch_init(struct ksz_device *dev);
- void lan937x_switch_exit(struct ksz_device *dev);
--void lan937x_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data);
--void lan937x_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val);
-+int lan937x_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data);
-+int lan937x_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val);
- int lan937x_change_mtu(struct ksz_device *dev, int port, int new_mtu);
- void lan937x_phylink_get_caps(struct ksz_device *dev, int port,
- 			      struct phylink_config *config);
-diff --git a/drivers/net/dsa/microchip/lan937x_main.c b/drivers/net/dsa/microchip/lan937x_main.c
-index daedd2bf20c1b..7b464f1fb5d88 100644
---- a/drivers/net/dsa/microchip/lan937x_main.c
-+++ b/drivers/net/dsa/microchip/lan937x_main.c
-@@ -128,14 +128,14 @@ static int lan937x_internal_phy_read(struct ksz_device *dev, int addr, int reg,
- 	return ksz_read16(dev, REG_VPHY_IND_DATA__2, val);
- }
- 
--void lan937x_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
-+int lan937x_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
- {
--	lan937x_internal_phy_read(dev, addr, reg, data);
-+	return lan937x_internal_phy_read(dev, addr, reg, data);
- }
- 
--void lan937x_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
-+int lan937x_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
- {
--	lan937x_internal_phy_write(dev, addr, reg, val);
-+	return lan937x_internal_phy_write(dev, addr, reg, val);
- }
- 
- static int lan937x_sw_mdio_read(struct mii_bus *bus, int addr, int regnum)
--- 
-2.30.2
+ /**
+
 

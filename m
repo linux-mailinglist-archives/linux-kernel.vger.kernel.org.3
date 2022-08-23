@@ -2,269 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6B859CF55
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABAE59CF88
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 05:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240169AbiHWDUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 23:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S240109AbiHWDeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 23:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239954AbiHWDUH (ORCPT
+        with ESMTP id S234556AbiHWDeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 23:20:07 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6380B4CA0B;
-        Mon, 22 Aug 2022 20:20:06 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MBZF26MxDzKwQj;
-        Tue, 23 Aug 2022 11:18:30 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgDXkO1fRwRj66O+Ag--.4888S8;
-        Tue, 23 Aug 2022 11:20:04 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     axboe@kernel.dk, tj@kernel.org, ming.lei@redhat.com,
-        mkoutny@suse.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v8 4/4] blk-throttle: fix io hung due to configuration updates
-Date:   Tue, 23 Aug 2022 11:31:30 +0800
-Message-Id: <20220823033130.874230-5-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220823033130.874230-1-yukuai1@huaweicloud.com>
-References: <20220823033130.874230-1-yukuai1@huaweicloud.com>
+        Mon, 22 Aug 2022 23:34:20 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D4932AA3;
+        Mon, 22 Aug 2022 20:34:17 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id g16so9406364qkl.11;
+        Mon, 22 Aug 2022 20:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=gm8nv1A1HcUSnQ4KZ2XBswRy9fFO4PeMLiDQLhSlOoo=;
+        b=IQjqzc+KSmruImmSPXbpoKrGOJlGjBg8YJEsxTyXvk3j4YkbpGJ65ekZNg/B+EIEnE
+         4jSMwRwB29H7E1OdhN9XvNW3jsWsSo/rhSK14FPXynq/A4AzKC1QtuvV8wHfR2x+YG9V
+         tdjHltSvvJiJwvaFxMDIXeKPlySSy80pvXDOSWfNJe9vcesfLUmfIc/yuIWFS1+SbGA3
+         jCJ+BTX1c6MARZqWX7wUOmiEhptNibKbhUz4Qwdk3nf/Njv+MI/OeVs3cuvF5Uqi9o3e
+         ++YE/tCjSOlMst1NwOIo2+yc5y74ORyUqGKW2b0K5UXO8329kBvLKh9WMdm+/90SbreM
+         1oqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=gm8nv1A1HcUSnQ4KZ2XBswRy9fFO4PeMLiDQLhSlOoo=;
+        b=JIHFu9dOm0GK8WOBpR2jpd4x8dRLZQnanuGjhYwkkKozM2n0BRYyxFGWA1tnErNT36
+         mS03weIXcF2WiP6g6nkj2JEz1isO1MqCOZ/VCmHPNUW7aMw7avzfEEQhK9MGc8vTRaI3
+         ch1NZdFilBxwAyah6E704S1B5wZdfU0cdBZ4g1HZacf+g3yMDrNHs6obYuL5o1FYCphS
+         qIU7VfwXyZHRbeTpc9DaF3gvuQM/k5ngrddjZgG7fHtC3d0pbcpvbhkysRU5OqOLoKlB
+         3ixuUoiTKXsAsDrnVB4CZga5fTWoF1nNIdPZIpcJtpI22ypq/qFTJ/939WLhoIM6YiDO
+         /sxA==
+X-Gm-Message-State: ACgBeo1QTFh3LGkQytgu6MCYUdinTs5aMlQ0HfXrP4VR9aZCFKdT5ibd
+        EOUUip5I+VZBGtwasQ1b1DJHhwefkrs=
+X-Google-Smtp-Source: AA6agR6lmmubZgl6EhUBDYD/YV2sSKNCQ3dZtwVcDPZbPb1njTV75FORlUOzhyaqpaY6sUBMCY57DA==
+X-Received: by 2002:a37:2ec6:0:b0:6bb:2ee3:4519 with SMTP id u189-20020a372ec6000000b006bb2ee34519mr14762140qkh.178.1661225656614;
+        Mon, 22 Aug 2022 20:34:16 -0700 (PDT)
+Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with UTF8SMTPSA id j20-20020a05620a411400b006b9a24dc9d7sm12084640qko.7.2022.08.22.20.34.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 20:34:16 -0700 (PDT)
+From:   Sean Anderson <seanga2@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     Yang Ling <gnaygnil@gmail.com>, linux-kernel@vger.kernel.org,
+        Kelvin Cheung <keguang.zhang@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Du Huanpeng <dhu@hodcarrier.org>,
+        Sean Anderson <seanga2@gmail.com>
+Subject: [RESEND PATCH] clk: ls1c: Fix PLL rate calculation
+Date:   Mon, 22 Aug 2022 23:34:14 -0400
+Message-Id: <20220823033414.198525-1-seanga2@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgDXkO1fRwRj66O+Ag--.4888S8
-X-Coremail-Antispam: 1UD129KBjvJXoW3GFyDGr1DGFyDWr48GrWktFb_yoWxtry8pF
-        WFkrs0qw45Xan7KFZxC3Z0yay0qws7Jry3J3y7Gr15AF1YkryktFn8ZrWYyay8AF97uFWI
-        vw1qgF9xCF42vrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-        4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQSdkU
-        UUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+noticed the following calculation, which is copied from
+drivers/clk/loongson1/clk-loongson1c.c:
 
-If new configuration is submitted while a bio is throttled, then new
-waiting time is recalculated regardless that the bio might already wait
-for some time:
-
-tg_conf_updated
- throtl_start_new_slice
-  tg_update_disptime
-  throtl_schedule_next_dispatch
-
-Then io hung can be triggered by always submmiting new configuration
-before the throttled bio is dispatched.
-
-Fix the problem by respecting the time that throttled bio already waited.
-In order to do that, add new fields to record how many bytes/io are
-waited, and use it to calculate wait time for throttled bio under new
-configuration.
-
-Some simple test:
-1)
-cd /sys/fs/cgroup/blkio/
-echo $$ > cgroup.procs
-echo "8:0 2048" > blkio.throttle.write_bps_device
+ulong ls1c300_pll_get_rate(struct clk *clk)
 {
-        sleep 2
-        echo "8:0 1024" > blkio.throttle.write_bps_device
-} &
-dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
+	unsigned int mult;
+	long long parent_rate;
+	void *base;
+	unsigned int val;
 
-2)
-cd /sys/fs/cgroup/blkio/
-echo $$ > cgroup.procs
-echo "8:0 1024" > blkio.throttle.write_bps_device
-{
-        sleep 4
-        echo "8:0 2048" > blkio.throttle.write_bps_device
-} &
-dd if=/dev/zero of=/dev/sda bs=8k count=1 oflag=direct
+	parent_rate = clk_get_parent_rate(clk);
+	base = (void *)clk->data;
 
-test results: io finish time
-	before this patch	with this patch
-1)	10s			6s
-2)	8s			6s
+	val = readl(base + START_FREQ);
+	mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
+	return (mult * parent_rate) / 4;
+}
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
+for the PLL. The datasheet has the following to say:
+
+START_FREQ 位    缺省值      描述
+========== ===== =========== ====================================
+FRAC_N     23:16 0           PLL 倍频系数的小数部分
+
+                 由          PLL 倍频系数的整数部分
+M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
+                 配置
+
+which according to google translate means
+
+START_FREQ Bits  Default       Description
+========== ===== ============= ================================================
+FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
+
+                 Depends on    Integer part of PLL multiplication factor
+M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
+                 configuration  recommended not to exceed 100)
+
+So just based on this description, I would expect that the formula to be
+something like
+
+	rate = parent * (256 * M_PLL + FRAC_N) / 256 / 4
+
+However, the datasheet also gives the following formula:
+
+	rate = parent * (M_PLL + FRAC_N) / 4
+
+which is what the Linux driver has implemented. I find this very unusual.
+First, the datasheet specifically says that these fields are the integer and
+fractional parts of the multiplier. Second, I think such a construct does not
+easily map to traditional PLL building blocks. Implementing this formula in
+hardware would likely require an adder, just to then set the threshold of a
+clock divider.
+
+I think it is much more likely that the first formula is correct. The author of
+the datasheet may think of a multiplier of (say) 3.14 as
+
+	M_PLL = 3
+	FRAC_N = 0.14
+
+which together sum to the correct multiplier, even though the actual value
+stored in FRAC_N would be 36.
+
+I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
+no difference in the formulae. The following patch is untested, but I suspect
+it will fix this issue. I would appreciate if anyone with access to the
+hardware could measure the output of the PLL (or one of its derived clocks) and
+determine the correct formula.
+
+[1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
+
+Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
 ---
- block/blk-throttle.c | 58 +++++++++++++++++++++++++++++++++++++++-----
- block/blk-throttle.h |  9 +++++++
- 2 files changed, 61 insertions(+), 6 deletions(-)
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 757b620f0f2d..679e08c0714c 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -639,6 +639,8 @@ static inline void throtl_start_new_slice_with_credit(struct throtl_grp *tg,
- {
- 	tg->bytes_disp[rw] = 0;
- 	tg->io_disp[rw] = 0;
-+	tg->carryover_bytes[rw] = 0;
-+	tg->carryover_ios[rw] = 0;
+ drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
+index 1ebf740380ef..2aa839b05d6b 100644
+--- a/drivers/clk/loongson1/clk-loongson1c.c
++++ b/drivers/clk/loongson1/clk-loongson1c.c
+@@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
+ 	u32 pll, rate;
  
- 	/*
- 	 * Previous slice has expired. We must have trimmed it after last
-@@ -656,12 +658,17 @@ static inline void throtl_start_new_slice_with_credit(struct throtl_grp *tg,
- 		   tg->slice_end[rw], jiffies);
+ 	pll = __raw_readl(LS1X_CLK_PLL_FREQ);
+-	rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
++	rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
+ 	rate *= OSC;
+-	rate >>= 2;
++	rate >>= 10;
+ 
+ 	return rate;
  }
- 
--static inline void throtl_start_new_slice(struct throtl_grp *tg, bool rw)
-+static inline void throtl_start_new_slice(struct throtl_grp *tg, bool rw,
-+					  bool clear_carryover)
- {
- 	tg->bytes_disp[rw] = 0;
- 	tg->io_disp[rw] = 0;
- 	tg->slice_start[rw] = jiffies;
- 	tg->slice_end[rw] = jiffies + tg->td->throtl_slice;
-+	if (clear_carryover) {
-+		tg->carryover_bytes[rw] = 0;
-+		tg->carryover_ios[rw] = 0;
-+	}
- 
- 	throtl_log(&tg->service_queue,
- 		   "[%c] new slice start=%lu end=%lu jiffies=%lu",
-@@ -783,6 +790,41 @@ static u64 calculate_bytes_allowed(u64 bps_limit, unsigned long jiffy_elapsed)
- 	return mul_u64_u64_div_u64(bps_limit, (u64)jiffy_elapsed, (u64)HZ);
- }
- 
-+static void __tg_update_carryover(struct throtl_grp *tg, bool rw)
-+{
-+	unsigned long jiffy_elapsed = jiffies - tg->slice_start[rw];
-+	u64 bps_limit = tg_bps_limit(tg, rw);
-+	u32 iops_limit = tg_iops_limit(tg, rw);
-+
-+	/*
-+	 * If config is updated while bios are still throttled, calculate and
-+	 * accumulate how many bytes/ios are waited across changes. And
-+	 * carryover_bytes/ios will be used to calculate new wait time under new
-+	 * configuration.
-+	 */
-+	if (bps_limit != U64_MAX)
-+		tg->carryover_bytes[rw] +=
-+			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
-+			tg->bytes_disp[rw];
-+	if (iops_limit != UINT_MAX)
-+		tg->carryover_ios[rw] +=
-+			calculate_io_allowed(iops_limit, jiffy_elapsed) -
-+			tg->io_disp[rw];
-+}
-+
-+static void tg_update_carryover(struct throtl_grp *tg)
-+{
-+	if (tg->service_queue.nr_queued[READ])
-+		__tg_update_carryover(tg, READ);
-+	if (tg->service_queue.nr_queued[WRITE])
-+		__tg_update_carryover(tg, WRITE);
-+
-+	/* see comments in struct throtl_grp for meaning of these fields. */
-+	throtl_log(&tg->service_queue, "%s: %llu %llu %u %u\n", __func__,
-+		   tg->carryover_bytes[READ], tg->carryover_bytes[WRITE],
-+		   tg->carryover_ios[READ], tg->carryover_ios[WRITE]);
-+}
-+
- static bool tg_within_iops_limit(struct throtl_grp *tg, struct bio *bio,
- 				 u32 iops_limit, unsigned long *wait)
- {
-@@ -800,7 +842,8 @@ static bool tg_within_iops_limit(struct throtl_grp *tg, struct bio *bio,
- 
- 	/* Round up to the next throttle slice, wait time must be nonzero */
- 	jiffy_elapsed_rnd = roundup(jiffy_elapsed + 1, tg->td->throtl_slice);
--	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd);
-+	io_allowed = calculate_io_allowed(iops_limit, jiffy_elapsed_rnd) +
-+		     tg->carryover_ios[rw];
- 	if (tg->io_disp[rw] + 1 <= io_allowed) {
- 		if (wait)
- 			*wait = 0;
-@@ -837,7 +880,8 @@ static bool tg_within_bps_limit(struct throtl_grp *tg, struct bio *bio,
- 		jiffy_elapsed_rnd = tg->td->throtl_slice;
- 
- 	jiffy_elapsed_rnd = roundup(jiffy_elapsed_rnd, tg->td->throtl_slice);
--	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd);
-+	bytes_allowed = calculate_bytes_allowed(bps_limit, jiffy_elapsed_rnd) +
-+			tg->carryover_bytes[rw];
- 	if (tg->bytes_disp[rw] + bio_size <= bytes_allowed) {
- 		if (wait)
- 			*wait = 0;
-@@ -898,7 +942,7 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
- 	 * slice and it should be extended instead.
- 	 */
- 	if (throtl_slice_used(tg, rw) && !(tg->service_queue.nr_queued[rw]))
--		throtl_start_new_slice(tg, rw);
-+		throtl_start_new_slice(tg, rw, true);
- 	else {
- 		if (time_before(tg->slice_end[rw],
- 		    jiffies + tg->td->throtl_slice))
-@@ -1332,8 +1376,8 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 	 * that a group's limit are dropped suddenly and we don't want to
- 	 * account recently dispatched IO with new low rate.
- 	 */
--	throtl_start_new_slice(tg, READ);
--	throtl_start_new_slice(tg, WRITE);
-+	throtl_start_new_slice(tg, READ, false);
-+	throtl_start_new_slice(tg, WRITE, false);
- 
- 	if (tg->flags & THROTL_TG_PENDING) {
- 		tg_update_disptime(tg);
-@@ -1361,6 +1405,7 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 		v = U64_MAX;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_update_carryover(tg);
- 
- 	if (is_u64)
- 		*(u64 *)((void *)tg + of_cft(of)->private) = v;
-@@ -1547,6 +1592,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 		return ret;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_update_carryover(tg);
- 
- 	v[0] = tg->bps_conf[READ][index];
- 	v[1] = tg->bps_conf[WRITE][index];
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index 45c6f3c1dfe0..a25e9e356d17 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -121,6 +121,15 @@ struct throtl_grp {
- 	uint64_t last_bytes_disp[2];
- 	unsigned int last_io_disp[2];
- 
-+	/*
-+	 * The following two fields are updated when new configuration is
-+	 * submitted while some bios are still throttled, they record how many
-+	 * bytes/ios are waited already in previous configuration, and they will
-+	 * be used to calculate wait time under new configuration.
-+	 */
-+	uint64_t carryover_bytes[2];
-+	unsigned int carryover_ios[2];
-+
- 	unsigned long last_check_time;
- 
- 	unsigned long latency_target; /* us */
 -- 
-2.31.1
+2.37.1
 

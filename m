@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A5559DE61
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189A659DCFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354569AbiHWKVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S1358075AbiHWLnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352409AbiHWKJe (ORCPT
+        with ESMTP id S1357885AbiHWLjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:09:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6267DF60;
-        Tue, 23 Aug 2022 01:55:40 -0700 (PDT)
+        Tue, 23 Aug 2022 07:39:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E71A6F55D;
+        Tue, 23 Aug 2022 02:28:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE8DB6155E;
-        Tue, 23 Aug 2022 08:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03619C433D6;
-        Tue, 23 Aug 2022 08:55:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2665EB81C66;
+        Tue, 23 Aug 2022 09:28:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56230C433C1;
+        Tue, 23 Aug 2022 09:28:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244939;
-        bh=9krYIMZkWByFYm0Z2MCMjTdo/cKY77hHZASSi3Elm3k=;
+        s=korg; t=1661246911;
+        bh=xwMDHTFnMLKH4+U7KF18c69Qbn3zdxCc6asbHfolpLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D/NJ5qw/4jaMtaLSXA4dotY5kXfoCsmtOEE/KY+7w6+CsO9WchRO7Tu5azfEbXzoI
-         0Tk6bglQGev9mkheWPCvWcNQu872+O+gM6g9Hpl40/Mdakn4Q8FqhfdquBpO7pDcwr
-         SGg7FEr8jY38BACMcqyQahActd0pPHEyfbtB2EAA=
+        b=RCY7DVprYVpscYjhfT51AJt6Kwqd5/3hcaWqHSCbceKXPX2ZcKOI8mwvO4/BjQzip
+         uO2RoaQ61rm6YdF0nvPCSfu5+WhuHoNiPfERD1OQo47nivwC/QKaREtVQhnqLBVViR
+         Z4u1Ybxod2mGHKKSnnIL3qVsvio8+jcw8fOzyAHY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 175/244] usb: renesas: Fix refcount leak bug
-Date:   Tue, 23 Aug 2022 10:25:34 +0200
-Message-Id: <20220823080105.129109668@linuxfoundation.org>
+        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Jan Kara <jack@suse.cz>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.4 257/389] ext4: add EXT4_INODE_HAS_XATTR_SPACE macro in xattr.h
+Date:   Tue, 23 Aug 2022 10:25:35 +0200
+Message-Id: <20220823080126.331222029@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 9d6d5303c39b8bc182475b22f45504106a07f086 ]
+commit 179b14152dcb6a24c3415200603aebca70ff13af upstream.
 
-In usbhs_rza1_hardware_init(), of_find_node_by_name() will return
-a node pointer with refcount incremented. We should use of_node_put()
-when it is not used anymore.
+When adding an xattr to an inode, we must ensure that the inode_size is
+not less than EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad. Otherwise,
+the end position may be greater than the start position, resulting in UAF.
 
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220618023205.4056548-1-windhl@126.com
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Link: https://lore.kernel.org/r/20220616021358.2504451-2-libaokun1@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/renesas_usbhs/rza.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/ext4/xattr.h |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/usb/renesas_usbhs/rza.c b/drivers/usb/renesas_usbhs/rza.c
-index 24de64edb674..2d77edefb4b3 100644
---- a/drivers/usb/renesas_usbhs/rza.c
-+++ b/drivers/usb/renesas_usbhs/rza.c
-@@ -23,6 +23,10 @@ static int usbhs_rza1_hardware_init(struct platform_device *pdev)
- 	extal_clk = of_find_node_by_name(NULL, "extal");
- 	of_property_read_u32(usb_x1_clk, "clock-frequency", &freq_usb);
- 	of_property_read_u32(extal_clk, "clock-frequency", &freq_extal);
+--- a/fs/ext4/xattr.h
++++ b/fs/ext4/xattr.h
+@@ -95,6 +95,19 @@ struct ext4_xattr_entry {
+ 
+ #define EXT4_ZERO_XATTR_VALUE ((void *)-1)
+ 
++/*
++ * If we want to add an xattr to the inode, we should make sure that
++ * i_extra_isize is not 0 and that the inode size is not less than
++ * EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad.
++ *   EXT4_GOOD_OLD_INODE_SIZE   extra_isize header   entry   pad  data
++ * |--------------------------|------------|------|---------|---|-------|
++ */
++#define EXT4_INODE_HAS_XATTR_SPACE(inode)				\
++	((EXT4_I(inode)->i_extra_isize != 0) &&				\
++	 (EXT4_GOOD_OLD_INODE_SIZE + EXT4_I(inode)->i_extra_isize +	\
++	  sizeof(struct ext4_xattr_ibody_header) + EXT4_XATTR_PAD <=	\
++	  EXT4_INODE_SIZE((inode)->i_sb)))
 +
-+	of_node_put(usb_x1_clk);
-+	of_node_put(extal_clk);
-+
- 	if (freq_usb == 0) {
- 		if (freq_extal == 12000000) {
- 			/* Select 12MHz XTAL */
--- 
-2.35.1
-
+ struct ext4_xattr_info {
+ 	const char *name;
+ 	const void *value;
 
 

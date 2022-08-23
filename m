@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2548659DDE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A07E59E26F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358985AbiHWL6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        id S1357012AbiHWK4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359072AbiHWL4I (ORCPT
+        with ESMTP id S1356545AbiHWKvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:56:08 -0400
+        Tue, 23 Aug 2022 06:51:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E107E31E;
-        Tue, 23 Aug 2022 02:33:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81410AB4CE;
+        Tue, 23 Aug 2022 02:12:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DE5761388;
-        Tue, 23 Aug 2022 09:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF16C433D6;
-        Tue, 23 Aug 2022 09:33:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1FAA60DB4;
+        Tue, 23 Aug 2022 09:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEBD5C433D7;
+        Tue, 23 Aug 2022 09:12:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247221;
-        bh=FiKJFq3p3hNMNAz/G+j1Jr63XmO/Uxj1ECLA2jSv+YM=;
+        s=korg; t=1661245963;
+        bh=QXVVy9ogRtOgoitRqY+eqdk8CN1f2+haTzgyHkGY9K0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pW1ptSztex2Kxfxc8af8wHM1cfbKdlM7bTBnORtqXfp3YqN3ODXMY7Ww0obEqTp1Z
-         dWoZtZmKOom7sP8rjKgciA3C/s+OqG0JZ55sTUBfHvGtH19iJqfaSSxDPVtplFsBhY
-         5UG3DJeua7LmcZWTmzliLQjnzjJ1lmG1IzxwgZLI=
+        b=P2XM2iWHJzScaDvkMeZmuyQC0E5xoI89lHLHNJ6KVrm7Zoldkib2nhLvcZ978lLUa
+         gMI+/135XX+6vegSGoySd7iEJ0RhKtSkB7epF1rNqGn8vSiTfjxT/173o2PVgJoQ0Q
+         DZ5U0xvsZj8Wsspo0H4QxLrKM252n4SYhujV4JfM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.4 329/389] nios2: page fault et.al. are *not* restartable syscalls...
+        stable@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
+Subject: [PATCH 4.19 238/287] vsock: Fix memory leak in vsock_connect()
 Date:   Tue, 23 Aug 2022 10:26:47 +0200
-Message-Id: <20220823080129.260618707@linuxfoundation.org>
+Message-Id: <20220823080109.079929857@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_ABUSE_SURBL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-commit 8535c239ac674f7ead0f2652932d35c52c4123b2 upstream.
+commit 7e97cfed9929eaabc41829c395eb0d1350fccb9d upstream.
 
-make sure that ->orig_r2 is negative for everything except
-the syscalls.
+An O_NONBLOCK vsock_connect() request may try to reschedule
+@connect_work.  Imagine the following sequence of vsock_connect()
+requests:
 
-Fixes: 82ed08dd1b0e ("nios2: Exception handling")
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+  1. The 1st, non-blocking request schedules @connect_work, which will
+     expire after 200 jiffies.  Socket state is now SS_CONNECTING;
+
+  2. Later, the 2nd, blocking request gets interrupted by a signal after
+     a few jiffies while waiting for the connection to be established.
+     Socket state is back to SS_UNCONNECTED, but @connect_work is still
+     pending, and will expire after 100 jiffies.
+
+  3. Now, the 3rd, non-blocking request tries to schedule @connect_work
+     again.  Since @connect_work is already scheduled,
+     schedule_delayed_work() silently returns.  sock_hold() is called
+     twice, but sock_put() will only be called once in
+     vsock_connect_timeout(), causing a memory leak reported by syzbot:
+
+  BUG: memory leak
+  unreferenced object 0xffff88810ea56a40 (size 1232):
+    comm "syz-executor756", pid 3604, jiffies 4294947681 (age 12.350s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      28 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  (..@............
+    backtrace:
+      [<ffffffff837c830e>] sk_prot_alloc+0x3e/0x1b0 net/core/sock.c:1930
+      [<ffffffff837cbe22>] sk_alloc+0x32/0x2e0 net/core/sock.c:1989
+      [<ffffffff842ccf68>] __vsock_create.constprop.0+0x38/0x320 net/vmw_vsock/af_vsock.c:734
+      [<ffffffff842ce8f1>] vsock_create+0xc1/0x2d0 net/vmw_vsock/af_vsock.c:2203
+      [<ffffffff837c0cbb>] __sock_create+0x1ab/0x2b0 net/socket.c:1468
+      [<ffffffff837c3acf>] sock_create net/socket.c:1519 [inline]
+      [<ffffffff837c3acf>] __sys_socket+0x6f/0x140 net/socket.c:1561
+      [<ffffffff837c3bba>] __do_sys_socket net/socket.c:1570 [inline]
+      [<ffffffff837c3bba>] __se_sys_socket net/socket.c:1568 [inline]
+      [<ffffffff837c3bba>] __x64_sys_socket+0x1a/0x20 net/socket.c:1568
+      [<ffffffff84512815>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+      [<ffffffff84512815>] do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+      [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+  <...>
+
+Use mod_delayed_work() instead: if @connect_work is already scheduled,
+reschedule it, and undo sock_hold() to keep the reference count
+balanced.
+
+Reported-and-tested-by: syzbot+b03f55bf128f9a38f064@syzkaller.appspotmail.com
+Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+Co-developed-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/nios2/include/asm/entry.h |    3 ++-
- arch/nios2/kernel/entry.S      |    4 +---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ net/vmw_vsock/af_vsock.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/arch/nios2/include/asm/entry.h
-+++ b/arch/nios2/include/asm/entry.h
-@@ -50,7 +50,8 @@
- 	stw	r13, PT_R13(sp)
- 	stw	r14, PT_R14(sp)
- 	stw	r15, PT_R15(sp)
--	stw	r2, PT_ORIG_R2(sp)
-+	movi	r24, -1
-+	stw	r24, PT_ORIG_R2(sp)
- 	stw	r7, PT_ORIG_R7(sp)
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1215,7 +1215,14 @@ static int vsock_stream_connect(struct s
+ 			 * timeout fires.
+ 			 */
+ 			sock_hold(sk);
+-			schedule_delayed_work(&vsk->connect_work, timeout);
++
++			/* If the timeout function is already scheduled,
++			 * reschedule it, then ungrab the socket refcount to
++			 * keep it balanced.
++			 */
++			if (mod_delayed_work(system_wq, &vsk->connect_work,
++					     timeout))
++				sock_put(sk);
  
- 	stw	ra, PT_RA(sp)
---- a/arch/nios2/kernel/entry.S
-+++ b/arch/nios2/kernel/entry.S
-@@ -185,6 +185,7 @@ ENTRY(handle_system_call)
- 	ldw	r5, PT_R5(sp)
- 
- local_restart:
-+	stw	r2, PT_ORIG_R2(sp)
- 	/* Check that the requested system call is within limits */
- 	movui	r1, __NR_syscalls
- 	bgeu	r2, r1, ret_invsyscall
-@@ -336,9 +337,6 @@ external_interrupt:
- 	/* skip if no interrupt is pending */
- 	beq	r12, r0, ret_from_interrupt
- 
--	movi	r24, -1
--	stw	r24, PT_ORIG_R2(sp)
--
- 	/*
- 	 * Process an external hardware interrupt.
- 	 */
+ 			/* Skip ahead to preserve error code set above. */
+ 			goto out_wait;
 
 

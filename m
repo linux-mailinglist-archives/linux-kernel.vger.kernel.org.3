@@ -2,106 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E323659E901
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3635159E8D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245063AbiHWRQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S243237AbiHWRPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343516AbiHWRP1 (ORCPT
+        with ESMTP id S245252AbiHWROo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:15:27 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35947A74C8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:50:27 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id l1so19234589lfk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=QUolfiYZKhuZ0h0B3LuZHuKPS00eFUXYmA/Bd2y5s4I=;
-        b=TOrVT7Bw1wcze2poGYZnEnhBFQKAsugEDX5vofp3qc4BWMsBQqESe8GO4YY84wIoe2
-         l0VRiPpb5Xk23/mzscq87BN3bAWDYtQD+92/JPqA/4x97FtMSoB/DSZ/z8jH1dAcvZS1
-         vjsZYZQDEdV70m3rbv+VpBPR6z4ZHRb2yxO1XbqRZccxlREcRL5387rvuayXpIh8hkDP
-         YKnuSf0WbPG5cuDVQKsfAqVkpu9tuanHE9oFpbov8UmjGpWD1RSyC1xeDfD/LKR3NS44
-         GrrWnh8nzHOCiCTqjdbXBGzztScXKGrAQULv0ss7IEa76YzvQPBG3SNKuW+Vf0frA6cf
-         JWCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=QUolfiYZKhuZ0h0B3LuZHuKPS00eFUXYmA/Bd2y5s4I=;
-        b=lruK35oKHutS7Gnd79VCw3pNflRpNfqRgOaTO/X/MVGgB8SP1NnEHoLxXkiVFPJhmk
-         5Iy6/syCnWXH9xfH+gjz1fr2hWDy/VOk5cONwrLEy5XHgV9dRqFKRTqXPIllkqsJN737
-         /LyzC+e8lBN5zGV7iAXYG7AyYXE/Ke1yjKFjLn6id+Ajgh1ouqecT0Uvv2M0qJ0zlDPi
-         gIG38QBno2E+/40JYU+u9pSBMRVvmnCLBaKlIvEdJDBrVDt9v2p3kvpbReNPjNSVzVcw
-         pJExAca3e3fqxXBG+fjLH45TTWQW5wfHB0o1EtYrY6wfMQgDEM1RZZueD/Pp2xF3Jji6
-         7yNw==
-X-Gm-Message-State: ACgBeo1b7+nlkIC2g1VNFdWcznn+uJ1aLAiWZSHu+3B0a2eiDvz0XN/B
-        2+8tIbtzdW63tewaQHMuuvvZow==
-X-Google-Smtp-Source: AA6agR4ugY4cbiKVm7rGtwHlbVL0Ns3GCfIDgsM/fmAFTzn3OxYvT1bEvN4Wx75yq2QO2QJWGjVmNg==
-X-Received: by 2002:a05:6512:1096:b0:492:ca89:a38d with SMTP id j22-20020a056512109600b00492ca89a38dmr7602295lfg.152.1661262625537;
-        Tue, 23 Aug 2022 06:50:25 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id v3-20020a056512348300b0048af6242892sm953790lfr.14.2022.08.23.06.50.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 06:50:24 -0700 (PDT)
-Message-ID: <6d08906f-fd8e-009d-fd0f-384165c88552@linaro.org>
-Date:   Tue, 23 Aug 2022 16:50:23 +0300
+        Tue, 23 Aug 2022 13:14:44 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2174A86700;
+        Tue, 23 Aug 2022 06:53:20 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1661262751t32ml53c
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 23 Aug 2022 21:52:30 +0800 (CST)
+X-QQ-SSF: 0100000000200040B000B00A0000000
+X-QQ-FEAT: 0b1/4t+gNkJ++Dgm7zJ6fFrNWFd/Ikx8Yab7Y1JNUbFJSbYJam5vPtKgWzzRZ
+        mNZTawlexVcvW4Ax5SzGgbdQUGCFbapYTIudj2AsXszVfao58H9b/Vv/JCA9qPVnHQRZtz4
+        yuIvGFtjvnrO4WGHbdW9s4rr28lX06DKAh5w5oZYMWn28kNSqR0F5eRW04Gx+RyLYv2WKez
+        6brbXH0KqzqCPWsK2Fts56XIPaX2otuQLO9ioyi0CDGgaHPCOgQ25MbM9u63z0uBWmpzmqp
+        icY8SdWiqeKZhmCKI8b+P35cxz9pkyDJ7PmkDy/br4JuyyEq+cOb94W0Igw7sWV9ChmO5nd
+        ynCtBHkNth/QiZQQfb+xeEfxEs2pc18K7CKHUUTpKeRtPM+FVcJmIzK6EduPA==
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] drivers/crypto: fix repeated words in comments
+Date:   Tue, 23 Aug 2022 21:52:23 +0800
+Message-Id: <20220823135223.62869-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH linux-next] soc: qcom: icc-bwmon: remove redundant ret
- variable
-Content-Language: en-US
-To:     cgel.zte@gmail.com
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220823133620.211902-1-cui.jinpeng2@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 16:36, cgel.zte@gmail.com wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> 
-> Return value from devm_regmap_field_bulk_alloc() directly
-> instead of taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
+Delete the redundant word 'to'.
 
-I cannot find this report. This is an open source work and public
-collaboration. The "Reported-by" usually means that the issue was
-reported to us, in some way, usually in public. Can we see the report?
-Otherwise adding non-public, non-verifiable reports is useless and
-clutters our report-credit-system.
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/crypto/n2_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/crypto/n2_core.c b/drivers/crypto/n2_core.c
+index 3b0bf6fea491..31e24df18877 100644
+--- a/drivers/crypto/n2_core.c
++++ b/drivers/crypto/n2_core.c
+@@ -1494,7 +1494,7 @@ static void n2_unregister_algs(void)
+  *
+  * So we have to back-translate, going through the 'intr' and 'ino'
+  * property tables of the n2cp MDESC node, matching it with the OF
+- * 'interrupts' property entries, in order to to figure out which
++ * 'interrupts' property entries, in order to figure out which
+  * devino goes to which already-translated IRQ.
+  */
+ static int find_devino_index(struct platform_device *dev, struct spu_mdesc_info *ip,
+-- 
+2.36.1
 
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> ---
->  drivers/soc/qcom/icc-bwmon.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof

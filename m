@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C74159DDBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D0659DEC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353074AbiHWKKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
+        id S1356257AbiHWKlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352760AbiHWKC2 (ORCPT
+        with ESMTP id S1354531AbiHWK2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8BA7CAA2;
-        Tue, 23 Aug 2022 01:50:51 -0700 (PDT)
+        Tue, 23 Aug 2022 06:28:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99309A407F;
+        Tue, 23 Aug 2022 02:06:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5DE45CE1B2A;
-        Tue, 23 Aug 2022 08:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F07BC433C1;
-        Tue, 23 Aug 2022 08:50:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D82F4B81C53;
+        Tue, 23 Aug 2022 09:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4EAC433C1;
+        Tue, 23 Aug 2022 09:06:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244647;
-        bh=bNe4rO2J68SBkBMaIXYCYTj2UDiAQNXOSRC37aerPW0=;
+        s=korg; t=1661245563;
+        bh=mEH2bvmY8Id/t3eHeCjcTSSGLBfWCQpEEuV3o9xiOhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bsVU11uxNeinsdm2ZAB2LTk75OA5XITYmpxSwup3VB6l0809Hvd7x0D3zNMXryDJj
-         xOKk5dkRDAQ7osKnqzx/Rx/Obqhp6ZJmyRySHrVdRYz9BuE7IKH5ZkgOUI/urTn8AV
-         l1FQFyjwmDnaNZfPRgo5CC+WWeoTaOdys5NwYlM8=
+        b=AGW/Z5TPLdzeWX7veGvjXTrcd5+9undvcKWCnBKTFpdCY0FIyIflXODqfkd1z6Sn8
+         8kr99AvntsuuaPH8yQpHlDeaNvPLZkm0YsHVQlInKJ8vD/PrLphBzMH9JJDyrybCnw
+         d68iiKV4vg+wtI4KhTmhtIth92D3aG7FIvxIBg78=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.15 128/244] netfilter: nf_tables: validate NFTA_SET_ELEM_OBJREF based on NFT_SET_OBJECT flag
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 118/287] mtd: st_spi_fsm: Add a clk_disable_unprepare() in .probe()s error path
 Date:   Tue, 23 Aug 2022 10:24:47 +0200
-Message-Id: <20220823080103.360962250@linuxfoundation.org>
+Message-Id: <20220823080104.358527106@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,51 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-commit 5a2f3dc31811e93be15522d9eb13ed61460b76c8 upstream.
+[ Upstream commit 28607b426c3d050714f250d0faeb99d2e9106e90 ]
 
-If the NFTA_SET_ELEM_OBJREF netlink attribute is present and
-NFT_SET_OBJECT flag is set on, report EINVAL.
+For all but one error path clk_disable_unprepare() is already there. Add
+it to the one location where it's missing.
 
-Move existing sanity check earlier to validate that NFT_SET_OBJECT
-requires NFTA_SET_ELEM_OBJREF.
-
-Fixes: 8aeff920dcc9 ("netfilter: nf_tables: add stateful object reference to set elements")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 481815a6193b ("mtd: st_spi_fsm: Handle clk_prepare_enable/clk_disable_unprepare.")
+Fixes: 69d5af8d016c ("mtd: st_spi_fsm: Obtain and use EMI clock")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220607152458.232847-2-u.kleine-koenig@pengutronix.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c |   13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/mtd/devices/st_spi_fsm.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -5761,6 +5761,15 @@ static int nft_add_set_elem(struct nft_c
- 			return -EINVAL;
- 	}
+diff --git a/drivers/mtd/devices/st_spi_fsm.c b/drivers/mtd/devices/st_spi_fsm.c
+index 55d4a77f3b7f..533096c88ae1 100644
+--- a/drivers/mtd/devices/st_spi_fsm.c
++++ b/drivers/mtd/devices/st_spi_fsm.c
+@@ -2120,10 +2120,12 @@ static int stfsm_probe(struct platform_device *pdev)
+ 		(long long)fsm->mtd.size, (long long)(fsm->mtd.size >> 20),
+ 		fsm->mtd.erasesize, (fsm->mtd.erasesize >> 10));
  
-+	if (set->flags & NFT_SET_OBJECT) {
-+		if (!nla[NFTA_SET_ELEM_OBJREF] &&
-+		    !(flags & NFT_SET_ELEM_INTERVAL_END))
-+			return -EINVAL;
-+	} else {
-+		if (nla[NFTA_SET_ELEM_OBJREF])
-+			return -EINVAL;
+-	return mtd_device_register(&fsm->mtd, NULL, 0);
+-
++	ret = mtd_device_register(&fsm->mtd, NULL, 0);
++	if (ret) {
+ err_clk_unprepare:
+-	clk_disable_unprepare(fsm->clk);
++		clk_disable_unprepare(fsm->clk);
 +	}
 +
- 	if ((flags & NFT_SET_ELEM_INTERVAL_END) &&
- 	     (nla[NFTA_SET_ELEM_DATA] ||
- 	      nla[NFTA_SET_ELEM_OBJREF] ||
-@@ -5899,10 +5908,6 @@ static int nft_add_set_elem(struct nft_c
- 	}
+ 	return ret;
+ }
  
- 	if (nla[NFTA_SET_ELEM_OBJREF] != NULL) {
--		if (!(set->flags & NFT_SET_OBJECT)) {
--			err = -EINVAL;
--			goto err_parse_key_end;
--		}
- 		obj = nft_obj_lookup(ctx->net, ctx->table,
- 				     nla[NFTA_SET_ELEM_OBJREF],
- 				     set->objtype, genmask);
+-- 
+2.35.1
+
 
 

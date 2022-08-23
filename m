@@ -2,113 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB5159EC2F
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1FF59EC2D
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 21:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbiHWTX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 15:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S232717AbiHWTXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 15:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232438AbiHWTXF (ORCPT
+        with ESMTP id S232859AbiHWTXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 15:23:05 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D56C134CA2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:04:27 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u9so21779ejy.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 11:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=67k58vrmy+9FIi/LCbLSxCkdQUH+mazDNft/DJM09r8=;
-        b=jjdr3CxnZZ2nnl1lgZKU61f1YPEPiDYdZARx4aack1uaM/twqyItxiDZJsJCdOERZK
-         izstXZVd5o8tAKv3nDr0yD444ZR4EtUcZI4DPj/w7oX6XaoL2IOFnA3l9KfKhqiJlVHT
-         ejYXDUcWzd/NVn2IleTUxLG/ydfTY0q1/mOrU=
+        Tue, 23 Aug 2022 15:23:10 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00735135AF0;
+        Tue, 23 Aug 2022 11:05:01 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-32a09b909f6so400929707b3.0;
+        Tue, 23 Aug 2022 11:05:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=67k58vrmy+9FIi/LCbLSxCkdQUH+mazDNft/DJM09r8=;
-        b=QU9Vh7SunmVrYwWRu9mxS51y6H3Df+j5BwMo4tHNJZ7d+F6l4ClwLaDpmKWpfSNQcB
-         LwRm8iAFmOrWwq4UlL1FKlOiQbo+2xjlJ/+k0MrQiz52vpMMrmEYdyAiNmabsGzmb4vn
-         dosJy7k/b4OiLliverGg5kE83jkyn9kOFtI4iGU/pvI64hRb8LUD6Z/Ho2zkRxt1ra/m
-         V+hPyHULhyoSiYaIcl2XYvaBRyMP+vHXHal7CViOEPX7VjOFcVs/dKkJMvR7g6l87lkP
-         Q7RO7RK74J6vhFDvpmBEEfPA1BADepLsw0OaGmDPc+KOD5iMA+cok78IgkIK3NkEcNjA
-         gYAQ==
-X-Gm-Message-State: ACgBeo3FhLrujnGOw6gHhEvACQnDnUqYuIpsOAiNPIY6noAcrCR/9iIA
-        C4g5lkKIm/jbq79y3D6qjHQhwA==
-X-Google-Smtp-Source: AA6agR6YmHWbickuoP9FVYkGjc1CJsOhfxrHnw0q3VOyzKBBCTM6aKgrpmN2gAw5QifkOdzir1T05Q==
-X-Received: by 2002:a17:906:f88f:b0:731:463d:4b15 with SMTP id lg15-20020a170906f88f00b00731463d4b15mr493141ejb.299.1661277866159;
-        Tue, 23 Aug 2022 11:04:26 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-57-252.cust.vodafonedsl.it. [188.217.57.252])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b0072f1d8e7301sm172237ejo.66.2022.08.23.11.04.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 11:04:25 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 20:04:23 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pci/saa7164: fix repeated words in comments
-Message-ID: <20220823180423.GC1277033@tom-ThinkPad-T14s-Gen-2i>
-References: <20220823145709.46069-1-wangjianli@cdjrlc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7wKGoZnic5LNVksHZqOyLyRJxA/khS3FDx7SnbOPfSk=;
+        b=24SAA5iB0GtU3ppNSW6ocMoHnb5q2gRsIoE/SoDUQqdtPcXth8wwclokUmCBagwNDk
+         ogtuTpTvdq1PYQEgr08EJmBRg4PqkaYf1+VaMwfNE9JGZJkrDRkM0v146PjgzbHyvbGV
+         ZBBr8rbt+CDHAR+JZOhc3ZlS4z3B38kwRBZ+Qlo93le4POTP2Xvn3wOOyXT83W+iu/NI
+         IkMT9tkICRzPQ/Msbq85I0x2N4A8j/ubIqfbp3xGbc63FiJ/IVmNPeoz206siB1GU65h
+         G8rh5S51z4h2ppDdJa9IEURhYoixhpd11T9cTS4efVqgMjkMGtlC4FoJvAOgbfNoULDy
+         bc/w==
+X-Gm-Message-State: ACgBeo1jy9On7ZBFeAmWk3SDH8CUkeFJSX6A/INJvGYI+ttiuzVsTnpN
+        tXXeESsCQ1cquWrFaYa503ldg6ai0V+paxM6B8Q=
+X-Google-Smtp-Source: AA6agR5bJErDIx47Az9fb4XE1uDN119UnaityOWnQElZjnOMZ0i23r0BIxfoRglwuZWVZypvWOlUby9Uw+M+A+DEZA4=
+X-Received: by 2002:a25:c204:0:b0:692:72b9:a778 with SMTP id
+ s4-20020a25c204000000b0069272b9a778mr25476145ybf.81.1661277900880; Tue, 23
+ Aug 2022 11:05:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823145709.46069-1-wangjianli@cdjrlc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220816130629.3178-1-lukasz.luba@arm.com>
+In-Reply-To: <20220816130629.3178-1-lukasz.luba@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Aug 2022 20:04:49 +0200
+Message-ID: <CAJZ5v0jR2RozeV301u4g90-BpNqkQMRrN=dgaOkJ7veVZ02=aw@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Aug 23, 2022 at 10:57:09PM +0800, wangjianli wrote:
-> Delete the redundant word 'the'.
-> 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+On Tue, Aug 16, 2022 at 3:06 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> There is no need to keep the max CPU capacity in the per_cpu instance.
+> Furthermore, there is no need to check and update that variable
+> (sg_cpu->max) every time in the frequency change request, which is part
+> of hot path. Instead use struct sugov_policy to store that information.
+> Initialize the max CPU capacity during the setup and start callback.
+> We can do that since all CPUs in the same frequency domain have the same
+> max capacity (capacity setup and thermal pressure are based on that).
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  drivers/media/pci/saa7164/saa7164-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
-> index 7973ae42873a..d5f32e3ff544 100644
-> --- a/drivers/media/pci/saa7164/saa7164-core.c
-> +++ b/drivers/media/pci/saa7164/saa7164-core.c
-> @@ -626,7 +626,7 @@ static irqreturn_t saa7164_irq(int irq, void *dev_id)
->  	portf = &dev->ports[SAA7164_PORT_VBI2];
->  
->  	/* Check that the hardware is accessible. If the status bytes are
-> -	 * 0xFF then the device is not accessible, the the IRQ belongs
-> +	 * 0xFF then the device is not accessible, the IRQ belongs
->  	 * to another driver.
->  	 * 4 x u32 interrupt registers.
->  	 */
-> -- 
-> 2.36.1
-> 
+> Changes v2:
+> - collected ACK from Viresh
+> - re-based on top of latest mainline where the previously conflicting
+>   change is now merged
+>
+>  kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 1207c78f85c1..9161d1136d01 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -25,6 +25,9 @@ struct sugov_policy {
+>         unsigned int            next_freq;
+>         unsigned int            cached_raw_freq;
+>
+> +       /* max CPU capacity, which is equal for all CPUs in freq. domain */
+> +       unsigned long           max;
+> +
+>         /* The next fields are only needed if fast switch cannot be used: */
+>         struct                  irq_work irq_work;
+>         struct                  kthread_work work;
+> @@ -48,7 +51,6 @@ struct sugov_cpu {
+>
+>         unsigned long           util;
+>         unsigned long           bw_dl;
+> -       unsigned long           max;
+>
+>         /* The field below is for single-CPU policies only: */
+>  #ifdef CONFIG_NO_HZ_COMMON
+> @@ -158,7 +160,6 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+>  {
+>         struct rq *rq = cpu_rq(sg_cpu->cpu);
+>
+> -       sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+>         sg_cpu->bw_dl = cpu_bw_dl(rq);
+>         sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+>                                           FREQUENCY_UTIL, NULL);
+> @@ -253,6 +254,7 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+>   */
+>  static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+>  {
+> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         unsigned long boost;
+>
+>         /* No boost currently required */
+> @@ -280,7 +282,8 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+>          * sg_cpu->util is already in capacity scale; convert iowait_boost
+>          * into the same scale so we can compare.
+>          */
+> -       boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
+> +       boost = sg_cpu->iowait_boost * sg_policy->max;
+> +       boost >>= SCHED_CAPACITY_SHIFT;
+>         boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
+>         if (sg_cpu->util < boost)
+>                 sg_cpu->util = boost;
+> @@ -337,7 +340,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+>         if (!sugov_update_single_common(sg_cpu, time, flags))
+>                 return;
+>
+> -       next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
+> +       next_f = get_next_freq(sg_policy, sg_cpu->util, sg_policy->max);
+>         /*
+>          * Do not reduce the frequency if the CPU has not been idle
+>          * recently, as the reduction is likely to be premature then.
+> @@ -373,6 +376,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+>                                      unsigned int flags)
+>  {
+>         struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
+> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         unsigned long prev_util = sg_cpu->util;
+>
+>         /*
+> @@ -399,7 +403,8 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+>                 sg_cpu->util = prev_util;
+>
+>         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+> -                                  map_util_perf(sg_cpu->util), sg_cpu->max);
+> +                                  map_util_perf(sg_cpu->util),
+> +                                  sg_policy->max);
+>
+>         sg_cpu->sg_policy->last_freq_update_time = time;
+>  }
+> @@ -408,25 +413,19 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>  {
+>         struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         struct cpufreq_policy *policy = sg_policy->policy;
+> -       unsigned long util = 0, max = 1;
+> +       unsigned long util = 0;
+>         unsigned int j;
+>
+>         for_each_cpu(j, policy->cpus) {
+>                 struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+> -               unsigned long j_util, j_max;
+>
+>                 sugov_get_util(j_sg_cpu);
+>                 sugov_iowait_apply(j_sg_cpu, time);
+> -               j_util = j_sg_cpu->util;
+> -               j_max = j_sg_cpu->max;
+>
+> -               if (j_util * max > j_max * util) {
+> -                       util = j_util;
+> -                       max = j_max;
+> -               }
+> +               util = max(j_sg_cpu->util, util);
+>         }
+>
+> -       return get_next_freq(sg_policy, util, max);
+> +       return get_next_freq(sg_policy, util, sg_policy->max);
+>  }
+>
+>  static void
+> @@ -752,7 +751,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+>  {
+>         struct sugov_policy *sg_policy = policy->governor_data;
+>         void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
+> -       unsigned int cpu;
+> +       unsigned int cpu = cpumask_first(policy->cpus);
+>
+>         sg_policy->freq_update_delay_ns = sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
+>         sg_policy->last_freq_update_time        = 0;
+> @@ -760,6 +759,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+>         sg_policy->work_in_progress             = false;
+>         sg_policy->limits_changed               = false;
+>         sg_policy->cached_raw_freq              = 0;
+> +       sg_policy->max                          = arch_scale_cpu_capacity(cpu);
+>
+>         sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+>
+> --
 
-All your patches about "repeated words in comments" looks good but maybe
-is better to put all these fixes on a series? I think for maintainers
-it's easier to manage
-
-Regards,
-Tommaso
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+Applied as 6.1 material, thanks!

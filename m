@@ -2,162 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2872659EE41
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248BD59EE44
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 23:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiHWVca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 17:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S231366AbiHWVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 17:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiHWVc1 (ORCPT
+        with ESMTP id S229798AbiHWVdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 17:32:27 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0533F7B791
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:32:25 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso15779022pjh.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:32:25 -0700 (PDT)
+        Tue, 23 Aug 2022 17:33:37 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E9428E1C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:33:36 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id 62so11966574iov.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 14:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=9Tyv/HjGt+kTjHUdJpqzUz7hlqhqn6nz07i1wBSdcbE=;
-        b=JJpoekHIwEOPtlFjvUifgeyZ4xG06w29FzXSUvKRjB4FUkO7GrtmJZQFl3D/OQKJiD
-         eM8aqGg+O7ONgMqFzDMWoPgMsMA26qqrI8PKcABs+EXPRkdMVA9n2oqlKGjU7qRRgXGO
-         YEhnhWEPA8IoVaiiQ9rJjdDMARUcfZWX1P6c5OAeF9Mpt74wEkftvT9AwsP+yPw0oQ2k
-         2vBigX/9W+ZVwjkfLTYFYuFm8+T74lB5A64oObWHz4ZSKvb7fRezV93OonDPOtVdBBQd
-         0eWL6sN10RkE5UyK2hQMDB2aLSo3c1jMqVzqEct+zpzfrswUhYiksW3nXHbJFjL576JC
-         KxTg==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=R6TsXaMTO4DJ/Xfoyooc+Twnt1v216EBvqAKqT4U61k=;
+        b=VI4DtEtoIO2A0moQTASUBYqZ4kF10YrwwglSzvjVHHkyoKPoCnBxmZjGRqGYVqctfi
+         ViK2Sv/zBcE4o78B7zORPr1wVYbHhGEY/uHWQKIXEwzuYbGQYLIrO4xAumJ1FU/otS9S
+         33inElQ/RcwvXZXfjfdbpZVMmsQ1SkWgdr2NQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc;
-        bh=9Tyv/HjGt+kTjHUdJpqzUz7hlqhqn6nz07i1wBSdcbE=;
-        b=bN6uENC50mdZDAf1X/xffreUPBOTf67GH6207682I9gFy1IH8J03x6AY2JDenHWN6O
-         VrVP9DgYl7tJkBg8DHSJam6b+dlulNThZU3UvvFsR1fD8MnQuY872LCad3I6l6BrMymH
-         5PzQNp3JP1Zgy86P+nXwaeSQJbMlSU5GkAOeMO+R8k2Gc+hBTa5Q/+n9F/Rs6+C6Q3WZ
-         khsMuvTB/cJpNpm6S089L9dK8r+EAkzEV0X1mZvvuC3I/v9/1S7lya1lCPGuSigvNkZP
-         iDFE/VQ7c60QAmiY1MHUna9Vd3F0ogf4I6gTBZeAKksowRooD8icB+a/9QFR83NC84NT
-         dveg==
-X-Gm-Message-State: ACgBeo01sQxfKPX7JEoCd5mhxXdiuVps+ux4beZ3FZwCT9z3nAKGgyFI
-        J2KLHeSt75i0InOr3l8bzMKy0A==
-X-Google-Smtp-Source: AA6agR7aPxzoh7iUSiuk4HHIHeu/lkhIEPudRf53d8nKUbpXo0mZZmRJu+VQtJVnVAPQNEFyYH+yEQ==
-X-Received: by 2002:a17:90a:6001:b0:1fa:e851:3480 with SMTP id y1-20020a17090a600100b001fae8513480mr5098001pji.153.1661290345218;
-        Tue, 23 Aug 2022 14:32:25 -0700 (PDT)
-Received: from ?IPV6:2406:3400:213:70c0:5c76:4280:5b6b:9ce0? ([2406:3400:213:70c0:5c76:4280:5b6b:9ce0])
-        by smtp.gmail.com with ESMTPSA id i62-20020a626d41000000b0052d27ccea39sm11712035pfc.19.2022.08.23.14.32.21
+        bh=R6TsXaMTO4DJ/Xfoyooc+Twnt1v216EBvqAKqT4U61k=;
+        b=DGUmgKohZc0In/QUAQlk9/hpwzt2Cozw4DBCivji1LqcPdrgZAz0CpPbpSn7ZffPyu
+         PXDa8AA041MDQz0Ayz8VzKxYJNot9NwKtW3DQSq4UsPjTxy4UqcELVrEXjVX8mSa6DUy
+         N2lRqg+2AFeV7W3+P8l0d4f7uc2nBmQ5Aei4qsWwtRIhWDrVAv37iKosFgSlYpxIsHSn
+         ClMYzeJ0Ll17L4sRO9h595/e8f6nKY8OJeZ/PnfkVqh0vxY/jjzGHLI3C2XNIKRaWTXX
+         qSW8o4/5LTngGJOg17reGjzH5i7D8d9Ga9pGK7262trxyHaXV8meYyPA33zvO62p6bKB
+         SdjQ==
+X-Gm-Message-State: ACgBeo1zW8d7lIecxtl6rxD200Hwj53APTHXK4bWQulUzuiGHyznBs2m
+        RsXAnjZUtQ3XcjYf/DIk4EKrJw==
+X-Google-Smtp-Source: AA6agR5FcOVRzM+xppGAFQu940G8xmdl4E3SmZX4kKyQu7xIHfEWpCxM04twI3KsKbbmyKi66SJWtQ==
+X-Received: by 2002:a05:6638:31c2:b0:32e:167a:d887 with SMTP id n2-20020a05663831c200b0032e167ad887mr12574201jav.197.1661290416118;
+        Tue, 23 Aug 2022 14:33:36 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id f3-20020a02a803000000b0034a0475fb33sm152132jaj.154.2022.08.23.14.33.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 14:32:24 -0700 (PDT)
-Message-ID: <38754fa6-5d1f-ed9b-9c31-7a443c968cad@flatmax.com>
-Date:   Wed, 24 Aug 2022 07:32:18 +1000
+        Tue, 23 Aug 2022 14:33:35 -0700 (PDT)
+Subject: Re: [PATCH 5.19 000/365] 5.19.4-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <aefd4879-78a5-e142-362d-f2b8ebb9e29d@linuxfoundation.org>
+Date:   Tue, 23 Aug 2022 15:33:34 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] ASoC: codes: src4xxx: Avoid clang
- -Wsometimes-uninitialized in src4xxx_hw_params()
-Content-Language: en-AU
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-References: <20220823151939.2493697-1-nathan@kernel.org>
-From:   Matt Flax <flatmax@flatmax.com>
-In-Reply-To: <20220823151939.2493697-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch looks good.
+On 8/23/22 1:58 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.4 release.
+> There are 365 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-On 24/8/22 01:19, Nathan Chancellor wrote:
-> Clang warns:
->
->    sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
->                                                                            ^
->    sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
->            int val, pj, jd, d;
->                              ^
->                              = 0
->    sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:293:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_10, jd);
->                                                                            ^~
->    sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' to silence this warning
->            int val, pj, jd, d;
->                          ^
->                            = 0
->    sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->                    default:
->                    ^~~~~~~
->    sound/soc/codecs/src4xxx.c:288:59: note: uninitialized use occurs here
->                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
->                                                                            ^~
->    sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' to silence this warning
->            int val, pj, jd, d;
->                      ^
->                        = 0
->    3 errors generated.
->
-> The datasheet does not have any default values for these regmap values
-> so pick some arbitrary values and print to the user that this is the
-> case to silence the warnings.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1691
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-> Suggested-by: Matt Flax <flatmax@flatmax.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->
-> v1 -> v2: https://lore.kernel.org/20220822183101.1115095-1-nathan@kernel.org/
->
-> * Don't return early, just initialize the values to some arbitrary
->    numbers and try to hobble along, as other parts of the chip may be
->    functional.
->
-> * Add message and comment to describe this situation.
->
->   sound/soc/codecs/src4xxx.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/sound/soc/codecs/src4xxx.c b/sound/soc/codecs/src4xxx.c
-> index a8f143057b41..db4e280dd055 100644
-> --- a/sound/soc/codecs/src4xxx.c
-> +++ b/sound/soc/codecs/src4xxx.c
-> @@ -280,9 +280,14 @@ static int src4xxx_hw_params(struct snd_pcm_substream *substream,
->   		default:
->   			/* don't error out here,
->   			 * other parts of the chip are still functional
-> +			 * Dummy initialize variables to avoid
-> +			 * -Wsometimes-uninitialized from clang.
->   			 */
->   			dev_info(component->dev,
-> -				"Couldn't set the RCV PLL as this master clock rate is unknown\n");
-> +				"Couldn't set the RCV PLL as this master clock rate is unknown. Chosen regmap values may not match real world values.\n");
-> +			pj = 0x0;
-> +			jd = 0xff;
-> +			d = 0xff;
->   			break;
->   		}
->   		ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_0F, pj);
->
-> base-commit: 94f072748337424c9cf92cd018532a34db3a5516
+Compiled and booted on my test system. No dmesg regressions.
+
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

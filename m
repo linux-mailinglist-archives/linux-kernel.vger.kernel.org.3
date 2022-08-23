@@ -2,148 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636A059E791
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5060D59E7A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245023AbiHWQjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
+        id S245239AbiHWQjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245014AbiHWQiE (ORCPT
+        with ESMTP id S245160AbiHWQi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:38:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EBD4D4C2;
-        Tue, 23 Aug 2022 06:07:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A1624336D1;
-        Tue, 23 Aug 2022 13:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661260053; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 23 Aug 2022 12:38:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2062557897
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661260063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O/ii+lOdNn7YfB+uRvuBLwUv3aBhJOTFT/L0utGIEpo=;
-        b=uQz41YgXjoWruZybjpnEznVOMrI0Ta0Z5cuCPIqd4Rpvi+LHKLpR9TsGiGrjHiWLhJprzw
-        H+KUnvYQIopBU+BQLGThfwhX2lhDNq12IqCoHaS1cEc1yh6pI02mt3S3qHu9Qop/p0E0fk
-        PLiH2v4Zlgkm2KI4Z+ZgbC2l92YmzE4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661260053;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O/ii+lOdNn7YfB+uRvuBLwUv3aBhJOTFT/L0utGIEpo=;
-        b=1xGvO2ZshrwMN6wB3/EAXA+Whmx/UjdkUO78nRCvJ+Zn7xf6dELC2Tej+TT4Rg5PuRrHv2
-        SpWbS5BCRW2aQEDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=9xAYAAOCpEEEwELWePUFnuDfySASzSuNbOm12cspl+0=;
+        b=brZbXO8HDkNL26mH4N6+CZRX7er+gGOUAn3M8zv+Tz4S80EOmjQHP6ZGt+JvGinIEJJDgY
+        L6VvJSbO6xU0vBAzJh6Hv8hrxju7EbOzeEoKpIT1vUBzR/59TBzQKPVZ50Y6NNSjSy5twY
+        D8q/88Yly+WuaAHb414DmDpALwZrkEQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-chscAqNLNMC1MwvnguUTyg-1; Tue, 23 Aug 2022 09:07:37 -0400
+X-MC-Unique: chscAqNLNMC1MwvnguUTyg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 918EC13A89;
-        Tue, 23 Aug 2022 13:07:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xqR6IxXRBGMLWgAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 23 Aug 2022 13:07:33 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 074ACA067B; Tue, 23 Aug 2022 15:07:33 +0200 (CEST)
-Date:   Tue, 23 Aug 2022 15:07:32 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     yebin <yebin10@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] jbd2: detect old record when do journal scan
-Message-ID: <20220823130732.73ifn3qwvnj7xh4b@quack3>
-References: <20220810013442.3474533-1-yebin10@huawei.com>
- <20220819095445.yq4d2qhrhb73p3zk@quack3>
- <63049B47.2000408@huawei.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB11029AB449;
+        Tue, 23 Aug 2022 13:07:36 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7003118EA8;
+        Tue, 23 Aug 2022 13:07:35 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH 2/5] smb3: missing inode locks in zero range
+From:   David Howells <dhowells@redhat.com>
+To:     sfrench@samba.org, linux-cifs@vger.kernel.org
+Cc:     lsahlber@redhat.com, jlayton@kernel.org, dchinner@redhat.com,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, samba-technical@lists.samba.org
+Date:   Tue, 23 Aug 2022 14:07:34 +0100
+Message-ID: <166126005487.548536.8031989219056277959.stgit@warthog.procyon.org.uk>
+In-Reply-To: <166126004083.548536.11195647088995116235.stgit@warthog.procyon.org.uk>
+References: <166126004083.548536.11195647088995116235.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63049B47.2000408@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 23-08-22 17:17:59, yebin wrote:
-> On 2022/8/19 17:54, Jan Kara wrote:
-> > On Wed 10-08-22 09:34:42, Ye Bin wrote:
-> > > As https://github.com/tytso/e2fsprogs/issues/120 describe tune2fs do not update
-> > > j_tail_sequence when do journal recovery. This maybe recover old journal record,
-> > > then will lead to file system corruption.
-> > > To avoid file system corruption in this case, if detect current transaction's
-> > > commit time earlier than previous transaction's commit time when do journal
-> > > scan, just return error.
-> > > 
-> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > Thanks for the patch! Let me see if I understand your concern right. You
-> > are concerned about the following scenario:
-> > 
-> > 1) Kernel uses the filesystem, there's a crash.
-> > 2) E2fsprogs replays the journal but fails to update sb->s_sequence in the
-> > journal superblock.
-> > 3) Kernel mounts the fs again - however note that even if kernel skips
-> > recovery, it does scan the journal jbd2_journal_skip_recovery() and
-> > journal->j_transaction_sequence is set based on the last transaction found
-> > in the journal.
-> > 
-> > So I don't think there is really possibility we will quickly reuse some
-> > transaction IDs and thus possibility of corruption on replay? Am I missing
-> > something?
-> > 
-> The file system corruption I encountered was indeed because e2fsprogs did
-> not update
-> journal - > J_ transaction_ Sequence leads to replay the old transaction.
-> So I wonder whether the kernel should detect this kind of exception, at
-> least when there
-> is a file system corruption, there are clues to trace.
+smb3 fallocate zero range was not grabbing the inode or filemap_invalidate
+locks so could have race with pagemap reinstantiating the page.
 
-OK, but what is not quite clear to me is why the kernel started to replay
-the journal in the first place. Didn't e2fsprogs mark the filesystem as
-clean after replaying the journal for some reason?
+Cc: stable@vger.kernel.org
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+---
 
-I'm asking because checking transaction validity based on wall clock time
-has its own issues as well (clock gets skewed, updated via ntpd, BIOS can
-reset it to some random value etc.) so adding the check you propose can
-also create new issues...
+ fs/cifs/smb2ops.c |   55 +++++++++++++++++++++++++++++------------------------
+ 1 file changed, 30 insertions(+), 25 deletions(-)
 
-								Honza
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 7e3de6a0e1dc..1c5a93ced946 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -3298,26 +3298,43 @@ get_smb2_acl(struct cifs_sb_info *cifs_sb,
+ 	return pntsd;
+ }
+ 
++static long smb3_zero_data(struct file *file, struct cifs_tcon *tcon,
++			     loff_t offset, loff_t len, unsigned int xid)
++{
++	struct cifsFileInfo *cfile = file->private_data;
++	struct file_zero_data_information fsctl_buf;
++
++	cifs_dbg(FYI, "Offset %lld len %lld\n", offset, len);
++
++	fsctl_buf.FileOffset = cpu_to_le64(offset);
++	fsctl_buf.BeyondFinalZero = cpu_to_le64(offset + len);
++
++	return SMB2_ioctl(xid, tcon, cfile->fid.persistent_fid,
++			  cfile->fid.volatile_fid, FSCTL_SET_ZERO_DATA,
++			  (char *)&fsctl_buf,
++			  sizeof(struct file_zero_data_information),
++			  0, NULL, NULL);
++}
++
+ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
+ 			    loff_t offset, loff_t len, bool keep_size)
+ {
+ 	struct cifs_ses *ses = tcon->ses;
+-	struct inode *inode;
+-	struct cifsInodeInfo *cifsi;
++	struct inode *inode = file_inode(file);
++	struct cifsInodeInfo *cifsi = CIFS_I(inode);
+ 	struct cifsFileInfo *cfile = file->private_data;
+-	struct file_zero_data_information fsctl_buf;
+ 	long rc;
+ 	unsigned int xid;
+ 	__le64 eof;
+ 
+ 	xid = get_xid();
+ 
+-	inode = d_inode(cfile->dentry);
+-	cifsi = CIFS_I(inode);
+-
+ 	trace_smb3_zero_enter(xid, cfile->fid.persistent_fid, tcon->tid,
+ 			      ses->Suid, offset, len);
+ 
++	inode_lock(inode);
++	filemap_invalidate_lock(inode->i_mapping);
++
+ 	/*
+ 	 * We zero the range through ioctl, so we need remove the page caches
+ 	 * first, otherwise the data may be inconsistent with the server.
+@@ -3325,26 +3342,12 @@ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
+ 	truncate_pagecache_range(inode, offset, offset + len - 1);
+ 
+ 	/* if file not oplocked can't be sure whether asking to extend size */
+-	if (!CIFS_CACHE_READ(cifsi))
+-		if (keep_size == false) {
+-			rc = -EOPNOTSUPP;
+-			trace_smb3_zero_err(xid, cfile->fid.persistent_fid,
+-				tcon->tid, ses->Suid, offset, len, rc);
+-			free_xid(xid);
+-			return rc;
+-		}
+-
+-	cifs_dbg(FYI, "Offset %lld len %lld\n", offset, len);
+-
+-	fsctl_buf.FileOffset = cpu_to_le64(offset);
+-	fsctl_buf.BeyondFinalZero = cpu_to_le64(offset + len);
++	rc = -EOPNOTSUPP;
++	if (keep_size == false && !CIFS_CACHE_READ(cifsi))
++		goto zero_range_exit;
+ 
+-	rc = SMB2_ioctl(xid, tcon, cfile->fid.persistent_fid,
+-			cfile->fid.volatile_fid, FSCTL_SET_ZERO_DATA,
+-			(char *)&fsctl_buf,
+-			sizeof(struct file_zero_data_information),
+-			0, NULL, NULL);
+-	if (rc)
++	rc = smb3_zero_data(file, tcon, offset, len, xid);
++	if (rc < 0)
+ 		goto zero_range_exit;
+ 
+ 	/*
+@@ -3357,6 +3360,8 @@ static long smb3_zero_range(struct file *file, struct cifs_tcon *tcon,
+ 	}
+ 
+  zero_range_exit:
++	filemap_invalidate_unlock(inode->i_mapping);
++	inode_unlock(inode);
+ 	free_xid(xid);
+ 	if (rc)
+ 		trace_smb3_zero_err(xid, cfile->fid.persistent_fid, tcon->tid,
 
-> > > diff --git a/fs/jbd2/recovery.c b/fs/jbd2/recovery.c
-> > > index f548479615c6..f3def21a96a5 100644
-> > > --- a/fs/jbd2/recovery.c
-> > > +++ b/fs/jbd2/recovery.c
-> > > @@ -812,8 +812,17 @@ static int do_one_pass(journal_t *journal,
-> > >   					break;
-> > >   				}
-> > >   			}
-> > > -			if (pass == PASS_SCAN)
-> > > +			if (pass == PASS_SCAN) {
-> > > +				if (commit_time < last_trans_commit_time) {
-> > > +					pr_err("JBD2: old journal record found "
-> > > +					       "in transaction %u\n",
-> > > +					       next_commit_ID);
-> > > +					err = -EFSBADCRC;
-> > > +					brelse(bh);
-> > > +					goto failed;
-> > > +				}
-> > >   				last_trans_commit_time = commit_time;
-> > > +			}
-> > >   			brelse(bh);
-> > >   			next_commit_ID++;
-> > >   			continue;
-> > > -- 
-> > > 2.31.1
-> > > 
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+

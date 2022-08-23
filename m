@@ -2,123 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AB359E721
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E1F59E70D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242560AbiHWQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S243378AbiHWQWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244661AbiHWQX5 (ORCPT
+        with ESMTP id S244396AbiHWQWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:23:57 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23299D66E;
-        Tue, 23 Aug 2022 05:46:09 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27NCXAw4012627;
-        Tue, 23 Aug 2022 12:46:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=06Qsmq29OzqEWs4XDYpIrPYFzYQA1ylzCMRH9Rv30S4=;
- b=gNBS326FmoN5AjgBPjvRO08XkOXupj9biZxRlT4uCRsnrKg8wFE+2kW1dHKXqwar93Pq
- fpEznWW5fNs3v1WpWlFEW9nzIWvmFpIAP22uftXFr1OHOmvMLOAa8FFSMqmcu6LJuISb
- 82230j2OUrqX1DSM0uIYMyp1rEexTGSYCI+PLrPjIdcPGKiRtXMkQcMXSXCpz9B4qBYn
- f1oWf15DTPYI5Y9Db0ZwUGbaI+ZcS+lKWxutAatoN5+MAONBMPMdC8h+Le5GNi4NOgY+
- y2Aewj7A6cjLtAiaM3mJnLcbPR11Ykzz58iXR5OR4DaWLAl+zTTEanpsKgEx7zdmnzp1 lw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j4y0c8bnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 12:46:00 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27NCNZqU013165;
-        Tue, 23 Aug 2022 12:45:58 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3j2q88utfg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 12:45:58 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27NCjtao32571826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 Aug 2022 12:45:55 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E17D952050;
-        Tue, 23 Aug 2022 12:45:54 +0000 (GMT)
-Received: from localhost (unknown [9.171.95.166])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 2F5C552054;
-        Tue, 23 Aug 2022 12:45:54 +0000 (GMT)
-Date:   Tue, 23 Aug 2022 14:45:52 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] s390: move from strlcpy with unused retval to strscpy
-Message-ID: <your-ad-here.call-01661258752-ext-8248@work.hours>
-References: <20220818210102.7301-1-wsa+renesas@sang-engineering.com>
- <20220822180249.2c79c7e8@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220822180249.2c79c7e8@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SVNN6Xt3WvYuy7K0mpuD76yH6KnR4CV0
-X-Proofpoint-ORIG-GUID: SVNN6Xt3WvYuy7K0mpuD76yH6KnR4CV0
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 23 Aug 2022 12:22:35 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7839014F6EB
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 05:46:35 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q18so12383698ljg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 05:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=7vkbXTvEIxbamOzsPAlGZ18SKerzAATRGx48coFp9Wg=;
+        b=l5rKdPLdrKNmWz0BuIx5srFeLQYtPJCncEBzmf732FKCQHG1Tc2h5SoAWxHbFwRWqw
+         V6gAvZKEe6vcz0E2JCvMSKBfJWQ56xD/lib/nApBuoYRpYtQqIHYrD2HHFbewsIKhgX2
+         ezOgZLmABxQd2gdesxFpeXIxq37TxapUObiaB4/R9AB0gtJ/iNoqSkof+JI84ihhiR6A
+         A+Cj3Y194a+cs9HBaY1VoGvLA0ls4wvHQFz+oECN3JZ8yx/fcsS8zi2Sv/FcsP8C1XSd
+         d/Hrgv16iUHPBapIlIJbjEvueUfb3BVYG1lQzNwHNNe11okQDh2ellT1XY73dHmlzr7h
+         g05g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=7vkbXTvEIxbamOzsPAlGZ18SKerzAATRGx48coFp9Wg=;
+        b=O0lrF7iZSYGCyMJx5mATZJM8++blOloUfek+vr8wK5fHqYlRhLmG2TKBGzPpqEi+lS
+         ZpybGhnfLNjd7GZribh9FsmJsf/Epd5brPz3a8bMknXO3qqtzJpnNslHaQg8YO7Er3oH
+         G4IpSYOUm0Jnw1FHi6w2HVwaq6sKW/nAIdtyLtt9G2nM9DLFauxn+FLRXhZwKp2P71TO
+         LFTJiXCyp4zQ0qwWjnqNM3LTTB3aenhjclYhH4IIOp6iCZB3rtvpM0x7vhghfL6Id95K
+         zLqTRrUV1aXGZeBRz5bf98b6sK0+sk2jb3hsffmQeaQ/WYqpGbSMKh384kk0jpDXijlB
+         gkJg==
+X-Gm-Message-State: ACgBeo23znv2Jyfs0RMdJ2xHcu05bRG2xcy9cazD62sHw1xSzplD2PgY
+        M39NaDesmPTakBGye1lcBpzwAA==
+X-Google-Smtp-Source: AA6agR5SszPK3XHuOtFzT/k6vG6kVjVdUaiPFlhBDCHwPoFxRVvMVwXQz0HMrHgJlmvjrajPesHbTw==
+X-Received: by 2002:a2e:a552:0:b0:25e:6fa1:a6c4 with SMTP id e18-20020a2ea552000000b0025e6fa1a6c4mr6557211ljn.90.1661258793251;
+        Tue, 23 Aug 2022 05:46:33 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id h16-20020a2e5310000000b0025e5cd1620fsm2355736ljb.57.2022.08.23.05.46.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 05:46:32 -0700 (PDT)
+Message-ID: <52fa28d6-4d48-bd0c-40e6-4f8855c4eac8@linaro.org>
+Date:   Tue, 23 Aug 2022 15:46:31 +0300
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-23_05,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 adultscore=0 spamscore=0
- lowpriorityscore=0 clxscore=1011 malwarescore=0 mlxlogscore=755
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208230050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: edac: Add bindings for Xilinx ZynqMP
+ OCM
+Content-Language: en-US
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        saikrishna12468@gmail.com, git@amd.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+References: <20220822115821.3907-1-sai.krishna.potthuri@amd.com>
+ <20220822115821.3907-2-sai.krishna.potthuri@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220822115821.3907-2-sai.krishna.potthuri@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 06:02:49PM -0700, Jakub Kicinski wrote:
-> On Thu, 18 Aug 2022 23:01:01 +0200 Wolfram Sang wrote:
-> > Follow the advice of the below link and prefer 'strscpy' in this
-> > subsystem. Conversion is 1:1 because the return value is not used.
-> > Generated by a coccinelle script.
-> > 
-> > Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > ---
-> >  drivers/s390/block/dasd_devmap.c | 2 +-
-> >  drivers/s390/block/dasd_eer.c    | 4 ++--
-> >  drivers/s390/block/dcssblk.c     | 2 +-
-> >  drivers/s390/char/hmcdrv_cache.c | 2 +-
-> >  drivers/s390/char/tape_class.c   | 4 ++--
-> >  drivers/s390/cio/qdio_debug.c    | 2 +-
-> >  drivers/s390/net/ctcm_main.c     | 2 +-
-> >  drivers/s390/net/fsm.c           | 2 +-
-> >  drivers/s390/net/qeth_ethtool.c  | 4 ++--
-> >  drivers/s390/scsi/zfcp_aux.c     | 2 +-
-> >  drivers/s390/scsi/zfcp_fc.c      | 2 +-
+On 22/08/2022 14:58, Sai Krishna Potthuri wrote:
+> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 > 
-> I'm assuming this will go via the s390 tree?
+> Add bindings for Xilinx ZynqMP OCM controller.
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> ---
+>  .../bindings/edac/xlnx,zynqmp-ocmc.yaml       | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml b/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> new file mode 100644
+> index 000000000000..6389fcb7ed69
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
+> @@ -0,0 +1,45 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/xlnx,zynqmp-ocmc.yaml#
 
-Yes, I'll just take it via s390 tree. Thanks
+Filename should be based on compatible, so xlnx,zynqmp-ocmc-1.0.yaml
 
-> 
-> Acked-by: Jakub Kicinski <kuba@kernel.org>
-> 
-> If nobody picks it up please feel free to resend the networking parts to us.
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Zynqmp OCM(On-Chip Memory) Controller
+
+So this is a memory controller, then please put the bindings in the
+memory-controllers directory.
+
+> +
+> +maintainers:
+> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> +  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> +
+> +description: |
+> +  The OCM supports 64-bit wide ECC functionality to detect multi-bit errors
+> +  and recover from a single-bit memory fault.On a write, if all bytes are
+> +  being written, the ECC is generated and written into the ECC RAM along with
+> +  the write-data that is written into the data RAM. If one or more bytes are
+> +  not written, then the read operation results in an correctable error or
+> +  uncorrectable error.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,zynqmp-ocmc-1.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+
+Instead this should be:
+additionalProperties: false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    memory-controller@ff960000 {
+> +      compatible = "xlnx,zynqmp-ocmc-1.0";
+> +      reg = <0xff960000 0x1000>;
+> +      interrupts = <0 10 IRQ_TYPE_LEVEL_HIGH>;
+
+What does 0 stand for? I commented about it already.
+
+
+> +    };
+
+
+Best regards,
+Krzysztof

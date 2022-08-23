@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D2C59D67E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEC659D2EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348436AbiHWJKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S241732AbiHWIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347950AbiHWJIc (ORCPT
+        with ESMTP id S241541AbiHWIC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:08:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812E585FDA;
-        Tue, 23 Aug 2022 01:30:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89B6A6148E;
-        Tue, 23 Aug 2022 08:29:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CB4C433B5;
-        Tue, 23 Aug 2022 08:29:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243354;
-        bh=9a8VWOB3kHtWZih/DNfyhw7RMpOevoUeaUMm2JCDfYw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dWgw/VAWW4OWC8KkB/IvltvKg6+hF7kwc1tLcfRBokMUGmzss3tZ1JjEl18Yz45NL
-         /9Ng+IN6+I4R76adl4y0QUCBetj4SYHP6qXEWKlwjM1CS9Ufn8gqai7ay9QRd40IM4
-         UXA2f4NP6DMwB44/e1/WQCxDfgWTTMwFzMiCVpxk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yufen Yu <yuyufen@huawei.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.19 233/365] blk-mq: run queue no matter whether the request is the last request
+        Tue, 23 Aug 2022 04:02:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16001659E0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:54 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrt-0002vf-Oc; Tue, 23 Aug 2022 10:02:38 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrr-001Sv1-5S; Tue, 23 Aug 2022 10:02:35 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oQOrp-00ALXd-07; Tue, 23 Aug 2022 10:02:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v3 00/17] net: dsa: microchip: add error handling and register access validation
 Date:   Tue, 23 Aug 2022 10:02:14 +0200
-Message-Id: <20220823080127.972131997@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
-References: <20220823080118.128342613@linuxfoundation.org>
-User-Agent: quilt/0.67
+Message-Id: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,63 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yufen Yu <yuyufen@huawei.com>
+changes v3:
+- fix build error in the middle of the patch stack.
 
-commit d3b38596875dbc709b4e721a5873f4663d8a9ea2 upstream.
+changes v2:
+- add regmap_ranges for KSZ9477
+- drop output clock devicetree in driver validation patches. DTs need
+  some more refactoring and can be done in a separate patch set.
+- remove some unused variables.
 
-We do test on a virtio scsi device (/dev/sda) and the default mq
-scheduler is 'none'. We found a IO hung as following:
+This patch series adds error handling for the PHY read/write path and optional
+register access validation.
+After adding regmap_ranges for KSZ8563 some bugs was detected, so
+critical bug fixes are sorted before ragmap_range patch.
 
-blk_finish_plug
-  blk_mq_plug_issue_direct
-      scsi_mq_get_budget
-      //get budget_token fail and sdev->restarts=1
+Potentially this bug fixes can be ported to stable kernels, but need to be
+reworked.
 
-			     	 scsi_end_request
-				   scsi_run_queue_async
-                                   //sdev->restart=0 and run queue
+Oleksij Rempel (17):
+  net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563
+    chip
+  net: dsa: microchip: do per-port Gbit detection instead of per-chip
+  net: dsa: microchip: don't announce extended register support on non
+    Gbit chips
+  net: dsa: microchip: allow to pass return values for PHY read/write
+    accesses
+  net: dsa: microchip: forward error value on all ksz_pread/ksz_pwrite
+    functions
+  net: dsa: microchip: ksz9477: add error handling to ksz9477_r/w_phy
+  net: dsa: microchip: ksz8795: add error handling to ksz8_r/w_phy
+  net: dsa: microchip: KSZ9893: do not write to not supported Output
+    Clock Control Register
+  net: dsa: microchip: add support for regmap_access_tables
+  net: dsa: microchip: add regmap_range for KSZ8563 chip
+  net: dsa: microchip: ksz9477: remove MII_CTRL1000 check from
+    ksz9477_w_phy()
+  net: dsa: microchip: add regmap_range for KSZ9477 chip
+  net: dsa: microchip: ksz9477: use internal_phy instead of phy_port_cnt
+  net: dsa: microchip: remove unused port phy variable
+  net: dsa: microchip: ksz9477: remove unused "on" variable
+  net: dsa: microchip: remove unused sgmii variable
+  net: dsa: microchip: remove IS_9893 flag
 
-     blk_mq_request_bypass_insert
-        //add request to hctx->dispatch list
+ drivers/net/dsa/microchip/ksz8.h         |   4 +-
+ drivers/net/dsa/microchip/ksz8795.c      | 111 ++++--
+ drivers/net/dsa/microchip/ksz9477.c      |  86 ++---
+ drivers/net/dsa/microchip/ksz9477.h      |   4 +-
+ drivers/net/dsa/microchip/ksz_common.c   | 450 ++++++++++++++++++++++-
+ drivers/net/dsa/microchip/ksz_common.h   |  90 +++--
+ drivers/net/dsa/microchip/ksz_spi.c      |   5 +-
+ drivers/net/dsa/microchip/lan937x.h      |   4 +-
+ drivers/net/dsa/microchip/lan937x_main.c |   8 +-
+ 9 files changed, 646 insertions(+), 116 deletions(-)
 
-  //continue to dispath plug list
-  blk_mq_dispatch_plug_list
-      blk_mq_try_issue_list_directly
-        //success issue all requests from plug list
-
-After .get_budget fail, scsi_mq_get_budget will increase 'restarts'.
-Normally, it will run hw queue when io complete and set 'restarts'
-as 0. But if we run queue before adding request to the dispatch list
-and blk_mq_dispatch_plug_list also success issue all requests, then
-on one will run queue, and the request will be stall in the dispatch
-list and cannot complete forever.
-
-It is wrong to use last request of plug list to decide if run queue is
-needed since all the remained requests in plug list may be from other
-hctxs. To fix the bug, pass run_queue as true always to
-blk_mq_request_bypass_insert().
-
-Fix-suggested-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: Yufen Yu <yuyufen@huawei.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Fixes: dc5fc361d891 ("block: attempt direct issue of plug list")
-Link: https://lore.kernel.org/r/20220803023355.3687360-1-yuyufen@huaweicloud.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- block/blk-mq.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2568,7 +2568,7 @@ static void blk_mq_plug_issue_direct(str
- 			break;
- 		case BLK_STS_RESOURCE:
- 		case BLK_STS_DEV_RESOURCE:
--			blk_mq_request_bypass_insert(rq, false, last);
-+			blk_mq_request_bypass_insert(rq, false, true);
- 			blk_mq_commit_rqs(hctx, &queued, from_schedule);
- 			return;
- 		default:
-
+-- 
+2.30.2
 

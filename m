@@ -2,59 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842B459E8F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C07459E8EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344727AbiHWRQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S238716AbiHWRRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244541AbiHWROx (ORCPT
+        with ESMTP id S229522AbiHWRQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:14:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E9D100977;
-        Tue, 23 Aug 2022 06:40:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F8386154C;
-        Tue, 23 Aug 2022 13:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BCBC433C1;
-        Tue, 23 Aug 2022 13:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661262023;
-        bh=2+G8RngWyxAqke4bxt5usQSl46UvUFATARmSK6gRm08=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UR4Yhx5x3P7UUehzGuqNuzCVIf2gG92TqIHiUZCgn2xLTwYRb2BVaZrDxywPFMTuS
-         DfZsw9vCLLbY7N/bQZC23Zkjy41FwvdEeo5Tun5uOeKnzCyF74pyaeEisT3P6+PjEs
-         BsgOioP5FYI114KFoLroQy1P5Lnh4LYS0nwkjlMLhNMEg8PJQXqgj+lwFwiN+c9KN8
-         8lYKt4V/iCZLVw0/KJPCUfWw+PNu4zvZrY0ehvbtPOVGWPXckhaBR3eX9u+geCzmem
-         W4PXWcPnwonjUG5yfZfHDDOds0GFC5E483C5vp3iorMnxsgwARYXAeEgllZNj0blXb
-         AiehE9Npm4yuQ==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        Rex-BC.Chen@mediatek.com, Liju-clr.Chen@mediatek.com,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jian.Yang@mediatek.com, TingHan.Shen@mediatek.com
-Subject: Re: [PATCH v4] dt-bindings: PCI: mediatek-gen3: Add support for MT8188 and MT8195
-Date:   Tue, 23 Aug 2022 15:40:15 +0200
-Message-Id: <166126199986.63298.9651112044432926221.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220802120624.19258-1-jianjun.wang@mediatek.com>
-References: <20220802120624.19258-1-jianjun.wang@mediatek.com>
+        Tue, 23 Aug 2022 13:16:58 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE93A4B31
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:41:52 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id d8so7349165lfq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 06:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=94ObA0sxNMfnUjuPe8k5nNJuRKk7+0BvBgJlyDjNB6U=;
+        b=MDkEhUd3g66BHtv8ayb5PFnYCSFsUOgMs1J3OFRtFIDpx5xhG7xgYbSmjimRv6ufky
+         0wfiKTXYXbklnpVEt8tDV6m2bVs5LPglAFfaoUDTPIGO+GoX/RuIhFzfuv6ktR2mq6Bm
+         XslsG1lxC6yywPsVcLVlAjbeWcpCz2+qrLnSTa7/rLHuRufNM/MTRldUkatcSxYQuae7
+         4G8OafImliELiwM/yF4BMHPZa6QWfkELACZZ74akC/cKMfVHwJ1t5R4ZXZDHXtC3EhHW
+         DMI7bWkl64txNuxh2FKPvy0o+5mFvYDc7zCn7cjkMOtZFrBAJALhoUCrkv9loDPHUF1f
+         8SkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=94ObA0sxNMfnUjuPe8k5nNJuRKk7+0BvBgJlyDjNB6U=;
+        b=tpqKhPDqYztBXb1+XmPVfIpXjDOC0126k46RZ/AZfb4B56c/03dIwqLznxsJnrqPKI
+         BRi2Jy6OW+U8IdJCr7Tt44CRG1dM4AxHpOQNZjDDpzJeQGwlz1alBBcmzdGRVOB/95uC
+         kT1a07mW6ClP82nVOV5enzUcCh8Od7P0HsHZqwjBkPjhxmJtZEr9IK+f0x6zu97mMiEq
+         4U8j6aXOBPSiOth3KOpRdae03hM8PMy9afnz/UjKyJbEq+FEBWHdQDqH8AeV2jcKdkN9
+         abLXh6Zgqmao7BjJR0gDsY1PmKFVbhI0+kX8u8RktlQZHFwUPQGfhOngiBv0FA94kUE6
+         u8PQ==
+X-Gm-Message-State: ACgBeo0WgwlsOj87zVr9VtxLbedKN8AvcocsBu0n9bvcFWWFPFcbsPoF
+        iEXMvxl+xV6p/HM17y5CIVSKzw==
+X-Google-Smtp-Source: AA6agR54aEjYHox84XnSc1aRIIM9Si6SlFqPQS60naXJqyyEDfTdI9sa1/BQZa7FkPZn6RojlDJEQQ==
+X-Received: by 2002:a05:6512:39d3:b0:492:e172:e313 with SMTP id k19-20020a05651239d300b00492e172e313mr3623919lfu.628.1661262111019;
+        Tue, 23 Aug 2022 06:41:51 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id p16-20020ac24ed0000000b0048b1b2233ddsm1493031lfr.120.2022.08.23.06.41.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 06:41:49 -0700 (PDT)
+Message-ID: <fe2041cc-dd8b-6695-1fc8-6c1c49dd7220@linaro.org>
+Date:   Tue, 23 Aug 2022 16:41:44 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH v2 1/4] dt-bindings: net: can: add STM32 bxcan DT
+ bindings
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com>
+ <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,18 +91,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 Aug 2022 20:06:24 +0800, Jianjun Wang wrote:
-> MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as MT8192.
+On 20/08/2022 11:29, Dario Binacchi wrote:
+> Add documentation of device tree bindings for the STM32 basic extended
+> CAN (bxcan) controller.
 > 
-> Also add new clock name "peri_mem" since the MT8188 and MT8195 use clock
-> "peri_mem" instead of "top_133m".
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > 
+> ---
 > 
+> Changes in v2:
+> - Change the file name into 'st,stm32-bxcan-core.yaml'.
+> - Rename compatibles:
+>   - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+>   - st,stm32-bxcan -> st,stm32f4-bxcan
+> - Rename master property to st,can-master.
+> - Remove the status property from the example.
+> - Put the node child properties as required.
+> 
+>  .../bindings/net/can/st,stm32-bxcan.yaml      | 136 ++++++++++++++++++
+>  1 file changed, 136 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> new file mode 100644
+> index 000000000000..288631b5556d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> @@ -0,0 +1,136 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/st,stm32-bxcan.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectronics bxCAN controller
+> +
+> +description: STMicroelectronics BxCAN controller for CAN bus
+> +
+> +maintainers:
+> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,stm32f4-bxcan-core
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Input clock for registers access
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - resets
+> +  - clocks
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +patternProperties:
 
-Applied to pci/dt, thanks!
+No improvements here, so my comment stay. Please fix it.
 
-[1/1] dt-bindings: PCI: mediatek-gen3: Add support for MT8188 and MT8195
-      https://git.kernel.org/lpieralisi/pci/c/7f08e806a03e
 
-Thanks,
-Lorenzo
+> +  "^can@[0-9]+$":
+> +    type: object
+> +    description:
+> +      A CAN block node contains two subnodes, representing each one a CAN
+> +      instance available on the machine.
+
+I still do not understand why you need children. You did not CC me on
+driver change, so difficult to say. You did not describe the parent
+device - there is no description. Why do you need parent device at all?
+This looks like some driver-driven-bindings instead of just real
+hardware description.
+
+Best regards,
+Krzysztof

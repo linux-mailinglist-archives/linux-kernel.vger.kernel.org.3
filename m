@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E2859D8F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9807259D8D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348539AbiHWJMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S1348872AbiHWJNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348263AbiHWJKD (ORCPT
+        with ESMTP id S1348571AbiHWJKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:10:03 -0400
+        Tue, 23 Aug 2022 05:10:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F016674E0C;
-        Tue, 23 Aug 2022 01:31:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9C86D558;
+        Tue, 23 Aug 2022 01:31:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47597B81C3E;
-        Tue, 23 Aug 2022 08:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1BEC433B5;
-        Tue, 23 Aug 2022 08:18:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 615B6B81C3B;
+        Tue, 23 Aug 2022 08:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F55C433D6;
+        Tue, 23 Aug 2022 08:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242737;
-        bh=v5/YKtomldikhe/i3h6gjddah5wV/t0Qwoy5NR3BAPQ=;
+        s=korg; t=1661242759;
+        bh=vHPGp8AEhZpZ/FwWx4QLugFFEi7ycBigP5bAFx4OfiQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qj3HGkjwGSyeVQ0S2U3jJuo01kGAvwwwyJpuRx+Xm/gT2bD1P1GSH6yBeY3fZsFSF
-         Fc+zhCZyDWnFTed93V0lKYrskH7XTn+vOqRjpr6YSSGILDsWAFz6t625NpsZkH9cep
-         pX9TIw4fJmM+gvfN/Qs0KoQtwl2z6CvF8A9Fg+vc=
+        b=MQuo9d7xnRiIb5Ewwsd4H7m5CQid4fGBpyU9a+53okIAOxjMwVfXG1lhforGrbzp3
+         iFjRl5NQsLpVwczifhymKGus4WrTikDgJsM0T0ZheYI/Fmrnd5NyjVp1ib1iv8P5HP
+         tKk/ZMz1l79WPbFgEOBqgQP/tZiNz/ssCs+d3ldg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.19 184/365] ASoC: codec: tlv320aic32x4: fix mono playback via I2S
-Date:   Tue, 23 Aug 2022 10:01:25 +0200
-Message-Id: <20220823080125.922323509@linuxfoundation.org>
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.19 191/365] netfilter: nf_tables: disallow NFTA_SET_ELEM_KEY_END with NFT_SET_ELEM_INTERVAL_END flag
+Date:   Tue, 23 Aug 2022 10:01:32 +0200
+Message-Id: <20220823080126.208106436@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -54,62 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit b4b5f29a076e52181f63e45a2ad1bc88593072e3 upstream.
+commit 4963674c2e71fc062f8f089f0f58ffbb5533060b upstream.
 
-The two commits referenced below break mono playback via I2S DAI because
-they set BCLK to half the required speed. For PCM transport over I2S, the
-number of transmitted channels is always 2, even for mono playback.
+These are mutually exclusive, actually NFTA_SET_ELEM_KEY_END replaces
+the flag notation.
 
-Fixes: dcd79364bff3 ("ASoC: codec: tlv3204: Enable 24 bit audio support")
-Fixes: 40b37136287b ("ASoC: tlv320aic32x4: Fix bdiv clock rate derivation")
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Link: https://lore.kernel.org/r/20220810104156.665452-1-p.zabel@pengutronix.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 7b225d0b5c6d ("netfilter: nf_tables: add NFTA_SET_ELEM_KEY_END attribute")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/tlv320aic32x4.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ net/netfilter/nf_tables_api.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/soc/codecs/tlv320aic32x4.c
-+++ b/sound/soc/codecs/tlv320aic32x4.c
-@@ -49,6 +49,8 @@ struct aic32x4_priv {
- 	struct aic32x4_setup_data *setup;
- 	struct device *dev;
- 	enum aic32x4_type type;
-+
-+	unsigned int fmt;
- };
- 
- static int aic32x4_reset_adc(struct snd_soc_dapm_widget *w,
-@@ -611,6 +613,7 @@ static int aic32x4_set_dai_sysclk(struct
- static int aic32x4_set_dai_fmt(struct snd_soc_dai *codec_dai, unsigned int fmt)
- {
- 	struct snd_soc_component *component = codec_dai->component;
-+	struct aic32x4_priv *aic32x4 = snd_soc_component_get_drvdata(component);
- 	u8 iface_reg_1 = 0;
- 	u8 iface_reg_2 = 0;
- 	u8 iface_reg_3 = 0;
-@@ -654,6 +657,8 @@ static int aic32x4_set_dai_fmt(struct sn
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -5855,6 +5855,7 @@ static int nft_add_set_elem(struct nft_c
+ 	      nla[NFTA_SET_ELEM_EXPIRATION] ||
+ 	      nla[NFTA_SET_ELEM_USERDATA] ||
+ 	      nla[NFTA_SET_ELEM_EXPR] ||
++	      nla[NFTA_SET_ELEM_KEY_END] ||
+ 	      nla[NFTA_SET_ELEM_EXPRESSIONS]))
  		return -EINVAL;
- 	}
  
-+	aic32x4->fmt = fmt;
-+
- 	snd_soc_component_update_bits(component, AIC32X4_IFACE1,
- 				AIC32X4_IFACE1_DATATYPE_MASK |
- 				AIC32X4_IFACE1_MASTER_MASK, iface_reg_1);
-@@ -758,6 +763,10 @@ static int aic32x4_setup_clocks(struct s
- 		return -EINVAL;
- 	}
- 
-+	/* PCM over I2S is always 2-channel */
-+	if ((aic32x4->fmt & SND_SOC_DAIFMT_FORMAT_MASK) == SND_SOC_DAIFMT_I2S)
-+		channels = 2;
-+
- 	madc = DIV_ROUND_UP((32 * adc_resource_class), aosr);
- 	max_dosr = (AIC32X4_MAX_DOSR_FREQ / sample_rate / dosr_increment) *
- 			dosr_increment;
 
 

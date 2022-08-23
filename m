@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4121259DFB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A313759DF35
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242275AbiHWLVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
+        id S1354805AbiHWKdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357480AbiHWLRh (ORCPT
+        with ESMTP id S1354307AbiHWKRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:17:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D5F89815;
-        Tue, 23 Aug 2022 02:21:02 -0700 (PDT)
+        Tue, 23 Aug 2022 06:17:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D694280530;
+        Tue, 23 Aug 2022 02:01:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D699F6121F;
-        Tue, 23 Aug 2022 09:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3379C433C1;
-        Tue, 23 Aug 2022 09:21:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1123EB81C3B;
+        Tue, 23 Aug 2022 09:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59EC8C433C1;
+        Tue, 23 Aug 2022 09:01:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246461;
-        bh=qthlUxLyneTrQoXxQBbYo31Gy/R5BpXEYmeBs7zGNCU=;
+        s=korg; t=1661245276;
+        bh=fW10HKKYcB1rLbHfYJR4dWoHOeHVQGIXOhz0zu9MA3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mjbLSY6GQAexzQoMHeQxdizIjDbpO7E7jEibVek1qwzLlimCQWBRuJPAzla3q5gks
-         ppNLkWOUZKVYc4xyz+FDZXKKGCY2F/L+ee3GYno3S/+SA2cjl/ZjO/gO+dS/PxkYtK
-         5zSPRuq1JFfpEBEVU+49xi+vjTDvnHVQ3GFrfVPE=
+        b=gv3hYXeyqgTvi/7XT2YDfWR+MX1UFRKDhPIgDsvnocT35Ke7G8/i1n7aDaSVLHE1u
+         IJmUicCz3G9IgnK14BCkSXtNP5Lx8TKUGLSIDR2GTspaCJza589I3mWx26E62qvyFP
+         +Muo/mzcxMprZCXMdutHBIaWA6lWsRqaj6m32a/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 117/389] drm/msm/mdp5: Fix global state lock backoff
-Date:   Tue, 23 Aug 2022 10:23:15 +0200
-Message-Id: <20220823080120.501465746@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.19 027/287] iio: light: isl29028: Fix the warning in isl29028_remove()
+Date:   Tue, 23 Aug 2022 10:23:16 +0200
+Message-Id: <20220823080101.186883475@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 92ef86ab513593c6329d04146e61f9a670e72fc5 ]
+commit 06674fc7c003b9d0aa1d37fef7ab2c24802cc6ad upstream.
 
-We need to grab the lock after the early return for !hwpipe case.
-Otherwise, we could have hit contention yet still returned 0.
+The driver use the non-managed form of the register function in
+isl29028_remove(). To keep the release order as mirroring the ordering
+in probe, the driver should use non-managed form in probe, too.
 
-Fixes an issue that the new CONFIG_DRM_DEBUG_MODESET_LOCK stuff flagged
-in CI:
+The following log reveals it:
 
-   WARNING: CPU: 0 PID: 282 at drivers/gpu/drm/drm_modeset_lock.c:296 drm_modeset_lock+0xf8/0x154
-   Modules linked in:
-   CPU: 0 PID: 282 Comm: kms_cursor_lega Tainted: G        W         5.19.0-rc2-15930-g875cc8bc536a #1
-   Hardware name: Qualcomm Technologies, Inc. DB820c (DT)
-   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-   pc : drm_modeset_lock+0xf8/0x154
-   lr : drm_atomic_get_private_obj_state+0x84/0x170
-   sp : ffff80000cfab6a0
-   x29: ffff80000cfab6a0 x28: 0000000000000000 x27: ffff000083bc4d00
-   x26: 0000000000000038 x25: 0000000000000000 x24: ffff80000957ca58
-   x23: 0000000000000000 x22: ffff000081ace080 x21: 0000000000000001
-   x20: ffff000081acec18 x19: ffff80000cfabb80 x18: 0000000000000038
-   x17: 0000000000000000 x16: 0000000000000000 x15: fffffffffffea0d0
-   x14: 0000000000000000 x13: 284e4f5f4e524157 x12: 5f534b434f4c5f47
-   x11: ffff80000a386aa8 x10: 0000000000000029 x9 : ffff80000cfab610
-   x8 : 0000000000000029 x7 : 0000000000000014 x6 : 0000000000000000
-   x5 : 0000000000000001 x4 : ffff8000081ad904 x3 : 0000000000000029
-   x2 : ffff0000801db4c0 x1 : ffff80000cfabb80 x0 : ffff000081aceb58
-   Call trace:
-    drm_modeset_lock+0xf8/0x154
-    drm_atomic_get_private_obj_state+0x84/0x170
-    mdp5_get_global_state+0x54/0x6c
-    mdp5_pipe_release+0x2c/0xd4
-    mdp5_plane_atomic_check+0x2ec/0x414
-    drm_atomic_helper_check_planes+0xd8/0x210
-    drm_atomic_helper_check+0x54/0xb0
-    ...
-   ---[ end trace 0000000000000000 ]---
-   drm_modeset_lock attempting to lock a contended lock without backoff:
-      drm_modeset_lock+0x148/0x154
-      mdp5_get_global_state+0x30/0x6c
-      mdp5_pipe_release+0x2c/0xd4
-      mdp5_plane_atomic_check+0x290/0x414
-      drm_atomic_helper_check_planes+0xd8/0x210
-      drm_atomic_helper_check+0x54/0xb0
-      drm_atomic_check_only+0x4b0/0x8f4
-      drm_atomic_commit+0x68/0xe0
+[   32.374955] isl29028 0-0010: remove
+[   32.376861] general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN PTI
+[   32.377676] KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
+[   32.379432] RIP: 0010:kernfs_find_and_get_ns+0x28/0xe0
+[   32.385461] Call Trace:
+[   32.385807]  sysfs_unmerge_group+0x59/0x110
+[   32.386110]  dpm_sysfs_remove+0x58/0xc0
+[   32.386391]  device_del+0x296/0xe50
+[   32.386959]  cdev_device_del+0x1d/0xd0
+[   32.387231]  devm_iio_device_unreg+0x27/0xb0
+[   32.387542]  devres_release_group+0x319/0x3d0
+[   32.388162]  i2c_device_remove+0x93/0x1f0
 
-Fixes: d59be579fa93 ("drm/msm/mdp5: Return error code in mdp5_pipe_release when deadlock is detected")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Patchwork: https://patchwork.freedesktop.org/patch/492701/
-Link: https://lore.kernel.org/r/20220707162040.1594855-1-robdclark@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 2db5054ac28d ("staging: iio: isl29028: add runtime power management support")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Link: https://lore.kernel.org/r/20220717004241.2281028-1-zheyuma97@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/iio/light/isl29028.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-index a4f5cb90f3e8..e4b8a789835a 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_pipe.c
-@@ -123,12 +123,13 @@ int mdp5_pipe_release(struct drm_atomic_state *s, struct mdp5_hw_pipe *hwpipe)
- {
- 	struct msm_drm_private *priv = s->dev->dev_private;
- 	struct mdp5_kms *mdp5_kms = to_mdp5_kms(to_mdp_kms(priv->kms));
--	struct mdp5_global_state *state = mdp5_get_global_state(s);
-+	struct mdp5_global_state *state;
- 	struct mdp5_hw_pipe_state *new_state;
+--- a/drivers/iio/light/isl29028.c
++++ b/drivers/iio/light/isl29028.c
+@@ -639,7 +639,7 @@ static int isl29028_probe(struct i2c_cli
+ 					 ISL29028_POWER_OFF_DELAY_MS);
+ 	pm_runtime_use_autosuspend(&client->dev);
  
- 	if (!hwpipe)
- 		return 0;
- 
-+	state = mdp5_get_global_state(s);
- 	if (IS_ERR(state))
- 		return PTR_ERR(state);
- 
--- 
-2.35.1
-
+-	ret = devm_iio_device_register(indio_dev->dev.parent, indio_dev);
++	ret = iio_device_register(indio_dev);
+ 	if (ret < 0) {
+ 		dev_err(&client->dev,
+ 			"%s(): iio registration failed with error %d\n",
 
 

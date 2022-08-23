@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744E759E0BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE3159DD51
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354802AbiHWK3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
+        id S1358381AbiHWLyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353238AbiHWKNM (ORCPT
+        with ESMTP id S1358913AbiHWLvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:13:12 -0400
+        Tue, 23 Aug 2022 07:51:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D0671993;
-        Tue, 23 Aug 2022 01:59:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23829D34EE;
+        Tue, 23 Aug 2022 02:32:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42904B81C28;
-        Tue, 23 Aug 2022 08:59:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A29CC433D6;
-        Tue, 23 Aug 2022 08:59:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9405B81C85;
+        Tue, 23 Aug 2022 09:31:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A656C433B5;
+        Tue, 23 Aug 2022 09:31:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245150;
-        bh=zXMtss4VfpDdXbj9MI1myaQXhSHrO2BJtp5vYDd2ldY=;
+        s=korg; t=1661247118;
+        bh=pq5jl0liAQqHiKcuVEOGf6QiN0IET6PLiMh34kv50FY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RN8bv2UGCZYscDDLWHRqEf2eZLwVcju0JUQkMirLZvtFyLLYWJFzxYQH/B/gBtDiS
-         BuoQ0kyAC9fxefo7Jf5iHtUMt3mYMulc2okV/ndJMGbHZsnWPKN21+UwQ4IwKiSAQF
-         8momqaieaqv+zCZOzP9vRJUL5FMgsPOlU4a8duRY=
+        b=rZmSovFUNT9xQdWMycF0Vk8EOW3J4trYqICTfIzWSVLV9E45f63EDoazIrEoV0nCA
+         WA5HmbpuP1xWJU4eJfDdsrE4jy/qPM0/oonJ0ZIanChQ7gGIDgCwcSdhklJ/IVTGxs
+         8PLXfPl6rKleamRYcBAZZnRbngTU7HmuLkHK2xZM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brice Goglin <Brice.Goglin@inria.fr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 215/244] riscv: dts: sifive: Add fu740 topology information
+        stable@vger.kernel.org, John Johansen <john.johansen@canonical.com>
+Subject: [PATCH 5.4 296/389] apparmor: Fix failed mount permission check error message
 Date:   Tue, 23 Aug 2022 10:26:14 +0200
-Message-Id: <20220823080106.686362291@linuxfoundation.org>
+Message-Id: <20220823080127.922632657@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+From: John Johansen <john.johansen@canonical.com>
 
-[ Upstream commit bf6cd1c01c959a31002dfa6784c0d8caffed4cf1 ]
+commit ec240b5905bbb09a03dccffee03062cf39e38dc2 upstream.
 
-The fu740 has no cpu-map node, so tools like hwloc cannot correctly
-parse the topology. Add the node using the existing node labels.
+When the mount check fails due to a permission check failure instead
+of explicitly at one of the subcomponent checks, AppArmor is reporting
+a failure in the flags match. However this is not true and AppArmor
+can not attribute the error at this point to any particular component,
+and should only indicate the mount failed due to missing permissions.
 
-Reported-by: Brice Goglin <Brice.Goglin@inria.fr>
-Link: https://github.com/open-mpi/hwloc/issues/536
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Link: https://lore.kernel.org/r/20220705190435.1790466-4-mail@conchuod.ie
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 2ea3ffb7782a ("apparmor: add mount mediation")
+Signed-off-by: John Johansen <john.johansen@canonical.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/boot/dts/sifive/fu740-c000.dtsi | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ security/apparmor/mount.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-index abbb960f90a0..454079a69ab4 100644
---- a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-+++ b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-@@ -134,6 +134,30 @@
- 				interrupt-controller;
- 			};
- 		};
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+
-+				core2 {
-+					cpu = <&cpu2>;
-+				};
-+
-+				core3 {
-+					cpu = <&cpu3>;
-+				};
-+
-+				core4 {
-+					cpu = <&cpu4>;
-+				};
-+			};
-+		};
- 	};
- 	soc {
- 		#address-cells = <2>;
--- 
-2.35.1
-
+--- a/security/apparmor/mount.c
++++ b/security/apparmor/mount.c
+@@ -229,7 +229,8 @@ static const char * const mnt_info_table
+ 	"failed srcname match",
+ 	"failed type match",
+ 	"failed flags match",
+-	"failed data match"
++	"failed data match",
++	"failed perms check"
+ };
+ 
+ /*
+@@ -284,8 +285,8 @@ static int do_match_mnt(struct aa_dfa *d
+ 			return 0;
+ 	}
+ 
+-	/* failed at end of flags match */
+-	return 4;
++	/* failed at perms check, don't confuse with flags match */
++	return 6;
+ }
+ 
+ 
 
 

@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71C359E9F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E2159EA11
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 19:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbiHWRpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 13:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S232547AbiHWRnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 13:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiHWRol (ORCPT
+        with ESMTP id S229817AbiHWRmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:44:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A4E6B8D8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 08:32:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D695FB81E07
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0870AC433D6;
-        Tue, 23 Aug 2022 15:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661268723;
-        bh=kv7ZNDv1FBguuVmkE95CjI4JtqYhHJBmXuAD/LbhowE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lobSX5e6t4xjH5/Am6fGj9FTN7qbOtqS8ZtVc0h1dp4mZoJSzj0Mxq9yx2ugCllno
-         xKQSzJzK555RV247wINMtB4xxRKfX7zz8EDFdUp7CGSJbgie6ljkBvpypjs8MJzdPq
-         q3GdOx+3EaFaTFK7t19ORqo0uShAxluFSlyXktTyC4xieZYigLgrYzhUgY3xwW2Kae
-         0Rpsn04UI7bOEjiQqL2xbBJhRSrKyTmlEo1p9/krFguIgY3UMDs1lNE2EIC4IEhEF+
-         GwpJA6wWSvXow0CX3SS/AClKr9eQneE9QLY89H+ojUJuqH+05JsoCORV74M1a08AjZ
-         zBl4bgT0sh1PQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Rolf Eike Beer <eb@emlix.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH -next] mm: pagewalk: Restore err initialization in walk_hugetlb_range()
-Date:   Tue, 23 Aug 2022 08:30:56 -0700
-Message-Id: <20220823153055.2517764-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Tue, 23 Aug 2022 13:42:51 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06298BE09;
+        Tue, 23 Aug 2022 08:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661268677;
+        bh=6y871TwjlGWu4Hn5isuPKP7hEDPU3mcdk7uvzqUMGlc=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=dElczNUP7M43ZNpUb5kqCWNp15vxyrnsfHh1zMwiDbRDOXuGZcwAs6oQ19mQwQHRY
+         Q9wzGqOhtn8u+TF8mF+uD2zqPSFvKlxPXHXVELq51tpLoCrEch0imuesUmW9yhiyE+
+         dYhk/OKH4mJL/6FXL0XJOMSQm/SBXH30/HiqZU0Q=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.177]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbzuH-1p1VeN3gGV-00dV1S; Tue, 23
+ Aug 2022 17:31:16 +0200
+Message-ID: <41808495-4002-9dc9-8143-bdc6fb7f4394@gmx.de>
+Date:   Tue, 23 Aug 2022 17:31:16 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.19 000/365] 5.19.4-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:OToLyasaT6alezisQuuvDFUZbsCpq4mPTtNw9MmXeW0G+HRIgpO
+ vz9zt0i2PABQWZARfnQNqujE/2LYIS8DJUhsUQuQFjbz6njQoq5GPNi3EpX+mN2z50v8Rkb
+ jBftcioU/pqGATgAIQtjphGrlOfUcWc1NwywzPr4CmytgFHtKhc6WaFgxA9wNKbuWEgRPMJ
+ n8YeJHDAzrhse3LqKXEyA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PjpAwpzMs2w=:iCr72FgZzSXb6wZ4MpggmI
+ qGe0NyxnoaP9faSdSGke6hhxnBZBP/LYvb4nAOWB1A1gq35TmT4UfaEctYQiRnUeeXPv+jodO
+ ySWVwkxwlar1JUA+ijeoSiRrMRVCUlmm6tlbvyhM35cIYop7nGsVBWnuYXUOSt6159uq4KzYf
+ EtLwG/TkVNvRHsSR6YhegzsLL3iWFb8/jzQkhlef+DnaQaewZrEeq8+B/gLiWbHAp++FshGAl
+ RzC04Oumpem1goy4sCtKfQLlyNS6rpuCaanUYbWfr3fik8FTi0lwZfqcfhK49W5YpbsDL0rC+
+ QZaedtNytL/s24v/Fmo7LFcBogU94zQr+M1m5TaKmB3FoAv5GLYGCtc1NbSXtWt5VLFag8ZdK
+ dygtKKlwKYdwJ+0U5M+tc9sS3+WiWbUCO+1Lh2nZs5f5YhhY+1XzV0S0CzQKGDyxaVIvrCNvI
+ u17JMAMQkVX71j9Notc+8+z29q9VB79fkekq1AjUfLxD4ZMoUmJ8RML+wN7s+9JThPfvoVI7J
+ DO1h5/k4kjDWaJwpqGzKCHJABVRYpb6aI/6BEoidDxkchaMxfu18+7zz/ElBfSFQqCYYaSzYi
+ RfPs0WYmmSEEQ2Tv0btkqPW8x5G+si0M8B00l2z38beRtRi4rO/dtIk7MupW66/yxfzQdZkU/
+ yc1HP8D5ok2qDMRjMcLh1yyu85rEcN6RdCTsbDLi+c4GFkvfisFVxrOXMqoc8Tn4kwgAVi7SK
+ U/u+B/7wxDxg9hWwzTpkdlUVjr9TfuE4PHpp6i/hZdwJOEABaBO+8a0YmpYTflFb0U7VxwjMh
+ MNm3AxeYxvLyGxBcwrSMdH7qDZ47J7GA/11r6on3U4k3nX0315T6A8yKarGlTNSDqUWadTFYo
+ Ma4CwXlggrPFBsOhYUqQoCpkRNYzx3w4Xknf5plME5xl1jmI9rXG5lFtU0AadLLdWLZBgGiJx
+ 5lAN7Ku28mPrzzF039VSjj0dDRPQdlZjdBF9OXDttXbGcLfXjiL8QiuN/ZhN0LdC0QrKS6VOi
+ ZcGSC+rEZ9hwsXrVzRooT32JM9s9J0jMxRgmSSupaD0NY0S3pNkHzIo+OXUtVn1S3St5Wbd14
+ Ar/+iyW4WmXH1UQoHBzyb4/pWxn6JfEwIn7uzzXFUNUkpEmPiNkqgip+w==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,52 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+hallo Greg
 
-  mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-                  else if (ops->pte_hole)
-                          ^~~~~~~~~~~~~
-  mm/pagewalk.c:321:7: note: uninitialized use occurs here
-                  if (err)
-                      ^~~
-  mm/pagewalk.c:318:8: note: remove the 'if' if its condition is always true
-                  else if (ops->pte_hole)
-                      ^~~~~~~~~~~~~~~~~~
-  mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence this warning
-                  int err;
-                        ^
-                          = 0
-  1 error generated.
+5.19.4-rc1
 
-Restore the initialization of err to zero so that it cannot be used
-uninitialized.
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 36)
 
-Fixes: 9ce1db56225a ("mm: pagewalk: make error checks more obvious")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1694
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
+Thanks
 
-I am sure that SHA is not stable and I expect this to be squashed into
-the original change.
-
- mm/pagewalk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index 54b2a1beeeb3..76e5ccda8c88 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -308,7 +308,7 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
- 	const struct mm_walk_ops *ops = walk->ops;
- 
- 	for (; addr < end; addr = next) {
--		int err;
-+		int err = 0;
- 		pte_t *pte = huge_pte_offset(walk->mm, addr & hmask, sz);
- 
- 		next = hugetlb_entry_end(h, addr, end);
-
-base-commit: d711de4adbec4cb0b8769bcae971b13293e6d311
--- 
-2.37.2
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 

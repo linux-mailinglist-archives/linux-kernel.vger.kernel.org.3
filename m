@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E670259EA99
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7867059EA9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiHWSMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
+        id S233674AbiHWSND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbiHWSL2 (ORCPT
+        with ESMTP id S233600AbiHWSMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:11:28 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5E359263;
-        Tue, 23 Aug 2022 09:23:14 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id c24so12701529pgg.11;
-        Tue, 23 Aug 2022 09:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=LjdOkoj/iIqWIrTcTlb26yqTsDM1G4uHJ+m78pSllzU=;
-        b=fr83FdYT1XmOH6+SfbhdHVyHMBXYkO245C27ol8qF7gLxPEu/8SZmZ1re4dAba3aME
-         1CZ/EVWvK706veHt6UZhjK4rN4KBLLn5L2u7i9q0/2BdRVOwky+dO57/yDlt47Af8QQt
-         VbkRdGlhJoT+awNbm7dIpyj3Kmt/SoopgDaPDxidf2BEwCjrudAybwqqQ/V+XD+EU4Ad
-         +GAVeROy3+szX2tL1CjBWLDeKR4Z3MWL8+F7YecgfdBhJ+lAhUwtH3M49EhSmob9ICr1
-         OBpHBN74cqPAH87EfbASkI0bJ7LHN2TOFUPkzeMASULii/l/NScGzYf8ueKYQif2KHp/
-         Lg0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LjdOkoj/iIqWIrTcTlb26yqTsDM1G4uHJ+m78pSllzU=;
-        b=3P01GbRK+gH3CBBJXYkqARszAcdhYQ13ghKeuBwmO7ie3CIC4OgOSMK7jZKMVgP/XK
-         0IKDAaO9+XZImA1JleejyNas+0J/t4QKbfy0KAiwEG3BeM5L92xpwlTWtjlmOLZv6xZp
-         ///cTUmiMWlo8SU3wMumXXlZBEd4uKRtRT3B1mLCIx015ekCTxAWqdB1Bqs/oKIMf+Z1
-         IH+2UUEneaWa95B/HJ2k+rfVw+KvaP1TVnMHtNWTCCyEtPEDBPKs5s1xhRPZkdsXiFwd
-         cfc0ytEkFc6bGOtM1TNb/D0Yz39KTNegMJpH8O3kEvThD2t8n2WJcIowt9cwiD7+DGmP
-         ILKQ==
-X-Gm-Message-State: ACgBeo0MmdYYc/fkH82qwckgIwmTWh+JUo2/ai2XOkBVeENBRhwbO3EI
-        1xxuMIsI/KwyiFXMBSsJcjfx8ojvIq8GCDvARMU=
-X-Google-Smtp-Source: AA6agR5cnh+fT7bPQ6maMa1z26oLeVjVE2OHEmxmDptmHUD3BCrrvUhebXFBYlMd9GESyGOtQl3N5In/ByRqcaQ1eeM=
-X-Received: by 2002:a63:2148:0:b0:427:17f6:7c05 with SMTP id
- s8-20020a632148000000b0042717f67c05mr21049767pgm.200.1661271794081; Tue, 23
- Aug 2022 09:23:14 -0700 (PDT)
+        Tue, 23 Aug 2022 14:12:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9819F9BB56
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661271879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZInkH65kXXJrl1np4vOxGvfc6E02VGBPw4illArQKwk=;
+        b=T6Us9JUsZUdABf1LKsliQmem7POLI3kepXdyS1mynfK4sr2YNN4ba1hZvKfA1PiImlNw7f
+        Z+dB5LybRbaj36neI0x0mxBwvndG41WRG265DGz/ROg6Zb2ovmHFGZ/MO50dYMPCOdUwQQ
+        xBnI57QPUY2fuwT0g0Cq22IdZxhZG7w=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-382-b1M910_7MUWejWr76gIR-Q-1; Tue, 23 Aug 2022 12:24:38 -0400
+X-MC-Unique: b1M910_7MUWejWr76gIR-Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C4C7A3C0E20F;
+        Tue, 23 Aug 2022 16:24:37 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2DC964010D2A;
+        Tue, 23 Aug 2022 16:24:37 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Subject: [PATCH] idxd: avoid deadlock in process_misc_interrupts()
+Date:   Tue, 23 Aug 2022 09:24:35 -0700
+Message-Id: <20220823162435.2099389-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-References: <20220816032846.2579217-1-imagedong@tencent.com>
- <CAKwvOd=accNK7t_SOmybo3e4UcBKoZ6TBPjCHT3eSSpSUouzEA@mail.gmail.com>
- <CADxym3Yxq0k_W43kVjrofjNoUUag3qwmpRGLLAQL1Emot3irPQ@mail.gmail.com>
- <20220818165838.GM25951@gate.crashing.org> <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com>
- <20220819152157.GO25951@gate.crashing.org> <CADxym3Y-=6pRP=CunxRomfwXf58k0LyLm510WGtzsBnzjqdD4g@mail.gmail.com>
- <871qt86711.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <871qt86711.fsf@oldenburg.str.redhat.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 24 Aug 2022 00:23:02 +0800
-Message-ID: <CADxym3Z7WpPbX7VSZqVd+nVnbaO6HvxV7ak58TXBCqBqodU+Jg@mail.gmail.com>
-Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
- kfree_skb_reason() by gcc
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, kuba@kernel.org,
-        miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+idxd_device_clear_state() now grabs the idxd->dev_lock
+itself, so don't grab the lock prior to calling it.
 
-On Mon, Aug 22, 2022 at 4:01 PM Florian Weimer <fweimer@redhat.com> wrote:
->
-> * Menglong Dong:
->
-> > /*
-> >  * Used by functions that use '__builtin_return_address'. These function
-> >  * don't want to be splited or made inline, which can make
-> >  * the '__builtin_return_address' got unexpected address.
-> >  */
-> > #define __fix_address noinline __noclone
->
-> You need something on the function *declaration* as well, to inhibit
-> sibcalls.
->
+This was seen in testing after dmar fault occurred on system,
+resulting in lockup stack traces.
 
-I did some research on the 'sibcalls' you mentioned above. Feel like
-It's a little similar to 'inline', and makes the callee use the same stack
-frame with the caller, which obviously will influence the result of
-'__builtin_return_address'.
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/dma/idxd/irq.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Hmm......but I'm not able to find any attribute to disable this optimization.
-Do you have any ideas?
+diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
+index 743ead5ebc57..5b9921475be6 100644
+--- a/drivers/dma/idxd/irq.c
++++ b/drivers/dma/idxd/irq.c
+@@ -324,13 +324,11 @@ static int process_misc_interrupts(struct idxd_device *idxd, u32 cause)
+ 			idxd->state = IDXD_DEV_HALTED;
+ 			idxd_wqs_quiesce(idxd);
+ 			idxd_wqs_unmap_portal(idxd);
+-			spin_lock(&idxd->dev_lock);
+ 			idxd_device_clear_state(idxd);
+ 			dev_err(&idxd->pdev->dev,
+ 				"idxd halted, need %s.\n",
+ 				gensts.reset_type == IDXD_DEVICE_RESET_FLR ?
+ 				"FLR" : "system reset");
+-			spin_unlock(&idxd->dev_lock);
+ 			return -ENXIO;
+ 		}
+ 	}
+-- 
+2.37.2
 
-Thanks!
-Menglong Dong
-
-> Thanks,
-> Florian
->

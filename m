@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F3659E352
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4DA59DC3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244560AbiHWMS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S1358797AbiHWL5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355217AbiHWMPf (ORCPT
+        with ESMTP id S1358627AbiHWLxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:15:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A071CE9923;
-        Tue, 23 Aug 2022 02:41:03 -0700 (PDT)
+        Tue, 23 Aug 2022 07:53:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C2BB47;
+        Tue, 23 Aug 2022 02:33:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D942B81CA1;
-        Tue, 23 Aug 2022 09:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D025EC433D6;
-        Tue, 23 Aug 2022 09:40:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEAB461389;
+        Tue, 23 Aug 2022 09:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D317BC433C1;
+        Tue, 23 Aug 2022 09:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247619;
-        bh=3TL4/x38uUL1hvU1MDgjd6By/370uGvYhov0doVhKiA=;
+        s=korg; t=1661247193;
+        bh=+cQueMhG49MjrWyekbaH7KLGxxmn10UFrF2aTy84y2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kBPaNpOvTBAtqqWNQfVzpfS61ZcVHpeeE2MFysQhoZRUrDYkJiE3Yj1mLsIqb7q4Y
-         mbDwLO0JVMdwiQ+Qkf6g3ypBYW3lk9fd+QrmJ7cTufGIie2Jc48SP66uelhjoR0A6Z
-         H6LNWsJSznRzfLuLuJMu5P/GVhgBR1pArF7Vw4Ow=
+        b=iSSpxYnxAiJ0DJdeIPr4ZvVo1vcpHILKgxLj10vFC3d7S0OEUTyMdea5gVT7pOhyf
+         EraEjU+WtoRt4ws5hBIN9ulx07dAdIMANFKrvyK6uDC6QKCvallr8kXQs2AyXV83P5
+         7YMHIuzzTQsCUiE818JGbhud0plAmwQPM2lCyOj4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 092/158] igb: Add lock to avoid data race
-Date:   Tue, 23 Aug 2022 10:27:04 +0200
-Message-Id: <20220823080049.752737191@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hector Martin <marcan@marcan.st>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 5.4 347/389] locking/atomic: Make test_and_*_bit() ordered on failure
+Date:   Tue, 23 Aug 2022 10:27:05 +0200
+Message-Id: <20220823080130.030533464@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,126 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Hector Martin <marcan@marcan.st>
 
-commit 6faee3d4ee8be0f0367d0c3d826afb3571b7a5e0 upstream.
+commit 415d832497098030241605c52ea83d4e2cfa7879 upstream.
 
-The commit c23d92b80e0b ("igb: Teardown SR-IOV before
-unregister_netdev()") places the unregister_netdev() call after the
-igb_disable_sriov() call to avoid functionality issue.
+These operations are documented as always ordered in
+include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
+type use cases where one side needs to ensure a flag is left pending
+after some shared data was updated rely on this ordering, even in the
+failure case.
 
-However, it introduces several race conditions when detaching a device.
-For example, when .remove() is called, the below interleaving leads to
-use-after-free.
+This is the case with the workqueue code, which currently suffers from a
+reproducible ordering violation on Apple M1 platforms (which are
+notoriously out-of-order) that ends up causing the TTY layer to fail to
+deliver data to userspace properly under the right conditions.  This
+change fixes that bug.
 
- (FREE from device detaching)      |   (USE from netdev core)
-igb_remove                         |  igb_ndo_get_vf_config
- igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
-  kfree(adapter->vf_data)          |
-  adapter->vfs_allocated_count = 0 |
-                                   |    memcpy(... adapter->vf_data[vf]
+Change the documentation to restrict the "no order on failure" story to
+the _lock() variant (for which it makes sense), and remove the
+early-exit from the generic implementation, which is what causes the
+missing barrier semantics in that case.  Without this, the remaining
+atomic op is fully ordered (including on ARM64 LSE, as of recent
+versions of the architecture spec).
 
-Moreover, the igb_disable_sriov() also suffers from data race with the
-requests from VF driver.
-
- (FREE from device detaching)      |   (USE from requests)
-igb_remove                         |  igb_msix_other
- igb_disable_sriov                 |   igb_msg_task
-  kfree(adapter->vf_data)          |    vf < adapter->vfs_allocated_count
-  adapter->vfs_allocated_count = 0 |
-
-To this end, this commit first eliminates the data races from netdev
-core by using rtnl_lock (similar to commit 719479230893 ("dpaa2-eth: add
-MAC/PHY support through phylink")). And then adds a spinlock to
-eliminate races from driver requests. (similar to commit 1e53834ce541
-("ixgbe: Add locking to prevent panic when setting sriov_numvfs to zero")
-
-Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Link: https://lore.kernel.org/r/20220817184921.735244-1-anthony.l.nguyen@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
+Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Acked-by: Will Deacon <will@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/igb/igb.h      |    2 ++
- drivers/net/ethernet/intel/igb/igb_main.c |   12 +++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ Documentation/atomic_bitops.txt     |    2 +-
+ include/asm-generic/bitops/atomic.h |    6 ------
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
---- a/drivers/net/ethernet/intel/igb/igb.h
-+++ b/drivers/net/ethernet/intel/igb/igb.h
-@@ -664,6 +664,8 @@ struct igb_adapter {
- 	struct igb_mac_addr *mac_table;
- 	struct vf_mac_filter vf_macs;
- 	struct vf_mac_filter *vf_mac_list;
-+	/* lock for VF resources */
-+	spinlock_t vfs_lock;
- };
+--- a/Documentation/atomic_bitops.txt
++++ b/Documentation/atomic_bitops.txt
+@@ -59,7 +59,7 @@ Like with atomic_t, the rule of thumb is
+  - RMW operations that have a return value are fully ordered.
  
- /* flags controlling PTP/1588 function */
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -3638,6 +3638,7 @@ static int igb_disable_sriov(struct pci_
- 	struct net_device *netdev = pci_get_drvdata(pdev);
- 	struct igb_adapter *adapter = netdev_priv(netdev);
- 	struct e1000_hw *hw = &adapter->hw;
-+	unsigned long flags;
+  - RMW operations that are conditional are unordered on FAILURE,
+-   otherwise the above rules apply. In the case of test_and_{}_bit() operations,
++   otherwise the above rules apply. In the case of test_and_set_bit_lock(),
+    if the bit in memory is unchanged by the operation then it is deemed to have
+    failed.
  
- 	/* reclaim resources allocated to VFs */
- 	if (adapter->vf_data) {
-@@ -3650,12 +3651,13 @@ static int igb_disable_sriov(struct pci_
- 			pci_disable_sriov(pdev);
- 			msleep(500);
- 		}
+--- a/include/asm-generic/bitops/atomic.h
++++ b/include/asm-generic/bitops/atomic.h
+@@ -35,9 +35,6 @@ static inline int test_and_set_bit(unsig
+ 	unsigned long mask = BIT_MASK(nr);
+ 
+ 	p += BIT_WORD(nr);
+-	if (READ_ONCE(*p) & mask)
+-		return 1;
 -
-+		spin_lock_irqsave(&adapter->vfs_lock, flags);
- 		kfree(adapter->vf_mac_list);
- 		adapter->vf_mac_list = NULL;
- 		kfree(adapter->vf_data);
- 		adapter->vf_data = NULL;
- 		adapter->vfs_allocated_count = 0;
-+		spin_unlock_irqrestore(&adapter->vfs_lock, flags);
- 		wr32(E1000_IOVCTL, E1000_IOVCTL_REUSE_VFQ);
- 		wrfl();
- 		msleep(100);
-@@ -3815,7 +3817,9 @@ static void igb_remove(struct pci_dev *p
- 	igb_release_hw_control(adapter);
- 
- #ifdef CONFIG_PCI_IOV
-+	rtnl_lock();
- 	igb_disable_sriov(pdev);
-+	rtnl_unlock();
- #endif
- 
- 	unregister_netdev(netdev);
-@@ -3975,6 +3979,9 @@ static int igb_sw_init(struct igb_adapte
- 
- 	spin_lock_init(&adapter->nfc_lock);
- 	spin_lock_init(&adapter->stats64_lock);
-+
-+	/* init spinlock to avoid concurrency of VF resources */
-+	spin_lock_init(&adapter->vfs_lock);
- #ifdef CONFIG_PCI_IOV
- 	switch (hw->mac.type) {
- 	case e1000_82576:
-@@ -7852,8 +7859,10 @@ unlock:
- static void igb_msg_task(struct igb_adapter *adapter)
- {
- 	struct e1000_hw *hw = &adapter->hw;
-+	unsigned long flags;
- 	u32 vf;
- 
-+	spin_lock_irqsave(&adapter->vfs_lock, flags);
- 	for (vf = 0; vf < adapter->vfs_allocated_count; vf++) {
- 		/* process any reset requests */
- 		if (!igb_check_for_rst(hw, vf))
-@@ -7867,6 +7876,7 @@ static void igb_msg_task(struct igb_adap
- 		if (!igb_check_for_ack(hw, vf))
- 			igb_rcv_ack_from_vf(adapter, vf);
- 	}
-+	spin_unlock_irqrestore(&adapter->vfs_lock, flags);
+ 	old = atomic_long_fetch_or(mask, (atomic_long_t *)p);
+ 	return !!(old & mask);
  }
+@@ -48,9 +45,6 @@ static inline int test_and_clear_bit(uns
+ 	unsigned long mask = BIT_MASK(nr);
  
- /**
+ 	p += BIT_WORD(nr);
+-	if (!(READ_ONCE(*p) & mask))
+-		return 0;
+-
+ 	old = atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
+ 	return !!(old & mask);
+ }
 
 

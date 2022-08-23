@@ -2,141 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DB759D836
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4909459D822
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241027AbiHWJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S235543AbiHWJbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350134AbiHWJVa (ORCPT
+        with ESMTP id S1350351AbiHWJ3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:21:30 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777A48C456;
-        Tue, 23 Aug 2022 01:34:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MBjDH5BJcz4xYS;
-        Tue, 23 Aug 2022 18:33:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1661243600;
-        bh=jzL+tYVj4e9+zENm5e4p359zO1COy5i/CDx3a5RuXi0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DWH/riAmZijXBMyFpMOiCjZL/u14KNbC33rDY2XPlmwRTlIHFZEyB3l4hZ6CutX2M
-         /hxh+Z+F6vNEwwgMah0o1MIoBK/i6qQfhDYcu9Ac4BZf6IxKGhWAcJIfsROANYVH0M
-         2cJCD7cGrgSm+6Hle+5F8DQiDlE3nNy4QRjFvW+n5WL+2Nkq4AKPDtSCDwkc9uk8QA
-         KEzBaddNdy74sR7hw0/y6OjlExq3oBBYjU97e95jCsGLYAR20kqphSEuAqjx6FngzL
-         qNIH2G9b0IyZaSi49GgtXATGN0SmKeTKjGlFe7UyPR4YxQbjQdI+Z1PfSv2CDedkjL
-         cs//ozxWcigLA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, atrajeev@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        lance@osuosl.org, paulmck@kernel.org, rcu@vger.kernel.org
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: Re: [PATCH linux-next] powerpc: disable sanitizer in irq_soft_mask_set
-In-Reply-To: <20220821010030.97539-1-zhouzhouyi@gmail.com>
-References: <20220821010030.97539-1-zhouzhouyi@gmail.com>
-Date:   Tue, 23 Aug 2022 18:33:14 +1000
-Message-ID: <87edx7l5px.fsf@mpe.ellerman.id.au>
+        Tue, 23 Aug 2022 05:29:22 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0826C923CA;
+        Tue, 23 Aug 2022 01:37:31 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bt10so5716539lfb.1;
+        Tue, 23 Aug 2022 01:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=vop6fItyvbYtkrV6IP5UVBH+x7wzffEHNhLEh8TzmD8=;
+        b=PdX27RnPGKwVCyCypErvS8EGx+jQCxJQjsN3GR6KThiHAzdSrVqpzi6+4lJ0R2Z2ZN
+         J8c+VhkgdNh7L1QWqN1bD0xhl2Zvr8pmNeW/HmfGFV7Hz51OxwuRfKtNNwThdHVBPk0j
+         bvYUq4kk6NDVLPuk0qo7kCA/XHYCuEmYnKA/cVrgVYn4aCrXWyvjDKGyAij6wY0Zkn4L
+         G8Czw9HygPAE3OyoUSWKNw3+EtS92m61SuRkgwjsYNNtrTn3aYAvowO87ZJBqAvbvqT/
+         i1JEI0YVotddMgzWYR/8Bqbbu8j4sBbyAsh2KpC3196CGZdEeWXD67uDgRwaGzg89yc0
+         cjkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=vop6fItyvbYtkrV6IP5UVBH+x7wzffEHNhLEh8TzmD8=;
+        b=FOScH8dl/SzvDNQQfGWRhmEdtsXBDuIRugqaeSt+EN1aPksGKjX46cEjeY860DLJrB
+         q3CwBPZ+50XDeR9ExSKBf+YCuVif8WLNyUY+3Fer/T6fxnWHE2e82InKOzpl0SDylCHc
+         7Ldqpeje7xT6gVJIr86lwgT38bEXC9UrShCDRv8h6CmATLV4oTfX/Slj6ELgOQgkCNo4
+         GgyII5Fw37KeJfDN2XVkeiFTrVCDr3V3fis+WGIGLjtfmMfU35zDYhdvmXIzzcb+S5oX
+         VcOPdri9tUGWc6BCCqI/2VuASnMj/LvwnAuhL3MLYsgUnS7KX5wJuj0ldRnHPpJTGKIj
+         GzLQ==
+X-Gm-Message-State: ACgBeo0f+Hg5nbgidpyvSSTvP4s8+aWVMpiYRW+HGqsdf9zmcOmpmPFE
+        3LkIVBuKXcN9gwnkYQkSigc=
+X-Google-Smtp-Source: AA6agR5sCJFUy6q6BK/+a0nDOxzWJIe8zJFPRjdjmjK/QZnURboZ9UHk7Aq9/NiHjnaBrmGzTmHdqA==
+X-Received: by 2002:a05:6512:13a1:b0:48d:f14:9059 with SMTP id p33-20020a05651213a100b0048d0f149059mr8993313lfa.110.1661243811321;
+        Tue, 23 Aug 2022 01:36:51 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id bf40-20020a2eaa28000000b0025e59f125fbsm2259108ljb.53.2022.08.23.01.36.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 01:36:50 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 11:36:48 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
+Message-ID: <20220823083648.j7hmyt4py5xqnzde@mobilestation>
+References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+ <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
+ <835938e3-e4f5-5029-9373-5dd59bc3b625@linaro.org>
+ <20220823082748.td6pwkzj5grfno77@mobilestation>
+ <afc181cd-46b7-4c69-d27a-d2005904f48a@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afc181cd-46b7-4c69-d27a-d2005904f48a@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhouyi Zhou <zhouzhouyi@gmail.com> writes:
-> In ppc, compiler based sanitizer will generate instrument instructions
-> around statement WRITE_ONCE(local_paca->irq_soft_mask, mask):
->
->    0xc000000000295cb0 <+0>:	addis   r2,r12,774
->    0xc000000000295cb4 <+4>:	addi    r2,r2,16464
->    0xc000000000295cb8 <+8>:	mflr    r0
->    0xc000000000295cbc <+12>:	bl      0xc00000000008bb4c <mcount>
->    0xc000000000295cc0 <+16>:	mflr    r0
->    0xc000000000295cc4 <+20>:	std     r31,-8(r1)
->    0xc000000000295cc8 <+24>:	addi    r3,r13,2354
->    0xc000000000295ccc <+28>:	mr      r31,r13
->    0xc000000000295cd0 <+32>:	std     r0,16(r1)
->    0xc000000000295cd4 <+36>:	stdu    r1,-48(r1)
->    0xc000000000295cd8 <+40>:	bl      0xc000000000609b98 <__asan_store1+8>
->    0xc000000000295cdc <+44>:	nop
->    0xc000000000295ce0 <+48>:	li      r9,1
->    0xc000000000295ce4 <+52>:	stb     r9,2354(r31)
->    0xc000000000295ce8 <+56>:	addi    r1,r1,48
->    0xc000000000295cec <+60>:	ld      r0,16(r1)
->    0xc000000000295cf0 <+64>:	ld      r31,-8(r1)
->    0xc000000000295cf4 <+68>:	mtlr    r0
->
-> If there is a context switch before "stb     r9,2354(r31)", r31 may
-> not equal to r13, in such case, irq soft mask will not work.
->
-> This patch disable sanitizer in irq_soft_mask_set.
->
-> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> ---
-> Dear PPC developers
->
-> I found this bug when trying to do rcutorture tests in ppc VM of
-> Open Source Lab of Oregon State University following Paul E. McKenny's guidance.
->
-> console.log report following bug:
->
-> [  346.527467][  T100] BUG: using smp_processor_id() in preemptible [00000000] code: rcu_torture_rea/100^M
-> [  346.529416][  T100] caller is rcu_preempt_deferred_qs_irqrestore+0x74/0xed0^M
-> [  346.531157][  T100] CPU: 4 PID: 100 Comm: rcu_torture_rea Tainted: G        W          5.19.0-rc5-next-20220708-dirty #253^M
-> [  346.533620][  T100] Call Trace:^M
-> [  346.534449][  T100] [c0000000094876c0] [c000000000ce2b68] dump_stack_lvl+0xbc/0x108 (unreliable)^M
-> [  346.536632][  T100] [c000000009487710] [c000000001712954] check_preemption_disabled+0x154/0x160^M
-> [  346.538665][  T100] [c0000000094877a0] [c0000000002ce2d4] rcu_preempt_deferred_qs_irqrestore+0x74/0xed0^M
-> [  346.540830][  T100] [c0000000094878b0] [c0000000002cf3c0] __rcu_read_unlock+0x290/0x3b0^M
-> [  346.542746][  T100] [c000000009487910] [c0000000002bb330] rcu_torture_read_unlock+0x30/0xb0^M
-> [  346.544779][  T100] [c000000009487930] [c0000000002b7ff8] rcutorture_one_extend+0x198/0x810^M
-> [  346.546851][  T100] [c000000009487a10] [c0000000002b8bfc] rcu_torture_one_read+0x58c/0xc90^M
-> [  346.548844][  T100] [c000000009487ca0] [c0000000002b942c] rcu_torture_reader+0x12c/0x360^M
-> [  346.550784][  T100] [c000000009487db0] [c0000000001de978] kthread+0x1e8/0x220^M
-> [  346.552555][  T100] [c000000009487e10] [c00000000000cd54] ret_from_kernel_thread+0x5c/0x64^M
->
-> After 12 days debugging, I finally narrow the problem to irq_soft_mask_set.
+On Tue, Aug 23, 2022 at 11:30:22AM +0300, Krzysztof Kozlowski wrote:
+> On 23/08/2022 11:27, Serge Semin wrote:
+> > On Tue, Aug 23, 2022 at 11:22:08AM +0300, Krzysztof Kozlowski wrote:
+> >> On 23/08/2022 11:17, Krzysztof Kozlowski wrote:
+> >>> On 22/08/2022 22:07, Serge Semin wrote:
+> >>>> The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
+> >>>> the CSRs layout is absolutely different and it doesn't has IRQ unlike DW
+> >>>> uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there is
+> >>>> no any reason to have these controllers described by the same bindings.
+> >>>> Thus let's split them up.
+> >>>>
+> >>>> While at it rename the original Synopsys uMCTL2 DT-schema file to a more
+> >>>> descriptive - snps,dw-umctl2-ddrc.yaml and add a more detailed title and
+> >>>> description of the device bindings.
+> >>>
+> >>> Filename should be based on compatible, so if renaming then
+> >>> snps,ddrc-3.80a.yaml or snps,ddrc.yaml... which leads to original
+> >>> filename anyway. Therefore nack for rename.
+> >>>
+> >>> BTW, if you perform renames, generate patches with proper -M/-C/-B
+> >>> arguments so this is detected.
+> >>>
+> >>>
+> >>>>
+> >>>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> >>>> --->  .../snps,dw-umctl2-ddrc.yaml                  | 51 +++++++++++++
+> >>>
+> >>> This is a mess. I did not get any cover letters, any other patches any
+> >>> description of relation between this and your other one.
+> >>>
+> >>> It seems you make independent and conflicting changes to the same file,
+> >>> so this has to be properly organized.
+> >>>
+> >>> Send entire patchset with cover letter with description of all
+> >>> dependencies to all maintainers.
+> >>>
+> >>> This is unreviewable now, so a no.
+> >>
+> > 
+> >> And also untestable by Rob's bot, so will have to wait.
+> > 
+> > For what reason it's untestable? The patch has no dependencies from
+> > any other patchset.
+> 
 
-Thanks for spending 12 days debugging it! O_o
+> This one is testable, but the next one is not, because it depends on
+> something. I don't see the reason to split the bindings between
+> different patchsets.
 
-> diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
-> index 26ede09c521d..a5ae8d82cc9d 100644
-> --- a/arch/powerpc/include/asm/hw_irq.h
-> +++ b/arch/powerpc/include/asm/hw_irq.h
-> @@ -121,7 +121,7 @@ static inline notrace unsigned long irq_soft_mask_return(void)
->   * for the critical section and as a clobber because
->   * we changed paca->irq_soft_mask
->   */
-> -static inline notrace void irq_soft_mask_set(unsigned long mask)
-> +static inline notrace __no_kcsan __no_sanitize_address void irq_soft_mask_set(unsigned long mask)
->  {
->  	/*
->  	 * The irq mask must always include the STD bit if any are set.
+Really, do you want me to collect all 55 patches in a single patchset?
 
-My worry is that this will force irq_soft_mask_set() out of line, which
-we would rather avoid. It's meant to be a fast path.
+Please read the cover letter more carefully. And please don't hurry
+with your judgement before nacking here and there.
 
-In fact with this applied I see nearly 300 out-of-line copies of the
-function when building a defconfig, and ~1700 calls to it.
+-Sergey
 
-Normally it is inlined at every call site.
-
-
-So I think I'm inclined to revert ef5b570d3700 ("powerpc/irq: Don't open
-code irq_soft_mask helpers").
-
-It was a nice looking cleanup, but those loads must not be instrumented
-by KASAN, but we also want them inlined, and AFAICS the only way to
-achieve that is to go back to inline asm.
-
-cheers
+> 
+> Best regards,
+> Krzysztof

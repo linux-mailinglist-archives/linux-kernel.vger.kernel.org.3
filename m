@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47C059DD30
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167E959DC58
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358314AbiHWLpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S1354908AbiHWKWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358438AbiHWLlv (ORCPT
+        with ESMTP id S1353164AbiHWKK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:41:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25F991D21;
-        Tue, 23 Aug 2022 02:29:22 -0700 (PDT)
+        Tue, 23 Aug 2022 06:10:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F5A7E308;
+        Tue, 23 Aug 2022 01:56:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 651C261335;
-        Tue, 23 Aug 2022 09:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D2BC433C1;
-        Tue, 23 Aug 2022 09:29:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D849A61555;
+        Tue, 23 Aug 2022 08:56:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5189C433C1;
+        Tue, 23 Aug 2022 08:56:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246960;
-        bh=M+8fQVCz/RIbbWbO9JI8rTnR2NcylydDqYx7daNK+jU=;
+        s=korg; t=1661244969;
+        bh=JI/03GeTwMgOsMygXf7J1KB/3ZHFrEc0d5hp42a4KF4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TO7QUvULAbCqDdetL/IaO6Wl7oBHV0zPCRCYs2l8Cw3zWU3ZemiT4HWM7LrixhHQT
-         fiR3yE15YKEcuXX6yMgtryzeyGN1zrhkG8IWDnu+hAynWYtOUwq+f89Xc0LBfd9ZBo
-         xkEm5Su4uzWbhdWFPX4AKhlGPArdxohugZwa3WeU=
+        b=xejPmJxDRYfafbP7wSz/wX/4BZBUMadfJDyZEIPYJ+wKr4CAzfXtemD0dWEgoHX4b
+         uqJ6A4ryrJNlcW5ArGGx6usZ1AGj2X95XQDru/2clclJ9ziOM3c1AZx6/FVQxcYorb
+         iMbOOqnIbjCC26VITXA4ME+1v/Zm0X7cIyXsI8Tg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 5.4 274/389] iommu/vt-d: avoid invalid memory access via node_online(NUMA_NO_NODE)
+        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
+        Matthias May <matthias.may@westermo.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 191/229] geneve: do not use RT_TOS for IPv6 flowlabel
 Date:   Tue, 23 Aug 2022 10:25:52 +0200
-Message-Id: <20220823080127.000278792@linuxfoundation.org>
+Message-Id: <20220823080100.429142200@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,61 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
+From: Matthias May <matthias.may@westermo.com>
 
-commit b0b0b77ea611e3088e9523e60860f4f41b62b235 upstream.
+commit ca2bb69514a8bc7f83914122f0d596371352416c upstream.
 
-KASAN reports:
+According to Guillaume Nault RT_TOS should never be used for IPv6.
 
-[ 4.668325][ T0] BUG: KASAN: wild-memory-access in dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
-[    4.676149][    T0] Read of size 8 at addr 1fffffff85115558 by task swapper/0/0
-[    4.683454][    T0]
-[    4.685638][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc3-00004-g0e862838f290 #1
-[    4.694331][    T0] Hardware name: Supermicro SYS-5018D-FN4T/X10SDV-8C-TLN4F, BIOS 1.1 03/02/2016
-[    4.703196][    T0] Call Trace:
-[    4.706334][    T0]  <TASK>
-[ 4.709133][ T0] ? dmar_parse_one_rhsa (arch/x86/include/asm/bitops.h:214 arch/x86/include/asm/bitops.h:226 include/asm-generic/bitops/instrumented-non-atomic.h:142 include/linux/nodemask.h:415 drivers/iommu/intel/dmar.c:497)
+Quote:
+RT_TOS() is an old macro used to interprete IPv4 TOS as described in
+the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
+code, although, given the current state of the code, most of the
+existing calls have no consequence.
 
-after converting the type of the first argument (@nr, bit number)
-of arch_test_bit() from `long` to `unsigned long`[0].
+But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
+field to be interpreted the RFC 1349 way. There's no historical
+compatibility to worry about.
 
-Under certain conditions (for example, when ACPI NUMA is disabled
-via command line), pxm_to_node() can return %NUMA_NO_NODE (-1).
-It is valid 'magic' number of NUMA node, but not valid bit number
-to use in bitops.
-node_online() eventually descends to test_bit() without checking
-for the input, assuming it's on caller side (which might be good
-for perf-critical tasks). There, -1 becomes %ULONG_MAX which leads
-to an insane array index when calculating bit position in memory.
-
-For now, add an explicit check for @node being not %NUMA_NO_NODE
-before calling test_bit(). The actual logics didn't change here
-at all.
-
-[0] https://github.com/norov/linux/commit/0e862838f290147ea9c16db852d8d494b552d38d
-
-Fixes: ee34b32d8c29 ("dmar: support for parsing Remapping Hardware Static Affinity structure")
-Cc: stable@vger.kernel.org # 2.6.33+
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Fixes: 3a56f86f1be6 ("geneve: handle ipv6 priority like ipv4 tos")
+Acked-by: Guillaume Nault <gnault@redhat.com>
+Signed-off-by: Matthias May <matthias.may@westermo.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/dmar.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/geneve.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/iommu/dmar.c
-+++ b/drivers/iommu/dmar.c
-@@ -475,7 +475,7 @@ static int dmar_parse_one_rhsa(struct ac
- 		if (drhd->reg_base_addr == rhsa->base_address) {
- 			int node = acpi_map_pxm_to_node(rhsa->proximity_domain);
+--- a/drivers/net/geneve.c
++++ b/drivers/net/geneve.c
+@@ -795,8 +795,7 @@ static struct dst_entry *geneve_get_v6_d
+ 		use_cache = false;
+ 	}
  
--			if (!node_online(node))
-+			if (node != NUMA_NO_NODE && !node_online(node))
- 				node = NUMA_NO_NODE;
- 			drhd->iommu->node = node;
- 			return 0;
+-	fl6->flowlabel = ip6_make_flowinfo(RT_TOS(prio),
+-					   info->key.label);
++	fl6->flowlabel = ip6_make_flowinfo(prio, info->key.label);
+ 	dst_cache = (struct dst_cache *)&info->dst_cache;
+ 	if (use_cache) {
+ 		dst = dst_cache_get_ip6(dst_cache, &fl6->saddr);
 
 

@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B7459D2F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2268B59D767
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241704AbiHWIED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
+        id S1350256AbiHWJ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241524AbiHWICy (ORCPT
+        with ESMTP id S1350817AbiHWJ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:02:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C028D659EB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:02:52 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrt-0002vs-OU; Tue, 23 Aug 2022 10:02:37 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrr-001SvL-VU; Tue, 23 Aug 2022 10:02:35 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQOrp-00ALYM-4N; Tue, 23 Aug 2022 10:02:33 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v3 05/17] net: dsa: microchip: forward error value on all ksz_pread/ksz_pwrite functions
-Date:   Tue, 23 Aug 2022 10:02:19 +0200
-Message-Id: <20220823080231.2466017-6-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220823080231.2466017-1-o.rempel@pengutronix.de>
-References: <20220823080231.2466017-1-o.rempel@pengutronix.de>
+        Tue, 23 Aug 2022 05:26:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF26C760DB;
+        Tue, 23 Aug 2022 01:36:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0600CB81C53;
+        Tue, 23 Aug 2022 08:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ACCEC433D6;
+        Tue, 23 Aug 2022 08:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661243413;
+        bh=gpZlTkMgtQZhjdaTnXjvpPHUJqnBmdmQfvXUs6qO6OE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QcZidmmsrMychWtAdN86heOZaWGnMraMLhG/FZxDE7W4cF65y3vL0QC79+jw7w4Kp
+         pLwn0XQYJokSbpVrrP/wRwGtrDPtsJDFcBah/5azFcudTCtE5e6logtR6C51I/VODG
+         WgZOZSZzMnTeL4SapwhdfyzGp+DafSdrFvgeklyY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 5.19 239/365] kbuild: fix the modules order between drivers and libs
+Date:   Tue, 23 Aug 2022 10:02:20 +0200
+Message-Id: <20220823080128.240505129@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,73 +53,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ksz_read*/ksz_write* are able to return errors, so forward it.
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+commit 113147510b48e764e624e3d0e6707a1e48bc05a9 upstream.
+
+Commit b2c885549122 ("kbuild: update modules.order only when contained
+modules are updated") accidentally changed the modules order.
+
+Prior to that commit, the modules order was determined based on
+vmlinux-dirs, which lists core-y/m, drivers-y/m, libs-y/m, in this order.
+
+Now, subdir-modorder lists them in a different order: core-y/m, libs-y/m,
+drivers-y/m.
+
+Presumably, there was no practical issue because the modules in drivers
+and libs are orthogonal, but there is no reason to have this distortion.
+
+Get back to the original order.
+
+Fixes: b2c885549122 ("kbuild: update modules.order only when contained modules are updated")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/microchip/ksz_common.h | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+ Makefile |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index baaeb60533faf..be0e5d6ef2bf0 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -393,40 +393,42 @@ static inline int ksz_write64(struct ksz_device *dev, u32 reg, u64 value)
- 	return regmap_bulk_write(dev->regmap[2], reg, val, 2);
- }
+--- a/Makefile
++++ b/Makefile
+@@ -1112,13 +1112,11 @@ vmlinux-alldirs	:= $(sort $(vmlinux-dirs
+ 		     $(patsubst %/,%,$(filter %/, $(core-) \
+ 			$(drivers-) $(libs-))))
  
--static inline void ksz_pread8(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pread8(struct ksz_device *dev, int port, int offset,
- 			      u8 *data)
- {
--	ksz_read8(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_read8(dev, dev->dev_ops->get_port_addr(port, offset), data);
- }
+-subdir-modorder := $(addsuffix modules.order,$(filter %/, \
+-			$(core-y) $(core-m) $(libs-y) $(libs-m) \
+-			$(drivers-y) $(drivers-m)))
+-
+ build-dirs	:= $(vmlinux-dirs)
+ clean-dirs	:= $(vmlinux-alldirs)
  
--static inline void ksz_pread16(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pread16(struct ksz_device *dev, int port, int offset,
- 			       u16 *data)
- {
--	ksz_read16(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_read16(dev, dev->dev_ops->get_port_addr(port, offset), data);
- }
- 
--static inline void ksz_pread32(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pread32(struct ksz_device *dev, int port, int offset,
- 			       u32 *data)
- {
--	ksz_read32(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_read32(dev, dev->dev_ops->get_port_addr(port, offset), data);
- }
- 
--static inline void ksz_pwrite8(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pwrite8(struct ksz_device *dev, int port, int offset,
- 			       u8 data)
- {
--	ksz_write8(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_write8(dev, dev->dev_ops->get_port_addr(port, offset), data);
- }
- 
--static inline void ksz_pwrite16(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pwrite16(struct ksz_device *dev, int port, int offset,
- 				u16 data)
- {
--	ksz_write16(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_write16(dev, dev->dev_ops->get_port_addr(port, offset),
-+			   data);
- }
- 
--static inline void ksz_pwrite32(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pwrite32(struct ksz_device *dev, int port, int offset,
- 				u32 data)
- {
--	ksz_write32(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_write32(dev, dev->dev_ops->get_port_addr(port, offset),
-+			   data);
- }
- 
- static inline void ksz_prmw8(struct ksz_device *dev, int port, int offset,
--- 
-2.30.2
++subdir-modorder := $(addsuffix /modules.order, $(build-dirs))
++
+ # Externally visible symbols (used by link-vmlinux.sh)
+ KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
+ KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
+
 

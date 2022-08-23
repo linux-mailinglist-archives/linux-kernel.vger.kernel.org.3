@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A1459E023
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC83859DF29
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240956AbiHWLDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S1359314AbiHWMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357273AbiHWLBy (ORCPT
+        with ESMTP id S230168AbiHWMAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:01:54 -0400
+        Tue, 23 Aug 2022 08:00:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBD2AF4BB;
-        Tue, 23 Aug 2022 02:14:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BB4D7D2A;
+        Tue, 23 Aug 2022 02:35:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85930B81C85;
-        Tue, 23 Aug 2022 09:14:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE4DC433B5;
-        Tue, 23 Aug 2022 09:14:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6A74B81C53;
+        Tue, 23 Aug 2022 09:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2203DC433C1;
+        Tue, 23 Aug 2022 09:34:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246041;
-        bh=LIzfmA1mLukFGyq63niJTErm1FewG0B2a5QkgHosg7Y=;
+        s=korg; t=1661247256;
+        bh=g97XD/pgPbqJ4VwO4uV+VBUuGwCDEvgLc1WAUiTfTeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t8XNS5v4zHUPh6RlQdDsrXkOC/+SVsAnduS0AfDeLGgN/sJpLbKxN4+dNfrUQep2w
-         mzz5MZ1f4bKba7k4ENZxkvafXxBEOQFmZKuJTtazz8VavxoJKOHWASfLduytpBOPqp
-         xHcceM5OMYUV2Foa7TBoWSQUrvUNAjFzJZNPj3FU=
+        b=IPQBqip7GhQ4C+pj5FS7+zdqUNdcZgUoDCn7m7BZgO/K/2u6MfSfejMnDUW1KMwe6
+         pcQIov4RiRkDwJ01KbPIK4HMCrOX2fw9g+cOQYA/Y1QrMEIYpmOevDZQc1jiBTmFpG
+         bzWkFrODkFZ/hZtrFQOgx+Cf5u3ZyScd5sVm0XuQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleg Kiselev <okiselev@amazon.com>,
-        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 269/287] ext4: avoid resizing to a partial cluster size
+        stable@vger.kernel.org, Andrew Donnellan <ajd@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 360/389] cxl: Fix a memory leak in an error handling path
 Date:   Tue, 23 Aug 2022 10:27:18 +0200
-Message-Id: <20220823080110.432124883@linuxfoundation.org>
+Message-Id: <20220823080130.587686861@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kiselev, Oleg <okiselev@amazon.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 69cb8e9d8cd97cdf5e293b26d70a9dee3e35e6bd ]
+[ Upstream commit 3a15b45b5454da862376b5d69a4967f5c6fa1368 ]
 
-This patch avoids an attempt to resize the filesystem to an
-unaligned cluster boundary.  An online resize to a size that is not
-integral to cluster size results in the last iteration attempting to
-grow the fs by a negative amount, which trips a BUG_ON and leaves the fs
-with a corrupted in-memory superblock.
+A bitmap_zalloc() must be balanced by a corresponding bitmap_free() in the
+error handling path of afu_allocate_irqs().
 
-Signed-off-by: Oleg Kiselev <okiselev@amazon.com>
-Link: https://lore.kernel.org/r/0E92A0AB-4F16-4F1A-94B7-702CC6504FDE@amazon.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/ce5869418f5838187946eb6b11a52715a93ece3d.1657566849.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/resize.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/misc/cxl/irq.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
-index 88f9627225fc..dd23c97ae951 100644
---- a/fs/ext4/resize.c
-+++ b/fs/ext4/resize.c
-@@ -1981,6 +1981,16 @@ int ext4_resize_fs(struct super_block *sb, ext4_fsblk_t n_blocks_count)
- 	}
- 	brelse(bh);
+diff --git a/drivers/misc/cxl/irq.c b/drivers/misc/cxl/irq.c
+index 4cb829d5d873..2e4dcfebf19a 100644
+--- a/drivers/misc/cxl/irq.c
++++ b/drivers/misc/cxl/irq.c
+@@ -349,6 +349,7 @@ int afu_allocate_irqs(struct cxl_context *ctx, u32 count)
  
-+	/*
-+	 * For bigalloc, trim the requested size to the nearest cluster
-+	 * boundary to avoid creating an unusable filesystem. We do this
-+	 * silently, instead of returning an error, to avoid breaking
-+	 * callers that blindly resize the filesystem to the full size of
-+	 * the underlying block device.
-+	 */
-+	if (ext4_has_feature_bigalloc(sb))
-+		n_blocks_count &= ~((1 << EXT4_CLUSTER_BITS(sb)) - 1);
-+
- retry:
- 	o_blocks_count = ext4_blocks_count(es);
- 
+ out:
+ 	cxl_ops->release_irq_ranges(&ctx->irqs, ctx->afu->adapter);
++	bitmap_free(ctx->irq_bitmap);
+ 	afu_irq_name_free(ctx);
+ 	return -ENOMEM;
+ }
 -- 
 2.35.1
 

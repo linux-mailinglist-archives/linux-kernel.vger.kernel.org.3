@@ -2,389 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B4D59EABA
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2497059EAC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbiHWSPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S231572AbiHWSQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiHWSOx (ORCPT
+        with ESMTP id S233482AbiHWSQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:14:53 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B403E103C50
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:29:18 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id t6so4475382ilf.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7tHFsAf+FO8lNa29v65Dj+9ntK8kT+IHmrzE3nFuT8A=;
-        b=Bdv8IeN+BIrvx0Ef47EKHaeybMXffhKSQqdC8Cj7RYORImm1h5sTIrqCm+CJFcZtfQ
-         9lcPB8QmRzP2GebM0sMlsYqqtCZRIINZw6Ds1O6t4yUDN+Mv9jTLMgEEV5KfxFzNsUe1
-         OVeMz3UCStzssydIpkBgEOEiCxzMgEAHi7mqwuKvdODzJdFQ0r++fokN0TsxkUtllX4H
-         eyiJ1STXgTfwMXnnro6tYSG5FYXG/Mj38czWrXAufhKBysNEkg3A7SLtK9rrj/0stPUy
-         5spfTQ0Ly37cSkzZJPuwgqnCEttnd7wOejhojuOZye04DugCE+ohCabfkybQ/neCvqdf
-         HJVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7tHFsAf+FO8lNa29v65Dj+9ntK8kT+IHmrzE3nFuT8A=;
-        b=Pg1nVGhEr+Sn6xdGoAKM2bNVGn9r8qXc48PGPERaIanmhQvHm6qLz8NkcRhW+Ho2gt
-         oBOgMuS2M9KeeUHNxrE/D/mkFuqm35M4CpVLyBADx86cssHY8EER4HYoCuIkMdsjMIjS
-         g6pY56kx3otkl6vp7XRNJlT4wqub2aSFhXH87++Jk6A3GRULVERndkFLPwLrVjaO8xdD
-         yKok3lSxcHHotBUdYwhItCjKInHx42mxWpsdkhyACw0u0Iz9P9NCvvDH1zIluU8epAxd
-         XCUkns6cEAW2xYMHKtzlTyb9sY3kMns+32b9j3MTpOuFLXzYiJdBPjbqoxPkof3kw0US
-         9opA==
-X-Gm-Message-State: ACgBeo0AvRTyZcdIh1PhItJwMZVQP25ctJwl+10yxy0QBPFRbrld+I8R
-        lasii62Af3l0eCibmPRLYE6wdTz9duoYRl+ElgQ2PQ==
-X-Google-Smtp-Source: AA6agR6DbteusixrIzp+00W7w7H5mHJcBuMRkiEkKjD+4r4q/v5SsgCr5bCfz8Y0GXeRppd3eO/JVv2liBkXWQ3UfIM=
-X-Received: by 2002:a05:6e02:1a63:b0:2e9:ec03:9618 with SMTP id
- w3-20020a056e021a6300b002e9ec039618mr192029ilv.187.1661272157518; Tue, 23 Aug
- 2022 09:29:17 -0700 (PDT)
+        Tue, 23 Aug 2022 14:16:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D2B15705;
+        Tue, 23 Aug 2022 09:31:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5083FB81EAE;
+        Tue, 23 Aug 2022 16:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D0EC433C1;
+        Tue, 23 Aug 2022 16:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661272274;
+        bh=OqHw0q9DNVYJjnlUp9Yin1mQ5pVhxLZiNR6IhSFn7bA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tRjNx3AR6TP1nyjLh0bi1GmL6MkgwnTlSz6NJSYPpVDTSH3nAW1ZJ11KWAvZnEyFp
+         0kbIjN2y0xVlccS/8p3JyFOSBw5mTEPLefYu/pCRpbaP+qF7svdC3CBSIub4QMI2nq
+         nul+hmJeIwfF6IzqwYdp9E228aMjshTpIeCl4eWYP4e3FJN+iblUHHYfDhjaVsGMdN
+         syR9CMXVKp80l7wZQxMMRz8Fa3SjPo7znivh7amixYM2pdgeb6HoQMGF9hMJua/rA9
+         qZZcM1DwIkCcULA7AvcXL7HOSmyV7POWYZ7qpRWKqMXXvWRvq138LgOMvemg1vccoq
+         CL6QFEY+kXyxA==
+Received: by pali.im (Postfix)
+        id A4438621; Tue, 23 Aug 2022 18:31:10 +0200 (CEST)
+Date:   Tue, 23 Aug 2022 18:31:10 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: pci-bridge-emul: Set position of PCI
+ capabilities to real HW value
+Message-ID: <20220823163110.rtqz534otlzsziza@pali>
+References: <20220703104627.27058-1-pali@kernel.org>
+ <20220823101439.24525-1-pali@kernel.org>
+ <YwT4fRJ4dF2JflwF@lpieralisi>
 MIME-Version: 1.0
-References: <20220823075717.28072-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220823075717.28072-1-shaozhengchao@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 23 Aug 2022 09:29:06 -0700
-Message-ID: <CANn89iKta=-C43_jQpVVra_v3HxfCjvx+pJFj6NfLoa_GTXfAQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: sched: delete duplicate cleanup of backlog
- and qlen
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Gomes <vinicius.gomes@intel.com>,
-        weiyongjun1@huawei.com, YueHaibing <yuehaibing@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YwT4fRJ4dF2JflwF@lpieralisi>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 12:54 AM Zhengchao Shao
-<shaozhengchao@huawei.com> wrote:
->
-> The qdisc_reset function has cleared the backlog and qlen of the qdisc.
-> There is no need to clear them again in the specific reset function.
+On Tuesday 23 August 2022 17:55:41 Lorenzo Pieralisi wrote:
+> On Tue, Aug 23, 2022 at 12:14:39PM +0200, Pali Rohár wrote:
+> > mvebu and aardvark HW have PCIe capabilities on different offset in PCI
+> > config space. Extend pci-bridge-emul.c code to allow setting custom driver
+> > custom value where PCIe capabilities starts.
+> > 
+> > With this change PCIe capabilities of both drivers are reported at the same
+> > location as where they are reported by U-Boot - in their real HW offset.
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > ---
+> > Changes in v2:
+> > * Rebase on top of v6.0-rc1, fix usage of PCIE_CAP_PCIEXP
+> > ---
+> >  drivers/pci/controller/pci-aardvark.c |  1 +
+> >  drivers/pci/controller/pci-mvebu.c    |  1 +
+> >  drivers/pci/pci-bridge-emul.c         | 46 +++++++++++++++++----------
+> >  drivers/pci/pci-bridge-emul.h         |  2 ++
+> >  4 files changed, 33 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+> > index 966c8b48bd96..4834198cc86b 100644
+> > --- a/drivers/pci/controller/pci-aardvark.c
+> > +++ b/drivers/pci/controller/pci-aardvark.c
+> > @@ -1078,6 +1078,7 @@ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
+> >  	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
+> >  
+> >  	bridge->has_pcie = true;
+> > +	bridge->pcie_start = PCIE_CORE_PCIEXP_CAP;
+> >  	bridge->data = pcie;
+> >  	bridge->ops = &advk_pci_bridge_emul_ops;
+> >  
+> > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > index af915c951f06..0fdbb5585fec 100644
+> > --- a/drivers/pci/controller/pci-mvebu.c
+> > +++ b/drivers/pci/controller/pci-mvebu.c
+> > @@ -946,6 +946,7 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
+> >  	bridge->subsystem_vendor_id = ssdev_id & 0xffff;
+> >  	bridge->subsystem_id = ssdev_id >> 16;
+> >  	bridge->has_pcie = true;
+> > +	bridge->pcie_start = PCIE_CAP_PCIEXP;
+> >  	bridge->data = port;
+> >  	bridge->ops = &mvebu_pci_bridge_emul_ops;
+> >  
+> > diff --git a/drivers/pci/pci-bridge-emul.c b/drivers/pci/pci-bridge-emul.c
+> > index 9c2ca28e3ecf..dfbbe43ef518 100644
+> > --- a/drivers/pci/pci-bridge-emul.c
+> > +++ b/drivers/pci/pci-bridge-emul.c
+> > @@ -22,11 +22,7 @@
+> >  
+> >  #define PCI_BRIDGE_CONF_END	PCI_STD_HEADER_SIZEOF
+> >  #define PCI_CAP_SSID_SIZEOF	(PCI_SSVID_DEVICE_ID + 2)
+> > -#define PCI_CAP_SSID_START	PCI_BRIDGE_CONF_END
+> > -#define PCI_CAP_SSID_END	(PCI_CAP_SSID_START + PCI_CAP_SSID_SIZEOF)
+> >  #define PCI_CAP_PCIE_SIZEOF	(PCI_EXP_SLTSTA2 + 2)
+> > -#define PCI_CAP_PCIE_START	PCI_CAP_SSID_END
+> > -#define PCI_CAP_PCIE_END	(PCI_CAP_PCIE_START + PCI_CAP_PCIE_SIZEOF)
+> >  
+> >  /**
+> >   * struct pci_bridge_reg_behavior - register bits behaviors
+> > @@ -324,7 +320,7 @@ pci_bridge_emul_read_ssid(struct pci_bridge_emul *bridge, int reg, u32 *value)
+> >  	switch (reg) {
+> >  	case PCI_CAP_LIST_ID:
+> >  		*value = PCI_CAP_ID_SSVID |
+> > -			(bridge->has_pcie ? (PCI_CAP_PCIE_START << 8) : 0);
+> > +			((bridge->pcie_start > bridge->ssid_start) ? (bridge->pcie_start << 8) : 0);
+> >  		return PCI_BRIDGE_EMUL_HANDLED;
+> >  
+> >  	case PCI_SSVID_VENDOR_ID:
+> > @@ -365,12 +361,25 @@ int pci_bridge_emul_init(struct pci_bridge_emul *bridge,
+> >  	if (!bridge->pci_regs_behavior)
+> >  		return -ENOMEM;
+> >  
+> > -	if (bridge->subsystem_vendor_id)
+> > -		bridge->conf.capabilities_pointer = PCI_CAP_SSID_START;
+> > -	else if (bridge->has_pcie)
+> > -		bridge->conf.capabilities_pointer = PCI_CAP_PCIE_START;
+> > -	else
+> > -		bridge->conf.capabilities_pointer = 0;
+> > +	/* If ssid_start and pcie_start were not specified then choose the lowest possible value. */
+> > +	if (!bridge->ssid_start && !bridge->pcie_start) {
+> > +		if (bridge->subsystem_vendor_id)
+> > +			bridge->ssid_start = PCI_BRIDGE_CONF_END;
+> > +		if (bridge->has_pcie)
+> > +			bridge->pcie_start = bridge->ssid_start + PCI_CAP_SSID_SIZEOF;
+> > +	} else if (!bridge->ssid_start && bridge->subsystem_vendor_id) {
+> > +		if (bridge->pcie_start - PCI_BRIDGE_CONF_END >= PCI_CAP_SSID_SIZEOF)
+> > +			bridge->ssid_start = PCI_BRIDGE_CONF_END;
+> > +		else
+> > +			bridge->ssid_start = bridge->pcie_start + PCI_CAP_PCIE_SIZEOF;
+> > +	} else if (!bridge->pcie_start && bridge->has_pcie) {
+> > +		if (bridge->ssid_start - PCI_BRIDGE_CONF_END >= PCI_CAP_PCIE_SIZEOF)
+> > +			bridge->pcie_start = PCI_BRIDGE_CONF_END;
+> 
+> Right. So here the PCI express capability should be made to point to
+> subsystem ID vendor capability but I don't see anything in the code
+> that makes it happen. I am just trying to understand what this patch
+> is changing and AFAICS this code path is not triggered with current
+> code but it may well be in the future.
 
-changelog is slightly inaccurate.
+This top level branch is called when emulated PCI bridge is PCIe device
+(has_pcie is truth) and PCIe host controller driver did not want to put
+PCI express capability at any specific offset (pcie_start address is not
+filled, is zero), but want to put SSID capability at specific offset
+(ssid_start is filled).
 
-qdisc_reset() is clearing qdisc->q.qlen and qdisc->qstats.backlog
-_after_ calling qdisc->ops->reset,
-not before.
+Second inner branch is called when between PCI standard capability and
+SSID capability is enough place for putting PCI express capability.
 
->
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  include/net/sch_generic.h | 1 -
->  net/sched/sch_atm.c       | 1 -
->  net/sched/sch_cbq.c       | 1 -
->  net/sched/sch_choke.c     | 2 --
->  net/sched/sch_drr.c       | 2 --
->  net/sched/sch_dsmark.c    | 2 --
->  net/sched/sch_etf.c       | 3 ---
->  net/sched/sch_ets.c       | 2 --
->  net/sched/sch_fq_codel.c  | 2 --
->  net/sched/sch_fq_pie.c    | 3 ---
->  net/sched/sch_hfsc.c      | 2 --
->  net/sched/sch_htb.c       | 2 --
->  net/sched/sch_multiq.c    | 1 -
->  net/sched/sch_prio.c      | 2 --
->  net/sched/sch_qfq.c       | 2 --
->  net/sched/sch_red.c       | 2 --
->  net/sched/sch_sfb.c       | 2 --
->  net/sched/sch_skbprio.c   | 3 ---
->  net/sched/sch_taprio.c    | 2 --
->  net/sched/sch_tbf.c       | 2 --
->  net/sched/sch_teql.c      | 1 -
->  21 files changed, 40 deletions(-)
->
-> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-> index ec693fe7c553..f2958fb5ae08 100644
-> --- a/include/net/sch_generic.h
-> +++ b/include/net/sch_generic.h
-> @@ -1137,7 +1137,6 @@ static inline void __qdisc_reset_queue(struct qdisc_skb_head *qh)
->  static inline void qdisc_reset_queue(struct Qdisc *sch)
->  {
->         __qdisc_reset_queue(&sch->q);
-> -       sch->qstats.backlog = 0;
->  }
->
->  static inline struct Qdisc *qdisc_replace(struct Qdisc *sch, struct Qdisc *new,
-> diff --git a/net/sched/sch_atm.c b/net/sched/sch_atm.c
-> index 4c8e994cf0a5..816fd0d7ba38 100644
-> --- a/net/sched/sch_atm.c
-> +++ b/net/sched/sch_atm.c
-> @@ -577,7 +577,6 @@ static void atm_tc_reset(struct Qdisc *sch)
->         pr_debug("atm_tc_reset(sch %p,[qdisc %p])\n", sch, p);
->         list_for_each_entry(flow, &p->flows, list)
->                 qdisc_reset(flow->q);
-> -       sch->q.qlen = 0;
->  }
->
->  static void atm_tc_destroy(struct Qdisc *sch)
-> diff --git a/net/sched/sch_cbq.c b/net/sched/sch_cbq.c
-> index af126eb3e431..b026daca160e 100644
-> --- a/net/sched/sch_cbq.c
-> +++ b/net/sched/sch_cbq.c
-> @@ -975,7 +975,6 @@ cbq_reset(struct Qdisc *sch)
->                         cl->cpriority = cl->priority;
->                 }
->         }
-> -       sch->q.qlen = 0;
->  }
->
->
-> diff --git a/net/sched/sch_choke.c b/net/sched/sch_choke.c
-> index 2adbd945bf15..25d2daaa8122 100644
-> --- a/net/sched/sch_choke.c
-> +++ b/net/sched/sch_choke.c
-> @@ -315,8 +315,6 @@ static void choke_reset(struct Qdisc *sch)
->                 rtnl_qdisc_drop(skb, sch);
->         }
->
-> -       sch->q.qlen = 0;
-> -       sch->qstats.backlog = 0;
->         if (q->tab)
->                 memset(q->tab, 0, (q->tab_mask + 1) * sizeof(struct sk_buff *));
->         q->head = q->tail = 0;
-> diff --git a/net/sched/sch_drr.c b/net/sched/sch_drr.c
-> index 18e4f7a0b291..4e5b1cf11b85 100644
-> --- a/net/sched/sch_drr.c
-> +++ b/net/sched/sch_drr.c
-> @@ -441,8 +441,6 @@ static void drr_reset_qdisc(struct Qdisc *sch)
->                         qdisc_reset(cl->qdisc);
->                 }
->         }
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->  }
->
->  static void drr_destroy_qdisc(struct Qdisc *sch)
-> diff --git a/net/sched/sch_dsmark.c b/net/sched/sch_dsmark.c
-> index 4c100d105269..7da6dc38a382 100644
-> --- a/net/sched/sch_dsmark.c
-> +++ b/net/sched/sch_dsmark.c
-> @@ -409,8 +409,6 @@ static void dsmark_reset(struct Qdisc *sch)
->         pr_debug("%s(sch %p,[qdisc %p])\n", __func__, sch, p);
->         if (p->q)
->                 qdisc_reset(p->q);
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->  }
->
->  static void dsmark_destroy(struct Qdisc *sch)
-> diff --git a/net/sched/sch_etf.c b/net/sched/sch_etf.c
-> index c48f91075b5c..d96103b0e2bf 100644
-> --- a/net/sched/sch_etf.c
-> +++ b/net/sched/sch_etf.c
-> @@ -445,9 +445,6 @@ static void etf_reset(struct Qdisc *sch)
->         timesortedlist_clear(sch);
->         __qdisc_reset_queue(&sch->q);
->
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
-> -
->         q->last = 0;
->  }
->
-> diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
-> index d73393493553..8de4365886e8 100644
-> --- a/net/sched/sch_ets.c
-> +++ b/net/sched/sch_ets.c
-> @@ -727,8 +727,6 @@ static void ets_qdisc_reset(struct Qdisc *sch)
->         }
->         for (band = 0; band < q->nbands; band++)
->                 qdisc_reset(q->classes[band].qdisc);
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->  }
->
->  static void ets_qdisc_destroy(struct Qdisc *sch)
-> diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
-> index 839e1235db05..23a042adb74d 100644
-> --- a/net/sched/sch_fq_codel.c
-> +++ b/net/sched/sch_fq_codel.c
-> @@ -347,8 +347,6 @@ static void fq_codel_reset(struct Qdisc *sch)
->                 codel_vars_init(&flow->cvars);
->         }
->         memset(q->backlogs, 0, q->flows_cnt * sizeof(u32));
-> -       sch->q.qlen = 0;
-> -       sch->qstats.backlog = 0;
->         q->memory_usage = 0;
->  }
->
-> diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
-> index d6aba6edd16e..35c35465226b 100644
-> --- a/net/sched/sch_fq_pie.c
-> +++ b/net/sched/sch_fq_pie.c
-> @@ -521,9 +521,6 @@ static void fq_pie_reset(struct Qdisc *sch)
->                 INIT_LIST_HEAD(&flow->flowchain);
->                 pie_vars_init(&flow->vars);
->         }
-> -
-> -       sch->q.qlen = 0;
-> -       sch->qstats.backlog = 0;
->  }
->
->  static void fq_pie_destroy(struct Qdisc *sch)
-> diff --git a/net/sched/sch_hfsc.c b/net/sched/sch_hfsc.c
-> index d3979a6000e7..03efc40e42fc 100644
-> --- a/net/sched/sch_hfsc.c
-> +++ b/net/sched/sch_hfsc.c
-> @@ -1484,8 +1484,6 @@ hfsc_reset_qdisc(struct Qdisc *sch)
->         }
->         q->eligible = RB_ROOT;
->         qdisc_watchdog_cancel(&q->watchdog);
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->  }
->
->  static void
-> diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
-> index 23a9d6242429..cb5872d22ecf 100644
-> --- a/net/sched/sch_htb.c
-> +++ b/net/sched/sch_htb.c
-> @@ -1008,8 +1008,6 @@ static void htb_reset(struct Qdisc *sch)
->         }
->         qdisc_watchdog_cancel(&q->watchdog);
->         __qdisc_reset_queue(&q->direct_queue);
-> -       sch->q.qlen = 0;
-> -       sch->qstats.backlog = 0;
->         memset(q->hlevel, 0, sizeof(q->hlevel));
->         memset(q->row_mask, 0, sizeof(q->row_mask));
->  }
-> diff --git a/net/sched/sch_multiq.c b/net/sched/sch_multiq.c
-> index cd8ab90c4765..f28050c7f12d 100644
-> --- a/net/sched/sch_multiq.c
-> +++ b/net/sched/sch_multiq.c
-> @@ -152,7 +152,6 @@ multiq_reset(struct Qdisc *sch)
->
->         for (band = 0; band < q->bands; band++)
->                 qdisc_reset(q->queues[band]);
-> -       sch->q.qlen = 0;
->         q->curband = 0;
->  }
->
-> diff --git a/net/sched/sch_prio.c b/net/sched/sch_prio.c
-> index 3b8d7197c06b..c03a11dd990f 100644
-> --- a/net/sched/sch_prio.c
-> +++ b/net/sched/sch_prio.c
-> @@ -135,8 +135,6 @@ prio_reset(struct Qdisc *sch)
->
->         for (prio = 0; prio < q->bands; prio++)
->                 qdisc_reset(q->queues[prio]);
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->  }
->
->  static int prio_offload(struct Qdisc *sch, struct tc_prio_qopt *qopt)
-> diff --git a/net/sched/sch_qfq.c b/net/sched/sch_qfq.c
-> index d4ce58c90f9f..13246a9dc5c1 100644
-> --- a/net/sched/sch_qfq.c
-> +++ b/net/sched/sch_qfq.c
-> @@ -1458,8 +1458,6 @@ static void qfq_reset_qdisc(struct Qdisc *sch)
->                         qdisc_reset(cl->qdisc);
->                 }
->         }
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->  }
->
->  static void qfq_destroy_qdisc(struct Qdisc *sch)
-> diff --git a/net/sched/sch_red.c b/net/sched/sch_red.c
-> index 40adf1f07a82..f1e013e3f04a 100644
-> --- a/net/sched/sch_red.c
-> +++ b/net/sched/sch_red.c
-> @@ -176,8 +176,6 @@ static void red_reset(struct Qdisc *sch)
->         struct red_sched_data *q = qdisc_priv(sch);
->
->         qdisc_reset(q->qdisc);
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->         red_restart(&q->vars);
->  }
->
-> diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
-> index 3d061a13d7ed..31717fa45a4f 100644
-> --- a/net/sched/sch_sfb.c
-> +++ b/net/sched/sch_sfb.c
-> @@ -453,8 +453,6 @@ static void sfb_reset(struct Qdisc *sch)
->         struct sfb_sched_data *q = qdisc_priv(sch);
->
->         qdisc_reset(q->qdisc);
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->         q->slot = 0;
->         q->double_buffering = false;
->         sfb_zero_all_buckets(q);
-> diff --git a/net/sched/sch_skbprio.c b/net/sched/sch_skbprio.c
-> index 7a5e4c454715..df72fb83d9c7 100644
-> --- a/net/sched/sch_skbprio.c
-> +++ b/net/sched/sch_skbprio.c
-> @@ -213,9 +213,6 @@ static void skbprio_reset(struct Qdisc *sch)
->         struct skbprio_sched_data *q = qdisc_priv(sch);
->         int prio;
->
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
-> -
->         for (prio = 0; prio < SKBPRIO_MAX_PRIORITY; prio++)
->                 __skb_queue_purge(&q->qdiscs[prio]);
->
-> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-> index 0b941dd63d26..db88a692ef81 100644
-> --- a/net/sched/sch_taprio.c
-> +++ b/net/sched/sch_taprio.c
-> @@ -1636,8 +1636,6 @@ static void taprio_reset(struct Qdisc *sch)
->                         if (q->qdiscs[i])
->                                 qdisc_reset(q->qdiscs[i]);
->         }
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->  }
->
->  static void taprio_destroy(struct Qdisc *sch)
-> diff --git a/net/sched/sch_tbf.c b/net/sched/sch_tbf.c
-> index 72102277449e..d0288e223542 100644
-> --- a/net/sched/sch_tbf.c
-> +++ b/net/sched/sch_tbf.c
-> @@ -330,8 +330,6 @@ static void tbf_reset(struct Qdisc *sch)
->         struct tbf_sched_data *q = qdisc_priv(sch);
->
->         qdisc_reset(q->qdisc);
-> -       sch->qstats.backlog = 0;
-> -       sch->q.qlen = 0;
->         q->t_c = ktime_get_ns();
->         q->tokens = q->buffer;
->         q->ptokens = q->mtu;
-> diff --git a/net/sched/sch_teql.c b/net/sched/sch_teql.c
-> index 6af6b95bdb67..79aaab51cbf5 100644
-> --- a/net/sched/sch_teql.c
-> +++ b/net/sched/sch_teql.c
-> @@ -124,7 +124,6 @@ teql_reset(struct Qdisc *sch)
->         struct teql_sched_data *dat = qdisc_priv(sch);
->
->         skb_queue_purge(&dat->q);
-> -       sch->q.qlen = 0;
->  }
->
->  static void
-> --
-> 2.17.1
->
+So in this case offset for PCI express capability (pcie_start) is set
+immediate after the PCI standard capability.
+
+All these conditions (toplevel + inner branch) are not currently called,
+because both aardvark and mvebu drivers do not match those conditions.
+I put this code here to ensure that if somebody adds a new driver which
+will use pci emul bridge, it will work and does not crash kernel because
+values pcie_start or ssid_start are not filled but capabilities are
+required.
+
+> In other words: what if PCI express capability is lower in the address
+> space (config) than the subsystem ID vendor capability ?
+
+Current code expects that if host controller driver sets both pcie_start
+and ssid_start, those values are correct, non-overlapping and can be
+handled correctly.
+
+And if offset to PCI express capability is lower than offset to SSID
+capability then there should not be any issue. First capability is
+correctly set into capabilities_pointer (via min function) and then
+pci_bridge_emul_conf_read() should handle it.
+
+The whole my idea is to construct capabilities linked list structure
+correctly based on input requirements (e.g. fixed location of some
+capability, etc).
+
+> I am just trying to understand the patch, so forgive me if the question
+> is already addressed in the code.
+> 
+> Thanks,
+> Lorenzo
+> 
+> > +		else
+> > +			bridge->pcie_start = bridge->ssid_start + PCI_CAP_SSID_SIZEOF;
+> > +	}
+> > +
+> > +	bridge->conf.capabilities_pointer = min(bridge->ssid_start, bridge->pcie_start);
+> >  
+> >  	if (bridge->conf.capabilities_pointer)
+> >  		bridge->conf.status |= cpu_to_le16(PCI_STATUS_CAP_LIST);
+> > @@ -459,15 +468,17 @@ int pci_bridge_emul_conf_read(struct pci_bridge_emul *bridge, int where,
+> >  		read_op = bridge->ops->read_base;
+> >  		cfgspace = (__le32 *) &bridge->conf;
+> >  		behavior = bridge->pci_regs_behavior;
+> > -	} else if (reg >= PCI_CAP_SSID_START && reg < PCI_CAP_SSID_END && bridge->subsystem_vendor_id) {
+> > +	} else if (reg >= bridge->ssid_start && reg < bridge->ssid_start + PCI_CAP_SSID_SIZEOF &&
+> > +		   bridge->subsystem_vendor_id) {
+> >  		/* Emulated PCI Bridge Subsystem Vendor ID capability */
+> > -		reg -= PCI_CAP_SSID_START;
+> > +		reg -= bridge->ssid_start;
+> >  		read_op = pci_bridge_emul_read_ssid;
+> >  		cfgspace = NULL;
+> >  		behavior = NULL;
+> > -	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
+> > +	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
+> > +		   bridge->has_pcie) {
+> >  		/* Our emulated PCIe capability */
+> > -		reg -= PCI_CAP_PCIE_START;
+> > +		reg -= bridge->pcie_start;
+> >  		read_op = bridge->ops->read_pcie;
+> >  		cfgspace = (__le32 *) &bridge->pcie_conf;
+> >  		behavior = bridge->pcie_cap_regs_behavior;
+> > @@ -538,9 +549,10 @@ int pci_bridge_emul_conf_write(struct pci_bridge_emul *bridge, int where,
+> >  		write_op = bridge->ops->write_base;
+> >  		cfgspace = (__le32 *) &bridge->conf;
+> >  		behavior = bridge->pci_regs_behavior;
+> > -	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
+> > +	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
+> > +		   bridge->has_pcie) {
+> >  		/* Our emulated PCIe capability */
+> > -		reg -= PCI_CAP_PCIE_START;
+> > +		reg -= bridge->pcie_start;
+> >  		write_op = bridge->ops->write_pcie;
+> >  		cfgspace = (__le32 *) &bridge->pcie_conf;
+> >  		behavior = bridge->pcie_cap_regs_behavior;
+> > diff --git a/drivers/pci/pci-bridge-emul.h b/drivers/pci/pci-bridge-emul.h
+> > index 71392b67471d..2a0e59c7f0d9 100644
+> > --- a/drivers/pci/pci-bridge-emul.h
+> > +++ b/drivers/pci/pci-bridge-emul.h
+> > @@ -131,6 +131,8 @@ struct pci_bridge_emul {
+> >  	struct pci_bridge_reg_behavior *pci_regs_behavior;
+> >  	struct pci_bridge_reg_behavior *pcie_cap_regs_behavior;
+> >  	void *data;
+> > +	u8 pcie_start;
+> > +	u8 ssid_start;
+> >  	bool has_pcie;
+> >  	u16 subsystem_vendor_id;
+> >  	u16 subsystem_id;
+> > -- 
+> > 2.20.1
+> > 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F81A59DBA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EF159DE0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357015AbiHWLFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S1359401AbiHWMFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356617AbiHWLDN (ORCPT
+        with ESMTP id S1359293AbiHWMBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:03:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02E8B2858;
-        Tue, 23 Aug 2022 02:15:08 -0700 (PDT)
+        Tue, 23 Aug 2022 08:01:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4176ED8E2A;
+        Tue, 23 Aug 2022 02:35:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4DE7B81C94;
-        Tue, 23 Aug 2022 09:14:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D32DC433D6;
-        Tue, 23 Aug 2022 09:14:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 434EC612D6;
+        Tue, 23 Aug 2022 09:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B0DC433C1;
+        Tue, 23 Aug 2022 09:34:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246075;
-        bh=BG1IryY/JpKplKDyYH7hpVvg67ZthQH8oyEbqAqfFfc=;
+        s=korg; t=1661247274;
+        bh=19IgdIE9ZrUrSbXsW+/oPm9vunuXvHYium+mpiIAJ+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0eap0GPD81VtCDn2xfdgOo/qaVbBSIXLIZDD0cCJjHFiBFLUJwsRzP4AjAXTpDypL
-         Ut3iKkEU4G1T8i3eDXRnKXh89n0cKRcyW50L50EfTm00fyWytX7rRPhynZ83WA3t/W
-         5ieWYICvNBgwsA5MMEA+VFzVx+PvKT//cUtChhok=
+        b=KhXvfOrn2tLD0b199fhBH7qRsvwmmLV4MKoFzeU8JpkPOCDWUjZcw1KT5TrR2tfZf
+         dFZ0VuWmBOjJWXY++vYixt9Q8LU5k6ojI15Sr4JCyBF/yZW+g4SQYHUK81hQt26a52
+         Wuzpz6AZBDAeb1SlsToJHo3inaGUaFLaE2P805b0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 282/287] video: fbdev: i740fb: Check the argument of i740_calc_vclk()
-Date:   Tue, 23 Aug 2022 10:27:31 +0200
-Message-Id: <20220823080110.984312492@linuxfoundation.org>
+        stable@vger.kernel.org, xctan <xc-tan@outlook.com>,
+        dram <dramforever@live.com>, Ruizhe Pan <c141028@gmail.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 374/389] riscv: mmap with PROT_WRITE but no PROT_READ is invalid
+Date:   Tue, 23 Aug 2022 10:27:32 +0200
+Message-Id: <20220823080131.179900565@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Celeste Liu <coelacanthus@outlook.com>
 
-[ Upstream commit 40bf722f8064f50200b8c4f8946cd625b441dda9 ]
+[ Upstream commit 2139619bcad7ac44cc8f6f749089120594056613 ]
 
-Since the user can control the arguments of the ioctl() from the user
-space, under special arguments that may result in a divide-by-zero bug.
+As mentioned in Table 4.5 in RISC-V spec Volume 2 Section 4.3, write
+but not read is "Reserved for future use.". For now, they are not valid.
+In the current code, -wx is marked as invalid, but -w- is not marked
+as invalid.
+This patch refines that judgment.
 
-If the user provides an improper 'pixclock' value that makes the argumet
-of i740_calc_vclk() less than 'I740_RFREQ_FIX', it will cause a
-divide-by-zero bug in:
-    drivers/video/fbdev/i740fb.c:353 p_best = min(15, ilog2(I740_MAX_VCO_FREQ / (freq / I740_RFREQ_FIX)));
-
-The following log can reveal it:
-
-divide error: 0000 [#1] PREEMPT SMP KASAN PTI
-RIP: 0010:i740_calc_vclk drivers/video/fbdev/i740fb.c:353 [inline]
-RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:646 [inline]
-RIP: 0010:i740fb_set_par+0x163f/0x3b70 drivers/video/fbdev/i740fb.c:742
-Call Trace:
- fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1034
- do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
- fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
-
-Fix this by checking the argument of i740_calc_vclk() first.
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Reported-by: xctan <xc-tan@outlook.com>
+Co-developed-by: dram <dramforever@live.com>
+Signed-off-by: dram <dramforever@live.com>
+Co-developed-by: Ruizhe Pan <c141028@gmail.com>
+Signed-off-by: Ruizhe Pan <c141028@gmail.com>
+Signed-off-by: Celeste Liu <coelacanthus@outlook.com>
+Link: https://lore.kernel.org/r/PH7PR14MB559464DBDD310E755F5B21E8CEDC9@PH7PR14MB5594.namprd14.prod.outlook.com
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/i740fb.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/riscv/kernel/sys_riscv.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/video/fbdev/i740fb.c b/drivers/video/fbdev/i740fb.c
-index f6d7b04d6dff..bdbafff4529f 100644
---- a/drivers/video/fbdev/i740fb.c
-+++ b/drivers/video/fbdev/i740fb.c
-@@ -399,7 +399,7 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
- 	u32 xres, right, hslen, left, xtotal;
- 	u32 yres, lower, vslen, upper, ytotal;
- 	u32 vxres, xoffset, vyres, yoffset;
--	u32 bpp, base, dacspeed24, mem;
-+	u32 bpp, base, dacspeed24, mem, freq;
- 	u8 r7;
- 	int i;
+diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
+index 12f8a7fce78b..8a7880b9c433 100644
+--- a/arch/riscv/kernel/sys_riscv.c
++++ b/arch/riscv/kernel/sys_riscv.c
+@@ -18,9 +18,8 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
+ 	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
+ 		return -EINVAL;
  
-@@ -642,7 +642,12 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
- 	par->atc[VGA_ATC_OVERSCAN] = 0;
+-	if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
+-		if (unlikely(!(prot & PROT_READ)))
+-			return -EINVAL;
++	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
++		return -EINVAL;
  
- 	/* Calculate VCLK that most closely matches the requested dot clock */
--	i740_calc_vclk((((u32)1e9) / var->pixclock) * (u32)(1e3), par);
-+	freq = (((u32)1e9) / var->pixclock) * (u32)(1e3);
-+	if (freq < I740_RFREQ_FIX) {
-+		fb_dbg(info, "invalid pixclock\n");
-+		freq = I740_RFREQ_FIX;
-+	}
-+	i740_calc_vclk(freq, par);
- 
- 	/* Since we program the clocks ourselves, always use VCLK2. */
- 	par->misc |= 0x0C;
+ 	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
+ 			       offset >> (PAGE_SHIFT - page_shift_offset));
 -- 
 2.35.1
 

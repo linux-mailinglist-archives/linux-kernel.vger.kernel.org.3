@@ -2,135 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3C359EA79
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935F459EA7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbiHWSES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S233480AbiHWSEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbiHWSD6 (ORCPT
+        with ESMTP id S231314AbiHWSEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:03:58 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC0EB3B25
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:10:22 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MBvMc2M34z9sk1;
-        Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IixxqM55Vla7; Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MBvMc0xbWz9sjs;
-        Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 088698B77A;
-        Tue, 23 Aug 2022 18:10:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id k0w-lGszsYuR; Tue, 23 Aug 2022 18:10:19 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (po17370.idsi0.si.c-s.fr [192.168.232.51])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BB7368B763;
-        Tue, 23 Aug 2022 18:10:19 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27NGA93B228335
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 18:10:09 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27NGA72T228316;
-        Tue, 23 Aug 2022 18:10:07 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: [PATCH] powerpc: Fix irq_soft_mask_set() and irq_soft_mask_return() with sanitizer
-Date:   Tue, 23 Aug 2022 18:09:53 +0200
-Message-Id: <d085ff06b48fb127c9630f11d927b9913c9a30dc.1661270957.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Tue, 23 Aug 2022 14:04:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312B8C2776
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:11:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0A026163B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 16:11:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 756FEC433D6;
+        Tue, 23 Aug 2022 16:11:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661271072;
+        bh=I2wMQlQE2ea0W3N6RNflFgDwWIvO1yrAEOonIAJwWe0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hSNdmwjbSdgzxxiy2Qzow0e270Hch77B2bpGjSSvCsBEq0D2lu1fyHza6fmFyevSY
+         I651tP7J8TQq8OWHcF3ddOmM58Q232mMCNLsju4WTWaGp1jQdjx9JpupezRSO216s2
+         Gi+4M0GDMeNwY8EB83YKlpOnJeOoR4A0zBRIjE5TflYDFKivDoABAY4GrAD60t7vqJ
+         WF4oASrfMmg6VsYGrsvEZNqwHqVNYBRDFaIKO5gPs5UamkOflYkkBJUcCqXGpX07wh
+         5kBgJU/plegFl8P78+jzUovFOnAnyZvJEEFkpIVukrEMDVT5YZ70FbtqUvOfCKQgr5
+         KG7LbnvSYLkEA==
+Date:   Tue, 23 Aug 2022 09:11:09 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        llvm@lists.linux.dev,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang
+ -Wbitfield-constant-conversion
+Message-ID: <YwT8HYefLbFaOdJz@dev-arch.thelio-3990X>
+References: <20220810010809.2024482-1-nathan@kernel.org>
+ <166058059542.769843.4941839393289864947.b4-ty@kernel.org>
+ <YwT0oUjo/lzBDRdH@dev-arch.thelio-3990X>
+ <YwT6bmqeBeoYcRi7@sirena.org.uk>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1661270991; l=2657; s=20211009; h=from:subject:message-id; bh=llrPL+LAbxiqu9+lBs/n9gV6IbV8Ic4a3dtYd+OqcSA=; b=4wpp2kYw9pom6zoEbN9RNiA8HbJr+L1VK6h1Kw5nVangVKaIU5XlgJxcjFitDdIvz/nP36lFXtyi uXoThT6hBqRxis5ANnvCyQ01TNkl3cJiNiPk++eZXopZom7e0Eb2
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwT6bmqeBeoYcRi7@sirena.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ppc, compiler based sanitizer will generate instrument instructions
-around statement WRITE_ONCE(local_paca->irq_soft_mask, mask):
+On Tue, Aug 23, 2022 at 05:03:58PM +0100, Mark Brown wrote:
+> On Tue, Aug 23, 2022 at 08:39:13AM -0700, Nathan Chancellor wrote:
+> 
+> > I noticed that this was applied to for-6.1. I know you do not rebase or
+> > change your trees so this request might be rejected based on that alone
+> > but would it be possible to cherry-pick this to for-6.0 so that it can
+> > be applied to Linus's tree quicker? We have had to apply this change to
+> > our CI to keep our builds green in mainline, -tip, and 5.19/5.15 stable
+> > with clang-16 due to -Werror. If not, no worries, I should have made it
+> > clearer that is what I was looking for with the subject prefix.
+> 
+> Hrm, OK - it's a bit surprising that this didn't get fixed in -next
+> before the clang change made it to mainline TBH, it looked like
+> something that had just hit -next.
 
-   0xc000000000295cb0 <+0>:	addis   r2,r12,774
-   0xc000000000295cb4 <+4>:	addi    r2,r2,16464
-   0xc000000000295cb8 <+8>:	mflr    r0
-   0xc000000000295cbc <+12>:	bl      0xc00000000008bb4c <mcount>
-   0xc000000000295cc0 <+16>:	mflr    r0
-   0xc000000000295cc4 <+20>:	std     r31,-8(r1)
-   0xc000000000295cc8 <+24>:	addi    r3,r13,2354
-   0xc000000000295ccc <+28>:	mr      r31,r13
-   0xc000000000295cd0 <+32>:	std     r0,16(r1)
-   0xc000000000295cd4 <+36>:	stdu    r1,-48(r1)
-   0xc000000000295cd8 <+40>:	bl      0xc000000000609b98 <__asan_store1+8>
-   0xc000000000295cdc <+44>:	nop
-   0xc000000000295ce0 <+48>:	li      r9,1
-   0xc000000000295ce4 <+52>:	stb     r9,2354(r31)
-   0xc000000000295ce8 <+56>:	addi    r1,r1,48
-   0xc000000000295cec <+60>:	ld      r0,16(r1)
-   0xc000000000295cf0 <+64>:	ld      r31,-8(r1)
-   0xc000000000295cf4 <+68>:	mtlr    r0
+Right, sorry for not making that more clear in the commit message. The
+change in clang was made only a few hours before this patch so I did fix
+it quickly but we do not usually get any heads up on new warnings. They
+just appear then we fix them and move on. I'll make it clearer where I
+want the patch to go in the future, thanks for accommodating this one
+time.
 
-If there is a context switch before "stb     r9,2354(r31)", r31 may
-not equal to r13, in such case, irq soft mask will not work.
-
-The same problem occurs in irq_soft_mask_return() with
-READ_ONCE(local_paca->irq_soft_mask).
-
-This patch partially reverts commit ef5b570d3700 ("powerpc/irq: Don't
-open code irq_soft_mask helpers") with a more modern inline assembly.
-
-Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Fixes: ef5b570d3700 ("powerpc/irq: Don't open code irq_soft_mask helpers")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/hw_irq.h | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
-index 26ede09c521d..8a7b0b78a80e 100644
---- a/arch/powerpc/include/asm/hw_irq.h
-+++ b/arch/powerpc/include/asm/hw_irq.h
-@@ -113,7 +113,11 @@ static inline void __hard_RI_enable(void)
- 
- static inline notrace unsigned long irq_soft_mask_return(void)
- {
--	return READ_ONCE(local_paca->irq_soft_mask);
-+	unsigned long flags;
-+
-+	asm volatile("lbz%X1 %0,%1" : "=r" (flags) : "m" (local_paca->irq_soft_mask));
-+
-+	return flags;
- }
- 
- /*
-@@ -140,8 +144,7 @@ static inline notrace void irq_soft_mask_set(unsigned long mask)
- 	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
- 		WARN_ON(mask && !(mask & IRQS_DISABLED));
- 
--	WRITE_ONCE(local_paca->irq_soft_mask, mask);
--	barrier();
-+	asm volatile("stb%X1 %0,%1" : : "r" (mask), "m" (local_paca->irq_soft_mask) : "memory");
- }
- 
- static inline notrace unsigned long irq_soft_mask_set_return(unsigned long mask)
--- 
-2.37.1
-
+Cheers,
+Nathan

@@ -2,84 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5F259D105
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0880759D109
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 08:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240471AbiHWGGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 02:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        id S240041AbiHWGKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 02:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239875AbiHWGGv (ORCPT
+        with ESMTP id S231827AbiHWGKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 02:06:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9408A5F21C;
-        Mon, 22 Aug 2022 23:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LV4bxumI+vK3fc/0MRDnOmmxXRYWHIYMbRz3zuQBKIc=; b=qnanjZ6fTwjqR7DgFGNwbwZx2s
-        PfavNZy32n86p2aVvcoVXQqc2aIsas3Cz0b+jgK7UCu1q3IX0KoA5Qxh5O9gTeAqG/i6IGRztabh8
-        tMm6xuoqkxvHAQUkaKnD9L0jhOxMWhRFjCtBHoc2h3gD1ZlMGyUfZBbs/LXA7y1zkWPo5OtAapdb7
-        bBi/DxOAuEseO7LnubF907TPakpi2+GPukkqE6qw968aiegpreUmRkDWWJLJMxJsoaAeU+EObZ8Wt
-        LzkrhvrQqqCQORDlb0qDaGlDv/U0CDSWt0CaP/Fh7JqSGdOIBhdlirizJj1IocYNNg8Yqtl0ulx0K
-        OgdHM/DQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQN3J-00F0f6-2L; Tue, 23 Aug 2022 06:06:17 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E3579980403; Tue, 23 Aug 2022 08:06:15 +0200 (CEST)
-Date:   Tue, 23 Aug 2022 08:06:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Fangrui Song <maskray@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
-Message-ID: <YwRuVywxTxPiIKbM@worktop.programming.kicks-ass.net>
-References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
- <20220815013317.26121-1-dmitrii.bundin.a@gmail.com>
- <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
- <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
+        Tue, 23 Aug 2022 02:10:15 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5752158B56
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661235014; x=1692771014;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NoZ36EAx5ccntdaDWrxrTT7Iigt1WKbWdoZsQR0GDG8=;
+  b=Ciz+dbk4ZXGySffWzqtxKbpi1HfMD6iGlFc+0hF0Nn7DaITgkMnVfVA9
+   IAJgjbNV0r5qXJR8RCuYrVQHQh3aO/gZqmEe48PWC+gTX+afIxtGfOgLo
+   lBJdMhtlqmKo3PUVaAERZBoaF6koCf9/5rDXRJN3DYtFGvDbppi8QyW11
+   3FvpLLBew/rkcLgWr1wtMljuMDbxEY5SIU5f4UYm4BLLlMxS8WKfMKZNj
+   aaJ7U4uRuairGGSBwuZaFTkiEup4xMsX0eW6dmyvawvlbRApPVOrBlmCI
+   6Mj1OTpGsNAMbb9Lq+4V9MWNJpJtZH3ndH50bAGM8qAnShZZ9BbJUOk6t
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="293600220"
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="293600220"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 23:10:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,256,1654585200"; 
+   d="scan'208";a="560037010"
+Received: from lkp-server01.sh.intel.com (HELO 5b31f6010e99) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Aug 2022 23:10:12 -0700
+Received: from kbuild by 5b31f6010e99 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQN75-00005P-2n;
+        Tue, 23 Aug 2022 06:10:11 +0000
+Date:   Tue, 23 Aug 2022 14:09:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mark:arm64/alternatives/rework 8/12]
+ arch/arm64/include/asm/alternative-macros.h:224:2: error: call to undeclared
+ function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202208231413.qMjHMepE-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 01:52:04AM +0300, Dmitrii Bundin wrote:
-> On Fri, Aug 19, 2022 at 8:42 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > Is any of this really necessary?
-> 
-> Consider the case if CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/alternatives/rework
+head:   c6f1e900bb0e1c5932f9995feaf4acb70cf6f62e
+commit: 1696b807a602e836898825b7fff3691438b90f39 [8/12] arm64: alternative: add alternative_has_feature_*()
+config: arm64-randconfig-r026-20220821 (https://download.01.org/0day-ci/archive/20220823/202208231413.qMjHMepE-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=1696b807a602e836898825b7fff3691438b90f39
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/alternatives/rework
+        git checkout 1696b807a602e836898825b7fff3691438b90f39
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-Can I just say I *HATE* that thing? It uesd to be I could do:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-../scripts/config --enable DEBUG_INFO
+All errors (new ones prefixed by >>):
 
-and I'd get a debug-info build, now I gotta use that horrible piece of
-crap you just mentioned which I mis-type at least once every single
-time.
+   In file included from kernel/bounds.c:10:
+   In file included from include/linux/page-flags.h:10:
+   In file included from include/linux/bug.h:5:
+   In file included from arch/arm64/include/asm/bug.h:26:
+   In file included from include/asm-generic/bug.h:5:
+   In file included from include/linux/compiler.h:248:
+   In file included from arch/arm64/include/asm/rwonce.h:11:
+>> arch/arm64/include/asm/alternative-macros.h:224:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           BUILD_BUG_ON(feature >= ARM64_NCAPS);
+           ^
+   arch/arm64/include/asm/alternative-macros.h:241:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           BUILD_BUG_ON(feature >= ARM64_NCAPS);
+           ^
+   2 errors generated.
+   make[2]: *** [scripts/Makefile.build:117: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1205: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:222: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/BUILD_BUG_ON +224 arch/arm64/include/asm/alternative-macros.h
+
+   220	
+   221	static __always_inline bool
+   222	alternative_has_feature_likely(unsigned long feature)
+   223	{
+ > 224		BUILD_BUG_ON(feature >= ARM64_NCAPS);
+   225	
+   226		asm_volatile_goto(
+   227		ALTERNATIVE("b	%l[l_no]", "nop", %[feature])
+   228		:
+   229		: [feature] "i" (feature)
+   230		:
+   231		: l_no);
+   232	
+   233		return true;
+   234	l_no:
+   235		return false;
+   236	}
+   237	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

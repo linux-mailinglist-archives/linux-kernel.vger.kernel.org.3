@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C65559D7CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A479E59D7AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243366AbiHWJta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
+        id S242180AbiHWJsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352571AbiHWJqf (ORCPT
+        with ESMTP id S1352120AbiHWJp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:46:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB74DB27;
-        Tue, 23 Aug 2022 01:44:19 -0700 (PDT)
+        Tue, 23 Aug 2022 05:45:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B179F1183A;
+        Tue, 23 Aug 2022 01:43:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3345661540;
-        Tue, 23 Aug 2022 08:43:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F27C433B5;
-        Tue, 23 Aug 2022 08:43:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A971B81C55;
+        Tue, 23 Aug 2022 08:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E102C433C1;
+        Tue, 23 Aug 2022 08:43:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244199;
-        bh=Ar0Ri1pXQ2u5TEvE1oM8+Sx9bnNlWLzCZzLjllN8NEw=;
+        s=korg; t=1661244206;
+        bh=N33/0tyB2ogA33cfEjn1YFSkrKBa93ZvpLZceAjDIK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t3QaiXGALtus5VP4P49vqbKBhf+exQtlOg9QIwkTArpm2m5NONVjNGVf7BH76/dOE
-         lp7pPGXpG4Gb+d9y1PPSkM5wttDE3/suWF1p0S2CF78DPIJLTbmGSSbsTH/wfpwbRX
-         06dCKaybAwLTXnQngyqhOWXCSSoCbStallyVeelk=
+        b=Sr9tz+qURkG9hb7xT/xhgJTzfxslxPgwJHq4Ovsch+RuMxWX+2MJYFqxnwQpbAe+g
+         PUCzBJN9tBiCoy8fHZWzKo7niJZlUJ7LZr8W14T4wbS7aqzQHDG4pyCRRLdflnS4qv
+         7+cT487EAC4VcB0Lp0pP201dCfIcVRpRW4gGErxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.15 055/244] SUNRPC: Reinitialise the backchannel request buffers before reuse
-Date:   Tue, 23 Aug 2022 10:23:34 +0200
-Message-Id: <20220823080100.903408710@linuxfoundation.org>
+        stable@vger.kernel.org, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 056/244] virtio_net: fix memory leak inside XPD_TX with mergeable
+Date:   Tue, 23 Aug 2022 10:23:35 +0200
+Message-Id: <20220823080100.932689364@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
 References: <20220823080059.091088642@linuxfoundation.org>
@@ -54,50 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 
-commit 6622e3a73112fc336c1c2c582428fb5ef18e456a upstream.
+commit 7a542bee27c6a57e45c33cbbdc963325fd6493af upstream.
 
-When we're reusing the backchannel requests instead of freeing them,
-then we should reinitialise any values of the send/receive xdr_bufs so
-that they reflect the available space.
+When we call xdp_convert_buff_to_frame() to get xdpf, if it returns
+NULL, we should check if xdp_page was allocated by xdp_linearize_page().
+If it is newly allocated, it should be freed here alone. Just like any
+other "goto err_xdp".
 
-Fixes: 0d2a970d0ae5 ("SUNRPC: Fix a backchannel race")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 44fa2dbd4759 ("xdp: transition into using xdp_frame for ndo_xdp_xmit")
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sunrpc/backchannel_rqst.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/net/virtio_net.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/net/sunrpc/backchannel_rqst.c
-+++ b/net/sunrpc/backchannel_rqst.c
-@@ -64,6 +64,17 @@ static void xprt_free_allocation(struct
- 	kfree(req);
- }
- 
-+static void xprt_bc_reinit_xdr_buf(struct xdr_buf *buf)
-+{
-+	buf->head[0].iov_len = PAGE_SIZE;
-+	buf->tail[0].iov_len = 0;
-+	buf->pages = NULL;
-+	buf->page_len = 0;
-+	buf->flags = 0;
-+	buf->len = 0;
-+	buf->buflen = PAGE_SIZE;
-+}
-+
- static int xprt_alloc_xdr_buf(struct xdr_buf *buf, gfp_t gfp_flags)
- {
- 	struct page *page;
-@@ -292,6 +303,9 @@ void xprt_free_bc_rqst(struct rpc_rqst *
- 	 */
- 	spin_lock_bh(&xprt->bc_pa_lock);
- 	if (xprt_need_to_requeue(xprt)) {
-+		xprt_bc_reinit_xdr_buf(&req->rq_snd_buf);
-+		xprt_bc_reinit_xdr_buf(&req->rq_rcv_buf);
-+		req->rq_rcv_buf.len = PAGE_SIZE;
- 		list_add_tail(&req->rq_bc_pa_list, &xprt->bc_pa_list);
- 		xprt->bc_alloc_count++;
- 		atomic_inc(&xprt->bc_slot_count);
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1017,8 +1017,11 @@ static struct sk_buff *receive_mergeable
+ 		case XDP_TX:
+ 			stats->xdp_tx++;
+ 			xdpf = xdp_convert_buff_to_frame(&xdp);
+-			if (unlikely(!xdpf))
++			if (unlikely(!xdpf)) {
++				if (unlikely(xdp_page != page))
++					put_page(xdp_page);
+ 				goto err_xdp;
++			}
+ 			err = virtnet_xdp_xmit(dev, 1, &xdpf, 0);
+ 			if (unlikely(!err)) {
+ 				xdp_return_frame_rx_napi(xdpf);
 
 

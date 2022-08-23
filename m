@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A71559EAD4
+	by mail.lfdr.de (Postfix) with ESMTP id 6332459EAD5
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiHWSVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S232250AbiHWSVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiHWSTv (ORCPT
+        with ESMTP id S234236AbiHWSUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:19:51 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84369D66C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:36:49 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MBvy83Ksyz9sZY;
-        Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZWOjktcaMbNv; Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MBvy82XQdz9sXB;
-        Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 47DEE8B77A;
-        Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id HbVMPEyK4SSm; Tue, 23 Aug 2022 18:36:48 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (po17370.idsi0.si.c-s.fr [192.168.232.51])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1CBF08B763;
-        Tue, 23 Aug 2022 18:36:47 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27NGabPW242982
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 23 Aug 2022 18:36:37 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27NGaaIs242981;
-        Tue, 23 Aug 2022 18:36:36 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: [PATCH] powerpc: Fix hard_irq_disable() with sanitizer
-Date:   Tue, 23 Aug 2022 18:36:35 +0200
-Message-Id: <a8298991b3df049a54ee8e558838e34265812014.1661272586.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Tue, 23 Aug 2022 14:20:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305569C8F9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661272634;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rr+CCLl6pUAPYpKq6d4iIVUVGRYiHUH+ODgPiQU/msQ=;
+        b=cYd7I4198uo6/8QKzY/Yz6Az6BSqgckwDPygLCbmrMAiqk8fugHIFY7X4Txh4v5Plllwvb
+        CuvWredjXApv+AQRz85q9QnY75kHCwyq1FbnrtL1eyACV2tfuPshN3cn9p4KASYI56iZeW
+        j1YaxKb+NQjewtsa9ntxb1dbRxZHmcQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461-5E-0USGqOuSVCT5-i_iu1A-1; Tue, 23 Aug 2022 12:37:11 -0400
+X-MC-Unique: 5E-0USGqOuSVCT5-i_iu1A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C49B1818CB7;
+        Tue, 23 Aug 2022 16:37:11 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AC81C945D0;
+        Tue, 23 Aug 2022 16:37:10 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Subject: [PATCH v2] dmaengine: idxd: avoid deadlock in process_misc_interrupts()
+Date:   Tue, 23 Aug 2022 09:37:09 -0700
+Message-Id: <20220823163709.2102468-1-jsnitsel@redhat.com>
+In-Reply-To: <20220823162435.2099389-1-jsnitsel@redhat.com>
+References: <20220823162435.2099389-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1661272593; l=1135; s=20211009; h=from:subject:message-id; bh=1t5HIaMLeYA++0rVBzTlWX4uhYtioV/mAywsDNdSRQI=; b=0HJEDFtxLltDwj+bnfOadrZxhQJaIWuYCJ+lJTGuLjpaBgY7Q7cLBrBvasbAYt1ZMqB/Cnw6SV7t csagP4l9AZL6qE+V7Psi9UyiK72HgW76WXTq/cLfQXV3fvCR/5BH
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by Zhouyi Zhou, WRITE_ONCE() is not atomic
-as expected when KASAN or KCSAN are compiled in.
+idxd_device_clear_state() now grabs the idxd->dev_lock
+itself, so don't grab the lock prior to calling it.
 
-Fix it by re-implementing it using inline assembly.
+This was seen in testing after dmar fault occurred on system,
+resulting in lockup stack traces.
 
-Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-Fixes: 077fc62b2b66 ("powerpc/irq: remove inline assembly in hard_irq_disable macro")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Fixes: cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on device driver removal")
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
 ---
- arch/powerpc/include/asm/hw_irq.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v2: add Fixes tag, and add subsystem to summary
 
-diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
-index 8a7b0b78a80e..83ab6668387b 100644
---- a/arch/powerpc/include/asm/hw_irq.h
-+++ b/arch/powerpc/include/asm/hw_irq.h
-@@ -285,7 +285,8 @@ static inline bool pmi_irq_pending(void)
- 	flags = irq_soft_mask_set_return(IRQS_ALL_DISABLED);		\
- 	local_paca->irq_happened |= PACA_IRQ_HARD_DIS;			\
- 	if (!arch_irqs_disabled_flags(flags)) {				\
--		WRITE_ONCE(local_paca->saved_r1, current_stack_pointer);\
-+		asm volatile("std%X0 %1,%0" : "=m" (local_paca->saved_r1) \
-+					    : "r" (current_stack_pointer)); \
- 		trace_hardirqs_off();					\
- 	}								\
- } while(0)
+ drivers/dma/idxd/irq.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
+index 743ead5ebc57..5b9921475be6 100644
+--- a/drivers/dma/idxd/irq.c
++++ b/drivers/dma/idxd/irq.c
+@@ -324,13 +324,11 @@ static int process_misc_interrupts(struct idxd_device *idxd, u32 cause)
+ 			idxd->state = IDXD_DEV_HALTED;
+ 			idxd_wqs_quiesce(idxd);
+ 			idxd_wqs_unmap_portal(idxd);
+-			spin_lock(&idxd->dev_lock);
+ 			idxd_device_clear_state(idxd);
+ 			dev_err(&idxd->pdev->dev,
+ 				"idxd halted, need %s.\n",
+ 				gensts.reset_type == IDXD_DEVICE_RESET_FLR ?
+ 				"FLR" : "system reset");
+-			spin_unlock(&idxd->dev_lock);
+ 			return -ENXIO;
+ 		}
+ 	}
 -- 
-2.37.1
+2.37.2
 

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5380159DA6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F63F59D957
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352618AbiHWKIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S241707AbiHWJuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352506AbiHWKCA (ORCPT
+        with ESMTP id S243895AbiHWJsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:02:00 -0400
+        Tue, 23 Aug 2022 05:48:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4185F7C500;
-        Tue, 23 Aug 2022 01:49:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB547A758;
+        Tue, 23 Aug 2022 01:44:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD116B81B90;
-        Tue, 23 Aug 2022 08:49:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E005C433D6;
-        Tue, 23 Aug 2022 08:49:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A29CEB81BF8;
+        Tue, 23 Aug 2022 08:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F374FC4314A;
+        Tue, 23 Aug 2022 08:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244591;
-        bh=X6jgYWZ4Mu4BRn1XVD+JQfc78HmS4SDy8hx0sB+nn/s=;
+        s=korg; t=1661244280;
+        bh=CmcPK2lc47Okxh9b7fsrFvpDKb/n652OLhI6HxQ2s24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GdoemA72jeiWJn7anC3QowU7ye370EJdbOZGZD5hHKurmmYSSdoZAuWI2u232Foc5
-         vfHN1F90dvhWfs1mKv0X86pnU3afu+cC4n1Y6fI4d+Xj+21Q8F+uNCPZUEbRmqZxlk
-         GIKloLbuA2Rw0bUqJDnTNJZf2XU9oZhVZmpvYID8=
+        b=mdoSxSMAEvQfdbvlKlhPCuzuB5GiZQIwiydH6mkglSSllZrC4JI4sRNgLL4aP56Yr
+         bN6BDCJv/dhq/IGVWXe1LZL/ZESRKxfpUo5UkM77+yaRocCPS50K35t3/nkodIQWHs
+         MF1wqkcwNPEp6EyIRRl52u/ahWCTO8YjRUbcAhxQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
-        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-        Marek Szlosek <marek.szlosek@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 115/244] iavf: Fix adminq error handling
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 113/229] platform/olpc: Fix uninitialized data in debugfs write
 Date:   Tue, 23 Aug 2022 10:24:34 +0200
-Message-Id: <20220823080102.854229679@linuxfoundation.org>
+Message-Id: <20220823080057.723034349@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,82 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 419831617ed349992c84344dbd9e627f9e68f842 upstream.
+[ Upstream commit 40ec787e1adf302c11668d4cc69838f4d584187d ]
 
-iavf_alloc_asq_bufs/iavf_alloc_arq_bufs allocates with dma_alloc_coherent
-memory for VF mailbox.
-Free DMA regions for both ASQ and ARQ in case error happens during
-configuration of ASQ/ARQ registers.
-Without this change it is possible to see when unloading interface:
-74626.583369: dma_debug_device_change: device driver has pending DMA allocations while released from device [count=32]
-One of leaked entries details: [device address=0x0000000b27ff9000] [size=4096 bytes] [mapped with DMA_BIDIRECTIONAL] [mapped as coherent]
+The call to:
 
-Fixes: d358aa9a7a2d ("i40evf: init code and hardware support")
-Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
-Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
-Tested-by: Marek Szlosek <marek.szlosek@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	size = simple_write_to_buffer(cmdbuf, sizeof(cmdbuf), ppos, buf, size);
+
+will succeed if at least one byte is written to the "cmdbuf" buffer.
+The "*ppos" value controls which byte is written.  Another problem is
+that this code does not check for errors so it's possible for the entire
+buffer to be uninitialized.
+
+Inintialize the struct to zero to prevent reading uninitialized stack
+data.
+
+Debugfs is normally only writable by root so the impact of this bug is
+very minimal.
+
+Fixes: 6cca83d498bd ("Platform: OLPC: move debugfs support from x86 EC driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YthIKn+TfZSZMEcM@kili
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_adminq.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/platform/olpc/olpc-ec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/iavf/iavf_adminq.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_adminq.c
-@@ -324,6 +324,7 @@ static enum iavf_status iavf_config_arq_
- static enum iavf_status iavf_init_asq(struct iavf_hw *hw)
- {
- 	enum iavf_status ret_code = 0;
-+	int i;
+diff --git a/drivers/platform/olpc/olpc-ec.c b/drivers/platform/olpc/olpc-ec.c
+index 374a8028fec7..b36a000ed969 100644
+--- a/drivers/platform/olpc/olpc-ec.c
++++ b/drivers/platform/olpc/olpc-ec.c
+@@ -170,7 +170,7 @@ static ssize_t ec_dbgfs_cmd_write(struct file *file, const char __user *buf,
+ 	int i, m;
+ 	unsigned char ec_cmd[EC_MAX_CMD_ARGS];
+ 	unsigned int ec_cmd_int[EC_MAX_CMD_ARGS];
+-	char cmdbuf[64];
++	char cmdbuf[64] = "";
+ 	int ec_cmd_bytes;
  
- 	if (hw->aq.asq.count > 0) {
- 		/* queue already initialized */
-@@ -354,12 +355,17 @@ static enum iavf_status iavf_init_asq(st
- 	/* initialize base registers */
- 	ret_code = iavf_config_asq_regs(hw);
- 	if (ret_code)
--		goto init_adminq_free_rings;
-+		goto init_free_asq_bufs;
- 
- 	/* success! */
- 	hw->aq.asq.count = hw->aq.num_asq_entries;
- 	goto init_adminq_exit;
- 
-+init_free_asq_bufs:
-+	for (i = 0; i < hw->aq.num_asq_entries; i++)
-+		iavf_free_dma_mem(hw, &hw->aq.asq.r.asq_bi[i]);
-+	iavf_free_virt_mem(hw, &hw->aq.asq.dma_head);
-+
- init_adminq_free_rings:
- 	iavf_free_adminq_asq(hw);
- 
-@@ -383,6 +389,7 @@ init_adminq_exit:
- static enum iavf_status iavf_init_arq(struct iavf_hw *hw)
- {
- 	enum iavf_status ret_code = 0;
-+	int i;
- 
- 	if (hw->aq.arq.count > 0) {
- 		/* queue already initialized */
-@@ -413,12 +420,16 @@ static enum iavf_status iavf_init_arq(st
- 	/* initialize base registers */
- 	ret_code = iavf_config_arq_regs(hw);
- 	if (ret_code)
--		goto init_adminq_free_rings;
-+		goto init_free_arq_bufs;
- 
- 	/* success! */
- 	hw->aq.arq.count = hw->aq.num_arq_entries;
- 	goto init_adminq_exit;
- 
-+init_free_arq_bufs:
-+	for (i = 0; i < hw->aq.num_arq_entries; i++)
-+		iavf_free_dma_mem(hw, &hw->aq.arq.r.arq_bi[i]);
-+	iavf_free_virt_mem(hw, &hw->aq.arq.dma_head);
- init_adminq_free_rings:
- 	iavf_free_adminq_arq(hw);
- 
+ 	mutex_lock(&ec_dbgfs_lock);
+-- 
+2.35.1
+
 
 

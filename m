@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC90A59E2A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7367B59E1DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354478AbiHWKVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S1353225AbiHWKLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352920AbiHWKJe (ORCPT
+        with ESMTP id S1352320AbiHWKCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:09:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1859D7DF5F;
-        Tue, 23 Aug 2022 01:55:36 -0700 (PDT)
+        Tue, 23 Aug 2022 06:02:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7CFA2630;
+        Tue, 23 Aug 2022 01:51:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B76CAB81C28;
-        Tue, 23 Aug 2022 08:55:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B42C433C1;
-        Tue, 23 Aug 2022 08:55:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5D256150F;
+        Tue, 23 Aug 2022 08:51:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2674C433C1;
+        Tue, 23 Aug 2022 08:51:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244933;
-        bh=0LLFBfOKHFPod6bxQlh8610jSWOZ/Fs0Wgi1kYBiWWk=;
+        s=korg; t=1661244666;
+        bh=t9EAyhTB6WaOrs6vp1R5UqNAeAWhZro/XkIxBgAHZao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O1feV97vPan5q2zMltiC2U6SEWIOcWE8GeR4PUfzXTOdt2MYdof4bxGFsfpZBY4sG
-         5scGyqrzTlOG1VDV4YnOxYzyk9dqc44EV+RQwkCaNUNhcNEr1ta9N5pYFicbQc9INF
-         x7bvQCk7G/JD2Sk8JO0zTF/VvN0GF5rjLEGRIXAY=
+        b=cfANHe7ae8ki5YsgBBeVvRiXmM/xOgZ/CR4W1WYJUAUEl/Yv1qaKjauTYFU42m9VP
+         FAjzgsbXqwLKh+EiQsR2R/1Uq8zStnG8dEWt5OUv0qyEG8SXMkFYb267XwRKyRXqDL
+         hT3N/Uakmq8Xbi9Zyl1aCg6CUfN3o+jS+B+ogI0s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Liang He <windhl@126.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 174/244] usb: host: ohci-ppc-of: Fix refcount leak bug
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: [PATCH 4.14 172/229] Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression
 Date:   Tue, 23 Aug 2022 10:25:33 +0200
-Message-Id: <20220823080105.087474189@linuxfoundation.org>
+Message-Id: <20220823080059.774255146@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit 40a959d7042bb7711e404ad2318b30e9f92c6b9b ]
+commit 332f1795ca202489c665a75e62e18ff6284de077 upstream.
 
-In ohci_hcd_ppc_of_probe(), of_find_compatible_node() will return
-a node pointer with refcount incremented. We should use of_node_put()
-when it is not used anymore.
+The patch d0be8347c623: "Bluetooth: L2CAP: Fix use-after-free caused
+by l2cap_chan_put" from Jul 21, 2022, leads to the following Smatch
+static checker warning:
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220617034637.4003115-1-windhl@126.com
+        net/bluetooth/l2cap_core.c:1977 l2cap_global_chan_by_psm()
+        error: we previously assumed 'c' could be null (see line 1996)
+
+Fixes: d0be8347c623 ("Bluetooth: L2CAP: Fix use-after-free caused by l2cap_chan_put")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ohci-ppc-of.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/bluetooth/l2cap_core.c |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
-index 45f7cceb6df3..98e46725999e 100644
---- a/drivers/usb/host/ohci-ppc-of.c
-+++ b/drivers/usb/host/ohci-ppc-of.c
-@@ -169,6 +169,7 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
- 				release_mem_region(res.start, 0x4);
- 		} else
- 			pr_debug("%s: cannot get ehci offset from fdt\n", __FILE__);
-+		of_node_put(np);
- 	}
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -1804,11 +1804,11 @@ static struct l2cap_chan *l2cap_global_c
+ 						   bdaddr_t *dst,
+ 						   u8 link_type)
+ {
+-	struct l2cap_chan *c, *c1 = NULL;
++	struct l2cap_chan *c, *tmp, *c1 = NULL;
  
- 	irq_dispose_mapping(irq);
--- 
-2.35.1
-
+ 	read_lock(&chan_list_lock);
+ 
+-	list_for_each_entry(c, &chan_list, global_l) {
++	list_for_each_entry_safe(c, tmp, &chan_list, global_l) {
+ 		if (state && c->state != state)
+ 			continue;
+ 
+@@ -1827,11 +1827,10 @@ static struct l2cap_chan *l2cap_global_c
+ 			dst_match = !bacmp(&c->dst, dst);
+ 			if (src_match && dst_match) {
+ 				c = l2cap_chan_hold_unless_zero(c);
+-				if (!c)
+-					continue;
+-
+-				read_unlock(&chan_list_lock);
+-				return c;
++				if (c) {
++					read_unlock(&chan_list_lock);
++					return c;
++				}
+ 			}
+ 
+ 			/* Closest match */
 
 

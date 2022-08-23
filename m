@@ -2,61 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C3B59E774
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2910059E812
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 18:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244995AbiHWQgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 12:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        id S244760AbiHWQ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 12:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245443AbiHWQgA (ORCPT
+        with ESMTP id S1343503AbiHWQz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:36:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDB8BCB2;
-        Tue, 23 Aug 2022 06:06:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD603614D1;
-        Tue, 23 Aug 2022 13:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50939C433D6;
-        Tue, 23 Aug 2022 13:06:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661259995;
-        bh=H8h0RHLn6+JPT0ZVlwXJ4vwSe51HEfutMbaRAkltf4o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTC4CsZPJhQPvAAqMNaRmhc+GWcLHArz3Ok0OJBhL/Qt3r11I5bcFchOdk5TCZBuK
-         cTi3PShOjAfQEmiDdM9EoYeK/R3rFYXmMk8alFomd38l5Z4w9V00ekY/CLVg5wtPUG
-         cd1fexliwWx6meFgLre6v8tCdtsotGNZwRWBb6DKBMPLpvIzJK6gx7dPJ1/BUksyUL
-         AvbvTQ86Y74Y6gMx7gvvDccar5p/ga6ag/SoBSgQCOucWgOzCV+qIaje4Ay17H1401
-         EsRDWlNTETXDCcNa0tlYnQS4NE4lLq6aupAwRCMFiCDFU0yiTi4VJkKAUYLh1c8XvL
-         /69x1Wd2TRaDA==
-Date:   Tue, 23 Aug 2022 14:06:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Implement get_optimum_mode(), not
- set_load()
-Message-ID: <YwTQ1i5s5cwowRss@sirena.org.uk>
-References: <20220726102024.1.Icc838fe7bf0ef54a014ab2fee8af311654f5342a@changeid>
- <20220822193153.zn2oxljmd76awqot@halaneylaptop>
- <CAD=FV=V_V-M1fJmeWH_=wG4GB9GERL9ToAZTwAjX9i-6k6QkWA@mail.gmail.com>
+        Tue, 23 Aug 2022 12:55:28 -0400
+X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 06:25:47 PDT
+Received: from luna.linkmauve.fr (82-65-109-163.subs.proxad.net [82.65.109.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7CD883CA;
+        Tue, 23 Aug 2022 06:25:46 -0700 (PDT)
+Received: by luna.linkmauve.fr (Postfix, from userid 1000)
+        id DBE46F41DDA; Tue, 23 Aug 2022 15:07:05 +0200 (CEST)
+From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Ash Logan <ash@heyquark.com>,
+        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.ne@posteo.net>
+Subject: [PATCH] rtc: gamecube: Always reset HW_SRNPROT after read
+Date:   Tue, 23 Aug 2022 15:07:02 +0200
+Message-Id: <20220823130702.1046-1-linkmauve@linkmauve.fr>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="X6FF6FFLRgFUYXaS"
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=V_V-M1fJmeWH_=wG4GB9GERL9ToAZTwAjX9i-6k6QkWA@mail.gmail.com>
-X-Cookie: You can't take damsel here now.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_DUL,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,43 +41,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This register would fail to be reset if reading the RTC bias failed for
+whichever reason.  This commit reorganises the code around to
+unconditionally write it back to its previous value, unmap it, and
+return the result of regmap_read(), which makes it both simpler and more
+correct in the error case.
 
---X6FF6FFLRgFUYXaS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+---
+ drivers/rtc/rtc-gamecube.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-On Mon, Aug 22, 2022 at 01:13:55PM -0700, Doug Anderson wrote:
+diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
+index c2717bb52b2b..c828bc8e05b9 100644
+--- a/drivers/rtc/rtc-gamecube.c
++++ b/drivers/rtc/rtc-gamecube.c
+@@ -265,18 +265,17 @@ static int gamecube_rtc_read_offset_from_sram(struct priv *d)
+ 	 * SRAM address as on previous consoles.
+ 	 */
+ 	ret = regmap_read(d->regmap, RTC_SRAM_BIAS, &d->rtc_bias);
+-	if (ret) {
+-		pr_err("failed to get the RTC bias\n");
+-		iounmap(hw_srnprot);
+-		return -1;
+-	}
+ 
+ 	/* Reset SRAM access to how it was before, our job here is done. */
+ 	if (old != 0x7bf)
+ 		iowrite32be(old, hw_srnprot);
++
+ 	iounmap(hw_srnprot);
+ 
+-	return 0;
++	if (ret)
++		pr_err("failed to get the RTC bias\n");
++
++	return ret;
+ }
+ 
+ static const struct regmap_range rtc_rd_ranges[] = {
+-- 
+2.37.2
 
-> I guess at this point I'll wait for Mark to give his suggestion for
-> what to do. Options I'm aware of:
-
-> a) ${SUBJECT} patch was written as a cleanup as per Mark's request and
-> we could just revert it.
-
-> b) We could make it so that failures to get the input/output voltages
-> doesn't count as an error when going through the get_optimum_mode()
-> path.
-
-We could push the checks for a valid voltage down into the drivers, a
-lot of things aren't particularly sensitive to the output voltage here
-and are much more sensitive to the current draw.  Depending on people's
-attitudes to DT stability for Qualcomm platforms we could also fix the
-affected DTs as well, though that doesn't stop us handling this in the
-core too.
-
---X6FF6FFLRgFUYXaS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmME0NUACgkQJNaLcl1U
-h9A/qAf+L08yi+AfUUOKiU+RzeDrbdpo0B+MwdqVLYM65myh59wA/z7dIUHNWslx
-QSLK+T8ppVRnu/qedfMqhWKigjP69HkVs8aVDVNx5InAXyYL9fWpS+sIq9PTrYpO
-crrASb+hFdboUdcrIbMq6xVSD0C9u5R98AgjTbAuGoYrRosXjWtViQVivCiBn3fm
-cNeDwOU5CEoouqAAvtjpjjbUbkIn6SZdTt95yIhWvUQuU7nOShmngfCQ+uQAbt0s
-hW4jcN4RS4Q1wPzDC0ccZl44BI2U0UvhMH/otFKXvjPnTU8DFH0tgBTTldmbPjd7
-wOKME+0yd4AvtUjLkUauv4iJuVESKQ==
-=QS7l
------END PGP SIGNATURE-----
-
---X6FF6FFLRgFUYXaS--

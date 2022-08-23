@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C4F59E290
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608FC59DBBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355804AbiHWKkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S1358082AbiHWLcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354550AbiHWKZy (ORCPT
+        with ESMTP id S1358100AbiHWL1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:25:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C234D74DC0;
-        Tue, 23 Aug 2022 02:05:20 -0700 (PDT)
+        Tue, 23 Aug 2022 07:27:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460FB90189;
+        Tue, 23 Aug 2022 02:25:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB3D4B81C86;
-        Tue, 23 Aug 2022 09:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23A31C433C1;
-        Tue, 23 Aug 2022 09:05:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F38896126A;
+        Tue, 23 Aug 2022 09:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED8E5C433D6;
+        Tue, 23 Aug 2022 09:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245517;
-        bh=9yJpKcuASDlp32Z391P93jbdRGoOwrig8KBbizf0sRA=;
+        s=korg; t=1661246699;
+        bh=HvyWMNn1dAMxG+kBolx7NdXelB+3mIqP2NLkskiIxtM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NIpv+JbdvvjHp3fZo5rMoUmvezV4DIOnfiEdrRJfikG7jEls1bkWzruoXWji7toS8
-         vQaoX9Hh75PpBZ2ewWmbkscc9lLlyjiYtXsei0mtXtRDEUdwI0w2NzDpGN+EgNgqM1
-         9ZizaXAFONUwtAbU4v6cUcagn+9ZICvKdWPSrnGI=
+        b=ckG7LTFdgR+PP3NfSeyinaNE2/W6ZPU9KPoI3VMn2wgdAVVxUr0CTnjRDKk30i8/T
+         RkJ6/Tpx4DRd/MJ1VGuWh4SXRfH8txxT9WqtQq86tjD9gI5yiXeQHbcWG6dt5B0bwO
+         TI4i9rF8MOyZeiETiejks3Oo9SjrWAU/QHijK4M8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Wang <vulab@iscas.ac.cn>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 072/287] i2c: Fix a potential use after free
-Date:   Tue, 23 Aug 2022 10:24:01 +0200
-Message-Id: <20220823080102.653454607@linuxfoundation.org>
+        stable@vger.kernel.org, Tang Bin <tangbin@cmss.chinamobile.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 164/389] usb: xhci: tegra: Fix error check
+Date:   Tue, 23 Aug 2022 10:24:02 +0200
+Message-Id: <20220823080122.476035562@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Wang <vulab@iscas.ac.cn>
+From: Tang Bin <tangbin@cmss.chinamobile.com>
 
-[ Upstream commit e4c72c06c367758a14f227c847f9d623f1994ecf ]
+[ Upstream commit 18fc7c435be3f17ea26a21b2e2312fcb9088e01f ]
 
-Free the adap structure only after we are done using it.
-This patch just moves the put_device() down a bit to avoid the
-use after free.
+In the function tegra_xusb_powerdomain_init(),
+dev_pm_domain_attach_by_name() may return NULL in some cases,
+so IS_ERR() doesn't meet the requirements. Thus fix it.
 
-Fixes: 611e12ea0f12 ("i2c: core: manage i2c bus device refcount in i2c_[get|put]_adapter")
-Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
-[wsa: added comment to the code, added Fixes tag]
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 6494a9ad86de ("usb: xhci: tegra: Add genpd support")
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+Link: https://lore.kernel.org/r/20220524121404.18376-1-tangbin@cmss.chinamobile.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/i2c-core-base.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci-tegra.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 2a43f4e46af0..9079be0d51d1 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -2273,8 +2273,9 @@ void i2c_put_adapter(struct i2c_adapter *adap)
- 	if (!adap)
- 		return;
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 6087b1fa530f..d53bdb7d297f 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -933,15 +933,15 @@ static int tegra_xusb_powerdomain_init(struct device *dev,
+ 	int err;
  
--	put_device(&adap->dev);
- 	module_put(adap->owner);
-+	/* Should be last, otherwise we risk use-after-free with 'adap' */
-+	put_device(&adap->dev);
- }
- EXPORT_SYMBOL(i2c_put_adapter);
+ 	tegra->genpd_dev_host = dev_pm_domain_attach_by_name(dev, "xusb_host");
+-	if (IS_ERR(tegra->genpd_dev_host)) {
+-		err = PTR_ERR(tegra->genpd_dev_host);
++	if (IS_ERR_OR_NULL(tegra->genpd_dev_host)) {
++		err = PTR_ERR(tegra->genpd_dev_host) ? : -ENODATA;
+ 		dev_err(dev, "failed to get host pm-domain: %d\n", err);
+ 		return err;
+ 	}
  
+ 	tegra->genpd_dev_ss = dev_pm_domain_attach_by_name(dev, "xusb_ss");
+-	if (IS_ERR(tegra->genpd_dev_ss)) {
+-		err = PTR_ERR(tegra->genpd_dev_ss);
++	if (IS_ERR_OR_NULL(tegra->genpd_dev_ss)) {
++		err = PTR_ERR(tegra->genpd_dev_ss) ? : -ENODATA;
+ 		dev_err(dev, "failed to get superspeed pm-domain: %d\n", err);
+ 		return err;
+ 	}
 -- 
 2.35.1
 

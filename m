@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCD359DEAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F02559E0C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358491AbiHWLtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S233335AbiHWKMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358617AbiHWLq4 (ORCPT
+        with ESMTP id S1352408AbiHWKFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:46:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813AFD25F7;
-        Tue, 23 Aug 2022 02:30:30 -0700 (PDT)
+        Tue, 23 Aug 2022 06:05:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9678A2858;
+        Tue, 23 Aug 2022 01:52:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27BB2B81C66;
-        Tue, 23 Aug 2022 09:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB84C433D6;
-        Tue, 23 Aug 2022 09:30:11 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D14B2CE1B4B;
+        Tue, 23 Aug 2022 08:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D22B0C433D6;
+        Tue, 23 Aug 2022 08:51:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247012;
-        bh=pkcrMrMlNowH+zSiZz0LXZX8iB4oc108NYilr0WnQ7s=;
+        s=korg; t=1661244719;
+        bh=xbUiAn6roGKlOVmttkOBenGDG4+k4twIaoCVAlzAAPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RbxCUC2icQHuEBck6jY+Wz4s+R/DZpvv8dSg64JgV7IVlnwhwAiJKQOJLPqLY4olJ
-         Wj0ID4IYjGEB4K2KcZf2jveN3eMF4xIpyJahvAS11Agba8T+qhMrj79UehoeQas09k
-         3Y4KWLZ8mhp1NrRE6o5kO5HtHRsrdV5mA3QBo6Pk=
+        b=chVUCmH6Bd2UQVMUaUOTQys6q6HYYcivPsreQkDiA5NIkCze0sKzSVsIAIh3ZaM6w
+         /jYa5BdDWHJklO5c7pqD4VJ21Nq+2RkuPxw46toiie24Wu8+rEU5VgsIp+l0yd37Za
+         li5kTp6dGcOlP9X7nGMdxzjq+H2Ls9mz+fq/TJJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Baokun Li <libaokun1@huawei.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 263/389] ext4: correct the misjudgment in ext4_iget_extra_inode
+        stable@vger.kernel.org,
+        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.14 180/229] can: ems_usb: fix clangs -Wunaligned-access warning
 Date:   Tue, 23 Aug 2022 10:25:41 +0200
-Message-Id: <20220823080126.557781195@linuxfoundation.org>
+Message-Id: <20220823080100.047311786@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit fd7e672ea98b95b9d4c9dae316639f03c16a749d upstream.
+commit a4cb6e62ea4d36e53fb3c0f18ea4503d7b76674f upstream.
 
-Use the EXT4_INODE_HAS_XATTR_SPACE macro to more accurately
-determine whether the inode have xattr space.
+clang emits a -Wunaligned-access warning on struct __packed
+ems_cpc_msg.
 
-Cc: stable@kernel.org
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220616021358.2504451-5-libaokun1@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+The reason is that the anonymous union msg (not declared as packed) is
+being packed right after some non naturally aligned variables (3*8
+bits + 2*32) inside a packed struct:
+
+| struct __packed ems_cpc_msg {
+| 	u8 type;	/* type of message */
+| 	u8 length;	/* length of data within union 'msg' */
+| 	u8 msgid;	/* confirmation handle */
+| 	__le32 ts_sec;	/* timestamp in seconds */
+| 	__le32 ts_nsec;	/* timestamp in nano seconds */
+|	/* ^ not naturally aligned */
+|
+| 	union {
+| 	/* ^ not declared as packed */
+| 		u8 generic[64];
+| 		struct cpc_can_msg can_msg;
+| 		struct cpc_can_params can_params;
+| 		struct cpc_confirm confirmation;
+| 		struct cpc_overrun overrun;
+| 		struct cpc_can_error error;
+| 		struct cpc_can_err_counter err_counter;
+| 		u8 can_state;
+| 	} msg;
+| };
+
+Starting from LLVM 14, having an unpacked struct nested in a packed
+struct triggers a warning. c.f. [1].
+
+Fix the warning by marking the anonymous union as packed.
+
+[1] https://github.com/llvm/llvm-project/issues/55520
+
+Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB interface")
+Link: https://lore.kernel.org/all/20220802094021.959858-1-mkl@pengutronix.de
+Cc: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+Cc: Sebastian Haas <haas@ems-wuensche.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inode.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/can/usb/ems_usb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -4841,8 +4841,7 @@ static inline int ext4_iget_extra_inode(
- 	__le32 *magic = (void *)raw_inode +
- 			EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize;
+--- a/drivers/net/can/usb/ems_usb.c
++++ b/drivers/net/can/usb/ems_usb.c
+@@ -206,7 +206,7 @@ struct __packed ems_cpc_msg {
+ 	__le32 ts_sec;	/* timestamp in seconds */
+ 	__le32 ts_nsec;	/* timestamp in nano seconds */
  
--	if (EXT4_GOOD_OLD_INODE_SIZE + ei->i_extra_isize + sizeof(__le32) <=
--	    EXT4_INODE_SIZE(inode->i_sb) &&
-+	if (EXT4_INODE_HAS_XATTR_SPACE(inode)  &&
- 	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
- 		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
- 		return ext4_find_inline_data_nolock(inode);
+-	union {
++	union __packed {
+ 		u8 generic[64];
+ 		struct cpc_can_msg can_msg;
+ 		struct cpc_can_params can_params;
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD5959E27D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCB959DE5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359489AbiHWML4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S241254AbiHWKXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359739AbiHWMLF (ORCPT
+        with ESMTP id S1353479AbiHWKLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:11:05 -0400
+        Tue, 23 Aug 2022 06:11:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D73C7F92;
-        Tue, 23 Aug 2022 02:38:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEFB7F111;
+        Tue, 23 Aug 2022 01:56:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81FFAB81C97;
-        Tue, 23 Aug 2022 09:37:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE943C433C1;
-        Tue, 23 Aug 2022 09:37:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2756B81C28;
+        Tue, 23 Aug 2022 08:56:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B762C433C1;
+        Tue, 23 Aug 2022 08:56:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247478;
-        bh=AjRQHlxk2wBIgYkQ7J3Gw7hX5PZJd+nwnR53i7RFcK8=;
+        s=korg; t=1661245014;
+        bh=TcBl72HrHmjDRathhtjfFih6aIlKLd2vED0J2ncQORk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CZyn+Pmsp2Rv3ZwizuVMjbqNy1jxkw/hOK/b/7wVZ89OhtsBdMzjDjgV92ZOPLn0F
-         0f0AVnnkPjNslmnUawi2zBBfqBtpUMynK6+ATMIJztFRn9jfgkrzgXkW0CpWqU9XSL
-         k/Ezt3awmj0md1LJU0STvoAGTB//bxkvfwq5DvqU=
+        b=WXSoR1m5wYZQB2Rf4Scl0MI3NhH21bH+oDjqn4R/gwjPtgKMXzFMwkPwVNGHZOf6Z
+         4qt7EHItRVL0nDE25MLCAmPJoUA6YTyIg/LDSfkFdQQErL8ymXEthi/4l8S7Hb+mPi
+         h8UDcOrL9KEim3EeIyyX4wMgMesVaJ9M7ACTb09Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.10 050/158] dt-bindings: arm: qcom: fix MSM8916 MTP compatibles
+        stable@vger.kernel.org, Timur Tabi <timur@kernel.org>,
+        Liang He <windhl@126.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 221/229] tty: serial: Fix refcount leak bug in ucc_uart.c
 Date:   Tue, 23 Aug 2022 10:26:22 +0200
-Message-Id: <20220823080048.113954231@linuxfoundation.org>
+Message-Id: <20220823080101.530122222@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Liang He <windhl@126.com>
 
-commit bb35fe1efbae4114bd288fae0f56070f563adcfc upstream.
+[ Upstream commit d24d7bb2cd947676f9b71fb944d045e09b8b282f ]
 
-The order of compatibles for MSM8916 MTP board is different:
+In soc_info(), of_find_node_by_type() will return a node pointer
+with refcount incremented. We should use of_node_put() when it is
+not used anymore.
 
-  msm8916-mtp.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
-    ['qcom,msm8916-mtp', 'qcom,msm8916-mtp/1', 'qcom,msm8916'] is too long
-
-Fixes: 9d3ef77fe568 ("dt-bindings: arm: Convert QCom board/soc bindings to json-schema")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220520123252.365762-3-krzysztof.kozlowski@linaro.org
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Timur Tabi <timur@kernel.org>
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220618060850.4058525-1-windhl@126.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/ucc_uart.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -123,8 +123,8 @@ properties:
-           - const: qcom,msm8974
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index 55b702775786..40b8e414f48f 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -1143,6 +1143,8 @@ static unsigned int soc_info(unsigned int *rev_h, unsigned int *rev_l)
+ 		/* No compatible property, so try the name. */
+ 		soc_string = np->name;
  
-       - items:
--          - const: qcom,msm8916-mtp/1
-           - const: qcom,msm8916-mtp
-+          - const: qcom,msm8916-mtp/1
-           - const: qcom,msm8916
- 
-       - items:
++	of_node_put(np);
++
+ 	/* Extract the SOC number from the "PowerPC," string */
+ 	if ((sscanf(soc_string, "PowerPC,%u", &soc) != 1) || !soc)
+ 		return 0;
+-- 
+2.35.1
+
 
 

@@ -2,183 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BABA59EAB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE04559EAAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiHWSLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
+        id S231265AbiHWSLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiHWSLZ (ORCPT
+        with ESMTP id S230426AbiHWSLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:11:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34794760FD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:23:12 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQWg7-00009i-3P; Tue, 23 Aug 2022 18:22:59 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQWg5-0004cc-Dq; Tue, 23 Aug 2022 18:22:57 +0200
-Date:   Tue, 23 Aug 2022 18:22:57 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH net-next v1 1/7] dt-bindings: net: pse-dt: add bindings
- for generic PSE controller
-Message-ID: <20220823162257.GO10138@pengutronix.de>
-References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
- <20220819120109.3857571-2-o.rempel@pengutronix.de>
- <20220822184112.GA113650-robh@kernel.org>
+        Tue, 23 Aug 2022 14:11:18 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74946F266
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:23:01 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo17706933pjd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=sr+/MYTdy+Hb+ViTpSI674A/Fgsv5oXGjKt3k8niW6E=;
+        b=F8K1uc4a7GIvY5YEhN3k3CQDZGWvAusCXcTbHH8+tdzRfb/CwXlDJj26VRtrQct2Lz
+         A/xIrxjjnqjvNFqaXgFCYTsm+hndyJD/E3x+T0rC78RVK6eKc30Ovr9uxOSKqtHaMnfH
+         Hvf2xY7Wc5Q/dUIrUeisGkp1ONwdWT4sN6wqUjrcZyySfjgcbSNz4JySvZ4e17bt5LYe
+         xmNQxcnWcYBVUpUNtqPiK+hCqU4KQhZObnn8xx2YsAxRBRIhvqCrILcE1kLcWWebiVdY
+         D4r4sZZl+TH8U973SfKYksBMDBsimN/hnFwVtskI+SKzvsxfMuOnsi6rkKcDnZXviKNn
+         jvSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=sr+/MYTdy+Hb+ViTpSI674A/Fgsv5oXGjKt3k8niW6E=;
+        b=oL2t3nphINX5I2uH0HqjuwmO6AZ31ZcnSWDN9bkw44VDFOUxlFKJOlOl7lSnEXYMOM
+         VBHj2+NilOM3Nlncu+OtRAbpmiOTDXrgixuDVNRY8KIh3K/wpLNIyyYZvMF76LMoI6AH
+         6vBXi5tXwMJYH4trvb1cxspYJta48YnyeF6O6Ukkb6RhTNoeS51R6QbpEv70QGZxUKoE
+         X1G9VBoJSOW+yV7RtMX5KO77vHXLyLVwJ3JP4l77T++as1KPFxyb76yhE9O6TWtTMJXj
+         gyoFwB+wHjwUVumwWiejBbIkgyYhEsKOHsLGz1ErZ0E6FPe1iqUEoFh9riM+SoeBVqda
+         Yn3w==
+X-Gm-Message-State: ACgBeo0aHcPvB2YnQrvS91ITAAMODJLD4LL0lFb3osgg9vSi7dtwcSRe
+        eTvO91RZxilv8aJNSpsvwV/Z4CAxb1U=
+X-Google-Smtp-Source: AA6agR54r7eQ8pJOXAqC2eJalPRtAmQd1x/ma/uKsnCxb+E4KrezW3C/YEF98fdT2JI0IvCxI4+Pmw==
+X-Received: by 2002:a17:90b:198e:b0:1fb:fb8:1072 with SMTP id mv14-20020a17090b198e00b001fb0fb81072mr4017061pjb.51.1661271780957;
+        Tue, 23 Aug 2022 09:23:00 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id x124-20020a623182000000b00534cb3872edsm10965706pfx.166.2022.08.23.09.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 09:23:00 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 23 Aug 2022 06:22:59 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        gregkh@linuxfoundation.org, hannes@cmpxchg.org, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, mhocko@suse.com, shakeelb@google.com,
+        songmuchun@bytedance.com, viro@zeniv.linux.org.uk,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [RFC PATCH] memcg: adjust memcg for new cgroup allocations
+Message-ID: <YwT+4zHz2gUWnI5S@slm.duckdns.org>
+References: <62188f37-f816-08e9-cdd5-8df23131746d@openvz.org>
+ <45a04b75-d61b-4c7a-7169-c971995a6049@openvz.org>
+ <20220817091728.GA23229@blackbody.suse.cz>
+ <Yv0aMqMIafD7cOQX@slm.duckdns.org>
+ <b64759d9-e183-99a2-3ec5-9241035eca69@openvz.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822184112.GA113650-robh@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b64759d9-e183-99a2-3ec5-9241035eca69@openvz.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 01:41:12PM -0500, Rob Herring wrote:
-> On Fri, Aug 19, 2022 at 02:01:03PM +0200, Oleksij Rempel wrote:
-> > Add binding for generic Ethernet PSE controller.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  .../bindings/net/pse-pd/generic-pse.yaml      | 40 +++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml b/Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml
-> > new file mode 100644
-> > index 0000000000000..64f91efa79a56
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml
-> > @@ -0,0 +1,40 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/pse-pd/generic-pse.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Generic Power Sourcing Equipment
-> > +
-> > +maintainers:
-> > +  - Oleksij Rempel <o.rempel@pengutronix.de>
-> > +
-> > +description: |
-> > +  Generic PSE controller. The device must be referenced by the PHY node
-> > +  to control power injection to the Ethernet cable.
-> 
-> Isn't this separate from the PHY other than you need to associate 
-> supplies with ethernet ports?
-> 
-> Is there a controller here? Or it is just a regulator consumer 
-> associated with an ethernet port?
+Hello,
 
-Current version has only regulator. It will be extended with IEEE 802.3
-specific power source classification information, wich will be overkill for the
-regulator framework. I can add it to the v2 version.
+On Tue, Aug 23, 2022 at 03:04:31PM +0300, Vasily Averin wrote:
+> I would like to properly handle cgroup1 case too.
+> To do it we can enable accounting for new 'struct cgroup' objects, 
+> and bind them to memcg of creator task.
 
-> > +properties:
-> > +  compatible:
-> > +    const: ieee802.3-podl-pse-generic
-> 
-> Is this for 802.3bu only (which is where PoDL comes from) or all the 
-> flavors? If all, do they need to be distinguished?
+I'm not sure it'd be a good idea to introduce two different behaviors for
+handling the same thing. I'd just leave cgroup1 as-is.
 
-yes. ieee802.3 defines type and class with different enumeration and
-meanings for PSE and PoDL PSE. 
-
-So far we have two different modes:
- - 802.3bu (PoDL PSE). Has own types and classes
- - 802.3af  is extended by 802.3at, and the extended by 802.3bt
-   all of them are named as PSE and has own types and classes as well.
-
-I worry more about the fact is some one will implement HW supporting both
-modes. IMO, it is possible to take usual ethernet PHY, configure to
-10Bit half-duplex and run over single pair. In this case it is possible
-to use only PoDL PSE mode.
-
-In this case I need single generic compatible but different properties
-to describe supported PSE and PoDL PSE modes.
-
-> 'generic' is redundant.
-
-ok
-
-> > +
-> > +  '#pse-cells':
-> 
-> What's this for? You don't have a consumer.
-
-the consumer is PHY.
-
-> > +    const: 0
-> > +
-> > +  ieee802.3-podl-pse-supply:
-> 
-> Seems a bit long
-
-ok. Reduce it to pse-supply ?
-
-> > +    description: |
-> 
-> Don't need '|' if no formatting to maintain.
-
-ok
-
-> > +      Power supply for the PSE controller
-> > +
-> > +additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - '#pse-cells'
-> > +  - ieee802.3-podl-pse-supply
-> > +
-> > +examples:
-> > +  - |
-> > +    ethernet-pse-1 {
-> > +      compatible = "ieee802.3-podl-pse-generic";
-> > +      ieee802.3-podl-pse-supply = <&reg_t1l1>;
-> > +      #pse-cells = <0>;
-> > +    };
-> > -- 
-> > 2.30.2
-> > 
-> > 
-> 
+Thanks.
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+tejun

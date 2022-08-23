@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD94F59E616
+	by mail.lfdr.de (Postfix) with ESMTP id 6417E59E615
 	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 17:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243688AbiHWPe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 11:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S241449AbiHWPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 11:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243432AbiHWPeC (ORCPT
+        with ESMTP id S240930AbiHWPeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 11:34:02 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89B8250341;
-        Tue, 23 Aug 2022 04:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661253448; x=1692789448;
-  h=message-id:date:mime-version:subject:to:references:from:
-   cc:in-reply-to:content-transfer-encoding;
-  bh=xtDNU8UiOB8VZnhym+s1uLfNOjHCLSoYSsA83kkfttk=;
-  b=2BT9BqBOJGkW0qkNgqBXTu6gM3/tijTBgTwm7+0ei1QvPaArHHwAZ0GQ
-   L1cT0FyJSEKoEHqh0MBIcOFFsw4ctYeJIbFLtnmB3OKiOGG5qa/AZqY/L
-   DNpf1KGGMWodx7dKsXUXVZpW4NQCB26T1Yy9Z7SE8bPHtmRLb1B+Bhtuk
-   f0uG1dpTyqH3+2/qsAdSkSaUuzIVK/cxtoLfER6S4gNNVc3Lt9Uw434cJ
-   UcG5vcfTN2g/aI5HS7vvteBuuT8hwCQprxE8fWgQe6EDXespk5XvIc5b0
-   x1H9ABSWFlMPz78DjsxpW7ibwtIKGBzN0YqM+/LUGH9QD9H0+bj232OzL
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="173692075"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Aug 2022 04:16:55 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 23 Aug 2022 04:16:55 -0700
-Received: from [10.159.205.135] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 23 Aug 2022 04:16:53 -0700
-Message-ID: <6482df4e-ec7b-04fc-f2a3-f75a67a69eff@microchip.com>
-Date:   Tue, 23 Aug 2022 13:16:50 +0200
+        Tue, 23 Aug 2022 11:34:13 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64A533431;
+        Tue, 23 Aug 2022 04:17:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id z187so13135882pfb.12;
+        Tue, 23 Aug 2022 04:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=0pU5iLLC3ceGYBrxwsq4Hg09zSm+DaoRJ02xrrcMouU=;
+        b=L/J2Gt5Jqlon8zl8L69XswAVdKmyHBBm+yg7CgJKoru26DL5+vPXnh3QzqLEUhRGff
+         eB7V8HK+J+/69FBQK4AtprGRYQb63wj7Cn37DjIJGxDuVFHEdMzjqHLbihoRXECgclKd
+         kNgxhZpvERwxyXaMDYsI29h60D5nGijBM/nG7gKBipWakO9b9J5S63RO8fRxpccnszBM
+         9TszvU+cjbUy8TbV6+DFIhNNAtIABTxykXqE/Z0MotEf8GmCQ1pjqova5D+XRhG6EEOI
+         uwPzdSOpBktFUHk82Fkc2+l1jnYSP1DAh/xGhpdLoobgMN8K6+mXuLtB/zBbjyMh1qFN
+         Ep9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=0pU5iLLC3ceGYBrxwsq4Hg09zSm+DaoRJ02xrrcMouU=;
+        b=jz+dBq8S3RKdnV/aQUD3aCYxvrSY4szuawxlqtfh59p6bxFpeCWSfqFx37Q51oizMb
+         WuoMl+ehfUXJEnsKIuGCyrhTHpwv8xFb648clgYDABj3PwUKsSV3q+zW2C+DBc/DNq9p
+         Xn/GcDHAS3G4c04eQ9+KwobdIizUXQJvhGYJAgXxWR2pdBkSjjcxsJWWEWyDSk/1SuhX
+         5KKiHp9Aesfb1f4AcyoDAcMe+rwmqctiyPYmiUKO4UnV5V1nOPk0iVeS9bxSfNlnY1NG
+         Dl7sFNlZlXVAYPdaldMIMBO/jsGhzNrdfo24iefj7+uq0MtBrpOdj7LdXrrGD2/RzVvX
+         ZdSA==
+X-Gm-Message-State: ACgBeo3i+BTOa3XExj6rE54l6NFmizCp9FrKU75/MAOSO1mNWEjRYuYQ
+        /U1zUS+sgc1/1dEQIJklEQ78M4Mcpo0atw==
+X-Google-Smtp-Source: AA6agR5rs3KV4MIEfAj6rMx6hvhj3C3GIa4ja16PB9v5wE1J9n3s2pDW3NoG4n64a5u3F4JL8JJRTg==
+X-Received: by 2002:a05:6a00:1952:b0:537:1bb2:8451 with SMTP id s18-20020a056a00195200b005371bb28451mr369530pfk.77.1661253454738;
+        Tue, 23 Aug 2022 04:17:34 -0700 (PDT)
+Received: from kelvin-ThinkPad-L14-Gen-1.. ([136.175.179.175])
+        by smtp.gmail.com with ESMTPSA id z11-20020a17090a8b8b00b001f51903e03fsm9572023pjn.32.2022.08.23.04.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 04:17:34 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH] MIPS: loongson32: ls1c: Fix hang during startup
+Date:   Tue, 23 Aug 2022 19:17:25 +0800
+Message-Id: <20220823111725.3134377-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [linux][PATCH v2 2/2] dts: arm: at91: Add SAMA5D3-EDS Board
-Content-Language: en-US
-To:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>,
-        Jerry Ray - C33025 <Jerry.Ray@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220822181314.8325-1-jerry.ray@microchip.com>
- <20220822181314.8325-2-jerry.ray@microchip.com>
- <59d1675d-89ae-787d-9743-e19c19ba0f97@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-In-Reply-To: <59d1675d-89ae-787d-9743-e19c19ba0f97@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,156 +69,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jerry,
+From: Yang Ling <gnaygnil@gmail.com>
 
-On 23/08/2022 at 09:28, Claudiu Beznea - M18063 wrote:
-> On 22.08.2022 21:13, Jerry Ray wrote:
->> The SAMA5D3-EDS board is an Ethernet Development Platform allowing for
->> evaluating many Microchip ethernet switch and PHY products.  Various
->> daughter cards can connect up via an RGMII connector or an RMII connector.
->>
->> The EDS board is not intended for stand-alone use and has no ethernet
->> capabilities when no daughter board is connected.  As such, this device
->> tree is intended to be used with a DT overlay defining the add-on board.
->> To better ensure consistency, some items are defined here as a form of
->> documentation so that all add-on overlays will use the same terms.
->>
->> Google search keywords: "Microchip SAMA5D3-EDS"
->>
->> Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
->> ---
->> v1->v2:
->>   - Modified the compatible field in the device tree to reflect Microchip
->>     Ethernet Development System Board.
->> ---
->>   arch/arm/boot/dts/at91-sama5d3_eds.dts | 314 +++++++++++++++++++++++++
->>   1 file changed, 314 insertions(+)
->>   create mode 100644 arch/arm/boot/dts/at91-sama5d3_eds.dts
->>
->> diff --git a/arch/arm/boot/dts/at91-sama5d3_eds.dts b/arch/arm/boot/dts/at91-sama5d3_eds.dts
->> new file mode 100644
-> 
-> You have to add this file to Makefile to be compiled.
-> 
->> index 000000000000..626f7bbe0164
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/at91-sama5d3_eds.dts
->> @@ -0,0 +1,314 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
+The RTCCTRL reg of LS1C is obselete.
+Writing this reg will cause system hang.
 
-I would prefer that we also allow MIT:
+Fixes: 60219c563c9b6 ("MIPS: Add RTC support for Loongson1C board")
+Signed-off-by: Yang Ling <gnaygnil@gmail.com>
+Tested-by: Keguang Zhang <keguang.zhang@gmail.com>
+Acked-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+ arch/mips/loongson32/ls1c/board.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+diff --git a/arch/mips/loongson32/ls1c/board.c b/arch/mips/loongson32/ls1c/board.c
+index e9de6da0ce51..9dcfe9de55b0 100644
+--- a/arch/mips/loongson32/ls1c/board.c
++++ b/arch/mips/loongson32/ls1c/board.c
+@@ -15,7 +15,6 @@ static struct platform_device *ls1c_platform_devices[] __initdata = {
+ static int __init ls1c_platform_init(void)
+ {
+ 	ls1x_serial_set_uartclk(&ls1x_uart_pdev);
+-	ls1x_rtc_set_extclk(&ls1x_rtc_pdev);
+ 
+ 	return platform_add_devices(ls1c_platform_devices,
+ 				   ARRAY_SIZE(ls1c_platform_devices));
 
->> +/*
->> + * at91-sama5d3_eds.dts - Device Tree file for the SAMA5D3 Ethernet
->> + *    Development System board.
->> + *
->> + *  Copyright (C) 2022 Microchip Technology, Inc. and its subsidiarie >> + *               2022 Jerry Ray <jerry.ray@microchip.com>
-
-Let's have only Microchip as a copyright holder and add yourself as 
-Author like:
-
-// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-/*
-  * Brief description goes here.
-  *
-  * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-  *
-  * Author: John Doe <john.doe@microchip.com>
-  *
-  * Longer description goes here.
-  * Even on multiple lines.
-  */
-
->> + */
->> +/dts-v1/;
->> +#include "sama5d36.dtsi"
->> +
->> +/ {
->> +       model = "SAMA5D3 Ethernet Development System";
->> +       compatible = "microchip,sama5d3-eds", "atmel,sama5d3", "atmel,sama5";
->> +
-
-[..]
-
->> +&pinctrl {
->> +       board {
->> +               pinctrl_i2c0_pu: i2c0_pu {
->> +                       atmel,pins =
->> +                               <AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>,
->> +                               <AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
->> +               };
->> +
->> +               pinctrl_i2c2_pu: i2c2_pu {
->> +                       atmel,pins =
->> +                               <AT91_PIOA 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>,
->> +                               <AT91_PIOA 19 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
->> +               };
->> +
->> +               pinctrl_key_gpio: key_gpio_0 {
->> +                       atmel,pins =
->> +                               <AT91_PIOE 29 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
->> +               };
->> +
->> +               pinctrl_mmc0_cd: mmc0_cd {
->> +                       atmel,pins =
->> +                               <AT91_PIOE 0 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
->> +               };
->> +
->> +               pinctrl_spi0_cs: spi0_cs_default {
->> +                       atmel,pins =
->> +                               <AT91_PIOD 13 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
->> +                                AT91_PIOD 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
->> +               };
->> +
->> +               pinctrl_spi1_cs: spi1_cs_default {
->> +                       atmel,pins = <AT91_PIOC 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
->> +                                     AT91_PIOC 28 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
->> +               };
->> +
->> +               pinctrl_usba_vbus: usba_vbus {
->> +                       atmel,pins =
->> +                               <AT91_PIOE 9 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
->> +               };
->> +
->> +               pinctrl_usb_default: usb_default {
->> +                       atmel,pins =
->> +                               <AT91_PIOE 3 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
->> +                                AT91_PIOE 4 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
->> +               };
->> +
->> +               pinctrl_vcc_mmc0_reg_gpio: vcc_mmc0_reg_gpio_default {
->> +                       atmel,pins = <AT91_PIOE 2 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
->> +               };
->> +
->> +               /* Reserved for reset signal to the RGMII connector. */
->> +               pinctrl_rgmii_rstn: rgmii_rstn {
-
-It's better if you sort these nodes alphabetically: please rearrange the 
-end of this list of pinctrl nodes.
-
->> +                       atmel,pins =
->> +                               <AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
->> +               };
->> +
->> +               /* Reserved for an interrupt line from the RMII and RGMII connectors. */
->> +               pinctrl_spi_irqn: spi_irqn {
->> +                       atmel,pins =
->> +                               <AT91_PIOB 28 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
->> +               };
->> +
->> +               /* Reserved for VBUS fault interrupt. */
->> +               pinctrl_vbusfault_irqn: vbusfault_irqn {
->> +                       atmel,pins =
->> +                               <AT91_PIOE 5 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
->> +               };
->> +       };
->> +};
-
-Thanks for your patch Jerry. Best regards,
-   Nicolas
-
-
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
 -- 
-Nicolas Ferre
+2.34.1
+

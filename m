@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79A359EED2
+	by mail.lfdr.de (Postfix) with ESMTP id F2C0559EED3
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiHWWNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S232207AbiHWWNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiHWWM2 (ORCPT
+        with ESMTP id S232419AbiHWWMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:12:28 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC2A7C778
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:18 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f5960500bso260576957b3.14
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:18 -0700 (PDT)
+        Tue, 23 Aug 2022 18:12:43 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B47434A
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:25 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-337ed9110c2so218379347b3.15
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=K4oRiNn+G2rdtJsE6L2b3oylFpgb/KpBFNxvRzPUh68=;
-        b=mPAPh3cEvyWdIZIF7pmnVaWOxwkdb/agfVPZLOISUSLKAOcBm6GD0GO984MB0BbI3h
-         nLeod1OUEJerQDtGS66iqteAj4Zm/QF4FHJoo6k5jCF7oa7npVly5Z+afdgkK7DojHeE
-         K8XhJDLxpv6UuKYEhvh3OXaCnHSBd81MS4q6MwEPHtSUGiZMhjf9hc0OnS34FCadQuwz
-         1SoHhjdmqixqY3VKmSmcDFXYPCR4Nxk+7nq3/U2G43pCTfjljlWU06JiNxt6XIhCpDPk
-         pZzBl3Mm1ZUgjxzQpUOIwQluQR+T8AvcaJs7Oz2ymxKbM2XVkwRHeMA2lI1ymtHkqfVg
-         Lvog==
+        bh=vpCoIyKRZsG9sSnwmRTlOTB6YRSjIw+Qbk8jvYcuaVE=;
+        b=XvSozB/DWuMKSbNHJ9l9xde2KRhs2B7hPE+zZEBJfJd7Fr6E4lDsopXJvIdm2+oO9j
+         jr31g9cAChKqFWsNNLIHJdF30A0bR3Cv2hneJzi8ReQowFjtktbkfhgyuILUR7cXFQvA
+         PjhFeFqrLVQ6dfX4gTRChIm+bE3ZoENvEXXD1WXoSW40LGANh/e2+thBWHo9naOHrsJq
+         PyBkagsL2dz4ZfnZRB88Ff4UDmD7DseC9LNSz8vpLyrAH8a45cAWOGDS4JmAcqncLx9g
+         k6mivrsUv+Wz/1aLhsPxsuwDEOf0RevYE/lwTzq/W/n8zvM1Bbnbo1lXkXaDP2Gg24/M
+         AFMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=K4oRiNn+G2rdtJsE6L2b3oylFpgb/KpBFNxvRzPUh68=;
-        b=GPBq0LkJp8EJR2JJB0lLTpX4+MuMNIz0EiFHqqPgPLsYrXAyyzN5MpDg54sooI60bI
-         C9kq+LLuKuEk3VvKLNU6cN0a/ec5WsKDzSlYpk9+RZuOjqR3/b7CPvz629zuu+pfucEl
-         LAEBUVqU91DAAE8MJpGKmPx7xBRYXK5v30iSx5ZbZ8GPwEVNMc4s2X+/ILc/6m5b8qkE
-         HjwkCmlFQs5xChRaOfvKs2tB4DpacxX4AbUMbjpamkhPK5ag/K7I8/hgoNXMLoudQOKE
-         BSSQNA0PPjbKajsbhxnSxvhzAFnyNTLAidNeU/zcyrSUzmBKK4HxNMIq3SKQ2PdYT4wN
-         jzMA==
-X-Gm-Message-State: ACgBeo0dUhJnU+tAwV+7x+TODvKuRUSbN7OP2YMYr7JgwTAWijvC8v/J
-        ULKjI83KQn84idUAILEFMJ74aCo/CAat
-X-Google-Smtp-Source: AA6agR7GhAN18bhNP7OEUGzMVoWqbLNjvwo0Kz5W4Z6P+DPRLh4sVcdbaQ0WjCi4/p46vI8Uk3tw7Xot0K2W
+        bh=vpCoIyKRZsG9sSnwmRTlOTB6YRSjIw+Qbk8jvYcuaVE=;
+        b=gLWr+hcovvDiOyb0JIZHA5yZZAIfN9oItXyfXaE3lsEYhQFl57CF+N/HtTX9epw7Wq
+         4KJdgsRThanSRvlH0evoS0ncj3nxFg2nHAhiILfJ1sidyBxL1f5o9ka5Jy4HhD1qiHdX
+         IGCj5D7w5gEYQm1u6uyo2qrIhHTkVsl2dddTSktwmQOoOQHA17h9yKQJ29TM9MQfuI2h
+         2thRQe3k/Zn+rq+Gfs8BBLQDKwr95jNCSTNy/q/wZ5Qsr6wCe5wQp/94DZOdkdStsWdp
+         6tyNEWjDAaQlelU44GV9KBXCOTegXvJOigbAWK/uVRD+3Hppn2c+ELZyNEkchqVI90Wh
+         XQMw==
+X-Gm-Message-State: ACgBeo2nvn42kG4hoIMSDzRyI1XlWFJM8EcDnatnMctnk33L91GEPy5Z
+        e3bRvJe/OWHUiHtGjVC4fcA7py4YhKNX
+X-Google-Smtp-Source: AA6agR6f5ty3lYMH2Y4qqlqwT9nA65Tc33n67UyVYg+Dgbepp9Cr8MCejsQA/hDfvv7R/YglXQcwvFGYYPpa
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7dbd:c08f:de81:c2a3])
- (user=irogers job=sendgmr) by 2002:a81:124c:0:b0:334:d633:f3c9 with SMTP id
- 73-20020a81124c000000b00334d633f3c9mr28335053yws.437.1661292677181; Tue, 23
- Aug 2022 15:11:17 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 15:09:21 -0700
+ (user=irogers job=sendgmr) by 2002:a25:cf4b:0:b0:68e:fea1:9fdc with SMTP id
+ f72-20020a25cf4b000000b0068efea19fdcmr26259610ybg.643.1661292684631; Tue, 23
+ Aug 2022 15:11:24 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 15:09:22 -0700
 In-Reply-To: <20220823220922.256001-1-irogers@google.com>
-Message-Id: <20220823220922.256001-18-irogers@google.com>
+Message-Id: <20220823220922.256001-19-irogers@google.com>
 Mime-Version: 1.0
 References: <20220823220922.256001-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v2 17/18] perf top: Fixes for thread safety analysis
+Subject: [PATCH v2 18/18] perf build: Enable -Wthread-safety with clang
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -114,41 +114,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add annotations to describe lock behavior.
+If building with clang then enable -Wthread-safety warnings.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-top.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/perf/Makefile.config | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 3757292bfe86..e832f04e3076 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
- 					struct hist_entry *he,
- 					struct perf_sample *sample,
- 					struct evsel *evsel, u64 ip)
-+	EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
- {
- 	struct annotation *notes;
- 	struct symbol *sym = he->ms.sym;
-@@ -724,13 +725,13 @@ static void *display_thread(void *arg)
- static int hist_iter__top_callback(struct hist_entry_iter *iter,
- 				   struct addr_location *al, bool single,
- 				   void *arg)
-+	EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
- {
- 	struct perf_top *top = arg;
--	struct hist_entry *he = iter->he;
- 	struct evsel *evsel = iter->evsel;
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 0661a1cf9855..0ef6f572485d 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
+ CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
+ HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
  
- 	if (perf_hpp_list.sym && single)
--		perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
-+		perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
++# Enabled Wthread-safety analysis for clang builds.
++ifeq ($(CC_NO_CLANG), 0)
++  CFLAGS += -Wthread-safety
++endif
++
+ include $(srctree)/tools/scripts/Makefile.arch
  
- 	hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
- 		     !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
+ $(call detected_var,SRCARCH)
 -- 
 2.37.2.609.g9ff673ca1a-goog
 

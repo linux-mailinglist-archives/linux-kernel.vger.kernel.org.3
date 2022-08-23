@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3285059D814
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764E659D843
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351848AbiHWJpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S238392AbiHWJ3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352441AbiHWJlV (ORCPT
+        with ESMTP id S1351139AbiHWJ0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:41:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A612D99252;
-        Tue, 23 Aug 2022 01:42:07 -0700 (PDT)
+        Tue, 23 Aug 2022 05:26:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B932915D3;
+        Tue, 23 Aug 2022 01:37:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A386B81C53;
-        Tue, 23 Aug 2022 08:41:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92BC9C433D6;
-        Tue, 23 Aug 2022 08:41:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0ABD6152F;
+        Tue, 23 Aug 2022 08:36:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E37C433D6;
+        Tue, 23 Aug 2022 08:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244099;
-        bh=s5578OVZR8KPzzrSrJ5oP9AEyfEJlKV7QfcOdlwYxjo=;
+        s=korg; t=1661243773;
+        bh=9SKAJjXFlHzhEZCiqbtuAW5C1JszHwdRG7QcZnOFqYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XvCuOAWEmmoBACiuXQOqvgTS55PXiLHmiEuzmd2Jhixr0b87CFIzx1dbPHMAUcGg+
-         t2Jv3nECNVWCxWto8DeneA2S8SVN/kzzLnkvGWk0RlbTXAUL7LFNRmI/uWSRRXH4nQ
-         eSjK6HXtsrggXxgXrpADpgwO+a59AbHsEuhdocXo=
+        b=BPmCiEK+6tsM5D69esATLAQpAW6rvyHp1ov9PXBWwB8xfBWGBB7HaKeo74AsL+sF5
+         nI9w90jiXdmF2m7hFGqF7rkgWpRuUJJ7AX8acwKDYNz9d36viQhMpzidxClzLdJdcC
+         /e8nCtiMlanxK+qhAy2YztPBCd5njDjacgpSNODg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Krister Johansen <kjlx@templeofstupid.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.15 019/244] tracing/perf: Fix double put of trace event when init fails
+        stable@vger.kernel.org, Ping Cheng <ping.cheng@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 4.14 017/229] HID: wacom: Dont register pad_input for touch switch
 Date:   Tue, 23 Aug 2022 10:22:58 +0200
-Message-Id: <20220823080059.711002766@linuxfoundation.org>
+Message-Id: <20220823080054.044105435@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,94 +55,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Ping Cheng <pinglinux@gmail.com>
 
-commit 7249921d94ff64f67b733eca0b68853a62032b3d upstream.
+commit d6b675687a4ab4dba684716d97c8c6f81bf10905 upstream.
 
-If in perf_trace_event_init(), the perf_trace_event_open() fails, then it
-will call perf_trace_event_unreg() which will not only unregister the perf
-trace event, but will also call the put() function of the tp_event.
-
-The problem here is that the trace_event_try_get_ref() is called by the
-caller of perf_trace_event_init() and if perf_trace_event_init() returns a
-failure, it will then call trace_event_put(). But since the
-perf_trace_event_unreg() already called the trace_event_put() function, it
-triggers a WARN_ON().
-
- WARNING: CPU: 1 PID: 30309 at kernel/trace/trace_dynevent.c:46 trace_event_dyn_put_ref+0x15/0x20
-
-If perf_trace_event_reg() does not call the trace_event_try_get_ref() then
-the perf_trace_event_unreg() should not be calling trace_event_put(). This
-breaks symmetry and causes bugs like these.
-
-Pull out the trace_event_put() from perf_trace_event_unreg() and call it
-in the locations that perf_trace_event_unreg() is called. This not only
-fixes this bug, but also brings back the proper symmetry of the reg/unreg
-vs get/put logic.
-
-Link: https://lore.kernel.org/all/cover.1660347763.git.kjlx@templeofstupid.com/
-Link: https://lkml.kernel.org/r/20220816192817.43d5e17f@gandalf.local.home
+Touch switch state is received through WACOM_PAD_FIELD. However, it
+is reported by touch_input. Don't register pad_input if no other pad
+events require the interface.
 
 Cc: stable@vger.kernel.org
-Fixes: 1d18538e6a092 ("tracing: Have dynamic events have a ref counter")
-Reported-by: Krister Johansen <kjlx@templeofstupid.com>
-Reviewed-by: Krister Johansen <kjlx@templeofstupid.com>
-Tested-by: Krister Johansen <kjlx@templeofstupid.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Ping Cheng <ping.cheng@wacom.com>
+Reviewed-by: Jason Gerecke <jason.gerecke@wacom.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_event_perf.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/hid/wacom_sys.c |    2 +-
+ drivers/hid/wacom_wac.c |   43 +++++++++++++++++++++++++------------------
+ 2 files changed, 26 insertions(+), 19 deletions(-)
 
-diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
-index a114549720d6..61e3a2620fa3 100644
---- a/kernel/trace/trace_event_perf.c
-+++ b/kernel/trace/trace_event_perf.c
-@@ -157,7 +157,7 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
- 	int i;
+--- a/drivers/hid/wacom_sys.c
++++ b/drivers/hid/wacom_sys.c
+@@ -1956,7 +1956,7 @@ static int wacom_register_inputs(struct
  
- 	if (--tp_event->perf_refcount > 0)
--		goto out;
-+		return;
- 
- 	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
- 
-@@ -176,8 +176,6 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
- 			perf_trace_buf[i] = NULL;
- 		}
+ 	error = wacom_setup_pad_input_capabilities(pad_input_dev, wacom_wac);
+ 	if (error) {
+-		/* no pad in use on this interface */
++		/* no pad events using this interface */
+ 		input_free_device(pad_input_dev);
+ 		wacom_wac->pad_input = NULL;
+ 		pad_input_dev = NULL;
+--- a/drivers/hid/wacom_wac.c
++++ b/drivers/hid/wacom_wac.c
+@@ -1897,7 +1897,6 @@ static void wacom_wac_pad_usage_mapping(
+ 		wacom_wac->has_mute_touch_switch = true;
+ 		usage->type = EV_SW;
+ 		usage->code = SW_MUTE_DEVICE;
+-		features->device_type |= WACOM_DEVICETYPE_PAD;
+ 		break;
+ 	case WACOM_HID_WD_TOUCHSTRIP:
+ 		wacom_map_usage(input, usage, field, EV_ABS, ABS_RX, 0);
+@@ -1977,6 +1976,30 @@ static void wacom_wac_pad_event(struct h
+ 			wacom_wac->hid_data.inrange_state |= value;
  	}
--out:
--	trace_event_put_ref(tp_event);
- }
  
- static int perf_trace_event_open(struct perf_event *p_event)
-@@ -241,6 +239,7 @@ void perf_trace_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- }
++	/* Process touch switch state first since it is reported through touch interface,
++	 * which is indepentent of pad interface. In the case when there are no other pad
++	 * events, the pad interface will not even be created.
++	 */
++	if ((equivalent_usage == WACOM_HID_WD_MUTE_DEVICE) ||
++	   (equivalent_usage == WACOM_HID_WD_TOUCHONOFF)) {
++		if (wacom_wac->shared->touch_input) {
++			bool *is_touch_on = &wacom_wac->shared->is_touch_on;
++
++			if (equivalent_usage == WACOM_HID_WD_MUTE_DEVICE && value)
++				*is_touch_on = !(*is_touch_on);
++			else if (equivalent_usage == WACOM_HID_WD_TOUCHONOFF)
++				*is_touch_on = value;
++
++			input_report_switch(wacom_wac->shared->touch_input,
++					    SW_MUTE_DEVICE, !(*is_touch_on));
++			input_sync(wacom_wac->shared->touch_input);
++		}
++		return;
++	}
++
++	if (!input)
++		return;
++
+ 	switch (equivalent_usage) {
+ 	case WACOM_HID_WD_TOUCHRING:
+ 		/*
+@@ -2006,22 +2029,6 @@ static void wacom_wac_pad_event(struct h
+ 			input_event(input, usage->type, usage->code, 0);
+ 		break;
  
-@@ -292,6 +291,7 @@ void perf_kprobe_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- 
- 	destroy_local_trace_kprobe(p_event->tp_event);
-@@ -347,6 +347,7 @@ void perf_uprobe_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- 	destroy_local_trace_uprobe(p_event->tp_event);
- }
--- 
-2.37.2
-
+-	case WACOM_HID_WD_MUTE_DEVICE:
+-	case WACOM_HID_WD_TOUCHONOFF:
+-		if (wacom_wac->shared->touch_input) {
+-			bool *is_touch_on = &wacom_wac->shared->is_touch_on;
+-
+-			if (equivalent_usage == WACOM_HID_WD_MUTE_DEVICE && value)
+-				*is_touch_on = !(*is_touch_on);
+-			else if (equivalent_usage == WACOM_HID_WD_TOUCHONOFF)
+-				*is_touch_on = value;
+-
+-			input_report_switch(wacom_wac->shared->touch_input,
+-					    SW_MUTE_DEVICE, !(*is_touch_on));
+-			input_sync(wacom_wac->shared->touch_input);
+-		}
+-		break;
+-
+ 	case WACOM_HID_WD_MODE_CHANGE:
+ 		if (wacom_wac->is_direct_mode != value) {
+ 			wacom_wac->is_direct_mode = value;
+@@ -2610,7 +2617,7 @@ void wacom_wac_event(struct hid_device *
+ 	/* usage tests must precede field tests */
+ 	if (WACOM_BATTERY_USAGE(usage))
+ 		wacom_wac_battery_event(hdev, field, usage, value);
+-	else if (WACOM_PAD_FIELD(field) && wacom->wacom_wac.pad_input)
++	else if (WACOM_PAD_FIELD(field))
+ 		wacom_wac_pad_event(hdev, field, usage, value);
+ 	else if (WACOM_PEN_FIELD(field) && wacom->wacom_wac.pen_input)
+ 		wacom_wac_pen_event(hdev, field, usage, value);
 
 

@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701B859D7B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF9959D626
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244202AbiHWJz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S242353AbiHWI7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242379AbiHWJx5 (ORCPT
+        with ESMTP id S242396AbiHWI7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:53:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8939F740;
-        Tue, 23 Aug 2022 01:46:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A36B6155F;
-        Tue, 23 Aug 2022 08:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA32C433C1;
-        Tue, 23 Aug 2022 08:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244369;
-        bh=TaPJ4kc6OvyZg5v07Qk2Re/qWXyqol4GpwkVdT9s3g8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qi88/mNYd76D474uq1KgZeyk1TdomcRnL2p+rnvl1oTzRWEtft2gdckcU8zunspl5
-         PUWMmDNzejdFtrjqn/l6zeBOvpGBTUqcNJKnvX8Zimu+AUClwtu/1IE790OcYH4gZ1
-         +a9GeknrZ+hz6cIvXIcVu/sdETuA0qK6nQ0/jVJE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 126/229] vfio/ccw: Do not change FSM state in subchannel event
-Date:   Tue, 23 Aug 2022 10:24:47 +0200
-Message-Id: <20220823080058.227731798@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 23 Aug 2022 04:59:16 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A090872848;
+        Tue, 23 Aug 2022 01:26:37 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id q18so11800449ljg.12;
+        Tue, 23 Aug 2022 01:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=INFiREuc8tsqsS8aIeq0sv6L+CLqHoDlQnC1BP60eqw=;
+        b=B42M+pKRB4ohHIy8nIxLiSRgc9jG1RBhSbh1D9TVeitjtgZrRyQz9UW35CFAWV3wEp
+         tWTMllOQHMXwnbxt2vUie0VD1Rd2GoHLGdDufOpzmD5WAH0oa3wGchYYWziTZmDVVwuM
+         uGR9cw/OZ4bXu6vnKkoYXNhsxD3hIGS7s3+Ce9U+RFlMHE7yUrJ6iesGXQdhkGQDt7DV
+         /WJ7gLDggNUyvLk2S12bpgCEyC7HacTy2UskAxRWhJQ/C2BoI+u+YHP0l5lGfmu/Na+6
+         h4380FDniPHBHb4NXRA0xEFljxLT6FrdZhjzhxDe0RkG4M0wKdE6eXyoc0+Qnv7O0B23
+         l0UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=INFiREuc8tsqsS8aIeq0sv6L+CLqHoDlQnC1BP60eqw=;
+        b=qJpSeSu74uaN6njGgEyTfdvJvISY1fBui3eBQRfnFZhuxBU0iFWYsAxel5lcJvx1L/
+         YBrZKBGmkSInyB5DxT1MlHICgnb2Sn+vKGfFX/jb7+9Ip6qpN0/54nnENQTM0pjWqPAG
+         xHWW0fZy28D5YvYUBAf5Ma82x7gMcEp4zr9k2Li76filfTC+QyOF/St6MhmtTEtkmAk3
+         avEPSJcB1MSVYzVXhNyzstfdcWuPIgNsw6WQXBibKWPzzpHKapt16eNcuXUXipvSW0TP
+         J8pd7O1TdQxtu1JUZPtp3vFA59q7ExD077VD+siKr+WHap0OrTkQRfYNTSeL/p/oz4Q1
+         lsOA==
+X-Gm-Message-State: ACgBeo0e03DZQHTSckE9/P2q3tKngdq5NkMdpYTMPhwCcFAxPFaWHqVO
+        DQN5y3gsmpikbqStI13rlFE=
+X-Google-Smtp-Source: AA6agR5Y6dLqZK4sNhaxcRwxDwyvypLkJXmZRN8Qcs1Fy/yZuE7/O7iNlqrScaudcfqaVAre1/8i0A==
+X-Received: by 2002:a2e:934f:0:b0:250:a7bc:2b8f with SMTP id m15-20020a2e934f000000b00250a7bc2b8fmr6733479ljh.512.1661243135386;
+        Tue, 23 Aug 2022 01:25:35 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id d12-20020a056512368c00b00492ce573726sm1908764lfs.47.2022.08.23.01.25.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 01:25:34 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 11:25:32 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/20] dt-bindings: memory: snps: Detach Zynq DDRC
+ controller support
+Message-ID: <20220823082532.gf3m6466rzfxmtns@mobilestation>
+References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822190730.27277-17-Sergey.Semin@baikalelectronics.ru>
+ <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a5a15749-1047-74ea-831e-54d27a6d6cdf@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Farman <farman@linux.ibm.com>
+On Tue, Aug 23, 2022 at 11:17:23AM +0300, Krzysztof Kozlowski wrote:
+> On 22/08/2022 22:07, Serge Semin wrote:
+> > The Zynq A05 DDRC controller has nothing in common with DW uMCTL2 DDRC:
+> > the CSRs layout is absolutely different and it doesn't has IRQ unlike DW
+> > uMCTL2 DDR controller of all versions (v1.x, v2.x and v3.x). Thus there is
+> > no any reason to have these controllers described by the same bindings.
+> > Thus let's split them up.
+> > 
+> > While at it rename the original Synopsys uMCTL2 DT-schema file to a more
+> > descriptive - snps,dw-umctl2-ddrc.yaml and add a more detailed title and
+> > description of the device bindings.
+> 
+> Filename should be based on compatible, so if renaming then
+> snps,ddrc-3.80a.yaml or snps,ddrc.yaml... which leads to original
+> filename anyway. Therefore nack for rename.
+> 
+> BTW, if you perform renames, generate patches with proper -M/-C/-B
+> arguments so this is detected.
+> 
+> 
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > --->  .../snps,dw-umctl2-ddrc.yaml                  | 51 +++++++++++++
+> 
 
-[ Upstream commit cffcc109fd682075dee79bade3d60a07152a8fd1 ]
+> This is a mess. I did not get any cover letters, any other patches any
+> description of relation between this and your other one.
+> 
+> It seems you make independent and conflicting changes to the same file,
+> so this has to be properly organized.
 
-The routine vfio_ccw_sch_event() is tasked with handling subchannel events,
-specifically machine checks, on behalf of vfio-ccw. It correctly calls
-cio_update_schib(), and if that fails (meaning the subchannel is gone)
-it makes an FSM event call to mark the subchannel Not Operational.
+Don't hurry with the judgement. Have a better look at your DT-related
+inbox.
+Link: https://lore.kernel.org/linux-devicetree/20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru/
 
-If that worked, however, then it decides that if the FSM state was already
-Not Operational (implying the subchannel just came back), then it should
-simply change the FSM to partially- or fully-open.
+-Sergey
 
-Remove this trickery, since a subchannel returning will require more
-probing than simply "oh all is well again" to ensure it works correctly.
-
-Fixes: bbe37e4cb8970 ("vfio: ccw: introduce a finite state machine")
-Signed-off-by: Eric Farman <farman@linux.ibm.com>
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220707135737.720765-4-farman@linux.ibm.com
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/s390/cio/vfio_ccw_drv.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/s390/cio/vfio_ccw_drv.c b/drivers/s390/cio/vfio_ccw_drv.c
-index 6cd41086f23e..4b5cdbdcd843 100644
---- a/drivers/s390/cio/vfio_ccw_drv.c
-+++ b/drivers/s390/cio/vfio_ccw_drv.c
-@@ -193,19 +193,11 @@ static int vfio_ccw_sch_event(struct subchannel *sch, int process)
- 	if (work_pending(&sch->todo_work))
- 		goto out_unlock;
- 
--	if (cio_update_schib(sch)) {
--		vfio_ccw_fsm_event(private, VFIO_CCW_EVENT_NOT_OPER);
--		rc = 0;
--		goto out_unlock;
--	}
--
--	private = dev_get_drvdata(&sch->dev);
--	if (private->state == VFIO_CCW_STATE_NOT_OPER) {
--		private->state = private->mdev ? VFIO_CCW_STATE_IDLE :
--				 VFIO_CCW_STATE_STANDBY;
--	}
- 	rc = 0;
- 
-+	if (cio_update_schib(sch))
-+		vfio_ccw_fsm_event(private, VFIO_CCW_EVENT_NOT_OPER);
-+
- out_unlock:
- 	spin_unlock_irqrestore(sch->lock, flags);
- 
--- 
-2.35.1
-
-
-
+> 
+> Send entire patchset with cover letter with description of all
+> dependencies to all maintainers.
+> 
+> This is unreviewable now, so a no.
+> 
+> Best regards,
+> Krzysztof

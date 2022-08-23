@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8B559DEB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C77F59DCED
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353403AbiHWKL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S1354619AbiHWKVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352123AbiHWKEe (ORCPT
+        with ESMTP id S1352940AbiHWKJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:04:34 -0400
+        Tue, 23 Aug 2022 06:09:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9437CAB3;
-        Tue, 23 Aug 2022 01:51:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD037DF7D;
+        Tue, 23 Aug 2022 01:55:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82C53611DD;
-        Tue, 23 Aug 2022 08:51:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6908BC433D6;
-        Tue, 23 Aug 2022 08:51:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C0BF614E7;
+        Tue, 23 Aug 2022 08:55:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A53C433C1;
+        Tue, 23 Aug 2022 08:55:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244684;
-        bh=940HAywEM73UL70jDkF4U0wYf98SJc6UM4UQiogCvyg=;
+        s=korg; t=1661244951;
+        bh=zuynUB4qvXHwuhHt93KM7PDIxN+C9d44hf1QyZClopY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R+5wkFIx6o0gmkcPMR9WGjcVB5WW9NPVr/E76sSq8D8J5ykdIBTZWxtcghhdgUtrN
-         79JZVvfne0L+c24sdiYJCcR4VSAS0G2h49KYNxGtnQHSn6AR4ihc8U3lUMqUZdc9ti
-         ZTm7VQYjaiVe6O196/kci8Zdr2sSzOAeKaZvHK5I=
+        b=f/GCJMRK0Pi6ARBTWxM2yvIZkgBiQMYcKaO5wfsPR+kvBOEZx2nkCwD3Zs6zouNQQ
+         7bXDWGP/aaki3nuCkHg4bjQ2XTTmIxrP0emLlVVUQtY+dPxc+lnBKjtZtJA9/vzDOC
+         4TutkhPQmZ94/HxDPL7XNzZoHh5fCEjz4spX6Ql4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.14 175/229] powerpc/ptdump: Fix display of RW pages on FSL_BOOK3E
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Pascal Terjan <pterjan@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 177/244] vboxguest: Do not use devm for irq
 Date:   Tue, 23 Aug 2022 10:25:36 +0200
-Message-Id: <20220823080059.865938476@linuxfoundation.org>
+Message-Id: <20220823080105.199528364@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Pascal Terjan <pterjan@google.com>
 
-commit dd8de84b57b02ba9c1fe530a6d916c0853f136bd upstream.
+[ Upstream commit 6169525b76764acb81918aa387ac168fb9a55575 ]
 
-On FSL_BOOK3E, _PAGE_RW is defined with two bits, one for user and one
-for supervisor. As soon as one of the two bits is set, the page has
-to be display as RW. But the way it is implemented today requires both
-bits to be set in order to display it as RW.
+When relying on devm it doesn't get freed early enough which causes the
+following warning when unloading the module:
 
-Instead of display RW when _PAGE_RW bits are set and R otherwise,
-reverse the logic and display R when _PAGE_RW bits are all 0 and
-RW otherwise.
+[249348.837181] remove_proc_entry: removing non-empty directory 'irq/20', leaking at least 'vboxguest'
+[249348.837219] WARNING: CPU: 0 PID: 6708 at fs/proc/generic.c:715 remove_proc_entry+0x119/0x140
 
-This change has no impact on other platforms as _PAGE_RW is a single
-bit on all of them.
+[249348.837379] Call Trace:
+[249348.837385]  unregister_irq_proc+0xbd/0xe0
+[249348.837392]  free_desc+0x23/0x60
+[249348.837396]  irq_free_descs+0x4a/0x70
+[249348.837401]  irq_domain_free_irqs+0x160/0x1a0
+[249348.837452]  mp_unmap_irq+0x5c/0x60
+[249348.837458]  acpi_unregister_gsi_ioapic+0x29/0x40
+[249348.837463]  acpi_unregister_gsi+0x17/0x30
+[249348.837467]  acpi_pci_irq_disable+0xbf/0xe0
+[249348.837473]  pcibios_disable_device+0x20/0x30
+[249348.837478]  pci_disable_device+0xef/0x120
+[249348.837482]  vbg_pci_remove+0x6c/0x70 [vboxguest]
 
-Fixes: 8eb07b187000 ("powerpc/mm: Dump linux pagetables")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/0c33b96317811edf691e81698aaee8fa45ec3449.1656427391.git.christophe.leroy@csgroup.eu
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Pascal Terjan <pterjan@google.com>
+Link: https://lore.kernel.org/r/20220612133744.4030602-1-pterjan@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/dump_linuxpagetables.c |   13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ drivers/virt/vboxguest/vboxguest_linux.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/arch/powerpc/mm/dump_linuxpagetables.c
-+++ b/arch/powerpc/mm/dump_linuxpagetables.c
-@@ -123,15 +123,10 @@ static const struct flag_info flag_array
- 		.set	= "user",
- 		.clear	= "    ",
- 	}, {
--#if _PAGE_RO == 0
--		.mask	= _PAGE_RW,
--		.val	= _PAGE_RW,
--#else
--		.mask	= _PAGE_RO,
--		.val	= 0,
--#endif
--		.set	= "rw",
--		.clear	= "ro",
-+		.mask	= _PAGE_RW | _PAGE_RO,
-+		.val	= _PAGE_RO,
-+		.set	= "ro",
-+		.clear	= "rw",
- 	}, {
- 		.mask	= _PAGE_EXEC,
- 		.val	= _PAGE_EXEC,
+diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
+index 73eb34849eab..4ccfd30c2a30 100644
+--- a/drivers/virt/vboxguest/vboxguest_linux.c
++++ b/drivers/virt/vboxguest/vboxguest_linux.c
+@@ -356,8 +356,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 		goto err_vbg_core_exit;
+ 	}
+ 
+-	ret = devm_request_irq(dev, pci->irq, vbg_core_isr, IRQF_SHARED,
+-			       DEVICE_NAME, gdev);
++	ret = request_irq(pci->irq, vbg_core_isr, IRQF_SHARED, DEVICE_NAME,
++			  gdev);
+ 	if (ret) {
+ 		vbg_err("vboxguest: Error requesting irq: %d\n", ret);
+ 		goto err_vbg_core_exit;
+@@ -367,7 +367,7 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	if (ret) {
+ 		vbg_err("vboxguest: Error misc_register %s failed: %d\n",
+ 			DEVICE_NAME, ret);
+-		goto err_vbg_core_exit;
++		goto err_free_irq;
+ 	}
+ 
+ 	ret = misc_register(&gdev->misc_device_user);
+@@ -403,6 +403,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	misc_deregister(&gdev->misc_device_user);
+ err_unregister_misc_device:
+ 	misc_deregister(&gdev->misc_device);
++err_free_irq:
++	free_irq(pci->irq, gdev);
+ err_vbg_core_exit:
+ 	vbg_core_exit(gdev);
+ err_disable_pcidev:
+@@ -419,6 +421,7 @@ static void vbg_pci_remove(struct pci_dev *pci)
+ 	vbg_gdev = NULL;
+ 	mutex_unlock(&vbg_gdev_mutex);
+ 
++	free_irq(pci->irq, gdev);
+ 	device_remove_file(gdev->dev, &dev_attr_host_features);
+ 	device_remove_file(gdev->dev, &dev_attr_host_version);
+ 	misc_deregister(&gdev->misc_device_user);
+-- 
+2.35.1
+
 
 

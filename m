@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167E959DC58
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6A259E00C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354908AbiHWKWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S1356008AbiHWKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353164AbiHWKK7 (ORCPT
+        with ESMTP id S1356407AbiHWKmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:10:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F5A7E308;
-        Tue, 23 Aug 2022 01:56:10 -0700 (PDT)
+        Tue, 23 Aug 2022 06:42:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BBCA98FB;
+        Tue, 23 Aug 2022 02:09:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D849A61555;
-        Tue, 23 Aug 2022 08:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5189C433C1;
-        Tue, 23 Aug 2022 08:56:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0947BB81C53;
+        Tue, 23 Aug 2022 09:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C91C433D6;
+        Tue, 23 Aug 2022 09:09:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244969;
-        bh=JI/03GeTwMgOsMygXf7J1KB/3ZHFrEc0d5hp42a4KF4=;
+        s=korg; t=1661245765;
+        bh=HW8oSDo9+AP0Lh/FOT/cK/fI51j5qkfr5A+LITh7TqM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xejPmJxDRYfafbP7wSz/wX/4BZBUMadfJDyZEIPYJ+wKr4CAzfXtemD0dWEgoHX4b
-         uqJ6A4ryrJNlcW5ArGGx6usZ1AGj2X95XQDru/2clclJ9ziOM3c1AZx6/FVQxcYorb
-         iMbOOqnIbjCC26VITXA4ME+1v/Zm0X7cIyXsI8Tg=
+        b=CXpeMFbnsBOdyf1oxkCWIHukAUf6iYJ8PzwZwFqexteWWTgolMPO5R1pVvLQPmgOt
+         qvssKMvgvgo28L20QGnd7rwXXkNWzKHO/F273Eq5oIHOQaV8xm9oKWQkhzvKu28EyL
+         7p7H8807tBzdWiroLqfp386AsyNMtYH/nkKLAwM8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Matthias May <matthias.may@westermo.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 191/229] geneve: do not use RT_TOS for IPv6 flowlabel
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 183/287] video: fbdev: s3fb: Check the size of screen before memset_io()
 Date:   Tue, 23 Aug 2022 10:25:52 +0200
-Message-Id: <20220823080100.429142200@linuxfoundation.org>
+Message-Id: <20220823080106.959200057@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias May <matthias.may@westermo.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-commit ca2bb69514a8bc7f83914122f0d596371352416c upstream.
+[ Upstream commit 6ba592fa014f21f35a8ee8da4ca7b95a018f13e8 ]
 
-According to Guillaume Nault RT_TOS should never be used for IPv6.
+In the function s3fb_set_par(), the value of 'screen_size' is
+calculated by the user input. If the user provides the improper value,
+the value of 'screen_size' may larger than 'info->screen_size', which
+may cause the following bug:
 
-Quote:
-RT_TOS() is an old macro used to interprete IPv4 TOS as described in
-the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
-code, although, given the current state of the code, most of the
-existing calls have no consequence.
+[   54.083733] BUG: unable to handle page fault for address: ffffc90003000000
+[   54.083742] #PF: supervisor write access in kernel mode
+[   54.083744] #PF: error_code(0x0002) - not-present page
+[   54.083760] RIP: 0010:memset_orig+0x33/0xb0
+[   54.083782] Call Trace:
+[   54.083788]  s3fb_set_par+0x1ec6/0x4040
+[   54.083806]  fb_set_var+0x604/0xeb0
+[   54.083836]  do_fb_ioctl+0x234/0x670
 
-But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
-field to be interpreted the RFC 1349 way. There's no historical
-compatibility to worry about.
+Fix the this by checking the value of 'screen_size' before memset_io().
 
-Fixes: 3a56f86f1be6 ("geneve: handle ipv6 priority like ipv4 tos")
-Acked-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: Matthias May <matthias.may@westermo.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a268422de8bf ("fbdev driver for S3 Trio/Virge")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/geneve.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/video/fbdev/s3fb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/geneve.c
-+++ b/drivers/net/geneve.c
-@@ -795,8 +795,7 @@ static struct dst_entry *geneve_get_v6_d
- 		use_cache = false;
- 	}
+diff --git a/drivers/video/fbdev/s3fb.c b/drivers/video/fbdev/s3fb.c
+index d63f23e26f7d..b17b806b4187 100644
+--- a/drivers/video/fbdev/s3fb.c
++++ b/drivers/video/fbdev/s3fb.c
+@@ -902,6 +902,8 @@ static int s3fb_set_par(struct fb_info *info)
+ 	value = clamp((htotal + hsstart + 1) / 2 + 2, hsstart + 4, htotal + 1);
+ 	svga_wcrt_multi(par->state.vgabase, s3_dtpc_regs, value);
  
--	fl6->flowlabel = ip6_make_flowinfo(RT_TOS(prio),
--					   info->key.label);
-+	fl6->flowlabel = ip6_make_flowinfo(prio, info->key.label);
- 	dst_cache = (struct dst_cache *)&info->dst_cache;
- 	if (use_cache) {
- 		dst = dst_cache_get_ip6(dst_cache, &fl6->saddr);
++	if (screen_size > info->screen_size)
++		screen_size = info->screen_size;
+ 	memset_io(info->screen_base, 0x00, screen_size);
+ 	/* Device and screen back on */
+ 	svga_wcrt_mask(par->state.vgabase, 0x17, 0x80, 0x80);
+-- 
+2.35.1
+
 
 

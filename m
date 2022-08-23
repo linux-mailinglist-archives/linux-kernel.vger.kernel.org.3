@@ -2,49 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368AB59D924
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363CB59D98A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242821AbiHWJyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S1350090AbiHWJZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352299AbiHWJva (ORCPT
+        with ESMTP id S1349781AbiHWJY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:51:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B596C9F0E7;
-        Tue, 23 Aug 2022 01:45:53 -0700 (PDT)
+        Tue, 23 Aug 2022 05:24:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C474490805;
+        Tue, 23 Aug 2022 01:35:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DC8DB81C3A;
-        Tue, 23 Aug 2022 08:17:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D1AC433D6;
-        Tue, 23 Aug 2022 08:17:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4123BB81C4F;
+        Tue, 23 Aug 2022 08:18:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC131C433C1;
+        Tue, 23 Aug 2022 08:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242654;
-        bh=OiF9Vciiallwzx+M+oH/zhtKHR7aGt/6vvnZGDtF6Fw=;
+        s=korg; t=1661242716;
+        bh=+Z2c0OxS9hfS3VZxv8oMBN/X8wfE6XIeSWU42oMqx5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=puEF5OblHnDjNgbEYeyoerQyQMQAfozr9ze7RFUOvt82CNvm7nrHNO9ukOSDcTZdz
-         JZejbjQRPQ4CXE0OElFtPViwGRPPTmpXQlTCbpgmo53JBGV6AA2dM0ywOOW+KIh+ok
-         aMH3HPL5p3sXrdOx+UWvo+HE2bjZWPz93sYNC22Y=
+        b=DnvO1XDR/pMEl79/YFpUmiXmcx0Sm36gvoNb8rbDnB4OnWCc/V2eJtCUZ69EfkfiQ
+         Is5mHwKMCowINxnCmWHoZreVJcRWVTS9iL4ie+2ViT+gj7KZ05LL/fSHNh+n/H9FKV
+         vhcy2kR4s1gCghVzhl3ZLjHCRP/6OER8hZ9Pls00=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.19 155/365] perf probe: Fix an error handling path in parse_perf_probe_command()
-Date:   Tue, 23 Aug 2022 10:00:56 +0200
-Message-Id: <20220823080124.707978080@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.19 178/365] ASoC: SOF: Intel: hda: Fix potential buffer overflow by snprintf()
+Date:   Tue, 23 Aug 2022 10:01:19 +0200
+Message-Id: <20220823080125.671237572@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -62,44 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 4bf6dcaa93bcd083a13c278a91418fe10e6d23a0 upstream.
+commit 94c1ceb043c1a002de9649bb630c8e8347645982 upstream.
 
-If a memory allocation fail, we should branch to the error handling path
-in order to free some resources allocated a few lines above.
+snprintf() returns the would-be-filled size when the string overflows
+the given buffer size, hence using this value may result in the buffer
+overflow (although it's unrealistic).
 
-Fixes: 15354d54698648e2 ("perf probe: Generate event name with line number")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: kernel-janitors@vger.kernel.org
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/b71bcb01fa0c7b9778647235c3ab490f699ba278.1659797452.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+This patch replaces with a safer version, scnprintf() for papering
+over such a potential issue.
+
+Fixes: 29c8e4398f02 ("ASoC: SOF: Intel: hda: add extended rom status dump to error log")
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20220801165420.25978-4-tiwai@suse.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/probe-event.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ sound/soc/sof/intel/hda.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/perf/util/probe-event.c
-+++ b/tools/perf/util/probe-event.c
-@@ -1775,8 +1775,10 @@ int parse_perf_probe_command(const char
- 	if (!pev->event && pev->point.function && pev->point.line
- 			&& !pev->point.lazy_line && !pev->point.offset) {
- 		if (asprintf(&pev->event, "%s_L%d", pev->point.function,
--			pev->point.line) < 0)
--			return -ENOMEM;
-+			pev->point.line) < 0) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -467,7 +467,7 @@ static void hda_dsp_dump_ext_rom_status(
+ 	chip = get_chip_info(sdev->pdata);
+ 	for (i = 0; i < HDA_EXT_ROM_STATUS_SIZE; i++) {
+ 		value = snd_sof_dsp_read(sdev, HDA_DSP_BAR, chip->rom_status_reg + i * 0x4);
+-		len += snprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
++		len += scnprintf(msg + len, sizeof(msg) - len, " 0x%x", value);
  	}
  
- 	/* Copy arguments and ensure return probe has no C argument */
+ 	dev_printk(level, sdev->dev, "extended rom status: %s", msg);
 
 

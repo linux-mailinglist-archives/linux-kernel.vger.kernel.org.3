@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58A359D966
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0900459D8B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242537AbiHWJwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S1351485AbiHWJhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351794AbiHWJuz (ORCPT
+        with ESMTP id S1351825AbiHWJgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:50:55 -0400
+        Tue, 23 Aug 2022 05:36:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB349E110;
-        Tue, 23 Aug 2022 01:45:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159F177EBD;
+        Tue, 23 Aug 2022 01:40:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A56EDB81C56;
-        Tue, 23 Aug 2022 08:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056A3C4347C;
-        Tue, 23 Aug 2022 08:34:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF4C2B81C5C;
+        Tue, 23 Aug 2022 08:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17ECCC433D6;
+        Tue, 23 Aug 2022 08:34:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661243647;
-        bh=8Vs1K216HeZwGcDjWgWfkjFQVdk3bJl/msDS7/SN7ug=;
+        s=korg; t=1661243650;
+        bh=E3o1NL9M7MMxOvh5P8/+p5pkrfDEPsN6Qcy7OMxtyBg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BkGoTgAds6UCcopmFRCkeNAvCL7tfKFf3vsIMkH94TTl8sNvVf4NszW+NgbVoy+VG
-         a0XWGOdbJoy9es73zKGDWZJQHKIcuUjE9vLL9twVYdQfwn1Obf/pFVe6uB4IIq8fQb
-         m7jbyJBVyr+uCwvvyexQx0wRVWv9KrBIjwa8rAjE=
+        b=iNxUGgz1wYS+xdqLHgod7z0VcqYGjCZdtQ7pR/+osCssFe921qG1Sn0mkUYDGz6ZC
+         kBzQHABFPWsVyxutdnNNNIP99uTuJcth2hEJEli1g/0n9oDWqopPOYHxq7RYYVR/bd
+         bH2tJA2haZsdZkbYvminTtYMaL4kwRf9VemOoQ/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 344/365] powerpc/watchdog: introduce a NMI watchdogs factor
-Date:   Tue, 23 Aug 2022 10:04:05 +0200
-Message-Id: <20220823080132.629878606@linuxfoundation.org>
+Subject: [PATCH 5.19 345/365] powerpc/pseries/mobility: set NMI watchdog factor during an LPM
+Date:   Tue, 23 Aug 2022 10:04:06 +0200
+Message-Id: <20220823080132.671776851@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
 References: <20220823080118.128342613@linuxfoundation.org>
@@ -58,85 +58,137 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Laurent Dufour <ldufour@linux.ibm.com>
 
-[ Upstream commit f5e74e836097d1004077390717d4bd95d4a2c27a ]
+[ Upstream commit 118b1366930c8c833b8b36abef657f40d4e26610 ]
 
-Introduce a factor which would apply to the NMI watchdog timeout.
+During an LPM, while the memory transfer is in progress on the arrival
+side, some latencies are generated when accessing not yet transferred
+pages on the arrival side. Thus, the NMI watchdog may be triggered too
+frequently, which increases the risk to hit an NMI interrupt in a bad
+place in the kernel, leading to a kernel panic.
 
-This factor is a percentage added to the watchdog_tresh value. The value is
-set under the watchdog_mutex protection and lockup_detector_reconfigure()
-is called to recompute wd_panic_timeout_tb.
+Disabling the Hard Lockup Watchdog until the memory transfer could be a
+too strong work around, some users would want this timeout to be
+eventually triggered if the system is hanging even during an LPM.
 
-Once the factor is set, it remains until it is set back to 0, which means
-no impact.
+Introduce a new sysctl variable nmi_watchdog_factor. It allows to apply
+a factor to the NMI watchdog timeout during an LPM. Just before the CPUs
+are stopped for the switchover sequence, the NMI watchdog timer is set
+to watchdog_thresh + factor%
+
+A value of 0 has no effect. The default value is 200, meaning that the
+NMI watchdog is set to 30s during LPM (based on a 10s watchdog_thresh
+value). Once the memory transfer is achieved, the factor is reset to 0.
+
+Setting this value to a high number is like disabling the NMI watchdog
+during an LPM.
 
 Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
 Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220713154729.80789-4-ldufour@linux.ibm.com
+Link: https://lore.kernel.org/r/20220713154729.80789-5-ldufour@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/nmi.h |  2 ++
- arch/powerpc/kernel/watchdog.c | 21 ++++++++++++++++++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
+ Documentation/admin-guide/sysctl/kernel.rst | 12 ++++++
+ arch/powerpc/platforms/pseries/mobility.c   | 43 +++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
 
-diff --git a/arch/powerpc/include/asm/nmi.h b/arch/powerpc/include/asm/nmi.h
-index ea0e487f87b1..c3c7adef74de 100644
---- a/arch/powerpc/include/asm/nmi.h
-+++ b/arch/powerpc/include/asm/nmi.h
-@@ -5,8 +5,10 @@
- #ifdef CONFIG_PPC_WATCHDOG
- extern void arch_touch_nmi_watchdog(void);
- long soft_nmi_interrupt(struct pt_regs *regs);
-+void watchdog_nmi_set_timeout_pct(u64 pct);
- #else
- static inline void arch_touch_nmi_watchdog(void) {}
-+static inline void watchdog_nmi_set_timeout_pct(u64 pct) {}
- #endif
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index ddccd1077462..9b7fa1baf225 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -592,6 +592,18 @@ to the guest kernel command line (see
+ Documentation/admin-guide/kernel-parameters.rst).
  
- #ifdef CONFIG_NMI_IPI
-diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
-index 7d28b9553654..5d903e63f932 100644
---- a/arch/powerpc/kernel/watchdog.c
-+++ b/arch/powerpc/kernel/watchdog.c
-@@ -91,6 +91,10 @@ static cpumask_t wd_smp_cpus_pending;
- static cpumask_t wd_smp_cpus_stuck;
- static u64 wd_smp_last_reset_tb;
  
-+#ifdef CONFIG_PPC_PSERIES
-+static u64 wd_timeout_pct;
-+#endif
++nmi_wd_lpm_factor (PPC only)
++============================
 +
- /*
-  * Try to take the exclusive watchdog action / NMI IPI / printing lock.
-  * wd_smp_lock must be held. If this fails, we should return and wait
-@@ -527,7 +531,13 @@ static int stop_watchdog_on_cpu(unsigned int cpu)
++Factor to apply to the NMI watchdog timeout (only when ``nmi_watchdog`` is
++set to 1). This factor represents the percentage added to
++``watchdog_thresh`` when calculating the NMI watchdog timeout during an
++LPM. The soft lockup timeout is not impacted.
++
++A value of 0 means no change. The default value is 200 meaning the NMI
++watchdog is set to 30s (based on ``watchdog_thresh`` equal to 10).
++
++
+ numa_balancing
+ ==============
  
- static void watchdog_calc_timeouts(void)
- {
--	wd_panic_timeout_tb = watchdog_thresh * ppc_tb_freq;
-+	u64 threshold = watchdog_thresh;
-+
-+#ifdef CONFIG_PPC_PSERIES
-+	threshold += (READ_ONCE(wd_timeout_pct) * threshold) / 100;
-+#endif
-+
-+	wd_panic_timeout_tb = threshold * ppc_tb_freq;
+diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
+index 78f3f74c7056..cbe0989239bf 100644
+--- a/arch/powerpc/platforms/pseries/mobility.c
++++ b/arch/powerpc/platforms/pseries/mobility.c
+@@ -48,6 +48,39 @@ struct update_props_workarea {
+ #define MIGRATION_SCOPE	(1)
+ #define PRRN_SCOPE -2
  
- 	/* Have the SMP detector trigger a bit later */
- 	wd_smp_panic_timeout_tb = wd_panic_timeout_tb * 3 / 2;
-@@ -570,3 +580,12 @@ int __init watchdog_nmi_probe(void)
- 	}
- 	return 0;
- }
++#ifdef CONFIG_PPC_WATCHDOG
++static unsigned int nmi_wd_lpm_factor = 200;
 +
-+#ifdef CONFIG_PPC_PSERIES
-+void watchdog_nmi_set_timeout_pct(u64 pct)
++#ifdef CONFIG_SYSCTL
++static struct ctl_table nmi_wd_lpm_factor_ctl_table[] = {
++	{
++		.procname	= "nmi_wd_lpm_factor",
++		.data		= &nmi_wd_lpm_factor,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_douintvec_minmax,
++	},
++	{}
++};
++static struct ctl_table nmi_wd_lpm_factor_sysctl_root[] = {
++	{
++		.procname       = "kernel",
++		.mode           = 0555,
++		.child          = nmi_wd_lpm_factor_ctl_table,
++	},
++	{}
++};
++
++static int __init register_nmi_wd_lpm_factor_sysctl(void)
 +{
-+	pr_info("Set the NMI watchdog timeout factor to %llu%%\n", pct);
-+	WRITE_ONCE(wd_timeout_pct, pct);
-+	lockup_detector_reconfigure();
++	register_sysctl_table(nmi_wd_lpm_factor_sysctl_root);
++
++	return 0;
 +}
++device_initcall(register_nmi_wd_lpm_factor_sysctl);
++#endif /* CONFIG_SYSCTL */
++#endif /* CONFIG_PPC_WATCHDOG */
++
+ static int mobility_rtas_call(int token, char *buf, s32 scope)
+ {
+ 	int rc;
+@@ -665,19 +698,29 @@ static int pseries_suspend(u64 handle)
+ static int pseries_migrate_partition(u64 handle)
+ {
+ 	int ret;
++	unsigned int factor = 0;
+ 
++#ifdef CONFIG_PPC_WATCHDOG
++	factor = nmi_wd_lpm_factor;
 +#endif
+ 	ret = wait_for_vasi_session_suspending(handle);
+ 	if (ret)
+ 		return ret;
+ 
+ 	vas_migration_handler(VAS_SUSPEND);
+ 
++	if (factor)
++		watchdog_nmi_set_timeout_pct(factor);
++
+ 	ret = pseries_suspend(handle);
+ 	if (ret == 0)
+ 		post_mobility_fixup();
+ 	else
+ 		pseries_cancel_migration(handle, ret);
+ 
++	if (factor)
++		watchdog_nmi_set_timeout_pct(0);
++
+ 	vas_migration_handler(VAS_RESUME);
+ 
+ 	return ret;
 -- 
 2.35.1
 

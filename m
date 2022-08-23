@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3221459DB81
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F3559E042
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359145AbiHWL7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S1350314AbiHWLHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359372AbiHWL4p (ORCPT
+        with ESMTP id S1356972AbiHWLEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:56:45 -0400
+        Tue, 23 Aug 2022 07:04:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CE8D75A9;
-        Tue, 23 Aug 2022 02:34:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0BCB2769;
+        Tue, 23 Aug 2022 02:15:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05F5FB81C89;
-        Tue, 23 Aug 2022 09:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D82AC433C1;
-        Tue, 23 Aug 2022 09:34:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BBF9B81C4E;
+        Tue, 23 Aug 2022 09:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E85C433D7;
+        Tue, 23 Aug 2022 09:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247259;
-        bh=5QEhkpbOIt5ZQhJj4twQe+roC+RNayxcEOZD8bg916A=;
+        s=korg; t=1661246110;
+        bh=fkS0yNqWNFUiOtkYMouC7Nw4WkF0NzDt3nXIozKSnWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GYVtzZxw1nceSCsDfAcUsihgcnTBTi2DhX5zzIOblbMlfk9AuRtCb6L//4KCZTn0n
-         SIg3G30lXsxqMzyzGg4HX1E9stRj3CmwQQKzVgUdcaAJIx7FKUfJMXEnVB0DwfCBme
-         kmk36lEeyCQHp/aRQkutBuc+hiDbkWn9A68xBhvE=
+        b=gjeN6iwcsiFlCyPI94xWydayo04FueqO4hScsfM+1pe3dB1WQ+DIBxiznaOXDpj/z
+         JxmwHZLefVQzCRdKMzdoXfoDey1V28wqeE9ePyR6hLtrtC5zOXMdrfQr+dQCGg05Eh
+         J2EH4CCyiwjTLskqsES+hqQ32On9No7jF7kv9Yjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 369/389] lib/list_debug.c: Detect uninitialized lists
+        stable@vger.kernel.org,
+        syzbot+1ee0910eca9c94f71f25@syzkaller.appspotmail.com,
+        syzbot+49b10793b867871ee26f@syzkaller.appspotmail.com,
+        syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 278/287] ALSA: timer: Use deferred fasync helper
 Date:   Tue, 23 Aug 2022 10:27:27 +0200
-Message-Id: <20220823080130.947646755@linuxfoundation.org>
+Message-Id: <20220823080110.795772629@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,78 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 0cc011c576aaa4de505046f7a6c90933d7c749a9 ]
+[ Upstream commit 95cc637c1afd83fb7dd3d7c8a53710488f4caf9c ]
 
-In some circumstances, attempts are made to add entries to or to remove
-entries from an uninitialized list.  A prime example is
-amdgpu_bo_vm_destroy(): It is indirectly called from
-ttm_bo_init_reserved() if that function fails, and tries to remove an
-entry from a list.  However, that list is only initialized in
-amdgpu_bo_create_vm() after the call to ttm_bo_init_reserved() returned
-success.  This results in crashes such as
+For avoiding the potential deadlock via kill_fasync() call, use the
+new fasync helpers to defer the invocation from PCI API.  Note that
+it's merely a workaround.
 
- BUG: kernel NULL pointer dereference, address: 0000000000000000
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 0 P4D 0
- Oops: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 1 PID: 1479 Comm: chrome Not tainted 5.10.110-15768-g29a72e65dae5
- Hardware name: Google Grunt/Grunt, BIOS Google_Grunt.11031.149.0 07/15/2020
- RIP: 0010:__list_del_entry_valid+0x26/0x7d
- ...
- Call Trace:
-  amdgpu_bo_vm_destroy+0x48/0x8b
-  ttm_bo_init_reserved+0x1d7/0x1e0
-  amdgpu_bo_create+0x212/0x476
-  ? amdgpu_bo_user_destroy+0x23/0x23
-  ? kmem_cache_alloc+0x60/0x271
-  amdgpu_bo_create_vm+0x40/0x7d
-  amdgpu_vm_pt_create+0xe8/0x24b
- ...
-
-Check if the list's prev and next pointers are NULL to catch such problems.
-
-Link: https://lkml.kernel.org/r/20220531222951.92073-1-linux@roeck-us.net
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Reported-by: syzbot+1ee0910eca9c94f71f25@syzkaller.appspotmail.com
+Reported-by: syzbot+49b10793b867871ee26f@syzkaller.appspotmail.com
+Reported-by: syzbot+8285e973a41b5aa68902@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/20220728125945.29533-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/list_debug.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ sound/core/timer.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/lib/list_debug.c b/lib/list_debug.c
-index 5d5424b51b74..413daa72a3d8 100644
---- a/lib/list_debug.c
-+++ b/lib/list_debug.c
-@@ -20,7 +20,11 @@
- bool __list_add_valid(struct list_head *new, struct list_head *prev,
- 		      struct list_head *next)
- {
--	if (CHECK_DATA_CORRUPTION(next->prev != prev,
-+	if (CHECK_DATA_CORRUPTION(prev == NULL,
-+			"list_add corruption. prev is NULL.\n") ||
-+	    CHECK_DATA_CORRUPTION(next == NULL,
-+			"list_add corruption. next is NULL.\n") ||
-+	    CHECK_DATA_CORRUPTION(next->prev != prev,
- 			"list_add corruption. next->prev should be prev (%px), but was %px. (next=%px).\n",
- 			prev, next->prev, next) ||
- 	    CHECK_DATA_CORRUPTION(prev->next != next,
-@@ -42,7 +46,11 @@ bool __list_del_entry_valid(struct list_head *entry)
- 	prev = entry->prev;
- 	next = entry->next;
+diff --git a/sound/core/timer.c b/sound/core/timer.c
+index 4920ec4f4594..f0e8b98f346e 100644
+--- a/sound/core/timer.c
++++ b/sound/core/timer.c
+@@ -75,7 +75,7 @@ struct snd_timer_user {
+ 	unsigned int filter;
+ 	struct timespec tstamp;		/* trigger tstamp */
+ 	wait_queue_head_t qchange_sleep;
+-	struct fasync_struct *fasync;
++	struct snd_fasync *fasync;
+ 	struct mutex ioctl_lock;
+ };
  
--	if (CHECK_DATA_CORRUPTION(next == LIST_POISON1,
-+	if (CHECK_DATA_CORRUPTION(next == NULL,
-+			"list_del corruption, %px->next is NULL\n", entry) ||
-+	    CHECK_DATA_CORRUPTION(prev == NULL,
-+			"list_del corruption, %px->prev is NULL\n", entry) ||
-+	    CHECK_DATA_CORRUPTION(next == LIST_POISON1,
- 			"list_del corruption, %px->next is LIST_POISON1 (%px)\n",
- 			entry, LIST_POISON1) ||
- 	    CHECK_DATA_CORRUPTION(prev == LIST_POISON2,
+@@ -1306,7 +1306,7 @@ static void snd_timer_user_interrupt(struct snd_timer_instance *timeri,
+ 	}
+       __wake:
+ 	spin_unlock(&tu->qlock);
+-	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
++	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
+ 	wake_up(&tu->qchange_sleep);
+ }
+ 
+@@ -1343,7 +1343,7 @@ static void snd_timer_user_ccallback(struct snd_timer_instance *timeri,
+ 	spin_lock_irqsave(&tu->qlock, flags);
+ 	snd_timer_user_append_to_tqueue(tu, &r1);
+ 	spin_unlock_irqrestore(&tu->qlock, flags);
+-	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
++	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
+ 	wake_up(&tu->qchange_sleep);
+ }
+ 
+@@ -1410,7 +1410,7 @@ static void snd_timer_user_tinterrupt(struct snd_timer_instance *timeri,
+ 	spin_unlock(&tu->qlock);
+ 	if (append == 0)
+ 		return;
+-	kill_fasync(&tu->fasync, SIGIO, POLL_IN);
++	snd_kill_fasync(tu->fasync, SIGIO, POLL_IN);
+ 	wake_up(&tu->qchange_sleep);
+ }
+ 
+@@ -1476,6 +1476,7 @@ static int snd_timer_user_release(struct inode *inode, struct file *file)
+ 		if (tu->timeri)
+ 			snd_timer_close(tu->timeri);
+ 		mutex_unlock(&tu->ioctl_lock);
++		snd_fasync_free(tu->fasync);
+ 		kfree(tu->queue);
+ 		kfree(tu->tqueue);
+ 		kfree(tu);
+@@ -2027,7 +2028,7 @@ static int snd_timer_user_fasync(int fd, struct file * file, int on)
+ 	struct snd_timer_user *tu;
+ 
+ 	tu = file->private_data;
+-	return fasync_helper(fd, file, on, &tu->fasync);
++	return snd_fasync_helper(fd, file, on, &tu->fasync);
+ }
+ 
+ static ssize_t snd_timer_user_read(struct file *file, char __user *buffer,
 -- 
 2.35.1
 

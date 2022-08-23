@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C981B59DE23
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E6959DD79
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358028AbiHWLnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        id S1356233AbiHWKqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357745AbiHWLiG (ORCPT
+        with ESMTP id S1355787AbiHWKku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:38:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F06F101CF;
-        Tue, 23 Aug 2022 02:28:23 -0700 (PDT)
+        Tue, 23 Aug 2022 06:40:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBD895A4;
+        Tue, 23 Aug 2022 02:08:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4ACDB81C89;
-        Tue, 23 Aug 2022 09:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C309C433C1;
-        Tue, 23 Aug 2022 09:28:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 087A2B81C53;
+        Tue, 23 Aug 2022 09:08:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 425ACC433C1;
+        Tue, 23 Aug 2022 09:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246886;
-        bh=V4LgSedpr3Mn3JFQSAmnZTgGzA5U6Wo8O3HklmKyLu4=;
+        s=korg; t=1661245696;
+        bh=W0RFa5n/bsdIeIsaCkYXbeLFaQlkU+73fKGi3Lcxwps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J528pb1rmNSGQoSULv4WjCvR3z6mFamfFW9CISF1HfAQ8D7YbP5gadmCnbuLDmnzs
-         32WV0bhgkZnBwdga68GWET9jNMingunocPwlClH4YkHZwTHTPIGjgtprIMRHtA0R06
-         /0guiJzaynqreIxGprK01PiczaBN+pEpowjleiWk=
+        b=sTpOxNaVVBAq4ZSYTfiIhK9dA59776DvMRoyKi/zA3aWGz7hocoATTNtLksIwylYQ
+         /9RFiT/HKJdOezpdptNQG74TRpJZn6hBhKft2kTH+q2ubOQtCRh38/1ZZV28yPqaoS
+         MQBEcBstqcNhR46bCwjnGGJnRS4EthX9LzAKmlA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Naresh Bannoth <nbannoth@in.ibm.com>,
-        Kyle Mahlkuch <Kyle.Mahlkuch@ibm.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.4 251/389] scsi: qla2xxx: Fix erroneous mailbox timeout after PCI error injection
+        stable@vger.kernel.org, Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 160/287] iommu/exynos: Handle failed IOMMU device registration properly
 Date:   Tue, 23 Aug 2022 10:25:29 +0200
-Message-Id: <20220823080126.074957854@linuxfoundation.org>
+Message-Id: <20220823080106.094151657@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
+References: <20220823080100.268827165@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,61 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Sam Protsenko <semen.protsenko@linaro.org>
 
-commit f260694e6463b63ae550aad25ddefe94cb1904da upstream.
+[ Upstream commit fce398d2d02c0a9a2bedf7c7201b123e153e8963 ]
 
-Clear wait for mailbox interrupt flag to prevent stale mailbox:
+If iommu_device_register() fails in exynos_sysmmu_probe(), the previous
+calls have to be cleaned up. In this case, the iommu_device_sysfs_add()
+should be cleaned up, by calling its remove counterpart call.
 
-Feb 22 05:22:56 ltcden4-lp7 kernel: qla2xxx [0135:90:00.1]-500a:4: LOOP UP detected (16 Gbps).
-Feb 22 05:22:59 ltcden4-lp7 kernel: qla2xxx [0135:90:00.1]-d04c:4: MBX Command timeout for cmd 69, ...
-
-To fix the issue, driver needs to clear the MBX_INTR_WAIT flag on purging
-the mailbox. When the stale mailbox completion does arrive, it will be
-dropped.
-
-Link: https://lore.kernel.org/r/20220616053508.27186-11-njavali@marvell.com
-Fixes: b6faaaf796d7 ("scsi: qla2xxx: Serialize mailbox request")
-Cc: Naresh Bannoth <nbannoth@in.ibm.com>
-Cc: Kyle Mahlkuch <Kyle.Mahlkuch@ibm.com>
-Cc: stable@vger.kernel.org
-Reported-by: Naresh Bannoth <nbannoth@in.ibm.com>
-Tested-by: Naresh Bannoth <nbannoth@in.ibm.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d2c302b6e8b1 ("iommu/exynos: Make use of iommu_device_register interface")
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Link: https://lore.kernel.org/r/20220714165550.8884-3-semen.protsenko@linaro.org
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_mbx.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/iommu/exynos-iommu.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -271,6 +271,12 @@ qla2x00_mailbox_command(scsi_qla_host_t
- 		atomic_inc(&ha->num_pend_mbx_stage3);
- 		if (!wait_for_completion_timeout(&ha->mbx_intr_comp,
- 		    mcp->tov * HZ)) {
-+			ql_dbg(ql_dbg_mbx, vha, 0x117a,
-+			    "cmd=%x Timeout.\n", command);
-+			spin_lock_irqsave(&ha->hardware_lock, flags);
-+			clear_bit(MBX_INTR_WAIT, &ha->mbx_cmd_flags);
-+			spin_unlock_irqrestore(&ha->hardware_lock, flags);
+diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+index 4bf6049dd2c7..8626c924f724 100644
+--- a/drivers/iommu/exynos-iommu.c
++++ b/drivers/iommu/exynos-iommu.c
+@@ -640,7 +640,7 @@ static int __init exynos_sysmmu_probe(struct platform_device *pdev)
+ 
+ 	ret = iommu_device_register(&data->iommu);
+ 	if (ret)
+-		return ret;
++		goto err_iommu_register;
+ 
+ 	platform_set_drvdata(pdev, data);
+ 
+@@ -667,6 +667,10 @@ static int __init exynos_sysmmu_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 
+ 	return 0;
 +
- 			if (chip_reset != ha->chip_reset) {
- 				spin_lock_irqsave(&ha->hardware_lock, flags);
- 				ha->flags.mbox_busy = 0;
-@@ -281,12 +287,6 @@ qla2x00_mailbox_command(scsi_qla_host_t
- 				rval = QLA_ABORTED;
- 				goto premature_exit;
- 			}
--			ql_dbg(ql_dbg_mbx, vha, 0x117a,
--			    "cmd=%x Timeout.\n", command);
--			spin_lock_irqsave(&ha->hardware_lock, flags);
--			clear_bit(MBX_INTR_WAIT, &ha->mbx_cmd_flags);
--			spin_unlock_irqrestore(&ha->hardware_lock, flags);
--
- 		} else if (ha->flags.purge_mbox ||
- 		    chip_reset != ha->chip_reset) {
- 			spin_lock_irqsave(&ha->hardware_lock, flags);
++err_iommu_register:
++	iommu_device_sysfs_remove(&data->iommu);
++	return ret;
+ }
+ 
+ static int __maybe_unused exynos_sysmmu_suspend(struct device *dev)
+-- 
+2.35.1
+
 
 

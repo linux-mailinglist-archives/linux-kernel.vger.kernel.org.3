@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EACA59DE84
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629A559DF7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356038AbiHWKxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S242835AbiHWLwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355887AbiHWKp2 (ORCPT
+        with ESMTP id S1358493AbiHWLtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:45:28 -0400
+        Tue, 23 Aug 2022 07:49:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF2C6CF59;
-        Tue, 23 Aug 2022 02:11:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E005B77EA2;
+        Tue, 23 Aug 2022 02:31:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19D6B60F54;
-        Tue, 23 Aug 2022 09:11:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD76C433D7;
-        Tue, 23 Aug 2022 09:11:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAEB4612D8;
+        Tue, 23 Aug 2022 09:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF458C433D6;
+        Tue, 23 Aug 2022 09:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245874;
-        bh=ltfQgSNyWjNYjljJhQLDIuB+VrweU0tvjkY1jwvjRzk=;
+        s=korg; t=1661247068;
+        bh=Ar0Ri1pXQ2u5TEvE1oM8+Sx9bnNlWLzCZzLjllN8NEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sMbSg04TcRUYRGDFE8qapwH62jl6kB7Ek8ql2lEwo+U2m93GNKZ1fhICAu3yvVKLp
-         vQuqSO5jUz6LxkTtdk8keqq4P6q2pLbppWdH6t7C7m45YA/wZg18MJf0l2f8gN70p7
-         tz7VJKhQz0w93Ce13rvVT0FPmGEYraEOmJNbt8nA=
+        b=ONd5t7ZUKTJs5Sl+X74bQFOz1ddyOq5uPTWgOeSAj5SrNV7JusKIaXoS8WKAqhM0C
+         Ec8jHq71hgmJKfKsZj0UJVSEzM6ARUmtbYKhrZKRjAb4/g0rGIt/Q8MHZWJxtSMjkE
+         BQ/j2i7ApZNdT+dvyGtcZLOqOLNMBmzZHRb94cPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 4.19 218/287] mmc: pxamci: Fix another error handling path in pxamci_probe()
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.4 309/389] SUNRPC: Reinitialise the backchannel request buffers before reuse
 Date:   Tue, 23 Aug 2022 10:26:27 +0200
-Message-Id: <20220823080108.297829640@linuxfoundation.org>
+Message-Id: <20220823080128.484628977@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit b886f54c300d31c109d2e4336b22922b64e7ba7d upstream.
+commit 6622e3a73112fc336c1c2c582428fb5ef18e456a upstream.
 
-The commit in Fixes: has introduced an new error handling without branching
-to the existing error handling path.
+When we're reusing the backchannel requests instead of freeing them,
+then we should reinitialise any values of the send/receive xdr_bufs so
+that they reflect the available space.
 
-Update it now and release some resources if pxamci_init_ocr() fails.
-
-Fixes: 61951fd6cb49 ("mmc: pxamci: let mmc core handle regulators")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/07a2dcebf8ede69b484103de8f9df043f158cffd.1658862932.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 0d2a970d0ae5 ("SUNRPC: Fix a backchannel race")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/pxamci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/sunrpc/backchannel_rqst.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/drivers/mmc/host/pxamci.c
-+++ b/drivers/mmc/host/pxamci.c
-@@ -677,7 +677,7 @@ static int pxamci_probe(struct platform_
+--- a/net/sunrpc/backchannel_rqst.c
++++ b/net/sunrpc/backchannel_rqst.c
+@@ -64,6 +64,17 @@ static void xprt_free_allocation(struct
+ 	kfree(req);
+ }
  
- 	ret = pxamci_init_ocr(host);
- 	if (ret < 0)
--		return ret;
-+		goto out;
- 
- 	mmc->caps = 0;
- 	host->cmdat = 0;
++static void xprt_bc_reinit_xdr_buf(struct xdr_buf *buf)
++{
++	buf->head[0].iov_len = PAGE_SIZE;
++	buf->tail[0].iov_len = 0;
++	buf->pages = NULL;
++	buf->page_len = 0;
++	buf->flags = 0;
++	buf->len = 0;
++	buf->buflen = PAGE_SIZE;
++}
++
+ static int xprt_alloc_xdr_buf(struct xdr_buf *buf, gfp_t gfp_flags)
+ {
+ 	struct page *page;
+@@ -292,6 +303,9 @@ void xprt_free_bc_rqst(struct rpc_rqst *
+ 	 */
+ 	spin_lock_bh(&xprt->bc_pa_lock);
+ 	if (xprt_need_to_requeue(xprt)) {
++		xprt_bc_reinit_xdr_buf(&req->rq_snd_buf);
++		xprt_bc_reinit_xdr_buf(&req->rq_rcv_buf);
++		req->rq_rcv_buf.len = PAGE_SIZE;
+ 		list_add_tail(&req->rq_bc_pa_list, &xprt->bc_pa_list);
+ 		xprt->bc_alloc_count++;
+ 		atomic_inc(&xprt->bc_slot_count);
 
 

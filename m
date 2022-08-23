@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BC559D8D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F3A59DA26
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242045AbiHWJst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
+        id S1352504AbiHWKFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352329AbiHWJqQ (ORCPT
+        with ESMTP id S1352159AbiHWKBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:46:16 -0400
+        Tue, 23 Aug 2022 06:01:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BAA8E996;
-        Tue, 23 Aug 2022 01:43:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40413ED63;
+        Tue, 23 Aug 2022 01:48:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FCDC614E7;
-        Tue, 23 Aug 2022 08:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78081C433C1;
-        Tue, 23 Aug 2022 08:43:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97C016122F;
+        Tue, 23 Aug 2022 08:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A1E5C433D6;
+        Tue, 23 Aug 2022 08:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244216;
-        bh=yogE9+4Ce06XGXVLmnH/jr0Qcnm8JpE9HUPjVLFTfMs=;
+        s=korg; t=1661244528;
+        bh=NHsKM+d4tge0A6zPGx33s14IW+dsrP40/dPudMVh+IE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1x0yC0kPciJaG77Zh/M5qLxUmJEVxw58nAlfZXKxqvfG8EaWU7ZjhVDjhqHrbw3to
-         ijCxCCg0GVlD7ZQXyLaaamzc3T8En6suxjbyKDvgxc5LeBhQAm4JwGMpiwede0mNdx
-         STd3y7PDMHK+dAMd/zEtvNaI1QWMJCraI1r0aCz4=
+        b=vAtfWQY+aM2BhhviEkspBU89wvxGjRJpsxkkYiMSUtPb1SOhxjHvh1277qQbrn05B
+         Iah0Hu24HU2plWvFiCF3IgOPUarKO8x4t3NcMvAFpOSl/Xw6gHDeedzOfBCiLLZ8va
+         skl8bXXClhteRYHEDe+oDuxu9E2dJKWvBtuYJ8DQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 104/229] memstick/ms_block: Fix a memory leak
-Date:   Tue, 23 Aug 2022 10:24:25 +0200
-Message-Id: <20220823080057.408800714@linuxfoundation.org>
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH 5.15 107/244] fs/ntfs3: Do not change mode if ntfs_set_ea failed
+Date:   Tue, 23 Aug 2022 10:24:26 +0200
+Message-Id: <20220823080102.591453799@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
-References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
-[ Upstream commit 54eb7a55be6779c4d0c25eaf5056498a28595049 ]
+commit 460bbf2990b3fdc597601c2cf669a3371c069242 upstream.
 
-'erased_blocks_bitmap' is never freed. As it is allocated at the same time
-as 'used_blocks_bitmap', it is likely that it should be freed also at the
-same time.
+ntfs_set_ea can fail with NOSPC, so we don't need to
+change mode in this situation.
+Fixes xfstest generic/449
+Fixes: be71b5cba2e6 ("fs/ntfs3: Add attrib operations")
 
-Add the corresponding bitmap_free() in msb_data_clear().
-
-Fixes: 0ab30494bc4f ("memstick: add support for legacy memorysticks")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/b3b78926569445962ea5c3b6e9102418a9effb88.1656155715.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/memstick/core/ms_block.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ntfs3/xattr.c |   20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/memstick/core/ms_block.c b/drivers/memstick/core/ms_block.c
-index 7138062733ba..55525f696c6c 100644
---- a/drivers/memstick/core/ms_block.c
-+++ b/drivers/memstick/core/ms_block.c
-@@ -1961,6 +1961,7 @@ static void msb_data_clear(struct msb_data *msb)
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -545,28 +545,23 @@ static noinline int ntfs_set_acl_ex(stru
  {
- 	kfree(msb->boot_page);
- 	bitmap_free(msb->used_blocks_bitmap);
-+	bitmap_free(msb->erased_blocks_bitmap);
- 	kfree(msb->lba_to_pba_table);
- 	kfree(msb->cache);
- 	msb->card = NULL;
--- 
-2.35.1
-
+ 	const char *name;
+ 	size_t size, name_len;
+-	void *value = NULL;
+-	int err = 0;
++	void *value;
++	int err;
+ 	int flags;
++	umode_t mode;
+ 
+ 	if (S_ISLNK(inode->i_mode))
+ 		return -EOPNOTSUPP;
+ 
++	mode = inode->i_mode;
+ 	switch (type) {
+ 	case ACL_TYPE_ACCESS:
+ 		/* Do not change i_mode if we are in init_acl */
+ 		if (acl && !init_acl) {
+-			umode_t mode;
+-
+ 			err = posix_acl_update_mode(mnt_userns, inode, &mode,
+ 						    &acl);
+ 			if (err)
+ 				goto out;
+-
+-			if (inode->i_mode != mode) {
+-				inode->i_mode = mode;
+-				mark_inode_dirty(inode);
+-			}
+ 		}
+ 		name = XATTR_NAME_POSIX_ACL_ACCESS;
+ 		name_len = sizeof(XATTR_NAME_POSIX_ACL_ACCESS) - 1;
+@@ -602,8 +597,13 @@ static noinline int ntfs_set_acl_ex(stru
+ 	err = ntfs_set_ea(inode, name, name_len, value, size, flags);
+ 	if (err == -ENODATA && !size)
+ 		err = 0; /* Removing non existed xattr. */
+-	if (!err)
++	if (!err) {
+ 		set_cached_acl(inode, type, acl);
++		if (inode->i_mode != mode) {
++			inode->i_mode = mode;
++			mark_inode_dirty(inode);
++		}
++	}
+ 
+ out:
+ 	kfree(value);
 
 

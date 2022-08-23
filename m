@@ -2,91 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F33A59D247
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF22459D235
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 09:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241088AbiHWHb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 03:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S241153AbiHWHcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 03:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241033AbiHWHbl (ORCPT
+        with ESMTP id S241063AbiHWHb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:31:41 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F40163F2D
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:31:40 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id x25so12690697ljm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 00:31:40 -0700 (PDT)
+        Tue, 23 Aug 2022 03:31:59 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F406C647C9;
+        Tue, 23 Aug 2022 00:31:52 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id f17so6526761pfk.11;
+        Tue, 23 Aug 2022 00:31:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=LMfa0g4iXajYSsq7G/GJjCw48iziR27HSljCF4whntw=;
-        b=sWZVI0duRZy6+VSu2/gbHRkb8m9W+UfstMbvXlE8WFEOVWsPIE3QJobZv7VXJXvnmp
-         dE2H4KN1fIGFMeAA43u/OgQw1t/0FAYn5QEnOY9JcWG4FHwMF8I9UY/DCUSldfhTMXAK
-         9NYwEO+UtDcBtWCJHXSgmC58I0IXPSJjNkW5ff0pY+UXeR+b/o95lTPwxSmmScUgKAkK
-         PPxiyu47AL1Gf9VB+pRwHurkUoAywLdinc5tGY+SP8Nw4YZ8FH2lUVdCy1B0RxWFOu0H
-         nG392sW3vRd8ejbCVmhuaKaxRzldrEkjYN32tfeYE0giX+EdHPdfl2KNOiHDyJInN80W
-         Z8zg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=bMjoYyTDsyRUgx8ZranR4mdIniSPbYJELNZYSk0nTHs=;
+        b=jGBuNF3u9pVvmg7gEUDKES7r+FaaDe4iJH5hFbDiBAhSTZUrb/jvsjVaaMBejm8Xyr
+         +SuY4H/1mkpoz+gfjrt1Nx7QRrEmAtnivDMjpoJX+IFst+wWJ4rBYJ8UXfxlpUluOfOM
+         XdQNXcQzBVDLS4F9754ftMOsLJUHc9Burv/gWZmS0SNv1SrZ5DYfaXRp2IGRdwDs4owv
+         cF42nUeigJa7trF7KGd0xk9fqfGOEmFD/Zor/IF+UUiYKLEcxoi8g2NL+i0EcgSro3OK
+         mwb2leMSObljziGLwHaSKp708zdZUYztV4gPoNhrw58xQvwxX7zyvLevdRr113jWzPfn
+         v6SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=LMfa0g4iXajYSsq7G/GJjCw48iziR27HSljCF4whntw=;
-        b=y6z30Lmx8KeTy9bpOrx5AfUy9HkbGrj3GhDmmWdlqSTBjzLt9FbDqY7AMJE3HttOq1
-         u55k1B3+ZuersZd86tUlfgTY6MpHz5uBAJ6jjU/k8kI5fqlMWvsax+rBVwr2MQoxd2dV
-         tZMcYW3AL4SJudxil8oOKbEqINt/U8zh9rx9JKzGc3d3l+7+GdwdccMpzzT7NWqW0Loc
-         t/k5dJ+JXOvENQz1arV8kXYXNduNpSu1D1kcM2JNgN3njTn4WBdz0PLF7mbcwnH5IzvB
-         QWyPL2Vci/wmVt7CAqr++cq+ruqFQu17wX0kN7ab99qzawKPe54bAL0dMIw3pYNT70qr
-         CkyA==
-X-Gm-Message-State: ACgBeo1sNuaTAKeaM7ePdtlg1vEn1pBDnogXJ8dnrZOFToSSK0JzpuBs
-        dIT75iYnBb8uem8ecGlC3bfyog==
-X-Google-Smtp-Source: AA6agR5ZiE2iR7OITJAmUSXeFVJVKHlOku91yjT7bxk6l+HmPGlr36uB3C/mcMlUH8N/ps0Zs/nEaw==
-X-Received: by 2002:a05:651c:a04:b0:25e:753b:db42 with SMTP id k4-20020a05651c0a0400b0025e753bdb42mr6594777ljq.529.1661239898975;
-        Tue, 23 Aug 2022 00:31:38 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id w8-20020a056512098800b0048b1ab313b2sm2363642lft.60.2022.08.23.00.31.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 00:31:38 -0700 (PDT)
-Message-ID: <d5beeb47-3b50-c41d-2176-d4b46811c5cb@linaro.org>
-Date:   Tue, 23 Aug 2022 10:31:37 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=bMjoYyTDsyRUgx8ZranR4mdIniSPbYJELNZYSk0nTHs=;
+        b=zgt3sxYlCtbJ9MYLtIEzR0PwSHoPKxoicFjVlnBeBaWo3Q0kDzTOyhjUw8FHBHsRdT
+         qlMnJgHIWnJoIAXm//imq26jPeFkBsQY7/uaaT2T8am74SPH9AYiJ/mxVKz/JnVwYugT
+         zu2L3JoqI1193CBXmTd9JjrodZYaijHi06ONQCAIB8oQZemZBZkVgbcg5kxuv9JdE/mX
+         gH0zxP/9LtqJJOgE/gVT9qLWD0Hv9yfMHXFq7xSfcpRZcfWPrOf5Wgrzo6WkVvM/fcyr
+         8+TbKdKX8c+x8Saa3Q1wrxumHB7g958wAHSLMqu2csAy5FBnm2Q3jbnIp8Q7YQI4XtGn
+         TZ2A==
+X-Gm-Message-State: ACgBeo0YgfW1sUy2gO9VAGG/ckZLPg9JXSRuviNp/Xwi1P6S8lFOnCZq
+        SgFYLjRl6+qx2WznISFGWfwF7+XBSZeIVsMhcQwGifZFax1vdg==
+X-Google-Smtp-Source: AA6agR4XHbQYmGVKRt50x7EkFE4YvH6VV7RIsVrwy7kYGIKQWSYwiFfqIjk12Xp4faO1WhaXyaaiQSJlZVvisi9Hie4=
+X-Received: by 2002:a62:7bd8:0:b0:536:9c1a:1ed3 with SMTP id
+ w207-20020a627bd8000000b005369c1a1ed3mr8842175pfc.77.1661239911918; Tue, 23
+ Aug 2022 00:31:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] arm64: dts: exynos: Add SysMMU nodes for Exynos850
-Content-Language: en-US
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>
-References: <20220823073006.358764-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220823073006.358764-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <CAPXMrf-C5XEUfOJd3GCtgtHOkc8DxDGbLxE5=GFmr+Py0zKxJA@mail.gmail.com>
+ <Yv3M8wqMkLwlaHxa@kroah.com> <Yv3wZLuPEL9B/h83@myrica> <Yv9shQ3i49efHG6f@kroah.com>
+ <CAPXMrf8VsNMKNLxFjdytk57mk_9ZC0avg1qCGLSMOZNirpdboQ@mail.gmail.com>
+ <YwCGoRt6ifOC6mCD@kroah.com> <CAPXMrf-Gc-Mv1goZrk59GG96OLPxEUC-FKT6Dwo6TU6D7po=gw@mail.gmail.com>
+ <YwR76AVTOsdXNpxh@kroah.com>
+In-Reply-To: <YwR76AVTOsdXNpxh@kroah.com>
+From:   RAJESH DASARI <raajeshdasari@gmail.com>
+Date:   Tue, 23 Aug 2022 10:31:40 +0300
+Message-ID: <CAPXMrf-XUHnfQtnCMs6pbpM+2LUBLqE2c1Z-UwsM-mU1KdoOUA@mail.gmail.com>
+Subject: Re: bpf selftest failed in 5.4.210 kernel
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org, df@google.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 10:30, Krzysztof Kozlowski wrote:
-> From: Sam Protsenko <semen.protsenko@linaro.org>
-> 
-> Add all SysMMU nodes to Exynos850 SoC device tree.
+Sorry for the confusion, results are indeed confusing to me .
+If I try with git bisect I get
 
-Apologies, that was a mistake to send.
+git bisect bad
+9d6f67365d9cdb389fbdac2bb5b00e59e345930e is the first bad commit
 
-Best regards,
-Krzysztof
+If I  try to test myself with multiple test scenarios(I have mentioned
+in  the previous mails) for the bad commits , I see that bad commits
+are
+bpf: Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()
+selftests/bpf: Fix test_align verifier log patterns
+selftests/bpf: Fix "dubious pointer arithmetic" test
+
+Thanks,
+Rajesh Dasari.
+
+On Tue, Aug 23, 2022 at 10:04 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Aug 22, 2022 at 10:23:02PM +0300, RAJESH DASARI wrote:
+> > Hi,
+> >
+> > Please find the test scenarios which I have tried.
+> >
+> > Test 1:
+> >
+> > Running system Kernel version (tag/commit) :  v5.4.210
+> > Kernel source code checkout : v5.4.210
+> > test_align test case execution status : Failure
+> >
+> > Test 2:
+> >
+> > Running system Kernel version (tag/commit) : v5.4.210
+> > Kernel source code checkout : v5.4.209
+> > test_align test case execution status : Failure
+> >
+> > Test 3:
+> >
+> > Running system Kernel version (tag/commit) : v5.4.209
+> > Kernel source code checkout : v5.4.209
+> > test_align test case execution status : Success
+> >
+> > Test 4:
+> >
+> > Running system Kernel version (tag/commit) : ACPI: APEI: Better fix to
+> > avoid spamming the console with old error logs ( Kernel compiled at
+> > this commit  and system is booted with this change)
+> > Kernel source code checkout : v5.4.210 but reverted selftests/bpf: Fix
+> > test_align verifier log patterns and selftests/bpf: Fix "dubious
+> > pointer arithmetic" test. If I revert only the Fix "dubious pointer
+> > arithmetic" test, the testcase still fails.
+> > test_align test case execution status : Success
+> >
+> > Test 5:
+> >
+> > Running system Kernel version (tag/commit) :  v5.4.210 but reverted
+> > commit (bpf: Verifer, adjust_scalar_min_max_vals to always call
+> > update_reg_bounds() )
+> > Kernel source code checkout : v5.4.210 but reverted selftests/bpf: Fix
+> > test_align verifier log patterns and selftests/bpf: Fix "dubious
+> > pointer arithmetic" test.
+> > test_align test case execution status : Success
+> >
+> > Test 6 :
+> >
+> > Running system Kernel version (tag/commit) : bpf: Test_verifier, #70
+> > error message updates for 32-bit right shift( Kernel compiled at this
+> > commit  and system is booted with this change)
+> > Kernel source code checkout : v5.4.209 or v5.4.210
+> > test_align test case execution status : Failure
+>
+> I'm sorry, but I don't know what to do with this report at all.
+>
+> Is there some failure somewhere?  If you use 'git bisect' do you find
+> the offending commit?
+>
+> confused,
+>
+> greg k-h

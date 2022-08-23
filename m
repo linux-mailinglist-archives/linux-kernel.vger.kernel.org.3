@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF3159E199
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63B659DBFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359464AbiHWMIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 08:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S1354396AbiHWKZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359515AbiHWMGH (ORCPT
+        with ESMTP id S1353594AbiHWKLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 08:06:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAB7DF4D8;
-        Tue, 23 Aug 2022 02:37:44 -0700 (PDT)
+        Tue, 23 Aug 2022 06:11:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A0F659E;
+        Tue, 23 Aug 2022 01:57:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE236149B;
-        Tue, 23 Aug 2022 09:37:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC2DC433D6;
-        Tue, 23 Aug 2022 09:37:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31AE9B81C35;
+        Tue, 23 Aug 2022 08:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FBC4C433D6;
+        Tue, 23 Aug 2022 08:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661247445;
-        bh=XXnsT8YnvLr5n07bfMayojz6yEaBHQq9iwO02OlXMVs=;
+        s=korg; t=1661245050;
+        bh=g8DqRUnEJ1CxvVsgj9EkQ/vTlZZXVk/+ZnUNVFzMwU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S8cc5pQgl3sotyCE+y5+5XbdmnM4gCkS3UOGqQqM2EoT1OLUZ1ZXpgP1iNGSPFeUM
-         YODD5bV3bLKXMiw16BStTE1/+ZZe35oGpUdSXDtEG2+rO1nkgVPH7TFGv5NfFj87Ks
-         f2k1OlQazbPH/YloT3Gx/EvW30z4j5TKDxM46pHY=
+        b=oTWH3qXGndxLwZKcqQcO6s00xh8ORDeOrqsHmantT0UBWy82Qd7J5HwaTl8ui+3aq
+         C5maOMEg1IMWS8T71UNvB37QOeFaDvlSuHWdIKjynIEj44tAK34MolVP3DjVeeIHA9
+         6pNeKpvDx5zzp3e8mdXJ223X26W3df56c+6okwC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.10 007/158] mmc: pxamci: Fix an error handling path in pxamci_probe()
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 180/244] zram: do not lookup algorithm in backends table
 Date:   Tue, 23 Aug 2022 10:25:39 +0200
-Message-Id: <20220823080046.359281137@linuxfoundation.org>
+Message-Id: <20220823080105.324990338@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
-References: <20220823080046.056825146@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +58,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-commit 98d7c5e5792b8ce3e1352196dac7f404bb1b46ec upstream.
+[ Upstream commit dc89997264de565999a1cb55db3f295d3a8e457b ]
 
-The commit in Fixes: has moved some code around without updating gotos to
-the error handling path.
+Always use crypto_has_comp() so that crypto can lookup module, call
+usermodhelper to load the modules, wait for usermodhelper to finish and so
+on.  Otherwise crypto will do all of these steps under CPU hot-plug lock
+and this looks like too much stuff to handle under the CPU hot-plug lock.
+Besides this can end up in a deadlock when usermodhelper triggers a code
+path that attempts to lock the CPU hot-plug lock, that zram already holds.
 
-Update it now and release some resources if pxamci_of_init() fails.
+An example of such deadlock:
 
-Fixes: fa3a5115469c ("mmc: pxamci: call mmc_of_parse()")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/6d75855ad4e2470e9ed99e0df21bc30f0c925a29.1658862932.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+- path A. zram grabs CPU hot-plug lock, execs /sbin/modprobe from crypto
+  and waits for modprobe to finish
+
+disksize_store
+ zcomp_create
+  __cpuhp_state_add_instance
+   __cpuhp_state_add_instance_cpuslocked
+    zcomp_cpu_up_prepare
+     crypto_alloc_base
+      crypto_alg_mod_lookup
+       call_usermodehelper_exec
+        wait_for_completion_killable
+         do_wait_for_common
+          schedule
+
+- path B. async work kthread that brings in scsi device. It wants to
+  register CPUHP states at some point, and it needs the CPU hot-plug
+  lock for that, which is owned by zram.
+
+async_run_entry_fn
+ scsi_probe_and_add_lun
+  scsi_mq_alloc_queue
+   blk_mq_init_queue
+    blk_mq_init_allocated_queue
+     blk_mq_realloc_hw_ctxs
+      __cpuhp_state_add_instance
+       __cpuhp_state_add_instance_cpuslocked
+        mutex_lock
+         schedule
+
+- path C. modprobe sleeps, waiting for all aync works to finish.
+
+load_module
+ do_init_module
+  async_synchronize_full
+   async_synchronize_cookie_domain
+    schedule
+
+[senozhatsky@chromium.org: add comment]
+  Link: https://lkml.kernel.org/r/20220624060606.1014474-1-senozhatsky@chromium.org
+Link: https://lkml.kernel.org/r/20220622023501.517125-1-senozhatsky@chromium.org
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Nitin Gupta <ngupta@vflare.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/pxamci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/block/zram/zcomp.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
---- a/drivers/mmc/host/pxamci.c
-+++ b/drivers/mmc/host/pxamci.c
-@@ -648,7 +648,7 @@ static int pxamci_probe(struct platform_
+diff --git a/drivers/block/zram/zcomp.c b/drivers/block/zram/zcomp.c
+index 052aa3f65514..0916de952e09 100644
+--- a/drivers/block/zram/zcomp.c
++++ b/drivers/block/zram/zcomp.c
+@@ -63,12 +63,6 @@ static int zcomp_strm_init(struct zcomp_strm *zstrm, struct zcomp *comp)
  
- 	ret = pxamci_of_init(pdev, mmc);
- 	if (ret)
--		return ret;
-+		goto out;
+ bool zcomp_available_algorithm(const char *comp)
+ {
+-	int i;
+-
+-	i = sysfs_match_string(backends, comp);
+-	if (i >= 0)
+-		return true;
+-
+ 	/*
+ 	 * Crypto does not ignore a trailing new line symbol,
+ 	 * so make sure you don't supply a string containing
+@@ -217,6 +211,11 @@ struct zcomp *zcomp_create(const char *compress)
+ 	struct zcomp *comp;
+ 	int error;
  
- 	host = mmc_priv(mmc);
- 	host->mmc = mmc;
++	/*
++	 * Crypto API will execute /sbin/modprobe if the compression module
++	 * is not loaded yet. We must do it here, otherwise we are about to
++	 * call /sbin/modprobe under CPU hot-plug lock.
++	 */
+ 	if (!zcomp_available_algorithm(compress))
+ 		return ERR_PTR(-EINVAL);
+ 
+-- 
+2.35.1
+
 
 

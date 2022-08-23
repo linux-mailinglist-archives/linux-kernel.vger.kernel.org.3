@@ -2,95 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7867059EA9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF0E59EAAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 20:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233674AbiHWSND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 14:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
+        id S229489AbiHWSNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 14:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233600AbiHWSMh (ORCPT
+        with ESMTP id S231896AbiHWSMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 14:12:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9819F9BB56
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 09:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661271879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZInkH65kXXJrl1np4vOxGvfc6E02VGBPw4illArQKwk=;
-        b=T6Us9JUsZUdABf1LKsliQmem7POLI3kepXdyS1mynfK4sr2YNN4ba1hZvKfA1PiImlNw7f
-        Z+dB5LybRbaj36neI0x0mxBwvndG41WRG265DGz/ROg6Zb2ovmHFGZ/MO50dYMPCOdUwQQ
-        xBnI57QPUY2fuwT0g0Cq22IdZxhZG7w=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-b1M910_7MUWejWr76gIR-Q-1; Tue, 23 Aug 2022 12:24:38 -0400
-X-MC-Unique: b1M910_7MUWejWr76gIR-Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C4C7A3C0E20F;
-        Tue, 23 Aug 2022 16:24:37 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2DC964010D2A;
-        Tue, 23 Aug 2022 16:24:37 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-Subject: [PATCH] idxd: avoid deadlock in process_misc_interrupts()
-Date:   Tue, 23 Aug 2022 09:24:35 -0700
-Message-Id: <20220823162435.2099389-1-jsnitsel@redhat.com>
+        Tue, 23 Aug 2022 14:12:44 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0416E896;
+        Tue, 23 Aug 2022 09:25:16 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3376851fe13so360342757b3.6;
+        Tue, 23 Aug 2022 09:25:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=e1ByaHgjT5aI+pkPeAiB/CuoKQTWUEVfvmAhYGOVHzY=;
+        b=UpztGszl4Wk+OEvdstrECX4nGznd/K/1k7PPcYYUWr15a00jm6biTrLYpOoKZdQFBj
+         Ergw/levxJRrWU9QWSgZ22f0zduysxtthR30+25BPmxW89+EUQx4haA+p+rK29ge5aCF
+         g21lnU+6ryAEEhbS3cav/aPQReR9LsMvvWFNSVgmjIzh4/2gOrCSoLfk6fJK7tBHnNVj
+         34OXubS0it7qwTIFalfXLlhxx+VQf/b2cSuzKgJYcqolmPPcvUW7Vw4r+pNo5TK4DYQR
+         FFkvov5J2Roi9J9BBZN4eCSUmHgW4HPJdPRd//O2W3e3TwBpsiICx2DPw8RDuIbtl0mY
+         kZMw==
+X-Gm-Message-State: ACgBeo0GwCqwp+LMKfiAYBAeATG0t06KNDhVvhd7b32ouCaiq0qrv66V
+        4l5sgtZ07yN7yfaSctLXrkximLMv+jp6DfllbmIHxTON
+X-Google-Smtp-Source: AA6agR4ufkdeFlSVd0hEGz/ZxKyiVvu1D9etm5aEB4P1tHJPl+mKMBJ35SUVfBRAP1kGsBOnUtpamNoW7FA41r623lU=
+X-Received: by 2002:a0d:f647:0:b0:328:317c:9069 with SMTP id
+ g68-20020a0df647000000b00328317c9069mr25955261ywf.301.1661271916000; Tue, 23
+ Aug 2022 09:25:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <12036348.O9o76ZdvQC@kreacher> <875yixk3ng.fsf@stealth>
+In-Reply-To: <875yixk3ng.fsf@stealth>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Aug 2022 18:25:04 +0200
+Message-ID: <CAJZ5v0jeZZLP9nPWrEwxct61UnabrMqifZZgcBbLy0u8-z4xmg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] ACPI: Device enumeration rearrangements and parent
+ field elimination
+To:     Punit Agrawal <punit.agrawal@bytedance.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-idxd_device_clear_state() now grabs the idxd->dev_lock
-itself, so don't grab the lock prior to calling it.
+On Fri, Aug 12, 2022 at 3:11 PM Punit Agrawal
+<punit.agrawal@bytedance.com> wrote:
+>
+> Hi Rafael,
+>
+> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+>
+> > Hi All,
+> >
+> > There are still opportunities to clean up the ACPI support code and
+> > this series is part of the effort in that direction.
+> >
+> > It makes changes without functional impact (AFAICS) to the core ACPI
+> > code related to devices and to some of its users.
+> >
+> > Please refer to the patch changelogs for details.
+>
+> Other than the single typo I noticed in Patch 2,
 
-This was seen in testing after dmar fault occurred on system,
-resulting in lockup stack traces.
+I've fixed that one while applying the patch.
 
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: dmaengine@vger.kernel.org
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/dma/idxd/irq.c | 2 --
- 1 file changed, 2 deletions(-)
+> the changes look good!
+>
+> If it helps,
+>
+> Reviewed-by: Punit Agrawal <punit.agrawal@bytedance.com>
 
-diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
-index 743ead5ebc57..5b9921475be6 100644
---- a/drivers/dma/idxd/irq.c
-+++ b/drivers/dma/idxd/irq.c
-@@ -324,13 +324,11 @@ static int process_misc_interrupts(struct idxd_device *idxd, u32 cause)
- 			idxd->state = IDXD_DEV_HALTED;
- 			idxd_wqs_quiesce(idxd);
- 			idxd_wqs_unmap_portal(idxd);
--			spin_lock(&idxd->dev_lock);
- 			idxd_device_clear_state(idxd);
- 			dev_err(&idxd->pdev->dev,
- 				"idxd halted, need %s.\n",
- 				gensts.reset_type == IDXD_DEVICE_RESET_FLR ?
- 				"FLR" : "system reset");
--			spin_unlock(&idxd->dev_lock);
- 			return -ENXIO;
- 		}
- 	}
--- 
-2.37.2
-
+Thank you!

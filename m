@@ -2,114 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B8B59D58B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BD859D538
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240795AbiHWIhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
+        id S241459AbiHWIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 04:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346182AbiHWIgA (ORCPT
+        with ESMTP id S1347102AbiHWIgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:36:00 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF891760FE
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:05 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id l19so9645874ljg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=dsUb3JwxKrpGEtwaM0xXt8nmsJshMrpryqMcaqMUxgw=;
-        b=HVGb4rTve0Fn0XJnLuQnerqws3m5Uhfk3U25WThW/5EA2sh13xN47kcg6Kb0M0oDOd
-         9uV1jUMBYfese4AM4viw6rZp9A7dtiq+5cYAc8rkGxkcuECk2C04awFUvG7TcWNfpl5H
-         vYBBxcx8pcmw7RkgdzctvGuCdMGJeyTT23ZCaJ9m/iA4/MLiL8J4ohtX7iQByuNsULCg
-         GlTdQYgiScAhgclk132QhLpCCJJnI+2bWqFQSjPTVBQgIS9UxJ+6JEMIQdLw/yrlUMt5
-         LfRW+2FL9L/3LbTujvlPjCxbQ7t6VvdDZ5YDayNVICak4OiAHEewMAL7QAkAlcINZiw2
-         /h8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=dsUb3JwxKrpGEtwaM0xXt8nmsJshMrpryqMcaqMUxgw=;
-        b=uIahdYlrnIB/Fp2Vb61nWf9qihr3jpisKCGEalFZFFziS90oSsdb10Zpv2bTqlae+b
-         L75kYsZLc5pS3cPFttXNGoGhi0IZITHl0nLyyrJ5jdoUPrjs/WQUKIBmZQBzQbHCtURr
-         zDopL+5H9XQvKz8HdWtW6f1g3HNCrqR+AuVNhI+Mg3gmIsoj0zotBUVbDOWH4Ei/5Kg4
-         HLqNrPERRtmAtOYy7Z+ML8h9Uy8TUH8wiUAYcTXQSjteiCi9YgInQNqQHQ+DYyFkSkN/
-         uYlyjg+776tEs3KY7/1rj/oweWPsGvx/8ogNM5VcOXx74BDx08dkX4qz0bQbVDmDGVkx
-         uSzg==
-X-Gm-Message-State: ACgBeo0uuOvlaDGHt4yLwdk+++E9/4gtNDgHFqlKgcBZXS4yGwaMuQlJ
-        RyzUP/8oOjlSDbCq6vp3FRO+0g==
-X-Google-Smtp-Source: AA6agR79ZeQOdFEdVULVnemohBGH9LmWT7OumoXb1UHf8vB7YnOku6VNElwDzXeWV5YXEmxTiLfvhw==
-X-Received: by 2002:a2e:a7d6:0:b0:261:caab:a952 with SMTP id x22-20020a2ea7d6000000b00261caaba952mr2985133ljp.425.1661242622922;
-        Tue, 23 Aug 2022 01:17:02 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.143])
-        by smtp.gmail.com with ESMTPSA id s10-20020a056512314a00b00492e36cb723sm1057328lfi.179.2022.08.23.01.17.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 01:17:02 -0700 (PDT)
-Message-ID: <fba5dccb-2549-30fe-5d65-8668aebd3811@openvz.org>
-Date:   Tue, 23 Aug 2022 11:17:01 +0300
+        Tue, 23 Aug 2022 04:36:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F86C76753
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661242636; x=1692778636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FFUrJBNMDk4t826TIAG649CcdossiWD3s3+Wk/wmhH4=;
+  b=PRMh7gJkry/Afvp1QLjCsrbIh/DPNl+OA/nwRPuxD5Qegn0jV0GohQ6v
+   PTvzSPciN5D8WlWg1txrQXIvrEtMAaSxWh39dDtSYBBjtaYV0JTuwUyrQ
+   zFMfYJ8jtia9IkiPtFm7/MsJ4kjNeF3ckdeqTGdwUXp8/rIq4z9qjJFTX
+   odOkMBJHhO1vph2v8HitrbDIXG2YB0GK18jMnNaO3pymYMHC4S65VlM0h
+   9rg/BAGvQaDYWv1JItqFFeuKtqfY5R/UPa2l3WJiG7HEvUxtYj0M1G6MY
+   ES5E+cb7DiVRdaXJhzHALyedCz/23IfekpYtf1zqLRDXBXZqUE/sR6wd/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="291183216"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="291183216"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 01:17:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="751606026"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 23 Aug 2022 01:17:12 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 23 Aug 2022 11:17:12 +0300
+Date:   Tue, 23 Aug 2022 11:17:12 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_typec: Stash port driver
+ info
+Message-ID: <YwSNCFt48Q9Eo02I@kuha.fi.intel.com>
+References: <20220819190807.1275937-1-pmalani@chromium.org>
+ <20220819190807.1275937-4-pmalani@chromium.org>
+ <YwRa/QxA/RRtxU3P@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH] memcg: adjust memcg used to charge for new
- simple_xattrs objects
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>, tj@kernel.org,
-        gregkh@linuxfoundation.org, hannes@cmpxchg.org, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, mhocko@suse.com, shakeelb@google.com,
-        songmuchun@bytedance.com, viro@zeniv.linux.org.uk,
-        Christian Brauner <brauner@kernel.org>
-References: <62188f37-f816-08e9-cdd5-8df23131746d@openvz.org>
- <f58bd7c8-0053-316c-db06-ced13ffcf867@openvz.org>
- <20220818122743.GB19175@blackbody.suse.cz>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <20220818122743.GB19175@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwRa/QxA/RRtxU3P@google.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 15:27, Michal Koutný wrote:
-> On Thu, Aug 18, 2022 at 12:10:45PM +0300, Vasily Averin <vvs@openvz.org> wrote:
->> sys_set[f]xattr uses simple_xattr infrastructure to create a new
->> extended attribute for in-memory file systems like sysfs and tmpfs.
->> Number and size of allocated objects are controlled by user space,
->> they are always living in memory and its lifetime is indefinitely long.
->> Therefore this memory should be properly accounted.
->>
->> By default new memory is accounted to memcg of creator process.
+On Tue, Aug 23, 2022 at 04:43:41AM +0000, Tzung-Bi Shih wrote:
+> On Fri, Aug 19, 2022 at 07:08:04PM +0000, Prashant Malani wrote:
+> > Stash port number and a pointer to the driver-specific struct in the
+> > local Type-C port struct.
+> > 
+> > These can be useful to the port driver to figure out how to communicate
+> > with the ChromeOS EC when an altmode driver related callback is invoked
+> > from the Type-C class code.
 > 
-> despite objects aren't bound to this process lifetime.
-> 
-> (I think this was the main argument for this approach and should be in
-> the commit message then.)
+> The patch looks good to me.  But I would suggest to send it in later series
+> that uses the driver-specific struct (e.g. in altmode driver related callbacks)
+> to make the usage clear.
 
-Thank you for the remark, I'll update patch description in the next version
+I agree.
 
->> As a result, neighboring xattrs of the same inode can be charged to
->> different memcgs. This looks unexpected and makes hard the
->> investigation of the memcg accounting issues.
->>
->> This patch adjust memcg used for such allocations. For kernfs
->> it gives memcg from kernfs node, for shmem -- from shmem_info.
->> This allows to cahrge all inode-sepcific objects to the same
->> memory cgroup.
-> 
-> IIUC you intend to inherit association from shmem_inode_info (i.e.
-> whoever created the inode). shmem_inode_cachep has SLAB_ACCOUNT, so it's valid.
+thanks,
 
-Yes, you are right, I'll clarify this in next patch version.
-
-Thank you,
-	Vasily Averin
+-- 
+heikki

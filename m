@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924A559DE3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D4459DDAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238339AbiHWLDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S244198AbiHWLEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356773AbiHWK7A (ORCPT
+        with ESMTP id S1356576AbiHWK74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:59:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6823ADCFE;
-        Tue, 23 Aug 2022 02:13:58 -0700 (PDT)
+        Tue, 23 Aug 2022 06:59:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B251786C09;
+        Tue, 23 Aug 2022 02:14:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2AE660F54;
-        Tue, 23 Aug 2022 09:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB036C433D6;
-        Tue, 23 Aug 2022 09:13:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCBC161226;
+        Tue, 23 Aug 2022 09:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF21C433D6;
+        Tue, 23 Aug 2022 09:13:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246029;
-        bh=zCjPwheLub6dsDGmASzjdfqqFdiCv1VVXqIVLu32/tE=;
+        s=korg; t=1661246035;
+        bh=PpYQ9sWEw42NyUlX2lft+LxP0PilRZHReFOoNyV3Z/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dP9EnbgQMl1cZOQEiIgZCqEmzH3P9etlcG7qAemoNBlnT7lx1aQemYEQy1ZCaJ/p5
-         zpjPW9HV53J3Dh+gymd3L3cdFB4SX3xAo3QqIgWEv054hQo4BTMGHeQTuDYC2vNId8
-         EgU4PxNHXFnKpmH8s2CFtIorTv6STINB+m+Kx0W4=
+        b=yBMFzK0mzGzmgmX72pQXGFs/3upNyk3QnZLTY4uhRMjtgWQvv66iMXVpS90vhXZ9I
+         OgR+o0W+RAtfDuVlpSPgT1e2LWB/YOHMG+48Zj8J4qG9IST2/eLvEEZpP/Vce+aPCT
+         G3ihooX7EMYIr0Dj6U0sojuujK9Ojdj44auOONKs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 266/287] dmaengine: sprd: Cleanup in .remove() after pm_runtime_get_sync() failed
-Date:   Tue, 23 Aug 2022 10:27:15 +0200
-Message-Id: <20220823080110.305326297@linuxfoundation.org>
+        stable@vger.kernel.org, Wentao_Liang <Wentao_Liang_g@163.com>,
+        Song Liu <song@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 267/287] drivers:md:fix a potential use-after-free bug
+Date:   Tue, 23 Aug 2022 10:27:16 +0200
+Message-Id: <20220823080110.340175238@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
 References: <20220823080100.268827165@linuxfoundation.org>
@@ -57,45 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Wentao_Liang <Wentao_Liang_g@163.com>
 
-[ Upstream commit 1e42f82cbec7b2cc4873751e7791e6611901c5fc ]
+[ Upstream commit 104212471b1c1817b311771d817fb692af983173 ]
 
-It's not allowed to quit remove early without cleaning up completely.
-Otherwise this results in resource leaks that probably yield graver
-problems later. Here for example some tasklets might survive the lifetime
-of the sprd-dma device and access sdev which is freed after .remove()
-returns.
+In line 2884, "raid5_release_stripe(sh);" drops the reference to sh and
+may cause sh to be released. However, sh is subsequently used in lines
+2886 "if (sh->batch_head && sh != sh->batch_head)". This may result in an
+use-after-free bug.
 
-As none of the device freeing requires an active device, just ignore the
-return value of pm_runtime_get_sync().
+It can be fixed by moving "raid5_release_stripe(sh);" to the bottom of
+the function.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
-Link: https://lore.kernel.org/r/20220721204054.323602-1-u.kleine-koenig@pengutronix.de
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/sprd-dma.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/md/raid5.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
-index 0fadf6a08494..4ec9a924a338 100644
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -987,11 +987,8 @@ static int sprd_dma_remove(struct platform_device *pdev)
- {
- 	struct sprd_dma_dev *sdev = platform_get_drvdata(pdev);
- 	struct sprd_dma_chn *c, *cn;
--	int ret;
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index dad426cc0f90..6f04473f0838 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -2670,10 +2670,10 @@ static void raid5_end_write_request(struct bio *bi)
+ 	if (!test_and_clear_bit(R5_DOUBLE_LOCKED, &sh->dev[i].flags))
+ 		clear_bit(R5_LOCKED, &sh->dev[i].flags);
+ 	set_bit(STRIPE_HANDLE, &sh->state);
+-	raid5_release_stripe(sh);
  
--	ret = pm_runtime_get_sync(&pdev->dev);
--	if (ret < 0)
--		return ret;
-+	pm_runtime_get_sync(&pdev->dev);
+ 	if (sh->batch_head && sh != sh->batch_head)
+ 		raid5_release_stripe(sh->batch_head);
++	raid5_release_stripe(sh);
+ }
  
- 	/* explicitly free the irq */
- 	if (sdev->irq > 0)
+ static void raid5_error(struct mddev *mddev, struct md_rdev *rdev)
 -- 
 2.35.1
 

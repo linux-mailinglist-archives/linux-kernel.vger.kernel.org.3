@@ -2,141 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C0559EED3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5204359EED5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 00:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiHWWNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 18:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S232666AbiHWWNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 18:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbiHWWMn (ORCPT
+        with ESMTP id S232562AbiHWWNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:12:43 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B47434A
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:25 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-337ed9110c2so218379347b3.15
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=vpCoIyKRZsG9sSnwmRTlOTB6YRSjIw+Qbk8jvYcuaVE=;
-        b=XvSozB/DWuMKSbNHJ9l9xde2KRhs2B7hPE+zZEBJfJd7Fr6E4lDsopXJvIdm2+oO9j
-         jr31g9cAChKqFWsNNLIHJdF30A0bR3Cv2hneJzi8ReQowFjtktbkfhgyuILUR7cXFQvA
-         PjhFeFqrLVQ6dfX4gTRChIm+bE3ZoENvEXXD1WXoSW40LGANh/e2+thBWHo9naOHrsJq
-         PyBkagsL2dz4ZfnZRB88Ff4UDmD7DseC9LNSz8vpLyrAH8a45cAWOGDS4JmAcqncLx9g
-         k6mivrsUv+Wz/1aLhsPxsuwDEOf0RevYE/lwTzq/W/n8zvM1Bbnbo1lXkXaDP2Gg24/M
-         AFMg==
+        Tue, 23 Aug 2022 18:13:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962708B2E4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661292703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SqSTkWZMCrwSwsjSNzpe+ypA/kUjJyLN2b7ZHvSho3U=;
+        b=ZYq5eHgtkXVWUfqLkxdvxYOhX0pdJUhF3FbQBYU271n4uQpzK4ZxJIT70xogtuZpKVRiWV
+        Ffq0mUfZW62EVbPFAPjfBTKNQXs6Z9xD3jjiyNdRMvh4PgqoTaSGw/0uDcYsu+VWef6Qef
+        IATxQ0iTnEB2GBF8gTcRaalKHjErFb4=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-110-GuhQl4zcNmC6p66W5DZeSA-1; Tue, 23 Aug 2022 18:11:42 -0400
+X-MC-Unique: GuhQl4zcNmC6p66W5DZeSA-1
+Received: by mail-qk1-f199.google.com with SMTP id x22-20020a05620a259600b006b552a69231so13170917qko.18
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 15:11:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=vpCoIyKRZsG9sSnwmRTlOTB6YRSjIw+Qbk8jvYcuaVE=;
-        b=gLWr+hcovvDiOyb0JIZHA5yZZAIfN9oItXyfXaE3lsEYhQFl57CF+N/HtTX9epw7Wq
-         4KJdgsRThanSRvlH0evoS0ncj3nxFg2nHAhiILfJ1sidyBxL1f5o9ka5Jy4HhD1qiHdX
-         IGCj5D7w5gEYQm1u6uyo2qrIhHTkVsl2dddTSktwmQOoOQHA17h9yKQJ29TM9MQfuI2h
-         2thRQe3k/Zn+rq+Gfs8BBLQDKwr95jNCSTNy/q/wZ5Qsr6wCe5wQp/94DZOdkdStsWdp
-         6tyNEWjDAaQlelU44GV9KBXCOTegXvJOigbAWK/uVRD+3Hppn2c+ELZyNEkchqVI90Wh
-         XQMw==
-X-Gm-Message-State: ACgBeo2nvn42kG4hoIMSDzRyI1XlWFJM8EcDnatnMctnk33L91GEPy5Z
-        e3bRvJe/OWHUiHtGjVC4fcA7py4YhKNX
-X-Google-Smtp-Source: AA6agR6f5ty3lYMH2Y4qqlqwT9nA65Tc33n67UyVYg+Dgbepp9Cr8MCejsQA/hDfvv7R/YglXQcwvFGYYPpa
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7dbd:c08f:de81:c2a3])
- (user=irogers job=sendgmr) by 2002:a25:cf4b:0:b0:68e:fea1:9fdc with SMTP id
- f72-20020a25cf4b000000b0068efea19fdcmr26259610ybg.643.1661292684631; Tue, 23
- Aug 2022 15:11:24 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 15:09:22 -0700
-In-Reply-To: <20220823220922.256001-1-irogers@google.com>
-Message-Id: <20220823220922.256001-19-irogers@google.com>
-Mime-Version: 1.0
-References: <20220823220922.256001-1-irogers@google.com>
-X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v2 18/18] perf build: Enable -Wthread-safety with clang
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SqSTkWZMCrwSwsjSNzpe+ypA/kUjJyLN2b7ZHvSho3U=;
+        b=NyD1kwFWanffRU1bd5G0Vvw9kxL19oUEAsmeUqPTQcaN4cFR3ybJjuHJfFmkdY//g5
+         lhGkAEgqPmYsPfn4VyDVcVyyuPAC0XHI/8dkvZwhDW8rD0JybKXNPfK5h/i0vtwcJUHV
+         kN7R9O4Gb7oCo0rv4r3efqx/bdZytpeSTOkecud4sf9hEK+KvEuY7oOoIrw9Kpv2YaUd
+         JxF62fNcc11dDSWeQsaojzG2Hlv3FyJYgMweEKUrsP5S1ZRrVduBR39bnhyNAR1ryvMd
+         hVJ+SShjc3qTZ5h8NsGzBBYsN0ORrmZo8b/MXNwyPWIii7i8219EeJ1BrT0CwoIAP8pO
+         KvPQ==
+X-Gm-Message-State: ACgBeo1/NzGbwv6/BoN0qhEJN+HOsdJ5yQU2TeSHAdwyfRma2F2O+SkE
+        mhOUdSJpRWsEdTKQG5Sv8KaNOowmA5ufR9YsQe88KGFRLAZ4JyNBg1tpkiP1XDlw6LM7GU2HW/k
+        SKtOJhBvUBCGAYq6R+eQbZNOmLvuKDBGj8VmJrPbQ8nbcOEwnJlaLsvEbFfBvJvaJenkBF3cQow
+        ==
+X-Received: by 2002:ac8:58c8:0:b0:344:87c2:c495 with SMTP id u8-20020ac858c8000000b0034487c2c495mr21306113qta.631.1661292701379;
+        Tue, 23 Aug 2022 15:11:41 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4lLdPjmsXBhe8LEZIi5nM1ZsA7umBVsvW+i6mZX+KoZuDvOiaboMlLZWVcvCAfdLMqUwSvCg==
+X-Received: by 2002:ac8:58c8:0:b0:344:87c2:c495 with SMTP id u8-20020ac858c8000000b0034487c2c495mr21306082qta.631.1661292700932;
+        Tue, 23 Aug 2022 15:11:40 -0700 (PDT)
+Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id s11-20020a05620a29cb00b006bbd0ae9c05sm12319185qkp.130.2022.08.23.15.11.39
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 23 Aug 2022 15:11:40 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>, peterx@redhat.com,
+        David Hildenbrand <david@redhat.com>, stable@vger.kernel.org,
+        Yu Zhao <yuzhao@google.com>
+Subject: [PATCH] mm/mprotect: Only reference swap pfn page if type match
+Date:   Tue, 23 Aug 2022 18:11:38 -0400
+Message-Id: <20220823221138.45602-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If building with clang then enable -Wthread-safety warnings.
+Yu Zhao reported a bug after the commit "mm/swap: Add swp_offset_pfn() to
+fetch PFN from swap entry" added a check in swp_offset_pfn() for swap type [1]:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+  kernel BUG at include/linux/swapops.h:117!
+  CPU: 46 PID: 5245 Comm: EventManager_De Tainted: G S         O L 6.0.0-dbg-DEV #2
+  RIP: 0010:pfn_swap_entry_to_page+0x72/0xf0
+  Code: c6 48 8b 36 48 83 fe ff 74 53 48 01 d1 48 83 c1 08 48 8b 09 f6
+  c1 01 75 7b 66 90 48 89 c1 48 8b 09 f6 c1 01 74 74 5d c3 eb 9e <0f> 0b
+  48 ba ff ff ff ff 03 00 00 00 eb ae a9 ff 0f 00 00 75 13 48
+  RSP: 0018:ffffa59e73fabb80 EFLAGS: 00010282
+  RAX: 00000000ffffffe8 RBX: 0c00000000000000 RCX: ffffcd5440000000
+  RDX: 1ffffffffff7a80a RSI: 0000000000000000 RDI: 0c0000000000042b
+  RBP: ffffa59e73fabb80 R08: ffff9965ca6e8bb8 R09: 0000000000000000
+  R10: ffffffffa5a2f62d R11: 0000030b372e9fff R12: ffff997b79db5738
+  R13: 000000000000042b R14: 0c0000000000042b R15: 1ffffffffff7a80a
+  FS:  00007f549d1bb700(0000) GS:ffff99d3cf680000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 0000440d035b3180 CR3: 0000002243176004 CR4: 00000000003706e0
+  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+  Call Trace:
+   <TASK>
+   change_pte_range+0x36e/0x880
+   change_p4d_range+0x2e8/0x670
+   change_protection_range+0x14e/0x2c0
+   mprotect_fixup+0x1ee/0x330
+   do_mprotect_pkey+0x34c/0x440
+   __x64_sys_mprotect+0x1d/0x30
+
+It triggers because pfn_swap_entry_to_page() could be called upon e.g. a
+genuine swap entry.
+
+Fix it by only calling it when it's a write migration entry where the page*
+is used.
+
+[1] https://lore.kernel.org/lkml/CAOUHufaVC2Za-p8m0aiHw6YkheDcrO-C3wRGixwDS32VTS+k1w@mail.gmail.com/
+
+Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
+Cc: David Hildenbrand <david@redhat.com>
+Cc: <stable@vger.kernel.org>
+Reported-by: Yu Zhao <yuzhao@google.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- tools/perf/Makefile.config | 5 +++++
- 1 file changed, 5 insertions(+)
+ mm/mprotect.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 0661a1cf9855..0ef6f572485d 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
- CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
- HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index f2b9b1da9083..4549f5945ebe 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -203,10 +203,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 			pages++;
+ 		} else if (is_swap_pte(oldpte)) {
+ 			swp_entry_t entry = pte_to_swp_entry(oldpte);
+-			struct page *page = pfn_swap_entry_to_page(entry);
+ 			pte_t newpte;
  
-+# Enabled Wthread-safety analysis for clang builds.
-+ifeq ($(CC_NO_CLANG), 0)
-+  CFLAGS += -Wthread-safety
-+endif
+ 			if (is_writable_migration_entry(entry)) {
++				struct page *page = pfn_swap_entry_to_page(entry);
 +
- include $(srctree)/tools/scripts/Makefile.arch
- 
- $(call detected_var,SRCARCH)
+ 				/*
+ 				 * A protection check is difficult so
+ 				 * just be safe and disable write
 -- 
-2.37.2.609.g9ff673ca1a-goog
+2.32.0
 

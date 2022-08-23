@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB32559E2D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBC559DB6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354230AbiHWK1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S1352529AbiHWMNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353725AbiHWKL4 (ORCPT
+        with ESMTP id S1356172AbiHWMMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0EC383;
-        Tue, 23 Aug 2022 01:58:15 -0700 (PDT)
+        Tue, 23 Aug 2022 08:12:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDA05EDF0;
+        Tue, 23 Aug 2022 02:39:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93C8FB81C35;
-        Tue, 23 Aug 2022 08:58:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00736C433C1;
-        Tue, 23 Aug 2022 08:58:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 680EF61496;
+        Tue, 23 Aug 2022 09:38:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3D7C433D6;
+        Tue, 23 Aug 2022 09:38:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245093;
-        bh=YI2a3bQsRpitOm3qvXNGbLX4UFt3jIL05K8HgbujqzQ=;
+        s=korg; t=1661247530;
+        bh=I1xhZSiC9DRvT8rxyQAW4Nh+0v4H2XNl/oVbjpuEVrI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1dzOW07sNH5Vz3YNvWBuomAN5dr3mmNVcyGSO4I7x26hLIy0erGnJvczIOZSpfeyn
-         Hx/K4CKEcGx+bw7Q3jCIR0bLo6RCXOKECnoC0BQe4/rgkbp50vHKqRiEI9a+NU9GIc
-         OlA4t5B+8ISx7/sKKw8Oh78aALOSeLPSz3SFomJw=
+        b=vKiqPs0sWTzzPsCL6ma7e89htPBKOuGNkHIp6r0/HNQENS1hafkoIpheoVRz8DJOV
+         UUkZWdi/2kt2VF0RUQiQG0biR2GlI69Sn242JZB5c+FH2xeZ2DTD9MZ0JENcgnAb2w
+         YKtuuEUzIJEz7Dx4f7Mq1YIwEbhUJo0scqkaNAH4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ning Li <ning.li@mediatek.com>,
-        Yunfei Wang <yf.wang@mediatek.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 211/244] iommu/io-pgtable-arm-v7s: Add a quirk to allow pgtable PA up to 35bit
+        stable@vger.kernel.org, Sandor Bodo-Merle <sbodomerle@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 038/158] net: bgmac: Fix a BUG triggered by wrong bytes_compl
 Date:   Tue, 23 Aug 2022 10:26:10 +0200
-Message-Id: <20220823080106.548904509@linuxfoundation.org>
+Message-Id: <20220823080047.604485109@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,217 +55,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Wang <yf.wang@mediatek.com>
+From: Sandor Bodo-Merle <sbodomerle@gmail.com>
 
-[ Upstream commit bfdd231374181254742c5e2faef0bef2d30c0ee4 ]
+commit 1b7680c6c1f6de9904f1d9b05c952f0c64a03350 upstream.
 
-Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
-cause pgtable PA size larger than 32bit.
+On one of our machines we got:
 
-Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
-so add a quirk to allow the PA of pgtables support up to bit35.
+kernel BUG at lib/dynamic_queue_limits.c:27!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+CPU: 0 PID: 1166 Comm: irq/41-bgmac Tainted: G        W  O    4.14.275-rt132 #1
+Hardware name: BRCM XGS iProc
+task: ee3415c0 task.stack: ee32a000
+PC is at dql_completed+0x168/0x178
+LR is at bgmac_poll+0x18c/0x6d8
+pc : [<c03b9430>]    lr : [<c04b5a18>]    psr: 800a0313
+sp : ee32be14  ip : 000005ea  fp : 00000bd4
+r10: ee558500  r9 : c0116298  r8 : 00000002
+r7 : 00000000  r6 : ef128810  r5 : 01993267  r4 : 01993851
+r3 : ee558000  r2 : 000070e1  r1 : 00000bd4  r0 : ee52c180
+Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 12c5387d  Table: 8e88c04a  DAC: 00000051
+Process irq/41-bgmac (pid: 1166, stack limit = 0xee32a210)
+Stack: (0xee32be14 to 0xee32c000)
+be00:                                              ee558520 ee52c100 ef128810
+be20: 00000000 00000002 c0116298 c04b5a18 00000000 c0a0c8c4 c0951780 00000040
+be40: c0701780 ee558500 ee55d520 ef05b340 ef6f9780 ee558520 00000001 00000040
+be60: ffffe000 c0a56878 ef6fa040 c0952040 0000012c c0528744 ef6f97b0 fffcfb6a
+be80: c0a04104 2eda8000 c0a0c4ec c0a0d368 ee32bf44 c0153534 ee32be98 ee32be98
+bea0: ee32bea0 ee32bea0 ee32bea8 ee32bea8 00000000 c01462e4 ffffe000 ef6f22a8
+bec0: ffffe000 00000008 ee32bee4 c0147430 ffffe000 c094a2a8 00000003 ffffe000
+bee0: c0a54528 00208040 0000000c c0a0c8c4 c0a65980 c0124d3c 00000008 ee558520
+bf00: c094a23c c0a02080 00000000 c07a9910 ef136970 ef136970 ee30a440 ef136900
+bf20: ee30a440 00000001 ef136900 ee30a440 c016d990 00000000 c0108db0 c012500c
+bf40: ef136900 c016da14 ee30a464 ffffe000 00000001 c016dd14 00000000 c016db28
+bf60: ffffe000 ee21a080 ee30a400 00000000 ee32a000 ee30a440 c016dbfc ee25fd70
+bf80: ee21a09c c013edcc ee32a000 ee30a400 c013ec7c 00000000 00000000 00000000
+bfa0: 00000000 00000000 00000000 c0108470 00000000 00000000 00000000 00000000
+bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+bfe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
+[<c03b9430>] (dql_completed) from [<c04b5a18>] (bgmac_poll+0x18c/0x6d8)
+[<c04b5a18>] (bgmac_poll) from [<c0528744>] (net_rx_action+0x1c4/0x494)
+[<c0528744>] (net_rx_action) from [<c0124d3c>] (do_current_softirqs+0x1ec/0x43c)
+[<c0124d3c>] (do_current_softirqs) from [<c012500c>] (__local_bh_enable+0x80/0x98)
+[<c012500c>] (__local_bh_enable) from [<c016da14>] (irq_forced_thread_fn+0x84/0x98)
+[<c016da14>] (irq_forced_thread_fn) from [<c016dd14>] (irq_thread+0x118/0x1c0)
+[<c016dd14>] (irq_thread) from [<c013edcc>] (kthread+0x150/0x158)
+[<c013edcc>] (kthread) from [<c0108470>] (ret_from_fork+0x14/0x24)
+Code: a83f15e0 0200001a 0630a0e1 c3ffffea (f201f0e7)
 
-Signed-off-by: Ning Li <ning.li@mediatek.com>
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Acked-by: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20220630092927.24925-2-yf.wang@mediatek.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The issue seems similar to commit 90b3b339364c ("net: hisilicon: Fix a BUG
+trigered by wrong bytes_compl") and potentially introduced by commit
+b38c83dd0866 ("bgmac: simplify tx ring index handling").
+
+If there is an RX interrupt between setting ring->end
+and netdev_sent_queue() we can hit the BUG_ON as bgmac_dma_tx_free()
+can miscalculate the queue size while called from bgmac_poll().
+
+The machine which triggered the BUG runs a v4.14 RT kernel - but the issue
+seems present in mainline too.
+
+Fixes: b38c83dd0866 ("bgmac: simplify tx ring index handling")
+Signed-off-by: Sandor Bodo-Merle <sbodomerle@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220808173939.193804-1-sbodomerle@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/io-pgtable-arm-v7s.c | 75 ++++++++++++++++++++++--------
- include/linux/io-pgtable.h         | 15 ++++--
- 2 files changed, 66 insertions(+), 24 deletions(-)
+ drivers/net/ethernet/broadcom/bgmac.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
-index be066c1503d3..ba3115fd0f86 100644
---- a/drivers/iommu/io-pgtable-arm-v7s.c
-+++ b/drivers/iommu/io-pgtable-arm-v7s.c
-@@ -182,14 +182,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
- 		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
- }
+--- a/drivers/net/ethernet/broadcom/bgmac.c
++++ b/drivers/net/ethernet/broadcom/bgmac.c
+@@ -189,8 +189,8 @@ static netdev_tx_t bgmac_dma_tx_add(stru
+ 	}
  
--static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
--				    struct io_pgtable_cfg *cfg)
-+static arm_v7s_iopte to_mtk_iopte(phys_addr_t paddr, arm_v7s_iopte pte)
- {
--	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
--
--	if (!arm_v7s_is_mtk_enabled(cfg))
--		return pte;
--
- 	if (paddr & BIT_ULL(32))
- 		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
- 	if (paddr & BIT_ULL(33))
-@@ -199,6 +193,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
- 	return pte;
- }
+ 	slot->skb = skb;
+-	ring->end += nr_frags + 1;
+ 	netdev_sent_queue(net_dev, skb->len);
++	ring->end += nr_frags + 1;
  
-+static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
-+				    struct io_pgtable_cfg *cfg)
-+{
-+	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
-+
-+	if (arm_v7s_is_mtk_enabled(cfg))
-+		return to_mtk_iopte(paddr, pte);
-+
-+	return pte;
-+}
-+
- static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
- 				  struct io_pgtable_cfg *cfg)
- {
-@@ -240,10 +245,17 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
- 	dma_addr_t dma;
- 	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
- 	void *table = NULL;
-+	gfp_t gfp_l1;
-+
-+	/*
-+	 * ARM_MTK_TTBR_EXT extend the translation table base support larger
-+	 * memory address.
-+	 */
-+	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-+		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
- 
- 	if (lvl == 1)
--		table = (void *)__get_free_pages(
--			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
-+		table = (void *)__get_free_pages(gfp_l1 | __GFP_ZERO, get_order(size));
- 	else if (lvl == 2)
- 		table = kmem_cache_zalloc(data->l2_tables, gfp);
- 
-@@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
- 		return NULL;
- 
- 	phys = virt_to_phys(table);
--	if (phys != (arm_v7s_iopte)phys) {
-+	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-+	    phys >= (1ULL << cfg->oas) : phys != (arm_v7s_iopte)phys) {
- 		/* Doesn't fit in PTE */
- 		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
- 		goto out_free;
-@@ -457,9 +470,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
- 					   arm_v7s_iopte curr,
- 					   struct io_pgtable_cfg *cfg)
- {
-+	phys_addr_t phys = virt_to_phys(table);
- 	arm_v7s_iopte old, new;
- 
--	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
-+	new = phys | ARM_V7S_PTE_TYPE_TABLE;
-+
-+	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-+		new = to_mtk_iopte(phys, new);
-+
- 	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
- 		new |= ARM_V7S_ATTR_NS_TABLE;
- 
-@@ -779,6 +797,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
- 						void *cookie)
- {
- 	struct arm_v7s_io_pgtable *data;
-+	slab_flags_t slab_flag;
-+	phys_addr_t paddr;
- 
- 	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
- 		return NULL;
-@@ -788,7 +808,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
- 
- 	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
- 			    IO_PGTABLE_QUIRK_NO_PERMS |
--			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
-+			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
-+			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
- 		return NULL;
- 
- 	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
-@@ -796,15 +817,27 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
- 	    !(cfg->quirks & IO_PGTABLE_QUIRK_NO_PERMS))
- 			return NULL;
- 
-+	if ((cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) &&
-+	    !arm_v7s_is_mtk_enabled(cfg))
-+		return NULL;
-+
- 	data = kmalloc(sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return NULL;
- 
- 	spin_lock_init(&data->split_lock);
-+
-+	/*
-+	 * ARM_MTK_TTBR_EXT extend the translation table base support larger
-+	 * memory address.
-+	 */
-+	slab_flag = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-+		    0 : ARM_V7S_TABLE_SLAB_FLAGS;
-+
- 	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
- 					    ARM_V7S_TABLE_SIZE(2, cfg),
- 					    ARM_V7S_TABLE_SIZE(2, cfg),
--					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
-+					    slab_flag, NULL);
- 	if (!data->l2_tables)
- 		goto out_free_data;
- 
-@@ -850,12 +883,16 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
  	wmb();
  
- 	/* TTBR */
--	cfg->arm_v7s_cfg.ttbr = virt_to_phys(data->pgd) | ARM_V7S_TTBR_S |
--				(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
--				 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
--				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
--				(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
--				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
-+	paddr = virt_to_phys(data->pgd);
-+	if (arm_v7s_is_mtk_enabled(cfg))
-+		cfg->arm_v7s_cfg.ttbr = paddr | upper_32_bits(paddr);
-+	else
-+		cfg->arm_v7s_cfg.ttbr = paddr | ARM_V7S_TTBR_S |
-+					(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
-+					 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
-+					 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
-+					(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
-+					 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
- 	return &data->iop;
- 
- out_free_data:
-diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
-index 86af6f0a00a2..ca98aeadcc80 100644
---- a/include/linux/io-pgtable.h
-+++ b/include/linux/io-pgtable.h
-@@ -74,17 +74,22 @@ struct io_pgtable_cfg {
- 	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
- 	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
- 	 *
-+	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
-+	 *	extend the translation table base support up to 35 bits PA, the
-+	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
-+	 *
- 	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
- 	 *	for use in the upper half of a split address space.
- 	 *
- 	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
- 	 *	attributes set in the TCR for a non-coherent page-table walker.
- 	 */
--	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
--	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
--	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
--	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
--	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
-+	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
-+	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
-+	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
-+	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
-+	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
-+	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
- 	unsigned long			quirks;
- 	unsigned long			pgsize_bitmap;
- 	unsigned int			ias;
--- 
-2.35.1
-
 
 

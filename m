@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3AF59D3FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 10:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B9759D6FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242664AbiHWIT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 04:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S243370AbiHWJO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242325AbiHWIPL (ORCPT
+        with ESMTP id S1349332AbiHWJLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 04:15:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C90D1EEEB;
-        Tue, 23 Aug 2022 01:10:03 -0700 (PDT)
+        Tue, 23 Aug 2022 05:11:30 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0835386C37;
+        Tue, 23 Aug 2022 01:31:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB05061284;
-        Tue, 23 Aug 2022 08:10:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98829C433C1;
-        Tue, 23 Aug 2022 08:10:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 09485CE1B34;
+        Tue, 23 Aug 2022 08:31:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D13C433C1;
+        Tue, 23 Aug 2022 08:31:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661242202;
-        bh=BrFXwbNfEskmHA1m12s7QDvxCiFqcliIkI/8VwguhzE=;
+        s=korg; t=1661243472;
+        bh=skXDE7HoEs1CM7r5+jZrhjl8BpmwHHmVvjU7vqHj44E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i48qIdq03Q0cOr5ui1Xelr0rkx76RorBsJsr67BvsUaBQrhJ9+zgrPCmdV6J5Xix0
-         yZCJFmSgvvrkeASvT9oEaEuPlpWouUTR4rkZLRsZX5bNJIPBBQ69l840H4v0Exk2IQ
-         S5h1R1KeuoZvr/mBbF74nvnbIZpvr03+bcSvB7xI=
+        b=GewB7pae6xuQCN6bM2E6RBHQfMhyuvQjVaRlbFJyaAc9ZOvV9GU8vxkfLsGdgS6QR
+         O1/NKMXPda+7o6aa/sCofl5b0U3cyPp5J3L83DoUYxF3WsRD2ti71oTe5ZJSIOtpWt
+         N5W2qydmL8P8eiJM00IPSo/bfFWTpXAU05rei7i8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.9 035/101] parisc: Fix device names in /proc/iomem
-Date:   Tue, 23 Aug 2022 10:03:08 +0200
-Message-Id: <20220823080035.921656131@linuxfoundation.org>
+        stable@vger.kernel.org, Dafna Hirschfeld <dhirschfeld@habana.ai>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 288/365] habanalabs: add terminating NULL to attrs arrays
+Date:   Tue, 23 Aug 2022 10:03:09 +0200
+Message-Id: <20220823080130.259653833@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
-References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080118.128342613@linuxfoundation.org>
+References: <20220823080118.128342613@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,45 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Dafna Hirschfeld <dhirschfeld@habana.ai>
 
-commit cab56b51ec0e69128909cef4650e1907248d821b upstream.
+[ Upstream commit 78d503087be190eab36290644ccec050135e7c70 ]
 
-Fix the output of /proc/iomem to show the real hardware device name
-including the pa_pathname, e.g. "Merlin 160 Core Centronics [8:16:0]".
-Up to now only the pa_pathname ("[8:16.0]") was shown.
+Arrays of struct attribute are expected to be NULL terminated.
+This is required by API methods such as device_add_groups.
+This fixes a crash when loading the driver for Goya device.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: <stable@vger.kernel.org> # v4.9+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Dafna Hirschfeld <dhirschfeld@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/kernel/drivers.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/misc/habanalabs/common/sysfs.c    | 2 ++
+ drivers/misc/habanalabs/gaudi/gaudi.c     | 1 +
+ drivers/misc/habanalabs/goya/goya_hwmgr.c | 2 ++
+ 3 files changed, 5 insertions(+)
 
---- a/arch/parisc/kernel/drivers.c
-+++ b/arch/parisc/kernel/drivers.c
-@@ -504,7 +504,6 @@ alloc_pa_dev(unsigned long hpa, struct h
- 	dev->id.hversion_rev = iodc_data[1] & 0x0f;
- 	dev->id.sversion = ((iodc_data[4] & 0x0f) << 16) |
- 			(iodc_data[5] << 8) | iodc_data[6];
--	dev->hpa.name = parisc_pathname(dev);
- 	dev->hpa.start = hpa;
- 	/* This is awkward.  The STI spec says that gfx devices may occupy
- 	 * 32MB or 64MB.  Unfortunately, we don't know how to tell whether
-@@ -518,10 +517,10 @@ alloc_pa_dev(unsigned long hpa, struct h
- 		dev->hpa.end = hpa + 0xfff;
- 	}
- 	dev->hpa.flags = IORESOURCE_MEM;
--	name = parisc_hardware_description(&dev->id);
--	if (name) {
--		strlcpy(dev->name, name, sizeof(dev->name));
--	}
-+	dev->hpa.name = dev->name;
-+	name = parisc_hardware_description(&dev->id) ? : "unknown";
-+	snprintf(dev->name, sizeof(dev->name), "%s [%s]",
-+		name, parisc_pathname(dev));
+diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
+index 9ebeb18ab85e..da8181068895 100644
+--- a/drivers/misc/habanalabs/common/sysfs.c
++++ b/drivers/misc/habanalabs/common/sysfs.c
+@@ -73,6 +73,7 @@ static DEVICE_ATTR_RO(clk_cur_freq_mhz);
+ static struct attribute *hl_dev_clk_attrs[] = {
+ 	&dev_attr_clk_max_freq_mhz.attr,
+ 	&dev_attr_clk_cur_freq_mhz.attr,
++	NULL,
+ };
  
- 	/* Silently fail things like mouse ports which are subsumed within
- 	 * the keyboard controller
+ static ssize_t vrm_ver_show(struct device *dev, struct device_attribute *attr, char *buf)
+@@ -93,6 +94,7 @@ static DEVICE_ATTR_RO(vrm_ver);
+ 
+ static struct attribute *hl_dev_vrm_attrs[] = {
+ 	&dev_attr_vrm_ver.attr,
++	NULL,
+ };
+ 
+ static ssize_t uboot_ver_show(struct device *dev, struct device_attribute *attr,
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index fba322241096..25d735aee6a3 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -9187,6 +9187,7 @@ static DEVICE_ATTR_RO(infineon_ver);
+ 
+ static struct attribute *gaudi_vrm_dev_attrs[] = {
+ 	&dev_attr_infineon_ver.attr,
++	NULL,
+ };
+ 
+ static void gaudi_add_device_attr(struct hl_device *hdev, struct attribute_group *dev_clk_attr_grp,
+diff --git a/drivers/misc/habanalabs/goya/goya_hwmgr.c b/drivers/misc/habanalabs/goya/goya_hwmgr.c
+index 6580fc6a486a..b595721751c1 100644
+--- a/drivers/misc/habanalabs/goya/goya_hwmgr.c
++++ b/drivers/misc/habanalabs/goya/goya_hwmgr.c
+@@ -359,6 +359,7 @@ static struct attribute *goya_clk_dev_attrs[] = {
+ 	&dev_attr_pm_mng_profile.attr,
+ 	&dev_attr_tpc_clk.attr,
+ 	&dev_attr_tpc_clk_curr.attr,
++	NULL,
+ };
+ 
+ static ssize_t infineon_ver_show(struct device *dev, struct device_attribute *attr, char *buf)
+@@ -375,6 +376,7 @@ static DEVICE_ATTR_RO(infineon_ver);
+ 
+ static struct attribute *goya_vrm_dev_attrs[] = {
+ 	&dev_attr_infineon_ver.attr,
++	NULL,
+ };
+ 
+ void goya_add_device_attr(struct hl_device *hdev, struct attribute_group *dev_clk_attr_grp,
+-- 
+2.35.1
+
 
 

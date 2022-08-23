@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F58659DD9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263DB59E04C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356840AbiHWKwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S1358917AbiHWLzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 07:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355775AbiHWKoS (ORCPT
+        with ESMTP id S243992AbiHWLwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:44:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49B7AB044;
-        Tue, 23 Aug 2022 02:10:29 -0700 (PDT)
+        Tue, 23 Aug 2022 07:52:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7242BD39B7;
+        Tue, 23 Aug 2022 02:32:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81870608D5;
-        Tue, 23 Aug 2022 09:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C53C433C1;
-        Tue, 23 Aug 2022 09:10:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F85161335;
+        Tue, 23 Aug 2022 09:32:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D38C433C1;
+        Tue, 23 Aug 2022 09:32:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245827;
-        bh=PQwFh3y1zqnoCjaqteSP56ZnA2D0ZUNmXY2D9oi4lEI=;
+        s=korg; t=1661247149;
+        bh=t5e8m7zUSZLlKDZ0aO+vYJnddTUtFWDaqH96W3GXM0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H/Tk5gZMTqvEqXGPHIc0S44svBVwcf52ATTIM3a8Vx0co5bCYkA2ScXTI2Zxwfq1g
-         ME1Ybx7VsSRPwd8sjNDxOTSNMcjeQ6sdhKHnp/IErsri9nw2c/9F9INmFTc7J7n+uq
-         qkJQZmiT8EwwNweOcR+kHAMY7YDcFKVbEVhFf1M0=
+        b=iD2PErDZXnNuDmrjtEVuvgKM6GnxT8noi6Jfn02dnyMF33631JsEkntEwqjh7eEGi
+         /DXRhKQzlHuVe4lCxgxk64qhVIIbhJ+wA6f+V4rOnE8hiQFS2+DLqe2NentXQUDIqb
+         PFdV+OEN6EIhLqwdy3FoTOfD0mbz83xmsxYGeQKo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhenpeng Lin <zplin@u.northwestern.edu>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Kamal Mostafa <kamal@canonical.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 201/287] net_sched: cls_route: remove from list when handle is 0
-Date:   Tue, 23 Aug 2022 10:26:10 +0200
-Message-Id: <20220823080107.633720163@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.4 293/389] can: ems_usb: fix clangs -Wunaligned-access warning
+Date:   Tue, 23 Aug 2022 10:26:11 +0200
+Message-Id: <20220823080127.791496032@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080100.268827165@linuxfoundation.org>
-References: <20220823080100.268827165@linuxfoundation.org>
+In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
+References: <20220823080115.331990024@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit 9ad36309e2719a884f946678e0296be10f0bb4c1 upstream.
+commit a4cb6e62ea4d36e53fb3c0f18ea4503d7b76674f upstream.
 
-When a route filter is replaced and the old filter has a 0 handle, the old
-one won't be removed from the hashtable, while it will still be freed.
+clang emits a -Wunaligned-access warning on struct __packed
+ems_cpc_msg.
 
-The test was there since before commit 1109c00547fc ("net: sched: RCU
-cls_route"), when a new filter was not allocated when there was an old one.
-The old filter was reused and the reinserting would only be necessary if an
-old filter was replaced. That was still wrong for the same case where the
-old handle was 0.
+The reason is that the anonymous union msg (not declared as packed) is
+being packed right after some non naturally aligned variables (3*8
+bits + 2*32) inside a packed struct:
 
-Remove the old filter from the list independently from its handle value.
+| struct __packed ems_cpc_msg {
+| 	u8 type;	/* type of message */
+| 	u8 length;	/* length of data within union 'msg' */
+| 	u8 msgid;	/* confirmation handle */
+| 	__le32 ts_sec;	/* timestamp in seconds */
+| 	__le32 ts_nsec;	/* timestamp in nano seconds */
+|	/* ^ not naturally aligned */
+|
+| 	union {
+| 	/* ^ not declared as packed */
+| 		u8 generic[64];
+| 		struct cpc_can_msg can_msg;
+| 		struct cpc_can_params can_params;
+| 		struct cpc_confirm confirmation;
+| 		struct cpc_overrun overrun;
+| 		struct cpc_can_error error;
+| 		struct cpc_can_err_counter err_counter;
+| 		u8 can_state;
+| 	} msg;
+| };
 
-This fixes CVE-2022-2588, also reported as ZDI-CAN-17440.
+Starting from LLVM 14, having an unpacked struct nested in a packed
+struct triggers a warning. c.f. [1].
 
-Reported-by: Zhenpeng Lin <zplin@u.northwestern.edu>
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Reviewed-by: Kamal Mostafa <kamal@canonical.com>
-Cc: <stable@vger.kernel.org>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Link: https://lore.kernel.org/r/20220809170518.164662-1-cascardo@canonical.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fix the warning by marking the anonymous union as packed.
+
+[1] https://github.com/llvm/llvm-project/issues/55520
+
+Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB interface")
+Link: https://lore.kernel.org/all/20220802094021.959858-1-mkl@pengutronix.de
+Cc: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+Cc: Sebastian Haas <haas@ems-wuensche.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/cls_route.c |    2 +-
+ drivers/net/can/usb/ems_usb.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/sched/cls_route.c
-+++ b/net/sched/cls_route.c
-@@ -528,7 +528,7 @@ static int route4_change(struct net *net
- 	rcu_assign_pointer(f->next, f1);
- 	rcu_assign_pointer(*fp, f);
+--- a/drivers/net/can/usb/ems_usb.c
++++ b/drivers/net/can/usb/ems_usb.c
+@@ -194,7 +194,7 @@ struct __packed ems_cpc_msg {
+ 	__le32 ts_sec;	/* timestamp in seconds */
+ 	__le32 ts_nsec;	/* timestamp in nano seconds */
  
--	if (fold && fold->handle && f->handle != fold->handle) {
-+	if (fold) {
- 		th = to_hash(fold->handle);
- 		h = from_hash(fold->handle >> 16);
- 		b = rtnl_dereference(head->table[th]);
+-	union {
++	union __packed {
+ 		u8 generic[64];
+ 		struct cpc_can_msg can_msg;
+ 		struct cpc_can_params can_params;
 
 

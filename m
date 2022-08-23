@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75B059D9A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACF359D9B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346836AbiHWJ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
+        id S245098AbiHWJ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346985AbiHWJzh (ORCPT
+        with ESMTP id S1351921AbiHWJ4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:55:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505689FAB6;
-        Tue, 23 Aug 2022 01:46:50 -0700 (PDT)
+        Tue, 23 Aug 2022 05:56:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646A8A0243;
+        Tue, 23 Aug 2022 01:47:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18BA161485;
-        Tue, 23 Aug 2022 08:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21ADFC433D6;
-        Tue, 23 Aug 2022 08:46:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB304B81C28;
+        Tue, 23 Aug 2022 08:46:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51856C433D6;
+        Tue, 23 Aug 2022 08:46:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244408;
-        bh=hKuHHiLafn/QwQz1nmKb0m+Sc2+ysGzFRZNdqguwTrI=;
+        s=korg; t=1661244414;
+        bh=UvjwmRJ+Iy/3UibiCRCyZWexNjPggbBD70mBSvpah3g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lEq/DUBlLJs/KwS4ScFSMuWmSgWf8lZyUfDcKVcBmcVbvJiRb4vl5W2qpct0F57hq
-         /mrPyDUjBxwOjrlLyw2s3r6FMBVMEy+WVk96AOCQdMHHJjWX9hkV55TKgqxU6/Rrmh
-         0eP+pJb+kqQcE5donPW1feJcKUioVip6KwEul09Y=
+        b=Cch7YNp0T0TL1qwWTO2jQXngLa0XirO+TvBjGM0AV1Hhs2jWlo9i7Ezxrj7PgSraa
+         qoBHl6stNoNAfitU49efz1Gu+5OM/kk0xkXKbJ8mrmL5d7R5o//TnEbA6CBUeWgEg3
+         FwZSQtZe5blEGkapCVdai+fm7QxgmmDlIcwdHTAM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 133/229] s390/zcore: fix race when reading from hardware system area
-Date:   Tue, 23 Aug 2022 10:24:54 +0200
-Message-Id: <20220823080058.454139478@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 134/229] video: fbdev: amba-clcd: Fix refcount leak bugs
+Date:   Tue, 23 Aug 2022 10:24:55 +0200
+Message-Id: <20220823080058.486095665@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
 References: <20220823080053.202747790@linuxfoundation.org>
@@ -57,82 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 9ffed254d938c9e99eb7761c7f739294c84e0367 ]
+[ Upstream commit 26c2b7d9fac42eb8317f3ceefa4c1a9a9170ca69 ]
 
-Memory buffer used for reading out data from hardware system
-area is not protected against concurrent access.
+In clcdfb_of_init_display(), we should call of_node_put() for the
+references returned by of_graph_get_next_endpoint() and
+of_graph_get_remote_port_parent() which have increased the refcount.
 
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Fixes: 411ed3225733 ("[S390] zfcpdump support.")
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-Link: https://lore.kernel.org/r/e68137f0f9a0d2558f37becc20af18e2939934f6.1658206891.git.agordeev@linux.ibm.com
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Besides, we should call of_node_put() both in fail path or when
+the references are not used anymore.
+
+Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/s390/char/zcore.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/video/fbdev/amba-clcd.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/s390/char/zcore.c b/drivers/s390/char/zcore.c
-index aaed778f67c4..9748ef463233 100644
---- a/drivers/s390/char/zcore.c
-+++ b/drivers/s390/char/zcore.c
-@@ -53,6 +53,7 @@ static struct dentry *zcore_reipl_file;
- static struct dentry *zcore_hsa_file;
- static struct ipl_parameter_block *ipl_block;
+diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
+index 66c7d766e330..6e9c40cd820d 100644
+--- a/drivers/video/fbdev/amba-clcd.c
++++ b/drivers/video/fbdev/amba-clcd.c
+@@ -772,8 +772,10 @@ static int clcdfb_of_init_display(struct clcd_fb *fb)
+ 		return -ENODEV;
  
-+static DEFINE_MUTEX(hsa_buf_mutex);
- static char hsa_buf[PAGE_SIZE] __aligned(PAGE_SIZE);
+ 	panel = of_graph_get_remote_port_parent(endpoint);
+-	if (!panel)
+-		return -ENODEV;
++	if (!panel) {
++		err = -ENODEV;
++		goto out_endpoint_put;
++	}
  
- /*
-@@ -69,19 +70,24 @@ int memcpy_hsa_user(void __user *dest, unsigned long src, size_t count)
- 	if (!hsa_available)
- 		return -ENODATA;
+ 	if (fb->vendor->init_panel) {
+ 		err = fb->vendor->init_panel(fb, panel);
+@@ -783,11 +785,11 @@ static int clcdfb_of_init_display(struct clcd_fb *fb)
  
-+	mutex_lock(&hsa_buf_mutex);
- 	while (count) {
- 		if (sclp_sdias_copy(hsa_buf, src / PAGE_SIZE + 2, 1)) {
- 			TRACE("sclp_sdias_copy() failed\n");
-+			mutex_unlock(&hsa_buf_mutex);
- 			return -EIO;
- 		}
- 		offset = src % PAGE_SIZE;
- 		bytes = min(PAGE_SIZE - offset, count);
--		if (copy_to_user(dest, hsa_buf + offset, bytes))
-+		if (copy_to_user(dest, hsa_buf + offset, bytes)) {
-+			mutex_unlock(&hsa_buf_mutex);
- 			return -EFAULT;
-+		}
- 		src += bytes;
- 		dest += bytes;
- 		count -= bytes;
- 	}
-+	mutex_unlock(&hsa_buf_mutex);
- 	return 0;
+ 	err = clcdfb_of_get_backlight(panel, fb->panel);
+ 	if (err)
+-		return err;
++		goto out_panel_put;
+ 
+ 	err = clcdfb_of_get_mode(&fb->dev->dev, panel, fb->panel);
+ 	if (err)
+-		return err;
++		goto out_panel_put;
+ 
+ 	err = of_property_read_u32(fb->dev->dev.of_node, "max-memory-bandwidth",
+ 			&max_bandwidth);
+@@ -816,11 +818,21 @@ static int clcdfb_of_init_display(struct clcd_fb *fb)
+ 
+ 	if (of_property_read_u32_array(endpoint,
+ 			"arm,pl11x,tft-r0g0b0-pads",
+-			tft_r0b0g0, ARRAY_SIZE(tft_r0b0g0)) != 0)
+-		return -ENOENT;
++			tft_r0b0g0, ARRAY_SIZE(tft_r0b0g0)) != 0) {
++		err = -ENOENT;
++		goto out_panel_put;
++	}
++
++	of_node_put(panel);
++	of_node_put(endpoint);
+ 
+ 	return clcdfb_of_init_tft_panel(fb, tft_r0b0g0[0],
+ 					tft_r0b0g0[1],  tft_r0b0g0[2]);
++out_panel_put:
++	of_node_put(panel);
++out_endpoint_put:
++	of_node_put(endpoint);
++	return err;
  }
  
-@@ -99,9 +105,11 @@ int memcpy_hsa_kernel(void *dest, unsigned long src, size_t count)
- 	if (!hsa_available)
- 		return -ENODATA;
- 
-+	mutex_lock(&hsa_buf_mutex);
- 	while (count) {
- 		if (sclp_sdias_copy(hsa_buf, src / PAGE_SIZE + 2, 1)) {
- 			TRACE("sclp_sdias_copy() failed\n");
-+			mutex_unlock(&hsa_buf_mutex);
- 			return -EIO;
- 		}
- 		offset = src % PAGE_SIZE;
-@@ -111,6 +119,7 @@ int memcpy_hsa_kernel(void *dest, unsigned long src, size_t count)
- 		dest += bytes;
- 		count -= bytes;
- 	}
-+	mutex_unlock(&hsa_buf_mutex);
- 	return 0;
- }
- 
+ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2EA59D6F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70E059D776
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 11:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbiHWJzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S1346705AbiHWJpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240126AbiHWJvo (ORCPT
+        with ESMTP id S1351943AbiHWJkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:51:44 -0400
+        Tue, 23 Aug 2022 05:40:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D746E2E8;
-        Tue, 23 Aug 2022 01:46:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC187960E;
+        Tue, 23 Aug 2022 01:41:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81326B81C39;
-        Tue, 23 Aug 2022 08:46:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45F7C433D6;
-        Tue, 23 Aug 2022 08:46:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71C4BB81C3E;
+        Tue, 23 Aug 2022 08:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C917BC433C1;
+        Tue, 23 Aug 2022 08:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244363;
-        bh=bBnAC7qyUS/FWZNSAMQLXtwhOege26wsptCan8PXqi8=;
+        s=korg; t=1661244059;
+        bh=DPuyn0vXH02KiwaX6fibOkAwgcLn6wDShe4JqCjHAHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oZddiK43ueX4dx/aZUTvKOtgtOllbKTZ1Q8Kdt5yt2AyMq5zfSw6xB1psz/5UJZeW
-         HSHyA7zd1rvN1zlgm3QYXcTIsqN/R6cs8GD/0gvqNt+XWJ2n8DskAslJ1Eshdtqkhh
-         /dUX8RhijKbPQjLJ+P2hXHzaTxA0WRUVZAqnckPk=
+        b=KU3cAjPhLcF88hRRiAgE2Q7FBDie9qxf5I3I4SW33LA5d7bcOg8P+YZkQejrOHxJJ
+         qYAWexziG19ZTcx3/eteaNbYC8B7ZkAyARbr0ddsPUWDGEy+FrlMX84/VOgWdsRxjl
+         HlZksYaB3YD/HDtqzn8f8ph5VUAdPFYL022IZX1s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Florian Westphal <fw@strlen.de>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 079/244] plip: avoid rcu debug splat
-Date:   Tue, 23 Aug 2022 10:23:58 +0200
-Message-Id: <20220823080101.686057284@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 080/229] can: rcar_can: do not report txerr and rxerr during bus-off
+Date:   Tue, 23 Aug 2022 10:24:01 +0200
+Message-Id: <20220823080056.577409346@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+References: <20220823080053.202747790@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-commit bc3c8fe3c79bcdae4d90e3726054fac5cca8ac32 upstream.
+[ Upstream commit a37b7245e831a641df360ca41db6a71c023d3746 ]
 
-WARNING: suspicious RCU usage
-5.2.0-rc2-00605-g2638eb8b50cfc #1 Not tainted
-drivers/net/plip/plip.c:1110 suspicious rcu_dereference_check() usage!
+During bus off, the error count is greater than 255 and can not fit in
+a u8.
 
-plip_open is called with RTNL held, switch to the correct helper.
-
-Fixes: 2638eb8b50cf ("net: ipv4: provide __rcu annotation for ifa_list")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Link: https://lore.kernel.org/r/20220807115304.13257-1-fw@strlen.de
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fd1159318e55 ("can: add Renesas R-Car CAN driver")
+Link: https://lore.kernel.org/all/20220719143550.3681-3-mailhol.vincent@wanadoo.fr
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/plip/plip.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/rcar/rcar_can.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/net/plip/plip.c
-+++ b/drivers/net/plip/plip.c
-@@ -1107,7 +1107,7 @@ plip_open(struct net_device *dev)
- 		/* Any address will do - we take the first. We already
- 		   have the first two bytes filled with 0xfc, from
- 		   plip_init_dev(). */
--		const struct in_ifaddr *ifa = rcu_dereference(in_dev->ifa_list);
-+		const struct in_ifaddr *ifa = rtnl_dereference(in_dev->ifa_list);
- 		if (ifa != NULL) {
- 			memcpy(dev->dev_addr+2, &ifa->ifa_local, 4);
- 		}
+diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
+index 963da8eda168..0156c18d5a2d 100644
+--- a/drivers/net/can/rcar/rcar_can.c
++++ b/drivers/net/can/rcar/rcar_can.c
+@@ -233,11 +233,8 @@ static void rcar_can_error(struct net_device *ndev)
+ 	if (eifr & (RCAR_CAN_EIFR_EWIF | RCAR_CAN_EIFR_EPIF)) {
+ 		txerr = readb(&priv->regs->tecr);
+ 		rxerr = readb(&priv->regs->recr);
+-		if (skb) {
++		if (skb)
+ 			cf->can_id |= CAN_ERR_CRTL;
+-			cf->data[6] = txerr;
+-			cf->data[7] = rxerr;
+-		}
+ 	}
+ 	if (eifr & RCAR_CAN_EIFR_BEIF) {
+ 		int rx_errors = 0, tx_errors = 0;
+@@ -337,6 +334,9 @@ static void rcar_can_error(struct net_device *ndev)
+ 		can_bus_off(ndev);
+ 		if (skb)
+ 			cf->can_id |= CAN_ERR_BUSOFF;
++	} else if (skb) {
++		cf->data[6] = txerr;
++		cf->data[7] = rxerr;
+ 	}
+ 	if (eifr & RCAR_CAN_EIFR_ORIF) {
+ 		netdev_dbg(priv->ndev, "Receive overrun error interrupt\n");
+-- 
+2.35.1
+
 
 

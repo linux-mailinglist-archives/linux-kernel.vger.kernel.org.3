@@ -2,211 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFEE59D824
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC3A59D9A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 12:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240676AbiHWJyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 05:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
+        id S1346083AbiHWJ6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 05:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352405AbiHWJvm (ORCPT
+        with ESMTP id S240930AbiHWJyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 05:51:42 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32CE9F0C0;
-        Tue, 23 Aug 2022 01:45:47 -0700 (PDT)
-Received: from [10.3.2.13] (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF4B5660035D;
-        Tue, 23 Aug 2022 09:45:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661244303;
-        bh=MB2Qk+RxUws0IOBMaJlk3RN6WN03sqbEJpsq6QhTiEM=;
-        h=Date:Subject:From:To:References:Cc:In-Reply-To:From;
-        b=WqIfcZKyImmTfB1AChHEp/cNhSy5VfGIwKlqyu4BjRlo31mlsYSLXy73lgbbDuQ6d
-         m/ScKTpMI7l932ttZBnbj5ChU9vo799g3Fx4ZTqle5C11uniuCIMrGHsePZW50eoBp
-         Q7Z+fTKI2fNlset1cpqhGiQN8bGmhqWs/wqyDgQu8QvmADPSDLU9wrmVMluwxvyl3W
-         KVCEbcJDb785SthcHCYLwN7HRWrGB3sipx47623NWwHjedJ3GR/dH+gXMOqpCL2Kh3
-         iHWTIEmzNLlQIWLy7AlD/wHCyVSTJvHjHUh+0dvqxmaWOn4gnEkobPC1Mzdr/RQ1eJ
-         uZFHfCH4XdQlw==
-Message-ID: <c9ba2629-fc81-cefd-0d6d-991084781ec3@collabora.com>
-Date:   Tue, 23 Aug 2022 11:45:00 +0300
+        Tue, 23 Aug 2022 05:54:11 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5369F76F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:46:25 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id m5so8063403lfj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 01:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=mDJdLmDh7T+sgYfQaoB0rv3PTQp6t8v++tQo3R9rjBM=;
+        b=PJmCi3gmqXBwu9NZSuf1sX/qLu5JNkaEDtHWybkWrrJYNlTb7SLUl2kh2pPknLCNVo
+         kigefusDwBu8bJtOXBYCGAoZQrjxJ8TkWevNSro1LAy2tqwz/mpLnS3J+RgEwx+60sqF
+         MCo+Rp+DD6zUB5Y2PB/g5372dnqsc/RDpQPt4qLvRhF6PWs8MvW0bvLHpupMhiZyVAqT
+         xvYBti5u6pj3myvEQAbKLE3n4nONKgccg/9nG+JhhRb4MrITU8q2RgqpogSV7z9QckSU
+         YUBHuV6Obk2RTQ/ULm1FXQu+twOTmlzHwVv5bQWIZLkf1e5FaUnnhbvsmMr8pdBvO3G1
+         eDKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=mDJdLmDh7T+sgYfQaoB0rv3PTQp6t8v++tQo3R9rjBM=;
+        b=zr9A02RO3pDzhToOIOKRnqrI5gzmL14LNG24h0htEaIR69TogEdX8O1pXyOqTa66E0
+         iCPlrHvaVxeP8P8c+eu8gnjmw3sMjsRgy3/wxo+0mt0deiDATpAzZUE8uurGn98z6fT1
+         H3/YE9eE+tDwJ2ow2jp9SOjbKK18yGwkfUUvAot/n/R0TfF9i1ZF2vNdW3sQVGbCLMgf
+         1o9wurP6cXz60VtaKzLvrEAAcRqWmgh5yEhkxyZHFnod5Ks+ePeXtrkE8RUzmXZRx0Fe
+         t2VoIxayur2Ty0bNaLJ3HCdoTKWasRViRkvu4nDUpFgA4HOKCiiW6LyBF2bfZk350+9F
+         w0HA==
+X-Gm-Message-State: ACgBeo3s1BghZ8E7FuBe4ApgFRfJmJdbzRtiBW1e9beUKjWc67KktWSV
+        AIuA0DCH6P1bQrUBj3UdIloMnQ==
+X-Google-Smtp-Source: AA6agR7Nq2AoAEGywDXYOyXtRoPVy5JyJcqHXZSpTRIDEZdX/31PgBVnoMZTmlWLvkRo+uqS17BH0Q==
+X-Received: by 2002:a05:6512:169e:b0:492:ebf7:7dd3 with SMTP id bu30-20020a056512169e00b00492ebf77dd3mr2420124lfb.33.1661244372109;
+        Tue, 23 Aug 2022 01:46:12 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05651203f400b0048a85bd4429sm1097971lfq.126.2022.08.23.01.46.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 01:46:10 -0700 (PDT)
+Message-ID: <ddb805c6-940b-d25f-9fca-380d70f9f1f3@linaro.org>
+Date:   Tue, 23 Aug 2022 11:46:09 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
+Subject: Re: [PATCH v2 3/4] arm64: dts: allwinner: h6: Add GPU OPP table
 Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "wsa@kernel.org" <wsa@kernel.org>
-References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
- <20220819122313.40445-2-akhilrajeev@nvidia.com>
- <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
- <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
- <SJ1PR12MB6339FC1F82EB1BB7417E533BC0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <ebb0764f-db92-d69d-49ac-151f4e3e0b8a@collabora.com>
- <SJ1PR12MB63396DC508F63807F1CE9901C0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <fac10841-1682-845f-3e4a-5668f59caed0@gmail.com>
- <cd0374f1-2c05-7e61-7187-cfc9c42edf63@gmail.com>
- <SJ1PR12MB63397BBD4EF314A742680F2CC0709@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <a7ba27c4-992b-28d1-f6c2-3937b4f275ce@collabora.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>
-In-Reply-To: <a7ba27c4-992b-28d1-f6c2-3937b4f275ce@collabora.com>
+To:     =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220821173051.155038-1-peron.clem@gmail.com>
+ <20220821173051.155038-4-peron.clem@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220821173051.155038-4-peron.clem@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 11:39, Dmitry Osipenko wrote:
-> On 8/23/22 08:17, Akhil R wrote:
->>> 22.08.2022 23:33, Dmitry Osipenko пишет:
->>>> 22.08.2022 13:29, Akhil R пишет:
->>>>>> On 8/22/22 09:56, Akhil R wrote:
->>>>>>>> 19.08.2022 18:15, Dmitry Osipenko пишет:
->>>>>>>>> 19.08.2022 15:23, Akhil R пишет:
->>>>>>>>>>      if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
->>>>>>>>>>              i2c_dev->is_vi = true;
->>>>>>>>>> +    else
->>>>>>>>>> +            i2c_dev->dma_support = !!(of_find_property(np, "dmas",
->>>>>>>>>> + NULL));
->>>>>>>>>
->>>>>>>>> 1. You leak the np returned by of_find_property().
->>>>>>>>>
->>>>>>>>> 2. There is device_property_read_bool() for this kind of
->>>>>>>>> property-exists checks.
->>>>>>> Okay. I went by the implementation in of_dma_request_slave_channel() to
->>>>>>> check 'dmas'.
->>>>>>>
->>>>>>>>>
->>>>>>>>> 3. If "dmas" is missing in DT, then dma_request_chan() should return
->>>>>>>>> NULL and everything will work fine. I suppose you haven't tried to
->>>>>>>>> test this code.
->>>>>>>>
->>>>>>>> Although, no. It should return ERR_PTR(-ENODEV) and then you should
->>> check
->>>>>>>> the return code.
->>>>>>> Yes. Agree that it is more agnostic to check for ERR_PTR(-ENODEV). But
->>> since I
->>>>>>> call tegra_init_dma() for every large transfer until DMA is initialized,
->>> wouldn't
->>>>>>> it be better to have a flag inside the driver so that we do not have to go
->>>>>> through
->>>>>>> so many functions for every attempted DMA transaction to find out that
->>> the
->>>>>> DT
->>>>>>> properties don't exist?
->>>>>>>
->>>>>>> Shall I just put i2c_dev->dma_support = true here since DMA is supported
->>> by
->>>>>>> hardware? It would turn false if dma_request_chan() returns something
->>> other
->>>>>>> than -EPROBE_DEFER.
->>>>>>>
->>>>>>>       if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
->>>>>>>               i2c_dev->is_vi = true;
->>>>>>>  +    else
->>>>>>>  +            i2c_dev->dma_support = true;
->>>>>>
->>>>>> The code already has dma_mode for that. I don't see why another variable
->>>>>> is needed.
->>>>>>
->>>>>> Either add new generic dma_request_chan_optional() that will return NULL
->>>>>> if channel is not available and make Tegra I2C driver to use it, or
->>>>>> handle the error code returned by dma_request_chan().
->>>>>
->>>>> Let me elaborate my thoughts.
->>>>>
->>>>> The function tegra_i2c_init_dma() is also called inside tegra_i2c_xfer_msg() if
->>>>> DMA is not initialized before, i.e. if (!i2c_dev->dma_buf).
->>>>
->>>> This is not true
->>>>
->>>> i2c_dev->dma_mode=false if !i2c_dev->dma_buf and that's it
->>>>
->>>> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/i2c/busses/i2c-
->>> tegra.c#L1253
->>>>
->>>> tegra_i2c_init_dma() is invoked only during probe
->>>>
->>>>> So, if suppose there is no DT entry for dmas, the driver would have to go take
->>> the
->>>>> path tegra_i2c_init_dma() -> dma_request_chan() -> of_*() apis -> ... and
->>> then figure
->>>>> out that DMA is not supported. This would happen for each transfer of size
->>> larger than
->>>>> I2C_PIO_MODE_PREFERRED_LEN.
->>>>>
->>>>> To avoid this, I am looking for a variable/flag which can indicate if the driver
->>> should attempt
->>>>> to configure DMA or not. I didn't quite get the idea if dma_mode can be
->>> extended to support
->>>>> this, because it is updated based on xfer_size on each transfer. My idea of
->>> i2c_dev->dma_support
->>>>> is that it will be constant after the probe().
->>>
->>> I see now that it's you added tegra_i2c_init_dma() to
->>> tegra_i2c_xfer_msg(). And tegra_i2c_init_dma() already falls back to PIO
->>> if DMA is unavailable.
->>>
->>> I don't remember why !IS_ENABLED(CONFIG_TEGRA20_APB_DMA) was added
->>> to
->>> tegra_i2c_init_dma(), but if dma_request_chan() returns -EPROBE_DEFER
->>> when there is no DMA channel available at all, then you should fix it.
->>>
->>> Trying to initialize DMA during transfer if it failed to initialize
->>> during probe is a wrong approach. DMA must be initialized only once
->>> during probe. Please make the probe to work properly.
->>
->> What I am trying for is to have a mechanism that doesn't halt the i2c transfers
->> till DMA is available. Also, I do not want to drop DMA because it was unavailable
->> during probe().
+On 21/08/2022 20:30, Clément Péron wrote:
+> Add an Operating Performance Points table for the GPU to
+> enable Dynamic Voltage & Frequency Scaling on the H6.
 > 
-> Why is it unavailable? Sounds like you're not packaging kernel properly.
+> The voltage range is set with minival voltage set to the target
+> and the maximal voltage set to 1.2V. This allow DVFS framework to
+> work properly on board with fixed regulator.
 > 
->> This situation is sure to hit if we have I2C driver as built in and DMA driver as a 
->> module. In such cases, I2C will never be able to use the DMA.
+> Signed-off-by: Clément Péron <peron.clem@gmail.com>
+> ---
+>  .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 88 +++++++++++++++++++
+>  1 file changed, 88 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
 > 
-> For Tegra I2C built-in + DMA driver module you should add the dma.ko to
-> initramfs and then it will work. This is a common practice for many
-> kernel drivers.
-> 
-> It's also similar to a problem with firmware files that must be
-> available to drivers during boot,
-> 
->> Another option I thought about was to request and free DMA channel for each
->> transfer, which many serial drivers already do. But I am a bit anxious if that will
->> increase the latency of transfer.
-> 
-> Perhaps all you need to do is to add MODULE_SOFTDEP to Tegra I2C driver
-> like we did it for the EMC driver [1].
-> 
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=14b43c20c283de36131da0cb44f3170b9ffa7630
-> 
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+> new file mode 100644
+> index 000000000000..a66204243515
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+> @@ -0,0 +1,88 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +// Copyright (C) 2022 Clément Péron <peron.clem@gmail.com>
+> +
+> +/ {
+> +	gpu_opp_table: gpu-opp-table {
 
-Although, probably MODULE_SOFTDEP won't work for a built-in driver. In
-that case, change Tegra I2C kconfig to depend on the DMA driver.
+I don't think you tested the change with dtbs_check. This does not match
+the bindings.
 
--- 
+> +		compatible = "operating-points-v2";
+> +
+> +		opp@216000000 {
+> +			opp-hz = /bits/ 64 <216000000>;
+> +			opp-microvolt = <810000 810000 1200000>;
+> +		};
+> +
+> +		opp@264000000 {
+> +			opp-hz = /bits/ 64 <264000000>;
+> +			opp-microvolt = <810000 810000 1200000>;
+> +		};
+> +
+> +		opp@312000000 {
+> +			opp-hz = /bits/ 64 <312000000>;
+> +			opp-microvolt = <810000 810000 1200000>;
+> +		};
+> +
+> +		opp@336000000 {
+> +			opp-hz = /bits/ 64 <336000000>;
+> +			opp-microvolt = <810000 810000 1200000>;
+> +		};
+> +
+> +		opp@360000000 {
+> +			opp-hz = /bits/ 64 <360000000>;
+> +			opp-microvolt = <820000 820000 1200000>;
+> +		};
+> +
+> +		opp@384000000 {
+> +			opp-hz = /bits/ 64 <384000000>;
+> +			opp-microvolt = <830000 830000 1200000>;
+> +		};
+> +
+> +		opp@408000000 {
+> +			opp-hz = /bits/ 64 <408000000>;
+> +			opp-microvolt = <840000 840000 1200000>;
+> +		};
+> +
+> +		opp@420000000 {
+> +			opp-hz = /bits/ 64 <420000000>;
+> +			opp-microvolt = <850000 850000 1200000>;
+> +		};
+> +
+> +		opp@432000000 {
+> +			opp-hz = /bits/ 64 <432000000>;
+> +			opp-microvolt = <860000 860000 1200000>;
+> +		};
+> +
+> +		opp@456000000 {
+> +			opp-hz = /bits/ 64 <456000000>;
+> +			opp-microvolt = <870000 870000 1200000>;
+> +		};
+> +
+> +		opp@504000000 {
+> +			opp-hz = /bits/ 64 <504000000>;
+> +			opp-microvolt = <890000 890000 1200000>;
+> +		};
+> +
+> +		opp@540000000 {
+> +			opp-hz = /bits/ 64 <540000000>;
+> +			opp-microvolt = <910000 910000 1200000>;
+> +		};
+> +
+> +		opp@576000000 {
+> +			opp-hz = /bits/ 64 <576000000>;
+> +			opp-microvolt = <930000 930000 1200000>;
+> +		};
+> +
+> +		opp@624000000 {
+> +			opp-hz = /bits/ 64 <624000000>;
+> +			opp-microvolt = <950000 950000 1200000>;
+> +		};
+> +
+> +		opp@756000000 {
+> +			opp-hz = /bits/ 64 <756000000>;
+> +			opp-microvolt = <1040000 1040000 1200000>;
+> +		};
+> +	};
+> +
+
+No need for such blank lines.
+
+
 Best regards,
-Dmitry
+Krzysztof

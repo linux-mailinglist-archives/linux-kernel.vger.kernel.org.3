@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653A459DBDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0675759DEE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355282AbiHWKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 06:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S1359160AbiHWMDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 08:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353440AbiHWKL3 (ORCPT
+        with ESMTP id S1359563AbiHWMBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 06:11:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67237F088;
-        Tue, 23 Aug 2022 01:56:46 -0700 (PDT)
+        Tue, 23 Aug 2022 08:01:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E31678591;
+        Tue, 23 Aug 2022 02:36:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83AA7614E7;
-        Tue, 23 Aug 2022 08:56:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84157C433D6;
-        Tue, 23 Aug 2022 08:56:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B007AB81C63;
+        Tue, 23 Aug 2022 09:36:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1104EC433C1;
+        Tue, 23 Aug 2022 09:36:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661245005;
-        bh=XpSNX1f32Q6TMFam1wAor2QPc0RbNk2vlmC0HXRK4HU=;
+        s=korg; t=1661247367;
+        bh=QQ3eWDx/UzEsjdEWteiakKgZ4UiJlFvdIgg8vViaTng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vyAYj4fR39pmAuInkNtnIeIZwrkwR+1z2qlq2m0dKDyo7pdzISZQmipq4qo544PU7
-         JQQc5sDn+hNF44zV8TdNMhNFr/icmqdmDJje29F/FYRA0XmIlPKKe8D5GwoIXmXAiX
-         KI2EOhG6ZSxgqSCBd1sUqwIezsAFDO9Go38pEEMo=
+        b=LhqUufxuA7fMjWcOBErhSmnoukzafkOpfxEmnfsfJN/Pd6nzIAJjxlCNqtLKv7e7w
+         0xfVJf8FouLmxpKybZHgXpA4UwZ3T1lovP8l3Vv1vClLN06UYE6UqUwRtgNChrnQhl
+         dh+Nn4HGd9xZi5xtc7+NL6ehyUukKxruiMM67F1Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 187/244] habanalabs/gaudi: mask constant value before cast
+        stable@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>
+Subject: [PATCH 5.10 014/158] apparmor: fix absroot causing audited secids to begin with =
 Date:   Tue, 23 Aug 2022 10:25:46 +0200
-Message-Id: <20220823080105.602580987@linuxfoundation.org>
+Message-Id: <20220823080046.648897715@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oded Gabbay <ogabbay@kernel.org>
+From: John Johansen <john.johansen@canonical.com>
 
-[ Upstream commit e3f49437a2e0221a387ecd192d742ae1434e1e3a ]
+commit 511f7b5b835726e844a5fc7444c18e4b8672edfd upstream.
 
-This fixes a sparse warning of
-"cast truncates bits from constant value"
+AppArmor is prefixing secids that are converted to secctx with the =
+to indicate the secctx should only be parsed from an absolute root
+POV. This allows catching errors where secctx are reparsed back into
+internal labels.
 
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Unfortunately because audit is using secid to secctx conversion this
+means that subject and object labels can result in a very unfortunate
+== that can break audit parsing.
+
+eg. the subj==unconfined term in the below audit message
+
+type=USER_LOGIN msg=audit(1639443365.233:160): pid=1633 uid=0 auid=1000
+ses=3 subj==unconfined msg='op=login id=1000 exe="/usr/sbin/sshd"
+hostname=192.168.122.1 addr=192.168.122.1 terminal=/dev/pts/1 res=success'
+
+Fix this by switch the prepending of = to a _. This still works as a
+special character to flag this case without breaking audit. Also move
+this check behind debug as it should not be needed during normal
+operqation.
+
+Fixes: 26b7899510ae ("apparmor: add support for absolute root view based labels")
+Reported-by: Casey Schaufler <casey@schaufler-ca.com>
+Signed-off-by: John Johansen <john.johansen@canonical.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/misc/habanalabs/gaudi/gaudi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ security/apparmor/include/lib.h |    5 +++++
+ security/apparmor/label.c       |    7 ++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 801acab048eb..8132200dca67 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -3318,19 +3318,19 @@ static void gaudi_init_nic_qman(struct hl_device *hdev, u32 nic_offset,
- 	u32 nic_qm_err_cfg, irq_handler_offset;
- 	u32 q_off;
+--- a/security/apparmor/include/lib.h
++++ b/security/apparmor/include/lib.h
+@@ -22,6 +22,11 @@
+  */
  
--	mtr_base_en_lo = lower_32_bits(CFG_BASE +
-+	mtr_base_en_lo = lower_32_bits((CFG_BASE & U32_MAX) +
- 			mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
- 	mtr_base_en_hi = upper_32_bits(CFG_BASE +
- 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
--	so_base_en_lo = lower_32_bits(CFG_BASE +
-+	so_base_en_lo = lower_32_bits((CFG_BASE & U32_MAX) +
- 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_SOB_OBJ_0);
- 	so_base_en_hi = upper_32_bits(CFG_BASE +
- 				mmSYNC_MNGR_E_N_SYNC_MNGR_OBJS_SOB_OBJ_0);
--	mtr_base_ws_lo = lower_32_bits(CFG_BASE +
-+	mtr_base_ws_lo = lower_32_bits((CFG_BASE & U32_MAX) +
- 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
- 	mtr_base_ws_hi = upper_32_bits(CFG_BASE +
- 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_MON_PAY_ADDRL_0);
--	so_base_ws_lo = lower_32_bits(CFG_BASE +
-+	so_base_ws_lo = lower_32_bits((CFG_BASE & U32_MAX) +
- 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_SOB_OBJ_0);
- 	so_base_ws_hi = upper_32_bits(CFG_BASE +
- 				mmSYNC_MNGR_W_S_SYNC_MNGR_OBJS_SOB_OBJ_0);
--- 
-2.35.1
-
+ #define DEBUG_ON (aa_g_debug)
++/*
++ * split individual debug cases out in preparation for finer grained
++ * debug controls in the future.
++ */
++#define AA_DEBUG_LABEL DEBUG_ON
+ #define dbg_printk(__fmt, __args...) pr_debug(__fmt, ##__args)
+ #define AA_DEBUG(fmt, args...)						\
+ 	do {								\
+--- a/security/apparmor/label.c
++++ b/security/apparmor/label.c
+@@ -1632,9 +1632,9 @@ int aa_label_snxprint(char *str, size_t
+ 	AA_BUG(!str && size != 0);
+ 	AA_BUG(!label);
+ 
+-	if (flags & FLAG_ABS_ROOT) {
++	if (AA_DEBUG_LABEL && (flags & FLAG_ABS_ROOT)) {
+ 		ns = root_ns;
+-		len = snprintf(str, size, "=");
++		len = snprintf(str, size, "_");
+ 		update_for_len(total, len, size, str);
+ 	} else if (!ns) {
+ 		ns = labels_ns(label);
+@@ -1896,7 +1896,8 @@ struct aa_label *aa_label_strn_parse(str
+ 	AA_BUG(!str);
+ 
+ 	str = skipn_spaces(str, n);
+-	if (str == NULL || (*str == '=' && base != &root_ns->unconfined->label))
++	if (str == NULL || (AA_DEBUG_LABEL && *str == '_' &&
++			    base != &root_ns->unconfined->label))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	len = label_count_strn_entries(str, end - str);
 
 

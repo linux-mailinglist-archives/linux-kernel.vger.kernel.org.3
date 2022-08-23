@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DA959DCE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0450D59DD2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 14:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358155AbiHWLnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 07:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
+        id S1353692AbiHWKUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 06:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357927AbiHWLjd (ORCPT
+        with ESMTP id S1351870AbiHWKIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:39:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FE567462;
-        Tue, 23 Aug 2022 02:28:30 -0700 (PDT)
+        Tue, 23 Aug 2022 06:08:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032A27D7B0;
+        Tue, 23 Aug 2022 01:54:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BC84BCE1B40;
-        Tue, 23 Aug 2022 09:28:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74A7C433C1;
-        Tue, 23 Aug 2022 09:28:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF088B81C39;
+        Tue, 23 Aug 2022 08:54:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDC1C433C1;
+        Tue, 23 Aug 2022 08:54:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661246906;
-        bh=XIyPzMQLBgtYoio64LREgctipDK0aA5owJ2+ONDYE6k=;
+        s=korg; t=1661244890;
+        bh=XoeuMJNEjEkczly+dAJKTnNDDgHKZv6zGPaKXsLWA14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qTDXuCrL9Sr/qT9p/5AnrjNqM6HMSTHsHdYOGCpDS2hAXNCfJpFA7NPjKAWe9LZ21
-         WhpyqiRgxH78LwpdJL+5U/BrOAwqDRgNv1c5vU+PzdLgQXzCg66jByQ5hPTGQ5d+j+
-         PxKHHFM6wmdGkg6YHZ5gF6GEr71WskLSwJd99TwY=
+        b=MmI+xTAk0Yc6IhJXUVKu7dmFNZZ9fN+Gmhq7ZcAkjBAlEWj7RAnkDKoAgPlJrxfUK
+         NjJBp40F0P4Wzh8DFceEMYxfmTFQ85clJ4zOq+8kYmPA54vdcwVFcTHrbd4KQoIsxC
+         8nrPvbgRDSd0UBLBD5DHwis4RA8rnS6NBaYsm4TI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 230/389] video: fbdev: amba-clcd: Fix refcount leak bugs
-Date:   Tue, 23 Aug 2022 10:25:08 +0200
-Message-Id: <20220823080125.204491240@linuxfoundation.org>
+        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 150/244] igb: Add lock to avoid data race
+Date:   Tue, 23 Aug 2022 10:25:09 +0200
+Message-Id: <20220823080104.179879082@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080115.331990024@linuxfoundation.org>
-References: <20220823080115.331990024@linuxfoundation.org>
+In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
+References: <20220823080059.091088642@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,78 +56,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Lin Ma <linma@zju.edu.cn>
 
-[ Upstream commit 26c2b7d9fac42eb8317f3ceefa4c1a9a9170ca69 ]
+commit 6faee3d4ee8be0f0367d0c3d826afb3571b7a5e0 upstream.
 
-In clcdfb_of_init_display(), we should call of_node_put() for the
-references returned by of_graph_get_next_endpoint() and
-of_graph_get_remote_port_parent() which have increased the refcount.
+The commit c23d92b80e0b ("igb: Teardown SR-IOV before
+unregister_netdev()") places the unregister_netdev() call after the
+igb_disable_sriov() call to avoid functionality issue.
 
-Besides, we should call of_node_put() both in fail path or when
-the references are not used anymore.
+However, it introduces several race conditions when detaching a device.
+For example, when .remove() is called, the below interleaving leads to
+use-after-free.
 
-Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ (FREE from device detaching)      |   (USE from netdev core)
+igb_remove                         |  igb_ndo_get_vf_config
+ igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
+  kfree(adapter->vf_data)          |
+  adapter->vfs_allocated_count = 0 |
+                                   |    memcpy(... adapter->vf_data[vf]
+
+Moreover, the igb_disable_sriov() also suffers from data race with the
+requests from VF driver.
+
+ (FREE from device detaching)      |   (USE from requests)
+igb_remove                         |  igb_msix_other
+ igb_disable_sriov                 |   igb_msg_task
+  kfree(adapter->vf_data)          |    vf < adapter->vfs_allocated_count
+  adapter->vfs_allocated_count = 0 |
+
+To this end, this commit first eliminates the data races from netdev
+core by using rtnl_lock (similar to commit 719479230893 ("dpaa2-eth: add
+MAC/PHY support through phylink")). And then adds a spinlock to
+eliminate races from driver requests. (similar to commit 1e53834ce541
+("ixgbe: Add locking to prevent panic when setting sriov_numvfs to zero")
+
+Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220817184921.735244-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/amba-clcd.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/intel/igb/igb.h      |    2 ++
+ drivers/net/ethernet/intel/igb/igb_main.c |   12 +++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
-index 3b7a7c74bf0a..09774ada36fb 100644
---- a/drivers/video/fbdev/amba-clcd.c
-+++ b/drivers/video/fbdev/amba-clcd.c
-@@ -714,16 +714,18 @@ static int clcdfb_of_init_display(struct clcd_fb *fb)
- 		return -ENODEV;
+--- a/drivers/net/ethernet/intel/igb/igb.h
++++ b/drivers/net/ethernet/intel/igb/igb.h
+@@ -664,6 +664,8 @@ struct igb_adapter {
+ 	struct igb_mac_addr *mac_table;
+ 	struct vf_mac_filter vf_macs;
+ 	struct vf_mac_filter *vf_mac_list;
++	/* lock for VF resources */
++	spinlock_t vfs_lock;
+ };
  
- 	panel = of_graph_get_remote_port_parent(endpoint);
--	if (!panel)
--		return -ENODEV;
-+	if (!panel) {
-+		err = -ENODEV;
-+		goto out_endpoint_put;
-+	}
+ /* flags controlling PTP/1588 function */
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -3637,6 +3637,7 @@ static int igb_disable_sriov(struct pci_
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
+ 	struct e1000_hw *hw = &adapter->hw;
++	unsigned long flags;
  
- 	err = clcdfb_of_get_backlight(panel, fb->panel);
- 	if (err)
--		return err;
-+		goto out_panel_put;
+ 	/* reclaim resources allocated to VFs */
+ 	if (adapter->vf_data) {
+@@ -3649,12 +3650,13 @@ static int igb_disable_sriov(struct pci_
+ 			pci_disable_sriov(pdev);
+ 			msleep(500);
+ 		}
+-
++		spin_lock_irqsave(&adapter->vfs_lock, flags);
+ 		kfree(adapter->vf_mac_list);
+ 		adapter->vf_mac_list = NULL;
+ 		kfree(adapter->vf_data);
+ 		adapter->vf_data = NULL;
+ 		adapter->vfs_allocated_count = 0;
++		spin_unlock_irqrestore(&adapter->vfs_lock, flags);
+ 		wr32(E1000_IOVCTL, E1000_IOVCTL_REUSE_VFQ);
+ 		wrfl();
+ 		msleep(100);
+@@ -3814,7 +3816,9 @@ static void igb_remove(struct pci_dev *p
+ 	igb_release_hw_control(adapter);
  
- 	err = clcdfb_of_get_mode(&fb->dev->dev, panel, fb->panel);
- 	if (err)
--		return err;
-+		goto out_panel_put;
+ #ifdef CONFIG_PCI_IOV
++	rtnl_lock();
+ 	igb_disable_sriov(pdev);
++	rtnl_unlock();
+ #endif
  
- 	err = of_property_read_u32(fb->dev->dev.of_node, "max-memory-bandwidth",
- 			&max_bandwidth);
-@@ -752,11 +754,21 @@ static int clcdfb_of_init_display(struct clcd_fb *fb)
+ 	unregister_netdev(netdev);
+@@ -3974,6 +3978,9 @@ static int igb_sw_init(struct igb_adapte
  
- 	if (of_property_read_u32_array(endpoint,
- 			"arm,pl11x,tft-r0g0b0-pads",
--			tft_r0b0g0, ARRAY_SIZE(tft_r0b0g0)) != 0)
--		return -ENOENT;
-+			tft_r0b0g0, ARRAY_SIZE(tft_r0b0g0)) != 0) {
-+		err = -ENOENT;
-+		goto out_panel_put;
-+	}
+ 	spin_lock_init(&adapter->nfc_lock);
+ 	spin_lock_init(&adapter->stats64_lock);
 +
-+	of_node_put(panel);
-+	of_node_put(endpoint);
++	/* init spinlock to avoid concurrency of VF resources */
++	spin_lock_init(&adapter->vfs_lock);
+ #ifdef CONFIG_PCI_IOV
+ 	switch (hw->mac.type) {
+ 	case e1000_82576:
+@@ -7846,8 +7853,10 @@ unlock:
+ static void igb_msg_task(struct igb_adapter *adapter)
+ {
+ 	struct e1000_hw *hw = &adapter->hw;
++	unsigned long flags;
+ 	u32 vf;
  
- 	return clcdfb_of_init_tft_panel(fb, tft_r0b0g0[0],
- 					tft_r0b0g0[1],  tft_r0b0g0[2]);
-+out_panel_put:
-+	of_node_put(panel);
-+out_endpoint_put:
-+	of_node_put(endpoint);
-+	return err;
++	spin_lock_irqsave(&adapter->vfs_lock, flags);
+ 	for (vf = 0; vf < adapter->vfs_allocated_count; vf++) {
+ 		/* process any reset requests */
+ 		if (!igb_check_for_rst(hw, vf))
+@@ -7861,6 +7870,7 @@ static void igb_msg_task(struct igb_adap
+ 		if (!igb_check_for_ack(hw, vf))
+ 			igb_rcv_ack_from_vf(adapter, vf);
+ 	}
++	spin_unlock_irqrestore(&adapter->vfs_lock, flags);
  }
  
- static int clcdfb_of_vram_setup(struct clcd_fb *fb)
--- 
-2.35.1
-
+ /**
 
 

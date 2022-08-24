@@ -2,246 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE05659FD10
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFA659FD13
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235337AbiHXOSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S239120AbiHXOSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238549AbiHXOSF (ORCPT
+        with ESMTP id S238549AbiHXOSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:18:05 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60042.outbound.protection.outlook.com [40.107.6.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FAD99240;
-        Wed, 24 Aug 2022 07:18:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f50x/6NpI6RYkVRZ3QANdmwt5wSJwez+hxQmarpuTYCg1uQ+BCt+VBfufdB+MlybsSWjZ/FvDWErjYuFuuvKqOXo650V7QfX/QOF17ClavpFHP7A6FksfWTlithjTYgefGyxZSudfyxKBRWukj5fxINFstTb9qmYDsDM9LUZeo8YNUL9q7LLE/NCLri2XQME9AQkWCM47hU4ZUZumgAsLCkpQ79QOwVPihQNCKS6CKXHLfkLf2l15wD4YVFJN+aBfs6l4wH0GG6Ud3OMf6irVgKLZjhP17CsmpIwQQDiRrIzzq37Y7gXznjVGOxBWNEMMV+5VRisQB8WFiPgBetLFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sKdtAoghSeZqmxBj6qq+lx/rbpp7xq7CrIF0S2M9I84=;
- b=Q7a2xYZCExLTgFd/FtJ94D9P6HtiiJ1xLWXifEeevXKFiceNJwBBwq9M1nxuzOKVqfbl/u2eT3HEwHF+XZNZERut8fHWK4NwDK74C0+4K9h1m4BKwRYIjjfVxr4VYsqveGA8u7joiisdkkbmvPciPAbZBujkyiQyxWuCQUKwOUe22CTvjOTt/QYah7Xu09+dLx3Mq+hcJYW9EUze0T0uNrlRDKm/SBYO/5Fma/3LPN6EruiE5ZQ9tmXwcy8KilQTNqHbG3JmGdoR86g3cjfbOpfq1NKWUeee22hvr36+NPcIDQ0gwAZB0CDHWikcJdq6z+ZwbHD7zf4r+x9iYapbwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sKdtAoghSeZqmxBj6qq+lx/rbpp7xq7CrIF0S2M9I84=;
- b=ubXx65vK0r+R4IRuTVg1Z2lEcVXcFdnqQRUXeWX41QIKhzWd4WWQGbGPQG6C3MTsks7+xFeZ4/4yjFVsoIkDZmxlVeMuyOhFb5c7zulxdCoUsyuZM00WzoGS3WUb6CeeiE/qUUkiKYbz/6ATCKAq/PeG2BW8vJQA9jKByj89ecySFuY73gAtVAgA7ke3RbrD8RCsV9zIvz+wvq5tM/LRVOgVbMPIy3vpQQ5LigWoksLiIVLmXTfkHj5oHI7esPSlyMnzfGGl1vfMdtj0gznv8t8aXy9lde/R8OM8cco5k4ZnATEZhtXVUbsyBaIwgaFE3y26yRqWJx0CTD2vl2dtog==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by AM6PR10MB2216.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:51::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Wed, 24 Aug
- 2022 14:18:01 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::75ee:d5d2:6b1d:150b]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::75ee:d5d2:6b1d:150b%3]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
- 14:18:01 +0000
-Date:   Wed, 24 Aug 2022 16:17:57 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     simon.guinot@sequanux.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>
-Subject: Re: [PATCH v4 1/5] gpio-f7188x: Add GPIO support for Nuvoton
- NCT6116
-Message-ID: <20220824161757.4ca3bb97@md1za8fc.ad001.siemens.net>
-In-Reply-To: <a001efb5-95a3-d89d-32bd-557b6f11bb80@redhat.com>
-References: <20220823102344.17624-1-henning.schild@siemens.com>
-        <20220823102344.17624-2-henning.schild@siemens.com>
-        <YwToilxquEZGqzQD@smile.fi.intel.com>
-        <20220823165459.143e1c30@md1za8fc.ad001.siemens.net>
-        <YwYjXzsSHNe+J3aO@76cbfcf04d45>
-        <20220824155038.5aa19495@md1za8fc.ad001.siemens.net>
-        <a001efb5-95a3-d89d-32bd-557b6f11bb80@redhat.com>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0712.eurprd06.prod.outlook.com
- (2603:10a6:20b:49f::18) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Wed, 24 Aug 2022 10:18:16 -0400
+Received: from outbound-smtp07.blacknight.com (outbound-smtp07.blacknight.com [46.22.139.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB8298D3B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:18:14 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp07.blacknight.com (Postfix) with ESMTPS id 135151C3D92
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:18:13 +0100 (IST)
+Received: (qmail 8923 invoked from network); 24 Aug 2022 14:18:12 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 24 Aug 2022 14:18:12 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH 1/1] mm/page_alloc: Leave IRQs enabled for per-cpu page allocations
+Date:   Wed, 24 Aug 2022 15:18:02 +0100
+Message-Id: <20220824141802.23395-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 891837c7-0a86-41c2-7e07-08da85db73b1
-X-MS-TrafficTypeDiagnostic: AM6PR10MB2216:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DLrFS0jQEpReTl17szKXuI/ynP3Z7HgcQyLfbUDNdSekGJdmBMqUc41wIcF7agmBgctKGJz75ajKHOK33PbX9M7XmRUyWgdVxvZPq4dk8/QGlej3Zm5kbuBergGNU5qJBVhO/V5aKWRc678rKox1Mlmcb6rVUQwcHZrdx+02v/kYGYIa+aDPVgJycfxgFy116LfNrocNr1UxK36BWcZ4AYnojt9sUcuyhngLOxtaiF34G6r+VnEODRj48rJirH4BiDN8v/I98LnTgU7bxAXPbToTIQH3whZLj4iwnCnM5W1j8FEv52rntxp8kjp3Hhbea4JhbkzYduuDOLgQsivv1pgvZuHKIIhnKxzqt21R2vHMBw7ujRdR0/3imbW8SSxQEWmEy//UFxpjV8kIztBk14YBx3roXjz+HkC73F2GJPNv6H6saOZO6HYAfYuSkbo2s5DCw5Ki+e9wRaoOgB7fE2ldEYlAY/VG2X3E3XsVK27rrfvkNwB0/acr7ixhn/4zA11SfFVYD4ifnkiY/ITzkhsQCyUBcq+vV+5RuIXkSmXvt2R0kuR5gNQIAispJrHD8DlYk4jvkNn8QhSqW5sAndUaWobbgJC/V56CX4KuwSVSR8HxNufZDFQ3K3mb6g3G6f/NMjr+pACyUH+vb1ba2bVh2IMMCGUuSzBjRT2mBS2S4pcYXJmPDdnAia+pCC4DTmOe6lwIQVsjM+4+TepWPw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(86362001)(186003)(1076003)(38100700002)(82960400001)(8936002)(66556008)(4326008)(66946007)(8676002)(9686003)(53546011)(5660300002)(44832011)(7416002)(6506007)(2906002)(41300700001)(6666004)(316002)(6512007)(26005)(6916009)(6486002)(54906003)(478600001)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r1Lh/a7CdBGY/Ku1JxZY5387pYJ+5Hk2rqqFB+HpPPSds7u+rGxBl+UPclSm?=
- =?us-ascii?Q?f/DSv8l52TC6a2mUIc4eKKckgJnjB9QaId7dTLyQF+83ogk6F5LGPgUIkAVi?=
- =?us-ascii?Q?eFQZBGKIrFQkh+2yXVe0zU2fh2KT7o0xv0b8gAZTkfp7H+lL5OIikBrGZHnA?=
- =?us-ascii?Q?e9K9HqB9LFPaJ8kRL+e/1pdsXQIVDsLrDid1Qy+ttatnJHDHE7FPhjpek6//?=
- =?us-ascii?Q?flBCxZdAFME9MbTzXzAxhaR0cXwTaYUIeeFJYjPehmfc7TZ1LJr0uEjywVAG?=
- =?us-ascii?Q?MispFTnFIO86wBjhQ266p97p8NXZI3UqCafqLtrFIxsR8YgRy/N7w9hgAUxB?=
- =?us-ascii?Q?OB1IKsA/fHAIeb9lUWopDGbvNNKyWC4F4AI07eCQ9c9599rcaZzOGj2+8oWh?=
- =?us-ascii?Q?xXlOsk9kdugvjieF9gp0pOc/ySr79Ds2XLjO0gMci9KGiQKMEPL0g/mvfiRz?=
- =?us-ascii?Q?NUzypYR7aVNrUKF9Yp74m63/q9FAKS+A7hOVmLVBf7MvCyRteuR8fIdtD+gu?=
- =?us-ascii?Q?B0Rlloc1cezPvELMB1r7uFDPtyq1s2Tcwk8e12d6EPsmvDGYFw6N9R93r0PB?=
- =?us-ascii?Q?3GxjAoG309VnUtuWoYipuymK8pESfZyKMdqujSoq1XX6u17ORNEdyH8XG4Y2?=
- =?us-ascii?Q?bC5lD0kno/01UCE20y3ZRA3Oclt6cDuwrrWjspATUIfp/UAWDnGhyl+AUr58?=
- =?us-ascii?Q?9/NnldYoAuS3jCO/kdDzUP6T1Fowt7IJ1VwngjjbiEzlUH3UwTjBA0dic3i2?=
- =?us-ascii?Q?VcHo+9X4Bc4eQgNCa917IObOJqMafiKx10Pu9jyFETZEy7tnqgvN93E+Kvz2?=
- =?us-ascii?Q?IBVOhiVHVoGt/ZBIp2hBbXPuFpLH+hDDepXbpftwqhTXSZ8+IWvavP92+NU3?=
- =?us-ascii?Q?9Ts1F3eXQ89IvsEm6mNRxyRYG6rJ3E9EDYU1WAwXHc7+SqFzWo6ArpmQxaR1?=
- =?us-ascii?Q?ELh+LxZNExEJ0/3S19GGCr8DfCJt1zKPuxdYwaKZIe/4nI4owHftuE75Fd1j?=
- =?us-ascii?Q?l77vZKk4oFWl+rIrRs0ScOkBEzCZxmbNiTwqrp+ZqXJ2FvEDdCZsIMlDyB9f?=
- =?us-ascii?Q?E5wrQVvQL0K9WmeEoNHkiFuvLSJ3Pqy4TzU3Jn0bSZOawo9Dxpf56IBYwNq7?=
- =?us-ascii?Q?s3Xch4VM8LKYHTqdEDx4EXPhsXq5RNrxZRiAkxcCb+jZePyNjr11AJlrRguo?=
- =?us-ascii?Q?NqBhh3Ah3PYRsvO+LbYomoJv/zPLGI1q+EzJIv7yET47yr8iq2rTo2MjqmoR?=
- =?us-ascii?Q?6cP2p7wM/6bfjFI/Nyk/fl0J4ZY+CmnDS1UTxc31YTm83GH8CGUuSLW6G0aL?=
- =?us-ascii?Q?J4Z9+g8kqejEhmeNOiRlDP11FlVD0p7mocG1OqCyi7Brm3JpARMd70xCBIug?=
- =?us-ascii?Q?Xh5Hw6jIryxshvLNsrRjqppUUSmJTLNMit7AKu9NQDZ/BxGydjASdgysDkTQ?=
- =?us-ascii?Q?B4UyheY2KjcreHWrCess8tNXFiVkvJhauP8Mpfsjad5tpfu5ixsGAqg/Np9K?=
- =?us-ascii?Q?60k1hdzp1X1AjAp7tCzfaquwRVmtwc1NLfsgWtEBgZnACZlVoaXaBLxKnnmz?=
- =?us-ascii?Q?It8nZIvCRbjkRau2AYP7RYd6FSbF/LpAsGViYXP7KLkX/DNgT7VMJs1mmsgi?=
- =?us-ascii?Q?4A=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 891837c7-0a86-41c2-7e07-08da85db73b1
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 14:18:01.2485
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: swUKA20+pmmaxLA7h1X5oKdTCTn7X9i3LbE9Hmi+0yJV3WAXG7bLTmV17EP4r7nIKZdkrG9YRTniLHd4FyrbmoEsw7MHe2OH9KDvSzsRTPI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB2216
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Wed, 24 Aug 2022 15:54:28 +0200
-schrieb Hans de Goede <hdegoede@redhat.com>:
+The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
+allocating from the PCP must not re-enter the allocator from IRQ context.
+In each instance where IRQ-reentrancy is possible, the lock is acquired using
+pcp_spin_trylock_irqsave() even though IRQs are disabled and re-entrancy
+is impossible.
 
-> Hi Henning,
-> 
-> On 8/24/22 15:50, Henning Schild wrote:
-> > Am Wed, 24 Aug 2022 15:10:55 +0200
-> > schrieb simon.guinot@sequanux.org:
-> >   
-> >> On Tue, Aug 23, 2022 at 04:54:59PM +0200, Henning Schild wrote:  
-> >>> Am Tue, 23 Aug 2022 17:47:38 +0300
-> >>> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:    
-> >>
-> >> Hi Andy,
-> >>
-> >> Thanks for this new version. It is looking good to me.
-> >>  
-> >>>     
-> >>>> On Tue, Aug 23, 2022 at 12:23:40PM +0200, Henning Schild wrote:
-> >>>>   
-> >>>>> Add GPIO support for Nuvoton NCT6116 chip. Nuvoton SuperIO
-> >>>>> chips are very similar to the ones from Fintek. In other
-> >>>>> subsystems they also share drivers and are called a family of
-> >>>>> drivers.
-> >>>>>
-> >>>>> For the GPIO subsystem the only difference is that the direction
-> >>>>> bit is reversed and that there is only one data bit per pin. On
-> >>>>> the SuperIO level the logical device is another one.
-> >>>>>
-> >>>>> On a chip level we do not have a manufacturer ID to check and
-> >>>>> also no revision.      
-> >>>>
-> >>>> ...
-> >>>>     
-> >>>>> - * GPIO driver for Fintek Super-I/O F71869, F71869A, F71882,
-> >>>>> F71889 and F81866
-> >>>>> + * GPIO driver for Fintek and Nuvoton Super-I/O chips      
-> >>>>
-> >>>> I'm not sure it's good idea to drop it from here. It means reader
-> >>>> has to get this info in a hard way.
-> >>>>
-> >>>> ...    
-> >>>
-> >>> Let us see what others say. I wanted to keep this in line with
-> >>> what Kconfig says and the oneliner in the Kconfig was getting
-> >>> pretty longish. Hence i decided to shorten that. Other drivers
-> >>> also seem to not list all the possible chips in many places, it
-> >>> is all maint effort when a new chips is added and the list is in
-> >>> like 5 places.    
-> >>
-> >> I agree with you that we can drop this line. It was already
-> >> incomplete and the information is quite readable a few lines below
-> >> in both the define list and the chip enumeration.
-> >>  
-> >>>     
-> >>>>> +#define gpio_dir_invert(type)	((type) == nct6116d)
-> >>>>> +#define gpio_data_single(type)	((type) == nct6116d)
-> >>>>>  
-> >>>>
-> >>>> What's prevents us to add a proper prefix to these? I don't like
-> >>>> the idea of them having "gpio" prefix.
-> >>>>
-> >>>> ...
-> >>>>     
-> >>>>> +		pr_info(DRVNAME ": Unsupported device
-> >>>>> 0x%04x\n", devid);
-> >>>>> +			pr_debug(DRVNAME ": Not a Fintek
-> >>>>> device at 0x%08x\n", addr);
-> >>>>> +	pr_info(DRVNAME ": Found %s at %#x\n",
-> >>>>> +		pr_info(DRVNAME ":   revision %d\n",      
-> >>>>
-> >>>> Can we, please, utilize pr_fmt()?
-> >>>>     
-> >>>>> +			(int)superio_inb(addr,
-> >>>>> SIO_FINTEK_DEVREV));      
-> >>>>
-> >>>> Explicit casting in printf() means wrong specifier in 99% of
-> >>>> cases.   
-> >>>
-> >>> For all the other comments i will wait for a second opinion. I
-> >>> specifically did not change existing code for more than the
-> >>> functional changes needed. And a bit of checkpatch.pl fixing.
-> >>> Beautification could be done on the way but would only cause
-> >>> inconsistency. That driver is what it is, if someone wants to
-> >>> overhaul the style ... that should be another patch. One likely
-> >>> not coming from me.    
-> >>
-> >> About the int cast, I think you can drop it while you are updating
-> >> this line. It is unneeded.  
-> > 
-> > Ok two voices for doing that one fix along the way. I will send a v5
-> > and hope nobody insists on me fixing the other findings in code i
-> > never wrote.  
-> 
-> You did not write it, but you are using it to do hw-enablement for
-> your company's products. So being asked to also some touch-ups
-> left and right while you are at it really is not unexpected IMHO.
+Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
+case at the cost of some IRQ allocations taking a slower path. If the PCP
+lists need to be refilled, the zone lock still needs to disable IRQs but
+that will only happen on PCP refill and drain. If an IRQ is raised when
+a PCP allocation is in progress, the trylock will fail and fallback to
+using the buddy lists directly. Note that this may not be a universal win
+if an interrupt-intensive workload also allocates heavily from interrupt
+context and contends heavily on the zone->lock as a result.
 
-Sure thing. Dropping a few characters from a line i touch anyhow is
-easy enough. But i.e a refactoring to pr_fmt would feel like asking too
-much in my book. That feels like work of the author or maintainer.
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+---
+ mm/page_alloc.c | 93 +++++++++++++++----------------------------------
+ 1 file changed, 28 insertions(+), 65 deletions(-)
 
-In fact i am just doing the homework of what i think should have long
-been done by Nuvoton.
-
-I hope that v5 will be acceptable.
-
-Henning 
-
-> Regards,
-> 
-> Hans
-> 
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e5486d47406e..6a8f07a0a548 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -169,21 +169,12 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+ 	_ret;								\
+ })
+ 
+-#define pcpu_spin_lock_irqsave(type, member, ptr, flags)		\
++#define pcpu_spin_trylock(type, member, ptr)				\
+ ({									\
+ 	type *_ret;							\
+ 	pcpu_task_pin();						\
+ 	_ret = this_cpu_ptr(ptr);					\
+-	spin_lock_irqsave(&_ret->member, flags);			\
+-	_ret;								\
+-})
+-
+-#define pcpu_spin_trylock_irqsave(type, member, ptr, flags)		\
+-({									\
+-	type *_ret;							\
+-	pcpu_task_pin();						\
+-	_ret = this_cpu_ptr(ptr);					\
+-	if (!spin_trylock_irqsave(&_ret->member, flags)) {		\
++	if (!spin_trylock(&_ret->member)) {				\
+ 		pcpu_task_unpin();					\
+ 		_ret = NULL;						\
+ 	}								\
+@@ -196,27 +187,16 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
+ 	pcpu_task_unpin();						\
+ })
+ 
+-#define pcpu_spin_unlock_irqrestore(member, ptr, flags)			\
+-({									\
+-	spin_unlock_irqrestore(&ptr->member, flags);			\
+-	pcpu_task_unpin();						\
+-})
+-
+ /* struct per_cpu_pages specific helpers. */
+ #define pcp_spin_lock(ptr)						\
+ 	pcpu_spin_lock(struct per_cpu_pages, lock, ptr)
+ 
+-#define pcp_spin_lock_irqsave(ptr, flags)				\
+-	pcpu_spin_lock_irqsave(struct per_cpu_pages, lock, ptr, flags)
+-
+-#define pcp_spin_trylock_irqsave(ptr, flags)				\
+-	pcpu_spin_trylock_irqsave(struct per_cpu_pages, lock, ptr, flags)
++#define pcp_spin_trylock(ptr)						\
++	pcpu_spin_trylock(struct per_cpu_pages, lock, ptr)
+ 
+ #define pcp_spin_unlock(ptr)						\
+ 	pcpu_spin_unlock(lock, ptr)
+ 
+-#define pcp_spin_unlock_irqrestore(ptr, flags)				\
+-	pcpu_spin_unlock_irqrestore(lock, ptr, flags)
+ #ifdef CONFIG_USE_PERCPU_NUMA_NODE_ID
+ DEFINE_PER_CPU(int, numa_node);
+ EXPORT_PER_CPU_SYMBOL(numa_node);
+@@ -1536,6 +1516,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 					struct per_cpu_pages *pcp,
+ 					int pindex)
+ {
++	unsigned long flags;
+ 	int min_pindex = 0;
+ 	int max_pindex = NR_PCP_LISTS - 1;
+ 	unsigned int order;
+@@ -1551,8 +1532,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 	/* Ensure requested pindex is drained first. */
+ 	pindex = pindex - 1;
+ 
+-	/* Caller must hold IRQ-safe pcp->lock so IRQs are disabled. */
+-	spin_lock(&zone->lock);
++	spin_lock_irqsave(&zone->lock, flags);
+ 	isolated_pageblocks = has_isolate_pageblock(zone);
+ 
+ 	while (count > 0) {
+@@ -1601,7 +1581,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 		} while (count > 0 && !list_empty(list));
+ 	}
+ 
+-	spin_unlock(&zone->lock);
++	spin_unlock_irqrestore(&zone->lock, flags);
+ }
+ 
+ static void free_one_page(struct zone *zone,
+@@ -3118,10 +3098,10 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ 			unsigned long count, struct list_head *list,
+ 			int migratetype, unsigned int alloc_flags)
+ {
++	unsigned long flags;
+ 	int i, allocated = 0;
+ 
+-	/* Caller must hold IRQ-safe pcp->lock so IRQs are disabled. */
+-	spin_lock(&zone->lock);
++	spin_lock_irqsave(&zone->lock, flags);
+ 	for (i = 0; i < count; ++i) {
+ 		struct page *page = __rmqueue(zone, order, migratetype,
+ 								alloc_flags);
+@@ -3155,7 +3135,7 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ 	 * pages added to the pcp list.
+ 	 */
+ 	__mod_zone_page_state(zone, NR_FREE_PAGES, -(i << order));
+-	spin_unlock(&zone->lock);
++	spin_unlock_irqrestore(&zone->lock, flags);
+ 	return allocated;
+ }
+ 
+@@ -3172,16 +3152,9 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+ 	batch = READ_ONCE(pcp->batch);
+ 	to_drain = min(pcp->count, batch);
+ 	if (to_drain > 0) {
+-		unsigned long flags;
+-
+-		/*
+-		 * free_pcppages_bulk expects IRQs disabled for zone->lock
+-		 * so even though pcp->lock is not intended to be IRQ-safe,
+-		 * it's needed in this context.
+-		 */
+-		spin_lock_irqsave(&pcp->lock, flags);
++		spin_lock(&pcp->lock);
+ 		free_pcppages_bulk(zone, to_drain, pcp, 0);
+-		spin_unlock_irqrestore(&pcp->lock, flags);
++		spin_unlock(&pcp->lock);
+ 	}
+ }
+ #endif
+@@ -3195,12 +3168,9 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
+ 
+ 	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+ 	if (pcp->count) {
+-		unsigned long flags;
+-
+-		/* See drain_zone_pages on why this is disabling IRQs */
+-		spin_lock_irqsave(&pcp->lock, flags);
++		spin_lock(&pcp->lock);
+ 		free_pcppages_bulk(zone, pcp->count, pcp, 0);
+-		spin_unlock_irqrestore(&pcp->lock, flags);
++		spin_unlock(&pcp->lock);
+ 	}
+ }
+ 
+@@ -3466,7 +3436,6 @@ static void free_unref_page_commit(struct zone *zone, struct per_cpu_pages *pcp,
+  */
+ void free_unref_page(struct page *page, unsigned int order)
+ {
+-	unsigned long flags;
+ 	unsigned long __maybe_unused UP_flags;
+ 	struct per_cpu_pages *pcp;
+ 	struct zone *zone;
+@@ -3494,10 +3463,10 @@ void free_unref_page(struct page *page, unsigned int order)
+ 
+ 	zone = page_zone(page);
+ 	pcp_trylock_prepare(UP_flags);
+-	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
++	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
+ 	if (pcp) {
+ 		free_unref_page_commit(zone, pcp, page, migratetype, order);
+-		pcp_spin_unlock_irqrestore(pcp, flags);
++		pcp_spin_unlock(pcp);
+ 	} else {
+ 		free_one_page(zone, page, pfn, order, migratetype, FPI_NONE);
+ 	}
+@@ -3512,7 +3481,6 @@ void free_unref_page_list(struct list_head *list)
+ 	struct page *page, *next;
+ 	struct per_cpu_pages *pcp = NULL;
+ 	struct zone *locked_zone = NULL;
+-	unsigned long flags;
+ 	int batch_count = 0;
+ 	int migratetype;
+ 
+@@ -3542,10 +3510,10 @@ void free_unref_page_list(struct list_head *list)
+ 		/* Different zone, different pcp lock. */
+ 		if (zone != locked_zone) {
+ 			if (pcp)
+-				pcp_spin_unlock_irqrestore(pcp, flags);
++				pcp_spin_unlock(pcp);
+ 
+ 			locked_zone = zone;
+-			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
++			pcp = pcp_spin_lock(locked_zone->per_cpu_pageset);
+ 		}
+ 
+ 		/*
+@@ -3564,14 +3532,14 @@ void free_unref_page_list(struct list_head *list)
+ 		 * a large list of pages to free.
+ 		 */
+ 		if (++batch_count == SWAP_CLUSTER_MAX) {
+-			pcp_spin_unlock_irqrestore(pcp, flags);
++			pcp_spin_unlock(pcp);
+ 			batch_count = 0;
+-			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
++			pcp = pcp_spin_lock(locked_zone->per_cpu_pageset);
+ 		}
+ 	}
+ 
+ 	if (pcp)
+-		pcp_spin_unlock_irqrestore(pcp, flags);
++		pcp_spin_unlock(pcp);
+ }
+ 
+ /*
+@@ -3783,15 +3751,11 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
+ 	struct per_cpu_pages *pcp;
+ 	struct list_head *list;
+ 	struct page *page;
+-	unsigned long flags;
+ 	unsigned long __maybe_unused UP_flags;
+ 
+-	/*
+-	 * spin_trylock may fail due to a parallel drain. In the future, the
+-	 * trylock will also protect against IRQ reentrancy.
+-	 */
++	/* spin_trylock may fail due to a parallel drain or IRQ reentrancy. */
+ 	pcp_trylock_prepare(UP_flags);
+-	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
++	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
+ 	if (!pcp) {
+ 		pcp_trylock_finish(UP_flags);
+ 		return NULL;
+@@ -3805,7 +3769,7 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
+ 	pcp->free_factor >>= 1;
+ 	list = &pcp->lists[order_to_pindex(migratetype, order)];
+ 	page = __rmqueue_pcplist(zone, order, migratetype, alloc_flags, pcp, list);
+-	pcp_spin_unlock_irqrestore(pcp, flags);
++	pcp_spin_unlock(pcp);
+ 	pcp_trylock_finish(UP_flags);
+ 	if (page) {
+ 		__count_zid_vm_events(PGALLOC, page_zonenum(page), 1);
+@@ -5329,7 +5293,6 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 			struct page **page_array)
+ {
+ 	struct page *page;
+-	unsigned long flags;
+ 	unsigned long __maybe_unused UP_flags;
+ 	struct zone *zone;
+ 	struct zoneref *z;
+@@ -5411,9 +5374,9 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 	if (unlikely(!zone))
+ 		goto failed;
+ 
+-	/* Is a parallel drain in progress? */
++	/* spin_trylock may fail due to a parallel drain or IRQ reentrancy. */
+ 	pcp_trylock_prepare(UP_flags);
+-	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
++	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
+ 	if (!pcp)
+ 		goto failed_irq;
+ 
+@@ -5432,7 +5395,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 		if (unlikely(!page)) {
+ 			/* Try and allocate at least one page */
+ 			if (!nr_account) {
+-				pcp_spin_unlock_irqrestore(pcp, flags);
++				pcp_spin_unlock(pcp);
+ 				goto failed_irq;
+ 			}
+ 			break;
+@@ -5447,7 +5410,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 		nr_populated++;
+ 	}
+ 
+-	pcp_spin_unlock_irqrestore(pcp, flags);
++	pcp_spin_unlock(pcp);
+ 	pcp_trylock_finish(UP_flags);
+ 
+ 	__count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
+-- 
+2.35.3
 

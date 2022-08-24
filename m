@@ -2,356 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2720D5A0337
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDE25A033F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240758AbiHXVQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 17:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S240674AbiHXVXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 17:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240722AbiHXVQl (ORCPT
+        with ESMTP id S236881AbiHXVW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 17:16:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727F07C740;
-        Wed, 24 Aug 2022 14:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661375800; x=1692911800;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=OpHZOLK8Re901DtVO7IeNJPmmFjpBW9Jdrt8i4CTb/8=;
-  b=J44Np6i4nGIpjgPOuDsnDioCAg46kseob6wRT3S5hEl6hzhmWpxeiKYI
-   mLLnzG+7e/elqR7Az9/78bA0wc3CDyrtDkJ8cBJCehMBupjB78xQaVJb+
-   5B/RQ/YqGGqawC4s9qNw25+HHYFwAshBErUWMe3uwTa6SUvkSmGz+uSbu
-   p5XfiEfhNtxViypxO640+iubqezlAuuUJtgF/WXkdMPdHDgUCvYpNA5gC
-   sbzrzPlSjfy7SmXFrkDfp92PzgZntEI6l83sazT0S8KnRdRFI4GStm2Kz
-   aleEPJcppH70rJRjD24MoT9vUTHBvh5JKZbmIaRjhc6nKNotodnfvQOQ4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="292823147"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="292823147"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 14:16:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="670682606"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Aug 2022 14:16:40 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 24 Aug 2022 14:16:39 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 24 Aug 2022 14:16:39 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 24 Aug 2022 14:16:39 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 24 Aug 2022 14:16:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bOVD9YmMQoRhUg52FmNx8EabqxCW1W15mWQcKCwXiNujZbDBKRkTBAEwcsDc1EMGtYHcVNnmynS+vXNxCmbDk8pYTJ267E4PsBEoFaLUuBMqLipn0TMWzQXY/o3VxhIiLQi2IccX0OxZASws3ByvAJ8MBeoCch9XjwpHLGB7I1Rw6s6yv6cK+vfYiNAuhRB2odCOa/SZ+/3/vjxEPnlj1w3fSB2AqEerpsHveIsVPXlMzWWMEusueRw4M5C8Tf4umsVue4Fi2I/1ck/HVbFrEdlIbQSWKd7BLJewmIhlWV1j5kfsVt0l7zuqZCMeYpZy1JhGFYliJrNFtsNy59gTNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JJJVGAWPdgFof0+lqgtUsAf3mU2/IepdW4Vx3GIVhRs=;
- b=O++BdD0v/SziWbbcLuoPmrWH7hcNKeEYXZeixywsqSgfqrJSOsoDwRnDqVQJZb1HyZXGRnn9Jqtp9BhwTJbzuU1C7CgGwCl41tdQ6THyiogKtbdt1sKvK9v5JzFQiprKXuKgwpPWQnfwdt63P38P9iHiPCQP10xfqDaCOsnPMUvFqBn/L/5J/yz4/9bdNoum7ue75H5O14D+3mo+yRfbYFpar+ZbG5qpF8TURdHY7ZIv0neYgXLtGJvcxM809m1leK5oXW0VTrwnIYNQTlBBkcNJtXVO7Zm+0yPUzMmxyn/iUpDs3MppPcjUKo7ElhI53IpRW9jGWpxfQvQVFHG3fA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by DM6PR11MB2713.namprd11.prod.outlook.com (2603:10b6:5:c4::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Wed, 24 Aug
- 2022 21:16:35 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::54b2:2db9:12fb:c006]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::54b2:2db9:12fb:c006%3]) with mapi id 15.20.5546.024; Wed, 24 Aug 2022
- 21:16:35 +0000
-Message-ID: <eca1657e-3dbf-d46c-fecf-f8888a25a878@intel.com>
-Date:   Wed, 24 Aug 2022 14:16:32 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.12.0
-Subject: Re: [PATCH v3 09/10] x86/resctrl: Add sysfs interface to write the
- event configuration
-Content-Language: en-US
-To:     Babu Moger <babu.moger@amd.com>, <fenghua.yu@intel.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <eranian@google.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <corbet@lwn.net>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <bagasdotme@gmail.com>
-References: <166117559756.6695.16047463526634290701.stgit@bmoger-ubuntu>
- <166117586910.6695.3670808098195387542.stgit@bmoger-ubuntu>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <166117586910.6695.3670808098195387542.stgit@bmoger-ubuntu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR10CA0003.namprd10.prod.outlook.com
- (2603:10b6:a03:255::8) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Wed, 24 Aug 2022 17:22:59 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A19167D6;
+        Wed, 24 Aug 2022 14:22:57 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id gb36so35900395ejc.10;
+        Wed, 24 Aug 2022 14:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=TaxwtaB3HvwyDk1N5cqaeYgh+6j8S3h48VfMZHiNWK0=;
+        b=k4Q2ZsvO7WY//nuV97w7Lz1W4Dk4/9Pa5CQrP5MQ7buNkMwHi309Y/G6/9KN0bCRlp
+         kPxMZyycO3BqncS8FbCLGfvC4bYLRFRi3XKg3H+XuVYvVlM510sUV8InodnGwBJ+cIDc
+         7amdK+tp+2BfKAyIF89V0YQr8Gkh3iJg820ZR2fdb+LIavNiTLADK7gmTBDDNDxdxy0t
+         XjNx8ADQzdiPGv9Gi9cHXT/Km4V7Gm2yKUxROK8e/kMrYujYypb8/XOhzZ6e4h7/9sUA
+         Lq/O7sHT2YLlRxWydG4bcV+J376VUumvM8loyHyNz4BhmYdOGUY+fbqZbAOs5tvwo5Ki
+         ukxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=TaxwtaB3HvwyDk1N5cqaeYgh+6j8S3h48VfMZHiNWK0=;
+        b=pa1XvSGp+JkswdzJmOLavM1RDjJQsLe5lbsgudiMtz9fe1akGRRXKKdE7Kiii8GJDk
+         kk1MQvlTSFwtqU45OM7tTki/y15XjU71CFQPUbvkzAIIVT6XOoM5nOZtWYFfnCJeoFeo
+         gyXtrsid6xs09Mk79oJB/CLnpMfUp0x7nOfBXUyemQYDEihT7XFAao6VBtnUmHDx6e9x
+         gLo1j4SKFh0itT5/3lPMhHmz9Ap3J1MRp5D0sKMeV1hfITAllWDuV0d96f5e01LNMVsN
+         eD/XmWaJHsZjujvzG7ehj2HdG+lH0oJ8NTyVXZOpbcdjvBbPtkr3v64BBUlRal/zaQ5M
+         QUZg==
+X-Gm-Message-State: ACgBeo2MmadDlMihiwtl4ms1DpiXoKK2FAmBTvuJ7ucgKJnoSYC1loQc
+        4vdOHYlsGBVi8at79CMwa0sttJxKzEwbqACIKLM=
+X-Google-Smtp-Source: AA6agR69K0DnwqxLOsjVUYt3EvIhvsD2vgcKJQUNSBaIYY4kgSBzisSwK3gRl7UJJu6dB0efRTKhQ0mllq0Nf/b38TI=
+X-Received: by 2002:a17:906:8a43:b0:73d:7cc2:245e with SMTP id
+ gx3-20020a1709068a4300b0073d7cc2245emr531916ejc.114.1661376175797; Wed, 24
+ Aug 2022 14:22:55 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 84e4467d-cfd1-4326-3ee7-08da8615ecb9
-X-MS-TrafficTypeDiagnostic: DM6PR11MB2713:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q5JdsvbbCJMs23okLnlbQHJI5ZHBzo9tu53zevD2MUJKQ/noSUdUsJkfgv6LsT17+m0A7r+X8WL7CHe+0sAlkE9rEgy/X768MnVLgN45n8k30tTEBWAvzBo1wZ6tWvw/amKmjMtiLW7bHRmA18+wpeJcBwvGQWVIW8Scurj2fKrzKh7tZTYLuwO9L9eJIQHr1ieSyXAIYeed1GoVrqwOqxQYl+4mPXdoN5apktN+GyDVbfG2lgdM1qjhI9jWVVJ97d7Xq3fQduv4GTSnO7Q1T0/SqOx6sTM/uCXVnhY5Tblr+EMc5Z+WYHSHfosb17DoJJqOuiku5M8B9HdWsXHAb+ZaCMZLtBoqY6ZOsqGbDqOK/Icmfj/ZuWAIV7kVzckJNXB1VBkQx2+V/unupJ0Q2NvOpRvKlHYtsvYs7Wx0eBPMdsr3b+hSmEwDUhxDtlFLVXOo8wAaDKzbbuwEtJ/1uDzkIVIArHjvPt4BEC/diTivIBh1w7x3qfNz1os89v+n+fjdXaox8edY71PmBoIuaYnC4dIR5xPJ2gg67DEC60FVTh/MYhDp5793MuL9XxBNXCdE2STHXyFxAotNRZwry1Jpe2U6c/StlUI52j7VCPtmpi+gF8GoWLDEjrdcVuLVtZFzEOAS222iEunyoA2eQCWkOY5WUGlxmJJZxjKQtjo6GrRe7Jr+g7FgBBGsaTGoW7HtZRArdpXymPpYzqQMa2upKPdaHTFkSXG1jHbTW6OFcNBcZhYFMnZNJxsIxzvPJY2tWHWf/jVAV+Iqm+JW/vRI1RdlrI1e3Us2417mUGs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(366004)(136003)(346002)(396003)(39860400002)(8676002)(66556008)(66946007)(4326008)(36756003)(66476007)(86362001)(38100700002)(82960400001)(31686004)(31696002)(8936002)(83380400001)(2616005)(6512007)(186003)(26005)(6666004)(478600001)(6486002)(7416002)(316002)(6506007)(2906002)(44832011)(5660300002)(53546011)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SEp4RVk5NkpWbUYxUmwwTmZZRGdxYUgrclk2NmVIOTAvTytzRkt3a1pFTFE2?=
- =?utf-8?B?TzhrWUJmVWdvYTB0NStjQmJjZnVmaHJMK0hpcFIrQi96NkVwM0IrZGN6Mldt?=
- =?utf-8?B?dlFZTjFxQjhnMGpWbnByNlp5VG5VMys0dWtzdTk3Y3RGYzBkMmIxNXdFc1gw?=
- =?utf-8?B?Y0RkcmFCQWE2eWpuL2pWQWgzQjdKYXlLNUFJVThhTTVaZXdkR3JKUFl3NUY3?=
- =?utf-8?B?aUliV3M0UkN0bUhjQXJRcVhQcnNML1hpeEtpc3RKYWFDN0FpWmJxekc0ODF4?=
- =?utf-8?B?cGFzWnYydjJwamQ2L0l4ZU5ITGVBelA1bjRaRVBRQzVMMEdiUEY3YmFVMEpF?=
- =?utf-8?B?dVdhLzBEQXFTc0FwcEZ6V1pkMkdHYkRsREliZVRLWjB2L21DUHByN00vWDJx?=
- =?utf-8?B?OTU0TVRadjFrd3hESFNFNVFCenZMNFpwMXRrUXU3d3QxTUxNVGRueXpCUWxH?=
- =?utf-8?B?WnhiUC9FQkU5ZStDS2N0SXZLd2t2UzNBeVoyYTBGaEdNRVNLNis4MDduemti?=
- =?utf-8?B?Q2FGTEI2S3RvZmpmblp4cjlaYVlWUkVJaUxSeCtqbWpVeG1iWWZJQkI3RWov?=
- =?utf-8?B?K2ZqOFNoYzh2NVhCMUFBMlJESUEwemxMT1JIcnpFR2ZPU2NXODBEeUFoV3Bo?=
- =?utf-8?B?Wk9BU29mWHRLRitqSFJ4cDQ2OC8yME5uSjFyOWNtOW8rVkFIaDJlTGdjcjkx?=
- =?utf-8?B?amR0bmF0eVZKYUwrOUo5K1dJVWhNelpMNDh4U1FLZmJXR2lvcHRIVnh2ZWJZ?=
- =?utf-8?B?MnRLT3psUzhDUVlIZk9sZitRODROVTh6L1VmTG5mVFUyV1JVOUlFSW5FQVE5?=
- =?utf-8?B?MkRjVTRIOFloVXhXVy9XMW5rK3EzcjFtVUFUTGFNWFVOaXBrSWE1clN4SGNU?=
- =?utf-8?B?ZWp5WmhrRCtyVHIyeTF0TEN6RTFXQnRLMk1YNTF4RGdHdFZWMENwSG5nMW1z?=
- =?utf-8?B?ODEvTjhmSEFJaFJNeXY1bURtODNuZm5MUG8rYlN6QmpCZElpbXhYNCt3Sjlr?=
- =?utf-8?B?cCswUi9UdVJFaFFBWmZldE9HUmxBZHl0WkJQeXFuMTVydlNYQjgrSEhpbjlt?=
- =?utf-8?B?VXNBUTRzTUVueHVDRE1PdlF3M2YxK2VUeGVHTVljMUM0Vm9DVmRkMWdnbE9N?=
- =?utf-8?B?QXMwMmJXRHN1RXR4c0xndnVzVitpUGY3Zmx5MDdDaGJxSTNYY1IrTStsbHM5?=
- =?utf-8?B?MTlGdDk2S2JhQlZxUW9YR0Z2Nk9jR1FoU1J4ekJuVVZFT2RtSWJSK0lxdVNT?=
- =?utf-8?B?bDlDeTlRQ0xVaklyaWgxYWFiaTdDY3dQS1gwelhMMUlFR0Vaa2NtbGVDd1lU?=
- =?utf-8?B?TEVENjA2dHpVYS9GT3F2cWw0WTZzWXJXYkF2aW4zb2VWR1BOM2UwV0d1blZs?=
- =?utf-8?B?b0haM2pZWmlGd0hBa2Y1aS9JcGNDZmdNZUVCdlgrNVA0Mlk3c3FwcitFalA1?=
- =?utf-8?B?OHkvYjUvRHJpNDdxTm4zVzMzdDJZUkNuY280V2thTHNoQmE4QVQ0cUdaa1E4?=
- =?utf-8?B?TCs3OXJQbVNKMVgxZ04xRGxobE03QmszaWZDd1k0UVhVVzJFVndHbEtXUlpJ?=
- =?utf-8?B?eDhlYWFSU1AwWStDS3czT3dMeHIwcmRiR2FlWUFNVHRLRlg3WmM0em02ckph?=
- =?utf-8?B?czFZYXlvYlpiSk1zekE3QXJNTUIrVFhxNWU0NWVJK3BMUFFJQzRDQ2hIU05i?=
- =?utf-8?B?KzBlOERUU1g2MlNvQVd2SDJaMjZRdllhZ1RybEEwekp2MCtPd1hFYng5MllN?=
- =?utf-8?B?RElpeUQ2MWJpbzVSYzVBbTh2d1kwZ1lreDdERmhaK0VPb1N2bWR3VmVabThi?=
- =?utf-8?B?Yk9NbkFBUXdmR1FRd2JRQWRsWVBuMjV2TitNVjVEaXMwOHlvcGlHSjNtM3dH?=
- =?utf-8?B?MnNiMmdaWGhYUHBGVVpGTVJQNHdLRExsZURmejdhSWtMKzQ4ZlNralprSUtm?=
- =?utf-8?B?Z2p4dENmbXNFeE8zblVmbk12ckExRWpydzBwd01qQzlHMUh6bCt0RlZJUE5s?=
- =?utf-8?B?MXp6WURUenYxb2l4UVZPejFJSGcwWmVBYkx3cFVrdk4rdHRrZnpwQ0F4L2Np?=
- =?utf-8?B?c2JLcXdhZTZwb0Z5SURRQ2NwODZxRW9UdXY2LzVoNm1HUXd3MUsvNmZjVHFv?=
- =?utf-8?B?UERCM0tJNE1sUGlibDRZekJIYmFZdWtwWFE0cjNrbi9HaFU2dU91d09NTWNk?=
- =?utf-8?B?bUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84e4467d-cfd1-4326-3ee7-08da8615ecb9
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 21:16:35.1594
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OubX42Cpbpgtqti1LRycY1xIkzjxY3ccrAYBMg4zZVfjTyo0LirPLVtP0wVLvUMahrEmXCI8B89F5xK2KgXDnrqcmAIfZD18AJRmgOB5L38=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2713
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220818221212.464487-1-void@manifault.com> <20220818221212.464487-3-void@manifault.com>
+In-Reply-To: <20220818221212.464487-3-void@manifault.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 24 Aug 2022 14:22:44 -0700
+Message-ID: <CAEf4BzY6oaCpHmh7x92mhqAVdPNDUe6GLndXHbqHx4i9QzjOsw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] bpf: Add bpf_user_ringbuf_drain() helper
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Babu,
-
-On 8/22/2022 6:44 AM, Babu Moger wrote:
-> Add the sysfs interface to write the event configuration for the
-> MBM configurable events. The event configuration can be changed by
-> writing to the sysfs file for that specific event.
-> 
-> Following are the types of events supported.
-> ==================================================================
-> Bits    Description
-> 6       Dirty Victims from the QOS domain to all types of memory
-> 5       Reads to slow memory in the non-local NUMA domain
-> 4       Reads to slow memory in the local NUMA domain
-> 3       Non-temporal writes to non-local NUMA domain
-> 2       Non-temporal writes to local NUMA domain
-> 1       Reads to memory in the non-local NUMA domain
-> 0       Reads to memory in the local NUMA domain
-> 
-> By default the mbm_total_bytes configuration is set to 0x7f to count
-> all the types of events and mbm_local_bytes configuration is set to
-> 0x15 to count all the local memory events.
-> 
-> For example:
-> To change the mbm_total_bytes to count all the reads, run the command.
-> $echo  0x33 > /sys/fs/resctrl/mon_data/mon_L3_00/mbm_total_config
-> 
-> To change the mbm_local_bytes to count all the slow memory reads, run
-> the command.
-> $echo  0x30 > /sys/fs/resctrl/mon_data/mon_L3_00/mbm_local_config
-> 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
-> Reviewed-by: Ingo Molnar <mingo@kernel.org>
+On Thu, Aug 18, 2022 at 3:12 PM David Vernet <void@manifault.com> wrote:
+>
+> In a prior change, we added a new BPF_MAP_TYPE_USER_RINGBUF map type which
+> will allow user-space applications to publish messages to a ringbuffer that
+> is consumed by a BPF program in kernel-space. In order for this map-type to
+> be useful, it will require a BPF helper function that BPF programs can
+> invoke to drain samples from the ringbuffer, and invoke callbacks on those
+> samples. This change adds that capability via a new BPF helper function:
+>
+> bpf_user_ringbuf_drain(struct bpf_map *map, void *callback_fn, void *ctx,
+>                        u64 flags)
+>
+> BPF programs may invoke this function to run callback_fn() on a series of
+> samples in the ringbuffer. callback_fn() has the following signature:
+>
+> long callback_fn(struct bpf_dynptr *dynptr, void *context);
+>
+> Samples are provided to the callback in the form of struct bpf_dynptr *'s,
+> which the program can read using BPF helper functions for querying
+> struct bpf_dynptr's.
+>
+> In order to support bpf_ringbuf_drain(), a new PTR_TO_DYNPTR register
+> type is added to the verifier to reflect a dynptr that was allocated by
+> a helper function and passed to a BPF program. Unlike PTR_TO_STACK
+> dynptrs which are allocated on the stack by a BPF program, PTR_TO_DYNPTR
+> dynptrs need not use reference tracking, as the BPF helper is trusted to
+> properly free the dynptr before returning. The verifier currently only
+> supports PTR_TO_DYNPTR registers that are also DYNPTR_TYPE_LOCAL.
+>
+> Note that while the corresponding user-space libbpf logic will be added in
+> a subsequent patch, this patch does contain an implementation of the
+> .map_poll() callback for BPF_MAP_TYPE_USER_RINGBUF maps. This .map_poll()
+> callback guarantees that an epoll-waiting user-space producer will
+> receive at least one event notification whenever at least one sample is
+> drained in an invocation of bpf_user_ringbuf_drain(), provided that the
+> function is not invoked with the BPF_RB_NO_WAKEUP flag.
+>
+> Sending an event notification for every sample is not an option, as it
+> could cause the system to hang due to invoking irq_work_queue() in
+> too-frequent succession. So as to try and optimize for the common case,
+> however, bpf_user_ringbuf_drain() will also send an event notification
+> whenever a sample being drained causes the ringbuffer to no longer be
+> full. This heuristic may not help some user-space producers, as a
+> producer can publish samples of varying size, and there may not be
+> enough space in the ringbuffer after the first sample is drained which
+> causes it to no longer be full. In this case, the producer may have to
+> wait until bpf_ringbuf_drain() returns to receive an event notification.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
 > ---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c |  109 ++++++++++++++++++++++++++++++++
->  1 file changed, 109 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index e1847d49fa15..83c8780726ff 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -323,9 +323,118 @@ int rdtgroup_mondata_config_show(struct seq_file *m, void *arg)
->  	return ret;
->  }
->  
-> +/*
-> + * This is called via IPI to read the CQM/MBM counters
-> + * in a domain.
+>  include/linux/bpf.h            |  11 +-
+>  include/uapi/linux/bpf.h       |  36 ++++++
+>  kernel/bpf/helpers.c           |   2 +
+>  kernel/bpf/ringbuf.c           | 210 ++++++++++++++++++++++++++++++++-
+>  kernel/bpf/verifier.c          |  72 +++++++++--
+>  tools/include/uapi/linux/bpf.h |  36 ++++++
+>  6 files changed, 352 insertions(+), 15 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index a627a02cf8ab..515d712fd4a5 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -401,7 +401,7 @@ enum bpf_type_flag {
+>         /* DYNPTR points to memory local to the bpf program. */
+>         DYNPTR_TYPE_LOCAL       = BIT(8 + BPF_BASE_TYPE_BITS),
+>
+> -       /* DYNPTR points to a ringbuf record. */
+> +       /* DYNPTR points to a kernel-produced ringbuf record. */
+>         DYNPTR_TYPE_RINGBUF     = BIT(9 + BPF_BASE_TYPE_BITS),
+>
+>         /* Size is known at compile time. */
+> @@ -606,6 +606,7 @@ enum bpf_reg_type {
+>         PTR_TO_MEM,              /* reg points to valid memory region */
+>         PTR_TO_BUF,              /* reg points to a read/write buffer */
+>         PTR_TO_FUNC,             /* reg points to a bpf program function */
+> +       PTR_TO_DYNPTR,           /* reg points to a dynptr */
+>         __BPF_REG_TYPE_MAX,
+>
+>         /* Extended reg_types. */
+> @@ -1333,6 +1334,11 @@ struct bpf_array {
+>  #define BPF_MAP_CAN_READ       BIT(0)
+>  #define BPF_MAP_CAN_WRITE      BIT(1)
+>
+> +/* Maximum number of user-producer ringbuffer samples that can be drained in
+> + * a call to bpf_user_ringbuf_drain().
 > + */
-> +void mon_event_config_write(void *info)
-> +{
-> +	union mon_data_bits *md = info;
-> +	u32 evtid = md->u.evtid;
-> +	u32 msr_index;
-> +
-> +	switch (evtid) {
-> +	case QOS_L3_MBM_TOTAL_EVENT_ID:
-> +		msr_index = 0;
-> +		break;
-> +	case QOS_L3_MBM_LOCAL_EVENT_ID:
-> +		msr_index = 1;
-> +		break;
-> +	default:
-> +		return; /* Not expected to come here */
+> +#define BPF_MAX_USER_RINGBUF_SAMPLES BIT(17)
 
-Please no inline comments.
-
-> +	}
-> +
-> +	wrmsr(MSR_IA32_EVT_CFG_BASE + msr_index, md->u.mon_config, 0);
-> +}
-> +
-> +ssize_t  rdtgroup_mondata_config_write(struct kernfs_open_file *of,
-> +				       char *buf, size_t nbytes, loff_t off)
-> +{
-> +	struct rdt_hw_resource *hw_res;
-> +	struct rdtgroup *rdtgrp;
-> +	struct rdt_resource *r;
-> +	unsigned int mon_config;
-> +	cpumask_var_t cpu_mask;
-> +	union mon_data_bits md;
-> +	struct rdt_domain *d;
-> +	u32 resid, domid;
-> +	int ret = 0, cpu;
-> +
-> +	ret = kstrtouint(buf, 0, &mon_config);
-> +	if (ret)
-> +		return ret;
-> +
-> +	rdt_last_cmd_clear();
-> +
-> +	/* mon_config cannot be more than the supported set of events */
-> +	if (mon_config > GENMASK(6, 0)) {
-
-Could this "GENMASK()" be given a name and be moved closer to where
-the bits are defined in internal.h? This will be easier to read and if any
-new bits are added it would hopefully be noticed more easily to get
-an update also.
-
-> +		rdt_last_cmd_puts("Invalid event configuration\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	cpus_read_lock();
-> +	rdtgrp = rdtgroup_kn_lock_live(of->kn);
-> +	if (!rdtgrp) {
-> +		return -ENOENT;
-> +		goto e_unlock;
-> +	}
-> +
-> +	if (!zalloc_cpumask_var(&cpu_mask, GFP_KERNEL)) {
-> +		ret = -ENOMEM;
-> +		goto e_unlock;
-> +	}
-> +
-> +
-> +	md.priv = of->kn->priv;
-> +	resid = md.u.rid;
-> +	domid = md.u.domid;
-> +
-> +	hw_res = &rdt_resources_all[resid];
-> +	r = &hw_res->r_resctrl;
-> +	d = rdt_find_domain(r, domid, NULL);
-> +	if (IS_ERR_OR_NULL(d)) {
-> +		ret = -ENOENT;
-> +		goto e_cpumask;
-> +	}
-> +
-> +	md.u.mon_config = mon_config & 0xFF;
-
-Same question as previous patch. I do not see this internal
-value used in the code, is storing it necessary?
+nit: I don't think using BIT() is appropriate here. 128 * 1024 would
+be better, IMO. This is not inherently required to be a single bit
+constant.
 
 > +
-> +	/* Pick all the CPUs in the domain instance */
-> +	for_each_cpu(cpu, &d->cpu_mask)
-> +		cpumask_set_cpu(cpu, cpu_mask);
-> +
-> +	cpu = get_cpu();
-> +	/* Update MSR_IA32_EVT_CFG_BASE MSR on this cpu if it's in cpu_mask */
-
-Please always use caps for CPU.
-
-> +	if (cpumask_test_cpu(cpu, cpu_mask))
-> +		mon_event_config_write(&md);
-> +
-> +	/* Update MSR_IA32_EVT_CFG_BASE MSR on all other cpus in cpu_mask */
-> +	smp_call_function_many(cpu_mask, mon_event_config_write, &md, 1);
-> +	put_cpu();
-
-I do not think we need to propagate this pattern more in the resctrl code.
-How about on_each_cpu_mask()? 
-
-> +
-> +	/*
-> +	 * When an Event Configuration is changed, the bandwidth counters
-> +	 * for all RMIDs and Events will be cleared, and the U-bit for every
-> +	 * RMID will be set on the next read to any BwEvent for every RMID.
-> +	 * Clear the mbm_local and mbm_total counts for all the RMIDs.
-> +	 */
-> +	memset(d->mbm_local, 0, sizeof(struct mbm_state) * r->num_rmid);
-> +	memset(d->mbm_total, 0, sizeof(struct mbm_state) * r->num_rmid);
-
-Could you please check if this is sufficient? Note how "mon_event_read()"
-is called with "first = true" right after the mon sysfs files are created to
-clear the state _and_ initialize the state to set the "prev" MSRs correctly.
-
-
-> +
-> +e_cpumask:
-> +	free_cpumask_var(cpu_mask);
-> +
-> +e_unlock:
-> +	rdtgroup_kn_unlock(of->kn);
-> +	cpus_read_unlock();
-> +
-> +	return ret ?: nbytes;
-> +}
-> +
->  static const struct kernfs_ops kf_mondata_config_ops = {
->  	.atomic_write_len       = PAGE_SIZE,
->  	.seq_show               = rdtgroup_mondata_config_show,
-> +	.write                  = rdtgroup_mondata_config_write,
+>  static inline u32 bpf_map_flags_to_cap(struct bpf_map *map)
+>  {
+>         u32 access_flags = map->map_flags & (BPF_F_RDONLY_PROG | BPF_F_WRONLY_PROG);
+> @@ -2411,6 +2417,7 @@ extern const struct bpf_func_proto bpf_loop_proto;
+>  extern const struct bpf_func_proto bpf_copy_from_user_task_proto;
+>  extern const struct bpf_func_proto bpf_set_retval_proto;
+>  extern const struct bpf_func_proto bpf_get_retval_proto;
+> +extern const struct bpf_func_proto bpf_user_ringbuf_drain_proto;
+>
+>  const struct bpf_func_proto *tracing_prog_func_proto(
+>    enum bpf_func_id func_id, const struct bpf_prog *prog);
+> @@ -2555,7 +2562,7 @@ enum bpf_dynptr_type {
+>         BPF_DYNPTR_TYPE_INVALID,
+>         /* Points to memory that is local to the bpf program */
+>         BPF_DYNPTR_TYPE_LOCAL,
+> -       /* Underlying data is a ringbuf record */
+> +       /* Underlying data is a kernel-produced ringbuf record */
+>         BPF_DYNPTR_TYPE_RINGBUF,
 >  };
->  
->  static bool is_cpu_list(struct kernfs_open_file *of)
-> 
-> 
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 3aee7681fa68..25c599d9adf8 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5356,6 +5356,41 @@ union bpf_attr {
+>   *     Return
+>   *             Current *ktime*.
+>   *
+> + * long bpf_user_ringbuf_drain(struct bpf_map *map, void *callback_fn, void *ctx, u64 flags)
+> + *     Description
+> + *             Drain samples from the specified user ringbuffer, and invoke the
+> + *             provided callback for each such sample:
+> + *
+> + *             long (\*callback_fn)(struct bpf_dynptr \*dynptr, void \*ctx);
+> + *
+> + *             If **callback_fn** returns 0, the helper will continue to try
+> + *             and drain the next sample, up to a maximum of
+> + *             BPF_MAX_USER_RINGBUF_SAMPLES samples. If the return value is 1,
+> + *             the helper will skip the rest of the samples and return. Other
+> + *             return values are not used now, and will be rejected by the
+> + *             verifier.
+> + *     Return
+> + *             The number of drained samples if no error was encountered while
+> + *             draining samples. If a user-space producer was epoll-waiting on
+> + *             this map, and at least one sample was drained, they will
+> + *             receive an event notification notifying them of available space
+> + *             in the ringbuffer. If the BPF_RB_NO_WAKEUP flag is passed to
+> + *             this function, no wakeup notification will be sent. If there
+> + *             are no samples in the ringbuffer, 0 is returned.
+> + *
+> + *             On failure, the returned value is one of the following:
+> + *
+> + *             **-EBUSY** if the ringbuffer is contended, and another calling
+> + *             context was concurrently draining the ringbuffer.
+> + *
+> + *             **-EINVAL** if user-space is not properly tracking the
+> + *             ringbuffer due to the producer position not being aligned to 8
 
-Reinette
+s/ringbuffer/ring buffer/ everywhere to be more human-readable and
+consistent with bpf_ringbuf_xxx() descriptions?
+
+> + *             bytes, a sample not being aligned to 8 bytes, the producer
+> + *             position not matching the advertised length of a sample, or the
+> + *             sample size being larger than the ringbuffer.
+> + *
+> + *             **-E2BIG** if user-space has tried to publish a sample that
+> + *             cannot fit within a struct bpf_dynptr.
+
+
+"sample size being larger than the ringbuffer" is documented above for
+-EINVAL, so it's ambiguous if it's E2BIG or EINVAL?
+
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)          \
+>         FN(unspec),                     \
+> @@ -5567,6 +5602,7 @@ union bpf_attr {
+>         FN(tcp_raw_check_syncookie_ipv4),       \
+>         FN(tcp_raw_check_syncookie_ipv6),       \
+>         FN(ktime_get_tai_ns),           \
+> +       FN(user_ringbuf_drain),         \
+>         /* */
+>
+>  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 3c1b9bbcf971..9141eae0ca67 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1661,6 +1661,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+>                 return &bpf_dynptr_write_proto;
+>         case BPF_FUNC_dynptr_data:
+>                 return &bpf_dynptr_data_proto;
+> +       case BPF_FUNC_user_ringbuf_drain:
+> +               return &bpf_user_ringbuf_drain_proto;
+>         default:
+>                 break;
+>         }
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index 0a8de712ecbe..3818398e57de 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+> @@ -38,6 +38,22 @@ struct bpf_ringbuf {
+>         struct page **pages;
+>         int nr_pages;
+>         spinlock_t spinlock ____cacheline_aligned_in_smp;
+> +       /* For user-space producer ringbuffers, an atomic_t busy bit is used to
+> +        * synchronize access to the ringbuffer in the kernel, rather than the
+> +        * spinlock that is used for kernel-producer ringbuffers. This is done
+> +        * because the ringbuffer must hold a lock across a BPF program's
+
+ditto about ringbuffer -> ring buffer (though here it's probably fine
+to just use short ringbuf), Gmail also doesn't like "ringbuffer" ;)
+
+> +        * callback:
+> +        *
+> +        *    __bpf_user_ringbuf_peek() // lock acquired
+> +        * -> program callback_fn()
+> +        * -> __bpf_user_ringbuf_sample_release() // lock released
+> +        *
+> +        * It is unsafe and incorrect to hold an IRQ spinlock across what could
+> +        * be a long execution window, so we instead simply disallow concurrent
+> +        * access to the ringbuffer by kernel consumers, and return -EBUSY from
+> +        * __bpf_user_ringbuf_peek() if the busy bit is held by another task.
+> +        */
+
+[...]
+
+> +       if (flags & BPF_RINGBUF_DISCARD_BIT) {
+> +               /* If the discard bit is set, the sample should be ignored, and
+> +                * we can instead try to read the next one.
+> +                *
+> +                * Synchronizes with smp_load_acquire() in the user-space
+> +                * producer, and smp_load_acquire() in
+> +                * __bpf_user_ringbuf_peek() above.
+> +                */
+> +               smp_store_release(&rb->consumer_pos, cons_pos + total_len);
+> +               goto retry;
+
+so given fast enough user-space producer, we can make kernel spend a
+lot of time looping and retrying here if we just commit discarded
+samples. And we won't be taking into account
+BPF_MAX_USER_RINGBUF_SAMPLES for those discards. That seems like a bit
+of a hole in the logic... would it be better to return with -EAGAIN
+for discard samples and let drain logic skip over them?
+
+> +       }
+> +
+> +       if (flags & BPF_RINGBUF_BUSY_BIT) {
+> +               err = -ENODATA;
+> +               goto err_unlock;
+> +       }
+> +
+> +       *sample = (void *)((uintptr_t)rb->data +
+> +                          (uintptr_t)((cons_pos + BPF_RINGBUF_HDR_SZ) & rb->mask));
+> +       *size = sample_len;
+> +       return 0;
+> +
+> +err_unlock:
+> +       atomic_set(&rb->busy, 0);
+> +       return err;
+> +}
+> +
+> +static void __bpf_user_ringbuf_sample_release(struct bpf_ringbuf *rb, size_t size, u64 flags)
+> +{
+> +       u64 producer_pos, consumer_pos;
+> +
+> +       /* Synchronizes with smp_store_release() in user-space producer. */
+> +       producer_pos = smp_load_acquire(&rb->producer_pos);
+> +
+> +       /* Using smp_load_acquire() is unnecessary here, as the busy-bit
+> +        * prevents another task from writing to consumer_pos after it was read
+> +        * by this task with smp_load_acquire() in __bpf_user_ringbuf_peek().
+> +        */
+> +       consumer_pos = rb->consumer_pos;
+> +        /* Synchronizes with smp_load_acquire() in user-space producer. */
+> +       smp_store_release(&rb->consumer_pos, consumer_pos + size + BPF_RINGBUF_HDR_SZ);
+> +
+> +       /* Prevent the clearing of the busy-bit from being reordered before the
+> +        * storing of the updated rb->consumer_pos value.
+> +        */
+> +       smp_mb__before_atomic();
+> +       atomic_set(&rb->busy, 0);
+> +
+> +       if (!(flags & BPF_RB_NO_WAKEUP)) {
+> +               /* As a heuristic, if the previously consumed sample caused the
+> +                * ringbuffer to no longer be full, send an event notification
+> +                * to any user-space producer that is epoll-waiting.
+> +                */
+> +               if (producer_pos - consumer_pos == ringbuf_total_data_sz(rb))
+
+I'm a bit confused here. This will be true only if user-space producer
+filled out entire ringbuf data *exactly* to the last byte with a
+single record. Or am I misunderstanding this?
+
+If my understanding is correct, how is this a realistic use case and
+how does this heuristic help at all?
+
+> +                       irq_work_queue(&rb->work);
+> +
+> +       }
+> +}
+> +
+> +BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *, map,
+> +          void *, callback_fn, void *, callback_ctx, u64, flags)
+> +{
+> +       struct bpf_ringbuf *rb;
+> +       long num_samples = 0, ret = 0;
+> +       bpf_callback_t callback = (bpf_callback_t)callback_fn;
+> +       u64 wakeup_flags = BPF_RB_NO_WAKEUP;
+> +
+> +       if (unlikely(flags & ~wakeup_flags))
+
+hm... so if we specify BPF_RB_FORCE_WAKEUP we'll reject this? Why? Why
+not allow both? And why use u64 variable to store BPF_RB_NO_WAKEUP
+constant, just use constant right here?
+
+> +               return -EINVAL;
+> +
+> +       rb = container_of(map, struct bpf_ringbuf_map, map)->rb;
+> +       do {
+> +               int err;
+> +               u32 size;
+> +               void *sample;
+> +               struct bpf_dynptr_kern dynptr;
+> +
+
+[...]
+
+> @@ -7323,22 +7366,35 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>                 }
+>                 break;
+>         case BPF_FUNC_dynptr_data:
+> +               helper_allocated_dynptr = false;
+>                 for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
+>                         if (arg_type_is_dynptr(fn->arg_type[i])) {
+> -                               if (meta.ref_obj_id) {
+> -                                       verbose(env, "verifier internal error: meta.ref_obj_id already set\n");
+> +                               struct bpf_reg_state *reg = &regs[BPF_REG_1 + i];
+> +
+> +                               if (helper_allocated_dynptr || meta.ref_obj_id) {
+> +                                       verbose(env, "verifier internal error: multiple dynptrs not supported\n");
+>                                         return -EFAULT;
+>                                 }
+> -                               /* Find the id of the dynptr we're tracking the reference of */
+> -                               meta.ref_obj_id = stack_slot_get_id(env, &regs[BPF_REG_1 + i]);
+> +
+> +                               if (base_type(reg->type) == PTR_TO_DYNPTR)
+> +                                       helper_allocated_dynptr = true;
+> +                               else
+> +                                       /* Find the id of the dynptr we're
+> +                                        * tracking the reference of
+> +                                        */
+> +                                       meta.ref_obj_id = stack_slot_get_id(env, reg);
+>                                 break;
+>                         }
+>                 }
+> -               if (i == MAX_BPF_FUNC_REG_ARGS) {
+> +               if (!helper_allocated_dynptr && i == MAX_BPF_FUNC_REG_ARGS) {
+
+we still expect to get to break in the loop above, right? so there is
+no need to special-case !helper_allocated_dynptr, is there?
+
+>                         verbose(env, "verifier internal error: no dynptr in bpf_dynptr_data()\n");
+>                         return -EFAULT;
+>                 }
+>                 break;
+> +       case BPF_FUNC_user_ringbuf_drain:
+> +               err = __check_func_call(env, insn, insn_idx_p, meta.subprogno,
+> +                                       set_user_ringbuf_callback_state);
+> +               break;
+>         }
+>
+>         if (err)
+
+[...]

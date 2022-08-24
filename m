@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B85A59F6E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAFF59F6DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236591AbiHXJvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S236660AbiHXJvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236132AbiHXJuc (ORCPT
+        with ESMTP id S236141AbiHXJuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 Aug 2022 05:50:32 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91433EE10;
-        Wed, 24 Aug 2022 02:50:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VN7-H-._1661334625;
-Received: from localhost(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VN7-H-._1661334625)
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9D83E746;
+        Wed, 24 Aug 2022 02:50:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VN6xHAc_1661334626;
+Received: from localhost(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VN6xHAc_1661334626)
           by smtp.aliyun-inc.com;
-          Wed, 24 Aug 2022 17:50:26 +0800
+          Wed, 24 Aug 2022 17:50:27 +0800
 From:   'Guanjun' <guanjun@linux.alibaba.com>
 To:     herbert@gondor.apana.org.au
 Cc:     zelin.deng@linux.alibaba.com, guanjun@linux.alibaba.com,
         xuchun.shang@linux.alibaba.com, artie.ding@linux.alibaba.com,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/9] crypto/ycc: Add skcipher algorithm support
-Date:   Wed, 24 Aug 2022 17:50:17 +0800
-Message-Id: <1661334621-44413-6-git-send-email-guanjun@linux.alibaba.com>
+Subject: [PATCH v1 6/9] crypto/ycc: Add aead algorithm support
+Date:   Wed, 24 Aug 2022 17:50:18 +0800
+Message-Id: <1661334621-44413-7-git-send-email-guanjun@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1661334621-44413-1-git-send-email-guanjun@linux.alibaba.com>
 References: <1661334621-44413-1-git-send-email-guanjun@linux.alibaba.com>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -42,788 +42,79 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Guanjun <guanjun@linux.alibaba.com>
 
-Support skcipher algorithm.
+Support aead algorithm.
 
 Signed-off-by: Guanjun <guanjun@linux.alibaba.com>
 ---
- drivers/crypto/ycc/Kconfig    |   9 +
+ drivers/crypto/ycc/Kconfig    |   1 +
  drivers/crypto/ycc/Makefile   |   2 +-
- drivers/crypto/ycc/ycc_algs.h | 114 ++++++
- drivers/crypto/ycc/ycc_dev.h  |   3 +
- drivers/crypto/ycc/ycc_drv.c  |  52 +++
- drivers/crypto/ycc/ycc_ring.h |  17 +-
- drivers/crypto/ycc/ycc_ske.c  | 925 ++++++++++++++++++++++++++++++++++++++++++
- 7 files changed, 1117 insertions(+), 5 deletions(-)
- create mode 100644 drivers/crypto/ycc/ycc_algs.h
- create mode 100644 drivers/crypto/ycc/ycc_ske.c
+ drivers/crypto/ycc/ycc_aead.c | 646 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/crypto/ycc/ycc_algs.h |  20 +-
+ drivers/crypto/ycc/ycc_drv.c  |   7 +
+ drivers/crypto/ycc/ycc_ring.h |  14 +
+ 6 files changed, 687 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/crypto/ycc/ycc_aead.c
 
 diff --git a/drivers/crypto/ycc/Kconfig b/drivers/crypto/ycc/Kconfig
-index 6e88ecb..8dae75e 100644
+index 8dae75e..d2808c3 100644
 --- a/drivers/crypto/ycc/Kconfig
 +++ b/drivers/crypto/ycc/Kconfig
-@@ -2,6 +2,15 @@ config CRYPTO_DEV_YCC
- 	tristate "Support for Alibaba YCC cryptographic accelerator"
- 	depends on CRYPTO && CRYPTO_HW && PCI
- 	default n
-+	select CRYPTO_SKCIPHER
-+	select CRYPTO_LIB_DES
-+	select CRYPTO_SM3_GENERIC
-+	select CRYPTO_AES
-+	select CRYPTO_CBC
-+	select CRYPTO_ECB
-+	select CRYPTO_CTR
-+	select CRYPTO_XTS
-+	select CRYPTO_SM4
- 	help
- 	  Enables the driver for the on-chip cryptographic accelerator of
- 	  Alibaba Yitian SoCs which is based on ARMv9 architecture.
+@@ -5,6 +5,7 @@ config CRYPTO_DEV_YCC
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_DES
+ 	select CRYPTO_SM3_GENERIC
++	select CRYPTO_AEAD
+ 	select CRYPTO_AES
+ 	select CRYPTO_CBC
+ 	select CRYPTO_ECB
 diff --git a/drivers/crypto/ycc/Makefile b/drivers/crypto/ycc/Makefile
-index 6c7733e..921034d 100644
+index 921034d..78fdeed 100644
 --- a/drivers/crypto/ycc/Makefile
 +++ b/drivers/crypto/ycc/Makefile
 @@ -1,3 +1,3 @@
  # SPDX-License-Identifier: GPL-2.0
  obj-(CONFIG_CRYPTO_DEV_YCC) += ycc.o
--ycc-objs := ycc_drv.o ycc_isr.o ycc_cdev.o ycc_ring.o
-+ycc-objs := ycc_drv.o ycc_isr.o ycc_cdev.o ycc_ring.o ycc_ske.o
-diff --git a/drivers/crypto/ycc/ycc_algs.h b/drivers/crypto/ycc/ycc_algs.h
+-ycc-objs := ycc_drv.o ycc_isr.o ycc_cdev.o ycc_ring.o ycc_ske.o
++ycc-objs := ycc_drv.o ycc_isr.o ycc_cdev.o ycc_ring.o ycc_ske.o ycc_aead.o
+diff --git a/drivers/crypto/ycc/ycc_aead.c b/drivers/crypto/ycc/ycc_aead.c
 new file mode 100644
-index 00000000..6c7b0dc
+index 00000000..8e9489e
 --- /dev/null
-+++ b/drivers/crypto/ycc/ycc_algs.h
-@@ -0,0 +1,114 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifndef __YCC_ALG_H
-+#define __YCC_ALG_H
-+
-+#include <crypto/skcipher.h>
-+
-+#include "ycc_ring.h"
-+#include "ycc_dev.h"
-+
-+enum ycc_gcm_mode {
-+	YCC_AES_128_GCM = 0,
-+	YCC_AES_192_GCM,
-+	YCC_AES_256_GCM,
-+	YCC_SM4_GCM,
-+};
-+
-+enum ycc_ccm_mode {
-+	YCC_AES_128_CCM = 0,
-+	YCC_AES_192_CCM,
-+	YCC_AES_256_CCM,
-+	YCC_SM4_CCM,
-+};
-+
-+enum ycc_ske_alg_mode {
-+	YCC_DES_ECB = 26,
-+	YCC_DES_CBC,
-+	YCC_DES_CFB,
-+	YCC_DES_OFB,
-+	YCC_DES_CTR, /* 30 */
-+
-+	YCC_TDES_128_ECB = 31,
-+	YCC_TDES_128_CBC,
-+	YCC_TDES_128_CFB,
-+	YCC_TDES_128_OFB,
-+	YCC_TDES_128_CTR,
-+	YCC_TDES_192_ECB,
-+	YCC_TDES_192_CBC,
-+	YCC_TDES_192_CFB,
-+	YCC_TDES_192_OFB,
-+	YCC_TDES_192_CTR, /* 40 */
-+
-+	YCC_AES_128_ECB = 41,
-+	YCC_AES_128_CBC,
-+	YCC_AES_128_CFB,
-+	YCC_AES_128_OFB,
-+	YCC_AES_128_CTR,
-+	YCC_AES_128_XTS, /* 46 */
-+
-+	YCC_AES_192_ECB = 48,
-+	YCC_AES_192_CBC,
-+	YCC_AES_192_CFB,
-+	YCC_AES_192_OFB,
-+	YCC_AES_192_CTR, /* 52 */
-+
-+	YCC_AES_256_ECB = 55,
-+	YCC_AES_256_CBC,
-+	YCC_AES_256_CFB,
-+	YCC_AES_256_OFB,
-+	YCC_AES_256_CTR,
-+	YCC_AES_256_XTS, /* 60 */
-+
-+	YCC_SM4_ECB = 62,
-+	YCC_SM4_CBC,
-+	YCC_SM4_CFB,
-+	YCC_SM4_OFB,
-+	YCC_SM4_CTR,
-+	YCC_SM4_XTS, /* 67 */
-+};
-+
-+enum ycc_cmd_id {
-+	YCC_CMD_SKE_ENC = 0x23,
-+	YCC_CMD_SKE_DEC,
-+};
-+
-+struct ycc_crypto_ctx {
-+	struct ycc_ring *ring;
-+	void *soft_tfm;
-+
-+	u32 keysize;
-+	u32 key_dma_size; /* dma memory size for key/key+iv */
-+
-+	u8 mode;
-+	u8 *cipher_key;
-+	u8 reserved[4];
-+};
-+
-+struct ycc_crypto_req {
-+	int mapped_src_nents;
-+	int mapped_dst_nents;
-+
-+	void *key_vaddr;
-+	dma_addr_t key_paddr;
-+
-+	struct ycc_cmd_desc desc;
-+	struct skcipher_request *ske_req;
-+	struct skcipher_request ske_subreq;
-+
-+	void *src_vaddr;
-+	dma_addr_t src_paddr;
-+	void *dst_vaddr;
-+	dma_addr_t dst_paddr;
-+
-+	int in_len;
-+	int out_len;
-+	int aad_offset;
-+	struct ycc_crypto_ctx *ctx;
-+	u8 last_block[16]; /* used to store iv out when decrypt */
-+};
-+
-+#define YCC_DEV(ctx)		(&(ctx)->ring->ydev->pdev->dev)
-+
-+int ycc_sym_register(void);
-+void ycc_sym_unregister(void);
-+#endif
-diff --git a/drivers/crypto/ycc/ycc_dev.h b/drivers/crypto/ycc/ycc_dev.h
-index dda82b0..08f9a05 100644
---- a/drivers/crypto/ycc/ycc_dev.h
-+++ b/drivers/crypto/ycc/ycc_dev.h
-@@ -151,4 +151,7 @@ static inline void ycc_g_err_unmask(void *vaddr)
- 	YCC_CSR_WR(vaddr, REG_YCC_DEV_INT_MASK, 0);
- }
- 
-+int ycc_algorithm_register(void);
-+void ycc_algorithm_unregister(void);
-+
- #endif
-diff --git a/drivers/crypto/ycc/ycc_drv.c b/drivers/crypto/ycc/ycc_drv.c
-index ac9b8c2..2cca83b 100644
---- a/drivers/crypto/ycc/ycc_drv.c
-+++ b/drivers/crypto/ycc/ycc_drv.c
-@@ -26,6 +26,7 @@
- #include "ycc_isr.h"
- #include "ycc_cdev.h"
- #include "ycc_ring.h"
-+#include "ycc_algs.h"
- 
- static const char ycc_name[] = "ycc";
- 
-@@ -36,6 +37,8 @@
- module_param(is_polling, bool, 0644);
- module_param(user_rings, int, 0644);
- 
-+static atomic_t ycc_algs_refcnt;
-+
- LIST_HEAD(ycc_table);
- DEFINE_MUTEX(ycc_mutex);
- 
-@@ -76,6 +79,40 @@ static int ycc_dev_debugfs_statistics_open(struct inode *inode, struct file *fil
- 	.owner		= THIS_MODULE,
- };
- 
-+int ycc_algorithm_register(void)
-+{
-+	int ret = 0;
-+
-+	/* No kernel rings */
-+	if (user_rings == YCC_RINGPAIR_NUM)
-+		return ret;
-+
-+	/* Only register once */
-+	if (atomic_inc_return(&ycc_algs_refcnt) > 1)
-+		return ret;
-+
-+	ret = ycc_sym_register();
-+	if (ret)
-+		goto err;
-+
-+	return 0;
-+
-+err:
-+	atomic_dec(&ycc_algs_refcnt);
-+	return ret;
-+}
-+
-+void ycc_algorithm_unregister(void)
-+{
-+	if (user_rings == YCC_RINGPAIR_NUM)
-+		return;
-+
-+	if (atomic_dec_return(&ycc_algs_refcnt))
-+		return;
-+
-+	ycc_sym_unregister();
-+}
-+
- static int ycc_device_flr(struct pci_dev *pdev, struct pci_dev *rcec_pdev)
- {
- 	int ret;
-@@ -322,6 +359,7 @@ static void ycc_rcec_unbind(struct ycc_dev *ydev)
- 	ycc_resource_free(rciep);
- 	rciep->assoc_dev = NULL;
- 	rcec->assoc_dev = NULL;
-+	ycc_algorithm_unregister();
- }
- 
- static int ycc_dev_add(struct ycc_dev *ydev)
-@@ -422,8 +460,20 @@ static int ycc_drv_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (ret)
- 		goto remove_debugfs;
- 
-+	if (test_bit(YDEV_STATUS_READY, &ydev->status)) {
-+		ret = ycc_algorithm_register();
-+		if (ret) {
-+			pr_err("Failed to register algorithm\n");
-+			clear_bit(YDEV_STATUS_READY, &ydev->status);
-+			clear_bit(YDEV_STATUS_READY, &ydev->assoc_dev->status);
-+			goto dev_del;
-+		}
-+	}
-+
- 	return ret;
- 
-+dev_del:
-+	ycc_dev_del(ydev);
- remove_debugfs:
- 	if (ydev->type == YCC_RCIEP) {
- 		debugfs_remove_recursive(ydev->debug_dir);
-@@ -479,6 +529,8 @@ static int __init ycc_drv_init(void)
- {
- 	int ret;
- 
-+	atomic_set(&ycc_algs_refcnt, 0);
-+
- 	ret = ycc_cdev_register();
- 	if (ret)
- 		goto out;
-diff --git a/drivers/crypto/ycc/ycc_ring.h b/drivers/crypto/ycc/ycc_ring.h
-index c3e7cbf..78ba959 100644
---- a/drivers/crypto/ycc/ycc_ring.h
-+++ b/drivers/crypto/ycc/ycc_ring.h
-@@ -75,11 +75,20 @@ struct ycc_resp_desc {
- 	u8 reserved[6];
- };
- 
-+struct ycc_skcipher_cmd {
-+	u8 cmd_id;
-+	u8 mode;
-+	u64 sptr:48;
-+	u64 dptr:48;
-+	u32 dlen;
-+	u16 key_idx;	/* key used to decrypt kek */
-+	u8 reserved[2];
-+	u64 keyptr:48;
-+	u8 padding;
-+} __packed;
-+
- union ycc_real_cmd {
--	/*
--	 * TODO: Real command will implement when
--	 * corresponding algorithm is ready
--	 */
-+	struct ycc_skcipher_cmd ske_cmd;
- 	u8 padding[32];
- };
- 
-diff --git a/drivers/crypto/ycc/ycc_ske.c b/drivers/crypto/ycc/ycc_ske.c
-new file mode 100644
-index 00000000..537dead
---- /dev/null
-+++ b/drivers/crypto/ycc/ycc_ske.c
-@@ -0,0 +1,925 @@
++++ b/drivers/crypto/ycc/ycc_aead.c
+@@ -0,0 +1,646 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
 +#define pr_fmt(fmt) "YCC: Crypto: " fmt
 +
++#include <crypto/internal/aead.h>
 +#include <crypto/internal/des.h>
 +#include <crypto/scatterwalk.h>
 +#include <linux/dma-mapping.h>
-+#include <crypto/skcipher.h>
 +#include <linux/crypto.h>
 +#include <crypto/aes.h>
-+#include <crypto/des.h>
-+#include <crypto/xts.h>
++#include <crypto/gcm.h>
 +#include <crypto/sm4.h>
 +#include "ycc_algs.h"
 +
-+static int ycc_skcipher_setkey(struct crypto_skcipher *tfm, const u8 *key,
-+			       unsigned int key_size, int mode,
-+			       unsigned int key_dma_size)
++static int ycc_aead_init(struct crypto_aead *tfm)
 +{
-+	struct ycc_crypto_ctx *ctx = crypto_skcipher_ctx(tfm);
-+
-+	if (ctx->cipher_key) {
-+		memset(ctx->cipher_key, 0, ctx->keysize);
-+	} else {
-+		ctx->cipher_key = kzalloc(key_size, GFP_KERNEL);
-+		if (!ctx->cipher_key)
-+			return -ENOMEM;
-+	}
-+	memcpy(ctx->cipher_key, key, key_size);
-+	ctx->mode = mode;
-+	ctx->keysize = key_size;
-+	ctx->key_dma_size = key_dma_size;
-+
-+	if (ctx->soft_tfm && crypto_skcipher_setkey(ctx->soft_tfm, key, key_size))
-+		pr_warn("Failed to setkey for soft skcipher tfm\n");
-+
-+	return 0;
-+}
-+
-+#define DEFINE_YCC_SKE_AES_SETKEY(name, mode, size)			\
-+int ycc_skcipher_aes_##name##_setkey(struct crypto_skcipher *tfm,	\
-+				     const u8 *key,			\
-+				     unsigned int key_size)		\
-+{									\
-+	int alg_mode;							\
-+	switch (key_size) {						\
-+	case AES_KEYSIZE_128:						\
-+		alg_mode = YCC_AES_128_##mode;				\
-+		break;							\
-+	case AES_KEYSIZE_192:						\
-+		alg_mode = YCC_AES_192_##mode;				\
-+		break;							\
-+	case AES_KEYSIZE_256:						\
-+		alg_mode = YCC_AES_256_##mode;				\
-+		break;							\
-+	default:							\
-+		return -EINVAL;						\
-+	}								\
-+	return ycc_skcipher_setkey(tfm, key, key_size, alg_mode, size);	\
-+}
-+
-+#define DEFINE_YCC_SKE_SM4_SETKEY(name, mode, size)			\
-+int ycc_skcipher_sm4_##name##_setkey(struct crypto_skcipher *tfm,	\
-+				     const u8 *key,			\
-+				     unsigned int key_size)		\
-+{									\
-+	int alg_mode = YCC_SM4_##mode;					\
-+	if (key_size != SM4_KEY_SIZE)					\
-+		return -EINVAL;						\
-+	return ycc_skcipher_setkey(tfm, key, key_size, alg_mode, size);	\
-+}
-+
-+#define DEFINE_YCC_SKE_DES_SETKEY(name, mode, size)			\
-+int ycc_skcipher_des_##name##_setkey(struct crypto_skcipher *tfm,	\
-+				     const u8 *key,			\
-+				     unsigned int key_size)		\
-+{									\
-+	int alg_mode = YCC_DES_##mode;					\
-+	int ret;							\
-+	if (key_size != DES_KEY_SIZE)					\
-+		return -EINVAL;						\
-+	ret = verify_skcipher_des_key(tfm, key);			\
-+	if (ret)							\
-+		return ret;						\
-+	return ycc_skcipher_setkey(tfm, key, key_size, alg_mode, size);	\
-+}
-+
-+#define DEFINE_YCC_SKE_3DES_SETKEY(name, mode, size)			\
-+int ycc_skcipher_3des_##name##_setkey(struct crypto_skcipher *tfm,	\
-+				      const u8 *key,			\
-+				      unsigned int key_size)		\
-+{									\
-+	int alg_mode = YCC_TDES_192_##mode;				\
-+	int ret;							\
-+	if (key_size != DES3_EDE_KEY_SIZE)				\
-+		return -EINVAL;						\
-+	ret = verify_skcipher_des3_key(tfm, key);			\
-+	if (ret)							\
-+		return ret;						\
-+	return ycc_skcipher_setkey(tfm, key, key_size, alg_mode, size);	\
-+}
-+
-+/*
-+ * ECB: Only has 1 key, without IV, at least 32 bytes.
-+ * Others except XTS: |key|iv|, at least 48 bytes.
-+ */
-+DEFINE_YCC_SKE_AES_SETKEY(ecb, ECB, 32);
-+DEFINE_YCC_SKE_AES_SETKEY(cbc, CBC, 48);
-+DEFINE_YCC_SKE_AES_SETKEY(ctr, CTR, 48);
-+DEFINE_YCC_SKE_AES_SETKEY(cfb, CFB, 48);
-+DEFINE_YCC_SKE_AES_SETKEY(ofb, OFB, 48);
-+
-+DEFINE_YCC_SKE_SM4_SETKEY(ecb, ECB, 32);
-+DEFINE_YCC_SKE_SM4_SETKEY(cbc, CBC, 48);
-+DEFINE_YCC_SKE_SM4_SETKEY(ctr, CTR, 48);
-+DEFINE_YCC_SKE_SM4_SETKEY(cfb, CFB, 48);
-+DEFINE_YCC_SKE_SM4_SETKEY(ofb, OFB, 48);
-+
-+DEFINE_YCC_SKE_DES_SETKEY(ecb, ECB, 32);
-+DEFINE_YCC_SKE_DES_SETKEY(cbc, CBC, 48);
-+DEFINE_YCC_SKE_DES_SETKEY(ctr, CTR, 48);
-+DEFINE_YCC_SKE_DES_SETKEY(cfb, CFB, 48);
-+DEFINE_YCC_SKE_DES_SETKEY(ofb, OFB, 48);
-+
-+DEFINE_YCC_SKE_3DES_SETKEY(ecb, ECB, 32);
-+DEFINE_YCC_SKE_3DES_SETKEY(cbc, CBC, 48);
-+DEFINE_YCC_SKE_3DES_SETKEY(ctr, CTR, 48);
-+DEFINE_YCC_SKE_3DES_SETKEY(cfb, CFB, 48);
-+DEFINE_YCC_SKE_3DES_SETKEY(ofb, OFB, 48);
-+
-+int ycc_skcipher_aes_xts_setkey(struct crypto_skcipher *tfm,
-+				const u8 *key,
-+				unsigned int key_size)
-+{
-+	int alg_mode;
-+	int ret;
-+
-+	ret = xts_verify_key(tfm, key, key_size);
-+	if (ret)
-+		return ret;
-+
-+	switch (key_size) {
-+	case AES_KEYSIZE_128 * 2:
-+		alg_mode = YCC_AES_128_XTS;
-+		break;
-+	case AES_KEYSIZE_256 * 2:
-+		alg_mode = YCC_AES_256_XTS;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	/* XTS: |key1|key2|iv|, at least 32 + 32 + 16 bytes */
-+	return ycc_skcipher_setkey(tfm, key, key_size, alg_mode, 80);
-+}
-+
-+int ycc_skcipher_sm4_xts_setkey(struct crypto_skcipher *tfm,
-+				const u8 *key,
-+				unsigned int key_size)
-+{
-+	int alg_mode;
-+	int ret;
-+
-+	ret = xts_verify_key(tfm, key, key_size);
-+	if (ret)
-+		return ret;
-+
-+	if (key_size != SM4_KEY_SIZE * 2)
-+		return -EINVAL;
-+
-+	alg_mode = YCC_SM4_XTS;
-+	return ycc_skcipher_setkey(tfm, key, key_size, alg_mode, 80);
-+}
-+
-+static int ycc_skcipher_fill_key(struct ycc_crypto_req *req)
-+{
-+	struct ycc_crypto_ctx *ctx = req->ctx;
-+	struct device *dev = YCC_DEV(ctx);
-+	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req->ske_req);
-+	u32 ivsize = crypto_skcipher_ivsize(tfm);
-+
-+	if (!req->key_vaddr) {
-+		req->key_vaddr = dma_alloc_coherent(dev, ALIGN(ctx->key_dma_size, 64),
-+						    &req->key_paddr, GFP_ATOMIC);
-+		if (!req->key_vaddr)
-+			return -ENOMEM;
-+	}
-+
-+	memset(req->key_vaddr, 0, ALIGN(ctx->key_dma_size, 64));
-+	/* XTS Mode has 2 keys & 1 iv */
-+	if (ctx->key_dma_size == 80) {
-+		memcpy(req->key_vaddr + (32 - ctx->keysize / 2),
-+		       ctx->cipher_key, ctx->keysize / 2);
-+		memcpy(req->key_vaddr + (64 - ctx->keysize / 2),
-+		       ctx->cipher_key + ctx->keysize / 2, ctx->keysize / 2);
-+	} else {
-+		memcpy(req->key_vaddr + (32 - ctx->keysize), ctx->cipher_key,
-+		       ctx->keysize);
-+	}
-+
-+	if (ivsize) {
-+		if (ctx->mode == YCC_DES_ECB ||
-+		    ctx->mode == YCC_TDES_128_ECB ||
-+		    ctx->mode == YCC_TDES_192_ECB ||
-+		    ctx->mode == YCC_AES_128_ECB ||
-+		    ctx->mode == YCC_AES_192_ECB ||
-+		    ctx->mode == YCC_AES_256_ECB ||
-+		    ctx->mode == YCC_SM4_ECB) {
-+			pr_err("Illegal ivsize for ECB mode, should be zero");
-+			goto clear_key;
-+		}
-+
-+		/* DES or 3DES */
-+		if (ctx->mode >= YCC_DES_ECB && ctx->mode <= YCC_TDES_192_CTR) {
-+			if (ivsize > 8)
-+				goto clear_key;
-+			memcpy(req->key_vaddr + ctx->key_dma_size - 8,
-+			       req->ske_req->iv, ivsize);
-+		} else {
-+			memcpy(req->key_vaddr + ctx->key_dma_size - 16,
-+			       req->ske_req->iv, ivsize);
-+		}
-+	}
-+
-+	return 0;
-+clear_key:
-+	memset(req->key_vaddr, 0, ALIGN(ctx->key_dma_size, 64));
-+	dma_free_coherent(dev, ctx->key_dma_size, req->key_vaddr, req->key_paddr);
-+	req->key_vaddr = NULL;
-+	return -EINVAL;
-+}
-+
-+static int ycc_skcipher_sg_map(struct ycc_crypto_req *req)
-+{
-+	struct device *dev = YCC_DEV(req->ctx);
-+	struct skcipher_request *ske_req = req->ske_req;
-+	int src_nents;
-+
-+	src_nents = sg_nents_for_len(ske_req->src, ske_req->cryptlen);
-+	if (unlikely(src_nents <= 0)) {
-+		pr_err("Failed to get src sg len\n");
-+		return -EINVAL;
-+	}
-+
-+	req->src_vaddr = dma_alloc_coherent(dev, ALIGN(req->in_len, 64),
-+					    &req->src_paddr, GFP_ATOMIC);
-+	if (!req->src_vaddr)
-+		return -ENOMEM;
-+
-+	req->dst_vaddr = dma_alloc_coherent(dev, ALIGN(req->in_len, 64),
-+					    &req->dst_paddr, GFP_ATOMIC);
-+	if (!req->dst_vaddr) {
-+		dma_free_coherent(dev, ALIGN(req->in_len, 64),
-+				  req->src_vaddr, req->src_paddr);
-+		return -ENOMEM;
-+	}
-+
-+	sg_copy_to_buffer(ske_req->src, src_nents, req->src_vaddr, ske_req->cryptlen);
-+	return 0;
-+}
-+
-+static inline void ycc_skcipher_sg_unmap(struct ycc_crypto_req *req)
-+{
-+	struct device *dev = YCC_DEV(req->ctx);
-+
-+	dma_free_coherent(dev, ALIGN(req->in_len, 64), req->src_vaddr, req->src_paddr);
-+	dma_free_coherent(dev, ALIGN(req->in_len, 64), req->dst_vaddr, req->dst_paddr);
-+}
-+
-+/*
-+ * For CBC & CTR
-+ */
-+static void ycc_skcipher_iv_out(struct ycc_crypto_req *req, void *dst)
-+{
-+	struct skcipher_request *ske_req = req->ske_req;
-+	struct crypto_skcipher *stfm = crypto_skcipher_reqtfm(ske_req);
-+	u8 bs = crypto_skcipher_blocksize(stfm);
-+	u8 mode = req->ctx->mode;
-+	u8 cmd = req->desc.cmd.ske_cmd.cmd_id;
-+	u32 nb = (ske_req->cryptlen + bs - 1) / bs;
-+
-+	switch (mode) {
-+	case YCC_DES_CBC:
-+	case YCC_TDES_128_CBC:
-+	case YCC_TDES_192_CBC:
-+	case YCC_AES_128_CBC:
-+	case YCC_AES_192_CBC:
-+	case YCC_AES_256_CBC:
-+	case YCC_SM4_CBC:
-+		if (cmd == YCC_CMD_SKE_DEC)
-+			memcpy(ske_req->iv, req->last_block, bs);
-+		else
-+			memcpy(ske_req->iv,
-+			       (u8 *)dst + ALIGN(ske_req->cryptlen, bs) - bs,
-+			       bs);
-+		break;
-+	case YCC_DES_CTR:
-+	case YCC_TDES_128_CTR:
-+	case YCC_TDES_192_CTR:
-+	case YCC_AES_128_CTR:
-+	case YCC_AES_192_CTR:
-+	case YCC_AES_256_CTR:
-+	case YCC_SM4_CTR:
-+		for ( ; nb-- ; )
-+			crypto_inc(ske_req->iv, bs);
-+		break;
-+	default:
-+		return;
-+	}
-+}
-+
-+static int ycc_skcipher_callback(void *ptr, u16 state)
-+{
-+	struct ycc_crypto_req *req = (struct ycc_crypto_req *)ptr;
-+	struct skcipher_request *ske_req = req->ske_req;
-+	struct ycc_crypto_ctx *ctx = req->ctx;
-+	struct device *dev = YCC_DEV(ctx);
-+
-+	sg_copy_from_buffer(ske_req->dst,
-+			    sg_nents_for_len(ske_req->dst, ske_req->cryptlen),
-+			    req->dst_vaddr, ske_req->cryptlen);
-+
-+	if (state == CMD_SUCCESS)
-+		ycc_skcipher_iv_out(req, req->dst_vaddr);
-+
-+	ycc_skcipher_sg_unmap(req);
-+
-+	if (req->key_vaddr) {
-+		memset(req->key_vaddr, 0, ALIGN(ctx->key_dma_size, 64));
-+		dma_free_coherent(dev, ALIGN(ctx->key_dma_size, 64),
-+				  req->key_vaddr, req->key_paddr);
-+		req->key_vaddr = NULL;
-+	}
-+	if (ske_req->base.complete)
-+		ske_req->base.complete(&ske_req->base,
-+				       state == CMD_SUCCESS ? 0 : -EBADMSG);
-+
-+	return 0;
-+}
-+
-+static inline bool ycc_skcipher_do_soft(struct ycc_dev *ydev)
-+{
-+	return !test_bit(YDEV_STATUS_READY, &ydev->status);
-+}
-+
-+static int ycc_skcipher_submit_desc(struct skcipher_request *ske_req, u8 cmd)
-+{
-+	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(ske_req);
-+	struct ycc_crypto_req *req = skcipher_request_ctx(ske_req);
-+	struct ycc_skcipher_cmd *ske_cmd = &req->desc.cmd.ske_cmd;
-+	struct ycc_crypto_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	struct ycc_flags *aflags;
-+	u8 bs = crypto_skcipher_blocksize(tfm);
-+	int ret;
-+
-+	memset(req, 0, sizeof(*req));
-+	req->ctx = ctx;
-+	req->ske_req = ske_req;
-+	req->in_len = ALIGN(ske_req->cryptlen, bs);
-+
-+	/*
-+	 * The length of request, 64n + bs, may lead the device hung.
-+	 * So append one bs here. This is a workaround for hardware issue.
-+	 */
-+	if (req->in_len % 64 == bs)
-+		req->in_len += bs;
-+
-+	ret = ycc_skcipher_fill_key(req);
-+	if (ret)
-+		return ret;
-+
-+	ret = ycc_skcipher_sg_map(req);
-+	if (ret)
-+		goto free_key;
-+
-+	ret = -ENOMEM;
-+	aflags = kzalloc(sizeof(struct ycc_flags), GFP_ATOMIC);
-+	if (!aflags)
-+		goto sg_unmap;
-+
-+	aflags->ptr = (void *)req;
-+	aflags->ycc_done_callback = ycc_skcipher_callback;
-+
-+	req->desc.private_ptr = (u64)aflags;
-+	ske_cmd->cmd_id  = cmd;
-+	ske_cmd->mode    = ctx->mode;
-+	ske_cmd->sptr    = req->src_paddr;
-+	ske_cmd->dptr    = req->dst_paddr;
-+	ske_cmd->dlen    = req->in_len;
-+	ske_cmd->keyptr  = req->key_paddr;
-+	ske_cmd->padding = 0;
-+
-+	/* LKCF will check iv output, for decryption, the iv is its last block */
-+	if (cmd == YCC_CMD_SKE_DEC)
-+		memcpy(req->last_block,
-+		       req->src_vaddr + ALIGN(ske_req->cryptlen, bs) - bs, bs);
-+
-+	ret = ycc_enqueue(ctx->ring, &req->desc);
-+	if (!ret)
-+		return -EINPROGRESS;
-+
-+	pr_debug("Failed to submit desc to ring\n");
-+	kfree(aflags);
-+
-+sg_unmap:
-+	ycc_skcipher_sg_unmap(req);
-+free_key:
-+	memset(req->key_vaddr, 0, ALIGN(ctx->key_dma_size, 64));
-+	dma_free_coherent(YCC_DEV(ctx),
-+			  ALIGN(ctx->key_dma_size, 64),
-+			  req->key_vaddr, req->key_paddr);
-+	req->key_vaddr = NULL;
-+	return ret;
-+}
-+
-+static int ycc_skcipher_encrypt(struct skcipher_request *req)
-+{
-+	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
-+	struct ycc_crypto_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	struct skcipher_request *subreq =
-+		&((struct ycc_crypto_req *)skcipher_request_ctx(req))->ske_subreq;
-+
-+	if (ycc_skcipher_do_soft(ctx->ring->ydev)) {
-+		skcipher_request_set_tfm(subreq, ctx->soft_tfm);
-+		skcipher_request_set_callback(subreq, req->base.flags,
-+					      req->base.complete, req->base.data);
-+		skcipher_request_set_crypt(subreq, req->src, req->dst,
-+					   req->cryptlen, req->iv);
-+		return crypto_skcipher_encrypt(subreq);
-+	}
-+
-+	return ycc_skcipher_submit_desc(req, YCC_CMD_SKE_ENC);
-+}
-+
-+static int ycc_skcipher_decrypt(struct skcipher_request *req)
-+{
-+	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
-+	struct ycc_crypto_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	struct skcipher_request *subreq =
-+		&((struct ycc_crypto_req *)skcipher_request_ctx(req))->ske_subreq;
-+
-+	if (ycc_skcipher_do_soft(ctx->ring->ydev)) {
-+		skcipher_request_set_tfm(subreq, ctx->soft_tfm);
-+		skcipher_request_set_callback(subreq, req->base.flags,
-+					      req->base.complete, req->base.data);
-+		skcipher_request_set_crypt(subreq, req->src, req->dst,
-+					   req->cryptlen, req->iv);
-+		return crypto_skcipher_encrypt(subreq);
-+	}
-+
-+	return ycc_skcipher_submit_desc(req, YCC_CMD_SKE_DEC);
-+}
-+
-+static int ycc_skcipher_init(struct crypto_skcipher *tfm)
-+{
-+	struct ycc_crypto_ctx *ctx = crypto_skcipher_ctx(tfm);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
 +	struct ycc_ring *ring;
 +
-+	ctx->soft_tfm = crypto_alloc_skcipher(crypto_tfm_alg_name(crypto_skcipher_tfm(tfm)), 0,
-+					      CRYPTO_ALG_NEED_FALLBACK | CRYPTO_ALG_ASYNC);
++	ctx->soft_tfm = crypto_alloc_aead(crypto_tfm_alg_name(crypto_aead_tfm(tfm)),
++					  0,
++					  CRYPTO_ALG_NEED_FALLBACK | CRYPTO_ALG_ASYNC);
 +	if (IS_ERR(ctx->soft_tfm)) {
 +		pr_warn("Failed to allocate soft tfm for:%s, software fallback is limited\n",
-+			crypto_tfm_alg_name(crypto_skcipher_tfm(tfm)));
++			crypto_tfm_alg_name(crypto_aead_tfm(tfm)));
 +		ctx->soft_tfm = NULL;
-+		crypto_skcipher_set_reqsize(tfm, sizeof(struct ycc_crypto_req));
++		crypto_aead_set_reqsize(tfm, sizeof(struct ycc_crypto_req));
 +	} else {
 +		/*
 +		 * If it's software fallback, store meta data of soft request.
 +		 */
-+		crypto_skcipher_set_reqsize(tfm, sizeof(struct ycc_crypto_req) +
-+					    crypto_skcipher_reqsize(ctx->soft_tfm));
++		crypto_aead_set_reqsize(tfm, sizeof(struct ycc_crypto_req) +
++					crypto_aead_reqsize(ctx->soft_tfm));
 +	}
 +
 +	ring = ycc_crypto_get_ring();
@@ -834,9 +125,9 @@ index 00000000..537dead
 +	return 0;
 +}
 +
-+static void ycc_skcipher_exit(struct crypto_skcipher *tfm)
++static void ycc_aead_exit(struct crypto_aead *tfm)
 +{
-+	struct ycc_crypto_ctx *ctx = crypto_skcipher_ctx(tfm);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
 +
 +	if (ctx->ring)
 +		ycc_crypto_free_ring(ctx->ring);
@@ -844,440 +135,709 @@ index 00000000..537dead
 +	kfree(ctx->cipher_key);
 +
 +	if (ctx->soft_tfm)
-+		crypto_free_skcipher((struct crypto_skcipher *)ctx->soft_tfm);
++		crypto_free_aead((struct crypto_aead *)ctx->soft_tfm);
 +}
 +
++static int ycc_aead_setkey(struct crypto_aead *tfm, const u8 *key,
++			   unsigned int key_size)
++{
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
++	const char *alg_name = crypto_tfm_alg_name(&tfm->base);
 +
-+static struct skcipher_alg ycc_skciphers[] = {
++	if (!strncmp("gcm(sm4)", alg_name, strlen("gcm(sm4)"))) {
++		if (key_size != SM4_KEY_SIZE)
++			return -EINVAL;
++		ctx->mode = YCC_SM4_GCM;
++	} else if (!strncmp("ccm(sm4)", alg_name, strlen("ccm(sm4)"))) {
++		ctx->mode = YCC_SM4_CCM;
++	} else if (!strncmp("gcm(aes)", alg_name, strlen("gcm(aes)"))) {
++		switch (key_size) {
++		case AES_KEYSIZE_128:
++			ctx->mode = YCC_AES_128_GCM;
++			break;
++		case AES_KEYSIZE_192:
++			ctx->mode = YCC_AES_192_GCM;
++			break;
++		case AES_KEYSIZE_256:
++			ctx->mode = YCC_AES_256_GCM;
++			break;
++		default:
++			return -EINVAL;
++		}
++	} else if (!strncmp("ccm(aes)", alg_name, strlen("ccm(aes)"))) {
++		switch (key_size) {
++		case AES_KEYSIZE_128:
++			ctx->mode = YCC_AES_128_CCM;
++			break;
++		case AES_KEYSIZE_192:
++			ctx->mode = YCC_AES_192_CCM;
++			break;
++		case AES_KEYSIZE_256:
++			ctx->mode = YCC_AES_256_CCM;
++			break;
++		default:
++			return -EINVAL;
++		}
++	}
++
++	if (ctx->cipher_key) {
++		memset(ctx->cipher_key, 0, ctx->keysize);
++	} else {
++		ctx->cipher_key = kzalloc(key_size, GFP_KERNEL);
++		if (!ctx->cipher_key)
++			return -ENOMEM;
++	}
++
++	memcpy(ctx->cipher_key, key, key_size);
++	ctx->keysize = key_size;
++	if (ctx->soft_tfm)
++		if (crypto_aead_setkey(ctx->soft_tfm, key, key_size))
++			pr_warn("Failed to setkey for soft aead tfm\n");
++
++	return 0;
++}
++
++static int ycc_aead_fill_key(struct ycc_crypto_req *req)
++{
++	struct ycc_crypto_ctx *ctx = req->ctx;
++	struct device *dev = YCC_DEV(ctx);
++	struct aead_request *aead_req = req->aead_req;
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	const char *alg_name = crypto_tfm_alg_name(&tfm->base);
++	int iv_len = 12;
++
++	if (!strncmp("ccm", alg_name, strlen("ccm")))
++		iv_len = 16;
++
++	if (!req->key_vaddr) {
++		req->key_vaddr = dma_alloc_coherent(dev, 64, &req->key_paddr,
++						    GFP_ATOMIC);
++		if (!req->key_vaddr)
++			return -ENOMEM;
++	}
++
++	memset(req->key_vaddr, 0, 64);
++	memcpy(req->key_vaddr + (32 - ctx->keysize), ctx->cipher_key, ctx->keysize);
++	memcpy(req->key_vaddr + 32, req->aead_req->iv, iv_len);
++	ctx->key_dma_size = 64;
++	return 0;
++}
++
++static int ycc_aead_sg_map(struct ycc_crypto_req *req)
++{
++	struct device *dev = YCC_DEV(req->ctx);
++	int ret = -ENOMEM;
++
++	req->src_paddr = dma_map_single(dev, req->src_vaddr,
++					ALIGN(req->in_len, 64), DMA_TO_DEVICE);
++	if (dma_mapping_error(dev, req->src_paddr)) {
++		pr_err("Failed to map src dma memory\n");
++		goto out;
++	}
++
++	req->dst_vaddr = dma_alloc_coherent(dev, ALIGN(req->out_len, 64),
++					    &req->dst_paddr, GFP_ATOMIC);
++	if (!req->dst_vaddr)
++		goto unmap_src;
++
++	return 0;
++unmap_src:
++	dma_unmap_single(dev, req->src_paddr, ALIGN(req->in_len, 64), DMA_TO_DEVICE);
++out:
++	return ret;
++}
++
++static void ycc_aead_sg_unmap(struct ycc_crypto_req *req)
++{
++	struct device *dev = YCC_DEV(req->ctx);
++
++	dma_unmap_single(dev, req->src_paddr, ALIGN(req->in_len, 64), DMA_TO_DEVICE);
++	dma_free_coherent(dev, ALIGN(req->in_len, 64), req->dst_vaddr, req->dst_paddr);
++}
++
++static inline void ycc_aead_unformat_data(struct ycc_crypto_req *req)
++{
++	kfree(req->src_vaddr);
++}
++
++static int ycc_aead_callback(void *ptr, u16 state)
++{
++	struct ycc_crypto_req *req = (struct ycc_crypto_req *)ptr;
++	struct aead_request *aead_req = req->aead_req;
++	struct ycc_crypto_ctx *ctx = req->ctx;
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	int taglen = crypto_aead_authsize(tfm);
++	struct device *dev = YCC_DEV(ctx);
++
++	/* TODO: workaround for GCM/CCM with junk bytes between ctext and tag */
++	if ((req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_GCM_ENC ||
++	     req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_CCM_ENC) &&
++	     aead_req->cryptlen % 16 != 0)
++		memcpy(req->dst_vaddr + aead_req->cryptlen,
++		       req->dst_vaddr + ALIGN(aead_req->cryptlen, 16), taglen);
++	scatterwalk_map_and_copy(req->src_vaddr + req->aad_offset, aead_req->dst, 0,
++				 aead_req->assoclen, 1);
++	if (req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_GCM_ENC ||
++	    req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_CCM_ENC) {
++		scatterwalk_map_and_copy(req->dst_vaddr, aead_req->dst,
++					 aead_req->assoclen,
++					 aead_req->cryptlen + taglen, 1);
++	} else {
++		scatterwalk_map_and_copy(req->dst_vaddr, aead_req->dst,
++					 aead_req->assoclen,
++					 aead_req->cryptlen - taglen, 1);
++	}
++
++	ycc_aead_sg_unmap(req);
++	ycc_aead_unformat_data(req);
++	if (req->key_vaddr) {
++		memset(req->key_vaddr, 0, 64);
++		dma_free_coherent(dev, 64, req->key_vaddr, req->key_paddr);
++		req->key_vaddr = NULL;
++	}
++
++	if (aead_req->base.complete)
++		aead_req->base.complete(&aead_req->base, state == CMD_SUCCESS ? 0 : -EBADMSG);
++
++	return 0;
++}
++
++#define aead_blob_len(x, y, z)	ALIGN(((x) + (y) + (z)), 16)
++
++static void *__ycc_aead_format_data(struct ycc_crypto_req *req, u8 *b0, u8 *b1,
++				    int alen, u8 cmd)
++{
++	struct aead_request *aead_req = req->aead_req;
++	int aad_len = aead_req->assoclen;
++	int cryptlen = aead_req->cryptlen;
++	int taglen = crypto_aead_authsize(crypto_aead_reqtfm(aead_req));
++	int src_len = cryptlen;
++	int b0_len = 0;
++	void *vaddr;
++	int size;
++
++	/* b0 != NULL means ccm, b0 len is 16 bytes */
++	if (b0)
++		b0_len = 16;
++
++	size = aead_blob_len(b0_len, alen, aad_len);
++	if (cmd == YCC_CMD_GCM_DEC || cmd == YCC_CMD_CCM_DEC) {
++		/*
++		 * LKCF format is not aligned |cipher_text|tag_text|
++		 * while ycc request |16-align cipher_text|16-align tag_text|
++		 */
++		src_len = cryptlen - taglen;
++		size += ALIGN(src_len, 16) + ALIGN(taglen, 16);
++	} else {
++		size += ALIGN(cryptlen, 16);
++	}
++
++	vaddr = kzalloc(ALIGN(size, 64), GFP_ATOMIC);
++	if (!vaddr)
++		return NULL;
++
++	if (b0)
++		memcpy(vaddr, b0, b0_len);
++	if (b1)
++		memcpy(vaddr + b0_len, b1, alen);
++	scatterwalk_map_and_copy(vaddr + b0_len + alen, aead_req->src, 0,
++				 aad_len, 0);
++	scatterwalk_map_and_copy(vaddr + aead_blob_len(b0_len, alen, aad_len),
++				 aead_req->src, aad_len,
++				 src_len, 0);
++	if (cmd == YCC_CMD_GCM_DEC || cmd == YCC_CMD_CCM_DEC)
++		scatterwalk_map_and_copy(vaddr +
++					 aead_blob_len(b0_len, alen, aad_len) +
++					 ALIGN(src_len, 16),
++					 aead_req->src, aad_len + cryptlen - taglen,
++					 taglen, 0);
++
++	req->in_len = size;
++	req->aad_offset = b0_len + alen;
++	return vaddr;
++}
++
++static void *ycc_aead_format_ccm_data(struct ycc_crypto_req *req,
++				      u16 *new_aad_len, u8 cmd)
++{
++	struct aead_request *aead_req = req->aead_req;
++	unsigned int taglen = crypto_aead_authsize(crypto_aead_reqtfm(aead_req));
++	unsigned int aad_len = aead_req->assoclen;
++	unsigned int cryptlen = aead_req->cryptlen;
++	u8 b0[16] = {0};
++	u8 b1[10] = {0}; /* Store encoded aad length */
++	u8 alen = 0;
++	int l;
++	__be32 msglen;
++
++	/* 1. check iv value aead_req->iv[0] = L - 1 */
++	if (aead_req->iv[0] < 1 || aead_req->iv[0] > 7) {
++		pr_err("L value is not valid for CCM\n");
++		return NULL;
++	}
++
++	l = aead_req->iv[0] + 1;
++
++	/* 2. format control infomration and nonce */
++	memcpy(b0, aead_req->iv, 16); /* iv max size is 15 - L */
++	b0[0] |= (((taglen - 2) / 2) << 3);
++	if (aad_len) {
++		b0[0] |= (1 << 6);
++		if (aad_len < 65280) {
++			/* 2 bytes encode aad length */
++			*(__be16 *)b1 = cpu_to_be16(aad_len);
++			alen = 2;
++		} else {
++			*(__be16 *)b1 = cpu_to_be16(0xfffe);
++			*(__be32 *)&b1[2] = cpu_to_be32(aad_len);
++			alen = 6;
++		}
++		*new_aad_len = ALIGN((16 + alen + aad_len), 16);
++	} else {
++		*new_aad_len = 16;
++	}
++	b0[0] |= aead_req->iv[0];
++
++	/* 3. set msg length. L - 1 Bytes store msg length */
++	if (l >= 4)
++		l = 4;
++	else if (cryptlen > (1 << (8 * l)))
++		return NULL;
++	if (cmd == YCC_CMD_CCM_DEC)
++		msglen = cpu_to_be32(cryptlen - taglen);
++	else
++		msglen = cpu_to_be32(cryptlen);
++	memcpy(&b0[16 - l], (u8 *)&msglen + 4 - l, l);
++
++	return __ycc_aead_format_data(req, b0, b1, alen, cmd);
++}
++
++static void *ycc_aead_format_data(struct ycc_crypto_req *req, u16 *new_aad_len,
++				  u32 *new_cryptlen, u8 cmd)
++{
++	struct aead_request *aead_req = req->aead_req;
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	int taglen = crypto_aead_authsize(tfm);
++
++	if (cmd == YCC_CMD_GCM_ENC || cmd == YCC_CMD_GCM_DEC) {
++		/* CCM */
++		*new_aad_len = aead_req->assoclen;
++		*new_cryptlen = aead_req->cryptlen;
++		req->out_len = *new_cryptlen + taglen;
++		return __ycc_aead_format_data(req, NULL, NULL, 0, cmd);
++	}
++
++	/* GCM */
++	*new_cryptlen = ALIGN(aead_req->cryptlen, 16);
++	req->out_len = *new_cryptlen + taglen;
++	return ycc_aead_format_ccm_data(req, new_aad_len, cmd);
++}
++
++/*
++ * This is a workaround. If ycc output len is outlen % 64 == 16, it
++ * might hang. taglen is 16 or 0
++ */
++static inline bool ycc_aead_do_soft(struct aead_request *aead_req, int taglen)
++{
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
++	struct ycc_dev *ydev = ctx->ring->ydev;
++
++	if ((ALIGN(aead_req->cryptlen, 64) + taglen) % 64 == 16 ||
++	    !test_bit(YDEV_STATUS_READY, &ydev->status))
++		return true;
++
++	return false;
++}
++
++static int ycc_aead_submit_desc(struct aead_request *aead_req, u8 cmd)
++{
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
++	struct ycc_crypto_req *req = aead_request_ctx(aead_req);
++	struct ycc_flags *aflags;
++	int taglen = crypto_aead_authsize(tfm);
++	u16 new_aad_len;
++	u32 new_cryptlen;
++	struct crypto_aes_ctx aes_ctx;
++	u8 tag[16];
++	u8 ziv[16] = {0};
++	__be32 counter = cpu_to_be32(1);
++	int ret = 0;
++
++	/*
++	 * YCC hw does not support gcm zero length plaintext. According to spec
++	 * if cryptlen is 0, just do aes_encrypt against IV
++	 */
++	if (aead_req->cryptlen == 0 && cmd == YCC_CMD_GCM_ENC) {
++		ret = aes_expandkey(&aes_ctx, ctx->cipher_key, ctx->keysize);
++		if (ret)
++			return ret;
++		memcpy(ziv, aead_req->iv, 12);
++		memcpy(ziv + 12, &counter, 4);
++		aes_encrypt(&aes_ctx, tag, ziv);
++		sg_copy_from_buffer(aead_req->dst,
++				    sg_nents_for_len(aead_req->dst, taglen),
++				    tag, taglen);
++		return 0;
++	}
++
++	if (aead_req->cryptlen == taglen && cmd == YCC_CMD_GCM_DEC) {
++		ret = aes_expandkey(&aes_ctx, ctx->cipher_key, ctx->keysize);
++		if (ret)
++			return ret;
++		/* Skip aad */
++		sg_copy_buffer(aead_req->src,
++			       sg_nents_for_len(aead_req->src, taglen),
++			       tag, taglen, aead_req->assoclen, 1);
++		aes_decrypt(&aes_ctx, ziv, tag);
++		sg_copy_from_buffer(aead_req->dst,
++				    sg_nents_for_len(aead_req->dst, taglen),
++				    ziv, taglen);
++		return 0;
++	}
++
++	memset(req, 0, sizeof(*req));
++	req->ctx = ctx;
++	req->aead_req = aead_req;
++
++	ret = ycc_aead_fill_key(req);
++	if (ret)
++		return ret;
++
++	req->src_vaddr = ycc_aead_format_data(req, &new_aad_len, &new_cryptlen, cmd);
++	if (!req->src_vaddr)
++		goto free_key;
++
++	ret = ycc_aead_sg_map(req);
++	if (ret)
++		goto unformat;
++
++	ret = -ENOMEM;
++	aflags = kzalloc(sizeof(struct ycc_flags), GFP_ATOMIC);
++	if (!aflags)
++		goto sg_unmap;
++
++	memset(&req->desc.cmd, 0, sizeof(union ycc_real_cmd));
++	aflags->ptr = (void *)req;
++	aflags->ycc_done_callback = ycc_aead_callback;
++	req->desc.private_ptr = (u64)aflags;
++	req->desc.cmd.aead_cmd.cmd_id = cmd;
++	req->desc.cmd.aead_cmd.mode = ctx->mode;
++	req->desc.cmd.aead_cmd.sptr = req->src_paddr;
++	req->desc.cmd.aead_cmd.dptr = req->dst_paddr;
++	if (cmd == YCC_CMD_GCM_DEC || cmd == YCC_CMD_CCM_DEC)
++		new_cryptlen = aead_req->cryptlen - taglen;
++	req->desc.cmd.aead_cmd.dlen = new_cryptlen;
++	req->desc.cmd.aead_cmd.keyptr = req->key_paddr;
++	req->desc.cmd.aead_cmd.aadlen = new_aad_len;
++	req->desc.cmd.aead_cmd.taglen = taglen;
++
++	/* 4. submit desc to cmd queue */
++	ret = ycc_enqueue(ctx->ring, &req->desc);
++	if (!ret)
++		return -EINPROGRESS;
++
++	pr_err("Failed to submit desc to ring\n");
++	kfree(aflags);
++
++sg_unmap:
++	ycc_aead_sg_unmap(req);
++unformat:
++	ycc_aead_unformat_data(req);
++free_key:
++	memset(req->key_vaddr, 0, 64);
++	dma_free_coherent(YCC_DEV(ctx), 64, req->key_vaddr, req->key_paddr);
++	req->key_vaddr = NULL;
++	return ret;
++}
++
++static int ycc_aead_ccm_encrypt(struct aead_request *aead_req)
++{
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
++	struct aead_request *subreq =
++		&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
++
++	if (ycc_aead_do_soft(aead_req, 16)) {
++		if (!ctx->soft_tfm)
++			return -ENOENT;
++		aead_request_set_tfm(subreq, ctx->soft_tfm);
++		aead_request_set_callback(subreq, aead_req->base.flags,
++					  aead_req->base.complete, aead_req->base.data);
++		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
++				       aead_req->cryptlen, aead_req->iv);
++		aead_request_set_ad(subreq, aead_req->assoclen);
++		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
++		return crypto_aead_encrypt(subreq);
++	}
++
++	return ycc_aead_submit_desc(aead_req, YCC_CMD_CCM_ENC);
++}
++
++static int ycc_aead_gcm_encrypt(struct aead_request *aead_req)
++{
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
++	struct aead_request *subreq =
++			&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
++
++	if (ycc_aead_do_soft(aead_req, 16)) {
++		if (!ctx->soft_tfm)
++			return -ENOENT;
++		aead_request_set_tfm(subreq, ctx->soft_tfm);
++		aead_request_set_callback(subreq, aead_req->base.flags,
++					  aead_req->base.complete, aead_req->base.data);
++		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
++				       aead_req->cryptlen, aead_req->iv);
++		aead_request_set_ad(subreq, aead_req->assoclen);
++		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
++		return crypto_aead_encrypt(subreq);
++	}
++
++	return ycc_aead_submit_desc(aead_req, YCC_CMD_GCM_ENC);
++}
++
++static int ycc_aead_gcm_decrypt(struct aead_request *aead_req)
++{
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
++	struct aead_request *subreq =
++		&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
++
++	if (ycc_aead_do_soft(aead_req, 0)) {
++		if (!ctx->soft_tfm)
++			return -ENOENT;
++		aead_request_set_tfm(subreq, ctx->soft_tfm);
++		aead_request_set_callback(subreq, aead_req->base.flags,
++					  aead_req->base.complete, aead_req->base.data);
++		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
++				       aead_req->cryptlen, aead_req->iv);
++		aead_request_set_ad(subreq, aead_req->assoclen);
++		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
++		return crypto_aead_decrypt(subreq);
++	}
++
++	return ycc_aead_submit_desc(aead_req, YCC_CMD_GCM_DEC);
++}
++
++static int ycc_aead_ccm_decrypt(struct aead_request *aead_req)
++{
++	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
++	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
++	struct aead_request *subreq =
++		&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
++
++	if (ycc_aead_do_soft(aead_req, 0)) {
++		if (!ctx->soft_tfm)
++			return -ENOENT;
++		aead_request_set_tfm(subreq, ctx->soft_tfm);
++		aead_request_set_callback(subreq, aead_req->base.flags,
++					  aead_req->base.complete, aead_req->base.data);
++		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
++				       aead_req->cryptlen, aead_req->iv);
++		aead_request_set_ad(subreq, aead_req->assoclen);
++		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
++		return crypto_aead_decrypt(subreq);
++	}
++
++	return ycc_aead_submit_desc(aead_req, YCC_CMD_CCM_DEC);
++}
++
++static struct aead_alg ycc_aeads[] = {
 +	{
 +		.base = {
-+			.cra_name = "cbc(aes)",
-+			.cra_driver_name = "ycc_cbc(aes)",
-+			.cra_priority = 4001,
++			.cra_name = "gcm(aes)",
++			.cra_driver_name = "gcm-aes-ycc",
++			.cra_priority = 350,
 +			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = AES_BLOCK_SIZE,
++			.cra_blocksize = 1,
 +			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
 +			.cra_module = THIS_MODULE,
 +		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_aes_cbc_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = AES_MIN_KEY_SIZE,
-+		.max_keysize = AES_MAX_KEY_SIZE,
++		.init = ycc_aead_init,
++		.exit = ycc_aead_exit,
++		.setkey = ycc_aead_setkey,
++		.decrypt = ycc_aead_gcm_decrypt,
++		.encrypt = ycc_aead_gcm_encrypt,
 +		.ivsize = AES_BLOCK_SIZE,
++		.maxauthsize = AES_BLOCK_SIZE,
 +	},
 +	{
 +		.base = {
-+			.cra_name = "ecb(aes)",
-+			.cra_driver_name = "ycc_ecb(aes)",
-+			.cra_priority = 4001,
++			.cra_name = "gcm(sm4)",
++			.cra_driver_name = "gcm-sm4-ycc",
++			.cra_priority = 350,
 +			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = AES_BLOCK_SIZE,
++			.cra_blocksize = 1,
 +			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
 +			.cra_module = THIS_MODULE,
 +		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_aes_ecb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = AES_MIN_KEY_SIZE,
-+		.max_keysize = AES_MAX_KEY_SIZE,
-+		.ivsize = 0,
++		.init = ycc_aead_init,
++		.exit = ycc_aead_exit,
++		.setkey = ycc_aead_setkey,
++		.decrypt = ycc_aead_gcm_decrypt,
++		.encrypt = ycc_aead_gcm_encrypt,
++		.ivsize = SM4_BLOCK_SIZE,
++		.maxauthsize = SM4_BLOCK_SIZE,
 +	},
 +	{
 +		.base = {
-+			.cra_name = "ctr(aes)",
-+			.cra_driver_name = "ycc_ctr(aes)",
-+			.cra_priority = 4001,
++			.cra_name = "ccm(aes)",
++			.cra_driver_name = "ccm-aes-ycc",
++			.cra_priority = 350,
 +			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = AES_BLOCK_SIZE,
++			.cra_blocksize = 1,
 +			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
 +			.cra_module = THIS_MODULE,
 +		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_aes_ctr_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = AES_MIN_KEY_SIZE,
-+		.max_keysize = AES_MAX_KEY_SIZE,
++		.init = ycc_aead_init,
++		.exit = ycc_aead_exit,
++		.setkey = ycc_aead_setkey,
++		.decrypt = ycc_aead_ccm_decrypt,
++		.encrypt = ycc_aead_ccm_encrypt,
 +		.ivsize = AES_BLOCK_SIZE,
++		.maxauthsize = AES_BLOCK_SIZE,
 +	},
 +	{
 +		.base = {
-+			.cra_name = "cfb(aes)",
-+			.cra_driver_name = "ycc_cfb(aes)",
-+			.cra_priority = 4001,
++			.cra_name = "ccm(sm4)",
++			.cra_driver_name = "ccm-sm4-ycc",
++			.cra_priority = 350,
 +			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = AES_BLOCK_SIZE,
++			.cra_blocksize = 1,
 +			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
 +			.cra_module = THIS_MODULE,
 +		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_aes_cfb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = AES_MIN_KEY_SIZE,
-+		.max_keysize = AES_MAX_KEY_SIZE,
-+		.ivsize = AES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ofb(aes)",
-+			.cra_driver_name = "ycc_ofb(aes)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = AES_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_aes_ofb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = AES_MIN_KEY_SIZE,
-+		.max_keysize = AES_MAX_KEY_SIZE,
-+		.ivsize = AES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "xts(aes)",
-+			.cra_driver_name = "ycc_xts(aes)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = AES_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_aes_xts_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = AES_MIN_KEY_SIZE * 2,
-+		.max_keysize = AES_MAX_KEY_SIZE * 2,
-+		.ivsize = AES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "cbc(sm4)",
-+			.cra_driver_name = "ycc_cbc(sm4)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = SM4_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_sm4_cbc_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = SM4_KEY_SIZE,
-+		.max_keysize = SM4_KEY_SIZE,
++		.init = ycc_aead_init,
++		.exit = ycc_aead_exit,
++		.setkey = ycc_aead_setkey,
++		.decrypt = ycc_aead_ccm_decrypt,
++		.encrypt = ycc_aead_ccm_encrypt,
 +		.ivsize = SM4_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ecb(sm4)",
-+			.cra_driver_name = "ycc_ecb(sm4)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = SM4_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_sm4_ecb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = SM4_KEY_SIZE,
-+		.max_keysize = SM4_KEY_SIZE,
-+		.ivsize = 0,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ctr(sm4)",
-+			.cra_driver_name = "ycc_ctr(sm4)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = SM4_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_sm4_ctr_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = SM4_KEY_SIZE,
-+		.max_keysize = SM4_KEY_SIZE,
-+		.ivsize = SM4_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "cfb(sm4)",
-+			.cra_driver_name = "ycc_cfb(sm4)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = SM4_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_sm4_cfb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = SM4_KEY_SIZE,
-+		.max_keysize = SM4_KEY_SIZE,
-+		.ivsize = SM4_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ofb(sm4)",
-+			.cra_driver_name = "ycc_ofb(sm4)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = SM4_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_sm4_ofb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = SM4_KEY_SIZE,
-+		.max_keysize = SM4_KEY_SIZE,
-+		.ivsize = SM4_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "xts(sm4)",
-+			.cra_driver_name = "ycc_xts(sm4)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = SM4_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_sm4_xts_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = SM4_KEY_SIZE * 2,
-+		.max_keysize = SM4_KEY_SIZE * 2,
-+		.ivsize = SM4_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "cbc(des)",
-+			.cra_driver_name = "ycc_cbc(des)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_des_cbc_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES_KEY_SIZE,
-+		.max_keysize = DES_KEY_SIZE,
-+		.ivsize = DES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ecb(des)",
-+			.cra_driver_name = "ycc_ecb(des)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_des_ecb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES_KEY_SIZE,
-+		.max_keysize = DES_KEY_SIZE,
-+		.ivsize = 0,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ctr(des)",
-+			.cra_driver_name = "ycc_ctr(des)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_des_ctr_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES_KEY_SIZE,
-+		.max_keysize = DES_KEY_SIZE,
-+		.ivsize = DES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "cfb(des)",
-+			.cra_driver_name = "ycc_cfb(des)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_des_cfb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES_KEY_SIZE,
-+		.max_keysize = DES_KEY_SIZE,
-+		.ivsize = DES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ofb(des)",
-+			.cra_driver_name = "ycc_ofb(des)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_des_ofb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES_KEY_SIZE,
-+		.max_keysize = DES_KEY_SIZE,
-+		.ivsize = DES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "cbc(des3_ede)",
-+			.cra_driver_name = "ycc_cbc(des3_ede)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES3_EDE_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_3des_cbc_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES3_EDE_KEY_SIZE,
-+		.max_keysize = DES3_EDE_KEY_SIZE,
-+		.ivsize = DES3_EDE_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ecb(des3_ede)",
-+			.cra_driver_name = "ycc_ecb(des3_ede)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES3_EDE_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_3des_ecb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES3_EDE_KEY_SIZE,
-+		.max_keysize = DES3_EDE_KEY_SIZE,
-+		.ivsize = 0,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ctr(des3_ede)",
-+			.cra_driver_name = "ycc_ctr(des3_ede)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES3_EDE_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_3des_ctr_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES3_EDE_KEY_SIZE,
-+		.max_keysize = DES3_EDE_KEY_SIZE,
-+		.ivsize = DES3_EDE_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "cfb(des3_ede)",
-+			.cra_driver_name = "ycc_cfb(des3_ede)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES3_EDE_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_3des_cfb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES3_EDE_KEY_SIZE,
-+		.max_keysize = DES3_EDE_KEY_SIZE,
-+		.ivsize = DES3_EDE_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ofb(des3_ede)",
-+			.cra_driver_name = "ycc_ofb(des3_ede)",
-+			.cra_priority = 4001,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = DES3_EDE_BLOCK_SIZE,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_skcipher_init,
-+		.exit = ycc_skcipher_exit,
-+		.setkey = ycc_skcipher_3des_ofb_setkey,
-+		.encrypt = ycc_skcipher_encrypt,
-+		.decrypt = ycc_skcipher_decrypt,
-+		.min_keysize = DES3_EDE_KEY_SIZE,
-+		.max_keysize = DES3_EDE_KEY_SIZE,
-+		.ivsize = DES3_EDE_BLOCK_SIZE,
++		.maxauthsize = SM4_BLOCK_SIZE,
 +	},
 +};
 +
-+int ycc_sym_register(void)
++int ycc_aead_register(void)
 +{
-+	return crypto_register_skciphers(ycc_skciphers, ARRAY_SIZE(ycc_skciphers));
++	return crypto_register_aeads(ycc_aeads, ARRAY_SIZE(ycc_aeads));
 +}
 +
-+void ycc_sym_unregister(void)
++void ycc_aead_unregister(void)
 +{
-+	crypto_unregister_skciphers(ycc_skciphers, ARRAY_SIZE(ycc_skciphers));
++	crypto_unregister_aeads(ycc_aeads, ARRAY_SIZE(ycc_aeads));
 +}
+diff --git a/drivers/crypto/ycc/ycc_algs.h b/drivers/crypto/ycc/ycc_algs.h
+index 6c7b0dc..e3be83ec 100644
+--- a/drivers/crypto/ycc/ycc_algs.h
++++ b/drivers/crypto/ycc/ycc_algs.h
+@@ -3,6 +3,7 @@
+ #define __YCC_ALG_H
+ 
+ #include <crypto/skcipher.h>
++#include <crypto/aead.h>
+ 
+ #include "ycc_ring.h"
+ #include "ycc_dev.h"
+@@ -70,6 +71,11 @@ enum ycc_ske_alg_mode {
+ enum ycc_cmd_id {
+ 	YCC_CMD_SKE_ENC = 0x23,
+ 	YCC_CMD_SKE_DEC,
++
++	YCC_CMD_GCM_ENC = 0x25,
++	YCC_CMD_GCM_DEC,
++	YCC_CMD_CCM_ENC,
++	YCC_CMD_CCM_DEC, /* 0x28 */
+ };
+ 
+ struct ycc_crypto_ctx {
+@@ -92,8 +98,10 @@ struct ycc_crypto_req {
+ 	dma_addr_t key_paddr;
+ 
+ 	struct ycc_cmd_desc desc;
+-	struct skcipher_request *ske_req;
+-	struct skcipher_request ske_subreq;
++	union {
++		struct skcipher_request *ske_req;
++		struct aead_request *aead_req;
++	};
+ 
+ 	void *src_vaddr;
+ 	dma_addr_t src_paddr;
+@@ -105,10 +113,18 @@ struct ycc_crypto_req {
+ 	int aad_offset;
+ 	struct ycc_crypto_ctx *ctx;
+ 	u8 last_block[16]; /* used to store iv out when decrypt */
++
++	/* soft request for fallback, keep at the end */
++	union {
++		struct skcipher_request ske_subreq;
++		struct aead_request aead_subreq;
++	};
+ };
+ 
+ #define YCC_DEV(ctx)		(&(ctx)->ring->ydev->pdev->dev)
+ 
+ int ycc_sym_register(void);
+ void ycc_sym_unregister(void);
++int ycc_aead_register(void);
++void ycc_aead_unregister(void);
+ #endif
+diff --git a/drivers/crypto/ycc/ycc_drv.c b/drivers/crypto/ycc/ycc_drv.c
+index 2cca83b..9522b42 100644
+--- a/drivers/crypto/ycc/ycc_drv.c
++++ b/drivers/crypto/ycc/ycc_drv.c
+@@ -95,8 +95,14 @@ int ycc_algorithm_register(void)
+ 	if (ret)
+ 		goto err;
+ 
++	ret = ycc_aead_register();
++	if (ret)
++		goto unregister_sym;
++
+ 	return 0;
+ 
++unregister_sym:
++	ycc_sym_unregister();
+ err:
+ 	atomic_dec(&ycc_algs_refcnt);
+ 	return ret;
+@@ -110,6 +116,7 @@ void ycc_algorithm_unregister(void)
+ 	if (atomic_dec_return(&ycc_algs_refcnt))
+ 		return;
+ 
++	ycc_aead_unregister();
+ 	ycc_sym_unregister();
+ }
+ 
+diff --git a/drivers/crypto/ycc/ycc_ring.h b/drivers/crypto/ycc/ycc_ring.h
+index 78ba959..2caa9e0 100644
+--- a/drivers/crypto/ycc/ycc_ring.h
++++ b/drivers/crypto/ycc/ycc_ring.h
+@@ -87,8 +87,22 @@ struct ycc_skcipher_cmd {
+ 	u8 padding;
+ } __packed;
+ 
++struct ycc_aead_cmd {
++	u8 cmd_id;
++	u8 mode;
++	u64 sptr:48;	/* include aad + payload */
++	u64 dptr:48;	/* encrypted/decrypted + tag */
++	u32 dlen;	/* data size */
++	u16 key_idx;
++	u16 kek_idx;
++	u64 keyptr:48;
++	u16 aadlen;
++	u8 taglen;	/* authenc size */
++} __packed;
++
+ union ycc_real_cmd {
+ 	struct ycc_skcipher_cmd ske_cmd;
++	struct ycc_aead_cmd aead_cmd;
+ 	u8 padding[32];
+ };
+ 
 -- 
 1.8.3.1
 

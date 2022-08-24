@@ -2,220 +2,475 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687EC59F01D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C3A59F020
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbiHXAL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S232776AbiHXAO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiHXALY (ORCPT
+        with ESMTP id S231569AbiHXAOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:11:24 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2129.outbound.protection.outlook.com [40.107.237.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8441E754A5;
-        Tue, 23 Aug 2022 17:11:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cu4LY2//zf3BQKO2z85wFMShxIXi+KWnYJtdeAFD1UiaqZ1XOSW5qHwic3ythdrl900C53lsC/UpiJ/i15r9PPkyCsXrDST3v02WgaWq0OuvXa3Q/uJMQ1ubvndlKaZV3FG1w2wA5RyGYuA2tSmbuYugHUN9vRjUgHSKsU7hEWy+gDHRQFQy5qeRCge3AeziRg/J8m41IPBUuwdbW2aRmmnbti3msU/OsHuWiXqnqzwTGHDgiqhgrGJpbaAWC9iQPifEqHBSK8iISgGxs1DfUzsP2c2I5koQwMFtMLiwKgWyC0mOufjfvJ8duhoaLHKdO6VaAE5e5ARWZrawy8zZiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S8qL0waLgutFBSEyWsJ6/8xRL2I5K7B7CSItD5auKl0=;
- b=F53U1gFLxX8hvNhZPjWTGFkM4YoYhzJS9GDIPbulGGcrfN10Sf1d5RJneD0KUZVMYVbYjZfhmxXjtceCtHCtoNZEL43IMy1TIWDo/juJ9nl9vfOSWVd/sdH1UrVIg6fNIBtmZqryqqdm4EgdJjE5fV39QdPjhLR/KKAltB3ItJ3eetsCCaNns2vPIlQGUjyrHnsym2rpG4VKL4fO4ydJrQKDe8McifQHJrdR0syDoRKYZyS8o1NdCYtsHECpK2FDhBp1T5ivSPjUTVnTwumXfSCb3hs0jvAr6TglAOUt+fHU6E1K44uEKtBVQvugFCspEItjmAMCp/ls3Dg+Ed1oyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hammerspace.com; dmarc=pass action=none
- header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S8qL0waLgutFBSEyWsJ6/8xRL2I5K7B7CSItD5auKl0=;
- b=dLjkcqB3D3SJEkXfqgOy+00rbuvZNowRgLE/o+GZfZSCqLE23BFtcqXAAex7rW1cq2cqfnoB3hCQ8LUhxmqsMWAj1PPWTfkSPSDFh3rw4mnPk1FiD5yTVJMlfXIfhY/7oz/xDn8cgc2aG1xGT3IxYaDxJvpKls5IFrFRAwA5gl0=
-Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
- by SN6PR13MB2399.namprd13.prod.outlook.com (2603:10b6:805:62::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Wed, 24 Aug
- 2022 00:11:18 +0000
-Received: from CH0PR13MB5084.namprd13.prod.outlook.com
- ([fe80::f1c7:62d0:a63d:f5ca]) by CH0PR13MB5084.namprd13.prod.outlook.com
- ([fe80::f1c7:62d0:a63d:f5ca%3]) with mapi id 15.20.5566.014; Wed, 24 Aug 2022
- 00:11:18 +0000
-From:   Trond Myklebust <trondmy@hammerspace.com>
-To:     "david@fromorbit.com" <david@fromorbit.com>,
-        "neilb@suse.de" <neilb@suse.de>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-Thread-Topic: [PATCH] iversion: update comments with info about atime updates
-Thread-Index: AQHYtiu78BIi9dXZ8UOO9hQoVoU0MK27DreAgAALz4CAABV0AIAAC+oAgABWqoCAAMYdAIAABJ6AgAADrACAALEBgIAAEc8AgAAD2QCAAAgXgA==
-Date:   Wed, 24 Aug 2022 00:11:17 +0000
-Message-ID: <1aeecde587672ed4e9932e7cf4c62291308f37a6.camel@hammerspace.com>
-References: <20220822133309.86005-1-jlayton@kernel.org> ,
- <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com> ,
- <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>    ,
- <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com> ,
- <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>    ,
- <20220822233231.GJ3600936@dread.disaster.area> ,
- <6cbcb33d33613f50dd5e485ecbf6ce7e305f3d6f.camel@kernel.org>    ,
- <166125468756.23264.2859374883806269821@noble.neil.brown.name> ,
- <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>    ,
- <166129348704.23264.10381335282721356873@noble.neil.brown.name>        ,
- <20220823232832.GQ3600936@dread.disaster.area>
-         <166129813890.23264.7939069509747685028@noble.neil.brown.name>
-In-Reply-To: <166129813890.23264.7939069509747685028@noble.neil.brown.name>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=hammerspace.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 98a50a3d-089c-4d19-0ab3-08da85652aa7
-x-ms-traffictypediagnostic: SN6PR13MB2399:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ifSoU2sOIWknXFzqhjgIoy7YhmOcFrekO5bX8sVsBTNe7V0S2fXPoP7EdmkxecJLnkYvr9tB79KSukb/m538MI9Ja1MBvLGChLZCEIGTbYSLb1eETePAbBAU0ijKF7hhuAk1Z+NRmIEDM2AVEsmxFDXMImPHAPV61qLcECjgUZs9VHJ9wy+PyPwI6eyPDLIeiNo0hq/w9LXcrDJBYx0WPJE2Vz9VxTdEp9vyMrGCRBSRQusz0JOf62xZuaUEKavl+dgYJJd8yPBC1upnmhl9lJHbAct829STx8/zcoEFlU1FmBhej9EwZz3s443bjhJGgiArhjENVU7OVOKiCM0sxuIvTFOQ4wI3DDNSFvf+rybCY0O+3Y0nUn6eQ6vKCgnADa1uLd1HFDi25N3Y25m+eePeNJPYwYCFkUYjGPy6t42zXGIqa/KajfGKEiLHn7yC+BDJ9Pe2LBHz4BnOyBaB9jBuFzxHgDib7uqtlee/l1a45B11zeBIWa7F8KFEqHolePvsXokmurSJ+ckuD5JXWLD3hRn1KD4uAEK/02jzSXA6lTuf73nVHVHJZZthtNYWZsa39vQztI4xmkXQRD6ZSoh+PQH6onpc4GV1dHXkEzFN2WtFOAguSYfX2fSsWu9Ha5CV3AJW6qjMBIJi2Ivod2oImiMIteF7tXEoj0Jjiiq+aMUubhr2cyrInQRanOaFzRcDHPjjhu52ppKU+JdYrQTJZP+kxgdGa/ly508e8Uv8spyFmqdUHtGk6mHZ7PMmg7pXTe/lDfPZfmIUswuLFprMhN8fSqQTEkzoVJIkZ1iEJCHvBBVwMcOdvCqaRp29pRhkrMBVXzdWcqONzOXqgJLV65g6Yxmfq/4jdLBtQKE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(136003)(39840400004)(366004)(396003)(6512007)(6506007)(26005)(5660300002)(8936002)(2906002)(15650500001)(7416002)(71200400001)(41300700001)(86362001)(2616005)(186003)(38100700002)(83380400001)(122000001)(36756003)(54906003)(110136005)(66946007)(66446008)(66556008)(64756008)(38070700005)(8676002)(76116006)(66476007)(966005)(478600001)(4326008)(316002)(6486002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VzNhVGpNSk1WWTNxKzhDRFZkOEtLMGR6YTdIY2dtMmxxWFhsOFFjYUp1cXF0?=
- =?utf-8?B?bkF2R0ZjeGVteTQxWnQ5VkNoaGR0aG8yUlNsU3orSmFqeU5uYU1hT3ltdEJD?=
- =?utf-8?B?OFlxTnpyUjRXOUM0NFlQN3V1ckdzQUJMaVlnTUg3cU9XUDErN1hPclZHcWxH?=
- =?utf-8?B?MUVtTElsNk8vQXpUU21JdkQ2OVdUQzVGNjNxTU1nN1hoZUE2dHh0ajZFaVJ1?=
- =?utf-8?B?M0JSSTZLcHFBM0JFWGF0RkR3TW9oc0kyMHZLWVJPNDBPSFJ5NnVuNlRFK2Ey?=
- =?utf-8?B?TGdkK2dJVDhuQ0VqS09HalR1QVlBVjNmWXdOS2J6TjdFRGVVL3l0UEpOREcv?=
- =?utf-8?B?TlR6RWtXQzcrb0pWVUxmMUFyNDdOYXJ0cVk0a2pPWGllZElsd3V2UDA2dzlP?=
- =?utf-8?B?ZVN4VFV6UStuRTFKdWRRcUJLa2txWEE4cnVpbE5ZRnora3ZmVmtVcHprWHY0?=
- =?utf-8?B?V2w1MjRPcjdEeG5oOHZLU0ZXa3phUmtGTUhMSkxSYkxWZ2Ric215YnJrNTNR?=
- =?utf-8?B?ZlhMcXYxcVJuYmZWNC9rNlFaQWNxWVNRdTNiVFhubXV2dUNWb25NZ01Fd1ZN?=
- =?utf-8?B?L1M5Ui95a28xbmdOaGdORmJsUkFvS1RpM3JXc29VQ3ByQStwSjNPY0w1VFJH?=
- =?utf-8?B?ZzAxYWpTUGRkUG1vZEhmcUdZU0dOaDRqUXpqOGN6RzZ0bE4zQ2RlTmJxQW9y?=
- =?utf-8?B?eUFOTlBWczN4c1JZKzFJVzhWM1N1Y3dIa2U3UnFENkpWa01ybFRFdGQyQ21S?=
- =?utf-8?B?bUpSWmw3bTl0ckYwTDNSTE9ybytaOXNtaFViZ25WR0RSYjg0dVQ4WG04VUpa?=
- =?utf-8?B?ZHNONnBlTzNaTTB3cmR1bE91amY5VG5JV1RhemIrSzRBOERhbERIWk5ORE16?=
- =?utf-8?B?dmMyZlF4N25iT2k1YU93SzVOalJvRFhTd21VMUdzVW5oWlllUVVzdEVVd040?=
- =?utf-8?B?YlRHeitIbWowNU10NXF2QW0zUDBsZC9oVG4zejA5RWRsL2QwcnhHZDVKNlBh?=
- =?utf-8?B?Q2lvcFkyclRqQ2FkaTlySVhnbmMwUlpVVW1SSnRhY1lNdHNqZmRweG9QbVdq?=
- =?utf-8?B?em9uZmo2YjJHYXFzd3pBL1RGL0R1TlNqbDFMMWpuUUlSOTZCR2IxdkNNblVG?=
- =?utf-8?B?RnlzSEJSbzJaemM0K0E2aXV4NjZ4U1FkOUZWWFpNdUlITmQ4cEU0Z1BLbWZq?=
- =?utf-8?B?STRTNmdraHNLd29zS0JwQXlRTnprV0RSOUo3eExNY2dUNERYM0ZNQ1R0c0R0?=
- =?utf-8?B?UittRlJoRVJrb1ZhTzU2bUJYQ0o3RVZYeGkvelp6ZElwL0l2bWlzM0tFWFJr?=
- =?utf-8?B?WXhONldMNDcxZWZ5OEZFMHdMRVJ1UTdUMTRxMlNIM2tsZWZIOWpYL2VPeXJp?=
- =?utf-8?B?enlDQk4yaC83cGxIeHdMUHovMFUreERGbTlTblNYZHlvVldUcEwvMjREVWYy?=
- =?utf-8?B?ZzBNcGZnMWhmcXdidERjNmxDMmZuYzlxY0hLR3JOWVgwZEZta0RIUTdCdmMv?=
- =?utf-8?B?Ulo4WTBkSEdKTzIza1hIaTQzODdLYzA4bzB6WWtVODhTRkY5NmNMeHVQbHha?=
- =?utf-8?B?enA4NlQraWpmamd2Y0EzNFljQXhtZldNeWtNZUN6cnNQeUlKNmlhMzJha29G?=
- =?utf-8?B?L2tEclIyQk9Cd3JvNnlPMTNycXRKc0ZWM1d1cWRHYkNGd2J4ZEJ0U3RYSnVS?=
- =?utf-8?B?c1N4dkZBU0ZXWDVKeVB1VWcra0s1SVFzLzc3RVVJYTNuWUhmY3BHL2dYRlUy?=
- =?utf-8?B?WHNEZkY0NEJHcDhmd2dLV0NxUXgvSEZXK1U4cHhKNGQzYytSZkJhNUpmSVk0?=
- =?utf-8?B?bWxhVFdCN2tzRE1oZUFwcE52YlVrZFpyV1FIblV1K3NtMHVad3RpY29tMnRr?=
- =?utf-8?B?NlN3WURHZmxFc2hXVFlUNk42RmFDTGxwNXZtQ1YvcHo4QzhnL1ZOdllhTHRr?=
- =?utf-8?B?cUNpVFJuZ2k4aUo5cjh1OTZ1aWZyYmE1TUxkeDFEM1g5bTNtZHlSK2h6Snd4?=
- =?utf-8?B?eG9PSStmV2lUR3dUdG1vTGNXd1diTFQvZDJDbkhPdG1GR2Z6RUFWNS9wR0RG?=
- =?utf-8?B?bzNKbFVzNTVMMzdtdmtoSzhoai9Gd3hpRStQZDloUU51RENTc0hSYWdsRFFu?=
- =?utf-8?B?VXJoekcraG1LeDdIbEpvSHNCbzdhY0FHVVVMREJheUlYN3VaRDc2ZUR5RnlJ?=
- =?utf-8?B?dHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <325C35D6EA03BA468CF5D4F04D5F37E5@namprd13.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 23 Aug 2022 20:14:20 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDE6883FF;
+        Tue, 23 Aug 2022 17:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661300058; x=1692836058;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i3M+r0vqX2r/Wry6UGrPxk6dMbhbJTmexTELkr22rbM=;
+  b=eLJqRBQCT2Nry3WGKr+oRmFVPh36p9WAn+hfvEtb11iFpY2r3i/8WwCV
+   tX2IWZANPvsFfHfu2tkDjxr0g1Zksv8I9//wjh2ZifTh4xz5ENeBvEjce
+   la5NTvwaMrbqTEq57W1P73DEcQR8oN7fdnk83/a2ly6pXVyKLkdQAB3Zm
+   9EurMxyqqbUVgj+GBtY/NgyIHhnqCVWE/r4n7wserQ0WIDXqtCta/u7/8
+   zHhrhNhJ+534+JGRRT1HRwSknh+Pnl3+bgQsQ6HD663XBN9BN4O1Ukeb0
+   3von0OJd4dqCLqi4i8sfH8AKakikjLUDM3fZymxP0m0r3XOIJZzZXUfa8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="293827379"
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="293827379"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 17:14:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="751873229"
+Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Aug 2022 17:14:11 -0700
+Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQe27-0000kH-0e;
+        Wed, 24 Aug 2022 00:14:11 +0000
+Date:   Wed, 24 Aug 2022 08:13:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] LoongArch: Use TLB for ioremap()
+Message-ID: <202208240804.stCUUthX-lkp@intel.com>
+References: <20220823030319.3872957-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-X-OriginatorOrg: hammerspace.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98a50a3d-089c-4d19-0ab3-08da85652aa7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 00:11:17.9503
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: d78YgBWnpGYZhHhhWl1KR2pQk4gJmiCr0y8kLZy0TI2gg6QtmXOLFfXNX/IfrrxQaTnH1MsNLPCsriSuJ9nnkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR13MB2399
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823030319.3872957-1-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTA4LTI0IGF0IDA5OjQyICsxMDAwLCBOZWlsQnJvd24gd3JvdGU6DQo+IE9u
-IFdlZCwgMjQgQXVnIDIwMjIsIERhdmUgQ2hpbm5lciB3cm90ZToNCj4gPiBPbiBXZWQsIEF1ZyAy
-NCwgMjAyMiBhdCAwODoyNDo0N0FNICsxMDAwLCBOZWlsQnJvd24gd3JvdGU6DQo+ID4gPiBPbiBU
-dWUsIDIzIEF1ZyAyMDIyLCBKZWZmIExheXRvbiB3cm90ZToNCj4gPiA+ID4gT24gVHVlLCAyMDIy
-LTA4LTIzIGF0IDIxOjM4ICsxMDAwLCBOZWlsQnJvd24gd3JvdGU6DQo+ID4gPiA+ID4gT24gVHVl
-LCAyMyBBdWcgMjAyMiwgSmVmZiBMYXl0b24gd3JvdGU6DQo+ID4gPiA+ID4gPiBTbywgd2UgY2Fu
-IHJlZmVyIHRvIHRoYXQgYW5kIHNpbXBseSBzYXk6DQo+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+
-ICJJZiB0aGUgZnVuY3Rpb24gdXBkYXRlcyB0aGUgbXRpbWUgb3IgY3RpbWUgb24gdGhlIGlub2Rl
-LA0KPiA+ID4gPiA+ID4gdGhlbiB0aGUNCj4gPiA+ID4gPiA+IGlfdmVyc2lvbiBzaG91bGQgYmUg
-aW5jcmVtZW50ZWQuIElmIG9ubHkgdGhlIGF0aW1lIGlzIGJlaW5nDQo+ID4gPiA+ID4gPiB1cGRh
-dGVkLA0KPiA+ID4gPiA+ID4gdGhlbiB0aGUgaV92ZXJzaW9uIHNob3VsZCBub3QgYmUgaW5jcmVt
-ZW50ZWQuIFRoZSBleGNlcHRpb24NCj4gPiA+ID4gPiA+IHRvIHRoaXMgcnVsZQ0KPiA+ID4gPiA+
-ID4gaXMgZXhwbGljaXQgYXRpbWUgdXBkYXRlcyB2aWEgdXRpbWVzKCkgb3Igc2ltaWxhcg0KPiA+
-ID4gPiA+ID4gbWVjaGFuaXNtLCB3aGljaA0KPiA+ID4gPiA+ID4gc2hvdWxkIHJlc3VsdCBpbiB0
-aGUgaV92ZXJzaW9uIGJlaW5nIGluY3JlbWVudGVkLiINCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBJ
-cyB0aGF0IGV4Y2VwdGlvbiBuZWVkZWQ/wqAgdXRpbWVzKCkgdXBkYXRlcyBjdGltZS4NCj4gPiA+
-ID4gPiANCj4gPiA+ID4gPiBodHRwczovL21hbjcub3JnL2xpbnV4L21hbi1wYWdlcy9tYW4yL3V0
-aW1lcy4yLmh0bWwNCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBkb2Vzbid0IHNheSB0aGF0LCBidXQN
-Cj4gPiA+ID4gPiANCj4gPiA+ID4gPiBodHRwczovL3B1YnMub3Blbmdyb3VwLm9yZy9vbmxpbmVw
-dWJzLzAwNzkwNDg3NS9mdW5jdGlvbnMvdXRpbWVzLmh0bWwNCj4gPiA+ID4gPiANCj4gPiA+ID4g
-PiBkb2VzLCBhcyBkb2VzIHRoZSBjb2RlLg0KPiA+ID4gPiA+IA0KPiA+ID4gPiANCj4gPiA+ID4g
-T2gsIGdvb2QgcG9pbnQhIEkgdGhpbmsgd2UgY2FuIGxlYXZlIHRoYXQgb3V0LiBFdmVuIGJldHRl
-ciENCj4gPiA+IA0KPiA+ID4gRnVydGhlciwgaW1wbGljaXQgbXRpbWUgdXBkYXRlcyAoZmlsZV91
-cGRhdGVfdGltZSgpKSBhbHNvIHVwZGF0ZQ0KPiA+ID4gY3RpbWUuDQo+ID4gPiBTbyBhbGwgeW91
-IG5lZWQgaXMNCj4gPiA+IMKgwqAgSWYgdGhlIGZ1bmN0aW9uIHVwZGF0ZXMgdGhlIGN0aW1lLCB0
-aGVuIGlfdmVyc2lvbiBzaG91bGQgYmUNCj4gPiA+IMKgwqAgaW5jcmVtZW50ZWQuDQo+ID4gPiAN
-Cj4gPiA+IGFuZCBJIGhhdmUgdG8gYXNrIC0gd2h5IG5vdCBqdXN0IHVzZSB0aGUgY3RpbWU/wqAg
-V2h5IGhhdmUgYW5vdGhlcg0KPiA+ID4gbnVtYmVyDQo+ID4gPiB0aGF0IGlzIHBhcmFsbGVsPw0K
-PiA+ID4gDQo+ID4gPiBUaW1lc3RhbXBzIGFyZSB1cGRhdGVkIGF0IEhaIChrdGltZV9nZXRfY291
-cnNlKSB3aGljaCBpcyBhdCBtb3N0DQo+ID4gPiBldmVyeQ0KPiA+ID4gbWlsbGlzZWNvbmQuDQo+
-ID4gDQo+ID4gS2VybmVsIHRpbWUsIGFuZCB0aGVyZWZvcmUgdGltZXN0YW1wcywgY2FuIGdvIGJh
-Y2t3YXJkcy4NCj4gDQo+IFllcywgYW5kIHdoZW4gdGhhdCBoYXBwZW5zIHlvdSBnZXQgdG8ga2Vl
-cCBib3RoIGhhbHZlcy4uLg0KPiANCj4gRm9yIE5GU3Y0IEkgcmVhbGx5IGRvbid0IHRoaW5rIHRo
-YXQgbWF0dGVycy7CoCBJZiBpdCBoYXBwZW5lZCBldmVyeQ0KPiBkYXksDQo+IHRoYXQgbWlnaHQg
-YmUgYSBwcm9ibGVtLsKgIEV2ZW4gaWYgaXQgaGFwcGVucyBhcyBhIGNvbnNlcXVlbmNlIG9mDQo+
-IG5vcm1hbA0KPiBvcGVyYXRpb25zIGl0IG1pZ2h0IGJlIGEgcHJvYmxlbS7CoCBCdXQgaXQgY2Fu
-IG9ubHkgaGFwcGVuIGlmDQo+IHNvbWV0aGluZw0KPiBnb2VzIHdyb25nLg0KPiANCj4gTW9zdGx5
-LCBORlN2NCBvbmx5IG5lZWRzIHRvIGNoYW5nZWlkIHRvIGNoYW5nZS7CoCBJZiB0aGUga2VybmVs
-IHRpbWUNCj4gZ29lcw0KPiBiYWNrd2FyZHMgaXQgaXMgcG9zc2libGUgdGhhdCBhIGNoYW5nZWlk
-IHdpbGwgcmVwZWF0LCB0aG91Z2gNCj4gdW5saWtlbHkuDQo+IEl0IGlzIGV2ZW4gcG9zc2libGUg
-dGhhdCBhIGNsaWVudCB3aWxsIHNlZSB0aGUgZmlyc3QgYW5kIHNlY29uZA0KPiBpbnN0YW5jZXMg
-b2YgdGhhdCByZXBlYXQsIGFuZCBhc3N1bWUgdGhlcmUgaXMgbm8gY2hhbmdlIGluIGJldHdlZW4g
-LQ0KPiBidXQNCj4gdGhhdCBpcyBhc3Ryb25vbWljYWxseSB1bmxpa2VseS7CoCAidG91Y2giaW5n
-IHRoZSBmaWxlIG9yIHJlbW91bnRpbmcNCj4gd2lsbA0KPiBmaXggdGhhdC4NCj4gDQo+IFdoZW4g
-YSB3cml0ZSBkZWxlZ2F0aW9uIGlzIGluIGZvcmNlICh3aGljaCBMaW51eCBkb2Vzbid0IGN1cnJl
-bnRseQ0KPiBvZmZlcg0KPiBhbmQgbm8tb25lIHNlZW1zIHRvIGNhcmUgYWJvdXQsIGJ1dCBtYXli
-ZSBvbmUgZGF5KSwgdGhlIGNsaWVudCBpcw0KPiBhbGxvd2VkIHRvIHVwZGF0ZSB0aGUgY2hhbmdl
-aWQsIGFuZCB3aGVuIHRoZSBkZWxlZ2F0aW9uIGlzIHJldHVybmVkLA0KPiB0aGUNCj4gc2VydmVy
-IGlzIHN1cHBvc2VkIHRvIGVuc3VyZSB0aGUgbmV3IGNoYW5nZWlkIGlzIGF0IGxlYXN0IHRoZSBs
-YXN0DQo+IG9uZQ0KPiBhc3NpZ25lZCBieSB0aGUgY2xpZW50LsKgIFRoaXMgaXMgdGhlIG9ubHkg
-cmVhc29uIHRoYXQgaXQgaXMgZGVmaW5lZA0KPiBhcw0KPiBiZWluZyBtb25vdG9uaWMgKHJhdGhl
-ciB0aGFuIGp1c3QgIm5vbi1yZXBlYXRpbmciKSAtIHNvIHRoZSBjbGllbnQNCj4gYW5kDQo+IHNl
-cnZlciBjYW4gY2hhbmdlIGl0IGluIHRoZSBzYW1lIHdheS4NCj4gDQoNClNvcnQgb2YuLi4gTW9u
-b3RvbmljaXR5IG9mIHRoZSBjaGFuZ2UgaWQgaXMgbm90IGEgcmVxdWlyZW1lbnQsIGV2ZW4gZm9y
-DQp0aGF0IGNhc2UuDQoNClRoZSBleGFjdCBORlN2NCByZXF1aXJlbWVudCBpcyB0aGF0IGlmIHRo
-ZSBzZXJ2ZXIgdXNlcyBhIGNhbGxiYWNrIHRvDQphc2sgdGhlIGNsaWVudCBmb3IgdGhlIGZpbGUg
-YXR0cmlidXRlIGluZm9ybWF0aW9uLCB0aGVuIHRoZSBjbGllbnQgaXMNCnN1cHBvc2VkIHRvIGJ1
-bXAgdGhlIHNlcnZlci1zdXBwbGllZCBjaGFuZ2UgaWQgdmFsdWUgYnkgMSB1bml0IGlmIGl0IGlz
-DQpjYWNoaW5nIHdyaXRlcy4gVGhlIGludGVudGlvbiBpcyBzaW1wbHkgdG8gZW5zdXJlIHRoYXQg
-dGhlcmUgaXMgYQ0Kbm90aWZpY2F0aW9uIG1lY2hhbmlzbSB0byBhbGxvdyB0aGUgc2VydmVyIHRv
-IGtub3cgdGhhdCB3cml0ZXMgYXJlDQpiZWluZyBjYWNoZWQgKE5vdGU6IEkndmUgbm8gaWRlYSB3
-aHkgd2UgZGlkbid0IGp1c3QgYWRkIGEgc2VwYXJhdGUgZmxhZw0KZm9yIHRoYXQgaW4gdGhlIGNh
-bGxiYWNrIHJlcGx5KS4NCg0KPiBTbyB3aGlsZSBrZXJuZWwgdGltZSBnb2luZyBiYWNrd2FyZHMg
-aXMgdGhlb3JldGljYWxseSBsZXNzIHRoYW4NCj4gaWRlYWwsDQo+IGl0IGlzIG5vdCBwcmFjdGlj
-YWxseSBhIHByb2JsZW0uDQo+IA0KDQpJIGFncmVlIHdpdGggdGhhdC4gQXMgbG9uZyBhcyB0aGlz
-IHJlc3VsdHMgaW4gZmV3IGNvbGxpc2lvbnMsIHNvIHRoYXQNCnZhbHVlIHVuaXF1ZW5lc3MgaXMg
-Z3VhcmFudGVlZCB0aGVuIGFwcGxpY2F0aW9ucyAoTkZTIG9yIG90aGVyKSB3aWxsDQpoYXZlIGEg
-d2F5IHRvIGRldGVybWluZSBpZiB0aGUgZmlsZXN5c3RlbSBvYmplY3QgaGFzIGNoYW5nZWQgc2lu
-Y2UgdGhleQ0KbGFzdCBsb29rZWQgYXQgaXQuDQoNCklPVzogSSdtIG5vdCBzYXlpbmcgdGhpcyBp
-cyB0aGUgcGVyZmVjdCB3YXkgdG8gaW1wbGVtZW50IGFuDQphcHBsaWNhdGlvbi12aXNpYmxlIGNo
-YW5nZSBhdHRyaWJ1dGUsIGJ1dCBpdCB3b3VsZCBiZSBhIG1hc3NpdmUNCmltcHJvdmVtZW50IG92
-ZXIgY3RpbWUsIGFuZCBtaWdodCBiZSBhIHByYWN0aWNhbCB3YXkgdG8gZ28gYWJvdXQgaXQuDQoN
-Ci0tIA0KVHJvbmQgTXlrbGVidXN0DQpMaW51eCBORlMgY2xpZW50IG1haW50YWluZXIsIEhhbW1l
-cnNwYWNlDQp0cm9uZC5teWtsZWJ1c3RAaGFtbWVyc3BhY2UuY29tDQoNCg0K
+Hi Huacai,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc2 next-20220823]
+[cannot apply to soc/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/LoongArch-Use-TLB-for-ioremap/20220823-110829
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 072e51356cd5a4a1c12c1020bc054c99b98333df
+config: loongarch-buildonly-randconfig-r001-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240804.stCUUthX-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/80f55a8feb23743d963d113c803bf54b1287244d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Huacai-Chen/LoongArch-Use-TLB-for-ioremap/20220823-110829
+        git checkout 80f55a8feb23743d963d113c803bf54b1287244d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash arch/loongarch/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/asm-generic/io.h:1048,
+                    from arch/loongarch/include/asm/io.h:94,
+                    from arch/loongarch/include/asm/pgtable.h:62,
+                    from arch/loongarch/include/asm/uaccess.h:17,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/ptrace.h:7,
+                    from arch/loongarch/kernel/cpu-probe.c:9:
+   include/linux/pgtable.h: In function 'pte_offset_kernel':
+   include/linux/pgtable.h:92:25: error: implicit declaration of function 'pmd_page_vaddr'; did you mean 'pgd_page_vaddr'? [-Werror=implicit-function-declaration]
+      92 |         return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+         |                         ^~~~~~~~~~~~~~
+         |                         pgd_page_vaddr
+>> include/linux/pgtable.h:92:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      92 |         return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+         |                ^
+   include/linux/pgtable.h: In function 'virt_to_kpte':
+   include/linux/pgtable.h:165:16: error: implicit declaration of function 'pmd_none'; did you mean 'pud_none'? [-Werror=implicit-function-declaration]
+     165 |         return pmd_none(*pmd) ? NULL : pte_offset_kernel(pmd, vaddr);
+         |                ^~~~~~~~
+         |                pud_none
+   include/linux/pgtable.h: In function 'ptep_test_and_clear_young':
+   include/linux/pgtable.h:207:14: error: implicit declaration of function 'pte_young' [-Werror=implicit-function-declaration]
+     207 |         if (!pte_young(pte))
+         |              ^~~~~~~~~
+   include/linux/pgtable.h:210:17: error: implicit declaration of function 'set_pte_at' [-Werror=implicit-function-declaration]
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                 ^~~~~~~~~~
+   include/linux/pgtable.h:210:55: error: implicit declaration of function 'pte_mkold' [-Werror=implicit-function-declaration]
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                                                       ^~~~~~~~~
+   include/linux/pgtable.h: In function 'ptep_get_and_clear':
+   include/linux/pgtable.h:269:9: error: implicit declaration of function 'pte_clear'; did you mean 'pud_clear'? [-Werror=implicit-function-declaration]
+     269 |         pte_clear(mm, address, ptep);
+         |         ^~~~~~~~~
+         |         pud_clear
+   include/linux/pgtable.h: In function 'ptep_set_wrprotect':
+   include/linux/pgtable.h:455:39: error: implicit declaration of function 'pte_wrprotect'; did you mean 'ptep_set_wrprotect'? [-Werror=implicit-function-declaration]
+     455 |         set_pte_at(mm, address, ptep, pte_wrprotect(old_pte));
+         |                                       ^~~~~~~~~~~~~
+         |                                       ptep_set_wrprotect
+   In file included from include/linux/init.h:5,
+                    from arch/loongarch/kernel/cpu-probe.c:7:
+   include/linux/pgtable.h: In function 'pmd_none_or_clear_bad':
+   include/linux/pgtable.h:877:22: error: implicit declaration of function 'pmd_bad'; did you mean 'pud_bad'? [-Werror=implicit-function-declaration]
+     877 |         if (unlikely(pmd_bad(*pmd))) {
+         |                      ^~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/pgtable.h: In function 'pmd_none_or_trans_huge_or_clear_bad':
+   include/linux/pgtable.h:1384:67: error: implicit declaration of function 'pmd_present'; did you mean 'pud_present'? [-Werror=implicit-function-declaration]
+    1384 |                 (IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION) && !pmd_present(pmdval)))
+         |                                                                   ^~~~~~~~~~~
+         |                                                                   pud_present
+   arch/loongarch/include/asm/pgtable.h: At top level:
+   arch/loongarch/include/asm/pgtable.h:199:19: error: static declaration of 'pmd_none' follows non-static declaration
+     199 | static inline int pmd_none(pmd_t pmd)
+         |                   ^~~~~~~~
+   include/linux/pgtable.h:165:16: note: previous implicit declaration of 'pmd_none' with type 'int()'
+     165 |         return pmd_none(*pmd) ? NULL : pte_offset_kernel(pmd, vaddr);
+         |                ^~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:204:19: error: static declaration of 'pmd_bad' follows non-static declaration
+     204 | static inline int pmd_bad(pmd_t pmd)
+         |                   ^~~~~~~
+   include/linux/pgtable.h:877:22: note: previous implicit declaration of 'pmd_bad' with type 'int()'
+     877 |         if (unlikely(pmd_bad(*pmd))) {
+         |                      ^~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   arch/loongarch/include/asm/pgtable.h:209:19: error: static declaration of 'pmd_present' follows non-static declaration
+     209 | static inline int pmd_present(pmd_t pmd)
+         |                   ^~~~~~~~~~~
+   include/linux/pgtable.h:1384:67: note: previous implicit declaration of 'pmd_present' with type 'int()'
+    1384 |                 (IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION) && !pmd_present(pmdval)))
+         |                                                                   ^~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:303:20: warning: conflicting types for 'set_pte_at'; have 'void(struct mm_struct *, long unsigned int,  pte_t *, pte_t)'
+     303 | static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+         |                    ^~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:303:20: error: static declaration of 'set_pte_at' follows non-static declaration
+   include/linux/pgtable.h:210:17: note: previous implicit declaration of 'set_pte_at' with type 'void(struct mm_struct *, long unsigned int,  pte_t *, pte_t)'
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                 ^~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:309:20: warning: conflicting types for 'pte_clear'; have 'void(struct mm_struct *, long unsigned int,  pte_t *)'
+     309 | static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
+         |                    ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:309:20: error: static declaration of 'pte_clear' follows non-static declaration
+   include/linux/pgtable.h:269:9: note: previous implicit declaration of 'pte_clear' with type 'void(struct mm_struct *, long unsigned int,  pte_t *)'
+     269 |         pte_clear(mm, address, ptep);
+         |         ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:330:19: error: static declaration of 'pte_young' follows non-static declaration
+     330 | static inline int pte_young(pte_t pte)  { return pte_val(pte) & _PAGE_ACCESSED; }
+         |                   ^~~~~~~~~
+   include/linux/pgtable.h:207:14: note: previous implicit declaration of 'pte_young' with type 'int()'
+     207 |         if (!pte_young(pte))
+         |              ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:333:21: error: conflicting types for 'pte_mkold'; have 'pte_t(pte_t)'
+     333 | static inline pte_t pte_mkold(pte_t pte)
+         |                     ^~~~~~~~~
+   include/linux/pgtable.h:210:55: note: previous implicit declaration of 'pte_mkold' with type 'int()'
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                                                       ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:363:21: error: conflicting types for 'pte_wrprotect'; have 'pte_t(pte_t)'
+     363 | static inline pte_t pte_wrprotect(pte_t pte)
+         |                     ^~~~~~~~~~~~~
+   include/linux/pgtable.h:455:39: note: previous implicit declaration of 'pte_wrprotect' with type 'int()'
+     455 |         set_pte_at(mm, address, ptep, pte_wrprotect(old_pte));
+         |                                       ^~~~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:382: warning: "pte_accessible" redefined
+     382 | #define pte_accessible pte_accessible
+         | 
+   include/linux/pgtable.h:780: note: this is the location of the previous definition
+     780 | # define pte_accessible(mm, pte)        ((void)(pte), 1)
+--
+   In file included from include/asm-generic/io.h:1048,
+                    from arch/loongarch/include/asm/io.h:94,
+                    from arch/loongarch/include/asm/pgtable.h:62,
+                    from arch/loongarch/include/asm/uaccess.h:17,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/ptrace.h:7,
+                    from include/linux/entry-common.h:6,
+                    from arch/loongarch/kernel/traps.c:10:
+   include/linux/pgtable.h: In function 'pte_offset_kernel':
+   include/linux/pgtable.h:92:25: error: implicit declaration of function 'pmd_page_vaddr'; did you mean 'pgd_page_vaddr'? [-Werror=implicit-function-declaration]
+      92 |         return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+         |                         ^~~~~~~~~~~~~~
+         |                         pgd_page_vaddr
+>> include/linux/pgtable.h:92:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      92 |         return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+         |                ^
+   include/linux/pgtable.h: In function 'virt_to_kpte':
+   include/linux/pgtable.h:165:16: error: implicit declaration of function 'pmd_none'; did you mean 'pud_none'? [-Werror=implicit-function-declaration]
+     165 |         return pmd_none(*pmd) ? NULL : pte_offset_kernel(pmd, vaddr);
+         |                ^~~~~~~~
+         |                pud_none
+   include/linux/pgtable.h: In function 'ptep_test_and_clear_young':
+   include/linux/pgtable.h:207:14: error: implicit declaration of function 'pte_young' [-Werror=implicit-function-declaration]
+     207 |         if (!pte_young(pte))
+         |              ^~~~~~~~~
+   include/linux/pgtable.h:210:17: error: implicit declaration of function 'set_pte_at' [-Werror=implicit-function-declaration]
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                 ^~~~~~~~~~
+   include/linux/pgtable.h:210:55: error: implicit declaration of function 'pte_mkold' [-Werror=implicit-function-declaration]
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                                                       ^~~~~~~~~
+   include/linux/pgtable.h: In function 'ptep_get_and_clear':
+   include/linux/pgtable.h:269:9: error: implicit declaration of function 'pte_clear'; did you mean 'pud_clear'? [-Werror=implicit-function-declaration]
+     269 |         pte_clear(mm, address, ptep);
+         |         ^~~~~~~~~
+         |         pud_clear
+   include/linux/pgtable.h: In function 'ptep_set_wrprotect':
+   include/linux/pgtable.h:455:39: error: implicit declaration of function 'pte_wrprotect'; did you mean 'ptep_set_wrprotect'? [-Werror=implicit-function-declaration]
+     455 |         set_pte_at(mm, address, ptep, pte_wrprotect(old_pte));
+         |                                       ^~~~~~~~~~~~~
+         |                                       ptep_set_wrprotect
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/bits.h:22,
+                    from include/linux/bitops.h:6,
+                    from arch/loongarch/kernel/traps.c:6:
+   include/linux/pgtable.h: In function 'pmd_none_or_clear_bad':
+   include/linux/pgtable.h:877:22: error: implicit declaration of function 'pmd_bad'; did you mean 'pud_bad'? [-Werror=implicit-function-declaration]
+     877 |         if (unlikely(pmd_bad(*pmd))) {
+         |                      ^~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/pgtable.h: In function 'pmd_none_or_trans_huge_or_clear_bad':
+   include/linux/pgtable.h:1384:67: error: implicit declaration of function 'pmd_present'; did you mean 'pud_present'? [-Werror=implicit-function-declaration]
+    1384 |                 (IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION) && !pmd_present(pmdval)))
+         |                                                                   ^~~~~~~~~~~
+         |                                                                   pud_present
+   arch/loongarch/include/asm/pgtable.h: At top level:
+   arch/loongarch/include/asm/pgtable.h:199:19: error: static declaration of 'pmd_none' follows non-static declaration
+     199 | static inline int pmd_none(pmd_t pmd)
+         |                   ^~~~~~~~
+   include/linux/pgtable.h:165:16: note: previous implicit declaration of 'pmd_none' with type 'int()'
+     165 |         return pmd_none(*pmd) ? NULL : pte_offset_kernel(pmd, vaddr);
+         |                ^~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:204:19: error: static declaration of 'pmd_bad' follows non-static declaration
+     204 | static inline int pmd_bad(pmd_t pmd)
+         |                   ^~~~~~~
+   include/linux/pgtable.h:877:22: note: previous implicit declaration of 'pmd_bad' with type 'int()'
+     877 |         if (unlikely(pmd_bad(*pmd))) {
+         |                      ^~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   arch/loongarch/include/asm/pgtable.h:209:19: error: static declaration of 'pmd_present' follows non-static declaration
+     209 | static inline int pmd_present(pmd_t pmd)
+         |                   ^~~~~~~~~~~
+   include/linux/pgtable.h:1384:67: note: previous implicit declaration of 'pmd_present' with type 'int()'
+    1384 |                 (IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION) && !pmd_present(pmdval)))
+         |                                                                   ^~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:303:20: warning: conflicting types for 'set_pte_at'; have 'void(struct mm_struct *, long unsigned int,  pte_t *, pte_t)'
+     303 | static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+         |                    ^~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:303:20: error: static declaration of 'set_pte_at' follows non-static declaration
+   include/linux/pgtable.h:210:17: note: previous implicit declaration of 'set_pte_at' with type 'void(struct mm_struct *, long unsigned int,  pte_t *, pte_t)'
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                 ^~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:309:20: warning: conflicting types for 'pte_clear'; have 'void(struct mm_struct *, long unsigned int,  pte_t *)'
+     309 | static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
+         |                    ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:309:20: error: static declaration of 'pte_clear' follows non-static declaration
+   include/linux/pgtable.h:269:9: note: previous implicit declaration of 'pte_clear' with type 'void(struct mm_struct *, long unsigned int,  pte_t *)'
+     269 |         pte_clear(mm, address, ptep);
+         |         ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:330:19: error: static declaration of 'pte_young' follows non-static declaration
+     330 | static inline int pte_young(pte_t pte)  { return pte_val(pte) & _PAGE_ACCESSED; }
+         |                   ^~~~~~~~~
+   include/linux/pgtable.h:207:14: note: previous implicit declaration of 'pte_young' with type 'int()'
+     207 |         if (!pte_young(pte))
+         |              ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:333:21: error: conflicting types for 'pte_mkold'; have 'pte_t(pte_t)'
+     333 | static inline pte_t pte_mkold(pte_t pte)
+         |                     ^~~~~~~~~
+   include/linux/pgtable.h:210:55: note: previous implicit declaration of 'pte_mkold' with type 'int()'
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                                                       ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:363:21: error: conflicting types for 'pte_wrprotect'; have 'pte_t(pte_t)'
+     363 | static inline pte_t pte_wrprotect(pte_t pte)
+         |                     ^~~~~~~~~~~~~
+   include/linux/pgtable.h:455:39: note: previous implicit declaration of 'pte_wrprotect' with type 'int()'
+     455 |         set_pte_at(mm, address, ptep, pte_wrprotect(old_pte));
+         |                                       ^~~~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:382: warning: "pte_accessible" redefined
+     382 | #define pte_accessible pte_accessible
+         | 
+--
+   In file included from include/asm-generic/io.h:1048,
+                    from arch/loongarch/include/asm/io.h:94,
+                    from arch/loongarch/include/asm/pgtable.h:62,
+                    from arch/loongarch/include/asm/uaccess.h:17,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from arch/loongarch/include/asm/elf.h:9,
+                    from include/linux/elf.h:6,
+                    from include/linux/module.h:19,
+                    from include/linux/device/driver.h:21,
+                    from include/linux/device.h:32,
+                    from include/linux/acpi.h:15,
+                    from arch/loongarch/kernel/irq.c:6:
+   include/linux/pgtable.h: In function 'pte_offset_kernel':
+   include/linux/pgtable.h:92:25: error: implicit declaration of function 'pmd_page_vaddr'; did you mean 'pgd_page_vaddr'? [-Werror=implicit-function-declaration]
+      92 |         return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+         |                         ^~~~~~~~~~~~~~
+         |                         pgd_page_vaddr
+>> include/linux/pgtable.h:92:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      92 |         return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+         |                ^
+   include/linux/pgtable.h: In function 'virt_to_kpte':
+   include/linux/pgtable.h:165:16: error: implicit declaration of function 'pmd_none'; did you mean 'pud_none'? [-Werror=implicit-function-declaration]
+     165 |         return pmd_none(*pmd) ? NULL : pte_offset_kernel(pmd, vaddr);
+         |                ^~~~~~~~
+         |                pud_none
+   include/linux/pgtable.h: In function 'ptep_test_and_clear_young':
+   include/linux/pgtable.h:207:14: error: implicit declaration of function 'pte_young' [-Werror=implicit-function-declaration]
+     207 |         if (!pte_young(pte))
+         |              ^~~~~~~~~
+   include/linux/pgtable.h:210:17: error: implicit declaration of function 'set_pte_at' [-Werror=implicit-function-declaration]
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                 ^~~~~~~~~~
+   include/linux/pgtable.h:210:55: error: implicit declaration of function 'pte_mkold' [-Werror=implicit-function-declaration]
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                                                       ^~~~~~~~~
+   include/linux/pgtable.h: In function 'ptep_get_and_clear':
+   include/linux/pgtable.h:269:9: error: implicit declaration of function 'pte_clear'; did you mean 'pud_clear'? [-Werror=implicit-function-declaration]
+     269 |         pte_clear(mm, address, ptep);
+         |         ^~~~~~~~~
+         |         pud_clear
+   include/linux/pgtable.h: In function 'ptep_set_wrprotect':
+   include/linux/pgtable.h:455:39: error: implicit declaration of function 'pte_wrprotect'; did you mean 'ptep_set_wrprotect'? [-Werror=implicit-function-declaration]
+     455 |         set_pte_at(mm, address, ptep, pte_wrprotect(old_pte));
+         |                                       ^~~~~~~~~~~~~
+         |                                       ptep_set_wrprotect
+   In file included from include/linux/kernel.h:20,
+                    from arch/loongarch/kernel/irq.c:5:
+   include/linux/pgtable.h: In function 'pmd_none_or_clear_bad':
+   include/linux/pgtable.h:877:22: error: implicit declaration of function 'pmd_bad'; did you mean 'pud_bad'? [-Werror=implicit-function-declaration]
+     877 |         if (unlikely(pmd_bad(*pmd))) {
+         |                      ^~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/pgtable.h: In function 'pmd_none_or_trans_huge_or_clear_bad':
+   include/linux/pgtable.h:1384:67: error: implicit declaration of function 'pmd_present'; did you mean 'pud_present'? [-Werror=implicit-function-declaration]
+    1384 |                 (IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION) && !pmd_present(pmdval)))
+         |                                                                   ^~~~~~~~~~~
+         |                                                                   pud_present
+   arch/loongarch/include/asm/pgtable.h: At top level:
+   arch/loongarch/include/asm/pgtable.h:199:19: error: static declaration of 'pmd_none' follows non-static declaration
+     199 | static inline int pmd_none(pmd_t pmd)
+         |                   ^~~~~~~~
+   include/linux/pgtable.h:165:16: note: previous implicit declaration of 'pmd_none' with type 'int()'
+     165 |         return pmd_none(*pmd) ? NULL : pte_offset_kernel(pmd, vaddr);
+         |                ^~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:204:19: error: static declaration of 'pmd_bad' follows non-static declaration
+     204 | static inline int pmd_bad(pmd_t pmd)
+         |                   ^~~~~~~
+   include/linux/pgtable.h:877:22: note: previous implicit declaration of 'pmd_bad' with type 'int()'
+     877 |         if (unlikely(pmd_bad(*pmd))) {
+         |                      ^~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   arch/loongarch/include/asm/pgtable.h:209:19: error: static declaration of 'pmd_present' follows non-static declaration
+     209 | static inline int pmd_present(pmd_t pmd)
+         |                   ^~~~~~~~~~~
+   include/linux/pgtable.h:1384:67: note: previous implicit declaration of 'pmd_present' with type 'int()'
+    1384 |                 (IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION) && !pmd_present(pmdval)))
+         |                                                                   ^~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:303:20: warning: conflicting types for 'set_pte_at'; have 'void(struct mm_struct *, long unsigned int,  pte_t *, pte_t)'
+     303 | static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+         |                    ^~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:303:20: error: static declaration of 'set_pte_at' follows non-static declaration
+   include/linux/pgtable.h:210:17: note: previous implicit declaration of 'set_pte_at' with type 'void(struct mm_struct *, long unsigned int,  pte_t *, pte_t)'
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                 ^~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:309:20: warning: conflicting types for 'pte_clear'; have 'void(struct mm_struct *, long unsigned int,  pte_t *)'
+     309 | static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
+         |                    ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:309:20: error: static declaration of 'pte_clear' follows non-static declaration
+   include/linux/pgtable.h:269:9: note: previous implicit declaration of 'pte_clear' with type 'void(struct mm_struct *, long unsigned int,  pte_t *)'
+     269 |         pte_clear(mm, address, ptep);
+         |         ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:330:19: error: static declaration of 'pte_young' follows non-static declaration
+     330 | static inline int pte_young(pte_t pte)  { return pte_val(pte) & _PAGE_ACCESSED; }
+         |                   ^~~~~~~~~
+   include/linux/pgtable.h:207:14: note: previous implicit declaration of 'pte_young' with type 'int()'
+     207 |         if (!pte_young(pte))
+         |              ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:333:21: error: conflicting types for 'pte_mkold'; have 'pte_t(pte_t)'
+     333 | static inline pte_t pte_mkold(pte_t pte)
+         |                     ^~~~~~~~~
+   include/linux/pgtable.h:210:55: note: previous implicit declaration of 'pte_mkold' with type 'int()'
+     210 |                 set_pte_at(vma->vm_mm, address, ptep, pte_mkold(pte));
+         |                                                       ^~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:363:21: error: conflicting types for 'pte_wrprotect'; have 'pte_t(pte_t)'
+     363 | static inline pte_t pte_wrprotect(pte_t pte)
+         |                     ^~~~~~~~~~~~~
+   include/linux/pgtable.h:455:39: note: previous implicit declaration of 'pte_wrprotect' with type 'int()'
+     455 |         set_pte_at(mm, address, ptep, pte_wrprotect(old_pte));
+         |                                       ^~~~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:382: warning: "pte_accessible" redefined
+     382 | #define pte_accessible pte_accessible
+         | 
+   include/linux/pgtable.h:780: note: this is the location of the previous definition
+     780 | # define pte_accessible(mm, pte)        ((void)(pte), 1)
+..
+
+
+vim +92 include/linux/pgtable.h
+
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  88  
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  89  #ifndef pte_offset_kernel
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  90  static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  91  {
+974b9b2c68f3d3 Mike Rapoport 2020-06-08 @92  	return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  93  }
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  94  #define pte_offset_kernel pte_offset_kernel
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  95  #endif
+974b9b2c68f3d3 Mike Rapoport 2020-06-08  96  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

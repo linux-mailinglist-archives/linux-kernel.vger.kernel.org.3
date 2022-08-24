@@ -2,190 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AA659FED1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6176459FEDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiHXPvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
+        id S237385AbiHXPwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238692AbiHXPvc (ORCPT
+        with ESMTP id S236946AbiHXPwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:51:32 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11F171988
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:51:28 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id h10so803473ila.13
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:51:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=tYVEJzjcF7qi8BB8OqunFeP+mvMsHMNy/bbwsRqxhK8=;
-        b=0WZZZKUUHYp0Hff75wlY6DiQ6Nz8V7pn3c5GzTZiakvNyU5y8B0uLSqpWDcK/lXosx
-         3n/Vad/22juLWrgu448s5hSbng+cFmUl686UJC+QbxFVEriNOZoDe6Y5Jlohy7LTBeke
-         ktfgJS/nv97nsTLbtSY6vpz/KkUCAgfwAsjGoSwEF5O1b40kHIisOjZT/dmplJ5d6LXy
-         D6I8tlEuYswMST+euUPEe84siO76sHMmOiY2ndlwjHasavIPeiG4rALO8HOSnadQbzKp
-         xeH3RHUw90Qlz/g4rz1jZBT+gd6FZ+Id+u4de4kPOOM2nkTMqlrqAJwCHQHfOS1NWFwB
-         a8rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=tYVEJzjcF7qi8BB8OqunFeP+mvMsHMNy/bbwsRqxhK8=;
-        b=DrCKLzcEr6IEMSXDgaoQDKDyJVJj3R7MPIGy0ASEqsxSQm8r2wV9541Ixau24KDvIY
-         eqQYQ7KG+rcFRcyTK6bYGzMv6x3uuzpHox4NDKBJkbjs9nC3/l+APTYRXKyKfnfmNg5b
-         nWTAxyCm8owu32zw33SW/LHOYXBJHvW0+fvsSZQw4+X9/4TWx1brFD8Lsu/F9ZRoecy0
-         18bwaskqXnpfMVasa4mrAk1a/bxCZ5EMWtlB7/7dEw7FLHCKvaE2bFQ47s+6hDZAaNwm
-         lrbCguDk3HA0b8Crw2WR7YQXKILXWG5GkF9JogUS9Mrhge98gGEKyv8JYgvSWmKoR4cM
-         aviA==
-X-Gm-Message-State: ACgBeo01R3Db+BXKFICzQStoVn6FgKoh5lnM8oKY9ftYCoQKT/DeBpyn
-        F+MD+2i9kOMA6ylFP950uOV/rg==
-X-Google-Smtp-Source: AA6agR5eTchsp6PUUCcMTTRze4rccUgTrRRZeT/qvq/j8KJ0zhQY/N/wWSH4ut6GkvP9zWVClzbFxw==
-X-Received: by 2002:a05:6e02:1004:b0:2e9:16f5:82b0 with SMTP id n4-20020a056e02100400b002e916f582b0mr2361906ilj.113.1661356287438;
-        Wed, 24 Aug 2022 08:51:27 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id a20-20020a924454000000b002dcfbf36438sm1143245ilm.12.2022.08.24.08.51.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 08:51:26 -0700 (PDT)
-Message-ID: <0b5a5360-efd1-2d77-1dbf-b7468386d1a0@kernel.dk>
-Date:   Wed, 24 Aug 2022 09:51:24 -0600
+        Wed, 24 Aug 2022 11:52:39 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0251372FC9;
+        Wed, 24 Aug 2022 08:52:37 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34B1D1EC056A;
+        Wed, 24 Aug 2022 17:52:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661356352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PBu2N2uipsqYRGU8bx2yq7gJv2+9Y2U5mdyTj0+/pTM=;
+        b=NB6YSRe/Ed3rUtDV9uiZDCWOh1AmqVaLjJr7swohSQBgEXc9Ml8+K+1qPwkVzabBT+Lz+T
+        0msrtdaC0S4A2mcX1OGqoxMuRHKbJNsW4RW5QLHEAY54tdqwlaA3FCXV6qpt2FqWjsiKmf
+        lRgsjSTC8LFhYEx4jgXYcDjls9XERvQ=
+Date:   Wed, 24 Aug 2022 17:52:31 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jia He <justin.he@arm.com>
+Cc:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        linux-doc@vger.kernel.org
+Subject: Re: [RESEND PATCH v3 4/9] EDAC/ghes: Move ghes_edac.force_load to
+ setup parameter
+Message-ID: <YwZJP25sfKcfw9eT@zn.tnic>
+References: <20220822154048.188253-1-justin.he@arm.com>
+ <20220822154048.188253-5-justin.he@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 2/2] coredump: Allow coredumps to pipes to work with
- io_uring
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Olivier Langlois <olivier@trillion01.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
- <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
- <87h7i694ij.fsf_-_@disp2133> <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
- <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
- <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
- <878rw9u6fb.fsf@email.froward.int.ebiederm.org>
- <303f7772-eb31-5beb-2bd0-4278566591b0@gmail.com>
- <87ilsg13yz.fsf@email.froward.int.ebiederm.org>
- <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
- <a29a1649-5e50-4221-9f44-66a35fbdff80@kernel.dk>
- <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org>
- <87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>
- <61abfb5a517e0ee253b0dc7ba9cd32ebd558bcb0.camel@trillion01.com>
- <bb423622f97826f483100a1a7f20ce10a9090158.camel@trillion01.com>
- <875yiisttu.fsf@email.froward.int.ebiederm.org>
- <654cb5de-a563-b812-a435-d9b435cee334@kernel.dk>
- <87lerdr810.fsf@email.froward.int.ebiederm.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <87lerdr810.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220822154048.188253-5-justin.he@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 9:11 AM, Eric W. Biederman wrote:
-> Jens Axboe <axboe@kernel.dk> writes:
+On Mon, Aug 22, 2022 at 03:40:43PM +0000, Jia He wrote:
+> ghes_edac_init() is too late to set this module flag ghes_edac.force_load.
+> Also, other edac drivers should not be able to control this flag.
 > 
->> On 8/23/22 12:22 PM, Eric W. Biederman wrote:
->>> Olivier Langlois <olivier@trillion01.com> writes:
->>>
->>>> On Mon, 2022-08-22 at 17:16 -0400, Olivier Langlois wrote:
->>>>>
->>>>> What is stopping the task calling do_coredump() to be interrupted and
->>>>> call task_work_add() from the interrupt context?
->>>>>
->>>>> This is precisely what I was experiencing last summer when I did work
->>>>> on this issue.
->>>>>
->>>>> My understanding of how async I/O works with io_uring is that the
->>>>> task
->>>>> is added to a wait queue without being put to sleep and when the
->>>>> io_uring callback is called from the interrupt context,
->>>>> task_work_add()
->>>>> is called so that the next time io_uring syscall is invoked, pending
->>>>> work is processed to complete the I/O.
->>>>>
->>>>> So if:
->>>>>
->>>>> 1. io_uring request is initiated AND the task is in a wait queue
->>>>> 2. do_coredump() is called before the I/O is completed
->>>>>
->>>>> IMHO, this is how you end up having task_work_add() called while the
->>>>> coredump is generated.
->>>>>
->>>> I forgot to add that I have experienced the issue with TCP/IP I/O.
->>>>
->>>> I suspect that with a TCP socket, the race condition window is much
->>>> larger than if it was disk I/O and this might make it easier to
->>>> reproduce the issue this way...
->>>
->>> I was under the apparently mistaken impression that the io_uring
->>> task_work_add only comes from the io_uring userspace helper threads.
->>> Those are definitely suppressed by my change.
->>>
->>> Do you have any idea in the code where io_uring code is being called in
->>> an interrupt context?  I would really like to trace that code path so I
->>> have a better grasp on what is happening.
->>>
->>> If task_work_add is being called from interrupt context then something
->>> additional from what I have proposed certainly needs to be done.
->>
->> task_work may come from the helper threads, but generally it does not.
->> One example would be doing a read from a socket. There's no data there,
->> poll is armed to trigger a retry. When we get the poll notification that
->> there's now data to be read, then we kick that off with task_work. Since
->> it's from the poll handler, it can trigger from interrupt context. See
->> the path from io_uring/poll.c:io_poll_wake() -> __io_poll_execute() ->
->> io_req_task_work_add() -> task_work_add().
+> Move this flag to setup parameter in ghes.
 > 
-> But that is a task_work to the helper thread correct?
+> Suggested-by: Toshi Kani <toshi.kani@hpe.com>
+> Signed-off-by: Jia He <justin.he@arm.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  5 +++
+>  drivers/acpi/apei/ghes.c                      | 24 +++++++++++-
+>  drivers/edac/ghes_edac.c                      | 38 +++++++------------
+>  include/acpi/ghes.h                           |  7 +++-
+>  4 files changed, 46 insertions(+), 28 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index d7f30902fda0..a5f0ee0d7727 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1593,6 +1593,11 @@
+>  			When zero, profiling data is discarded and associated
+>  			debugfs files are removed at module unload time.
+>  
+> +	ghes_edac_force= [X86] Skip the platform check and forcibly load the
 
-No, it goes to the task that originally allocated/issued the request.
-Which would be the original task, unless the request was originally
-marked as going straight to a helper (IOSQE_ASYNC). For most cases,
-it'll be the original task, not a helper thread.
+So there already is ghes.disable which is using the module param thing.
+Why don't you do that too?
 
->> It can also happen for regular IRQ based reads from regular files, where
->> the completion is actually done via task_work added from the potentially
->> IRQ based completion path.
-> 
-> I can see that.
-> 
-> Which leaves me with the question do these task_work's directly wake up
-> the thread that submitted the I/O request?   Or is there likely to be
-> something for an I/O thread to do before an ordinary program thread is
-> notified.
-> 
-> I am asking because it is only the case of notifying ordinary program
-> threads that is interesting in the case of a coredump.  As I understand
-> it a data to read notification would typically be handled by the I/O
-> uring worker thread to trigger reading the data before letting userspace
-> know everything it asked to be done is complete.
+> +			ghes_edac modules.
 
-By default, it'll go back to the original task. If something is
-pollable, then there's no helper thread doing the request. An issue
-attempt is performed by the original task, there's no data/space there,
-poll is armed to trigger a retry. Retry notification will then queue
-task_work with the original task to retry.
+"module" - singular.
 
-Generally for io_uring, helper threads are a slow path and aren't used
-unless we have no other options. For example, if someone has a network
-IO backend and there's helper thread activity, then that's generally a
-sign that something is wrong. This isn't super relevant to this
-particular topic, just highlighting that normally you would not expect
-to see much (if any) io-wq activity at all.
+> +			Format: <bool>
+> +			default: false (0)
+> +
+>  	goldfish	[X86] Enable the goldfish android emulator platform.
+>  			Don't use this when you are not running on the
+>  			android emulator
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 9c52183e3ad9..e17e0ee8f842 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -94,6 +94,26 @@
+>  #define FIX_APEI_GHES_SDEI_CRITICAL	__end_of_fixed_addresses
+>  #endif
+>  
+> +/*
+> + * "ghes_edac_force=1" forcibly loads ghes_edac and skips the platform
+> + * check.
+> + */
+> +bool __read_mostly ghes_edac_force;
+> +EXPORT_SYMBOL(ghes_edac_force);
+> +
+> +static int __init setup_ghes_edac_load(char *str)
+> +{
+> +	if (str)
+> +		if (!strcmp("true", str) || !strcmp("1", str))
+> +			ghes_edac_force = true;
+> +
+> +	if (!IS_ENABLED(CONFIG_X86))
+> +		ghes_edac_force = true;
+> +
+> +	return 1;
+> +}
+> +__setup("ghes_edac_force=", setup_ghes_edac_load);
+
+Why all that?
+
+Isn't specifying
+
+ghes.edac_force_load
+
+on the kernel command line enough? I.e., you don't need to parse the
+passed in option - just the presence of the parameter is enough.
+
+> +
+>  static ATOMIC_NOTIFIER_HEAD(ghes_report_chain);
+>  
+>  static inline bool is_hest_type_generic_v2(struct ghes *ghes)
+> @@ -1517,13 +1537,13 @@ static struct acpi_platform_list plat_list[] = {
+>  	{ } /* End */
+>  };
+>  
+> -struct list_head *ghes_get_devices(bool force)
+> +struct list_head *ghes_get_devices(void)
+>  {
+>  	int idx = -1;
+>  
+>  	if (IS_ENABLED(CONFIG_X86)) {
+>  		idx = acpi_match_platform_list(plat_list);
+> -		if (idx < 0 && !force)
+> +		if (idx < 0 && !ghes_edac_force)
+>  			return NULL;
+>  	}
+>  
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index bb3ea42ba70b..6a2b54cc7240 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -54,10 +54,6 @@ static DEFINE_MUTEX(ghes_reg_mutex);
+>   */
+>  static DEFINE_SPINLOCK(ghes_lock);
+>  
+> -/* "ghes_edac.force_load=1" skips the platform check */
+> -static bool __read_mostly force_load;
+> -module_param(force_load, bool, 0);
+> -
+>  static bool system_scanned;
+>  
+>  static struct list_head *ghes_devs;
+> @@ -437,23 +433,12 @@ static int ghes_edac_register(struct device *dev)
+>  	mci->ctl_name = "ghes_edac";
+>  	mci->dev_name = "ghes";
+>  
+> -	if (fake) {
+> -		pr_info("This system has a very crappy BIOS: It doesn't even list the DIMMS.\n");
+> -		pr_info("Its SMBIOS info is wrong. It is doubtful that the error report would\n");
+> -		pr_info("work on such system. Use this driver with caution\n");
+> -	} else if (force_load) {
+> -		pr_info("This EDAC driver relies on BIOS to enumerate memory and get error reports.\n");
+> -		pr_info("Unfortunately, not all BIOSes reflect the memory layout correctly.\n");
+> -		pr_info("So, the end result of using this driver varies from vendor to vendor.\n");
+> -		pr_info("If you find incorrect reports, please contact your hardware vendor\n");
+> -		pr_info("to correct its BIOS.\n");
+> -		pr_info("This system has %d DIMM sockets.\n", ghes_hw.num_dimms);
+> -	}
+> -
+>  	if (!fake) {
+>  		struct dimm_info *src, *dst;
+>  		int i = 0;
+>  
+> +		pr_info("This system has %d DIMM sockets.\n", ghes_hw.num_dimms);
+> +
+>  		mci_for_each_dimm(mci, dst) {
+>  			src = &ghes_hw.dimms[i];
+>  
+
+This hunk...
+
+> @@ -478,6 +463,17 @@ static int ghes_edac_register(struct device *dev)
+>  	} else {
+>  		struct dimm_info *dimm = edac_get_dimm(mci, 0, 0, 0);
+>  
+> +		pr_info("This system has a very crappy BIOS: It doesn't even list the DIMMS.\n");
+> +		pr_info("Its SMBIOS info is wrong. It is doubtful that the error report would\n");
+> +		pr_info("work on such system. Use this driver with caution\n");
+> +
+> +		if (ghes_edac_force) {
+> +			pr_info("This EDAC driver relies on BIOS to enumerate memory and get\n");
+> +			pr_info("error reports. Unfortunately, not all BIOSes reflect the\n");
+> +			pr_info("memory layout correctly. If you find incorrect reports, please\n");
+> +			pr_info("contact your hardware vendor for its in correct BIOS.\n");
+> +		}
+> +
+>  		dimm->nr_pages = 1;
+>  		dimm->grain = 128;
+>  		dimm->mtype = MEM_UNKNOWN;
+
+... and this hunk look unrelated to what this patch is doing. What are
+they for?
+
+Thx.
 
 -- 
-Jens Axboe
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

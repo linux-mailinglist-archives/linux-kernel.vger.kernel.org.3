@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF4459FE62
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D004959FEC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbiHXPbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S238891AbiHXPto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239577AbiHXPa5 (ORCPT
+        with ESMTP id S237332AbiHXPth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:30:57 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B75A1901E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:30:56 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id AAA2732009A3;
-        Wed, 24 Aug 2022 11:30:54 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 24 Aug 2022 11:30:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661355054; x=1661441454; bh=UWEjBSdwLo
-        HCpeWHAdeX0Lnymfed3xOveR1DLx5HrYc=; b=ULHgHtn5NHKNfL2UkspRLKeOkb
-        C3ZbnLl18NGByg2tqztaYDv0YsHYf9LV49igzKNItHRPBx+jJ3NejeWJK1Xe8JVb
-        v2CAg6cL1qaKWTcKxIIqxralQgJq4BiaVoNH/gDZdlNSM0c7pcvGrXDOJsfKbsCF
-        ivdwC24HfLpeAr5NKeywdXln+yGNOcwwOjs9n1rVpsgNS7IP9clUSwhU8br5tjxx
-        uX/MGYhiel+05y9K9zuuEs4ad8DvUBpx+lovA2ix82IqLziS81vBworp/6RgTDFd
-        p272BCeB63+q0x1/hTVG8u4TARUHy5lmNmkZWZBryTkc2N9YvO30HtdFQTJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661355054; x=1661441454; bh=UWEjBSdwLoHCpeWHAdeX0Lnymfed
-        3xOveR1DLx5HrYc=; b=VWzW6GMlx8eKa5TW1KStIfs0N4R5dOJlE/nh4T2hoFHI
-        4QFQ23yX5ojZmgXtjuLBRfrilDTz6UuRW8eTOeMxwwswdYslzWcWnzBD7Ho2yhv1
-        dM/pZEUQKLktdPVTj+s3SfhEo1NZuIs80seMCqTpjSOVVzkQJ69KW5i7UDwnyb2Q
-        +z3As3q6RIVzAorbIYPsJ6bra+cIWPTAnqaCQYi/2N1hCIDN2jrQgJNEIxGae9MP
-        K/XSI9dgKBAnJlPXONkU4ZJ42bT5NloSQ6yDEBRm1gcvQJj7yUiSFD8YgN20diQS
-        dOppc/bQ/joy197h44yiip91Xjtxsr14w4Vvlts5rw==
-X-ME-Sender: <xms:LUQGY_MRs5cssNyB3ytj7-9tMKpuf_8SbM_h8LrpWG7lyYIBZzwotg>
-    <xme:LUQGY58SWQfFOlX3ipsFg9GfAwn7-bOhBE9AxTyu37qdeSQS_o4N1luTxXImUasYE
-    fDmlJZ_jQYQTvq3nns>
-X-ME-Received: <xmr:LUQGY-QfnCur25s8h30J1lIKR3V_o-OqJBpaf1N7Siizmfkc0WbygoOLg8Gx>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
-    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:LUQGYzvYMzkv_wS3yvHVWv1_-LYHb0DZw1X41OwCeo2-1VE9sgHTUQ>
-    <xmx:LUQGY3fX_6vLZg88v5LOWATwzGv8FYsPwgKHCfFQu7dQC8K1FcwWPg>
-    <xmx:LUQGY_1DHmwst_u3iws3Zogo69eAWG-0lJv7Q5Dsz7tPNopLU6VRJQ>
-    <xmx:LkQGY_1PcZ04syCJj8_5KZEpzwFGg-8JMX6VaESkmxIkD8dlMJpTFg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 24 Aug 2022 11:30:53 -0400 (EDT)
-Date:   Wed, 24 Aug 2022 17:30:51 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Charles Mirabile <cmirabil@redhat.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Serge Schneider <serge@raspberrypi.org>,
-        Nicolas Saenz Julienne <nicolassaenzj@gmail.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        rh-kdlp@googlegroups.com, Joel Slebodnick <jslebodn@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: Re: [PATCH v10 0/6] Raspberry Pi Sense HAT driver
-Message-ID: <20220824153051.bx6kfcih76kh3exc@houat>
-References: <20220823174158.45579-1-cmirabil@redhat.com>
- <fc54a7a3-c67b-79ab-5e87-d468695e5553@i2se.com>
- <CABe3_aFJ0gkLDFB9k5FEn1SmupbLEKxAn8y=WTt-Rc0xUEK4Dw@mail.gmail.com>
+        Wed, 24 Aug 2022 11:49:37 -0400
+Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC830AE4C;
+        Wed, 24 Aug 2022 08:49:33 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 46BCC3C1537;
+        Wed, 24 Aug 2022 15:49:30 +0000 (UTC)
+Received: from pdx1-sub0-mail-a272 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id A8E253C0446;
+        Wed, 24 Aug 2022 15:49:29 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661356169; a=rsa-sha256;
+        cv=none;
+        b=cu+o5/F1M8oKJJd3Cb1g5dj0+jtfKIbltlxaohXPKX70qy/US83bzr4rjx126amUdBi8n/
+        0FyHDETA3K7ylQna1mq9ej2UDDhZizPSj8pXPVLC13CaPWPv6iR3jINiOSicT9Zdq8PHx7
+        aryG06pXKtcpPj4V8CHz0OpZ/ZtL4VSWJwPSbPnI1CqQgyirUZ55uYFgjNFGV9+PtDg/Hc
+        DkXHvcVtalzK3WqS+zl2t6wgYjCTe9/BR/taWx1yQWF++Mr95ZHF84YH2cB49rlYlwj+vc
+        hIQulx3PRREWLN5dz0zM7Csb/njLi3uycTf8UpGLChl04CPA6vfs+rRU6lsIxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661356169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=f8zvgpAQ/vOOCAA6BsteItnQintQryatUs+B9WSkV00=;
+        b=jTUPY3ohRb5pC/6MgkVbIUiJltXIQmi/q2jcDJF189xLhTlcwddDN6Qh8jqTJ5FSaZOZ1K
+        Ukz72PHrGELo4ciuaLk/vA9/x5Hr0v/IqvoHMQgw4NjDbUZrJ8R0nz4CSzeCanJ5bC2GNO
+        kI5PLgjoBYeJPOwZtxvy+oETZGh+LyfuHhWLjZv3PuXSzrARH7ezylqgWdm1ue6vzNJu8Y
+        a88zCjt9rDFDBVbNKmvzGPnPWR5V0BsLGLweZa2Gtn+eAy9KqOEYxPdnCc6v7FKuQy56XZ
+        tX6X/cla/ho0HOuRN8uC+5PF/rQ7GT8G1ooGfjZgKFF3UvqrRhnY4VEhTMJM7Q==
+ARC-Authentication-Results: i=1;
+        rspamd-5cbff9fff7-55tb6;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Bottle-Average: 1edba8120ba38851_1661356170002_2449178677
+X-MC-Loop-Signature: 1661356170002:1405177085
+X-MC-Ingress-Time: 1661356170002
+Received: from pdx1-sub0-mail-a272 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.109.219.74 (trex/6.7.1);
+        Wed, 24 Aug 2022 15:49:29 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a272 (Postfix) with ESMTPSA id 4MCVs473t5zCv;
+        Wed, 24 Aug 2022 08:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661356169;
+        bh=f8zvgpAQ/vOOCAA6BsteItnQintQryatUs+B9WSkV00=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=KZk2ksKNEUDT32Rd3tpDfFxsY0TRFy+bGHBa4znHeeVbLOWCqdV2FNTTu9B8eezou
+         HPkEHlIKLekVraT3q9sdv32aLYNFlF49NA5VJeo4vKinBlI7PvoEaLEOkN50lyMWMJ
+         tuvbbr0rgqpXK1ajE99YjWn2MNX82Nw8oycR+U7Q2klt93JM0OXACYDrGPCaUEu9L+
+         Ih6q6jvT65kzrmGWQ0Jen51ed2az3IDA1MeIViF6V6y3ctT6u3XDzdjDyymZfzyLZ8
+         Do8l9+xJ0QGtEA5Yx7+KAZaLQYplKZEfPICn7Slz4MD+zhWQNcYeFm3U77Y0o/7WaN
+         Z9MXfwmcsdLDg==
+Date:   Wed, 24 Aug 2022 08:31:22 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Adam Manzanares <a.manzanares@samsung.com>,
+        "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "widawsk@kernel.org" <widawsk@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cxl: Replace HDM decoder granularity magic numbers
+Message-ID: <20220824153122.2bgths6lnsxlolos@offworld>
+References: <CGME20220822170552uscas1p1b1ee530bf38a14806010d65d1b593ab0@uscas1p1.samsung.com>
+ <20220822170510.125082-1-a.manzanares@samsung.com>
+ <20220822171703.sfizbmn6retpxggi@offworld>
+ <20220824104401.00005cd4@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qnkn4bktoy4h2gpu"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CABe3_aFJ0gkLDFB9k5FEn1SmupbLEKxAn8y=WTt-Rc0xUEK4Dw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220824104401.00005cd4@huawei.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 24 Aug 2022, Jonathan Cameron wrote:
 
---qnkn4bktoy4h2gpu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>On Mon, 22 Aug 2022 10:17:03 -0700
+>Davidlohr Bueso <dave@stgolabs.net> wrote:
 
-On Wed, Aug 24, 2022 at 08:06:59AM -0400, Charles Mirabile wrote:
-> On Tue, Aug 23, 2022 at 5:30 PM Stefan Wahren <stefan.wahren@i2se.com> wr=
-ote:
-> > >    drivers/auxdisplay: sensehat: Raspberry Pi Sense HAT display driver
-> > We don't have an Ack for this display driver. Maybe we should ask Maxime
-> > Ripard and Noralf Tr=F8nnes especially Pavel Machek had concerns about =
-the
-> > right subsystem?
+>> Actually the whole drivers/cxl/* could use updating the comments for 3.0.
 >
-> I just looked back at the comments from Pavel on v9. I had meant to
-> reply to him, and I actually drafted something but it got lost in the
-> shuffle and I never sent it (also my bad).
->
-> The driver is an fbdev in the raspberry pi tree, and that is where we
-> started when upstreaming, but right from the outset we were told that
-> it couldn't be an fbdev since that subsystem is being deprecated
-> the replacement is the DRM subsystem
+>Interesting point.  What do we want to do on this?  Most similar
+>cases I've been involved on rely on referring to 'oldest' compatible spec.
+>(this is true for ACPI stuff for example).
 
-Indeed
+I find it incredibly annoying to reference table or section numbers from old
+specs mention in the code. Unless dealing with specific version things, why
+use old specs at all?
 
-> but (as Matthias Brugger suggests) that is probably overkill for an
-> 8x8 display. Does that settle the subsystem question?
+The main drawback to this is obviously the constant need to update everything,
+so...
 
-If you were aiming for an fbdev driver, a KMS driver these days would be
-notably simpler.
-
-We've added simpler and simpler devices, such as the SSD1306 recently,
-so I can't see anything wrong with using KMS either.
-
-Maxime
-
---qnkn4bktoy4h2gpu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwZEKwAKCRDj7w1vZxhR
-xeP5AP49OPG5mL6W0tELzpbzif+x+BpthcKKwThVhaPXEL3JcwD+PBhrC2xNONxU
-yrmVGBo/7cUtnUmAjR/2f1Ih0jR0Kws=
-=QqBo
------END PGP SIGNATURE-----
-
---qnkn4bktoy4h2gpu--
+Thanks,
+Davidlohr

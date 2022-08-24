@@ -2,189 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C0D59FEC2
+	by mail.lfdr.de (Postfix) with ESMTP id 8A77659FEC1
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239200AbiHXPtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S233702AbiHXPtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239916AbiHXPsr (ORCPT
+        with ESMTP id S230492AbiHXPtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:48:47 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26686C77F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:48:27 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id CEE8C32009C8;
-        Wed, 24 Aug 2022 11:48:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 24 Aug 2022 11:48:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661356106; x=1661442506; bh=KiIFMGOdSQ
-        RAgyuh6d1iUT5BtacW3klnbBIVwJD0Oqs=; b=kvnRV1eddW5m5h4fMiulMBz1dv
-        xnNqkypAWWx0UFAeELpiH5uG7JTd1l4D5DBqX3akRyi7ve4rwihHV82zctXkrcty
-        ZhKjSde99R6jb5JW2titRfm1779ohFweEFVBMj5cn35ZlfzA6z18ECGvEZdl4XwJ
-        LbejOZG6PwvXCYcGMG5+4ik3naJ9iyIEJFEce6YdyVVXzrtWurgBhPH/FoAeLeY+
-        jDd8Ik0V72ZPMsl7MRfuWNOs2aK/qJSlz5ft/OOjFozTSoF5GOfwsheLJp60AEdd
-        rTXaaq1JyF4HZaImbW/DO7wfP9URJROrIz/a4oLfoRwPovw7K+F97LnafshA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661356106; x=1661442506; bh=KiIFMGOdSQRAgyuh6d1iUT5BtacW
-        3klnbBIVwJD0Oqs=; b=RrmBPMmC4K/PIzZBG5PT2o4WofGgwCRlnN9XV9jrjqo2
-        cdEcKncx6qJfkHc7Wy9UkHpv3y31Ws383TayXakm/YoCcNE81rMYbqX2Ozime0or
-        dpQat30mlDb1aESdrIwWImJ7sQDGOPQl3NQ8y30sBP39CiWNnqKsGJBqALbFLHbd
-        EJ2JVEwCZxuQk5GIe/4hGfNAPM3uUahjtCFvq34kw2BfWWFleWiyCk8xzhp5PFRz
-        ERQ5Pjo1UvGCOgSjMyTRRBsvFc1eLcXZEPxLOfN8EQnBYGr6cpzho48xRPNKDIbn
-        WTaGkknCKVbIcZ36gHcjFpmIf6PODgI39bJm7fQNOQ==
-X-ME-Sender: <xms:SkgGY7fbesNrMwqMcg1LyxZzrxutpGHvP1E7QMh_MYMaQwFIP6NYeg>
-    <xme:SkgGYxMTYCPwxFj0942kfgH_p-KeDdp1DnMbObKlbz35aJwBl85NR9RJy-aqWfAcJ
-    xyJkk9wQPLhXmOf7pY>
-X-ME-Received: <xmr:SkgGY0iJ72fxmpIEcCIAtRStsL3v7ckcNtgNGkVcjbJy3U-xh4-XeKpr7EFh>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:SkgGY8-Pl7kej_EyLcSnGm-_ytk16aIXAJ-H4nxu988KY8wqHbQeHg>
-    <xmx:SkgGY3v504GGZmf_-JAS-Rr2zsh2NNidLpAy-m2He6ZV9YOywOP0sg>
-    <xmx:SkgGY7FXsOGcxEq4wAMGzc7QjAUsa0_M3X6o8kltLsUI1kNoMC_JVQ>
-    <xmx:SkgGYxI2JiRg2JayFiuWCDgqV-qaRhzRqesfleI7HaNfbS7P-3F6ZQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 24 Aug 2022 11:48:25 -0400 (EDT)
-Date:   Wed, 24 Aug 2022 17:48:23 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH drm-misc-next v2 2/4] drm/vc4: plane: protect device
- resources after removal
-Message-ID: <20220824154823.qu3tdwypg5o3ci4z@houat>
-References: <20220819110849.192037-1-dakr@redhat.com>
- <20220819110849.192037-3-dakr@redhat.com>
+        Wed, 24 Aug 2022 11:49:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A865B5;
+        Wed, 24 Aug 2022 08:49:05 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 87C401EC06C1;
+        Wed, 24 Aug 2022 17:49:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661356140;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MxmGGXRqvy/kg2UXwgf3BTIi/G3tnob4EQvNp/M87dg=;
+        b=edWs/RGlWPHohWezYHzoJbU9dRiEhHFyWoNdS92OSV80ZKfDJ1FxJk8Wi4RFo170tz66KE
+        Q1zXpPSLDqUtB6xCpnnt0X4D8EBwM5QykrLTtOf/hyOnYaT5c/yjCw9WIgrMV1LOCLqw2m
+        VUSteKrfbIdRO1piuGefKQWTQ8bmTsY=
+Date:   Wed, 24 Aug 2022 17:48:56 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     X86 ML <x86@kernel.org>, Michael Matz <matz@suse.de>,
+        linux-toolchains@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/sev: Mark snp_abort() noreturn
+Message-ID: <YwZIaJIr4Zmpaams@zn.tnic>
+References: <20220824152420.20547-1-bp@alien8.de>
+ <YwZF8pvWHqFYQOVB@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i6p2xirgmwjujatv"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220819110849.192037-3-dakr@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YwZF8pvWHqFYQOVB@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 24, 2022 at 05:38:26PM +0200, Peter Zijlstra wrote:
+> You'll probably also have to add it to the
+> objtool/check.c:global_noreturn[] list, for the case where objtool fails
+> to recognise it as noreturn.
 
---i6p2xirgmwjujatv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+How come?
 
-On Fri, Aug 19, 2022 at 01:08:47PM +0200, Danilo Krummrich wrote:
-> (Hardware) resources which are bound to the driver and device lifecycle
-> must not be accessed after the device and driver are unbound.
->=20
-> However, the DRM device isn't freed as long as the last user closed it,
-> hence userspace can still call into the driver.
->=20
-> Therefore protect the critical sections which are accessing those
-> resources with drm_dev_enter() and drm_dev_exit().
->=20
-> Fixes: 9872c7a31921 ("drm/vc4: plane: Switch to drmm_universal_plane_allo=
-c()")
-> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
-> ---
->  drivers/gpu/drm/vc4/vc4_plane.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_pl=
-ane.c
-> index eff9c63adfa7..c46acb770036 100644
-> --- a/drivers/gpu/drm/vc4/vc4_plane.c
-> +++ b/drivers/gpu/drm/vc4/vc4_plane.c
-> @@ -19,6 +19,7 @@
->  #include <drm/drm_atomic_helper.h>
->  #include <drm/drm_atomic_uapi.h>
->  #include <drm/drm_blend.h>
-> +#include <drm/drm_drv.h>
->  #include <drm/drm_fb_dma_helper.h>
->  #include <drm/drm_fourcc.h>
->  #include <drm/drm_framebuffer.h>
-> @@ -1219,6 +1220,10 @@ u32 vc4_plane_write_dlist(struct drm_plane *plane,=
- u32 __iomem *dlist)
->  {
->  	struct vc4_plane_state *vc4_state =3D to_vc4_plane_state(plane->state);
->  	int i;
-> +	int idx;
-> +
-> +	if (!drm_dev_enter(plane->dev, &idx))
-> +		goto out;
-> =20
->  	vc4_state->hw_dlist =3D dlist;
-> =20
-> @@ -1226,6 +1231,9 @@ u32 vc4_plane_write_dlist(struct drm_plane *plane, =
-u32 __iomem *dlist)
->  	for (i =3D 0; i < vc4_state->dlist_count; i++)
->  		writel(vc4_state->dlist[i], &dlist[i]);
-> =20
-> +	drm_dev_exit(idx);
-> +
-> +out:
->  	return vc4_state->dlist_count;
->  }
-> =20
-> @@ -1245,6 +1253,7 @@ void vc4_plane_async_set_fb(struct drm_plane *plane=
-, struct drm_framebuffer *fb)
->  	struct vc4_plane_state *vc4_state =3D to_vc4_plane_state(plane->state);
->  	struct drm_gem_dma_object *bo =3D drm_fb_dma_get_gem_obj(fb, 0);
->  	uint32_t addr;
-> +	int idx;
-> =20
->  	/* We're skipping the address adjustment for negative origin,
->  	 * because this is only called on the primary plane.
-> @@ -1252,12 +1261,17 @@ void vc4_plane_async_set_fb(struct drm_plane *pla=
-ne, struct drm_framebuffer *fb)
->  	WARN_ON_ONCE(plane->state->crtc_x < 0 || plane->state->crtc_y < 0);
->  	addr =3D bo->dma_addr + fb->offsets[0];
-> =20
-> +	if (!drm_dev_enter(plane->dev, &idx))
-> +		return;
-> +
->  	/* Write the new address into the hardware immediately.  The
->  	 * scanout will start from this address as soon as the FIFO
->  	 * needs to refill with pixels.
->  	 */
->  	writel(addr, &vc4_state->hw_dlist[vc4_state->ptr0_offset]);
-> =20
-> +	drm_dev_exit(idx);
-> +
+Doesn't objtool see the attribute?
 
-You did change the CRTC patch, but the comment to protect the entire
-function also applies to this one.
+-- 
+Regards/Gruss,
+    Boris.
 
-Maxime
-
---i6p2xirgmwjujatv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwZIRwAKCRDj7w1vZxhR
-xTpMAP9QqYSv8ty8je48B2HuywFGJE+Q2WGNAW/paVlqkHD0WwD/XgOG/VA+mckd
-g+GkI3JRlnAhkCqVRyReiq/t0DFeagk=
-=OEZa
------END PGP SIGNATURE-----
-
---i6p2xirgmwjujatv--
+https://people.kernel.org/tglx/notes-about-netiquette

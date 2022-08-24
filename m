@@ -2,101 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D804D59F6F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DCB59F6F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236054AbiHXJ5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S236025AbiHXJ6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232895AbiHXJ5N (ORCPT
+        with ESMTP id S232849AbiHXJ6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:57:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D979A76
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661335031;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=67TcKJ9jWGMiEw4kg52hWXxqV/N5/I9VlmIszyd4tqI=;
-        b=bvEH1HGHJzdiAwtzVRPh+TAAZYPV+PosX4ArREjQzdBJtfLhHWdA0rKu+IBplUWWLdi3KP
-        KOl4Kp2N+zIw55D92Rztwuy/5yRFSFsga+WZ/C+nc9WbFRF8p1lvZ/hlYfje/qU1fm4yrv
-        z5+M5Cr+ZPeqJhs87I+8h8M5Bfp+rEw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-365-dCN4VzZQPjCjHH9U-_2dyQ-1; Wed, 24 Aug 2022 05:57:10 -0400
-X-MC-Unique: dCN4VzZQPjCjHH9U-_2dyQ-1
-Received: by mail-wm1-f72.google.com with SMTP id n7-20020a1c2707000000b003a638356355so7019490wmn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:57:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=67TcKJ9jWGMiEw4kg52hWXxqV/N5/I9VlmIszyd4tqI=;
-        b=GNT1jta/qXEcc9mgSjxifh+ElDgCwq7jZv2CbRjN2lbWZTj4E72H3z4lX5qxlY9MR7
-         ZvXRvH+uUgktYOp5crWpcqDVi8nTDJaprkn0JmwhZohCXg+0GM9tmHq8iEv882pK7iaT
-         LVdQlZ2hBaEyGZZDEIiO/IdZHa8TuhXncAKUj1dj0ly+I8pHW6F3Te7Ln7hN+XIAi7Hc
-         wMlJ8wHyWVuytyP6LJtYLsrgpR4bvPF2qEyYQY3TwMduzIvk03smH/QksRew48Jr29fe
-         plHMJHMszlq63EdQscxiUpztxJtl5gHI7fyykW1tAl7K53wqxJA+gIsvcqCtfsywkD3g
-         qiBQ==
-X-Gm-Message-State: ACgBeo1dLd+EzulLws3k5SELWL1SA+oJ7ZY0gOno1KRW2f2Wfq3zSANZ
-        tAmTHkVs3R0ifxIHFpBvOJpTb+rXJY6Np8j9ms9WVNXY5f4dH7Ne9MUNOoTHbxZ9EeM35sGTPuv
-        o8a+GoUY9M5HZ/HV9XY7ya2Xv
-X-Received: by 2002:a05:6000:606:b0:225:7264:8f06 with SMTP id bn6-20020a056000060600b0022572648f06mr985430wrb.27.1661335029400;
-        Wed, 24 Aug 2022 02:57:09 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4gyv5u3qg2yLq2zqzn2c9wgxUKEY2z8IPI+Y201XRbuYkIl5QRMnrv7NBI5d1k0Z7rQs+kWw==
-X-Received: by 2002:a05:6000:606:b0:225:7264:8f06 with SMTP id bn6-20020a056000060600b0022572648f06mr985403wrb.27.1661335029194;
-        Wed, 24 Aug 2022 02:57:09 -0700 (PDT)
-Received: from [192.168.110.200] (82-65-22-26.subs.proxad.net. [82.65.22.26])
-        by smtp.gmail.com with ESMTPSA id z13-20020a5d44cd000000b00222ed7ea203sm16236679wrr.100.2022.08.24.02.57.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 02:57:08 -0700 (PDT)
-Message-ID: <5bba0f0e-544e-85ef-627b-6dd35244871a@redhat.com>
-Date:   Wed, 24 Aug 2022 11:57:07 +0200
+        Wed, 24 Aug 2022 05:58:17 -0400
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD5012AFC;
+        Wed, 24 Aug 2022 02:58:16 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.108.20.149])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 964C31220F409;
+        Wed, 24 Aug 2022 11:58:14 +0200 (CEST)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Wed, 24 Aug
+ 2022 11:58:14 +0200
+Message-ID: <5bb9955e-4c2f-ca55-0e77-c082a868371a@traphandler.com>
+Date:   Wed, 24 Aug 2022 11:58:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v8 02/24] bpf/verifier: allow kfunc to read user
- provided context
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v6 2/3] leds: Add driver for the TLC5925 LED
+ controller
 Content-Language: en-US
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20220721153625.1282007-3-benjamin.tissoires@redhat.com>
- <20220722084556.1342406-1-benjamin.tissoires@redhat.com>
- <CAADnVQLypx8Yd7L4GByGNEJaWgg0R6ukNV9hz0ge1+ZdW4mdgQ@mail.gmail.com>
- <CAO-hwJK5v8An5W48x2TDH=iNb49iEbC8uGwMbdCak0Bjnmea+w@mail.gmail.com>
-In-Reply-To: <CAO-hwJK5v8An5W48x2TDH=iNb49iEbC8uGwMbdCak0Bjnmea+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220722081146.47262-1-jjhiblot@traphandler.com>
+ <20220722081146.47262-3-jjhiblot@traphandler.com>
+ <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
+ <5ba34982-52c7-e41a-fba8-d88d93529e47@traphandler.com>
+ <20220804210412.GA30210@duo.ucw.cz>
+ <0663c616-97c8-444c-f390-275fae402453@traphandler.com>
+ <CAHp75Vf1cT81cx38VQ80PbyG9i9xbiegMnQoMWwZEZf+7fWJuQ@mail.gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <CAHp75Vf1cT81cx38VQ80PbyG9i9xbiegMnQoMWwZEZf+7fWJuQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG4EX2.emp2.local (172.16.2.32) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 17741367783541651931
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepieejfedukeevudfghfetudevhffhhfekjeeiudegtdehueevgfdvgeeivdeifedvnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhohedvke
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -104,121 +64,47 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 7/25/22 18:36, Benjamin Tissoires wrote:
-> On Fri, Jul 22, 2022 at 6:16 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+On 24/08/2022 10:55, Andy Shevchenko wrote:
+> On Wed, Aug 24, 2022 at 11:39 AM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+>> On 04/08/2022 23:04, Pavel Machek wrote:
+>>> On Thu 2022-08-04 22:23:00, Jean-Jacques Hiblot wrote:
+>>>> On 31/07/2022 21:28, Andy Shevchenko wrote:
+>>>>> On Fri, Jul 22, 2022 at 10:14 AM Jean-Jacques Hiblot
+>>>>> <jjhiblot@traphandler.com> wrote:
+> ...
+>
+>>>>> Sorry for my slowpokeness, but I just realized that this driver may
+>>>>> not be needed. What is the difference to existing gpio-74x164?
+>>>> It might work. However it might not be as practical and efficient as the
+>>>> dedicated LED driver.
+>>>>
+>>>> I'll give a try.
+>>> It is certainly preffered solution. If you decide to re-submit the
+>>> driver anyway, please mention that we already have GPIO driver for
+>>> compatible chip, and explain why this is superior.
+>> sorry for the delay. I tried with the  74x164 gpio driver and it works
+>> as expected.
 >>
->> On Fri, Jul 22, 2022 at 1:46 AM Benjamin Tissoires
->> <benjamin.tissoires@redhat.com> wrote:
->>>
->>> When a kfunc was trying to access data from context in a syscall eBPF
->>> program, the verifier was rejecting the call.
->>> This is because the syscall context is not known at compile time, and
->>> so we need to check this when actually accessing it.
->>>
->>> Check for the valid memory access and allow such situation to happen.
->>>
->>> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->>>
->>> ---
->>>
->>> changes in v8:
->>> - fixup comment
->>> - return -EACCESS instead of -EINVAL for consistency
->>>
->>> changes in v7:
->>> - renamed access_t into atype
->>> - allow zero-byte read
->>> - check_mem_access() to the correct offset/size
->>>
->>> new in v6
->>> ---
->>>   kernel/bpf/verifier.c | 21 +++++++++++++++++++++
->>>   1 file changed, 21 insertions(+)
->>>
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index 7c1e056624f9..c807c5d7085a 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
->>>          struct bpf_map *map_ptr;
->>>          bool raw_mode;
->>>          bool pkt_access;
->>> +       bool is_kfunc;
->>>          u8 release_regno;
->>>          int regno;
->>>          int access_size;
->>> @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
->>>                                     struct bpf_call_arg_meta *meta)
->>>   {
->>>          struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
->>> +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->>>          u32 *max_access;
->>>
->>>          switch (base_type(reg->type)) {
->>> @@ -5223,6 +5225,24 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
->>>                                  env,
->>>                                  regno, reg->off, access_size,
->>>                                  zero_size_allowed, ACCESS_HELPER, meta);
->>> +       case PTR_TO_CTX:
->>> +               /* in case of a kfunc called in a program of type SYSCALL, the context is
->>> +                * user supplied, so not computed statically.
->>> +                * Dynamically check it now
->>> +                */
->>> +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
+>> The only drawbacks are:
 >>
->> prog_type check looks a bit odd here.
->> Can we generalize with
->> if (!env->ops->convert_ctx_access
-> 
-> Yep, seems to be working fine for my use case and the test cases I
-> have in this series.
-> 
->>
->> In other words any program type that doesn't have ctx rewrites can
->> use helpers to access ctx fields ?
->>
->> Also why kfunc only?
->> It looks safe to allow normal helpers as well.
-> 
-> Well, not sure what is happening here, but if I remove the check for
-> kfunc, the test for PTR_TO_CTX == NULL and size == 0 gives me a
-> -EINVAL.
-
-I finally managed to track down the issue.
-
-The reason was that if we now call check_mem_access for every function 
-check, but also subprogs. And so we ensure that a subprog can access 
-context.
-
-This is all fine, but that test now tags the subprog accessing the 
-context, even if it is actually null and not accessing it in the code.
-
-So to restore the previous behavior, I am storing 
-env->prog->aux->max_ctx_offset in btf_check_subprog_arg_match() and 
-restore it after the call to check for the arguments.
-
-See the v9 for the detail in the code.
-
-Cheers,
-Benjamin
-
-> 
-> The original reason for kfunc only was because I wanted to scope the
-> changes to something I can control, but now I am completely out of
-> ideas on why the NULL test fails if it enters the if branch.
-> 
-> Unfortunately I won't have a lot of time this week to tackle this (I
-> am on holiday with my family), and next will be tough too (at home but
-> doing renovations).
-> 
-> I can send the fixup to remove the prog_type check as I just made sure
-> it works with the selftests. But I won't be able to dig further why it
-> fails without the kfunc check, because not enough time and
-> concentration.
-> 
-> Cheers,
-> Benjamin
-
+>> - as-is the 74x164 gpio driver supports only one output-enable gpio.
+>> However in practice I don't think multiple OE GPIOs will ever be used.
+> Let's leave it to the case when it will be needed. So, we can skip this point.
+>
+>> - with this approach, every time a LED status is changed the whole
+>> register has to be sent on the SPI bus. In other words, changes cannot
+>> be coalesced.
+> But isn't it the same as what you do in your driver? To me it looks
+> like you send the entire range of the values each time you change one
+> LED's brightness. I don't see any differences with the GPIO driver.
+No. The TLC5925 driver updates the register asynchronously: the cached 
+value of the register is updated synchronously and then it is 
+transferred over SPI using a workqueue. This way if multiple LED are set 
+in a short time, the changes are coalesced into a single SPI transfer. 
+This is however probably not a must-have feature.
+>
+>> I don't know if this is enough to make a dedicated TLC5925 driver
+>> desirable in the kernel.
+> I don't think you have enough justification for a new driver.
+>

@@ -2,954 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8753059FC95
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1238659FC9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237909AbiHXOC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        id S238178AbiHXOEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237669AbiHXOCV (ORCPT
+        with ESMTP id S235661AbiHXOED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:02:21 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839D77E832;
-        Wed, 24 Aug 2022 07:02:18 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661349735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=le3Xmqi0vRpm9+qmgLwh/qNRMSSn2w9POUcxH1bimw4=;
-        b=YKxOzt8ZfnEaqSnJbE0SDO5lIzZMWw5BH2KGpmN9orQdBRkaiWTBsysSTrMrGHRNInQsMb
-        ifRDOvUx8gI5EuDUMSHdQ0XxLjHVPRV/bgI3UlcSZsV/ZHCKB4wWiW09H/vEi7rr/cz5hy
-        ABJwYMwYtvKAlKNa6M3/mD0oEvFvcE4=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     cai.huoqing@linux.dev
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: [PATCH] dmaengine: dw-edma: Add support for native HDMA
-Date:   Wed, 24 Aug 2022 22:01:44 +0800
-Message-Id: <20220824140146.29140-1-cai.huoqing@linux.dev>
+        Wed, 24 Aug 2022 10:04:03 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70075.outbound.protection.outlook.com [40.107.7.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB06887083;
+        Wed, 24 Aug 2022 07:04:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O6QLzP3WAtbIIA0S/lRrCtTHblBs5fTuBrs4g5LWPoc2EMdwP00FCVN3NPDr2ufPpmNo93wMv3+74oWXgniKZC0e16a/k0xHGq6LMwTcviS/VIWRRjB3EFsHsJz/ZqlpsWPJfYlb5w9oWeXBLfyoajHUSmdTJbFEr8Mi0KHJet4uzcxgVFXyEUQqX7MYEpUsVYyXUt9JG2jPDtKHJ/3mscytopih6lepHrY4Wc/eNksnl6V09/kuQ20CAE0ScpVqAESgocjBaHuZwp/Sc91UkrqSDB8f17JWuzamN/cINKcg7DSRzYrhjnc08XAedCLo8x5q5yEhj69Kni0ljv3oQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iPKS7mP9x5xeWYCKJ6oQrZloI4Ysy1MV9iOHvMTjwBI=;
+ b=e/TY0dqx43Duywx8TR1bkljTBio/KT8kfK0sH/RCxYkPAQX0357vbMr1BCh04Tp1bgxDyeUt7oBUabmd6lDbW+BFivgTF22rrOBNrmvrzj56b4+4TFfZqYvZoLc75mxkZd5NP8Wfo/BuWVUILpYV3l6FfMObLifcNMemB531gf0CtWkjoXJz7FOQxNRUUSRTFqsountAUGlf1Sd04x9iw/fdH319azW2MQSUEq/KSkf7weWFmEI83gtA9JGre/gU5wT3HmlR22gpAk30xTg2DRQkmIFkObPREUOCsEZaad7IgwY9foKtEPKllM2TOZcjIa+kuvm50GZlMnno6z7C6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=linaro.org smtp.mailfrom=siemens.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iPKS7mP9x5xeWYCKJ6oQrZloI4Ysy1MV9iOHvMTjwBI=;
+ b=lyTCzUVIWgP6nE3BVZhVRFBchkPL9MtzSru9Fu2BTOJVmmQ53ZDRw2DPIXuh4Uoc2oUG5Bch2CNLgT69OYmaNxPhk+2DVhcuIkPySaMwEi5w8Ye0YTO8TxQiZxenSGpY+eZjgrfqfOCFS0ddMzR5lVt1OmAMj7fDY528XXmeKgH5eheLoDrliinzf+mUIv0tfGJGcJ6cKVlfnuduMi2glgjb0j/w/piIc3i6yeqW1qHy9PiJpxH05wHZjLsx63BvZ4FsOIQrbGhyeNh344oez2GKIBWaM0paUYcO79NPK9IaCkPHC+zvixD5KYC0KkmqKhgx2eXUAnzqpC14RVFsAQ==
+Received: from DB9PR02CA0022.eurprd02.prod.outlook.com (2603:10a6:10:1d9::27)
+ by DB6PR10MB1559.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:6:36::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Wed, 24 Aug
+ 2022 14:03:59 +0000
+Received: from DB5EUR01FT009.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:1d9:cafe::15) by DB9PR02CA0022.outlook.office365.com
+ (2603:10a6:10:1d9::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15 via Frontend
+ Transport; Wed, 24 Aug 2022 14:03:59 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=siemens.com;
+Received-SPF: Fail (protection.outlook.com: domain of siemens.com does not
+ designate 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.76) by
+ DB5EUR01FT009.mail.protection.outlook.com (10.152.4.124) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5566.15 via Frontend Transport; Wed, 24 Aug 2022 14:03:59 +0000
+Received: from DEMCHDC89XA.ad011.siemens.net (139.25.226.103) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.9; Wed, 24 Aug 2022 16:03:57 +0200
+Received: from md1za8fc.ad001.siemens.net (139.25.0.80) by
+ DEMCHDC89XA.ad011.siemens.net (139.25.226.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.9; Wed, 24 Aug 2022 16:03:57 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee@kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>
+CC:     Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>,
+        <simon.guinot@sequanux.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v5 0/5] add support for another simatic board
+Date:   Wed, 24 Aug 2022 16:03:42 +0200
+Message-ID: <20220824140347.1842-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [139.25.0.80]
+X-ClientProxiedBy: DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) To
+ DEMCHDC89XA.ad011.siemens.net (139.25.226.103)
+X-TM-AS-Product-Ver: SMEX-14.0.0.3080-8.6.1018-26680.007
+X-TM-AS-Result: No-10--12.198300-8.000000
+X-TMASE-MatchedRID: tC0x+CmGG+8rpjrmrWphXLdeTPu4qCaOeDPho5Jw+XAsIMJqMNlanUlo
+        PruIq9jT02DA+6J8XN1nbyATPFLi0iiUlO4YffC3skaOZjOmjNE3PGxhv7akGQrcxrzwsv5u1cu
+        IRwt/4MjVjNsehGf0vd56eAtmq2rwdj1Cy2U84rvizmK6NdGX5G31FZ8LNR0EuZBZOg7RfX8vuz
+        dRZ+l3c3PW+p0zOs/DPsWcKsQns01RtiPAXngvCe6Bh/vmoH4yjIJ0KdSGRo4fZhFimVQHW8ioJ
+        Qie/DjpK4YqHgCSopVPpjLRqc8GljDOSE1tWAtWETeFhrKfkTXFJ9E937W8zopHR9xEGhE1RwDU
+        669267wc0nbYaP5Pw86HTpvs6fCpmHziDDAkm8gTqqN9z4iBnlGEd5OSBmbmngIgpj8eDcAZ1Cd
+        BJOsoY8RB0bsfrpPIfiAqrjYtFiRTgRq8dcB/GKgA87zTSqGJPM4zykv3Fcsh8dkI5KkwLn7cGd
+        19dSFd
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--12.198300-8.000000
+X-TMASE-Version: SMEX-14.0.0.3080-8.6.1018-26680.007
+X-TM-SNTS-SMTP: 0CEDD7B281A6F594F3EF8751DD9D22F365162C95EFA94F9827D39FC6D9A1A3122000:8
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: eb903efc-f138-48fb-5b9c-08da85d97dcf
+X-MS-TrafficTypeDiagnostic: DB6PR10MB1559:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Li5tp9XRAu+qaFpGaCbH60THcg0bH4eTukpb3TsYgNS6NrR8asqJyuUyzz7Qc7M/DvWvTZM1E2X0P8x8hDHlGXHt5fEuZj5nFTnC894rZ8ObLD4DBpwbcBDrfxlzDAJstVhUvXQewadBt2pwSxJusfeZR9MkPvRAjOfh0iy6A3STfhB/6KLlQjG88V7wgw/cHxkO+pZEuHCyd1z3sFlWKTToeAZIIwDlz08yVbjbxMX15HOcrrNYQehaVQalrOVbQhqUk5Wmyd+F+sMD7erC4cLX4xtf+aR+BAqk0kupWFWjeOxAiky4w2PTcfOEaTtd/e646nbtm6+c/qdXcpeIuMjO7WOpHCMGjtNpLsLftlYWkhque7wc3z8ogrEIF6DKg96jz24AyIQ7bHs2mVvzymUulUCBYp3Lk1wudU0pSpZQ7p63M3bd/xPYCNGMy8VQ/E9x+OreQ1sk2GXvCV2gWoTusCiPLBbxS+8mGsDVfi9798tSBaMZC6vnebysSuhVZfQf7CXt0xI3ViLWdUWG3hcYqBJWzX6Bmkt11oy2/g0pG8l82wuNR3MmAtm0jwrS3JNQS+gUvMvDWYn6lw7Bd8NF9RjmwKQV93h4+ZR+vkvEeWG+d5vPkMD2yjoka2w42LjvDvXkUzqQr3Xc7nG7SMDU3awuPnxKAunE6JBy0Un7r/o+k8V1It9Cb+4J/NToKfZ+Hxnn/9SF9TvCX/Tf6Kfekyc31NZaMhPNGjqAZ0NZxYzDChjtji2mgLxLydo4ZY+W4k3hZodWQleXhh8KiK0/zZnEdbLix28BPL1rXTWVMtlz1g56zsgKQZEGYY8X6i0hL1qA+5oGBQh/BdZLoa0Oh9bpuJTnYeCZV4FV3tL+7gpDIusPvSn+fDS0IeL2Knb1ffGG8HbLLMQsFReSgQ==
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(39860400002)(396003)(46966006)(36840700001)(40470700004)(40460700003)(2616005)(186003)(83380400001)(956004)(336012)(47076005)(1076003)(16526019)(36756003)(34020700004)(36860700001)(70586007)(4326008)(8676002)(40480700001)(54906003)(110136005)(316002)(70206006)(86362001)(2906002)(26005)(6666004)(107886003)(8936002)(44832011)(5660300002)(82310400005)(478600001)(41300700001)(7416002)(356005)(921005)(82740400003)(81166007)(82960400001)(83996005)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 14:03:59.0786
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb903efc-f138-48fb-5b9c-08da85d97dcf
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT009.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR10MB1559
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for HDMA NATIVE, as long the IP design has set
-the compatible register map parameter-HDMA_NATIVE,
-which allows compatibility for native HDMA register configuration.
+changes since v4:
+  - remove int case from a printk in p1
+  - include tags into commit messages
 
-The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-And the native HDMA registers are different from eDMA,
-so this patch add support for HDMA NATIVE mode
+changes since v3:
+  - update Kconfig as well
+  - drop chip names from comment in driver header
+  - add manufacturer check for Fintek again, Nuvoton not possible
+  - drop revision printing for Nuvoton
+  - restructure defines again
+  - add new model 427G
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
----
- drivers/dma/dw-edma/Makefile             |   4 +-
- drivers/dma/dw-edma/dw-edma-core.c       | 116 ++++++++---
- drivers/dma/dw-edma/dw-edma-pcie.c       |   5 +-
- drivers/dma/dw-edma/dw-edma-v0-core.c    |   3 +
- drivers/dma/dw-edma/dw-hdma-v0-core.c    | 236 +++++++++++++++++++++++
- drivers/dma/dw-edma/dw-hdma-v0-core.h    |  27 +++
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 167 ++++++++++++++++
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  25 +++
- drivers/dma/dw-edma/dw-hdma-v0-regs.h    |  94 +++++++++
- include/linux/dma/edma.h                 |   3 +-
- 10 files changed, 646 insertions(+), 34 deletions(-)
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+changes since v2: (p1 only)
+  - rename macros that change behavior
+  - use chip type not device id in the macros
+  - reorder defines a bit
 
-diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
-index 8d45c0d5689d..95c5ae760a64 100644
---- a/drivers/dma/dw-edma/Makefile
-+++ b/drivers/dma/dw-edma/Makefile
-@@ -1,7 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
--dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
-+dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o \
-+							   dw-hdma-v0-debugfs.o
- dw-edma-objs			:= dw-edma-core.o \
-+						   dw-hdma-v0-core.o \
- 					dw-edma-v0-core.o $(dw-edma-y)
- obj-$(CONFIG_DW_EDMA_PCIE)	+= dw-edma-pcie.o
-diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-index 07f756479663..f0e44cb810d0 100644
---- a/drivers/dma/dw-edma/dw-edma-core.c
-+++ b/drivers/dma/dw-edma/dw-edma-core.c
-@@ -19,6 +19,7 @@
- 
- #include "dw-edma-core.h"
- #include "dw-edma-v0-core.h"
-+#include "dw-hdma-v0-core.h"
- #include "../dmaengine.h"
- #include "../virt-dma.h"
- 
-@@ -176,6 +177,7 @@ static void dw_edma_start_transfer(struct dw_edma_chan *chan)
- 	struct dw_edma_chunk *child;
- 	struct dw_edma_desc *desc;
- 	struct virt_dma_desc *vd;
-+	struct dw_edma *dw = chan->dw;
- 
- 	vd = vchan_next_desc(&chan->vc);
- 	if (!vd)
-@@ -190,7 +192,11 @@ static void dw_edma_start_transfer(struct dw_edma_chan *chan)
- 	if (!child)
- 		return;
- 
--	dw_edma_v0_core_start(child, !desc->xfer_sz);
-+	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
-+		dw_hdma_v0_core_start(child, !desc->xfer_sz);
-+	else
-+		dw_edma_v0_core_start(child, !desc->xfer_sz);
-+
- 	desc->xfer_sz += child->ll_region.sz;
- 	dw_edma_free_burst(child);
- 	list_del(&child->list);
-@@ -248,8 +254,15 @@ static int dw_edma_device_resume(struct dma_chan *dchan)
- static int dw_edma_device_terminate_all(struct dma_chan *dchan)
- {
- 	struct dw_edma_chan *chan = dchan2dw_edma_chan(dchan);
-+	struct dw_edma *dw = chan->dw;
-+	enum dma_status status;
- 	int err = 0;
- 
-+	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
-+		status = dw_hdma_v0_core_ch_status(chan);
-+	else
-+		status = dw_edma_v0_core_ch_status(chan);
-+
- 	if (!chan->configured) {
- 		/* Do nothing */
- 	} else if (chan->status == EDMA_ST_PAUSE) {
-@@ -257,7 +270,7 @@ static int dw_edma_device_terminate_all(struct dma_chan *dchan)
- 		chan->configured = false;
- 	} else if (chan->status == EDMA_ST_IDLE) {
- 		chan->configured = false;
--	} else if (dw_edma_v0_core_ch_status(chan) == DMA_COMPLETE) {
-+	} else if (status == DMA_COMPLETE) {
- 		/*
- 		 * The channel is in a false BUSY state, probably didn't
- 		 * receive or lost an interrupt
-@@ -557,11 +570,15 @@ dw_edma_device_prep_interleaved_dma(struct dma_chan *dchan,
- 
- static void dw_edma_done_interrupt(struct dw_edma_chan *chan)
- {
-+	struct dw_edma *dw = chan->dw;
- 	struct dw_edma_desc *desc;
- 	struct virt_dma_desc *vd;
- 	unsigned long flags;
- 
--	dw_edma_v0_core_clear_done_int(chan);
-+	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
-+		dw_hdma_v0_core_clear_done_int(chan);
-+	else
-+		dw_edma_v0_core_clear_done_int(chan);
- 
- 	spin_lock_irqsave(&chan->vc.lock, flags);
- 	vd = vchan_next_desc(&chan->vc);
-@@ -601,9 +618,13 @@ static void dw_edma_done_interrupt(struct dw_edma_chan *chan)
- static void dw_edma_abort_interrupt(struct dw_edma_chan *chan)
- {
- 	struct virt_dma_desc *vd;
-+	struct dw_edma *dw = chan->dw;
- 	unsigned long flags;
- 
--	dw_edma_v0_core_clear_abort_int(chan);
-+	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
-+		dw_hdma_v0_core_clear_abort_int(chan);
-+	else
-+		dw_edma_v0_core_clear_abort_int(chan);
- 
- 	spin_lock_irqsave(&chan->vc.lock, flags);
- 	vd = vchan_next_desc(&chan->vc);
-@@ -620,9 +641,8 @@ static irqreturn_t dw_edma_interrupt(int irq, void *data, bool write)
- {
- 	struct dw_edma_irq *dw_irq = data;
- 	struct dw_edma *dw = dw_irq->dw;
--	unsigned long total, pos, val;
-+	unsigned long total, pos, val, mask;
- 	unsigned long off;
--	u32 mask;
- 
- 	if (write) {
- 		total = dw->wr_ch_cnt;
-@@ -634,24 +654,36 @@ static irqreturn_t dw_edma_interrupt(int irq, void *data, bool write)
- 		mask = dw_irq->rd_mask;
- 	}
- 
--	val = dw_edma_v0_core_status_done_int(dw, write ?
--							  EDMA_DIR_WRITE :
--							  EDMA_DIR_READ);
--	val &= mask;
--	for_each_set_bit(pos, &val, total) {
--		struct dw_edma_chan *chan = &dw->chan[pos + off];
-+	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE) {
-+		for_each_set_bit(pos, &mask, total) {
-+			struct dw_edma_chan *chan = &dw->chan[pos + off];
- 
--		dw_edma_done_interrupt(chan);
--	}
-+			val = dw_hdma_v0_core_status_int(chan);
-+			if (dw_hdma_v0_core_check_done_int(val))
-+				dw_edma_done_interrupt(chan);
-+			if (dw_hdma_v0_core_check_abort_int(val))
-+				dw_edma_abort_interrupt(chan);
-+		}
-+	} else {
-+		val = dw_edma_v0_core_status_done_int(dw, write ?
-+								EDMA_DIR_WRITE :
-+								EDMA_DIR_READ);
-+		val &= mask;
-+		for_each_set_bit(pos, &val, total) {
-+			struct dw_edma_chan *chan = &dw->chan[pos + off];
-+
-+			dw_edma_done_interrupt(chan);
-+		}
- 
--	val = dw_edma_v0_core_status_abort_int(dw, write ?
--							   EDMA_DIR_WRITE :
--							   EDMA_DIR_READ);
--	val &= mask;
--	for_each_set_bit(pos, &val, total) {
--		struct dw_edma_chan *chan = &dw->chan[pos + off];
-+		val = dw_edma_v0_core_status_abort_int(dw, write ?
-+								EDMA_DIR_WRITE :
-+								EDMA_DIR_READ);
-+		val &= mask;
-+		for_each_set_bit(pos, &val, total) {
-+			struct dw_edma_chan *chan = &dw->chan[pos + off];
- 
--		dw_edma_abort_interrupt(chan);
-+			dw_edma_abort_interrupt(chan);
-+		}
- 	}
- 
- 	return IRQ_HANDLED;
-@@ -794,7 +826,10 @@ static int dw_edma_channel_setup(struct dw_edma *dw, bool write,
- 			dt_region->sz = chip->dt_region_rd[j].sz;
- 		}
- 
--		dw_edma_v0_core_device_config(chan);
-+		if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
-+			dw_hdma_v0_core_device_config(chan);
-+		else
-+			dw_edma_v0_core_device_config(chan);
- 	}
- 
- 	/* Set DMA channel capabilities */
-@@ -937,13 +972,23 @@ int dw_edma_probe(struct dw_edma_chip *chip)
- 
- 	raw_spin_lock_init(&dw->lock);
- 
--	dw->wr_ch_cnt = min_t(u16, chip->ll_wr_cnt,
--			      dw_edma_v0_core_ch_count(dw, EDMA_DIR_WRITE));
--	dw->wr_ch_cnt = min_t(u16, dw->wr_ch_cnt, EDMA_MAX_WR_CH);
-+	if (chip->mf == EDMA_MF_HDMA_NATIVE) {
-+		dw->wr_ch_cnt = min_t(u16, chip->ll_wr_cnt,
-+					dw_hdma_v0_core_ch_count(dw, EDMA_DIR_WRITE));
-+		dw->wr_ch_cnt = min_t(u16, dw->wr_ch_cnt, EDMA_MAX_WR_CH);
- 
--	dw->rd_ch_cnt = min_t(u16, chip->ll_rd_cnt,
--			      dw_edma_v0_core_ch_count(dw, EDMA_DIR_READ));
--	dw->rd_ch_cnt = min_t(u16, dw->rd_ch_cnt, EDMA_MAX_RD_CH);
-+		dw->rd_ch_cnt = min_t(u16, chip->ll_rd_cnt,
-+					dw_hdma_v0_core_ch_count(dw, EDMA_DIR_READ));
-+		dw->rd_ch_cnt = min_t(u16, dw->rd_ch_cnt, EDMA_MAX_RD_CH);
-+	} else {
-+		dw->wr_ch_cnt = min_t(u16, chip->ll_wr_cnt,
-+					dw_edma_v0_core_ch_count(dw, EDMA_DIR_WRITE));
-+		dw->wr_ch_cnt = min_t(u16, dw->wr_ch_cnt, EDMA_MAX_WR_CH);
-+
-+		dw->rd_ch_cnt = min_t(u16, chip->ll_rd_cnt,
-+					dw_edma_v0_core_ch_count(dw, EDMA_DIR_READ));
-+		dw->rd_ch_cnt = min_t(u16, dw->rd_ch_cnt, EDMA_MAX_RD_CH);
-+	}
- 
- 	if (!dw->wr_ch_cnt && !dw->rd_ch_cnt)
- 		return -EINVAL;
-@@ -960,7 +1005,10 @@ int dw_edma_probe(struct dw_edma_chip *chip)
- 	snprintf(dw->name, sizeof(dw->name), "dw-edma-core:%d", chip->id);
- 
- 	/* Disable eDMA, only to establish the ideal initial conditions */
--	dw_edma_v0_core_off(dw);
-+	if (chip->mf == EDMA_MF_HDMA_NATIVE)
-+		dw_hdma_v0_core_off(dw);
-+	else
-+		dw_edma_v0_core_off(dw);
- 
- 	/* Request IRQs */
- 	err = dw_edma_irq_request(dw, &wr_alloc, &rd_alloc);
-@@ -981,7 +1029,10 @@ int dw_edma_probe(struct dw_edma_chip *chip)
- 	pm_runtime_enable(dev);
- 
- 	/* Turn debugfs on */
--	dw_edma_v0_core_debugfs_on(dw);
-+	if (chip->mf == EDMA_MF_HDMA_NATIVE)
-+		dw_hdma_v0_core_debugfs_on(dw);
-+	else
-+		dw_edma_v0_core_debugfs_on(dw);
- 
- 	chip->dw = dw;
- 
-@@ -1028,7 +1079,10 @@ int dw_edma_remove(struct dw_edma_chip *chip)
- 	}
- 
- 	/* Turn debugfs off */
--	dw_edma_v0_core_debugfs_off(dw);
-+	if (chip->mf == EDMA_MF_HDMA_NATIVE)
-+		dw_hdma_v0_core_debugfs_off(dw);
-+	else
-+		dw_edma_v0_core_debugfs_off(dw);
- 
- 	return 0;
- }
-diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
-index d6b5e2463884..7cd2e045325d 100644
---- a/drivers/dma/dw-edma/dw-edma-pcie.c
-+++ b/drivers/dma/dw-edma/dw-edma-pcie.c
-@@ -121,7 +121,8 @@ static void dw_edma_pcie_get_vsec_dma_data(struct pci_dev *pdev,
- 	map = FIELD_GET(DW_PCIE_VSEC_DMA_MAP, val);
- 	if (map != EDMA_MF_EDMA_LEGACY &&
- 	    map != EDMA_MF_EDMA_UNROLL &&
--	    map != EDMA_MF_HDMA_COMPAT)
-+	    map != EDMA_MF_HDMA_COMPAT &&
-+		map != EDMA_MF_HDMA_NATIVE)
- 		return;
- 
- 	pdata->mf = map;
-@@ -277,6 +278,8 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
- 		pci_dbg(pdev, "Version:\teDMA Unroll (0x%x)\n", chip->mf);
- 	else if (chip->mf == EDMA_MF_HDMA_COMPAT)
- 		pci_dbg(pdev, "Version:\tHDMA Compatible (0x%x)\n", chip->mf);
-+	else if (chip->mf == EDMA_MF_HDMA_NATIVE)
-+		pci_dbg(pdev, "Version:\tHDMA Native (0x%x)\n", chip->mf);
- 	else
- 		pci_dbg(pdev, "Version:\tUnknown (0x%x)\n", chip->mf);
- 
-diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
-index 77e6cfe52e0a..167a2c4144dd 100644
---- a/drivers/dma/dw-edma/dw-edma-v0-core.c
-+++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
-@@ -12,6 +12,9 @@
- #include "dw-edma-v0-core.h"
- #include "dw-edma-v0-regs.h"
- #include "dw-edma-v0-debugfs.h"
-+#include "dw-hdma-v0-core.h"
-+#include "dw-hdma-v0-regs.h"
-+#include "dw-hdma-v0-debugfs.h"
- 
- enum dw_edma_control {
- 	DW_EDMA_V0_CB					= BIT(0),
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-new file mode 100644
-index 000000000000..cd4746d98839
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 core
-+ */
-+
-+#include <linux/bitfield.h>
-+
-+#include "dw-edma-core.h"
-+#include "dw-edma-v0-core.h"
-+#include "dw-edma-v0-regs.h"
-+#include "dw-hdma-v0-core.h"
-+#include "dw-hdma-v0-regs.h"
-+#include "dw-hdma-v0-debugfs.h"
-+
-+enum dw_hdma_control {
-+	DW_HDMA_V0_CB					= BIT(0),
-+	DW_HDMA_V0_TCB					= BIT(1),
-+	DW_HDMA_V0_LLP					= BIT(2),
-+	DW_HDMA_V0_LIE					= BIT(3),
-+	DW_HDMA_V0_RIE					= BIT(4),
-+	DW_HDMA_V0_CCS					= BIT(8),
-+	DW_HDMA_V0_LLE					= BIT(9),
-+};
-+static inline struct dw_hdma_v0_regs __iomem *__dw_regs(struct dw_edma *dw)
-+{
-+	return dw->chip->reg_base;
-+}
-+
-+static inline struct dw_hdma_v0_ch_regs __iomem *
-+__dw_ch_regs(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch)
-+{
-+
-+	if (dir == EDMA_DIR_WRITE)
-+		return &(__dw_regs(dw)->ch[ch].wr);
-+	else
-+		return &(__dw_regs(dw)->ch[ch].rd);
-+}
-+
-+#define SET_CH_32(dw, dir, ch, name, value) \
-+	writel(value, &(__dw_ch_regs(dw, dir, ch)->name))
-+
-+#define GET_CH_32(dw, dir, ch, name) \
-+	readl(&(__dw_ch_regs(dw, dir, ch)->name))
-+
-+#define SET_BOTH_CH_32(dw, ch, name, value) \
-+	do {					\
-+		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_WRITE, ch)->name));		\
-+		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_READ, ch)->name));	\
-+	} while (0)
-+
-+#define SET_LL_32(ll, value) \
-+	writel(value, ll)
-+
-+/* HDMA management callbacks */
-+void dw_hdma_v0_core_off(struct dw_edma *dw)
-+{
-+	int id;
-+
-+	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
-+		SET_BOTH_CH_32(dw, id, int_setup,
-+				HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
-+		SET_BOTH_CH_32(dw, id, int_clear,
-+				HDMA_V0_STOP_INT_MASK & HDMA_V0_ABORT_INT_MASK);
-+		SET_BOTH_CH_32(dw, id, ch_en, 0);
-+	}
-+}
-+
-+u16 dw_hdma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
-+{
-+	u32 num_ch = 0;
-+	int id;
-+
-+	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
-+		if (GET_CH_32(dw, id, dir, ch_en) & BIT(0))
-+			num_ch++;
-+	}
-+
-+	if (num_ch > HDMA_V0_MAX_NR_CH)
-+		num_ch = HDMA_V0_MAX_NR_CH;
-+
-+	return (u16)num_ch;
-+}
-+
-+enum dma_status dw_hdma_v0_core_ch_status(struct dw_edma_chan *chan)
-+{
-+	struct dw_edma *dw = chan->dw;
-+	u32 tmp;
-+
-+	tmp = FIELD_GET(HDMA_V0_CH_STATUS_MASK,
-+			GET_CH_32(dw, chan->id, chan->dir, ch_stat));
-+
-+	if (tmp == 1)
-+		return DMA_IN_PROGRESS;
-+	else if (tmp == 3)
-+		return DMA_COMPLETE;
-+	else
-+		return DMA_ERROR;
-+}
-+
-+void dw_hdma_v0_core_clear_done_int(struct dw_edma_chan *chan)
-+{
-+	struct dw_edma *dw = chan->dw;
-+
-+	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_STOP_INT_MASK);
-+}
-+
-+void dw_hdma_v0_core_clear_abort_int(struct dw_edma_chan *chan)
-+{
-+	struct dw_edma *dw = chan->dw;
-+
-+	SET_CH_32(dw, chan->dir, chan->id, int_clear, HDMA_V0_ABORT_INT_MASK);
-+}
-+
-+u32 dw_hdma_v0_core_status_int(struct dw_edma_chan *chan)
-+{
-+	struct dw_edma *dw = chan->dw;
-+
-+	return GET_CH_32(dw, chan->dir, chan->id, int_stat);
-+}
-+
-+u32 dw_hdma_v0_core_check_done_int(u32 val)
-+{
-+	return (FIELD_GET(HDMA_V0_STOP_INT_MASK, val) == BIT(0));
-+}
-+
-+u32 dw_hdma_v0_core_check_abort_int(u32 val)
-+{
-+	return (FIELD_GET(HDMA_V0_ABORT_INT_MASK, val) == BIT(0));
-+}
-+
-+static void dw_hdma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
-+{
-+	struct dw_edma_burst *child;
-+	struct dw_edma_chan *chan = chunk->chan;
-+	struct dw_edma_v0_lli __iomem *lli;
-+	struct dw_edma_v0_llp __iomem *llp;
-+	u32 control = 0, i = 0;
-+	int j;
-+
-+	lli = chunk->ll_region.vaddr;
-+
-+	if (chunk->cb)
-+		control = DW_HDMA_V0_CB;
-+
-+	j = chunk->bursts_alloc;
-+	list_for_each_entry(child, &chunk->burst->list, list) {
-+		j--;
-+		if (!j) {
-+			control |= DW_HDMA_V0_LIE;
-+			if (!(chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL))
-+				control |= DW_HDMA_V0_RIE;
-+		}
-+		/* Channel control */
-+		SET_LL_32(&lli[i].control, control);
-+		/* Transfer size */
-+		SET_LL_32(&lli[i].transfer_size, child->sz);
-+		/* SAR */
-+		SET_LL_32(&lli[i].sar.lsb, lower_32_bits(child->sar));
-+		SET_LL_32(&lli[i].sar.msb, upper_32_bits(child->sar));
-+		/* DAR */
-+		SET_LL_32(&lli[i].dar.lsb, lower_32_bits(child->dar));
-+		SET_LL_32(&lli[i].dar.msb, upper_32_bits(child->dar));
-+		i++;
-+	}
-+
-+	llp = (void __iomem *)&lli[i];
-+	control = DW_HDMA_V0_LLP | DW_HDMA_V0_TCB;
-+	if (!chunk->cb)
-+		control |= DW_HDMA_V0_CB;
-+
-+	/* Channel control */
-+	SET_LL_32(&llp->control, control);
-+	/* Linked list */
-+	SET_LL_32(&llp->llp.lsb, lower_32_bits(chunk->ll_region.paddr));
-+	SET_LL_32(&llp->llp.msb, upper_32_bits(chunk->ll_region.paddr));
-+}
-+
-+void dw_hdma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
-+{
-+	struct dw_edma_chan *chan = chunk->chan;
-+	struct dw_edma *dw = chan->dw;
-+	u32 tmp;
-+
-+	dw_hdma_v0_core_write_chunk(chunk);
-+
-+	if (first) {
-+		/* Enable engine */
-+		SET_CH_32(dw, chan->dir, chan->id, ch_en, BIT(0));
-+		/* Interrupt enable&unmask - done, abort */
-+		tmp = GET_CH_32(dw, chan->dir, chan->id, int_setup);
-+		tmp |= HDMA_V0_STOP_INT_MASK;
-+		tmp |= HDMA_V0_ABORT_INT_MASK;
-+		tmp |= HDMA_V0_LOCAL_ABORT_INT_EN;
-+		tmp |= HDMA_V0_LOCAL_STOP_INT_EN;
-+		SET_CH_32(dw, chan->dir, chan->id, int_setup, tmp);
-+		/* Channel control */
-+		SET_CH_32(dw, chan->dir, chan->id, control1, HDMA_V0_LINKLIST_EN);
-+		/* Linked list */
-+		/* llp is not aligned on 64bit -> keep 32bit accesses */
-+		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
-+			  lower_32_bits(chunk->ll_region.paddr));
-+		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
-+			  upper_32_bits(chunk->ll_region.paddr));
-+	}
-+	/* Doorbell */
-+	SET_CH_32(dw, chan->dir, chan->id, doorbell, HDMA_V0_DOORBELL_START);
-+}
-+
-+int dw_hdma_v0_core_device_config(struct dw_edma_chan *chan)
-+{
-+	struct dw_edma *dw = chan->dw;
-+
-+	/* MSI done addr - low, high */
-+	SET_CH_32(dw, chan->dir, chan->id, msi_stop.lsb, chan->msi.address_lo);
-+	SET_CH_32(dw, chan->dir, chan->id, msi_stop.msb, chan->msi.address_hi);
-+	/* MSI abort addr - low, high */
-+	SET_CH_32(dw, chan->dir, chan->id, msi_abort.lsb, chan->msi.address_lo);
-+	SET_CH_32(dw, chan->dir, chan->id, msi_abort.msb, chan->msi.address_hi);
-+	SET_CH_32(dw, chan->dir, chan->id, msi_abort.msb, chan->msi.address_hi);
-+	/* config MSI data */
-+	SET_CH_32(dw, chan->dir, chan->id, msi_msgdata, chan->msi.data);
-+
-+	return 0;
-+}
-+
-+/* eDMA debugfs callbacks */
-+void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
-+{
-+	dw_hdma_v0_debugfs_on(dw);
-+}
-+
-+void dw_hdma_v0_core_debugfs_off(struct dw_edma *dw)
-+{
-+	dw_hdma_v0_debugfs_off(dw);
-+}
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.h b/drivers/dma/dw-edma/dw-hdma-v0-core.h
-new file mode 100644
-index 000000000000..61d3a6d9d024
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-core.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 Cai Huoqing
-+ * Synopsys DesignWare eDMA v0 core
-+ */
-+
-+#ifndef _DW_HDMA_V0_CORE_H
-+#define _DW_HDMA_V0_CORE_H
-+
-+#include <linux/dma/edma.h>
-+
-+/* HDMA management callbacks */
-+void dw_hdma_v0_core_off(struct dw_edma *chan);
-+u16 dw_hdma_v0_core_ch_count(struct dw_edma *chan, enum dw_edma_dir dir);
-+enum dma_status dw_hdma_v0_core_ch_status(struct dw_edma_chan *chan);
-+void dw_hdma_v0_core_clear_done_int(struct dw_edma_chan *chan);
-+void dw_hdma_v0_core_clear_abort_int(struct dw_edma_chan *chan);
-+u32 dw_hdma_v0_core_status_int(struct dw_edma_chan *chan);
-+u32 dw_hdma_v0_core_check_done_int(u32 val);
-+u32 dw_hdma_v0_core_check_abort_int(u32 val);
-+void dw_hdma_v0_core_start(struct dw_edma_chunk *chunk, bool first);
-+int dw_hdma_v0_core_device_config(struct dw_edma_chan *chan);
-+/* HDMA debug fs callbacks */
-+void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw);
-+void dw_hdma_v0_core_debugfs_off(struct dw_edma *dw);
-+
-+#endif /* _DW_HDMA_V0_CORE_H */
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-new file mode 100644
-index 000000000000..2f1ddac9513b
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/bitfield.h>
-+
-+#include "dw-hdma-v0-debugfs.h"
-+#include "dw-hdma-v0-regs.h"
-+#include "dw-edma-core.h"
-+
-+#define REGS_ADDR(name) \
-+	((void __force *)&regs->name)
-+
-+#define REGISTER(name) \
-+	{ #name, REGS_ADDR(name) }
-+
-+#define WRITE_STR				"write"
-+#define READ_STR				"read"
-+#define CHANNEL_STR				"channel"
-+#define REGISTERS_STR				"registers"
-+
-+static struct dw_edma				*dw;
-+static struct dw_hdma_v0_regs			__iomem *regs;
-+struct debugfs_entries {
-+	const char				*name;
-+	dma_addr_t				*reg;
-+};
-+
-+static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
-+{
-+	void __iomem *reg = (void __force __iomem *)data;
-+	*val = readl(reg);
-+
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
-+
-+static void dw_hdma_debugfs_create_x32(const struct debugfs_entries entries[],
-+				       int nr_entries, struct dentry *dir)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_entries; i++) {
-+		if (!debugfs_create_file_unsafe(entries[i].name, 0444, dir,
-+						entries[i].reg,	&fops_x32))
-+			break;
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_ch(struct dw_hdma_v0_ch_regs __iomem *regs,
-+				    struct dentry *dir)
-+{
-+	int nr_entries;
-+	const struct debugfs_entries debugfs_regs[] = {
-+		REGISTER(ch_en),
-+		REGISTER(doorbell),
-+		REGISTER(llp.lsb),
-+		REGISTER(llp.msb),
-+		REGISTER(cycle_sync),
-+		REGISTER(transfer_size),
-+		REGISTER(sar.lsb),
-+		REGISTER(sar.msb),
-+		REGISTER(dar.lsb),
-+		REGISTER(dar.msb),
-+		REGISTER(control1),
-+		REGISTER(ch_stat),
-+		REGISTER(int_stat),
-+		REGISTER(int_setup),
-+		REGISTER(int_clear),
-+		REGISTER(msi_stop.lsb),
-+		REGISTER(msi_stop.msb),
-+		REGISTER(msi_abort.lsb),
-+		REGISTER(msi_abort.msb),
-+		REGISTER(msi_msgdata),
-+	};
-+
-+	nr_entries = ARRAY_SIZE(debugfs_regs);
-+	dw_hdma_debugfs_create_x32(debugfs_regs, nr_entries, dir);
-+}
-+
-+static void dw_hdma_debugfs_regs_wr(struct dentry *dir)
-+{
-+	struct dentry *regs_dir, *ch_dir;
-+	int i;
-+	char name[16];
-+
-+	regs_dir = debugfs_create_dir(WRITE_STR, dir);
-+	if (!regs_dir)
-+		return;
-+
-+	for (i = 0; i < dw->wr_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dir = debugfs_create_dir(name, regs_dir);
-+		if (!ch_dir)
-+			return;
-+
-+		dw_hdma_debugfs_regs_ch(&regs->ch[i].wr, ch_dir);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_rd(struct dentry *dir)
-+{
-+	struct dentry *regs_dir, *ch_dir;
-+	int i;
-+	char name[16];
-+
-+	regs_dir = debugfs_create_dir(READ_STR, dir);
-+	if (!regs_dir)
-+		return;
-+
-+	for (i = 0; i < dw->rd_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dir = debugfs_create_dir(name, regs_dir);
-+		if (!ch_dir)
-+			return;
-+
-+		dw_hdma_debugfs_regs_ch(&regs->ch[i].rd, ch_dir);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs(void)
-+{
-+	struct dentry *regs_dir;
-+
-+	regs_dir = debugfs_create_dir(REGISTERS_STR, dw->debugfs);
-+	if (!regs_dir)
-+		return;
-+
-+	dw_hdma_debugfs_regs_wr(regs_dir);
-+	dw_hdma_debugfs_regs_rd(regs_dir);
-+}
-+
-+void dw_hdma_v0_debugfs_on(struct dw_edma *_dw)
-+{
-+	dw = _dw;
-+	if (!dw)
-+		return;
-+
-+	regs = dw->chip->reg_base;
-+	if (!regs)
-+		return;
-+
-+	dw->debugfs = debugfs_create_dir(dw->name, NULL);
-+	if (!dw->debugfs)
-+		return;
-+
-+	debugfs_create_u32("mf", 0444, dw->debugfs, &dw->chip->mf);
-+	debugfs_create_u16("wr_ch_cnt", 0444, dw->debugfs, &dw->wr_ch_cnt);
-+	debugfs_create_u16("rd_ch_cnt", 0444, dw->debugfs, &dw->rd_ch_cnt);
-+
-+	dw_hdma_debugfs_regs();
-+}
-+
-+void dw_hdma_v0_debugfs_off(struct dw_edma *_dw)
-+{
-+	dw = _dw;
-+	if (!dw)
-+		return;
-+
-+	debugfs_remove_recursive(dw->debugfs);
-+	dw->debugfs = NULL;
-+}
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-new file mode 100644
-index 000000000000..53bc7e93f4a0
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ */
-+
-+#ifndef _DW_HDMA_V0_DEBUG_FS_H
-+#define _DW_HDMA_V0_DEBUG_FS_H
-+
-+#include <linux/dma/edma.h>
-+
-+#ifdef CONFIG_DEBUG_FS
-+void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
-+void dw_hdma_v0_debugfs_off(struct dw_edma *dw);
-+#else
-+static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-+{
-+}
-+
-+static inline void dw_hdma_v0_debugfs_off(struct dw_edma *dw)
-+{
-+}
-+#endif /* CONFIG_DEBUG_FS */
-+
-+#endif /* _DW_HDMA_V0_DEBUG_FS_H */
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-regs.h b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
-new file mode 100644
-index 000000000000..2a2a3620d809
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
-@@ -0,0 +1,94 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 reg
-+ */
-+
-+#ifndef _DW_HDMA_V0_REGS_H
-+#define _DW_HDMA_V0_REGS_H
-+
-+#include <linux/dmaengine.h>
-+
-+#define HDMA_V0_MAX_NR_CH					8
-+#define HDMA_V0_LOCAL_ABORT_INT_EN			BIT(6)
-+#define HDMA_V0_REMOTE_ABORT_INT_EN			BIT(5)
-+#define HDMA_V0_LOCAL_STOP_INT_EN			BIT(4)
-+#define HDMA_V0_REMOTEL_STOP_INT_EN			BIT(3)
-+#define HDMA_V0_ABORT_INT_MASK				BIT(2)
-+#define HDMA_V0_STOP_INT_MASK				BIT(0)
-+#define HDMA_V0_LINKLIST_EN					BIT(0)
-+#define HDMA_V0_DOORBELL_START				BIT(0)
-+#define HDMA_V0_CH_STATUS_MASK				GENMASK(1, 0)
-+
-+struct dw_hdma_v0_ch_regs {
-+	u32 ch_en;					/* 0x0000 */
-+	u32 doorbell;				/* 0x0004 */
-+	u32 prefetch;				/* 0x0008 */
-+	u32 handshake;				/* 0x000c */
-+	union {
-+		u64 reg;				/* 0x0010..0x0014 */
-+		struct {
-+			u32 lsb;			/* 0x0010 */
-+			u32 msb;			/* 0x0014 */
-+		};
-+	} llp;
-+	u32 cycle_sync;				/* 0x0018 */
-+	u32 transfer_size;			/* 0x001c */
-+	union {
-+		u64 reg;				/* 0x0020..0x0024 */
-+		struct {
-+			u32 lsb;			/* 0x0020 */
-+			u32 msb;			/* 0x0024 */
-+		};
-+	} sar;
-+	union {
-+		u64 reg;				/* 0x0028..0x002c */
-+		struct {
-+			u32 lsb;			/* 0x0028 */
-+			u32 msb;			/* 0x002c */
-+		};
-+	} dar;
-+
-+	u32 watermark_en;			/* 0x0030 */
-+	u32	control1;				/* 0x0034 */
-+	u32	func_num;				/* 0x0038 */
-+	u32	qos;					/* 0x003c */
-+	u32	reserved;				/* 0x0040..0x007c */
-+	u32 ch_stat;				/* 0x0080 */
-+	u32 int_stat;				/* 0x0084 */
-+	u32 int_setup;				/* 0x0088 */
-+	u32 int_clear;				/* 0x008c */
-+	union {
-+		u64 reg;				/* 0x0090..0x0094 */
-+		struct {
-+			u32 lsb;			/* 0x0090 */
-+			u32 msb;			/* 0x0094 */
-+		};
-+	} msi_stop;
-+	union {
-+		u64 reg;				/* 0x0098..0x009c */
-+		struct {
-+			u32 lsb;			/* 0x0098 */
-+			u32 msb;			/* 0x009c */
-+		};
-+	} msi_watermark;
-+	union {
-+		u64 reg;				/* 0x00a0..0x00a4 */
-+		struct {
-+			u32 lsb;			/* 0x00a0 */
-+			u32 msb;			/* 0x00a4 */
-+		};
-+	} msi_abort;
-+	u32	msi_msgdata;			/* 0x00a8 */
-+} __packed;
-+
-+struct dw_hdma_v0_ch {
-+	struct dw_hdma_v0_ch_regs wr;			/* 0x0000 */
-+	struct dw_hdma_v0_ch_regs rd;			/* 0x0100 */
-+} __packed;
-+
-+struct dw_hdma_v0_regs {
-+	struct dw_hdma_v0_ch ch[HDMA_V0_MAX_NR_CH]; /* 0x0000..0x0fa8 */
-+} __packed;
-+
-+#endif /* _DW_HDMA_V0_REGS_H */
-diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-index 7d8062e9c544..a379b599c7fa 100644
---- a/include/linux/dma/edma.h
-+++ b/include/linux/dma/edma.h
-@@ -30,7 +30,8 @@ struct dw_edma_core_ops {
- enum dw_edma_map_format {
- 	EDMA_MF_EDMA_LEGACY = 0x0,
- 	EDMA_MF_EDMA_UNROLL = 0x1,
--	EDMA_MF_HDMA_COMPAT = 0x5
-+	EDMA_MF_HDMA_COMPAT = 0x5,
-+	EDMA_MF_HDMA_NATIVE = 0x7
- };
- 
- /**
+changes since v1:
+  - remove unused define
+  - fix bug where (base + 2) was used as second data bit
+  - add macros for "inverted" and "single data bit"
+
+This series first enables a SuperIO GPIO driver to support a chip from
+the vendor Nuvoton, the driver is for Fintek devices but those just are
+very similar. And in watchdog and hwmon subsystems these SuperIO drivers
+also share code and are sometimes called a family.
+
+In another step the individual banks receive a label to tell them apart,
+a step which potentially changes an interface to legacy users that might
+rely on all banks having the same label, or an exact label. But since a
+later patch wants to use GPIO_LOOKUP unique labels are needed and i
+decided to assign them for all supported chips.
+
+In a following patch the Simatic GPIO LED driver is extended to provide
+LEDs in case that SuperIO GPIO driver can be loaded.
+
+Last but not least the watchdog module of that same SuperIO gets loaded
+on a best effort basis.
+
+The very last patch enables a second model of that same board type.
+
+Henning Schild (5):
+  gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+  gpio-f7188x: use unique labels for banks/chips
+  leds: simatic-ipc-leds-gpio: add new model 227G
+  platform/x86: simatic-ipc: enable watchdog for 227G
+  platform/x86: simatic-ipc: add new model 427G
+
+ drivers/gpio/Kconfig                          |   3 +-
+ drivers/gpio/gpio-f7188x.c                    | 228 +++++++++++-------
+ drivers/leds/simple/simatic-ipc-leds-gpio.c   |  42 +++-
+ drivers/platform/x86/simatic-ipc.c            |  10 +-
+ .../platform_data/x86/simatic-ipc-base.h      |   1 +
+ include/linux/platform_data/x86/simatic-ipc.h |   2 +
+ 6 files changed, 193 insertions(+), 93 deletions(-)
+
 -- 
-2.25.1
+2.35.1
 

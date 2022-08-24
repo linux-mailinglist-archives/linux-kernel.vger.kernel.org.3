@@ -2,267 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4BD59FC4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AC959FC54
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238773AbiHXNzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        id S238805AbiHXNzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238724AbiHXNyo (ORCPT
+        with ESMTP id S237446AbiHXNyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:54:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143809A9BF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661349116;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CXkViq0AL4M4jKlvREvWic60usHrsSFfTWZqwClV86Y=;
-        b=fg9vQdvFG/45uYoEHs6BZ1PYktTxuRn5KVXkDL1ibEAnjfD5ZKiHVs1Es61rs+fHWJ4aSz
-        9dZPCaBcqd5Ty7MxshCg+l8neYpom9tqhhcMX+7zPbdAktM8dAkCvg1lZTk6XnDugtqSW/
-        4cTVa4HrI1ISQn3HOBWcRQ61okQA4iE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-193-YU2NB1A9OCmhM4KVxvkRdw-1; Wed, 24 Aug 2022 09:51:54 -0400
-X-MC-Unique: YU2NB1A9OCmhM4KVxvkRdw-1
-Received: by mail-ed1-f72.google.com with SMTP id q32-20020a05640224a000b004462f105fa9so9770107eda.4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:51:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=CXkViq0AL4M4jKlvREvWic60usHrsSFfTWZqwClV86Y=;
-        b=MPNqlaoTTpZqRmeD6uQYQGWnY5Pv1ot1WLsxgf7OUMw1AKyGJAvgXAum/j+d5ckBjD
-         CNJRlj62HNY3/T4p7tL+pf/UvpgQfkI06ZOWRX3BivZlTFpIb5zP31nmVyir+g5h59Nu
-         WYwgYmOSetpTygGKOCtA0Vjpgr/VprMGc4nHoqn3E7aTb+yrPPjngGdnFU1MgIQ1D0LB
-         phgYSa/2F16825eL/H0ZZfQd4n8rqSaH3zi7kdP245gR1Eo3AudumXgO5wgF+f/dBN8k
-         Vmgyr7gemCzEBWLnvVdx9eS7+SAGbS91bsHQr+s7Kz/PyhZWhB13VOHFSbuzeXxh0JHW
-         nDJA==
-X-Gm-Message-State: ACgBeo0/vSNumNHEHTxb6TIq8WnY+XNzqd9BoxdegRg4h47RuN/6R2g6
-        8YSgKOSIuxnmsCu+2l37JqrDyvkY0/uoVXHmQzgL1j4ZnXbLwUsIv5g9sYAJ5Ft6m5BYTmeHUIF
-        tzkkrNbs8kz7PD5yiLtfmqeu/
-X-Received: by 2002:a17:906:5a4c:b0:73d:60b8:618c with SMTP id my12-20020a1709065a4c00b0073d60b8618cmr3019850ejc.740.1661349112209;
-        Wed, 24 Aug 2022 06:51:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7jVVal+ZBOJliVJemZcZdjoAJ/YIbvtSmhX0ToQoagmAazizDmmBCKCHbfnCBU0inxmW0xDQ==
-X-Received: by 2002:a17:906:5a4c:b0:73d:60b8:618c with SMTP id my12-20020a1709065a4c00b0073d60b8618cmr3019841ejc.740.1661349111953;
-        Wed, 24 Aug 2022 06:51:51 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id c9-20020a17090618a900b007311eb42e40sm1228393ejf.54.2022.08.24.06.51.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 06:51:51 -0700 (PDT)
-Message-ID: <44b937bf-dff7-c301-1c5e-51fb1aed87e8@redhat.com>
-Date:   Wed, 24 Aug 2022 15:51:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] asus-wmi: Support the hardware GPU MUX on some laptops
+        Wed, 24 Aug 2022 09:54:51 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFF67E337;
+        Wed, 24 Aug 2022 06:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661349165; x=1692885165;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=9Uf0g8hLnoxGq3nubXfNa3BJ3d/X/5iCQnyFDuLUBcc=;
+  b=ZyVWxrvbi1qQFUQhjA6f9p556vm6XhFSMXx3OKqDco6NYv8hERNUboE1
+   EeAqxz29dBVh22lp9ss6Km+NT6HGtDGO7V8aDhlvIe8T003EedixZ8ySn
+   oAZXUEsVZDwwNzDmRKjBzmYUewqd1iaX6AoIk7M+7WIgX48BDaRtPxrTd
+   Go4iGORbku7k267Ex7Fk3f20nAux1niQ9BVcAHKTXu56rdHDp/79wWmsa
+   Wl98USeLe/9u6veMsEN46DLyj+FXSUVX1CyjOLwgsk+S7R4ONBwQNhHqk
+   EqUQU6T52XtLYtevN4moceZyGO/eYqcaRhzbzkpf0F4nV4MA5h+9/K3q+
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="170746312"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 06:52:44 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 24 Aug 2022 06:52:41 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 24 Aug 2022 06:52:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ApgOsONXdVT1bOmZhQw1WYf4dGH8ADzhuKUz5YyZzzng0X8burAwTkcmwScQdbis2ddsxFCxxhzJnfDsnz7wTw6Q1LXwAOQ6dbMniuhemc5DSzOnkfufKtK8SYX00JV39rMjc3xNgRYtcjgvHjxvFTrIzViw/9WNk+VekzCBGqCkqurTsFQ2YqF1Vq8L65Dyo+l9v0ZiqOjZL1m8NxpbDfSkfF6Q4UH/vFpPBFHrrrzbFYgX5PH7VwEy1FrP7LXp4aLdfsp6Xf2ztBpiWCDqtmZeNCTNsRXZ0/RhXZe8J2gYxYUd1KW8APKgUR7NR9AIqsrWXz4kji3mHeZM2pPvNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9Uf0g8hLnoxGq3nubXfNa3BJ3d/X/5iCQnyFDuLUBcc=;
+ b=HQpzxu1hSs9Y8ZGtP5LX8b3bxHWuDjZ9/4azxECTdkWtcqX8Oe3jCjtu2zOAj26A8mZw1lcOAEGwP4q45z42d7DeE7uOb2sz/QDLAn5hV6fFuWE+IMHjIx6fCjK2GDSlVNz9gBwjf4zo9SvkWSCaDDDPoU8wu+2gbE4rSG6AYRZ6HXlFs0AUScbbfNiR4TpGe48J9heH92x9Bsv119+gRtW7ISZwo0M4EfGjDpWGHzzdVjZ2yFeJoC3jUSWoEL/UFaY5aPQnoHT3/5gHEA6U9RqLq7+/rkdsB/v3JHCvBlHWMhzZDq/IKEhjvOw9wfdkch+KNgzXMjKKqAEi/Eyujg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9Uf0g8hLnoxGq3nubXfNa3BJ3d/X/5iCQnyFDuLUBcc=;
+ b=TOUm4pao7Oys7S5aIhB12bYawK8bt/0I/08UdcTN23o7yB7er6aDoa7ZJAoa2i9IZJEV0esDx89woxawTbS/lrhDOw/pjI73B5FOyek8346FFeVAKE/hG4hIpZgIEgdf2IKv66gUMerj0O9n6v8uydrfoGsx5HIe30gfDYMOYSM=
+Received: from PH0PR11MB5096.namprd11.prod.outlook.com (2603:10b6:510:3c::5)
+ by CY8PR11MB7012.namprd11.prod.outlook.com (2603:10b6:930:54::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
+ 2022 13:52:36 +0000
+Received: from PH0PR11MB5096.namprd11.prod.outlook.com
+ ([fe80::b9d5:a00c:517f:8454]) by PH0PR11MB5096.namprd11.prod.outlook.com
+ ([fe80::b9d5:a00c:517f:8454%6]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
+ 13:52:36 +0000
+From:   <Tharunkumar.Pasumarthi@microchip.com>
+To:     <linux-i2c@vger.kernel.org>, <christophe.jaillet@wanadoo.fr>,
+        <linux-kernel@vger.kernel.org>, <wsa@kernel.org>
+CC:     <krzk@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <robh@kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <sven@svenpeter.dev>, <jsd@semihalf.com>,
+        <semen.protsenko@linaro.org>, <rafal@milecki.pl>,
+        <UNGLinuxDriver@microchip.com>, <olof@lixom.net>, <arnd@arndb.de>
+Subject: Re: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Add driver for
+ I2C host controller in multifunction endpoint of pci1xxxx switch
+Thread-Topic: [PATCH RFC i2c-master] i2c: microchip: pci1xxxx: Add driver for
+ I2C host controller in multifunction endpoint of pci1xxxx switch
+Thread-Index: AQHYttI9ItE0vA92WES0jroLXsIOYq28XuIAgAG1XgA=
+Date:   Wed, 24 Aug 2022 13:52:36 +0000
+Message-ID: <972a65f01b0077940cb4728e1fbfd3ea28860176.camel@microchip.com>
+References: <20220823145603.2606475-1-tharunkumar.pasumarthi@microchip.com>
+         <667f1658-cf29-6b19-fd57-0c62f625d536@wanadoo.fr>
+In-Reply-To: <667f1658-cf29-6b19-fd57-0c62f625d536@wanadoo.fr>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220813092624.6228-1-luke@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220813092624.6228-1-luke@ljones.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d81f2948-669e-4c09-77f7-08da85d7e6c1
+x-ms-traffictypediagnostic: CY8PR11MB7012:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XCw9RixMMftubJIl6sflM3gKh4+9AyFRbAOD2PoxUtv2ZTpkgzc//etUbOJgAJnyrzMTtOPFliaOcgF4EsGOFdNdDmXKNA6/vT14Yfk+UiCjPOpbl/s3PKPpwVquv73AOhXj7GSc6PJz38Pd37sYUCRJu9OCREvz1m0eV29wqr8VeqRvAOZXvQV+ccRVzENINYqHOmQR/d7Fh63NvCSSlZJO+VVcA4PsSOhKnzMLwPe2sIZVRrncHZqHSfAHsFMggiTPWFifDAIkeom8bJnBgXKVshvXvLfEEz/gnd9HLgz//7oKgVRYuu9R5t2CrEc3ZWof+VDkTEqYhLrGmn2UJumV62KmV6ai6A1HEVHS6i5WCZYJWUX43WpvKxUhU9fa5c9KOrZ7/5Ez3tDtJ7MXVTDNQtfJrllw/b/KVRawuQiXLTNgjTHCtYbeiZbWHzK/xe3Cv5yUJkiRozvhG0Pic+sB/YiO1GHuxbwoaOGbfi5HiR28BvVAXBFQWEm2Noak9VZpBhoEo75YrqqTOIsmnLlI0XGt7Ao4YTMbgnx8GgaU9i4XdDgjm5byTGUdRCvkq8rbHPIUlGuRxEdOW2RgzdXBxUneln42oFg55kwgZ2x2RSpKkplkYSLawizYlAsPlX+vU6NIi6UGinxT+1of2C/ISxpWlnfY338HVR6NpkjJL/EWjrY4jWCefmIfRq0LuNltG9KaQhe9f/vBjJ/DlHm78vwx4XnyNMz04VIE2tAc54j8D87tejtgYj1S0rvUbAGwHOF8S9pLaxkwZt/k/pHANbWggdvuWyVNNY1VfwbN5H99zpJvlrbuIVBfKFUU
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5096.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(376002)(346002)(366004)(39860400002)(4326008)(64756008)(66946007)(66556008)(66446008)(66476007)(8676002)(91956017)(6486002)(76116006)(5660300002)(41300700001)(7416002)(8936002)(38100700002)(122000001)(478600001)(54906003)(71200400001)(316002)(110136005)(36756003)(26005)(2616005)(6512007)(66574015)(186003)(6506007)(2906002)(83380400001)(86362001)(38070700005)(32563001)(414714003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UFBHcXYyZThnUjREbkVnNlFlSU9ZRnErWU5xUG9PQ1dDMHlZNUYwT0E3VFkr?=
+ =?utf-8?B?cDN0Vjg4NnBDWE4vK1prVHpEbFhBMGpIOGdSZWJmUkxNUmxzYXJqeXVlcWIv?=
+ =?utf-8?B?V050WW1adjZEQ2xaM0pNTlRxd0lGV244cWExMXZ1ZFgwUXFMMnhRekdITXYr?=
+ =?utf-8?B?WHR3eEtJQ2laZ2htUGxtd3VOczlKc2wrY3JYc0k0bTZFYUM4ME9EbktMcjdm?=
+ =?utf-8?B?Z1FmQVNxZjJxRkxjRU44cHF1bTc0V1pEN0dNM2F6ZFVZeTV4Q056UGhKVE5R?=
+ =?utf-8?B?ZndEdi9zOFZYUTh2cXBGTUZMWWJqZko1TWNRcVhVeU5kNldNZTdmeUlVSnZk?=
+ =?utf-8?B?dVRhOWtnOGswK2d6L2YzRWJFY3JHNlEyVDVGM2JnMUhHU25vRkdXeTI1d0hi?=
+ =?utf-8?B?dXB5ejZ1ZnNRU05BeGtadnBXck0xS2xoc2tkS1ZodnNrY2VMcU9ZaVFhZlpu?=
+ =?utf-8?B?QWJVM1k5NkRUaG5PWWN3OGhMWGs5bW5oaDZ2dnlwYzF1SzRLUXRlQXdwWVV4?=
+ =?utf-8?B?Umtab0xGZzZMbWRyWE5SQ0dLM3UvWkpwZ0xnTlRTVnVibFN3ZWNoenFtcGNk?=
+ =?utf-8?B?S3FuN1ZtaWRDY2ZiM1M2Umk3b29qcGRHRDl0Vy9qYzZzNTkxSjFLLzV1endk?=
+ =?utf-8?B?NnVnOUtzQXVFS1gvdmltNm1TNnZyTHcyYlIvc2crWDJtWENlOHJtaEVPZGhq?=
+ =?utf-8?B?QmVDeHZCNzhsOEtoRkx2V2dvYkJYTGNaZVhzR1M2YVpqeit4cUkrR3cwYjFR?=
+ =?utf-8?B?L2MvS2pNMk14MWh2b2FQSVZaR3Bhc0JxMHUzNng2TlRTNzZmVGIrN1laMkd6?=
+ =?utf-8?B?aFJNNXk5RTZCWnI2SEhkMHpiWnZDMmx0dVVhT242WldodVlHZ1NmME5ZR2lF?=
+ =?utf-8?B?aHI1R2F6eGpvblJJOW51QnJMSHhNQVFSTGtJUHdvOFUvWFJWaGloblJFWE9U?=
+ =?utf-8?B?WU1uSjEveUpSaTU4WmtxbjJITnlZcEU0ZGdIQTJ6NWQ3eGV3WW5PTkgzdmlY?=
+ =?utf-8?B?RnB0ZEtlVmtKTDNXcXU0SkF0azVlVWhGMktKODVIUmRvWFNKRTZtUTFxd2Q2?=
+ =?utf-8?B?N1prL1dMT2k5bDN5ejk1eHo4SlJHbktoTUpMM1dweHF1ekJPQVpEVElOTEdy?=
+ =?utf-8?B?TlZLcFphUjk3RDk3QUxURkQ2R21EYUQ0ZzFNcDZGWFpmTnA4Tkplb3EwSm9t?=
+ =?utf-8?B?aituMk5JMDhydTRxVkdJeEZ2empwc1FHZU1Na0wxQlZQUkJxNDZHeFRsdEM2?=
+ =?utf-8?B?VThiWS8wa210RHVDWkJZNVZzUkh2NnIvdThvU29Vbi8zQ2lGZDIwZkFKVWVm?=
+ =?utf-8?B?OTFzU2tmZ0FwK3JaV3BBem0vcmkrYzlpa3dHT3ZiTWw3dTNEUkxwZnY3Z0RV?=
+ =?utf-8?B?SVkzWW0zV2dFdU9FdHR0ZEhhYXZRUyt0cVZJVG1DUU9ha3NrUCs4ak5zUngv?=
+ =?utf-8?B?TXdtYWUySTl4bVZ3ZjdQV3JSTzc0ZERkZUpIcjhLT2lHWVU0TWJzTTRsQnBq?=
+ =?utf-8?B?WFpvZkpZb1lyYlhSV3lGR1FJM04wTy9xNWg3SW0zcU9Xd0ZhOGQrRm4wZity?=
+ =?utf-8?B?cGViaDdGZzE3RVRhRmNIbDBYTVoxVmZCWlBrS0hYR2VWQXJEdUxPUUtRUFNW?=
+ =?utf-8?B?MWVjSXNEc2pEUU16RzNXV2t3M3RiTU9HdzJ0eWZDWnFtNEVlb2IrNURNK1N6?=
+ =?utf-8?B?K2d3VjdMYnA2bnZBM3ppaDluNllabWtQbHJhUS9IQUV5dGNCdzdCK2xYUXFk?=
+ =?utf-8?B?cW8yYVR5a0xsRVpDTkdZeE41bE1MTWp1RzJFTkJmbTk1TkRiNlN6aHh3SUVq?=
+ =?utf-8?B?QXVuamUwc21YWWRmeTk3dnlndHNFWGQ3OUlMWXR6Y0UyTGt3SG1XYkd4U2lM?=
+ =?utf-8?B?a0t0S2V6QklnV0puSWdCY2E2UUpGTU9ZTkR2eEhzWFd5VEJJZ21CK2Nqbnlh?=
+ =?utf-8?B?VWRzMmgrbWUvNEJJcFlCaTRJWitDV21rMlR0M1NDK3hvTDdFc1p1ZE9MUmFo?=
+ =?utf-8?B?Mi9jckNlVi96MmhMSFowajJCY3pYRTZGUHdoeGVNR2dzTkh4VjZvcXBETWVu?=
+ =?utf-8?B?OHB2aEk2emZvUzA2Si9YMUNlQU1jL3d1czhZTmhyazVOVGNmTS9JWHAyNzNr?=
+ =?utf-8?B?V3JjVEFVYTZhN000ek9ERXU1SVMzSzZkN2R3aXg2OXRHckN5d1h1WitXZGUr?=
+ =?utf-8?Q?PYoZfp1SHpWKsgfaH1NKyHvnHkOaGhVTMSQ7cVmnsB6h?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0470F129EE43FE42AA0157C671CC9ABE@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5096.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d81f2948-669e-4c09-77f7-08da85d7e6c1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 13:52:36.1623
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6cVfSFMRXBDeqPH0yxKRJseFB2eqciS+zctVQqhS8WYNcLoTruWqIhWlPrQT8DLdIuhNAteGzgFwGjUKgp9qkJneEC96U+4821jSEL7zqgrs9MQEOMEFxWPT8EDVbWc3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7012
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/13/22 11:26, Luke D. Jones wrote:
-> Support the hardware GPU MUX switch available on some models. This
-> switch can toggle the MUX between:
-> 
-> - 0, Dedicated mode
-> - 1, Optimus mode
-> 
-> Optimus mode is the regular iGPU + dGPU available, while dedicated
-> mode switches the system to have only the dGPU available.
-> 
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note there were several whitespace/indentation issues with this
-patch. The documentation patch was using spaces instead of tabs
-and the .c changes where using 3 space indents instead of tabs
-in some places. I've fixed this up while merging this time around,
-but for future submissions please ensure that you get the indentation
-right and that you only use tabs and not spaces.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-> ---
->  .../ABI/testing/sysfs-platform-asus-wmi       | 11 ++++
->  drivers/platform/x86/asus-wmi.c               | 62 +++++++++++++++++++
->  include/linux/platform_data/x86/asus-wmi.h    |  3 +
->  3 files changed, 76 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> index 574b5170a37d..03124eab7f01 100644
-> --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-> @@ -58,6 +58,17 @@ Description:
->  			* 1 - overboost,
->  			* 2 - silent
->  
-> +What:          /sys/devices/platform/<platform>/gpu_mux_mode
-> +Date:          Aug 2022
-> +KernelVersion: 6.1
-> +Contact:       "Luke Jones" <luke@ljones.dev>
-> +Description:
-> +               Switch the GPU hardware MUX mode. Laptops with this feature can
-> +			   can be toggled to boot with only the dGPU (discrete mode) or in
-> +			   standard Optimus/Hybrid mode. On switch a reboot is required:
-> +                       * 0 - Discrete GPU,
-> +                       * 1 - Optimus/Hybrid,
-> +
->  What:          /sys/devices/platform/<platform>/dgpu_disable
->  Date:          Aug 2022
->  KernelVersion: 5.17
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index e2b51b5550e8..0421ffb81927 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -230,6 +230,7 @@ struct asus_wmi {
->  
->  	bool egpu_enable_available;
->  	bool dgpu_disable_available;
-> +	bool gpu_mux_mode_available;
->  
->  	bool throttle_thermal_policy_available;
->  	u8 throttle_thermal_policy_mode;
-> @@ -668,6 +669,59 @@ static ssize_t egpu_enable_store(struct device *dev,
->  }
->  static DEVICE_ATTR_RW(egpu_enable);
->  
-> +/* gpu mux switch *************************************************************/
-> +static int gpu_mux_mode_check_present(struct asus_wmi *asus)
-> +{
-> +	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
-> +
-> +   return 0;
-> +}
-> +
-> +static ssize_t gpu_mux_mode_show(struct device *dev,
-> +                  struct device_attribute *attr, char *buf)
-> +{
-> +   struct asus_wmi *asus = dev_get_drvdata(dev);
-> +   int result;
-> +
-> +   result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_GPU_MUX);
-> +   if (result < 0)
-> +       return result;
-> +
-> +   return sysfs_emit(buf, "%d\n", result);
-> +}
-> +
-> +static ssize_t gpu_mux_mode_store(struct device *dev,
-> +                   struct device_attribute *attr,
-> +                   const char *buf, size_t count)
-> +{
-> +   struct asus_wmi *asus = dev_get_drvdata(dev);
-> +   int result, err;
-> +   u32 optimus;
-> +
-> +   err = kstrtou32(buf, 10, &optimus);
-> +   if (err)
-> +       return err;
-> +
-> +   if (optimus > 1)
-> +       return -EINVAL;
-> +
-> +   err = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_MUX, optimus, &result);
-> +   if (err) {
-> +       dev_err(dev, "Failed to set GPU MUX mode: %d\n", err);
-> +       return err;
-> +   }
-> +	/* !1 is considered a fail by ASUS */
-> +	if (result != 1) {
-> +		dev_warn(dev, "Failed to set GPU MUX mode (result): 0x%x\n", result);
-> +       return -EIO;
-> +   }
-> +
-> +   sysfs_notify(&asus->platform_device->dev.kobj, NULL, "gpu_mux_mode");
-> +
-> +   return count;
-> +}
-> +static DEVICE_ATTR_RW(gpu_mux_mode);
-> +
->  /* Battery ********************************************************************/
->  
->  /* The battery maximum charging percentage */
-> @@ -3165,6 +3219,7 @@ static struct attribute *platform_attributes[] = {
->  	&dev_attr_touchpad.attr,
->  	&dev_attr_egpu_enable.attr,
->  	&dev_attr_dgpu_disable.attr,
-> +	&dev_attr_gpu_mux_mode.attr,
->  	&dev_attr_lid_resume.attr,
->  	&dev_attr_als_enable.attr,
->  	&dev_attr_fan_boost_mode.attr,
-> @@ -3195,6 +3250,8 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
->  		ok = asus->egpu_enable_available;
->  	else if (attr == &dev_attr_dgpu_disable.attr)
->  		ok = asus->dgpu_disable_available;
-> +	else if (attr == &dev_attr_gpu_mux_mode.attr)
-> +		ok = asus->gpu_mux_mode_available;
->  	else if (attr == &dev_attr_fan_boost_mode.attr)
->  		ok = asus->fan_boost_mode_available;
->  	else if (attr == &dev_attr_throttle_thermal_policy.attr)
-> @@ -3464,6 +3521,10 @@ static int asus_wmi_add(struct platform_device *pdev)
->  	if (err)
->  		goto fail_dgpu_disable;
->  
-> +	err = gpu_mux_mode_check_present(asus);
-> +   if (err)
-> +       goto fail_gpu_mux_mode;
-> +
->  	err = fan_boost_mode_check_present(asus);
->  	if (err)
->  		goto fail_fan_boost_mode;
-> @@ -3578,6 +3639,7 @@ static int asus_wmi_add(struct platform_device *pdev)
->  fail_fan_boost_mode:
->  fail_egpu_enable:
->  fail_dgpu_disable:
-> +fail_gpu_mux_mode:
->  fail_platform:
->  fail_panel_od:
->  	kfree(asus);
-> diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-> index a571b47ff362..c023332842a2 100644
-> --- a/include/linux/platform_data/x86/asus-wmi.h
-> +++ b/include/linux/platform_data/x86/asus-wmi.h
-> @@ -98,6 +98,9 @@
->  /* dgpu on/off */
->  #define ASUS_WMI_DEVID_DGPU		0x00090020
->  
-> +/* gpu mux switch, 0 = dGPU, 1 = Optimus */
-> +#define ASUS_WMI_DEVID_GPU_MUX 0x00090016
-> +
->  /* DSTS masks */
->  #define ASUS_WMI_DSTS_STATUS_BIT	0x00000001
->  #define ASUS_WMI_DSTS_UNKNOWN_BIT	0x00000002
-
+T24gVHVlLCAyMDIyLTA4LTIzIGF0IDEzOjQ4ICswMjAwLCBDaHJpc3RvcGhlIEpBSUxMRVQgd3Jv
+dGU6Cj4gTGUgMjMvMDgvMjAyMiDDoCAxNjo1NiwgVGhhcnVuIEt1bWFyIFAgYSDDqWNyaXQgOgo+
+ID4gTWljcm9jaGlwIFBDSTFYWFhYIGlzIGFuIHVubWFuYWdlZCBQQ0llMy4xYSBTd2l0Y2ggZm9y
+IENvbnN1bWVyLAo+ID4gSW5kdXN0cmlhbCBhbmQgQXV0b21vdGl2ZSBhcHBsaWNhdGlvbnMuIFRo
+aXMgc3dpdGNoIGhhcyBtdWx0aXBsZQo+ID4gZG93bnN0cmVhbSBwb3J0cy4gSW4gb25lIG9mIHRo
+ZSBTd2l0Y2gncyBEb3duc3RyZWFtIHBvcnQsIHRoZXJlCj4gPiBpcyBhIG11bHRpZnVuY3Rpb24g
+ZW5kcG9pbnQgZm9yIHBlcmlwaGVyYWxzIHdoaWNoIGluY2x1ZGVzIGFuIEkyQwo+ID4gaG9zdCBj
+b250cm9sbGVyLiBUaGUgSTJDIGZ1bmN0aW9uIGluIHRoZSBlbmRwb2ludCBvcGVyYXRlcyBhdCAx
+MDBLSHosCj4gPiA0MDBLSHogYW5kIDEgTUh6IGFuZCBoYXMgYnVmZmVyIGRlcHRoIG9mIDEyOCBi
+eXRlcy4KPiA+IFRoaXMgcGF0Y2ggcHJvdmlkZXMgdGhlIEkyQyBjb250cm9sbGVyIGRyaXZlciBm
+b3IgdGhlIEkyQyBlbmRwb2ludAo+ID4gb2YgdGhlIHN3aXRjaC4KPiA+IAo+ID4gU2lnbmVkLW9m
+Zi1ieTogVGhhcnVuIEt1bWFyIFAgPHRoYXJ1bmt1bWFyLnBhc3VtYXJ0aGlAbWljcm9jaGlwLmNv
+bT4KPiA+IC0tLQo+ID4gwqAgTUFJTlRBSU5FUlPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqDCoCA4ICsKPiA+IMKgIGRyaXZlcnMvaTJj
+L2J1c3Nlcy9LY29uZmlnwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDEwICsKPiA+IMKg
+IGRyaXZlcnMvaTJjL2J1c3Nlcy9NYWtlZmlsZcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqDC
+oCAxICsKPiA+IMKgIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbWNocC1wY2kxeHh4eC5jIHwgMTEy
+MyArKysrKysrKysrKysrKysrKysrKysrKysKPiA+IMKgIDQgZmlsZXMgY2hhbmdlZCwgMTE0MiBp
+bnNlcnRpb25zKCspCj4gPiDCoCBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9pMmMvYnVzc2Vz
+L2kyYy1tY2hwLXBjaTF4eHh4LmMKPiAKPiAKPiA+ICtzdGF0aWMgaW50IHBjaTF4eHh4X2kyY19w
+cm9iZV9wY2koc3RydWN0IHBjaV9kZXYgKnBkZXYsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnN0IHN0cnVjdCBwY2lf
+ZGV2aWNlX2lkICplbnQpCj4gPiArewo+ID4gK8KgwqDCoMKgIHN0cnVjdCBwY2kxeHh4eF9pMmMg
+KmkyYzsKPiA+ICvCoMKgwqDCoCBpbnQgcmV0Owo+ID4gKwo+ID4gK8KgwqDCoMKgIGkyYyA9IGRl
+dm1fa3phbGxvYygmcGRldi0+ZGV2LCBzaXplb2YoKmkyYyksIEdGUF9LRVJORUwpOwo+ID4gK8Kg
+wqDCoMKgIGlmICghaTJjKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVO
+T01FTTsKPiA+ICsKPiA+ICvCoMKgwqDCoCBwY2lfc2V0X2RydmRhdGEocGRldiwgaTJjKTsKPiA+
+ICsKPiA+ICvCoMKgwqDCoCBpMmMtPmkyY194ZmVyX2luX3Byb2dyZXNzID0gZmFsc2U7Cj4gPiAr
+Cj4gPiArwqDCoMKgwqAgcmV0ID0gcGNpbV9lbmFibGVfZGV2aWNlKHBkZXYpOwo+ID4gK8KgwqDC
+oMKgIGlmIChyZXQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7Cj4g
+PiArCj4gPiArwqDCoMKgwqAgcGNpX3NldF9tYXN0ZXIocGRldik7Cj4gPiArCj4gPiArwqDCoMKg
+wqAgLyogd2UgYXJlIGdldHRpbmcgdGhlIGJhc2UgYWRkcmVzcyBvZiB0aGUgU01CIGNvcmUuIFNN
+QiBjb3JlIHVzZXMKPiA+ICvCoMKgwqDCoMKgICogQkFSMCBhbmQgMzJLIGlzIHRoZSBzaXplIGhl
+cmUgcGNpX3Jlc291cmNlX2xlbiByZXR1cm5zIDMySyBieQo+ID4gK8KgwqDCoMKgwqAgKiByZWFk
+aW5nIEJBUjAKPiA+ICvCoMKgwqDCoMKgICovCj4gPiArCj4gPiArwqDCoMKgwqAgcmV0ID0gcGNp
+bV9pb21hcF9yZWdpb25zKHBkZXYsIEJJVCgwKSwgcGNpX25hbWUocGRldikpOwo+ID4gK8KgwqDC
+oMKgIGlmIChyZXQgPCAwKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVO
+T01FTTsKPiA+ICsKPiA+ICvCoMKgwqDCoCBpMmMtPmkyY19iYXNlID0gcGNpbV9pb21hcF90YWJs
+ZShwZGV2KVswXTsKPiA+ICsKPiA+ICvCoMKgwqDCoCBpbml0X2NvbXBsZXRpb24oJmkyYy0+aTJj
+X3hmZXJfZG9uZSk7Cj4gPiArCj4gPiArwqDCoMKgwqAgcGNpMXh4eHhfaTJjX2luaXQoaTJjKTsK
+PiA+ICsKPiA+ICvCoMKgwqDCoCBkZXZfaW5mbygmcGRldi0+ZGV2LCAiaTJjIGNsb2NrIGZyZXE6
+ICVkXG4iLCBpMmMtPmZyZXEpOwo+ID4gKwo+ID4gK8KgwqDCoMKgIHJldCA9IHBjaV9hbGxvY19p
+cnFfdmVjdG9ycyhwZGV2LCAxLCAxLCBQQ0lfSVJRX0FMTF9UWVBFUyk7Cj4gPiArwqDCoMKgwqAg
+aWYgKHJldCA8IDApCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7Cj4g
+PiArCj4gPiArwqDCoMKgwqAgLypSZWdpc3RlciB0aGUgaXNyLiB3ZSBhcmUgbm90IHVzaW5nIGFu
+eSBpc3IgZmxhZ3MgaGVyZS4qLwo+ID4gK8KgwqDCoMKgIHJldCA9IGRldm1fcmVxdWVzdF9pcnEo
+JnBkZXYtPmRldiwgcGNpX2lycV92ZWN0b3IocGRldiwgMCksCj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBjaTF4eHh4X2kyY19pc3Is
+IFBDSTFYWFhYX0lSUV9GTEFHUywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGNpX25hbWUocGRldiksIGkyYyk7Cj4gPiArwqDCoMKg
+wqAgaWYgKHJldCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBlcnJfZnJlZV9y
+ZWdpb247Cj4gPiArCj4gPiArwqDCoMKgwqAgaTJjLT5hZGFwID0gcGNpMXh4eHhfaTJjX29wczsK
+PiA+ICvCoMKgwqDCoCBpMmMtPmFkYXAuY2xhc3MgPSBJMkNfQ0xBU1NfU1BEOwo+ID4gK8KgwqDC
+oMKgIGkyYy0+YWRhcC5kZXYucGFyZW50ID0gJnBkZXYtPmRldjsKPiA+ICsKPiA+ICvCoMKgwqDC
+oCBzbnByaW50ZihpMmMtPmFkYXAubmFtZSwgc2l6ZW9mKGkyYy0+YWRhcC5uYW1lKSwKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAiTUNIUCBQQ0kxeHh4eCBpMmMgYWRhcHRlciBhdCAl
+cyIsIHBjaV9uYW1lKHBkZXYpKTsKPiA+ICsKPiA+ICvCoMKgwqDCoCBpMmNfc2V0X2FkYXBkYXRh
+KCZpMmMtPmFkYXAsIGkyYyk7Cj4gPiArCj4gPiArwqDCoMKgwqAgcmV0ID0gaTJjX2FkZF9hZGFw
+dGVyKCZpMmMtPmFkYXApOwo+ID4gK8KgwqDCoMKgIGlmIChyZXQpIHsKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgZGV2X2VycigmcGRldi0+ZGV2LCAiaTJjIGFkZCBhZGFwdGVyIGZhaWxl
+ZCA9ICVkXG4iLCByZXQpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwY2kxeHh4eF9p
+MmNfc2h1dGRvd24oaTJjKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBlcnJf
+ZnJlZV9yZWdpb247Cj4gPiArwqDCoMKgwqAgfQo+ID4gKwo+ID4gK8KgwqDCoMKgIHJldHVybiAw
+Owo+ID4gKwo+ID4gK2Vycl9mcmVlX3JlZ2lvbjoKPiA+ICvCoMKgwqDCoCBwY2lfZnJlZV9pcnFf
+dmVjdG9ycyhwZGV2KTsKPiAKPiBTaG91bGQgdGhpcyBhbHNvIGJlIHBhcnQgb2YgdGhlIC5yZW1v
+dmUgZnVuY3Rpb24/CgpZZXMsIEkgd2lsbCBpbmNsdWRlIHRoaXMgQVBJIGluIHJlbW92ZSBjYWxs
+YmFjawoKPiA+ICvCoMKgwqDCoCByZXR1cm4gcmV0Owo+ID4gK30KPiA+ICsKPiA+ICtzdGF0aWMg
+dm9pZCBwY2kxeHh4eF9pMmNfcmVtb3ZlX3BjaShzdHJ1Y3QgcGNpX2RldiAqcGRldikKPiA+ICt7
+Cj4gPiArwqDCoMKgwqAgc3RydWN0IHBjaTF4eHh4X2kyYyAqaTJjID0gcGNpX2dldF9kcnZkYXRh
+KHBkZXYpOwo+ID4gKwo+ID4gK8KgwqDCoMKgIGkyY19kZWxfYWRhcHRlcigmaTJjLT5hZGFwKTsK
+PiA+ICvCoMKgwqDCoCBwY2kxeHh4eF9pMmNfc2h1dGRvd24oaTJjKTsKPiA+ICt9Cj4gPiArCgo=

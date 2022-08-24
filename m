@@ -2,111 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAF859F570
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E8859F571
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235422AbiHXIj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S235684AbiHXIjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiHXIjZ (ORCPT
+        with ESMTP id S235520AbiHXIjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:39:25 -0400
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D1D67CAE;
-        Wed, 24 Aug 2022 01:39:22 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.109.138.102])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id A0B49122094DA;
-        Wed, 24 Aug 2022 10:39:20 +0200 (CEST)
-Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
- (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Wed, 24 Aug
- 2022 10:39:20 +0200
-Message-ID: <0663c616-97c8-444c-f390-275fae402453@traphandler.com>
-Date:   Wed, 24 Aug 2022 10:39:19 +0200
+        Wed, 24 Aug 2022 04:39:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004B069F47;
+        Wed, 24 Aug 2022 01:39:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DF17617A2;
+        Wed, 24 Aug 2022 08:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF14EC433D6;
+        Wed, 24 Aug 2022 08:39:25 +0000 (UTC)
+Message-ID: <3ccf3023-9b1c-2ae6-dd70-6f318eec22e2@xs4all.nl>
+Date:   Wed, 24 Aug 2022 10:39:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH v6 2/3] leds: Add driver for the TLC5925 LED
- controller
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v28 4/4] media: platform: mtk-mdp3: add MediaTek MDP3
+ driver
 Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220722081146.47262-1-jjhiblot@traphandler.com>
- <20220722081146.47262-3-jjhiblot@traphandler.com>
- <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
- <5ba34982-52c7-e41a-fba8-d88d93529e47@traphandler.com>
- <20220804210412.GA30210@duo.ucw.cz>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <20220804210412.GA30210@duo.ucw.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: DAG2EX1.emp2.local (172.16.2.11) To DAG1EX1.emp2.local
- (172.16.2.1)
-X-Ovh-Tracer-Id: 16408865246057806299
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgtdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepvdehueeuffduudelieefvedttdefgeeuueduteetgeethfevudetgedviefgtdeknecuffhomhgrihhnpehtihdrtghomhenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdek
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        cellopoint.kai@gmail.com, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>
+References: <20220823023803.27850-1-moudy.ho@mediatek.com>
+ <20220823023803.27850-5-moudy.ho@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220823023803.27850-5-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Moudy,
 
-On 04/08/2022 23:04, Pavel Machek wrote:
-> On Thu 2022-08-04 22:23:00, Jean-Jacques Hiblot wrote:
->> On 31/07/2022 21:28, Andy Shevchenko wrote:
->>> On Fri, Jul 22, 2022 at 10:14 AM Jean-Jacques Hiblot
->>> <jjhiblot@traphandler.com> wrote:
->>>> The TLC5925 is a 16-channels constant-current LED sink driver.
->>>> It is controlled via SPI but doesn't offer a register-based interface.
->>>> Instead it contains a shift register and latches that convert the
->>>> serial input into a parallel output.
->>>>
->>>> Datasheet: https://www.ti.com/lit/ds/symlink/tlc5925.pdf
->>>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
->>>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->>> Sorry for my slowpokeness, but I just realized that this driver may
->>> not be needed. What is the difference to existing gpio-74x164?
->> It might work. However it might not be as practical and efficient as the
->> dedicated LED driver.
->>
->> I'll give a try.
-> It is certainly preffered solution. If you decide to re-submit the
-> driver anyway, please mention that we already have GPIO driver for
-> compatible chip, and explain why this is superior.
+On 23/08/2022 04:38, Moudy Ho wrote:
+> This patch adds driver for MediaTek's Media Data Path ver.3 (MDP3).
+> It provides the following functions:
+>   color transform, format conversion, resize, crop, rotate, flip
+>   and additional image quality enhancement.
+> 
+> The MDP3 driver is mainly used for Google Chromebook products to
+> import the new architecture to set the HW settings as shown below:
+>   User -> V4L2 framework
+>     -> MDP3 driver -> SCP (setting calculations)
+>       -> MDP3 driver -> CMDQ (GCE driver) -> HW
+> 
+> Each modules' related operation control is sited in mtk-mdp3-comp.c
+> Each modules' register table is defined in file with "mdp_reg_" prefix
+> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
+> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
+> Probe, power, suspend/resume, system level functions are defined in
+> mtk-mdp3-core.c
+> 
+> Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+> Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/media/platform/mediatek/Kconfig       |    1 +
+>  drivers/media/platform/mediatek/Makefile      |    1 +
+>  drivers/media/platform/mediatek/mdp3/Kconfig  |   20 +
+>  drivers/media/platform/mediatek/mdp3/Makefile |    6 +
+>  .../platform/mediatek/mdp3/mdp_reg_ccorr.h    |   19 +
+>  .../platform/mediatek/mdp3/mdp_reg_rdma.h     |   65 ++
+>  .../platform/mediatek/mdp3/mdp_reg_rsz.h      |   39 +
+>  .../platform/mediatek/mdp3/mdp_reg_wdma.h     |   47 +
+>  .../platform/mediatek/mdp3/mdp_reg_wrot.h     |   55 +
+>  .../platform/mediatek/mdp3/mtk-img-ipi.h      |  290 +++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |  466 ++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |   43 +
+>  .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 1033 +++++++++++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  186 +++
+>  .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  357 ++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   94 ++
+>  .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  724 ++++++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |   48 +
+>  .../platform/mediatek/mdp3/mtk-mdp3-regs.c    |  735 ++++++++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-regs.h    |  373 ++++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     |  313 +++++
+>  .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |   78 ++
+>  22 files changed, 4993 insertions(+)
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/Kconfig
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/Makefile
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_ccorr.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rdma.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rsz.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wdma.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wrot.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
+>  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
+> 
+> diff --git a/drivers/media/platform/mediatek/Kconfig b/drivers/media/platform/mediatek/Kconfig
+> index af47d9888552..84104e2cd024 100644
+> --- a/drivers/media/platform/mediatek/Kconfig
+> +++ b/drivers/media/platform/mediatek/Kconfig
+> @@ -6,3 +6,4 @@ source "drivers/media/platform/mediatek/jpeg/Kconfig"
+>  source "drivers/media/platform/mediatek/mdp/Kconfig"
+>  source "drivers/media/platform/mediatek/vcodec/Kconfig"
+>  source "drivers/media/platform/mediatek/vpu/Kconfig"
+> +source "drivers/media/platform/mediatek/mdp3/Kconfig"
+> diff --git a/drivers/media/platform/mediatek/Makefile b/drivers/media/platform/mediatek/Makefile
+> index d3850a13f128..38e6ba917fe5 100644
+> --- a/drivers/media/platform/mediatek/Makefile
+> +++ b/drivers/media/platform/mediatek/Makefile
+> @@ -3,3 +3,4 @@ obj-y += jpeg/
+>  obj-y += mdp/
+>  obj-y += vcodec/
+>  obj-y += vpu/
+> +obj-y += mdp3/
+> diff --git a/drivers/media/platform/mediatek/mdp3/Kconfig b/drivers/media/platform/mediatek/mdp3/Kconfig
+> new file mode 100644
+> index 000000000000..af371c17c386
+> --- /dev/null
+> +++ b/drivers/media/platform/mediatek/mdp3/Kconfig
+> @@ -0,0 +1,20 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config VIDEO_MEDIATEK_MDP3
+> +	tristate "MediaTek MDP v3 driver"
+> +	depends on MTK_IOMMU || COMPILE_TEST
+> +	depends on VIDEO_DEV
+> +	depends on ARCH_MEDIATEK || COMPILE_TEST
+> +	depends on HAS_DMA
 
-Hi all,
+A 'depends on REMOTEPROC' is missing here (see the 'kernel test robot' email
+you received), but I have added that myself.
 
-sorry for the delay. I tried with the  74x164 gpio driver and it works 
-as expected.
+It's now in my for-v6.1c branch. If I don't see any new 'kernel test robot'
+emails in the next few days, then I'll make a PR early next week.
 
-The only drawbacks are:
+Regards,
 
-- as-is the 74x164 gpio driver supports only one output-enable gpio. 
-However in practice I don't think multiple OE GPIOs will ever be used.
+	Hans
 
-- with this approach, every time a LED status is changed the whole 
-register has to be sent on the SPI bus. In other words, changes cannot 
-be coalesced.
-
-
-I don't know if this is enough to make a dedicated TLC5925 driver 
-desirable in the kernel.
-
-JJ
-
->
-> Thanks,
-> 								Pavel
->
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	select V4L2_MEM2MEM_DEV
+> +	select MTK_MMSYS
+> +	select VIDEO_MEDIATEK_VPU
+> +	select MTK_CMDQ
+> +	select MTK_SCP
+> +	default n
+> +	help
+> +	    It is a v4l2 driver and present in MediaTek MT8183 SoC.
+> +	    The driver supports scaling and color space conversion.
+> +
+> +	    To compile this driver as a module, choose M here: the
+> +	    module will be called mtk-mdp3.

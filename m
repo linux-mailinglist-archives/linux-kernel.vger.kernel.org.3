@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C30859FE67
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345D159FE69
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbiHXPcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S236726AbiHXPdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237212AbiHXPcN (ORCPT
+        with ESMTP id S235526AbiHXPdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:32:13 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407751FCDD
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:32:12 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id r69so15346798pgr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:32:12 -0700 (PDT)
+        Wed, 24 Aug 2022 11:33:03 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E8D205DC;
+        Wed, 24 Aug 2022 08:33:02 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id h1so8948522wmd.3;
+        Wed, 24 Aug 2022 08:33:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=UZnSHBhLdMOKtTsvoHUMcnhpm7mRfzt47Yx1rwe6TYo=;
-        b=ZLLZ1sQgjDCQZCR6iPbiV+dqJNVFlqF98MJZe+fMBspnKcQ1UNH5o3QOOx9DF7zBKA
-         4NTZQU8BcU6LZoqrr74W5W2rChziUMwFRSTTGrC513hiwIJ39DS6AjzTbmueQdO2STE0
-         t09KkGjDmYbiMqWw8kicU5n4mAAvwqsvfR4L8kRTE4YxLV1mXG0u1f2lpXeh4xy6gdFe
-         Wv/tpw2JwZvjKVZthEj5z4x1vSTS+evVhLMdntp8ICLZ2wM3nwRTCYJP9MatbCfSirsX
-         fcVMxPNOyrjAZQmeXvPefg+H+k8Jj7MzekfI//odudIng7UsH3Qp7cbIUqf69180zIUj
-         AbYg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=L1CRzway24QdCfBYns+2r9yxTGCOw/2hnCmosLBB2r8=;
+        b=jLnr4rEjiEXa3dBspon7XRBATWKHOlqWLCYcOka7m9rDZ6U4pw8kV+xEbE4di16kaW
+         Qm+gY1iAC2FrlT3ohk8Im329DbQZsBSfG1OH7x66oh2JPUWA2qsbG85itfFyrfiD1+8E
+         JN+H+fk7leDmk0R1sDjBpXZ3ptRt5KkRqnuugbiPB+IjEOVQH3/fbABfdNiGLEXQ9Z1c
+         fHHa83dsJEWnKWbunxtxIC9ykyShW2YHKGPETqKEX4SPPQ435XPSExFbXHiayB7LHHjO
+         EzuaYcnmdhAcIk0icmG5A38j8Fcci4rOVqxQe9zAAXebWshCkL2iBZKegWHiVmUOulN+
+         2SHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=UZnSHBhLdMOKtTsvoHUMcnhpm7mRfzt47Yx1rwe6TYo=;
-        b=x4r487PTMzAMikP6llbdsbrEijXEigFe+5Fz+pqX5v6E8Ti/H5/9E0rW9JaTUsO6d3
-         Don0p+hW3xVbcbHpg6Otqs3m1LgpbVAgsQnW1lFvpDz7UzPQF30X/PtrwmWR7v8pwPby
-         OQ7NGpi9mUyoJUbuk72zDworbrLuTeX5+L93Xr5Nf2zFF8D5Ye4TzO6xB1JPCUCH9tsx
-         xx1SYBNVZ9pHyn2wkASB6pNexkNZ+chRKGn/V1Z9+1BCUYFOeCHRSuZmiiAJlC4ls4Ol
-         cg5cLlxREQsBkc/0ZBfANca01Bydvg3U1QoSz0oatKBnQqpzMBcdZnx5A4Lnypsq1swe
-         qiYg==
-X-Gm-Message-State: ACgBeo0D1EsN2GoQhxFkfRcUzacbJJvbBoh9xRtKB2SWV50Xm1cHmQDc
-        0pcpojyTrBI+lO5beS04Ct5hPQ==
-X-Google-Smtp-Source: AA6agR5QWDXsHQ6VWlCNVAAXtH2sA1tM24WXPqXY0c9+lwwnmRBfulv0M4b7+RjikXl1y2MhtN3W7Q==
-X-Received: by 2002:a63:8343:0:b0:42b:3b1a:89f6 with SMTP id h64-20020a638343000000b0042b3b1a89f6mr859171pge.26.1661355131607;
-        Wed, 24 Aug 2022 08:32:11 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090ad3c500b001f53705ee92sm1567101pjw.6.2022.08.24.08.32.11
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=L1CRzway24QdCfBYns+2r9yxTGCOw/2hnCmosLBB2r8=;
+        b=vR5pDm/7/VKRY2dygnc1cfiJlW2IPhN5pZnA7XVSVdS55QkWyIXaNv6gUu8qrU+6U9
+         seC2EEvjXHBOPRQJ7+D07ZihvbfILvMauezc5jRGzSUOb1yezNPmDbTc+vqS82vSfzvH
+         ZvSLsRK38xHihlvIIrle8+YIw1ft/DFx9qEL1JI7E+Rq5C8qQloi7YiBsW4E+2fMG+ja
+         VTird9H9nidqItXSjHlHZkl0RMTxPcvSJ4ww2JGYGGCcpYaeJAiz1rYpybuuM4TyOj7a
+         1uUzKNGKewV3tHoiBBzmwMbC952VSrGEuz8BxmxJ3M63FZBKAM99YDP0+M5HgWv1fPg+
+         osSg==
+X-Gm-Message-State: ACgBeo32aepOYTOnig+Z2ChxT48QechbLPXHWAj+szkPJ+Ep+19dqfPX
+        BdR0GkfV3ZQKRPkCm46Lf0k=
+X-Google-Smtp-Source: AA6agR6JgFXxoSYlgrTlnkUOgrbnMrCnYd8RxmpJNC5g5B4cmNPpTgbwIN5AEdLHZ8gdlNHpActs+Q==
+X-Received: by 2002:a05:600c:35cc:b0:3a6:f08:9b1 with SMTP id r12-20020a05600c35cc00b003a60f0809b1mr5507116wmq.22.1661355181191;
+        Wed, 24 Aug 2022 08:33:01 -0700 (PDT)
+Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id y8-20020a5d4ac8000000b0021f73c66198sm16902283wrs.1.2022.08.24.08.33.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 08:32:11 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 15:32:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Colton Lewis <coltonlewis@google.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>
-Subject: Re: [PATCH v4 5/6] KVM: selftests: Make arm64's MMIO ucall multi-VM
- friendly
-Message-ID: <YwZEdzHtWEfCpr7B@google.com>
-References: <20220824032115.3563686-1-seanjc@google.com>
- <20220824032115.3563686-6-seanjc@google.com>
- <YwY9BYDUeiT87/Vs@google.com>
+        Wed, 24 Aug 2022 08:33:00 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] of/device: Fix up of_dma_configure_id() stub
+Date:   Wed, 24 Aug 2022 17:32:56 +0200
+Message-Id: <20220824153256.1437483-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwY9BYDUeiT87/Vs@google.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022, Oliver Upton wrote:
-> Hi Sean,
-> 
-> On Wed, Aug 24, 2022 at 03:21:14AM +0000, Sean Christopherson wrote:
-> > +/*
-> > + * Sync a global pointer to the guest that has a per-VM value, in which case
-> > + * writes to the host copy of the "global" must be serialized (in case a test
-> > + * is being truly crazy and spawning multiple VMs concurrently).
-> > + */
-> 
-> Do we even care about writes to the host's copy of the global pointer?
-> I don't see how the host pointer is used beyond serializing writes into
-> a guest.
-> 
-> IOW, it looks as though we could skip the whole global illusion
-> altogether and write straight into guest memory.
+From: Thierry Reding <treding@nvidia.com>
 
-*sigh*
+Since the stub version of of_dma_configure_id() was added in commit
+a081bd4af4ce ("of/device: Add input id to of_dma_configure()"), it has
+not matched the signature of the full function, leading to build failure
+reports when code using this function is built on !OF configurations.
 
-This exact thought crossed my mind when I first looked at this code, but somehow
-I couldn't come up with the obvious solution of using a temporary on-stack variable
-to hold the desired value.
+Fixes: a081bd4af4ce ("of/device: Add input id to of_dma_configure()")
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ include/linux/of_device.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Something like this should work.
+diff --git a/include/linux/of_device.h b/include/linux/of_device.h
+index 1d7992a02e36..1a803e4335d3 100644
+--- a/include/linux/of_device.h
++++ b/include/linux/of_device.h
+@@ -101,8 +101,9 @@ static inline struct device_node *of_cpu_device_node_get(int cpu)
+ }
+ 
+ static inline int of_dma_configure_id(struct device *dev,
+-				   struct device_node *np,
+-				   bool force_dma)
++				      struct device_node *np,
++				      bool force_dma,
++				      const u32 *id)
+ {
+ 	return 0;
+ }
+-- 
+2.37.2
 
-#define write_guest_global(vm, g, val) ({			\
-	typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));	\
-	typeof(g) _val = val;					\
-								\
-	memcpy(_p, &(_val), sizeof(g));				\
-})

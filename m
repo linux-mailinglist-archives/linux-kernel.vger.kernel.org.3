@@ -2,191 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E8859F571
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A2759F576
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235684AbiHXIjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S235067AbiHXIlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235520AbiHXIjd (ORCPT
+        with ESMTP id S234260AbiHXIlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:39:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004B069F47;
-        Wed, 24 Aug 2022 01:39:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DF17617A2;
-        Wed, 24 Aug 2022 08:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF14EC433D6;
-        Wed, 24 Aug 2022 08:39:25 +0000 (UTC)
-Message-ID: <3ccf3023-9b1c-2ae6-dd70-6f318eec22e2@xs4all.nl>
-Date:   Wed, 24 Aug 2022 10:39:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v28 4/4] media: platform: mtk-mdp3: add MediaTek MDP3
- driver
+        Wed, 24 Aug 2022 04:41:07 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60042.outbound.protection.outlook.com [40.107.6.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70205474F6;
+        Wed, 24 Aug 2022 01:41:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gT+UlIfbQ5r9yM2DywaKdqwAkqPqYdqAV/IoWkLp68sH//xt6pqm4bA62RJEVuUN4DFmTnYE8uDJS2wDhfs9aMt06t7aOn/mxnVGL3k+vFXme2oS0X8Fm/ywjcEJNQQ05IJ9szp0Cls/phRp5ouLFNvv/SdcRm6VJ/kIIExbhL3gEOKwjYVMIyUlYQVMT7YY+5NqTDXkFWpV9NIpMHjliw45OGzTKp36Y98PbniCfUrrNIgPmexEi8nnZhKNrdSyBkxFdsioqsxH/8UeNcEVnGzpy1iiKIFqnT6MHWstowm1Y6gyAhcB7JQwD7399YxPIGHPCOg6tV2zyprDIVNMQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TbgVyP+VoceeUjriSLdYGUdDr85mQM2kFdkjqyqRpus=;
+ b=N8p1LpWJvRyM5urvgYeD2EnfzlSJwIGgc2Dge6GQtXHXTtGmdZXqtSIXlqcQfVA3aHJi1zgj/HWIEw+OfDJ/EV78VOQCbyjvXitN33OSqysx72F3J4QJ2467T3fD1/p3SEuJ2rq0MITXGbaiEs7cRD90uKMblRe6LRfP8lOQDAgRfsuNLGaJtfklpBG5LmyN46uNgcs0IFv2D0TTHZ1zJ52+rGI2M/xRzoG8Fo0KpVOZiTCIUmNf/kd53NiZLeC0iQbxRkjhpVstc36CSzEyQshNa1yQtnUMmrt6WZFfTGX1Ktj8vmSGtyOFZUveJs0c+pemPe1NU4QnNd4YTfK+DQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TbgVyP+VoceeUjriSLdYGUdDr85mQM2kFdkjqyqRpus=;
+ b=O88skmQBQQuRidCfpkmI9Pv85twh2vL9QAzceMVtZlgxV3BJOllxcDfrR1un+DqClC8NBKCgcU3ntkgx6LBzYoJ0X9dD+XPKUrdB+BcmrSxTyZAwe6H+fwsxAwtXvrfaPs58PGxM27hgLZNlaXbuASdYlMll8h4YMY/Yul1zabE=
+Received: from AM6PR04MB6053.eurprd04.prod.outlook.com (2603:10a6:20b:b9::10)
+ by AM8PR04MB7377.eurprd04.prod.outlook.com (2603:10a6:20b:1de::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
+ 2022 08:40:59 +0000
+Received: from AM6PR04MB6053.eurprd04.prod.outlook.com
+ ([fe80::6cd5:f11c:4e5c:d79c]) by AM6PR04MB6053.eurprd04.prod.outlook.com
+ ([fe80::6cd5:f11c:4e5c:d79c%3]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
+ 08:40:59 +0000
+From:   "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>,
+        "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+CC:     Guenter Roeck <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: RE: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+ unlock sequence
+Thread-Topic: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+ unlock sequence
+Thread-Index: AQHYsSoBdxZHPlON40a5XuD6jrx4qK2xDxMAgAmF+ACAAAMHAIAAZZiAgAEFDYCAADtTgIAAMAWAgAEz8ACAABu1AIAABLbQ
+Date:   Wed, 24 Aug 2022 08:40:58 +0000
+Message-ID: <AM6PR04MB6053D8E0A9AD24757095BFB5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+References: <20220816043643.26569-1-alice.guo@oss.nxp.com>
+ <20220816043643.26569-3-alice.guo@oss.nxp.com>
+ <20220816062330.z2fvurteg337krw2@pengutronix.de>
+ <AM6PR04MB60537292F559EC012F0EB510E2719@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220822080010.ecdphpm3i26cco5f@pengutronix.de>
+ <20220822140347.GA4087281@roeck-us.net>
+ <AM6PR04MB6053E26CB59410EBCC2C93AEE2709@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220823091027.ezyxkn64asajvjom@pengutronix.de>
+ <20220823120219.GA203169@roeck-us.net>
+ <AM6PR04MB60535EC5B774004AF996BDA5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220824080338.humjny4fabhmx3z7@pengutronix.de>
+In-Reply-To: <20220824080338.humjny4fabhmx3z7@pengutronix.de>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        cellopoint.kai@gmail.com, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>
-References: <20220823023803.27850-1-moudy.ho@mediatek.com>
- <20220823023803.27850-5-moudy.ho@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220823023803.27850-5-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f3cdb317-300b-4489-d339-08da85ac5e80
+x-ms-traffictypediagnostic: AM8PR04MB7377:EE_
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LWyMUbV1E2jKUiV9VOkzboaT4IKYEhKNrkuR9hf2J+nu2h3EjfqOKS8vNq0dK7ETqcQWF6Yu6Fpar/deI/fjpUImwhl0BnaNobGus2nrx/7T+WEGQnvhiHZtrZXItOClaUM6c6PS7MNqjxmoTmkSgCZ8qbn46CC0Pk48TaEBdF3qvWP1UuNLq673uRm6YUDcJGYVjQyUObiCr/PymydUlxotcktnq+laUo0v5l/XCG0z3hgUptJx0gavlG7NIJx21/l7oQALLTN1O28qWqp/Zj/d8G3dF3ZoaSAdA3soYXmlH7Ifpwr1mDjqBKUFijXZCXzDK2ylNTG5b1ho3aMHqCMJ31MpgTyXaBDkX5Q74ezkEVpHxacCLovmIW1mOSIG8vY49WG6sYfdHcIN0ZDEBorElXQWTsHxdiyFiPP31/vHL5aTazMFUD4hOfch7cCPnOXsGnADDXnFeeuvFk7F2PjAJIVw0Swao97x7lAt+pfslBYP351Y3Jjdd2YYtpU20xDBDpM0P3CmBr278UGD4yCGTmLnHT3Y3565pHQ/0oLCS8Ow1VUWbUM5vzhNVknFy6/YR77wdU50pELDZ+UqMqeZ7SToXfqlMDF0o5eKSnKEI5CTBg/lQ7bdYdEzYs+vBsB3tLksd0jlhOHFOM55TdpYuF9jNevcnqHPyyOWwPcBAOH2T14Wik5QNaWksqmtHu+fn5dydav9IqhsAji9d3ETnqd6VcY1XxK6awotH4y7xmdv0B4gZq77QNt79Kt4a3vCPooWUyDRJ7D4R8bQJA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(366004)(376002)(346002)(186003)(71200400001)(38070700005)(41300700001)(66476007)(64756008)(8676002)(4326008)(66446008)(66946007)(76116006)(66556008)(478600001)(7696005)(6506007)(86362001)(316002)(26005)(9686003)(53546011)(54906003)(110136005)(38100700002)(2906002)(122000001)(8936002)(55016003)(5660300002)(52536014)(33656002)(83380400001)(7416002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xpx1N5UYBDgNi/sShDCe/zWFXrQE7PbS70hwhOmUJisSEi8QxtkmMp2GjuNT?=
+ =?us-ascii?Q?eWyU+ngCZdF5ZySWebStD6s3zfHBy1g/WkbliQhySTi4L4fPHeBIG/Lf3flv?=
+ =?us-ascii?Q?xwzrRDso/GOMCxL2SyHxs10A4Gcx46A1BDcNESG0Xrofr7GejVzborOhZ0QC?=
+ =?us-ascii?Q?6RjgIze4BDind6sfjZvVeoKIOKxqsKBpthD6ksVvXhOACJfIsmREpC5OkanI?=
+ =?us-ascii?Q?Uc5bNv+D0boG+OIkzBLxAeceveQ/7vXH4Ulb2KI8z3fhleRK92tCMlh99nKx?=
+ =?us-ascii?Q?eJNo7alGua8YwnicIO9UcHn3c6+Fxve9or34dkxtn6I/8/oDv7U2R5PNqpbh?=
+ =?us-ascii?Q?0TfNSvRJuXUevGJrwyORIjeOpa0F+Zjm9qRIqmciHUQ72ipXJzDsdlJiGPVs?=
+ =?us-ascii?Q?StTm/JwV31aaOjipXkrda8ehw75ZT1i2a1OzsaRMRuHqYZFvQqpM4s8TdfGG?=
+ =?us-ascii?Q?nd3wu5NCveo1P45N8o+aVOexSTa8hTIgsry9kJMkUjQf07Tku7EOtpzPCocT?=
+ =?us-ascii?Q?zJ/siP4u0837bVdhkTOvvz8JwpqMdbvns/eAZDduzVWSsv0vBySPW6LHQkCF?=
+ =?us-ascii?Q?BUUCxkWJ4GkZ0xX3t+Ge4Gofg8HViCxj2qAhZmZ5lrkQ8mJfn+U1LxsLaSa7?=
+ =?us-ascii?Q?Pky+F/Kq97u5AHAU+sAULL8FaiufPGMqAFdDuyn95fhqHOa7JS5B6JNzRS50?=
+ =?us-ascii?Q?YaHPyQeRF+CQTTKFXHKrneZcm9/pwHLKPSGZwEC6lzpHYjeqOEQfZXkem/vJ?=
+ =?us-ascii?Q?g2lLp5SOTXp7hJFU+UgEfP+lgSFiDRkgb2LoN/wUDtwBSrOf/PTJ8/gqEkW5?=
+ =?us-ascii?Q?xQRamNHgUB/rIhl3iERO/GBSrxAVc7zkrdb92Qah0TMqQqM9w450+PRRS6O/?=
+ =?us-ascii?Q?tpMuQlTk2yVDJgwiddIbgAV54jp4LS7VxT5WGDes3fkxipt8K7U+lvq7n+oN?=
+ =?us-ascii?Q?wGccIJqQK2NypaRV3bs45uFFnp5VPSi7kyX/JhAiNokdy36sEsr8N/sMiG0o?=
+ =?us-ascii?Q?3qeU5yFGjjZhxwTDw2M6tONsz3FCmJvd2ptdaX/rECR1KqVcOFMZ2HYoVdXH?=
+ =?us-ascii?Q?TZ/B7WBejG1zdDTLCldohru9K2/aTzrlbj9ricFUnsU0lcPcHiixlkDD+Mej?=
+ =?us-ascii?Q?GuauPxUZ07zgbgi3vGYEU+t2rJBkXpE85CPQWu5ApQ9qNR7/vBbXTOIZudLD?=
+ =?us-ascii?Q?MyhB9bjYiaKgiokkJXhwSIeAvi36NpsxgBG4ZLjSe+UWKB5piH7PjEpYqFWj?=
+ =?us-ascii?Q?4yZT3JJ8OejzBtKouby5tpP3ExkI9lg0nf1m6tMvtVwW0FPpj0WTaTFIqXwp?=
+ =?us-ascii?Q?81S0CDb5GsZZWf1nGSd7N1wauSemkd8MDDEV3f3N7PUTLhlFAhdiL401C21C?=
+ =?us-ascii?Q?JFmkSSFhAq8F83WrNa4IUYKsUm/3H9D9uNSnW2BQc2VHhxEOZ/leDuhWwPeH?=
+ =?us-ascii?Q?8In6tYOzpMFUOovbnwaZnwgyMWo+3jRcEonTRL8Sop4HrRR7+hLke6YmACvb?=
+ =?us-ascii?Q?zx3cH5PfWqJJJ5xmbxkR7V/KM+OxMMkT41rQiXPchTP8iFAw2HZVOBsSW4Te?=
+ =?us-ascii?Q?mgivTOPV1nFr0uWd/wVoE7nRcu1EjsgLRbbOAX4e?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6053.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3cdb317-300b-4489-d339-08da85ac5e80
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 08:40:59.2091
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lkrUgaszz3XhGPmE5zqp8YCu8n7E9w3v6vrqANfoUmDHHIGFeBVWdsWR2asbmL+VOEmP8eObiSq7SZoyCu5r4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7377
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Moudy,
+> -----Original Message-----
+> From: Marco Felsch <m.felsch@pengutronix.de>
+> Sent: Wednesday, August 24, 2022 4:04 PM
+> To: Alice Guo (OSS) <alice.guo@oss.nxp.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>; wim@linux-watchdog.org;
+> shawnguo@kernel.org; s.hauer@pengutronix.de; festevam@gmail.com;
+> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> dl-linux-imx <linux-imx@nxp.com>; kernel@pengutronix.de;
+> linux-watchdog@vger.kernel.org
+> Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier fo=
+r
+> unlock sequence
+>=20
+> Hi Alice,
+>=20
+> On 22-08-24, Alice Guo (OSS) wrote:
+>=20
+> ...
+>=20
+> > > > > Hi Guenter and Marco,
+> > > > >
+> > > > > 1. did you see any issues?
+> > > > > This WDOG Timer first appeared in i.MX7ULP, no one report issues
+> > > > > probably because few people use i.MX7ULP. This issue was found
+> > > > > when we did a stress test on it. When we reconfigure the WDOG
+> > > > > Timer, there is a certain probability that it reset. The reason
+> > > > > for the error is that when WDOG_CS[CMD32EN] is 0, the unlock
+> > > > > sequence is two 16-bit writes (0xC520, 0xD928) to the CNT
+> > > > > register within 16 bus clocks, and improper unlock sequence cause=
+s the
+> WDOG to reset.
+> > > > > Adding mb() is to guarantee that two 16-bit writes are finished
+> > > > > within 16
+> > > bus clocks.
+> > > >
+> > > > After this explanation the whole imx7ulp_wdt_init() seems a bit
+> > > > buggy because writel_relaxed() as well as writel() are 32bit access
+> functions.
+> > > > So the very first thing to do is to enable the 32-bit mode.
+> > > >
+> > > Agreed. This is much better than having extra code to deal with both
+> > > 16-bit and 32-bit access.
+> > >
+> > > > Also this is a explanation worth to be added to the commit message
+> > > > ;)
+> > > >
+> > >
+> > > Definitely. Also, the use of mb(), if it should indeed be needed,
+> > > would have to be explained in a code comment.
+> > >
+> > > Thanks,
+> > > Guenter
+> >
+> > Hi Marco and Guenter,
+> >
+> > Thank you for your comments. I plan to enable support for 32-bit
+> > unlock command write words in bootloader. In this way, there is no
+> > need to distinguish whether the unlock command is a 32-bit command or
+> > a 16-bit command in driver.
+>=20
+> Please don't move this into the bootloader, enabling it within the init s=
+eq. is
+> just fine. If you move it into the bootloader then you can't ensure that =
+the bit is
+> set since there are plenty of bootloaders out there.
+>=20
+> As I said, just drop the "16bit" unlock sequence from the init function b=
+ecause
+> the unlock is handled just fine in all the watchdog_ops.
+>=20
+> Regards,
+>   Marco
 
-On 23/08/2022 04:38, Moudy Ho wrote:
-> This patch adds driver for MediaTek's Media Data Path ver.3 (MDP3).
-> It provides the following functions:
->   color transform, format conversion, resize, crop, rotate, flip
->   and additional image quality enhancement.
-> 
-> The MDP3 driver is mainly used for Google Chromebook products to
-> import the new architecture to set the HW settings as shown below:
->   User -> V4L2 framework
->     -> MDP3 driver -> SCP (setting calculations)
->       -> MDP3 driver -> CMDQ (GCE driver) -> HW
-> 
-> Each modules' related operation control is sited in mtk-mdp3-comp.c
-> Each modules' register table is defined in file with "mdp_reg_" prefix
-> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
-> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
-> Probe, power, suspend/resume, system level functions are defined in
-> mtk-mdp3-core.c
-> 
-> Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-> Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/media/platform/mediatek/Kconfig       |    1 +
->  drivers/media/platform/mediatek/Makefile      |    1 +
->  drivers/media/platform/mediatek/mdp3/Kconfig  |   20 +
->  drivers/media/platform/mediatek/mdp3/Makefile |    6 +
->  .../platform/mediatek/mdp3/mdp_reg_ccorr.h    |   19 +
->  .../platform/mediatek/mdp3/mdp_reg_rdma.h     |   65 ++
->  .../platform/mediatek/mdp3/mdp_reg_rsz.h      |   39 +
->  .../platform/mediatek/mdp3/mdp_reg_wdma.h     |   47 +
->  .../platform/mediatek/mdp3/mdp_reg_wrot.h     |   55 +
->  .../platform/mediatek/mdp3/mtk-img-ipi.h      |  290 +++++
->  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |  466 ++++++++
->  .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |   43 +
->  .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 1033 +++++++++++++++++
->  .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  186 +++
->  .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  357 ++++++
->  .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   94 ++
->  .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  724 ++++++++++++
->  .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |   48 +
->  .../platform/mediatek/mdp3/mtk-mdp3-regs.c    |  735 ++++++++++++
->  .../platform/mediatek/mdp3/mtk-mdp3-regs.h    |  373 ++++++
->  .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     |  313 +++++
->  .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |   78 ++
->  22 files changed, 4993 insertions(+)
->  create mode 100644 drivers/media/platform/mediatek/mdp3/Kconfig
->  create mode 100644 drivers/media/platform/mediatek/mdp3/Makefile
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_ccorr.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rdma.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rsz.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wdma.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wrot.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
->  create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
-> 
-> diff --git a/drivers/media/platform/mediatek/Kconfig b/drivers/media/platform/mediatek/Kconfig
-> index af47d9888552..84104e2cd024 100644
-> --- a/drivers/media/platform/mediatek/Kconfig
-> +++ b/drivers/media/platform/mediatek/Kconfig
-> @@ -6,3 +6,4 @@ source "drivers/media/platform/mediatek/jpeg/Kconfig"
->  source "drivers/media/platform/mediatek/mdp/Kconfig"
->  source "drivers/media/platform/mediatek/vcodec/Kconfig"
->  source "drivers/media/platform/mediatek/vpu/Kconfig"
-> +source "drivers/media/platform/mediatek/mdp3/Kconfig"
-> diff --git a/drivers/media/platform/mediatek/Makefile b/drivers/media/platform/mediatek/Makefile
-> index d3850a13f128..38e6ba917fe5 100644
-> --- a/drivers/media/platform/mediatek/Makefile
-> +++ b/drivers/media/platform/mediatek/Makefile
-> @@ -3,3 +3,4 @@ obj-y += jpeg/
->  obj-y += mdp/
->  obj-y += vcodec/
->  obj-y += vpu/
-> +obj-y += mdp3/
-> diff --git a/drivers/media/platform/mediatek/mdp3/Kconfig b/drivers/media/platform/mediatek/mdp3/Kconfig
-> new file mode 100644
-> index 000000000000..af371c17c386
-> --- /dev/null
-> +++ b/drivers/media/platform/mediatek/mdp3/Kconfig
-> @@ -0,0 +1,20 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config VIDEO_MEDIATEK_MDP3
-> +	tristate "MediaTek MDP v3 driver"
-> +	depends on MTK_IOMMU || COMPILE_TEST
-> +	depends on VIDEO_DEV
-> +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on HAS_DMA
+Hi Marco,
 
-A 'depends on REMOTEPROC' is missing here (see the 'kernel test robot' email
-you received), but I have added that myself.
+Sorry, I did not tell you that all watchdog control bits, timeout value, an=
+d window value cannot be set until the watchdog is unlocked. Support for 32=
+-bit unlock command write words in enabled in imx7ulp_wdt_init now.
 
-It's now in my for-v6.1c branch. If I don't see any new 'kernel test robot'
-emails in the next few days, then I'll make a PR early next week.
+Best Regards,
+Alice Guo
 
-Regards,
 
-	Hans
 
-> +	select VIDEOBUF2_DMA_CONTIG
-> +	select V4L2_MEM2MEM_DEV
-> +	select MTK_MMSYS
-> +	select VIDEO_MEDIATEK_VPU
-> +	select MTK_CMDQ
-> +	select MTK_SCP
-> +	default n
-> +	help
-> +	    It is a v4l2 driver and present in MediaTek MT8183 SoC.
-> +	    The driver supports scaling and color space conversion.
-> +
-> +	    To compile this driver as a module, choose M here: the
-> +	    module will be called mtk-mdp3.

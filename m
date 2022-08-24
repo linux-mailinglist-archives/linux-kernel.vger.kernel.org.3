@@ -2,161 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6EB5A0445
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DA55A0447
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiHXWtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 18:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S230491AbiHXWuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 18:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHXWtV (ORCPT
+        with ESMTP id S230410AbiHXWuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:49:21 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0328A61B25;
-        Wed, 24 Aug 2022 15:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661381360; x=1692917360;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=z3vsZLjVC4CUCSUgk1xEzCXpWrYxoIh3AYAWmYKkxaw=;
-  b=nK6OdIXohKm4IostGIZIWlLf1FwBjaMgt4OoXAr+ez+8WRHacRAdtkeh
-   xbAzWrlD/KwxGYdMUWaoNd7dfffwxy9RTeMJKimM2/lB1JnIBSRg/2Mqu
-   IIYuOES47L6dG7BDPcjl1bChiqffc+o0oYpmGdUvtVdltGP5piNW8x+lf
-   uUOgztJWllhmTFNWqZ8lQLERnrXpuY7RxU/J5rulN4jnNQ5TRcqYgY2LD
-   G+HxyvCU2Y6JrB96wnH0fsuquW5H3xZ1X+k+Yaw8K8ROPTA8o/ucmfasy
-   b0PlBb7bUB9RhqOCBCbaIbIMhThkibdsEu2x1IkTslvrfiwX2rT51Y4Ck
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="273846617"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="273846617"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 15:49:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="938085589"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Aug 2022 15:49:20 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 24 Aug 2022 15:49:20 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 24 Aug 2022 15:49:19 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 24 Aug 2022 15:49:19 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 24 Aug 2022 15:49:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gvA8dzkgULmE8PDIL3NBIqjQP4gzWjsFH3QW3FJTKam5T7YP49TPRWs8UE8ZT2R7Z08tS3Sh6a0mRNePArfNUOJ0SmALcwCOVDNHXkE0Yhjn3Ng1+BOaTLIeGjrQi8oXtBHPSpNY0Pge8wUevsTjSQn9w0UvC7yAAm5q52caeV4KuZKJtdN+yNInTvtNXETvLd2FiTcp3gUgiMPDtsDcAxVfgBLeWPevcirtQSQIRIbsjQTUgFgoThX8N+HxbmC40ulKnirWfG1/DjgaTpBNi4n2HTVcvOMrxnjEid7Jt8gASH67IG6c/oltRpLXzMTuA0MRdfmPOy0c03i3LIitrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7DeiYPIyr4i24v9ZPg0M56UMPtU5xaQ8bArGXYKVrS4=;
- b=I+Ij4nB03fXBKJW8oj+TQ/Br6nhHHEzcC7xbQ4Bvvzf2HwxRkgG4dJb2M7ZK/SPaOB4Gwk0CoZvN4i+BDSbc14bHjMx9Gd2fmrTPN2pRnTZLnm9CHGFBkGfmZbuhp+3kboyZ3yjPWavCBI+wRSaB3lu51dIyLIgYCHv5rmHeywJwvgWtVSl9riSAI9c6TiJyXPrWdIwjlzxwpbA08V9NLuPzUA1I6ERR3OaomWUlmJHRcEGaGWMNFW6kc1LD7mXFbwj7saAf8CMtzXzU1hdIuL/Z1NP0glZ2b26L7T1aDQqgZIb8r2FtRd5r0f98UtacIVcE8dfyc3VbED15hYMzwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by SN6PR11MB3198.namprd11.prod.outlook.com (2603:10b6:805:c3::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Wed, 24 Aug
- 2022 22:49:17 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::5d13:99ae:8dfe:1f01]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::5d13:99ae:8dfe:1f01%3]) with mapi id 15.20.5566.014; Wed, 24 Aug 2022
- 22:49:17 +0000
-Message-ID: <08e59f2d-24cb-dca8-b1b8-9e80f8a85398@intel.com>
-Date:   Wed, 24 Aug 2022 15:49:15 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [RFC PATCH 1/2] KVM: x86: Add a new system attribute for dynamic
- XSTATE component
-Content-Language: en-CA
-To:     Sean Christopherson <seanjc@google.com>
-CC:     <kvm@vger.kernel.org>, <pbonzini@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <yang.zhong@intel.com>
-References: <20220823231402.7839-1-chang.seok.bae@intel.com>
- <20220823231402.7839-2-chang.seok.bae@intel.com>
- <YwabSPpC1G9J+aRA@google.com>
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <YwabSPpC1G9J+aRA@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0265.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::30) To PH0PR11MB4855.namprd11.prod.outlook.com
- (2603:10b6:510:41::12)
+        Wed, 24 Aug 2022 18:50:37 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF087255B2;
+        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so22713658fac.5;
+        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:cc:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=cVr7EjOeuA4Iq3LSWg/NF5BMsUxiamTOQ8MK4OLgi5A=;
+        b=nNyX2ow2/eL3/m+b7YveC0PUvcu85t8FAYoQJeyo4pjFYC3BgnBhVcgha0RiomkhL4
+         cJRyVAIJjicbo5rq5Cb8BNyLEB1x2QYc1d0HK53hgnlfylXv6nxtkoI9PBl/iFnH4fkp
+         r41NDgYtm3H03TKqRNafdKJFEP8Fd6BdbHdcZ4mVfANk3ZdAJNnTh3uV4gFQnDWNEu9t
+         32txW8NLHmKSBWBdCTaNHA60csUGyrmnxRwl8svG2qEcDMj4PC5vl2eIKl/u3ddAJbWW
+         D6IQuxLUvB4VbbP611dSbKyDnYpgY/jiHnDDy9hy7yM8GXHJ+28/mFjjKzYUoeG9nfS1
+         U/xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:cc:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=cVr7EjOeuA4Iq3LSWg/NF5BMsUxiamTOQ8MK4OLgi5A=;
+        b=L2e6HVGwSmQpDVK8VtoA31xJtqLPD6zf2/C0yPD4Pb3RQktDg1BpdZ6FTo7NOQZO1u
+         lhNyEP37p7AB6zBfae9N5iQoxvmNrChYHKq0bkoTvQxpNfDHz1uj9riQ6enaQqXViEBw
+         UiTGOAlEXJU9mazx2YRH1bw5y/NzPa6lRIb52Grd2VYp0PW7jwGVVjm4uSZpRCLqLfGU
+         ouGn7MeiNUGh0VarDm8uutb0AK/m0Y8IHOlOQ3DlVp2V5OnxX7XHK7c8XC0m/f/AG2oS
+         l2/65+1FkG32cGOWQCikOh9GgEWrIge692CN3PpgNdEPQTFG+vfUNhB4fiE3femlmHrx
+         c6Vw==
+X-Gm-Message-State: ACgBeo2JY+N2hmP4a1pqO3eLGLwbmo0R+eGEb2K5x4kExFxY+zuurk2E
+        auFgRP4Z6a21DAGmPrbiAEI=
+X-Google-Smtp-Source: AA6agR4iB0qmWLoxnq0qCvKQTADtks334bZv3oLhLSmgujmQ+lM4RVGM1qXSyQY3ytjuSDPFVxFYGQ==
+X-Received: by 2002:a05:6870:1601:b0:108:2d92:5494 with SMTP id b1-20020a056870160100b001082d925494mr4848157oae.109.1661381425274;
+        Wed, 24 Aug 2022 15:50:25 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id ay19-20020a056808301300b00342e8bd2299sm4298699oib.6.2022.08.24.15.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 15:50:24 -0700 (PDT)
+Message-ID: <538ebda0-0f8a-ebae-f02f-c8f8736ca12b@gmail.com>
+Date:   Wed, 24 Aug 2022 19:50:39 -0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 452f93ce-f06d-4ecb-dec7-08da8622dff2
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3198:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +uuD8Oi1O3nqlqxiwjmtfZJrdHdk34QJDXIZ3c2AAL6C3N68txS31HZClKzUGqkWjDWylenagQRC9z0E7y78ZIBTjBMqittIMQQXfFMmLbh6F8hufCzGef+Gj/BRJoWB75Fd6Peo/+OWaHt4xobBuywm849n2yJXcdHEascdnIYFF5/G0mtSE+9McGatDi1GkFXIAYciTUDBRKu5rOX/0UQ7dPik1KLWVyn05i8DhFYRKRFuEXfhXZMwCr8S/N/7uqTYwlDn3mG/9sPwppLaWWS5szr3eaSyU5K5LQkgax8BdpUyuY7q4qGAItsm456kHnthzFI4EC7qMer0qzxi4Lg1USO7fUs463hMnZ9wbgw2BeDFWX96BEtzVL/EaqlPT9oRWPtohpbwoFKy8pVS9JltayDruJBRYdEG/PSuuXFO4anJ09Zy1/MjfTCXombcyzXwNtEd1/new3zZZweHv8NX8WQOBdDwoAP+DhCupX7HP57mpYk9Pfv8Yj/2I1C9Bhy/AiNJpSEUqCQsuBUWBu363jOkhPrVpHXVghKMSx/yz+PtmNNZAdNLHSzegNGRUiz0zFVM9RdjyM63g3rlUkhXSZh0ptU/hh1qRJiGp0vVAndBgKYaIZx11KXjYH8MwDa83S/yXH75GmLIxbabyY0gJe/4jyRIbb94a2Mcjaq4o6kgNDKRs7DpaURbsKsIMeB2OUZDicNaLPGhMmTGF99305MzP3/N+587h57nPZ5SE2CIFOdUE6F0S51W3TSuz4ebAPsi3YRw2+gGg+027WRKt2yxqG431spyIPOp7Bs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(346002)(376002)(136003)(39860400002)(396003)(6486002)(41300700001)(66946007)(316002)(66556008)(5660300002)(38100700002)(478600001)(107886003)(66476007)(31686004)(4326008)(6916009)(31696002)(36756003)(8676002)(8936002)(2616005)(2906002)(6512007)(53546011)(186003)(6506007)(83380400001)(26005)(86362001)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0Q0cnpIWWM3aW13UGF0Mmw2dUgzUmRrTTNKdVhZRUVWSEd5M3g2aWxzb0tU?=
- =?utf-8?B?K3JhUGY0NnROL1ZGdEZ5K0NCWXRSSEc0NnB1L1c1dGo4UW9jc1FjVjdwMExq?=
- =?utf-8?B?OTVrMHI2cDZaeUJmVTNTS21PL3NTNWhEN2hoSVBac3hJWExYeXY2ais2MzE0?=
- =?utf-8?B?Yk9GdFhlNmg2dmVPclp5cFptQnhwcml2TTAwaDg0a0xRRlRDaDJDRFh0VDRD?=
- =?utf-8?B?OGxrVTdtRW5oV1FNZGZSL0FHNXFDMGFwQXV5OVRLT1Y1di9IWSt2VHVFZXRv?=
- =?utf-8?B?aFcrRUZ5SGtsZEFPUUhubXRpR3RDVkpJNjJBR1Vra1ZKemd4ZERFMkxKdnZp?=
- =?utf-8?B?NXZUMFV1YWZnVmF0SC9VOCtvRTA5TG1VVXVOTUpNYWc5N04yODVEd1hmclla?=
- =?utf-8?B?ZDdkeWZKdE9NQk8zWWJEVW9DeDRkcDNxOTJZbFYzSG8rM2tHM3dzcyt4cXN1?=
- =?utf-8?B?Qm9KOHVJNGN5dTlGa3NVcUZQUis1bFVwOWpyQmRsOW9KNDVKOGxQNkRid3hV?=
- =?utf-8?B?K2dNWHFDQnVxd29yYklXTitLSXBWOVVaMnFNZ2tpczkwdWRYRWI4N3RNNlM2?=
- =?utf-8?B?dEFlL0xaSXZRQUdxVVBuZnJNSWMvN3BZK2c0K1ErcXc4VTh2OGlsa1lROEVH?=
- =?utf-8?B?RlFndXZKalIrRzFZblljSGR6VnljOUtaMEZNNnIxaEFhOE01VEFmS3dDZnZ3?=
- =?utf-8?B?ZkN6YStjenNYUkY5dXJiKytudGN6OE94RGNWdkdyYklndWVWU2QreHg5bTNK?=
- =?utf-8?B?cWZQZXZMR2lCbHRURUg1cG5lOVRNcTZHT1hJd2hZTGhQSXBrUnRBSnpnZXhu?=
- =?utf-8?B?dFNLYjErSU01WlJyaDNFZ0pKRGtDMEwzbXVGWmhGLzRFRy9DWkVsRmVXdW5i?=
- =?utf-8?B?M2hMNGZrOGlvc0JsU3FsQURqNW9OMHNBanZ2L3d3U25WSDROTVpGbWNjekpE?=
- =?utf-8?B?clI3eHExMXdjdmUrc1E5YTIyejk0N3FyRGt1T2RQZ1ZUVG82YU1nREtIZHEr?=
- =?utf-8?B?WWN0M2ZKZlRpbEdpaE9TOHRyUm1WcjdsSWsxRGxDZWJNVzJna2xkSjhQQnBZ?=
- =?utf-8?B?TjlTN2lEczNHbUZuWW1EVHMxb3FseWhhT0JrRnRYMHh6enZ4eFBsRmFyaCt2?=
- =?utf-8?B?OG1ETFlVclhMVnRSV3c0elJGc1lvYWNiRUZVaG1wWUtkcW5KOXFWL2Q0OWpY?=
- =?utf-8?B?U1UzWENaS3dhWGJOQTI0STVsRG9JdlNYcWRsSEFrdVJ1RU5TSytjOThCTGFI?=
- =?utf-8?B?Y2orRkg5N1Y4b2JBbFNFQ3ptSkRCa2hSbUZQeHRSRTVPUkhVODJQKzdaMkIz?=
- =?utf-8?B?SUFxOU5YQWl0U0lyR29rR2pEWTZVdnFsTFRZNkpGdnQ0SEZya283REVlM0lp?=
- =?utf-8?B?OUJ1UyttVXBJenVCLzJzbVlNMWZQbGpYL0M3YjRKY3hHbGFGaWc0Wll2TW15?=
- =?utf-8?B?NXpwTXJuaTNvdVFWT3M3WUxmSDNlZEI0Snc0Q2hLWnN4VnRJN0xJc0p2OXVp?=
- =?utf-8?B?TG1sRTFsbFJtNzh5Q0J5VGovaFpkKzZuaGdvenNYNTN0RW11UjhoSm8vWnZP?=
- =?utf-8?B?eFBrVjZHaDB0Vm1CeUg1L1ZaTWFpYW0zYTB0Qm9OWi9ITEVqQUdxNFpMT3dG?=
- =?utf-8?B?S2tlcjRhVDFVZGVpOUxNKzZiUm1kekM2NklMLzZUZ0dVVlY5RmZ5V1Nab2w5?=
- =?utf-8?B?Y1NOd1Yyck9qeGEwOERzbW9BcmMzV0FEZVN3OTdVSmhCYjczOVlsa0V1amk4?=
- =?utf-8?B?RHpnUFVqeFNvb0kxMkpia1Y2bkpVOU9FNFI3SXIxVTRwd0ZNYmlZbFpYcTRy?=
- =?utf-8?B?UFo5RVJaNllyaDBqcnRlYytBSlZwc2pRTlkrRFlHM1ZMd2VQaDhMOGZjZmJX?=
- =?utf-8?B?bFIyUjdXZStGNmkzQUVoUzBiYXh4UkZYaGNRLzR0V2FHSE5seTMxMWNrbkVH?=
- =?utf-8?B?a0VDWkROc25ENWV3a3VKdW1RN0NGSTU4aFNyRm54c0JsYURRcnJqRHYyOHpT?=
- =?utf-8?B?MjYyU0h3NTlMZ1lUemlkRG9vZ1lvMTNOdElUalB1czVKOFFzdTRpWGZkOU0y?=
- =?utf-8?B?MmFmUGoxd1Nqa202aDd2UjJPZE9sVndtVDVjS3J4RnZZNlk0dG1zM3NhdkRx?=
- =?utf-8?B?bjVscTk1UWtaNFQ2NVFXT1BEdk9xN0pJVWx3eUthUUxyeDZnTlVKZWdnMTNs?=
- =?utf-8?B?SHc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 452f93ce-f06d-4ecb-dec7-08da8622dff2
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 22:49:17.2625
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hNhWvJIJby/wJnHxrPMCtGckbJ+JMFR8kyyM3IM+n/1m48sA4Ysb1b1jY0jZoZA1GnV6klgcfIEbBRSv9/x/fKNzUWi3otLkZ0JRF/QqWug=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3198
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
+ entries)
+Content-Language: en-US
+References: <YwQRKkmWqsf/Du6A@kernel.org>
+ <CADo9pHhW9w+ciNbQr+7u4mezuQ1USyh0k2Wshy=wkdEcxRiDLA@mail.gmail.com>
+ <YwY2mFuJP10dehRx@kernel.org>
+ <CADo9pHheRprMRAZkcxcALRv7gi8r+_CpNBP+LB4rt0n-_ZMQ4Q@mail.gmail.com>
+ <YwY3qEa2gFsPg2jz@kernel.org>
+ <CADo9pHhcw2+WEYfD=hJ-o67fw9Uf+ERS8xo2SHApNQgPwGCmBA@mail.gmail.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Luna Jernberg <droidbittin@gmail.com>
+Cc:     dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alibek Omarov <a1ba.omarov@gmail.com>,
+        Kornilios Kourtis <kornilios@isovalent.com>,
+        Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
+From:   Martin Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <CADo9pHhcw2+WEYfD=hJ-o67fw9Uf+ERS8xo2SHApNQgPwGCmBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,46 +86,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/2022 2:42 PM, Sean Christopherson wrote:
-> On Tue, Aug 23, 2022, Chang S. Bae wrote:
->> == Background ==
->>
->> A set of architecture-specific prctl() options offer to control dynamic
->> XSTATE components in VCPUs. Userspace VMMs may interact with the host using
->> ARCH_GET_XCOMP_GUEST_PERM and ARCH_REQ_XCOMP_GUEST_PERM.
->>
->> However, they are separated from the KVM API. KVM may select features that
->> the host supports and advertise them through the KVM_X86_XCOMP_GUEST_SUPP
->> attribute.
->>
->> == Problem ==
->>
->> QEMU [1] queries the features through the KVM API instead of using the x86
->> arch_prctl() option. But it still needs to use arch_prctl() to request the
->> permission. Then this step may become fragile because it does not guarantee
->> to comply with the KVM policy.
+On 8/24/22 11:38, Luna Jernberg wrote:
+> https://forum.endeavouros.com/t/failed-to-start-load-kernel-modules-on-boot-after-system-update-nvidia/30584/17?u=sradjoker
 > 
-> But backdooring through KVM doesn't prevent usersepace from walking in through
-> the front door (arch_prctl()), i.e. this doesn't protect the kernel in any way.
+> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
+>> Em Wed, Aug 24, 2022 at 04:36:18PM +0200, Luna Jernberg escreveu:
+>>> The Nvidia driver breaks
+>>
+>> How? What are the messages?
+>>
+>> Here is a test on an Archlinux container:
+>>
+>> [perfbuilder@758097c04011 dwarves-1.24]$ pahole --version
+>> v1.24
+>> [perfbuilder@758097c04011 dwarves-1.24]$ cat /etc/os-release
+>> NAME="Arch Linux"
+>> PRETTY_NAME="Arch Linux"
+>> ID=arch
+>> BUILD_ID=rolling
+>> VERSION_ID=TEMPLATE_VERSION_ID
+>> ANSI_COLOR="38;2;23;147;209"
+>> HOME_URL="https://archlinux.org/"
+>> DOCUMENTATION_URL="https://wiki.archlinux.org/"
+>> SUPPORT_URL="https://bbs.archlinux.org/"
+>> BUG_REPORT_URL="https://bugs.archlinux.org/"
+>> LOGO=archlinux-logo
+>> [perfbuilder@758097c04011 dwarves-1.24]$ pahole list_head
+>> struct list_head {
+>> 	struct list_head *         next;                 /*     0     8 */
+>> 	struct list_head *         prev;                 /*     8     8 */
+>>
+>> 	/* size: 16, cachelines: 1, members: 2 */
+>> 	/* last cacheline: 16 bytes */
+>> };
+>> [perfbuilder@758097c04011 dwarves-1.24]$ pahole --sizes | sort -k2 -nr |
+>> head
+>> rcu_state	300608	7
+>> cmp_data	290904	1
+>> dec_data	274520	1
+>> cpu_entry_area	241664	0
+>> kvm	190016	6
+>> pglist_data	173440	6
+>> ZSTD_DCtx_s	161480	6
+>> saved_cmdlines_buffer	131104	1
+>> debug_store_buffers	131072	0
+>> hid_parser	110848	1
+>> [perfbuilder@758097c04011 dwarves-1.24]$
+>>
+>>> On 8/24/22, Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com> wrote:
+>>>> Em Wed, Aug 24, 2022 at 03:23:29PM +0200, Luna Jernberg escreveu:
+>>>>> This package breaks on Arch Linux at the moment and if you are using
+>>>>> Arch
+>>>>> its recommended that you downgrade to 1.23
+>>>>
+>>>> Breaks in what sense? Can you please provide details?
+>>>>
+>>>> - Arnaldo
+>>>>
+>>>>> On Tue, Aug 23, 2022 at 1:59 AM Arnaldo Carvalho de Melo
+>>>>> <acme@kernel.org>
+>>>>> wrote:
+>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>>         The v1.24 release of pahole and its friends is out, with
+>>>>>> faster
+>>>>>> BTF generation by parallelizing the encoding part in addition to the
+>>>>>> previoulsy parallelized DWARF loading, support for 64-bit BTF
+>>>>>> enumeration
+>>>>>> entries, signed BTF encoding of 'char', exclude/select DWARF loading
+>>>>>> based on the language that generated the objects, etc.
+>>>>>>
+>>>>>> Main git repo:
+>>>>>>
+>>>>>>    git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+>>>>>>
+>>>>>> Mirror git repo:
+>>>>>>
+>>>>>>    https://github.com/acmel/dwarves.git
+>>>>>>
+>>>>>> tarball + gpg signature:
+>>>>>>
+>>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.xz
+>>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.bz2
+>>>>>>    https://fedorapeople.org/~acme/dwarves/dwarves-1.24.tar.sign
+>>>>>>
+>>>>>>         Thanks a lot to all the contributors and distro packagers,
+>>>>>> you're
+>>>>>> on the
+>>>>>> CC list, I appreciate a lot the work you put into these tools,
+>>>>>>
+>>>>>> Best Regards,
+>>>>>>
+>>>>>> BTF encoder:
+>>>>>>
+>>>>>> - Add support to BTF_KIND_ENUM64 to represent enumeration entries
+>>>>>> with
+>>>>>>   more than 32 bits.
+>>>>>>
+>>>>>> - Support multithreaded encoding, in addition to DWARF multithreaded
+>>>>>>   loading, speeding up the process.
+>>>>>>
+>>>>>>   Selected just like DWARF multithreaded loading, using the 'pahole
+>>>>>> -j'
+>>>>>>   option.
+>>>>>>
+>>>>>> - Encode 'char' type as signed.
+>>>>>>
+>>>>>> BTF Loader:
+>>>>>>
+>>>>>> - Add support to BTF_KIND_ENUM64.
+>>>>>>
+>>>>>> pahole:
+>>>>>>
+>>>>>> - Introduce --lang and --lang_exclude to specify the language the
+>>>>>>   DWARF compile units were originated from to use or filter.
+>>>>>>
+>>>>>>   Use case is to exclude Rust compile units while aspects of the
+>>>>>>   DWARF generated for it get sorted out in a way that the kernel
+>>>>>>   BPF verifier don't refuse loading the BTF generated from them.
+>>>>>>
+>>>>>> - Introduce --compile to generate compilable code in a similar
+>>>>>> fashion
+>>>>>> to:
+>>>>>>
+>>>>>>    bpftool btf dump file vmlinux format c > vmlinux.h
+>>>>>>
+>>>>>>   As with 'bpftool', this will notice type shadowing, i.e. multiple
+>>>>>> types
+>>>>>>   with the same name and will disambiguate by adding a suffix.
+>>>>>>
+>>>>>> - Don't segfault when processing bogus files.
+>>>>>>
+>>>>
+>>>> --
+>>>>
+>>>> - Arnaldo
+>>>>
+>>
+>> --
+>>
+>> - Arnaldo
+>>
 
-No, I don't think backdooring is established in this proposal. The body 
-of the arch_prctl() support is encapsulated inside of the x86 core code. 
-KVM is simply calling it like arch_prctl() does.
+Can you try a build of the kernel or the by passing the
+--skip_encoding_btf_enum64 to scripts/pahole-flags.sh?
 
-> KVM needs to ensure that _KVM_ doesn't screw up and let userspace use features
-> that KVM doesn't support.  The kernel's restrictions on using features goes on
-> top, i.e. KVM must behave correctly irrespective of kernel restrictions.
+Here's a patch for either in tree scripts/pahole-flags.sh or
+/usr/lib/modules/5.19.3-arch1-1/build/scripts/pahole-flags.sh
 
-Maybe this is a policy decision. I don't think that 
-ARCH_REQ_XCOMP_GUEST_PERM goes away with this. Userspace may still use 
-the arch_prctl() set. But then it makes more sense and consistent to use 
-ARCH_GET_XCOMP_SUPP in first place, instead of KVM_X86_XCOMP_GUEST_SUPP, no?
+diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+index 0d99ef17e4a528..1f1f1d397c399a 100755
+--- a/scripts/pahole-flags.sh
++++ b/scripts/pahole-flags.sh
+@@ -19,5 +19,9 @@ fi
+ if [ "${pahole_ver}" -ge "122" ]; then
+ 	extra_paholeopt="${extra_paholeopt} -j"
+ fi
++if [ "${pahole_ver}" -ge "124" ]; then
++	# see PAHOLE_HAS_LANG_EXCLUDE
++	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_enum64"
++fi
 
-> If QEMU wants to assert that it didn't misconfigure itself, it can assert on the
-> config in any number of ways, e.g. assert that ARCH_GET_XCOMP_GUEST_PERM is a
-> subset of KVM_X86_XCOMP_GUEST_SUPP at the end of kvm_request_xsave_components().
+ echo ${extra_paholeopt}
 
-Yes, but I guess the new attribute can make it simple.
-
-Thanks,
-Chang
+- Martin Rodriguez Reboredo

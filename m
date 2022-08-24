@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2128659F5EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F7159F5E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiHXJKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S235501AbiHXJH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234852AbiHXJKk (ORCPT
+        with ESMTP id S233772AbiHXJHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:10:40 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D9B3FA02
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:10:39 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id e4so12391052qvr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=qp5U4hlmW1coNM2H6xZQ1GZizUdeX5ho/eYaDjMVqY0=;
-        b=esvYOuK4gh+mq2fW9go+4DjZ7T6fOpQzZkckuZ5y9mpQtZSUJri1HxYNVcDhsWD1aC
-         LIDLhIs0sZMkpuw50YoGBx+5PlpbDGD4OeEGytcOOy/SrK2OTBE6i8y4GG+QEhkoTpgU
-         jv72bkrJrln2HawFU4ZLdoeCFxMJSKbitk4yZgEHrLdgh+tMkWWqj1wIx7P3Vk+qp8Gx
-         PvL9zdqx5uORFYM8H0KnnE8IGf31GakqCrrfr1MnS6oGfA2wSJUBPmlHejUySP1C9ja6
-         WkAqd5/ZH0Eu639lwkjg19vdGPF9ahGqtCX6Rjz4t4UjA+ASsUXQ0nhC3VRU5tR0TOj0
-         7BMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=qp5U4hlmW1coNM2H6xZQ1GZizUdeX5ho/eYaDjMVqY0=;
-        b=d8WeiQlhs4iV9wHCz7bMfkeIado+wzijSFGVg07joxtuAjX4VKPFSu4sOXV0b/pBuK
-         a/z4nkJnmFpTL25gtZK9L3lwTTLtaHrkikb9YpfY4pavOg+7W7XkirRfOUKgVT6RzkwM
-         vN+vqhL0yNvTcfGXQhsKMAX5r7bDrgZn3u1k1pQB58Og5VQ5VbFSK9y/oMYTeScmeGHC
-         WVg9hBKykj4sNQgi6+kr12XSB4h75SE0Rq+x5dqcg6Kj9HQWs5RdN/hTv2jgJv4p/qkM
-         l8n/J+uYH+rRumN2wx0zdUrla6pQakSNUZCLRhqNRR/vQ2nbP8ryrKgLlookCiL2BCEW
-         AzVQ==
-X-Gm-Message-State: ACgBeo1tEPUQVZM7b6rSkKkzds7vy76yLT1Wr4pDiS7EL5cAm0K0lmlB
-        8olvvN/DJe9z0aR6HoZ8T9D5vUyo5q8ZFivkn/M=
-X-Google-Smtp-Source: AA6agR759TYd8NsABjdqIgQwmehgtiJHxZzljv9De4C9FMXY1pb6lH4ffUQZhTN72SxIF9dwqjYCHyMBlmCnFXT0IPA=
-X-Received: by 2002:ad4:5baf:0:b0:476:6a9e:b5e1 with SMTP id
- 15-20020ad45baf000000b004766a9eb5e1mr23122067qvq.64.1661332238224; Wed, 24
- Aug 2022 02:10:38 -0700 (PDT)
+        Wed, 24 Aug 2022 05:07:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBC37647E;
+        Wed, 24 Aug 2022 02:07:22 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MCKs21WJ9zkWPl;
+        Wed, 24 Aug 2022 17:03:50 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
+ 2022 17:07:19 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next] net: sched: remove unnecessary init of qidsc skb head
+Date:   Wed, 24 Aug 2022 17:10:03 +0800
+Message-ID: <20220824091003.15935-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220824012624.2826445-1-yury.norov@gmail.com> <20220824012624.2826445-2-yury.norov@gmail.com>
-In-Reply-To: <20220824012624.2826445-2-yury.norov@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 24 Aug 2022 12:10:02 +0300
-Message-ID: <CAHp75VcB08oTrB8R9Zyo4Ja=c_XqybqdCw46fY4_MNqvSSCtLQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] lib/find_bit: introduce FIND_FIRST_BIT() macro
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dennis Zhou <dennis@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 4:51 AM Yury Norov <yury.norov@gmail.com> wrote:
->
-> Now that we have many flavors of find_first_bit(), and expect even more,
-> it's better to have one macro that generates optimal code for all and makes
-> maintaining of slightly different functions simpler.
->
-> The logic common to all versions is moved to the new macro, and all the
-> flavors are generated by providing an EXPRESSION macro-parameter, like
-> in this example:
->
->   #define FIND_FIRST_BIT(EXPRESSION, size) ...
->
->   find_first_ornot_and_bit(addr1, addr2, addr3, size)
->   {
->         return FIND_NEXT_BIT(addr1[idx] | ~addr2[idx] & addr3[idx], size);
->   }
->
-> The EXPRESSION may be of any complexity, as soon as it only refers
-> the bitmap(s) and an iterator idx.
->
-> The 'word_op' is here to allow the macro to generate code for _le
-> versions on big-endian machines; used in the following patches.
+The memory allocated by using kzallloc_node and kcalloc has been cleared.
+Therefore, the structure members of the new qdisc are 0. So there's no
+need to explicitly assign a value of 0.
 
-...
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ include/net/sch_generic.h | 7 -------
+ net/sched/sch_generic.c   | 1 -
+ net/sched/sch_htb.c       | 2 --
+ 3 files changed, 10 deletions(-)
 
-> +#ifndef word_op
-> +#define word_op
-> +#endif
-
-Not sure about the naming without namespace. Perhaps __ffs_word_op?
-
-> +#define FIND_FIRST_BIT(EXPRESSION, size)                                       \
-> +({                                                                             \
-> +       unsigned long idx, val, sz = (size);                                    \
-> +                                                                               \
-> +       for (idx = 0; idx * BITS_PER_LONG < sz; idx++) {                        \
-
-I think we can do slightly better:
-
-for (unsigned long idx = 0; idx < sz; idx += BITS_PER_LONG) {
-  unsigned long val;
-
-> +               val = (EXPRESSION);                                             \
-> +               if (val) {                                                      \
-> +                       sz = min(idx * BITS_PER_LONG + __ffs(word_op(val)), sz);\
-
-sz = min(idx + __ffs(...));
-
-> +                       break;                                                  \
-> +               }                                                               \
-> +       }                                                                       \
-> +                                                                               \
-> +       sz;                                                                     \
-> +})
-
-
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index ec693fe7c553..dcdb8474ed68 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -940,13 +940,6 @@ static inline void qdisc_purge_queue(struct Qdisc *sch)
+ 	qdisc_tree_reduce_backlog(sch, qlen, backlog);
+ }
+ 
+-static inline void qdisc_skb_head_init(struct qdisc_skb_head *qh)
+-{
+-	qh->head = NULL;
+-	qh->tail = NULL;
+-	qh->qlen = 0;
+-}
+-
+ static inline void __qdisc_enqueue_tail(struct sk_buff *skb,
+ 					struct qdisc_skb_head *qh)
+ {
+diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+index d47b9689eba6..0c0f20f7b9f5 100644
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -941,7 +941,6 @@ struct Qdisc *qdisc_alloc(struct netdev_queue *dev_queue,
+ 		goto errout;
+ 	__skb_queue_head_init(&sch->gso_skb);
+ 	__skb_queue_head_init(&sch->skb_bad_txq);
+-	qdisc_skb_head_init(&sch->q);
+ 	gnet_stats_basic_sync_init(&sch->bstats);
+ 	spin_lock_init(&sch->q.lock);
+ 
+diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
+index 23a9d6242429..f43414e42ad5 100644
+--- a/net/sched/sch_htb.c
++++ b/net/sched/sch_htb.c
+@@ -1106,8 +1106,6 @@ static int htb_init(struct Qdisc *sch, struct nlattr *opt,
+ 	if (err < 0)
+ 		goto err_free_direct_qdiscs;
+ 
+-	qdisc_skb_head_init(&q->direct_queue);
+-
+ 	if (tb[TCA_HTB_DIRECT_QLEN])
+ 		q->direct_qlen = nla_get_u32(tb[TCA_HTB_DIRECT_QLEN]);
+ 	else
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+

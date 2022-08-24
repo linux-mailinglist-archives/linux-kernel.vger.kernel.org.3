@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF1659FC53
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329DB59FC6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237296AbiHXNz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S232039AbiHXN5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238374AbiHXNyw (ORCPT
+        with ESMTP id S238152AbiHXNyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:54:52 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B629F7E317
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:53:09 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id b9so12684941qka.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:53:09 -0700 (PDT)
+        Wed, 24 Aug 2022 09:54:53 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C25185AA1;
+        Wed, 24 Aug 2022 06:53:25 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id l23so5457538lji.1;
+        Wed, 24 Aug 2022 06:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=aFrzc4EVs8mhahc/oN0YA6pJviRrO2jnMiLvsQfb3cc=;
-        b=VWSPsIfCI2hMtcLYQCa6GqkdGrz11Kq+elD+EN2F87F5Ym6+VrE3F85UaQmPd11Qyz
-         ZVprzh7JYHisIXpXZipnPqtWyRQMsJ+DCbV1R3pEBSww241ppbNHeHjUu0r6TqZpvTw4
-         /pAeZHe1BpQUKzXrmAGLWhO75a4dPzA6yO1peC/fxNFV9ekJcykFThOMGx1yjkCj2wLF
-         iTbQ5bNlYKBDbKCt81npIQ9mUh7gLL7s6urhohFn+UwEyrmuEGmDyiJiQ/X4n6cWpp/R
-         +uYd0XLweIfQ0JOFpJVOnteTztIZIWnLPCxsigpe3DFWcBGcIKRE/US5UKxiGEtuB1UV
-         m+xA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=+00v8/E5qk1yIDkZWdbSORfSXrpxHk75ngoT4usDJks=;
+        b=glXo7h1wsPI13hRWOMz20kLzJTYz7GZS3cDQv1yW2PT6lIxGH1geTSHQM0kQOdOxgM
+         WQmBfcxvUIAqg1XbeVw5/0FyXGfS4DCU/s7gJhuDoXLRXbhEqAgAdy076KEMq7JS3EDq
+         yYuykppwoRJEmIPaKMjX9LucwxbuZK2wwu+9qw7ruP6t3bgfHe3GezbX2fLONAMZ/1l5
+         ZjWKHvbtljDOkl7fol0JThcRbPHFuKX8L/rg/okhpB5/HpTYnQzWNEPyXZQ8C7Z1crUD
+         a0shqzhTMlaxmi4n7C88Hi6eMvg9QJOVrW4S27SyeZ7LGJy+vAEFKUmq2IpNl06nhpbz
+         FxoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=aFrzc4EVs8mhahc/oN0YA6pJviRrO2jnMiLvsQfb3cc=;
-        b=p2xsj9K6KonG6G11FwP6IB4FfEOYq6uKtP9tnxgnLzY0opr/aJnCwRHZ22ZlePb69n
-         fuu8T3FUIPKyyCu4M0ofE4taRu6GQRl19ImQU6+H9d6SSg+kRuiaAdiuVHWNXlH4NpNg
-         2IUhE0EL2E75yguqYdKu1U4vsIn7wSsv4OQY/heSgbwDXKFUcVO2WdfKFAWEzeEFi1K7
-         u71sPPtBtP1Dc7aT8IbFrzElrhrcm2mvjlaA+R8fFN+embYdmThEyjjs+bCYq5c6gJPZ
-         GbMQ17PJPe0vl4U4wbz5Tr7LTtaK8nEcxnRB0Sj2eTQiVCUPwHWm0Dy29B2cBkK1hsfl
-         wx1Q==
-X-Gm-Message-State: ACgBeo2hcsTmCvOVL5jkxjfueoTQq91IMYaDVHYDICeeU0J/LK4wSU1N
-        ca+lFNt+UKe/nGOugWUoRFs=
-X-Google-Smtp-Source: AA6agR6MoGegyBt+MHW+c4UIxqrzRTEZyoEdKTB8Qv8cLYpWehLoDfRE7/rpaGsRbqiBUj/pv/Bfxw==
-X-Received: by 2002:a05:620a:573:b0:6bb:2865:e3cc with SMTP id p19-20020a05620a057300b006bb2865e3ccmr20021125qkp.15.1661349188761;
-        Wed, 24 Aug 2022 06:53:08 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:5a54:d9d9:c2a4:527e])
-        by smtp.gmail.com with ESMTPSA id n18-20020a05620a295200b006b9593e2f68sm16835404qkp.4.2022.08.24.06.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 06:53:08 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 06:53:07 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dennis Zhou <dennis@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Subject: Re: [PATCH v2 3/3] lib/find_bit: optimize find_next_bit() functions
-Message-ID: <YwYtQ7t+3grPF16n@yury-laptop>
-References: <20220824012624.2826445-1-yury.norov@gmail.com>
- <20220824012624.2826445-4-yury.norov@gmail.com>
- <CAHp75Ve4QTSs_mSB7uMqOK4q+A-z-O1tc2k5=2qaRHTdAC3yog@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+00v8/E5qk1yIDkZWdbSORfSXrpxHk75ngoT4usDJks=;
+        b=wFLVXx6+y3v/heJizzB4x9EGsdlN7furFpc2DGrM1jbVKh+LXuyvBOpc+NN3aSvMCe
+         6xzmpBbLgueFRBscMGE2yYMPiU6ThPg5GVMVrjteu1Z+YJEhbZ18g54Tw/dpJtvoIJq6
+         9SGSqdqd04uMfiiVovLH2DIGMb+yMzCG1gQbzGRxP9sjkh88+nsNHOW1MLT0Hicg6IFr
+         pBLsWwIYoa4sBVwtMDZ307ys45Ud8QyD4Ema2TL9nL8dzi2yxINYjwkTEs/3oxi7QZcA
+         coBr5Z6DuQVbvstHISPSsxsjx6X5+jYOT/N7cEYflkPw+0X2yrlxGtSWOpyQXcuZJ7IZ
+         m5nw==
+X-Gm-Message-State: ACgBeo3P39ol28iDYzNm8eUALjGroUd5En0su45gPjcA9EZTA8f8nHYl
+        XRrPc63YWCRVk4qt25ZTiRJSTvLS9Uvi66ZzdQ==
+X-Google-Smtp-Source: AA6agR796Vc7t3+Eq4HsjuvtQEqpwVsDpz0JZ7uhhfRDt19W8t8FnNDynkT3KJj7m42/JlX/ty0HVA+4ivKYqw1QnFc=
+X-Received: by 2002:a2e:8250:0:b0:261:e2db:f6a5 with SMTP id
+ j16-20020a2e8250000000b00261e2dbf6a5mr718381ljh.261.1661349202581; Wed, 24
+ Aug 2022 06:53:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Ve4QTSs_mSB7uMqOK4q+A-z-O1tc2k5=2qaRHTdAC3yog@mail.gmail.com>
+References: <20220822021520.6996-1-kernelfans@gmail.com> <20220822021520.6996-7-kernelfans@gmail.com>
+ <20220822024528.GC6159@paulmck-ThinkPad-P17-Gen-1> <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
+ <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1>
+From:   Pingfan Liu <kernelfans@gmail.com>
+Date:   Wed, 24 Aug 2022 21:53:11 +0800
+Message-ID: <CAFgQCTup0uTqnKi79Tu+5Q0POYVdcE4UkGes8KfHXBd6VR552A@mail.gmail.com>
+Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Price <steven.price@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, boqun.feng@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,83 +80,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:19:05PM +0300, Andy Shevchenko wrote:
-> On Wed, Aug 24, 2022 at 4:56 AM Yury Norov <yury.norov@gmail.com> wrote:
+On Tue, Aug 23, 2022 at 11:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Tue, Aug 23, 2022 at 09:50:56AM +0800, Pingfan Liu wrote:
+> > On Sun, Aug 21, 2022 at 07:45:28PM -0700, Paul E. McKenney wrote:
+> > > On Mon, Aug 22, 2022 at 10:15:16AM +0800, Pingfan Liu wrote:
+> > > > In order to support parallel, rcu_state.n_online_cpus should be
+> > > > atomic_dec()
+> > > >
+> > > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> > >
+> > > I have to ask...  What testing have you subjected this patch to?
+> > >
 > >
-> > Over the past couple years, the function _find_next_bit() was extended
-> > with parameters that modify its behavior to implement and- zero- and le-
-> > flavors. The parameters are passed at compile time, but current design
-> > prevents a compiler from optimizing out the conditionals.
-> >
-> > As find_next_bit() API grows, I expect that more parameterss will be added.
-> 
-> parameters
-> 
-> > Current designs would require more conditional code in _find_next_bit(),
-> > which would bloat the helper even more and make it barely readable.
-> >
-> > This patch replaces _find_next_bit() with a macro FIND_NEXT_BIT, and adds
-> > a set of wrappers, so that the compile-time optimization becomes possible.
-> >
-> > The common logic is moved to the new macro, and all flavors may be
-> > generated by providing an EXPRESSION macro parameter, like in this example:
-> >
-> >   #define FIND_NEXT_BIT(EXPRESSION, size, start) ...
-> >
-> >   find_next_xornot_and_bit(addr1, addr2, addr3, size, start)
-> >   {
-> >         return FIND_NEXT_BIT(addr1[idx] ^ ~addr2[idx] & addr3[idx], size, start);
-> >   }
-> >
-> > The EXPRESSION may be of any complexity, as soon as it only refers
-> > the bitmap(s) and an iterator idx.
-> 
-> ...
-> 
-> > +#define FIND_NEXT_BIT(EXPRESSION, size, start)                                 \
-> > +({                                                                             \
-> > +       unsigned long mask, idx, tmp, sz = (size), __start = (start);           \
-> > +                                                                               \
-> > +       if (unlikely(__start >= sz))                                            \
-> > +               goto out;                                                       \
-> > +                                                                               \
-> > +       mask = word_op(BITMAP_FIRST_WORD_MASK(__start));                        \
-> > +       idx = __start / BITS_PER_LONG;                                          \
-> > +                                                                               \
-> > +       for (tmp = (EXPRESSION) & mask; !tmp; tmp = (EXPRESSION)) {             \
-> 
-> for (unsigned long tmp ...;
-> But hey, why not loop over idx (which probably should be named as
-> offset)
+> > This patch subjects to [1]. The series aims to enable kexec-reboot in
+> > parallel on all cpu. As a result, the involved RCU part is expected to
+> > support parallel.
+>
+> I understand (and even sympathize with) the expectation.  But results
+> sometimes diverge from expectations.  There have been implicit assumptions
+> in RCU about only one CPU going offline at a time, and I am not sure
+> that all of them have been addressed.  Concurrent CPU onlining has
+> been looked at recently here:
+>
+> https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
+>
+> You did us atomic_dec() to make rcu_state.n_online_cpus decrementing be
+> atomic, which is good.  Did you look through the rest of RCU's CPU-offline
+> code paths and related code paths?
+>
 
-Offset in structure, index in array, isn't?
+I went through those codes at a shallow level, especially at each
+cpuhp_step hook in the RCU system.
 
-> as I proposed in the first patch? You will drop a lot of
-> divisions / multiplications, no?
+But as you pointed out, there are implicit assumptions about only one
+CPU going offline at a time, I will chew the google doc which you
+share.  Then I can come to a final result.
 
-Those divisions and multiplications are optimized away, and
-what you suggested blows up the EXPRESSION.
+> > [1]: https://lore.kernel.org/linux-arm-kernel/20220822021520.6996-3-kernelfans@gmail.com/T/#mf62352138d7b040fdb583ba66f8cd0ed1e145feb
+>
+> Perhaps I am more blind than usual today, but I am not seeing anything
+> in this patch describing the testing.  At this point, I am thinking in
+> terms of making rcutorture test concurrent CPU offlining parallel
+>
 
-I tried like this:
-   mask = word_op(BITMAP_FIRST_WORD_MASK(__start));
-   idx = __start / BITS_PER_LONG;
-   tmp = (EXPRESSION);
+Yes, testing results are more convincing in this area.
 
-   while (1) {
-        if (tmp) {
-               sz = min(idx * BITS_PER_LONG + __ffs(word_op(tmp)), sz);
-               break;
-        }
+After making clear the implicit assumptions, I will write some code to
+bridge my code and rcutorture test. Since the series is a little
+different from parallel cpu offlining. It happens after all devices
+are torn down, and there is no way to rollback.
 
-        if (++idx > sz)
-                break;
+> Thoughts?
+>
 
-        tmp = (EXPRESSION);
-   } 
+Need a deeper dive into this field. Hope to bring out something soon.
 
-And it generated the same code, but looks less expressive to me.
-If you have some elegant approach in mind - can you please share
-it, and how the generated code looks?
 
 Thanks,
-Yury
+
+    Pingfan

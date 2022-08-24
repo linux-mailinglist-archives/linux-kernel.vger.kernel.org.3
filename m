@@ -2,92 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416555A0176
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D230F5A017E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238780AbiHXSjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S239040AbiHXSmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiHXSja (ORCPT
+        with ESMTP id S232226AbiHXSmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:39:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9BD7A753;
-        Wed, 24 Aug 2022 11:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661366369; x=1692902369;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6kllcoGLd/oieDxknGPqnzJ+0To7+vbTJBdPwvBOljE=;
-  b=M7ENKBMQDD1FW5ddXRfe+edPxyamqJe2x3qv+8nhmjxk+jzs0XWcz4p3
-   qjkfSNL7lfbkgsy3zAajy+0Wjz19EsZ14axL58zTZziZXcccnr/z+GpLz
-   hKB3jBWP79Pt6U/gaxTmOaDp+o3HWiO4rE2SmpVMHBgZwcuKbhW9+orLZ
-   gmkJFECOfKAVUSGPRtBvaOAgkZlbBYkh9tFCHvLWKXHDMg+Dn7tVvICzT
-   Rz235V0wkbINRFxDh3aDgqJIkM1Ls1DOwoyxilfHFHKIcCjqH+NzSAZDM
-   kuWWSGHLzmuJ3+0G93lLByHBbxqhyp7zXR9rTmrxBzoyXZeD5wbM6Xo+H
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="292791530"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="292791530"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 11:39:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="938021111"
-Received: from skeshri-mobl.ger.corp.intel.com (HELO [10.212.154.182]) ([10.212.154.182])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 11:39:20 -0700
-Message-ID: <4414b911-80a1-beec-a402-2966f93d9670@intel.com>
-Date:   Wed, 24 Aug 2022 11:39:20 -0700
+        Wed, 24 Aug 2022 14:42:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B49C78588
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661366535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=34X7VFt8V3iE8XwzbGfHOBsqTvNr4hGuESvVJPfwn4E=;
+        b=cOsCUrGLY+6BDCvLOkPFFtsFWQ7kkMG2YmwlXhNC2peMksTWPjK94r3yv6PyVGDQRt4uk5
+        HLlm6F6qnJ03X97OOQfOJeZlotxUmLFuXWiVhwBKjPDOLByGDk0sal5PWrUHvCmpqKMopj
+        bR9eUdwZBTe02bCMD5vJUOFFb15pGo8=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-125-fPBSSi3GNBiLF0zWZZiFRw-1; Wed, 24 Aug 2022 14:42:13 -0400
+X-MC-Unique: fPBSSi3GNBiLF0zWZZiFRw-1
+Received: by mail-qt1-f197.google.com with SMTP id k9-20020ac80749000000b0034302b53c6cso13654297qth.22
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:42:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=34X7VFt8V3iE8XwzbGfHOBsqTvNr4hGuESvVJPfwn4E=;
+        b=INS/zzSIvGl4+HYYxklkmXSLP5KRxXlDYXc4XHSnpOFUg8yYfxjOOY0sW0WIEIqX31
+         s/KU6oWPrwyLOeOqmqNLJKghkNzn2lrw05PpHLX6sE7d8QpwY99A9HardSxlsds8vssn
+         8xTiOEQpc1bvgCjkfeo2GrylI+WOLcGsGWvQ+S3um4jYXaULMVPHRtAXB4DBfvtV6DpT
+         dlNB/txmQ0BLnGZhGPmuEod+8oIYbHfKIu00RzP6tKlp+bCUN71GjAJaFRRLFsT4RGEq
+         K8TclsjC3iwesjiV0FbMIStOVNAmHBbUPZOzZ4nzYrcAov9C5LRY64pIzMISq/1fk7g6
+         8urQ==
+X-Gm-Message-State: ACgBeo06QLpx11e6yCznMvcXuum1ELFyW3jCwmW/F6lOiCyN6ZchueUG
+        5KsfQcgT0xAl0vSBV9D3Q8vFXZSg2hCU91LPoLYveS4k779+F5ZTyx3njMd1TihtsL4xMeNmIRC
+        mFJazuZhA00pno/rexI8Vp5KB
+X-Received: by 2002:a37:952:0:b0:6ba:37c6:12ec with SMTP id 79-20020a370952000000b006ba37c612ecmr472051qkj.331.1661366533530;
+        Wed, 24 Aug 2022 11:42:13 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6zZO3JsIuYFh83voDv4+f19vJAN66uxS7OW65PV5Ygvr7CcBVHQ5XqJSy6pDjQP2Ne3PP31Q==
+X-Received: by 2002:a37:952:0:b0:6ba:37c6:12ec with SMTP id 79-20020a370952000000b006ba37c612ecmr472042qkj.331.1661366533349;
+        Wed, 24 Aug 2022 11:42:13 -0700 (PDT)
+Received: from [192.168.1.52] (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id r25-20020ae9d619000000b006bb2f555ba4sm15216878qkk.41.2022.08.24.11.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 11:42:12 -0700 (PDT)
+Message-ID: <38e416b47bb30fa161e52f24ecbcf95015480fed.camel@redhat.com>
+Subject: Re: [PATCH v2] dmaengine: idxd: avoid deadlock in
+ process_misc_interrupts()
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Dave Jiang <dave.jiang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Date:   Wed, 24 Aug 2022 11:42:11 -0700
+In-Reply-To: <223e5a43-95a5-da54-0ff7-c2e088a072e3@intel.com>
+References: <20220823162435.2099389-1-jsnitsel@redhat.com>
+         <20220823163709.2102468-1-jsnitsel@redhat.com>
+         <905d3feb-f75b-e91c-f3de-b69718aa5c69@intel.com>
+         <20220824005435.jyexxvjxj3z7tc2f@cantor>
+         <223e5a43-95a5-da54-0ff7-c2e088a072e3@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
- ksgxd+0x1b7/0x1d0
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
- <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
- <46e3483b-a5ab-2a05-8a28-f9ea87e881c3@intel.com>
- <04c9d5fa-5861-bbc3-3e2f-e18a73866645@molgen.mpg.de>
- <63a60042-4a4a-3bc3-5fa1-4495d80cc06c@molgen.mpg.de>
- <beabe16c-b28b-cd65-f6b6-4242bc74926d@intel.com>
- <33c2a495-13ad-97ac-f2c2-4096cf8f5b58@molgen.mpg.de>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <33c2a495-13ad-97ac-f2c2-4096cf8f5b58@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 15:33, Paul Menzel wrote:
->> Thanks for the extra debug info.  Unfortunately, nothing is really
->> sticking out as an obvious problem.
->>
->> The EREMOVE return codes would be interesting to know, as well as an
->> idea what the physical addresses are that fail and the _counts_ of how
->> many pages get sanitized versus fail.
-> 
-> Is there a knob to print out this information? Or way to get this
-> information using ftrace? I’d like to avoid rebuilding the Linux kernel.
+On Wed, 2022-08-24 at 10:45 -0700, Dave Jiang wrote:
+>=20
+> On 8/23/2022 5:54 PM, Jerry Snitselaar wrote:
+> > On Tue, Aug 23, 2022 at 09:46:19AM -0700, Dave Jiang wrote:
+> > > On 8/23/2022 9:37 AM, Jerry Snitselaar wrote:
+> > > > idxd_device_clear_state() now grabs the idxd->dev_lock
+> > > > itself, so don't grab the lock prior to calling it.
+> > > >=20
+> > > > This was seen in testing after dmar fault occurred on system,
+> > > > resulting in lockup stack traces.
+> > > >=20
+> > > > Cc: Fenghua Yu <fenghua.yu@intel.com>
+> > > > Cc: Dave Jiang <dave.jiang@intel.com>
+> > > > Cc: Vinod Koul <vkoul@kernel.org>
+> > > > Cc: dmaengine@vger.kernel.org
+> > > > Fixes: cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on
+> > > > device driver removal")
+> > > > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > > Thanks Jerry!
+> > >=20
+> > > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> > >=20
+> > I noticed another problem while looking at this. When the device
+> > ends
+> > up in the halted state, and needs an flr or system reset, it calls
+> > idxd_wqs_unmap_portal(). Then if you do a modprobe -r idxd, you hit
+> > the WARN_ON in devm_iounmap(), because the remove code path calls
+> > idxd_wq_portal_unmap(), and wq->portal is null. I'm not sure if it
+> > just needs a simple sanity check in drv_disable_wq() to avoid the
+> > call
+> > in the case that it has already been unmapped, or if more cleanup
+> > needs to be done, and possibly a state to differentiate between
+> > halted + soft reset possible, versus halted + flr or system reset
+> > needed.=C2=A0 You get multiple "Device is HALTED" messages during the
+> > removal as well.
+>=20
+> Thanks!
+>=20
+> Fenghua, can you please take a look at this when you have a chance?=20
+> Thank you!
+>=20
+>=20
 
-You can probably do it with a kprobe and ftrace, but it's a little bit
-of a pain since the ENCL* instructions are all inlined and don't get
-wrapped in actual function calls.
+Fenghua,
 
-I'd just rebuild the kernel if it were me.
+I see another potential issue. If a software reset is
+attempted idxd_device_reinit() will be called which walks
+the wqs, and if a wq has the state IDXD_WQ_ENABLED it calls
+idxd_wq_enable(), but the first thing idxd_wq_enable() does
+is see that the state is IDXD_WQ_ENABLED and returns 0.
+Without the wq enable command being sent, it will not be
+re-enabled, yes?
 
-Maybe we just just uninline all of the ENCL* instruction so that we
-*can* more easily trace them.  It's not like they are performance sensitive.
+Regards,
+Jerry
+
+> >=20
+> > Regards,
+> > Jerry
+> >=20
+>=20
+

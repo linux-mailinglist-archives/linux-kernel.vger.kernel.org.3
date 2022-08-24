@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C058B59F4EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC2959F4F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbiHXITx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S235521AbiHXIT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbiHXITr (ORCPT
+        with ESMTP id S235088AbiHXITx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:19:47 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B718F65BF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:19:45 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id r14-20020a17090a4dce00b001faa76931beso827352pjl.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:19:45 -0700 (PDT)
+        Wed, 24 Aug 2022 04:19:53 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD98A32D99
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:19:51 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id c24so14384183pgg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=WejlGClWGOz4bz39sTGrt+zcC+1FgtAJxwc+yuBUn+0=;
-        b=QkzRNE8TJAoxa395U9z1bSpDOL0XmFFWXvXjkujyohp4m+IMk0dOTbr8IRZfB+ovb2
-         k7b9W7LyHAQWVxnKxRsyM6cNd/fkAGtvvpQ6u7eLQnaTrpryXQbY/S7sweSPWZdrQxaA
-         p8saNle7iyLF2t6eAOkcjPWOUp0UxSPvZlY3lHPdZQUKKPo4kQpgqtjgWRbmW3TtOUXn
-         M8CXi4zUhKJxBm22fKxSgT5gUVuzLK8kcva0GCuONUwiKgY23N0MjaBgXLIlPow7U5Wa
-         6cXrkM0l5rSuJuxfVnjZZgsXltSOvzHEbRHM2NnBFgCdMV4KJvxvJPlsyS3r2+2n28IY
-         uAGA==
+        bh=HEbBlNE74XAOeDaqxFIrSXJjdeTVN4APARuNyd0Kkrc=;
+        b=XG5IJm+fVYs18/E3Fxu0pVrfrCgjv+nZ+l1p2BXLUiSKR3+DLxwsecj0VsQmLyKeiy
+         u3emI9DCR+vp1DaZHoMZIDR8kuSyRe25o5OtavgfUU++zW8VMduwVMX94ebgn/HQjy9f
+         GylD73ZClQBsEq1CUEmHq1IXpyn722i7yKTXkUF8wzFQUhtW//SStvpHw0zgSVzLOkmV
+         ZkxUyK/cD3yRuG+ya7SyXQsEJJYXwfj9MIsH32g5D/ey71a4uKLsjfrWZnEjTmIJabon
+         VfH8O/9u0ducGF8idUzlAYkUWr2Mc5k2gzh/FN++XngFPlag+2t86eNsnuZdglakynFc
+         l/pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=WejlGClWGOz4bz39sTGrt+zcC+1FgtAJxwc+yuBUn+0=;
-        b=kjpyHxcn8fkXOPbY0MfkWBkmxBmwluJK348sv2X1zkWqTx6wRRk61GydQviTH9xQ/M
-         xwWcxRKbz/i+YOudaFBGKyvx8uh0Wql3iKuhWi/KFezyZHwEWMJqynJYrxY/Rwxn72c2
-         1VRYlbb0UoG4M7I74X9et7MsqpqKCVwuQP91bnnqhD3QQxmF+RyjwLKapBN7b3yAsONg
-         nakNZWFMelTfa9nYa4/Uv1IqUYo25d9ySXJole2Ascdtjvf5RDvfBSTtdErbXnjIo+Nc
-         /XP+PcgGAaEngZvp0CSqy70xmiUNgKGdv+DpaLG1P2NOyet+ugS25NIqiJ2opH2vCpnQ
-         i8AQ==
-X-Gm-Message-State: ACgBeo0htlZyD7xY8jOL+vEBEC7zBZZdNSV14M/7hy+cCW5ZCJ4ixSnC
-        5zmbUgRGzmqbfaO3eGe+MjwEjA==
-X-Google-Smtp-Source: AA6agR40vU1zPgbtGYji72Q/9h5FA6BzjcQF5ct6JsOHHVEBNJqE1UnmsLnABo5S/ubOJm7FFC+OCw==
-X-Received: by 2002:a17:902:e88b:b0:172:fbf5:2e7c with SMTP id w11-20020a170902e88b00b00172fbf52e7cmr7955096plg.2.1661329185264;
-        Wed, 24 Aug 2022 01:19:45 -0700 (PDT)
+        bh=HEbBlNE74XAOeDaqxFIrSXJjdeTVN4APARuNyd0Kkrc=;
+        b=JvNmGHpE6NOvwgY+lkg99VJhV3OgnRQA+Ge9hFLqEIOKKCXBHPqzwifUkxKxxkXQdU
+         sczEhw18Wc2eM1VZtzlnqC18MHYfbb1mfU/UU2X6sji5MX/gFnivfgr21euYc4wF/mAH
+         TZjfiiWxQhfQgpaoRQe/eUzG9VNtd2Ix36UIfop4meIQqT4QmRkdpkpb8p0z4y/uBWrR
+         0hivl5tsVpp0PcjipQTiqF8RLqCYeOig/S5+x7fSvLEam6mvBEeVsjyMoIeTYEIxQICp
+         Yt93Q5dnMyXLd7E+vXNWk042mkxEP0oPK5h1rqE8hA08MHXkpgExm/OXsLcov3wluEqP
+         NI1Q==
+X-Gm-Message-State: ACgBeo3BrfELBf8ApZzrygp7lM9cpfF7WODZBURVuB5Z4E3L8OxzxC+l
+        v1UAknSotIZ1VcGgYw6l2s2mjg==
+X-Google-Smtp-Source: AA6agR7tzL8eaVCAjYwevawfVzwdWlzsLcP2irafzEzzW6hZqw5AJNo0GK4S+veu0lp6GXX0tnXaeQ==
+X-Received: by 2002:a63:5b4c:0:b0:42a:2fe:2f83 with SMTP id l12-20020a635b4c000000b0042a02fe2f83mr22495338pgm.413.1661329191386;
+        Wed, 24 Aug 2022 01:19:51 -0700 (PDT)
 Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id q31-20020a635c1f000000b00421841943dfsm10486587pgb.12.2022.08.24.01.19.39
+        by smtp.gmail.com with ESMTPSA id q31-20020a635c1f000000b00421841943dfsm10486587pgb.12.2022.08.24.01.19.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 01:19:44 -0700 (PDT)
+        Wed, 24 Aug 2022 01:19:51 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com,
         surenb@google.com
@@ -56,9 +56,9 @@ Cc:     gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
         cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v3 01/10] sched/psi: fix periodic aggregation shut off
-Date:   Wed, 24 Aug 2022 16:18:20 +0800
-Message-Id: <20220824081829.33748-2-zhouchengming@bytedance.com>
+Subject: [PATCH v3 02/10] sched/psi: don't create cgroup PSI files when psi_disabled
+Date:   Wed, 24 Aug 2022 16:18:21 +0800
+Message-Id: <20220824081829.33748-3-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220824081829.33748-1-zhouchengming@bytedance.com>
 References: <20220824081829.33748-1-zhouchengming@bytedance.com>
@@ -73,101 +73,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't want to wake periodic aggregation work back up if the
-task change is the aggregation worker itself going to sleep, or
-we'll ping-pong forever.
+commit 3958e2d0c34e ("cgroup: make per-cgroup pressure stall tracking configurable")
+make PSI can be configured to skip per-cgroup stall accounting. And
+doesn't expose PSI files in cgroup hierarchy.
 
-Previously, we would use psi_task_change() in psi_dequeue() when
-task going to sleep, so this check was put in psi_task_change().
+This patch do the same thing when psi_disabled.
 
-But commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
-defer task sleep handling to psi_task_switch(), won't go through
-psi_task_change() anymore.
-
-So this patch move this check to psi_task_switch().
-
-Fixes: 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 ---
- kernel/sched/psi.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ kernel/cgroup/cgroup.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index ecb4b4ff4ce0..39463dcc16bb 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -796,7 +796,6 @@ void psi_task_change(struct task_struct *task, int clear, int set)
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 03dbbf8a8c28..2f79ddf9a85d 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3748,6 +3748,9 @@ static void cgroup_pressure_release(struct kernfs_open_file *of)
+ 
+ bool cgroup_psi_enabled(void)
  {
- 	int cpu = task_cpu(task);
- 	struct psi_group *group;
--	bool wake_clock = true;
- 	void *iter = NULL;
- 	u64 now;
- 
-@@ -806,19 +805,9 @@ void psi_task_change(struct task_struct *task, int clear, int set)
- 	psi_flags_change(task, clear, set);
- 
- 	now = cpu_clock(cpu);
--	/*
--	 * Periodic aggregation shuts off if there is a period of no
--	 * task changes, so we wake it back up if necessary. However,
--	 * don't do this if the task change is the aggregation worker
--	 * itself going to sleep, or we'll ping-pong forever.
--	 */
--	if (unlikely((clear & TSK_RUNNING) &&
--		     (task->flags & PF_WQ_WORKER) &&
--		     wq_worker_last_func(task) == psi_avgs_work))
--		wake_clock = false;
- 
- 	while ((group = iterate_groups(task, &iter)))
--		psi_group_change(group, cpu, clear, set, now, wake_clock);
-+		psi_group_change(group, cpu, clear, set, now, true);
- }
- 
- void psi_task_switch(struct task_struct *prev, struct task_struct *next,
-@@ -854,6 +843,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- 
- 	if (prev->pid) {
- 		int clear = TSK_ONCPU, set = 0;
-+		bool wake_clock = true;
- 
- 		/*
- 		 * When we're going to sleep, psi_dequeue() lets us
-@@ -867,13 +857,23 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- 				clear |= TSK_MEMSTALL_RUNNING;
- 			if (prev->in_iowait)
- 				set |= TSK_IOWAIT;
++	if (static_branch_likely(&psi_disabled))
++		return false;
 +
-+			/*
-+			 * Periodic aggregation shuts off if there is a period of no
-+			 * task changes, so we wake it back up if necessary. However,
-+			 * don't do this if the task change is the aggregation worker
-+			 * itself going to sleep, or we'll ping-pong forever.
-+			 */
-+			if (unlikely((prev->flags & PF_WQ_WORKER) &&
-+				     wq_worker_last_func(prev) == psi_avgs_work))
-+				wake_clock = false;
- 		}
- 
- 		psi_flags_change(prev, clear, set);
- 
- 		iter = NULL;
- 		while ((group = iterate_groups(prev, &iter)) && group != common)
--			psi_group_change(group, cpu, clear, set, now, true);
-+			psi_group_change(group, cpu, clear, set, now, wake_clock);
- 
- 		/*
- 		 * TSK_ONCPU is handled up to the common ancestor. If we're tasked
-@@ -882,7 +882,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- 		if (sleep) {
- 			clear &= ~TSK_ONCPU;
- 			for (; group; group = iterate_groups(prev, &iter))
--				psi_group_change(group, cpu, clear, set, now, true);
-+				psi_group_change(group, cpu, clear, set, now, wake_clock);
- 		}
- 	}
+ 	return (cgroup_feature_disable_mask & (1 << OPT_FEATURE_PRESSURE)) == 0;
  }
+ 
 -- 
 2.37.2
 

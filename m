@@ -2,129 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D645659FE29
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1213E59FE2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239466AbiHXPWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S239471AbiHXPWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiHXPWG (ORCPT
+        with ESMTP id S229640AbiHXPWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:22:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2189B72EED;
-        Wed, 24 Aug 2022 08:22:06 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 24 Aug 2022 11:22:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AC298A7F
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:22:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F0606601E8F;
-        Wed, 24 Aug 2022 16:22:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661354524;
-        bh=0T3J2stygSQ46G6B6v9zKNnVQmlqX5H9hiMN/yLf2Co=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C7kNvimP5fOeZ0pyknplgArACBn58oK40aC89jsu3KaqWXbcbY8TsmhOzQXGPZXJW
-         HlOE9l3nkbpE4cq7o7VzS7BLHKZ7JbB/cOakl527Kh6ywLyq6Vl+/D6cQEe4Tgmdsa
-         clxboeNEqjRMl0uZ8PhzGtLQXa+tn7p9f9fX0RM1Sox5gkFZodPnajK1NtmQiu0rUQ
-         jCjwYKEH2ZVybOdU5ZggxwmEs9aj+6c4EZ1TaDGOCpNvzNJSTVyvlM7X8dNfWi6Qba
-         4ht1LFVkuybaOjoAhoDb5lNkC/scx8bwroiq2hCKb3C5T+0VaVlNIxY0x7+lIxFlrq
-         hHP83HoyFxTWA==
-Message-ID: <76beb362-09c3-bbff-c50d-794a200cb641@collabora.com>
-Date:   Wed, 24 Aug 2022 18:22:00 +0300
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E39161865
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F306C433C1;
+        Wed, 24 Aug 2022 15:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661354560;
+        bh=Xu7LCdyMGn+McwuXQcjzobThUsINws7xLr2XHKj0nNo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lDkZMcwagdoURaR+jm24a+ohs1u+RX+U7TEQbISwiBnOzC3gKi0sLdglVz/S+pPO4
+         5eGIb0gqEW3fH6BZ2Qz6BWy5ihyAt97ds6xvqUBcm6xtMEzb+joFOHLLT81kUkuxuP
+         dtdWi7a3I85psdFyxh9hLwA+9+b9aAclXhqJvEaU=
+Date:   Wed, 24 Aug 2022 17:22:37 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] sysfs: do not create empty directories if no
+ attributes are present
+Message-ID: <YwZCPdPl2T+ndzjU@kroah.com>
+References: <20220824135951.3604059-1-gregkh@linuxfoundation.org>
+ <fb3a66c6-a8b3-02db-4170-5d5c521165e2@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 6/9] dma-buf: Move dma-buf attachment to dynamic
- locking specification
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lima@lists.freedesktop.org
-References: <20220824102248.91964-1-dmitry.osipenko@collabora.com>
- <20220824102248.91964-7-dmitry.osipenko@collabora.com>
- <17181951-1b40-cd39-48df-58b43cad117d@amd.com>
- <4af793fd-eccc-ad70-65c3-de78dced71f0@collabora.com>
- <b24017e9-e8e7-148e-951b-0f2a1dffdca7@amd.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <b24017e9-e8e7-148e-951b-0f2a1dffdca7@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fb3a66c6-a8b3-02db-4170-5d5c521165e2@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 18:14, Christian König wrote:
-> Am 24.08.22 um 17:03 schrieb Dmitry Osipenko:
->> On 8/24/22 17:08, Christian König wrote:
->>> Am 24.08.22 um 12:22 schrieb Dmitry Osipenko:
->>>> Move dma-buf attachment API functions to the dynamic locking
->>>> specification.
->>>> The strict locking convention prevents deadlock situations for dma-buf
->>>> importers and exporters.
->>>>
->>>> Previously, the "unlocked" versions of the attachment API functions
->>>> weren't taking the reservation lock and this patch makes them to take
->>>> the lock.
->>> Didn't we concluded that we need to keep the attach and detach callbacks
->>> without the lock and only move the map/unmap callbacks over?
->>>
->>> Otherwise it won't be possible for drivers to lock multiple buffers if
->>> they have to shuffle things around for a specific attachment.
->> We did conclude that. The attach/detach dma-buf ops are unlocked, but
->> the map_dma_buf/unmap_dma_buf must be invoked under lock and
->> dma_buf_dynamic_attach_unlocked() maps dma-buf if either importer or
->> exporter can't handle the dynamic mapping [1].
+On Wed, Aug 24, 2022 at 05:17:44PM +0200, Pierre-Louis Bossart wrote:
 > 
-> Ah! You are confusing me over and over again with that :)
 > 
-> Ok in this case that here is fine, I just need to re-read the patch.
+> On 8/24/22 15:59, Greg Kroah-Hartman wrote:
+> > When creating an attribute group, if it is named a subdirectory is
+> > created and the sysfs files are placed into that subdirectory.  If no
+> > files are created, normally the directory would still be present, but it
+> > would be empty.  Clean this up by removing the directory if no files
+> > were successfully created in the group at all.
+> > 
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > Cc: Sanyog Kale <sanyog.r.kale@intel.com>
+> > Cc: alsa-devel@alsa-project.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > v2: new patch
+> > 
+> > Note, totally untested!  The following soundwire patches will need this,
+> > if a soundwire developer could test this out, it would be most
+> > apreciated.
+> 
+> Not able to see the kernel boot with this first patch. The device is
+> stuck with the cursor not even blinking. It seems our CI test devices
+> are also stuck.
+> 
+> This is completely beyond my comfort zone but I can run more tests to
+> root cause this.
 
-It's indeed not trivial to review this patch, not sure if we can make it
-simpler. Maybe it's possible to factor out the changes related to
-dynamic mapping, or maybe it's not worthwhile..
+Ick, ok, so much for sending out untested patches :(
 
-Anyways, thank you for helping with reviewing it :)
+I'll test and debug this tomorrow and resend a correct version, thanks
+for helping out here, sorry it didn't work.
 
--- 
-Best regards,
-Dmitry
+greg k-h

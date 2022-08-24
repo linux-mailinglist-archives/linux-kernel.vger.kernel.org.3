@@ -2,203 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00C65A028C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775525A028F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbiHXUNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S240217AbiHXUOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240174AbiHXUN2 (ORCPT
+        with ESMTP id S240183AbiHXUOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:13:28 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C907C51C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:13:22 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id w19so35664294ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:13:22 -0700 (PDT)
+        Wed, 24 Aug 2022 16:14:33 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAAC7C51B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:14:32 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id w19so35669668ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:14:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=HgbqYZOjkQz+AVbkvY9xpQJX7wcETZRoC2bMvANI6uE=;
-        b=ukFtpbOmBQulkO1xqsJXiSJmElXO89VlR2jsvOIKyOQ9KMcXV60uHy+QYWtqrkghLz
-         gcs6NwPdiEQX2IprWNpFORcj+L6wxNfO4cdowf/d08oWnthL9JL4s72D4C0/UDisy2ve
-         Ob70c9z8JjEGbLxUkiiW2fd5ljmnNAFJ81ILDyCDZvcduSfLpM5CvDb4H6yvfaZl+Xfo
-         emI3o70UJATAcV0ZyoBwI2CTqB8ykUfCbpGXz3mFqL35Q9X5h4EKhY9ruaYJ6Q0/AVOb
-         Q4tFEwDoN3rwfNFdbfJQuJrnkNk6l/dFe1/jnketvxk2hiUXk2jURcxtDCJmHERUfKRx
-         xq3w==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc;
+        bh=5wderqoELsTLjghMp/IM+PXHINVRCuk3zx8LINvIKws=;
+        b=XxLdjwXpYcSieF9CW8HBoOS3cQ+DgN/sIBQV0LTkPVYO+ZR3zJE6Y0iMOoBKY7W/5D
+         Zin4S3yv/ej1awd6KT3sMaOZOAVK34IDl/lWip4rPIu/H2TXqNkcyQyRnxu/SIGr5rB7
+         93joR9k2B5XZQ3XolrryZpIVl8MFylwqbPTKI6z+oLq9ASxybRwFOGhDAUvkqrYmrbjj
+         nB8HDBUnE/sLJtZpZHnskApcE2U5Qngoe2lFbQ4zmjmiQIktA2CLOrbZ7uzD5hAQihfS
+         oOUAeVJX2/1KeUbHnKo5kZXJu/T7aUts8zhuaYHSNsEpFrFx3R7aBKgxL0lrPz8fKXdq
+         tMXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=HgbqYZOjkQz+AVbkvY9xpQJX7wcETZRoC2bMvANI6uE=;
-        b=uHEdJ24Jn/IWXFyny+OqHL5YOtyTy/LlkNjHzSpWIVP2ot2dCaHE/MNdwfvCZtcklo
-         YQj17folJHhR6YlKA2dBw17lmZw4HB97s6A567Dj4tL26lx81QOS72nMRyVfFrmSVlbp
-         qfkcy0AwJj31o+Iaz+ztMB5UuYNdZfCqflKhTVj9u/a1ihw44STlyCpSci7F2ImSqAXi
-         t/RApz7a4+6DEcTVXBYjZ9Ja/n/v4ZxHqO9/0sYj4RJSqTSgkaHY94dFLsEOeqTRYyHG
-         jH3x0D25GNhzy3d7h1rXnGazVHM2yHsAoYySYpMBgh2punOF85sArZrHnCrtiS8hGKfM
-         nt3Q==
-X-Gm-Message-State: ACgBeo0g1KWXRUCsmfPJqIkxgd6P9R/AFLYQbnTijdoyNlanPUFLrCbf
-        xv5SXvZYfCgmGo80NFJrB6KdgvMFaWCmsxLGfzBtPA==
-X-Google-Smtp-Source: AA6agR6e2GaA0iz7+Ch1T3xwmrYaZc//8OIuVBCRLQaTRoyiP6K8lvqDC9J0s37qGPahDxwhMlCqh42FkG2OjfBn3C8=
-X-Received: by 2002:a17:906:9bea:b0:73d:cd17:7528 with SMTP id
- de42-20020a1709069bea00b0073dcd177528mr198282ejc.412.1661372001129; Wed, 24
- Aug 2022 13:13:21 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=5wderqoELsTLjghMp/IM+PXHINVRCuk3zx8LINvIKws=;
+        b=NyyDm03BfFbavwijcCCzAxRrGGKR1YUNHAOZR7LKwk8yawJE3nnvp/mjsCh1CiMzx/
+         Fy/knSvbBMxFSaUZizJ/BHt6bd0Q4i7DxXoz5jROBRzJasRzhpsjb6JXjaNm4qSfdMGT
+         3Z0ItgIBh70GRpFMfO0SUxWwiuLV4HW0YzrEtceGCDkNQgXs+i692AqSO4CYGw3r4t//
+         Jl7LreGlcQL5cvpaTAZQBOwK89TWlhW/bjcsvNqrRnYYQZgrT6UFXsAU2EEXPmQpa+0k
+         pvX4FicvhFbLEeS6Us9ZrNxMSRT+1qJZ4TvEONGp6oBIF8oPZ+Q6mUo8wSf6t7RjYgzH
+         bOHQ==
+X-Gm-Message-State: ACgBeo2sXCXtT4BhmPcxIeuEFZarsdPWqHzx47QFidB7YUsdTylmnzGZ
+        Vll/Ak7ZivB0EdK3KruS01Xyl5aas6M=
+X-Google-Smtp-Source: AA6agR6WLMPCX9zOhMSJKoDPqvnocG0tgnhURzf5jHERcYQZZI1RODLqHOu6dpSOa/sESEQLY2iGUw==
+X-Received: by 2002:a17:907:3f9d:b0:73d:a90f:197d with SMTP id hr29-20020a1709073f9d00b0073da90f197dmr370845ejc.460.1661372071174;
+        Wed, 24 Aug 2022 13:14:31 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id v6-20020a056402184600b0043d1eff72b3sm3587060edy.74.2022.08.24.13.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 13:14:30 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 22:14:28 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] staging: rtl8192e: Coding Syle of rtl_core.c improved
+Message-ID: <cover.1661370978.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-References: <20220824065936.861377531@linuxfoundation.org>
-In-Reply-To: <20220824065936.861377531@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 25 Aug 2022 01:43:09 +0530
-Message-ID: <CA+G9fYuTOvKfHz7t0GppiNqLx-9n-yycsLX-rdMQogrh9guX_w@mail.gmail.com>
-Subject: Re: [PATCH 5.19 000/362] 5.19.4-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022 at 12:31, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.19.4 release.
-> There are 362 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 26 Aug 2022 06:58:34 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.4-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Following Checkpatch errors are improved:
+- blank lines
+- CamelCase of TxCheckStuckHandler and RxCheckStuckHandler
+- "Unnecessary ftrace-like logging"
+- CamelCase of PHY_SetRFPowerState
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Philipp Hortmann (4):
+  staging: rtl8192e: Remove blank lines in rtl_core.c
+  staging: rtl8192e: Rename Tx... and RxCheckStuckHandler
+  staging: rtl8192e: Remove Unnecessary ftrace-like logging
+  staging: rtl8192e: Remove PHY_SetRFPowerState and rename StateToSet
 
-NOTE:
-x86_64 and arm64 clang nightly allmodconfig build failed.
-sound/soc/atmel/mchp-spdiftx.c:508:20: error: implicit truncation from
-'int' to bit-field changes value from 1 to -1
-[-Werror,-Wbitfield-constant-conversion]
-dev->gclk_enabled = 1;
-                  ^ ~
-1 error generated.
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.h    |   1 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  | 166 ++----------------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |   6 +-
+ 3 files changed, 18 insertions(+), 155 deletions(-)
 
-clang-14-allmodconfig build pass on x86_64 and arm64.
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.3-363-gafd9d04cfdb9/testrun/11542345/suite/build/test/clang-14-allmodconfig/history/
+-- 
+2.37.2
 
-clang-nightly-allmodconfig build pass on x86_64 and arm64.
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.3-363-gafd9d04cfdb9/testrun/11542345/suite/build/test/clang-nightly-allmodconfig/history/
-
-## Build
-* kernel: 5.19.4-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.19.y
-* git commit: afd9d04cfdb9cff1b69e2ff10272ced56c641036
-* git describe: v5.19.3-363-gafd9d04cfdb9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.3-363-gafd9d04cfdb9
-
-## Test regressions (compared to v5.19.3)
-* arm64, build
-  - clang-nightly-allmodconfig
-
-* x86_64, build
-  - clang-nightly-allmodconfig
-  - https://builds.tuxbuild.com/2DntPWhfYK6ESM6Il3l6aIvKqes/
-
-* riscv, build
-  - clang-nightly-allmodconfig
-  - clang-nightly-defconfig
-  - clang-nightly-tinyconfig
-  - https://builds.tuxbuild.com/2DntPYts34sHJI5VZuK5zKzkXr1/
-
-## No metric Regressions (compared to v5.19.3)
-
-## No test Fixes (compared to v5.19.3)
-
-## No metric Fixes (compared to v5.19.3)
-
-## Test result summary
-total: 106629, pass: 95920, fail: 1031, skip: 9541, xfail: 137
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 306 total, 303 passed, 3 failed
-* arm64: 68 total, 65 passed, 3 failed
-* i386: 57 total, 51 passed, 6 failed
-* mips: 50 total, 47 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 56 passed, 9 failed
-* riscv: 32 total, 24 passed, 8 failed
-* s390: 22 total, 20 passed, 2 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 61 total, 58 passed, 3 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

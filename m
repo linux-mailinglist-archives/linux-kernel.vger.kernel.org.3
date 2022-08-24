@@ -2,122 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914865A026D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2423C5A0274
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240082AbiHXUDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S239038AbiHXUEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbiHXUDs (ORCPT
+        with ESMTP id S239057AbiHXUEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:03:48 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73FE7C1F9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:03:47 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id j17so13630235qtp.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=I/OhQ05sFa4+JbagejiMcd2839cYv/Wn8Ivi9z3/4j0=;
-        b=F7kiYdCFyT/ZhldrVONseUJBHjLD7mzVSGdd5XX79poudK3LGXfpYWvrgCXmfoAyTr
-         dwgT+0VvkgBM5iNF0eIP3BWPYNYtj32Je4xKe/Gh5QJWBWaPMQT/CxNDDN7kZMBWPCQ4
-         DyuoG6hYvspPJ7TkBNHnO0QlbaMqtPjCEAEDB2FaAoHxwX+1y/dG+dRgzw1Y59p7bM9l
-         scPThZAL9W10zGjFN6CbuJawuKQHsg2nT1oaQhzuKSfNYvwJJw2VL4mOtadHP1l92Y/F
-         j7AD/a1NPTurHq+nXuLj/GiFRTC5EQb7rDZqJP+K0tcsISrL2uP4ssTGNx1OAJrNivNB
-         4Qcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=I/OhQ05sFa4+JbagejiMcd2839cYv/Wn8Ivi9z3/4j0=;
-        b=hBo8aKRMvLKNlwg0Oq7v6lFnclmtmLPapDcftVX7oa8T/onnmZjvs4kpDY84v6blUS
-         yVKS7BMhQHZIFs7bSKTQTMb8qv4UwRPgdlaYfDtvk+W1mAtEUtm6xR8F0ZE2+OXa0RIu
-         9CQnDipo4n9eP4Qoq/EkS++nOBWm61sNsyFN0dg+rko+CmsC/tZq9ndo/qYgwp/N7JgK
-         1XLxwdBr70kCwSLhpwfWiQcWNtl3+I8vvXDXi5Yyt9ZkSNnTEX+7rjMUq5DffhpRNmu2
-         oS05cV7yumwNgxlhwKAuJlMicT3Qop+NhPkFTVGF8/lDG0LpVGjj/hdE/ybzLtVdlgfg
-         xyhg==
-X-Gm-Message-State: ACgBeo3UvPOWvZXHl24D+Mw2pEPRLDxJvScf/mJ1/BieWPghWpfQHmRL
-        /jVj8dUixY3DXsTBE2iH7D6Wo32xBcM=
-X-Google-Smtp-Source: AA6agR7+K1kirULTq08b9kk3Whm9NekJugreqPrgDPv35N9AuMwUmw6mF/SiGQ1OqNVzv9HP1ar4RA==
-X-Received: by 2002:ac8:5ad4:0:b0:344:5e40:7824 with SMTP id d20-20020ac85ad4000000b003445e407824mr877705qtd.482.1661371426996;
-        Wed, 24 Aug 2022 13:03:46 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:5a54:d9d9:c2a4:527e])
-        by smtp.gmail.com with ESMTPSA id d17-20020a05620a241100b006b46a78bc0fsm17001073qkn.118.2022.08.24.13.03.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 13:03:46 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 13:03:45 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dennis Zhou <dennis@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Subject: Re: [PATCH v2 2/3] lib/find_bit: create find_first_zero_bit_le()
-Message-ID: <YwaEIRWYumY1i1Ne@yury-laptop>
-References: <20220824012624.2826445-1-yury.norov@gmail.com>
- <20220824012624.2826445-3-yury.norov@gmail.com>
- <CAHp75VdgXBFH_vxUNYZLc2ahOrC8oBj0x=2GWXZr+CLGX1qyTg@mail.gmail.com>
- <YwYpqRZxCe9NLZyk@yury-laptop>
- <YwZmsvlFR0cOxvnD@shell.armlinux.org.uk>
+        Wed, 24 Aug 2022 16:04:50 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75B7632E;
+        Wed, 24 Aug 2022 13:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661371480;
+        bh=mT+JncqykK1/MQG4BV6pGNhG34tuIpbu4gUj8Qq5OJg=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=je1iScQue2PuzOXKqByGfXSW1Qx1ZMfpotwkROyCZsJdSHIqDzw70Z0WtBzwWKyyO
+         T0ZcxrYqSNG599BfW8OSma065E/e+6srrPudnzs+1zheu+/wxH/0Wt8EM/6AaK5dSe
+         6URRu5A9fA7zjrdRf//AyC3DzDSuuUOT5U/cjiA0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.173.19]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MVvLB-1oqcLl1B5B-00RtjX; Wed, 24
+ Aug 2022 22:04:40 +0200
+Message-ID: <6efc0d2a-c2af-947c-d928-104e3add1650@gmx.de>
+Date:   Wed, 24 Aug 2022 22:04:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwZmsvlFR0cOxvnD@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] fbcon: Properly revert changes when vc_resize() failed
+Content-Language: en-US
+To:     Shigeru Yoshida <syoshida@redhat.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com
+References: <20220818181336.3504010-1-syoshida@redhat.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220818181336.3504010-1-syoshida@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bPYtDBYr/fK766CKWILWMU7xF4/wZ+tyXxZ1o8D2m8Jo85BJ+as
+ DNW6Cz5IoGsD2PzMXfhkHHJBmrmJi0/gZdkacY5RzJBUap2qs1wCwreOlmx6Y/XNoOsTg+o
+ 9MRQE0QR54b3UTUFtfdSXRChRLYQyp/1RIqWJFyFBQZldaNXhs6p4GYoBrUTmwMgMfMbl33
+ N6FltjFkdpDIxKBB4r6BA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:v/nCVi1yI7M=:ftuED5v4WP4ZqnIzTwPVlg
+ xvrViHqKL0rzJ7LDMoCsR+/heF0xhFSK0UMYKhhwh40W1BPiTK1E64EzZSy1/Cl037/RXsDBb
+ 9D+dxZzx3dm1h6B5MDGlSJ+g+YtEnLe51gQSWNvyw1lnO/DIuvQvaCqXJeOP7BZcuWg/ZNkme
+ /mVbVPz0eYkIfNXwy0wbr/kMiGjwDTKfcnW6z0zbARDZQkLOVwiFuJp0IjBAFOtThwrpXp7Ch
+ dttQLKauLvJ0aOT1iuUA4TzNOfCjMBjWnP9SjfzqZIg1ROskjF43YiZ2ik0+adsESHsmIeu+1
+ puv5l5z9j8Mwx0rYF1FFRLjHurmQ37IbEfMWfwIzdUdK//Y7bV+ZIdlF2M2Pb5SbIoFK4+uCB
+ yLmA3XiJekW5rtNuTgovWtkVZ1f8Nck1zGtlD6W8Wm+22tjROxAx6CIPA382GrSrLP9oH/U/m
+ 48yQOY1xfh4UNyZ++Mzw+CE96QSkWFgIxZ39sAOrQedThM2xXCF6Mzvk/L1AfEaYT9kd+8Dio
+ QzU6ysz9+nL9hH5aIox0KZzzxvLj6mGlWYn4qvy5E2XiwtHCEoOgip9XDfjGo478AqSReGqY7
+ 685niWvag0B+MphtZOzIWWHSpvOYZCfbquDOkiRSiqE3rhLbeBZzfbFb/vWhov78H2Cs1TkpW
+ L9B39CKWpS7P8OerSEOV56nOQBm1X1ty2/yRu2A8y0s0pfgg3C8zKw0ljwIp4LK6r0HShPJTN
+ bk+Li0hINWJI7zg3aBEctiqz0rZy6fnYRG/QMaUSw1/JeBYNK4OoH5j9HFg4vWYyyfhHzS0AD
+ P2UbsPpV2xxm5ujfbX4Ei9U4DOtcoRnLAydGkL6h1slTcHcyqw3QyOi2/WWJkErNhyCKqPtMT
+ e3Vm7pVjUVY5dYTSmajTtgKWXncilU6uh8uaewB3Qq1hdbkEv5B2csrIs18Zh2eR7Y1edsM7h
+ W6hvBofJhVeZJFTjdhhxERqeeYISGlYt6mhXCDmxLg4unvMfYWutpcxFQ/eemx/rNrrlgBMJh
+ mt1NRjlPOKGmR6AgqlAJyjubEifg2N7PzG4AXmpAF2U8ZC7YRvuyfuOaiPsEOw7dAgddNsFIh
+ L4+G6iYQvfZXgTRxnaowfsEVSq0z7oeaAJh87IvmNpAIu1P2q8Yn6fQvw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 06:58:10PM +0100, Russell King (Oracle) wrote:
-> On Wed, Aug 24, 2022 at 06:37:45AM -0700, Yury Norov wrote:
-> > Because there is a codebase that relies on existing types, mostly in
-> > filesystem code. And those fs fixes would require 5 or 6 patches.
-> 
-> Does that mean that are there filesystems that are passing pointers to
-> the find_bit functions which are _not_ aligned to an "unsigned long" ?
+Hi Shigeru,
 
-Not necessarily. For example, I looked at ext2/4 code, and it looks like
-they need void *bitmap, because they pass opaque pointer ->b_data from
-struct buffer_head:
+On 8/18/22 20:13, Shigeru Yoshida wrote:
+> fbcon_do_set_font() calls vc_resize() when font size is changed.
+> However, if if vc_resize() failed, current implementation doesn't
+> revert changes for font size, and this causes inconsistent state.
+>
+> syzbot reported unable to handle page fault due to this issue [1].
+> syzbot's repro uses fault injection which cause failure for memory
+> allocation, so vc_resize() failed.
+>
+> This patch fixes this issue by properly revert changes for font
+> related date when vc_resize() failed.
+>
+> Link: https://syzkaller.appspot.com/bug?id=3D3443d3a1fa6d964dd7310a0cb16=
+96d165a3e07c4 [1]
+> Reported-by: syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com
+> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
 
-  struct buffer_head {
-        ...
-        char *b_data;                   /* pointer to data within the page */
-        ...
-  }
+applied.
 
-So, quite probably, the pointer is aligned when it points to a bitmap.
-But I have nothing to prove it, except standard anthropic principle
-"otherwise people would complain".
+Thank you!
+Helge
 
-In LE case, the find_bit_le() functions are aliased to find_bit(),
-which is aligned, and somehow it works.
+> ---
+>  drivers/video/fbdev/core/fbcon.c | 27 +++++++++++++++++++++++++--
+>  1 file changed, 25 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core=
+/fbcon.c
+> index cf9ac4da0a82..825b012debe7 100644
+> --- a/drivers/video/fbdev/core/fbcon.c
+> +++ b/drivers/video/fbdev/core/fbcon.c
+> @@ -2401,15 +2401,21 @@ static int fbcon_do_set_font(struct vc_data *vc,=
+ int w, int h, int charcount,
+>  	struct fb_info *info =3D fbcon_info_from_console(vc->vc_num);
+>  	struct fbcon_ops *ops =3D info->fbcon_par;
+>  	struct fbcon_display *p =3D &fb_display[vc->vc_num];
+> -	int resize;
+> +	int resize, ret, old_userfont, old_width, old_height, old_charcount;
+>  	char *old_data =3D NULL;
+>
+>  	resize =3D (w !=3D vc->vc_font.width) || (h !=3D vc->vc_font.height);
+>  	if (p->userfont)
+>  		old_data =3D vc->vc_font.data;
+>  	vc->vc_font.data =3D (void *)(p->fontdata =3D data);
+> +	old_userfont =3D p->userfont;
+>  	if ((p->userfont =3D userfont))
+>  		REFCOUNT(data)++;
+> +
+> +	old_width =3D vc->vc_font.width;
+> +	old_height =3D vc->vc_font.height;
+> +	old_charcount =3D vc->vc_font.charcount;
+> +
+>  	vc->vc_font.width =3D w;
+>  	vc->vc_font.height =3D h;
+>  	vc->vc_font.charcount =3D charcount;
+> @@ -2425,7 +2431,9 @@ static int fbcon_do_set_font(struct vc_data *vc, i=
+nt w, int h, int charcount,
+>  		rows =3D FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
+>  		cols /=3D w;
+>  		rows /=3D h;
+> -		vc_resize(vc, cols, rows);
+> +		ret =3D vc_resize(vc, cols, rows);
+> +		if (ret)
+> +			goto err_out;
+>  	} else if (con_is_visible(vc)
+>  		   && vc->vc_mode =3D=3D KD_TEXT) {
+>  		fbcon_clear_margins(vc, 0);
+> @@ -2435,6 +2443,21 @@ static int fbcon_do_set_font(struct vc_data *vc, =
+int w, int h, int charcount,
+>  	if (old_data && (--REFCOUNT(old_data) =3D=3D 0))
+>  		kfree(old_data - FONT_EXTRA_WORDS * sizeof(int));
+>  	return 0;
+> +
+> +err_out:
+> +	p->fontdata =3D old_data;
+> +	vc->vc_font.data =3D (void *)old_data;
+> +
+> +	if (userfont) {
+> +		p->userfont =3D old_userfont;
+> +		REFCOUNT(data)--;
+> +	}
+> +
+> +	vc->vc_font.width =3D old_width;
+> +	vc->vc_font.height =3D old_height;
+> +	vc->vc_font.charcount =3D old_charcount;
+> +
+> +	return ret;
+>  }
+>
+>  /*
 
-> If there are, we should _not_ convert 32-bit ARM to use word loads or
-> use the generic code; unaligned loads are expensive on older ARM CPUs,
-> at least not the code for older ARM CPUs.
-
-I wonder, if there's an arch that throws an exception in case of unaligned
-access. IIRC, ARM can do that, but this option is disabled in kernel.
-Right?
-
-I have a series that adds a runtime parameters checker for bitmaps.
-I'll add a test for alignment and see how it works (not very soon).
-
-Thanks,
-Yury

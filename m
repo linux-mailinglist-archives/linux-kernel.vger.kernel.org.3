@@ -2,219 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776F259F180
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C68059F188
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbiHXCsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 22:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S231163AbiHXCyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 22:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbiHXCs3 (ORCPT
+        with ESMTP id S229445AbiHXCyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 22:48:29 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97246B164
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:48:27 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MC9Qv6qnczXdsj;
-        Wed, 24 Aug 2022 10:44:07 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 10:48:25 +0800
-Received: from [10.174.177.86] (10.174.177.86) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 10:48:24 +0800
-Message-ID: <93f9d06b-c557-b489-d5d4-0433419c73a1@huawei.com>
-Date:   Wed, 24 Aug 2022 10:48:23 +0800
+        Tue, 23 Aug 2022 22:54:15 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E4879A64;
+        Tue, 23 Aug 2022 19:54:13 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id 20so14477947plo.10;
+        Tue, 23 Aug 2022 19:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=xjHGR01bg2kpVPYi+pXOo5QWorjBYLZotbDze1gfyao=;
+        b=UVvnJyreL/MJV4n2DPY7uiwpOIi4ygmz66hYehADwS62vbFMrKivI7MbsWg+beb5Dg
+         NoKITJca50UqRTaz4ECwOBE46LbFOOUPcyhLDNlD32UdyrwnISfvEuEoL1hoj6ZH6bMj
+         kU+alCujyfUdJ9tEfmBwAyuYv9bUbv+2QjQbkhPRK+EnC4Ont6RdArgtCkiQSh1FWgX5
+         mY1pn7IPN5kxjjGPiSWSVaXnJBLcvFWhIgVsjGRryHQEVlXeXCrrNw3rHO13+Fk8qgun
+         Llb956xjHtDmq4qpUtFk+SB/dAxv+BZwsz3+3u5dPNsHdwRdmpaaF4hKK1jxBt8IdKDH
+         P8tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=xjHGR01bg2kpVPYi+pXOo5QWorjBYLZotbDze1gfyao=;
+        b=xciyNX+HJH71tuEXzAt7hZrL9WGTmqOkfcOD6oxqSWOBWyzpgNrM5PBv9qpQsV7hKX
+         Oa/u4xJVHVlTdnAzcP2MB0I/YSFI2XCIsEAmvieBvt9P7S8QsvKPq3n10dOdgfoeWE4y
+         xH9TA3Vkk74l3V2OpK2/UdQ5nUhIN/Ak3YmFzDPLnuJUDBLqIABzxXF1bpZHMmvt65EB
+         1T/kH1xmlqVPons9YvO9Ki2DoYifnx6S0HjAOzu/nyMsx2wZMCADPS1Uro8rG587lvt1
+         5ds1meoxcoO7PERZrIL3jBYBUmIgrfpHiaQMyhdr2Y8NUZZJueLpYIZrk/SdFgpFGUSJ
+         /wZw==
+X-Gm-Message-State: ACgBeo0z6qFksN+XpiQBmM3DNLjR4R/debBAwkYLo+cb5r4fEv5cmH7P
+        +UMWyFJ1UH/VhjHoX1NSXo8=
+X-Google-Smtp-Source: AA6agR4Oy1S3Di/3UUDS7ZkR050xgMIAIBJGXHSup7WBfvP6N1gEGmcgDQb8eZL0ymoy6vfWOhrKng==
+X-Received: by 2002:a17:90b:17d0:b0:1fb:5bbc:917c with SMTP id me16-20020a17090b17d000b001fb5bbc917cmr6224052pjb.109.1661309653296;
+        Tue, 23 Aug 2022 19:54:13 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-13.three.co.id. [180.214.232.13])
+        by smtp.gmail.com with ESMTPSA id h12-20020a170902f54c00b0016ee328fd61sm1795122plf.198.2022.08.23.19.54.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 19:54:12 -0700 (PDT)
+Message-ID: <fc054b1c-b3c8-f627-d4c1-d916a2d286ca@gmail.com>
+Date:   Wed, 24 Aug 2022 09:54:04 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH -next] f2fs: fix wrong dirty page count when race between
- mmap and fallocate.
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-CC:     <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>
-References: <20220815081555.2961943-1-zhangshuqi3@huawei.com>
- <a364da58-f476-69fd-3f90-448f35c8e151@kernel.org>
- <YwFaTprvOf8ckGsP@google.com> <YwFd/+YPfPz60uWg@google.com>
-From:   Shuqi Zhang <zhangshuqi3@huawei.com>
-In-Reply-To: <YwFd/+YPfPz60uWg@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 2/2] coresight: etm4x: docs: Add documentation for
+ 'ts_source' sysfs interface
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>, suzuki.poulose@arm.com,
+        coresight@lists.linaro.org, mathieu.poirier@linaro.org
+Cc:     mike.leach@linaro.org, leo.yan@linaro.org,
+        linux-kernel@vger.kernel.org, german.gomez@arm.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+References: <20220823160650.455823-1-james.clark@arm.com>
+ <20220823160650.455823-3-james.clark@arm.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220823160650.455823-3-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.86]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/23/22 23:06, James Clark wrote:
+> +:Example:
+> +    ``$> cat ts_source``
+> +
+> +    ``$> 1``
+> +
 
-On 08/21, Jaegeuk Kim wrote:
-> On 08/20, Jaegeuk Kim wrote:
->> On 08/20, Chao Yu wrote:
->>> On 2022/8/15 16:15, Shuqi Zhang wrote:
->>>> This is a BUG_ON issue as follows when running xfstest-generic-503:
->>>> WARNING: CPU: 21 PID: 1385 at fs/f2fs/inode.c:762 f2fs_evict_inode+0x847/0xaa0
->>>> Modules linked in:
->>>> CPU: 21 PID: 1385 Comm: umount Not tainted 5.19.0-rc5+ #73
->>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
->>>>
->>>> Call Trace:
->>>> evict+0x129/0x2d0
->>>> dispose_list+0x4f/0xb0
->>>> evict_inodes+0x204/0x230
->>>> generic_shutdown_super+0x5b/0x1e0
->>>> kill_block_super+0x29/0x80
->>>> kill_f2fs_super+0xe6/0x140
->>>> deactivate_locked_super+0x44/0xc0
->>>> deactivate_super+0x79/0x90
->>>> cleanup_mnt+0x114/0x1a0
->>>> __cleanup_mnt+0x16/0x20
->>>> task_work_run+0x98/0x100
->>>> exit_to_user_mode_prepare+0x3d0/0x3e0
->>>> syscall_exit_to_user_mode+0x12/0x30
->>>> do_syscall_64+0x42/0x80
->>>> entry_SYSCALL_64_after_hwframe+0x46/0xb0
->>>>
->>>> Function flow analysis when BUG occurs:
->>>> f2fs_fallocate                    mmap
->>>>                                     do_page_fault
->>>>                                       pte_spinlock  // ---lock_pte
->>>>                                       do_wp_page
->>>>                                         wp_page_shared
->>>>                                           pte_unmap_unlock   // unlock_pte
->>>>                                             do_page_mkwrite
->>>>                                             f2fs_vm_page_mkwrite
->>>>                                               down_read(i_mmap_sem)
->>>>                                               lock_page
->>>>                                               if (PageMappedToDisk(page))
->>>>                                                 goto out;
->>>>                                               // set_page_dirty  --NOT RUN
->>>>                                               out: up_read(i_mmap_sem)
->>>>                                             lock_page
->>>>                                           finish_mkwrite_fault // unlock_pte
->>>> f2fs_collapse_range
->>>>     down_write(i_mmap_sem)
->>>>     truncate_pagecache
->>>>       unmap_mapping_pages
->>>>         i_mmap_lock_write // down_write(i_mmap_rwsem)
->>>>           ......
->>>>           zap_pte_range
->>>>             pte_offset_map_lock // ---lock_pte
->>>>             f2fs_set_data_page_dirty
->>> I didn't get it, why zap_pte_range() can set page dirty w/o lock_page?
->>>
->>> I found it's very easy to reproduce this bug, but previously I never saw this...
->>> is there any code udpate around truncate_pagecache()?
->> Found this.
->>
->> 2637  * The caller must ensure this doesn't race with truncation.  Most will
->> 2638  * simply hold the folio lock, but e.g. zap_pte_range() calls with the
->> 2639  * folio mapped and the pte lock held, which also locks out truncation.
->> 2640  */
->> 2641 bool filemap_dirty_folio(struct address_space *mapping, struct folio *folio)
->> 2642 {
->>
->>> Thanks,
->>>
->>>>               if (!PageDirty(page)) {
->>>>                                           fault_dirty_shared_page
->>>>                                             f2fs_set_data_page_dirty
->>>>                                               if (!PageDirty(page)) {
->>>>                                                 __set_page_dirty_nobuffer
->>>>                                                 f2fs_update_dirty_page // ++
->>>>                                               }
->>>>                                             unlock_page
->>>>                 __set_page_dirty_nobuffers
->>>>                 f2fs_update_dirty_page // page count++
->>>>               }
->>>>             pte_unmap_unlock  // --unlock_pte
->>>>         i_mmap_unlock_write  // up_write(i_mmap_rwsem)
->>>>     truncate_inode_pages
->>>>     up_write(i_mmap_sem)
->>>>
->>>> When race happens between mmap-do_page_fault-wp_page_shared and
->>>> fallocate-truncate_pagecache-zap_pte_range, the zap_pte_range calls
->>>> function set_page_dirty without page lock. Besides, though
->>>> truncate_pagecache has immap and pte lock, wp_page_shared calls
->>>> fault_dirty_shared_page without any. In this case, two threads race
->>>> in f2fs_set_data_page_dirty function. Page is set to dirty only ONCE,
->>>> but the count is added TWICE by calling f2fs_update_dirty_page.
->>>> Thus the count of dirty page cannot accord with the real dirty pages.
->>>>
->>>> Following is the solution to in case of race happens without any lock.
->>>> If making sure f2fs_vm_page_mkwrite calls set_page_dirty within immap
->>>> lock area, page will already be dirtied when running into
->>>> fault_dirty_shared_page-f2fs_set_data_page_dirty.
->>>> The count of dirty page will not be increased wrong times.
->>>>
->>>> Signed-off-by: Shuqi Zhang <zhangshuqi3@huawei.com>
->>>> ---
->>>>    fs/f2fs/file.c | 11 ++++++-----
->>>>    1 file changed, 6 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->>>> index ce4905a073b3..d837359a9c00 100644
->>>> --- a/fs/f2fs/file.c
->>>> +++ b/fs/f2fs/file.c
->>>> @@ -140,7 +140,7 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
->>>>    	 * check to see if the page is mapped already (no holes)
->>>>    	 */
->>>>    	if (PageMappedToDisk(page))
->>>> -		goto out_sem;
->>>> +		goto set_dirty;
->>>>    	/* page is wholly or partially inside EOF */
->>>>    	if (((loff_t)(page->index + 1) << PAGE_SHIFT) >
->>>> @@ -150,14 +150,15 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
->>>>    		offset = i_size_read(inode) & ~PAGE_MASK;
->>>>    		zero_user_segment(page, offset, PAGE_SIZE);
->>>>    	}
->>>> -	set_page_dirty(page);
->>>> -	if (!PageUptodate(page))
->>>> -		SetPageUptodate(page);
->>>>    	f2fs_update_iostat(sbi, APP_MAPPED_IO, F2FS_BLKSIZE);
->>>> -	f2fs_update_time(sbi, REQ_TIME);
->>>> +set_dirty:
->>>>    	trace_f2fs_vm_page_mkwrite(page, DATA);
->>>> +	set_page_dirty(page);
->>>> +	if (!PageUptodate(page))
->>>> +		SetPageUptodate(page);
-> Actually we don't need to call SetPageUptodate() since set_page_dirty() should
-> do? And, it seems the call stack is out-dated as well.
->
-> By the way, do we just need to get the right count by this?
->
-> --- a/fs/f2fs/data.c
-> +++ b/fs/f2fs/data.c
-> @@ -3697,8 +3697,7 @@ static bool f2fs_dirty_data_folio(struct address_space *mapping,
->                  folio_mark_uptodate(folio);
->          BUG_ON(folio_test_swapcache(folio));
->
-> -       if (!folio_test_dirty(folio)) {
-> -               filemap_dirty_folio(mapping, folio);
-> +       if (filemap_dirty_folio(mapping, folio)) {
->                  f2fs_update_dirty_folio(inode, folio);
->                  return true;
->          }
+Shouldn't literal code block be used instead for example snippet
+above?
 
-Yes, this patch seems a better one. I will send a PATCH-v2 about it.
-
-
-Thanks,
-
->>>> +	f2fs_update_time(sbi, REQ_TIME);
->>>>    out_sem:
->>>>    	filemap_invalidate_unlock_shared(inode->i_mapping);
->>
->> _______________________________________________
->> Linux-f2fs-devel mailing list
->> Linux-f2fs-devel@lists.sourceforge.net
->> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+-- 
+An old man doll... just what I always wanted! - Clara

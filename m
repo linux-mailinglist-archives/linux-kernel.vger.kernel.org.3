@@ -2,213 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF64759FCBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163AA59FCC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238352AbiHXOGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S238923AbiHXOIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239128AbiHXOGO (ORCPT
+        with ESMTP id S238156AbiHXOIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:06:14 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBBF98A5D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:06:11 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w10so10062125edc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:06:11 -0700 (PDT)
+        Wed, 24 Aug 2022 10:08:05 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA0F44542;
+        Wed, 24 Aug 2022 07:08:03 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bq23so15115611lfb.7;
+        Wed, 24 Aug 2022 07:08:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=WISgtRtj7XAbDMj5crexRB3gKRdBJedqKO8qGlTO7ac=;
-        b=T3LH1lzO4KaEX4zn8CgVYuDuv1KauxJR+HLCXKEs3xkm360Emw4hVW/MuvafYZ6sl/
-         3JPoNCsUwsH6+piwal7pIV4xPcGk8/LhMhEmlDsIW5wXG1GsuodbK5PAQMitAaN3SklC
-         UDZ4VPj9lBpiLtgWK1EICxF2A+N21C/ZEJZAlVolTuMYN7KyxVC3LlArNy48s6WdarRN
-         QM7u7L8czZFsRahByWnn++hZx6eXqbmVB8j1Vab8qkWaBUCGWKA7wqQqGZS8B2rDK/6s
-         I50j59hZkbewhI7anqmsnrTDwIZg46TVpjej35gDcENEkxdo/tXAd8zJRfrcLqyBaNeq
-         DT8A==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=E0CG0DrryLpU+UCEBU22L4+M6TrrPgcC3P/2h/Fu7l8=;
+        b=VEe+xsJ7cCsGLe8UqPwgQ3JHIeCU6nI5x71EURgUpemhL3JLwbv3WDs+2TlisnsstG
+         Ck9ObEcg2VJywOM3Q1UqPHxMJIKERFj8AOW2rXVxeHKrJDsKildhkte7zNmZ1Yq1l/W9
+         su/SORAWmeLtyI4F/uo275YYZ6iHlQPwpoeDhRRXJudqGoEMGcxVdXIsRyUBgspVA200
+         HM9P5HMSjMuZ0JTZ2c6dgEc+uKKwThD1OQfQsWBeJli4K28svAYyH6zpiOx6OPAK3+Je
+         Oz4kbanGGuCMAYz3+DXYkiGJqK+oBOrLaaKeKqddQfO0YWIfTyiYDrqY1n4jOmMYmnz1
+         VJFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=WISgtRtj7XAbDMj5crexRB3gKRdBJedqKO8qGlTO7ac=;
-        b=Yg9qY7D8y5sbo84wwTSSqk00+SuDAYOt46ngefivREGEQVUGv2/eMqnyUoebTxaxEc
-         ModBy4UPU7a/rieG/y+XoFcrrrMCvv2JJiCEV+qzsMoBJ5eqdUOwxLajKA82PU+4sPRG
-         P1p1lfW43XxoEMSo2rr8Cy2J2iS4MlbgQe+VXCMzLk/oS5vuzNTKxb8U89/fNnyEb97N
-         t7zPvX1EurOKhGIgiSApT7PW2QwbQQlupZ77C+cUqQmK0QFYMCDk5hZsPbXItEHv+pwi
-         OQl7hi0cO/5wS1cdqtnTh4DiJKAhY2PNBFKbnx+wxbUgNFbbBZR4RTsRKLRTRuAlIkHu
-         BxyQ==
-X-Gm-Message-State: ACgBeo2CRbKzieTu609+jQQ0S7ykJBKUDbDj1/xTY1vVBEVoYsDGMhNm
-        GRbZlZAeq1RmmiGDUatzF1pJ6g==
-X-Google-Smtp-Source: AA6agR5yguLUR17cvPndc4QbDiWkEyiOKg4uGJnQ8vcfvPlTxDs7gcZCwbc7LsXL9nbmZwpGfFI8Ig==
-X-Received: by 2002:a05:6402:f14:b0:447:7944:558 with SMTP id i20-20020a0564020f1400b0044779440558mr3068928eda.29.1661349969800;
-        Wed, 24 Aug 2022 07:06:09 -0700 (PDT)
-Received: from localhost ([2a02:8070:6389:a4c0:2ca9:6d59:782b:fff3])
-        by smtp.gmail.com with ESMTPSA id cz21-20020a0564021cb500b004465d1db765sm3103733edb.89.2022.08.24.07.06.08
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=E0CG0DrryLpU+UCEBU22L4+M6TrrPgcC3P/2h/Fu7l8=;
+        b=Ne60S+AaJ4a44FNMiAE6L5Zw2T1QEtcfNB6kwbehfdVXD1OIb1mOy5ZrtaqZnfXQ4z
+         uxhFpt82mWIsC4iIz+QHDd6wJ1CdF+tjSscr+H98/3S4hhLGfufgxkpEhmrZA5Glb7ct
+         /i3eFMVC2DJCKDLe2DnRyMt4gcryjoc6J6gPesaoXU5Yuw+7PNFICC/PYjl30eLo/jL5
+         YfiWHwkPduT6nxUeTx1AVXVchugY2ep4XXqHvab7YOG0Af4errX1GucEA7E5+F0Pew82
+         rxSyzYQoqE63uZl2fULWXbDAGRSqm+Vys7H5mjVOQRASotiBW8rZGw9IRjt8LnzJvd5B
+         mxAg==
+X-Gm-Message-State: ACgBeo2kO6HaruwaH/ziJ8vq2Qcg3AfiYnGZXisi8yRLldV52IXlVrqh
+        5YkmjBk9ZoN/BDp/t6E2Obk=
+X-Google-Smtp-Source: AA6agR7eBGS0t8bAtmMG9kR2mnycCtyHLzZ+k4T63f69rE09XNDjJ+uKAvFR1vg8kJQDxDZ4Dw0zvQ==
+X-Received: by 2002:a05:6512:3503:b0:481:4470:4134 with SMTP id h3-20020a056512350300b0048144704134mr10007806lfs.42.1661350081733;
+        Wed, 24 Aug 2022 07:08:01 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id x4-20020a2e8384000000b00261cd70e41asm1543356ljg.32.2022.08.24.07.08.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 07:06:09 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 10:06:08 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     tj@kernel.org, mkoutny@suse.com, surenb@google.com,
-        gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
-        peterz@infradead.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Wed, 24 Aug 2022 07:08:01 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 17:07:59 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 05/10] sched/psi: optimize task switch inside shared
- cgroups again
-Message-ID: <YwYwUIjAGHLtRGue@cmpxchg.org>
-References: <20220824081829.33748-1-zhouchengming@bytedance.com>
- <20220824081829.33748-6-zhouchengming@bytedance.com>
+Subject: Re: [PATCH RESEND v5 00/24] dmaengine: dw-edma: Add RP/EP local DMA
+ controllers support
+Message-ID: <20220824140759.7gg7t53z2xi7jxaj@mobilestation>
+References: <20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220823154526.GB6371@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220824081829.33748-6-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220823154526.GB6371@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 04:18:24PM +0800, Chengming Zhou wrote:
-> commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
-> defer prev task sleep handling to psi_task_switch(), so we don't need
-> to clear and set TSK_ONCPU state for common cgroups.
+On Tue, Aug 23, 2022 at 09:15:26PM +0530, Manivannan Sadhasivam wrote:
+> On Mon, Aug 22, 2022 at 09:53:08PM +0300, Serge Semin wrote:
+> > This is a final patchset in the series created in the framework of
+> > my Baikal-T1 PCIe/eDMA-related work:
+> > 
+> > [1: Done v5] PCI: dwc: Various fixes and cleanups
+> > Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
+> > Merged: kernel 6.0-rc1
+> > [2: Done v4] PCI: dwc: Add hw version and dma-ranges support
+> > Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru
+> > Merged: kernel 6.0-rc1
+> > [3: In-review v5] PCI: dwc: Add generic resources and Baikal-T1 support
+> > Link: https://lore.kernel.org/linux-pci/20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru/
+> > [4: Done v5] dmaengine: dw-edma: Add RP/EP local DMA support
+> > Link: ---you are looking at it---
+> > 
+> > Note it is very recommended to merge the patchsets in the same order as
+> > they are listed in the set above in order to have them applied smoothly.
+> > Nothing prevents them from being reviewed synchronously though.
+> > 
+> > Please note originally this series was self content, but due to Frank
+> > being a bit faster in his work submission I had to rebase my patchset onto
+> > his one. So now this patchset turns to be dependent on the Frank' work:
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
+> > 
+> > Here is a short summary regarding this patchset. The series starts with
+> > fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
+> > initializes the LL/DT base addresses for the platforms with not matching
+> > CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
+> > method to get a correct base address. After that you can find a series of
+> > the interleaved xfers fixes. It turned out the interleaved transfers
+> > implementation didn't work quite correctly from the very beginning for
+> > instance missing src/dst addresses initialization, etc. In the framework
+> > of the next two patches we suggest to add a new platform-specific
+> > callback - pci_address() and use it to convert the CPU address to the PCIe
+> > space address. It is at least required for the DW eDMA remote End-point
+> > setup on the platforms with not-matching CPU/PCIe address spaces. In case
+> > of the DW eDMA local RP/EP setup the conversion will be done automatically
+> > by the outbound iATU (if no DMA-bypass flag is specified for the
+> > corresponding iATU window). Then we introduce a set of the patches to make
+> > the DebugFS part of the code supporting the multi-eDMA controllers
+> > platforms. It starts with several cleanup patches and is closed joining
+> > the Read/Write channels into a single DMA-device as they originally should
+> > have been. After that you can find the patches with adding the non-atomic
+> > io-64 methods usage, dropping DT-region descriptors allocation, replacing
+> > chip IDs with the device name. In addition to that in order to have the
+> > eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
+> > dma-ranges-based memory ranges mapping since in case of the root port DT
+> > node it's applicable for the peripheral PCIe devices only. Finally at the
+> > series closure we introduce a generic DW eDMA controller support being
+> > available in the DW PCIe Root Port/Endpoint driver.
+> > 
 > 
->     A
->     |
->     B
->    / \
->   C   D
->  /     \
-> prev   next
+
+> I've tested this series on Qualcomm SM8450 SoC based dev board. So,
 > 
-> After that commit psi_task_switch() do:
-> 1. psi_group_change(next, .set=TSK_ONCPU) for D
-> 2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C
-> 3. psi_group_change(prev, .clear=TSK_RUNNING) for B, A
+> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > 
-> But there is a limitation "prev->psi_flags == next->psi_flags" that
-> if not satisfied, will make this cgroups optimization unusable for both
-> sleep switch or running switch cases. For example:
+
+Thanks.
+
+> Not sure what is the merging strategy for this one but this series should get
+> merged into a single tree. Since the PCI patch is touching the designware
+> driver, merging the series into dmaengine tree might result in conflict later.
+
+Right, the series
+[PATCH v5 00/20] PCI: dwc: Add generic resources and Baikal-T1 support
+is supposed to be merged in first. Then this one will get to be
+applied with no conflicts. That's what I imply in the head of the
+cover-letter.
+
+-Sergey
+
 > 
-> prev->in_memstall != next->in_memstall when sleep switch:
-> 1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
-> 2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C, B, A
+> Thanks,
+> Mani
 > 
-> prev->in_memstall != next->in_memstall when running switch:
-> 1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
-> 2. psi_group_change(prev, .clear=TSK_ONCPU) for C, B, A
+> > Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v2:
+> > - Drop the patches:
+> >   [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
+> >   [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
+> >   since they are going to be merged in in the framework of the
+> >   Frank's patchset.
+> > - Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
+> >   failure."
+> > - Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
+> >   definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
+> > - Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
+> >   'dent'." (@Manivannan)
+> > - Slightly extend the eDMA name array size. (@Manivannan)
+> > - Change the specific DMA mapping comment a bit to being
+> >   clearer. (@Manivannan)
+> > - Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
+> >   method."
+> > - Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
+> >   device. That happens if the driver is disabled. (@Manivannan)
+> > - Add "dma" registers resource mapping procedure. (@Manivannan)
+> > - Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
+> > - Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
+> > - Remove eDMA in the dw_pcie_ep_exit() method.
+> > - Move the dw_pcie_edma_detect() method execution to the tail of the
+> >   dw_pcie_ep_init() function.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v3:
+> > - Conditionally set dchan->dev->device.dma_coherent field since it can
+> >   be missing on some platforms. (@Manivannan)
+> > - Drop the patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
+> >   method". A similar modification has been done in another patchset.
+> > - Add more comprehensive and less regression prune eDMA block detection
+> >   procedure.
+> > - Drop the patch: "dma-direct: take dma-ranges/offsets into account in
+> >   resource mapping". It will be separately reviewed.
+> > - Remove Manivannan tb tag from the modified patches.
+> > - Rebase onto the kernel v5.18.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru
+> > Changelog v4:
+> > - Rabase onto the laters Frank Li series:
+> > Link: https://lore.kernel.org/all/20220524152159.2370739-1-Frank.Li@nxp.com/
+> > - Add Vinod' Ab-tag.
+> > - Rebase onto the kernel v5.19-rcX.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220728142841.12305-1-Sergey.Semin@baikalelectronics.ru
+> > Changelog v5:
+> > - Just resend.
+> > - Rebase onto the kernel v6.0-rc2.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Acked-By: Vinod Koul <vkoul@kernel.org>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> > Cc: "Krzysztof Wilczyński" <kw@linux.com>
+> > Cc: linux-pci@vger.kernel.org
+> > Cc: dmaengine@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > 
+> > Serge Semin (24):
+> >   dmaengine: Fix dma_slave_config.dst_addr description
+> >   dmaengine: dw-edma: Release requested IRQs on failure
+> >   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
+> >   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
+> >     xfers
+> >   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
+> >   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
+> >   dmaengine: dw-edma: Add CPU to PCIe bus address translation
+> >   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
+> >     glue-driver
+> >   dmaengine: dw-edma: Drop chancnt initialization
+> >   dmaengine: dw-edma: Fix DebugFS reg entry type
+> >   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
+> >   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
+> >   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
+> >   dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
+> >   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
+> >   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
+> >   dmaengine: dw-edma: Join Write/Read channels into a single device
+> >   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
+> >   dmaengine: dw-edma: Use non-atomic io-64 methods
+> >   dmaengine: dw-edma: Drop DT-region allocation
+> >   dmaengine: dw-edma: Replace chip ID number with device name
+> >   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
+> >   dmaengine: dw-edma: Skip cleanup procedure if no private data found
+> >   PCI: dwc: Add DW eDMA engine support
+> > 
+> >  drivers/dma/dw-edma/dw-edma-core.c            | 216 +++++-----
+> >  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
+> >  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
+> >  drivers/dma/dw-edma/dw-edma-v0-core.c         |  60 +--
+> >  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
+> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
+> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
+> >  .../pci/controller/dwc/pcie-designware-ep.c   |  12 +-
+> >  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
+> >  drivers/pci/controller/dwc/pcie-designware.c  | 186 +++++++++
+> >  drivers/pci/controller/dwc/pcie-designware.h  |  20 +
+> >  include/linux/dma/edma.h                      |  18 +-
+> >  include/linux/dmaengine.h                     |   2 +-
+> >  13 files changed, 583 insertions(+), 356 deletions(-)
+> > 
+> > -- 
+> > 2.35.1
+> > 
 > 
-> The reason why this limitation exist is that we consider a group is
-> PSI_MEM_FULL if the CPU is actively reclaiming and nothing productive
-> could run even if it were runnable. So when CPU curr changed from prev
-> to next and their in_memstall status is different, we have to change
-> PSI_MEM_FULL status for their common cgroups.
-> 
-> This patch remove this limitation by making psi_group_change() change
-> PSI_MEM_FULL status depend on CPU curr->in_memstall status.
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-
-Hoo boy, that took me a second.
-
-
-Way back when PSI_MEM_FULL was accounted from the timer tick, task
-switching could simply iterate next and prev to the common ancestor to
-update TSK_ONCPU and be done.
-
-Then memstall ticks were replaced with checking curr->in_memstall
-directly in psi_group_change(). That meant that now if the task switch
-was between a memstall and a !memstall task, we had to iterate through
-the common ancestors at least ONCE to fix up their state_masks.
-
-We added the identical_state filter to make sure the common ancestor
-elimination was skipped in that case. It seems that was always a
-little too eager, because it caused us to walk the common ancestors
-*twice* instead of the required once: the iteration for next could
-have stopped at the common ancestor; prev could have updated TSK_ONCPU
-up to the common ancestor, then finish to the root without changing
-any flags, just to get the new curr->in_memstall into the state_masks.
-
-This patch recognizes this and makes it so that we walk to the root
-exactly once if state_mask needs updating.
-
-
-Unless I missed anything, would you mind adding this to the changelog?
-
-I'm not quite sure how 4117cebf1a9f ("psi: Optimize task switch inside
-shared cgroups") fits into the picture. That optimized the sleep case,
-but the sleep case never had the common ancestor optimization (the dq
-would have already cleared TSK_ONCPU up to the root). Let me know if I
-am mistaken.
-
-AFAICS I can see, this patch here is simply catching up on a missed
-optimization that could have been done in 7fae6c8171d2 ("psi: Use
-ONCPU state tracking machinery to detect reclaim") directly already.
-
-So I think it all makes sense. I have just two notes on the diff:
-
-> @@ -820,8 +820,6 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  	u64 now = cpu_clock(cpu);
->  
->  	if (next->pid) {
-> -		bool identical_state;
-> -
->  		psi_flags_change(next, 0, TSK_ONCPU);
->  		/*
->  		 * When switching between tasks that have an identical
-> @@ -829,11 +827,9 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  		 * we reach the first common ancestor. Iterate @next's
->  		 * ancestors only until we encounter @prev's ONCPU.
->  		 */
-
-The comment is rather stale now. Could you change it to this?
-
-		/*
-		 * Set TSK_ONCPU on @next's cgroups. If @next shares any
-		 * ancestors with @prev, those will already have @prev's
-		 * TSK_ONCPU bit set, and we can stop the iteration there.
-		 */
-
-> -		identical_state = prev->psi_flags == next->psi_flags;
->  		iter = NULL;
->  		while ((group = iterate_groups(next, &iter))) {
-> -			if (identical_state &&
-> -			    per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
-> +			if (per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
->  				common = group;
->  				break;
->  			}
-> @@ -880,7 +876,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  		 * TSK_ONCPU is handled up to the common ancestor. If we're tasked
->  		 * with dequeuing too, finish that for the rest of the hierarchy.
->  		 */
-> -		if (sleep) {
-> +		if (sleep || unlikely(prev->in_memstall != next->in_memstall)) {
->  			clear &= ~TSK_ONCPU;
->  			for (; group; group = iterate_groups(prev, &iter))
->  				psi_group_change(group, cpu, clear, set, now, wake_clock);
-
-Okay, this computes too. But it is somewhat special-cased, without
-explaining why the memstall state in particular matters. Instead of
-focusing on the exceptions though, can we just generalize this a bit?
-
-		/*
-		 * TSK_ONCPU is handled up to the common ancestor. If there are
-		 * any other differences between the two tasks (e.g. prev goes
-		 * to sleep, or only one task is memstall), finish propagating
-		 * those differences all the way up to the root.
-		 */
-		if ((prev->psi_flags ^ next->psi_flags) & ~TSK_ONCPU) {
-			clear &= ~TSK_ONCPU;
-			for (; group; group = iterate_groups(prev, &iter))
-				psi_group_change(group, cpu, clear, set, now, wake_clock);
-		}
-
-Thanks
-Johannes
+> -- 
+> மணிவண்ணன் சதாசிவம்

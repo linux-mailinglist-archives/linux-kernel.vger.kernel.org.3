@@ -2,156 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCE15A0453
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDF85A0456
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiHXW6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 18:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S230398AbiHXXBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 19:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiHXW6U (ORCPT
+        with ESMTP id S229450AbiHXXBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:58:20 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B22751400
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:58:19 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q63so2052674pga.9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=7uKSPP7wtQ3PYuBGGC9h5HElz/JUzm6F2UIsi7vY/QM=;
-        b=NuiQK2A5b/fHXxhYvlXEcTR4hghg7STEpnTevT+DKP6JDA9odmCB+yvUYrHSz7UlXh
-         tcvMbMxjZyVAShWZm7Rn6jYL4EpMx31nVe2cTcFNzeoRLceKU8Y/ZoUJEMmPE2MhA+Ph
-         1EjOzkPygFolUJAWNMwpwYOmXMrI7L9qZFbP262eOQVA2TXL/Dg2y/b3j8zjGYSQ2Pav
-         2xhGmaBJwORbWb8lbI9YHmaj1SOThtuj4hp4R2kr2I/hD8qk5ZDfhCZCSrZAElEkZcc1
-         CcWG5Ynh9PUQnm1ZssnKyg9oc/E97I3R+7hvLKxQo5wHF5RlOdZ8uTWCWN1bago2zpa1
-         tymg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=7uKSPP7wtQ3PYuBGGC9h5HElz/JUzm6F2UIsi7vY/QM=;
-        b=5YHokxRx5QU410zf85/uDL8rSM87wrYETOlNdXzP9Iey11mCKr5EBVVu+mtBxDZ4Zd
-         L0GenA0Wkfh8AePX7mhF3mgFx5mfJ/VIgulT4xBR0eappWYM2+VZMEwFlrQtx2ws/yZ1
-         6PxW+uqXxNS0GJRSp9TVwDeCiK3yvSIcEo9NJoqVn79NsPCx8WmHS/vevOgM3ZYAvcq5
-         fur3XoYV2Os0CofJSEQKAq3jhAuULTvIjOT4Rovwyb0p6BAypKu16sxBRTKTBXp+ybir
-         m6l5KVuLK2UL2DvG9kWH7XTZyLICEpFAACNS0D9AiPZmWV2GNC2sxbrfnhvhwbZFpcq8
-         7WGA==
-X-Gm-Message-State: ACgBeo3ckcSZtRU3diX979P+E2yGWJae73Ix6ML7/ESkk7nOGYhyxUJw
-        7zRGuVH0TF0GMxvUwN+W9QhLkuGvw8bzoQ==
-X-Google-Smtp-Source: AA6agR4tgl9E6PRbu6VIqVEKHVN3amsz4PBpEeifJ6EMQDqF3m63uKCt5a4Mm7BvfC6NaNhXv/WI7g==
-X-Received: by 2002:a62:7bd8:0:b0:536:9c1a:1ed3 with SMTP id w207-20020a627bd8000000b005369c1a1ed3mr950732pfc.77.1661381898446;
-        Wed, 24 Aug 2022 15:58:18 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id lt2-20020a17090b354200b001fabaeb1245sm1986695pjb.24.2022.08.24.15.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 15:58:18 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 22:58:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Kees Cook <keescook@chromium.org>,
+        Wed, 24 Aug 2022 19:01:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C2D61D67;
+        Wed, 24 Aug 2022 16:01:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A438F6198D;
+        Wed, 24 Aug 2022 23:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02320C433C1;
+        Wed, 24 Aug 2022 23:01:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661382096;
+        bh=K3AbTfljAyXVZM4eIUALsi1LVRgo6MtUgR1LZeL3H60=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=kJkmYAXd/qlzEbph6FQwXr/qP+E/zZg6j3xY1ujeUbS3h3cWZ3ynHv+m5qAgkcB80
+         DShJqWwlCImTDbBZ0WpyBm4oB6bgygxoZNDovR5SZ8EEx/wa1gpfvIqHObZ5prFmq3
+         kxS4arHARwRBVwJmu2ChH7vk1DnJ+qs+OX4uSkUdOjeaKcDkKTAiqyUNbgDvJ3W7Iz
+         iaJ0iDVfC5xXVNrQzDhW09BHqkXOl/Uktkbz6+IeYwswvo2C55ZHAAmHcLP/H6rJ34
+         Y/4SsELKzrIc1EoJdw/KL84HAH8UnKmMYaYrjUDsGnEsSUB+nKhWNVu73UFwFwnu6T
+         2AvwLTo99keBQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8DDC25C05C9; Wed, 24 Aug 2022 16:01:35 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 16:01:35 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Pingfan Liu <kernelfans@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 12/13] KVM: x86: SVM: don't save SVM state to SMRAM
- when VM is not long mode capable
-Message-ID: <YwatBgiVoCv+UNlp@google.com>
-References: <20220803155011.43721-1-mlevitsk@redhat.com>
- <20220803155011.43721-13-mlevitsk@redhat.com>
+        Steven Price <steven.price@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
+Message-ID: <20220824230135.GG6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220822021520.6996-1-kernelfans@gmail.com>
+ <20220822021520.6996-7-kernelfans@gmail.com>
+ <20220822024528.GC6159@paulmck-ThinkPad-P17-Gen-1>
+ <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
+ <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1>
+ <CAFgQCTup0uTqnKi79Tu+5Q0POYVdcE4UkGes8KfHXBd6VR552A@mail.gmail.com>
+ <20220824162050.GA6159@paulmck-ThinkPad-P17-Gen-1>
+ <de70b840-df04-5a52-c36f-9eaed839aa7c@joelfernandes.org>
+ <20220824192129.GE6159@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YTvbsrQAxx4Qdme-9T_pUAo00+ZM0qug1tk4puEPmYn4A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220803155011.43721-13-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YTvbsrQAxx4Qdme-9T_pUAo00+ZM0qug1tk4puEPmYn4A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022, Maxim Levitsky wrote:
-> When the guest CPUID doesn't have support for long mode, 32 bit SMRAM
-> layout is used and it has no support for preserving EFER and/or SVM
-> state.
+On Wed, Aug 24, 2022 at 06:54:01PM -0400, Joel Fernandes wrote:
+> On Wed, Aug 24, 2022 at 3:21 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Wed, Aug 24, 2022 at 01:26:01PM -0400, Joel Fernandes wrote:
+> > >
+> > >
+> > > On 8/24/2022 12:20 PM, Paul E. McKenney wrote:
+> > > > On Wed, Aug 24, 2022 at 09:53:11PM +0800, Pingfan Liu wrote:
+> > > >> On Tue, Aug 23, 2022 at 11:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >>>
+> > > >>> On Tue, Aug 23, 2022 at 09:50:56AM +0800, Pingfan Liu wrote:
+> > > >>>> On Sun, Aug 21, 2022 at 07:45:28PM -0700, Paul E. McKenney wrote:
+> > > >>>>> On Mon, Aug 22, 2022 at 10:15:16AM +0800, Pingfan Liu wrote:
+> > > >>>>>> In order to support parallel, rcu_state.n_online_cpus should be
+> > > >>>>>> atomic_dec()
+> > > >>>>>>
+> > > >>>>>> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> > > >>>>>
+> > > >>>>> I have to ask...  What testing have you subjected this patch to?
+> > > >>>>>
+> > > >>>>
+> > > >>>> This patch subjects to [1]. The series aims to enable kexec-reboot in
+> > > >>>> parallel on all cpu. As a result, the involved RCU part is expected to
+> > > >>>> support parallel.
+> > > >>>
+> > > >>> I understand (and even sympathize with) the expectation.  But results
+> > > >>> sometimes diverge from expectations.  There have been implicit assumptions
+> > > >>> in RCU about only one CPU going offline at a time, and I am not sure
+> > > >>> that all of them have been addressed.  Concurrent CPU onlining has
+> > > >>> been looked at recently here:
+> > > >>>
+> > > >>> https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
+> > > >>>
+> > > >>> You did us atomic_dec() to make rcu_state.n_online_cpus decrementing be
+> > > >>> atomic, which is good.  Did you look through the rest of RCU's CPU-offline
+> > > >>> code paths and related code paths?
+> > > >>
+> > > >> I went through those codes at a shallow level, especially at each
+> > > >> cpuhp_step hook in the RCU system.
+> > > >
+> > > > And that is fine, at least as a first step.
+> > > >
+> > > >> But as you pointed out, there are implicit assumptions about only one
+> > > >> CPU going offline at a time, I will chew the google doc which you
+> > > >> share.  Then I can come to a final result.
+> > > >
+> > > > Boqun Feng, Neeraj Upadhyay, Uladzislau Rezki, and I took a quick look,
+> > > > and rcu_boost_kthread_setaffinity() seems to need some help.  As it
+> > > > stands, it appears that concurrent invocations of this function from the
+> > > > CPU-offline path will cause all but the last outgoing CPU's bit to be
+> > > > (incorrectly) set in the cpumask_var_t passed to set_cpus_allowed_ptr().
+> > > >
+> > > > This should not be difficult to fix, for example, by maintaining a
+> > > > separate per-leaf-rcu_node-structure bitmask of the concurrently outgoing
+> > > > CPUs for that rcu_node structure.  (Similar in structure to the
+> > > > ->qsmask field.)
+> > > >
+> > > > There are probably more where that one came from.  ;-)
+> > >
+> > > Should rcutree_dying_cpu() access to rnp->qsmask have a READ_ONCE() ? I was
+> > > thinking grace period initialization or qs reporting paths racing with that. Its
+> > > just tracing, still :)
+> >
+> > Looks like it should be regardless of Pingfan's patches, given that
+> > the grace-period kthread might report a quiescent state concurrently.
 > 
-> Note that this isn't relevant to running 32 bit guests on VM which is
-> long mode capable - such VM can still run 32 bit guests in compatibility
-> mode.
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 7ca5e06878e19a..64cfd26bc5e7a6 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4442,6 +4442,15 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, union kvm_smram *smram)
->  	if (!is_guest_mode(vcpu))
->  		return 0;
->  
-> +	/*
-> +	 * 32 bit SMRAM format doesn't preserve EFER and SVM state.
-> +	 * SVM should not be enabled by the userspace without marking
-> +	 * the CPU as at least long mode capable.
+> Thanks for confirming, I'll queue it into my next revision of the series.
 
-Hmm, or userspace can ensure SMIs never get delivered.  Maybe?
+Sounds good!
 
-	/*
-	 * 32-bit SMRAM format doesn't preserve EFER and SVM state.  Userspace is
-	 * responsible for ensuring nested SVM and SMIs are mutually exclusive.
-	 */
-
-> +	 */
-> +
-
-Unnecessary newline.
-
-> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_LM))
-> +		return 1;
-
-This doesn't actually fix anything,  RSM will still jump to L2 state but in L1
-context.  I think we first need to actually handle errors from
-static_call(kvm_x86_enter_smm).
-
-Given that SVM can't even guarantee nested_svm_simple_vmexit() succeeds, i.e. KVM
-can't force the vCPU out of L2 to ensure triple fault would hit L1, killing the VM
-seems like the least awful solution (and it's still quite awful).
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 54fa0aa95785..38a6f4089296 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9985,7 +9985,10 @@ static void enter_smm(struct kvm_vcpu *vcpu)
-         * state (e.g. leave guest mode) after we've saved the state into the
-         * SMM state-save area.
-         */
--       static_call(kvm_x86_enter_smm)(vcpu, &smram);
-+       if (static_call(kvm_x86_enter_smm)(vcpu, &smram)) {
-+               kvm_vm_dead(vcpu->vm);
-+               return;
-+       }
-
-        kvm_smm_changed(vcpu, true);
-        kvm_vcpu_write_guest(vcpu, vcpu->arch.smbase + 0xfe00, &smram, sizeof(smram));
-
-> +
->  	smram->smram64.svm_guest_flag = 1;
->  	smram->smram64.svm_guest_vmcb_gpa = svm->nested.vmcb12_gpa;
->  
-> -- 
-> 2.26.3
-> 
+							Thanx, Paul

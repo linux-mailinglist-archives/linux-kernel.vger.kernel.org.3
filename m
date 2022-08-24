@@ -2,132 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89DF59F339
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104E459F33C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbiHXFxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 01:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
+        id S234517AbiHXFzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 01:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiHXFxX (ORCPT
+        with ESMTP id S229551AbiHXFzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 01:53:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5EF82754;
-        Tue, 23 Aug 2022 22:53:22 -0700 (PDT)
+        Wed, 24 Aug 2022 01:55:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D55E80F46;
+        Tue, 23 Aug 2022 22:55:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7606FB822F0;
-        Wed, 24 Aug 2022 05:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72A9C433C1;
-        Wed, 24 Aug 2022 05:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661320399;
-        bh=xYx09e/FwCKJeDXFZzACj1fWTrIBpLHE2EnCNXrSroA=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E6D61896;
+        Wed, 24 Aug 2022 05:55:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB4BC433D6;
+        Wed, 24 Aug 2022 05:55:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661320517;
+        bh=7Pr8jo6vAqF+ThsxlzbnzWMKHAqg3OsrYlY7SV9GvRU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TVnqYa7x7LmcPayzCMr21vN5XocvMwvmUpy/Asg1QcQI9HebF4HiJbzjkf069amXK
-         airByeV6QG8jWPuLmPbvnCKowes+bWjy75vfwmzBOGDXdzFbcEilMbpDL/ZIywk5rD
-         yGKJHb2K3ss6U3hS+VGlrytpRe23S2OIjLBnYz+c=
-Date:   Wed, 24 Aug 2022 07:53:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Piyush Mehta <piyush.mehta@amd.com>
-Cc:     balbi@kernel.org, michal.simek@xilinx.com, michal.simek@amd.com,
-        shubhrajyoti.datta@xilinx.com, lee.jones@linaro.org,
-        christophe.jaillet@wanadoo.fr, szymon.heidrich@gmail.com,
-        jakobkoschel@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@amd.com, siva.durga.prasad.paladugu@amd.com
-Subject: Re: [PATCH] usb: gadget: udc-xilinx: replace memcpy with memcpy_toio
-Message-ID: <YwW8zE8ieLCsSxPN@kroah.com>
-References: <20220824051636.1109962-1-piyush.mehta@amd.com>
+        b=fcUQXBfwXBb4Zba/4l4AMS/CbcAm6vf/r8RB1nEsMdHdqLULqyyLKj/jkX0tUJyOW
+         Tf8g3jr0yzzqcVHVG4J/BfizpOHFgNkamfGNv+56Ud6zm5jhbH5cE6vTwtgJOAh570
+         EEM5l5tRjnUy1MscqQ7+YcuZ5X1WWldW4pKu7+IRibZ2s6TUMDnImLT/PNZEbbUzxc
+         ttyf1IF5txPuThZjVBjDG1FxJFxWL8MTfVlKYN8bFhQibZZS/rAHrigjGcIrfh7ZBf
+         CDcZnOehG7s5opvIhRNy1DblOKRpuXJ/c8KPOJlXP/bQoheMCQAbLAfCDCAVMp2EIY
+         8w5GeqKFVC+2A==
+Date:   Wed, 24 Aug 2022 07:55:13 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Weilong Chen <chenweilong@huawei.com>
+Cc:     yangyicong@hisilicon.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] i2c: i2c-hisi: Add support for initializing control
+ module via DT
+Message-ID: <YwW9QVZ3CaLJEvpF@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Weilong Chen <chenweilong@huawei.com>, yangyicong@hisilicon.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220822010031.97769-1-chenweilong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ycFtVXGw3a18ZPQ3"
 Content-Disposition: inline
-In-Reply-To: <20220824051636.1109962-1-piyush.mehta@amd.com>
+In-Reply-To: <20220822010031.97769-1-chenweilong@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 10:46:36AM +0530, Piyush Mehta wrote:
-> For ARM processor, unaligned access to device memory is not allowed.
-> Method memcpy does not take care of alignment.
-> 
-> USB detection failure with the unaligned address of memory access, with
-> below kernel crash. To fix the unaligned address the kernel panic issue,
-> replace memcpy with memcpy_toio method.
-> 
-> Kernel crash:
-> Unable to handle kernel paging request at virtual address ffff80000c05008a
-> Mem abort info:
->   ESR = 0x96000061
->   EC = 0x25: DABT (current EL), IL = 32 bits
->   SET = 0, FnV = 0
->   EA = 0, S1PTW = 0
->   FSC = 0x21: alignment fault
-> Data abort info:
->   ISV = 0, ISS = 0x00000061
->   CM = 0, WnR = 1
-> swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000000143b000
-> [ffff80000c05008a] pgd=100000087ffff003, p4d=100000087ffff003,
-> pud=100000087fffe003, pmd=1000000800bcc003, pte=00680000a0010713
-> Internal error: Oops: 96000061 [#1] SMP
-> Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.15.19-xilinx-v2022.1 #1
-> Hardware name: ZynqMP ZCU102 Rev1.0 (DT)
-> pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : __memcpy+0x30/0x260
-> lr : __xudc_ep0_queue+0xf0/0x110
-> sp : ffff800008003d00
-> x29: ffff800008003d00 x28: ffff800009474e80 x27: 00000000000000a0
-> x26: 0000000000000100 x25: 0000000000000012 x24: ffff000800bc8080
-> x23: 0000000000000001 x22: 0000000000000012 x21: ffff000800bc8080
-> x20: 0000000000000012 x19: ffff000800bc8080 x18: 0000000000000000
-> x17: ffff800876482000 x16: ffff800008004000 x15: 0000000000004000
-> x14: 00001f09785d0400 x13: 0103020101005567 x12: 0781400000000200
-> x11: 00000000c5672a10 x10: 00000000000008d0 x9 : ffff800009463cf0
-> x8 : ffff8000094757b0 x7 : 0201010055670781 x6 : 4000000002000112
-> x5 : ffff80000c05009a x4 : ffff000800a15012 x3 : ffff00080362ad80
-> x2 : 0000000000000012 x1 : ffff000800a15000 x0 : ffff80000c050088
-> Call trace:
->  __memcpy+0x30/0x260
->  xudc_ep0_queue+0x3c/0x60
->  usb_ep_queue+0x38/0x44
->  composite_ep0_queue.constprop.0+0x2c/0xc0
->  composite_setup+0x8d0/0x185c
->  configfs_composite_setup+0x74/0xb0
->  xudc_irq+0x570/0xa40
->  __handle_irq_event_percpu+0x58/0x170
->  handle_irq_event+0x60/0x120
->  handle_fasteoi_irq+0xc0/0x220
->  handle_domain_irq+0x60/0x90
->  gic_handle_irq+0x74/0xa0
->  call_on_irq_stack+0x2c/0x60
->  do_interrupt_handler+0x54/0x60
->  el1_interrupt+0x30/0x50
->  el1h_64_irq_handler+0x18/0x24
->  el1h_64_irq+0x78/0x7c
->  arch_cpu_idle+0x18/0x2c
->  do_idle+0xdc/0x15c
->  cpu_startup_entry+0x28/0x60
->  rest_init+0xc8/0xe0
->  arch_call_rest_init+0x10/0x1c
->  start_kernel+0x694/0x6d4
->  __primary_switched+0xa4/0xac
-> 
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
 
-What commit id does this fix?  Should it go to a stable branch?
+--ycFtVXGw3a18ZPQ3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please add this information in the form of a Fixes: tag and such and
-resend.
+On Mon, Aug 22, 2022 at 09:00:31AM +0800, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
+>=20
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
 
-thanks,
+We also need the DT bindings documented in
+'Documentation/devicetree/bindings/i2c'.
 
-greg k-h
+
+--ycFtVXGw3a18ZPQ3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMFvUEACgkQFA3kzBSg
+KbYGzg//RSjynEL7vNjhzpwCxN2r2XCRsBY9/L9o+iRu8VIyka9/le26sI3522b8
+Y+hzefygXtMzlch60RFJia1APwsOLsctNq7GS6FyIlxFodvGYJwe6Dg+DKCvVrlD
+8eYMHCDDTqdpiDaR5o09Pf3UylIYitAPBgDrwsjDPB0SNEw9y3+MnTya+9hT900O
+XS29HJ8mBICUaRx2X2g7ySCPrveystUSKKGFDnx+3BHK6+2PQoV7ho3UIj5HxRUd
+Isr6jUIjI8nngOC+mukiT/8eZh0l2Kix8cMj3zuyZ1WHGkxozEK8aNXMxxi56o/d
+GPAwqlQIMkh5uv5yX4bUqMlYTVV7E3oHCyzMrj2xw4W4J7ox9/f6sBHP33ZWBPTc
+nCltuKBQcvpSQj401KqaPokh0eKolRSNza+A2tXPNLK7DnXgPIBGIYA8EAoGCmWP
+79qGRv7h4S6NM+PWyfWDZT1enkxP/2oYpoi1XCRdQfPCUSiKJNvHPUhKtfpySTpo
+51yOxQwQuEwNMPw+PVvT5QwBriJCg1XrUcM06CRb9ePw1YRbJgUBIgj+8q770LA4
+Wwgwaqh0LgiZ05co1SMsnAITB0DP/rLdS4tsEGDlKUWO1dILT3PP8lOH3J+LmmgX
+wXpC2E++vUOkWtkcgbFR1B9vJ7bHg4KT/a4duA7nV/s8vwL6TWE=
+=camm
+-----END PGP SIGNATURE-----
+
+--ycFtVXGw3a18ZPQ3--

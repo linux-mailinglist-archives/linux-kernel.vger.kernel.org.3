@@ -2,120 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E853659F0C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219F859F118
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbiHXBT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S233757AbiHXBjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbiHXBTz (ORCPT
+        with ESMTP id S231290AbiHXBja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:19:55 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D751D4BD28;
-        Tue, 23 Aug 2022 18:19:53 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MC7Wt13MXz6S2XJ;
-        Wed, 24 Aug 2022 09:18:18 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgAH8r23fAVjzNAPAw--.10560S3;
-        Wed, 24 Aug 2022 09:19:52 +0800 (CST)
-Subject: Re: [PATCH 4/4] blk-throttle: cleanup throtl_dequeue_tg()
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220823013810.406075-1-yukuai1@huaweicloud.com>
- <20220823013810.406075-5-yukuai1@huaweicloud.com>
- <YwUdouGld9Z7K8r1@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <dd9b7a59-a16a-74f5-011c-664ca91e8ada@huaweicloud.com>
-Date:   Wed, 24 Aug 2022 09:19:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 23 Aug 2022 21:39:30 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C3E8C035
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:39:28 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 082FA7E15C1;
+        Wed, 24 Aug 2022 01:39:28 +0000 (UTC)
+Received: from pdx1-sub0-mail-a225 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 58D167E144A;
+        Wed, 24 Aug 2022 01:39:27 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661305167; a=rsa-sha256;
+        cv=none;
+        b=YM8/iN0AEuuGYPyJrF7uRM2ywMduzfIJWbBmrJvEP1L+IcGTsdeM97xekt3ckJcx1jcgI/
+        IkYL9dEYEbBkIT5Ho9A5JfJm3Q57/zJTOYYgkfg0H+PcimsUWR0Y6NLmBLKAfw+w7atp7u
+        BLv5HkQw7jQvbVgV2d2h4KAmvwmaNbb4nCvGVYRB0QQGE3QxXPPKi7WfH27F4w2lNrfM3C
+        20TMkvBRFkY9RtLDU3LrROqElQoh9KtVhXxjcx3lgbqPg6N1UWQHpQVooA+LnMTk1Nnnoo
+        nnt2dGHzJRFDY9GwQz2lnX+VeK05z23be+dNNbaHg5k+qUUlBE80C0WOZ0GIVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661305167;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=J+hEYIEjvOwz2IyYKQJbNRKzS/JVrt+rHjvP+egv3pQ=;
+        b=lZs79j5/qHvG3TUe27KhIHgmNldv7Adf2suCPr2Fan8MjAHmvRfwCZ9AANfcyfCxpxpUv8
+        ze4zLjkfViK34iaJPG92KNArlZJ/rGtzr93q0AjaEhRUFB4blq+ymfQap/cJRvV5xX9XVa
+        qHUPjt0Y9UyHLpncEhoEToBkqQhjhuBS1oIi49xmc8bdmCQQk3UWeXLkkGqr25I7wHpaYE
+        KcRdDT5/0j5VPcLgNbvCNYTP62wd6uwdybYnRs0vXAn28gQ6PrBJq0kHg9AriNzkcrter0
+        3lA2MpxfQXvyxnkLYMufUKkXm2EoKC5ZlcoSpMBpNGLhLwZ+jwbXlrLxEJxAgg==
+ARC-Authentication-Results: i=1;
+        rspamd-5cbff9fff7-bjsdh;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Glossy-Dime: 1021f1c555efe553_1661305167619_443955144
+X-MC-Loop-Signature: 1661305167619:473570999
+X-MC-Ingress-Time: 1661305167619
+Received: from pdx1-sub0-mail-a225 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.103.147.30 (trex/6.7.1);
+        Wed, 24 Aug 2022 01:39:27 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a225 (Postfix) with ESMTPSA id 4MC80G5py6z1jh;
+        Tue, 23 Aug 2022 18:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661305167;
+        bh=J+hEYIEjvOwz2IyYKQJbNRKzS/JVrt+rHjvP+egv3pQ=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=SWusiSuECsjBEl+LRWPfdW7Nc75nB1HAFFk+Gf60fCn9oUUWMiTQ/9Ap6yZXd/fqn
+         R9c9AUoIS9Z3AlUc9L7RIqQ7NXbbDHskgPcOwcgl43EWIv6ZaUK3/Yaas1CzGpA4qy
+         VN0FE4p21Hd98YYzI4uvPX9EuqSxtjfMHdbH4sp1WtR2cnLaeRiSbda39ptQos6BQ1
+         oh8V6bBb4GrXBFkDCQUUAmLX7SQTHHfueXnxT/IHI5gFMQkVkX1GDGZVBso9pj8Pf4
+         4RsKts3RfuWjXGNgxw9HTnNvQ4EEKQdq+yvuP4AKp3+tCIREYjm87GW70ONENRhqt5
+         43C/NrLEss2hg==
+Date:   Tue, 23 Aug 2022 18:21:21 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v13 42/70] fs/proc/base: use maple tree iterators in
+ place of linked list
+Message-ID: <20220824012121.aj2qkzrmdyywu45t@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-43-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <YwUdouGld9Z7K8r1@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAH8r23fAVjzNAPAw--.10560S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF4DXr1kWw13Ww45Ar1fJFb_yoW8AFyrpF
-        y5A3WrCF42qr4qkr1Yq3ZrXFWSvws7JF4rAws7J3WSyr42vry3KFn7ZFyrXaykZFZ7XrWr
-        ZF4Dtwn5A3WUZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220822150128.1562046-43-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tejun
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-ÔÚ 2022/08/24 2:34, Tejun Heo Ð´µÀ:
-> On Tue, Aug 23, 2022 at 09:38:10AM +0800, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Now that throtl_dequeue_tg() is called when the last bio is dispatched,
->> there is no need to check the flag THROTL_TG_PENDING, since it's ensured
->> to be set when bio is throttled.
->>
->> There are no functional changes.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   block/blk-throttle.c | 11 ++++-------
->>   1 file changed, 4 insertions(+), 7 deletions(-)
->>
->> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
->> index 47142a1dd102..e47506a8ef47 100644
->> --- a/block/blk-throttle.c
->> +++ b/block/blk-throttle.c
->> @@ -570,14 +570,11 @@ static void throtl_enqueue_tg(struct throtl_grp *tg)
->>   
->>   static void throtl_dequeue_tg(struct throtl_grp *tg)
->>   {
->> -	if (tg->flags & THROTL_TG_PENDING) {
->> -		struct throtl_service_queue *parent_sq =
->> -			tg->service_queue.parent_sq;
->> +	struct throtl_service_queue *parent_sq = tg->service_queue.parent_sq;
->>   
->> -		throtl_rb_erase(&tg->rb_node, parent_sq);
->> -		--parent_sq->nr_pending;
->> -		tg->flags &= ~THROTL_TG_PENDING;
->> -	}
->> +	throtl_rb_erase(&tg->rb_node, parent_sq);
->> +	--parent_sq->nr_pending;
->> +	tg->flags &= ~THROTL_TG_PENDING;
-> 
-> Yeah, I don't know about this one. This breaks the symmetry with
-> throtl_enqueue_tg() and it's a bit odd that we aren't at least
-> WARN_ON_ONCE() on the flag given what the flag tracks. If you want to do
-> this, I think the prev approach of just removing the flag is better as that
-> was symmetric at least.
+>From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 
-Yes, you are right, thanks for the advice. Since now it's a bit
-ambivalent, we might as well just remove this patch?
+-ENOCHANGELOG.
 
-Thanks,
-Kuai
-> 
-> Thanks.
-> 
-
+>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>---
+> fs/proc/base.c | 5 ++++-
+> 1 file changed, 4 insertions(+), 1 deletion(-)
+>
+>diff --git a/fs/proc/base.c b/fs/proc/base.c
+>index 93f7e3d971e4..0b72a6d8aac3 100644
+>--- a/fs/proc/base.c
+>+++ b/fs/proc/base.c
+>@@ -2350,6 +2350,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+> 	GENRADIX(struct map_files_info) fa;
+> 	struct map_files_info *p;
+> 	int ret;
+>+	MA_STATE(mas, NULL, 0, 0);
+>
+> 	genradix_init(&fa);
+>
+>@@ -2377,6 +2378,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+> 	}
+>
+> 	nr_files = 0;
+>+	mas.tree = &mm->mm_mt;
+>
+> 	/*
+> 	 * We need two passes here:
+>@@ -2388,7 +2390,8 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+> 	 * routine might require mmap_lock taken in might_fault().
+> 	 */
+>
+>-	for (vma = mm->mmap, pos = 2; vma; vma = vma->vm_next) {
+>+	pos = 2;
+>+	mas_for_each(&mas, vma, ULONG_MAX) {
+> 		if (!vma->vm_file)
+> 			continue;
+> 		if (++pos <= ctx->pos)
+>
+>-- 
+>2.35.1
+>

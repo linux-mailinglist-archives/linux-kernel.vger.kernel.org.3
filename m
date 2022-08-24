@@ -2,116 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7221A59FF8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90ED059FF91
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239498AbiHXQdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S239113AbiHXQfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239979AbiHXQbV (ORCPT
+        with ESMTP id S238384AbiHXQfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:31:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADF6915D4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661358679;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UXUvPXR+b9lqF8hwT6ic9kgmL6Hea0lIAs1c1MqWYvI=;
-        b=FHo4aXd/rsP/qXV8VfB5JczrT0tpAFivQkA2a8cqiNDVOlgsACHb2dq1LDCTmdMNn2P/sk
-        C3S2ADyzP4XWgYvR0YsYHgR+YmI4R1lhlasGr/KdJ+tFTyMyTeJw/J6WWF1QEusWucTVIn
-        TVj6ZFuckwgI/+XVDRAacstVmHu0N0M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-552-SCBzPGAuN0qxwGul-CpxkQ-1; Wed, 24 Aug 2022 12:31:14 -0400
-X-MC-Unique: SCBzPGAuN0qxwGul-CpxkQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 140248039A1;
-        Wed, 24 Aug 2022 16:31:14 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9EF3840315A;
-        Wed, 24 Aug 2022 16:31:10 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        kexec@lists.infradead.org, David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>
-Subject: [PATCH RFC 2/2] checkpatch: warn on usage of VM_BUG_ON() and friends
-Date:   Wed, 24 Aug 2022 18:31:00 +0200
-Message-Id: <20220824163100.224449-3-david@redhat.com>
-In-Reply-To: <20220824163100.224449-1-david@redhat.com>
-References: <20220824163100.224449-1-david@redhat.com>
+        Wed, 24 Aug 2022 12:35:32 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291BC80F4C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:35:31 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so12922914ilu.17
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:35:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=SAh57rTjphZIWff57ut959PhYNidmDvkR6EstUizDYg=;
+        b=QKLZbtgUA8tHyu4sTVX1Go7z9a1kVE9VEoKUFZNnRhAtUu+9gV1T7QcPatBsfglsYD
+         4KIP1RscyXAFMowZ0B0mLJfoXRYcVBwnOw3q9d7Kkm3q3Zt0qb2+ie5t/5BNjtLZ7rMT
+         eMzU9vRCSmZfJEvxwI10VHP5xRWrBEYZX4VIjh73YhlFB8eH/b+41osdzP1rKt3cwkQV
+         nNiwZ1fq0TqGr3lhkH0ypP09ucfKeZRHopT8AgK8Jmq5Oh5nHfBy4J5/Sxl4MthCKHSr
+         ub8bX9/X6Nv1M/nO84qcJrC+cNuet3B589w+1j3vHTkdyIQdWxkZjtoNRldTabpttBeQ
+         cJVQ==
+X-Gm-Message-State: ACgBeo1pEJ/4cPW8WqtYWxCCcivcf32xNmuqsQTK0WFIhAnzKMLT9Ju+
+        sj14xDBdG4gDl6Aqf315xaoPU7iYePKIq0mM+O/24NJ1VXxY
+X-Google-Smtp-Source: AA6agR6ZBN+WFXvWU4gkmCBNPwWt+c3aM7f4qneAfNHwmFoJDz3AphkWJNHmAzr5AZ7WMJX524bl6IM1YG4a3ZVE27us75gCT8Rx
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:160a:b0:349:d991:d929 with SMTP id
+ x10-20020a056638160a00b00349d991d929mr8183409jas.144.1661358930466; Wed, 24
+ Aug 2022 09:35:30 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 09:35:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e51e3e05e6ff44db@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in tty_ldisc_receive_buf
+From:   syzbot <syzbot+be4b95faeb7a9073bb88@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-checkpatch does not point out that VM_BUG_ON() and friends should be
-avoided, however, Linus notes:
+Hello,
 
-    VM_BUG_ON() has the exact same semantics as BUG_ON. It is literally
-    no different, the only difference is "we can make the code smaller
-    because these are less important". [1]
+syzbot found the following issue on:
 
-So let's warn on VM_BUG_ON() and friends as well. While at it, make it
-clearer that the kernel really shouldn't be crashed.
+HEAD commit:    1c23f9e627a7 Linux 6.0-rc2
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=177ac367080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3045c937aad027f7
+dashboard link: https://syzkaller.appspot.com/bug?extid=be4b95faeb7a9073bb88
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1701758d080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17473aad080000
 
-Note that there are some other *_BUG_ON flavors, but they are not all
-bad: for example, KVM_BUG_ON() only triggers a WARN_ON_ONCE and then
-flags KVM as being buggy, so we'll not care about them for now here.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+be4b95faeb7a9073bb88@syzkaller.appspotmail.com
 
-[1] https://lore.kernel.org/r/CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+Mem abort info:
+  ESR = 0x0000000086000006
+  EC = 0x21: IABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000010b44f000
+[0000000000000000] pgd=080000010b5f3003, p4d=080000010b5f3003, pud=080000010b1ce003, pmd=0000000000000000
+Internal error: Oops: 86000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 28 Comm: kworker/u4:1 Not tainted 6.0.0-rc2-syzkaller-16440-g1c23f9e627a7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
+Workqueue: events_unbound flush_to_ldisc
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : 0x0
+lr : gsmld_receive_buf+0x140/0x214 drivers/tty/n_gsm.c:2861
+sp : ffff80000f603c30
+x29: ffff80000f603c40 x28: 0000000000000000 x27: 00000000000003d9
+x26: 0000000000000000 x25: 0000000000000000 x24: ffff80000d937000
+x23: ffff80000d681e40 x22: ffff0000c929b800 x21: 0000000000000000
+x20: ffff80000c205988 x19: ffff0000c91cf446 x18: ffff80000d2dec40
+x17: 0000000000000008 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000004 x12: ffff80000d681e78
+x11: ff808000098e7e04 x10: 0000000000000000 x9 : ffff8000098e7e04
+x8 : 0000000000000000 x7 : ffff8000098dac3c x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 00000000000003da
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff0000c929b800
+Call trace:
+ 0x0
+ tty_ldisc_receive_buf+0xb8/0xcc drivers/tty/tty_buffer.c:461
+ tty_port_default_receive_buf+0x54/0x8c drivers/tty/tty_port.c:39
+ receive_buf drivers/tty/tty_buffer.c:511 [inline]
+ flush_to_ldisc+0x150/0x358 drivers/tty/tty_buffer.c:561
+ process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+ worker_thread+0x340/0x610 kernel/workqueue.c:2436
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20
+Code: bad PC value
+---[ end trace 0000000000000000 ]---
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
+
 ---
- scripts/checkpatch.pl | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 79e759aac543..4c18acf17032 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -4695,12 +4695,12 @@ sub process {
- 			}
- 		}
- 
--# avoid BUG() or BUG_ON()
--		if ($line =~ /\b(?:BUG|BUG_ON)\b/) {
-+# do not use BUG(), BUG_ON(), VM_BUG_ON() and friends.
-+		if ($line =~ /\b(?:BUG|BUG_ON|VM_BUG_ON|VM_BUG_ON_[A-Z]+)\b/) {
- 			my $msg_level = \&WARN;
- 			$msg_level = \&CHK if ($file);
- 			&{$msg_level}("AVOID_BUG",
--				      "Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()\n" . $herecurr);
-+				      "Do not crash the kernel unless it is unavoidable - use WARN_ON_ONCE & recovery code (if reasonable) rather than BUG(), BUG_ON(), VM_BUG_ON(), ...\n" . $herecurr);
- 		}
- 
- # avoid LINUX_VERSION_CODE
--- 
-2.37.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

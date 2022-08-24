@@ -2,196 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8248C59F02E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EA159F030
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbiHXAX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        id S231684AbiHXAZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiHXAX5 (ORCPT
+        with ESMTP id S229872AbiHXAZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:23:57 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DD950075;
-        Tue, 23 Aug 2022 17:23:56 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id r124so2359753oig.11;
-        Tue, 23 Aug 2022 17:23:56 -0700 (PDT)
+        Tue, 23 Aug 2022 20:25:02 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E68D25FB
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:25:00 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-11c5505dba2so18778617fac.13
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=LJAfA7GotYMc2sBImpvtvpZqft2fC+cWg+7aSAi+MUI=;
+        b=J8Z/QwaoEtvIKAD3GGv0vJiORTtrZK6BWnFjNAbedgZFY47B1xacZGex+76dIqSRpw
+         o8hIeegzWId5M5Rrs8YN3/UNLLbZOaABDosP3QkOXhvYQApsNgpuG+D0b6sv2WQJJ01U
+         iOvKqbWOIx9TBvcUVyg3pOxQYDy3W2ygUmMGQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=z3gbS+dvNMlzyhJK3RThDNWfcjbn/dU0DQZBMqseXn0=;
-        b=kYfxqaqaOUoPAN51plqIWtQjSFJ+NkddUfQUREc+EcgU3Syffzs5Mnvppds5G8Qesm
-         OSK2irWsWpkYPxParH3hf0pw6KjmNrjPviGI5nYPnW0q6bylQ6FxiPyFLqD5soY/N2Rn
-         mzzEKgbaJIC/mB1Hbw+7LC3umwDstea+ooHwjfjzCRKFSwpYhtJatCfw7LjFoMPybaRR
-         t6iNWniUXXCcQPLPdh1hnCOhjlKqDEToQ6OmeYWttrLiD0V8hQdwVoxYv4ZraBxX+TzH
-         UfCtfXJVmT3sU/DNKLes2uT/URGa3g8l3NGe0dpS5KvOhxZBoQYypTkY1YfPjS5+4HVK
-         IzEg==
-X-Gm-Message-State: ACgBeo2dh1gNV3fXt1rYBvqQVbx+UVjzDwYR0JWiRMelUa/XML++iPa7
-        ozKYGbLzuTeg1MMn50I7mJDNGQqmCQ==
-X-Google-Smtp-Source: AA6agR6mxgCTl0NfIJJjwFJDTc6t76xpU9NN2dg7Q7Pt77XqKHCJGPxaRenqC5Re0V2UnAbPZaSujg==
-X-Received: by 2002:a05:6808:23cd:b0:345:efa:2a40 with SMTP id bq13-20020a05680823cd00b003450efa2a40mr2229844oib.294.1661300636163;
-        Tue, 23 Aug 2022 17:23:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k37-20020a05687095a500b00101bc3380a5sm669853oao.12.2022.08.23.17.23.55
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=LJAfA7GotYMc2sBImpvtvpZqft2fC+cWg+7aSAi+MUI=;
+        b=Vb17G+XYwFc10AvD+CeLaH2ns6/ZYURWHgL4OQhlkGWkhecklYZfkkxyZwNKvsPjAU
+         tA+n3lVZyR+gsekDNC/mjafglTkc0ZK5KOKOBNAl9GsyrCudWKaIXeTTC1Z1+J8GXr4m
+         /I5diH24aR7A5dCwr+TUp3UdwMRe1z1p7qqbLIE/rRsM8b3zSsV82va/Kve7B2NVxlG6
+         kNZerd8fy4/HH0rD4eZOzdg72ILoSdea9LHkII0d3zr4eben4xxYwZY6mgOdXEe44Ts/
+         PcFNn4QLTd2Yzp9An8QmC3XCmA01hAwCXp21sE6kwnZxhwpIdGEDLNbEvDgtFmdGHOX3
+         2nxg==
+X-Gm-Message-State: ACgBeo31aLvI316uHPaY5qmuK7nYC9xdlmPtFxkH1rYEqPmUHBCe7mJO
+        hRwwLBIBzyjNsVWbjqM4IEBVLg==
+X-Google-Smtp-Source: AA6agR5xRrsm0J1Ep+Om0FKDcYfwDXf/B6TbGlwLEb8cEHiHs/ivqpi9BYzu6oK91U++QCzMGiC8MQ==
+X-Received: by 2002:a05:6870:8912:b0:11b:a59c:f533 with SMTP id i18-20020a056870891200b0011ba59cf533mr2525842oao.220.1661300699430;
+        Tue, 23 Aug 2022 17:24:59 -0700 (PDT)
+Received: from shuah-tx13.internal ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v23-20020a0568301bd700b0063711a0010bsm4154466ota.76.2022.08.23.17.24.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 17:23:55 -0700 (PDT)
-Received: (nullmailer pid 521915 invoked by uid 1000);
-        Wed, 24 Aug 2022 00:23:55 -0000
-Date:   Tue, 23 Aug 2022 19:23:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        linux-kbuild@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: fix wrong use of if_changed_rule
-Message-ID: <20220824002355.GA391120-robh@kernel.org>
-References: <20220817152027.16928-1-masahiroy@kernel.org>
+        Tue, 23 Aug 2022 17:24:58 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, mailhol.vincent@wanadoo.fr,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongren Zenithal Zheng <i@zenithal.me>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v2] usbip: add USBIP_URB_* URB transfer flags
+Date:   Tue, 23 Aug 2022 18:24:56 -0600
+Message-Id: <20220824002456.94605-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817152027.16928-1-masahiroy@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 12:20:26AM +0900, Masahiro Yamada wrote:
-> The intent for if_changed_rule is to re-run the rule when the command
-> line is changed, but this if_changed_rule does not do anything for it.
+USBIP driver packs URB transfer flags in network packets that are
+exchanged between Server (usbip_host) and Client (vhci_hcd).
 
-This is the issue with DT_SCHEMA_FILES changes not causing a rebuild?
+URB_* flags are internal to kernel and could change. Where as USBIP
+URB flags exchanged in network packets are USBIP user API must not
+change.
 
-> $(cmd-check) for this rule is always empty because:
-> 
->  [1] $(cmd_$@) is empty because .processed-schema.json.cmd does not exist
->  [2] $(cmd_$1) is empty because cmd_chkdt is not defined
-> 
-> To address [1], use cmd_and_cmdsave instead of cmd.
-> 
-> To address [2], rename rule_chkdt to rule_mk_schema so that the stem
-> parts of cmd_* and rule_* match, like commit 7a0496056064 ("kbuild:
-> fix DT binding schema rule to detect command line changes").
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
-> Another possibility might be to split out yamllint and chk_bindings
-> as standalone build rules instead of running them as a side-effect
-> of the schema build. (but it it up to Rob's preference)
+Add USBIP_URB* flags to make this an explicit API and change the
+client and server to map them. Details as follows:
 
-That is the direction I'd like to go. Something like the below patch 
-perhaps.
+Client tx path (USBIP_CMD_SUBMIT):
+- Maps URB_* to USBIP_URB_* when it sends USBIP_CMD_SUBMIT packet.
 
-The main issue (or feature?) is that 'dt_binding_lint' and 
-'dt_binding_schema' targets are still rerun every time even with the 
-dummy target files.
+Server rx path (USBIP_CMD_SUBMIT):
+- Maps USBIP_URB_* to URB_* when it receives USBIP_CMD_SUBMIT packet.
 
-I think the top level makefile can be simplified a bit more with this 
-change, but this is what I got to being somewhat functional.
+Flags aren't included in USBIP_CMD_UNLINK and USBIP_RET_SUBMIT packets
+and no special handling is needed for them in the following cases:
 
-diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
-index 1eaccf135b30..ec3d8a926331 100644
---- a/Documentation/devicetree/bindings/Makefile
-+++ b/Documentation/devicetree/bindings/Makefile
-@@ -34,11 +34,13 @@ CHK_DT_DOCS := $(shell $(find_cmd))
- quiet_cmd_yamllint = LINT    $(src)
-       cmd_yamllint = ($(find_cmd) | \
-                      xargs -n200 -P$$(nproc) \
--		     $(DT_SCHEMA_LINT) -f parsable -c $(srctree)/$(src)/.yamllint >&2) || true
-+		     $(DT_SCHEMA_LINT) -f parsable -c $(srctree)/$(src)/.yamllint >&2) || true; \
-+                     touch $(obj)/dt_binding_lint.checked
+- Server rx path (USBIP_CMD_UNLINK)
+- Client rx path & Server tx path (USBIP_RET_SUBMIT)
+
+Update protocol documentation to reflect the change.
+
+Suggested-by: Hongren Zenithal Zheng <i@zenithal.me>
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+
+Changes since v1: addressed review comments
+
+ Documentation/usb/usbip_protocol.rst | 13 ++--
+ drivers/usb/usbip/stub_rx.c          |  4 +-
+ drivers/usb/usbip/usbip_common.c     | 91 +++++++++++++++++++++++++++-
+ include/uapi/linux/usbip.h           | 26 ++++++++
+ 4 files changed, 122 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
+index 0b8541fda4d8..adc158967cc6 100644
+--- a/Documentation/usb/usbip_protocol.rst
++++ b/Documentation/usb/usbip_protocol.rst
+@@ -340,13 +340,12 @@ USBIP_CMD_SUBMIT:
+ | 0         | 20     | usbip_header_basic, 'command' shall be 0x00000001 |
+ +-----------+--------+---------------------------------------------------+
+ | 0x14      | 4      | transfer_flags: possible values depend on the     |
+-|           |        | URB transfer_flags (refer to URB doc in           |
+-|           |        | Documentation/driver-api/usb/URB.rst)             |
+-|           |        | but with URB_NO_TRANSFER_DMA_MAP masked. Refer to |
+-|           |        | function usbip_pack_cmd_submit and function       |
+-|           |        | tweak_transfer_flags in drivers/usb/usbip/        |
+-|           |        | usbip_common.c. The following fields may also ref |
+-|           |        | to function usbip_pack_cmd_submit and URB doc     |
++|           |        | USBIP_URB transfer_flags.                         |
++|           |        | Refer to include/uapi/linux/usbip.h and           |
++|           |        | Documentation/driver-api/usb/URB.rst.             |
++|           |        | Refer to usbip_pack_cmd_submit() and              |
++|           |        | tweak_transfer_flags() in drivers/usb/usbip/      |
++|           |        | usbip_common.c.                                   |
+ +-----------+--------+---------------------------------------------------+
+ | 0x18      | 4      | transfer_buffer_length:                           |
+ |           |        | use URB transfer_buffer_length                    |
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index 5dd41e8215e0..fc01b31bbb87 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -464,7 +464,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+ 	int nents;
+ 	int num_urbs = 1;
+ 	int pipe = get_pipe(sdev, pdu);
+-	int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
++	int use_sg = pdu->u.cmd_submit.transfer_flags & USBIP_URB_DMA_MAP_SG;
+ 	int support_sg = 1;
+ 	int np = 0;
+ 	int ret, i;
+@@ -514,7 +514,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+ 				num_urbs = nents;
+ 				priv->completed_urbs = 0;
+ 				pdu->u.cmd_submit.transfer_flags &=
+-								~URB_DMA_MAP_SG;
++								~USBIP_URB_DMA_MAP_SG;
+ 			}
+ 		} else {
+ 			buffer = kzalloc(buf_len, GFP_KERNEL);
+diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+index 2ab99244bc31..053a2bca4c47 100644
+--- a/drivers/usb/usbip/usbip_common.c
++++ b/drivers/usb/usbip/usbip_common.c
+@@ -344,6 +344,91 @@ static unsigned int tweak_transfer_flags(unsigned int flags)
+ 	return flags;
+ }
  
--quiet_cmd_chk_bindings = CHKDT   $@
-+quiet_cmd_chk_bindings = CHKDT   $(src)
-       cmd_chk_bindings = ($(find_cmd) | \
--                         xargs -n200 -P$$(nproc) $(DT_DOC_CHECKER) -u $(srctree)/$(src)) || true
-+                         xargs -n200 -P$$(nproc) $(DT_DOC_CHECKER) -u $(srctree)/$(src)) || true; \
-+                         touch $(obj)/dt_binding_schema.checked
- 
- quiet_cmd_mk_schema = SCHEMA  $@
-       cmd_mk_schema = f=$$(mktemp) ; \
-@@ -46,12 +48,6 @@ quiet_cmd_mk_schema = SCHEMA  $@
-                       $(DT_MK_SCHEMA) -j $(DT_MK_SCHEMA_FLAGS) @$$f > $@ ; \
- 		      rm -f $$f
- 
--define rule_chkdt
--	$(if $(DT_SCHEMA_LINT),$(call cmd,yamllint),)
--	$(call cmd,chk_bindings)
--	$(call cmd,mk_schema)
--endef
--
- DT_DOCS = $(patsubst $(srctree)/%,%,$(shell $(find_all_cmd)))
- 
- override DTC_FLAGS := \
-@@ -64,8 +60,25 @@ override DTC_FLAGS := \
- # Disable undocumented compatible checks until warning free
- override DT_CHECKER_FLAGS ?=
- 
--$(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
--	$(call if_changed_rule,chkdt)
-+dt_binding_lint: $(obj)/dt_binding_lint.checked
++/*
++ * USBIP driver packs URB transfer flags in PDUs that are exchanged
++ * between Server (usbip_host) and Client (vhci_hcd). URB_* flags
++ * are internal to kernel and could change. Where as USBIP URB flags
++ * exchanged in PDUs are USBIP user API must not change.
++ *
++ * USBIP_URB* flags are exported as explicit API and client and server
++ * do mapping from kernel flags to USBIP_URB*. Details as follows:
++ *
++ * Client tx path (USBIP_CMD_SUBMIT):
++ * - Maps URB_* to USBIP_URB_* when it sends USBIP_CMD_SUBMIT packet.
++ *
++ * Server rx path (USBIP_CMD_SUBMIT):
++ * - Maps USBIP_URB_* to URB_* when it receives USBIP_CMD_SUBMIT packet.
++ *
++ * Flags aren't included in USBIP_CMD_UNLINK and USBIP_RET_SUBMIT packets
++ * and no special handling is needed for them in the following cases:
++ * - Server rx path (USBIP_CMD_UNLINK)
++ * - Client rx path & Server tx path (USBIP_RET_SUBMIT)
++ *
++ * Code paths:
++ * usbip_pack_pdu() is the common routine that handles packing pdu from
++ * urb and unpack pdu to an urb.
++ *
++ * usbip_pack_cmd_submit() and usbip_pack_ret_submit() handle
++ * USBIP_CMD_SUBMIT and USBIP_RET_SUBMIT respectively.
++ *
++ * usbip_map_urb_to_usbip() and usbip_map_usbip_to_urb() are used
++ * by usbip_pack_cmd_submit() and usbip_pack_ret_submit() to map
++ * flags.
++ */
 +
-+$(obj)/dt_binding_lint.checked: $(CHK_DT_DOCS) $(src)/.yamllint FORCE
-+	$(call if_changed,yamllint)
++struct urb_to_usbip_flags {
++	u32 urb_flag;
++	u32 usbip_flag;
++};
 +
-+dt_binding_schema: $(obj)/dt_binding_schema.checked
++#define NUM_USBIP_FLAGS	17
 +
-+$(obj)/dt_binding_schema.checked: $(CHK_DT_DOCS) check_dtschema_version FORCE
-+	$(call if_changed,chk_bindings)
++static const struct urb_to_usbip_flags flag_map[NUM_USBIP_FLAGS] = {
++	{URB_SHORT_NOT_OK, USBIP_URB_SHORT_NOT_OK},
++	{URB_ISO_ASAP, USBIP_URB_ISO_ASAP},
++	{URB_NO_TRANSFER_DMA_MAP, USBIP_URB_NO_TRANSFER_DMA_MAP},
++	{URB_ZERO_PACKET, USBIP_URB_ZERO_PACKET},
++	{URB_NO_INTERRUPT, USBIP_URB_NO_INTERRUPT},
++	{URB_FREE_BUFFER, USBIP_URB_FREE_BUFFER},
++	{URB_DIR_IN, USBIP_URB_DIR_IN},
++	{URB_DIR_OUT, USBIP_URB_DIR_OUT},
++	{URB_DIR_MASK, USBIP_URB_DIR_MASK},
++	{URB_DMA_MAP_SINGLE, USBIP_URB_DMA_MAP_SINGLE},
++	{URB_DMA_MAP_PAGE, USBIP_URB_DMA_MAP_PAGE},
++	{URB_DMA_MAP_SG, USBIP_URB_DMA_MAP_SG},
++	{URB_MAP_LOCAL, USBIP_URB_MAP_LOCAL},
++	{URB_SETUP_MAP_SINGLE, USBIP_URB_SETUP_MAP_SINGLE},
++	{URB_SETUP_MAP_LOCAL, USBIP_URB_SETUP_MAP_LOCAL},
++	{URB_DMA_SG_COMBINED, USBIP_URB_DMA_SG_COMBINED},
++	{URB_ALIGNED_TEMP_BUFFER, USBIP_URB_ALIGNED_TEMP_BUFFER},
++};
 +
-+dt_binding_examples: CHECK_DT_BINDING = y
++static unsigned int urb_to_usbip(unsigned int flags)
++{
++	unsigned int map_flags = 0;
++	int loop;
 +
-+dt_binding_examples: $(obj)/processed-schema.json $(patsubst $(srctree)/%.yaml,%.example.dtb, $(CHK_DT_DOCS))
++	for (loop = 0; loop < NUM_USBIP_FLAGS; loop++) {
++		if (flags & flag_map[loop].urb_flag)
++			map_flags |= flag_map[loop].usbip_flag;
++	}
 +
-+dt_binding_check: dt_binding_lint dt_binding_examples dt_binding_schema
++	return map_flags;
++}
 +
++static unsigned int usbip_to_urb(unsigned int flags)
++{
++	unsigned int map_flags = 0;
++	int loop;
 +
-+$(obj)/processed-schema.json: $(DT_DOCS) check_dtschema_version FORCE
-+	$(call if_changed,mk_schema)
- 
- always-y += processed-schema.json
- always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dts, $(CHK_DT_DOCS))
-diff --git a/Makefile b/Makefile
-index c7705f749601..0f197e3bd1f9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1391,7 +1391,7 @@ dtbs_prepare: include/config/kernel.release scripts_dtc
- 
- ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
- export CHECK_DTBS=y
--dtbs: dt_binding_check
-+dtbs: dt_binding_schema
- endif
- 
- dtbs_check: dtbs
-@@ -1409,13 +1409,14 @@ PHONY += scripts_dtc
- scripts_dtc: scripts_basic
- 	$(Q)$(MAKE) $(build)=scripts/dtc
- 
--ifneq ($(filter dt_binding_check, $(MAKECMDGOALS)),)
-+ifneq ($(filter dt_binding_examples, $(MAKECMDGOALS)),)
- export CHECK_DT_BINDING=y
- endif
- 
--PHONY += dt_binding_check
--dt_binding_check: scripts_dtc
--	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings
-+DT_BINDING_TARGETS := dt_binding_check dt_binding_lint dt_binding_schema dt_binding_examples
-+PHONY += $(DT_BINDING_TARGETS)
-+$(DT_BINDING_TARGETS): scripts_dtc
-+	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings $@
- 
- # ---------------------------------------------------------------------------
- # Modules
++	for (loop = 0; loop < NUM_USBIP_FLAGS; loop++) {
++		if (flags & flag_map[loop].usbip_flag)
++			map_flags |= flag_map[loop].urb_flag;
++	}
++
++	return map_flags;
++}
++
+ static void usbip_pack_cmd_submit(struct usbip_header *pdu, struct urb *urb,
+ 				  int pack)
+ {
+@@ -354,14 +439,14 @@ static void usbip_pack_cmd_submit(struct usbip_header *pdu, struct urb *urb,
+ 	 * will be discussed when usbip is ported to other operating systems.
+ 	 */
+ 	if (pack) {
+-		spdu->transfer_flags =
+-			tweak_transfer_flags(urb->transfer_flags);
++		/* map after tweaking the urb flags */
++		spdu->transfer_flags = urb_to_usbip(tweak_transfer_flags(urb->transfer_flags));
+ 		spdu->transfer_buffer_length	= urb->transfer_buffer_length;
+ 		spdu->start_frame		= urb->start_frame;
+ 		spdu->number_of_packets		= urb->number_of_packets;
+ 		spdu->interval			= urb->interval;
+ 	} else  {
+-		urb->transfer_flags         = spdu->transfer_flags;
++		urb->transfer_flags         = usbip_to_urb(spdu->transfer_flags);
+ 		urb->transfer_buffer_length = spdu->transfer_buffer_length;
+ 		urb->start_frame            = spdu->start_frame;
+ 		urb->number_of_packets      = spdu->number_of_packets;
+diff --git a/include/uapi/linux/usbip.h b/include/uapi/linux/usbip.h
+index fd393d908d8a..e4421ad55b2e 100644
+--- a/include/uapi/linux/usbip.h
++++ b/include/uapi/linux/usbip.h
+@@ -24,4 +24,30 @@ enum usbip_device_status {
+ 	VDEV_ST_USED,
+ 	VDEV_ST_ERROR
+ };
++
++/* USB URB Transfer flags:
++ *
++ * USBIP server and client (vchi) pack URBs in TCP packets. The following
++ * are the transfer type defines used in USBIP protocol.
++ */
++
++#define USBIP_URB_SHORT_NOT_OK		0x0001
++#define USBIP_URB_ISO_ASAP		0x0002
++#define USBIP_URB_NO_TRANSFER_DMA_MAP	0x0004
++#define USBIP_URB_ZERO_PACKET		0x0040
++#define USBIP_URB_NO_INTERRUPT		0x0080
++#define USBIP_URB_FREE_BUFFER		0x0100
++#define USBIP_URB_DIR_IN		0x0200
++#define USBIP_URB_DIR_OUT		0
++#define USBIP_URB_DIR_MASK		USBIP_URB_DIR_IN
++
++#define USBIP_URB_DMA_MAP_SINGLE	0x00010000
++#define USBIP_URB_DMA_MAP_PAGE		0x00020000
++#define USBIP_URB_DMA_MAP_SG		0x00040000
++#define USBIP_URB_MAP_LOCAL		0x00080000
++#define USBIP_URB_SETUP_MAP_SINGLE	0x00100000
++#define USBIP_URB_SETUP_MAP_LOCAL	0x00200000
++#define USBIP_URB_DMA_SG_COMBINED	0x00400000
++#define USBIP_URB_ALIGNED_TEMP_BUFFER	0x00800000
++
+ #endif /* _UAPI_LINUX_USBIP_H */
+-- 
+2.34.1
+

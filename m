@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA4459FA7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900C759FA98
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237411AbiHXMwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S237693AbiHXMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiHXMv6 (ORCPT
+        with ESMTP id S237597AbiHXMzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:51:58 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A918F82872
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:51:57 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id l8so6330459lfc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=0TuW2xQ2dHEAX2VuSflBzrY44GKwjJbFHupy3IUl/18=;
-        b=Eb27nBagWPJfWxAw0LkLVRMjTsYgGR+bfjcemf9c0v6wo86pWGNYzPOWKLW1SdzgGi
-         0igufXAj/2mnAF2/AaGyx/PE/RDNAxUNosf49tdNFKpkPc2zt/oDcEHGxjD2Nt8hC31p
-         jgSTKdtuoh0HgeOByVHOw55bIvu5X1DkIfVGagh5R/tpMBvNI5v1qLWkp70/t3zcHjqQ
-         Lu5/H+Q2UkvjZ3Mc515s3mzzPmx5/gdVh/vS2goMSzHSX07+bD7KONwK46lwbL84FV62
-         ThFX8jDrPMbh2cotTTXYwTeV+uune/kLz+N/ZoQHUpCuHtBNE+j76Dgbr1+OWkEbUO3w
-         wAaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=0TuW2xQ2dHEAX2VuSflBzrY44GKwjJbFHupy3IUl/18=;
-        b=1mIaVmNqw4kLQ1gr3mxK29SO+2AY2pNnEz8hol1UGAqsR7SnxkBx4YFM9riIAipcuF
-         /iI7dlqEj0h2Kwd/gWEjI/WG5epZV92/QZvS+TkM9rOYPljmnrOzaQjXFaUcUpuDmGAc
-         bBNcqWb8gNI7mfcort/9daEC0aGLNGVB/1kb3/En2pkp/4IgiDVIgnihQaq+9vlZcl4y
-         6E0m/FOVSVgrImDww0yc8jw0EBrsAvbxKC3W16RuBpOguZPI0dtIIvVKHtxc6CWAtmqo
-         2tJmbi810S60pobqb6S69zkfpYYpb3WSQoDOYvxF6mwWRK9n7nQYL0oou83mDvXV9TP4
-         DHfg==
-X-Gm-Message-State: ACgBeo33JGAQGHS5uxg/qZXkVTNf+toaYKTpTxg+tH2/7pZFvqix7nWq
-        q6kUT8KXLJ3mEdixTBBWbk9u6A==
-X-Google-Smtp-Source: AA6agR4yZjpivxeswgNyIq6jPQbfQ6fnoDvUWR7N5sObanybYz2aTAebJigHEIIOB+PzliOaoHwZLg==
-X-Received: by 2002:a19:4918:0:b0:48c:e6a0:c8d8 with SMTP id w24-20020a194918000000b0048ce6a0c8d8mr10274409lfa.679.1661345516094;
-        Wed, 24 Aug 2022 05:51:56 -0700 (PDT)
-Received: from [10.243.4.185] (213-212-21-103.static.ip-only.net. [213.212.21.103])
-        by smtp.gmail.com with ESMTPSA id i21-20020a196d15000000b0048b08e25979sm2997261lfc.199.2022.08.24.05.51.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 05:51:55 -0700 (PDT)
-Message-ID: <747d4b9a-b521-4b73-d887-ca2411e243b4@linaro.org>
-Date:   Wed, 24 Aug 2022 15:51:54 +0300
+        Wed, 24 Aug 2022 08:55:05 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB2A6DAE7;
+        Wed, 24 Aug 2022 05:55:03 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OCqMhE012681;
+        Wed, 24 Aug 2022 08:54:55 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3j5ad43vy2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 08:54:54 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 27OCsrBV040113
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 24 Aug 2022 08:54:53 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 24 Aug 2022 08:54:52 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 24 Aug 2022 08:54:52 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 24 Aug 2022 08:54:52 -0400
+Received: from rbolboac.ad.analog.com ([10.48.65.109])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 27OCseST004251;
+        Wed, 24 Aug 2022 08:54:42 -0400
+From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
+Subject: [PATCH 0/2] iio: adc: add max11205 adc driver
+Date:   Wed, 24 Aug 2022 15:52:01 +0300
+Message-ID: <20220824125203.685287-1-ramona.bolboaca@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0
- support
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
- <20220824094327.33685-2-wsa+renesas@sang-engineering.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220824094327.33685-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: vfrpV0RT2oP80eMNpU4JmBaL5hpF7jhU
+X-Proofpoint-ORIG-GUID: vfrpV0RT2oP80eMNpU4JmBaL5hpF7jhU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-24_07,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=624 spamscore=0 clxscore=1015 mlxscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208240049
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,14 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 12:43, Wolfram Sang wrote:
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml | 5 +++++
+Adding support for max11205 16-bit single-channel ultra-low power
+delta-sigma adc.
+The MAX11205 is compatible with the 2-wire interface and uses
+SCLK and RDY/DOUT for serial communica- tions. In this mode, all
+controls are implemented by tim- ing the high or low phase of the SCLK.
+The 2-wire serial interface only allows for data to be read out through the
+RDY/DOUT output.
 
+Ramona Bolboaca (2):
+  bindings: iio: adc: Add max11205 documentation file
+  iio: adc: add max11205 adc driver
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ .../bindings/iio/adc/maxim,max11205.yaml      |  65 ++++++
+ MAINTAINERS                                   |   8 +
+ drivers/iio/adc/Kconfig                       |  14 ++
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/max11205.c                    | 192 ++++++++++++++++++
+ 5 files changed, 280 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/maxim,max11205.yaml
+ create mode 100644 drivers/iio/adc/max11205.c
 
+-- 
+2.25.1
 
-Best regards,
-Krzysztof

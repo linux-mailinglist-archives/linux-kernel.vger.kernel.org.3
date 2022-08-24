@@ -2,173 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001A25A0366
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A925A036B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237433AbiHXVt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 17:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S240092AbiHXVuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 17:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiHXVtx (ORCPT
+        with ESMTP id S239953AbiHXVut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 17:49:53 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AED111A34
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:49:52 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id w10so11609246edc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:49:52 -0700 (PDT)
+        Wed, 24 Aug 2022 17:50:49 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9401E65558
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:50:48 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id 20so16832979plo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:50:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0M2E2CBv1JpAO8KBnEyx4hFHR2QWIViR8P0YrfLF2RU=;
-        b=pMPVm6Ju6mgGJShZt4yz4XgTLQgAo7kMU+nfTEch8KJTkh4U75Dgzu1t6x8n/OvWrQ
-         mQXPzZznkL/0Ae4ov4GjaZamFNG5UAtkli9r/XqkUXirKKfq/slnOyRdJvl+WF2L3Dxq
-         gOmBsXGwYTCs2yMNlab807HiD4YvcL/q0BreCUtWsrnyN9gZLhexZgG+sS8Ger4Ut8fl
-         Fz7EXZrbFyXthZr1Uw/wrv3fifbr+W71b1ywK36+YTZLRg++TnyffRK4NfrFNOoteOsV
-         C7WLO4qiz+rXDOECocE/cRJphiI8ithlMKY4XO6uCO+azmF7wXD0j9B/cu6HDY2HbW9n
-         Kx3A==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=RUPC3jPCalHtDBNfvRBs/lbqBPlwSNYiWYp0S4PJ/XU=;
+        b=gIHmiktIXmAFUsCwbcPQOlxaKONLU3DwN4gqqDggiCoauGYVwUhDfJClUivkb6m2Iv
+         toLhTLkqj3XOWZpAw9II5tGSbwNROBX/IP6Zb6Ri7ytnYYdwXmP1ehzyWzJ5cAb4x+Va
+         60vPXyXiLoAWo8bdcrLv3e6mY3NT7sSJAfZDIPbQCewkc5mIx0lb2NXbmQCvdZixU4lm
+         cIhaOpV0cL+IQEegjVrvRDZ6m+n2v2J6sqw6PjLykeDZdygsooLa5ljtW3a2TVk3nbEm
+         oWyPqnvSBvW39n9klYGMrBuWLr+zi1xW0NW2O3B/ufPQ0uyMBosPRp1bblSqKkb/aA1v
+         +szg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0M2E2CBv1JpAO8KBnEyx4hFHR2QWIViR8P0YrfLF2RU=;
-        b=YTugudWXEP2k0L2988qtAVvhujAwuVvI5nhOf5stkV2Rik2Wv8h9Z7x243FsLvI6b9
-         n/tNfp6RkfwSDnIx4/PkKJHWv4bvbMQSZDEnQ1DVZURsLE8SV0eGLDoCUbJfDb0tTH13
-         dBNhGA2MaYnwfxjkUrIBY/uFsnlGVw+sy+uldIRMRysLgksMJ7PidQ+gCzW5P8AgAdsq
-         p183Ul4e6UjeFHDvroadDeMfEc3SKkUXS6TYX2q/1Ov2IMAG9NU8bfgnVO3ItNJuSaIT
-         KW0HqprAmoi+UxzcMW5FUGDuS5CUlBPsijcI+buU4T+j35F3yv9o5JUs9XyJGbRv+Mli
-         DH4Q==
-X-Gm-Message-State: ACgBeo1n64/5d8PE5bxjSSRL1uKFZxKNy8hHfEJ/7FWNdVwEkUmHTUn5
-        qKf8tsvT6Znvm7C/ewR1TvaizvEGwHM9KAlKsajQkiymWN47ig==
-X-Google-Smtp-Source: AA6agR5O09ML+y+wkwpqTFZdyXLKvTKOvDCKzxGZhCBlRLzXqKLVaTrTyKDBulfYruq3gzai3YvRRCh/BgDxoWjudl0=
-X-Received: by 2002:a05:6402:27c6:b0:446:73f4:b5c2 with SMTP id
- c6-20020a05640227c600b0044673f4b5c2mr764674ede.1.1661377790746; Wed, 24 Aug
- 2022 14:49:50 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=RUPC3jPCalHtDBNfvRBs/lbqBPlwSNYiWYp0S4PJ/XU=;
+        b=jU4OtlVykhJhdKF+1HWK/ZLsg3KjrCJcKomTYM/knRiBvCLqxrebCCLy5a1/AhIvvL
+         URhRW4cy3hLy/6PrbFH2GyFCJ5fG94Ehjs+nhAZnRYLYuAFVaCmCmckE7dH0uu7BTcf4
+         QpuKt+AGEfTX/q0274h4zr9rfrGkqGzCupg872UFrTYCxp8QiEcG5BLTXRa+nzia0erE
+         L6wUqSakpZxaAUf78xK1Oaa6VgEcs6OEzIYlrGAyal/EchAukJ8+rzghDMVy3akFJKvW
+         EZy4rnSYw/fh0JOGdtdJ/k4BPTBeeFsG7ElELlqt9hecGc21q+JICZfLkgkwBSuXE/Uk
+         CLEw==
+X-Gm-Message-State: ACgBeo3E0IgVlF0QYydMiXSjIGlHEZzxuOYVVdkN7KNlVd6WTCj7qc3s
+        9ecSAMZfabBb8z3TbbxmB3Am1A==
+X-Google-Smtp-Source: AA6agR4Lo5G4GBoW0Csa2WkXlDva4B14EmccEzjTBr/lql7tOsivvXBIhVjphGHfixlQZH/MIcds6A==
+X-Received: by 2002:a17:902:a60c:b0:171:407d:16f8 with SMTP id u12-20020a170902a60c00b00171407d16f8mr767658plq.58.1661377847914;
+        Wed, 24 Aug 2022 14:50:47 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170902f78b00b001709e3c750dsm2366264pln.194.2022.08.24.14.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 14:50:47 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 21:50:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 04/13] KVM: x86: emulator: update the emulation mode
+ after rsm
+Message-ID: <YwadM2Y3FCMutSpt@google.com>
+References: <20220803155011.43721-1-mlevitsk@redhat.com>
+ <20220803155011.43721-5-mlevitsk@redhat.com>
 MIME-Version: 1.0
-References: <20220824072526.750357674@linuxfoundation.org>
-In-Reply-To: <20220824072526.750357674@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 25 Aug 2022 03:19:39 +0530
-Message-ID: <CA+G9fYs7_Ly2YR2dcMhtN9aaEdY0aDBURgxzF8baMZgbd=C1fQ@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/98] 4.9.326-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803155011.43721-5-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022 at 12:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.326 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 26 Aug 2022 07:24:55 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.326-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, Aug 03, 2022, Maxim Levitsky wrote:
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Please make the changelog standalone, even though it means restating the shortlog
+in most cases.  When viewing git commits, the shortlog+changelog are bundled
+fairly close together, but when viewing patches in a mail client, e.g. when doing
+initial review, the shortlog is in the subject which may be far away or even
+completely hidden.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> This ensures that RIP will be correctly written back,
+> because the RSM instruction can switch the CPU mode from
+> 32 bit (or less) to 64 bit.
 
-## Build
-* kernel: 4.9.326-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: cac0256273b13936edab0c4b8f455911ba01a2b2
-* git describe: v4.9.325-99-gcac0256273b1
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.325-99-gcac0256273b1
+Wrap closer to ~75 chars.
 
-## No test Regressions (compared to v4.9.325)
+> 
+> This fixes a guest crash in case the #SMI is received
+> while the guest runs a code from an address > 32 bit.
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/emulate.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index bc70caf403c2b4..5e91b26cc1d8aa 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -2666,6 +2666,11 @@ static int em_rsm(struct x86_emulate_ctxt *ctxt)
+>  	if (ret != X86EMUL_CONTINUE)
+>  		goto emulate_shutdown;
+>  
+> +
 
-## No metric Regressions (compared to v4.9.325)
+Unnecessary newline.
 
-## No test Fixes (compared to v4.9.325)
-
-## No metric Fixes (compared to v4.9.325)
-
-## Test result summary
-total: 75829, pass: 67050, fail: 762, skip: 7840, xfail: 177
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 250 total, 245 passed, 5 failed
-* arm64: 50 total, 43 passed, 7 failed
-* i386: 26 total, 25 passed, 1 failed
-* mips: 30 total, 30 passed, 0 failed
-* parisc: 12 total, 0 passed, 12 failed
-* powerpc: 36 total, 16 passed, 20 failed
-* s390: 12 total, 9 passed, 3 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 45 total, 44 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> +	ret = emulator_recalc_and_set_mode(ctxt);
+> +	if (ret != X86EMUL_CONTINUE)
+> +		goto emulate_shutdown;
+> +
+>  	/*
+>  	 * Note, the ctxt->ops callbacks are responsible for handling side
+>  	 * effects when writing MSRs and CRs, e.g. MMU context resets, CPUID
+> -- 
+> 2.26.3
+> 

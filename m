@@ -2,108 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8BE5A0301
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432285A02EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiHXUun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S240482AbiHXUm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiHXUuj (ORCPT
+        with ESMTP id S237796AbiHXUmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:50:39 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CD86DAC6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:50:38 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so12569734otd.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:50:38 -0700 (PDT)
+        Wed, 24 Aug 2022 16:42:53 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5C16BCEF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:42:52 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id a22so23550944edj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=KduZjIEyBxkzWgXFN93eLdrigURNo60WLuJ3gbVZ7XY=;
-        b=HzD4lZ/6vc6C1WbqLgNeBjsTawvUPrh+Xj9kvCaukUs4HQ4qPkl3iXv/4oz9z8HwXo
-         ECVxp5rH4cZomOeGqhdJQD8ko317eSJ1CyxlRlohPXJiVaA5x1hshUDuqSdO4cmtUGMW
-         CNqIz6REQRw99lwDp8gd7kPHARUS2DCtzdD4A=
+        bh=br69d+7ymucGww4aAsP6ibWtAg7r86QRawhRUVPh24M=;
+        b=X4vC6f500acsLOb7Eh7Bbfji+Uhr/3rF2ulUzhbpgdfyeFI9DbrKce3rg6oaLdWWGY
+         JRa/DZq2f9mFZMidAdB7JcnsJ0ejHNNbRqIxy3iN6gw591++dzI2KDMh5jDC+flXHke6
+         cS6vmrBqIU/jMsX4GbQIKNqUCe3L3aBUu9W6I4Fe63sX9ix/ZJHjrmvZou81i63cjgCv
+         OD0AtisE0MWswmYzoDICJTdVM3PGXS6aONWs206pZaGqjpIGGQzRw36VfMv/RZaljZgk
+         d6XmGtBs5U9C0Ks/hTBnZBpUr2OJRy1Uf1coUKyfzVOzLRsOihxCkgO6oXvCI5JnATP8
+         WxEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=KduZjIEyBxkzWgXFN93eLdrigURNo60WLuJ3gbVZ7XY=;
-        b=MHKv6s7EDaLpRxRF5sWHlAy+mWzCEK5lMfB+6O2ytb/S6181jyLJOcKXhniqu5/nu3
-         C3lW5jIOAPne+O3zdkT28CXa1lVtfJapGU+7n4UQKFOaIuRNz8sZBbPjv2TfHWd9r546
-         gUMwaLAyRMOVgDVl58XT5RxiU9mAfmk6Y4aGBaEvk7Er+7hzO44w9PFE+6jckIIp2D6H
-         H1wyAWQxwsXdhB2lLMYIgqE5p22yDRrSRK6I2v3SangMiU4yboaqVYb2jqcpn/OIndns
-         XzElKSQ3K20KnBN2kQjzqM0LjN7ggFQdW2p2z8VXYDt8bMWKmkbic0r+JZLbF4KL5A60
-         0syA==
-X-Gm-Message-State: ACgBeo2wUfN/v/XkGrlrZVJlG+v7t2wl3S+Y1OtGKEgIh6KTWjuYhqQE
-        X+h/E8sGEl/P0MBBm2yVD1bz0XWA07ZruA==
-X-Google-Smtp-Source: AA6agR4vspImuPIuslf7CkIX4jcmKqTPwy04foecuJWtpJVBDH3m127MNH+jd0Ef+JUQ+aVJl3sSqw==
-X-Received: by 2002:a05:6830:18fa:b0:638:d46c:1374 with SMTP id d26-20020a05683018fa00b00638d46c1374mr229360otf.142.1661374237882;
-        Wed, 24 Aug 2022 13:50:37 -0700 (PDT)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com. [209.85.167.182])
-        by smtp.gmail.com with ESMTPSA id z24-20020a4a8e58000000b004357ccfc8bfsm4096768ook.7.2022.08.24.13.50.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 13:50:37 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id a133so12993359oif.4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:50:37 -0700 (PDT)
-X-Received: by 2002:a05:6808:23c4:b0:344:e426:d2a7 with SMTP id
- bq4-20020a05680823c400b00344e426d2a7mr4087711oib.232.1661373740120; Wed, 24
- Aug 2022 13:42:20 -0700 (PDT)
+        bh=br69d+7ymucGww4aAsP6ibWtAg7r86QRawhRUVPh24M=;
+        b=LjYD9mph2+ROPz4PQ2H5Vp6MRF23RZ4HRUcmDc2/acFlTSIOna2IPtKWYV01OTEuce
+         oPSYxb/7RVLgfDYJl3P4cm4a8QH/5wi6lyuP98lzHLBib6FJ+tf0XVqISvjy4mVPfChw
+         KshaMEAAQdsbtcm+k0jBd+Lc8bMUPD/KsnsWMnGFinzSWa6dkh7Xq3Ln15xt8Z6uegaZ
+         vZaJtwG8tL4qw7gxtoZ2QkQU2S/jnBTAlrDCkHaj2xLaAtqR/mSpUCGxxOryByLdN09z
+         Rqd0lmis262JIgAFOI3aPlxECXOsJ3IlFjnf6vr0tZ2SdorzvvOw/pbVzyMRzxwWhTub
+         um/w==
+X-Gm-Message-State: ACgBeo247p+cYlX3wo0k+AgLHhDdZu56I1cypMtNfDX+tNLlT7mNlyur
+        tf1lygcYzuSzk6Fvei/ZmQgrWKFc+Fj4WAE4hsZTmA==
+X-Google-Smtp-Source: AA6agR4bAYLqiK6baFhQ57kCdRMC/7XyhhLf5+tWFOReeew8NIneOtzyXHmbbhgKonRFmXw75Us4aHWY/pf3wUYYkwo=
+X-Received: by 2002:a05:6402:447:b0:440:d482:495f with SMTP id
+ p7-20020a056402044700b00440d482495fmr640160edw.264.1661373771051; Wed, 24 Aug
+ 2022 13:42:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1661252818.git.duoming@zju.edu.cn>
-In-Reply-To: <cover.1661252818.git.duoming@zju.edu.cn>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Wed, 24 Aug 2022 13:42:09 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNf5JV9mj8mbm1OGZ_zd4d8srFc=E++Amg4MoQjqjS_TA@mail.gmail.com>
-Message-ID: <CA+ASDXNf5JV9mj8mbm1OGZ_zd4d8srFc=E++Amg4MoQjqjS_TA@mail.gmail.com>
-Subject: Re: [PATCH v8 0/2] Add new APIs of devcoredump and fix bugs
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        amit karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>, kvalo@kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>
+References: <20220824065913.068916566@linuxfoundation.org>
+In-Reply-To: <20220824065913.068916566@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 25 Aug 2022 02:12:39 +0530
+Message-ID: <CA+G9fYtUxnhhCfDUmOj1R2ApvLZgn0GZ0VKpF2phb2O801LuWQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/242] 5.15.63-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 4:21 AM Duoming Zhou <duoming@zju.edu.cn> wrote:
+On Wed, 24 Aug 2022 at 12:31, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> The first patch adds new APIs to support migration of users
-> from old device coredump related APIs.
+> This is the start of the stable review cycle for the 5.15.63 release.
+> There are 242 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> The second patch fix sleep in atomic context bugs of mwifiex
-> caused by dev_coredumpv().
+> Responses should be made by Fri, 26 Aug 2022 06:58:31 +0000.
+> Anything received after that time might be too late.
 >
-> Duoming Zhou (2):
->   devcoredump: add new APIs to support migration of users from old
->     device coredump related APIs
->   mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.63-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I would have expected a third patch in here, that actually converts
-existing users. Then in the following release cycle, clean up any new
-users of the old API that pop up in the meantime and drop the old API.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-But I'll defer to the people who would actually be merging your code.
-Technically it could also work to simply provide the API this cycle,
-and convert everyone in the next.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Brian
+NOTE:
+The following build failures noticed on mainline.
+x86_64 and arm64 clang nightly allmodconfig build failed.
+sound/soc/atmel/mchp-spdiftx.c:508:20: error: implicit truncation from
+'int' to bit-field changes value from 1 to -1
+[-Werror,-Wbitfield-constant-conversion]
+dev->gclk_enabled = 1;
+                  ^ ~
+1 error generated.
+
+## Build
+* kernel: 5.15.63-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 5137ebd6fd586a297e4b9c89ea61ce5b210ba9c8
+* git describe: v5.15.62-243-g5137ebd6fd58
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.62-243-g5137ebd6fd58
+
+## Test Regressions (compared to v5.15.62)
+* arm64, build
+  - clang-nightly-allmodconfig
+
+* x86_64, build
+  - clang-nightly-allmodconfig
+
+* riscv, build
+  - clang-nightly-allmodconfig
+  - clang-nightly-defconfig
+  - clang-nightly-tinyconfig
+
+## No metric Regressions (compared to v5.15.62)
+
+## No test Fixes (compared to v5.15.62)
+
+## No metric Fixes (compared to v5.15.62)
+
+## Test result summary
+total: 105556, pass: 94891, fail: 886, skip: 9641, xfail: 138
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 306 total, 303 passed, 3 failed
+* arm64: 68 total, 65 passed, 3 failed
+* i386: 57 total, 51 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 59 total, 56 passed, 3 failed
+* riscv: 27 total, 24 passed, 3 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 61 total, 58 passed, 3 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

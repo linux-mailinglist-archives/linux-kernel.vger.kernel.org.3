@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081FB59FF7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0025359FF7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239296AbiHXQ2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S239447AbiHXQ2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiHXQ2O (ORCPT
+        with ESMTP id S239418AbiHXQ2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:28:14 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0961382F8D;
-        Wed, 24 Aug 2022 09:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661358478;
-        bh=/JoCUmYyXJpMrmMGoBDe1GVrcRBpSz2UCYx2nBYqnrI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=hdicWkl6A5DLxc1Wu7iQlkEoyQnbt3Qg3bGL9Dg4FYVmtXmwwnJq4giwn+PvB6aPh
-         lqRO1oD+uXumt27iGHdGmAKNZMuqg5gxD+9yO2ubAzpsWQZWOtc8YsLDEvgwtOaVCf
-         BGBYS7yiK9EJYlapt4zNRxuKYTKgX+SGVHFVRaUM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from silverpad ([82.113.106.57]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MvK4f-1pI1qm3Xgf-00rFKd; Wed, 24
- Aug 2022 18:27:58 +0200
-From:   Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-To:     oliver@neukum.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     JFLF <jflf_kernel@gmx.com>
-Subject: [PATCH v2] r8152: add PID for the Lenovo OneLink+ Dock
-Date:   Wed, 24 Aug 2022 18:27:51 +0200
-Message-Id: <20220824162751.11881-1-jflf_kernel@gmx.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 24 Aug 2022 12:28:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E5582F8D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661358498; x=1692894498;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5gPvSM69EFABalYJ9JXoG8SIkAFvTVcfdVREF5gnBvo=;
+  b=J1x+uMTQqgiLHhtCnArjldHwXD2xeGrYImVgBfxcxc1SUitP/IXt5pCW
+   +g6PNJe9UyoIToFt1dmsl/pHe33DiygzdTz+q0kpDr59ETceebQP7lDhu
+   A5n9jwA1JR7PUEqRjqtKnQHMM0Z8dV8sTaQKbc73vhKsRaws4ChhYBovl
+   pIH62jfeewu51fDjUXVNW8U4qzDEPVtsDWqyrZZmOgUdUwvFo/axNK3IU
+   lZhbDxSrAVo3avrU1o3qOf7XDzokvXa83bJ1EPFFbOjqwoaOMdYa9pWZw
+   FzNxa2IDSp+hq3gXZ/ymomJ3K1S6FlNU8oN//wg2DhOE2OYRtGwRMDYpC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="294796109"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="294796109"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:28:17 -0700
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="937975167"
+Received: from skeshri-mobl.ger.corp.intel.com (HELO [10.212.154.182]) ([10.212.154.182])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:28:16 -0700
+Message-ID: <69cfbf60-2583-1bdc-3313-3b1ab72968e0@intel.com>
+Date:   Wed, 24 Aug 2022 09:28:17 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6FZAJtIqXhXav3lOfcXwUhEu6JC99LFsPjFBMODnDY8h00Jt5Pz
- p9Y9DpKtQ8r98M0scFU/LofzRfqAajzg8NRUuQJBkNSQMhlXa+XZyWNJgw0QBw6NVRnzZOQ
- 4aEz8kRyE5EjVx59rb1rV6NVhedqQzQJjtNLaYbcdhOphkWDqeGoTv3c7i+VezkmNIhb/rV
- 7yBT6LBrZvPvmyY1aeqyA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xfpsgQm5lWw=:kCHZi2jY/E9O50va/kemj7
- xAlzXxfjYzHGx2ShDXx7MJ6Y0E6m+I8wpdJBT6gmjjGj4dGA4rD7xIcrEHiXM5b3CdluYnHDP
- XVDvjN394IBnMN904NkGn9Zde4cizcCZwLFHin5E+qTHZZy1QUWX95SVN0bZD9lOT/zCC+jF5
- JrqFfJ9XdONR3cjja36XHjWUkxWlj0baMmqBqE+O5BHFy3f08JHffQjaWzadA9OPyIuj/5bH1
- 9MXpCi02TjGeHJ85ak7oB4yn1egSApF/if43Bl1cl/zQ3PigVj9Vo5nqNw7AqeGC935WUw5kl
- doRsYzJFJqSs3r8t+f0PRrz4UJJxvFu6lHnJHtyMzeuiyXdwcYHwGSrDTTElEBL3oaBQtvu3Z
- ejun+rYJtYyJ4EL4ZUu31dr9uAlMUEUJHkMnw9QiZiN3oj6ucjefrRQ7grjaIe0Cj/4yBZe8a
- 1JU6p9bfuBYlYVx2hiLfMZfJc7HTCqDOeJVQDwNcjhn2XcpxlHUs51kR/K2+lLEyGBUXm2gIH
- SmbuSWhdxrEZ/vt3mnT60Ef1ZZcImhs/4uIpvcaG9ovIrGl0EtPEUwJg4uKpQFRoloDY9Zxzu
- dEOcP0HHYnew7RzYbdIQCzpldulZGa3qlOY7vbPqwixQHdE8s49JrPfNH3Vtj1syhpaH6brRm
- WzAGxbfOfqtMGc/o2LKSDeDPW6aBCzOhAs4xCuxl5EzPad/PHQ/zaObNcq8DQBkzMeiimOQYR
- Akwo4c47A1bNRvbdGkiVZ30KVdCrCswCX6efhwMPjl/2kOajTmP2fGkxqUrCyGQeOUQRby8UN
- NoPAm2jQNAeYHs6YkYG/yEX7YDnQ734osg4g0S2WOWNLOI/bQRaW0B66jKzQs1Jodse30kh0u
- xSihvXUp+YF1urtov3G3K0CL/rxpOLonF5O3YknH8Mb7de2Vx/+YchMwCeOvKonvbXaez39sf
- nxdFKACd5sFINSBczlkPvHtSrANeAPTwg3u3CWFweftMaBYjH/NWqYKyJlo+9P2lLxuK01ISc
- jUcSZ4NBSPi0iu5EM8e9Crc8ezclENw6H//bbGh9zJwZTIlYGgsO2kz8EbUKtiKwRvXdXKyr1
- vXvLVINWkBuG8rMj95Fs8M39CnkVTA9jjTcUQocypWhyl7Dr+T9jD+RsmzwiUspzTtji2qOD0
- 8UvtNORaG9BZ1txy2Yg7aSsv7rt/NnZHtu1mX1NIs3E2za6tIG7fu0DgmDSbuirBjjAGXwFy4
- cHIYwtwl2g5FY4wefYlLLI1csTWY7JOLmAkrxYiFYSDzkv6U/AnWoCKjuHHkRvzsOW3qHvbmE
- Pve3al4FXgmLZkfXmLzAvNlRuyZlAg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: PKU usage improvements for threads
+Content-Language: en-US
+To:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jann Horn <jannh@google.com>
+References: <202208221331.71C50A6F@keescook>
+ <a5df4929-24aa-79bf-c5d0-98efbf323132@intel.com>
+ <CAEAAPHa3g0QwU=DZ2zVCqTCSh-+n2TtVKrQ07LvpwDjQ-F09gA@mail.gmail.com>
+ <b4f0dca5-1d15-67f7-4600-9a0a91e9d0bd@intel.com>
+ <26078f2a-67be-4aa1-bbb2-dcd1168c9d12@www.fastmail.com>
+ <CAEAAPHae8Lr3KfqfLpK3w5F3MPFoG4HJLxX3cMgbKpmQ_jp6Og@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAEAAPHae8Lr3KfqfLpK3w5F3MPFoG4HJLxX3cMgbKpmQ_jp6Og@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,75 +72,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: JFLF <jflf_kernel@gmx.com>
+On 8/24/22 01:51, Stephen Röttger wrote:
+>>> Yeah, that's something for which our defenses are quite weak.  But, it
+>>> also calls for a very generic mm/ solution and not something specific at
+>>> all to pkeys.
+> We were also thinking about if this should be a more generic feature instead of
+> being tied to pkeys. I.e. the doc above has an alternative proposal to introduce
+> something like a memory seal/unseal syscall.
+> I was personally leaning towards using pkeys for this for a few reasons:
+> * intuitively it would make sense to me to extend PKEY_DISABLE_ACCESS
+>   to also mean disable all changes to the memory, not just the data.
 
-The Lenovo OneLink+ Dock contains an RTL8153 controller that behaves as
-a broken CDC device by default. Add the custom Lenovo PID to the r8152
-driver to support it properly.
+It would make some sense, but we can't do it with the existing
+PKEY_DISABLE_ACCESS ABI.  It would surely break existing users if they
+couldn't munmap() memory that was PKEY_DISABLE_ACCESS.
 
-Also, systems compatible with this dock provide a BIOS option to enable
-MAC address passthrough (as per Lenovo document "ThinkPad Docking
-Solutions 2017"). Add the custom PID to the MAC passthrough list too.
+But, making it part of the mprotect() ABI wouldn't be the worst thing in
+the world.  Since we have a pkey_mprotect(), any mprotect()-based
+mechanism could even reuse the existing pkey syscalls.
 
-Tested on a ThinkPad 13 1st gen with the expected results:
-
-passthrough disabled: Invalid header when reading pass-thru MAC addr
-passthrough enabled:  Using pass-thru MAC addr XX:XX:XX:XX:XX:XX
-
-Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-=2D--
- drivers/net/usb/cdc_ether.c | 7 +++++++
- drivers/net/usb/r8152.c     | 3 +++
- 2 files changed, 10 insertions(+)
-
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 2de09ad5b..e11f70911 100644
-=2D-- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -777,6 +777,13 @@ static const struct usb_device_id	products[] =3D {
- },
- #endif
-
-+/* Lenovo ThinkPad OneLink+ Dock (based on Realtek RTL8153) */
-+{
-+	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3054, USB_CLASS_COMM,
-+			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-+	.driver_info =3D 0,
-+},
-+
- /* ThinkPad USB-C Dock (based on Realtek RTL8153) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3062, USB_CLASS_COMM,
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 0f6efaaba..e692a1576 100644
-=2D-- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -770,6 +770,7 @@ enum rtl8152_flags {
- 	RX_EPROTO,
- };
-
-+#define DEVICE_ID_THINKPAD_ONELINK_PLUS_DOCK		0x3054
- #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
- #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
- #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
-@@ -9584,6 +9585,7 @@ static bool rtl8152_supports_lenovo_macpassthru(stru=
-ct usb_device *udev)
-
- 	if (vendor_id =3D=3D VENDOR_ID_LENOVO) {
- 		switch (product_id) {
-+		case DEVICE_ID_THINKPAD_ONELINK_PLUS_DOCK:
- 		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
- 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
- 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
-@@ -9831,6 +9833,7 @@ static const struct usb_device_id rtl8152_table[] =
-=3D {
- 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927),
- 	REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3054),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069),
- 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082),
-=2D-
-2.34.1
-
+I do agree with Andy, though, that I'm not quite sure what the attack
+model is here.  If an attacker can make arbitrary system calls, surely
+protecting one little altstack VMA isn't doing to help much.

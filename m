@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B65C5A006C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05E25A0072
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240179AbiHXRcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S240191AbiHXRc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239329AbiHXRb5 (ORCPT
+        with ESMTP id S239329AbiHXRc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:31:57 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3017D797
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:31:54 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ca13so23621395ejb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NRT6dfzfkfi+NLMeGizooZpE9maX11OCkJa4Z5bjB10=;
-        b=RrNM63hFQuNodikVJqSybL0bp4O0dsufrM+sECvfH9W/QCiP6DlkUhO6AVc6GI/uLf
-         b4WSf9Hy2tqzLCrPsS+Xf7JXJ4uumotTQUuUifuv2LMS5uIzUYnkzm+yk6Gq8UdsCi8s
-         f02zTDeknEeBxz0ZFGol/mf2MswNl8P3QdXVg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NRT6dfzfkfi+NLMeGizooZpE9maX11OCkJa4Z5bjB10=;
-        b=WO6UoEEO1CDGVbjf7CUr4tv1/FunrsGMDz+8ZlEdVmekYOlyIo8AACPXT3G6OGKGeq
-         KBUeG/vlsEP9BcVpQPG0LZW+b3MPTqX8/7XBr4t6Of1dLvl4AaO9gv9EDNhWZrhPk0t3
-         w5lZlt5wj0OpiDAqmwHZxDvCNz/Pt8c3eTvFh+LzIaDysjrwuktfuDwA363FKVZ4T6Vk
-         Je/FDBxrcUJVHAiU12eMXDlUI7dgKwck0WKKocYFht3zwc8MTmYzNED+o12ZA52c0UI2
-         DY3kPq6P32vinAmkB8kesndXPaNhnjes2C7CER+9RstFlZWiU34Wlzs5zwpjWugH2U76
-         KtMA==
-X-Gm-Message-State: ACgBeo36NN15DRxhahcpL+89ZJs3IF1PcsNF9XtNkKepiM7sq/jUGjWD
-        QiwRdENjiUlV/jyAAvibs/E49sPZRnvXiAuB
-X-Google-Smtp-Source: AA6agR48sCqTxbgRVnEUpWAQFf2hOSYYynRPAVNsxjAFWKU+Tt+Duwt1ifVw5s6wbBjzQ/MlrCT/Vw==
-X-Received: by 2002:a17:907:284a:b0:73d:a818:5a2a with SMTP id el10-20020a170907284a00b0073da8185a2amr14379ejc.159.1661362312839;
-        Wed, 24 Aug 2022 10:31:52 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id oq11-20020a170906cc8b00b0073ae9ba9ba9sm1424595ejb.9.2022.08.24.10.31.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 10:31:52 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id z14-20020a7bc7ce000000b003a5db0388a8so2126844wmk.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:31:52 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ece:b0:3a6:28:bc59 with SMTP id
- g14-20020a05600c4ece00b003a60028bc59mr5865091wmq.154.1661362311628; Wed, 24
- Aug 2022 10:31:51 -0700 (PDT)
+        Wed, 24 Aug 2022 13:32:26 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E744B7D798;
+        Wed, 24 Aug 2022 10:32:24 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id caaf97ed744133c6; Wed, 24 Aug 2022 19:32:23 +0200
+Received: from kreacher.localnet (unknown [213.134.169.54])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 075BF66D192;
+        Wed, 24 Aug 2022 19:32:21 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH] drm: amd: amdgpu: ACPI: Add comment about ACPI_FADT_LOW_POWER_S0
+Date:   Wed, 24 Aug 2022 19:32:21 +0200
+Message-ID: <1831630.tdWV9SEqCh@kreacher>
 MIME-Version: 1.0
-References: <20220822141930.5f43b5e7@endymion.delvare>
-In-Reply-To: <20220822141930.5f43b5e7@endymion.delvare>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 24 Aug 2022 10:31:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiFRok=hU_BNEsqodjyGm=XV9LVZ1w=cm4ooEtWVpYLPg@mail.gmail.com>
-Message-ID: <CAHk-=wiFRok=hU_BNEsqodjyGm=XV9LVZ1w=cm4ooEtWVpYLPg@mail.gmail.com>
-Subject: Re: [GIT PULL] dmi update for v5.19
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.169.54
+X-CLIENT-HOSTNAME: 213.134.169.54
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgudduiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeevtdehuddvteduffejgeegueehheekfedtgeevkeeuffffudeffefgheevkeelgfenucffohhmrghinhepuhgvfhhirdhorhhgnecukfhppedvudefrddufeegrdduieelrdehgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdehgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepledprhgtphhtthhopegrlhgvgigrnhguvghrrdguvghutghhvghrsegrmhgurdgtohhmpdhrtghpthhtoheptghhrhhishhtihgrnhdrkhhovghnihhgsegrmhgurdgtohhmpdhrtghpthhtohepighinhhhuhhirdfrrghnsegrmhgurdgtohhmpdhrtghpthhtoheprghmugdqghhfgieslhhishhtshdrfhhrvggvuggvshhk
+ thhophdrohhrghdprhgtphhtthhopegurhhiqdguvghvvghlsehlihhsthhsrdhfrhgvvgguvghskhhtohhprdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 5:19 AM Jean Delvare <jdelvare@suse.de> wrote:
->
-> Andy Shevchenko (1):
->       firmware: dmi: Use the proper accessor for the version field
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I pulled this, but I kind of question it.
+According to the ACPI specification [1], the ACPI_FADT_LOW_POWER_S0
+flag merely means that it is better to use low-power S0 idle on the
+given platform than S3 (provided that the latter is supported) and it
+doesn't preclude using either of them (which of them will be used
+depends on the choices made by user space).
 
-This replaces a single 32-bit memory access (and an optimized byte
-swap) and a mask operation with three load-byte-and-shift operations.
+However, on some systems that flag is used to indicate whether or not
+to enable special firmware mechanics allowing the system to save more
+energy when suspended to idle.  If that flag is unset, doing so is
+generally risky.
 
-It's not clear that the new code is better.
+Accordingly, add a comment to explain the ACPI_FADT_LOW_POWER_S0 check
+in amdgpu_acpi_is_s0ix_active(), the purpose of which is otherwise
+somewhat unclear.
 
-That said, I can't imagine it matters - but because I looked at it, I
-note that the length check seems to be kind of iffy.
+Link: https://uefi.org/specs/ACPI/6.4/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#fixed-acpi-description-table-fadt # [1]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-The code checks that the length of the block is < 32 before doing the
-checksum on it, but shouldn't it also check for some minimum size?
-Otherwise the dmi checksum is kind of pointless, isn't it?
+Index: linux-pm/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+===================================================================
+--- linux-pm.orig/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
++++ linux-pm/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+@@ -1066,6 +1066,12 @@ bool amdgpu_acpi_is_s0ix_active(struct a
+ 	    (pm_suspend_target_state != PM_SUSPEND_TO_IDLE))
+ 		return false;
+ 
++	/*
++	 * If ACPI_FADT_LOW_POWER_S0 is not set in the FADT, it is generally
++	 * risky to do any special firmware-related preparations for entering
++	 * S0ix even though the system is suspending to idle, so return false
++	 * in that case.
++	 */
+ 	if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)) {
+ 		dev_warn_once(adev->dev,
+ 			      "Power consumption will be higher as BIOS has not been configured for suspend-to-idle.\n"
 
-It will access a minimum of 24 bytes for that dmi_base thing, so that
-would be the most obvious minimum value. But maybe there is some
-spec-defined size for that that only covers the header?
 
-           Linus
+

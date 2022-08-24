@@ -2,203 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8F459FAAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5115459FAB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237886AbiHXM6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S237527AbiHXM7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237622AbiHXM6j (ORCPT
+        with ESMTP id S237622AbiHXM7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:58:39 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8F697B2E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:58:36 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id q18so15344282ljg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=1GfWJHR/x5piPvfICRZ+8DXyaOC916mUwAEahhmR7Bg=;
-        b=xBMINWQ/VnjaGVPCE/q0Fg7SvC3mM4CUg/N4QetunqsFUfusnDwjb+M95+dciFHrQu
-         RXlojLQTdMp+7djTrK32e70yvN5IzgLipK1UT80IVRp2h7k2At44LN7Pf/hyMTwZuPDb
-         77vCF+CW41bFOsBe6RDO2fGdGEsWgScEAQM0D0Sgbsu3aZc8m9eQpKecHe9vFggTmiAt
-         yU/KxNpwD+1ufHNstHzvPNZQbh75kXQ2xHT3/I5gs/l3iu4DFaEEbZYIfIvbj3RnEl24
-         05LRsymk14UyFyYOrqDGfHgmXs9cfRYI3oNNm4Q/mpZ3rex/mFE2DElbJJ7jpzqdhc8B
-         K8ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=1GfWJHR/x5piPvfICRZ+8DXyaOC916mUwAEahhmR7Bg=;
-        b=TFgpDX+PwD88iDFU04sQ3s3DZ9JKQb1aXhM0uXqghie7qeB5AAw9p2gBw4LVQq9dfX
-         ZJltts1a6ZwzvWuVTOHpXDObq9UVhvfzaJtzQwjgWrxnQZFf89f7qYGe8XTgBAJksuSf
-         Cq5fEm2xMwmZzCC+R5vplIHP+T8dRbJXrETgiFaYYRiT+jhfDkglc8608GT7SjOIInfq
-         +hFd4R9cV4QNXtwjyzd5Dks1Qb7GedHmkZOavcvuiRc7HYli8WkazU/HkdZW/Qlp7TEe
-         pRlALGI99rWwyR8+Exuj7p69dN0Ea7zVnie9dSsVkuNFk1rttZY/QSte+b2GJcQaQgMp
-         LLYQ==
-X-Gm-Message-State: ACgBeo2vQX0icpTKkHu1V7ymavVxe75MpLtoXQwEVUbGBt/RjE9BNOwc
-        PCD+64MYYJ8b5p28+8xEQCtW6g==
-X-Google-Smtp-Source: AA6agR4upOTeoaIh6uzUsa5JU0XIzx+xlCiRe2cq6nttWmYYcb46rp7T/8gMTufYlDHBD4XEHFXbeA==
-X-Received: by 2002:a2e:bf07:0:b0:261:cafb:d4a8 with SMTP id c7-20020a2ebf07000000b00261cafbd4a8mr4318756ljr.268.1661345914326;
-        Wed, 24 Aug 2022 05:58:34 -0700 (PDT)
-Received: from [10.243.4.185] ([194.157.23.230])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05651205ce00b0048bd7136ef3sm3012084lfo.221.2022.08.24.05.58.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 05:58:33 -0700 (PDT)
-Message-ID: <f7c9c8ee-675b-216c-0e2d-28d11890477a@linaro.org>
-Date:   Wed, 24 Aug 2022 15:58:31 +0300
+        Wed, 24 Aug 2022 08:59:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCFC97B05;
+        Wed, 24 Aug 2022 05:59:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D2409207D7;
+        Wed, 24 Aug 2022 12:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661345972; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Sc8yPIrn2lPmz4U/qGCYgSl43TnthOC7R6vNmH5QSs=;
+        b=1RZtKWvRxQ6nAOERd7yoidX0z3KFExoGW9rmskgRWxSXd/4HmZAe1s0ijBEjFa2F7j9pUU
+        /qN212si0kmDkfT5VeuUFl6wvBxF9MBUmZjekT2dZ+u9FnLnrFHV8Olw+eDIVGM4VwOZzw
+        wDnkXBdo03SqRkaIV/WCvKTDM4uX3Ww=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661345972;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Sc8yPIrn2lPmz4U/qGCYgSl43TnthOC7R6vNmH5QSs=;
+        b=fMn0z1UvcAsxKzSctW1SUJflag/1GTvE7d5KKAQXy4ksC1Nwn04tLE4/ItzVvpLJw8SITK
+        lx5jHns4N1LXkhDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A12D213780;
+        Wed, 24 Aug 2022 12:59:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6YhOJrQgBmM/XwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 24 Aug 2022 12:59:32 +0000
+Message-ID: <cc07df7a-d13f-faa2-d0b8-48e15951de66@suse.cz>
+Date:   Wed, 24 Aug 2022 14:59:32 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] bindings: fpga: Add binding doc for the zynqmp afi
- config driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: linux-next: build warnings after merge of the slab tree
 Content-Language: en-US
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>, git@amd.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, ronak.jain@xilinx.com,
-        rajan.vaja@xilinx.com, abhyuday.godhasara@xilinx.com,
-        piyush.mehta@xilinx.com, lakshmi.sai.krishna.potthuri@xilinx.com,
-        harsha.harsha@xilinx.com, linus.walleij@linaro.org,
-        nava.manne@xilinx.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20220824035542.706433-1-nava.kishore.manne@amd.com>
- <20220824035542.706433-3-nava.kishore.manne@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220824035542.706433-3-nava.kishore.manne@amd.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220824134530.1b10e768@canb.auug.org.au>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220824134530.1b10e768@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 06:55, Nava kishore Manne wrote:
-> Xilinx Zynq US+ MPSoC platform connect the PS to the programmable
-> logic(PL) through the AXI port. This AXI port helps to establish
-
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
-
-> the data path between the PS and PL. In-order to establish the proper
-> communication data path between PS and PL the AXI port data path should
-> be configured with the proper Bus-width values.
+On 8/24/22 05:45, Stephen Rothwell wrote:
+> Hi all,
 > 
-> This patch adds the binding document for the zynqmp afi config driver
-> to handle the AXI port bus-width configurations and PS-PL resets.
-
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
+> After merging the slab tree, today's linux-next build (htmldocs) produced
+> these warnings:
 > 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
->  .../bindings/fpga/xlnx,zynqmp-afi-fpga.yaml   | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
+> mm/slab_common.c:964: warning: Function parameter or member 'object' not described in 'kfree'
+> mm/slab_common.c:964: warning: Excess function parameter 'objp' description in 'kfree'
 > 
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
-> new file mode 100644
-> index 000000000000..faae4951e991
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
-> @@ -0,0 +1,100 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/xlnx,zynqmp-afi-fpga.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx ZynqMP AFI interface Manager.
-> +
-> +maintainers:
-> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
-> +
-> +description: The Zynq UltraScale+ MPSoC Processing System core provides access
-> +  from PL masters to PS internal peripherals, and memory through AXI FIFO
-> +  interface(AFI)
-> +
-> +properties:
-> +  compatible:
-> +    items:
+> Introduced by commit
+> 
+>    79c7527b9805 ("mm/sl[au]b: generalize kmalloc subsystem")
+> 
 
-No items, you have only one item.
-
-> +      - enum:
-> +          - xlnx,zynqmp-afi-fpga
-> +
-> +  resets:
-> +    description:
-> +      A list of phandles for resets listed in reset-names.
-
-You need maxItems:4
-
-> +
-> +  reset-names:
-> +    items:
-> +      - const: pl0-rst
-> +      - const: pl1-rst
-> +      - const: pl2-rst
-> +      - const: pl3-rst
-> +
-> +patternProperties:
-> +  "^xlnx,afifm[0-6]-rd-bus-width$":
-> +    description: bus width used to configure the afifm-rd interface.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 32, 64, 128 ]
-> +
-> +  "^xlnx,afifm[0-6]-wr-bus-width$":
-> +    description: bus width used to configure the afifm-wr interface.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 32, 64, 128 ]
-> +
-> +  "^xlnx,afifs-ss[0-2]-bus-width$":
-> +    description: bus width used to configure the afifs interface.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 32, 64, 128 ]
-> +
-> +required:
-> +  - compatible
-> +  - xlnx,afifm0-rd-bus-width
-> +  - xlnx,afifm1-rd-bus-width
-> +  - xlnx,afifm2-rd-bus-width
-> +  - xlnx,afifm3-rd-bus-width
-> +  - xlnx,afifm4-rd-bus-width
-> +  - xlnx,afifm5-rd-bus-width
-> +  - xlnx,afifm6-rd-bus-width
-> +  - xlnx,afifm0-wr-bus-width
-> +  - xlnx,afifm1-wr-bus-width
-> +  - xlnx,afifm2-wr-bus-width
-> +  - xlnx,afifm3-wr-bus-width
-> +  - xlnx,afifm4-wr-bus-width
-> +  - xlnx,afifm5-wr-bus-width
-> +  - xlnx,afifm6-wr-bus-width
-> +  - xlnx,afifs-ss0-bus-width
-> +  - xlnx,afifs-ss1-bus-width
-> +  - xlnx,afifs-ss2-bus-width
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/reset/xlnx-zynqmp-resets.h>
-> +    zynqmp-afi {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-
-Best regards,
-Krzysztof
+Thanks, should be fixed in the new for-next I just pushed.

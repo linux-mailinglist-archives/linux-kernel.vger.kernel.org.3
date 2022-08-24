@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654C759F366
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC4F59F368
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbiHXGEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
+        id S234603AbiHXGEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbiHXGEm (ORCPT
+        with ESMTP id S234275AbiHXGEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:04:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358E091D35;
-        Tue, 23 Aug 2022 23:04:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF2C4B822DF;
-        Wed, 24 Aug 2022 06:04:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10050C433C1;
-        Wed, 24 Aug 2022 06:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661321078;
-        bh=Vg8rTF4/cdtBoLL5ouYQ0cWuabQoYYlJa7ce+p3Xejs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VjcVhUpolXkOJk2e7Xbrrmm38DHGKJUqEQ00X9L5/ERNz4hgHNGGcDmsoZztq5NVl
-         b7FlUW3xjkdUD6WyiHQxb5qoxbKQvrsY+cqOOr5MJiRYI0DnevOFXDAPh0EybbK7nv
-         XlxhPjuGxasFT70mMeEtHy3TuazFglf1unjI9UCU=
-Date:   Wed, 24 Aug 2022 08:04:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mazin Al Haddad <mazinalhaddad05@gmail.com>
-Cc:     pontus.fuchs@gmail.com, netdev@vger.kernel.org, kvalo@kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com,
-        edumazet@google.com, paskripkin@gmail.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel-mentees@lists.linuxfoundation.org,
-        davem@davemloft.net
-Subject: Re: [PATCH] ar5523: check endpoints type and direction in probe()
-Message-ID: <YwW/cw2cXLEd5xFo@kroah.com>
-References: <20220823222436.514204-1-mazinalhaddad05@gmail.com>
+        Wed, 24 Aug 2022 02:04:41 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBE8923FD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:04:40 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q9so5097394pgq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Dk8XzDm9D48Wg0yOKNV6jG+OQwP/124WGzj8tislXC0=;
+        b=GV2EUQSbNojALXv87dCRbopnxuVC/rIx0y82s6hI/GqE8tRc7A12byQ3c2V4h8ispa
+         8xxLUnrIuLPQF4Ne8XNC+OKGJpXHk62Ct75oDChoBcKh4GQCIPh/xW3vm5oAPb760/85
+         oqnHDsBgg1UGtSQjBhtq717O86m0WqW2uiqIg8ukV0ysFZ2Cc5a6ufebPpw0MGwJ062M
+         pVO7zQUGtvzGgJdbQMeCYIOFDdZek0T0F7MYm5zRPnGk+Qi1WxuzlLhFJZt13PU+/7pC
+         uqCtRNXXQRPGG7dGqj6pq/+ZFxcd7xbvZZZz8/AVdCWsxaoKcBlpc8uzoDBPYtZvd25t
+         RZEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Dk8XzDm9D48Wg0yOKNV6jG+OQwP/124WGzj8tislXC0=;
+        b=L7oaFZSf453Qal4jxxd4CYZ47Mn1nO/QSMAW7zLMAXSkVEtGGi1H8PPOzgb4mMs1qi
+         SaIBFbZ9nnnIYH32qr9km03vqNz0c/C2CRQ8/6sKaAkv3NkBv3I+Zn8j0EVxD0fBSUt9
+         sXpFd6wkCqhRs8b7+o0WkengEJF46DLZpcVwVBEc3HfbsNzpHo9SA65ssgT1A+zIYIpF
+         bwC8uFlwZZULynK8kwyz2XTE3CEgBT1Hr56yfiQTzaJq8IuXI70tBisAwfRDce9HDJzP
+         XV6rUk7BDUNQBu2chKcmtZLvXHRBxJDLWFffuZVf72O5U2CVu+XRT4mUkS62J46OnIUB
+         F4xg==
+X-Gm-Message-State: ACgBeo37d5SAZiJ1pkCbOqNsB3q8Ff4jh4xVKDScRMqKE0ndPzYvOoqQ
+        jR2jvMOy4ckhhBBevGea1hX0EA==
+X-Google-Smtp-Source: AA6agR42Mf+/DePJe3KKIFqhmxuPv3YBRiHOFkeDdcXPFc6xg94SgVGRNpLAt2WM0u7q3E2/nzEtRw==
+X-Received: by 2002:a05:6a00:88f:b0:530:dec:81fd with SMTP id q15-20020a056a00088f00b005300dec81fdmr28642736pfj.64.1661321079747;
+        Tue, 23 Aug 2022 23:04:39 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id x63-20020a623142000000b0052d24402e52sm11805350pfx.79.2022.08.23.23.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 23:04:38 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 11:34:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Ilia Lin <ilia.lin@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Niklas Cassel <nks@flawful.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: opp: Add missing
+ (unevaluated|additional)Properties on child nodes
+Message-ID: <20220824060436.in2weji5hpyabtsl@vireshk-i7>
+References: <20220823145649.3118479-17-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823222436.514204-1-mazinalhaddad05@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220823145649.3118479-17-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,85 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 01:24:38AM +0300, Mazin Al Haddad wrote:
-> Fixes a bug reported by syzbot, where a warning occurs in usb_submit_urb()
-> due to the wrong endpoint type. There is no check for both the number
-> of endpoints and the type which causes an error as the code tries to
-> send a URB to the wrong endpoint.
+On 23-08-22, 09:56, Rob Herring wrote:
+> In order to ensure only documented properties are present, node schemas
+> must have unevaluatedProperties or additionalProperties set to false
+> (typically).
 > 
-> Fix it by adding a check for the number of endpoints and the
-> direction/type of the endpoints. If the endpoints do not match the 
-> expected configuration -ENODEV is returned.
-> 
-> Syzkaller report:
-> 
-> usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-> WARNING: CPU: 1 PID: 71 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
-> Modules linked in:
-> CPU: 1 PID: 71 Comm: kworker/1:2 Not tainted 5.19.0-rc7-syzkaller-00150-g32f02a211b0a #0
-> Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->  <TASK>
->  ar5523_cmd+0x420/0x790 drivers/net/wireless/ath/ar5523/ar5523.c:275
->  ar5523_cmd_read drivers/net/wireless/ath/ar5523/ar5523.c:302 [inline]
->  ar5523_host_available drivers/net/wireless/ath/ar5523/ar5523.c:1376 [inline]
->  ar5523_probe+0xc66/0x1da0 drivers/net/wireless/ath/ar5523/ar5523.c:1655
-> 
-> 
-> Link: https://syzkaller.appspot.com/bug?extid=1bc2c2afd44f820a669f
-> Reported-and-tested-by: syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
-> Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/net/wireless/ath/ar5523/ar5523.c | 31 ++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
+>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 1 +
+>  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 1 +
+>  2 files changed, 2 insertions(+)
 > 
-> diff --git a/drivers/net/wireless/ath/ar5523/ar5523.c b/drivers/net/wireless/ath/ar5523/ar5523.c
-> index 6f937d2cc126..5451bf9ab9fb 100644
-> --- a/drivers/net/wireless/ath/ar5523/ar5523.c
-> +++ b/drivers/net/wireless/ath/ar5523/ar5523.c
-> @@ -1581,8 +1581,39 @@ static int ar5523_probe(struct usb_interface *intf,
->  	struct usb_device *dev = interface_to_usbdev(intf);
->  	struct ieee80211_hw *hw;
->  	struct ar5523 *ar;
-> +	struct usb_host_interface *host = intf->cur_altsetting;
->  	int error = -ENOMEM;
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> index 59663e897dae..a202b6c6561d 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+> @@ -40,6 +40,7 @@ properties:
+>  patternProperties:
+>    '^opp-?[0-9]+$':
+>      type: object
+> +    additionalProperties: false
 >  
-> +	if (host->desc.bNumEndpoints != 4) {
-> +		dev_err(&dev->dev, "Wrong number of endpoints\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	for (int i = 0; i < host->desc.bNumEndpoints; ++i) {
-> +		struct usb_endpoint_descriptor *ep = &host->endpoint[i].desc;
-> +		// Check for type of endpoint and direction.
-> +		switch (i) {
-> +		case 0:
-> +		case 1:
-> +			if ((ep->bEndpointAddress & USB_DIR_OUT) &&
-> +			    ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-> +			     == USB_ENDPOINT_XFER_BULK)){
+>      properties:
+>        opp-hz: true
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+> index 14a7a689ad6d..df8442fb11f0 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+> @@ -19,6 +19,7 @@ properties:
+>  patternProperties:
+>    '^opp-?[0-9]+$':
+>      type: object
+> +    additionalProperties: false
+>  
+>      properties:
+>        opp-level: true
 
-Did you run your change through checkpatch?
+Applied. Thanks.
 
-> +				dev_err(&dev->dev, "Wrong type of endpoints\n");
-> +				return -ENODEV;
-> +			}
-> +			break;
-> +		case 2:
-> +		case 3:
-> +			if ((ep->bEndpointAddress & USB_DIR_IN) &&
-> +			    ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-> +			     == USB_ENDPOINT_XFER_BULK)){
-> +				dev_err(&dev->dev, "Wrong type of endpoints\n");
-> +				return -ENODEV;
-> +			}
-> +			break;
-> +		}
-
-We have usb helper functions for all of this, why not use them instead
-of attempting to roll your own?
-
-thanks,
-
-greg k-h
+-- 
+viresh

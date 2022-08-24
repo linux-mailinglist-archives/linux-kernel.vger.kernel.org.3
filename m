@@ -2,73 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3579E59FB74
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F7059FB76
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237644AbiHXNez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S237753AbiHXNfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235526AbiHXNex (ORCPT
+        with ESMTP id S237449AbiHXNfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:34:53 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ED562D0;
-        Wed, 24 Aug 2022 06:34:50 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1661348085t9zorb9j
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 24 Aug 2022 21:34:44 +0800 (CST)
-X-QQ-SSF: 01000000002000C0E000B00A0000000
-X-QQ-FEAT: 3M0okmaRx3jTc4V2x+XjrCr6fA5e0YP6JnDtOca3veDQwrnfMQYyveIwzyCli
-        Ed1eXLljA+84g8XW/Dn+W0wbdpqHTMfWVOxiI2blUoPhcxTo6tfOHYywJNFPYCtbtlG93e4
-        lNlRSFETu5H/X9ZE1Gl2zLFHiq21eI2DCGY/0oQO8SrZTzq34FxmJFofiB5thf4rKpCcQVf
-        eXLW9UreWwkrbxRBJeDrlXgQloIlhU5ToEH6xXNXpGYrbQWSjR8lNvbqsK5q3CIdhhOYKHy
-        NdXdDhXzQMSaUY445jg3y5AEIxaqgBNYIDds8zUaV+iUgJBiy2wGQferMMbNhbq6BK5K8ox
-        6p3rgEjthO/VkMZW/crHyCf8QQJrOEcwmlANRTYwjKEpeAnszzAQcGvoHY2BoIJpTanGv6G
-        WClNrfMTHZ8=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] media/v4l2-core: fix repeated words in comments
-Date:   Wed, 24 Aug 2022 21:34:38 +0800
-Message-Id: <20220824133438.1829-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 24 Aug 2022 09:35:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554EE1EC52
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:35:00 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B9CC022682;
+        Wed, 24 Aug 2022 13:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661348098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cHzlnZidDyBhZ9au5VIeVEnIK4LNM13JTXYOfl1103s=;
+        b=reifUiNBAiNnltI7FdGX+1IYGjWQOJ4KWf2m0G0+bTUxiLDd8gGVbXVQTaLYc0fczJ6FhH
+        cfKV2AbQcp2pDjam6Aa5dhn0R8AlBcPPVM5TzKetKFb+TUB96Si9vxfBC89OC69x03VLwi
+        uXihrwAUmT5XB1jxijKKvjijzeyDSR8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661348098;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cHzlnZidDyBhZ9au5VIeVEnIK4LNM13JTXYOfl1103s=;
+        b=H3PVQyjVovuIs55Sjs+kO0ob15CCXgr/NsazWjNvgHwBLslJOTk0Hbn8gAE14hN6L6ySYB
+        s6KDQ749KzBe/PAg==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4A56A2C141;
+        Wed, 24 Aug 2022 13:34:58 +0000 (UTC)
+Date:   Wed, 24 Aug 2022 14:34:51 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] mm: reduce noise in show_mem for lowmem allocations
+Message-ID: <20220824133451.6kqttzm5t4iigz2i@suse.de>
+References: <YwScVmVofIZkopkF@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <YwScVmVofIZkopkF@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+On Tue, Aug 23, 2022 at 11:22:30AM +0200, Michal Hocko wrote:
+> Hi,
+> while discussing early DMA pool pre-allocation failure with Christoph
+> [1] I have realized that the allocation failure warning is rather noisy
+> for constrained allocations like GFP_DMA{32}. Those zones are usually
+> not populated on all nodes very often as their memory ranges are
+> constrained.
+> 
+> This is an attempt to reduce the ballast that doesn't provide any
+> relevant information for those allocation failures investigation.
+> Please note that I have only compile tested it (in my default config
+> setup) and I am throwing it mostly to see what people think about it.
+> 
+> [1] http://lkml.kernel.org/r/20220817060647.1032426-1-hch@lst.de
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/media/v4l2-core/v4l2-flash-led-class.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No objections.
 
-diff --git a/drivers/media/v4l2-core/v4l2-flash-led-class.c b/drivers/media/v4l2-core/v4l2-flash-led-class.c
-index e70e128ccc9c..355595a0fefa 100644
---- a/drivers/media/v4l2-core/v4l2-flash-led-class.c
-+++ b/drivers/media/v4l2-core/v4l2-flash-led-class.c
-@@ -94,7 +94,7 @@ static int v4l2_flash_set_led_brightness(struct v4l2_flash *v4l2_flash,
- 	 * brightness <-> intensity conversion, it also must have defined
- 	 * related v4l2 control step == 1. In such a case a backward conversion
- 	 * from led brightness to v4l2 intensity is required to find out the
--	 * the aligned intensity value.
-+	 * aligned intensity value.
- 	 */
- 	if (has_flash_op(v4l2_flash, led_brightness_to_intensity))
- 		ctrl->val = call_flash_op(v4l2_flash,
 -- 
-2.36.1
-
+Mel Gorman
+SUSE Labs

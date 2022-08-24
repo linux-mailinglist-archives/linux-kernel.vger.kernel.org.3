@@ -2,322 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEB359F1FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736EE59F1FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiHXDWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 23:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S234483AbiHXDWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 23:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234308AbiHXDVb (ORCPT
+        with ESMTP id S234403AbiHXDVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 23:21:31 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623F682D12
+        Tue, 23 Aug 2022 23:21:34 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EC17EFD5
         for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:30 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id q73-20020a17090a1b4f00b001fb633703fcso167565pjq.5
+Received: by mail-pf1-x430.google.com with SMTP id 1so8073890pfu.0
         for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:reply-to:from:to:cc;
-        bh=ID0LEN54g4SKI12YiNIJ9Ou03DYNCbuKZq4SDDiKjA0=;
-        b=MIyLxnBhPREuMmCFGfdXhP05WPcmtjb1vwHFIbVVRFVs4jR2fonrTaIHNxayLeWFvI
-         vRIjETuqqQtEl/oOfOlexNo6GSKg/65OOqECKXQJ9aAlA6XqJOBIwRcWgqfXOosk9D8j
-         VPRBAhNwIIePzlmHjVuRHYhBIqcj0KGWUssusNH9xb3aVQ1PlhWKDMm/JNNBiztkl5/a
-         dYhqP9ERH/fzgi8b5B88DLfvDynm0gh2FDpbyJuPInhEFP5GUhGS+IgiPBueJYfLLNjJ
-         Ba+i6EfGZxmNdAYIRxaAyRtMlp9m8RqE/9c+o55oeMkydrSq6gQyilcJhm8JhRVM3xYo
-         aHYg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=ntVqCWkbl1KfzGFt4cpcTZjZVHMz1SHqpeAZAtzUVfc=;
+        b=dEC8FUpC5wrVO5HalvQsP+lxgGYW8EzxmbPT5ojDUoUK1LT3xiSUqdFMXRB3X5ZL7a
+         wEksX+A4QmK5Kg3S6viyJ+MaVP+xtluYBFN9OYNtyvLuxxMMktn5dw3n/avaSCdLDoE6
+         gZQzEugFypTWW2Zfp3uN8uxPDdEFnqRDBnXFqKx7OY2poq/HK6x3scyoNeHhd+7LVDKI
+         6X+cQonCPp5IvlrfxTnzdayUs67+DG7bkez8PSJgLmtxZY2noFz3rdhh4g7IERkXHg23
+         FVoAGFOius152GJlVk9I/ZhSZwcdYejhUvGHxy+BZJ1B+GIm0o/36OnRe3P2Vzit2Qru
+         HQLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=ID0LEN54g4SKI12YiNIJ9Ou03DYNCbuKZq4SDDiKjA0=;
-        b=7+mWxzWOX/AMVFZSsAFLnveE6B48j4BPcM1kW5bR8DJoQBK5Zn5XJ+tA6CmJlvJI1b
-         k4BcRscwY+xIYVSJXa0Lf1tY66btBKQo22NPBxFeSjDSg4wnTRmi4itI6Oc5cpdrvq4d
-         CECOH/Z6uSQd7xFzptVdLt5RiIDeSsYV5gaq5rTnO43ZZqWZNCBBQcbRcMvYPmvdzU8T
-         0t614o/CHHk3JeSEyo+yVl4IT0omLToeP1bPhNNrpikgNE8sCkSbo9lXhZMAqrNHmAXN
-         6TOeaiMwcZcd53V7h/q8pRyKefuxpgscGw1itcEPn1p68n+iYbFga695Duov3NcPGp/4
-         AwDw==
-X-Gm-Message-State: ACgBeo3hM/Jlx3GivCEh8s83SGX99uxfCF5VaiAk/rdhOGBLDwdHDvlq
-        yhGES0PLCtIAPfFawGQQqEijWTcyY2c=
-X-Google-Smtp-Source: AA6agR7qJXZ060IVlHFYw5MostRiExgVNSpQSb5aqpoFfJhg5KBymx9MNvVNgiIbEitImrJ5lWzWN1hYAyQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:a14:b0:1fa:bc6e:e5e8 with SMTP id
- gg20-20020a17090b0a1400b001fabc6ee5e8mr154528pjb.1.1661311289328; Tue, 23 Aug
- 2022 20:21:29 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 24 Aug 2022 03:21:15 +0000
-In-Reply-To: <20220824032115.3563686-1-seanjc@google.com>
-Message-Id: <20220824032115.3563686-7-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220824032115.3563686-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v4 6/6] KVM: selftests: Add ucall pool based implementation
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Colton Lewis <coltonlewis@google.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=ntVqCWkbl1KfzGFt4cpcTZjZVHMz1SHqpeAZAtzUVfc=;
+        b=nrDsLSYVA/zYBkuWnt1e3SxdbdbPZberwPI4f1zJ2malJxmAAXyBMfJ4rQl+EE0hPg
+         XeetIWeDqeYQjMejZdqU6Sm/coVL0C9u5DEhiLWqebN1rTT3kjipnyk378J/HzcUZaJy
+         WVIpAa/EqaaK8q/TDnqDPdsxjsMdz9X+XUjHrizabHt+W6dWDPz0bqsDPFFPTNL5X3o7
+         rfIno/Kn4Jylc6dKeo8tjE8iyFYuPQsbOTVVFXIDpsfK/Ou7vA9dleMZwNHDlB+8AZ+5
+         qx1z2ONMhWz7d7n1Lht2a+50Ooe8pITG9Dml0Cr1Ia/sGA8WTk59xulGeB4CJZIrmzaU
+         6ZfQ==
+X-Gm-Message-State: ACgBeo3hTywm9NshWaa9YLqvXhEuMCGAGISD3oviEMEFEVPgWkqlSM0Z
+        T8mUm9AjUCIzKjuN4luZUckLsw==
+X-Google-Smtp-Source: AA6agR7sPtlvcm46TBeuUUX4jmbUZwmhI+zRtXyf4QLkmHg/rn3YGQNH3SyHW41z9jIUMjMN60boNA==
+X-Received: by 2002:a05:6a00:1996:b0:52e:b0f7:8c67 with SMTP id d22-20020a056a00199600b0052eb0f78c67mr27725629pfl.20.1661311289648;
+        Tue, 23 Aug 2022 20:21:29 -0700 (PDT)
+Received: from MacBook-Pro.local.bytedance.net ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id k23-20020a628417000000b00534bcd63f2fsm11682556pfd.190.2022.08.23.20.21.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Aug 2022 20:21:29 -0700 (PDT)
+From:   lizhe.67@bytedance.com
+To:     oliver.sang@intel.com
+Cc:     Jason@zx2c4.com, Pavel.Tatashin@microsoft.com,
+        akpm@linux-foundation.org, cai@lca.pw, iamjoonsoo.kim@lge.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, lizefan.x@bytedance.com,
+        lizhe.67@bytedance.com, lkp@intel.com, lkp@lists.01.org,
+        mark-pk.tsai@mediatek.com, mgorman@techsingularity.net,
+        mhiramat@kernel.org, mhocko@kernel.org, rostedt@goodmis.org,
+        vbabka@suse.cz, yang.shi@linaro.org
+Subject: Re: [page_ext]  a02a0e703b: Kernel_panic-not_syncing:Out_of_memory
+Date:   Wed, 24 Aug 2022 11:21:15 +0800
+Message-Id: <20220824032115.76008-1-lizhe.67@bytedance.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <YwHmXLu5txij+p35@xsang-OptiPlex-9020>
+References: <YwHmXLu5txij+p35@xsang-OptiPlex-9020>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+On 21 Aug 2022 16:01:32, kernel test robot <oliver.sang@intel.com> wrote:
+>Greeting,
+>
+>FYI, we noticed the following commit (built with gcc-11):
+>
+>commit: a02a0e703b59a6fdd1b8ae50b47396621a03fc1f ("page_ext: move up page_ext_init() to catch early page allocation if DEFERRED_STRUCT_PAGE_INIT is n")
+>https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+>
+>in testcase: boot
+>
+>on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
+>
+>caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+>+----------------------------------------+------------+------------+
+>|                                        | 3be3989b3b | a02a0e703b |
+>+----------------------------------------+------------+------------+
+>| boot_successes                         | 70         | 0          |
+>| boot_failures                          | 0          | 66         |
+>| Mem-Info                               | 0          | 66         |
+>| Kernel_panic-not_syncing:Out_of_memory | 0          | 66         |
+>+----------------------------------------+------------+------------+
+>
+>
+>If you fix the issue, kindly add following tag
+>Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+>
+>[    0.541637][    T0] Memory: 3927672K/4193784K available (11206K kernel code, 4497K rwdata, 3820K rodata, 1008K init, 1332K bss, 266112K reserved, 0K
+>cma-reserved, 3432328K highmem)
+>[    0.545125][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+>[    0.546120][    T0] swapper: vmalloc error: size 7864320, vm_struct allocation failed, mode:0xdc0(GFP_KERNEL|__GFP_ZERO), nodemask=(null),cpuset=(nul
+>l),mems_allowed=0-7
+>[    0.548152][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc1-00121-ga02a0e703b59 #1
+>[    0.549286][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+>[    0.550662][    T0] Call Trace:
+>[    0.551108][    T0]  ? show_stack+0x3d/0x45
+>[    0.551694][    T0]  dump_stack_lvl+0x34/0x44
+>[    0.552299][    T0]  dump_stack+0xd/0x10
+>[    0.552841][    T0]  warn_alloc.cold+0x55/0xaf
+>[    0.553454][    T0]  __vmalloc_node_range+0x87/0x140
+>[    0.554139][    T0]  vzalloc_node+0x64/0x80
+>[    0.554716][    T0]  ? _page_ext_init+0x119/0x1e7
+>[    0.555382][    T0]  _page_ext_init+0x119/0x1e7
+>[    0.556010][    T0]  start_kernel+0x213/0x49a
+>[    0.556615][    T0]  ? early_idt_handler_common+0x44/0x44
+>[    0.557358][    T0]  i386_start_kernel+0x48/0x4a
+>[    0.557995][    T0]  startup_32_smp+0x161/0x164
+>[    0.558622][    T0] Mem-Info:
+>[    0.559039][    T0] active_anon:0 inactive_anon:0 isolated_anon:0
+>[    0.559039][    T0]  active_file:0 inactive_file:0 isolated_file:0
+>[    0.559039][    T0]  unevictable:0 dirty:0 writeback:0
+>[    0.559039][    T0]  slab_reclaimable:0 slab_unreclaimable:25
+>[    0.559039][    T0]  mapped:0 shmem:0 pagetables:0 bounce:0
+>[    0.559039][    T0]  kernel_misc_reclaimable:0
+>[    0.559039][    T0]  free:981893 free_pcp:0 free_cma:0
+>[    0.564216][    T0] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB kernel_stack:0kB pagetables:0kB all_unreclaimable? no
+>[    0.567976][    T0] Node 0 DMA free:15360kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15992kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+>[    0.571575][    T0] lowmem_reserve[]: 0 0 0 0
+>[    0.572172][    T0] Node 0 Normal free:479884kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:745464kB managed:479984kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+>[    0.575803][    T0] lowmem_reserve[]: 0 0 0 0
+>[    0.576395][    T0] Node 0 HighMem free:3432328kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:3432328kB managed:3432328kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+>[    0.580081][    T0] lowmem_reserve[]: 0 0 0 0
+>[    0.580668][    T0] Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 1*1024kB (U) 1*2048kB (M) 3*4096kB (M) = 15360kB
+>[    0.582377][    T0] Node 0 Normal: 3*4kB (UM) 2*8kB (UM) 1*16kB (U) 1*32kB (M) 1*64kB (M) 2*128kB (UM) 3*256kB (UM) 1*512kB (U) 1*1024kB (U) 3*2048kB (UM) 115*4096kB (M) = 479884kB
+>[    0.584609][    T0] Node 0 HighMem: 0*4kB 1*8kB (M) 0*16kB 0*32kB 0*64kB 1*128kB (M) 1*256kB (M) 1*512kB (M) 1*1024kB (M) 1*2048kB (M) 837*4096kB (M) = 3432328kB
+>[    0.586543][    T0] 0 total pagecache pages
+>[    0.587121][    T0] 0 pages in swap cache
+>[    0.587680][    T0] Free swap  = 0kB
+>[    0.588170][    T0] Total swap = 0kB
+>[    0.588664][    T0] 1048446 pages RAM
+>[    0.589165][    T0] 858082 pages HighMem/MovableOnly
+>[    0.589850][    T0] 66528 pages reserved
+>[    0.590394][    T0] 0 pages cma reserved
+>[    0.590947][    T0] page ext allocation failure
+>[    0.591574][    T0] Kernel panic - not syncing: Out of memory
+>[    0.592360][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc1-00121-ga02a0e703b59 #1
+>[    0.593520][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+>[    0.594937][    T0] Call Trace:
+>[    0.595370][    T0]  ? show_stack+0x3d/0x45
+>[    0.595952][    T0]  dump_stack_lvl+0x34/0x44
+>[    0.596560][    T0]  dump_stack+0xd/0x10
+>[    0.597098][    T0]  panic+0xdd/0x251
+>[    0.597602][    T0]  _page_ext_init+0x131/0x1e7
+>[    0.598223][    T0]  start_kernel+0x213/0x49a
+>[    0.598830][    T0]  ? early_idt_handler_common+0x44/0x44
+>[    0.599530][    T0]  i386_start_kernel+0x48/0x4a
+>[    0.600152][    T0]  startup_32_smp+0x161/0x164
+>
+>
+>
+>To reproduce:
+>
+>        # build kernel
+>	cd linux
+>	cp config-6.0.0-rc1-00121-ga02a0e703b59 .config
+>	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 olddefconfig prepare modules_prepare bzImage modules
+>	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+>	cd <mod-install-dir>
+>	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+>
+>
+>        git clone https://github.com/intel/lkp-tests.git
+>        cd lkp-tests
+>        bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+>
+>        # if come across any failure that blocks the test,
+>        # please remove ~/.lkp and /lkp dir to run from a clean state.
 
-To play nice with guests whose stack memory is encrypted, e.g. AMD SEV,
-introduce a new "ucall pool" implementation that passes the ucall struct
-via dedicated memory (which can be mapped shared, a.k.a. as plain text).
-
-Because not all architectures have access to the vCPU index in the guest,
-use a bitmap with atomic accesses to track which entries in the pool are
-free/used.  A list+lock could also work in theory, but synchronizing the
-individual pointers to the guest would be a mess.
-
-Note, there's no need to rewalk the bitmap to ensure success.  If all
-vCPUs are simply allocating, success is guaranteed because there are
-enough entries for all vCPUs.  If one or more vCPUs are freeing and then
-reallocating, success is guaranteed because vCPUs _always_ walk the
-bitmap from 0=>N; if vCPU frees an entry and then wins a race to
-re-allocate, then either it will consume the entry it just freed (bit is
-the first free bit), or the losing vCPU is guaranteed to see the freed
-bit (winner consumes an earlier bit, which the loser hasn't yet visited).
-
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Co-developed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- .../selftests/kvm/include/ucall_common.h      | 14 ++--
- .../testing/selftests/kvm/lib/aarch64/ucall.c |  7 +-
- tools/testing/selftests/kvm/lib/riscv/ucall.c |  2 +-
- tools/testing/selftests/kvm/lib/s390x/ucall.c |  2 +-
- .../testing/selftests/kvm/lib/ucall_common.c  | 83 ++++++++++++++++++-
- .../testing/selftests/kvm/lib/x86_64/ucall.c  |  2 +-
- 6 files changed, 89 insertions(+), 21 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
-index 8077a6d8b1ba..360397e3cbf5 100644
---- a/tools/testing/selftests/kvm/include/ucall_common.h
-+++ b/tools/testing/selftests/kvm/include/ucall_common.h
-@@ -22,6 +22,9 @@ enum {
- struct ucall {
- 	uint64_t cmd;
- 	uint64_t args[UCALL_MAX_ARGS];
-+
-+	/* Host virtual address of this struct. */
-+	struct ucall *hva;
- };
- 
- void ucall_arch_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa);
-@@ -32,15 +35,8 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
- void ucall(uint64_t cmd, int nargs, ...);
- uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
- 
--static inline void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
--{
--	ucall_arch_init(vm, mmio_gpa);
--}
--
--static inline void ucall_uninit(struct kvm_vm *vm)
--{
--	ucall_arch_uninit(vm);
--}
-+void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa);
-+void ucall_uninit(struct kvm_vm *vm);
- 
- #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
- 				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
-diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-index acb47c813477..5f79c9fc72d7 100644
---- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-@@ -43,12 +43,9 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
- 
- 	if (run->exit_reason == KVM_EXIT_MMIO &&
- 	    run->mmio.phys_addr == vcpu->vm->ucall_mmio_addr) {
--		vm_vaddr_t gva;
--
--		TEST_ASSERT(run->mmio.is_write && run->mmio.len == 8,
-+		TEST_ASSERT(run->mmio.is_write && run->mmio.len == sizeof(uint64_t),
- 			    "Unexpected ucall exit mmio address access");
--		memcpy(&gva, run->mmio.data, sizeof(gva));
--		return addr_gva2hva(vcpu->vm, gva);
-+		return (void *)(*((uint64_t *)run->mmio.data));
- 	}
- 
- 	return NULL;
-diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-index c58ecb8a0981..9526a200d038 100644
---- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-@@ -59,7 +59,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
- 	    run->riscv_sbi.extension_id == KVM_RISCV_SELFTESTS_SBI_EXT) {
- 		switch (run->riscv_sbi.function_id) {
- 		case KVM_RISCV_SELFTESTS_SBI_UCALL:
--			return addr_gva2hva(vcpu->vm, run->riscv_sbi.args[0]);
-+			return (void *)run->riscv_sbi.args[0];
- 		case KVM_RISCV_SELFTESTS_SBI_UNEXP:
- 			vcpu_dump(stderr, vcpu, 2);
- 			TEST_ASSERT(0, "Unexpected trap taken by guest");
-diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-index 208f0f04299b..1efdeac60b4e 100644
---- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-@@ -30,7 +30,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
- 	    (run->s390_sieic.ipb >> 16) == 0x501) {
- 		int reg = run->s390_sieic.ipa & 0xf;
- 
--		return addr_gva2hva(vcpu->vm, run->s.regs.gprs[reg]);
-+		return (void *)run->s.regs.gprs[reg];
- 	}
- 	return NULL;
- }
-diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-index ced480860746..29f8cb614382 100644
---- a/tools/testing/selftests/kvm/lib/ucall_common.c
-+++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-@@ -1,22 +1,97 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include "kvm_util.h"
-+#include "linux/types.h"
-+#include "linux/bitmap.h"
-+#include "linux/atomic.h"
-+
-+struct ucall_header {
-+	DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
-+	struct ucall ucalls[KVM_MAX_VCPUS];
-+};
-+
-+/*
-+ * This "global" holds different per-VM values, it must not be accessed from
-+ * host code except to sync the guest value, and that must be done atomically.
-+ */
-+static struct ucall_header *ucall_pool;
-+
-+static void ucall_set_pool(struct kvm_vm *vm, struct ucall_header *val)
-+{
-+	atomic_sync_global_pointer_to_guest(vm, ucall_pool, val);
-+}
-+
-+void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
-+{
-+	struct ucall_header *hdr;
-+	struct ucall *uc;
-+	vm_vaddr_t vaddr;
-+	int i;
-+
-+	vaddr = vm_vaddr_alloc(vm, sizeof(*hdr), KVM_UTIL_MIN_VADDR);
-+	hdr = (struct ucall_header *)addr_gva2hva(vm, vaddr);
-+	memset(hdr, 0, sizeof(*hdr));
-+
-+	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-+		uc = &hdr->ucalls[i];
-+		uc->hva = uc;
-+	}
-+
-+	ucall_set_pool(vm, (void *)vaddr);
-+
-+	ucall_arch_init(vm, mmio_gpa);
-+}
-+
-+void ucall_uninit(struct kvm_vm *vm)
-+{
-+	ucall_set_pool(vm, NULL);
-+
-+	ucall_arch_uninit(vm);
-+}
-+
-+static struct ucall *ucall_alloc(void)
-+{
-+	struct ucall *uc;
-+	int i;
-+
-+	GUEST_ASSERT(ucall_pool && ucall_pool->in_use);
-+
-+	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-+		if (!atomic_test_and_set_bit(i, ucall_pool->in_use)) {
-+			uc = &ucall_pool->ucalls[i];
-+			memset(uc->args, 0, sizeof(uc->args));
-+			return uc;
-+		}
-+	}
-+	GUEST_ASSERT(0);
-+	return NULL;
-+}
-+
-+static noinline void ucall_free(struct ucall *uc)
-+{
-+	/* Beware, here be pointer arithmetic.  */
-+	clear_bit(uc - ucall_pool->ucalls, ucall_pool->in_use);
-+}
- 
- void ucall(uint64_t cmd, int nargs, ...)
- {
--	struct ucall uc = {};
-+	struct ucall *uc;
- 	va_list va;
- 	int i;
- 
--	WRITE_ONCE(uc.cmd, cmd);
-+	uc = ucall_alloc();
-+
-+	WRITE_ONCE(uc->cmd, cmd);
- 
- 	nargs = min(nargs, UCALL_MAX_ARGS);
- 
- 	va_start(va, nargs);
- 	for (i = 0; i < nargs; ++i)
--		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
-+		WRITE_ONCE(uc->args[i], va_arg(va, uint64_t));
- 	va_end(va);
- 
--	ucall_arch_do_ucall((vm_vaddr_t)&uc);
-+	ucall_arch_do_ucall((vm_vaddr_t)uc->hva);
-+
-+	ucall_free(uc);
- }
- 
- uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-index 016a0487cf72..82e7f6ae7811 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-@@ -30,7 +30,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
- 		struct kvm_regs regs;
- 
- 		vcpu_regs_get(vcpu, &regs);
--		return addr_gva2hva(vcpu->vm, regs.rdi);
-+		return (void *)regs.rdi;
- 	}
- 	return NULL;
- }
--- 
-2.37.1.595.g718a3a8f04-goog
-
+The reaon of this problem is we call page_ext_init() before vmap initialization.
+Moving page_ext_init() behind vmalloc_init() will solve this problem. Suggusted
+by Michal Hocko <mhocko@suse.com>, I will send another patch using a cmd line
+parameter to achieve the idea and solve the oom problem. Thanks for reporting
+this bug.

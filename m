@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C8259F4C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08A059F4CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiHXIK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S235082AbiHXIKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiHXIK0 (ORCPT
+        with ESMTP id S235613AbiHXIKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:10:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D33E857C7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:10:24 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id bf22so16296735pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=9/eyKaPfuteIwHEnAMNI1rBDayjT1OLnm5QHb0/XnpM=;
-        b=cPxFHkHRNoi1QBAXIZO2yurpDn3w+3l34l7pBPurq8rCROhaUjmamifjcijzDGua/m
-         YRIcg6wAzqTPTsp320ufVQc0Kb8NnQtL8yx25moUm5SswdFzVU9kYjWoc5jiCIF3uM2r
-         3DyVOi1J8LAaxEvuVcahNa7DE7YdictCKevdI2TcRCvNDOUrIbX47U+KCKlVtPTWh9X6
-         F6N3hXERQBk9dAvoiTRiFLR02mSYLOKIvrv9rnQst77WFHPvwKGYFm7utnSPnackgNwb
-         LmYnZiPxuBIGZVPiSGBTcZINkXsugVVl2OktUjldWgZtHgmsxdOzfAyVEOkEYQRcr6GR
-         ZcqQ==
+        Wed, 24 Aug 2022 04:10:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A57857CD
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661328641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FkqRyVmVnH2p/hv4jFAhKRZhXQQdh+BaDqLkaLzGuMI=;
+        b=VIMDWym97Amc5j9oWyLt0sVrTpOLLja5ePZzFfYgFs7MPiiMsg2/0qMXywt9SQNN27u+hr
+        8NR7FtotBwTIfu8CP1nEjwETCMfyuyaq7mbvc3C1K6//zDBdHy8S7TTRIpBtD2UghlTNyx
+        CwcfRHVExovsPs4tifB2jUFY522pRFw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-346-NuaksvYBPA2FaI4C5tZl-w-1; Wed, 24 Aug 2022 04:10:40 -0400
+X-MC-Unique: NuaksvYBPA2FaI4C5tZl-w-1
+Received: by mail-wr1-f71.google.com with SMTP id i24-20020adfaad8000000b002251cb5e812so2615646wrc.14
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:10:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=9/eyKaPfuteIwHEnAMNI1rBDayjT1OLnm5QHb0/XnpM=;
-        b=SIG0cpZPpxljk1OhdxYk9iecKv1N5JJ2bEB/qVVfRyR3Ngi1f2Gpf7ASAYvrg8nSXs
-         GwwJrxzpBz56Wsknu4zFQoO/MUCumIDXuJuAXzbAbanFKqzjKYWx4zmoyfNkRxyZRqEd
-         WtcuPEGwNCsgNt8N1bq+cP6GjQ79ClmuxLd5QSSxu5yQ6gngg9HsJaNO2VZNtVOPhkZZ
-         lEJ2AyIj0lR2a3FAxJo1w0wCk5hYOpyhRK7Ia+aBJvclsyx1hTDjJETogTZWjFPKcBHg
-         YjoWL40OCLHJ/SgkjNuR89TYYgMcH/a0/T25SNRpKJGmpNS8u4NXqIPf0nP9XmXZccxe
-         yJcQ==
-X-Gm-Message-State: ACgBeo1WjbyRuq9J9qHEuN83QeRJqoCs6KuZBPveMnK0QxjEaNg1Ct1I
-        yc7sCwkxuYykQHMw5H6bs0TqWPkg0XHquDn1oW4=
-X-Google-Smtp-Source: AA6agR7mOlL6iWB+csFRao6aJppvPwxrM+PSC03oib3/MwvPJvTec2P0Wk4/CsnZda2KXSiwddkoqNaUXpxd2g1w8jk=
-X-Received: by 2002:a17:90b:4a05:b0:1f5:62d5:4155 with SMTP id
- kk5-20020a17090b4a0500b001f562d54155mr7417749pjb.6.1661328623952; Wed, 24 Aug
- 2022 01:10:23 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=FkqRyVmVnH2p/hv4jFAhKRZhXQQdh+BaDqLkaLzGuMI=;
+        b=MalMOMVLD2HlMx3tBgL+27e7hjThwW3HKMRe1cXR+orUoZlqDyqjky3WmADZlcWvFA
+         At5B434znsPkhzbIoOk4JgR/AqpoHITznEB3pfoNT/w2vo7oS8RtEaztWQ55Jp7LPcaS
+         FDbVnlrwFOtmm4MDSfuutgv824eIpuGPU6h4F952ulTaoN2OB0qnVp5P970YI+MTQFtB
+         GCmdv35YkjHG7NuBLEyyNymg1Gz58ck/R7Sutu8Moh/cyyMRFWKgTpMcK8UZZEZFFBBI
+         wupvMDo3jgm4lT+X09YLs0o9oaF8PIvlIn3W/AU//7ib2sJKbN6V55KqMMhPayknmtr/
+         LWHg==
+X-Gm-Message-State: ACgBeo0Nk/zoPs96Pv91/CLnn8Z4DxG+JpTCJbOjHlZjMgBygKZGbXk/
+        ZHJEXck0IglJBuYbhT/ONU5kT8FUxP4YhMnOPHouzsOPJx8nNyrVBC8ByNTI4GRsyeEjBq1dwJf
+        8dut/Ko6P91yig01r8pQ4sqKt
+X-Received: by 2002:a5d:5487:0:b0:225:3fa7:41c2 with SMTP id h7-20020a5d5487000000b002253fa741c2mr11668198wrv.195.1661328639300;
+        Wed, 24 Aug 2022 01:10:39 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7oWpPdTD3abka/IUBi2UFio+jqKRoZcRc1o7eyZSl+PEi58PEdaVPrSmiTzEqsevHnndBcoQ==
+X-Received: by 2002:a5d:5487:0:b0:225:3fa7:41c2 with SMTP id h7-20020a5d5487000000b002253fa741c2mr11668178wrv.195.1661328639030;
+        Wed, 24 Aug 2022 01:10:39 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:c500:5445:cf40:2e32:6e73? (p200300cbc707c5005445cf402e326e73.dip0.t-ipconnect.de. [2003:cb:c707:c500:5445:cf40:2e32:6e73])
+        by smtp.gmail.com with ESMTPSA id m9-20020adfe0c9000000b00225206dd595sm16017732wri.86.2022.08.24.01.10.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 01:10:38 -0700 (PDT)
+Message-ID: <96433a14-1d2c-739d-95fb-3e3339200dcf@redhat.com>
+Date:   Wed, 24 Aug 2022 10:10:36 +0200
 MIME-Version: 1.0
-References: <20220824055637.10676-1-zhouzhouyi@gmail.com> <8d8bfc81-b584-20f4-65ae-d626f019cdf4@csgroup.eu>
- <CAABZP2w7jw4OHXPDANNabaD1L1BbUG8ymu9zLGEt5xA8YgZ3ow@mail.gmail.com> <66f0770d-83ee-34cb-2dea-b8d957613c7f@csgroup.eu>
-In-Reply-To: <66f0770d-83ee-34cb-2dea-b8d957613c7f@csgroup.eu>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 24 Aug 2022 16:10:12 +0800
-Message-ID: <CAABZP2ybddBG1KVTemcg4PvHsObVfP7Z+UMUkMCpZSBjBwFKbg@mail.gmail.com>
-Subject: Re: [PATCH linux-next] mm: fix used but uninitialized variable
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/2] mm: Cap zone movable's min wmark to small value
+Content-Language: en-US
+To:     Wupeng Ma <mawupeng1@huawei.com>, akpm@linux-foundation.org
+Cc:     corbet@lwn.net, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, songmuchun@bytedance.com,
+        mike.kravetz@oracle.com, osalvador@suse.de, rppt@kernel.org,
+        surenb@google.com, jsavitz@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, wangkefeng.wang@huawei.com
+References: <20220819093025.105403-1-mawupeng1@huawei.com>
+ <20220819093025.105403-2-mawupeng1@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220819093025.105403-2-mawupeng1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,115 +87,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 2:49 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 24/08/2022 =C3=A0 08:41, Zhouyi Zhou a =C3=A9crit :
-> > Thank Christophe for reviewing my patch
-> >
-> > On Wed, Aug 24, 2022 at 2:10 PM Christophe Leroy
-> > <christophe.leroy@csgroup.eu> wrote:
-> >>
-> >>
-> >>
-> >> Le 24/08/2022 =C3=A0 07:56, Zhouyi Zhou a =C3=A9crit :
-> >>> In function walk_hugetlb_range, the local variable err may
-> >>> be used uninitialzed when:
-> >>> ops->pte_hole in side of "else if (ops->pte_hole)" is false.
-> >>>
-> >>> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> >>> ---
-> >>> Dear mm Developers:
-> >>>
-> >>> When I build kernel using "make CC=3Dclang-14"
-> >>> the compiler complains following:
-> >>>
-> >>> CC      mm/pagewalk.o
-> >>> mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whe=
-never 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> >>>                   else if (ops->pte_hole)
-> >>>                            ^~~~~~~~~~~~~
-> >>> mm/pagewalk.c:321:7: note: uninitialized use occurs here
-> >>>                   if (err)
-> >>>                       ^~~
-> >>> mm/pagewalk.c:318:8: note: remove the 'if' if its condition is always=
- true
-> >>>                   else if (ops->pte_hole)
-> >>>                        ^~~~~~~~~~~~~~~~~~
-> >>> mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence =
-this warning
-> >>>                   int err;
-> >>>                          ^
-> >>>                           =3D 0
-> >>> 1 error generated.
-> >>> make[1]: *** [scripts/Makefile.build:250: mm/pagewalk.o] Error 1
-> >>> make: *** [Makefile:2006: mm] Error 2
-> >>>
-> >>> I initialize that variable outside of the for loop because we can ass=
-ign 0 to err
-> >>> only once in this function.
-> >>>
-> >>> After my fix, I can compile the kernel.
-> >>>
-> >>> Many Thanks
-> >>> Zhouyi
-> >>> --
-> >>>    mm/pagewalk.c | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-> >>> index 54b2a1beeeb3..b6eb330e8ecd 100644
-> >>> --- a/mm/pagewalk.c
-> >>> +++ b/mm/pagewalk.c
-> >>> @@ -306,9 +306,9 @@ static int walk_hugetlb_range(unsigned long addr,=
- unsigned long end,
-> >>>        unsigned long hmask =3D huge_page_mask(h);
-> >>>        unsigned long sz =3D huge_page_size(h);
-> >>>        const struct mm_walk_ops *ops =3D walk->ops;
-> >>> +     int err =3D 0;
-> >>
-> >> Why do you move it back outside of the for loop allthough it is
-> >> exclusively used inside the loop ?
-> > I move it outside of the for loop for performance consideration. Becaus=
-e
-> > if we initialize err inside, there will be an assignment statement
-> > every iteration.
->
-> I think GCC is smart enough to do the assignment only when necessary,
-> maybe have a look at the generated assembly in order to confirm.
-Thank Christophe for your guidance, I disassembled the GCC generated
-code, it optimized away int err =3D 0 on both X86 and PowerPC platforms.
-The disassembled instructions are quite long, so I prefer not to paste
-in my email unless someone asks me to do so ;-)
->
-> >>
-> >>>
-> >>>        for (; addr < end; addr =3D next) {
-> >>> -             int err;
-> >>
-> >> Another solution would be to add an explicit else, setting err =3D 0 i=
-n
-> >> the if/else if sequence.
-> > Thank Christophe for your valuable advice, I am going to prepare a 2nd =
-version
->
-Thank Christophe for your reminder, I only subscribed to the RCU
-mailing list currently, so I submitted duplicated work.  I should be
-more devoted to the Linux community. I am sorry.
-> Don't spend too much time on that, there are already other people
-> looking at it, see
-> https://lore.kernel.org/linux-mm/20220823153055.2517764-1-nathan@kernel.o=
-rg/T/
->
-> >
-> > Thanks
-> > Zhouyi
-Many thanks
-Zhouyi
-> >>
-> >>>                pte_t *pte =3D huge_pte_offset(walk->mm, addr & hmask,=
- sz);
-> >>>
-> >>>                next =3D hugetlb_entry_end(h, addr, end);
+On 19.08.22 11:30, Wupeng Ma wrote:
+> From: Ma Wupeng <mawupeng1@huawei.com>
+> 
+> Since min_free_kbytes is based on gfp_zone(GFP_USER) which does not include
+> zone movable. However zone movable will get its min share in
+> __setup_per_zone_wmarks() which does not make any sense.
+> 
+> And like highmem pages, __GFP_HIGH and PF_MEMALLOC allocations usually
+> don't need movable pages, so there is no need to assign min pages for zone
+> movable.
+> 
+> Let's cap pages_min for zone movable to a small value here just link
+> highmem pages.
+> 
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> ---
+>  mm/page_alloc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index e5486d47406e..ff644205370f 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -8638,7 +8638,7 @@ static void __setup_per_zone_wmarks(void)
+>  
+>  	/* Calculate total number of !ZONE_HIGHMEM pages */
+>  	for_each_zone(zone) {
+> -		if (!is_highmem(zone))
+> +		if (!is_highmem(zone) && zone_idx(zone) != ZONE_MOVABLE)
+>  			lowmem_pages += zone_managed_pages(zone);
+>  	}
+>  
+> @@ -8648,7 +8648,7 @@ static void __setup_per_zone_wmarks(void)
+>  		spin_lock_irqsave(&zone->lock, flags);
+>  		tmp = (u64)pages_min * zone_managed_pages(zone);
+>  		do_div(tmp, lowmem_pages);
+> -		if (is_highmem(zone)) {
+> +		if (is_highmem(zone) || zone_idx(zone) == ZONE_MOVABLE) {
+>  			/*
+>  			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
+>  			 * need highmem pages, so cap pages_min to a small
+
+This kind-off makes sense to me, but I'm not completely sure about all
+implications. We most certainly should update the comment as well.
+
+-- 
+Thanks,
+
+David / dhildenb
+

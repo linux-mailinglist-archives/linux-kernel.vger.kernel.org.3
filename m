@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E1359FEA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C4259FEA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239625AbiHXPmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S239796AbiHXPm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239866AbiHXPlX (ORCPT
+        with ESMTP id S239723AbiHXPlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:41:23 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F6963F1B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:41:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-334d894afd8so298582477b3.19
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:41:15 -0700 (PDT)
+        Wed, 24 Aug 2022 11:41:39 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A790999259
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:41:22 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33931a5c133so211753347b3.17
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:41:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=mq5FPo+AM7Zy4O9tMPHTBeU5z09469F+MvTFiiQ8luk=;
-        b=j28RrTDdPl6USPzEqsb5k4CLTQ0gugdm4nXOjAZa8REs0POvR6h5zY95N71xwsrNm4
-         bpIPAF06AJOHQMglSzPCkoa/9yruH2UKwLS5s5W/1sf6AWFgd3FUN4te/wPwyfq4Qw6U
-         dcSmtHtUVHfJaGaWqB7uxDYcm/mHEUUTGQuZtT+a6NDLDU0p0ZlzhoD3Ise7LB3xQO0J
-         i79Nal859TkoKhrY3bZZo9H2ITiy0dle61pcaDPmyEkHWAhvStWXT0ixfTAk/3jFH7dC
-         Voa0TdobTGvDKUKB/oQdeDZKd7JMzLQohRthXtV1VdEpgO0DrseG0olwxgEXjuCvx8Ku
-         +gqw==
+        bh=GrPou0VZKgNlblC435aJ0/uQRkx4htFwsCEj3e4SObU=;
+        b=N1o6OUXGC/iH2ijb+lNFnDPHgqw3EE+YVt/w/YNG5LZUfFDtYUy7DPSHSoCRfmQwJS
+         GEW628oNDtiSEG+TR9DYt4rWnaj3cDMsOXnilUJ370jMbMm2KfNgR9m9Ztnive72kTrg
+         OaXWIVL0131N9ESH7zWki2HFxKiH1rI35QiprRkAJ13BoDEnL+LlSMy/HEWT438XtiMf
+         WGYAyjrFhnpcRX1qI2eaj3Tz+LyLgSHEugk/D/oOKrB0J9WujNMqEsCeVjZOH7UIoT9C
+         YQYpw/2SUA7LK6rmLDDGa50cJB04mKuYyUDqd0YphGCt9YPiv0IJMleBR3DizoZje5+w
+         Sv/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=mq5FPo+AM7Zy4O9tMPHTBeU5z09469F+MvTFiiQ8luk=;
-        b=X5DHjAUOIMvHr8NzBAYiPqYD2r0ab5ujvJ4+sb+WoKdkRQ7o2ZoOeLmDNpWWY3pa/4
-         uMDEM1IEMxAY6KSyxfZgjNvaVa1FZHbvodl8Q0G5W6umIcZ7zkMJQaYafK9vuJQuY0JK
-         y03BMwdAXCq4zF345S89i2fldHgY0/kl4lhQfvVxE28uk/UFt5PYMpRNfgXE4WuEOO7x
-         Zg+3cIrLm2DVUxabwntgOBjpLHoYWLZGPU9GvHNOsd748WH9XYcdGJMeJwuTP5NYW1W+
-         kd2NISiJa7DZFu7lOfz+OpuDEqlz3+nuoimnN2vJPOd+9i8UeGsrZwWogerqjrPlgA6O
-         Up3w==
-X-Gm-Message-State: ACgBeo1BZ58gzM9ynZNmGVOKX71matJCZh2k5ePD9beQSg6EKKuw+kFE
-        q/OJzhMgpNr52pZjd0j662tvwT+/2JP8
-X-Google-Smtp-Source: AA6agR5HenVVA08d8hNFo9P64Hkt7PhicsOZTG74PjiVurZ5ytVEd0pKdh/s/Eym5MGmf/WFsbX0NCO/Fs8I
+        bh=GrPou0VZKgNlblC435aJ0/uQRkx4htFwsCEj3e4SObU=;
+        b=aY46QS0VsVKNHaV8BhXKVpv9wm5yblmQUMQyUbbJ5zdhUYNTwG4rCtUvL9zeJBWA2t
+         9BenNiQ0EfYQ0JP/miAJROwnr69C7JtKE9PEDmocAuXOE0f7FUKlGjvt7YDXNJpHpNee
+         NmIy/I4E6JM0d2Crnt3ZNA400VS2T6DeVMHZNAA5t1is75Fv0hsD2AJBzWsLeADZozKI
+         2Q47ywji6QN5SZXGfG2Lpj3T9d3RKllIp9iOVQ1awMH91ft1eLDTRqB0KzffmvoAf8XP
+         xpOFhBKp/f++dNMuhp9OH6ues+1OZmsQGVZlO4OLYa4Xam8LCfugpHZxX+M3+DjCcELr
+         nMAg==
+X-Gm-Message-State: ACgBeo0P+a1Aih4Z+/8f4CJZ0rb6v7pijYQNSbFPSxwWFZ3NtFyzEK0v
+        YkNXSSRvzVrVRm09j+Nty8cuPDWhuFM5
+X-Google-Smtp-Source: AA6agR50UpqAJXTKM7Aszo8uGw/kXlrIkRrRMT0M2mPuVHtgbj+KdyX05ZLo/uA1kRbmgsROvLG/mEAHf0b2
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:ab82:a348:500d:1fc4])
- (user=irogers job=sendgmr) by 2002:a25:2f58:0:b0:695:8490:a2a with SMTP id
- v85-20020a252f58000000b0069584900a2amr18998326ybv.138.1661355675365; Wed, 24
- Aug 2022 08:41:15 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 08:39:00 -0700
+ (user=irogers job=sendgmr) by 2002:a25:b3c4:0:b0:68d:d900:837e with SMTP id
+ x4-20020a25b3c4000000b0068dd900837emr28057015ybf.501.1661355681725; Wed, 24
+ Aug 2022 08:41:21 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 08:39:01 -0700
 In-Reply-To: <20220824153901.488576-1-irogers@google.com>
-Message-Id: <20220824153901.488576-18-irogers@google.com>
+Message-Id: <20220824153901.488576-19-irogers@google.com>
 Mime-Version: 1.0
 References: <20220824153901.488576-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v3 17/18] perf top: Fixes for thread safety analysis
+Subject: [PATCH v3 18/18] perf build: Enable -Wthread-safety with clang
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -114,41 +114,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add annotations to describe lock behavior.
+If building with clang then enable -Wthread-safety warnings.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-top.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/perf/Makefile.config | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 5af3347eedc1..e89208b4ad4b 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
- 					struct hist_entry *he,
- 					struct perf_sample *sample,
- 					struct evsel *evsel, u64 ip)
-+	EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
- {
- 	struct annotation *notes;
- 	struct symbol *sym = he->ms.sym;
-@@ -724,13 +725,13 @@ static void *display_thread(void *arg)
- static int hist_iter__top_callback(struct hist_entry_iter *iter,
- 				   struct addr_location *al, bool single,
- 				   void *arg)
-+	EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
- {
- 	struct perf_top *top = arg;
--	struct hist_entry *he = iter->he;
- 	struct evsel *evsel = iter->evsel;
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index c41a090c0652..72dadafdbad9 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -19,6 +19,11 @@ detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
+ CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
+ HOSTCFLAGS := $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
  
- 	if (perf_hpp_list.sym && single)
--		perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
-+		perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
++# Enabled Wthread-safety analysis for clang builds.
++ifeq ($(CC_NO_CLANG), 0)
++  CFLAGS += -Wthread-safety
++endif
++
+ include $(srctree)/tools/scripts/Makefile.arch
  
- 	hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
- 		     !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
+ $(call detected_var,SRCARCH)
 -- 
 2.37.2.609.g9ff673ca1a-goog
 

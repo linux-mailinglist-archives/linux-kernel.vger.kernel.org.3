@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480D359FF90
+	by mail.lfdr.de (Postfix) with ESMTP id DE7DE59FF92
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238589AbiHXQfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S239541AbiHXQfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239545AbiHXQfc (ORCPT
+        with ESMTP id S230348AbiHXQfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:35:32 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8223980F4D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:35:31 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id k22-20020a6bf716000000b0068898c0b395so9617327iog.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:35:31 -0700 (PDT)
+        Wed, 24 Aug 2022 12:35:31 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0EA80B63
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:35:30 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id o5-20020a056e02102500b002ddcc65029cso12931011ilj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:35:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=igPw/4yA+mTANwSdMoZucgTYkONKNQ2e1OHP2G/JPo0=;
-        b=QT89sgbTJpKMow1UHA5zY7QiEdDX2R0c2wvrX80b7Y8hrsfDwqF4PIZUPENy8aZi2x
-         FPo4lJ2gsfc8EejGmMuHhRgMlG8MBJH7uQDelaBORlfc+DX4unJADVwjQrgTwq3YdfZN
-         pDv1SGn8XbPYIg9D4VZUObjDmKTSKPlPE4bLSKEdI+sMqaBVoNFc4dpstjWDiUmKe34y
-         E3tCveJiHFWEIct/NWgMGcj4wU1wv8UKof6QNMqEVcn03O0HE2yn4uPDy6mVXXaY/FZk
-         byTthutO4i54YVRUA3/zgRxklJVxQK6ef9UJdRH5W4Km6Sd4IhrDkFdj+d+K7S6L6I1o
-         wqUw==
-X-Gm-Message-State: ACgBeo1YVqEVjZQRxMCFw9gQ5JtwK4DsywlSnOfqzqgPEJP0krHOLiXs
-        7pvvKr2VquiiRwKT9v6PSp0uNEPXGLex01Efa5Un3kB6e+lp
-X-Google-Smtp-Source: AA6agR5bgppAZ7QEzoIstb2KBTdF0RBmHECgpmY4kmUqRRoeAiwbgTDcu5VE+GfWrTZs5Qckj5AW/LVVrGs+AGXZu2jtZJ4f3U/a
+        bh=XRsedfIcW+HglbEqbIPeqE6h3oV5yzf+0kc6Op+llds=;
+        b=LnWNZid72NLQVSB5ZZ5x10LJm9Et8StkBfWTXkYv0igcqUs7udh03ydHYx50wA5xBF
+         RDBUmLCDOaiFabdv4FkqN5iafu33RtNJ+sVWFU24H4MvKu1jgW+7YGfutXPZoxjdUcGu
+         HHxe2KCAUfo9fQu/dYy0OVrprgPsUoA7QIvxuT4nWnawc2mki1AZ7S1hI9LeolDW/bsT
+         ag0zEewpvRiXU7M4ypQZyjDdmrvCefCLFqepEO5SJMmQJzJQI+ze0tmPf2Wfmrcnk5jk
+         9JPQHRxoDCbuWE99OzgOxjxNjJ5dZy1q/n9uzvBxQYohU7V/g+uDZD4ReA2hLt74PQJB
+         luSA==
+X-Gm-Message-State: ACgBeo0Rdms+gndUhBshi/6hv39nshhuGj7EWQHPH1h95+uPKzlx7KnD
+        2J2y1zpR+RaN3vjeUfXyBdr4IZDzzpftKEqoyMQCX+/7Rx49
+X-Google-Smtp-Source: AA6agR52F0vRGuU+pk1JcZsAkSpStS/VeWOcdJw9MHIiOCddfHTkFh2uX8a7912W44VdA1iEhOkZZByZj+LgeKjMXimkfJOgPtLF
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d02:b0:346:f5ef:6ab2 with SMTP id
- q2-20020a0566380d0200b00346f5ef6ab2mr14004741jaj.300.1661358930783; Wed, 24
+X-Received: by 2002:a92:dc0a:0:b0:2e9:4fa6:f6df with SMTP id
+ t10-20020a92dc0a000000b002e94fa6f6dfmr2552053iln.203.1661358930205; Wed, 24
  Aug 2022 09:35:30 -0700 (PDT)
 Date:   Wed, 24 Aug 2022 09:35:30 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e9f4e905e6ff4495@google.com>
-Subject: [syzbot] general protection fault in __io_sync_cancel
-From:   syzbot <syzbot+bf76847df5f7359c9e09@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+Message-ID: <000000000000e12a9005e6ff4417@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in tiocsti
+From:   syzbot <syzbot+032314e8d7de2bdb97f7@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
         linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -58,85 +58,63 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    df0219d11b6f Merge tag 'parisc-for-6.0-2' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=108d7fcb080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=911efaff115942bb
-dashboard link: https://syzkaller.appspot.com/bug?extid=bf76847df5f7359c9e09
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ef1715080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17fcebc3080000
+HEAD commit:    1c23f9e627a7 Linux 6.0-rc2
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17eefdcb080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3045c937aad027f7
+dashboard link: https://syzkaller.appspot.com/bug?extid=032314e8d7de2bdb97f7
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1190eb6b080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a1e50d080000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bf76847df5f7359c9e09@syzkaller.appspotmail.com
+Reported-by: syzbot+032314e8d7de2bdb97f7@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 1 PID: 3614 Comm: syz-executor233 Not tainted 6.0.0-rc2-syzkaller-00044-gdf0219d11b6f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:__io_sync_cancel+0x10d/0x1c0 io_uring/cancel.c:224
-Code: 48 c1 ea 03 80 3c 02 00 0f 85 aa 00 00 00 49 8b 86 f8 00 00 00 48 8d 1c d8 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 8e 00 00 00 48 8b 1b 48 8d 7d 08 48 b8 00 00 00
-RSP: 0018:ffffc900038ffc20 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff83f87914 RDI: ffff888146d8a0f8
-RBP: ffffc900038ffce0 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88801c9df800 R14: ffff888146d8a000 R15: 0000000000000000
-FS:  0000555556c5e300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005d84c8 CR3: 0000000070564000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- io_sync_cancel+0x240/0x630 io_uring/cancel.c:265
- __io_uring_register io_uring/io_uring.c:3833 [inline]
- __do_sys_io_uring_register+0x5c9/0x1110 io_uring/io_uring.c:3878
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f9ae908dd29
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc2e5075e8 EFLAGS: 00000246 ORIG_RAX: 00000000000001ab
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f9ae908dd29
-RDX: 0000000020000000 RSI: 0000000000000018 RDI: 000000000000000a
-RBP: 00007f9ae9051ed0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000246 R12: 00007f9ae9051f60
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+Mem abort info:
+  ESR = 0x0000000086000006
+  EC = 0x21: IABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000010b28b000
+[0000000000000000] pgd=080000010b411003, p4d=080000010b411003, pud=080000010b47b003, pmd=0000000000000000
+Internal error: Oops: 86000006 [#1] PREEMPT SMP
 Modules linked in:
+CPU: 1 PID: 3028 Comm: syz-executor908 Not tainted 6.0.0-rc2-syzkaller-16440-g1c23f9e627a7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : 0x0
+lr : gsmld_receive_buf+0x140/0x214 drivers/tty/n_gsm.c:2861
+sp : ffff80000ffe3cb0
+x29: ffff80000ffe3cc0 x28: 0000000000000000 x27: 0000000000000000
+x26: 0000000000000000 x25: 0000000000000000 x24: ffff80000d937000
+x23: ffff80000d681e40 x22: ffff0000cb2dc000 x21: ffff80000ffe3d21
+x20: ffff80000c205988 x19: ffff80000ffe3d24 x18: 00000000000000c0
+x17: ffff80000dd7a698 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000004 x12: ffff80000d681e78
+x11: ff808000098e7e04 x10: 0000000000000000 x9 : ffff8000098e7e04
+x8 : 0000000000000000 x7 : ffff8000098dcea4 x6 : 0000000000000000
+x5 : ffff80000e087890 x4 : 0000000000000002 x3 : 0000000000000001
+x2 : ffff80000ffe3d20 x1 : 0000000000000000 x0 : ffff0000cb2dc000
+Call trace:
+ 0x0
+ tiocsti+0x168/0x1c4 drivers/tty/tty_io.c:2293
+ tty_ioctl+0x284/0x9f4 drivers/tty/tty_io.c:2692
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: bad PC value
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:__io_sync_cancel+0x10d/0x1c0 io_uring/cancel.c:224
-Code: 48 c1 ea 03 80 3c 02 00 0f 85 aa 00 00 00 49 8b 86 f8 00 00 00 48 8d 1c d8 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 8e 00 00 00 48 8b 1b 48 8d 7d 08 48 b8 00 00 00
-RSP: 0018:ffffc900038ffc20 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff83f87914 RDI: ffff888146d8a0f8
-RBP: ffffc900038ffce0 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88801c9df800 R14: ffff888146d8a000 R15: 0000000000000000
-FS:  0000555556c5e300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f622cf74268 CR3: 0000000070564000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	48 c1 ea 03          	shr    $0x3,%rdx
-   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   8:	0f 85 aa 00 00 00    	jne    0xb8
-   e:	49 8b 86 f8 00 00 00 	mov    0xf8(%r14),%rax
-  15:	48 8d 1c d8          	lea    (%rax,%rbx,8),%rbx
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 da             	mov    %rbx,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 8e 00 00 00    	jne    0xc2
-  34:	48 8b 1b             	mov    (%rbx),%rbx
-  37:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
-  3b:	48                   	rex.W
-  3c:	b8                   	.byte 0xb8
-  3d:	00 00                	add    %al,(%rax)
 
 
 ---

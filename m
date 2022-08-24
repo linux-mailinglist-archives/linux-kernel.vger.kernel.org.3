@@ -2,158 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD4A59F580
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD7159F58D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235835AbiHXIof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S236045AbiHXIpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbiHXIoc (ORCPT
+        with ESMTP id S235874AbiHXIp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:44:32 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF1B7DF45
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:44:31 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id a4-20020a056e0208a400b002e4621942dfso12140223ilt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:44:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=iU0XsqVPnYL4CZWCyT3f3typg2pRUQWnUeSJgfKQ29s=;
-        b=zZaFBt2vJp49IAXe1BsqF8luMeI5g4shg013lqVfzriSDAlEjnC4d7N7j2YSttqCwv
-         xwAzTrNXE7JfwdDc+kPOGAX1t1II0T6eF05eZY6RylMvwJ0GQf610xoN1NsLdjQoFeKP
-         GpgmdHMaenGHlQmW732bWFPW9ZdJ2T9bKHG1z93O8fW5rPkyFqN0IMd0iAO4CwlyqeMt
-         z2SlD+sfHazp+vJMpcFdLRdHLipWbPppHTqRPIj3fkKQumMA0NpBkEfABnCa2HazNc03
-         k4wO/Alr+ajaOAqmPndX8t5Wjtzu6ijVUcXBVwbkbmvkOeCAwRTd6eqJF+K6zePNYxfh
-         btMg==
-X-Gm-Message-State: ACgBeo3SEMnKBC+Gb6tpuuf4TUtTGnR85upGMhDKEXPonrtaWbY4FBmz
-        cps0DUcDBr3WC9n9FoQZ5zyDWKJeywWdsmsDZi8zY6GGx7I3
-X-Google-Smtp-Source: AA6agR7nQPFzBbtwJPx8NI+7Ycq6e/+/D1oPv+UrMAhAJf4gIc5cutLSXO8ErPhdxcv5MjYI2REBqXzft2AillFIYd5Vpx4b8p6p
+        Wed, 24 Aug 2022 04:45:29 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA2C5FF60
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661330728; x=1692866728;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JEkWUs4zeDNwBs7lQ1SlQ2qdaH4W+YB2xngdMUADV+I=;
+  b=g5ktsfMr1pqNYdzg3mefCmfbQqdb+P0amQW0ac45i1qVMzmDdTWmn0e5
+   sFos8SGOnocObkduq94oVZe1McojoqMbdNRd8Zl7KiYYbna41p6ocJ8tD
+   QB/750cB3LkNKuRjMVWGQw52jPP72gSAyDCGM/OwbvG4RiXywGnMkql42
+   V1maXBtou7Kg9OxdDb87a1PkLrD/k81b/W+Zg3rvgIt7IC881zAGkg2zV
+   d3wmW/O1VT9Ka0IXRUB+GTtD7eXeMg4JL0c4Fla7Pl3TzyoleH30MT66f
+   4BLS8HCFCJx7/FUI+DN2WNVepOtPYaIdkkHPAeo0veqIVAGWlWSMRbNuf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="357882433"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="357882433"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 01:45:28 -0700
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="785553954"
+Received: from yuhsuanc-mobl.gar.corp.intel.com (HELO paris.amr.corp.intel.com) ([10.254.38.238])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 01:45:25 -0700
+From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+To:     intel-gfx@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mchehab@kernel.org, chris@chris-wilson.co.uk,
+        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
+        jani.nikula@intel.com, nirmoy.das@intel.com, airlied@linux.ie,
+        daniel@ffwll.ch, andi.shyti@linux.intel.com,
+        andrzej.hajda@intel.com, keescook@chromium.org,
+        mauro.chehab@linux.intel.com,
+        intel-gfx-trybot@lists.freedesktop.org
+Subject: [PATCH v9 0/8] Fixes integer overflow or integer truncation issues in page lookups, ttm place configuration and scatterlist creation
+Date:   Wed, 24 Aug 2022 17:45:06 +0900
+Message-Id: <20220824084514.2261614-1-gwan-gyeong.mun@intel.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:14c4:b0:346:1663:faa6 with SMTP id
- l4-20020a05663814c400b003461663faa6mr12927735jak.316.1661330670893; Wed, 24
- Aug 2022 01:44:30 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 01:44:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007e402e05e6f8b043@google.com>
-Subject: [syzbot] WARNING in handle_bug (3)
-From:   syzbot <syzbot+0b1ca6d5c5cd600df7a0@syzkaller.appspotmail.com>
-To:     arve@android.com, brauner@kernel.org, cmllamas@google.com,
-        gregkh@linuxfoundation.org, joel@joelfernandes.org,
-        linux-kernel@vger.kernel.org, maco@android.com, surenb@google.com,
-        syzkaller-bugs@googlegroups.com, tkjos@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patch series fixes integer overflow or integer truncation issues in
+page lookups, ttm place configuration and scatterlist creation, etc.
+We need to check that we avoid integer overflows when looking up a page,
+and so fix all the instances where we have mistakenly used a plain integer
+instead of a more suitable long.
+And there is an impedance mismatch between the scatterlist API using
+unsigned int and our memory/page accounting in unsigned long. That is we
+may try to create a scatterlist for a large object that overflows returning
+a small table into which we try to fit very many pages. As the object size
+is under the control of userspace, we have to be prudent and catch the
+conversion errors. To catch the implicit truncation as we switch from
+unsigned long into the scatterlist's unsigned int, we use improved
+overflows_type check and report E2BIG prior to the operation. This is
+already used in our create ioctls to indicate if the uABI request is simply
+too large for the backing store. 
+And ttm place also has the same problem with scatterlist creation,
+and we fix the integer truncation problem with the way approached by
+scatterlist creation.
+And It corrects the error code to return -E2BIG when creating gem objects
+using ttm or shmem, if the size is too large in each case.
+In order to provide a common macro, it moves and adds a few utility macros
+into overflow/util_macros header
 
-syzbot found the following issue on:
+v9: Fix overflows_type() to use __builtin_add_overflow() instead of
+    __builtin_add_overflow_p() (Andrzej)
+    Fix overflows_ptr() to use overflows_type() with the unsigned long type (Andrzej)
+v8: Add check_assign() and remove safe_conversion() (Kees)
+    Replace safe_conversion() with check_assign() (Kees)
+    Fix overflows_type() to use gcc's built-in overflow function (Andrzej)
+    Add overflows_ptr() to allow overflow checking when assigning a value
+    into a pointer variable (G.G.)
+v7: Fix to use WARN_ON() macro where GEM_BUG_ON() macro was used. (Jani)
+v6: Move macro addition location so that it can be used by other than drm subsystem (Jani, Mauro, Andi)
+    Fix to follow general use case for GEM_BUG_ON(). (Jani)
+v5: Fix an alignment to match open parenthesis
+    Fix macros to be enclosed in parentheses for complex values
+    Fix too long line warning
+v4: Fix build warnins that reported by kernel test robot. (kernel test robot <lkp@intel.com>)
+    Add kernel-doc markups to the kAPI functions and macros (Mauoro)
+v3: Modify overflows_type() macro to consider signed data types and
+	add is_type_unsigned() macro (Mauro)
+    Make not use the same macro name on a function. (Mauro)
+    For kernel-doc, macros and functions are handled in the same namespace,
+    the same macro name on a function prevents ever adding documentation for it.
+    Not to change execution inside a macro. (Mauro)
+    Fix the problem that safe_conversion() macro always returns true (G.G)
+    Add safe_conversion_gem_bug_on() macro and remove temporal SAFE_CONVERSION() macro. (G.G.)
 
-HEAD commit:    50cd95ac4654 Merge tag 'execve-v6.0-rc2' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=151e0ab5080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e706e91b2a433db
-dashboard link: https://syzkaller.appspot.com/bug?extid=0b1ca6d5c5cd600df7a0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Chris Wilson (3):
+  drm/i915/gem: Typecheck page lookups
+  drm/i915: Check for integer truncation on scatterlist creation
+  drm/i915: Remove truncation warning for large objects
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Gwan-gyeong Mun (5):
+  overflow: Move and add few utility macros into overflow
+  util_macros: Add exact_type macro to catch type mis-match while
+    compiling
+  drm/i915: Check for integer truncation on the configuration of ttm
+    place
+  drm/i915: Check if the size is too big while creating shmem file
+  drm/i915: Use error code as -E2BIG when the size of gem ttm object is
+    too large
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0b1ca6d5c5cd600df7a0@syzkaller.appspotmail.com
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c  |   6 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.c    |   7 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.h    | 303 +++++++++++++++---
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  27 +-
+ drivers/gpu/drm/i915/gem/i915_gem_phys.c      |   4 +
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c     |  19 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c       |  23 +-
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c   |   5 +-
+ .../drm/i915/gem/selftests/i915_gem_context.c |  12 +-
+ .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
+ .../drm/i915/gem/selftests/i915_gem_object.c  |   8 +-
+ drivers/gpu/drm/i915/gvt/dmabuf.c             |   9 +-
+ drivers/gpu/drm/i915/i915_gem.c               |  18 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h       |  11 +
+ drivers/gpu/drm/i915/i915_user_extensions.c   |   3 +-
+ drivers/gpu/drm/i915/i915_utils.h             |   6 +-
+ drivers/gpu/drm/i915/i915_vma.c               |   8 +-
+ drivers/gpu/drm/i915/intel_region_ttm.c       |  17 +-
+ include/linux/overflow.h                      |  62 ++++
+ include/linux/util_macros.h                   |  25 ++
+ 20 files changed, 486 insertions(+), 95 deletions(-)
 
-------------[ cut here ]------------
-WARNING: CPU: 3 PID: 21395 at include/linux/mmap_lock.h:155 mmap_assert_locked include/linux/mmap_lock.h:155 [inline]
-WARNING: CPU: 3 PID: 21395 at include/linux/mmap_lock.h:155 find_vma+0xf8/0x270 mm/mmap.c:2255
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RAX: 00000000000023cc RBX: 0000000000000000 RCX: ffffc90003259000
-RDX: 0000000000040000 RSI: ffffffff81b5e258 RDI: 0000000000000005
-RBP: 0000000020ffc000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801af3f840
- <TASK>
- binder_thread_write+0x664/0x3220 drivers/android/binder.c:3974
- binder_ioctl_write_read drivers/android/binder.c:5024 [inline]
- binder_ioctl+0x3470/0x6d00 drivers/android/binder.c:5311
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6019a89279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f601ac2a168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f6019b9bf80 RCX: 00007f6019a89279
-RDX: 0000000020000380 RSI: 00000000c0306201 RDI: 0000000000000004
-RBP: 00007f6019ae3189 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd82d3b46f R14: 00007f601ac2a300 R15: 0000000000022000
- </TASK>
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 3 PID: 21395 Comm: syz-executor.0 Not tainted 6.0.0-rc1-syzkaller-00340-g50cd95ac4654 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- panic+0x2c8/0x627 kernel/panic.c:274
- __warn.cold+0x259/0x2c4 kernel/panic.c:624
- report_bug+0x1bc/0x210 lib/bug.c:198
- handle_bug+0x3c/0x60 arch/x86/kernel/traps.c:316
- exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:336
- asm_exc_invalid_op+0x16/0x20 arch/x86/include/asm/idtentry.h:568
-RIP: 0010:mmap_assert_locked include/linux/mmap_lock.h:155 [inline]
-RIP: 0010:find_vma+0xf8/0x270 mm/mmap.c:2255
-Code: 49 8d bc 24 28 01 00 00 be ff ff ff ff e8 a0 4a c9 07 31 ff 89 c3 89 c6 e8 75 54 c5 ff 85 db 0f 85 61 ff ff ff e8 a8 57 c5 ff <0f> 0b e9 55 ff ff ff e8 9c 57 c5 ff 4c 89 e7 e8 64 38 fb ff 0f 0b
-RSP: 0018:ffffc90003bb7530 EFLAGS: 00010212
-RAX: 00000000000023cc RBX: 0000000000000000 RCX: ffffc90003259000
-RDX: 0000000000040000 RSI: ffffffff81b5e258 RDI: 0000000000000005
-RBP: 0000000020ffc000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801af3f840
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000000
- vma_lookup include/linux/mm.h:2743 [inline]
- binder_alloc_get_vma drivers/android/binder_alloc.c:340 [inline]
- binder_alloc_new_buf_locked drivers/android/binder_alloc.c:405 [inline]
- binder_alloc_new_buf+0xd6/0x18b0 drivers/android/binder_alloc.c:590
- binder_transaction+0x242e/0x9a80 drivers/android/binder.c:3187
- binder_thread_write+0x664/0x3220 drivers/android/binder.c:3974
- binder_ioctl_write_read drivers/android/binder.c:5024 [inline]
- binder_ioctl+0x3470/0x6d00 drivers/android/binder.c:5311
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6019a89279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f601ac2a168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f6019b9bf80 RCX: 00007f6019a89279
-RDX: 0000000020000380 RSI: 00000000c0306201 RDI: 0000000000000004
-RBP: 00007f6019ae3189 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd82d3b46f R14: 00007f601ac2a300 R15: 0000000000022000
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+-- 
+2.37.1
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

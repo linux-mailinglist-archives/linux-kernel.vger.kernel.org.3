@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8584A59F746
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C6959F74C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236672AbiHXKR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
+        id S231949AbiHXKTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiHXKRx (ORCPT
+        with ESMTP id S236712AbiHXKTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:17:53 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B52672B5B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:17:52 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id n7so20160821wrv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:17:52 -0700 (PDT)
+        Wed, 24 Aug 2022 06:19:11 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DB975383;
+        Wed, 24 Aug 2022 03:19:10 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id b2so12493708qvp.1;
+        Wed, 24 Aug 2022 03:19:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=2rEDI8nneWR8uBhC0k6la2EvHD4yLzs+a+6fUoYoKU4=;
-        b=VFeU530PAmK3n65fcXn1z65tSUzwYLn85+ojxSycSOPVQcheykt616CE28AJr0U3SN
-         WEwvG4O8Wn+wPOXom3oZdoxlCbYU0rvZSTXRgr8Xn9jVyIc4dbpJrVE9sn2c0xkg9yE4
-         m72FqQyOrhyqyoY4JiFaZOhyOJH095QKXbX/jwHZzpMMGl23vDec+NOLToJ5lkCCTcbQ
-         bxnb/saWP3f2H5q2mDOY6tovIJc4bFcZ/u4UvTf4DiCXiun4CiMT1fB5sEI1EJA/tHxQ
-         ZONjdcHmDa3AnyGz3zLzKDdBmv85QfIdlr9xdYrPKcWJs4/KcjrejIuyx+1R33YoBCYm
-         vAOA==
+        bh=A8eOmbFD5R8cCPQMqUHoUv9zLlrHEiXgVk4D0zzGcsI=;
+        b=FrP22utlBCXIaUoML5oy+pY7TkvNuAbuSmyroEsUl5/4L7p7ScDLYEI+RhCoD72CfG
+         exFKUJ1za6KrKpFJaNOOM/MlQ4L2CqK6Lu9kTaG4EQjGf5h+Hr3m6vf1yanFDAehErlc
+         ZM/CiuwBKG4V7fNfqVYcLqMYOxtRi/S0lBiqxhEzv2KHSQmZ3pCRQdiM2BA32SN7ssTG
+         jHKuubUe3zJwMfpuxkFv5vK0/UUKZsWfskBrbcxORHyPhZsobFBz76a9gBsdBJOP+gad
+         CItwRf63cA18yS02y0nIeUKuPQWZg4O6LNFnqQyiBqJ9OorGdhbdZRKcK4Lkhpj88xC6
+         /Fng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=2rEDI8nneWR8uBhC0k6la2EvHD4yLzs+a+6fUoYoKU4=;
-        b=cLzxVggLnXVznImxFe35WfJUV94Bo9Gzrkc8IsGYhACKS5QouTkMayvjmPwd/8FSrn
-         4+yG0XhuBNNflg2OR5bsKGjuejsoPWiItTuUh111I7XrjXEQXMJ/qlJo87V88lUdEP4c
-         hk/jlsh1rbpAhsyv9V2QABhZTUDGofgNGI9sb/2wNU6+h2Nt3KBSrLnr+ZjuvCwkealA
-         mij7d+1e6gqN3UDaI1oE7vSgBJqQplfxLfjmU+NW2IvNI9myR6DKMzBKNRqKIirNwApF
-         2jIbGE4xf7kZ4ZZB5ralJqWzGJj2leQN+4QUn158z3fOb/+lQSh8q34xzc7qXXPEbj0i
-         rZIg==
-X-Gm-Message-State: ACgBeo0L9uXotMhfs0biz5iaFrL+xphV0EBpOPIs8BJ1UGhtmezKLaBo
-        tEPKU/x3EFOALYAjgYSoiu1hpmJRWaQCjI4HRm0vXhmeHB8=
-X-Google-Smtp-Source: AA6agR7sQ+Joxq+aq8uIl+CNG/GIrqr+nGL3cJhEBxurQU45bDdJBx8cY5FhIPu5261Cv1lHhcYULOg7B0jFQMr9xIA=
-X-Received: by 2002:a5d:45c1:0:b0:225:2803:e791 with SMTP id
- b1-20020a5d45c1000000b002252803e791mr15643183wrs.539.1661336270818; Wed, 24
- Aug 2022 03:17:50 -0700 (PDT)
+        bh=A8eOmbFD5R8cCPQMqUHoUv9zLlrHEiXgVk4D0zzGcsI=;
+        b=PELL44bLrSJ1Ljt7aBL0c2MECXGexYlBpsv93Q/3Tdu6D37NgXS7iOuN+h3tzt+2On
+         Jha4IAIjWKDN0uzCIXBR3CJg5PfJUPhVNCH09JBUL/ER6uofE2UTpakuv0OW9mM8n3vb
+         vZZCP5uus0Thi3SN6BVwccVBr9HT99+tlr9aXxBTn0WntNma5mhglvfsRZAloSsuSZv6
+         QbcrulsXIQVl1vE5Ay/p8Rzo+mBGnHctHRbdDAetkLPf6VKmYyHWTSNx+4YKcOeFB0k+
+         8BetTSqd0tDpDtluUnNOXXXRuPNaro0yBpL04cEl/75k1cmteUdpakng1b2fMWwimhFD
+         q9RQ==
+X-Gm-Message-State: ACgBeo0El8ZtuM+2Agmz2mB+QWN5KC+8+uar95c1UQOVU7bS1a7ulRHh
+        OcCUjaFZxqOfmv2gtYsnMakGk3gUZ1NRxMXsrvA=
+X-Google-Smtp-Source: AA6agR7dP4gEfsC9IFZ9dWOgXfWlpFKV76iGJHBCOdyB6C2QNPjBsdO/YLZXptAD/FtgNrHsTL8t3BHL+LNLzV9OWNU=
+X-Received: by 2002:a05:6214:29c2:b0:497:8b2:442 with SMTP id
+ gh2-20020a05621429c200b0049708b20442mr5044808qvb.97.1661336349050; Wed, 24
+ Aug 2022 03:19:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220823144728.47068-1-pgwipeout@gmail.com> <86198a8a-96d4-5856-bc2d-44bf352c82fe@wolfvision.net>
-In-Reply-To: <86198a8a-96d4-5856-bc2d-44bf352c82fe@wolfvision.net>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 24 Aug 2022 12:17:39 +0200
-Message-ID: <CAMdYzYopzOJ2RtWtYgP3G4ESVMFhCqU3fOQq_kCc1g51ZDZ=bA@mail.gmail.com>
-Subject: Re: [PATCH v2] phy: rockchip-inno-usb2: Return zero after otg sync
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+References: <20220722081146.47262-1-jjhiblot@traphandler.com>
+ <20220722081146.47262-3-jjhiblot@traphandler.com> <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
+ <5ba34982-52c7-e41a-fba8-d88d93529e47@traphandler.com> <20220804210412.GA30210@duo.ucw.cz>
+ <0663c616-97c8-444c-f390-275fae402453@traphandler.com> <CAHp75Vf1cT81cx38VQ80PbyG9i9xbiegMnQoMWwZEZf+7fWJuQ@mail.gmail.com>
+ <5bb9955e-4c2f-ca55-0e77-c082a868371a@traphandler.com>
+In-Reply-To: <5bb9955e-4c2f-ca55-0e77-c082a868371a@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 24 Aug 2022 13:18:32 +0300
+Message-ID: <CAHp75Vc5g0OL6YUY2WsUZA6bovB+sdJE3Bv3SWp-1pRh3kyiow@mail.gmail.com>
+Subject: Re: [RESEND PATCH v6 2/3] leds: Add driver for the TLC5925 LED controller
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        Linus Walleij <linusw@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,69 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 7:33 AM Michael Riesch
-<michael.riesch@wolfvision.net> wrote:
->
-> Hi Peter,
->
-> On 8/23/22 16:47, Peter Geis wrote:
-> > The otg sync state patch reuses the ret variable, but fails to set it to
-> > zero after use. This leads to a situation when the otg port is in
-> > peripheral mode where the otg phy aborts halfway through setup.  It also
-> > fails to account for a failure to register the extcon notifier. Fix this
-> > by using our own variable and skipping otg sync in case of failure.
-> >
-> > Fixes: 8dc60f8da22f ("phy: rockchip-inno-usb2: Sync initial otg state")
-> >
-> > Reported-by: Markus Reichl <m.reichl@fivetechno.de>
-> > Reported-by: Michael Riesch <michael.riesch@wolfvision.net>
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
-> > Tested-by: Markus Reichl <m.reichl@fivetechno.de>
-> > ---
-> >  drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> > index 0b1e9337ee8e..d579a22c61df 100644
-> > --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> > +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> > @@ -1124,7 +1124,7 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
-> >                                         struct rockchip_usb2phy_port *rport,
-> >                                         struct device_node *child_np)
-> >  {
-> > -     int ret;
-> > +     int ret, id;
-> >
-> >       rport->port_id = USB2PHY_PORT_OTG;
-> >       rport->port_cfg = &rphy->phy_cfg->port_cfgs[USB2PHY_PORT_OTG];
-> > @@ -1164,11 +1164,12 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
-> >                                       EXTCON_USB_HOST, &rport->event_nb);
-> >               if (ret)
->
-> This needs braces, right?
->
->         if (ret) {
-> >                       dev_err(rphy->dev, "register USB HOST notifier failed\n");
-> > +                     goto out;
->
->         }
->
-> With the braces the patch works as expected.
++Cc: GPIO maintainers
 
-Yup, thanks for that. I hate working without access to my hardware.
+On Wed, Aug 24, 2022 at 12:58 PM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+> On 24/08/2022 10:55, Andy Shevchenko wrote:
+> > On Wed, Aug 24, 2022 at 11:39 AM Jean-Jacques Hiblot
+> > <jjhiblot@traphandler.com> wrote:
 
->
-> Thanks and best regards,
-> Michael
->
-> >
-> >               if (!of_property_read_bool(rphy->dev->of_node, "extcon")) {
-> >                       /* do initial sync of usb state */
-> > -                     ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
-> > -                     extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
-> > +                     id = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
-> > +                     extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !id);
-> >               }
-> >       }
-> >
+...
+
+> >> - with this approach, every time a LED status is changed the whole
+> >> register has to be sent on the SPI bus. In other words, changes cannot
+> >> be coalesced.
+> > But isn't it the same as what you do in your driver? To me it looks
+> > like you send the entire range of the values each time you change one
+> > LED's brightness. I don't see any differences with the GPIO driver.
+> No. The TLC5925 driver updates the register asynchronously: the cached
+> value of the register is updated synchronously and then it is
+> transferred over SPI using a workqueue. This way if multiple LED are set
+> in a short time, the changes are coalesced into a single SPI transfer.
+> This is however probably not a must-have feature.
+
+Ah, thanks for elaboration. But GPIO supports this type of ops.
+
+And the more I think about this feature I find it more harmful than
+useful. The problem is that delayed operation may take an
+unpredictable amount of time and on the heavily loaded machine the
+event might be lost (imagine the blinking LED informing about some
+critical issue and it blinks only once and then, for example, machine
+reboots or so). I believe we both understand that for the GPIO is a
+no-go feature for sure, because sequence of the GPIO signals is highly
+important (imagine bit-banging of any of the protocols).
+
+> >> I don't know if this is enough to make a dedicated TLC5925 driver
+> >> desirable in the kernel.
+> > I don't think you have enough justification for a new driver.
+
+After this message I first must withdraw my Rb tag, and turn my voice
+against this driver because of the above. On the contrary we might ask
+the GPIO library for a specific API to have what you do with the
+user's consent of side effects. Linus, Bart, I'm talking of the
+delayed (async) version of gpio_set_multiple(). But personally I think
+it's not so easy to implement in a bugless manner (because we need to
+synchronize it forcibly at any time we call another GPIO API against
+the same chip).
+
+Summarize this:
+ - you may add a compatible string to the GPIO driver and DT schema,
+and we are done.
+
+-- 
+With Best Regards,
+Andy Shevchenko

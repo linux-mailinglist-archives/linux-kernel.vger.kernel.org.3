@@ -2,247 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6845A013A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5975A013C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240438AbiHXSRP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 Aug 2022 14:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S240106AbiHXSRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240325AbiHXSRM (ORCPT
+        with ESMTP id S240454AbiHXSRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:17:12 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E53863E6;
-        Wed, 24 Aug 2022 11:17:11 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-333b049f231so482533917b3.1;
-        Wed, 24 Aug 2022 11:17:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=h84Zr9r9rSsYZ8SwNyGHfmMeTe1hr9idQvFt4tmHIBc=;
-        b=m1OYainTvYwEXlWvHk4aMkpT/GrdCuvq+hKJabvZ7CtBUJFbho0O586O2tPQXITUmM
-         qJ1aow7VRsOG9kYCHpTsDekAVWdGvHx906okEHVTO7fTbcHkTalz0nrxPu0QAsGBKzON
-         WALZWASMhdK/3LWmpmMnrA1XQwSEfxxBDz3ZCs869PhLulfz8c0cWVAWmfCV221Q7+U1
-         mooqtsFlvYBbkcbwUoCAcNt5aHCFLlu2pIkPa1XfrPgiXL+4ed9AQsbtOp2GbglygI9u
-         TIIAzK/5yf5i/BHX2yljZG52u5zcXRRieSgLLiQSiJLiqbouJkWameUAOXr6fXEknWlA
-         uLqQ==
-X-Gm-Message-State: ACgBeo2U+mzqic5pjfrmS8fT1OVh6uhtU/S0vjUpMwufB/yDuS37CQlP
-        fzwlC8p6TUNMTmQiZpEomqjvJxl6/fUGy/giPXg=
-X-Google-Smtp-Source: AA6agR5ntzbx9qbVRJuIgmxELzoNlDVZmrPwKD05VaZ1sHrrY63Eqm5w3WASH3U4HSMrxvii54aOev+bHdDujdc9GXk=
-X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
- z15-20020a25664f000000b0066cd0f436ccmr354284ybm.482.1661365030507; Wed, 24
- Aug 2022 11:17:10 -0700 (PDT)
+        Wed, 24 Aug 2022 14:17:46 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93546792C0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661365065; x=1692901065;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1EbJt8QGTZbgeVBVRxMer5GSOjtLydOv1UV8iFXX81g=;
+  b=PE7SxlzEH6l7Ff5AtpCx/zHZJzoZIadd4gxE4B62cfePOq+HNSPFKZXZ
+   SiOh1lwNucBpMC2ecGorDP8uNNtdHsOjUptJq3wPelkgL4VzfDparNoh1
+   kYhi0TtIK7/9ZMH9ns/Y/PeCvgz64oCS2NS40oQgqI6BglRcMiVMpTNKO
+   pV7FTM3nCvyy6qgfPY+QZ7WIRdztBU7R/H+q1gCfiG2annTCOJ+B9mFvE
+   uQwI5yIX4s1ioawvQmUm+uVgc7Mz5X8uwR/gQSv3fAEGYJJ1VNdDFZyvh
+   b3VcjHVUC16+GhMcnAL0ao8x3Tsv65NhX3PA6b+V7w5c+l6exoANCMiE5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291609094"
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="291609094"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 11:17:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="642954018"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 24 Aug 2022 11:17:29 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQuwS-0000xv-1d;
+        Wed, 24 Aug 2022 18:17:28 +0000
+Date:   Thu, 25 Aug 2022 02:17:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: include/trace/trace_events.h:261:16: error: function
+ 'trace_event_get_offsets_iwlwifi_dbg' might be a candidate for 'gnu_printf'
+ format attribute
+Message-ID: <202208250229.UZTZVPeu-lkp@intel.com>
 MIME-Version: 1.0
-References: <0fc7062d-696a-0794-8730-48ef08bcb8bd@linaro.org>
-In-Reply-To: <0fc7062d-696a-0794-8730-48ef08bcb8bd@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Aug 2022 20:16:59 +0200
-Message-ID: <CAJZ5v0h0r2dW7xW+GW3=KDEZZEkyYOXVCOmD3fad=a2enNhddA@mail.gmail.com>
-Subject: Re: [GIT PULL] early thermal changes for v6.1-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 1:38 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> this cycle will contain certainly a higher number of changes than the
-> previous ones. That will come from the rework of the thermal trip
-> handling / consolidation which is still WIP but where the drivers
-> changes are partly acked-by the different maintainers. The result will
-> be great IMO in terms of cleanup, encapsulation and maintainability.
->
-> The thermal OF cleanup and rework have been consolidated meanwhile.
->
-> In order to not have a huge pull request at the end of the v6.1
-> development cycle, I propose to send early but smaller pull requests
-> (release often, release early), so hopefully that will make the changes
-> smooth and may be hit the potential bugs for those who are sticking to
-> linux-pm instead of linux-next.
->
-> This pull request is the first one and has been in the linux-next branch
-> since a couple of weeks.
->
-> It includes the thermal OF rework, with the corresponding fixes and the
-> monitoring locking scheme path changes.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c40e8341e3b3bb27e3a65b06b5b454626234c4f0
+commit: c7c37bb87590886e08d24dec53089f74b89f5fbb tracing/iwlwifi: Use the new __vstring() helper
+date:   6 weeks ago
+config: x86_64-sof-customedconfig-edison-defconfig (https://download.01.org/0day-ci/archive/20220825/202208250229.UZTZVPeu-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c7c37bb87590886e08d24dec53089f74b89f5fbb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c7c37bb87590886e08d24dec53089f74b89f5fbb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/intel/iwlwifi/
 
-Pulled, thanks!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/trace/define_trace.h:102,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace-msg.h:71,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace.h:91,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c:15:
+   drivers/net/wireless/intel/iwlwifi/./iwl-devtrace-msg.h: In function 'trace_event_get_offsets_iwlwifi_dbg':
+>> include/trace/trace_events.h:261:16: error: function 'trace_event_get_offsets_iwlwifi_dbg' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
+     261 |         struct trace_event_raw_##call __maybe_unused *entry;            \
+         |                ^~~~~~~~~~~~~~~~
+   include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+      40 |         DECLARE_EVENT_CLASS(name,                              \
+         |         ^~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/./iwl-devtrace-msg.h:49:1: note: in expansion of macro 'TRACE_EVENT'
+      49 | TRACE_EVENT(iwlwifi_dbg,
+         | ^~~~~~~~~~~
+   In file included from include/trace/define_trace.h:102,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace-msg.h:71,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace.h:91,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c:15:
+   drivers/net/wireless/intel/iwlwifi/./iwl-devtrace-msg.h: In function 'trace_event_raw_event_iwlwifi_dbg':
+   include/trace/trace_events.h:386:16: error: function 'trace_event_raw_event_iwlwifi_dbg' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
+     386 |         struct trace_event_raw_##call *entry;                           \
+         |                ^~~~~~~~~~~~~~~~
+   include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+      40 |         DECLARE_EVENT_CLASS(name,                              \
+         |         ^~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/./iwl-devtrace-msg.h:49:1: note: in expansion of macro 'TRACE_EVENT'
+      49 | TRACE_EVENT(iwlwifi_dbg,
+         | ^~~~~~~~~~~
+   In file included from include/trace/define_trace.h:103,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace-msg.h:71,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace.h:91,
+                    from drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c:15:
+   drivers/net/wireless/intel/iwlwifi/./iwl-devtrace-msg.h: In function 'perf_trace_iwlwifi_dbg':
+   include/trace/perf.h:64:16: error: function 'perf_trace_iwlwifi_dbg' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
+      64 |         struct hlist_head *head;                                        \
+         |                ^~~~~~~~~~
+   include/trace/trace_events.h:40:9: note: in expansion of macro 'DECLARE_EVENT_CLASS'
+      40 |         DECLARE_EVENT_CLASS(name,                              \
+         |         ^~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/./iwl-devtrace-msg.h:49:1: note: in expansion of macro 'TRACE_EVENT'
+      49 | TRACE_EVENT(iwlwifi_dbg,
+         | ^~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
 
-> The following changes since commit 8c596324232d22e19f8df59ba03410b9b5b0f3d7:
->
->    dt-bindings: thermal: Fix missing required property (2022-08-15
-> 20:38:40 +0200)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.1-rc1
->
-> for you to fetch changes up to 06f36055121769b9eb9b7d28c7499d1cc8269dc3:
->
->    Revert "mlxsw: core: Add the hottest thermal zone detection"
-> (2022-08-17 20:32:27 +0200)
->
-> ----------------------------------------------------------------
-> - Rework the device tree initialization, convert the drivers to the
->    new API and remove the old OF code (Daniel Lezcano)
->
-> - Fix return value to -ENODEV when searching for a specific thermal
->    zone which does not exist (Daniel Lezcano)
->
-> - Fix the return value inspection in of_thermal_zone_find() (Dan
->    Carpenter)
->
-> - Fix kernel panic when kasan is enabled as it detects an use after
->    free when unregistering a thermal zone (Daniel Lezcano)
->
-> - Move the set_trip ops inside the thermal sysfs code (Daniel Lezcano)
->
-> - Remove unnecessary error message as it is already showed in the
->    underlying function (Jiapeng Chong)
->
-> - Rework the monitoring path and move the locks upper in the call
->    stack to fix some potentials race windows (Daniel Lezcano)
->
-> - Fix lockdep_assert() warning introduced by the lock rework (Daniel
->    Lezcano)
->
-> - Revert the Mellanox 'hotter thermal zone' feature because it is
->    already handled in the thermal framework core code (Daniel Lezcano)
->
-> ----------------------------------------------------------------
-> Dan Carpenter (1):
->        thermal/of: Fix error code in of_thermal_zone_find()
->
-> Daniel Lezcano (42):
->        thermal/of: Rework the thermal device tree initialization
->        thermal/of: Return -ENODEV instead of -EINVAL if registration fails
->        thermal/of: Fix free after use in thermal_of_unregister()
->        thermal/of: Make new code and old code co-exist
->        thermal/drivers/rockchip: Switch to new of API
->        thermal/drivers/uniphier: Switch to new of API
->        thermal/drivers/generic-adc: Switch to new of API
->        thermal/drivers/mmio: Switch to new of API
->        thermal/drivers/tegra: Switch to new of API
->        thermal/drivers/sun8i: Switch to new of API
->        thermal/drivers/sprd: Switch to new of API
->        thermal/drivers/broadcom: Switch to new of API
->        thermal/drivers/qcom: Switch to new of API
->        thermal/drivers/st: Switch to new of API
->        thermal/drivers/amlogic: Switch to new of API
->        thermal/drivers/armada: Switch to new of API
->        thermal/drivers/db8500: Switch to new of API
->        thermal/drivers/imx: Switch to new of API
->        thermal/drivers/rcar: Switch to new of API
->        thermal/drivers/rzg2l: Switch to new of API
->        thermal/drivers/qoriq: Switch to new of API
->        thermal/drivers/mtk: Switch to new of API
->        thermal/drivers/banggap: Switch to new of API
->        thermal/drivers/maxim: Switch to new of API
->        thermal/drivers/hisilicon: Switch to new of API
->        thermal/drivers/ti-soc: Switch to new of API
->        ata/drivers/ahci_imx: Switch to new of thermal API
->        hwmon: pm_bus: core: Switch to new of thermal API
->        hwmon/drivers/core: Switch to new of thermal API
->        iio/drivers/sun4i_gpadc: Switch to new of thermal API
->        Input: sun4i-ts - switch to new of thermal API
->        regulator/drivers/max8976: Switch to new of thermal API
->        thermal/drivers/samsung: Switch to new of thermal API
->        thermal/core: Move set_trip_temp ops to the sysfs code
->        thermal/of: Remove old OF code
->        thermal/core: Rearm the monitoring only one time
->        thermal/core: Rework the monitoring a bit
->        thermal/governors: Group the thermal zone lock inside the
-> throttle function
->        thermal/core: Move the thermal zone lock out of the governors
->        thermal/core: Move the mutex inside the
-> thermal_zone_device_update() function
->        thermal/core: Fix lockdep_assert() warning
->        Revert "mlxsw: core: Add the hottest thermal zone detection"
->
-> Jiapeng Chong (1):
->        thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary print
-> function dev_err()
->
->   drivers/ata/ahci_imx.c                             |   15 +-
->   drivers/hwmon/hwmon.c                              |   14 +-
->   drivers/hwmon/pmbus/pmbus_core.c                   |   10 +-
->   drivers/hwmon/scpi-hwmon.c                         |   14 +-
->   drivers/iio/adc/sun4i-gpadc-iio.c                  |   14 +-
->   drivers/input/touchscreen/sun4i-ts.c               |   10 +-
->   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |   77 +-
->   drivers/regulator/max8973-regulator.c              |   10 +-
->   drivers/thermal/amlogic_thermal.c                  |   16 +-
->   drivers/thermal/armada_thermal.c                   |   12 +-
->   drivers/thermal/broadcom/bcm2711_thermal.c         |   14 +-
->   drivers/thermal/broadcom/bcm2835_thermal.c         |   14 +-
->   drivers/thermal/broadcom/brcmstb_thermal.c         |   20 +-
->   drivers/thermal/broadcom/ns-thermal.c              |   50 +-
->   drivers/thermal/broadcom/sr-thermal.c              |   16 +-
->   drivers/thermal/db8500_thermal.c                   |    8 +-
->   drivers/thermal/gov_bang_bang.c                    |   10 +-
->   drivers/thermal/gov_fair_share.c                   |    3 +-
->   drivers/thermal/gov_power_allocator.c              |   20 +-
->   drivers/thermal/gov_step_wise.c                    |   10 +-
->   drivers/thermal/hisi_thermal.c                     |   14 +-
->   drivers/thermal/imx8mm_thermal.c                   |   14 +-
->   drivers/thermal/imx_sc_thermal.c                   |   14 +-
->   drivers/thermal/k3_bandgap.c                       |   12 +-
->   drivers/thermal/k3_j72xx_bandgap.c                 |   12 +-
->   drivers/thermal/max77620_thermal.c                 |    8 +-
->   drivers/thermal/mtk_thermal.c                      |   10 +-
->   drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   23 +-
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   12 +-
->   drivers/thermal/qcom/tsens.c                       |   16 +-
->   drivers/thermal/qoriq_thermal.c                    |   12 +-
->   drivers/thermal/rcar_gen3_thermal.c                |   16 +-
->   drivers/thermal/rcar_thermal.c                     |   13 +-
->   drivers/thermal/rockchip_thermal.c                 |   14 +-
->   drivers/thermal/rzg2l_thermal.c                    |   10 +-
->   drivers/thermal/samsung/exynos_tmu.c               |   24 +-
->   drivers/thermal/sprd_thermal.c                     |   18 +-
->   drivers/thermal/st/stm_thermal.c                   |   18 +-
->   drivers/thermal/sun8i_thermal.c                    |   14 +-
->   drivers/thermal/tegra/soctherm.c                   |   21 +-
->   drivers/thermal/tegra/tegra-bpmp-thermal.c         |   19 +-
->   drivers/thermal/tegra/tegra30-tsensor.c            |   12 +-
->   drivers/thermal/thermal-generic-adc.c              |   10 +-
->   drivers/thermal/thermal_core.c                     |   63 +-
->   drivers/thermal/thermal_core.h                     |    4 +-
->   drivers/thermal/thermal_helpers.c                  |   73 +-
->   drivers/thermal/thermal_mmio.c                     |   17 +-
->   drivers/thermal/thermal_of.c                       | 1148
-> +++++++-------------
->   drivers/thermal/thermal_sysfs.c                    |   11 +-
->   drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   16 +-
->   drivers/thermal/uniphier_thermal.c                 |   10 +-
->   include/linux/thermal.h                            |   85 +-
->   52 files changed, 796 insertions(+), 1324 deletions(-)
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+vim +261 include/trace/trace_events.h
+
+55de2c0b5610cb include/trace/trace_events.h Masami Hiramatsu         2021-11-22  253  
+091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  254  #undef DECLARE_EVENT_CLASS
+091ad3658e3c76 include/trace/ftrace.h       Ingo Molnar              2009-11-26  255  #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
+d0ee8f4a1f5f3d include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  256) static inline notrace int trace_event_get_offsets_##call(		\
+62323a148fbeb0 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13  257) 	struct trace_event_data_offsets_##call *__data_offsets, proto)	\
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  258  {									\
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  259  	int __data_size = 0;						\
+114e7b52dee69c include/trace/ftrace.h       Filipe Brandenburger     2014-02-28  260  	int __maybe_unused __item_length;				\
+a7237765730a10 include/trace/trace_events.h Steven Rostedt (Red Hat  2015-05-13 @261) 	struct trace_event_raw_##call __maybe_unused *entry;		\
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  262  									\
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  263  	tstruct;							\
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  264  									\
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  265  	return __data_size;						\
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  266  }
+7fcb7c472f455d include/trace/ftrace.h       Li Zefan                 2009-06-01  267  
+
+:::::: The code at line 261 was first introduced by commit
+:::::: a7237765730a10d429736f47ac4b89779ec6c534 tracing: Rename ftrace_raw_##call event structures to trace_event_raw_##call
+
+:::::: TO: Steven Rostedt (Red Hat) <rostedt@goodmis.org>
+:::::: CC: Steven Rostedt <rostedt@goodmis.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

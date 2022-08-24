@@ -2,152 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D899659FD4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CFF59FF04
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237649AbiHXO3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S239073AbiHXQDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239207AbiHXO3k (ORCPT
+        with ESMTP id S237876AbiHXQD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:29:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3201B5B7BF;
-        Wed, 24 Aug 2022 07:29:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661351379; x=1692887379;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HeVu9/CMfMxDmJqZrVHFxtwjuciRTrJJHoMMUYqANE8=;
-  b=aYaODmHeXxQ9JWBz3qmiNS9PBKY5nwoSDpZDepLPbE/hWZFcw3TKfKJe
-   wF8JrRRrFjESdLvW1d2HTypPpFAeqmsa5bUlGf5HobMNc6ycELHQui2AV
-   +lm7JqqrG807mki1dgznhsgSB2JpLekCi4Wx1Pn1TftCJrZDbNVfcgUrz
-   JwFiKV2MARBx/bANCM8Zg3IuIvNE92uj+QVoMgn0jT3c+QsYAr2dpGRid
-   CBfmeey+O63LGhpgmS/61WWfkWjdEdry9I4lTIO1xyNEdQvll10GZxwka
-   5KM54fOFonYeLz5G+C8CkEARVuo5hI3TDtg6Se4kAP581A9KXNCAkdIZb
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="173938073"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 07:29:38 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 24 Aug 2022 07:29:37 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 24 Aug 2022 07:29:34 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <gregkh@linuxfoundation.org>,
-        <arnd@arndb.de>, <dragan.cvetic@xilinx.com>,
-        <derek.kiernan@xilinx.com>
-Subject: [PATCH v1 char-misc-next 5/5] misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.
-Date:   Thu, 25 Aug 2022 01:30:47 +0530
-Message-ID: <20220824200047.150308-6-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220824200047.150308-1-kumaravel.thiagarajan@microchip.com>
-References: <20220824200047.150308-1-kumaravel.thiagarajan@microchip.com>
+        Wed, 24 Aug 2022 12:03:29 -0400
+Received: from vm3.sequanux.org (static.55.155.9.5.clients.your-server.de [5.9.155.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20BF27D1CC;
+        Wed, 24 Aug 2022 09:03:27 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by vm3.sequanux.org (Postfix) with ESMTP id 5B9B21086F5;
+        Wed, 24 Aug 2022 18:03:02 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at vm3.sequanux.org
+Received: from vm3.sequanux.org ([127.0.0.1])
+        by localhost (vm3.sequanux.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id qh_e4nFra39O; Wed, 24 Aug 2022 18:02:36 +0200 (CEST)
+Received: from localhost (softwrestling.org [95.216.36.37])
+        by vm3.sequanux.org (Postfix) with ESMTPSA id 7D7391086F3;
+        Wed, 24 Aug 2022 18:02:36 +0200 (CEST)
+Date:   Wed, 24 Aug 2022 18:02:25 +0200
+From:   simon.guinot@sequanux.org
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Henning Schild <henning.schild@siemens.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>
+Subject: Re: [PATCH v4 1/5] gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+Message-ID: <YwZLkeu2RmJsDPC+@76cbfcf04d45>
+References: <20220823102344.17624-1-henning.schild@siemens.com>
+ <20220823102344.17624-2-henning.schild@siemens.com>
+ <YwToilxquEZGqzQD@smile.fi.intel.com>
+ <20220823165459.143e1c30@md1za8fc.ad001.siemens.net>
+ <YwYjXzsSHNe+J3aO@76cbfcf04d45>
+ <20220824155038.5aa19495@md1za8fc.ad001.siemens.net>
+ <a001efb5-95a3-d89d-32bd-557b6f11bb80@redhat.com>
+ <20220824161757.4ca3bb97@md1za8fc.ad001.siemens.net>
+ <3ec46cab-c775-824c-6bad-6fdddeea6e6a@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="M3dzRQFvnwZDbVpO"
+Content-Disposition: inline
+In-Reply-To: <3ec46cab-c775-824c-6bad-6fdddeea6e6a@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Power event handlers suspend and resume are invoked by the operating
-system to notify the driver about the power events. Wakeup is enabled
-before entering suspend and disabled after resuming.
 
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
----
- .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
+--M3dzRQFvnwZDbVpO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-index eb5ad75c9c88..230503cca2ff 100644
---- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-@@ -14,6 +14,7 @@
- #include "mchp_pci1xxxx_gp.h"
- 
- #define PCI1XXXX_NR_PINS		93
-+#define PERI_GEN_RESET			0
- #define OUT_EN_OFFSET(x)		((((x) / 32) * 4) + 0x400)
- #define INP_EN_OFFSET(x)		((((x) / 32) * 4) + 0x400 + 0x10)
- #define OUT_OFFSET(x)			((((x) / 32) * 4) + 0x400 + 0x20)
-@@ -291,6 +292,38 @@ static struct irq_chip pci1xxxx_gpio_irqchip = {
- 	.irq_set_type = pci1xxxx_gpio_set_type,
- };
- 
-+static int pci1xxxx_gpio_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_gpio *priv = dev_get_drvdata(dev);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&priv->lock, flags);
-+	pci1xxx_assign_bit(priv->reg_base, PIO_GLOBAL_CONFIG_OFFSET,
-+			   16, true);
-+	pci1xxx_assign_bit(priv->reg_base, PIO_GLOBAL_CONFIG_OFFSET,
-+			   17, false);
-+	pci1xxx_assign_bit(priv->reg_base, PERI_GEN_RESET, 16, true);
-+	spin_unlock_irqrestore(&priv->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_gpio_resume(struct device *dev)
-+{
-+	struct pci1xxxx_gpio *priv = dev_get_drvdata(dev);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&priv->lock, flags);
-+	pci1xxx_assign_bit(priv->reg_base, PIO_GLOBAL_CONFIG_OFFSET,
-+			   17, true);
-+	pci1xxx_assign_bit(priv->reg_base, PIO_GLOBAL_CONFIG_OFFSET,
-+			   16, false);
-+	pci1xxx_assign_bit(priv->reg_base, PERI_GEN_RESET, 16, false);
-+	spin_unlock_irqrestore(&priv->lock, flags);
-+
-+	return 0;
-+}
-+
- static int pci1xxxx_gpio_setup(struct pci1xxxx_gpio *priv, int irq)
- {
- 	struct gpio_chip *gchip = &priv->gpio;
-@@ -325,6 +358,7 @@ static int pci1xxxx_gpio_setup(struct pci1xxxx_gpio *priv, int irq)
- 	girq->parents = NULL;
- 	girq->default_type = IRQ_TYPE_NONE;
- 	girq->handler = handle_bad_irq;
-+
- 	return 0;
- }
- 
-@@ -370,6 +404,8 @@ static int pci1xxxx_gpio_probe(struct auxiliary_device *aux_dev,
- 	return devm_gpiochip_add_data(&aux_dev->dev, &priv->gpio, priv);
- }
- 
-+static SIMPLE_DEV_PM_OPS(pci1xxxx_gpio_pm_ops, pci1xxxx_gpio_suspend, pci1xxxx_gpio_resume);
-+
- const struct auxiliary_device_id pci1xxxx_gpio_auxiliary_id_table[] = {
- 	{.name = "mchp_pci1xxxx_gp.gp_gpio"},
- 	{}
-@@ -378,6 +414,7 @@ const struct auxiliary_device_id pci1xxxx_gpio_auxiliary_id_table[] = {
- static struct auxiliary_driver pci1xxxx_gpio_driver = {
- 	.driver = {
- 		.name = "PCI1xxxxGPIO",
-+		.pm = &pci1xxxx_gpio_pm_ops,
- 		},
- 	.probe = pci1xxxx_gpio_probe,
- 	.id_table = pci1xxxx_gpio_auxiliary_id_table
--- 
-2.25.1
+On Wed, Aug 24, 2022 at 04:24:46PM +0200, Hans de Goede wrote:
+> Hi,
+>=20
+> On 8/24/22 16:17, Henning Schild wrote:
+> > Am Wed, 24 Aug 2022 15:54:28 +0200
+> > schrieb Hans de Goede <hdegoede@redhat.com>:
+> >=20
+> >> Hi Henning,
+> >>
+> >> On 8/24/22 15:50, Henning Schild wrote:
+> >>> Am Wed, 24 Aug 2022 15:10:55 +0200
+> >>> schrieb simon.guinot@sequanux.org:
+> >>>  =20
+> >>>> On Tue, Aug 23, 2022 at 04:54:59PM +0200, Henning Schild wrote: =20
+> >>>>> Am Tue, 23 Aug 2022 17:47:38 +0300
+> >>>>> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:   =20
+> >>>>
+> >>>> Hi Andy,
+> >>>>
+> >>>> Thanks for this new version. It is looking good to me.
+> >>>> =20
+> >>>>>    =20
+> >>>>>> On Tue, Aug 23, 2022 at 12:23:40PM +0200, Henning Schild wrote:
+> >>>>>>  =20
+> >>>>>>> Add GPIO support for Nuvoton NCT6116 chip. Nuvoton SuperIO
+> >>>>>>> chips are very similar to the ones from Fintek. In other
+> >>>>>>> subsystems they also share drivers and are called a family of
+> >>>>>>> drivers.
+> >>>>>>>
+> >>>>>>> For the GPIO subsystem the only difference is that the direction
+> >>>>>>> bit is reversed and that there is only one data bit per pin. On
+> >>>>>>> the SuperIO level the logical device is another one.
+> >>>>>>>
+> >>>>>>> On a chip level we do not have a manufacturer ID to check and
+> >>>>>>> also no revision.     =20
+> >>>>>>
+> >>>>>> ...
+> >>>>>>    =20
+> >>>>>>> - * GPIO driver for Fintek Super-I/O F71869, F71869A, F71882,
+> >>>>>>> F71889 and F81866
+> >>>>>>> + * GPIO driver for Fintek and Nuvoton Super-I/O chips     =20
+> >>>>>>
+> >>>>>> I'm not sure it's good idea to drop it from here. It means reader
+> >>>>>> has to get this info in a hard way.
+> >>>>>>
+> >>>>>> ...   =20
+> >>>>>
+> >>>>> Let us see what others say. I wanted to keep this in line with
+> >>>>> what Kconfig says and the oneliner in the Kconfig was getting
+> >>>>> pretty longish. Hence i decided to shorten that. Other drivers
+> >>>>> also seem to not list all the possible chips in many places, it
+> >>>>> is all maint effort when a new chips is added and the list is in
+> >>>>> like 5 places.   =20
+> >>>>
+> >>>> I agree with you that we can drop this line. It was already
+> >>>> incomplete and the information is quite readable a few lines below
+> >>>> in both the define list and the chip enumeration.
+> >>>> =20
+> >>>>>    =20
+> >>>>>>> +#define gpio_dir_invert(type)	((type) =3D=3D nct6116d)
+> >>>>>>> +#define gpio_data_single(type)	((type) =3D=3D nct6116d)
+> >>>>>>> =20
+> >>>>>>
+> >>>>>> What's prevents us to add a proper prefix to these? I don't like
+> >>>>>> the idea of them having "gpio" prefix.
+> >>>>>>
+> >>>>>> ...
+> >>>>>>    =20
+> >>>>>>> +		pr_info(DRVNAME ": Unsupported device
+> >>>>>>> 0x%04x\n", devid);
+> >>>>>>> +			pr_debug(DRVNAME ": Not a Fintek
+> >>>>>>> device at 0x%08x\n", addr);
+> >>>>>>> +	pr_info(DRVNAME ": Found %s at %#x\n",
+> >>>>>>> +		pr_info(DRVNAME ":   revision %d\n",     =20
+> >>>>>>
+> >>>>>> Can we, please, utilize pr_fmt()?
+> >>>>>>    =20
+> >>>>>>> +			(int)superio_inb(addr,
+> >>>>>>> SIO_FINTEK_DEVREV));     =20
+> >>>>>>
+> >>>>>> Explicit casting in printf() means wrong specifier in 99% of
+> >>>>>> cases.  =20
+> >>>>>
+> >>>>> For all the other comments i will wait for a second opinion. I
+> >>>>> specifically did not change existing code for more than the
+> >>>>> functional changes needed. And a bit of checkpatch.pl fixing.
+> >>>>> Beautification could be done on the way but would only cause
+> >>>>> inconsistency. That driver is what it is, if someone wants to
+> >>>>> overhaul the style ... that should be another patch. One likely
+> >>>>> not coming from me.   =20
+> >>>>
+> >>>> About the int cast, I think you can drop it while you are updating
+> >>>> this line. It is unneeded. =20
+> >>>
+> >>> Ok two voices for doing that one fix along the way. I will send a v5
+> >>> and hope nobody insists on me fixing the other findings in code i
+> >>> never wrote. =20
+> >>
+> >> You did not write it, but you are using it to do hw-enablement for
+> >> your company's products. So being asked to also some touch-ups
+> >> left and right while you are at it really is not unexpected IMHO.
+> >=20
+> > Sure thing. Dropping a few characters from a line i touch anyhow is
+> > easy enough. But i.e a refactoring to pr_fmt would feel like asking too
+> > much in my book. That feels like work of the author or maintainer.
+>=20
+> Right, but that assumes that the original author / maintainer is still
+> around and actively contributing which unfortunately is not always
+> the case.
 
+Actually the original author is not active but he is still keeping an
+eye on the driver :)
+
+I still review and test the patches I catch on the MLs. And I am ready
+to do some maintenance work if needed.
+
+Henning, I think you could have done the pr_fmt conversion. It is not
+a big deal and it would have been nice. But indeed, you don't have to...
+
+Simon
+
+--M3dzRQFvnwZDbVpO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEXW8DgovlR3VS5hA0zyg/RDPmszoFAmMGS4wACgkQzyg/RDPm
+szpTlhAAxXX31W3p2E5qH5oNGNmHIqUSt+Ckv8Roe77lrNCktr+h+VqzNmfuamHW
+5XepeoEb8Fl17K5yNF2O72I5q1Z37SRwlsWblI1k53SsPFzzad3bd/3TLJiRY6KB
+Q5hjGc1ygqUAPIlEamnWBk194F0seLDnMKvj3ovO3DGst9xCgvH43p+SetJnN3P0
+q6nqlG9GxBXUw+3tijt2Szdqn6VWs8TcCynvvElaU1gGRqj9S/XbIcRBj9ASWL0d
+eLkJpT5WSvBf4M0pNgzF5P0ytWlCijb5V05/Bc9Hg+O3cA3NPXCFMwLpoXy8/UoB
+YSFrYgUtTf5vnMHZnTBVLWuXmrA/Tqq1xiBLY/jGPxa6Eqc1+r+ewkBmjq9xUBac
+5DvzHk82D9quTtIf0ETHQf/t646vvXhEHEew9IVwWYjfwvYpgMCJa1bZYr/xfGh7
+THvV7dygt2e/twQnjFLcNaJ1qWV3YKU81ASb6Sy1ccULgtL/WN8out1l/zQByQAU
+8l84emk+qaMCNX1+PHlKuOxglBiHzY4M8bBmInhyqUAKDbwPRisYD+KuqnYvXBDm
+Wj7eotUx/Czc387v+HhZvsQKBQiYRUgACf0L0qBE6NplJac4vjTaUNvcYsX4fR+b
+Ny1y9KDRoojcO1v4OeJHagdG2NXsyG+b6IG3S+W4/CSgGEr0t6o=
+=1yeY
+-----END PGP SIGNATURE-----
+
+--M3dzRQFvnwZDbVpO--

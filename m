@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C766A59F110
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FF759F0FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbiHXBgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S233260AbiHXBdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiHXBgR (ORCPT
+        with ESMTP id S230503AbiHXBdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:36:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB06057259
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661304975; x=1692840975;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZSQdgFUsPfJRnOYbqUKECCoXJ23M8lFz2oYprolTziI=;
-  b=oKOx5NQM9UKkoWp6mlkYWhrqAcLwGRX3qCHBx3ofZV2Ef53bzhdQLKNK
-   ptRC6C91St3WfDH/Y03UqNG9CEH27vh/eUgwWzgfs4Ke5JnWD2fUouxzC
-   /BV7et/UpjPFnjFKN1xnEvKgG+Oapm9hRJKX1er6z3YCdnVBe/vQv88Xi
-   zSbQDkJOuawJYeX87wkzElhHxP8eAWjdwbMCMiwAW/Jy7ABAOq6zE1Yfo
-   bpbR5xUwT00dJAb3/NhmENq0yvDvOCkx1fvLLpqVhlrzAX7bqktD4qBAK
-   d8d9z0mDLoAcVzched8UTxx+i1zs4T8iAwDzW4DxjQqbFdINgkPMPhQLD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="319893655"
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="319893655"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 18:36:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="560398672"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 23 Aug 2022 18:36:13 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQfJV-0000oh-0A;
-        Wed, 24 Aug 2022 01:36:13 +0000
-Date:   Wed, 24 Aug 2022 09:35:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mark:arm64/alternatives/rework 15/18]
- arch/arm64/kernel/alternative.c:269:14: warning: no previous prototype for
- function 'alt_cb_patch_nops'
-Message-ID: <202208240946.qpIze2KD-lkp@intel.com>
+        Tue, 23 Aug 2022 21:33:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C514D82B;
+        Tue, 23 Aug 2022 18:33:39 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MC7mc2Z3WzXdh2;
+        Wed, 24 Aug 2022 09:29:20 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
+ 2022 09:33:37 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next] netlink: fix some kernel-doc comments
+Date:   Wed, 24 Aug 2022 09:36:21 +0800
+Message-ID: <20220824013621.365103-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/alternatives/rework
-head:   fad62c713602c963008575fd972d316569a32d12
-commit: e5a9b245aeab3e0d83fbc7f9861351e8bb0e4823 [15/18] arm64: alternatives: add shared NOP callback
-config: arm64-randconfig-r022-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240946.qpIze2KD-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=e5a9b245aeab3e0d83fbc7f9861351e8bb0e4823
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/alternatives/rework
-        git checkout e5a9b245aeab3e0d83fbc7f9861351e8bb0e4823
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/mm/ kernel/
+Modify the comment of input parameter of nlmsg_ and nla_ function.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ include/net/netlink.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/kernel/alternative.c:269:14: warning: no previous prototype for function 'alt_cb_patch_nops' [-Wmissing-prototypes]
-   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
-                ^
-   arch/arm64/kernel/alternative.c:269:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
-           ^
-           static 
-   1 warning generated.
-
-
-vim +/alt_cb_patch_nops +269 arch/arm64/kernel/alternative.c
-
-   268	
- > 269	noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
-
+diff --git a/include/net/netlink.h b/include/net/netlink.h
+index 7a2a9d3144ba..e658d18afa67 100644
+--- a/include/net/netlink.h
++++ b/include/net/netlink.h
+@@ -741,6 +741,7 @@ static inline int __nlmsg_parse(const struct nlmsghdr *nlh, int hdrlen,
+  * @hdrlen: length of family specific header
+  * @tb: destination array with maxtype+1 elements
+  * @maxtype: maximum attribute type to be expected
++ * @policy: validation policy
+  * @extack: extended ACK report struct
+  *
+  * See nla_parse()
+@@ -760,6 +761,7 @@ static inline int nlmsg_parse(const struct nlmsghdr *nlh, int hdrlen,
+  * @hdrlen: length of family specific header
+  * @tb: destination array with maxtype+1 elements
+  * @maxtype: maximum attribute type to be expected
++ * @policy: validation policy
+  * @extack: extended ACK report struct
+  *
+  * See nla_parse_deprecated()
+@@ -779,6 +781,7 @@ static inline int nlmsg_parse_deprecated(const struct nlmsghdr *nlh, int hdrlen,
+  * @hdrlen: length of family specific header
+  * @tb: destination array with maxtype+1 elements
+  * @maxtype: maximum attribute type to be expected
++ * @policy: validation policy
+  * @extack: extended ACK report struct
+  *
+  * See nla_parse_deprecated_strict()
+@@ -814,7 +817,6 @@ static inline struct nlattr *nlmsg_find_attr(const struct nlmsghdr *nlh,
+  * @len: length of attribute stream
+  * @maxtype: maximum attribute type to be expected
+  * @policy: validation policy
+- * @validate: validation strictness
+  * @extack: extended ACK report struct
+  *
+  * Validates all attributes in the specified attribute stream against the
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

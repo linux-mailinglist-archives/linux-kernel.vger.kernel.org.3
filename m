@@ -2,147 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0C359FA8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C19159FA9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237605AbiHXMyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
+        id S237517AbiHXM4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237558AbiHXMx6 (ORCPT
+        with ESMTP id S237044AbiHXM4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:53:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B7995E4F;
-        Wed, 24 Aug 2022 05:53:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 828B16138B;
-        Wed, 24 Aug 2022 12:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF8C2C433D6;
-        Wed, 24 Aug 2022 12:53:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661345635;
-        bh=9qKTFfSvvv3odyymWozZ3aH/e3Es4L33cC41zZfYrDE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Hk1K3btiYElGBvohLpvnxQA2OisfrjMc8S/kg7OoZJF85mm9jLVcvTTAZ2Lw3evSf
-         +sk8cPvrEnDfRUlkNaDMbeNAim0UmwOmrY2pIWcRft2vYW4uPpmhpNvFOWSEFl9mf3
-         QLay6v3wIZsAU5jfFCs7L1BJGnXS/W03OFJ0YDMp4gY37+neRradBW1qYmAIK/3vXZ
-         rH0cBEQjhvbko4l7YDHO4ZvHkKsW6ii/iQNe7zRcOO0XiedDIeQ1GB55rvhtyCgtDT
-         MTwkOUMyoB8htAc5+QUeCwDFg2s1hrRx+bU8zr99viJWCFLcJrbgo2GNfUpBcdOvDe
-         UEdrfsdXKJDGw==
-Message-ID: <5f248d934ec5d2345986fd75d7d12bcd9e2f32b9.camel@kernel.org>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Trond Myklebust <trondmy@hammerspace.com>
-Date:   Wed, 24 Aug 2022 08:53:53 -0400
-In-Reply-To: <166129348704.23264.10381335282721356873@noble.neil.brown.name>
-References: <20220822133309.86005-1-jlayton@kernel.org>
-        , <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
-        , <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-        , <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
-        , <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>
-        , <20220822233231.GJ3600936@dread.disaster.area>
-        , <6cbcb33d33613f50dd5e485ecbf6ce7e305f3d6f.camel@kernel.org>
-        , <166125468756.23264.2859374883806269821@noble.neil.brown.name>
-        , <df469d936b2e1c1a8c9c947896fa8a160f33b0e8.camel@kernel.org>
-         <166129348704.23264.10381335282721356873@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 24 Aug 2022 08:56:23 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FA485FFF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:56:16 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1661345762t10p0fcg
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 24 Aug 2022 20:56:01 +0800 (CST)
+X-QQ-SSF: 01000000002000C0E000B00A0000000
+X-QQ-FEAT: ZdHcY4j9T+K94SWBB3cuuxFtymFLVJ+fL1aGmbrpiFQTCt1Idp1t1648ssCy/
+        ea0PqgdPHEKLUC6+1pcecIQBTH2VZuk85JsX2HybE2tv4SwdIfQvy3XmMm1KkUxnMtywtS1
+        5nBYeR9rb0YnQn3tx5WxsX0UY6h5DsCQTB+ttCDJv9bJhtXIrnZ4SUeSbQZ20HY4tKYdgHz
+        /AlpcfPNPZdMMZbvJEFkvFKTcIA56MK9/RuE+UVIJFaa7bxXcq0BBJwIOmCxgRBwTGKw4N2
+        3AfbGOZd3Gc5ZpQlTgAWUokXRukY2a9xQoOXyYaZJeAgPMs/hl/FJ2Vf+rnCQg0IPMt1xW7
+        OLVllQ4d+wHhkYcfET9U2SVD/PYPdVJn2Pqv6/e
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] drm/vmwgfx: fix repeated words in comments
+Date:   Wed, 24 Aug 2022 20:55:54 +0800
+Message-Id: <20220824125554.27901-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-24 at 08:24 +1000, NeilBrown wrote:
-> On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > On Tue, 2022-08-23 at 21:38 +1000, NeilBrown wrote:
-> > > On Tue, 23 Aug 2022, Jeff Layton wrote:
-> > > > So, we can refer to that and simply say:
-> > > >=20
-> > > > "If the function updates the mtime or ctime on the inode, then the
-> > > > i_version should be incremented. If only the atime is being updated=
-,
-> > > > then the i_version should not be incremented. The exception to this=
- rule
-> > > > is explicit atime updates via utimes() or similar mechanism, which
-> > > > should result in the i_version being incremented."
-> > >=20
-> > > Is that exception needed? utimes() updates ctime.
-> > >=20
-> > > https://man7.org/linux/man-pages/man2/utimes.2.html
-> > >=20
-> > > doesn't say that, but
-> > >=20
-> > > https://pubs.opengroup.org/onlinepubs/007904875/functions/utimes.html
-> > >=20
-> > > does, as does the code.
-> > >=20
-> >=20
-> > Oh, good point! I think we can leave that out. Even better!
->=20
-> Further, implicit mtime updates (file_update_time()) also update ctime.
-> So all you need is
->  If the function updates the ctime, then i_version should be
->  incremented.
->=20
-> and I have to ask - why not just use the ctime? Why have another number
-> that is parallel?
->=20
-> Timestamps are updated at HZ (ktime_get_course) which is at most every
-> millisecond.
-> xfs stores nanosecond resolution, so about 20 bits are currently wasted.
-> We could put a counter like i_version in there that only increments
-> after it is viewed, then we can get all the precision we need but with
-> exactly ctime semantics.
->=20
-> The 64 change-id could comprise
->  35 bits of seconds (nearly a millenium)
->  16 bits of sub-seconds (just in case a higher precision time was wanted
->  one day)
->  13 bits of counter. - 8192 changes per tick
+ Delete the redundant word 'to'.
+ Delete the redundant word 'should'.
 
-We'd need a "seen" flag too, so maybe only 4096 changes per tick...
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c | 4 ++--
+ drivers/gpu/drm/vmwgfx/vmwgfx_kms.h     | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->=20
-> The value exposed in i_ctime would hide the counter and just show the
-> timestamp portion of what the filesystem stores. This would ensure we
-> never get changes on different files that happen in one order leaving
-> timestamps with the reversed order (the timestamps could be the same,
-> but that is expected).
->=20
-> This scheme could be made to handle a sustained update rate of 1
-> increment every 8 nanoseconds (if the counter were allowed to overflow
-> into unused bits of the sub-second field). This is one ever 24 CPU
-> cycles. Incrementing a counter and making it visible to all CPUs can
-> probably be done in 24 cycles. Accessing it and setting the "seen" flag
-> as well might just fit with faster memory. Getting any other useful
-> work done while maintaining that rate on a single file seems unlikely.
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c b/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
+index d49de4905efa..82b9d33ecc84 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
+@@ -381,7 +381,7 @@ static int vmw_execbuf_res_noctx_val_add(struct vmw_sw_context *sw_context,
+ }
+ 
+ /**
+- * vmw_view_res_val_add - Add a view and the surface it's pointing to to the
++ * vmw_view_res_val_add - Add a view and the surface it's pointing to the
+  * validation list
+  *
+  * @sw_context: The software context holding the validation list.
+@@ -409,7 +409,7 @@ static int vmw_view_res_val_add(struct vmw_sw_context *sw_context,
+ 
+ /**
+  * vmw_view_id_val_add - Look up a view and add it and the surface it's pointing
+- * to to the validation list.
++ * to the validation list.
+  *
+  * @sw_context: The software context holding the validation list.
+  * @view_type: The view type to look up.
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
+index 1d1c8b82c898..7c04e8150fe2 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
+@@ -69,7 +69,7 @@ struct vmw_du_update_plane {
+ 	 *
+ 	 * Some surface resource or buffer object need some extra cmd submission
+ 	 * like update GB image for proxy surface and define a GMRFB for screen
+-	 * object. That should should be done here as this callback will be
++	 * object. That should be done here as this callback will be
+ 	 * called after FIFO allocation with the address of command buufer.
+ 	 *
+ 	 * This callback is optional.
+-- 
+2.36.1
 
-This is an interesting idea.
-
-So, for NFSv4 you'd just mask off the counter bits (and "seen" flag) to
-get the ctime, and for the change attribute we'd just mask off the
-"seen" flag and put it all in there.
-
- * Implementing that for all filesystems would be a huge project though.
-   If we were implementing the i_version counter from scratch, I'd
-   probably do something along these lines. Given that we already have
-   an existing i_version counter, would there be any real benefit to
-   pursuing this avenue instead?
---=20
-Jeff Layton <jlayton@kernel.org>

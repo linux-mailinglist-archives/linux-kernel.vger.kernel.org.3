@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4166359F4AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4E859F4B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235562AbiHXIDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S235588AbiHXIEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235597AbiHXIDL (ORCPT
+        with ESMTP id S235563AbiHXID6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:03:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C743B83F2D;
-        Wed, 24 Aug 2022 01:03:08 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 08:03:05 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661328186;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=fMC31QZsCePHeMFSj02/iaLnOUX/ksL6PNDDb0owKtk=;
-        b=4sREGs+pM/62fkI9etbbxv+De/Xn9nvUBdFl3JEvqBAkbpIm+xJNzaFe4kZXvIpL5rRqc3
-        BF/vjddSMe+2w7KKt7VIY/agVU1bQ6ceIWcFrG6SMCa+cRK3eo66I7pKikOho+3Ix7AqP0
-        ntZ28AWygR7B2vlTFSBmG7iEemtmMKaqslZGApI3uQxctgQPkhzASFsq35INl/SYMIRY6u
-        cydaUGiKWZtJSTuXUlOYWySq57xryeicG62I1btde+fjbO4rdOTqqzhk27P/roP9/B/pKs
-        WUN++MAYmZnzaJfEZrWAAMdI5+6AqCXpFlvwPoZawA0ZRIQ5UdlkoTik3AS0vw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661328186;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=fMC31QZsCePHeMFSj02/iaLnOUX/ksL6PNDDb0owKtk=;
-        b=9SqbUNAuzCynmZnB625IQhoJepipy3sqE5BW62BJE1ZApvSFoYGI6WU5iM18Bvgl8WhY/Z
-        47knitLqjLEOBYDA==
-From:   "tip-bot2 for Tom Lendacky" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/sev: Don't use cc_platform_has() for early
- SEV-SNP calls
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
+        Wed, 24 Aug 2022 04:03:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F4986054
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:03:57 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oQlMR-0008Gu-Vj; Wed, 24 Aug 2022 10:03:39 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oQlMQ-0002AW-S9; Wed, 24 Aug 2022 10:03:38 +0200
+Date:   Wed, 24 Aug 2022 10:03:38 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+ unlock sequence
+Message-ID: <20220824080338.humjny4fabhmx3z7@pengutronix.de>
+References: <20220816043643.26569-1-alice.guo@oss.nxp.com>
+ <20220816043643.26569-3-alice.guo@oss.nxp.com>
+ <20220816062330.z2fvurteg337krw2@pengutronix.de>
+ <AM6PR04MB60537292F559EC012F0EB510E2719@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220822080010.ecdphpm3i26cco5f@pengutronix.de>
+ <20220822140347.GA4087281@roeck-us.net>
+ <AM6PR04MB6053E26CB59410EBCC2C93AEE2709@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220823091027.ezyxkn64asajvjom@pengutronix.de>
+ <20220823120219.GA203169@roeck-us.net>
+ <AM6PR04MB60535EC5B774004AF996BDA5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Message-ID: <166132818542.401.9222834659601554463.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM6PR04MB60535EC5B774004AF996BDA5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,76 +68,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Hi Alice,
 
-Commit-ID:     cdaa0a407f1acd3a44861e3aea6e3c7349e668f1
-Gitweb:        https://git.kernel.org/tip/cdaa0a407f1acd3a44861e3aea6e3c7349e668f1
-Author:        Tom Lendacky <thomas.lendacky@amd.com>
-AuthorDate:    Tue, 23 Aug 2022 16:55:51 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 24 Aug 2022 09:54:32 +02:00
+On 22-08-24, Alice Guo (OSS) wrote:
 
-x86/sev: Don't use cc_platform_has() for early SEV-SNP calls
+...
 
-When running identity-mapped and depending on the kernel configuration,
-it is possible that the compiler uses jump tables when generating code
-for cc_platform_has().
+> > > > Hi Guenter and Marco,
+> > > >
+> > > > 1. did you see any issues?
+> > > > This WDOG Timer first appeared in i.MX7ULP, no one report issues
+> > > > probably because few people use i.MX7ULP. This issue was found when
+> > > > we did a stress test on it. When we reconfigure the WDOG Timer,
+> > > > there is a certain probability that it reset. The reason for the
+> > > > error is that when WDOG_CS[CMD32EN] is 0, the unlock sequence is two
+> > > > 16-bit writes (0xC520, 0xD928) to the CNT register within 16 bus
+> > > > clocks, and improper unlock sequence causes the WDOG to reset.
+> > > > Adding mb() is to guarantee that two 16-bit writes are finished within 16
+> > bus clocks.
+> > >
+> > > After this explanation the whole imx7ulp_wdt_init() seems a bit buggy
+> > > because writel_relaxed() as well as writel() are 32bit access functions.
+> > > So the very first thing to do is to enable the 32-bit mode.
+> > >
+> > Agreed. This is much better than having extra code to deal with both 16-bit
+> > and 32-bit access.
+> > 
+> > > Also this is a explanation worth to be added to the commit message ;)
+> > >
+> > 
+> > Definitely. Also, the use of mb(), if it should indeed be needed, would have to
+> > be explained in a code comment.
+> > 
+> > Thanks,
+> > Guenter
+> 
+> Hi Marco and Guenter,
+> 
+> Thank you for your comments. I plan to enable support for 32-bit
+> unlock command write words in bootloader. In this way, there is no
+> need to distinguish whether the unlock command is a 32-bit command or
+> a 16-bit command in driver.
 
-This causes a boot failure because the jump table uses un-mapped kernel
-virtual addresses, not identity-mapped addresses. This has been seen
-with CONFIG_RETPOLINE=n.
+Please don't move this into the bootloader, enabling it within the init
+seq. is just fine. If you move it into the bootloader then you can't
+ensure that the bit is set since there are plenty of bootloaders out
+there.
 
-Similar to sme_encrypt_kernel(), use an open-coded direct check for the
-status of SNP rather than trying to eliminate the jump table. This
-preserves any code optimization in cc_platform_has() that can be useful
-post boot. It also limits the changes to SEV-specific files so that
-future compiler features won't necessarily require possible build changes
-just because they are not compatible with running identity-mapped.
+As I said, just drop the "16bit" unlock sequence from the init function
+because the unlock is handled just fine in all the watchdog_ops.
 
-  [ bp: Massage commit message. ]
-
-Fixes: 5e5ccff60a29 ("x86/sev: Add helper for validating pages in early enc attribute changes")
-Reported-by: Sean Christopherson <seanjc@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org> # 5.19.x
-Link: https://lore.kernel.org/all/YqfabnTRxFSM+LoX@google.com/
----
- arch/x86/kernel/sev.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 63dc626..4f84c3f 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -701,7 +701,13 @@ e_term:
- void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr,
- 					 unsigned int npages)
- {
--	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+	/*
-+	 * This can be invoked in early boot while running identity mapped, so
-+	 * use an open coded check for SNP instead of using cc_platform_has().
-+	 * This eliminates worries about jump tables or checking boot_cpu_data
-+	 * in the cc_platform_has() function.
-+	 */
-+	if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
- 		return;
- 
- 	 /*
-@@ -717,7 +723,13 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
- 					unsigned int npages)
- {
--	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+	/*
-+	 * This can be invoked in early boot while running identity mapped, so
-+	 * use an open coded check for SNP instead of using cc_platform_has().
-+	 * This eliminates worries about jump tables or checking boot_cpu_data
-+	 * in the cc_platform_has() function.
-+	 */
-+	if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
- 		return;
- 
- 	/* Invalidate the memory pages before they are marked shared in the RMP table. */
+Regards,
+  Marco

@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8C559F7D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB0F59F7DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbiHXKcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
+        id S236444AbiHXKdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiHXKcr (ORCPT
+        with ESMTP id S236500AbiHXKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:32:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45B57F106;
-        Wed, 24 Aug 2022 03:32:45 -0700 (PDT)
+        Wed, 24 Aug 2022 06:33:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A250380B4D;
+        Wed, 24 Aug 2022 03:33:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F196B8239F;
-        Wed, 24 Aug 2022 10:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52C3C433C1;
-        Wed, 24 Aug 2022 10:32:35 +0000 (UTC)
-Message-ID: <0609dbe4-5596-ee9d-abeb-3c126e7ba755@xs4all.nl>
-Date:   Wed, 24 Aug 2022 12:32:34 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1858161900;
+        Wed, 24 Aug 2022 10:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191E0C433D6;
+        Wed, 24 Aug 2022 10:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661337192;
+        bh=+gsQSafX9u7DcMcLEj6Bzg0Av/lPycIr85rXwV72OC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i1JPp9kcEmRc3pTqob4/kF5ttxl3+gUDSOJk5X5r46s7LoLeSF5mYqfSBdqHyST5j
+         Y9242jQRNVWwh+78PrAMZr8tsImEg7st17CvvsR6OqbtND/6N3uechefWJ6EyzrGoW
+         KrFT3KPlmidoNxXQDE/4MAw74s8kIocabqSocLQCrTRO32eiEWG6E5gw9LUGGGGHG9
+         9FWKH17h5vkG+LeC/mMUG45KWlJ9KnwCzYRKfhWvaZr+HbM+4vHWMyEFt1pbjTqxD7
+         7Ov/f3EOLmEUWeU2Q+CTuInoSepk8dC+fWTdLJuvinlDQt9646bi7Hx4GkU5OwSZnj
+         kj4CRWkXHiHXg==
+Received: by pali.im (Postfix)
+        id 428D57DA; Wed, 24 Aug 2022 12:33:08 +0200 (CEST)
+Date:   Wed, 24 Aug 2022 12:33:08 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: pci-bridge-emul: Set position of PCI
+ capabilities to real HW value
+Message-ID: <20220824103308.tmjvks2sbn5p4dew@pali>
+References: <20220703104627.27058-1-pali@kernel.org>
+ <20220823101439.24525-1-pali@kernel.org>
+ <YwT4fRJ4dF2JflwF@lpieralisi>
+ <20220823163110.rtqz534otlzsziza@pali>
+ <YwXSW4pDSMZeHhMm@lpieralisi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 8/9] media: videobuf2: Stop using internal dma-buf lock
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lima@lists.freedesktop.org
-References: <20220824102248.91964-1-dmitry.osipenko@collabora.com>
- <20220824102248.91964-9-dmitry.osipenko@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220824102248.91964-9-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwXSW4pDSMZeHhMm@lpieralisi>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,143 +66,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nice!
-
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-
-Regards,
-
-	Hans
-
-On 24/08/2022 12:22, Dmitry Osipenko wrote:
-> All drivers that use dma-bufs have been moved to the updated locking
-> specification and now dma-buf reservation is guaranteed to be locked
-> by importers during the mapping operations. There is no need to take
-> the internal dma-buf lock anymore. Remove locking from the videobuf2
-> memory allocators.
+On Wednesday 24 August 2022 09:25:15 Lorenzo Pieralisi wrote:
+> [...]
 > 
-> Acked-by: Tomasz Figa <tfiga@chromium.org>
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  drivers/media/common/videobuf2/videobuf2-dma-contig.c | 11 +----------
->  drivers/media/common/videobuf2/videobuf2-dma-sg.c     | 11 +----------
->  drivers/media/common/videobuf2/videobuf2-vmalloc.c    | 11 +----------
->  3 files changed, 3 insertions(+), 30 deletions(-)
+> > > In other words: what if PCI express capability is lower in the address
+> > > space (config) than the subsystem ID vendor capability ?
+> > 
+> > Current code expects that if host controller driver sets both pcie_start
+> > and ssid_start, those values are correct, non-overlapping and can be
+> > handled correctly.
+> > 
+> > And if offset to PCI express capability is lower than offset to SSID
+> > capability then there should not be any issue. First capability is
+> > correctly set into capabilities_pointer (via min function) and then
+> > pci_bridge_emul_conf_read() should handle it.
 > 
-> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> index de762dbdaf78..2c69bf0470e7 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> @@ -382,18 +382,12 @@ static struct sg_table *vb2_dc_dmabuf_ops_map(
->  	struct dma_buf_attachment *db_attach, enum dma_data_direction dma_dir)
->  {
->  	struct vb2_dc_attachment *attach = db_attach->priv;
-> -	/* stealing dmabuf mutex to serialize map/unmap operations */
-> -	struct mutex *lock = &db_attach->dmabuf->lock;
->  	struct sg_table *sgt;
->  
-> -	mutex_lock(lock);
-> -
->  	sgt = &attach->sgt;
->  	/* return previously mapped sg table */
-> -	if (attach->dma_dir == dma_dir) {
-> -		mutex_unlock(lock);
-> +	if (attach->dma_dir == dma_dir)
->  		return sgt;
-> -	}
->  
->  	/* release any previous cache */
->  	if (attach->dma_dir != DMA_NONE) {
-> @@ -409,14 +403,11 @@ static struct sg_table *vb2_dc_dmabuf_ops_map(
->  	if (dma_map_sgtable(db_attach->dev, sgt, dma_dir,
->  			    DMA_ATTR_SKIP_CPU_SYNC)) {
->  		pr_err("failed to map scatterlist\n");
-> -		mutex_unlock(lock);
->  		return ERR_PTR(-EIO);
->  	}
->  
->  	attach->dma_dir = dma_dir;
->  
-> -	mutex_unlock(lock);
-> -
->  	return sgt;
->  }
->  
-> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> index 39e11600304a..e63e718c0bf7 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> @@ -424,18 +424,12 @@ static struct sg_table *vb2_dma_sg_dmabuf_ops_map(
->  	struct dma_buf_attachment *db_attach, enum dma_data_direction dma_dir)
->  {
->  	struct vb2_dma_sg_attachment *attach = db_attach->priv;
-> -	/* stealing dmabuf mutex to serialize map/unmap operations */
-> -	struct mutex *lock = &db_attach->dmabuf->lock;
->  	struct sg_table *sgt;
->  
-> -	mutex_lock(lock);
-> -
->  	sgt = &attach->sgt;
->  	/* return previously mapped sg table */
-> -	if (attach->dma_dir == dma_dir) {
-> -		mutex_unlock(lock);
-> +	if (attach->dma_dir == dma_dir)
->  		return sgt;
-> -	}
->  
->  	/* release any previous cache */
->  	if (attach->dma_dir != DMA_NONE) {
-> @@ -446,14 +440,11 @@ static struct sg_table *vb2_dma_sg_dmabuf_ops_map(
->  	/* mapping to the client with new direction */
->  	if (dma_map_sgtable(db_attach->dev, sgt, dma_dir, 0)) {
->  		pr_err("failed to map scatterlist\n");
-> -		mutex_unlock(lock);
->  		return ERR_PTR(-EIO);
->  	}
->  
->  	attach->dma_dir = dma_dir;
->  
-> -	mutex_unlock(lock);
-> -
->  	return sgt;
->  }
->  
-> diff --git a/drivers/media/common/videobuf2/videobuf2-vmalloc.c b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-> index 7831bf545874..41db707e43a4 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-vmalloc.c
-> @@ -267,18 +267,12 @@ static struct sg_table *vb2_vmalloc_dmabuf_ops_map(
->  	struct dma_buf_attachment *db_attach, enum dma_data_direction dma_dir)
->  {
->  	struct vb2_vmalloc_attachment *attach = db_attach->priv;
-> -	/* stealing dmabuf mutex to serialize map/unmap operations */
-> -	struct mutex *lock = &db_attach->dmabuf->lock;
->  	struct sg_table *sgt;
->  
-> -	mutex_lock(lock);
-> -
->  	sgt = &attach->sgt;
->  	/* return previously mapped sg table */
-> -	if (attach->dma_dir == dma_dir) {
-> -		mutex_unlock(lock);
-> +	if (attach->dma_dir == dma_dir)
->  		return sgt;
-> -	}
->  
->  	/* release any previous cache */
->  	if (attach->dma_dir != DMA_NONE) {
-> @@ -289,14 +283,11 @@ static struct sg_table *vb2_vmalloc_dmabuf_ops_map(
->  	/* mapping to the client with new direction */
->  	if (dma_map_sgtable(db_attach->dev, sgt, dma_dir, 0)) {
->  		pr_err("failed to map scatterlist\n");
-> -		mutex_unlock(lock);
->  		return ERR_PTR(-EIO);
->  	}
->  
->  	attach->dma_dir = dma_dir;
->  
-> -	mutex_unlock(lock);
-> -
->  	return sgt;
->  }
->  
+> I don't understand how the pointer to the SSID cap is set in this
+> specific case, I don't see any code doing that but that's most certainly
+> because I don't know in details the emul bridge internals.
+> 
+> IIUC, in pci_bridge_emul_read_ssid(), we set the next cap pointer if
+> the PCI express capability is at an address higher (current case) than
+> the SSID capability otherwise we set it to 0 (end of the list).
+> 
+> The other way around, I don't see the PCI express next cap pointer
+> being set anywhere (where, IIUC, it should be set to point to the
+> SSID cap) - I am not sure you are handling it.
+
+Ou, I see. This is really missing! It should be set when initializing
+pcie_conf.cap_id and pcie_conf.cap at this place:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/pci/pci-bridge-emul.c?h=v6.0-rc2#n379
+
+I will fix it and send a new version of this patch.
+
+> That's the only question I have on this patch.
+> 
+> Lorenzo
+> 
+> > The whole my idea is to construct capabilities linked list structure
+> > correctly based on input requirements (e.g. fixed location of some
+> > capability, etc).
+> > 
+> > > I am just trying to understand the patch, so forgive me if the question
+> > > is already addressed in the code.
+> > > 
+> > > Thanks,
+> > > Lorenzo
+> > > 
+> > > > +		else
+> > > > +			bridge->pcie_start = bridge->ssid_start + PCI_CAP_SSID_SIZEOF;
+> > > > +	}
+> > > > +
+> > > > +	bridge->conf.capabilities_pointer = min(bridge->ssid_start, bridge->pcie_start);
+> > > >  
+> > > >  	if (bridge->conf.capabilities_pointer)
+> > > >  		bridge->conf.status |= cpu_to_le16(PCI_STATUS_CAP_LIST);
+> > > > @@ -459,15 +468,17 @@ int pci_bridge_emul_conf_read(struct pci_bridge_emul *bridge, int where,
+> > > >  		read_op = bridge->ops->read_base;
+> > > >  		cfgspace = (__le32 *) &bridge->conf;
+> > > >  		behavior = bridge->pci_regs_behavior;
+> > > > -	} else if (reg >= PCI_CAP_SSID_START && reg < PCI_CAP_SSID_END && bridge->subsystem_vendor_id) {
+> > > > +	} else if (reg >= bridge->ssid_start && reg < bridge->ssid_start + PCI_CAP_SSID_SIZEOF &&
+> > > > +		   bridge->subsystem_vendor_id) {
+> > > >  		/* Emulated PCI Bridge Subsystem Vendor ID capability */
+> > > > -		reg -= PCI_CAP_SSID_START;
+> > > > +		reg -= bridge->ssid_start;
+> > > >  		read_op = pci_bridge_emul_read_ssid;
+> > > >  		cfgspace = NULL;
+> > > >  		behavior = NULL;
+> > > > -	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
+> > > > +	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
+> > > > +		   bridge->has_pcie) {
+> > > >  		/* Our emulated PCIe capability */
+> > > > -		reg -= PCI_CAP_PCIE_START;
+> > > > +		reg -= bridge->pcie_start;
+> > > >  		read_op = bridge->ops->read_pcie;
+> > > >  		cfgspace = (__le32 *) &bridge->pcie_conf;
+> > > >  		behavior = bridge->pcie_cap_regs_behavior;
+> > > > @@ -538,9 +549,10 @@ int pci_bridge_emul_conf_write(struct pci_bridge_emul *bridge, int where,
+> > > >  		write_op = bridge->ops->write_base;
+> > > >  		cfgspace = (__le32 *) &bridge->conf;
+> > > >  		behavior = bridge->pci_regs_behavior;
+> > > > -	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
+> > > > +	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
+> > > > +		   bridge->has_pcie) {
+> > > >  		/* Our emulated PCIe capability */
+> > > > -		reg -= PCI_CAP_PCIE_START;
+> > > > +		reg -= bridge->pcie_start;
+> > > >  		write_op = bridge->ops->write_pcie;
+> > > >  		cfgspace = (__le32 *) &bridge->pcie_conf;
+> > > >  		behavior = bridge->pcie_cap_regs_behavior;
+> > > > diff --git a/drivers/pci/pci-bridge-emul.h b/drivers/pci/pci-bridge-emul.h
+> > > > index 71392b67471d..2a0e59c7f0d9 100644
+> > > > --- a/drivers/pci/pci-bridge-emul.h
+> > > > +++ b/drivers/pci/pci-bridge-emul.h
+> > > > @@ -131,6 +131,8 @@ struct pci_bridge_emul {
+> > > >  	struct pci_bridge_reg_behavior *pci_regs_behavior;
+> > > >  	struct pci_bridge_reg_behavior *pcie_cap_regs_behavior;
+> > > >  	void *data;
+> > > > +	u8 pcie_start;
+> > > > +	u8 ssid_start;
+> > > >  	bool has_pcie;
+> > > >  	u16 subsystem_vendor_id;
+> > > >  	u16 subsystem_id;
+> > > > -- 
+> > > > 2.20.1
+> > > > 

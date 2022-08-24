@@ -2,73 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6F059F86D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E048659F86B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237030AbiHXLMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
+        id S234058AbiHXLMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 07:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235137AbiHXLM1 (ORCPT
+        with ESMTP id S232570AbiHXLMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 07:12:27 -0400
+        Wed, 24 Aug 2022 07:12:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79DC67CA9;
-        Wed, 24 Aug 2022 04:12:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECD46716D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:12:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5405161931;
-        Wed, 24 Aug 2022 11:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95404C433B5;
-        Wed, 24 Aug 2022 11:12:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 157436192C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6E5C433D6;
+        Wed, 24 Aug 2022 11:12:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661339544;
-        bh=H+veo+Dao6bkJ0QMyFov+hU73WKqs+8y5v0OSddUH8Y=;
+        s=k20201202; t=1661339548;
+        bh=OGlg8pv6kHT4dTZmIiN7JaN/Td1DIt3ykmROSVhjXKk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=kBHMSKXnm0q0/ig5wiPntO3Jl5ZlIKYg+9lyllxyXo7josUAAKfnl1BGY3qq5uhyO
-         Z39yjwD4/NFhx2B6Wc/+r0hxaXJ3UbARfcsvcwDHtrvsdD9i4JhAPciVl3T+CrM3hE
-         /EfTraglUjPsMItvnKtQPOtWdoDhkRmhY/G/3keG1xGxXbDlJUrW1CZutdptQFqyPk
-         xmLku2O2USngmtzYaRvm9/aAWs6ObNDWc20kLO8WBsH/+ochtgPB/WbGdw8JMgyDNG
-         LzO0IgWc0DDMNlWKK3zbXjCzwriQw4vMTPFYeOP0n1m836BgYwak6uCgFGY1uhlIZY
-         l8v5dwKXirf2Q==
+        b=R89AQjm5QIFEy1m4KLw/y3y2fnUtsahYYAiDRrKZ7ZVutepzYsjI3j649BIhmpVt6
+         BIWFJ24zWf8uKJTwO1LANI064i3Q62jQ+yYvw/u/dnBJKdhi5e9QydoifyCwe/MjHM
+         0ZVAG30iOKEHOZovM7etDo7b/5+D6FUkhYJ6YFS+7ltBW9GEgC7dxVTEOxHr6NBk5l
+         EVmUTe5SOqjkkKpguYiDGPkIu3jt7uEhMNl09oAVmExm700bo6jZGgahl7SyVHDnNW
+         +J3qiIHFrMv7UBLBAOjdyFF6h+h2kufzi4Qm5U2kc1FrbqERx9edy/uS/1BORps4Ju
+         WAy5d2T1nRQfw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Cheng-Yi Chiang <cychiang@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shane Chien <shane.chien@mediatek.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220823145649.3118479-8-robh@kernel.org>
-References: <20220823145649.3118479-8-robh@kernel.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: Add missing (unevaluated|additional)Properties on child nodes
-Message-Id: <166133953831.17904.2785802329558247784.b4-ty@kernel.org>
-Date:   Wed, 24 Aug 2022 12:12:18 +0100
+To:     alsa-devel@alsa-project.org, perex@perex.cz, Xiubo.Lee@gmail.com,
+        lgirdwood@gmail.com, nicoleotsuka@gmail.com,
+        shengjiu.wang@gmail.com, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        festevam@gmail.com, tiwai@suse.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1659681926-13493-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1659681926-13493-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_sai: Update slots number according to bclk_ratio
+Message-Id: <166133954610.17904.8655688757494279362.b4-ty@kernel.org>
+Date:   Wed, 24 Aug 2022 12:12:26 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -83,10 +57,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 09:56:39 -0500, Rob Herring wrote:
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
+On Fri, 5 Aug 2022 14:45:26 +0800, Shengjiu Wang wrote:
+> The bclk_ratio is set by .set_bclk_ratio API.
+> bclk_ratio = slots * slot_width
+> So if slots is not set by .set_tdm_slot, then it can be calculated
+> by bclk_ratio.
 > 
 > 
 
@@ -96,8 +71,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: dt-bindings: Add missing (unevaluated|additional)Properties on child nodes
-      commit: 9e10a1ded6a1b7ffacbb2d9c75fe6aa91623051b
+[1/1] ASoC: fsl_sai: Update slots number according to bclk_ratio
+      commit: 837b40293de66a5b96f883f540512ec5c3867610
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

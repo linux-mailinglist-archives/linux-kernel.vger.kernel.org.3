@@ -2,98 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4AB59FB7E
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3FC59FB7F
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237698AbiHXNhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
+        id S238270AbiHXNhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237624AbiHXNhL (ORCPT
+        with ESMTP id S238265AbiHXNhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:37:11 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCCA7D7A9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:37:09 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d23so19676904lfl.13
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=3OQC25wWN31BCwSbCduRMMv4rNNc0uP1j1+GX/KbrNs=;
-        b=wpEQNzNKOT3YdGIQFc9W5b5/EtVd8HmW0cSRtQ3McUNiI5LisGZjuU2uYAt2mKyQru
-         AzMBKiyOgm8/Q3bG8aYCqcpFdm9vkK4P3WehHpgPTlCHqL6yuPNdZVF7C8uNWKCYlINn
-         6+qUm2A6XD3U7BSDZ7Ou+pQ8uFQLnxaZ5xpm7Af3Es0Vkr2Ay4dmtnUkOdN3jXejV+nJ
-         1k89Tr5XCrXGp0N2FYyKADU9eQnhR3PcvV86MxfyI/Vz5kstDIweKPpOOTfzTbuVb95p
-         lpdUqQgEUOyHo3dBPAZfOOtruz07kPs1C7CdeE84Tq1nMu3TA4KnPpmaOAvqPJhPhf8v
-         F8Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=3OQC25wWN31BCwSbCduRMMv4rNNc0uP1j1+GX/KbrNs=;
-        b=Xcx/iPBDEI3zdx6Yy5OqwOgHWsdTpC6SroslETF9U33aVH++V3FDVoI+S2SZPRuKIZ
-         fvy1XmMFJFYFIcEGTHl11urP1/qbi6EgU0PO56cEjOZ4m8VbiuWmrEYVv5gxTyGe5/j6
-         8L/3dDqmFhpOhIBZjeI4MhcVrnRihYqcU0sAkkfcxrhCGqDi6xPFfSemE3SQzlwuzzkJ
-         VZM3t+igsjYQ7LYcVTq1yOzlFHSkQke2VuV6uF5hf1vDxmyA/Ijx9nkZ7pZpwuM/DeH4
-         vUZY44319Fr0Z38BL87PKkPLUQQW0WWL7Ck4QP870cApcmFMEOYun//sg+CFiBtj1IXx
-         tNAw==
-X-Gm-Message-State: ACgBeo3+SfU6ZpR7VcOAwKQKHPmmmK4cPltei7PE48wDFiuEBeuyqAU6
-        vaLxzjzvTRGgNud9RiRYfGLuDg==
-X-Google-Smtp-Source: AA6agR5mW8yFmhKsYKo2N4/NXGAdRcP64LGKPZsWPykSgeE9dIVxYgh3zulrgO870O0ziP3kisYhfg==
-X-Received: by 2002:a05:6512:2385:b0:492:e4cc:17ca with SMTP id c5-20020a056512238500b00492e4cc17camr5102483lfv.132.1661348227725;
-        Wed, 24 Aug 2022 06:37:07 -0700 (PDT)
-Received: from [10.243.4.185] ([194.204.13.210])
-        by smtp.gmail.com with ESMTPSA id t17-20020a2e9c51000000b0025e4c49969fsm108927ljj.98.2022.08.24.06.37.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 06:37:07 -0700 (PDT)
-Message-ID: <c6826de7-591f-97f9-af44-35a6293d17ea@linaro.org>
-Date:   Wed, 24 Aug 2022 16:37:05 +0300
+        Wed, 24 Aug 2022 09:37:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B683B7DF53;
+        Wed, 24 Aug 2022 06:37:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B4F7614C2;
+        Wed, 24 Aug 2022 13:37:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB00C433C1;
+        Wed, 24 Aug 2022 13:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661348236;
+        bh=EQYgx2ILFFg1QXRoYyC52FpjVJo12AMoBM4Wemwr6E8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ou6Myf5+8knuXNUYvfBpdyPabrCMoPcGBOVdHIpa+Ee1BJ8EozZjxJ1DMQt+cDsjh
+         WrCgrBFmA37Vw5TiQZRQEDGDHG02qOVwKjOJAk7G1v2YA7nd0IQEkRdFrqdN1ekGiC
+         EAh982aMRGTDrZ2RNsjCgtKBdzThwR8ki0eJJeGYToxea9ln7fyhOMTwadAzNQ5Ch0
+         NbNoAcdHvAhiX3jiWauEikqUtonUt48clig/bYeVb89WgeaHGTYpvoLqIrLs/b/wjU
+         Qmpzm46YPZdDXmX4jmTbNjTHGvzOfjNePpMHG+jNqY9ZPkO2m5sbt3J32aVs9nk15x
+         wqrqK7f/VK1CA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3CB2B404A1; Wed, 24 Aug 2022 10:37:14 -0300 (-03)
+Date:   Wed, 24 Aug 2022 10:37:14 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf sched: Fix memory leaks in __cmd_record
+Message-ID: <YwYpiuN3VlzVyCiw@kernel.org>
+References: <20220824043825.322827-1-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V4 1/6] dt-bindings: clock: meson: add S4 SoC PLL clock
- controller bindings
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220823022630.25007-1-yu.tu@amlogic.com>
- <20220823022630.25007-2-yu.tu@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220823022630.25007-2-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220824043825.322827-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/08/2022 05:26, Yu Tu wrote:
-> Add the documentation to support Amlogic S4 SoC PLL clock driver and
-> add S4 SoC PLL clock controller bindings.
+Em Tue, Aug 23, 2022 at 09:38:25PM -0700, Ian Rogers escreveu:
+> An array of strings is passed to cmd_record but not freed. As
+> cmd_record modifies the array, add another array as a copy that can be
+> mutated allowing the original array contents to all be freed.
 > 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> Detected with -fsanitize=address.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-sched.c | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> index 2f6cd1b8b662..59ba14d2321c 100644
+> --- a/tools/perf/builtin-sched.c
+> +++ b/tools/perf/builtin-sched.c
+> @@ -3355,7 +3355,8 @@ static bool schedstat_events_exposed(void)
+>  static int __cmd_record(int argc, const char **argv)
+>  {
+>  	unsigned int rec_argc, i, j;
+> -	const char **rec_argv;
+> +	char **rec_argv;
+> +	const char **rec_argv_copy;
+>  	const char * const record_args[] = {
+>  		"record",
+>  		"-a",
+> @@ -3384,6 +3385,7 @@ static int __cmd_record(int argc, const char **argv)
+>  		ARRAY_SIZE(schedstat_args) : 0;
+>  
+>  	struct tep_event *waking_event;
+> +	int ret;
+>  
+>  	/*
+>  	 * +2 for either "-e", "sched:sched_wakeup" or
+> @@ -3391,14 +3393,15 @@ static int __cmd_record(int argc, const char **argv)
+>  	 */
+>  	rec_argc = ARRAY_SIZE(record_args) + 2 + schedstat_argc + argc - 1;
+>  	rec_argv = calloc(rec_argc + 1, sizeof(char *));
+> +	rec_argv_copy = calloc(rec_argc + 1, sizeof(char *));
+>  
+> -	if (rec_argv == NULL)
+> +	if (rec_argv == NULL || rec_argv_copy == NULL)
+>  		return -ENOMEM;
 
+Here you´re leaking rec_argv if rec_argv_copy fails to be allocated, no?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+- Arnaldo
 
+>  
+>  	for (i = 0; i < ARRAY_SIZE(record_args); i++)
+>  		rec_argv[i] = strdup(record_args[i]);
+>  
+> -	rec_argv[i++] = "-e";
+> +	rec_argv[i++] = strdup("-e");
+>  	waking_event = trace_event__tp_format("sched", "sched_waking");
+>  	if (!IS_ERR(waking_event))
+>  		rec_argv[i++] = strdup("sched:sched_waking");
+> @@ -3409,11 +3412,19 @@ static int __cmd_record(int argc, const char **argv)
+>  		rec_argv[i++] = strdup(schedstat_args[j]);
+>  
+>  	for (j = 1; j < (unsigned int)argc; j++, i++)
+> -		rec_argv[i] = argv[j];
+> +		rec_argv[i] = strdup(argv[j]);
+>  
+>  	BUG_ON(i != rec_argc);
+>  
+> -	return cmd_record(i, rec_argv);
+> +	memcpy(rec_argv_copy, rec_argv, sizeof(char*) * rec_argc);
+> +	ret = cmd_record(rec_argc, rec_argv_copy);
+> +
+> +	for (i = 0; i < rec_argc; i++)
+> +		free(rec_argv[i]);
+> +	free(rec_argv);
+> +	free(rec_argv_copy);
+> +
+> +	return ret;
+>  }
+>  
+>  int cmd_sched(int argc, const char **argv)
+> -- 
+> 2.37.2.609.g9ff673ca1a-goog
 
-Best regards,
-Krzysztof
+-- 
+
+- Arnaldo

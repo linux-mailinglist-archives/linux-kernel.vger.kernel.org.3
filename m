@@ -2,62 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B32959F4D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AD359F4DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbiHXIMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
+        id S235057AbiHXIQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiHXIMw (ORCPT
+        with ESMTP id S231846AbiHXIQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:12:52 -0400
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99E685AB1;
-        Wed, 24 Aug 2022 01:12:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1661328756; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=DSlC6MNqXJEKuLWWv9hD5ReOtHPCoIIspX9WVJYwx76RtxpYjqB3NGMU3dedRU3CL1lSicqv3EZfUcnhQ1EJIyaNSME4Ri4EKFI9jmwB5/XzPNh0OL9ammAtpqD7c+41CFO2mL6ydJ8/IvNIpIRJHgo7BvTjDy/4c6AI/9+xwus=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1661328756; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=nxuDlBnh7rD26c84GHsAUGHCF7GK79bwk7nQ3eQxjyY=; 
-        b=eLZ9qpm4vxcJ0enFIjDW/CuyYqacaj3hvYJNWkUIU3lQ6Qmp2Snj7Q1uCQEVHyZaoLtKVXmJ+pb6dSbFJDou1TXhFrAQWVyQ65YIjaWtEQrf11pFVd8nEkcEa75iS3JIAgg8JmVKNe8q3sQ/4V6fxnRE8UyNxwJLN+MVlZbBbo8=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661328756;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=nxuDlBnh7rD26c84GHsAUGHCF7GK79bwk7nQ3eQxjyY=;
-        b=QXUy31uj4dbboP+XiXGdXmL43R95UeAcwm0xOMj/EcZneZkZEKQG6FCsq/pMFLcU
-        mlWD6fj6JCJ9uOXfnN/r9w616HiOgvi2fB8VSl+IxO65Kzi7SB0N2+i5MmCFcs+wT+A
-        +zSVw/g3xbbuxu0s5eMM9Z9DXsRVvezkiOxewFWs=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1661328745149618.5620763655653; Wed, 24 Aug 2022 13:42:25 +0530 (IST)
-Date:   Wed, 24 Aug 2022 13:42:25 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Jens Axboe" <axboe@kernel.dk>
-Cc:     "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "stable" <stable@vger.kernel.org>,
-        "linux-block" <linux-block@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "syzbot+a8e049cd3abd342936b6" 
-        <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>
-Message-ID: <182cee8e2a7.5a62eb4811173.7413734946973464259@siddh.me>
-In-Reply-To: <166127140632.124225.483036207879834754.b4-ty@kernel.dk>
-References: <20220823160810.181275-1-code@siddh.me> <166127140632.124225.483036207879834754.b4-ty@kernel.dk>
-Subject: Re: [PATCH v2] loop: Check for overflow while configuring loop
+        Wed, 24 Aug 2022 04:16:00 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376A37AC25;
+        Wed, 24 Aug 2022 01:15:59 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b44so784504edf.9;
+        Wed, 24 Aug 2022 01:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=t+aZeiVlAe5lh3K/X4ugpJOclmyPgg9VuIl3dEAp86Y=;
+        b=RwDOce9fW9ntXysRk36Zwo/dNQgieL4D1Psds2402Ua9G612KbPfZ3ywrawVqJ1LG9
+         BoR61Fd7PcYWIU7t9kei0WDtZ7GFA98MqONFcnkWXf8/WoM9NvZNZpuiukjkP9z31xFd
+         poQ3TPC8/YnhKDMUBPb2NH/eKgwBpvrFjZGuAptTXvdDt9yGyypjFl+nXQGYCL6TodmB
+         SCRfQZ5Ll0QReowdWBRx27ySciQegCzT8pq4b3oR2OEX3Z8jCSfMnkX7Flm/826/VB8i
+         vjt1jVPgPXGRyRTT9PRL0fN1VpRAe99IpnzK7AkQGn/iSw4EF6/dR8dsindF52H6qrBD
+         0B/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=t+aZeiVlAe5lh3K/X4ugpJOclmyPgg9VuIl3dEAp86Y=;
+        b=HepzZuca/tU//pWSWA+V1DeynOurr/PH9kyx8xw1+1eiYAXOVfjjY58U/BTJzygADm
+         23GNJyTzlWVLFKqN6g1uYpHgUyCNfki4/gVgCYbfLBbqM3z3p3v9hQoUtUQCZ3Byt69o
+         sC8Un8JWp3iEEtFwxtGb17F6ZN3o1wvkpsnkU6IT8gkpAWI/lA1V3ZLQxQB3wxUvKISx
+         /Hl3QQY0R73b3lJG2S9uaemiF4HuoYoanzYvk0iQA9CKfXEGiWaGFZVBDGZZBpA5l/Kx
+         FduafUH0pjM8zxpRQMpUglrobPoFfWdDUZkh40p3YgUOk3LyFPdAvibyBrMFh1ChTVxb
+         0TKw==
+X-Gm-Message-State: ACgBeo1s+AHDdDao+7NGXmWx8f20PeJUWX+qCBU4L3outYOBIMrBX66F
+        Gx5eMYqd+TDRXWKTKOA46zM=
+X-Google-Smtp-Source: AA6agR5WH9cs54GXa7c0sIrJtFNUOlFjguUIT6fJ54OYlQdQkrAW01KvKXoTr/lw8ix8/uTgzgKCRg==
+X-Received: by 2002:a05:6402:e98:b0:441:a982:45bc with SMTP id h24-20020a0564020e9800b00441a98245bcmr6471619eda.239.1661328957691;
+        Wed, 24 Aug 2022 01:15:57 -0700 (PDT)
+Received: from [172.17.235.233] (nata195.ugent.be. [157.193.240.195])
+        by smtp.gmail.com with ESMTPSA id f14-20020a170906c08e00b00711edab7622sm839529ejz.40.2022.08.24.01.15.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 01:15:57 -0700 (PDT)
+Message-ID: <1ce29a1e-2db7-2953-b71e-c0408559ecff@gmail.com>
+Date:   Wed, 24 Aug 2022 10:15:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] infiniband: remove unnecessary null check
+Content-Language: en-US
+To:     cgel.zte@gmail.com, dennis.dalessandro@cornelisnetworks.com
+Cc:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220824080503.221680-1-chi.minghao@zte.com.cn>
+From:   Niels Dossche <dossche.niels@gmail.com>
+In-Reply-To: <20220824080503.221680-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,17 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 21:46:46 +0530  Jens Axboe  wrote:
-> Applied, thanks!
+On 8/24/22 10:05, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> [1/1] loop: Check for overflow while configuring loop
->       commit: f11ebc7347340d291ba032a3872e40d3283fc351
+> container_of is never null, so this null check is
+> unnecessary.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/infiniband/sw/rdmavt/vt.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/infiniband/sw/rdmavt/vt.c b/drivers/infiniband/sw/rdmavt/vt.c
+> index 59481ae39505..b2d83b4958fc 100644
+> --- a/drivers/infiniband/sw/rdmavt/vt.c
+> +++ b/drivers/infiniband/sw/rdmavt/vt.c
+> @@ -50,8 +50,6 @@ struct rvt_dev_info *rvt_alloc_device(size_t size, int nports)
+>  	struct rvt_dev_info *rdi;
+>  
+>  	rdi = container_of(_ib_alloc_device(size), struct rvt_dev_info, ibdev);
+> -	if (!rdi)
+> -		return rdi;
+>  
+>  	rdi->ports = kcalloc(nports, sizeof(*rdi->ports), GFP_KERNEL);
+>  	if (!rdi->ports)
 
-Thanks!
-
-Though, it seems that you have used the mailing list's address
-(linux-kernel-mentees@lists.linuxfoundation.org) in the author
-field instead of the Signed-off email.
-
-Thanks,
-Siddh
+I believe this patch is incorrect because "_ib_alloc_device" may return a null pointer.
+Note that the first member of "rvt_dev_info" is "ib_device", so the check on container_of effectively checks if the allocation failed, which is necessary to check.

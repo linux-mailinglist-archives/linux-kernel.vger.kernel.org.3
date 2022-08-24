@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51C859FFD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FC359FFDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238291AbiHXQwS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 Aug 2022 12:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S238525AbiHXQzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238359AbiHXQwN (ORCPT
+        with ESMTP id S236806AbiHXQy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:52:13 -0400
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA1F193F1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:52:12 -0700 (PDT)
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id C3D66C024E;
-        Wed, 24 Aug 2022 16:52:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 696E12002C;
-        Wed, 24 Aug 2022 16:52:06 +0000 (UTC)
-Message-ID: <3c250aa26020b2f336fd575a58d06ba26faf1f14.camel@perches.com>
-Subject: Re: [PATCH RFC 2/2] checkpatch: warn on usage of VM_BUG_ON() and
- friends
-From:   Joe Perches <joe@perches.com>
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        kexec@lists.infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>
-Date:   Wed, 24 Aug 2022 12:52:05 -0400
-In-Reply-To: <20220824163100.224449-3-david@redhat.com>
-References: <20220824163100.224449-1-david@redhat.com>
-         <20220824163100.224449-3-david@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 24 Aug 2022 12:54:58 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF13AE7C;
+        Wed, 24 Aug 2022 09:54:55 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id x23so16175940pll.7;
+        Wed, 24 Aug 2022 09:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=KqNFaFPHcc3gAC4NXdiDPBYjVvtei+p83QWy8+fa+Io=;
+        b=bHJY6ZHgS0cVaG8dhhHyEhYI3myRY0I06v1Fw7fckGjpZSiJ+IZ5szJVtHWFK6h+/T
+         n/OmH7RJT38/zWhX2ELeBfabYLt8cUuusNm54VCuXsIHUeoeNiQy0iT9KXLwrwPY+BQm
+         JQeEHWIGxjn4ry25TBPjgKVepT0EBNKrRdyzOqb5Pw9UFKvnZPgaq/v62TPNb+j99UUd
+         CHhvKpFbo8kZFDlRi/AbeqG0ueFGoOHv3rdQgEFvkwPM4cDFWrED8pDB33DkHq7iAFS6
+         4GjVsrt/qn5IJDH2D9vHoyYfLUxb7jQDMMmyRwtiCkjOJno11Y7GMS6BP5OG8WogOxDa
+         x4Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=KqNFaFPHcc3gAC4NXdiDPBYjVvtei+p83QWy8+fa+Io=;
+        b=gGTE9jFZA3+L8UFaGjUs6gb/+CwoNp8qsZ/agqspKANs7/+Gx72EKcMQp7eC3OG+3L
+         InXhRI6+qsxheItEGgO1Hvbem8DiBBb3jbGGdaws6+Z9CayIjFNOkRrmUEWq8lexLqtW
+         ThjyZjrlPnXecCj0yzqiU5XFqW6GPIEPixjL00xIcTo1bn01sL8gjTrjRnuCl0FiVDTw
+         jPmnDDsihsVEC0VvsVE5d1OmhedE1Kk/1J9BFVmO7/qULkIk6l31g+bsYzMcJc8/2g6J
+         hIct4lxjRWqfn92704IW+D0Nglr78FzLCot4oL/JC68FMAi5ZMttUBkiTNmzHm3WMTIq
+         p4gg==
+X-Gm-Message-State: ACgBeo2X3M0WOkrs3/xlJC+uO9IdXxIj7cSerU+kJiJHXC/einSRkZyj
+        Y1dasuQ5qv/75p8yf0iKi8o=
+X-Google-Smtp-Source: AA6agR4mMWrUFg4IZ/EGX0Lf7f4Rnc+qklbnToH8LnXW2ZaqJ+V5RL0GQKuEe0mP8G4wJk2T51NcHw==
+X-Received: by 2002:a17:90a:3e48:b0:1fa:99af:d881 with SMTP id t8-20020a17090a3e4800b001fa99afd881mr9334107pjm.243.1661360094740;
+        Wed, 24 Aug 2022 09:54:54 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bg8-20020a056a02010800b0042a59ecdbdfsm8967781pgb.84.2022.08.24.09.54.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 09:54:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 24 Aug 2022 09:54:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/157] 5.10.138-rc3 review
+Message-ID: <20220824165451.GA708846@roeck-us.net>
+References: <20220824065856.174558929@linuxfoundation.org>
 MIME-Version: 1.0
-X-Stat-Signature: jucjcx4acoerrt8q895fp6htgrjxts67
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 696E12002C
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220824065856.174558929@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/ObFLiNI+vpAgQqKNzyIkOlEeiH6U5Lr8=
-X-HE-Tag: 1661359926-188978
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-24 at 18:31 +0200, David Hildenbrand wrote:
-> checkpatch does not point out that VM_BUG_ON() and friends should be
-> avoided, however, Linus notes:
+On Wed, Aug 24, 2022 at 09:00:52AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.138 release.
+> There are 157 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
->     VM_BUG_ON() has the exact same semantics as BUG_ON. It is literally
->     no different, the only difference is "we can make the code smaller
->     because these are less important". [1]
+> Responses should be made by Fri, 26 Aug 2022 06:58:27 +0000.
+> Anything received after that time might be too late.
 > 
-> So let's warn on VM_BUG_ON() and friends as well. While at it, make it
-> clearer that the kernel really shouldn't be crashed.
-> 
-> Note that there are some other *_BUG_ON flavors, but they are not all
-> bad: for example, KVM_BUG_ON() only triggers a WARN_ON_ONCE and then
-> flags KVM as being buggy, so we'll not care about them for now here.
-[]
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -4695,12 +4695,12 @@ sub process {
->  			}
->  		}
->  
-> -# avoid BUG() or BUG_ON()
-> -		if ($line =~ /\b(?:BUG|BUG_ON)\b/) {
-> +# do not use BUG(), BUG_ON(), VM_BUG_ON() and friends.
-> +		if ($line =~ /\b(?:BUG|BUG_ON|VM_BUG_ON|VM_BUG_ON_[A-Z]+)\b/) {
 
-Perhaps better as something like the below to pick up more variants
+Build results:
+	total: 163 pass: 163 fail: 0
+Qemu test results:
+	total: 474 pass: 474 fail: 0
 
-		if ($line =~ /\b(?!KVM_|BUILD_)(?:[A-Z_]*_)?BUG(?:_ON)?(?:_[A-Z_]+)?\s*\(/
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
->  			my $msg_level = \&WARN;
->  			$msg_level = \&CHK if ($file);
->  			&{$msg_level}("AVOID_BUG",
-> -				      "Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()\n" . $herecurr);
-
-and maybe:
-
-				      "Do not crash the kernel unless it is unavoidable - use WARN_ON_ONCE & recovery code (if reasonable) rather than BUG() or variants\n" . $herecurr);
-
+Guenter

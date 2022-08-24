@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7806A59F4EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8AE59F4F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbiHXIUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S235681AbiHXIUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbiHXIUE (ORCPT
+        with ESMTP id S235584AbiHXIUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:20:04 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B34857C2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:20:03 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id u22so15015334plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:20:03 -0700 (PDT)
+        Wed, 24 Aug 2022 04:20:11 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01B37FF93
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:20:09 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id x14-20020a17090a8a8e00b001fb61a71d99so826213pjn.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=T5Xd8mmYM32aYWsV+JS4zJF3yib8jGf3ov52iW7dkys=;
-        b=2hbOVKhOIJMdq+ESAqgtn9qO5FOZb7JuoMEFLh7q/VunkkOu9QAT5ULHRWLNGQHUmN
-         f+BAdie4GiPCPkFWX4K1h+kjjefd+BKv3QZwl+MX/Wi+1tUdoLPaG1DFS88O0FQD8OIe
-         MuLXlFlHpQY7LCq6GjLVtMo1aGQRwAoCaEiL9D1wC1vXIIQ6YXzfgWEfJeBvS+brm3jC
-         o4YhJAJGyZ5PspBdTHCfEKsF2rRbqlBg6h4ajiQztHfDToeo84tMAeHwNtV8roDKp62a
-         RDIJ5oLfbDn9L+m38KS0qIw2WwsB5HKK2qwtDhQAPv3bCGmDIJym1uNeXaJYeGGm1F/9
-         J9og==
+        bh=h1njInj6+0OhDb5dvpxX7bRUejwiRI98B8XQXql9WZQ=;
+        b=6yf8wi5zNwzZEIkCgVGTFObmPAniOIiQplzYcLSqdfynQw4Vz6bS6N+/FmuzSny6ig
+         IbyW0Ll7Ib5/jwQy0MXG8EzqmWCb3Z+6uOTpaat+70mhVmkKwAycfew2QvqpBorPYVpn
+         j8UXv3nEOdb0xJXxSQbqLZu2SGvwDIRpmeOsvG6Meij2IOzxPdRcyTYoyp4tnOaBvrG0
+         ij0kKjV6+2yUcfuz5jgsZTb1l8Je8MXPyvvGRgtN8nbzcgBCzC+9q+XiNo6ZvIudhAV+
+         C3bE3iISnulIycKcpmRz9qXnmLn7bqfELsePToRk1Ibz7O2hAhd646bBzd+ws075cyUU
+         k5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=T5Xd8mmYM32aYWsV+JS4zJF3yib8jGf3ov52iW7dkys=;
-        b=I/j5GOfzYemO9DAwdiK4ZSQkLdRFe0k02F13UbRfTo2RRaPtH8zEIWAvyuMZvXRomh
-         /DonBM9p0KaOR+C/XfkieKO9XXG9EhZpsd22fIbkhoqLfRV+X7B1kAHzsiGdq6A/BKyt
-         CmHvr+f8+TeWKSLUD1TT+83oqtblSg2OtCrcIKmKg2+lrRgiKWjvQnn64/kScyF/GLNd
-         P0ThP8bSTPIHH3cIPt0FLKddRn5PgYPykFFEvYSfVLSPSqkShT2f/9MdE3JF4RlvN6k7
-         nck0ohR9gmAgZ0WNdtiOC57WKNDh1d0Swyagd0JovXcHT6J0wE4PQo10uNGw5+WGOcwc
-         hs+A==
-X-Gm-Message-State: ACgBeo3NRpsu3oYGe/LP0D9vCI0G1VZhdw0x8OSeCzjcZJ7tZET54TX7
-        6rJP2fGYkfyTtKsT3oqIsMZcR0xBitQDbQ==
-X-Google-Smtp-Source: AA6agR6mL/3prlPOQPzpJzCgrVHKgCOeio2wkX6dkk2PYa+ddmaiTrx7bTioyVdKpdoD66cL7Zx35Q==
-X-Received: by 2002:a17:90a:c78f:b0:1fa:e505:18e6 with SMTP id gn15-20020a17090ac78f00b001fae50518e6mr7359010pjb.23.1661329203483;
-        Wed, 24 Aug 2022 01:20:03 -0700 (PDT)
+        bh=h1njInj6+0OhDb5dvpxX7bRUejwiRI98B8XQXql9WZQ=;
+        b=7bVhpiNdrmTzJ/e1u1KBaScDbXMFBsLeucYCi71QRQTvvABoxQ9xYhKOuIcoP0CGoE
+         NYuo5YAuA//JANTMhOHFlFlMqGVdTHgfqtNRSHZhUPQ9/W8n0tByjwuQIudzVXakfIGV
+         d/AtwR/CdRMKBnL6sJf6autB6EMoD686E4YHRkmOsPzGlgG/wH4839mjCvPvd6QS8yTV
+         kYoFRlRtoaF7oJwf3Ry1Dtxa/uG0xhY+IRoSDR1r66EPRSbtMfo0tVFUBu6yo3+zYOZF
+         mbwz24N9mb1m4PYVC/YlMYBYDrXgVDrI/6US9NAZ86R4jA49IfL4/wYnJxqPrp4zEYVo
+         PE3w==
+X-Gm-Message-State: ACgBeo0mDnXCJruAv5sHt+3JNIjZfndJkVbhkCaZy1gnMe1Y2aWmg+V/
+        RpX5/fwvIsRpV8rTg3dmHPb0yA==
+X-Google-Smtp-Source: AA6agR5rrAy3gZcaFBGnbostM2BwS4dc/C5F1+ZodDYHXjtFDsV/x7DOwZWdoQqDtcedLKMDeBp79A==
+X-Received: by 2002:a17:902:cec1:b0:16d:c4f2:66c5 with SMTP id d1-20020a170902cec100b0016dc4f266c5mr27326630plg.20.1661329209524;
+        Wed, 24 Aug 2022 01:20:09 -0700 (PDT)
 Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id q31-20020a635c1f000000b00421841943dfsm10486587pgb.12.2022.08.24.01.19.57
+        by smtp.gmail.com with ESMTPSA id q31-20020a635c1f000000b00421841943dfsm10486587pgb.12.2022.08.24.01.20.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 01:20:03 -0700 (PDT)
+        Wed, 24 Aug 2022 01:20:09 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com,
         surenb@google.com
@@ -56,9 +56,9 @@ Cc:     gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
         cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v3 04/10] sched/psi: move private helpers to sched/stats.h
-Date:   Wed, 24 Aug 2022 16:18:23 +0800
-Message-Id: <20220824081829.33748-5-zhouchengming@bytedance.com>
+Subject: [PATCH v3 05/10] sched/psi: optimize task switch inside shared cgroups again
+Date:   Wed, 24 Aug 2022 16:18:24 +0800
+Message-Id: <20220824081829.33748-6-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220824081829.33748-1-zhouchengming@bytedance.com>
 References: <20220824081829.33748-1-zhouchengming@bytedance.com>
@@ -73,51 +73,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch move psi_task_change/psi_task_switch declarations out of
-PSI public header, since they are only needed for implementing the
-PSI stats tracking in sched/stats.h
+commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
+defer prev task sleep handling to psi_task_switch(), so we don't need
+to clear and set TSK_ONCPU state for common cgroups.
 
-psi_task_switch is obvious, psi_task_change can't be public helper
-since it doesn't check psi_disabled static key. And there is no
-any user now, so put it in sched/stats.h too.
+    A
+    |
+    B
+   / \
+  C   D
+ /     \
+prev   next
+
+After that commit psi_task_switch() do:
+1. psi_group_change(next, .set=TSK_ONCPU) for D
+2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C
+3. psi_group_change(prev, .clear=TSK_RUNNING) for B, A
+
+But there is a limitation "prev->psi_flags == next->psi_flags" that
+if not satisfied, will make this cgroups optimization unusable for both
+sleep switch or running switch cases. For example:
+
+prev->in_memstall != next->in_memstall when sleep switch:
+1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
+2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C, B, A
+
+prev->in_memstall != next->in_memstall when running switch:
+1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
+2. psi_group_change(prev, .clear=TSK_ONCPU) for C, B, A
+
+The reason why this limitation exist is that we consider a group is
+PSI_MEM_FULL if the CPU is actively reclaiming and nothing productive
+could run even if it were runnable. So when CPU curr changed from prev
+to next and their in_memstall status is different, we have to change
+PSI_MEM_FULL status for their common cgroups.
+
+This patch remove this limitation by making psi_group_change() change
+PSI_MEM_FULL status depend on CPU curr->in_memstall status.
 
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 ---
- include/linux/psi.h  | 4 ----
- kernel/sched/stats.h | 4 ++++
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ kernel/sched/psi.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/psi.h b/include/linux/psi.h
-index dd74411ac21d..fffd229fbf19 100644
---- a/include/linux/psi.h
-+++ b/include/linux/psi.h
-@@ -18,10 +18,6 @@ extern struct psi_group psi_system;
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 77d53c03a76f..26c03bd56b9c 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -820,8 +820,6 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+ 	u64 now = cpu_clock(cpu);
  
- void psi_init(void);
- 
--void psi_task_change(struct task_struct *task, int clear, int set);
--void psi_task_switch(struct task_struct *prev, struct task_struct *next,
--		     bool sleep);
+ 	if (next->pid) {
+-		bool identical_state;
 -
- void psi_memstall_enter(unsigned long *flags);
- void psi_memstall_leave(unsigned long *flags);
- 
-diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
-index baa839c1ba96..c39b467ece43 100644
---- a/kernel/sched/stats.h
-+++ b/kernel/sched/stats.h
-@@ -107,6 +107,10 @@ __schedstats_from_se(struct sched_entity *se)
- }
- 
- #ifdef CONFIG_PSI
-+void psi_task_change(struct task_struct *task, int clear, int set);
-+void psi_task_switch(struct task_struct *prev, struct task_struct *next,
-+		     bool sleep);
-+
- /*
-  * PSI tracks state that persists across sleeps, such as iowaits and
-  * memory stalls. As a result, it has to distinguish between sleeps,
+ 		psi_flags_change(next, 0, TSK_ONCPU);
+ 		/*
+ 		 * When switching between tasks that have an identical
+@@ -829,11 +827,9 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+ 		 * we reach the first common ancestor. Iterate @next's
+ 		 * ancestors only until we encounter @prev's ONCPU.
+ 		 */
+-		identical_state = prev->psi_flags == next->psi_flags;
+ 		iter = NULL;
+ 		while ((group = iterate_groups(next, &iter))) {
+-			if (identical_state &&
+-			    per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
++			if (per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
+ 				common = group;
+ 				break;
+ 			}
+@@ -880,7 +876,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+ 		 * TSK_ONCPU is handled up to the common ancestor. If we're tasked
+ 		 * with dequeuing too, finish that for the rest of the hierarchy.
+ 		 */
+-		if (sleep) {
++		if (sleep || unlikely(prev->in_memstall != next->in_memstall)) {
+ 			clear &= ~TSK_ONCPU;
+ 			for (; group; group = iterate_groups(prev, &iter))
+ 				psi_group_change(group, cpu, clear, set, now, wake_clock);
 -- 
 2.37.2
 

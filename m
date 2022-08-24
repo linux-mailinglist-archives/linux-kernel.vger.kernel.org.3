@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D8959FA53
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC0359FA5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237396AbiHXMrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S234700AbiHXMsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbiHXMro (ORCPT
+        with ESMTP id S237452AbiHXMrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:47:44 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C834693500
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:47:42 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id q7so20148811lfu.5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:47:42 -0700 (PDT)
+        Wed, 24 Aug 2022 08:47:48 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7723294EC1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:47:46 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bq23so14796398lfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=B0YHX1DxtYHmEtJGgAoy2E59Dxdr5pOaRwx+CNb8cXo=;
-        b=ExdVABFFCg0YrICjQUHrRtJdAu9Mu2FYNhpTmNxI5Oii0WNEj5VBEnO51VbBoxw/E3
-         Yp7qOO3VcJaosHeWvGY1Wu0hAIiwgBlDywDzFbUMx2CRh/E2mww94wSbXgDnlHQDPGqN
-         iisSr1MMhf6gnNgkHqKjnrPsY6TxvRSPwdGcg64FOakvPZYTHGDDQUItixN3VB34s2dA
-         HOZ/qbnzOUMatatsHAiuohCx+OW5MpYAsYd+wrDXAc0y/sfVSGA4+kFB+h+j0dMsVqm+
-         p8rWyqRaKsrOqpf7LvOe3xzo9oiEwEYu5eR/PH9cHBBldStAdy7U+X7xrLdHR0B2FxM/
-         vLwQ==
+        bh=HCkgWRsW68okr3HXj1aoAUOQtm+hBGu9v0QWmb8CPe0=;
+        b=dWZ3lQkmAteiBhKIEs/l5SZZCUZ8+DJHs4otLWuEp1SbpTaZMfllrzHhq/mFEmZKV1
+         LqkkfKqSJRt3ev3DV5xT0uCY+vPYIQIp2xelATaYKsNjcC2VaqaVDOZASKrYV9GUHk+u
+         NGWbqEo00loFNO8FqKz67PHSIS+7q2nFag2WMRX0FmgX/xHr8hyE8ikCqrXNsOVl7Dhm
+         w+MjdLXOUozbIBTCsOsIKDn2hZzsuTGZj30Dmtu/oASHN8wU5if4RptL8yPwWkzOIKB8
+         90X5WJJaEXaeOLfBz+v5NGi0g0y4OCI9xibJAF2F53ib6vbc9eF/iI5ZRtzG3uaIsdMz
+         LUDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=B0YHX1DxtYHmEtJGgAoy2E59Dxdr5pOaRwx+CNb8cXo=;
-        b=3BbRzGsjkzNfqTfz7XTlgTXer5OhyoaEXymwFgCZbyXOfiBy6tnaCjWD6Z9d5fLtpA
-         MprvmbaZUH+lPSG1DnT4owl4Qw+SBuQwsUs2ORt+RpGweiKRg7M0IvCtNfYVVdkIuSm/
-         PemKOu8HeSZO+HszV3YBG0ZRew7+f+xvNFepLwVYSNaDENSIuCCgx+ECSPNFmv7kWxSP
-         FO2B53KWvizXH6Y3NAgz7XtIQPEIrNyO7hhDSOOir2BhUZK4i1fkDQGlkhcI6/Or2tKZ
-         hCTBUE2FuaA7SYx+AlDHNDszR2ZeNK8HkZHDocL4aOm7lRxJMqs2PvyAu8hZlXBn0HR6
-         KIDg==
-X-Gm-Message-State: ACgBeo1ITZbKSolp6r5TCI2gTRqEAkApniIC42h1/7XPO5cwEG5NmC+w
-        /6+5tlHqIJziejwU0EmPAxAdpw==
-X-Google-Smtp-Source: AA6agR4bRuL+NaricpxNR8LYFD1ua/hvzMiXB1+ErOc5A92wdvDFMqS/1LCh1V/LIRKZsw0D53rQxw==
-X-Received: by 2002:a05:6512:692:b0:492:ece0:32e5 with SMTP id t18-20020a056512069200b00492ece032e5mr4275032lfe.636.1661345261144;
-        Wed, 24 Aug 2022 05:47:41 -0700 (PDT)
-Received: from [10.243.4.185] ([194.204.13.210])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05651220d300b0048b05882c28sm3006728lfr.271.2022.08.24.05.47.38
+        bh=HCkgWRsW68okr3HXj1aoAUOQtm+hBGu9v0QWmb8CPe0=;
+        b=d57wUS37WMjv7Pj5ENtBDsFgYVwm9bYUYaXS2ccwiEQ3loGs5kO44SRjUZfcLql0Gj
+         +SWFHdp9f4YcJZT7kflQk00+kAlzeBzJ+TwEagNm8mcu/LXS5yoTBH6KRHEzlceqo0/J
+         trBlGKHyH9nY1AMNrGSkOL61Fgw450XDiBOS4YhkuCSEBKAWP/IZ0u2o+SQlXvCKHIhk
+         l1RnQjIISucNKtSC6D6MInhc6wWK8dcn2La0vaEiHcaNiM/1T3A/kibnhsnBV3V1gGOj
+         AyWSNf1cP58iwOieueD6izwy/OnT7RzgTJ1dydZiqw0/jV4oPwz4NRSShFKwte9Spkr+
+         TXtA==
+X-Gm-Message-State: ACgBeo25zYVDENGh7r2PKVtKE/BMXV34xzIq0EuVz5fo+njSgQH2+Wde
+        WjsIFbfrkCeaCI0xW1FYwNT+Dw==
+X-Google-Smtp-Source: AA6agR4eNUBQjn5HPo5JYDP4s9gU6xJOSJTUVA4FpSM9g3v69U0V1OpMhgoWrItrdVqemUex9AHSKQ==
+X-Received: by 2002:a05:6512:2284:b0:492:ca50:d857 with SMTP id f4-20020a056512228400b00492ca50d857mr8249169lfu.209.1661345264775;
+        Wed, 24 Aug 2022 05:47:44 -0700 (PDT)
+Received: from [10.243.4.185] ([194.157.23.230])
+        by smtp.gmail.com with ESMTPSA id p3-20020a056512138300b0048b07e82b8csm2996630lfa.55.2022.08.24.05.47.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 05:47:40 -0700 (PDT)
-Message-ID: <1c2685e9-1501-8815-2cf0-b545bb91ca5d@linaro.org>
-Date:   Wed, 24 Aug 2022 15:47:36 +0300
+        Wed, 24 Aug 2022 05:47:44 -0700 (PDT)
+Message-ID: <91c2bf5f-8bbf-22be-bd57-a535bf4b95e0@linaro.org>
+Date:   Wed, 24 Aug 2022 15:47:40 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 2/2] powerpc/82xx: remove spidev node from mgcoge
+Subject: Re: [PATCH 1/2] ARM: dts: stm32: argon: remove spidev node
 Content-Language: en-US
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-spi@vger.kernel.org
-Cc:     Heiko Schocher <hs@denx.de>, Rob Herring <robh+dt@kernel.org>,
+Cc:     Reinhold Mueller <reinhold.mueller@emtrion.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Holger Brunck <holger.brunck@keymile.com>,
-        Kumar Gala <galak@kernel.crashing.org>,
-        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20220824082130.21934-1-wsa+renesas@sang-engineering.com>
- <20220824082130.21934-3-wsa+renesas@sang-engineering.com>
+ <20220824082130.21934-2-wsa+renesas@sang-engineering.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220824082130.21934-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220824082130.21934-2-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,9 +89,10 @@ On 24/08/2022 11:21, Wolfram Sang wrote:
 > Remove this non-HW description. There won't be a regression because it
 > won't bind since 2015 anyhow.
 > 
-> Fixes: 5d1d67e361ea ("powerpc/82xx: add SPI support for mgcoge")
-> Cc: Heiko Schocher <hs@denx.de>
+> Fixes: 16e3e44c5b87 ("ARM: dts: stm32: Add support for the emtrion emSBC-Argon")
+> Cc: Reinhold Mueller <reinhold.mueller@emtrion.com>
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

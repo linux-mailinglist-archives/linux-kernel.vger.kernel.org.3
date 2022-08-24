@@ -2,190 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C305A02A7
+	by mail.lfdr.de (Postfix) with ESMTP id 725835A02A6
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240320AbiHXUZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S240375AbiHXUZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240310AbiHXUZg (ORCPT
+        with ESMTP id S240354AbiHXUZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:25:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE2530F6D;
-        Wed, 24 Aug 2022 13:25:35 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OJlaQi006584;
-        Wed, 24 Aug 2022 20:25:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=x+LyAortpu5TRNqNPw55nWkD8w2jYuet0vVJUp2hZBI=;
- b=CNRhwlfCznXGvlpKVMdbdslqPoQ3zmArcivgD1OJbbFm6mH+28gnLq1qkFKgAE0wrw+M
- 9SOhr/HmspNvon+Od2fsU/KwsJVCiSqgaXXfmp9ZvuqPKxPCb6sB8vNsZvzB6TMwik3/
- pIWHtt5UGW12AsKQj+yPbm0OTnqezXkO0SSBGkCJBp2c7h77a75IpewvD0ZSjGogB3ls
- EapBtUJ4NDIatsBXecmHNrxV2hPLkNeU2T78kN9uZSCgfuXaIAfvLc4eW+1TwsbOleCT
- v5morBSY3JFGr6jLdvzzjMWGi6R6qb5DTYoL5J1lunlyGnsZVVJ0sjq3E4mk/2D2kkTB mQ== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j5tf41078-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Aug 2022 20:25:23 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27OKK0UO022273;
-        Wed, 24 Aug 2022 20:25:23 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma03dal.us.ibm.com with ESMTP id 3j2q8a25wc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Aug 2022 20:25:23 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27OKPLgj42533120
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Aug 2022 20:25:21 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 710F66A04D;
-        Wed, 24 Aug 2022 20:25:21 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 277DB6A047;
-        Wed, 24 Aug 2022 20:25:20 +0000 (GMT)
-Received: from [9.211.112.122] (unknown [9.211.112.122])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 24 Aug 2022 20:25:19 +0000 (GMT)
-Message-ID: <04644ee5-2386-1f3d-c1a3-fc4227570cf7@linux.ibm.com>
-Date:   Wed, 24 Aug 2022 16:25:19 -0400
+        Wed, 24 Aug 2022 16:25:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934281F613
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661372749;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WcGllBx/E+hwvIFs2WxQDGDJChMuYQJTiL0H+5A7OM0=;
+        b=TU36UDUF5tc3Y4XVjVatqgkZdgawz+vG3zQBs25yaq4wU4QkL7hTEK+s+drxT+Y6tCibRs
+        nuG1MmHD0cIKaUfA6agjh+tSihzH9zGE86R51aG1o66DDqL4ZgBPELsvG5KE2GCreMQU9/
+        EGlBm4kIIw+Y8zvT8Gv3LlpgAMIx+ck=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-393-WLWbl_vCMC2fgS6CK-KoYQ-1; Wed, 24 Aug 2022 16:25:48 -0400
+X-MC-Unique: WLWbl_vCMC2fgS6CK-KoYQ-1
+Received: by mail-qv1-f71.google.com with SMTP id od16-20020a0562142f1000b00496e2ea7934so6233046qvb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:25:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=WcGllBx/E+hwvIFs2WxQDGDJChMuYQJTiL0H+5A7OM0=;
+        b=Ep/WmcPQi8JZiLIJkRVXR1IXL7ohJ43P3aSDFoFWQbbmnB/rBJ6Ex9hr3Z3hZ6CJUv
+         06xIuqzA+UYi2v6gWpXWF8tO81tlLF5Fr8VYT7IDAu0q//0RMuFtXcPr4SNwY2hXy1Xe
+         GwIFxgCdRxBEvFH0fgn1bVI8DjhtJIm6Gfk+EqW+pC61k0YDxxCvPClJZbpvuICnIYHQ
+         Sn8xGDH0NCes98ZuBy8kS3FEzIj/Sib1bUpicRcqNnxfMSDs+iGP5NWGqk26gssjCC4O
+         kuH096fKbrG3ivyxkoHykP5wtj3k30GHsvvwWfnSuCpXpRaXyHXDRa1p4WlnToLRIU4M
+         ogQQ==
+X-Gm-Message-State: ACgBeo2bYnWF7YQ7RTthHH64b8iYGulDm3fQwLdoGyY7qXXgtZ237pRh
+        vW01dliC3aByxKGQbNlQZpr1Xb3ZgOA88OLA7GJ9aEXmGPMc/kWNjI6dPAvJNOe4HcSAAaqHiPr
+        463PUZUMwzudjv5yPd7dHS6w+
+X-Received: by 2002:ac8:7e83:0:b0:344:7ee0:1241 with SMTP id w3-20020ac87e83000000b003447ee01241mr889832qtj.587.1661372747563;
+        Wed, 24 Aug 2022 13:25:47 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4At86RE03P4mlSnr4jeclId4tDLoIpgKf+KL9cAcwLzF1s7WEI2JSHt6UJKgXWx7E14+/57Q==
+X-Received: by 2002:ac8:7e83:0:b0:344:7ee0:1241 with SMTP id w3-20020ac87e83000000b003447ee01241mr889808qtj.587.1661372747336;
+        Wed, 24 Aug 2022 13:25:47 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id v16-20020a05620a0f1000b006b97151d2b3sm16098374qkl.67.2022.08.24.13.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 13:25:46 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 16:25:44 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
+Message-ID: <YwaJSBnp2eyMlkjw@xz-m1.local>
+References: <871qtfvdlw.fsf@nvdebian.thelocal>
+ <YvxWUY9eafFJ27ef@xz-m1.local>
+ <87o7wjtn2g.fsf@nvdebian.thelocal>
+ <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
+ <Yv1BJKb5he3dOHdC@xz-m1.local>
+ <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Yv5QXkS4Bm9pTBeG@xz-m1.local>
+ <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <87czcqiecd.fsf@nvdebian.thelocal>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] iommu/s390: Fix race with release_device ops
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, schnelle@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-References: <20220823203059.81919-1-mjrosato@linux.ibm.com>
- <a6e42442-d9cb-0d63-bb71-da78a5669a51@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <a6e42442-d9cb-0d63-bb71-da78a5669a51@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: r4qAPCH24FV5xKnEVuvKrWrpsZJM3HJf
-X-Proofpoint-ORIG-GUID: r4qAPCH24FV5xKnEVuvKrWrpsZJM3HJf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-24_12,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 phishscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
- priorityscore=1501 spamscore=0 lowpriorityscore=0 suspectscore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208240073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87czcqiecd.fsf@nvdebian.thelocal>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 4:37 AM, Pierre Morel wrote:
+On Wed, Aug 24, 2022 at 11:56:25AM +1000, Alistair Popple wrote:
+> >> Still I don't know whether there'll be any side effect of having stall tlbs
+> >> in !present ptes because I'm not familiar enough with the private dev swap
+> >> migration code.  But I think having them will be safe, even if redundant.
 > 
-> 
-> On 8/23/22 22:30, Matthew Rosato wrote:
->> With commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
->> calls") s390-iommu is supposed to handle dynamic switching between IOMMU
->> domains and the DMA API handling.  However, this commit does not
->> sufficiently handle the case where the device is released via a call
->> to the release_device op as it may occur at the same time as an opposing
->> attach_dev or detach_dev since the group mutex is not held over
->> release_device.  This was observed if the device is deconfigured during a
->> small window during vfio-pci initialization and can result in WARNs and
->> potential kernel panics.
->>
->> Handle this by tracking when the device is probed/released via
->> dev_iommu_priv_set/get().  Ensure that once the device is released only
->> release_device handles the re-init of the device DMA.
->>
->> Fixes: fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev calls")
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/pci.h |  1 +
->>   arch/s390/pci/pci.c         |  1 +
->>   drivers/iommu/s390-iommu.c  | 68 ++++++++++++++++++++++++++++---------
->>   3 files changed, 54 insertions(+), 16 deletions(-)
->>
->> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
->> index 7b4cdadbc023..1295b6900e4b 100644
->> --- a/arch/s390/include/asm/pci.h
->> +++ b/arch/s390/include/asm/pci.h
->> @@ -157,6 +157,7 @@ struct zpci_dev {
->>       /* DMA stuff */
->>       unsigned long    *dma_table;
->>       spinlock_t    dma_table_lock;
->> +    spinlock_t    dma_domain_lock;
->>       int        tlb_refresh;
->>         spinlock_t    iommu_bitmap_lock;
->> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
->> index 73cdc5539384..61901c1be3cc 100644
->> --- a/arch/s390/pci/pci.c
->> +++ b/arch/s390/pci/pci.c
->> @@ -832,6 +832,7 @@ struct zpci_dev *zpci_create_device(u32 fid, u32 fh, enum zpci_state state)
->>       kref_init(&zdev->kref);
->>       mutex_init(&zdev->lock);
->>       mutex_init(&zdev->kzdev_lock);
->> +    spin_lock_init(&zdev->dma_domain_lock);
->>         rc = zpci_init_iommu(zdev);
->>       if (rc)
->> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
->> index c898bcbbce11..513a7ebd23b3 100644
->> --- a/drivers/iommu/s390-iommu.c
->> +++ b/drivers/iommu/s390-iommu.c
->> @@ -90,15 +90,39 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
->>       struct zpci_dev *zdev = to_zpci_dev(dev);
->>       struct s390_domain_device *domain_device;
->>       unsigned long flags;
->> -    int cc, rc;
->> +    int cc, rc = 0;
->>         if (!zdev)
->>           return -ENODEV;
->>   +    /* First check compatibility */
->> +    spin_lock_irqsave(&s390_domain->list_lock, flags);
->> +    /* First device defines the DMA range limits */
->> +    if (list_empty(&s390_domain->devices)) {
->> +        domain->geometry.aperture_start = zdev->start_dma;
->> +        domain->geometry.aperture_end = zdev->end_dma;
->> +        domain->geometry.force_aperture = true;
->> +    /* Allow only devices with identical DMA range limits */
->> +    } else if (domain->geometry.aperture_start != zdev->start_dma ||
->> +           domain->geometry.aperture_end != zdev->end_dma) {
->> +        rc = -EINVAL;
->> +    }
->> +    spin_unlock_irqrestore(&s390_domain->list_lock, flags);
->> +    if (rc)
->> +        return rc;
->> +
->>       domain_device = kzalloc(sizeof(*domain_device), GFP_KERNEL);
->>       if (!domain_device)
->>           return -ENOMEM;
->>   +    /* Leave now if the device has already been released */
->> +    spin_lock_irqsave(&zdev->dma_domain_lock, flags);
->> +    if (!dev_iommu_priv_get(dev)) {
->> +        spin_unlock_irqrestore(&zdev->dma_domain_lock, flags);
->> +        kfree(domain_device);
->> +        return 0;
->> +    }
->> +
->>       if (zdev->dma_table && !zdev->s390_domain) {
->>           cc = zpci_dma_exit_device(zdev);
->>           if (cc) {
-> 
-> Am I wrong? It seems to me that zpci_dma_exit_device here is called with the spin_lock locked but this function zpci_dma_exit_device calls vfree which may sleep.
-> 
+> What side-effect were you thinking of? I don't see any issue with not
+> TLB flushing stale device-private TLBs prior to the migration because
+> they're not accessible anyway and shouldn't be in any TLB.
 
-Oh, good point, I just enabled lockdep to verify that.
+Sorry to be misleading, I never meant we must add them.  As I said it's
+just that I don't know the code well so I don't know whether it's safe to
+not have it.
 
-I think we could just replace this with a mutex instead, it's not a performance path.  I've been running tests successfully today with this patch modified to instead use a mutex for dma_domain_lock.
+IIUC it's about whether having stall system-ram stall tlb in other
+processor would matter or not here.  E.g. some none pte that this code
+collected (boosted both "cpages" and "npages" for a none pte) could have
+stall tlb in other cores that makes the page writable there.
+
+When I said I'm not familiar with the code, it's majorly about one thing I
+never figured out myself, in that migrate_vma_collect_pmd() has this
+optimization to trylock on the page, collect if it succeeded:
+
+  /*
+   * Optimize for the common case where page is only mapped once
+   * in one process. If we can lock the page, then we can safely
+   * set up a special migration page table entry now.
+   */
+   if (trylock_page(page)) {
+          ...
+   } else {
+          put_page(page);
+          mpfn = 0;
+   }
+
+But it's kind of against a pure "optimization" in that if trylock failed,
+we'll clear the mpfn so the src[i] will be zero at last.  Then will we
+directly give up on this page, or will we try to lock_page() again
+somewhere?
+
+The future unmap op is also based on this "cpages", not "npages":
+
+	if (args->cpages)
+		migrate_vma_unmap(args);
+
+So I never figured out how this code really works.  It'll be great if you
+could shed some light to it.
+
+Thanks,
+
+-- 
+Peter Xu
 

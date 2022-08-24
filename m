@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665C059F17E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776F259F180
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiHXCsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 22:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S232471AbiHXCsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 22:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiHXCsL (ORCPT
+        with ESMTP id S232096AbiHXCs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 22:48:11 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8D36A4BD
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:48:09 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MC9RV1KKCz1N7Td;
-        Wed, 24 Aug 2022 10:44:38 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+        Tue, 23 Aug 2022 22:48:29 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97246B164
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:48:27 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MC9Qv6qnczXdsj;
+        Wed, 24 Aug 2022 10:44:07 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 10:48:01 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
- 2022 10:48:01 +0800
-Message-ID: <48ca5e9e-eb03-3fb1-96d0-4755e1d39c3f@huawei.com>
-Date:   Wed, 24 Aug 2022 10:48:01 +0800
+ 15.1.2375.24; Wed, 24 Aug 2022 10:48:25 +0800
+Received: from [10.174.177.86] (10.174.177.86) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 10:48:24 +0800
+Message-ID: <93f9d06b-c557-b489-d5d4-0433419c73a1@huawei.com>
+Date:   Wed, 24 Aug 2022 10:48:23 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] objtool: replace _ASM_PTR with quad in macros
-Content-Language: en-US
-To:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        "peterz@infradead.org" <peterz@infradead.org>
-CC:     <jpoimboe@kernel.org>, <bp@suse.de>, <mhiramat@kernel.org>,
-        <sv@linux.ibm.com>, <christophe.leroy@csgroup.eu>,
-        <naveen.n.rao@linux.vnet.ibm.com>
-References: <20220823133124.55914-1-chenzhongjin@huawei.com>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220823133124.55914-1-chenzhongjin@huawei.com>
+ Thunderbird/102.2.0
+Subject: Re: [PATCH -next] f2fs: fix wrong dirty page count when race between
+ mmap and fallocate.
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+CC:     <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>
+References: <20220815081555.2961943-1-zhangshuqi3@huawei.com>
+ <a364da58-f476-69fd-3f90-448f35c8e151@kernel.org>
+ <YwFaTprvOf8ckGsP@google.com> <YwFd/+YPfPz60uWg@google.com>
+From:   Shuqi Zhang <zhangshuqi3@huawei.com>
+In-Reply-To: <YwFd/+YPfPz60uWg@google.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500013.china.huawei.com (7.185.36.172)
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.86]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -56,143 +56,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/23 21:31, Chen Zhongjin wrote:
-> Macros STACK_FRAME_NON_STANDARD and ANNOTATE_NOENDBR uses
-> _ASM_PTR. It switch between .long and .quad based on 32bit
-> or 64bit. However objtool doesn't work for 32bit, so _ASM_PTR
-> makes no sense.
+
+On 08/21, Jaegeuk Kim wrote:
+> On 08/20, Jaegeuk Kim wrote:
+>> On 08/20, Chao Yu wrote:
+>>> On 2022/8/15 16:15, Shuqi Zhang wrote:
+>>>> This is a BUG_ON issue as follows when running xfstest-generic-503:
+>>>> WARNING: CPU: 21 PID: 1385 at fs/f2fs/inode.c:762 f2fs_evict_inode+0x847/0xaa0
+>>>> Modules linked in:
+>>>> CPU: 21 PID: 1385 Comm: umount Not tainted 5.19.0-rc5+ #73
+>>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
+>>>>
+>>>> Call Trace:
+>>>> evict+0x129/0x2d0
+>>>> dispose_list+0x4f/0xb0
+>>>> evict_inodes+0x204/0x230
+>>>> generic_shutdown_super+0x5b/0x1e0
+>>>> kill_block_super+0x29/0x80
+>>>> kill_f2fs_super+0xe6/0x140
+>>>> deactivate_locked_super+0x44/0xc0
+>>>> deactivate_super+0x79/0x90
+>>>> cleanup_mnt+0x114/0x1a0
+>>>> __cleanup_mnt+0x16/0x20
+>>>> task_work_run+0x98/0x100
+>>>> exit_to_user_mode_prepare+0x3d0/0x3e0
+>>>> syscall_exit_to_user_mode+0x12/0x30
+>>>> do_syscall_64+0x42/0x80
+>>>> entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>>>>
+>>>> Function flow analysis when BUG occurs:
+>>>> f2fs_fallocate                    mmap
+>>>>                                     do_page_fault
+>>>>                                       pte_spinlock  // ---lock_pte
+>>>>                                       do_wp_page
+>>>>                                         wp_page_shared
+>>>>                                           pte_unmap_unlock   // unlock_pte
+>>>>                                             do_page_mkwrite
+>>>>                                             f2fs_vm_page_mkwrite
+>>>>                                               down_read(i_mmap_sem)
+>>>>                                               lock_page
+>>>>                                               if (PageMappedToDisk(page))
+>>>>                                                 goto out;
+>>>>                                               // set_page_dirty  --NOT RUN
+>>>>                                               out: up_read(i_mmap_sem)
+>>>>                                             lock_page
+>>>>                                           finish_mkwrite_fault // unlock_pte
+>>>> f2fs_collapse_range
+>>>>     down_write(i_mmap_sem)
+>>>>     truncate_pagecache
+>>>>       unmap_mapping_pages
+>>>>         i_mmap_lock_write // down_write(i_mmap_rwsem)
+>>>>           ......
+>>>>           zap_pte_range
+>>>>             pte_offset_map_lock // ---lock_pte
+>>>>             f2fs_set_data_page_dirty
+>>> I didn't get it, why zap_pte_range() can set page dirty w/o lock_page?
+>>>
+>>> I found it's very easy to reproduce this bug, but previously I never saw this...
+>>> is there any code udpate around truncate_pagecache()?
+>> Found this.
+>>
+>> 2637  * The caller must ensure this doesn't race with truncation.  Most will
+>> 2638  * simply hold the folio lock, but e.g. zap_pte_range() calls with the
+>> 2639  * folio mapped and the pte lock held, which also locks out truncation.
+>> 2640  */
+>> 2641 bool filemap_dirty_folio(struct address_space *mapping, struct folio *folio)
+>> 2642 {
+>>
+>>> Thanks,
+>>>
+>>>>               if (!PageDirty(page)) {
+>>>>                                           fault_dirty_shared_page
+>>>>                                             f2fs_set_data_page_dirty
+>>>>                                               if (!PageDirty(page)) {
+>>>>                                                 __set_page_dirty_nobuffer
+>>>>                                                 f2fs_update_dirty_page // ++
+>>>>                                               }
+>>>>                                             unlock_page
+>>>>                 __set_page_dirty_nobuffers
+>>>>                 f2fs_update_dirty_page // page count++
+>>>>               }
+>>>>             pte_unmap_unlock  // --unlock_pte
+>>>>         i_mmap_unlock_write  // up_write(i_mmap_rwsem)
+>>>>     truncate_inode_pages
+>>>>     up_write(i_mmap_sem)
+>>>>
+>>>> When race happens between mmap-do_page_fault-wp_page_shared and
+>>>> fallocate-truncate_pagecache-zap_pte_range, the zap_pte_range calls
+>>>> function set_page_dirty without page lock. Besides, though
+>>>> truncate_pagecache has immap and pte lock, wp_page_shared calls
+>>>> fault_dirty_shared_page without any. In this case, two threads race
+>>>> in f2fs_set_data_page_dirty function. Page is set to dirty only ONCE,
+>>>> but the count is added TWICE by calling f2fs_update_dirty_page.
+>>>> Thus the count of dirty page cannot accord with the real dirty pages.
+>>>>
+>>>> Following is the solution to in case of race happens without any lock.
+>>>> If making sure f2fs_vm_page_mkwrite calls set_page_dirty within immap
+>>>> lock area, page will already be dirtied when running into
+>>>> fault_dirty_shared_page-f2fs_set_data_page_dirty.
+>>>> The count of dirty page will not be increased wrong times.
+>>>>
+>>>> Signed-off-by: Shuqi Zhang <zhangshuqi3@huawei.com>
+>>>> ---
+>>>>    fs/f2fs/file.c | 11 ++++++-----
+>>>>    1 file changed, 6 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>> index ce4905a073b3..d837359a9c00 100644
+>>>> --- a/fs/f2fs/file.c
+>>>> +++ b/fs/f2fs/file.c
+>>>> @@ -140,7 +140,7 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
+>>>>    	 * check to see if the page is mapped already (no holes)
+>>>>    	 */
+>>>>    	if (PageMappedToDisk(page))
+>>>> -		goto out_sem;
+>>>> +		goto set_dirty;
+>>>>    	/* page is wholly or partially inside EOF */
+>>>>    	if (((loff_t)(page->index + 1) << PAGE_SHIFT) >
+>>>> @@ -150,14 +150,15 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
+>>>>    		offset = i_size_read(inode) & ~PAGE_MASK;
+>>>>    		zero_user_segment(page, offset, PAGE_SIZE);
+>>>>    	}
+>>>> -	set_page_dirty(page);
+>>>> -	if (!PageUptodate(page))
+>>>> -		SetPageUptodate(page);
+>>>>    	f2fs_update_iostat(sbi, APP_MAPPED_IO, F2FS_BLKSIZE);
+>>>> -	f2fs_update_time(sbi, REQ_TIME);
+>>>> +set_dirty:
+>>>>    	trace_f2fs_vm_page_mkwrite(page, DATA);
+>>>> +	set_page_dirty(page);
+>>>> +	if (!PageUptodate(page))
+>>>> +		SetPageUptodate(page);
+> Actually we don't need to call SetPageUptodate() since set_page_dirty() should
+> do? And, it seems the call stack is out-dated as well.
 >
-> Considering that _ASM_PTR comes from asm.h, which is x86
-> specific head file, while objtool.h is generic. Replace
-> _ASM_PTR with quad and remove asm.h reference.
+> By the way, do we just need to get the right count by this?
 >
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> ---
->   include/linux/objtool.h       | 6 ++----
->   tools/include/linux/objtool.h | 6 ++----
->   2 files changed, 4 insertions(+), 8 deletions(-)
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -3697,8 +3697,7 @@ static bool f2fs_dirty_data_folio(struct address_space *mapping,
+>                  folio_mark_uptodate(folio);
+>          BUG_ON(folio_test_swapcache(folio));
 >
-> diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-> index 62c54ffbeeaa..d2413cb78037 100644
-> --- a/include/linux/objtool.h
-> +++ b/include/linux/objtool.h
-> @@ -45,8 +45,6 @@ struct unwind_hint {
->   
->   #ifdef CONFIG_OBJTOOL
->   
-> -#include <asm/asm.h>
-> -
->   #ifndef __ASSEMBLY__
->   
->   #define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
-> @@ -87,7 +85,7 @@ struct unwind_hint {
->   #define ANNOTATE_NOENDBR					\
->   	"986: \n\t"						\
->   	".pushsection .discard.noendbr\n\t"			\
-> -	_ASM_PTR " 986b\n\t"					\
-> +	".quad 986b\n\t"					\
->   	".popsection\n\t"
->   
->   #define ASM_REACHABLE							\
-> @@ -144,7 +142,7 @@ struct unwind_hint {
->   
->   .macro STACK_FRAME_NON_STANDARD func:req
->   	.pushsection .discard.func_stack_frame_non_standard, "aw"
-> -	_ASM_PTR \func
-> +	.quad \func
->   	.popsection
->   .endm
->   
-> diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
-> index 62c54ffbeeaa..d2413cb78037 100644
-> --- a/tools/include/linux/objtool.h
-> +++ b/tools/include/linux/objtool.h
-> @@ -45,8 +45,6 @@ struct unwind_hint {
->   
->   #ifdef CONFIG_OBJTOOL
->   
-> -#include <asm/asm.h>
-> -
->   #ifndef __ASSEMBLY__
->   
->   #define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
-> @@ -87,7 +85,7 @@ struct unwind_hint {
->   #define ANNOTATE_NOENDBR					\
->   	"986: \n\t"						\
->   	".pushsection .discard.noendbr\n\t"			\
-> -	_ASM_PTR " 986b\n\t"					\
-> +	".quad 986b\n\t"					\
->   	".popsection\n\t"
->   
->   #define ASM_REACHABLE							\
-> @@ -144,7 +142,7 @@ struct unwind_hint {
->   
->   .macro STACK_FRAME_NON_STANDARD func:req
->   	.pushsection .discard.func_stack_frame_non_standard, "aw"
-> -	_ASM_PTR \func
-> +	.quad \func
->   	.popsection
->   .endm
->   
+> -       if (!folio_test_dirty(folio)) {
+> -               filemap_dirty_folio(mapping, folio);
+> +       if (filemap_dirty_folio(mapping, folio)) {
+>                  f2fs_update_dirty_folio(inode, folio);
+>                  return true;
+>          }
 
-As ppc said they will use objtool for both 32 and 64bit, maybe we still 
-need a switchable symbol type for this.
-
-How about this one?
+Yes, this patch seems a better one. I will send a PATCH-v2 about it.
 
 
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index 62c54ffbeeaa..14af2bcc460b 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -45,10 +45,14 @@ struct unwind_hint {
+Thanks,
 
-  #ifdef CONFIG_OBJTOOL
-
--#include <asm/asm.h>
--
-  #ifndef __ASSEMBLY__
-
-+#ifdef CONFIG_64BIT
-+#define _RELOC_PTR __stringify(.quad)
-+#else
-+#define _RELOC_PTR __stringify(.long)
-+#endif
-+
-  #define UNWIND_HINT(sp_reg, sp_offset, type, end)              \
-         "987: \n\t"                                             \
-         ".pushsection .discard.unwind_hints\n\t"                \
-@@ -87,7 +91,7 @@ struct unwind_hint {
-  #define ANNOTATE_NOENDBR                                       \
-         "986: \n\t"                                             \
-         ".pushsection .discard.noendbr\n\t"                     \
--       _ASM_PTR " 986b\n\t"                                    \
-+       _RELOC_PTR " 986b\n\t"                                  \
-         ".popsection\n\t"
-
-  #define ASM_REACHABLE                                                  \
-@@ -98,6 +102,12 @@ struct unwind_hint {
-
-  #else /* __ASSEMBLY__ */
-
-+#ifdef CONFIG_64BIT
-+#define _RELOC_PTR .quad
-+#else
-+#define _RELOC_PTR .long
-+#endif
-+
-  /*
-   * This macro indicates that the following intra-function call is valid.
-   * Any non-annotated intra-function call will cause objtool to issue a 
-warning.
-@@ -144,7 +154,7 @@ struct unwind_hint {
-
-  .macro STACK_FRAME_NON_STANDARD func:req
-         .pushsection .discard.func_stack_frame_non_standard, "aw"
--       _ASM_PTR \func
-+       _RELOC_PTR \func
-         .popsection
-  .endm
-
-
-
+>>>> +	f2fs_update_time(sbi, REQ_TIME);
+>>>>    out_sem:
+>>>>    	filemap_invalidate_unlock_shared(inode->i_mapping);
+>>
+>> _______________________________________________
+>> Linux-f2fs-devel mailing list
+>> Linux-f2fs-devel@lists.sourceforge.net
+>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

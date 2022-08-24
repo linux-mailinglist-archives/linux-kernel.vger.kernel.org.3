@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4E859F4B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B566059F4B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbiHXIEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S235574AbiHXID7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235563AbiHXID6 (ORCPT
+        with ESMTP id S232752AbiHXID5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:03:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F4986054
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:03:57 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oQlMR-0008Gu-Vj; Wed, 24 Aug 2022 10:03:39 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oQlMQ-0002AW-S9; Wed, 24 Aug 2022 10:03:38 +0200
-Date:   Wed, 24 Aug 2022 10:03:38 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
- unlock sequence
-Message-ID: <20220824080338.humjny4fabhmx3z7@pengutronix.de>
-References: <20220816043643.26569-1-alice.guo@oss.nxp.com>
- <20220816043643.26569-3-alice.guo@oss.nxp.com>
- <20220816062330.z2fvurteg337krw2@pengutronix.de>
- <AM6PR04MB60537292F559EC012F0EB510E2719@AM6PR04MB6053.eurprd04.prod.outlook.com>
- <20220822080010.ecdphpm3i26cco5f@pengutronix.de>
- <20220822140347.GA4087281@roeck-us.net>
- <AM6PR04MB6053E26CB59410EBCC2C93AEE2709@AM6PR04MB6053.eurprd04.prod.outlook.com>
- <20220823091027.ezyxkn64asajvjom@pengutronix.de>
- <20220823120219.GA203169@roeck-us.net>
- <AM6PR04MB60535EC5B774004AF996BDA5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+        Wed, 24 Aug 2022 04:03:57 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F1786054
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:03:56 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id v4so14343760pgi.10
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=vLuqniAMwqY6ECfkYSPT1Bkq/cd7HE9h4EEKEFfMYEk=;
+        b=WInXrY3qRgrPgpReqwCl4R8vLZ1EJa31NKnxJoyTy4qEipQsgpGYSdIVq1ejlCAPpN
+         OlZbbEC+PBY5Ibu9LEGcwdwOWEAXizp8VI7vPIJWCTosW5UvtKi2r2oODfpXbsKzQ5Ik
+         Oq1VaFSfGf/6SKvBA1ZqQyF523w+ERzFvUdztoRbFQrdLliOMaMjg3hUgtRcRwozPnO0
+         BSwsDxGJ3fWMIQb/gNRFp2wL/WMH2r8vlIFG3jbrw2eFlkdHQf91UGyeaBgv2Lkn7jgA
+         PS2gtDtIjimMqU4P3JItk4TavlGYQf7Y4b0RKxNmFjYlXFth/so5CW2VpfTvQjAuH1Hp
+         9wiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=vLuqniAMwqY6ECfkYSPT1Bkq/cd7HE9h4EEKEFfMYEk=;
+        b=hGoAS7ATPaAFqNzaZLMi79YUCcozEZoN1iUApWNrLROyBJA5ARdUfsUCgbSHQ4D+Ht
+         JeTQNqph2rZ6TfoIUgcpWV4V++9YHhLeJ4jjRSU1FmY9W1DNXLVNbGCfNvR5PAb2M/6i
+         T1k7XQCZq0kEQuWKKhr5Rv+zkQy1sQcruRZ3AbBONuRvsatDajxfhajj8+IssT6Mm2rm
+         etUZXjXLO5iifY7JqbrYivUcKFJabe8HB3S7pVEK9lFsJnLvn4FxTmxeYkpRf2tAXPNk
+         voe2rFvkF0tMItn8OQ8RI0LpAGdWoYNIQmDpnW9wVYI/N6mdnXHpGvsC737/7fog24Yx
+         0CjQ==
+X-Gm-Message-State: ACgBeo1+bnSqJjfVNVaVMYiF0gmaNe8x8endS+0nJfRLKixi5tp1waTg
+        g68RsGt7paO7Gx9zlFMgl/M=
+X-Google-Smtp-Source: AA6agR7MlcgjgtEOya/NAybABl6gcw7J21DmWRhCKXk8BHL8WvNnBdvkEdqRcGH18AtoUgBC6YY0fg==
+X-Received: by 2002:a65:6e8f:0:b0:42a:c7d3:f2ed with SMTP id bm15-20020a656e8f000000b0042ac7d3f2edmr8386132pgb.209.1661328235880;
+        Wed, 24 Aug 2022 01:03:55 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x187-20020a6263c4000000b0053656fdaf88sm8153571pfb.69.2022.08.24.01.03.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 01:03:55 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     Larry.Finger@lwfinger.net
+Cc:     phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, straube.linux@gmail.com,
+        martin@kaiser.cx, jhpark1013@gmail.com, makvihas@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] staging: r8188eu: remove unnecessary null check
+Date:   Wed, 24 Aug 2022 08:03:50 +0000
+Message-Id: <20220824080350.221614-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM6PR04MB60535EC5B774004AF996BDA5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alice,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On 22-08-24, Alice Guo (OSS) wrote:
+container_of is never null, so this null check is
+unnecessary.
 
-...
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/staging/r8188eu/core/rtw_mlme.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-> > > > Hi Guenter and Marco,
-> > > >
-> > > > 1. did you see any issues?
-> > > > This WDOG Timer first appeared in i.MX7ULP, no one report issues
-> > > > probably because few people use i.MX7ULP. This issue was found when
-> > > > we did a stress test on it. When we reconfigure the WDOG Timer,
-> > > > there is a certain probability that it reset. The reason for the
-> > > > error is that when WDOG_CS[CMD32EN] is 0, the unlock sequence is two
-> > > > 16-bit writes (0xC520, 0xD928) to the CNT register within 16 bus
-> > > > clocks, and improper unlock sequence causes the WDOG to reset.
-> > > > Adding mb() is to guarantee that two 16-bit writes are finished within 16
-> > bus clocks.
-> > >
-> > > After this explanation the whole imx7ulp_wdt_init() seems a bit buggy
-> > > because writel_relaxed() as well as writel() are 32bit access functions.
-> > > So the very first thing to do is to enable the 32-bit mode.
-> > >
-> > Agreed. This is much better than having extra code to deal with both 16-bit
-> > and 32-bit access.
-> > 
-> > > Also this is a explanation worth to be added to the commit message ;)
-> > >
-> > 
-> > Definitely. Also, the use of mb(), if it should indeed be needed, would have to
-> > be explained in a code comment.
-> > 
-> > Thanks,
-> > Guenter
-> 
-> Hi Marco and Guenter,
-> 
-> Thank you for your comments. I plan to enable support for 32-bit
-> unlock command write words in bootloader. In this way, there is no
-> need to distinguish whether the unlock command is a 32-bit command or
-> a 16-bit command in driver.
-
-Please don't move this into the bootloader, enabling it within the init
-seq. is just fine. If you move it into the bootloader then you can't
-ensure that the bit is set since there are plenty of bootloaders out
-there.
-
-As I said, just drop the "16bit" unlock sequence from the init function
-because the unlock is handled just fine in all the watchdog_ops.
-
-Regards,
-  Marco
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 56c8bd5f4c60..d089da7e90e0 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -1442,10 +1442,6 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
+ 	pmlmepriv->pscanned = phead->next;
+ 	while (phead != pmlmepriv->pscanned) {
+ 		pnetwork = container_of(pmlmepriv->pscanned, struct wlan_network, list);
+-		if (!pnetwork) {
+-			ret = _FAIL;
+-			goto exit;
+-		}
+ 		pmlmepriv->pscanned = pmlmepriv->pscanned->next;
+ 		rtw_check_join_candidate(pmlmepriv, &candidate, pnetwork);
+ 	}
+-- 
+2.25.1

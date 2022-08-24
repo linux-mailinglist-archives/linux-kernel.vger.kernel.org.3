@@ -2,88 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F6E59FEC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DEB59FECB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238508AbiHXPtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        id S237980AbiHXPuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236868AbiHXPtg (ORCPT
+        with ESMTP id S238709AbiHXPuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:49:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247D061717;
-        Wed, 24 Aug 2022 08:49:35 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 003536601DAD;
-        Wed, 24 Aug 2022 16:49:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661356173;
-        bh=vOJMhTQ7HzZBp0ZZo9K4hrXQVabXIso7oNLwG6hsKLo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=c6s4L7HIzhqXHIRjPO78mUx2njs0FTSDwh/if1G8GrYUXKIesr5TSuVpzCCXzCFaC
-         RQwFs9mzKIF/SoKOeW/iFsEtF2HNDrH0QYgFH8Bjb0EODV2gEnzbMJNa3D7Euz+aq1
-         ttSiIgN9lBknJRw6hrDsumfPw8z1mfE/u3dAN4OYGFY1SnY5ytLPSVBmnTh6lKyQde
-         YOUN/UNH4qT1TRrXxpbCLStfVkyl6+y4obXi9sfi44ZsbJWXBmSFG438Hbbw7Cm9FD
-         zamHCbpRiEHeEJEqGHwgMIgiFMUhzX7OjakAgX0Hfj9WgvOsPDRnfMMAi2GCcW6bPu
-         eS/kqb6U0BR1g==
-Message-ID: <25d6b7e7-bbcc-7613-42d1-13c2b9ab2937@collabora.com>
-Date:   Wed, 24 Aug 2022 18:49:28 +0300
+        Wed, 24 Aug 2022 11:50:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2502CC87
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:50:05 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661356203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ofO6K+OMSITsaGHE8wMcO5f9lytJ/iLlxdnlabEaK1I=;
+        b=JhAQ6V4+16Gu0NBUcQAaWB5DQVw7zIvVKEKq1ImhWzXV1gpNPmr0C47vKMlFhsZTGAaFvC
+        Zpq2UiNxhNmcfubZKrBjLw1umInlc0KbV7pxvbPYoRQx2pwExH+4Q+UjW8hPUt+EMEEJLH
+        fC7FVVMWmqqa+88Qt+ll9Rhi2ssmSfBOPeFmMChicEXkmlzutUwnFXHv4aw7MC+b6vnLi5
+        iJmUuhNujcXCJjsQZcjfsfj9Ue6qgm0BaYwy12sJmWeMDup7rE8rsOe7owBKHmoJ8vXvZg
+        T7muHnONglPF47wdMZxhJzfx5wJ/Nsv+V+1jCnCTou+6qzg7sOjxQSflypEVjQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661356203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ofO6K+OMSITsaGHE8wMcO5f9lytJ/iLlxdnlabEaK1I=;
+        b=rceyqpXABUnxU14b/oZvdTgDd0fvgTIrPw6CSbkO8vumkFD8F/DxDbYPEYopggl/o00niP
+        LVD0UfvOuNn2gZCQ==
+To:     suhui_kernel@163.com, mingo@kernel.org
+Cc:     akpm@linux-foundation.org, bp@alien8.de, dietmar.eggemann@arm.com,
+        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
+        luto@amacapital.net, mgorman@suse.de, peterz@infradead.org,
+        torvalds@linux-foundation.org, vincent.guittot@linaro.org,
+        nhuck@google.com, ndesaulniers@google.com, lukas.bulwahn@gmail.com,
+        masahiroy@kernel.org
+Subject: Re: [PATCH 09/15] sched/headers: Introduce
+ kernel/sched/build_policy.c and build multiple .c files there
+In-Reply-To: <20220823074702.2900118-1-suhui_kernel@163.com>
+References: <20220315084247.40783-10-mingo@kernel.org>
+ <20220823074702.2900118-1-suhui_kernel@163.com>
+Date:   Wed, 24 Aug 2022 17:50:02 +0200
+Message-ID: <87pmgpy72t.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [Linaro-mm-sig] [PATCH v3 6/9] dma-buf: Move dma-buf attachment
- to dynamic locking specification
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lima@lists.freedesktop.org
-References: <20220824102248.91964-1-dmitry.osipenko@collabora.com>
- <20220824102248.91964-7-dmitry.osipenko@collabora.com>
- <055c3c05-ac4c-430e-f2b9-08f000acf435@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <055c3c05-ac4c-430e-f2b9-08f000acf435@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,73 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 18:24, Christian König wrote:
-> Am 24.08.22 um 12:22 schrieb Dmitry Osipenko:
->> Move dma-buf attachment API functions to the dynamic locking
->> specification.
->> The strict locking convention prevents deadlock situations for dma-buf
->> importers and exporters.
->>
->> Previously, the "unlocked" versions of the attachment API functions
->> weren't taking the reservation lock and this patch makes them to take
->> the lock.
->>
->> Intel and AMD GPU drivers already were mapping the attached dma-bufs
->> under
->> the held lock during attachment, hence these drivers are updated to use
->> the locked functions.
->>
->> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->> ---
->>   drivers/dma-buf/dma-buf.c                  | 115 ++++++++++++++-------
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c    |   4 +-
->>   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c |   8 +-
->>   drivers/gpu/drm/i915/gem/i915_gem_object.c |  12 +++
->>   include/linux/dma-buf.h                    |  20 ++--
->>   5 files changed, 110 insertions(+), 49 deletions(-)
->>
->> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->> index 4556a12bd741..f2a5a122da4a 100644
->> --- a/drivers/dma-buf/dma-buf.c
->> +++ b/drivers/dma-buf/dma-buf.c
->> @@ -559,7 +559,7 @@ static struct file *dma_buf_getfile(struct dma_buf
->> *dmabuf, int flags)
->>    * 2. Userspace passes this file-descriptors to all drivers it wants
->> this buffer
->>    *    to share with: First the file descriptor is converted to a
->> &dma_buf using
->>    *    dma_buf_get(). Then the buffer is attached to the device using
->> - *    dma_buf_attach().
->> + *    dma_buf_attach_unlocked().
-> 
-> Now I get why this is confusing me so much.
-> 
-> The _unlocked postfix implies that there is another function which
-> should be called with the locks already held, but this is not the case
-> for attach/detach (because they always need to grab the lock themselves).
+On Tue, Aug 23 2022 at 15:47, suhui kernel wrote:
+> Hi Ingo, Since commit f96eca432015ddc1b621632488ebc345bca06791 merged, the
+> scripts/clang-tools/gen_compile_commands.py can't work very well.
+>
+>   In this patch the build_policy.c and build_utility.c include kernel/sched/xxx.c(
+> such as rt.c idle.c...), so it compile the build_utility.o build_policy.o directly,
+> and it won't generate kernel/sched/xxx.c(such as rt.o idle.o), so the gen_compile_commands.py
+> can't work.
 
-That's correct. The attach/detach ops of exporter can take the lock
-(like i915 exporter does it), hence importer must not grab the lock
-around dma_buf_attach() invocation.
+gen_compile_commands.py works perfectly fine and generates the entries
+for build_policy.o and built_utility.o as expected.
 
-> So I suggest to drop the _unlocked postfix for the attach/detach
-> functions. Another step would then be to unify attach/detach with
-> dynamic_attach/dynamic_detach when both have the same locking convention
-> anyway.
+gen_compile_commands.py scans the build tree for .cmd files and extracts
+the command line from those files into the the json file. As there is no
+.cmd file for the .c files which are included into build_*.c there wont
+be entries in the json file either.
 
-It's not a problem to change the name, but it's unclear to me why we
-should do it. The _unlocked postfix tells importer that reservation must
-be unlocked and it must be unlocked in case of dma_buf_attach().
+>   It will report "[8/23/2022, 3:24:06 PM] "rt.c" not found in "${workspaceFolder}/compile_commands.json".
+> 'includePath' from c_cpp_properties.json in folder 'linux' will be
+> used for this file instead.".
 
-Dropping the postfix will make dma_buf_attach() inconsistent with the
-rest of the _unlocked functions(?). Are you sure we need to rename it?
+No idea where this message comes from, but certainly not from
+gen_compile_commands.py because that generates the file.
 
-> Sorry that this is going so much back and forth, it's really complicated
-> to keep all the stuff in my head at the moment :)
+The clang-tidy kernel build target generates and uses that file and that
+works perfectly fine.
 
-Not a problem at all, I expected that it will take some time for this
-patchset to settle down.
+So what exactly broke?
 
--- 
-Best regards,
-Dmitry
+Thanks,
+
+        tglx
+
+

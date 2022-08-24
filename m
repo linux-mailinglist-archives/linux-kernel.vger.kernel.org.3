@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0987659FA05
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6724259FA07
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237529AbiHXMak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S237557AbiHXMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237508AbiHXMa3 (ORCPT
+        with ESMTP id S237479AbiHXMad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:30:29 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2F949B58
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:28 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id bf22so16863816pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:28 -0700 (PDT)
+        Wed, 24 Aug 2022 08:30:33 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7979F4D178
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:32 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so1428347pjj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=MXeTFOPwaEYUnBKivNI6IIvkTRiGbL/Q2wJpJf6zbRo=;
-        b=HQHBOY5lZpaZ+qTObtvVlZeS+Hz5VZapvG+JueRbRZDAdpGvaYCj8c8/syiQFxHkwS
-         kVHkbTjUtEvgd+t5P7OHQKd39CRHrxnCDEE71shIBzXXimjpRJE3sOrdX3wjls23Bf3j
-         dbaie1+5oEN2rUmiC3EN0HLElzS6rylQQq4pRPg8jhmzoIV88zduw4VhZe+0Vslu2f68
-         qgu33LfbfuQ+A0S4YHSWwCWmKuweh8DdKNx0/kFCxhBItfCbISadP6td2FUU+zXAAKpe
-         EJWh3vAGs7le17ILFjUc3Q/dVU2t4HsCWE6fANFYtVqxMiiKEFMYwbo12tGNZIDxkRPx
-         47+g==
+        bh=u8y/r/XRzUdXpFeOgWGRlYtl7JW+XG3qjD2H5X3t6VU=;
+        b=xoMLQ/pbCct2ail+mi5yAKNNxllhIFJ4jLnUZilIT1gXuHDI7VlCvxuidcviokMLCL
+         BpyH8EShKjQ/+Nz3eoMlu3ZxxqIIgo15Ontekj3/eHu2xinMuZQT8T7O9NQCuBie9QY2
+         PthruMNGFkU8zkLGyQVxqjAvTOL9a3dRFQJUWInOojPWVjpFXx1/TP+/AeXu4cXXuV7f
+         5J5MQlICHS3GgpHZN29vNN9q3aHf61FE5S6+X168CrtyittLFP8XfAfXJ29/+iT48JHR
+         khvdauqIZfKb8mBhLJMpQVnEsdLBBspTJ0X/EivsfG70LoD/QkuY6bpaZtAx8WAwl3Jc
+         Ar1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=MXeTFOPwaEYUnBKivNI6IIvkTRiGbL/Q2wJpJf6zbRo=;
-        b=Oy24M+X70Kum1tgew8B4kmCuk3UOh88ZD07mrol6WYb4+ojhiCHqVVrXaykFAVsgXh
-         YfAOUa/NxIOGSYPXuhfoYXoy3BaeM7slmPvPwYxZAFywODyeOq7ymZQY5cOEDJWzt/jW
-         GCfpfDDzZ2oxyhalqxknCXyYU7YpJxuQ/kKLp/Q0T7wpqrcSdlKs60+70q4Zx5dY0SP1
-         DlJzkShFMSQRtZew1lGZkwrUkloNtb18/2H1QYbH3gMBmLHSVGML/jj8+o6ItyzkpJg4
-         C/kfLPvB/xPV3Vyr6bomc5YdaPGtRHyWnz1N47UmILXWRXIW8mQSJbwp3h7fGE3sPxO/
-         /TQg==
-X-Gm-Message-State: ACgBeo2BPY7E83EZOLRFWLwLJ+quI4gDTy+WaIhdeKNjObTg5EM2sZk5
-        xvNyrQB0utVdBPZICsBHDr1n
-X-Google-Smtp-Source: AA6agR6x9GSi2J9BABOsuQCyB8ynh29Q1qxfh7AhFPTdGC0DNCf+hHeDlhOUt8BK0F2Wu0IjKfJxSw==
-X-Received: by 2002:a17:90b:1b10:b0:1fb:7baa:ce1c with SMTP id nu16-20020a17090b1b1000b001fb7baace1cmr4015390pjb.131.1661344227690;
-        Wed, 24 Aug 2022 05:30:27 -0700 (PDT)
+        bh=u8y/r/XRzUdXpFeOgWGRlYtl7JW+XG3qjD2H5X3t6VU=;
+        b=X9y/ar+d/iP3qw51CqBQq7lVfjF1EZ/c4NVLwyyzdRG25Q4/ev8PuXJ3//fy9kNhbi
+         IeNhiNXcXzw5LrGflZ4ZiTCyrXdXYxCD3cpu65Fh1vdsWupcQmsHparQ1VO6P/2PuYK7
+         vboFacbdZGeodQuYYglJTRX6MmKA/BmRaVtarJQ84Fgb/EPWRp+zBl21hhsAOdL4Y/Zo
+         0AeAh8f/7J3P/MsxFZaPcq9AyR6K+TA6QLnoYfolG/HUEUH3sc5uOCPSApcw/suQbsWF
+         d6I0Bb6CXXnJPB8fspV4y4jsfeP+0w+c9l0X/wv/8bqYqWmJ9N4W6ZiGQWf3iH1tHdOz
+         L+aw==
+X-Gm-Message-State: ACgBeo2EhENnoia4tLg5grNSZPagRRVWdSeOzu6xRaLFG+wVfL4IXN4a
+        0a0YQ++alGKLN6atPRcVocQhH9nhAfG3
+X-Google-Smtp-Source: AA6agR5lbQb07q07y2DyrSsy/8lWjg7mGKNQL+ZYzktgLJ385BIgC8leoq3f8ciKsvVmcjFupnMCxg==
+X-Received: by 2002:a17:902:ebc8:b0:172:549d:e392 with SMTP id p8-20020a170902ebc800b00172549de392mr28527048plg.141.1661344231883;
+        Wed, 24 Aug 2022 05:30:31 -0700 (PDT)
 Received: from localhost.localdomain ([117.207.24.28])
-        by smtp.gmail.com with ESMTPSA id b3-20020a1709027e0300b00173031308fdsm3539220plm.158.2022.08.24.05.30.23
+        by smtp.gmail.com with ESMTPSA id b3-20020a1709027e0300b00173031308fdsm3539220plm.158.2022.08.24.05.30.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 05:30:27 -0700 (PDT)
+        Wed, 24 Aug 2022 05:30:31 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     kishon@ti.com, gregkh@linuxfoundation.org, lpieralisi@kernel.org
 Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
         mie@igel.co.jp, kw@linux.com,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         stable@vger.kernel.org
-Subject: [PATCH v2 2/5] tools: PCI: Fix parsing the return value of IOCTLs
-Date:   Wed, 24 Aug 2022 18:00:07 +0530
-Message-Id: <20220824123010.51763-3-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 3/5] Documentation: PCI: endpoint: Use the correct return value of pcitest.sh
+Date:   Wed, 24 Aug 2022 18:00:08 +0530
+Message-Id: <20220824123010.51763-4-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220824123010.51763-1-manivannan.sadhasivam@linaro.org>
 References: <20220824123010.51763-1-manivannan.sadhasivam@linaro.org>
@@ -64,155 +64,198 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"pci_endpoint_test" driver now returns 0 for success and negative error
-code for failure. So adapt to the change by reporting FAILURE if the
-return value is < 0, and SUCCESS otherwise.
+The pci_endpoint_test driver has been fixed to return correct error no
+from IOCTL. In that process, the pcitest tool now returns SUCCESS and
+FAILED instead of OKAY and NOT_OKAY. So change that in documentation also.
 
 Cc: stable@vger.kernel.org #5.10
-Fixes: 3f2ed8134834 ("tools: PCI: Add a userspace tool to test PCI endpoint")
+Fixes: 16263d9e1ded ("Documentation: PCI: Add userguide for PCI endpoint test function")
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- tools/pci/pcitest.c | 41 +++++++++++++++++++++--------------------
- 1 file changed, 21 insertions(+), 20 deletions(-)
+ Documentation/PCI/endpoint/pci-test-howto.rst | 152 +++++++++---------
+ 1 file changed, 76 insertions(+), 76 deletions(-)
 
-diff --git a/tools/pci/pcitest.c b/tools/pci/pcitest.c
-index 441b54234635..a4e5b17cc3b5 100644
---- a/tools/pci/pcitest.c
-+++ b/tools/pci/pcitest.c
-@@ -18,7 +18,6 @@
+diff --git a/Documentation/PCI/endpoint/pci-test-howto.rst b/Documentation/PCI/endpoint/pci-test-howto.rst
+index 909f770a07d6..3bc43b9f9856 100644
+--- a/Documentation/PCI/endpoint/pci-test-howto.rst
++++ b/Documentation/PCI/endpoint/pci-test-howto.rst
+@@ -144,92 +144,92 @@ pcitest.sh Output
+ 	# pcitest.sh
+ 	BAR tests
  
- #define BILLION 1E9
+-	BAR0:           OKAY
+-	BAR1:           OKAY
+-	BAR2:           OKAY
+-	BAR3:           OKAY
+-	BAR4:           NOT OKAY
+-	BAR5:           NOT OKAY
++	BAR0:           SUCCESS
++	BAR1:           SUCCESS
++	BAR2:           SUCCESS
++	BAR3:           SUCCESS
++	BAR4:           FAILED
++	BAR5:           FAILED
  
--static char *result[] = { "NOT OKAY", "OKAY" };
- static char *irq[] = { "LEGACY", "MSI", "MSI-X" };
+ 	Interrupt tests
  
- struct pci_test {
-@@ -54,9 +53,9 @@ static int run_test(struct pci_test *test)
- 		ret = ioctl(fd, PCITEST_BAR, test->barnum);
- 		fprintf(stdout, "BAR%d:\t\t", test->barnum);
- 		if (ret < 0)
--			fprintf(stdout, "TEST FAILED\n");
-+			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
+-	SET IRQ TYPE TO LEGACY:         OKAY
+-	LEGACY IRQ:     NOT OKAY
+-	SET IRQ TYPE TO MSI:            OKAY
+-	MSI1:           OKAY
+-	MSI2:           OKAY
+-	MSI3:           OKAY
+-	MSI4:           OKAY
+-	MSI5:           OKAY
+-	MSI6:           OKAY
+-	MSI7:           OKAY
+-	MSI8:           OKAY
+-	MSI9:           OKAY
+-	MSI10:          OKAY
+-	MSI11:          OKAY
+-	MSI12:          OKAY
+-	MSI13:          OKAY
+-	MSI14:          OKAY
+-	MSI15:          OKAY
+-	MSI16:          OKAY
+-	MSI17:          NOT OKAY
+-	MSI18:          NOT OKAY
+-	MSI19:          NOT OKAY
+-	MSI20:          NOT OKAY
+-	MSI21:          NOT OKAY
+-	MSI22:          NOT OKAY
+-	MSI23:          NOT OKAY
+-	MSI24:          NOT OKAY
+-	MSI25:          NOT OKAY
+-	MSI26:          NOT OKAY
+-	MSI27:          NOT OKAY
+-	MSI28:          NOT OKAY
+-	MSI29:          NOT OKAY
+-	MSI30:          NOT OKAY
+-	MSI31:          NOT OKAY
+-	MSI32:          NOT OKAY
+-	SET IRQ TYPE TO MSI-X:          OKAY
+-	MSI-X1:         OKAY
+-	MSI-X2:         OKAY
+-	MSI-X3:         OKAY
+-	MSI-X4:         OKAY
+-	MSI-X5:         OKAY
+-	MSI-X6:         OKAY
+-	MSI-X7:         OKAY
+-	MSI-X8:         OKAY
+-	MSI-X9:         NOT OKAY
+-	MSI-X10:        NOT OKAY
+-	MSI-X11:        NOT OKAY
+-	MSI-X12:        NOT OKAY
+-	MSI-X13:        NOT OKAY
+-	MSI-X14:        NOT OKAY
+-	MSI-X15:        NOT OKAY
+-	MSI-X16:        NOT OKAY
++	SET IRQ TYPE TO LEGACY:         SUCCESS
++	LEGACY IRQ:     FAILED
++	SET IRQ TYPE TO MSI:            SUCCESS
++	MSI1:           SUCCESS
++	MSI2:           SUCCESS
++	MSI3:           SUCCESS
++	MSI4:           SUCCESS
++	MSI5:           SUCCESS
++	MSI6:           SUCCESS
++	MSI7:           SUCCESS
++	MSI8:           SUCCESS
++	MSI9:           SUCCESS
++	MSI10:          SUCCESS
++	MSI11:          SUCCESS
++	MSI12:          SUCCESS
++	MSI13:          SUCCESS
++	MSI14:          SUCCESS
++	MSI15:          SUCCESS
++	MSI16:          SUCCESS
++	MSI17:          FAILED
++	MSI18:          FAILED
++	MSI19:          FAILED
++	MSI20:          FAILED
++	MSI21:          FAILED
++	MSI22:          FAILED
++	MSI23:          FAILED
++	MSI24:          FAILED
++	MSI25:          FAILED
++	MSI26:          FAILED
++	MSI27:          FAILED
++	MSI28:          FAILED
++	MSI29:          FAILED
++	MSI30:          FAILED
++	MSI31:          FAILED
++	MSI32:          FAILED
++	SET IRQ TYPE TO MSI-X:          SUCCESS
++	MSI-X1:         SUCCESS
++	MSI-X2:         SUCCESS
++	MSI-X3:         SUCCESS
++	MSI-X4:         SUCCESS
++	MSI-X5:         SUCCESS
++	MSI-X6:         SUCCESS
++	MSI-X7:         SUCCESS
++	MSI-X8:         SUCCESS
++	MSI-X9:         FAILED
++	MSI-X10:        FAILED
++	MSI-X11:        FAILED
++	MSI-X12:        FAILED
++	MSI-X13:        FAILED
++	MSI-X14:        FAILED
++	MSI-X15:        FAILED
++	MSI-X16:        FAILED
+ 	[...]
+-	MSI-X2047:      NOT OKAY
+-	MSI-X2048:      NOT OKAY
++	MSI-X2047:      FAILED
++	MSI-X2048:      FAILED
  
- 	if (test->set_irqtype) {
-@@ -65,16 +64,18 @@ static int run_test(struct pci_test *test)
- 		if (ret < 0)
- 			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
+ 	Read Tests
  
- 	if (test->get_irqtype) {
- 		ret = ioctl(fd, PCITEST_GET_IRQTYPE);
- 		fprintf(stdout, "GET IRQ TYPE:\t\t");
--		if (ret < 0)
-+		if (ret < 0) {
- 			fprintf(stdout, "FAILED\n");
--		else
-+		} else {
- 			fprintf(stdout, "%s\n", irq[ret]);
-+			ret = 0;
-+		}
- 	}
+-	SET IRQ TYPE TO MSI:            OKAY
+-	READ (      1 bytes):           OKAY
+-	READ (   1024 bytes):           OKAY
+-	READ (   1025 bytes):           OKAY
+-	READ (1024000 bytes):           OKAY
+-	READ (1024001 bytes):           OKAY
++	SET IRQ TYPE TO MSI:            SUCCESS
++	READ (      1 bytes):           SUCCESS
++	READ (   1024 bytes):           SUCCESS
++	READ (   1025 bytes):           SUCCESS
++	READ (1024000 bytes):           SUCCESS
++	READ (1024001 bytes):           SUCCESS
  
- 	if (test->clear_irq) {
-@@ -83,34 +84,34 @@ static int run_test(struct pci_test *test)
- 		if (ret < 0)
- 			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
+ 	Write Tests
  
- 	if (test->legacyirq) {
- 		ret = ioctl(fd, PCITEST_LEGACY_IRQ, 0);
- 		fprintf(stdout, "LEGACY IRQ:\t");
- 		if (ret < 0)
--			fprintf(stdout, "TEST FAILED\n");
-+			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
+-	WRITE (      1 bytes):          OKAY
+-	WRITE (   1024 bytes):          OKAY
+-	WRITE (   1025 bytes):          OKAY
+-	WRITE (1024000 bytes):          OKAY
+-	WRITE (1024001 bytes):          OKAY
++	WRITE (      1 bytes):          SUCCESS
++	WRITE (   1024 bytes):          SUCCESS
++	WRITE (   1025 bytes):          SUCCESS
++	WRITE (1024000 bytes):          SUCCESS
++	WRITE (1024001 bytes):          SUCCESS
  
- 	if (test->msinum > 0 && test->msinum <= 32) {
- 		ret = ioctl(fd, PCITEST_MSI, test->msinum);
- 		fprintf(stdout, "MSI%d:\t\t", test->msinum);
- 		if (ret < 0)
--			fprintf(stdout, "TEST FAILED\n");
-+			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
+ 	Copy Tests
  
- 	if (test->msixnum > 0 && test->msixnum <= 2048) {
- 		ret = ioctl(fd, PCITEST_MSIX, test->msixnum);
- 		fprintf(stdout, "MSI-X%d:\t\t", test->msixnum);
- 		if (ret < 0)
--			fprintf(stdout, "TEST FAILED\n");
-+			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
- 
- 	if (test->write) {
-@@ -120,9 +121,9 @@ static int run_test(struct pci_test *test)
- 		ret = ioctl(fd, PCITEST_WRITE, &param);
- 		fprintf(stdout, "WRITE (%7ld bytes):\t\t", test->size);
- 		if (ret < 0)
--			fprintf(stdout, "TEST FAILED\n");
-+			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
- 
- 	if (test->read) {
-@@ -132,9 +133,9 @@ static int run_test(struct pci_test *test)
- 		ret = ioctl(fd, PCITEST_READ, &param);
- 		fprintf(stdout, "READ (%7ld bytes):\t\t", test->size);
- 		if (ret < 0)
--			fprintf(stdout, "TEST FAILED\n");
-+			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
- 
- 	if (test->copy) {
-@@ -144,14 +145,14 @@ static int run_test(struct pci_test *test)
- 		ret = ioctl(fd, PCITEST_COPY, &param);
- 		fprintf(stdout, "COPY (%7ld bytes):\t\t", test->size);
- 		if (ret < 0)
--			fprintf(stdout, "TEST FAILED\n");
-+			fprintf(stdout, "FAILED\n");
- 		else
--			fprintf(stdout, "%s\n", result[ret]);
-+			fprintf(stdout, "SUCCESS\n");
- 	}
- 
- 	fflush(stdout);
- 	close(fd);
--	return (ret < 0) ? ret : 1 - ret; /* return 0 if test succeeded */
-+	return ret;
- }
- 
- int main(int argc, char **argv)
+-	COPY (      1 bytes):           OKAY
+-	COPY (   1024 bytes):           OKAY
+-	COPY (   1025 bytes):           OKAY
+-	COPY (1024000 bytes):           OKAY
+-	COPY (1024001 bytes):           OKAY
++	COPY (      1 bytes):           SUCCESS
++	COPY (   1024 bytes):           SUCCESS
++	COPY (   1025 bytes):           SUCCESS
++	COPY (1024000 bytes):           SUCCESS
++	COPY (1024001 bytes):           SUCCESS
 -- 
 2.25.1
 

@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF2159FC62
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B27A59FC63
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238734AbiHXN4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        id S238843AbiHXN4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239207AbiHXNzv (ORCPT
+        with ESMTP id S239230AbiHXNzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:55:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5555B7BF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:54:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 204891FE9A;
-        Wed, 24 Aug 2022 13:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661349295; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YH9z4JU2bwTg40vWiFH3ozsp+vDepQBVhfttSpFUe/Q=;
-        b=djF3+5E/HPbHqJyAtNKK1WLWYUZbayvBv6M6oWQ09IxwtcZUVLtQKXy3fsF0LANJB49WsK
-        rYf48qkXeCM2BRLESMyBQwKwYosfZuS8qAELsKaT2stk40kLPZmywKGpIa7rP99lhpwP/1
-        a8o7fX/dA5h0h7gm9X+Xpe1oUxZTwPw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661349295;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YH9z4JU2bwTg40vWiFH3ozsp+vDepQBVhfttSpFUe/Q=;
-        b=IBhR97T2hKnM0VdB90QD6TK5aWwuVCNpM2ZDAqkdx48k4XG9pRwzkJp4ZK22DRnNPpTCNV
-        L0p+6OeaxMrVgXBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0CC613780;
-        Wed, 24 Aug 2022 13:54:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0tYeKq4tBmN9dwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 24 Aug 2022 13:54:54 +0000
-Message-ID: <e3f9bde2-7754-491a-78c0-a4a37dacbdd5@suse.cz>
-Date:   Wed, 24 Aug 2022 15:54:54 +0200
+        Wed, 24 Aug 2022 09:55:52 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6057FE70;
+        Wed, 24 Aug 2022 06:55:07 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso908348wmb.2;
+        Wed, 24 Aug 2022 06:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=+TfRFZdPPa8B51MYvjdd539ePUr6kSsCQn61FGO4GdE=;
+        b=aFe6EZILPi4mhBimcUcflE/kKSW5k3aY0tETzNxA0P11eSF6STOEpvtzCCW9Uev2fN
+         a4UwvQyI6/h/IQRuU+qk0IqsnJFOJuEQTq7YJ5rHOy705kyLy0xPDgWkpQ3XYPXGmq36
+         OdzQseeK+dwILujmlW5M4npWAjrq14G+FAQLsUTCSZI9ESeTJauVjnLHvifH9ACzQ/tw
+         dXUXYPGoKk2V8GjCwEGS1qFRrcAACizGai+V8ZzWm5nXSdl6dC9JnqmswFJni9lLyejj
+         4CzvrgCrCoRPO2AZlMPi8Rzl4MXUfeJD2Pob9EIzJ7g1u4dUfw/Mqo3tPETtxZ9Zn9Y+
+         IQ7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=+TfRFZdPPa8B51MYvjdd539ePUr6kSsCQn61FGO4GdE=;
+        b=H5GLJf/CHIL2bTqim0raoyKXRsb0ufYn48rmzuOLRd+LqGc+fXATJM/V3RgAqaBNYh
+         BXM6f1XjkY48/ddaeUUn6AazvZodVO8ZJOvmmWuQzVL/H61qYJdOQoTQhHF04EAE0o0R
+         RY641VSJxtnouTudGfKccjnFzHnxsmKPTWhSvuxWQY0kYVwhQ/xnmOUWfEKqAO9tOUri
+         bCAmG9d9R8ZoFP0ZMzk17tLeDcu2fME3Hb25KFvgMW2JvJyZ+eRkL6gDUJbmUXeqkkHi
+         SPbaKHCzzkmE68KRf80Tx9GBV+MTFRQRb2aXpi4Y4rsQA6e5fJxwefSCnIWF//47rUkQ
+         8ufQ==
+X-Gm-Message-State: ACgBeo3dPX5786Co9SqoTZ0yMnivMjUci92r3SVC7Mnlvil3rzjsAlZJ
+        lEPgItdD9IoDVz8GpCgEDVs=
+X-Google-Smtp-Source: AA6agR4QxBBWMr++j4x5qmO1sVOahCNUuQT962B+1Govc61YXOhMi0sKq2jcvX6UFcV/97fPHKtdPQ==
+X-Received: by 2002:a7b:cd0f:0:b0:3a5:ec59:daf0 with SMTP id f15-20020a7bcd0f000000b003a5ec59daf0mr5305484wmj.13.1661349305735;
+        Wed, 24 Aug 2022 06:55:05 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id v8-20020a05600c214800b003a540fef440sm2239530wml.1.2022.08.24.06.55.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 06:55:04 -0700 (PDT)
+Message-ID: <0557c9fa-1ec4-5413-78f6-f5d78f3f9ffb@gmail.com>
+Date:   Wed, 24 Aug 2022 15:55:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [PATCH 1/9] slub: Make PREEMPT_RT support less convoluted
+Subject: Re: [PATCH v2 0/7] Input: mt6779-keypad - double keys support
 Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>, linux-mm@kvack.org
-References: <20220817162703.728679-1-bigeasy@linutronix.de>
- <20220817162703.728679-2-bigeasy@linutronix.de>
- <ffb4012b-e038-a92e-c84c-bb1d061fe29f@suse.cz>
- <YwYm31FKQJh/CVBn@linutronix.de>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <YwYm31FKQJh/CVBn@linutronix.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Fabien Parent <parent.f@gmail.com>
+References: <20220720-mt8183-keypad-v2-0-6d42c357cb76@baylibre.com>
+ <YvQ3A2/Pop4YzzQ8@google.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <YvQ3A2/Pop4YzzQ8@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,48 +84,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 15:25, Sebastian Andrzej Siewior wrote:
-> On 2022-08-23 19:15:43 [+0200], Vlastimil Babka wrote:
->>> +#define slub_local_irq_save(flags)	local_irq_save(flags)
->>> +#define slub_local_irq_restore(flags)	local_irq_restore(flags)
+
+
+On 11/08/2022 00:53, Dmitry Torokhov wrote:
+> On Tue, Jul 26, 2022 at 02:56:05PM +0200, Mattijs Korpershoek wrote:
+>> The MediaTek keypad controller has multiple operating modes:
+>> * single key detection (currently implemented)
+>> * double key detection
 >>
->> Note these won't be neccessary anymore after
->> https://lore.kernel.org/linux-mm/20220823170400.26546-6-vbabka@suse.cz/T/#u
-> 
-> Okay, let me postpone that one and rebase what is left on top.
-> 
->>> @@ -482,7 +488,7 @@ static inline bool __cmpxchg_double_slab(struct kmem_cache *s, struct slab *slab
->>>   		void *freelist_new, unsigned long counters_new,
->>>   		const char *n)
->>>   {
->>> -	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
->>> +	if (use_lockless_fast_path())
->>>   		lockdep_assert_irqs_disabled();
+>> With double key detection, each (row,column) is a group that can detect
+>> two keys in the key matrix.
+>> This minimizes the overall pin counts for cost reduction.
+>> However, pressing multiple keys in the same group will not be
+>> detected properly.
 >>
->> This test would stay after the patch I referenced above. But while this
->> change will keep testing the technically correct thing, the name would be
->> IMHO misleading here, as this is semantically not about the lockless fast
->> path, but whether we need to have irqs disabled to avoid a deadlock due to
->> irq incoming when we hold the bit_spin_lock() and its handler trying to
->> acquire it as well.
+>> On some boards, like mt8183-pumpkin, double key detection is used.
+>>
+>> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 > 
-> Color me confused. Memory is never allocated in-IRQ context on
-> PREEMPT_RT. Therefore I don't understand why interrupts must be disabled
-> for the fast path (unless that comment only applied to !RT).
+> Applied patches 1 through 5 (leaving dts patches out), thank you.
+> 
 
-Yes that only applied to !RT. Hence why the assert is there only for !RT.
+Applied 6 and 7 now. Thanks!
 
-> It could be about preemption since spinlock, local_lock don't disable
-> preemption and so another allocation on the same CPU is possible. But
-> then you say "we hold the bit_spin_lock()" and this one disables
-> preemption. This means nothing can stop the bit_spin_lock() owner from
-> making progress and since there is no memory allocation in-IRQ, we can't
-> block on the same bit_spin_lock() on the same CPU.
-
-Yeah, realizing that this is true on RT led to the recent patch I 
-referenced. Initially when converting SLUB to RT last year I didn't 
-realize this detail, and instead replaced the irq disabling done (only 
-on !RT) by e.g. local_lock_irqsave with the manual local_irq_save().
-
-> Sebastian
-
+>>
+>> ---
+>> Changes in v2:
+>> - bindings: add matrix-keymap justification in commit message (Krzysztof)
+>> - bindings: switch from double-keys(boolean) to keys-per-group(uint32) (Krzysztof)
+>> - driver: add a function pointer for row/column calculation (Angelo)
+>> - Link to v1: https://lore.kernel.org/r/20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com
+>>
+>> ---
+>> Fabien Parent (2):
+>>        arm64: dts: mediatek: mt8183: add keyboard node
+>>        arm64: dts: mediatek: mt8183-pumpkin: add keypad support
+>>
+>> Mattijs Korpershoek (5):
+>>        MAINTAINERS: input: add mattijs for mt6779-keypad
+>>        dt-bindings: mediatek,mt6779-keypad: use unevaluatedProperties
+>>        dt-bindings: mediatek,mt6779-keypad: add mediatek,keys-per-group
+>>        Input: mt6779-keypad - prepare double keys support with calc_row_col
+>>        Input: mt6779-keypad - support double keys matrix
+>>
+>>   .../bindings/input/mediatek,mt6779-keypad.yaml     |  8 ++++-
+>>   MAINTAINERS                                        |  6 ++++
+>>   arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    | 21 +++++++++++
+>>   arch/arm64/boot/dts/mediatek/mt8183.dtsi           |  9 +++++
+>>   drivers/input/keyboard/mt6779-keypad.c             | 41 ++++++++++++++++++++--
+>>   5 files changed, 82 insertions(+), 3 deletions(-)
+>> ---
+>> base-commit: 668af1b6548837b44a2bfe65dcbae6b250adbf63
+>> change-id: 20220720-mt8183-keypad-20aa77106ff0
+>>
+>> Best regards,
+>> -- 
+>> Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> 

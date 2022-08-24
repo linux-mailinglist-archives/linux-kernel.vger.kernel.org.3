@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC35159F39C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A1D59F39D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235026AbiHXGc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S235063AbiHXGdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiHXGc0 (ORCPT
+        with ESMTP id S234026AbiHXGdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:32:26 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A036D7E83C
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:32:24 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MCGSL05SyzGpmK;
-        Wed, 24 Aug 2022 14:30:42 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 14:31:50 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 14:31:49 +0800
-Message-ID: <4063da85-b110-4afd-2023-59d4da41c27f@huawei.com>
-Date:   Wed, 24 Aug 2022 14:31:48 +0800
+        Wed, 24 Aug 2022 02:33:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D29D7F0B4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:33:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F759B82365
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:33:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0300C43470;
+        Wed, 24 Aug 2022 06:33:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661322810;
+        bh=8kwtJX3bSOriP9VPSA40UiAk54/reUPTo+73q/qPh/I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EduN1P9tPAYeIwUR4X+tbVZQ2CjasVsIgE3+8ybkq4S6/qzf3GsqI+3KIdblKUctX
+         HVUqSbPekR0PQq3rV2oLcGjHgVwq1+fdljXSO+nyKyBEU/H+rKTsOTUwdIgVDwc2ZX
+         s1htuFgNK11ngX+eJrwrQkwd+lfX4vIdKouv1U39RV3mJ55shs36Pt2VMWpV5UfcwT
+         PNaP4yU5HUCD2z4Vfbo4xsEarMb1+Afl8UuKge9AT14EWVxX87EnEtwQ7SunKLxBlP
+         4LakKRT8GATWy0CXdoc5QYEzJGnsk2w8AWeNYi61VSH/kce0khejRTvgo4qzJYkvz7
+         JYsKlhHzIMonQ==
+Message-ID: <5688e47a-fc2c-457c-fa78-071733bf06f3@kernel.org>
+Date:   Wed, 24 Aug 2022 08:33:25 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v2 0/2]riscv: some refactorings realted to uaccess
- and extable
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, <Conor.Dooley@microchip.com>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>
-References: <20220815032025.2685516-1-tongtiangen@huawei.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <20220815032025.2685516-1-tongtiangen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH -next 1/2] rv/monitors: add 'static' qualifier for local
+ symbols
+Content-Language: en-US
+To:     Zeng Heng <zengheng4@huawei.com>, mingo@redhat.com,
+        rostedt@goodmis.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220824034357.2014202-1-zengheng4@huawei.com>
+ <20220824034357.2014202-2-zengheng4@huawei.com>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220824034357.2014202-2-zengheng4@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,26 +59,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi riscv maintainers, kindly ping...
+On 8/24/22 05:43, Zeng Heng wrote:
+> The sparse tool complains as follows:
+> 
+> kernel/trace/rv/monitors/wwnr/wwnr.c:18:19:
+> warning: symbol 'rv_wwnr' was not declared. Should it be static?
+> 
+> The `rv_wwnr` symbol is not dereferenced by other extern files,
+> so add static qualifier for it.
+> 
+> So does wip module.
+> 
+> Fixes:	ccc319dcb450 ("rv/monitor: Add the wwnr monitor")
+> Fixes:	8812d21219b9 ("rv/monitor: Add the wip monitor skeleton created by dot2k")
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 
-Thanks,
-Tong.
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-在 2022/8/15 11:20, Tong Tiangen 写道:
-> This patchset do some refactorings related to riscv's uaccess and extable,
-> mainly for the usage of __get/put_user_nocheck() which not distinguish user
-> access and kernel access.
-> 
-> v1 -> v2:
->    According to Conor's suggestion, split into two logically independent
->    patches.
-> 
-> Tong Tiangen (2):
->    riscv: uaccess: rename __get/put_user_nocheck to __get/put_mem_nocheck
->    riscv: extable: add new extable type EX_TYPE_KACCESS_ERR_ZERO support
-> 
->   arch/riscv/include/asm/asm-extable.h |  12 ++
->   arch/riscv/include/asm/uaccess.h     | 162 +++++++++++++--------------
->   arch/riscv/mm/extable.c              |   1 +
->   3 files changed, 94 insertions(+), 81 deletions(-)
-> 
+Thanks!
+-- Daniel

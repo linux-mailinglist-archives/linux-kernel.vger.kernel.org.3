@@ -2,593 +2,529 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216B159FA02
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEF959F9FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbiHXMaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S237496AbiHXMaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237055AbiHXMaM (ORCPT
+        with ESMTP id S237457AbiHXMaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:30:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0460721E0F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661344210; x=1692880210;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bX544JOQI9KoTn/T2/FLxNw3OO3dnKZLffKPXZxjp54=;
-  b=VVH6O5LDs+d5ZoPqXsEbXkpkJTszwII8l5RQcaYJUmQqdQC6ztOp1v3b
-   nijXQxp8KXpgTwPsWk7ZPkcXTeOdMFdmRKeg9MD6iis/cEN8zcLyWK59C
-   rsoof7DV4ZsZzLq0BsM607AGSzszXRh/g2Wi413jgh8vLkGw7MF+UmLii
-   Zf9vwGw3D3KDth+UQ2y7p013d6fXbFwleQ0CKPzALuyGvDxfMhK9piFDa
-   E2swKyBtD745mMmLa+mmsZJe5ynZKq1WVvM5z6rKjofbp1m2svNlGvrFL
-   4s/OBtKfQFS5mY8AsaJtFLTJkN561HBkbiUdyB6vNlzXJS1uSaBwrBQw2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="273700720"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="273700720"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 05:30:10 -0700
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="670482060"
-Received: from zhaohaif-mobl1.ccr.corp.intel.com (HELO [10.254.209.28]) ([10.254.209.28])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 05:30:08 -0700
-Message-ID: <06c215c6-cbae-d6b9-312c-6535e51a3128@linux.intel.com>
-Date:   Wed, 24 Aug 2022 20:30:05 +0800
+        Wed, 24 Aug 2022 08:30:25 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227D05B060
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:24 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id w29so10777541pfj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=jx5D2mTV+ExxV8ji9PCBz7vQf+NrUEKj5YJ/dsZ+EGc=;
+        b=lUY19Y9Hd9OS3UivjnlZCoXY1Bh/MTUqfkDMO9l+Ox5gj32ooZicggfrJnvlMXKAxd
+         i6VcOEC9xDtmg24ihkGf9Bwg0RxIXqixVTMjVD+GZeN7ef5DdDVkFH5+DHSC9RPtO9V4
+         jth5ptsa24LpkiVe5qvE6wUGZyi5npyqj+m8k2axWb3fVLkZTlxCuzsOTa0xXY21QB6Z
+         gEp/5lAH7mxAkaw1gmfsBWG/yAv9K3ssyIdSpy2Lxcuvv6q1JlNqo2goBU4dYUOOoif2
+         BnMNA10IN8KB8dU0VZdV/C4Uo43b7vpAVGp3FCFR1c6EKo1L2vnAbMGTlHnP1khhB6Ga
+         kR/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=jx5D2mTV+ExxV8ji9PCBz7vQf+NrUEKj5YJ/dsZ+EGc=;
+        b=0BRxucTqf2uKCbmuyVYZL+hisFWX7xtruY7KBz14i0yCLN5H8G50LyeZ+s9j/ZeU6o
+         afHfeL8h+sHJ6SOFqa/F6HpmfZxUCjn67vg7Ys2f8hr+wtGEnB413Ke6pHQ2ox/j1kKq
+         gIdyJRDe6ikUkk7RWrwyc45lkIodNmJC3DN01s/xKh9uR7I6rZVLwf1o/joniuDcBI3M
+         Fhqt9DmCMWQf0GFAZr5mwP0g4ccS0siXt9QQd3PrRce/BGOdWRdce1G6osrUBFZFzNEU
+         ehEp9pk0Yu9Hms4sZsIM32UA8FGV0G7ZLNy1AZK2d/Im22RkCDj5by+1jQXDHoF6L54+
+         jeOw==
+X-Gm-Message-State: ACgBeo3vHHN7j03kj08HDBiAVnqJFewMf4WKqf6M2S6stgXtOMW+Bl8I
+        l3m0LwL5ai+C8dlBeV0YElJu
+X-Google-Smtp-Source: AA6agR7P9b6IBewqy9DpjGisAzgO74uYCSE7ZBWKK8Cwk+n3NWqNf/c1nYyvvIjanHpCkx2UCcg9ig==
+X-Received: by 2002:a05:6a00:842:b0:52e:2515:d657 with SMTP id q2-20020a056a00084200b0052e2515d657mr29276965pfk.31.1661344223508;
+        Wed, 24 Aug 2022 05:30:23 -0700 (PDT)
+Received: from localhost.localdomain ([117.207.24.28])
+        by smtp.gmail.com with ESMTPSA id b3-20020a1709027e0300b00173031308fdsm3539220plm.158.2022.08.24.05.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 05:30:23 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@ti.com, gregkh@linuxfoundation.org, lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mie@igel.co.jp, kw@linux.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 1/5] misc: pci_endpoint_test: Fix the return value of IOCTL
+Date:   Wed, 24 Aug 2022 18:00:06 +0530
+Message-Id: <20220824123010.51763-2-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220824123010.51763-1-manivannan.sadhasivam@linaro.org>
+References: <20220824123010.51763-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] iommu/iova: Optimize alloc_iova with rbtree_augmented
-To:     Peng Zhang <zhangpeng.00@bytedance.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com
-References: <20220824095139.66477-1-zhangpeng.00@bytedance.com>
-From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
-In-Reply-To: <20220824095139.66477-1-zhangpeng.00@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+IOCTLs are supposed to return 0 for success and negative error codes for
+failure. Currently, this driver is returning 0 for failure and 1 for
+success, that's not correct. Hence, fix it!
 
-在 2022/8/24 17:51, Peng Zhang 写道:
-> The current algorithm of alloc_iova is to scan all iovas until it finds
-> a gap that satisfies the condition to allocate. This can be very slow in
-> some scenarios. We can optimize alloc_iova() from time complexity O(n)
-What kind of scenarion for example ?
-> to O(log(n)).
->
-> We can make a test like this:
-> Write a module and initialize iova_domain with 4k granule.
-> Then using a user-mode program to call the module to allocate iova of
-> size 1 2^20 times within the allocation limit of 2^20. This is single
-> threaded and the low 4g space is full after 2^20 allocations.
->
-> Finally loop the following three steps:
-> 1. Randomly releases an iova.
->
-> 2. Allocate an iova of size 1 within the allocation limit of 2^20.
->
-> 3. Allocate an iova of size 1 within the allocation limit of 2^20.
->     This will fail and take a very long time, because max32_alloc_size
->     is reset whenever an iova is released.
->
-> The data below is the result of repeating the three steps 1024 times in
-> a physical machine with a CPU clocked at 2.30GHz
->
-> Before improvement:
-> Tracing 1 functions for "alloc_iova"...
+Cc: stable@vger.kernel.org #5.10
+Fixes: 2c156ac71c6b ("misc: Add host side PCI driver for PCI test function device")
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/misc/pci_endpoint_test.c | 163 ++++++++++++++-----------------
+ 1 file changed, 76 insertions(+), 87 deletions(-)
 
-Out of curiosity, do you have number about "alloc_iova + free_iova" and
-
-"alloc_iova_fast + free_iova_fast" ?
-
->     nsecs             : count    distbution
-
-s/distbution/distribution ?
-
-
-Thanks,
-
-Ethan
-
->       256 -> 511      : 1594    |                                      |
->       512 -> 1023     : 1030686 |**************************************|
->      1024 -> 2047     : 14661   |                                      |
->      2048 -> 4095     : 1730    |                                      |
->      4096 -> 8191     : 634     |                                      |
->      8192 -> 16383    : 20      |                                      |
->     16384 -> 32767    : 2       |                                      |
->     32768 -> 65535    : 2       |                                      |
->     65536 -> 131071   : 3       |                                      |
->    131072 -> 262143   : 6       |                                      |
->    262144 -> 524287   : 8       |                                      |
->    524288 -> 1048575  : 19      |                                      |
->   1048576 -> 2097151  : 35      |                                      |
->   2097152 -> 4194303  : 55      |                                      |
->   4194304 -> 8388607  : 117     |                                      |
->   8388608 -> 16777215 : 165     |                                      |
-> 16777216 -> 33554431 : 1112    |                                      |
-> avg = 33867 nsecs, total: 35589643563 nsecs, count: 1050849
->
-> With improvement:
-> Tracing 1 functions for "alloc_iova"...
-> nsecs             : count     distribution
->    512 -> 1023     : 1033561  |****************************************|
->   1024 -> 2047     : 13631    |                                        |
->   2048 -> 4095     : 2981     |                                        |
->   4096 -> 8191     : 448      |                                        |
->   8192 -> 16383    : 5        |                                        |
-> 16384 -> 32767    : 1        |                                        |
-> avg = 696 nsecs, total: 732196323 nsecs, count: 1050627
->
-> Introduce the improved algorithm:
->
-> ------------------------------------------------------------------------
-> | gap1  |iova1| gap2 |iova2| gap3 |iova3|   gap4  |iova4| gap5  |anchor|
-> ------------------------------------------------------------------------
->
-> let A = allocatable_size
-> let B = max_allocatable_size
->                      ____________
->                    /    iova2     \      B = max( left_child->B,
->                   |       A        |              right_child->B,
->                    \      B       /               A)
->                      ------------
->                     /            \
->                    /              \
->      ____________                    ____________
->    /    iova1     \                /    iova4     \
->   |       A        |              |       A        |
->    \      B       /                \      B        /
->      ------------                    ------------
->                                     /            \
->                                    /              \
->                      ____________                    ____________
->                    /    iova3     \                /    anchor    \
->                   |       A        |              |       A        |
->                    \      B       /                \      B        /
->                      ------------                    ------------
->
-> Define the gap of a iova is the gap between the iova and it's previous
-> iova. Such as the gap of iova3 is gap3.This gap can be used to allocate.
->
-> Add three variables to struct iova.
-> prev_iova:
->           point to the previous iova, sush as iova3->prev_iova point to
->           iova2.
->
-> allocatable_size:
->           allocatable_size is the max size can be allocated from a gap.
->           It is not the length of a gap because the allocated address
->           may need to be aligned.
->
-> max_allocatable_size:
->           max_allocatable_size is the max allocatable_size of all iova's
->           gap in the subtree.
->
->           max_allocatable_size = max( left_child->max_allocatable_size,
->                                       right_child->max_allocatable_size,
->                                       allocatable_size)
->
-> We can use rbtree_augmented to maintain max_allocatable_size in time
-> complexity O(log(n)).
->
-> In the rbtree, with the max_allocatable_size and allocatable_size,
-> searching the gap to allocate is fast and the time complexity is
-> O(log(n)).
->
-> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
-> ---
->   drivers/iommu/iova.c | 265 ++++++++++++++++++++++++++++++++-----------
->   include/linux/iova.h |   5 +-
->   2 files changed, 204 insertions(+), 66 deletions(-)
->
-> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-> index db77aa675145..79625ac82560 100644
-> --- a/drivers/iommu/iova.c
-> +++ b/drivers/iommu/iova.c
-> @@ -43,6 +43,56 @@ static struct iova *to_iova(struct rb_node *node)
->   	return rb_entry(node, struct iova, node);
->   }
->   
-> +/*
-> + * We can't judge whether it can be allocated only by a given interval length
-> + * because the address may be aligned.
-> + * This function computes the max allocatable size for a given interval.
-> + * The time complexity of this function is O(log(n)).
-> + */
-> +static unsigned long __compute_allocatable_size(unsigned long lo,
-> +						unsigned long hi)
-> +{
-> +	unsigned long allocatable_size = 0;
-> +
-> +	if (lo == 0)
-> +		return hi;
-> +	while (lo < hi) {
-> +		unsigned long delta = 1UL << __ffs64(lo);
-> +
-> +		if (hi - lo <= delta) {
-> +			allocatable_size = max(allocatable_size, hi - lo);
-> +			break;
-> +		}
-> +		allocatable_size = max(allocatable_size, delta);
-> +		lo += delta;
-> +	}
-> +	return allocatable_size;
-> +}
-> +
-> +static inline unsigned long prev_iova_high(struct iova *iova)
-> +{
-> +	return iova->prev_iova ? iova->prev_iova->pfn_hi + 1 : 0;
-> +}
-> +
-> +static inline unsigned long iova_compute_allocatable_size(struct iova *iova)
-> +{
-> +	return __compute_allocatable_size(prev_iova_high(iova), iova->pfn_lo);
-> +}
-> +
-> +static inline unsigned long iova_get_allocatable_size(struct iova *iova)
-> +{
-> +	return iova->allocatable_size;
-> +}
-> +
-> +RB_DECLARE_CALLBACKS_MAX(static, iova_gap_callbacks, struct iova, node,
-> +			 unsigned long, max_allocatable_size,
-> +			 iova_get_allocatable_size)
-> +
-> +static inline void iova_max_allocatable_size_update(struct iova *iova)
-> +{
-> +	iova_gap_callbacks_propagate(&iova->node, NULL);
-> +}
-> +
->   void
->   init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->   	unsigned long start_pfn)
-> @@ -63,8 +113,16 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->   	iovad->dma_32bit_pfn = 1UL << (32 - iova_shift(iovad));
->   	iovad->max32_alloc_size = iovad->dma_32bit_pfn;
->   	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
-> +	iovad->anchor.prev_iova = NULL;
-> +	iovad->anchor.allocatable_size =
-> +				__compute_allocatable_size(0, IOVA_ANCHOR);
-> +	iovad->anchor.max_allocatable_size  = iovad->anchor.allocatable_size;
-> +
->   	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
->   	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
-> +
-> +	if (start_pfn)
-> +		reserve_iova(iovad, 0, start_pfn - 1);
->   }
->   EXPORT_SYMBOL_GPL(init_iova_domain);
->   
-> @@ -87,7 +145,8 @@ __cached_rbnode_insert_update(struct iova_domain *iovad, struct iova *new)
->   }
->   
->   static void
-> -__cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free)
-> +__cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free,
-> +			      struct rb_node *next)
->   {
->   	struct iova *cached_iova;
->   
-> @@ -95,51 +154,32 @@ __cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free)
->   	if (free == cached_iova ||
->   	    (free->pfn_hi < iovad->dma_32bit_pfn &&
->   	     free->pfn_lo >= cached_iova->pfn_lo))
-> -		iovad->cached32_node = rb_next(&free->node);
-> +		iovad->cached32_node = next;
->   
->   	if (free->pfn_lo < iovad->dma_32bit_pfn)
->   		iovad->max32_alloc_size = iovad->dma_32bit_pfn;
->   
->   	cached_iova = to_iova(iovad->cached_node);
->   	if (free->pfn_lo >= cached_iova->pfn_lo)
-> -		iovad->cached_node = rb_next(&free->node);
-> +		iovad->cached_node = next;
->   }
->   
-> -static struct rb_node *iova_find_limit(struct iova_domain *iovad, unsigned long limit_pfn)
-> +static struct rb_node *iova_find_limit(struct iova_domain *iovad,
-> +				       unsigned long limit_pfn)
->   {
-> -	struct rb_node *node, *next;
-> -	/*
-> -	 * Ideally what we'd like to judge here is whether limit_pfn is close
-> -	 * enough to the highest-allocated IOVA that starting the allocation
-> -	 * walk from the anchor node will be quicker than this initial work to
-> -	 * find an exact starting point (especially if that ends up being the
-> -	 * anchor node anyway). This is an incredibly crude approximation which
-> -	 * only really helps the most likely case, but is at least trivially easy.
-> -	 */
-> -	if (limit_pfn > iovad->dma_32bit_pfn)
-> -		return &iovad->anchor.node;
-> -
-> -	node = iovad->rbroot.rb_node;
-> -	while (to_iova(node)->pfn_hi < limit_pfn)
-> -		node = node->rb_right;
-> -
-> -search_left:
-> -	while (node->rb_left && to_iova(node->rb_left)->pfn_lo >= limit_pfn)
-> -		node = node->rb_left;
-> -
-> -	if (!node->rb_left)
-> -		return node;
-> -
-> -	next = node->rb_left;
-> -	while (next->rb_right) {
-> -		next = next->rb_right;
-> -		if (to_iova(next)->pfn_lo >= limit_pfn) {
-> -			node = next;
-> -			goto search_left;
-> -		}
-> -	}
-> +	struct rb_node *curr = iovad->rbroot.rb_node;
->   
-> -	return node;
-> +	while (curr) {
-> +		struct iova *iova = to_iova(curr);
-> +
-> +		if (limit_pfn - 1 > iova->pfn_hi)
-> +			curr = curr->rb_right;
-> +		else if (limit_pfn <= prev_iova_high(iova))
-> +			curr = curr->rb_left;
-> +		else
-> +			break;
-> +	}
-> +	return curr;
->   }
->   
->   /* Insert the iova into domain rbtree by holding writer lock */
-> @@ -148,6 +188,7 @@ iova_insert_rbtree(struct rb_root *root, struct iova *iova,
->   		   struct rb_node *start)
->   {
->   	struct rb_node **new, *parent = NULL;
-> +	struct iova *next_iova;
->   
->   	new = (start) ? &start : &(root->rb_node);
->   	/* Figure out where to put new node */
-> @@ -166,61 +207,143 @@ iova_insert_rbtree(struct rb_root *root, struct iova *iova,
->   		}
->   	}
->   	/* Add new node and rebalance tree. */
-> +
->   	rb_link_node(&iova->node, parent, new);
-> -	rb_insert_color(&iova->node, root);
-> +
-> +	next_iova = to_iova(rb_next(&iova->node));
-> +	iova->prev_iova = next_iova->prev_iova;
-> +	next_iova->prev_iova = iova;
-> +
-> +	iova->allocatable_size = iova_compute_allocatable_size(iova);
-> +	next_iova->allocatable_size = iova_compute_allocatable_size(next_iova);
-> +
-> +	/*
-> +	 * Do't swap the following two lines, because next_iova is the ancestor
-> +	 * of iova and updating iova first is faster.
-> +	 */
-> +	iova_max_allocatable_size_update(iova);
-> +	iova_max_allocatable_size_update(next_iova);
-> +
-> +	rb_insert_augmented(&iova->node, root, &iova_gap_callbacks);
-> +}
-> +
-> +static inline bool check_interval(unsigned long lo, unsigned long hi,
-> +				  unsigned long limit_pfn, unsigned long size,
-> +				  unsigned long align_mask)
-> +{
-> +	hi = min(hi, limit_pfn);
-> +	if (lo >= hi)
-> +		return false;
-> +	if (hi >= size && ((hi - size) & align_mask) >= lo)
-> +		return true;
-> +	return false;
->   }
->   
->   static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
->   		unsigned long size, unsigned long limit_pfn,
->   			struct iova *new, bool size_aligned)
->   {
-> -	struct rb_node *curr, *prev;
-> -	struct iova *curr_iova;
->   	unsigned long flags;
-> -	unsigned long new_pfn, retry_pfn;
-> +	struct rb_node *curr;
-> +	struct rb_node *parent;
-> +	struct iova *curr_iova;
->   	unsigned long align_mask = ~0UL;
-> -	unsigned long high_pfn = limit_pfn, low_pfn = iovad->start_pfn;
-> +	bool ignore = false;
->   
->   	if (size_aligned)
->   		align_mask <<= fls_long(size - 1);
->   
-> -	/* Walk the tree backwards */
->   	spin_lock_irqsave(&iovad->iova_rbtree_lock, flags);
-> +
->   	if (limit_pfn <= iovad->dma_32bit_pfn &&
->   			size >= iovad->max32_alloc_size)
->   		goto iova32_full;
->   
->   	curr = __get_cached_rbnode(iovad, limit_pfn);
->   	curr_iova = to_iova(curr);
-> -	retry_pfn = curr_iova->pfn_hi + 1;
->   
-> -retry:
-> -	do {
-> -		high_pfn = min(high_pfn, curr_iova->pfn_lo);
-> -		new_pfn = (high_pfn - size) & align_mask;
-> -		prev = curr;
-> -		curr = rb_prev(curr);
-> -		curr_iova = to_iova(curr);
-> -	} while (curr && new_pfn <= curr_iova->pfn_hi && new_pfn >= low_pfn);
-> -
-> -	if (high_pfn < size || new_pfn < low_pfn) {
-> -		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
-> -			high_pfn = limit_pfn;
-> -			low_pfn = retry_pfn;
-> -			curr = iova_find_limit(iovad, limit_pfn);
-> -			curr_iova = to_iova(curr);
-> -			goto retry;
-> +	if (limit_pfn >= curr_iova->pfn_lo &&
-> +	    curr_iova->allocatable_size >= size)
-> +		goto found;
-> +
-> +	/* If limit_pfn > dma_32bit_pfn, this could be faster. */
-> +	if (limit_pfn > iovad->dma_32bit_pfn) {
-> +		curr_iova = to_iova(&iovad->anchor.node);
-> +
-> +		while (curr_iova) {
-> +			if (check_interval(prev_iova_high(curr_iova),
-> +					   curr_iova->pfn_lo, limit_pfn,
-> +					   size, align_mask))
-> +				goto found;
-> +			curr_iova = curr_iova->prev_iova;
->   		}
->   		iovad->max32_alloc_size = size;
->   		goto iova32_full;
->   	}
->   
-> +	curr = iova_find_limit(iovad, limit_pfn);
-> +	curr_iova = to_iova(curr);
-> +
-> +	if (check_interval(prev_iova_high(curr_iova),
-> +			   curr_iova->pfn_lo, limit_pfn,
-> +			   size, align_mask))
-> +		goto found;
-> +
-> +	while (true) {
-> +		/* Check left subtree */
-> +		if (!ignore && curr->rb_left) {
-> +			curr_iova = to_iova(curr->rb_left);
-> +			if (curr_iova->max_allocatable_size >= size)
-> +				goto check_subtree;
-> +		}
-> +
-> +		parent = rb_parent(curr);
-> +		if (parent == NULL)
-> +			break;
-> +		/*
-> +		 * If current node is the left child of it's parent,
-> +		 * the parent node and the parent's right sub_tree should not
-> +		 * to be checked because they exceed the limit_pfn.
-> +		 */
-> +		ignore = parent->rb_left == curr;
-> +		curr = parent;
-> +
-> +		/* Check current node. */
-> +		if (!ignore) {
-> +			curr_iova = to_iova(curr);
-> +			if (curr_iova->allocatable_size >= size)
-> +				goto found;
-> +		}
-> +	}
-> +	if (limit_pfn >= iovad->dma_32bit_pfn)
-> +		iovad->max32_alloc_size = size;
-> +	goto iova32_full;
-> +
-> +check_subtree:
-> +	while (true) {
-> +		if (curr_iova->allocatable_size >= size)
-> +			goto found;
-> +
-> +		curr = &curr_iova->node;
-> +		if (curr->rb_right &&
-> +			to_iova(curr->rb_right)->max_allocatable_size >= size) {
-> +			curr_iova = to_iova(curr->rb_right);
-> +			continue;
-> +		}
-> +		WARN_ON(curr->rb_left == NULL);
-> +		curr_iova = to_iova(curr->rb_left);
-> +	}
-> +
-> +found:
->   	/* pfn_lo will point to size aligned address if size_aligned is set */
-> -	new->pfn_lo = new_pfn;
-> +	new->pfn_lo = (min(curr_iova->pfn_lo, limit_pfn) - size) & align_mask;
->   	new->pfn_hi = new->pfn_lo + size - 1;
->   
-> -	/* If we have 'prev', it's a valid place to start the insertion. */
-> -	iova_insert_rbtree(&iovad->rbroot, new, prev);
-> +	/*
-> +	 * If we have 'prev' or 'next',
-> +	 * it's a valid place to start the insertion.
-> +	 */
-> +	iova_insert_rbtree(&iovad->rbroot, new, &curr_iova->node);
->   	__cached_rbnode_insert_update(iovad, new);
->   
->   	spin_unlock_irqrestore(&iovad->iova_rbtree_lock, flags);
-> @@ -352,9 +475,18 @@ private_find_iova(struct iova_domain *iovad, unsigned long pfn)
->   
->   static void remove_iova(struct iova_domain *iovad, struct iova *iova)
->   {
-> +	struct rb_node *next;
-> +	struct iova *next_iova;
->   	assert_spin_locked(&iovad->iova_rbtree_lock);
-> -	__cached_rbnode_delete_update(iovad, iova);
-> -	rb_erase(&iova->node, &iovad->rbroot);
-> +
-> +	next = rb_next(&iova->node);
-> +	__cached_rbnode_delete_update(iovad, iova, next);
-> +
-> +	next_iova = to_iova(next);
-> +	next_iova->prev_iova = iova->prev_iova;
-> +	next_iova->allocatable_size = iova_compute_allocatable_size(next_iova);
-> +	iova_max_allocatable_size_update(next_iova);
-> +	rb_erase_augmented(&iova->node, &iovad->rbroot, &iova_gap_callbacks);
->   }
->   
->   /**
-> @@ -554,8 +686,11 @@ static void
->   __adjust_overlap_range(struct iova *iova,
->   	unsigned long *pfn_lo, unsigned long *pfn_hi)
->   {
-> -	if (*pfn_lo < iova->pfn_lo)
-> +	if (*pfn_lo < iova->pfn_lo) {
->   		iova->pfn_lo = *pfn_lo;
-> +		iova->allocatable_size = iova_compute_allocatable_size(iova);
-> +		iova_max_allocatable_size_update(iova);
-> +	}
->   	if (*pfn_hi > iova->pfn_hi)
->   		*pfn_lo = iova->pfn_hi + 1;
->   }
-> diff --git a/include/linux/iova.h b/include/linux/iova.h
-> index 320a70e40233..feb8121f104d 100644
-> --- a/include/linux/iova.h
-> +++ b/include/linux/iova.h
-> @@ -11,7 +11,7 @@
->   
->   #include <linux/types.h>
->   #include <linux/kernel.h>
-> -#include <linux/rbtree.h>
-> +#include <linux/rbtree_augmented.h>
->   #include <linux/dma-mapping.h>
->   
->   /* iova structure */
-> @@ -19,6 +19,9 @@ struct iova {
->   	struct rb_node	node;
->   	unsigned long	pfn_hi; /* Highest allocated pfn */
->   	unsigned long	pfn_lo; /* Lowest allocated pfn */
-> +	struct iova	*prev_iova;
-> +	unsigned long	allocatable_size;
-> +	unsigned long	max_allocatable_size;
->   };
->   
->   
-
+diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+index 8f786a225dcf..a7d8ae9730f6 100644
+--- a/drivers/misc/pci_endpoint_test.c
++++ b/drivers/misc/pci_endpoint_test.c
+@@ -174,13 +174,12 @@ static void pci_endpoint_test_free_irq_vectors(struct pci_endpoint_test *test)
+ 	test->irq_type = IRQ_TYPE_UNDEFINED;
+ }
+ 
+-static bool pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
++static int pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+ 						int type)
+ {
+-	int irq = -1;
++	int irq = -ENOSPC;
+ 	struct pci_dev *pdev = test->pdev;
+ 	struct device *dev = &pdev->dev;
+-	bool res = true;
+ 
+ 	switch (type) {
+ 	case IRQ_TYPE_LEGACY:
+@@ -202,15 +201,16 @@ static bool pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+ 		dev_err(dev, "Invalid IRQ type selected\n");
+ 	}
+ 
++	test->irq_type = type;
++
+ 	if (irq < 0) {
+-		irq = 0;
+-		res = false;
++		test->num_irqs = 0;
++		return irq;
+ 	}
+ 
+-	test->irq_type = type;
+ 	test->num_irqs = irq;
+ 
+-	return res;
++	return 0;
+ }
+ 
+ static void pci_endpoint_test_release_irq(struct pci_endpoint_test *test)
+@@ -225,7 +225,7 @@ static void pci_endpoint_test_release_irq(struct pci_endpoint_test *test)
+ 	test->num_irqs = 0;
+ }
+ 
+-static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
++static int pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+ {
+ 	int i;
+ 	int err;
+@@ -240,7 +240,7 @@ static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+ 			goto fail;
+ 	}
+ 
+-	return true;
++	return 0;
+ 
+ fail:
+ 	switch (irq_type) {
+@@ -260,10 +260,10 @@ static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+ 		break;
+ 	}
+ 
+-	return false;
++	return err;
+ }
+ 
+-static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
++static int pci_endpoint_test_bar(struct pci_endpoint_test *test,
+ 				  enum pci_barno barno)
+ {
+ 	int j;
+@@ -272,7 +272,7 @@ static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+ 	struct pci_dev *pdev = test->pdev;
+ 
+ 	if (!test->bar[barno])
+-		return false;
++		return -ENOMEM;
+ 
+ 	size = pci_resource_len(pdev, barno);
+ 
+@@ -285,13 +285,13 @@ static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+ 	for (j = 0; j < size; j += 4) {
+ 		val = pci_endpoint_test_bar_readl(test, barno, j);
+ 		if (val != 0xA0A0A0A0)
+-			return false;
++			return -EIO;
+ 	}
+ 
+-	return true;
++	return 0;
+ }
+ 
+-static bool pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
++static int pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+ {
+ 	u32 val;
+ 
+@@ -303,12 +303,12 @@ static bool pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+ 	val = wait_for_completion_timeout(&test->irq_raised,
+ 					  msecs_to_jiffies(1000));
+ 	if (!val)
+-		return false;
++		return -ETIMEDOUT;
+ 
+-	return true;
++	return 0;
+ }
+ 
+-static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
++static int pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+ 				       u16 msi_num, bool msix)
+ {
+ 	u32 val;
+@@ -324,19 +324,18 @@ static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+ 	val = wait_for_completion_timeout(&test->irq_raised,
+ 					  msecs_to_jiffies(1000));
+ 	if (!val)
+-		return false;
++		return -ETIMEDOUT;
+ 
+-	if (pci_irq_vector(pdev, msi_num - 1) == test->last_irq)
+-		return true;
++	if (pci_irq_vector(pdev, msi_num - 1) != test->last_irq)
++		return -EIO;
+ 
+-	return false;
++	return 0;
+ }
+ 
+-static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
++static int pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 				   unsigned long arg)
+ {
+ 	struct pci_endpoint_test_xfer_param param;
+-	bool ret = false;
+ 	void *src_addr;
+ 	void *dst_addr;
+ 	u32 flags = 0;
+@@ -360,12 +359,12 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
+ 	if (err) {
+ 		dev_err(dev, "Failed to get transfer param\n");
+-		return false;
++		return -EFAULT;
+ 	}
+ 
+ 	size = param.size;
+ 	if (size > SIZE_MAX - alignment)
+-		goto err;
++		return -EINVAL;
+ 
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+ 	if (use_dma)
+@@ -373,22 +372,21 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 
+ 	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
+ 		dev_err(dev, "Invalid IRQ type option\n");
+-		goto err;
++		return -EINVAL;
+ 	}
+ 
+ 	orig_src_addr = kzalloc(size + alignment, GFP_KERNEL);
+ 	if (!orig_src_addr) {
+ 		dev_err(dev, "Failed to allocate source buffer\n");
+-		ret = false;
+-		goto err;
++		return -ENOMEM;
+ 	}
+ 
+ 	get_random_bytes(orig_src_addr, size + alignment);
+ 	orig_src_phys_addr = dma_map_single(dev, orig_src_addr,
+ 					    size + alignment, DMA_TO_DEVICE);
+-	if (dma_mapping_error(dev, orig_src_phys_addr)) {
++	err = dma_mapping_error(dev, orig_src_phys_addr);
++	if (err) {
+ 		dev_err(dev, "failed to map source buffer address\n");
+-		ret = false;
+ 		goto err_src_phys_addr;
+ 	}
+ 
+@@ -412,15 +410,15 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 	orig_dst_addr = kzalloc(size + alignment, GFP_KERNEL);
+ 	if (!orig_dst_addr) {
+ 		dev_err(dev, "Failed to allocate destination address\n");
+-		ret = false;
++		err = -ENOMEM;
+ 		goto err_dst_addr;
+ 	}
+ 
+ 	orig_dst_phys_addr = dma_map_single(dev, orig_dst_addr,
+ 					    size + alignment, DMA_FROM_DEVICE);
+-	if (dma_mapping_error(dev, orig_dst_phys_addr)) {
++	err = dma_mapping_error(dev, orig_dst_phys_addr);
++	if (err) {
+ 		dev_err(dev, "failed to map destination buffer address\n");
+-		ret = false;
+ 		goto err_dst_phys_addr;
+ 	}
+ 
+@@ -453,8 +451,8 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 			 DMA_FROM_DEVICE);
+ 
+ 	dst_crc32 = crc32_le(~0, dst_addr, size);
+-	if (dst_crc32 == src_crc32)
+-		ret = true;
++	if (dst_crc32 != src_crc32)
++		err = -EIO;
+ 
+ err_dst_phys_addr:
+ 	kfree(orig_dst_addr);
+@@ -465,16 +463,13 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
+ 
+ err_src_phys_addr:
+ 	kfree(orig_src_addr);
+-
+-err:
+-	return ret;
++	return err;
+ }
+ 
+-static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
++static int pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 				    unsigned long arg)
+ {
+ 	struct pci_endpoint_test_xfer_param param;
+-	bool ret = false;
+ 	u32 flags = 0;
+ 	bool use_dma;
+ 	u32 reg;
+@@ -492,14 +487,14 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 	int err;
+ 
+ 	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
+-	if (err != 0) {
++	if (err) {
+ 		dev_err(dev, "Failed to get transfer param\n");
+-		return false;
++		return -EFAULT;
+ 	}
+ 
+ 	size = param.size;
+ 	if (size > SIZE_MAX - alignment)
+-		goto err;
++		return -EINVAL;
+ 
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+ 	if (use_dma)
+@@ -507,23 +502,22 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 
+ 	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
+ 		dev_err(dev, "Invalid IRQ type option\n");
+-		goto err;
++		return -EINVAL;
+ 	}
+ 
+ 	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
+ 	if (!orig_addr) {
+ 		dev_err(dev, "Failed to allocate address\n");
+-		ret = false;
+-		goto err;
++		return -ENOMEM;
+ 	}
+ 
+ 	get_random_bytes(orig_addr, size + alignment);
+ 
+ 	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
+ 					DMA_TO_DEVICE);
+-	if (dma_mapping_error(dev, orig_phys_addr)) {
++	err = dma_mapping_error(dev, orig_phys_addr);
++	if (err) {
+ 		dev_err(dev, "failed to map source buffer address\n");
+-		ret = false;
+ 		goto err_phys_addr;
+ 	}
+ 
+@@ -556,24 +550,21 @@ static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 	wait_for_completion(&test->irq_raised);
+ 
+ 	reg = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
+-	if (reg & STATUS_READ_SUCCESS)
+-		ret = true;
++	if (!(reg & STATUS_READ_SUCCESS))
++		err = -EIO;
+ 
+ 	dma_unmap_single(dev, orig_phys_addr, size + alignment,
+ 			 DMA_TO_DEVICE);
+ 
+ err_phys_addr:
+ 	kfree(orig_addr);
+-
+-err:
+-	return ret;
++	return err;
+ }
+ 
+-static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
++static int pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 				   unsigned long arg)
+ {
+ 	struct pci_endpoint_test_xfer_param param;
+-	bool ret = false;
+ 	u32 flags = 0;
+ 	bool use_dma;
+ 	size_t size;
+@@ -592,12 +583,12 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
+ 	if (err) {
+ 		dev_err(dev, "Failed to get transfer param\n");
+-		return false;
++		return -EFAULT;
+ 	}
+ 
+ 	size = param.size;
+ 	if (size > SIZE_MAX - alignment)
+-		goto err;
++		return -EINVAL;
+ 
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+ 	if (use_dma)
+@@ -605,21 +596,20 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 
+ 	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
+ 		dev_err(dev, "Invalid IRQ type option\n");
+-		goto err;
++		return -EINVAL;
+ 	}
+ 
+ 	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
+ 	if (!orig_addr) {
+ 		dev_err(dev, "Failed to allocate destination address\n");
+-		ret = false;
+-		goto err;
++		return -ENOMEM;
+ 	}
+ 
+ 	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
+ 					DMA_FROM_DEVICE);
+-	if (dma_mapping_error(dev, orig_phys_addr)) {
++	err = dma_mapping_error(dev, orig_phys_addr);
++	if (err) {
+ 		dev_err(dev, "failed to map source buffer address\n");
+-		ret = false;
+ 		goto err_phys_addr;
+ 	}
+ 
+@@ -651,50 +641,51 @@ static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 			 DMA_FROM_DEVICE);
+ 
+ 	crc32 = crc32_le(~0, addr, size);
+-	if (crc32 == pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM))
+-		ret = true;
++	if (crc32 != pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM))
++		err = -EIO;
+ 
+ err_phys_addr:
+ 	kfree(orig_addr);
+-err:
+-	return ret;
++	return err;
+ }
+ 
+-static bool pci_endpoint_test_clear_irq(struct pci_endpoint_test *test)
++static int pci_endpoint_test_clear_irq(struct pci_endpoint_test *test)
+ {
+ 	pci_endpoint_test_release_irq(test);
+ 	pci_endpoint_test_free_irq_vectors(test);
+-	return true;
++
++	return 0;
+ }
+ 
+-static bool pci_endpoint_test_set_irq(struct pci_endpoint_test *test,
++static int pci_endpoint_test_set_irq(struct pci_endpoint_test *test,
+ 				      int req_irq_type)
+ {
+ 	struct pci_dev *pdev = test->pdev;
+ 	struct device *dev = &pdev->dev;
++	int err;
+ 
+ 	if (req_irq_type < IRQ_TYPE_LEGACY || req_irq_type > IRQ_TYPE_MSIX) {
+ 		dev_err(dev, "Invalid IRQ type option\n");
+-		return false;
++		return -EINVAL;
+ 	}
+ 
+ 	if (test->irq_type == req_irq_type)
+-		return true;
++		return 0;
+ 
+ 	pci_endpoint_test_release_irq(test);
+ 	pci_endpoint_test_free_irq_vectors(test);
+ 
+-	if (!pci_endpoint_test_alloc_irq_vectors(test, req_irq_type))
+-		goto err;
+-
+-	if (!pci_endpoint_test_request_irq(test))
+-		goto err;
++	err = pci_endpoint_test_alloc_irq_vectors(test, req_irq_type);
++	if (err)
++		return err;
+ 
+-	return true;
++	err = pci_endpoint_test_request_irq(test);
++	if (err) {
++		pci_endpoint_test_free_irq_vectors(test);
++		return err;
++	}
+ 
+-err:
+-	pci_endpoint_test_free_irq_vectors(test);
+-	return false;
++	return 0;
+ }
+ 
+ static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
+@@ -812,10 +803,9 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
+ 
+ 	pci_set_master(pdev);
+ 
+-	if (!pci_endpoint_test_alloc_irq_vectors(test, irq_type)) {
+-		err = -EINVAL;
++	err = pci_endpoint_test_alloc_irq_vectors(test, irq_type);
++	if (err)
+ 		goto err_disable_irq;
+-	}
+ 
+ 	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
+ 		if (pci_resource_flags(pdev, bar) & IORESOURCE_MEM) {
+@@ -852,10 +842,9 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
+ 		goto err_ida_remove;
+ 	}
+ 
+-	if (!pci_endpoint_test_request_irq(test)) {
+-		err = -EINVAL;
++	err = pci_endpoint_test_request_irq(test);
++	if (err)
+ 		goto err_kfree_test_name;
+-	}
+ 
+ 	misc_device = &test->miscdev;
+ 	misc_device->minor = MISC_DYNAMIC_MINOR;
 -- 
-"firm, enduring, strong, and long-lived"
+2.25.1
 

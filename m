@@ -2,123 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D42659FEE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB20259FEE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238052AbiHXPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S238914AbiHXPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236884AbiHXPy1 (ORCPT
+        with ESMTP id S237392AbiHXPzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:54:27 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9511972EF0;
-        Wed, 24 Aug 2022 08:54:26 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id m2so5598954qvq.11;
-        Wed, 24 Aug 2022 08:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JayAHS+OuNb+tyTryqcDsCuLA5dC38MXJtz38feqpuE=;
-        b=mvsh0Cn0VLETNnxcOhwecAeKWzrUuHEJAjYg2OvijsY66ETjWMmCMPZ2KuXInqdkz1
-         RB47XLKzF7x7ht1pCdHpZQjCcFv+2hPpcRBJy4bcat6lg0KZ9KrZ/0lthw9G+fPOCWFw
-         EOL5Fgm9PdeZrUks6F/BLJLKxb4re6P9+oGJiak+gHiDc9ccWfvRFGVHXWzh5VNxO9+P
-         zFSFJ6i3kj+YIP2kQLnaHI/T0rmQ5Cw69jqteao/Y2n6WQPrhsKi8/jKB4hzHkafF5Rq
-         jn7UAyu3Usfog7HcngwlAHPVX6tne8iTvUtT1jux4E4LOEEe8isy98BVoK1++t3LxbH9
-         RMeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JayAHS+OuNb+tyTryqcDsCuLA5dC38MXJtz38feqpuE=;
-        b=HHMduJoP39M9/1UNIx8JFC5BAX/B4cmHz3yKJsirFyQHsTLhj1PFXVqiY3aUrrV8oE
-         NtT7JgBe0VXy7odcGx/KZYDKtqkeU42RYr+g49qh5SHL5nUmZFYAROPHmG7nu9QiKJHR
-         9252mZr7pGeUocTMte4QwR4UgWlgoL66zm/JVIIfbCaLvsxUfGChm8MCkRjNXz0Tguns
-         XItwdRh7hMREAMXsf/je4ZFt5roGsuy2LKmxuIJK3Z+dsK7Plca/RUiySO1Ag3UDoeO1
-         SAUjFdlOyTkBhFmSnfWbJVJzznX2//KlHKWdM3H+EdIQo4OyGmO2Sl0A1j2yycOA7HRN
-         3JZw==
-X-Gm-Message-State: ACgBeo2I4T0Sc/cKGYIs6GFZhvNsQkqxv/uhNQPt4NOMbjiau0X4rZfC
-        MmOdLiK5YBHxjwQrmZcMJsSVwRyxANR8oeBCNuMyNBbGwww=
-X-Google-Smtp-Source: AA6agR4X852vOzlnPqLIyPLX+Wa320bennKiKmAkP/rIphXqC3Krc1SbPNgaPRmAkrChHfjiLzHb0QW6FsSP1ZucH9c=
-X-Received: by 2002:a05:6214:29c2:b0:497:8b2:442 with SMTP id
- gh2-20020a05621429c200b0049708b20442mr6434328qvb.97.1661356465737; Wed, 24
- Aug 2022 08:54:25 -0700 (PDT)
+        Wed, 24 Aug 2022 11:55:16 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5025F214
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:55:13 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 335641EC056A;
+        Wed, 24 Aug 2022 17:55:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661356508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=FwQUi4dAp845Zd5RUWtjKFuLCwxIp02ZFGB49oZzfCQ=;
+        b=DxozawXWXxCJzoXKJjOk/15zCoTDRv0kazS3Xi0xdHiCKdJqu4jhU5UeGNz5EOl2ZEAQwg
+        fLg278POT2YIHMORXoNXCAgzDeTVJdvzaycPm/tHqyljMSs3N0ov4hmsJj1dmoHMIIyWv4
+        PVSwLio6gb5fN/S6vh8Sq0GHlTeJFkA=
+Date:   Wed, 24 Aug 2022 17:55:07 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 1/6] x86/tdx: Add TDX Guest attestation interface
+ driver
+Message-ID: <YwZJ22gOWG0OyZB2@zn.tnic>
+References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220728034420.648314-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Yv5KNyX992ddvVtD@zn.tnic>
+ <c8262af7-1552-98e0-fb35-4cf17228b039@linux.intel.com>
 MIME-Version: 1.0
-References: <20220824131428.31904-1-henning.schild@siemens.com>
-In-Reply-To: <20220824131428.31904-1-henning.schild@siemens.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 24 Aug 2022 18:53:49 +0300
-Message-ID: <CAHp75Veu5CpRcmtvKwqhwqpjSgrvw03V6k7WrO8v=+cLhABcsA@mail.gmail.com>
-Subject: Re: [PATCH v2] leds: simatic-ipc-leds-gpio: make sure we have the
- GPIO providing driver
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c8262af7-1552-98e0-fb35-4cf17228b039@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 4:27 PM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> If we register a "leds-gpio" platform device for GPIO pins that do not
-> exist we get a -EPROBE_DEFER and the probe will be tried again later.
-> If there is not driver to provide that pin we will poll forever and also
+On Tue, Aug 23, 2022 at 12:36:43PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> Do you want to me to leave it to Kirill to handle the cleanup, or
+> submit a new patch here?
 
-not --> no
+Yeah, leave it to him - the less confusion the better.
 
-> create a lot of log messages.
->
-> So check if that GPIO driver is configured, if so it will come up
-> eventually. If not we exit our probe function early and do not even
-
-not, we
-
-> bother registering the "leds-gpio". This method was chosen over "Kconfig
-> depends" since this way we can add support for more devices and GPIO
-> backends more easily without "depends"ing on all GPIO backends.
-
-"depends":ing
-
-The code is fine from my perspective,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-thanks!
-
-> Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version of Siemens driver")
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> index 4c9e663a90ba..0c96ba98e338 100644
-> --- a/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> @@ -57,6 +57,8 @@ static int simatic_ipc_leds_gpio_probe(struct platform_device *pdev)
->         struct gpio_desc *gpiod;
->         int err;
->
-> +       if (!IS_ENABLED(CONFIG_PINCTRL_BROXTON))
-> +               return -ENODEV;
->         gpiod_add_lookup_table(&simatic_ipc_led_gpio_table);
->         simatic_leds_pdev = platform_device_register_resndata(NULL,
->                 "leds-gpio", PLATFORM_DEVID_NONE, NULL, 0,
-> --
-> 2.35.1
->
-
+Thx.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

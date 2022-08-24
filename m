@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B2B59F2C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 06:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0710459F2C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 06:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbiHXEsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 00:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
+        id S234818AbiHXEs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 00:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiHXEsn (ORCPT
+        with ESMTP id S234798AbiHXEss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 00:48:43 -0400
+        Wed, 24 Aug 2022 00:48:48 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A0347C18C;
-        Tue, 23 Aug 2022 21:48:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D57F68E470;
+        Tue, 23 Aug 2022 21:48:47 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D16A113E;
-        Tue, 23 Aug 2022 21:48:45 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F3EF23A;
+        Tue, 23 Aug 2022 21:48:51 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.43.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E57103F67D;
-        Tue, 23 Aug 2022 21:48:35 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0966E3F67D;
+        Tue, 23 Aug 2022 21:48:41 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         peterz@infradead.org, alexander.shishkin@linux.intel.com,
@@ -35,107 +35,51 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH V7 0/8] perf: Expand perf_branch_entry
-Date:   Wed, 24 Aug 2022 10:18:14 +0530
-Message-Id: <20220824044822.70230-1-anshuman.khandual@arm.com>
+Subject: [PATCH V7 1/8] perf: Add system error and not in transaction branch types
+Date:   Wed, 24 Aug 2022 10:18:15 +0530
+Message-Id: <20220824044822.70230-2-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220824044822.70230-1-anshuman.khandual@arm.com>
+References: <20220824044822.70230-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Branch Record Buffer Extension (BRBE) implementation on arm64 captures more
-branch type classification which cannot be accommodated in the current perf
-branch record format via perf_branch_entry.type element (4 bit field). Also
-it captures privilege information which does not have a corresponding slot
-in perf_branch_entry. This series expands struct perf_branch_entry, to meet
-both these requirements without breaking the existing user space ABI for
-perf tools.
+This expands generic branch type classification by adding two more entries
+there in i.e system error and not in transaction. This also updates the x86
+implementation to process X86_BR_NO_TX records as appropriate. This changes
+branch types reported to user space on x86 platform but it should not be a
+problem. The possible scenarios and impacts are enumerated here.
 
-All architecture specific branch types added via perf_branch_entry.new_type
-field in [PATCH 3/4] will be used in BRBE implementation on arm64 platform
-later on with the following map.
+--------------------------------------------------------------------------
+| kernel | perf tool |                     Impact                        |
+--------------------------------------------------------------------------
+|   old  |    old    |  Works as before                                  |
+--------------------------------------------------------------------------
+|   old  |    new    |  PERF_BR_UNKNOWN is processed                     |
+--------------------------------------------------------------------------
+|   new  |    old    |  PERF_BR_NO_TX is blocked via old PERF_BR_MAX     |
+--------------------------------------------------------------------------
+|   new  |    new    |  PERF_BR_NO_TX is recognized                      |
+--------------------------------------------------------------------------
 
-#ifdef CONFIG_ARM64
-#define PERF_BR_FIQ		PERF_BR_NEW_ARCH_1
-#define PERF_BR_DEBUG_HALT	PERF_BR_NEW_ARCH_2
-#define PERF_BR_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
-#define PERF_BR_DEBUG_INST	PERF_BR_NEW_ARCH_4
-#define PERF_BR_DEBUG_DATA	PERF_BR_NEW_ARCH_5
-#endif
+When PERF_BR_NO_TX is blocked via old PERF_BR_MAX (new kernel with old perf
+tool) the user space might throw up an warning complaining about an
+unrecognized branch types being reported, but it's expected. PERF_BR_SERROR
+& PERF_BR_NO_TX branch types will be used for BRBE implementation on arm64
+platform.
 
-This series applies on v6.20-rc2
+PERF_BR_NO_TX complements 'abort' and 'in_tx' elements in perf_branch_entry
+which represent other transaction states for a given branch record. Because
+this completes the transaction state classification.
 
-perf API
-
-The series being applied
-
-- Clean : tools/perf/check-headers.sh
-- Clean : diff -u tools/include/uapi/linux/perf_event.h include/uapi/linux/perf_event.h
-
-References
-
-- BRBE captured branch record information
-
-https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers/BRBINF-n--EL1--Branch-Record-Buffer-Information-Register--n-?lang=en
-
-- BRBE based perf branch stack implementation on arm64 platform
-
-https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
-
-Changes in V7:
-
-- Collected earlier 'Reviewed-by:' tags from James Clark
-- Rebased on v6.0-rc2
-
-Changes in V6:
-
-https://lore.kernel.org/linux-arm-kernel/20220610035101.424112-1-anshuman.khandual@arm.com/
-
-- Process PERF_BR_EXTEND_ABI in perf tools and fetch from perf_branch_entry.new_type
-- Modified the commit message for [PATCH 1/8]
-
-Changes in V5:
-
-https://lore.kernel.org/linux-arm-kernel/20220404045046.634522-1-anshuman.khandual@arm.com/
-
-- Dropped patches [PATCH 1/10] and [PATCH 6/10] related to PERF_BR_[RET|IRQ] - merged
-  via the commit cedd3614e5d9c809 ("perf: Add irq and exception return branch types")
-
-- Rebased series on v5.18-rc1
-
-Changes in V4:
-
-https://lore.kernel.org/all/20220315053516.431515-1-anshuman.khandual@arm.com/
-
-- Modified the struct branch_flags as required
-- Dropped CONFIG_ARM64 from perf header file to avoid build problem
-- Renamed PERF_BR_NEW_<BRANCH_TYPE> as PERF_BR_ARM64_<BRANCH_TYPE>
-
-Changes in V3:
-
-https://lore.kernel.org/all/20220314055857.125421-1-anshuman.khandual@arm.com/
-
-- Fixed small typo s/privillege/privilege in include/uapi/linux/perf_event.h
-- Added PRIV_SHIFT in __p_branch_sample_type()
-- Added arm64 platform override of the new arch specific branch types
-- Renamed s/PERF_BR_XXX/PERF_BR_PRIV_XXX/ for privilege level branch types
-- Added PERF_BR_PRIV_UNKNOWN as the starting value
-- Expanded perf_branch_entry.priv into a 3 bits field 
-
-Changes in V2:
-
-https://lore.kernel.org/all/20220309033642.144769-1-anshuman.khandual@arm.com/
-
-Cc: Robin Murphy <robin.murphy@arm.com> 
-Cc: Suzuki Poulose <suzuki.poulose@arm.com>
-Cc: James Clark <james.clark@arm.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
@@ -145,33 +89,42 @@ Cc: Jiri Olsa <jolsa@redhat.com>
 Cc: Namhyung Kim <namhyung@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-perf-users@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
+Reviewed-by: James Clark <james.clark@arm.com>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ arch/x86/events/intel/lbr.c     | 2 +-
+ include/uapi/linux/perf_event.h | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Anshuman Khandual (8):
-  perf: Add system error and not in transaction branch types
-  perf: Extend branch type classification
-  perf: Capture branch privilege information
-  perf: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
-  perf/tools: Add system error and not in transaction branch types
-  perf/tools: Extend branch type classification
-  perf/tools: Add branch privilege information request flag
-  perf/tools: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
-
- arch/x86/events/intel/lbr.c               |  2 +-
- include/uapi/linux/perf_event.h           | 36 +++++++++++-
- tools/include/uapi/linux/perf_event.h     | 36 +++++++++++-
- tools/perf/Documentation/perf-record.txt  |  1 +
- tools/perf/builtin-script.c               |  2 +-
- tools/perf/util/branch.c                  | 69 ++++++++++++++++++++++-
- tools/perf/util/branch.h                  |  7 ++-
- tools/perf/util/parse-branch-options.c    |  1 +
- tools/perf/util/perf_event_attr_fprintf.c |  2 +-
- tools/perf/util/session.c                 |  2 +-
- 10 files changed, 149 insertions(+), 9 deletions(-)
-
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 4f70fb6c2c1e..30441dd4cf89 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1334,7 +1334,7 @@ static int branch_map[X86_BR_TYPE_MAP_MAX] = {
+ 	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
+ 	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
+ 	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
+-	PERF_BR_UNKNOWN,	/* X86_BR_NO_TX */
++	PERF_BR_NO_TX,		/* X86_BR_NO_TX */
+ 	PERF_BR_CALL,		/* X86_BR_ZERO_CALL */
+ 	PERF_BR_UNKNOWN,	/* X86_BR_CALL_STACK */
+ 	PERF_BR_IND,		/* X86_BR_IND_JMP */
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index 03b370062741..84e245d37ad4 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -253,6 +253,8 @@ enum {
+ 	PERF_BR_COND_RET	= 10,	/* conditional function return */
+ 	PERF_BR_ERET		= 11,	/* exception return */
+ 	PERF_BR_IRQ		= 12,	/* irq */
++	PERF_BR_SERROR		= 13,	/* system error */
++	PERF_BR_NO_TX		= 14,	/* not in transaction */
+ 	PERF_BR_MAX,
+ };
+ 
 -- 
 2.25.1
 

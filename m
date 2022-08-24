@@ -2,170 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A761C59F1E9
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2B459F1E8
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbiHXDS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 23:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S232732AbiHXDSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 23:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiHXDST (ORCPT
+        with ESMTP id S229926AbiHXDSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 23:18:19 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E3880E98
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661311098; x=1692847098;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DWQv2ElRIStja53Rqc2aCuX3gUp5VawiT44lzrf1/p4=;
-  b=oAML/XdxXPD9uPLYks7S7TADpu0g+OloEh8K82aJZEF/A7uajrQyZdDh
-   piccM1Xta0aDgj2JlcNCRjCzfECWhfwGAONYZiwxDjRNgWIe4YyAE6ufd
-   OUNps3noR46y0JB3jPGGYoncchdhnTgIMENHsH5Rzf9KfS7cc89Tps+Zn
-   HJFIrSowY6FWax55E1Lzm+QfNoiu6SS8L1QRdxWuF5iirFkfKB2RutpM4
-   ga3gsDTDJ7aS33zlE1Ht/Pstrz7EYOCkqbUnEjG4Kr26ureNM+GeYkFKg
-   eTshqAgSJn2fj7Nj6h6+26CS9o0BjN+1pwnJaLzxoo9gq4NaA5/QPZbkN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="280828493"
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="280828493"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 20:18:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="937729954"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Aug 2022 20:18:16 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQguF-0000up-2u;
-        Wed, 24 Aug 2022 03:18:15 +0000
-Date:   Wed, 24 Aug 2022 11:17:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mark:arm64/alternatives/rework 17/18]
- arch/arm64/kernel/alternative.c:146:6: warning: no previous prototype for
- function 'summarize_alternatives'
-Message-ID: <202208241125.5Pk8b711-lkp@intel.com>
+        Tue, 23 Aug 2022 23:18:13 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D85080B65
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:18:12 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y15so11274919pfr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=r/Iq1H6m/C2yL0fNrluazrrCDTlyKaFFMtLoSCNrNGg=;
+        b=vzL3rr0kGodNUcoOfC/mX7XDjB+/DvHaVBxMBIsUVpWthu/fTy4ws2dq9PEPZsuNcV
+         7jQI8ROW64nU7Aub1jlNRo+B2681onaLy63o32OSqebQgZAMn/UjHqiV0c97FWhGvayP
+         pgROkiJ2hFI9fnALDipXBPg8xZrCU7iZwcyfMMy2EhF3aBViv9VIHDggkXef1jccxD4Y
+         9M6rTggjJxExm3ed2wmbQz4WFXkoUoQOCTxofDCeZHiM78jizmqPu01+//XRTK8EHGDv
+         3s7IP4kGl6sbyUe1Am2kT4PKLL1UcBVfKIvnbfUBExaeJoaFoRztu4Vf9omrIz8Fv1DO
+         Orhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=r/Iq1H6m/C2yL0fNrluazrrCDTlyKaFFMtLoSCNrNGg=;
+        b=1piHdFpB3RLb9sPYvBPugB/FYPlLyJH9ZuI6z0xbsWhJvFCOxdrADQk2R9pXKiLOMT
+         uc5oTfvbY1P/e5y62PwdUyvG37W3vns25mVS3+srrMwEwCT/wmKgEYcg0+9TKwbOLkoA
+         6PLLgnjw373x+/PtsP4F9BInqHZLE7F5H/hX4nD4DX9/8yRrdDVCVwsDqN9D+s8UK4BV
+         LEhqh7DtzW3hDkc6NY7BxpsDGkjDGfTa++i9LG7OeFiEOc5TNpL9of5niPL+lGVlYem0
+         PNOvvMySH9B0jpUWS30yOOSbZcEddptQzJwO56crn8wUTO++Gx38fktd7VOTCTYLEsCN
+         6B2Q==
+X-Gm-Message-State: ACgBeo1yeTQf+XZvZd2z/wUfQHXkPTnaTxoqB95711qkxqMYo9t9t8N3
+        X7SGMYYkUwNpl9Jn7GSgR4oSfg==
+X-Google-Smtp-Source: AA6agR4AOBIsvTAu2hTmlJsAKVgdHZ8nmL42wKkElJYuOfxm/RVcE21M/j2CHdmtSDgjv7JCs2eVng==
+X-Received: by 2002:a63:b246:0:b0:42a:3d57:7d5d with SMTP id t6-20020a63b246000000b0042a3d577d5dmr19549228pgo.294.1661311091737;
+        Tue, 23 Aug 2022 20:18:11 -0700 (PDT)
+Received: from MacBook-Pro.local.bytedance.net ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id x24-20020aa79418000000b0052d50e14f1dsm11500868pfo.78.2022.08.23.20.18.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Aug 2022 20:18:11 -0700 (PDT)
+From:   lizhe.67@bytedance.com
+To:     mhocko@suse.com
+Cc:     Jason@zx2c4.com, akpm@linux-foundation.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lizefan.x@bytedance.com, lizhe.67@bytedance.com,
+        mark-pk.tsai@mediatek.com, mhiramat@kernel.org,
+        rostedt@goodmis.org, vbabka@suse.cz, yuanzhu@bytedance.com
+Subject: Re: [PATCH] page_ext: move up page_ext_init() to catch early page allocation if DEFERRED_STRUCT_PAGE_INIT is n
+Date:   Wed, 24 Aug 2022 11:17:59 +0800
+Message-Id: <20220824031759.75875-1-lizhe.67@bytedance.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <YwMresZeGmEA6qZP@dhcp22.suse.cz>
+References: <YwMresZeGmEA6qZP@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/alternatives/rework
-head:   fad62c713602c963008575fd972d316569a32d12
-commit: 6f13524469effb9785e5692389b94113f994c100 [17/18] HACK: dump summary of alternatives
-config: arm64-randconfig-r022-20220823 (https://download.01.org/0day-ci/archive/20220824/202208241125.5Pk8b711-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project b04d01c009d7f66bcca9138d2ce40999eedf104d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=6f13524469effb9785e5692389b94113f994c100
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/alternatives/rework
-        git checkout 6f13524469effb9785e5692389b94113f994c100
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ arch/arm64/mm/ kernel/events/
+On 2022-08-22  7:08 UTC, mhocko@suse.com wrote:
+>On Sat 20-08-22 09:02:57, lizhe.67@bytedance.com wrote:
+>> On 2022-08-18 7:36 UTC, mhocko@suse.com wrote:
+>> >> From: Li Zhe <lizhe.67@bytedance.com>
+>> >> 
+>> >> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
+>> >> we call page_ext_init() after page_alloc_init_late() to avoid some panic
+>> >> problem. It seems that we cannot track early page allocations in current
+>> >> kernel even if page structure has been initialized early.
+>> >> 
+>> >> This patch move up page_ext_init() to catch early page allocations when
+>> >> DEFERRED_STRUCT_PAGE_INIT is n. After this patch, we only need to turn
+>> >> DEFERRED_STRUCT_PAGE_INIT to n then we are able to analyze the early page
+>> >> allocations. This is useful especially when we find that the free memory
+>> >> value is not the same right after different kernel booting.
+>> >
+>> >is this actually useful in practice? I mean who is going to disable
+>> >DEFERRED_STRUCT_PAGE_INIT and recompile the kernel for debugging early
+>> >allocations?
+>> 
+>> Yes it is useful. We use this method to catch the difference of early
+>> page allocations between two kernel.
+>
+>I was not questioning the functionality itself but the way how it is
+>achieved. Recompiling the kernel to achieve debuggability has proven to
+>be really a bad approach historically. Most people are using
+>pre-compiled kernels these days.
+>
+>> > I do see how debugging those early allocations might be useful but that
+>> > would require a boot time option to be practical IMHO. Would it make
+>> > sense to add a early_page_ext parameter which would essentially disable
+>> > the deferred ipage initialization. That should be quite trivial to
+>> > achieve (just hook into defer_init AFAICS).
+>> 
+>> It is a good idea. A cmdline parameter is a flexible and dynamic method for
+>> us to decide whether to defer page's and page_ext's initilization. For
+>> comparison, this patch provides a static method to decide whether to defer
+>> page's and page_ext's initilization. They are not conflicting. My next
+>> work is trying to achieve your idea.
+>
+>They are not conflicting but this patch adds ifdefs and additional code
+>that needs compile time testing with different options set. I.e. it adds
+>maintenance burden for something that can be achieved by better means.
+>So if you are ok to work on the runtime knob then I would propose to
+>drop this patch from the mm tree and replace it by a trivial patch to
+>allow early boot debugging by a cmd line parameter.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/kernel/alternative.c:146:6: warning: no previous prototype for function 'summarize_alternatives' [-Wmissing-prototypes]
-   void summarize_alternatives(const struct alt_region *region)
-        ^
-   arch/arm64/kernel/alternative.c:146:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void summarize_alternatives(const struct alt_region *region)
-   ^
-   static 
-   arch/arm64/kernel/alternative.c:330:14: warning: no previous prototype for function 'alt_cb_patch_nops' [-Wmissing-prototypes]
-   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
-                ^
-   arch/arm64/kernel/alternative.c:330:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
-           ^
-           static 
-   2 warnings generated.
-
-
-vim +/summarize_alternatives +146 arch/arm64/kernel/alternative.c
-
-   140	
-   141	#define for_each_region_alt(region, alt)		\
-   142		for (struct alt_instr *alt = (region)->begin;	\
-   143		     (alt) < (region)->end;			\
-   144		     (alt)++)
-   145	
- > 146	void summarize_alternatives(const struct alt_region *region)
-   147	{
-   148		unsigned int entries[ARM64_NCAPS] = { 0 };
-   149		unsigned int orig_len[ARM64_NCAPS] = { 0 };
-   150		unsigned int repl_len[ARM64_NCAPS] = { 0 };
-   151		unsigned int callbacks[ARM64_NCAPS] = { 0 };
-   152	
-   153		unsigned int total_entries = 0;
-   154		unsigned int total_orig = 0;
-   155		unsigned int total_repl = 0;
-   156		unsigned int total_callbacks = 0;
-   157	
-   158		for_each_region_alt(region, alt) {
-   159			int cap = ALT_CAP(alt);
-   160	
-   161			entries[cap]++;
-   162			total_entries++;
-   163	
-   164			orig_len[cap] += alt->orig_len;
-   165			total_orig += alt->orig_len;
-   166	
-   167			repl_len[cap] += alt->alt_len;
-   168			total_repl += alt->alt_len;
-   169	
-   170			if (ALT_HAS_CB(alt)) {
-   171				callbacks[cap]++;
-   172				total_callbacks++;
-   173			}
-   174		}
-   175	
-   176		pr_info("Alternatives summary:\n"
-   177			"    entries:      %5d\n"
-   178			"    instructions: %5d\n"
-   179			"    replacements: %5d\n"
-   180			"    callbacks:    %5d\n",
-   181			total_entries,
-   182			total_orig / AARCH64_INSN_SIZE,
-   183			total_repl / AARCH64_INSN_SIZE,
-   184			total_callbacks);
-   185	
-   186		for (int i = 0; i < ARM64_NCAPS; i++) {
-   187			if (!entries[i])
-   188				continue;
-   189	
-   190			pr_info("cpucap %2d => entries: %5d orig: %5d, repl: %5d, cb: %5d\n",
-   191				i,
-   192				entries[i],
-   193				orig_len[i] / AARCH64_INSN_SIZE,
-   194				repl_len[i] / AARCH64_INSN_SIZE,
-   195				callbacks[i]);
-   196		}
-   197	}
-   198	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yes you are right. Recompiling the kernel is not a clever method. I will send
+another patch with a cmd line parameter 'early_page_ext' to achieve this idea.
+Thanks for your advice.

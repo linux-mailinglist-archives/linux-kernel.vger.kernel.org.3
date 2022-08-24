@@ -2,104 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E002159F8A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E848559F8A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237090AbiHXLdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S235811AbiHXLdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 07:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiHXLdO (ORCPT
+        with ESMTP id S236671AbiHXLdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 07:33:14 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD638037A
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:33:13 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso1320149pjk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=AHlvfWwcWZjTu4ncIVy2BK3HgcJqLKX00ngl2RsEioY=;
-        b=VgyX2UfdYGB+kTNkc8FtyZjKtCrQNEBZk4gJv1I06+pwyJwZNW7CV5qFfrJc5JEgj4
-         IpxMN8WQHyPdm2uXbgrb5sd1hrruvINfxaPukVoghs+eWpqNA8beNdSciEAMAb8ffYXc
-         WG4q1BVffgKDtZlQSdYf7/qTSRbGRQiqtIrhpxlcGSsczS3J96TF1oe4TzkIvnvo6Rxc
-         fLNluOVUQ544YR9DZW9iZyU3oTRuoUHP/8PYnkBezG6we58Q54OFonRn10qLeN8/kXCa
-         mQagWF2Tmrnkt4ICaGjh5LWJgiPsmBRmhbnTAk0/wvt/KC2U6QQn64gjCh5GXbRSK983
-         iZyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=AHlvfWwcWZjTu4ncIVy2BK3HgcJqLKX00ngl2RsEioY=;
-        b=buT/tYnyEFjc9fRHdQaPSjD4o2EjGaiGow8xD/jPJgKzeQ33/BpZKaKXQckLcPVyR5
-         WSCdwvzAcw57g6fHdAAGDU4IugqEmxEcP7OZtdrYQZ+ldEdYrS7MxE3jcmtUNtczckVh
-         o+chq3qb937buLpSZojalAjH/DkgO0ttJ1iBemPHKb0aGU+2fTU8SjPwhAOzSXXBXJEf
-         hJGeWvROspbz2oiAK5BF1+ajwd2YWDgLzaM8V3n/I8UFjCX4ab24oGUiyPEeyKlhq7dY
-         rCNFx/0TX2MeTIm34cV4Z3gLXLPXzV4T7Yr35io75b5zvHVV9oitQxjwsOOYxq0OhvAS
-         aTCQ==
-X-Gm-Message-State: ACgBeo23pwt5HpBHDKuG2JnY6kgVCeVWshPglyZvo/dCz2+YB+lkkI+b
-        dC+8vX20XLcgNTrsEUr4PnwRW5hz26g8VQQWBsk=
-X-Google-Smtp-Source: AA6agR6ZD/GJjp6A7GBvdD6lt8r6/kn+px7uNMX5v9JQLgCP6zlvqSeAC3XMGRjf250OonzHC5nPrGWq7y5X5WwJOKY=
-X-Received: by 2002:a17:903:18a:b0:16f:e43:efdf with SMTP id
- z10-20020a170903018a00b0016f0e43efdfmr27752034plg.157.1661340793061; Wed, 24
- Aug 2022 04:33:13 -0700 (PDT)
+        Wed, 24 Aug 2022 07:33:36 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284927E83D;
+        Wed, 24 Aug 2022 04:33:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VN7Iwjc_1661340812;
+Received: from 30.227.73.144(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VN7Iwjc_1661340812)
+          by smtp.aliyun-inc.com;
+          Wed, 24 Aug 2022 19:33:32 +0800
+Message-ID: <c6fd70dd-2b0b-ea9f-f0f8-9d727cde2718@linux.alibaba.com>
+Date:   Wed, 24 Aug 2022 19:33:31 +0800
 MIME-Version: 1.0
-Received: by 2002:a05:7022:23a1:b0:43:a2d1:f72f with HTTP; Wed, 24 Aug 2022
- 04:33:12 -0700 (PDT)
-Reply-To: felixdouglas212@gmail.com
-From:   "Mr. Douglas Felix" <legalri168@gmail.com>
-Date:   Wed, 24 Aug 2022 11:33:12 +0000
-Message-ID: <CAEWy=dUv-4b31gxUr_U46ZgrbYcX=TUxBJ2W8vngcjSmNGxm0Q@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1035 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5004]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [legalri168[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [felixdouglas212[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [legalri168[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v3] cachefiles: fix error return code in
+ cachefiles_ondemand_copen()
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>, Sun Ke <sunke32@huawei.com>
+Cc:     linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20220818125038.2247720-1-sunke32@huawei.com>
+ <3700079.1661336363@warthog.procyon.org.uk>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <3700079.1661336363@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-A mail was sent to you sometime last week with the expectation of
-having a return mail from you but to my surprise you never bothered to replied.
-Kindly reply for further explanations.
+Hi David,
 
-Respectfully yours,
-Barrister Douglas Felix.
+On 8/24/22 6:19 PM, David Howells wrote:
+> 	/* fail OPEN request if copen format is invalid */
+> 	ret = kstrtol(psize, 0, &size);
+> 	if (ret) {
+> 		req->error = ret;
+> 		goto out;
+> 	}
+> 
+> 	/* fail OPEN request if daemon reports an error */
+> 	if (size < 0) {
+> 		if (!IS_ERR_VALUE(size))
+> 			ret = size = -EINVAL;
+> 		req->error = size;
+> 		goto out;
+> 	}
+> 
+> Should ret get set to the error in size?
+
+
+The user daemon completes the OPEN request by replying with the "copen"
+command.  The format of "copen" is like: "copen <id>,<cache_size>",
+where <cache_size> specifies the size of the backing file. Besides,
+<cache_size> is also reused for specifying the error code when the user
+daemon thinks it should fail the OPEN request. In this case, the OPEN
+request will fail, while the copen command (i.e.
+cachefiles_ondemand_copen()) shall return 0, since the format of the
+input "copen" command has no problem at all. After all, the error code
+inside <cache_size> is specified by the user daemon itself, and the fact
+that the OPEN request will fail totally lies in the expectation of the
+user daemon.
+
+
+On the other hand, cachefiles_ondemand_copen() needs to return error
+code when the user daemon specifies the "copen" command in a wrong
+format, e.g. specifying an invalid error code in <cache_size>. This is
+exactly what this patch fixes.
+
+
+-- 
+Thanks,
+Jingbo

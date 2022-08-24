@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4302259F56A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAF859F570
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiHXIiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S235422AbiHXIj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiHXIiI (ORCPT
+        with ESMTP id S231146AbiHXIjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:38:08 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2203869F4B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:38:07 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id f21so16377014pjt.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject:cc
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=+N+UE2X7qHP/k3D28KNJuWxXPnW1fj++zF37MMUkZvs=;
-        b=l2mLLuW96AUMrOkw1NO9NyPlFA+5vidq2XHQ1XGYHXAt58pkEkSdmTrVB0bq+Ij/Dd
-         NFPq5Cq03M7jUOl1bFfiHiNld5AxAk4ZmpQne5kyZRDzmeoODLxiYLskI1xUM3NFwrpC
-         LvtoN33HZeFUOKjFrOmeNvlTVuG0HLWbjBnip//tNSPxhZWyC7fYydTJ2bfH1WCXRii4
-         dz/xsMiJr7y/pEWxjKOuNiFVwOtVe7tyS+HkhpGhwzvj57iP6pT7n68x5VmhGp+EZvDn
-         bk2xuQN/peZCsxoaMfNN/MChuqiB6M+yXj+4NGzNnLTWFIVoQHOpHTY3HVyQ4X+jecC5
-         om1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject:cc
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=+N+UE2X7qHP/k3D28KNJuWxXPnW1fj++zF37MMUkZvs=;
-        b=rNpf37mrIsPewYDWJFnio8x3PzHoy2LzIUIPvvMVarA+vVLfPvyMwwCOZz72WvmJ2H
-         /U7FlmipOklMsYihUF7Evl/rbyLr0btQcRWj8wdU7ybeRtpsdvY0AIRnVnlauawMvzfH
-         3OzBCD+wCOt1kv+j6lu3AHXtrlyrYJxpC1tS910F3BZm+jmJ88MAnNBAvm8wpp2ieJRs
-         1GzCLFWEACoc7TBudgxjB8hTIFlM7c87H8fvbX4axhw6MBSh8OldUo+nxsEzojh/yWW+
-         ZdPuFECi+tKVUbTpUMztHsOQpmKVo/bbMUlOW4WMj8CQ8x7IOTmEB1knosQoo9TvVoyf
-         vTFw==
-X-Gm-Message-State: ACgBeo1Q4TVi6BgdpIk1aWHnxdY8wQ77TnDzdRw/3Wh49kcZNCGofskl
-        fWTnsEBSVRy7BFddtGLh8kRaUw==
-X-Google-Smtp-Source: AA6agR792mm220wXVOY8iINInSkP7OO47CDQTqD6ox3ALgicSewvh8sQM/dCrRGc3T1Cpg9MYRL/XA==
-X-Received: by 2002:a17:902:aa03:b0:172:9b18:ebb1 with SMTP id be3-20020a170902aa0300b001729b18ebb1mr26730429plb.24.1661330286451;
-        Wed, 24 Aug 2022 01:38:06 -0700 (PDT)
-Received: from [10.76.43.148] ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id lp12-20020a17090b4a8c00b001fa8b909ef0sm843210pjb.7.2022.08.24.01.38.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 01:38:06 -0700 (PDT)
-Message-ID: <95f6eec3-62f7-46d8-9bb1-664fb9e36534@bytedance.com>
-Date:   Wed, 24 Aug 2022 16:38:00 +0800
+        Wed, 24 Aug 2022 04:39:25 -0400
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D1D67CAE;
+        Wed, 24 Aug 2022 01:39:22 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.109.138.102])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id A0B49122094DA;
+        Wed, 24 Aug 2022 10:39:20 +0200 (CEST)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Wed, 24 Aug
+ 2022 10:39:20 +0200
+Message-ID: <0663c616-97c8-444c-f390-275fae402453@traphandler.com>
+Date:   Wed, 24 Aug 2022 10:39:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Cc:     helei.sig11@bytedance.com,
-        virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pizhenwei@bytedance.com
-Subject: PING: [PATCH v2] virtio-crypto: fix memory-leak
-To:     mst@redhat.com, herbert@gondor.apana.org.au,
-        arei.gonglei@huawei.com
-References: <20220816094336.27806-1-helei.sig11@bytedance.com>
-From:   Lei He <helei.sig11@bytedance.com>
-In-Reply-To: <20220816094336.27806-1-helei.sig11@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v6 2/3] leds: Add driver for the TLC5925 LED
+ controller
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>
+CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220722081146.47262-1-jjhiblot@traphandler.com>
+ <20220722081146.47262-3-jjhiblot@traphandler.com>
+ <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
+ <5ba34982-52c7-e41a-fba8-d88d93529e47@traphandler.com>
+ <20220804210412.GA30210@duo.ucw.cz>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <20220804210412.GA30210@duo.ucw.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG2EX1.emp2.local (172.16.2.11) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 16408865246057806299
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgtdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepvdehueeuffduudelieefvedttdefgeeuueduteetgeethfevudetgedviefgtdeknecuffhomhgrihhnpehtihdrtghomhenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdek
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/16 下午5:43, Lei He wrote:
-> From: lei he <helei.sig11@bytedance.com>
-> 
-> Fix memory-leak for virtio-crypto akcipher request, this problem is
-> introduced by 59ca6c93387d3(virtio-crypto: implement RSA algorithm).
-> The leak can be reproduced and tested with the following script
-> inside virtual machine:
-> 
-> Signed-off-by: lei he <helei.sig11@bytedance.com>
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> Reviewed-by: Gonglei <arei.gonglei@huawei.com>
-> ---
->   drivers/crypto/virtio/virtio_crypto_akcipher_algs.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> index 2a60d0525cde..168195672e2e 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> @@ -56,6 +56,10 @@ static void virtio_crypto_akcipher_finalize_req(
->   	struct virtio_crypto_akcipher_request *vc_akcipher_req,
->   	struct akcipher_request *req, int err)
->   {
-> +	kfree(vc_akcipher_req->src_buf);
-> +	kfree(vc_akcipher_req->dst_buf);
-> +	vc_akcipher_req->src_buf = NULL;
-> +	vc_akcipher_req->dst_buf = NULL;
->   	virtcrypto_clear_request(&vc_akcipher_req->base);
->   
->   	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine, req, err);
-> 
-> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
 
-PING.
+On 04/08/2022 23:04, Pavel Machek wrote:
+> On Thu 2022-08-04 22:23:00, Jean-Jacques Hiblot wrote:
+>> On 31/07/2022 21:28, Andy Shevchenko wrote:
+>>> On Fri, Jul 22, 2022 at 10:14 AM Jean-Jacques Hiblot
+>>> <jjhiblot@traphandler.com> wrote:
+>>>> The TLC5925 is a 16-channels constant-current LED sink driver.
+>>>> It is controlled via SPI but doesn't offer a register-based interface.
+>>>> Instead it contains a shift register and latches that convert the
+>>>> serial input into a parallel output.
+>>>>
+>>>> Datasheet: https://www.ti.com/lit/ds/symlink/tlc5925.pdf
+>>>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>>>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>>> Sorry for my slowpokeness, but I just realized that this driver may
+>>> not be needed. What is the difference to existing gpio-74x164?
+>> It might work. However it might not be as practical and efficient as the
+>> dedicated LED driver.
+>>
+>> I'll give a try.
+> It is certainly preffered solution. If you decide to re-submit the
+> driver anyway, please mention that we already have GPIO driver for
+> compatible chip, and explain why this is superior.
 
-Best regards,
-Lei He
---
-helei.sig11@bytedance.com
+Hi all,
 
+sorry for the delay. I tried with the  74x164 gpio driver and it works 
+as expected.
+
+The only drawbacks are:
+
+- as-is the 74x164 gpio driver supports only one output-enable gpio. 
+However in practice I don't think multiple OE GPIOs will ever be used.
+
+- with this approach, every time a LED status is changed the whole 
+register has to be sent on the SPI bus. In other words, changes cannot 
+be coalesced.
+
+
+I don't know if this is enough to make a dedicated TLC5925 driver 
+desirable in the kernel.
+
+JJ
+
+>
+> Thanks,
+> 								Pavel
+>

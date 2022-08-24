@@ -2,124 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337135A0287
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00C65A028C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238359AbiHXUMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S240173AbiHXUNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiHXUMb (ORCPT
+        with ESMTP id S240174AbiHXUN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:12:31 -0400
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02FC18351;
-        Wed, 24 Aug 2022 13:12:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1661371910; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=C8kXq44ddm3iaKNd1oRbVUneTC5/YlLrbJKbYJFrSyOwIJMx/hjq0CgILBvnIFJPAVQSicL+m8qOpokoVw3ZMaPWfY1DqHUgDEFlLM4BR9i89XFS87vmf19Y8fqV0KN/bA2q4Xjyd0rqGh14dB9VWNk7WC1qPeTFNuguiIM83M8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1661371910; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=o8+2mxY1s6gN8Aqlaw9vhuuz0VwD5wwLUGg9+r5eCc8=; 
-        b=a2y/UZCDL2gII40gkzMEX9teyJwQWRpdW3QqwSBCO0+lko9tBStKMq5Y9iXI32kmFCGqO+zsYv0vipLJ0JM4ZtGxGEIimp76gV0RiAH+uLPsBv7xo6taYzrPvLNRJKjocfXPwGu9qkAnzZxJ8hvAraFh47hj1R4DbRzuU/D72L8=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661371910;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=o8+2mxY1s6gN8Aqlaw9vhuuz0VwD5wwLUGg9+r5eCc8=;
-        b=f6VU8o9ZHQIjTgQ3f038x8f+Fkqlna8W0jgLN3dR6uixc8bnzogi1i9up8y56WTy
-        RDBnD0ONbiYGEnVYm/gCbndaiFK/AmidbOtlavg2JYTJHdgCJ7krSJGUL/6L26Ttrcr
-        6Nbi62weq+h7ahrASJ+PzNuuJedi/aX/74v2u5QI=
-Received: from localhost.localdomain (103.249.233.18 [103.249.233.18]) by mx.zoho.in
-        with SMTPS id 1661371907172679.3555503675442; Thu, 25 Aug 2022 01:41:47 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
-Message-ID: <20220824201136.182039-1-code@siddh.me>
-Subject: Re: [PATCH] wifi: mac80211: Don't finalize CSA in IBSS mode if state is disconnected
-Date:   Thu, 25 Aug 2022 01:41:36 +0530
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814151512.9985-1-code@siddh.me>
-References: <20220814151512.9985-1-code@siddh.me>
+        Wed, 24 Aug 2022 16:13:28 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C907C51C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:13:22 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id w19so35664294ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:13:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=HgbqYZOjkQz+AVbkvY9xpQJX7wcETZRoC2bMvANI6uE=;
+        b=ukFtpbOmBQulkO1xqsJXiSJmElXO89VlR2jsvOIKyOQ9KMcXV60uHy+QYWtqrkghLz
+         gcs6NwPdiEQX2IprWNpFORcj+L6wxNfO4cdowf/d08oWnthL9JL4s72D4C0/UDisy2ve
+         Ob70c9z8JjEGbLxUkiiW2fd5ljmnNAFJ81ILDyCDZvcduSfLpM5CvDb4H6yvfaZl+Xfo
+         emI3o70UJATAcV0ZyoBwI2CTqB8ykUfCbpGXz3mFqL35Q9X5h4EKhY9ruaYJ6Q0/AVOb
+         Q4tFEwDoN3rwfNFdbfJQuJrnkNk6l/dFe1/jnketvxk2hiUXk2jURcxtDCJmHERUfKRx
+         xq3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=HgbqYZOjkQz+AVbkvY9xpQJX7wcETZRoC2bMvANI6uE=;
+        b=uHEdJ24Jn/IWXFyny+OqHL5YOtyTy/LlkNjHzSpWIVP2ot2dCaHE/MNdwfvCZtcklo
+         YQj17folJHhR6YlKA2dBw17lmZw4HB97s6A567Dj4tL26lx81QOS72nMRyVfFrmSVlbp
+         qfkcy0AwJj31o+Iaz+ztMB5UuYNdZfCqflKhTVj9u/a1ihw44STlyCpSci7F2ImSqAXi
+         t/RApz7a4+6DEcTVXBYjZ9Ja/n/v4ZxHqO9/0sYj4RJSqTSgkaHY94dFLsEOeqTRYyHG
+         jH3x0D25GNhzy3d7h1rXnGazVHM2yHsAoYySYpMBgh2punOF85sArZrHnCrtiS8hGKfM
+         nt3Q==
+X-Gm-Message-State: ACgBeo0g1KWXRUCsmfPJqIkxgd6P9R/AFLYQbnTijdoyNlanPUFLrCbf
+        xv5SXvZYfCgmGo80NFJrB6KdgvMFaWCmsxLGfzBtPA==
+X-Google-Smtp-Source: AA6agR6e2GaA0iz7+Ch1T3xwmrYaZc//8OIuVBCRLQaTRoyiP6K8lvqDC9J0s37qGPahDxwhMlCqh42FkG2OjfBn3C8=
+X-Received: by 2002:a17:906:9bea:b0:73d:cd17:7528 with SMTP id
+ de42-20020a1709069bea00b0073dcd177528mr198282ejc.412.1661372001129; Wed, 24
+ Aug 2022 13:13:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
+References: <20220824065936.861377531@linuxfoundation.org>
+In-Reply-To: <20220824065936.861377531@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 25 Aug 2022 01:43:09 +0530
+Message-ID: <CA+G9fYuTOvKfHz7t0GppiNqLx-9n-yycsLX-rdMQogrh9guX_w@mail.gmail.com>
+Subject: Re: [PATCH 5.19 000/362] 5.19.4-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 14 Aug 2022 20:45:12 +0530  Siddh Raman Pant  wrote:
-> When we are not connected to a channel, sending channel "switch"
-> announcement doesn't make any sense.
->=20
-> The BSS list is empty in that case. This causes the for loop in
-> cfg80211_get_bss() to be bypassed, so the function returns NULL
-> (check line 1424 of net/wireless/scan.c), causing the WARN_ON()
-> in ieee80211_ibss_csa_beacon() to get triggered (check line 500
-> of net/mac80211/ibss.c), which was consequently reported on the
-> syzkaller dashboard.
->=20
-> Thus, check if we have an existing connection before generating
-> the CSA beacon in ieee80211_ibss_finish_csa().
->=20
-> Fixes: cd7760e62c2a ("mac80211: add support for CSA in IBSS mode")
-> Bug report: https://syzkaller.appspot.com/bug?id=3D05603ef4ae8926761b678d=
-2939a3b2ad28ab9ca6
-> Reported-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
-> Cc: stable@vger.kernel.org
+On Wed, 24 Aug 2022 at 12:31, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.19.4 release.
+> There are 362 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 26 Aug 2022 06:58:34 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.4-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Tested-by: syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Syzbot is now booting properly and the test ran successfully.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks,
-Siddh
+NOTE:
+x86_64 and arm64 clang nightly allmodconfig build failed.
+sound/soc/atmel/mchp-spdiftx.c:508:20: error: implicit truncation from
+'int' to bit-field changes value from 1 to -1
+[-Werror,-Wbitfield-constant-conversion]
+dev->gclk_enabled = 1;
+                  ^ ~
+1 error generated.
 
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
-> ---
-> The fixes commit is old, and syzkaller shows the problem exists for
-> 4.19 and 4.14 as well, so CC'd stable list.
->=20
->  net/mac80211/ibss.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/net/mac80211/ibss.c b/net/mac80211/ibss.c
-> index d56890e3fabb..9b283bbc7bb4 100644
-> --- a/net/mac80211/ibss.c
-> +++ b/net/mac80211/ibss.c
-> @@ -530,6 +530,10 @@ int ieee80211_ibss_finish_csa(struct ieee80211_sub_i=
-f_data *sdata)
-> =20
->  =09sdata_assert_lock(sdata);
-> =20
-> +=09/* When not connected/joined, sending CSA doesn't make sense. */
-> +=09if (ifibss->state !=3D IEEE80211_IBSS_MLME_JOINED)
-> +=09=09return -ENOLINK;
-> +
->  =09/* update cfg80211 bss information with the new channel */
->  =09if (!is_zero_ether_addr(ifibss->bssid)) {
->  =09=09cbss =3D cfg80211_get_bss(sdata->local->hw.wiphy,
-> --=20
-> 2.35.1
+clang-14-allmodconfig build pass on x86_64 and arm64.
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.3-363-gafd9d04cfdb9/testrun/11542345/suite/build/test/clang-14-allmodconfig/history/
 
+clang-nightly-allmodconfig build pass on x86_64 and arm64.
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.3-363-gafd9d04cfdb9/testrun/11542345/suite/build/test/clang-nightly-allmodconfig/history/
+
+## Build
+* kernel: 5.19.4-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: afd9d04cfdb9cff1b69e2ff10272ced56c641036
+* git describe: v5.19.3-363-gafd9d04cfdb9
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.3-363-gafd9d04cfdb9
+
+## Test regressions (compared to v5.19.3)
+* arm64, build
+  - clang-nightly-allmodconfig
+
+* x86_64, build
+  - clang-nightly-allmodconfig
+  - https://builds.tuxbuild.com/2DntPWhfYK6ESM6Il3l6aIvKqes/
+
+* riscv, build
+  - clang-nightly-allmodconfig
+  - clang-nightly-defconfig
+  - clang-nightly-tinyconfig
+  - https://builds.tuxbuild.com/2DntPYts34sHJI5VZuK5zKzkXr1/
+
+## No metric Regressions (compared to v5.19.3)
+
+## No test Fixes (compared to v5.19.3)
+
+## No metric Fixes (compared to v5.19.3)
+
+## Test result summary
+total: 106629, pass: 95920, fail: 1031, skip: 9541, xfail: 137
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 306 total, 303 passed, 3 failed
+* arm64: 68 total, 65 passed, 3 failed
+* i386: 57 total, 51 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 56 passed, 9 failed
+* riscv: 32 total, 24 passed, 8 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 61 total, 58 passed, 3 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

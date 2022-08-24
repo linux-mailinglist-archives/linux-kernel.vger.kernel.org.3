@@ -2,179 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689865A02A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C305A02A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240276AbiHXUZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S240320AbiHXUZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239493AbiHXUZK (ORCPT
+        with ESMTP id S240310AbiHXUZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:25:10 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2083.outbound.protection.outlook.com [40.107.101.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B4711C26;
-        Wed, 24 Aug 2022 13:25:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AEhjLVdlYAKaInMm6bDKYJqJkHFSouNANtxMwPNL2XyFDEGwiqiyrqREMsSmm4ELld8OHrEQtK3VLY4fR4c5qmBdEHR5SjuNx60o+kjFtY/NEFfdN47UulmVu9LrZ7CT9hmRMRIq3vBEWyesh+KtniW+9wRZ2TfGqyj3r4DC9dZQV+R22FLy3pZBHraEH0GRr7311Z0Zzr6xeZGrvIc52RAXmkGxpRdJfj8rLB/2h5AEMKTCEFMD6JBAFQ8Ppu/ikopZsACEQGFjUMimsxhBpsklX3FS/lUps+bEF0VeZZz3Ohah87ijA0Brx7BCfctVn8EAqHUMwpMyElTT2B2SvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kobkWjyNfqgeGhRPJPngFMSHtbwaFt6QgTENLMXXy/Y=;
- b=JHEYdyzMaCukA4fUMHmbYXPPpc/bg7yckvhqzJKCGDt0Cp8xKUGBXxQdXPn5ExkW2am93TCob45PDRQVnnfuI8PIpFSaiuOz5b59pJye/iICNCSLIwW7o9fA3YftPEaBsB6gowkFHyxGo/JY6/ZMhnLJaepsv0O9kEMgKiB/1XwPsEJg2h5BrBkFHQwRXYMLB+JO226tW3Qv5269qmCdPpunF7+jtrSQXX08c+cT7z6118N7xjLVJEF4XH0eg8d6PEHm71ora84Hd4fzfMsHDjE9AwICEqTLK5cM6BM0YTxfrfNdjwg4cR2cQBXvL0USfKZ+xrPLAWB+1gpJmVmyrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kobkWjyNfqgeGhRPJPngFMSHtbwaFt6QgTENLMXXy/Y=;
- b=RmndNc8wLoicT6h6iCT3mbMDlpeEBALfBRIP0AII2W5y6KFZwZ5FZi1Y7mtkNIBzsAjtP3HKDosLOFJxUPXIQ2b8Jq6YrmWBeZmiFbml5y9czsrkJ0K8/mcpj9+o65q9GFdazole79ezw2F2LRd7rjjnYHSB0coLtMTnMgtqSvg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MWHPR1201MB0159.namprd12.prod.outlook.com (2603:10b6:301:59::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Wed, 24 Aug
- 2022 20:25:06 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::e00a:1f8c:dcd1:afc3]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::e00a:1f8c:dcd1:afc3%5]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
- 20:25:06 +0000
-Message-ID: <8cb42207-b04c-7222-08fa-60c8eb0b3521@amd.com>
-Date:   Wed, 24 Aug 2022 15:25:03 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] drm: amd: amdgpu: ACPI: Add comment about
- ACPI_FADT_LOW_POWER_S0
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <1831630.tdWV9SEqCh@kreacher>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <1831630.tdWV9SEqCh@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0024.namprd03.prod.outlook.com
- (2603:10b6:610:b0::29) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Wed, 24 Aug 2022 16:25:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE2530F6D;
+        Wed, 24 Aug 2022 13:25:35 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OJlaQi006584;
+        Wed, 24 Aug 2022 20:25:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=x+LyAortpu5TRNqNPw55nWkD8w2jYuet0vVJUp2hZBI=;
+ b=CNRhwlfCznXGvlpKVMdbdslqPoQ3zmArcivgD1OJbbFm6mH+28gnLq1qkFKgAE0wrw+M
+ 9SOhr/HmspNvon+Od2fsU/KwsJVCiSqgaXXfmp9ZvuqPKxPCb6sB8vNsZvzB6TMwik3/
+ pIWHtt5UGW12AsKQj+yPbm0OTnqezXkO0SSBGkCJBp2c7h77a75IpewvD0ZSjGogB3ls
+ EapBtUJ4NDIatsBXecmHNrxV2hPLkNeU2T78kN9uZSCgfuXaIAfvLc4eW+1TwsbOleCT
+ v5morBSY3JFGr6jLdvzzjMWGi6R6qb5DTYoL5J1lunlyGnsZVVJ0sjq3E4mk/2D2kkTB mQ== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j5tf41078-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 20:25:23 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27OKK0UO022273;
+        Wed, 24 Aug 2022 20:25:23 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma03dal.us.ibm.com with ESMTP id 3j2q8a25wc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 20:25:23 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27OKPLgj42533120
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Aug 2022 20:25:21 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 710F66A04D;
+        Wed, 24 Aug 2022 20:25:21 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 277DB6A047;
+        Wed, 24 Aug 2022 20:25:20 +0000 (GMT)
+Received: from [9.211.112.122] (unknown [9.211.112.122])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Aug 2022 20:25:19 +0000 (GMT)
+Message-ID: <04644ee5-2386-1f3d-c1a3-fc4227570cf7@linux.ibm.com>
+Date:   Wed, 24 Aug 2022 16:25:19 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14c37054-fc80-49cd-156f-08da860ebb73
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0159:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lvmxcgOV8j5YlrWMhOgIx9otVrxcUCBbSvOpZcQcNESv3Vbwp0DFjMvmTPgieciPNH7AXY0aeP5yf/7117BAI5tgYhs8V1q8BI9MXFGRy/jr2mjwpV7MkYiRnGMHIhBcRctE8uNHqzZzJT8CpIZJmMl/q3E/r2mBz+H6deQDvLY0I9XESA7UJMMlEm0ZxSbJcICgwIjgpjNeRWLfGGbMZM8slKdE+PAxYvlMHsvs6MN/8j3GJPLHqg/RB5IS2xAGpD2vn38n1eqh1Jb5gIGbzXjYzXT/PqfgpCmVIok5lwBVZnpxABzf6oj5xvs/N1PeUbafp3a5UYOqnA4zZQdj/cj4fzdNQ8wJmfguLTmr/ejHm2xz8KPNPXWeq2vFRKQFP5hQEOoUSMEwKr/JeJzIDda/+irVdXs4KhADBVYV8JM+Tit7DbIwswL+OF88c2Ve+8v6bZ4FTaDnZbXlIpdyM4UIniBUZMD6k/ejhufE1ACl1DUEZN9YodIqlptBQvJTRZ3xRAYJu4I1Q2eZQcOHfZZ3ZWOmVkYunjvAeuvj0+Fq4caCx44Drg0Y7YHQzDGz+X+OBUnkcbrikDL84xsLOh1IEfQ5Jsfrrkqo0MuCnyxniL6Jeo86x55qQYVdqwzqHo+HB0weOgFkAogi1bVnChOOCCDtRzpBJY1Z2jPXu5WtHv2TTBbj9qcONGgoQBXXEIZCSHInnYDaINBQQNATrsrpC5HqAQW2h1s1rzrvE8YdaLpSHtcS9QtzjsnzS6CwBSzGym3f/tINxQvBuz3M97ltC+olCZzA5FMIgPrO7vpjXNE3jEtdMPbKGsJSm38fOrs7eu7XREIeVvZp7/b3MVNAwC8kF0niJ5Xln7cSSXc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(2616005)(186003)(86362001)(53546011)(2906002)(26005)(6506007)(6512007)(31696002)(84970400001)(38100700002)(83380400001)(8936002)(36756003)(110136005)(6636002)(54906003)(41300700001)(316002)(8676002)(4326008)(66476007)(31686004)(478600001)(5660300002)(66556008)(6666004)(966005)(6486002)(45080400002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RTBRT0w3REFLOTFiK1NIejhrOEVhaE5PU1dXSmgyeVhYOEFWNGFZbVhKY2NN?=
- =?utf-8?B?UzVTMHRDSGFpREZ5blVwbExWQnFOdDVUVlhJM2paQXVRRUEvZVhNNXdaS291?=
- =?utf-8?B?VTJrbGJrQnlKYVdlajhZY3ZxYzdUekV6WUFZTjlmUEdYMWpnVk1aRkJCQU1X?=
- =?utf-8?B?UXlXd2lUOTZvTTVWVDA4dW9WNlZvV2ZSZjRNZ1lJU3JaT3hpZ2sxSFBsS2M0?=
- =?utf-8?B?a2VWZXN1L0J6ZTc4d2hkalRNd3dCVk9SSFBqSG1RTFdUNStTY1FNaENKT3kz?=
- =?utf-8?B?RVZpNm9rV1hCdk9TZ203TWdjb05JYSsyZVAzbmhiaDlLdnl4WDVTdWV0eGZH?=
- =?utf-8?B?eThEOUh3RTc0RWxTTjZzNHpGZXUvUGIwbXc0R005TEx4MUtZdU0vakRMR3Yz?=
- =?utf-8?B?b2pzNHkwR1ByL2VIVVpFckdSWGxWTEwzYlUwSGtMQU1UbHFzVldienBtdG43?=
- =?utf-8?B?UElidURuR29FYUFkSzVtU3k4VDcrSHhUM05OaTZQZncxdG1qMkk0YURkdUtV?=
- =?utf-8?B?d01xZElDdTBRdDQ3Y0xKZDJXRGtjSXpRU1lhYjk3WkhLTzY5MGMwejlHdEhv?=
- =?utf-8?B?bVR5RXo1dHhkVmx0dVNTc1M2cnljRlh2UTB4eFRJMWZRZk1xMEc4SFVrS1Fk?=
- =?utf-8?B?MzFmcUV3bmRQemNUNndEY3JiZFIzTWVlcUhqRndNRzhxUFdFYXBiTGVFV3hH?=
- =?utf-8?B?bnVyQThLNzAvbkZuRVAxNmw0U2tPdGw2bTVVOHdPZDF2ZjlKdWRJSlBwRUlL?=
- =?utf-8?B?cWs2ZUdzbUdxTkxEakFiYWE4OXlsOXM2RlVsbnNwRG1BWUJjWE1lMHdVVnA0?=
- =?utf-8?B?ZHBBKzE5a3RzbmdiZW9mOWo5bTRaMktXemFtRWRXQjFpWFRmYUpkazZROXFh?=
- =?utf-8?B?MGpRcU51UFZEN2xjTlRURVRtemZsQ2JVdzJ1enNFOTdpZXUwc044UTd2cjA3?=
- =?utf-8?B?LzRxVTFpQXZTbFRXdE5DUDlMOWgzTk5FVVltaTEvZzVqM0xDbUJSa0hxTlcx?=
- =?utf-8?B?VC94L0wvN3ZTSGxreHdzdCtkVVpPQU4remVjd2NaNEdXdlIyK21Ec0lBTmFL?=
- =?utf-8?B?RG1IVUVkSEhJS2NSZkxhQ0xmZkJHVXRWbWFnUEx3aXFHeE1KS1B4dHdWenZi?=
- =?utf-8?B?ZGhWUVJJRVNaTDJhS0lURjJ4dTlaWkVJRWVJWDJjMUZLc3ZHVUlhOCs4Y1NK?=
- =?utf-8?B?UmpDRjBrcm9DSlBMVUZJQjVLUmR2dzhrWGQyYkg3UGx4SytiYUhqanRReDdB?=
- =?utf-8?B?Ny8yaDIzSWhtb25rYmlRNFJmMEtVejhWNFFhSk5yV3FVTU83RXNuWDlTNy9Z?=
- =?utf-8?B?a0FRTVZLUHk0V1Azc3FDcnp2Z20rZVhXcmR4b2tqYmRzWFMyV0k0cFdZTTRI?=
- =?utf-8?B?dUFIVnNibFpHMXAwQzkzRlI2b1pXZzVua1FpMnlqUWg2LzZtVjgydGliUFJH?=
- =?utf-8?B?TC9VYmczV0lDZnNUVzZzOEZwWExRRXorQ1VoYUYwNGN5bGVwa1RVR2ErWUNZ?=
- =?utf-8?B?SXVlMUlNVTFrOHRjbk0vQVZ2NWMwMHNjWDRUSlFJUVRUODNQRXc1R2syck9U?=
- =?utf-8?B?Sm1iQzBDeW85T3g0aVU3SzluOHNwUWhqUmN0SnFEdDUzdDkrcUlMSEZGK0Jp?=
- =?utf-8?B?S1pNVk5wNWhRTWdFb3dZaHpTaVdNckd0YUs5Z2l0bk4yMGV6bDl5MFlRYjZO?=
- =?utf-8?B?WHA0dU9tekhJSEo3NjFCYjVkVStacXhvbzk3UFJmUC9oRzlaVXNyeDM3anZr?=
- =?utf-8?B?Z2hKdkIxQTFReVRTVjAzblhYb3FzUzVFUTk2c09kREdydkMwMlVxWjI2Myty?=
- =?utf-8?B?dFBTODNKR2NDRGtkNkJBMGppaWlhTElJeUN4MHJWTVdDMGxVRVorb1BNc1pm?=
- =?utf-8?B?R0p5SUFDZG9Jck9EZVlQa0ZiQ2lqT1BvOVM4Y0d3dkwzYkZMNWdZOFZNdjBy?=
- =?utf-8?B?UGJORTU5YUJRai90WVk1NHdBaTRhcTRQNHpUTUJGQUN2Nk0rTlc3c0hPMGdJ?=
- =?utf-8?B?bjNYbHE2QlpFckp0ejhMTDgwbjhLek5KaUdCOXA5d2UyTmZ5ajE5ZVVJcVdk?=
- =?utf-8?B?ZkNCWjNuZmFDZFpIM01MVnpwd1k2cytpZmR5WmV2MW5XQkJjN2EvdmRvclUw?=
- =?utf-8?Q?GXN8Iw0pD0JqN10p1fkTXLWEh?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14c37054-fc80-49cd-156f-08da860ebb73
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 20:25:06.0610
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yByvOSGAjGxYMXjroejoJNYHSzVkgghx7+AjKQ+pd3jSa8kWYKkttdu6l06jgCif68whKXCQE7iiHuJGmKwmQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0159
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] iommu/s390: Fix race with release_device ops
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, schnelle@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
+References: <20220823203059.81919-1-mjrosato@linux.ibm.com>
+ <a6e42442-d9cb-0d63-bb71-da78a5669a51@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <a6e42442-d9cb-0d63-bb71-da78a5669a51@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: r4qAPCH24FV5xKnEVuvKrWrpsZJM3HJf
+X-Proofpoint-ORIG-GUID: r4qAPCH24FV5xKnEVuvKrWrpsZJM3HJf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-24_12,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 phishscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208240073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/2022 12:32, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 8/24/22 4:37 AM, Pierre Morel wrote:
 > 
-> According to the ACPI specification [1], the ACPI_FADT_LOW_POWER_S0
-> flag merely means that it is better to use low-power S0 idle on the
-> given platform than S3 (provided that the latter is supported) and it
-> doesn't preclude using either of them (which of them will be used
-> depends on the choices made by user space).
 > 
-> However, on some systems that flag is used to indicate whether or not
-> to enable special firmware mechanics allowing the system to save more
-> energy when suspended to idle.  If that flag is unset, doing so is
-> generally risky.
+> On 8/23/22 22:30, Matthew Rosato wrote:
+>> With commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
+>> calls") s390-iommu is supposed to handle dynamic switching between IOMMU
+>> domains and the DMA API handling.  However, this commit does not
+>> sufficiently handle the case where the device is released via a call
+>> to the release_device op as it may occur at the same time as an opposing
+>> attach_dev or detach_dev since the group mutex is not held over
+>> release_device.  This was observed if the device is deconfigured during a
+>> small window during vfio-pci initialization and can result in WARNs and
+>> potential kernel panics.
+>>
+>> Handle this by tracking when the device is probed/released via
+>> dev_iommu_priv_set/get().  Ensure that once the device is released only
+>> release_device handles the re-init of the device DMA.
+>>
+>> Fixes: fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev calls")
+>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>> ---
+>>   arch/s390/include/asm/pci.h |  1 +
+>>   arch/s390/pci/pci.c         |  1 +
+>>   drivers/iommu/s390-iommu.c  | 68 ++++++++++++++++++++++++++++---------
+>>   3 files changed, 54 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+>> index 7b4cdadbc023..1295b6900e4b 100644
+>> --- a/arch/s390/include/asm/pci.h
+>> +++ b/arch/s390/include/asm/pci.h
+>> @@ -157,6 +157,7 @@ struct zpci_dev {
+>>       /* DMA stuff */
+>>       unsigned long    *dma_table;
+>>       spinlock_t    dma_table_lock;
+>> +    spinlock_t    dma_domain_lock;
+>>       int        tlb_refresh;
+>>         spinlock_t    iommu_bitmap_lock;
+>> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+>> index 73cdc5539384..61901c1be3cc 100644
+>> --- a/arch/s390/pci/pci.c
+>> +++ b/arch/s390/pci/pci.c
+>> @@ -832,6 +832,7 @@ struct zpci_dev *zpci_create_device(u32 fid, u32 fh, enum zpci_state state)
+>>       kref_init(&zdev->kref);
+>>       mutex_init(&zdev->lock);
+>>       mutex_init(&zdev->kzdev_lock);
+>> +    spin_lock_init(&zdev->dma_domain_lock);
+>>         rc = zpci_init_iommu(zdev);
+>>       if (rc)
+>> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+>> index c898bcbbce11..513a7ebd23b3 100644
+>> --- a/drivers/iommu/s390-iommu.c
+>> +++ b/drivers/iommu/s390-iommu.c
+>> @@ -90,15 +90,39 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>>       struct zpci_dev *zdev = to_zpci_dev(dev);
+>>       struct s390_domain_device *domain_device;
+>>       unsigned long flags;
+>> -    int cc, rc;
+>> +    int cc, rc = 0;
+>>         if (!zdev)
+>>           return -ENODEV;
+>>   +    /* First check compatibility */
+>> +    spin_lock_irqsave(&s390_domain->list_lock, flags);
+>> +    /* First device defines the DMA range limits */
+>> +    if (list_empty(&s390_domain->devices)) {
+>> +        domain->geometry.aperture_start = zdev->start_dma;
+>> +        domain->geometry.aperture_end = zdev->end_dma;
+>> +        domain->geometry.force_aperture = true;
+>> +    /* Allow only devices with identical DMA range limits */
+>> +    } else if (domain->geometry.aperture_start != zdev->start_dma ||
+>> +           domain->geometry.aperture_end != zdev->end_dma) {
+>> +        rc = -EINVAL;
+>> +    }
+>> +    spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>> +    if (rc)
+>> +        return rc;
+>> +
+>>       domain_device = kzalloc(sizeof(*domain_device), GFP_KERNEL);
+>>       if (!domain_device)
+>>           return -ENOMEM;
+>>   +    /* Leave now if the device has already been released */
+>> +    spin_lock_irqsave(&zdev->dma_domain_lock, flags);
+>> +    if (!dev_iommu_priv_get(dev)) {
+>> +        spin_unlock_irqrestore(&zdev->dma_domain_lock, flags);
+>> +        kfree(domain_device);
+>> +        return 0;
+>> +    }
+>> +
+>>       if (zdev->dma_table && !zdev->s390_domain) {
+>>           cc = zpci_dma_exit_device(zdev);
+>>           if (cc) {
 > 
-> Accordingly, add a comment to explain the ACPI_FADT_LOW_POWER_S0 check
-> in amdgpu_acpi_is_s0ix_active(), the purpose of which is otherwise
-> somewhat unclear.
+> Am I wrong? It seems to me that zpci_dma_exit_device here is called with the spin_lock locked but this function zpci_dma_exit_device calls vfree which may sleep.
 > 
-> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fuefi.org%2Fspecs%2FACPI%2F6.4%2F05_ACPI_Software_Programming_Model%2FACPI_Software_Programming_Model.html%23fixed-acpi-description-table-fadt&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7Cf43320dda5114deeb16908da85f69d3b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637969591512297179%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=xp8pNzsXCkLcIJOJFY77yaLkMrvz5he3S%2Bi%2FwaxTwwg%3D&amp;reserved=0 # [1]
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Oh, good point, I just enabled lockdep to verify that.
 
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c |    6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> Index: linux-pm/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> +++ linux-pm/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-> @@ -1066,6 +1066,12 @@ bool amdgpu_acpi_is_s0ix_active(struct a
->   	    (pm_suspend_target_state != PM_SUSPEND_TO_IDLE))
->   		return false;
->   
-> +	/*
-> +	 * If ACPI_FADT_LOW_POWER_S0 is not set in the FADT, it is generally
-> +	 * risky to do any special firmware-related preparations for entering
-> +	 * S0ix even though the system is suspending to idle, so return false
-> +	 * in that case.
-> +	 */
->   	if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)) {
->   		dev_warn_once(adev->dev,
->   			      "Power consumption will be higher as BIOS has not been configured for suspend-to-idle.\n"
-> 
-> 
-> 
+I think we could just replace this with a mutex instead, it's not a performance path.  I've been running tests successfully today with this patch modified to instead use a mutex for dma_domain_lock.
 

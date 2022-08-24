@@ -2,191 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736EE59F1FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2D159F206
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234483AbiHXDWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 23:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S232656AbiHXD0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 23:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbiHXDVe (ORCPT
+        with ESMTP id S234698AbiHXD0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 23:21:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EC17EFD5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:30 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 1so8073890pfu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=ntVqCWkbl1KfzGFt4cpcTZjZVHMz1SHqpeAZAtzUVfc=;
-        b=dEC8FUpC5wrVO5HalvQsP+lxgGYW8EzxmbPT5ojDUoUK1LT3xiSUqdFMXRB3X5ZL7a
-         wEksX+A4QmK5Kg3S6viyJ+MaVP+xtluYBFN9OYNtyvLuxxMMktn5dw3n/avaSCdLDoE6
-         gZQzEugFypTWW2Zfp3uN8uxPDdEFnqRDBnXFqKx7OY2poq/HK6x3scyoNeHhd+7LVDKI
-         6X+cQonCPp5IvlrfxTnzdayUs67+DG7bkez8PSJgLmtxZY2noFz3rdhh4g7IERkXHg23
-         FVoAGFOius152GJlVk9I/ZhSZwcdYejhUvGHxy+BZJ1B+GIm0o/36OnRe3P2Vzit2Qru
-         HQLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=ntVqCWkbl1KfzGFt4cpcTZjZVHMz1SHqpeAZAtzUVfc=;
-        b=nrDsLSYVA/zYBkuWnt1e3SxdbdbPZberwPI4f1zJ2malJxmAAXyBMfJ4rQl+EE0hPg
-         XeetIWeDqeYQjMejZdqU6Sm/coVL0C9u5DEhiLWqebN1rTT3kjipnyk378J/HzcUZaJy
-         WVIpAa/EqaaK8q/TDnqDPdsxjsMdz9X+XUjHrizabHt+W6dWDPz0bqsDPFFPTNL5X3o7
-         rfIno/Kn4Jylc6dKeo8tjE8iyFYuPQsbOTVVFXIDpsfK/Ou7vA9dleMZwNHDlB+8AZ+5
-         qx1z2ONMhWz7d7n1Lht2a+50Ooe8pITG9Dml0Cr1Ia/sGA8WTk59xulGeB4CJZIrmzaU
-         6ZfQ==
-X-Gm-Message-State: ACgBeo3hTywm9NshWaa9YLqvXhEuMCGAGISD3oviEMEFEVPgWkqlSM0Z
-        T8mUm9AjUCIzKjuN4luZUckLsw==
-X-Google-Smtp-Source: AA6agR7sPtlvcm46TBeuUUX4jmbUZwmhI+zRtXyf4QLkmHg/rn3YGQNH3SyHW41z9jIUMjMN60boNA==
-X-Received: by 2002:a05:6a00:1996:b0:52e:b0f7:8c67 with SMTP id d22-20020a056a00199600b0052eb0f78c67mr27725629pfl.20.1661311289648;
-        Tue, 23 Aug 2022 20:21:29 -0700 (PDT)
-Received: from MacBook-Pro.local.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id k23-20020a628417000000b00534bcd63f2fsm11682556pfd.190.2022.08.23.20.21.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Aug 2022 20:21:29 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     oliver.sang@intel.com
-Cc:     Jason@zx2c4.com, Pavel.Tatashin@microsoft.com,
-        akpm@linux-foundation.org, cai@lca.pw, iamjoonsoo.kim@lge.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, lizefan.x@bytedance.com,
-        lizhe.67@bytedance.com, lkp@intel.com, lkp@lists.01.org,
-        mark-pk.tsai@mediatek.com, mgorman@techsingularity.net,
-        mhiramat@kernel.org, mhocko@kernel.org, rostedt@goodmis.org,
-        vbabka@suse.cz, yang.shi@linaro.org
-Subject: Re: [page_ext]  a02a0e703b: Kernel_panic-not_syncing:Out_of_memory
-Date:   Wed, 24 Aug 2022 11:21:15 +0800
-Message-Id: <20220824032115.76008-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <YwHmXLu5txij+p35@xsang-OptiPlex-9020>
-References: <YwHmXLu5txij+p35@xsang-OptiPlex-9020>
+        Tue, 23 Aug 2022 23:26:17 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61BC82D0D
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:24:09 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661311447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WvqtXr0ZxDawY/tyHZfZOqHE/RevYexrNMdIBURV2lg=;
+        b=vNQwWk7c+MjxfvhOj1U6GZUD869Kl6V+fdN0KXKAH9PohNr6y0YHoyitt1jyi9pQYtKPgR
+        CsTXduakHSeruhv6WvCzHFIyeXMAg1yAmek6K7CQIJxE6HpZjDWSKhVFiV5iCt0pL+XilT
+        vk7NHxtiopnSnDfS35NwH4QZR032Xak=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH RESEND] mm: hugetlb: simplify per-node sysfs creation and
+ removal
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <60933ffc-b850-976c-78a0-0ee6e0ea9ef0@redhat.com>
+Date:   Wed, 24 Aug 2022 11:23:12 +0800
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Greg KH <gregkh@linuxfoundation.org>, rafael@kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, andi@firstfloor.org,
+        linux-kernel@vger.kernel.org, Linux MM <linux-mm@kvack.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <685F3238-D727-4C1F-9BA4-36651ABCD91A@linux.dev>
+References: <20220819080029.12241-1-songmuchun@bytedance.com>
+ <60933ffc-b850-976c-78a0-0ee6e0ea9ef0@redhat.com>
+To:     David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21 Aug 2022 16:01:32, kernel test robot <oliver.sang@intel.com> wrote:
->Greeting,
->
->FYI, we noticed the following commit (built with gcc-11):
->
->commit: a02a0e703b59a6fdd1b8ae50b47396621a03fc1f ("page_ext: move up page_ext_init() to catch early page allocation if DEFERRED_STRUCT_PAGE_INIT is n")
->https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
->
->in testcase: boot
->
->on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
->
->caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
->+----------------------------------------+------------+------------+
->|                                        | 3be3989b3b | a02a0e703b |
->+----------------------------------------+------------+------------+
->| boot_successes                         | 70         | 0          |
->| boot_failures                          | 0          | 66         |
->| Mem-Info                               | 0          | 66         |
->| Kernel_panic-not_syncing:Out_of_memory | 0          | 66         |
->+----------------------------------------+------------+------------+
->
->
->If you fix the issue, kindly add following tag
->Reported-by: kernel test robot <oliver.sang@intel.com>
->
->
->[    0.541637][    T0] Memory: 3927672K/4193784K available (11206K kernel code, 4497K rwdata, 3820K rodata, 1008K init, 1332K bss, 266112K reserved, 0K
->cma-reserved, 3432328K highmem)
->[    0.545125][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
->[    0.546120][    T0] swapper: vmalloc error: size 7864320, vm_struct allocation failed, mode:0xdc0(GFP_KERNEL|__GFP_ZERO), nodemask=(null),cpuset=(nul
->l),mems_allowed=0-7
->[    0.548152][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc1-00121-ga02a0e703b59 #1
->[    0.549286][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
->[    0.550662][    T0] Call Trace:
->[    0.551108][    T0]  ? show_stack+0x3d/0x45
->[    0.551694][    T0]  dump_stack_lvl+0x34/0x44
->[    0.552299][    T0]  dump_stack+0xd/0x10
->[    0.552841][    T0]  warn_alloc.cold+0x55/0xaf
->[    0.553454][    T0]  __vmalloc_node_range+0x87/0x140
->[    0.554139][    T0]  vzalloc_node+0x64/0x80
->[    0.554716][    T0]  ? _page_ext_init+0x119/0x1e7
->[    0.555382][    T0]  _page_ext_init+0x119/0x1e7
->[    0.556010][    T0]  start_kernel+0x213/0x49a
->[    0.556615][    T0]  ? early_idt_handler_common+0x44/0x44
->[    0.557358][    T0]  i386_start_kernel+0x48/0x4a
->[    0.557995][    T0]  startup_32_smp+0x161/0x164
->[    0.558622][    T0] Mem-Info:
->[    0.559039][    T0] active_anon:0 inactive_anon:0 isolated_anon:0
->[    0.559039][    T0]  active_file:0 inactive_file:0 isolated_file:0
->[    0.559039][    T0]  unevictable:0 dirty:0 writeback:0
->[    0.559039][    T0]  slab_reclaimable:0 slab_unreclaimable:25
->[    0.559039][    T0]  mapped:0 shmem:0 pagetables:0 bounce:0
->[    0.559039][    T0]  kernel_misc_reclaimable:0
->[    0.559039][    T0]  free:981893 free_pcp:0 free_cma:0
->[    0.564216][    T0] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB kernel_stack:0kB pagetables:0kB all_unreclaimable? no
->[    0.567976][    T0] Node 0 DMA free:15360kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15992kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
->[    0.571575][    T0] lowmem_reserve[]: 0 0 0 0
->[    0.572172][    T0] Node 0 Normal free:479884kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:745464kB managed:479984kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
->[    0.575803][    T0] lowmem_reserve[]: 0 0 0 0
->[    0.576395][    T0] Node 0 HighMem free:3432328kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:3432328kB managed:3432328kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
->[    0.580081][    T0] lowmem_reserve[]: 0 0 0 0
->[    0.580668][    T0] Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 1*1024kB (U) 1*2048kB (M) 3*4096kB (M) = 15360kB
->[    0.582377][    T0] Node 0 Normal: 3*4kB (UM) 2*8kB (UM) 1*16kB (U) 1*32kB (M) 1*64kB (M) 2*128kB (UM) 3*256kB (UM) 1*512kB (U) 1*1024kB (U) 3*2048kB (UM) 115*4096kB (M) = 479884kB
->[    0.584609][    T0] Node 0 HighMem: 0*4kB 1*8kB (M) 0*16kB 0*32kB 0*64kB 1*128kB (M) 1*256kB (M) 1*512kB (M) 1*1024kB (M) 1*2048kB (M) 837*4096kB (M) = 3432328kB
->[    0.586543][    T0] 0 total pagecache pages
->[    0.587121][    T0] 0 pages in swap cache
->[    0.587680][    T0] Free swap  = 0kB
->[    0.588170][    T0] Total swap = 0kB
->[    0.588664][    T0] 1048446 pages RAM
->[    0.589165][    T0] 858082 pages HighMem/MovableOnly
->[    0.589850][    T0] 66528 pages reserved
->[    0.590394][    T0] 0 pages cma reserved
->[    0.590947][    T0] page ext allocation failure
->[    0.591574][    T0] Kernel panic - not syncing: Out of memory
->[    0.592360][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc1-00121-ga02a0e703b59 #1
->[    0.593520][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
->[    0.594937][    T0] Call Trace:
->[    0.595370][    T0]  ? show_stack+0x3d/0x45
->[    0.595952][    T0]  dump_stack_lvl+0x34/0x44
->[    0.596560][    T0]  dump_stack+0xd/0x10
->[    0.597098][    T0]  panic+0xdd/0x251
->[    0.597602][    T0]  _page_ext_init+0x131/0x1e7
->[    0.598223][    T0]  start_kernel+0x213/0x49a
->[    0.598830][    T0]  ? early_idt_handler_common+0x44/0x44
->[    0.599530][    T0]  i386_start_kernel+0x48/0x4a
->[    0.600152][    T0]  startup_32_smp+0x161/0x164
->
->
->
->To reproduce:
->
->        # build kernel
->	cd linux
->	cp config-6.0.0-rc1-00121-ga02a0e703b59 .config
->	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 olddefconfig prepare modules_prepare bzImage modules
->	make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 INSTALL_MOD_PATH=<mod-install-dir> modules_install
->	cd <mod-install-dir>
->	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
->
->
->        git clone https://github.com/intel/lkp-tests.git
->        cd lkp-tests
->        bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
->
->        # if come across any failure that blocks the test,
->        # please remove ~/.lkp and /lkp dir to run from a clean state.
 
-The reaon of this problem is we call page_ext_init() before vmap initialization.
-Moving page_ext_init() behind vmalloc_init() will solve this problem. Suggusted
-by Michal Hocko <mhocko@suse.com>, I will send another patch using a cmd line
-parameter to achieve the idea and solve the oom problem. Thanks for reporting
-this bug.
+
+> On Aug 23, 2022, at 18:21, David Hildenbrand <david@redhat.com> wrote:
+>=20
+> On 19.08.22 10:00, Muchun Song wrote:
+>> The following commit offload per-node sysfs creation and removal to a =
+kworker and
+>> did not say why it is needed.  And it also said "I don't know that =
+this is
+>> absolutely required".  It seems like the author was not sure as well. =
+ Since it
+>> only complicates the code, this patch will revert the changes to =
+simplify the code.
+>>=20
+>>  39da08cb074c ("hugetlb: offload per node attribute registrations")
+>>=20
+>> We could use memory hotplug notifier to do per-node sysfs creation =
+and removal
+>> instead of inserting those operations to node registration and =
+unregistration.
+>> Then, it can reduce the code coupling between node.c and hugetlb.c.  =
+Also, it can
+>> simplify the code.
+>>=20
+>> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+>=20
+>=20
+> [...]
+>=20
+>> @@ -683,7 +626,6 @@ static int register_node(struct node *node, int =
+num)
+>> void unregister_node(struct node *node)
+>> {
+>> 	compaction_unregister_node(node);
+>> -	hugetlb_unregister_node(node);		/* no-op, if memoryless =
+node */
+>> 	node_remove_accesses(node);
+>> 	node_remove_caches(node);
+>> 	device_unregister(&node->dev);
+>> @@ -905,74 +847,8 @@ void register_memory_blocks_under_node(int nid, =
+unsigned long start_pfn,
+>> 			   (void *)&nid, func);
+>> 	return;
+>> }
+>=20
+> [...]
+>=20
+>> 	/*
+>> 	 * Create all node devices, which will properly link the node
+>> 	 * to applicable memory block devices and already created cpu =
+devices.
+>> diff --git a/include/linux/node.h b/include/linux/node.h
+>> index 40d641a8bfb0..ea817b507f54 100644
+>> --- a/include/linux/node.h
+>> +++ b/include/linux/node.h
+>> @@ -2,15 +2,15 @@
+>> /*
+>>  * include/linux/node.h - generic node definition
+>>  *
+>> - * This is mainly for topological representation. We define the=20
+>> - * basic 'struct node' here, which can be embedded in per-arch=20
+>> + * This is mainly for topological representation. We define the
+>> + * basic 'struct node' here, which can be embedded in per-arch
+>>  * definitions of processors.
+>>  *
+>>  * Basic handling of the devices is done in drivers/base/node.c
+>> - * and system devices are handled in drivers/base/sys.c.=20
+>> + * and system devices are handled in drivers/base/sys.c.
+>>  *
+>>  * Nodes are exported via driverfs in the class/node/devices/
+>> - * directory.=20
+>> + * directory.
+>=20
+> Unrelated changes.
+
+Yep, a minor cleanup BTW.
+
+>=20
+>>  */
+>> #ifndef _LINUX_NODE_H_
+>> #define _LINUX_NODE_H_
+>> @@ -18,7 +18,6 @@
+>> #include <linux/device.h>
+>> #include <linux/cpumask.h>
+>> #include <linux/list.h>
+>> -#include <linux/workqueue.h>
+>>=20
+>> /**
+>>  * struct node_hmem_attrs - heterogeneous memory performance =
+attributes
+>> @@ -84,10 +83,6 @@ static inline void node_set_perf_attrs(unsigned =
+int nid,
+>> struct node {
+>> 	struct device	dev;
+>> 	struct list_head access_list;
+>> -
+>> -#if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_HUGETLBFS)
+>> -	struct work_struct	node_work;
+>> -#endif
+>> #ifdef CONFIG_HMEM_REPORTING
+>> 	struct list_head cache_attrs;
+>> 	struct device *cache_dev;
+>> @@ -96,7 +91,6 @@ struct node {
+>>=20
+>> struct memory_block;
+>> extern struct node *node_devices[];
+>> -typedef  void (*node_registration_func_t)(struct node *);
+>>=20
+>> #if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_NUMA)
+>> void register_memory_blocks_under_node(int nid, unsigned long =
+start_pfn,
+>> @@ -144,11 +138,6 @@ extern void =
+unregister_memory_block_under_nodes(struct memory_block *mem_blk);
+>> extern int register_memory_node_under_compute_node(unsigned int =
+mem_nid,
+>> 						   unsigned int cpu_nid,
+>> 						   unsigned access);
+>> -
+>> -#ifdef CONFIG_HUGETLBFS
+>> -extern void register_hugetlbfs_with_node(node_registration_func_t =
+doregister,
+>> -					 node_registration_func_t =
+unregister);
+>> -#endif
+>> #else
+>> static inline void node_dev_init(void)
+>> {
+>> @@ -176,11 +165,6 @@ static inline int =
+unregister_cpu_under_node(unsigned int cpu, unsigned int nid)
+>> static inline void unregister_memory_block_under_nodes(struct =
+memory_block *mem_blk)
+>> {
+>> }
+>> -
+>> -static inline void =
+register_hugetlbfs_with_node(node_registration_func_t reg,
+>> -						node_registration_func_t =
+unreg)
+>> -{
+>> -}
+>> #endif
+>>=20
+>> #define to_node(device) container_of(device, struct node, dev)
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index 536a52c29035..9a72499486c1 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -33,6 +33,7 @@
+>> #include <linux/migrate.h>
+>> #include <linux/nospec.h>
+>> #include <linux/delayacct.h>
+>> +#include <linux/memory.h>
+>>=20
+>> #include <asm/page.h>
+>> #include <asm/pgalloc.h>
+>> @@ -3967,19 +3968,19 @@ static void hugetlb_unregister_node(struct =
+node *node)
+>>  * Register hstate attributes for a single node device.
+>>  * No-op if attributes already registered.
+>>  */
+>> -static void hugetlb_register_node(struct node *node)
+>> +static int hugetlb_register_node(struct node *node)
+>> {
+>> 	struct hstate *h;
+>> 	struct node_hstate *nhs =3D &node_hstates[node->dev.id];
+>> 	int err;
+>>=20
+>> 	if (nhs->hugepages_kobj)
+>> -		return;		/* already allocated */
+>> +		return 0;		/* already allocated */
+>>=20
+>> 	nhs->hugepages_kobj =3D kobject_create_and_add("hugepages",
+>> 							=
+&node->dev.kobj);
+>> 	if (!nhs->hugepages_kobj)
+>> -		return;
+>> +		return -ENOMEM;
+>>=20
+>> 	for_each_hstate(h) {
+>> 		err =3D hugetlb_sysfs_add_hstate(h, nhs->hugepages_kobj,
+>> @@ -3989,9 +3990,28 @@ static void hugetlb_register_node(struct node =
+*node)
+>> 			pr_err("HugeTLB: Unable to add hstate %s for =
+node %d\n",
+>> 				h->name, node->dev.id);
+>> 			hugetlb_unregister_node(node);
+>> -			break;
+>> +			return -ENOMEM;
+>> 		}
+>> 	}
+>> +	return 0;
+>> +}
+>> +
+>> +static int __meminit hugetlb_memory_callback(struct notifier_block =
+*self,
+>> +					     unsigned long action, void =
+*arg)
+>> +{
+>> +	int ret =3D 0;
+>> +	struct memory_notify *mnb =3D arg;
+>> +	int nid =3D mnb->status_change_nid;
+>> +
+>> +	if (nid =3D=3D NUMA_NO_NODE)
+>> +		return NOTIFY_DONE;
+>> +
+>> +	if (action =3D=3D MEM_GOING_ONLINE)
+>> +		ret =3D hugetlb_register_node(node_devices[nid]);
+>> +	else if (action =3D=3D MEM_CANCEL_ONLINE || action =3D=3D =
+MEM_OFFLINE)
+>> +		hugetlb_unregister_node(node_devices[nid]);
+>> +
+>> +	return notifier_from_errno(ret);
+>> }
+>>=20
+>> /*
+>> @@ -4003,18 +4023,11 @@ static void __init =
+hugetlb_register_all_nodes(void)
+>> {
+>> 	int nid;
+>>=20
+>> -	for_each_node_state(nid, N_MEMORY) {
+>> -		struct node *node =3D node_devices[nid];
+>> -		if (node->dev.id =3D=3D nid)
+>> -			hugetlb_register_node(node);
+>> -	}
+>> -
+>> -	/*
+>> -	 * Let the node device driver know we're here so it can
+>> -	 * [un]register hstate attributes on node hotplug.
+>> -	 */
+>> -	register_hugetlbfs_with_node(hugetlb_register_node,
+>> -				     hugetlb_unregister_node);
+>> +	get_online_mems();
+>> +	hotplug_memory_notifier(hugetlb_memory_callback, 0);
+>> +	for_each_node_state(nid, N_MEMORY)
+>> +		hugetlb_register_node(node_devices[nid]);
+>> +	put_online_mems();
+>> }
+>> #else	/* !CONFIG_NUMA */
+>=20
+> Do we really *need* the memory hotplug notifier and the added =
+complexity
+> due for handling memory-less nodes?
+
+I have found the commit introduced this mechanism, see commit:
+
+	4faf8d950ec4 ("hugetlb: handle memory hot-plug events")
+
+=46rom the commit message, I think it is a suggestion from David =
+Rientjes.
+I didn=E2=80=99t see any reasons why we need it. So Cc David Rientjes =
+(Maybe
+he knew more context). The committer Lee and the reviewer Andi=E2=80=99s =
+email
+is invalid (don=E2=80=99t Cc them)
+
+>=20
+> Why can't we simply register/unregister sysfs entries in
+> register_node/unregister_node and call it a day?
+>=20
+
+At least, I agree with you. Before I change to this way, let=E2=80=99s =
+wait for
+some potential comments from David Rientjes.
+
+
+Thanks.
+
+> TBH, we should just have sysfs entries for memory-less nodes and not
+> care about such (corner) cases.
+>=20
+>=20
+> --=20
+> Thanks,
+>=20
+> David / dhildenb
+

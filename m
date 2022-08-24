@@ -2,382 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A7459F0E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8AE59F0F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbiHXB0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S231409AbiHXBax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233467AbiHXB0e (ORCPT
+        with ESMTP id S232882AbiHXBar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:26:34 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D017FFBF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:26:30 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id x5so11727867qtv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=DPa5bMY5tURbOHdsYxwkpWe9Vc0eXQVyNRUAXaTm0RM=;
-        b=ZYj4dDDa6VvWs7mJs5UJQKM+v4d+S4fVIjvqSEMAVEfzxpalof6ISFSmmhm5Uup3ai
-         j94Hts1JXoH6GEj8JU03IaMV3G63QGFfr6/d25DkpiOAGqnS/uVZD6o77y7zO1NAKwAw
-         V9sO0BUzKIvHN3UYLezuWgDbE/K9FiX/N0CRCHXQOXiOQvgRdE0/iziuGOc74CyUcUyM
-         kAOpyYv8nLRjWnRD9EGNdM750XZBlmwNDmSIpeKXaIJCwf2OaX35pYOBeYUFdVE9wVFZ
-         Lal1x/Le7HaQ7wkoFitnAJq75uQRsCOujwvOcoC5SD62GU66fqRaDe7fMCIHTWCS6SlG
-         /SRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=DPa5bMY5tURbOHdsYxwkpWe9Vc0eXQVyNRUAXaTm0RM=;
-        b=O7HTnJYAzKvfJvPtjT+Wv44m19YdCeiKAg4ROMvMT32g7Yjjef3tv3/Aq2uxAvNWZm
-         Bf+VNGSvNfZuqImMY89cBS8VNqWjTVZFzqJwnCWd7OB0cacS5FY0t5JsbGjf1K4tboHO
-         m1b8NF16djSHRADE8AW6gh3yWgooii7AWAb9pb75Y8nRrDp3xGOCQNT6QzSdVPaDPiHE
-         DS1zWcGxnh0FWeMfzK/rGnqnjFc6ugCWqrp8Jtn+9fTOMxQ91W0zjCRuxAmYTV14SJX2
-         2wz9qWDRwBFHi8jBD/F+jFmAr3SStdJlQvYYdZHrjwy1nOWc8FKeZUqqIPA7q4tk55Mj
-         u7mQ==
-X-Gm-Message-State: ACgBeo1RRAJsYOMOfmVzZvvpvmqW3fOMVYopGdNjlnH7XW0QsGAlbB+O
-        tBNTI6W1P2QCL8AQpDaDcbg=
-X-Google-Smtp-Source: AA6agR7qYAkbCCIbxTcFXuRqRjg2Ds3LNATPeCSOJdAxUxvlyl6Ztk2itsq2tsDhnXEp6sXBzpRriQ==
-X-Received: by 2002:a05:622a:56:b0:344:50e3:3363 with SMTP id y22-20020a05622a005600b0034450e33363mr21758494qtw.217.1661304389925;
-        Tue, 23 Aug 2022 18:26:29 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:9de8:f9bd:9f64:5017])
-        by smtp.gmail.com with ESMTPSA id u3-20020a37ab03000000b006bac157ec19sm13554019qke.123.2022.08.23.18.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 18:26:29 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dennis Zhou <dennis@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Subject: [PATCH v2 3/3] lib/find_bit: optimize find_next_bit() functions
-Date:   Tue, 23 Aug 2022 18:26:24 -0700
-Message-Id: <20220824012624.2826445-4-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220824012624.2826445-1-yury.norov@gmail.com>
-References: <20220824012624.2826445-1-yury.norov@gmail.com>
+        Tue, 23 Aug 2022 21:30:47 -0400
+X-Greylist: delayed 135 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 18:30:44 PDT
+Received: from p3plsmtpa06-01.prod.phx3.secureserver.net (p3plsmtpa06-01.prod.phx3.secureserver.net [173.201.192.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662E51B7A4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:30:44 -0700 (PDT)
+Received: from black ([121.35.128.89])
+        by :SMTPAUTH: with ESMTPSA
+        id QfBxo3UvK8KflQfBzoFS6c; Tue, 23 Aug 2022 18:28:29 -0700
+X-CMAE-Analysis: v=2.4 cv=WdvJ12tX c=1 sm=1 tr=0 ts=63057ebd
+ a=Ts6IU5S7MsxbcnDc+OdCiQ==:117 a=Ts6IU5S7MsxbcnDc+OdCiQ==:17
+ a=IkcTkHD0fZMA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=_twTT5zqAAAA:8
+ a=pGLkceISAAAA:8 a=ATfU8fHJlrvmeOZnxusA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=ILoXdGDbYT3DTB7Z0gVI:22
+X-SECURESERVER-ACCT: dhu@hodcarrier.org
+Date:   Wed, 24 Aug 2022 09:28:25 +0800
+From:   Du Huanpeng <dhu@hodcarrier.org>
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        Yang Ling <gnaygnil@gmail.com>, linux-kernel@vger.kernel.org,
+        Kelvin Cheung <keguang.zhang@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>
+Subject: Re: [RESEND PATCH] clk: ls1c: Fix PLL rate calculation
+Message-ID: <20220824012825.GA2956@black>
+References: <20220823033414.198525-1-seanga2@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220823033414.198525-1-seanga2@gmail.com>
+X-CMAE-Envelope: MS4xfB7Qh1/JJak2gztQXiYgXTUVMZsO1KSPSanPLPhuJCyRNNIvHZpItw6k8A1HpaGJ2vq9orllLlr7Kh7lh85IQK47meW/+e3/Do+4DgYrkECkZeFgsSD1
+ n5SGWQdhCBGejZWA2Uab7HIcjO6kgYAufbUq+JtB95WoogF8GYjxYiRt0TJDV8VS41n12PtIe/QTVoi9nB+vuiG81U4moMcnh/q0AvPuKaxaXg+MKqAqnFPR
+ JloMvp8VsjCXD6+9WO0BFKRxOiwqVZfpKjOSYLSMaQxZVTvn6WOC5vZZ10illBB8eeBd99M25IKEqJz7k1qAnHpzy7iDdHsogxEQmCSUNKhmEbgJB/R54ar+
+ ABfLLY0/J+neyz1N2ulop7IPzuFk25+EDqLwDBxh3HVcSpPfJj8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Over the past couple years, the function _find_next_bit() was extended
-with parameters that modify its behavior to implement and- zero- and le-
-flavors. The parameters are passed at compile time, but current design
-prevents a compiler from optimizing out the conditionals.
+On Mon, Aug 22, 2022 at 11:34:14PM -0400, Sean Anderson wrote:
+Dear Sean,
+> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+> noticed the following calculation, which is copied from
+I didn't copy it from this driver, I read the document and ``try'' to
+understand it.
+I also write a excel [1] file to calculate values for clock nodes.
 
-As find_next_bit() API grows, I expect that more parameterss will be added.
-Current designs would require more conditional code in _find_next_bit(),
-which would bloat the helper even more and make it barely readable.
-
-This patch replaces _find_next_bit() with a macro FIND_NEXT_BIT, and adds
-a set of wrappers, so that the compile-time optimization becomes possible.
-
-The common logic is moved to the new macro, and all flavors may be
-generated by providing an EXPRESSION macro parameter, like in this example:
-
-  #define FIND_NEXT_BIT(EXPRESSION, size, start) ...
-  
-  find_next_xornot_and_bit(addr1, addr2, addr3, size, start)
-  {
-  	return FIND_NEXT_BIT(addr1[idx] ^ ~addr2[idx] & addr3[idx], size, start);
-  }
-
-The EXPRESSION may be of any complexity, as soon as it only refers
-the bitmap(s) and an iterator idx.
-
-I ran find_bit_benchmark 16 times on top of 6.0-rc2 and 16 times on top
-of this series. The results for kvm/x86_64 are:
-
-                      v6.0-rc2  Optimized       Difference  Z-score
-Random dense bitmap         ns         ns        ns      %
-find_next_bit:          787735     670546    117189   14.9     3.97
-find_next_zero_bit:     777492     664208    113284   14.6    10.51
-find_last_bit:          830925     687573    143352   17.3     2.35
-find_first_bit:        3874366    3306635    567731   14.7     1.84
-find_first_and_bit:   40677125   37739887   2937238    7.2     1.36
-find_next_and_bit:      347865     304456     43409   12.5     1.35
-
-Random sparse bitmap
-find_next_bit:           19816      14021      5795   29.2     6.10
-find_next_zero_bit:    1318901    1223794     95107    7.2     1.41
-find_last_bit:           14573      13514      1059    7.3     6.92
-find_first_bit:        1313321    1249024     64297    4.9     1.53
-find_first_and_bit:       8921       8098       823    9.2     4.56
-find_next_and_bit:        9796       7176      2620   26.7     5.39
-
-Where the statistics is significant (z-score > 3), the improvement
-is ~15%.
-
-According to bloat-o-meter, the Image size is 10-11K less:
-
-x86_64/defconfig:
-add/remove: 32/14 grow/shrink: 61/782 up/down: 6344/-16521 (-10177)
-
-arm64/defconfig:
-add/remove: 3/2 grow/shrink: 50/714 up/down: 608/-11556 (-10948)
-
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
-Checkpatch warns that the FIND_NEXT_BIT() is a "Macros with flow
-control statements", but in this case I think it's false positive
-because the label is defined in the same code block as the 'goto'
-statement, and control can't flow out of the block.
-
- include/linux/find.h | 23 ++++++++-----
- lib/find_bit.c       | 78 +++++++++++++++-----------------------------
- lib/find_bit.h       | 21 ++++++++++++
- lib/find_bit_be.c    | 19 +++++++++++
- 4 files changed, 81 insertions(+), 60 deletions(-)
-
-diff --git a/include/linux/find.h b/include/linux/find.h
-index 2464bff5de04..dead6f53a97b 100644
---- a/include/linux/find.h
-+++ b/include/linux/find.h
-@@ -8,9 +8,12 @@
- 
- #include <linux/bitops.h>
- 
--extern unsigned long _find_next_bit(const unsigned long *addr1,
--		const unsigned long *addr2, unsigned long nbits,
--		unsigned long start, unsigned long invert, unsigned long le);
-+unsigned long _find_next_bit(const unsigned long *addr1, unsigned long nbits,
-+				unsigned long start);
-+unsigned long _find_next_and_bit(const unsigned long *addr1, const unsigned long *addr2,
-+					unsigned long nbits, unsigned long start);
-+unsigned long _find_next_zero_bit(const unsigned long *addr, unsigned long nbits,
-+					 unsigned long start);
- extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
- extern unsigned long _find_first_and_bit(const unsigned long *addr1,
- 					 const unsigned long *addr2, unsigned long size);
-@@ -19,6 +22,10 @@ extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long siz
- 
- #ifdef __BIG_ENDIAN
- unsigned long _find_first_zero_bit_le(const unsigned long *addr, unsigned long size);
-+unsigned long _find_next_zero_bit_le(const  unsigned long *addr, unsigned
-+					long size, unsigned long offset);
-+unsigned long _find_next_bit_le(const unsigned long *addr, unsigned
-+				long size, unsigned long offset);
- #endif
- 
- #ifndef find_next_bit
-@@ -45,7 +52,7 @@ unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
- 		return val ? __ffs(val) : size;
- 	}
- 
--	return _find_next_bit(addr, NULL, size, offset, 0UL, 0);
-+	return _find_next_bit(addr, size, offset);
- }
- #endif
- 
-@@ -75,7 +82,7 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
- 		return val ? __ffs(val) : size;
- 	}
- 
--	return _find_next_bit(addr1, addr2, size, offset, 0UL, 0);
-+	return _find_next_and_bit(addr1, addr2, size, offset);
- }
- #endif
- 
-@@ -103,7 +110,7 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
- 		return val == ~0UL ? size : ffz(val);
- 	}
- 
--	return _find_next_bit(addr, NULL, size, offset, ~0UL, 0);
-+	return _find_next_zero_bit(addr, size, offset);
- }
- #endif
- 
-@@ -251,7 +258,7 @@ unsigned long find_next_zero_bit_le(const void *addr, unsigned
- 		return val == ~0UL ? size : ffz(val);
- 	}
- 
--	return _find_next_bit(addr, NULL, size, offset, ~0UL, 1);
-+	return _find_next_zero_bit_le(addr, size, offset);
- }
- #endif
- 
-@@ -284,7 +291,7 @@ unsigned long find_next_bit_le(const void *addr, unsigned
- 		return val ? __ffs(val) : size;
- 	}
- 
--	return _find_next_bit(addr, NULL, size, offset, 0UL, 1);
-+	return _find_next_bit_le(addr, size, offset);
- }
- #endif
- 
-diff --git a/lib/find_bit.c b/lib/find_bit.c
-index ccc4fb1dfc71..357750d25ff9 100644
---- a/lib/find_bit.c
-+++ b/lib/find_bit.c
-@@ -21,58 +21,6 @@
- 
- #include "find_bit.h"
- 
--#if !defined(find_next_bit) || !defined(find_next_zero_bit) ||			\
--	!defined(find_next_bit_le) || !defined(find_next_zero_bit_le) ||	\
--	!defined(find_next_and_bit)
--/*
-- * This is a common helper function for find_next_bit, find_next_zero_bit, and
-- * find_next_and_bit. The differences are:
-- *  - The "invert" argument, which is XORed with each fetched word before
-- *    searching it for one bits.
-- *  - The optional "addr2", which is anded with "addr1" if present.
-- */
--unsigned long _find_next_bit(const unsigned long *addr1,
--		const unsigned long *addr2, unsigned long nbits,
--		unsigned long start, unsigned long invert, unsigned long le)
--{
--	unsigned long tmp, mask;
--
--	if (unlikely(start >= nbits))
--		return nbits;
--
--	tmp = addr1[start / BITS_PER_LONG];
--	if (addr2)
--		tmp &= addr2[start / BITS_PER_LONG];
--	tmp ^= invert;
--
--	/* Handle 1st word. */
--	mask = BITMAP_FIRST_WORD_MASK(start);
--	if (le)
--		mask = swab(mask);
--
--	tmp &= mask;
--
--	start = round_down(start, BITS_PER_LONG);
--
--	while (!tmp) {
--		start += BITS_PER_LONG;
--		if (start >= nbits)
--			return nbits;
--
--		tmp = addr1[start / BITS_PER_LONG];
--		if (addr2)
--			tmp &= addr2[start / BITS_PER_LONG];
--		tmp ^= invert;
--	}
--
--	if (le)
--		tmp = swab(tmp);
--
--	return min(start + __ffs(tmp), nbits);
--}
--EXPORT_SYMBOL(_find_next_bit);
--#endif
--
- #ifndef find_first_bit
- /*
-  * Find the first set bit in a memory region.
-@@ -108,6 +56,32 @@ unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size
- EXPORT_SYMBOL(_find_first_zero_bit);
- #endif
- 
-+#ifndef find_next_bit
-+unsigned long _find_next_bit(const unsigned long *addr, unsigned long nbits, unsigned long start)
-+{
-+	return FIND_NEXT_BIT(addr[idx], nbits, start);
-+}
-+EXPORT_SYMBOL(_find_next_bit);
-+#endif
-+
-+#ifndef find_next_and_bit
-+unsigned long _find_next_and_bit(const unsigned long *addr1, const unsigned long *addr2,
-+					unsigned long nbits, unsigned long start)
-+{
-+	return FIND_NEXT_BIT(addr1[idx] & addr2[idx], nbits, start);
-+}
-+EXPORT_SYMBOL(_find_next_and_bit);
-+#endif
-+
-+#ifndef find_next_zero_bit
-+unsigned long _find_next_zero_bit(const unsigned long *addr, unsigned long nbits,
-+					 unsigned long start)
-+{
-+	return FIND_NEXT_BIT(~addr[idx], nbits, start);
-+}
-+EXPORT_SYMBOL(_find_next_zero_bit);
-+#endif
-+
- #ifndef find_last_bit
- unsigned long _find_last_bit(const unsigned long *addr, unsigned long size)
- {
-diff --git a/lib/find_bit.h b/lib/find_bit.h
-index b4b6245ddbf6..6b6312f93301 100644
---- a/lib/find_bit.h
-+++ b/lib/find_bit.h
-@@ -21,4 +21,25 @@
- 	sz;									\
- })
- 
-+#define FIND_NEXT_BIT(EXPRESSION, size, start)					\
-+({										\
-+	unsigned long mask, idx, tmp, sz = (size), __start = (start);		\
-+										\
-+	if (unlikely(__start >= sz))						\
-+		goto out;							\
-+										\
-+	mask = word_op(BITMAP_FIRST_WORD_MASK(__start));			\
-+	idx = __start / BITS_PER_LONG;						\
-+										\
-+	for (tmp = (EXPRESSION) & mask; !tmp; tmp = (EXPRESSION)) {		\
-+		if (idx > sz / BITS_PER_LONG)					\
-+			goto out;						\
-+		idx++;								\
-+	}									\
-+										\
-+	sz = min(idx * BITS_PER_LONG + __ffs(word_op(tmp)), sz);		\
-+out:										\
-+	sz;									\
-+})
-+
- #endif /* _LIB_FIND_BIT_H */
-diff --git a/lib/find_bit_be.c b/lib/find_bit_be.c
-index 36173cb7e012..cbf669aaf3cb 100644
---- a/lib/find_bit_be.c
-+++ b/lib/find_bit_be.c
-@@ -21,3 +21,22 @@ unsigned long _find_first_zero_bit_le(const unsigned long *addr, unsigned long s
- }
- EXPORT_SYMBOL(_find_first_zero_bit_le);
- #endif
-+
-+#ifndef find_next_zero_bit_le
-+unsigned long _find_next_zero_bit_le(const unsigned long *addr, unsigned
-+		long size, unsigned long offset)
-+{
-+	return FIND_NEXT_BIT(~addr[idx], size, offset);
-+}
-+EXPORT_SYMBOL(_find_next_zero_bit_le);
-+#endif
-+
-+#ifndef find_next_bit_le
-+unsigned long _find_next_bit_le(const unsigned long  *addr, unsigned
-+		long size, unsigned long offset)
-+{
-+	return FIND_NEXT_BIT(addr[idx], size, offset);
-+}
-+EXPORT_SYMBOL(_find_next_bit_le);
-+
-+#endif
--- 
-2.34.1
-
+[1] https://github.com/hodcarrier/ls1c300_bsp
+> drivers/clk/loongson1/clk-loongson1c.c:
+> 
+> ulong ls1c300_pll_get_rate(struct clk *clk)
+> {
+> 	unsigned int mult;
+> 	long long parent_rate;
+> 	void *base;
+> 	unsigned int val;
+> 
+> 	parent_rate = clk_get_parent_rate(clk);
+> 	base = (void *)clk->data;
+> 
+> 	val = readl(base + START_FREQ);
+> 	mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
+> 	return (mult * parent_rate) / 4;
+> }
+> 
+> I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
+> for the PLL. The datasheet has the following to say:
+> 
+> START_FREQ 位    缺省值      描述
+> ========== ===== =========== ====================================
+> FRAC_N     23:16 0           PLL 倍频系数的小数部分
+> 
+>                  由          PLL 倍频系数的整数部分
+> M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
+>                  配置
+> 
+> which according to google translate means
+> 
+> START_FREQ Bits  Default       Description
+> ========== ===== ============= ================================================
+> FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
+> 
+>                  Depends on    Integer part of PLL multiplication factor
+> M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
+>                  configuration  recommended not to exceed 100)
+> 
+> So just based on this description, I would expect that the formula to be
+> something like
+> 
+> 	rate = parent * (256 * M_PLL + FRAC_N) / 256 / 4
+> 
+> However, the datasheet also gives the following formula:
+> 
+> 	rate = parent * (M_PLL + FRAC_N) / 4
+> 
+> which is what the Linux driver has implemented. I find this very unusual.
+> First, the datasheet specifically says that these fields are the integer and
+> fractional parts of the multiplier. Second, I think such a construct does not
+> easily map to traditional PLL building blocks. Implementing this formula in
+> hardware would likely require an adder, just to then set the threshold of a
+> clock divider.
+> 
+> I think it is much more likely that the first formula is correct. The author of
+> the datasheet may think of a multiplier of (say) 3.14 as
+> 
+> 	M_PLL = 3
+> 	FRAC_N = 0.14
+> 
+> which together sum to the correct multiplier, even though the actual value
+> stored in FRAC_N would be 36.
+> 
+> I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
+> no difference in the formulae. The following patch is untested, but I suspect
+> it will fix this issue. I would appreciate if anyone with access to the
+> hardware could measure the output of the PLL (or one of its derived clocks) and
+> determine the correct formula.
+> 
+> [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
+> 
+> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> ---
+> 
+>  drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
+> index 1ebf740380ef..2aa839b05d6b 100644
+> --- a/drivers/clk/loongson1/clk-loongson1c.c
+> +++ b/drivers/clk/loongson1/clk-loongson1c.c
+> @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
+>  	u32 pll, rate;
+>  
+>  	pll = __raw_readl(LS1X_CLK_PLL_FREQ);
+> -	rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
+> +	rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
+>  	rate *= OSC;
+> -	rate >>= 2;
+> +	rate >>= 10;
+>  
+>  	return rate;
+>  }
+> -- 
+> 2.37.1
+> 

@@ -2,120 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9F059F022
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A146E59F029
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiHXAQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S230211AbiHXAX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiHXAQZ (ORCPT
+        with ESMTP id S232053AbiHXAXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:16:25 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BE560EA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:16:23 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id x19so12181447pfq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:16:23 -0700 (PDT)
+        Tue, 23 Aug 2022 20:23:22 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6014F6B4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:23:20 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id f4so11572188qkl.7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:23:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=hcfEp+dYBdEKW+6uFA3n79gHDSD/E9Yv3lIEobD8YWQ=;
-        b=Sb3Pt5pkzFSREsYhzBZPaeo5hkzyEmcD8iVaEcpoZhGzaGN2vWUyA3Y6L38dYmtAx1
-         Pujuti7YG1sR+FxuwybfPMcx16hvfBGKWR0zfr6IGN+aE/iLdUIB+fHc1O8E3YTU2gR0
-         2SMDzN1cJLGe8vRHVQfv6tBmcXjGZjfGVv+XB0R+dAX22vh90ygG3yls4GCsve5Y+Nn/
-         Ws6tzRpVlweFXM4WiAVcJQepA61GmnY6OU4GyxyDE/jEKHSE4ZvqsVRqsMKa8JCyz++6
-         je9D87J8xbD3gnFPvryNrbqCrYETTN+BPlMLFB48UyYEjd/Cj9qQSGbEe8J9fCDyT0L2
-         rBgA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=nOzcA3rS/YzoTQm3mufkwndpYmIoKltWyuaOARH3bwA=;
+        b=CqnNoNuKzKtmwalCFcLeGz1LmHJ73g0Dse/GMHn4DR7qOKXYreU2u8N2oH0ODaRuWC
+         gx9lddxHfhEUOekQk/OZvVZKF+SArj56AxbRrrfq0xpMYiiDQiyq6ZdiktbLLwjnLmGN
+         UcOoJFOnyzOXDNoj0++moct4tSDn5oaT8ZFn1nl7O8ZdrPb7uEMSp0Z0X5YmNtI760Dc
+         QZT0wWvUJr7ov67GUePvmiTqC0KbtFLJZLkXo3uAJifPVycLCQngLSG6KvKaakGjs9Nf
+         Pf6rdT9KB0MnpC+HC8qnYOdDkM8SAn98eScFjM4KZFnKv59X+TFTlt/B3IbcqsZkESae
+         UYxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=hcfEp+dYBdEKW+6uFA3n79gHDSD/E9Yv3lIEobD8YWQ=;
-        b=ro/GPq73IHSD3ofZoODdBftywDykNSqj3TPecMtjClMIlcK2wprXYImUalJGG6nyza
-         yvN1rdcfZF4GujgtvGqQhwJAjR1skLzyHlBtTXdnhVWdyfhVUexAEithdDIIRy0C5v0F
-         nTWDMyIOQkhjfRi+AyarpPJAOg5MRS7aZfNK9WrfGGYAdJaWmYSD32xqiQyPkiuL8ke2
-         zCz2IBjrlZOqW3pWO2FOtgYMImyGhYhs6Htem1c050x6an4+Z9s18w9GAbN1NZX4uGmd
-         2CS0S6rthNFgRSXwmTkRlt8zTiv7AHWvGixU21qoNBCeni/jbwpQk4vDnDR2mMeDhIky
-         r4rA==
-X-Gm-Message-State: ACgBeo29AqY9qC+rNaJkEzcOq5ubNex6rOgiYz9Se+2hjbvagyg1HogJ
-        u4Q0FgZTrjcfuwtPQwT1qzCWcg==
-X-Google-Smtp-Source: AA6agR5ond+1oeUeB1tNu4zplHOG1IXeVCU/Tk/fynhXxKo9X0D2W1OITp55ilmQQv+QfWO1fWf3uw==
-X-Received: by 2002:a05:6a02:284:b0:429:cd1d:aa1b with SMTP id bk4-20020a056a02028400b00429cd1daa1bmr22565477pgb.396.1661300183198;
-        Tue, 23 Aug 2022 17:16:23 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n2-20020a622702000000b0052e7f103138sm11283572pfn.38.2022.08.23.17.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 17:16:22 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 00:16:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     =?utf-8?B?546L5rW35byb?= <wanghaichi@tju.edu.cn>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
-Subject: Re: WARNING: kmalloc bug in kvm_page_track_create_memslot
-Message-ID: <YwVt0kkkb9XNOozo@google.com>
-References: <APQAVgBhFMDqJKhR5OIMSKrh.1.1661173385472.Hmail.3014218099@tju.edu.cn>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=nOzcA3rS/YzoTQm3mufkwndpYmIoKltWyuaOARH3bwA=;
+        b=knJYIaA3DW1+qadYDnoK01wnIRVhheOaGgpSjybDmKtoAGUuUB7+RMpnQu0XYovf2f
+         COZVFjfyNRuzYUUghecUqqdPSgAPNEx4qUR4iWKZDdXyMXWfiuv1l3zlk9/YuTT24OZu
+         2UPLUcu+Gf0TTBjZbKoewzxKdXmix+BKq3RDmOEFdqauglNHNjmS8p9gfkiU8uvPc4h6
+         qn0I2yTDYXHp+SCmVRnI4KZw6sGhMRbDYWHWHotAnIsTwg8HOW6/od/flnoob2dv4us3
+         KF4nB2jtrv9jGQ/dPbax1Pimz9td1hjgAaZjjyOWV6GjICs4jJNSkmEGWELaRlLfwuEs
+         3HrA==
+X-Gm-Message-State: ACgBeo3XlZNAhhE8QD1wQOZaHTlFEAuAS78YuOpImDEJFqo5P0dd5RFP
+        3hvd41guUC0QjxxVb/eJQwS00ljRegN7UAalY+qqFw==
+X-Google-Smtp-Source: AA6agR5fh4lw+gR4Rr1eIVp31Mm/w0enQgEM9jwiLmzHxu7UZxc0kEH6XrUL55nPhhbfQ/gg7jv1XIK59UWESv6mjMY=
+X-Received: by 2002:a05:620a:458c:b0:6bb:848a:b86b with SMTP id
+ bp12-20020a05620a458c00b006bb848ab86bmr18083896qkb.267.1661300599003; Tue, 23
+ Aug 2022 17:23:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <APQAVgBhFMDqJKhR5OIMSKrh.1.1661173385472.Hmail.3014218099@tju.edu.cn>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+References: <20220812202802.3774257-1-haoluo@google.com> <20220812202802.3774257-2-haoluo@google.com>
+ <CAEf4BzbuD+vLzxVkXpiX=yKu2WbHLrekrZS8hx2TWU04m0h-kA@mail.gmail.com>
+In-Reply-To: <CAEf4BzbuD+vLzxVkXpiX=yKu2WbHLrekrZS8hx2TWU04m0h-kA@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 23 Aug 2022 17:23:08 -0700
+Message-ID: <CA+khW7gnAM0+dre+kF4z4-DB2FhemsZRBFKsjXVvVH5U6O4EPw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 1/5] bpf: Introduce cgroup iter
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022, 王海弛 wrote:
-> The full log crash log are as follows:(also in the attach, crash.report)
-> -----------------------------------------
-> WARNING: CPU: 1 PID: 19519 at mm/util.c:597 kvmalloc_node+0x111/0x120 mm/util.c:597
-> Modules linked in:
-> CPU: 1 PID: 19519 Comm: syz-executor.0 Not tainted 5.15.0-rc5+ #6
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> RIP: 0010:kvmalloc_node+0x111/0x120 mm/util.c:597
-> Code: 01 00 00 00 4c 89 e7 e8 7d 58 0d 00 49 89 c5 e9 69 ff ff ff e8 40 c5 d0 ff 41 89 ed 41 81 cd 00 20 01 00 eb 95 e8 2f c5 d0 ff <0f> 0b e9 4c ff ff ff 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 16
-> RSP: 0018:ffffc90003907830 EFLAGS: 00010216
-> RAX: 0000000000031766 RBX: 0000000000000000 RCX: 0000000000040000
-> RDX: ffffc90003941000 RSI: ffff88802b6c8000 RDI: 0000000000000002
-> RBP: 0000000000400dc0 R08: ffffffff81a68e11 R09: 000000007fffffff
-> R10: 0000000000000007 R11: ffffed1026b86541 R12: 00000000a0000000
-> R13: 0000000000000000 R14: 00000000ffffffff R15: 0000000000000000
-> FS:  00007f526e4c7700(0000) GS:ffff888135c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f9614442020 CR3: 0000000021c3c000 CR4: 0000000000752ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> PKRU: 55555554
-> Call Trace:
->  kvmalloc include/linux/mm.h:805 [inline]
->  kvmalloc_array include/linux/mm.h:823 [inline]
->  kvcalloc include/linux/mm.h:828 [inline]
->  kvm_page_track_create_memslot+0x50/0x110 arch/x86/kvm/mmu/page_track.c:39
->  kvm_alloc_memslot_metadata arch/x86/kvm/x86.c:11501 [inline]
->  kvm_arch_prepare_memory_region+0x339/0x600 arch/x86/kvm/x86.c:11538
->  kvm_set_memslot+0x16e/0x19f0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1592
->  __kvm_set_memory_region+0xc30/0x13d0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1755
->  kvm_set_memory_region+0x29/0x40 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1776
->  kvm_vm_ioctl_set_memory_region arch/x86/kvm/../../../virt/kvm/kvm_main.c:1788 [inline]
->  kvm_vm_ioctl+0x507/0x23a0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4363
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl fs/ioctl.c:860 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
+On Mon, Aug 15, 2022 at 9:17 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Aug 12, 2022 at 1:28 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> >
+> >  - walking a cgroup's descendants in pre-order.
+> >  - walking a cgroup's descendants in post-order.
+> >  - walking a cgroup's ancestors.
+> >  - process only the given cgroup.
+> >
+> > When attaching cgroup_iter, one can set a cgroup to the iter_link
+> > created from attaching. This cgroup is passed as a file descriptor
+> > or cgroup id and serves as the starting point of the walk. If no
+> > cgroup is specified, the starting point will be the root cgroup v2.
+> >
+> > For walking descendants, one can specify the order: either pre-order or
+> > post-order. For walking ancestors, the walk starts at the specified
+> > cgroup and ends at the root.
+> >
+> > One can also terminate the walk early by returning 1 from the iter
+> > program.
+> >
+> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > program is called with cgroup_mutex held.
+> >
+> > Currently only one session is supported, which means, depending on the
+> > volume of data bpf program intends to send to user space, the number
+> > of cgroups that can be walked is limited. For example, given the current
+> > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
+> > be walked is 512. This is a limitation of cgroup_iter. If the output
+> > data is larger than the kernel buffer size, after all data in the
+> > kernel buffer is consumed by user space, the subsequent read() syscall
+> > will signal EOPNOTSUPP. In order to work around, the user may have to
+> > update their program to reduce the volume of data sent to output. For
+> > example, skip some uninteresting cgroups. In future, we may extend
+> > bpf_iter flags to allow customizing buffer size.
+> >
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > Acked-by: Tejun Heo <tj@kernel.org>
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+> >  include/linux/bpf.h                           |   8 +
+> >  include/uapi/linux/bpf.h                      |  35 +++
+> >  kernel/bpf/Makefile                           |   3 +
+> >  kernel/bpf/cgroup_iter.c                      | 283 ++++++++++++++++++
+> >  tools/include/uapi/linux/bpf.h                |  35 +++
+> >  .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+> >  6 files changed, 366 insertions(+), 2 deletions(-)
+> >  create mode 100644 kernel/bpf/cgroup_iter.c
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index a627a02cf8ab..ecb8c61178a1 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -48,6 +48,7 @@ struct mem_cgroup;
+> >  struct module;
+> >  struct bpf_func_state;
+> >  struct ftrace_ops;
+> > +struct cgroup;
+> >
+> >  extern struct idr btf_idr;
+> >  extern spinlock_t btf_idr_lock;
+> > @@ -1730,7 +1731,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
+> >         int __init bpf_iter_ ## target(args) { return 0; }
+> >
+> >  struct bpf_iter_aux_info {
+> > +       /* for map_elem iter */
+> >         struct bpf_map *map;
+> > +
+> > +       /* for cgroup iter */
+> > +       struct {
+> > +               struct cgroup *start; /* starting cgroup */
+> > +               int order;
+>
+> why not using enum as a type here?
+>
 
-This was fixed back in v5.18 by commit 37b2a6510a48 ("KVM: use __vcalloc for very
-large allocations").
+Sorry Andrii, I missed your reply.
+
+No special reasons. Will use enum in the next version.
+
+> > +       } cgroup;
+> >  };
+> >
+> >  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 7d1e2794d83e..bc3c901b9f70 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -87,10 +87,34 @@ struct bpf_cgroup_storage_key {
+> >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> >  };
+> >
+> > +enum bpf_iter_order {
+> > +       BPF_ITER_DESCENDANTS_PRE = 0,   /* walk descendants in pre-order. */
+> > +       BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+> > +       BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+> > +       BPF_ITER_SELF_ONLY,             /* process only a single object. */
+> > +};
+> > +
+> >  union bpf_iter_link_info {
+> >         struct {
+> >                 __u32   map_fd;
+> >         } map;
+> > +       struct {
+> > +               /* Users must specify order using one of the following values:
+> > +                *  - BPF_ITER_DESCENDANTS_PRE
+> > +                *  - BPF_ITER_DESCENDANTS_POST
+> > +                *  - BPF_ITER_ANCESTORS_UP
+> > +                *  - BPF_ITER_SELF_ONLY
+> > +                */
+> > +               __u32   order;
+>
+> same, we just declared the UAPI enum above, why not specify that this
+> is that enum here?
+>
+
+Will use enum.
+
+> > +
+> > +               /* At most one of cgroup_fd and cgroup_id can be non-zero. If
+> > +                * both are zero, the walk starts from the default cgroup v2
+> > +                * root. For walking v1 hierarchy, one should always explicitly
+> > +                * specify cgroup_fd.
+> > +                */
+> > +               __u32   cgroup_fd;
+> > +               __u64   cgroup_id;
+>
+> for my own education, does root cgroup has cgroup_id == 0?
+>
+
+Yeah, unfortunately, the root cgroup has cgroup_id == 1. :(
+
+> > +       } cgroup;
+> >  };
+> >
+>
+> [...]

@@ -2,104 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BC259FADD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4FF59FAE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237898AbiHXNHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
+        id S237950AbiHXNIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236189AbiHXNHf (ORCPT
+        with ESMTP id S237944AbiHXNIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:07:35 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A637B7EFC5;
-        Wed, 24 Aug 2022 06:07:33 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id m15so8944672pjj.3;
-        Wed, 24 Aug 2022 06:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=8hQNlaNRXsTFWu3o2bv0H8H3dQ4+lM+vaoEV4x76qg4=;
-        b=ZWuwggVwhgl+RWG5blvg8JohOdTrZXEfEQHhPT7ykLYdSBw/1aLDHoYVLHGFiGkkjz
-         p4Rk12s5pYr0JGSUAhScvCc61YcODUrF3eozBk4JbL+YH+Zvk2owIBU3+ty9xaiTlE2P
-         E3V35PYtht2oeMuxZCKnkXsyp5m4+xzjlge81oBWyJzYdiOtAoGiB2uN/92dLDm0csFM
-         lj8rAsX/sLisHMZitoHUJHc7vqP9ovFPD/dDHGon5T8X+xadUggDAoykuifJpEotRwCJ
-         u8LnB8vLFhunyGzu8NYxW42E2K2rrptrsfGkyN5hIiu0UZnjYZB3M3shydY/CHZdHlpl
-         ICuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=8hQNlaNRXsTFWu3o2bv0H8H3dQ4+lM+vaoEV4x76qg4=;
-        b=E+tta91d7LNGt/+fTEIXoG1NeX/Pq0oCEV683QlrAUFQ6rCRIgMVN9TYFrJ6SCVypg
-         3tcelJKzHn9HP7cGAlEAihBaf2wWzx9Qk57+wS346p2bcZPi12TNKDhoaiwnmqQzbDVg
-         o+BK28ds2NSP8ojC7T+pX1WJ1qLieErF9h8JZDUA6l7WGSxBRmoptVgVOwCHpES9gApb
-         5Bnxu8zG0v5ctKQjS86G5QTx5TWugFFheX3P30UD0/dpYMFMK8jWPhu4Dqj8ycF+66hK
-         +txFGEPzTds00BV0RjOtw52zKLf3NMPfAbjI+7T6nkccJXKZ1kx1qmT75Hsp1hpMF4J8
-         Zlng==
-X-Gm-Message-State: ACgBeo0f0ATK9Y5fI+qxCGU9h33EQna+DpW7Pbel2lB7NIzkQGNK0L9T
-        9lTPlxNcBA4aQNlfAlHO7M+UIGQmtPM2/Q==
-X-Google-Smtp-Source: AA6agR6xn/Z0E7zOROHt6LLIPRv549HHXNyJ8KBcJsXZt4wQkIka7KikRb0a2eGY22Bl3jJJ5qc98g==
-X-Received: by 2002:a17:903:2049:b0:172:eb95:c61e with SMTP id q9-20020a170903204900b00172eb95c61emr13467280pla.74.1661346445857;
-        Wed, 24 Aug 2022 06:07:25 -0700 (PDT)
-Received: from fedora.. ([103.159.189.138])
-        by smtp.gmail.com with ESMTPSA id m12-20020a633f0c000000b0041c49af8156sm11096323pga.6.2022.08.24.06.07.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 06:07:25 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexey Sheplyakov <asheplyakov@basealt.ru>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Khalid Masum <khalid.masum.92@gmail.com>
-Subject: [PATCH] usb: host: Use helper function to get endpoint
-Date:   Wed, 24 Aug 2022 19:07:02 +0600
-Message-Id: <20220824130702.10912-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 24 Aug 2022 09:08:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E41979ED;
+        Wed, 24 Aug 2022 06:08:03 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OCsvBx011129;
+        Wed, 24 Aug 2022 13:07:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=C92YZM5cMwhgJYVIBus9Pp9OYPmeR5q17ZO5INhcwRU=;
+ b=gyO8gvuRd9gCF2iVgxlf6EF3EJuyaZRfBA+bRBYb1AkgkYo1yS9hH3yTHzq4ISdwN2ER
+ x+z3z7xqnlHcdN8zz9+OvXQQyT90jQ0MNI117wSOGToj4Zby81t6kZyhWkjtwePQs7mo
+ n4YJpVjmqfrIsQNpS8lzs7hqNs2/+zsPSSBq4lAH6IjoXVu+NweJ2WU68hto43vS9x4B
+ RL3dfcr7eDL6TIBE9+IvtfizTvERmMTsngOwqtSXhTFYhDLGYzlpGqrQfl0TGNWsFGl5
+ +usInS+az2ro6Nj/Fg9ZbvQKB55QFxuP3gwauSLYwd8cVQdg3VBj888eudaOi4Corb8Z GQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52phbbxn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 13:07:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27OD7h1X013123
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 13:07:43 GMT
+Received: from [10.50.48.231] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 24 Aug
+ 2022 06:07:39 -0700
+Message-ID: <8a8d52db-b489-61ae-4057-3af1e91b638b@quicinc.com>
+Date:   Wed, 24 Aug 2022 18:37:36 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 1/3] soc: qcom: llcc: Pass SoC specific EDAC register
+ offsets to EDAC driver
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     <bjorn.andersson@linaro.org>, <bp@alien8.de>, <mchehab@kernel.org>,
+        <james.morse@arm.com>, <rric@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>
+References: <20220812060602.7672-1-manivannan.sadhasivam@linaro.org>
+ <20220812060602.7672-2-manivannan.sadhasivam@linaro.org>
+ <396e6b2e-11d1-a11d-206a-cfd69f6cd358@quicinc.com>
+ <20220823153152.GA6371@thinkpad>
+ <c96016c8-8992-6c8a-b7c1-0ab3722986e0@quicinc.com>
+ <20220824125759.GA4767@thinkpad>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20220824125759.GA4767@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iCPcglIdwttX5mgPguRrMmMBm9dWFkZ9
+X-Proofpoint-GUID: iCPcglIdwttX5mgPguRrMmMBm9dWFkZ9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-24_07,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 mlxscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208240050
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current implementation to convert urb pipe number to struct 
-usb_host_endpoint in rquest_single_step_set_feature_urb is a little
-messy. 
+On 8/24/2022 6:27 PM, Manivannan Sadhasivam wrote:
+> On Wed, Aug 24, 2022 at 10:43:51AM +0530, Sai Prakash Ranjan wrote:
+>> On 8/23/2022 9:01 PM, Manivannan Sadhasivam wrote:
+>>> On Mon, Aug 22, 2022 at 05:29:13PM +0530, Sai Prakash Ranjan wrote:
+>>>> Hi Mani,
+>>>>
+>>>> On 8/12/2022 11:36 AM, Manivannan Sadhasivam wrote:
+>>>>> The LLCC EDAC register offsets varies between each SoCs. Until now, the
+>>>>> EDAC driver used the hardcoded register offsets. But this caused crash
+>>>>> on SM8450 SoC where the register offsets has been changed.
+>>>>>
+>>>>> So to avoid this crash and also to make it easy to accomodate changes for
+>>>>> new SoCs, let's pass the SoC specific register offsets to the EDAC driver.
+>>>>>
+>>>>> Currently, two set of offsets are used. One is SM8450 specific and another
+>>>>> one is common to all SoCs.
+>>>>>
+>>>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>>> <snip> ...
+>>>>
+>>>>>     static const struct qcom_llcc_config sm8350_cfg = {
+>>>>> @@ -309,6 +370,7 @@ static const struct qcom_llcc_config sm8350_cfg = {
+>>>>>     	.size           = ARRAY_SIZE(sm8350_data),
+>>>>>     	.need_llcc_cfg	= true,
+>>>>>     	.reg_offset	= llcc_v1_2_reg_offset,
+>>>>> +	.edac_reg	= &common_edac_reg,
+>>>>>     };
+>>>>>     static const struct qcom_llcc_config sm8450_cfg = {
+>>>>> @@ -316,6 +378,7 @@ static const struct qcom_llcc_config sm8450_cfg = {
+>>>>>     	.size           = ARRAY_SIZE(sm8450_data),
+>>>>>     	.need_llcc_cfg	= true,
+>>>>>     	.reg_offset	= llcc_v21_reg_offset,
+>>>>> +	.edac_reg	= &sm8450_edac_reg,
+>>>>>     };
+>>>>>
+>>>> Can we have LLCC version specific register offsets instead of SoC specific similar to reg_offset callbacks?
+>>>> For SM8450, it would be llcc_v21_edac_reg and for others llcc_v1_2_edac_reg instead of common_edac_reg.
+>>>> common_edac_reg is very general and is not exactly common for all, its just common for SoCs with same LLCC.
+>>>>
+>>> I thought about it but I was not sure if rest of the SoCs are using version
+>>> v1.2. I know that reg_offset uses v1.2 but I was skeptical and hence used the
+>>> SoC specific offsets.
+>>>
+>>> Can you confirm if rest of the SoCs are using v1.2?
+>> LLCC versioning follows w.x.y.z format and w and y are major and minor versions based
+>> on which the naming for reg_offsets is chosen.
+>>
+>> Now in above reg_offsets, llcc_v1_2 is not v1.2, it means v1.0 or v2.0 where 1, 2 is a major version
+>> and 0 is a minor version. llcc_v21 is actually v2.1 where 2 is a major and 1 is a minor version.
+>> I know the naming is pretty bad, should probably replace llcc_v1_2 with llcc_v1_0_v2_0 and
+>> llcc_v21 with llcc_v2_1? Note here minor version is important because SM8350 is v2.0 and uses
+>> old reg offsets.
+>>
+> Yeah it is confusing. I think we should just use the base LLCC version
+> that got changed with the previous one and add a comment on top of the
+> definition. For instance, all of the SoCs before SM8450 should use
+> llcc_v1_reg_offset since the LLCC version starts from v1.0.0 and SM8450 should
+> use llcc_v2_1_reg_offset since it supports the LLCC reg offset that got changed
+> since v2.1.0. Thoughts?
 
-Use usb_pipe_endpoint helper function to get the endpoint instead.
+Ya sounds good, only exception is SM8350 which is v2.0 but will be using v1 in naming but I guess its OK.
 
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
----
- drivers/usb/core/hcd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks,
+Sai
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 94b305bbd621..107e29d5d3ae 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2165,8 +2165,7 @@ static struct urb *request_single_step_set_feature_urb(
- 		return NULL;
- 
- 	urb->pipe = usb_rcvctrlpipe(udev, 0);
--	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
--				[usb_pipeendpoint(urb->pipe)];
-+	ep = usb_pipe_endpoint(udev, urb->pipe);
- 	if (!ep) {
- 		usb_free_urb(urb);
- 		return NULL;
--- 
-2.37.1
+> Thanks,
+> Mani
+>
+>> So coming to your query now, all other SoCs except SM8450(which uses v2.1) are using LLCC v1.0
+>> or v2.0, so it is valid to use the same logic as reg_offsets for edac_reg.
+>>
+>> Thanks,
+>> Sai
+>>
+>>> Thanks,
+>>> Mani
+>>>
+>>>> Version based is more applicable as multiple SoCs might use same LLCC versions and would reduce SoC specific data
+>>>> which would be needed for every SoC in case some newer LLCC comes out. I know you could just call sm8450_edac_reg
+>>>> for lets say sm8550 or so on to reduce duplication but that won't look good.
+>>>>
+>>>>
+>>>> Thanks,
+>>>> Sai
 

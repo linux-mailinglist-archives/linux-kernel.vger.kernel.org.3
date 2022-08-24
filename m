@@ -2,594 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C54159FEDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D42659FEE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238125AbiHXPxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+        id S238052AbiHXPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237669AbiHXPxN (ORCPT
+        with ESMTP id S236884AbiHXPy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:53:13 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EC072EFB
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:53:11 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id ay12so8975413wmb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:53:11 -0700 (PDT)
+        Wed, 24 Aug 2022 11:54:27 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9511972EF0;
+        Wed, 24 Aug 2022 08:54:26 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id m2so5598954qvq.11;
+        Wed, 24 Aug 2022 08:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=+q1VAwhF1EdpGOt2l8P3hpLXQpV4wpKsbOGCS4axWqc=;
-        b=Hhi5YcVI4mNsew0/GcSY3VXxeGRxZWxiNAAN/3+tW/XAaMH0qio5e+upB5cZeQr65P
-         I9roRQgmLV3x/wr95BT3THCh6dNf+5A+W63NDwD2Or646lamDGec45lXPD4XABLPpSOt
-         ynQyf86H6SFuOKQDLWlSca8LbOpaYOXfsPPWPv+AfMnhrYIAVHUlpv8wSFcdJOHy2ZI5
-         0o+ARUj59NvVYxeTlX8uzAwJND4Y8eRR+ssabm9ojOJ8wq9uE0RPX4R9lIKPpl7yH8eD
-         jukAJKoXlW5sljx2MS6vzcf3kvqHw4bkjdVgZNmzfWxbh4ZMVrTaQ6WOWteNaiAqQfjo
-         PWEw==
+        bh=JayAHS+OuNb+tyTryqcDsCuLA5dC38MXJtz38feqpuE=;
+        b=mvsh0Cn0VLETNnxcOhwecAeKWzrUuHEJAjYg2OvijsY66ETjWMmCMPZ2KuXInqdkz1
+         RB47XLKzF7x7ht1pCdHpZQjCcFv+2hPpcRBJy4bcat6lg0KZ9KrZ/0lthw9G+fPOCWFw
+         EOL5Fgm9PdeZrUks6F/BLJLKxb4re6P9+oGJiak+gHiDc9ccWfvRFGVHXWzh5VNxO9+P
+         zFSFJ6i3kj+YIP2kQLnaHI/T0rmQ5Cw69jqteao/Y2n6WQPrhsKi8/jKB4hzHkafF5Rq
+         jn7UAyu3Usfog7HcngwlAHPVX6tne8iTvUtT1jux4E4LOEEe8isy98BVoK1++t3LxbH9
+         RMeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=+q1VAwhF1EdpGOt2l8P3hpLXQpV4wpKsbOGCS4axWqc=;
-        b=mf/hXVi+fymdDNcUCDiSK0zNZJ98HiH9b0EMmz48oxwDel64IbCzlKKSymznBS2KP9
-         lydnDCc6y6N7zqsMPy330uKo4MVxw2vFJzqH5tdAT22W8WKBFqPsVvvHpN5dOChV4377
-         vZtOdxktgSY67c8IzOZOhcHbfp1WZuf6+lQbO2OT1ApDztR6lV7EbHcvnfK42sPUtQY/
-         ET0L7pE/D/WvKaegCx8xEExY/tZDW47VCjDEN8Xt6U0G/N2DyHCwhP2E0down0DUzOza
-         jxKLxddXw0dUaMTvYGp9PcOviy9B5hkqwEDLEzzCI8xIzKwRVA8MCDICelnyjTvsTvDf
-         89UQ==
-X-Gm-Message-State: ACgBeo2VjxNiRtk3tQdVnjWirAEZExrTsJu5vna/qlq5+M0d6yR4OsHw
-        BX3nHDtllMaHD8M76t5PTgCH3yQcdqVM6iwJXmN3gA==
-X-Google-Smtp-Source: AA6agR4eKDA5dsWNvv2FRaXsomKJjPMY9MUldnJZ3YHzZ7VRxY1e2L9HV3/Fz+tkCxk9AdJqSRkIzslctAChL5FWxiM=
-X-Received: by 2002:a05:600c:19c8:b0:3a5:ec6a:8d16 with SMTP id
- u8-20020a05600c19c800b003a5ec6a8d16mr5586280wmq.182.1661356389860; Wed, 24
- Aug 2022 08:53:09 -0700 (PDT)
+        bh=JayAHS+OuNb+tyTryqcDsCuLA5dC38MXJtz38feqpuE=;
+        b=HHMduJoP39M9/1UNIx8JFC5BAX/B4cmHz3yKJsirFyQHsTLhj1PFXVqiY3aUrrV8oE
+         NtT7JgBe0VXy7odcGx/KZYDKtqkeU42RYr+g49qh5SHL5nUmZFYAROPHmG7nu9QiKJHR
+         9252mZr7pGeUocTMte4QwR4UgWlgoL66zm/JVIIfbCaLvsxUfGChm8MCkRjNXz0Tguns
+         XItwdRh7hMREAMXsf/je4ZFt5roGsuy2LKmxuIJK3Z+dsK7Plca/RUiySO1Ag3UDoeO1
+         SAUjFdlOyTkBhFmSnfWbJVJzznX2//KlHKWdM3H+EdIQo4OyGmO2Sl0A1j2yycOA7HRN
+         3JZw==
+X-Gm-Message-State: ACgBeo2I4T0Sc/cKGYIs6GFZhvNsQkqxv/uhNQPt4NOMbjiau0X4rZfC
+        MmOdLiK5YBHxjwQrmZcMJsSVwRyxANR8oeBCNuMyNBbGwww=
+X-Google-Smtp-Source: AA6agR4X852vOzlnPqLIyPLX+Wa320bennKiKmAkP/rIphXqC3Krc1SbPNgaPRmAkrChHfjiLzHb0QW6FsSP1ZucH9c=
+X-Received: by 2002:a05:6214:29c2:b0:497:8b2:442 with SMTP id
+ gh2-20020a05621429c200b0049708b20442mr6434328qvb.97.1661356465737; Wed, 24
+ Aug 2022 08:54:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824072814.16422-1-adrian.hunter@intel.com> <20220824072814.16422-6-adrian.hunter@intel.com>
-In-Reply-To: <20220824072814.16422-6-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 24 Aug 2022 08:52:57 -0700
-Message-ID: <CAP-5=fWwAEgj_X2dKCuZF7MdgnH-V-VEuYdaN8AQAvbAqPY-MA@mail.gmail.com>
-Subject: Re: [PATCH 5/5] perf record: Allow multiple recording time ranges
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        linux-kernel@vger.kernel.org
+References: <20220824131428.31904-1-henning.schild@siemens.com>
+In-Reply-To: <20220824131428.31904-1-henning.schild@siemens.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 24 Aug 2022 18:53:49 +0300
+Message-ID: <CAHp75Veu5CpRcmtvKwqhwqpjSgrvw03V6k7WrO8v=+cLhABcsA@mail.gmail.com>
+Subject: Re: [PATCH v2] leds: simatic-ipc-leds-gpio: make sure we have the
+ GPIO providing driver
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:28 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Wed, Aug 24, 2022 at 4:27 PM Henning Schild
+<henning.schild@siemens.com> wrote:
 >
-> AUX area traces can produce too much data to record successfully or
-> analyze subsequently. Add another means to reduce data collection by
-> allowing multiple recording time ranges.
->
-> This is useful, for instance, in cases where a workload produces
-> predictably reproducible events in specific time ranges.
->
-> Today we only have perf record -D <msecs> to start at a specific region, or
-> some complicated approach using snapshot mode and external scripts sending
-> signals or using the fifos. But these approaches are difficult to set up
-> compared with simply having perf do it.
->
-> Extend perf record option -D/--delay option to specifying relative time
-> stamps for start stop controlled by perf with the right time offset, for
-> instance:
->
->     perf record -e intel_pt// -D 10-20,30-40
->
-> to record 10ms to 20ms into the trace and 30ms to 40ms.
+> If we register a "leds-gpio" platform device for GPIO pins that do not
+> exist we get a -EPROBE_DEFER and the probe will be tried again later.
+> If there is not driver to provide that pin we will poll forever and also
 
-Could you add a test like this in:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/shell/record.sh?h=perf/core
-If for no other reason than code coverage. It would also be
-interesting to see what happens if floating point values are passed,
-ranges are incomplete, etc. As the functionality is generic the event
-could be cycles or instructions rather than intel_pt.
+not --> no
 
-Thanks,
-Ian
+> create a lot of log messages.
+>
+> So check if that GPIO driver is configured, if so it will come up
+> eventually. If not we exit our probe function early and do not even
 
-> Example:
->
->  The example workload is:
->
->  $ cat repeat-usleep.c
->
->  int usleep(useconds_t usec);
->
->  int usage(int ret, const char *msg)
->  {
->          if (msg)
->                  fprintf(stderr, "%s\n", msg);
->
->          fprintf(stderr, "Usage is: repeat-usleep <microseconds>\n");
->
->          return ret;
->  }
->
->  int main(int argc, char *argv[])
->  {
->          unsigned long usecs;
->          char *end_ptr;
->
->          if (argc != 2)
->                  return usage(1, "Error: Wrong number of arguments!");
->
->          errno = 0;
->          usecs = strtoul(argv[1], &end_ptr, 0);
->          if (errno || *end_ptr || usecs > UINT_MAX)
->                  return usage(1, "Error: Invalid argument!");
->
->          while (1) {
->                  int ret = usleep(usecs);
->
->                  if (ret & errno != EINTR)
->                          return usage(1, "Error: usleep() failed!");
->          }
->
->          return 0;
->  }
->
->  $ perf record -e intel_pt//u --delay 10-20,40-70,110-160 -- ./repeat-usleep 500
->  Events disabled
->  Events enabled
->  Events disabled
->  Events enabled
->  Events disabled
->  Events enabled
->  Events disabled
->  [ perf record: Woken up 5 times to write data ]
->  [ perf record: Captured and wrote 0.204 MB perf.data ]
->  Terminated
->
->  A dlfilter is used to determine continuous data collection (timestamps
->  less than 1ms apart):
->
->  $ cat dlfilter-show-delays.c
->
->  static __u64 start_time;
->  static __u64 last_time;
->
->  int start(void **data, void *ctx)
->  {
->          printf("%-17s\t%-9s\t%-6s\n", " Time", " Duration", " Delay");
->          return 0;
->  }
->
->  int filter_event_early(void *data, const struct perf_dlfilter_sample *sample, void *ctx)
->  {
->          __u64 delta;
->
->          if (!sample->time)
->                  return 1;
->          if (!last_time)
->                  goto out;
->          delta = sample->time - last_time;
->          if (delta < 1000000)
->                  goto out2;;
->          printf("%17.9f\t%9.1f\t%6.1f\n", start_time / 1000000000.0, (last_time - start_time) / 1000000.0, delta / 1000000.0);
->  out:
->          start_time = sample->time;
->  out2:
->          last_time = sample->time;
->          return 1;
->  }
->
->  int stop(void *data, void *ctx)
->  {
->          printf("%17.9f\t%9.1f\n", start_time / 1000000000.0, (last_time - start_time) / 1000000.0);
->          return 0;
->  }
->
->  The result shows the times roughly match the --delay option:
->
->  $ perf script --itrace=qb --dlfilter dlfilter-show-delays.so
->   Time                    Duration        Delay
->    39215.302317300             9.7         20.5
->    39215.332480217            30.4         40.9
->    39215.403837717            49.8
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+not, we
+
+> bother registering the "leds-gpio". This method was chosen over "Kconfig
+> depends" since this way we can add support for more devices and GPIO
+> backends more easily without "depends"ing on all GPIO backends.
+
+"depends":ing
+
+The code is fine from my perspective,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+thanks!
+
+> Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version of Siemens driver")
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
 > ---
->  tools/perf/Documentation/perf-record.txt |   6 +-
->  tools/perf/builtin-record.c              |  24 ++-
->  tools/perf/util/evlist.c                 | 234 +++++++++++++++++++++++
->  tools/perf/util/evlist.h                 |   9 +
->  4 files changed, 269 insertions(+), 4 deletions(-)
+>  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-> index 099817ef5150..953b9663522a 100644
-> --- a/tools/perf/Documentation/perf-record.txt
-> +++ b/tools/perf/Documentation/perf-record.txt
-> @@ -430,8 +430,10 @@ if combined with -a or -C options.
->  -D::
->  --delay=::
->  After starting the program, wait msecs before measuring (-1: start with events
-> -disabled). This is useful to filter out the startup phase of the program, which
-> -is often very different.
-> +disabled), or enable events only for specified ranges of msecs (e.g.
-> +-D 10-20,30-40 means wait 10 msecs, enable for 10 msecs, wait 10 msecs, enable
-> +for 10 msecs, then stop). Note, delaying enabling of events is useful to filter
-> +out the startup phase of the program, which is often very different.
+> diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c b/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> index 4c9e663a90ba..0c96ba98e338 100644
+> --- a/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> @@ -57,6 +57,8 @@ static int simatic_ipc_leds_gpio_probe(struct platform_device *pdev)
+>         struct gpio_desc *gpiod;
+>         int err;
 >
->  -I::
->  --intr-regs::
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index cefb3028f565..7fdb1dd9a0a8 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -2498,6 +2498,10 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->                 }
->         }
->
-> +       err = event_enable_timer__start(rec->evlist->eet);
-> +       if (err)
-> +               goto out_child;
-> +
->         trigger_ready(&auxtrace_snapshot_trigger);
->         trigger_ready(&switch_output_trigger);
->         perf_hooks__invoke_record_start();
-> @@ -2621,6 +2625,14 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->                         }
->                 }
->
-> +               err = event_enable_timer__process(rec->evlist->eet);
-> +               if (err < 0)
-> +                       goto out_child;
-> +               if (err) {
-> +                       err = 0;
-> +                       done = 1;
-> +               }
-> +
->                 /*
->                  * When perf is starting the traced process, at the end events
->                  * die with the process and we wait for that. Thus no need to
-> @@ -2842,6 +2854,12 @@ static int perf_record_config(const char *var, const char *value, void *cb)
->         return 0;
->  }
->
-> +static int record__parse_event_enable_time(const struct option *opt, const char *str, int unset)
-> +{
-> +       struct record *rec = (struct record *)opt->value;
-> +
-> +       return evlist__parse_event_enable_time(rec->evlist, &rec->opts, str, unset);
-> +}
->
->  static int record__parse_affinity(const struct option *opt, const char *str, int unset)
->  {
-> @@ -3303,8 +3321,10 @@ static struct option __record_options[] = {
->         OPT_CALLBACK('G', "cgroup", &record.evlist, "name",
->                      "monitor event in cgroup name only",
->                      parse_cgroups),
-> -       OPT_INTEGER('D', "delay", &record.opts.initial_delay,
-> -                 "ms to wait before starting measurement after program start (-1: start with events disabled)"),
-> +       OPT_CALLBACK('D', "delay", &record, "ms",
-> +                    "ms to wait before starting measurement after program start (-1: start with events disabled), "
-> +                    "or ranges of time to enable events e.g. '-D 10-20,30-40'",
-> +                    record__parse_event_enable_time),
->         OPT_BOOLEAN(0, "kcore", &record.opts.kcore, "copy /proc/kcore"),
->         OPT_STRING('u', "uid", &record.opts.target.uid_str, "user",
->                    "user to profile"),
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 3cfe730c12b8..fcfe5bcc0bcf 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -15,6 +15,7 @@
->  #include "target.h"
->  #include "evlist.h"
->  #include "evsel.h"
-> +#include "record.h"
->  #include "debug.h"
->  #include "units.h"
->  #include "bpf_counter.h"
-> @@ -40,12 +41,14 @@
->  #include <sys/ioctl.h>
->  #include <sys/mman.h>
->  #include <sys/prctl.h>
-> +#include <sys/timerfd.h>
->
->  #include <linux/bitops.h>
->  #include <linux/hash.h>
->  #include <linux/log2.h>
->  #include <linux/err.h>
->  #include <linux/string.h>
-> +#include <linux/time64.h>
->  #include <linux/zalloc.h>
->  #include <perf/evlist.h>
->  #include <perf/evsel.h>
-> @@ -147,6 +150,7 @@ static void evlist__purge(struct evlist *evlist)
->
->  void evlist__exit(struct evlist *evlist)
->  {
-> +       event_enable_timer__exit(&evlist->eet);
->         zfree(&evlist->mmap);
->         zfree(&evlist->overwrite_mmap);
->         perf_evlist__exit(&evlist->core);
-> @@ -2167,6 +2171,236 @@ int evlist__ctlfd_process(struct evlist *evlist, enum evlist_ctl_cmd *cmd)
->         return err;
->  }
->
-> +/**
-> + * struct event_enable_time - perf record -D/--delay single time range.
-> + * @start: start of time range to enable events in milliseconds
-> + * @end: end of time range to enable events in milliseconds
-> + *
-> + * N.B. this structure is also accessed as an array of int.
-> + */
-> +struct event_enable_time {
-> +       int     start;
-> +       int     end;
-> +};
-> +
-> +static int parse_event_enable_time(const char *str, struct event_enable_time *range, bool first)
-> +{
-> +       const char *fmt = first ? "%u - %u %n" : " , %u - %u %n";
-> +       int ret, start, end, n;
-> +
-> +       ret = sscanf(str, fmt, &start, &end, &n);
-> +       if (ret != 2 || end <= start)
-> +               return -EINVAL;
-> +       if (range) {
-> +               range->start = start;
-> +               range->end = end;
-> +       }
-> +       return n;
-> +}
-> +
-> +static ssize_t parse_event_enable_times(const char *str, struct event_enable_time *range)
-> +{
-> +       int incr = !!range;
-> +       bool first = true;
-> +       ssize_t ret, cnt;
-> +
-> +       for (cnt = 0; *str; cnt++) {
-> +               ret = parse_event_enable_time(str, range, first);
-> +               if (ret < 0)
-> +                       return ret;
-> +               /* Check no overlap */
-> +               if (!first && range && range->start <= range[-1].end)
-> +                       return -EINVAL;
-> +               str += ret;
-> +               range += incr;
-> +               first = false;
-> +       }
-> +       return cnt;
-> +}
-> +
-> +/**
-> + * struct event_enable_timer - control structure for perf record -D/--delay.
-> + * @evlist: event list
-> + * @times: time ranges that events are enabled (N.B. this is also accessed as an
-> + *         array of int)
-> + * @times_cnt: number of time ranges
-> + * @timerfd: timer file descriptor
-> + * @pollfd_pos: position in @evlist array of file descriptors to poll (fdarray)
-> + * @times_step: current position in (int *)@times)[],
-> + *              refer event_enable_timer__process()
-> + *
-> + * Note, this structure is only used when there are time ranges, not when there
-> + * is only an initial delay.
-> + */
-> +struct event_enable_timer {
-> +       struct evlist *evlist;
-> +       struct event_enable_time *times;
-> +       size_t  times_cnt;
-> +       int     timerfd;
-> +       int     pollfd_pos;
-> +       size_t  times_step;
-> +};
-> +
-> +static int str_to_delay(const char *str)
-> +{
-> +       char *endptr;
-> +       long d;
-> +
-> +       d = strtol(str, &endptr, 10);
-> +       if (*endptr || d > INT_MAX || d < -1)
-> +               return 0;
-> +       return d;
-> +}
-> +
-> +int evlist__parse_event_enable_time(struct evlist *evlist, struct record_opts *opts,
-> +                                   const char *str, int unset)
-> +{
-> +       enum fdarray_flags flags = fdarray_flag__nonfilterable | fdarray_flag__non_perf_event;
-> +       struct event_enable_timer *eet;
-> +       ssize_t times_cnt;
-> +       ssize_t ret;
-> +       int err;
-> +
-> +       if (unset)
-> +               return 0;
-> +
-> +       opts->initial_delay = str_to_delay(str);
-> +       if (opts->initial_delay)
-> +               return 0;
-> +
-> +       ret = parse_event_enable_times(str, NULL);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       times_cnt = ret;
-> +       if (times_cnt == 0)
-> +               return -EINVAL;
-> +
-> +       eet = zalloc(sizeof(*eet));
-> +       if (!eet)
-> +               return -ENOMEM;
-> +
-> +       eet->times = calloc(times_cnt, sizeof(*eet->times));
-> +       if (!eet->times) {
-> +               err = -ENOMEM;
-> +               goto free_eet;
-> +       }
-> +
-> +       if (parse_event_enable_times(str, eet->times) != times_cnt) {
-> +               err = -EINVAL;
-> +               goto free_eet_times;
-> +       }
-> +
-> +       eet->times_cnt = times_cnt;
-> +
-> +       eet->timerfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC);
-> +       if (eet->timerfd == -1) {
-> +               err = -errno;
-> +               pr_err("timerfd_create failed: %s\n", strerror(errno));
-> +               goto free_eet_times;
-> +       }
-> +
-> +       eet->pollfd_pos = perf_evlist__add_pollfd(&evlist->core, eet->timerfd, NULL, POLLIN, flags);
-> +       if (eet->pollfd_pos < 0) {
-> +               err = eet->pollfd_pos;
-> +               goto close_timerfd;
-> +       }
-> +
-> +       eet->evlist = evlist;
-> +       evlist->eet = eet;
-> +       opts->initial_delay = eet->times[0].start;
-> +
-> +       return 0;
-> +
-> +close_timerfd:
-> +       close(eet->timerfd);
-> +free_eet_times:
-> +       free(eet->times);
-> +free_eet:
-> +       free(eet);
-> +       return err;
-> +}
-> +
-> +static int event_enable_timer__set_timer(struct event_enable_timer *eet, int ms)
-> +{
-> +       struct itimerspec its = {
-> +               .it_value.tv_sec = ms / MSEC_PER_SEC,
-> +               .it_value.tv_nsec = (ms % MSEC_PER_SEC) * NSEC_PER_MSEC,
-> +       };
-> +       int err = 0;
-> +
-> +       if (timerfd_settime(eet->timerfd, 0, &its, NULL) < 0) {
-> +               err = -errno;
-> +               pr_err("timerfd_settime failed: %s\n", strerror(errno));
-> +       }
-> +       return err;
-> +}
-> +
-> +int event_enable_timer__start(struct event_enable_timer *eet)
-> +{
-> +       int ms;
-> +
-> +       if (!eet)
-> +               return 0;
-> +
-> +       ms = eet->times[0].end - eet->times[0].start;
-> +       eet->times_step = 1;
-> +
-> +       return event_enable_timer__set_timer(eet, ms);
-> +}
-> +
-> +int event_enable_timer__process(struct event_enable_timer *eet)
-> +{
-> +       struct pollfd *entries;
-> +       short revents;
-> +
-> +       if (!eet)
-> +               return 0;
-> +
-> +       entries = eet->evlist->core.pollfd.entries;
-> +       revents = entries[eet->pollfd_pos].revents;
-> +       entries[eet->pollfd_pos].revents = 0;
-> +
-> +       if (revents & POLLIN) {
-> +               size_t step = eet->times_step;
-> +               size_t pos = step / 2;
-> +
-> +               if (step & 1) {
-> +                       evlist__disable_non_dummy(eet->evlist);
-> +                       pr_info(EVLIST_DISABLED_MSG);
-> +                       if (pos >= eet->times_cnt - 1) {
-> +                               /* Disarm timer */
-> +                               event_enable_timer__set_timer(eet, 0);
-> +                               return 1; /* Stop */
-> +                       }
-> +               } else {
-> +                       evlist__enable_non_dummy(eet->evlist);
-> +                       pr_info(EVLIST_ENABLED_MSG);
-> +               }
-> +
-> +               step += 1;
-> +               pos = step / 2;
-> +
-> +               if (pos < eet->times_cnt) {
-> +                       int *times = (int *)eet->times; /* Accessing 'times' as array of int */
-> +                       int ms = times[step] - times[step - 1];
-> +
-> +                       eet->times_step = step;
-> +                       return event_enable_timer__set_timer(eet, ms);
-> +               }
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +void event_enable_timer__exit(struct event_enable_timer **ep)
-> +{
-> +       if (!ep || !*ep)
-> +               return;
-> +       free((*ep)->times);
-> +       zfree(ep);
-> +}
-> +
->  struct evsel *evlist__find_evsel(struct evlist *evlist, int idx)
->  {
->         struct evsel *evsel;
-> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-> index 3a8474406738..9d967fe3953a 100644
-> --- a/tools/perf/util/evlist.h
-> +++ b/tools/perf/util/evlist.h
-> @@ -48,6 +48,8 @@ enum bkw_mmap_state {
->         BKW_MMAP_EMPTY,
->  };
->
-> +struct event_enable_timer;
-> +
->  struct evlist {
->         struct perf_evlist core;
->         bool             enabled;
-> @@ -79,6 +81,7 @@ struct evlist {
->                 int     ack;    /* ack file descriptor for control commands */
->                 int     pos;    /* index at evlist core object to check signals */
->         } ctl_fd;
-> +       struct event_enable_timer *eet;
->  };
->
->  struct evsel_str_handler {
-> @@ -426,6 +429,12 @@ int evlist__ctlfd_ack(struct evlist *evlist);
->  #define EVLIST_ENABLED_MSG "Events enabled\n"
->  #define EVLIST_DISABLED_MSG "Events disabled\n"
->
-> +int evlist__parse_event_enable_time(struct evlist *evlist, struct record_opts *opts,
-> +                                   const char *str, int unset);
-> +int event_enable_timer__start(struct event_enable_timer *eet);
-> +void event_enable_timer__exit(struct event_enable_timer **ep);
-> +int event_enable_timer__process(struct event_enable_timer *eet);
-> +
->  struct evsel *evlist__find_evsel(struct evlist *evlist, int idx);
->
->  int evlist__scnprintf_evsels(struct evlist *evlist, size_t size, char *bf);
+> +       if (!IS_ENABLED(CONFIG_PINCTRL_BROXTON))
+> +               return -ENODEV;
+>         gpiod_add_lookup_table(&simatic_ipc_led_gpio_table);
+>         simatic_leds_pdev = platform_device_register_resndata(NULL,
+>                 "leds-gpio", PLATFORM_DEVID_NONE, NULL, 0,
 > --
-> 2.25.1
+> 2.35.1
 >
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,138 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FB259F617
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B881259F61C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236235AbiHXJTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
+        id S235400AbiHXJWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235131AbiHXJTo (ORCPT
+        with ESMTP id S233356AbiHXJWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:19:44 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19C9832D7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:19:42 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id f14so12220371qkm.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=QZ1Zdo4TymduSekJHO/MM7un0W7AuCiIMfSsAxw8LuI=;
-        b=dfZv3as1V10XwuRX11EVQjEcQQrIDSswFB7Bisf64q5BNi3QYdfMFQMEIrqOxXWkCa
-         h53O+cReCVuv4GnCbB+lDB4qtLlJRtZPdD5tW5httZDdB5G4x5nZVt4IsLi2T86fkTFa
-         b9AJxPmhFqjVMvNaxZfzcDQbW13m5YvxFqQ3y8tWbWRyrOA7p7KXU0C14hBAB3Jr0YLu
-         tK91yiilbhzY0hrHtb5Dy5aC4w6Vf4LJXsto/E0hrS/4NjHbb5iYaLzMe+pMxoiB/msQ
-         apPPJRaZwmjoG89JgROSJFIsT63QgBXkE5JQoM++yOaN9L61AkYd7K9QXYbeZChdlYD+
-         BCjA==
+        Wed, 24 Aug 2022 05:22:22 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB44832FF
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:22:21 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id z9-20020a056e02088900b002e35dba878cso12243037ils.10
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:22:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=QZ1Zdo4TymduSekJHO/MM7un0W7AuCiIMfSsAxw8LuI=;
-        b=XaM28WqWTTQpzREsleKkiGN3fnTVyTGrH6KFzYYghJh5wuFrWNqAXQdU5DpcgsDRsD
-         54cff9AjyVFmt0Fm68IBxjeZozpnHHsOPSNMuetcCH9zQHaOkh7Hp+ZpiFhfatyKrKCC
-         T+cIHLOFDlUv4gIpYoUCyZJylW+DYOR4usKnJ+HthA/Q0XHvvrR73/kYGN9yqkooJTX8
-         eVQMnNlSbS+o409LOXmK4Xw3cY7B3NiGRwNd+qlM5hPvKp6z3KDJTluAFWSjMjb7EK2/
-         66msSjSX7e7MilZ3PGsEPw9+W33NrOyA7EKxE1nrgId9AfV7XKvgSVzzqNWTGekjuQAU
-         NI+A==
-X-Gm-Message-State: ACgBeo3WAXV73LkFKbe5BSZ8j1ALLFaVgoSZ0JZzqKJXwRmnNiWzzBJN
-        sFdiuuNOxw1c8Jp+fj9wZ9nTbn4GrYTE2oVOMRo=
-X-Google-Smtp-Source: AA6agR6MTk0hE5I5asyFmVNcsj40GrGLGjdh6R6zk/gJT8MBp9e5ZD8FTVpHeIE3SBaKCD8VdybST1o056dS1SUCXzI=
-X-Received: by 2002:a05:620a:410e:b0:6bc:5cdc:88ec with SMTP id
- j14-20020a05620a410e00b006bc5cdc88ecmr605306qko.734.1661332781985; Wed, 24
- Aug 2022 02:19:41 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=beK/RyAk6JMkokDhacR9sWsAak3KfcE5cJn8YM9YfXo=;
+        b=rLUDX1c8FaovIu6S6cWyzRaX/BT1dxXTZt6s4VCw0o66wBB857ox1Hakd6jL90j092
+         23SkMsF1oND+OfEn1ntbvQunC7SPxzhpoZZcOojZivkjkk6wvDz+uAIzBxaM8Jpg8YtB
+         9YpY9LxXAXS+e3SCo4H2dvfruqOz1/bhsnxeNiwbBb++XjSyu7W+wftksfPEPwqBWDXn
+         xOT8MavimAiO8iXt6s2mBr3spgPvlxFM4FKwrYM6whf0eGpPnZHQERupHRWdowvJnvnD
+         Prz2KqRYKYy9pVxip2wjzHgJ4Nxi8u1GxKuaM4A3UHJX/GLIUXjV38FqckCDK++rQiB7
+         6zqA==
+X-Gm-Message-State: ACgBeo1oG6S6DcXYdTBM8PEHTk+6HwKYYhsvke3A6NwlwaSnc0fas/ae
+        PG9Oc+ulja0bBxM/E+/Y2Mr2orkK/jG9BuSyGDKTxTMhQQje
+X-Google-Smtp-Source: AA6agR6mP2aXHamSsBpvwnCpSKmNwCSi2tgtr0N3coyIek8Yc/zb44/ELnSpufpvajxhye3fmSAykNr+kNPBcTUHWfmsvDw8LjEd
 MIME-Version: 1.0
-References: <20220824012624.2826445-1-yury.norov@gmail.com> <20220824012624.2826445-4-yury.norov@gmail.com>
-In-Reply-To: <20220824012624.2826445-4-yury.norov@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 24 Aug 2022 12:19:05 +0300
-Message-ID: <CAHp75Ve4QTSs_mSB7uMqOK4q+A-z-O1tc2k5=2qaRHTdAC3yog@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] lib/find_bit: optimize find_next_bit() functions
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dennis Zhou <dennis@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
+X-Received: by 2002:a05:6638:140c:b0:349:b5bb:5129 with SMTP id
+ k12-20020a056638140c00b00349b5bb5129mr10501248jad.276.1661332941207; Wed, 24
+ Aug 2022 02:22:21 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 02:22:21 -0700
+In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d082f105e6f93705@google.com>
+Subject: Re: [syzbot] general protection fault in fscache_free_cookie
+From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, linux-cachefs-bounces@redhat.com,
+        linux-cachefs-owner@redhat.com, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org, mudongliangabcd@gmail.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 4:56 AM Yury Norov <yury.norov@gmail.com> wrote:
->
-> Over the past couple years, the function _find_next_bit() was extended
-> with parameters that modify its behavior to implement and- zero- and le-
-> flavors. The parameters are passed at compile time, but current design
-> prevents a compiler from optimizing out the conditionals.
->
-> As find_next_bit() API grows, I expect that more parameterss will be added.
-
-parameters
-
-> Current designs would require more conditional code in _find_next_bit(),
-> which would bloat the helper even more and make it barely readable.
->
-> This patch replaces _find_next_bit() with a macro FIND_NEXT_BIT, and adds
-> a set of wrappers, so that the compile-time optimization becomes possible.
->
-> The common logic is moved to the new macro, and all flavors may be
-> generated by providing an EXPRESSION macro parameter, like in this example:
->
->   #define FIND_NEXT_BIT(EXPRESSION, size, start) ...
->
->   find_next_xornot_and_bit(addr1, addr2, addr3, size, start)
->   {
->         return FIND_NEXT_BIT(addr1[idx] ^ ~addr2[idx] & addr3[idx], size, start);
->   }
->
-> The EXPRESSION may be of any complexity, as soon as it only refers
-> the bitmap(s) and an iterator idx.
-
-...
-
-> +#define FIND_NEXT_BIT(EXPRESSION, size, start)                                 \
-> +({                                                                             \
-> +       unsigned long mask, idx, tmp, sz = (size), __start = (start);           \
-> +                                                                               \
-> +       if (unlikely(__start >= sz))                                            \
-> +               goto out;                                                       \
-> +                                                                               \
-> +       mask = word_op(BITMAP_FIRST_WORD_MASK(__start));                        \
-> +       idx = __start / BITS_PER_LONG;                                          \
-> +                                                                               \
-> +       for (tmp = (EXPRESSION) & mask; !tmp; tmp = (EXPRESSION)) {             \
-
-for (unsigned long tmp ...;
-But hey, why not loop over idx (which probably should be named as
-offset) as I proposed in the first patch? You will drop a lot of
-divisions / multiplications, no?
-
-> +               if (idx > sz / BITS_PER_LONG)                                   \
-> +                       goto out;                                               \
-> +               idx++;                                                          \
-> +       }                                                                       \
-> +                                                                               \
-> +       sz = min(idx * BITS_PER_LONG + __ffs(word_op(tmp)), sz);                \
-> +out:                                                                           \
-> +       sz;                                                                     \
-> +})
-
--- 
-With Best Regards,
-Andy Shevchenko
+This bug is marked as fixed by commit:
+fscache: fix GPF in fscache_free_cookie
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.

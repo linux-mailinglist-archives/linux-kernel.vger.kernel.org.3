@@ -2,478 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D065A0385
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427675A038A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240451AbiHXV6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 17:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S240573AbiHXV7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 17:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240415AbiHXV6q (ORCPT
+        with ESMTP id S237655AbiHXV7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 17:58:46 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE6776457;
-        Wed, 24 Aug 2022 14:58:44 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b16so23791084edd.4;
-        Wed, 24 Aug 2022 14:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=g2Ey6Q0UqOsLnQOmjv2tGRZLeR87hKYQCnLG8faintQ=;
-        b=deMdKeS2iMfX2/ewJNTskKo/vTYbZLffgfxH7kmVLkWZvsIOFrlhHmoruwuwGR7yZp
-         P6VwibVdkF50yBRVGj0QKrknjWq1k1JsASd7SPmvvJVHxck5tSWzO0hZZjxQr28g5Dr2
-         yTTESG5DwFqjwI0Fv1kNAgvZ4hloz5bJX2NTQAgyKqMbrobUlLr4yo0eHortCNbDtGZB
-         cUcqdMXpFOyv0mdegg4LLI5tgbSjxhOW/qGrw5ACiz63xsCw6Yx4jBwN25EvPnNhxo7d
-         ycRDiPSv4ZGedjvV+qDtpcyyRcDj4c5rMzP8zeujARAtuRVcCOUG3HLCb44n67MHREaZ
-         RxoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=g2Ey6Q0UqOsLnQOmjv2tGRZLeR87hKYQCnLG8faintQ=;
-        b=K24jQiFSFjeZQANa6m9Iu+NNJUfUmdOcez4gT6vMS1E3SI/iugjgC128diDwo0tq1k
-         g9QZ1RvzFFMTheaWTTK2CWQF8u+hrDtJhxkMSaPsD3WnXo5v1US+Sb2/PWXaOnJuOi4Q
-         6s3uRITDUJe0SsSqaevMJoB9100rymVZjMtCWcKv6kfJSIhGhua6ExXldNvVr4ffFlnF
-         hl+a2UeoJN4mNi+FfrM74bDOD+REbYTcnhDUC/keef3ngctswagkJu9qMvhSAlJ2wacI
-         FWvn0AE4UT4utPm2OkHgS1n/upxnQgNa43TqjONZ8JpM4NEgPthwhpB4pEltEXJXNmFk
-         lGRQ==
-X-Gm-Message-State: ACgBeo1Df5iPO55dcyp/NwedIlfswVqNkS45l9FoiCcQMB/JkX15a6Vu
-        Htf/unOWe5KWS3ncE+Dz8pTmwjJN1dVZLCYpBfI=
-X-Google-Smtp-Source: AA6agR5X3JEZVxh4hWjYJ1kmS5OICYG3yZflh0TDEPsAO08md9aiklSrJ2KitGHFjmmhyJ+BQMSq9v7SQIQuKQ9PeGk=
-X-Received: by 2002:a05:6402:24a4:b0:440:8c0c:8d2b with SMTP id
- q36-20020a05640224a400b004408c0c8d2bmr762970eda.311.1661378323177; Wed, 24
- Aug 2022 14:58:43 -0700 (PDT)
+        Wed, 24 Aug 2022 17:59:31 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2051.outbound.protection.outlook.com [40.107.100.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F6276763;
+        Wed, 24 Aug 2022 14:59:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JJmMCaIAxV3+tHVkotc0iXcBMm4qLq94yagN4IY9e+yh8XLJul8CwFNKHdtxP6mIwIYXzsR8SOd5KTiFJOKcaaEiimIb1aewesbKhGg/7f9dbFxn3piKKrjjinlPt9P53TemLxh7VoFvTN/3leVtdTtIzN52xjv7ilvbWY86W9xUIraxfazks5H2nLc6ntSZYOZ7C2wHQcLVLs0rw/Vw2006Eb77CqPZl2QO2X/nlgo+CxHjY4Olah/lJsLeHldaE1KY/w6rbu0HKUBMR5HyExDF+HV4sywfgROtpxictSrrd/LV6N34VQsDe/92r0+6xLKM0h0zc7Xd6mw2DE516Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WtRgwr//724AGR28U6k3UdiY6o46PlgQzN3ZTB2Gq64=;
+ b=F8dNbkfOZlvVxXC8uXrKysHSu8ZS/b+K43L9XYg9XVsVznOoixMzDYN89HiiBHr2+f8VfvWrPsZakHXNMdgKaaKQIolHiZq5FdcdpY1vBTwgiZtZZ5jh8peckp3GUzdLVziNuGr/k7FRpr2i+s/JgUxI1bW9Q01kPyvWsNFFt08sBa7I4adLtvo+m4aAt6Qmryc1dwy35cIokF/Ubn315SpFfrlLW6y4pzWbuIj2JL6OvtahlSFJkIwsP/VI/PhTOVe3vBugpiYVO/hfIF42sNRf/0st0VXupHKR/ikdyjikESZAWfu4rvsrRBmqehtcRXsgLI8Y5HQvWZLEmWxBvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WtRgwr//724AGR28U6k3UdiY6o46PlgQzN3ZTB2Gq64=;
+ b=sHbAgk5fVXXhRqEMIkKAVIRygWxXMrznqTAH5UAxEWrB7psm8cEWPpbhdsojmVY+ZHytG+RWPIbo8F3s9+yBXH6+qUJobkgltLfYxVH9MtZAHkDH5taKzRoIrr5FtgD3dO1A8pfoYE/F2KZ9O5DWf+siK+EGBk448TmTpI1u8eWUy/tLzXZCFjqnn5yE1ftNY83asPWmGGzGxEO0d7IvjDSLAbALtpy2Qn3mrEI/DvgVrwLpCiwqcDebwViswm2RJ1TPhC5yO3L1IpMPrCdnn3AuEhvj5zhBrdtBukJRxNIkP+g8P17XvjfKxiK14pFoWG/Gd2W4G4TQY2CasWthsQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by BYAPR12MB3590.namprd12.prod.outlook.com (2603:10b6:a03:ae::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Wed, 24 Aug
+ 2022 21:59:28 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5566.014; Wed, 24 Aug 2022
+ 21:59:27 +0000
+Message-ID: <0db131cf-013e-6f0e-c90b-5c1e840d869c@nvidia.com>
+Date:   Wed, 24 Aug 2022 14:59:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH RFC 1/2] coding-style.rst: document BUG() and WARN() rules
+ ("do not crash the kernel")
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        kexec@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>
+References: <20220824163100.224449-1-david@redhat.com>
+ <20220824163100.224449-2-david@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220824163100.224449-2-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0142.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c6::27) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
-References: <20220818221212.464487-1-void@manifault.com> <20220818221212.464487-4-void@manifault.com>
-In-Reply-To: <20220818221212.464487-4-void@manifault.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 24 Aug 2022 14:58:31 -0700
-Message-ID: <CAEf4BzZkzZacR7ziFf2orNk2znNqhJhBTDGhSOtGNvB2z4moJQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] bpf: Add libbpf logic for user-space ring buffer
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c84b96ef-6d36-4b79-5912-08da861bea1d
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3590:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hzmIg0jqfbg5m3lOl6N7isTfas1o0J5Im6mEd9gcKy15QmqfJRSLdsvTbAHybEgXTmz1ZOFO8UsX0ved94Q7gU5kvbxBRoe5H1VUOOmxKl1m+yV0w4ZHmx/v3E0Wmrimhpk8/865F+PjP6fXj0j+6j03fl2G2XNlvVi+fyFKUBFYc9y6KwiTeSUISPHE6NBg3hR1VmCFl8lSYP6iAIOgzg13366n+5jFdsDbQQSsvwVyI7jYo93GN+dOz632Pf0C6tWRqmHFXczdOUwYba/e8cJvntFchOaCpMa0++ioSwBdM5ajLilxEUCkVY16PeH0xcqFGEjc/K7sI6ZnezSfXguW2fL5DlZrANkPqQdHynJ42/WXbq961UBM5bce/r9eZF4gDyeEyikaGd7dwXKaa2wBlDPIBpnB4gYVuNJIu0jNvV9pAJ5ioYK1fAHbX+4bHC8xBKBD6coGN14Q3/y/H4+TPRT6Dv/OVVkm3/kLHAXFQAP06pg9cQFxhDeeZMc559aTSl20zUbcmZrf5HXrWRe4Te71+FCYpRWOfLhwqgYmEPXsOJNeKoNZ76pDtuyb8DHqbcoN2WpEcQFD0Qa/2YpmACP0vj/5fs8uS3bt9K8/KZSmAteXj776N2RXJGNzm3FlmcUfuk3bhVxdwLwo/Dm0xXI6jbuG8zB7mDqt8PpNo23GXo+bQ+dwPcUK+yDl9iyvJnlYu1YPNHVM9uh5Cn9v16RkcGTUT6TdQgI/AYTy90kH3uHHC/Uxz4DQkVT+dNdGNTWIkYQWHSfM/ZFE74yWR6h704BR1cc60j/aI1s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(26005)(31696002)(86362001)(38100700002)(8936002)(54906003)(36756003)(316002)(7416002)(6486002)(66946007)(31686004)(478600001)(6506007)(8676002)(66476007)(66556008)(2616005)(4326008)(186003)(5660300002)(53546011)(83380400001)(2906002)(41300700001)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1hBNm9OaVdGZlFsaUR5djNSQ1o2SnNKWnVidUFTd1ZTYmJUQTlCZzlPWjVx?=
+ =?utf-8?B?NEtSbmxZYjFQeElFYkhMaVF3bWN4NFBJN1M1ekswekRKaXVBZjJEamZwTW5n?=
+ =?utf-8?B?OG5zQ3NORWl1blFCRmtoc1FBUGtCa2RvQ1pqRURMOEtsS2kxTmVwQVc2czli?=
+ =?utf-8?B?czF5dnI3YnhyQTh0Ulh2U2h1bUZRQkZUMWVKZzVSWFZBcGM5OHNWb1RNbXl2?=
+ =?utf-8?B?aG5FQUsyTHN1Q3dVU1dZSzBmVkQ0eFRZUGNQaURTeCttNklnQzAxYVhrZjRl?=
+ =?utf-8?B?MVRXZjU3M2RFL2xtL0ZOMGtDZ29jSG1wTW9CT0VBYmluc005K1JVTW1IK3Fx?=
+ =?utf-8?B?Y2dTbGhEU0JzWHBTbm1nakpPcGdsVW9vZmFqRmRXY0FnV2t5cnlpVXdLK3Yx?=
+ =?utf-8?B?a3VvZjRzWXRDVWlkcEM0VDc1Y2hXZHJYR1cvU25WdFczNVN0Q2pvQm10MTRQ?=
+ =?utf-8?B?UEZTYVRKRmNGYXFlNUpBR1BNL1ozZkg3b21UTGVyUnBrckwybkswWlRweFEz?=
+ =?utf-8?B?djhRVUx2Q0Fjb3ladnBsM01rRlR2ZHo0TklmOVFtS0FzN29WWU5FQUF0Y0FL?=
+ =?utf-8?B?dmpJVzVLYWJSeXNNSUF1OGoxMVBzUFl5Qk1PVVFPQnZPcVRMWVBZYldhR1Jn?=
+ =?utf-8?B?Nk5ZbmQwMjlacVkvRTg1MnZpT0JnWVpZNDhHbnpUclQ0ZmpuSVZsK2dqSSti?=
+ =?utf-8?B?T1JwdGdMazhjbkRDR2Fzem5PcThoMS80c2lFWUVmLzRkM2Z6OFExcDIyemR6?=
+ =?utf-8?B?RzhWQUF4TDZ0QkdkcGUxOFpRWk1LR3BFalJZVDdybnpZTkRpbVNsb1o0ZFoz?=
+ =?utf-8?B?cWVFVS9iVmo3R1JjdG9LdmExbmNnYzZzOTA0bHg0UHl5WUptYWxNMGVDZnFJ?=
+ =?utf-8?B?bm42MTZYcHBidFlEVUN2Vzk1RWFWUzQzTTd0ZDlPbXVXTld4QUxQaFU2OWlm?=
+ =?utf-8?B?aHNSYUM4UmNQV3RJNm5JVUpRWndzcmFMWkx1dHQ4clc0NERpM0R0RHZ1WjVR?=
+ =?utf-8?B?S1p3U01LZ0U4cjNKaGI2Z3k4N0NqNHI3Wk5DcmhvTkhoeEM2TlF1SHBZOWJV?=
+ =?utf-8?B?N2FtMnFFZS85TEhYc3EwZDVwUWpHQlZBSklNMmFaT2FYRVd2WTRCbW5RRWo1?=
+ =?utf-8?B?Vkd1NlBNQldMQnFVeGFqZktlQzZCa0Q3YzdwUXVwcHlFdklPQzFDb2x0Ky9H?=
+ =?utf-8?B?ZVB2SE55eWUrM3JUY0Z5YmFQc01rYjdpZTNqZlRQQ1Jjdnd1MXlEODF1TW1H?=
+ =?utf-8?B?cUtqQ2RibEJZM2ZlalA1TFJDMFlvajNqdEt3NVA0SExFSm5McmtmUXg2bk9w?=
+ =?utf-8?B?Q2NoNUl1dk5TR2hIWFVJNGIzcHVZV3Z3Z0drM3VtQUsrLzZsa0J2VXllMkdB?=
+ =?utf-8?B?ZU1vVS9JTHRCNjJWMTM3UUlvd1F1SjJJb2hMU3hHYVJaTkhvQTNDK09POTNw?=
+ =?utf-8?B?U1J5NzFaQWtLNXBVanB1aDF1RzlSUExVeENqMi9CZjhEM3pZd21rVHRaM3NI?=
+ =?utf-8?B?TnlMY09wengxUm5aazljTUxSUy9Mam5nWXZDd25yaXlhQW5mS1NsdU5QZU1B?=
+ =?utf-8?B?N1ZMdFhmVEt6ZXdveGcrd05VdW9jWFU0eGY1bHVMQmlZNDAyN2xtbkxqblJu?=
+ =?utf-8?B?Wm9jci9xMldGRlZNWTVBM1Rrc2Vrck9PaVoxUW5UVzNKQ2NNblpEWTdpVkVF?=
+ =?utf-8?B?Q2ZYZ05QN05LcjNrd0xnU0wxZm02QkxMMkFIdTU4R0FSNTNTcWFHUUt4UWpo?=
+ =?utf-8?B?U1dmRkl3ZGhJZmEwUjhQcW9EbkZPSXBYR29TeUhHR3VzM2VhMWlGck5oUFdB?=
+ =?utf-8?B?Yll2dnVGaWJDWXlFZHJHMngxZjN1MWpBOUxoK1ZjcXVRVC93TU1td0Z1UTJC?=
+ =?utf-8?B?dDI4WHJNWjcxSTlLaGd3alI2Mi9EUG5nREtxdlIvM05MT1ZMRHBTWWZTSFVO?=
+ =?utf-8?B?SHV5SnFUMmxwTllsRXRiY3hCRHp3bnhEYUNlbkpKZU9GdUZnanYyVzlZbSt1?=
+ =?utf-8?B?bVkwNnMxZVFnZ0RTY3RuZThtS0Z5N2p0U0FhQjM5UXBCU3Z6NS9HZGRidTJI?=
+ =?utf-8?B?NHpLbGlOdFJsZDM3VWhzZnl3dU5kTDgzZmVwc1BRd0R1K2NYcTY2Z28yNGVM?=
+ =?utf-8?Q?0I0eL0InS/RRilKyGH++SVqvE?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c84b96ef-6d36-4b79-5912-08da861bea1d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 21:59:27.8252
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 59q+8kcAnee4WpOp5lb4eHbnUBNQmiSlUCI1x/t6+nUP3rfKEJKfxoelTJsN8btWXvSyNKajIxDl0dh0Y35fGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3590
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 3:12 PM David Vernet <void@manifault.com> wrote:
->
-> Now that all of the logic is in place in the kernel to support user-space
-> produced ringbuffers, we can add the user-space logic to libbpf. This
-> patch therefore adds the following public symbols to libbpf:
->
-> struct user_ring_buffer *
-> user_ring_buffer__new(int map_fd,
->                       const struct user_ring_buffer_opts *opts);
-> void *user_ring_buffer__reserve(struct user_ring_buffer *rb, __u32 size);
-> void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb,
->                                          __u32 size, int timeout_ms);
-> void user_ring_buffer__submit(struct user_ring_buffer *rb, void *sample);
-> void user_ring_buffer__discard(struct user_ring_buffer *rb,
-> void user_ring_buffer__free(struct user_ring_buffer *rb);
->
-> A user-space producer must first create a struct user_ring_buffer * object
-> with user_ring_buffer__new(), and can then reserve samples in the
-> ringbuffer using one of the following two symbols:
->
-> void *user_ring_buffer__reserve(struct user_ring_buffer *rb, __u32 size);
-> void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb,
->                                          __u32 size, int timeout_ms);
->
-> With user_ring_buffer__reserve(), a pointer to an @size region of the
-> ringbuffer will be returned if sufficient space is available in the buffer.
-> user_ring_buffer__reserve_blocking() provides similar semantics, but will
-> block for up to @timeout_ms in epoll_wait if there is insufficient space in
-> the buffer. This function has the guarantee from the kernel that it will
-> receive at least one event-notification per invocation to
-> bpf_ringbuf_drain(), provided that at least one sample is drained, and the
-> BPF program did not pass the BPF_RB_NO_WAKEUP flag to bpf_ringbuf_drain().
->
-> Once a sample is reserved, it must either be committed to the ringbuffer
-> with user_ring_buffer__submit(), or discarded with
-> user_ring_buffer__discard().
->
-> Signed-off-by: David Vernet <void@manifault.com>
-> ---
->  tools/lib/bpf/libbpf.c        |  10 +-
->  tools/lib/bpf/libbpf.h        |  21 +++
->  tools/lib/bpf/libbpf.map      |   6 +
->  tools/lib/bpf/libbpf_probes.c |   1 +
->  tools/lib/bpf/ringbuf.c       | 327 ++++++++++++++++++++++++++++++++++
->  5 files changed, 363 insertions(+), 2 deletions(-)
->
+On 8/24/22 09:30, David Hildenbrand wrote:
+> diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+> index 03eb53fd029a..a6d81ff578fe 100644
+> --- a/Documentation/process/coding-style.rst
+> +++ b/Documentation/process/coding-style.rst
+> @@ -1186,6 +1186,33 @@ expression used.  For instance:
+>  	#endif /* CONFIG_SOMETHING */
+>  
 
-[...]
+I like the idea of adding this documentation, and this is the right
+place. Naturally, if one likes something, one must immediately change
+it. :) Therefore, here is an alternative writeup that I think captures
+what you and the email threads were saying.
 
-> +LIBBPF_API struct user_ring_buffer *
-> +user_ring_buffer__new(int map_fd, const struct user_ring_buffer_opts *opts);
-> +LIBBPF_API void *user_ring_buffer__reserve(struct user_ring_buffer *rb,
-> +                                          __u32 size);
-> +
-> +LIBBPF_API void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb,
-> +                                                   __u32 size,
-> +                                                   int timeout_ms);
-> +LIBBPF_API void user_ring_buffer__submit(struct user_ring_buffer *rb,
-> +                                        void *sample);
-> +LIBBPF_API void user_ring_buffer__discard(struct user_ring_buffer *rb,
-> +                                         void *sample);
-> +LIBBPF_API void user_ring_buffer__free(struct user_ring_buffer *rb);
-> +
+How's this sound?
 
-Let's make sure that all the relevant comments and description of
-inputs/outputs/errors are documented here. These doccomments go to
-https://libbpf.readthedocs.io/en/latest/api.html
-
-
-also, please make sure that declarations that fit within 100
-characters stay on single line, it's much more readable that way
-
->  /* Perf buffer APIs */
->  struct perf_buffer;
->
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 2b928dc21af0..40c83563f90a 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -367,4 +367,10 @@ LIBBPF_1.0.0 {
-
-now that 1.0 is released, this will have to go into a new LIBBPF_1.1.0
-section (which inherits from LIBBPF_1.0.0)
-
->                 libbpf_bpf_map_type_str;
->                 libbpf_bpf_prog_type_str;
->                 perf_buffer__buffer;
-> +               user_ring_buffer__discard;
-> +               user_ring_buffer__free;
-> +               user_ring_buffer__new;
-> +               user_ring_buffer__reserve;
-> +               user_ring_buffer__reserve_blocking;
-> +               user_ring_buffer__submit;
->  };
-
-[...]
-
-> +       /* Map read-write the producer page and data pages. We map the data
-> +        * region as twice the total size of the ringbuffer to allow the simple
-> +        * reading and writing of samples that wrap around the end of the
-> +        * buffer.  See the kernel implementation for details.
-> +        */
-> +       tmp = mmap(NULL, rb->page_size + 2 * info.max_entries,
-> +                  PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, rb->page_size);
-> +       if (tmp == MAP_FAILED) {
-> +               err = -errno;
-> +               pr_warn("user ringbuf: failed to mmap data pages for map fd=%d: %d\n",
-> +                       map_fd, err);
-> +               return libbpf_err(err);
-> +       }
-> +
-> +       rb->producer_pos = tmp;
-> +       rb->data = tmp + rb->page_size;
-> +
-> +       rb_epoll = &rb->event;
-> +       rb_epoll->events = EPOLLOUT;
-> +       if (epoll_ctl(rb->epoll_fd, EPOLL_CTL_ADD, map_fd, rb_epoll) < 0) {
-> +               err = -errno;
-> +               pr_warn("user ringbuf: failed to epoll add map fd=%d: %d\n", map_fd, err);
-> +               return libbpf_err(err);
-
-this is internal helper function, so there is no need to use
-libbpf_err() helpers, just return errors directly. Only user-facing
-functions should make sure to set both errno and return error
-
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +struct user_ring_buffer *
-> +user_ring_buffer__new(int map_fd, const struct user_ring_buffer_opts *opts)
-> +{
-> +       struct user_ring_buffer *rb;
-> +       int err;
-> +
-> +       if (!OPTS_VALID(opts, ring_buffer_opts))
-
-user_ring_buffer_opts
-
-> +               return errno = EINVAL, NULL;
-> +
-> +       rb = calloc(1, sizeof(*rb));
-> +       if (!rb)
-> +               return errno = ENOMEM, NULL;
-> +
-> +       rb->page_size = getpagesize();
-> +
-> +       rb->epoll_fd = epoll_create1(EPOLL_CLOEXEC);
-> +       if (rb->epoll_fd < 0) {
-> +               err = -errno;
-> +               pr_warn("user ringbuf: failed to create epoll instance: %d\n", err);
-> +               goto err_out;
-> +       }
-> +
-> +       err = user_ringbuf_map(rb, map_fd);
-> +       if (err)
-> +               goto err_out;
-> +
-> +       return rb;
-> +
-> +err_out:
-> +       user_ring_buffer__free(rb);
-> +       return errno = -err, NULL;
-> +}
-> +
-> +static void user_ringbuf__commit(struct user_ring_buffer *rb, void *sample, bool discard)
-> +{
-> +       __u32 new_len;
-> +       struct ringbuf_hdr *hdr;
-> +
-> +       /* All samples are aligned to 8 bytes, so the header will only ever
-> +        * wrap around the back of the ringbuffer if the sample is at the
-> +        * very beginning of the ringbuffer.
-> +        */
-> +       if (sample == rb->data)
-> +               hdr = rb->data + (rb->mask - BPF_RINGBUF_HDR_SZ + 1);
-> +       else
-> +               hdr = sample - BPF_RINGBUF_HDR_SZ;
-
-let's avoid extra if in a hot path?
-
-hdr = rb->data + (rb->mask + 1 + (sample - rb->data) -
-BPF_RINGBUF_HDR_SZ) & rb->mask;
-
-> +
-> +       new_len = hdr->len & ~BPF_RINGBUF_BUSY_BIT;
-> +       if (discard)
-> +               new_len |= BPF_RINGBUF_DISCARD_BIT;
-> +
-> +       /* Synchronizes with smp_load_acquire() in __bpf_user_ringbuf_peek() in
-> +        * the kernel.
-> +        */
-> +       __atomic_exchange_n(&hdr->len, new_len, __ATOMIC_ACQ_REL);
-> +}
-> +
-> +/* Discard a previously reserved sample into the ring buffer.  It is not
-> + * necessary to synchronize amongst multiple producers when invoking this
-> + * function.
-> + */
-> +void user_ring_buffer__discard(struct user_ring_buffer *rb, void *sample)
-> +{
-> +       user_ringbuf__commit(rb, sample, true);
-> +}
-> +
-> +/* Submit a previously reserved sample into the ring buffer. It is not
-> + * necessary to synchronize amongst multiple producers when invoking this
-> + * function.
-> + */
-> +void user_ring_buffer__submit(struct user_ring_buffer *rb, void *sample)
-> +{
-> +       user_ringbuf__commit(rb, sample, false);
-> +}
-> +
-> +/* Reserve a pointer to a sample in the user ring buffer. This function is
-> + * *not* thread safe, and callers must synchronize accessing this function if
-> + * there are multiple producers.
-> + *
-> + * If a size is requested that is larger than the size of the entire
-> + * ringbuffer, errno is set to E2BIG and NULL is returned. If the ringbuffer
-> + * could accommodate the size, but currently does not have enough space, errno
-> + * is set to ENODATA and NULL is returned.
-
-ENOSPC seems more appropriate for such a situation?
-
-> + *
-> + * Otherwise, a pointer to the sample is returned. After initializing the
-> + * sample, callers must invoke user_ring_buffer__submit() to post the sample to
-> + * the kernel. Otherwise, the sample must be freed with
-> + * user_ring_buffer__discard().
-> + */
-
-usual complaints about "ringbuffer", feels like a typo
+diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+index 03eb53fd029a..32df0d503388 100644
+--- a/Documentation/process/coding-style.rst
++++ b/Documentation/process/coding-style.rst
+@@ -1185,6 +1185,53 @@ expression used.  For instance:
+        ...
+        #endif /* CONFIG_SOMETHING */
+ 
++22) Do not crash the kernel
++---------------------------
++
++Use WARN() rather than BUG()
++****************************
++
++Do not add new code that uses any of the BUG() variants, such as BUG(),
++BUG_ON(), or VM_BUG_ON(). Instead, use a WARN*() variant, preferably
++WARN_ON_ONCE(), and possibly with recovery code. Recovery code is not required
++if there is no reasonable way to at least partially recover.
++
++Use WARN_ON_ONCE() rather than WARN() or WARN_ON()
++**************************************************
++
++WARN_ON_ONCE() is generally preferred over WARN() or WARN_ON(), because it is
++common for a given warning condition, if it occurs at all, to occur multiple
++times. (For example, once per file, or once per struct page.) This can fill up
++and wrap the kernel log, and can even slow the system enough that the excessive
++logging turns into its own, additional problem.
++
++Do not WARN lightly
++*******************
++
++WARN*() is intended for unexpected, this-should-never-happen situations. WARN*()
++macros are not to be used for anything that is expected to happen during normal
++operation. These are not pre- or post-condition asserts, for example. Again:
++WARN*() must not be used for a condition that is expected to trigger easily, for
++example, by user space actions. pr_warn_once() is a possible alternative, if you
++need to notify the user of a problem.
++
++Do not worry about panic_on_warn users
++**************************************
++
++A few more words about panic_on_warn: Remember that ``panic_on_warn`` is an
++available kernel option, and that many users set this option. This is why there
++is a "Do not WARN lightly" writeup, above. However, the existence of
++panic_on_warn users is not a valid reason to avoid the judicious use WARN*().
++That is because, whoever enables panic_on_warn has explicitly asked the kernel
++to crash if a WARN*() fires, and such users must be prepared to deal with the
++consequences of a system that is somewhat more likely to crash.
++
++Use BUILD_BUG_ON() for compile-time assertions
++**********************************************
++
++The use of BUILD_BUG_ON() is acceptable and encouraged, because it is a
++compile-time assertion that has no effect at runtime.
 
 
-> +void *user_ring_buffer__reserve(struct user_ring_buffer *rb, __u32 size)
-> +{
-> +       __u32 avail_size, total_size, max_size;
-> +       /* 64-bit to avoid overflow in case of extreme application behavior */
-> +       __u64 cons_pos, prod_pos;
-> +       struct ringbuf_hdr *hdr;
-> +
-> +       /* Synchronizes with smp_store_release() in __bpf_user_ringbuf_peek() in
-> +        * the kernel.
-> +        */
-> +       cons_pos = smp_load_acquire(rb->consumer_pos);
-> +       /* Synchronizes with smp_store_release() in user_ringbuf__commit() */
-> +       prod_pos = smp_load_acquire(rb->producer_pos);
-> +
-> +       /* Round up size to a multiple of 8. */
-> +       size = (size + 7) / 8 * 8;
-> +       max_size = rb->mask + 1;
-> +       avail_size = max_size - (prod_pos - cons_pos);
-> +       total_size = size + BPF_RINGBUF_HDR_SZ;
-> +
-> +       if (total_size > max_size)
-> +               return errno = E2BIG, NULL;
-> +
-> +       if (avail_size < total_size)
-> +               return errno = ENODATA, NULL;
-> +
-> +       hdr = rb->data + (prod_pos & rb->mask);
-> +       hdr->len = size | BPF_RINGBUF_BUSY_BIT;
+thanks,
 
-so I double-checked what kernel ringbuf is doing with size. We still
-record exact user-requested size in header, but all the logic knows
-that it has to be rounded up to closest 8. I think that's best
-behavior because it preserves user-supplied information exactly. So if
-I wanted to reserve and communicate 4 byte sample to my producers,
-they should see that there are 4 bytes of data available, not 8. So
-let's do the same here?
-
-We still should validate that all the positions are multiples of 8, of
-course, as you do in this revision.
-
-> +       hdr->pad = 0;
-> +
-> +       /* Synchronizes with smp_load_acquire() in __bpf_user_ringbuf_peek() in
-> +        * the kernel.
-> +        */
-> +       smp_store_release(rb->producer_pos, prod_pos + total_size);
-> +
-> +       return (void *)rb->data + ((prod_pos + BPF_RINGBUF_HDR_SZ) & rb->mask);
-> +}
-> +
-> +static int ms_elapsed_timespec(const struct timespec *start, const struct timespec *end)
-> +{
-> +       int total, ns_per_ms = 1000000, ns_per_s = ns_per_ms * 1000;
-> +
-> +       if (end->tv_sec > start->tv_sec) {
-> +               total = 1000 * (end->tv_sec - start->tv_sec);
-> +               total += (end->tv_nsec + (ns_per_s - start->tv_nsec)) / ns_per_ms;
-> +       } else {
-> +               total = (end->tv_nsec - start->tv_nsec) / ns_per_ms;
-> +       }
-> +
-
-hm... this seems overengineered, tbh
-
-u64 start_ns = (u64)start->tv_sec * 1000000000 + start->tv_nsec;
-u64 end_ns = (u64)end->tv_sec * 1000000000 + start->tv_nsec;
-
-return (end_ns - start_ns) / 1000000;
-
-?
-
-> +       return total;
-> +}
-> +
-> +/* Reserve a record in the ringbuffer, possibly blocking for up to @timeout_ms
-> + * until a sample becomes available.  This function is *not* thread safe, and
-> + * callers must synchronize accessing this function if there are multiple
-> + * producers.
-> + *
-> + * If @timeout_ms is -1, the function will block indefinitely until a sample
-> + * becomes available. Otherwise, @timeout_ms must be non-negative, or errno
-> + * will be set to EINVAL, and NULL will be returned. If @timeout_ms is 0,
-> + * no blocking will occur and the function will return immediately after
-> + * attempting to reserve a sample.
-> + *
-> + * If @size is larger than the size of the entire ringbuffer, errno is set to
-> + * E2BIG and NULL is returned. If the ringbuffer could accommodate @size, but
-> + * currently does not have enough space, the caller will block until at most
-> + * @timeout_ms has elapsed. If insufficient space is available at that time,
-> + * errno will be set to ENODATA, and NULL will be returned.
-
-ENOSPC?
-
-> + *
-> + * The kernel guarantees that it will wake up this thread to check if
-> + * sufficient space is available in the ringbuffer at least once per invocation
-> + * of the bpf_ringbuf_drain() helper function, provided that at least one
-> + * sample is consumed, and the BPF program did not invoke the function with
-> + * BPF_RB_NO_WAKEUP. A wakeup may occur sooner than that, but the kernel does
-> + * not guarantee this.
-> + *
-> + * When a sample of size @size is found within @timeout_ms, a pointer to the
-> + * sample is returned. After initializing the sample, callers must invoke
-> + * user_ring_buffer__submit() to post the sample to the ringbuffer. Otherwise,
-> + * the sample must be freed with user_ring_buffer__discard().
-> + */
-
-so comments like this should go into doccomments for this functions in libbpf.h
-
-> +void *user_ring_buffer__reserve_blocking(struct user_ring_buffer *rb, __u32 size, int timeout_ms)
-> +{
-> +       int ms_elapsed = 0, err;
-> +       struct timespec start;
-> +
-> +       if (timeout_ms < 0 && timeout_ms != -1)
-> +               return errno = EINVAL, NULL;
-> +
-> +       if (timeout_ms != -1) {
-> +               err = clock_gettime(CLOCK_MONOTONIC, &start);
-> +               if (err)
-> +                       return NULL;
-> +       }
-> +
-> +       do {
-> +               int cnt, ms_remaining = timeout_ms - ms_elapsed;
-
-let's max(0, timeout_ms - ms_elapsed) to avoid negative ms_remaining
-in some edge timing cases
-
-> +               void *sample;
-> +               struct timespec curr;
-> +
-> +               sample = user_ring_buffer__reserve(rb, size);
-> +               if (sample)
-> +                       return sample;
-> +               else if (errno != ENODATA)
-> +                       return NULL;
-> +
-> +               /* The kernel guarantees at least one event notification
-> +                * delivery whenever at least one sample is drained from the
-> +                * ringbuffer in an invocation to bpf_ringbuf_drain(). Other
-> +                * additional events may be delivered at any time, but only one
-> +                * event is guaranteed per bpf_ringbuf_drain() invocation,
-> +                * provided that a sample is drained, and the BPF program did
-> +                * not pass BPF_RB_NO_WAKEUP to bpf_ringbuf_drain().
-> +                */
-> +               cnt = epoll_wait(rb->epoll_fd, &rb->event, 1, ms_remaining);
-> +               if (cnt < 0)
-> +                       return NULL;
-> +
-> +               if (timeout_ms == -1)
-> +                       continue;
-> +
-> +               err = clock_gettime(CLOCK_MONOTONIC, &curr);
-> +               if (err)
-> +                       return NULL;
-> +
-> +               ms_elapsed = ms_elapsed_timespec(&start, &curr);
-> +       } while (ms_elapsed <= timeout_ms);
-
-let's simplify all the time keeping to use nanosecond timestamps and
-only convert to ms when calling epoll_wait()? Then you can just have a
-tiny helper to convert timespec to nanosecond ts ((u64)ts.tv_sec *
-1000000000 + ts.tv_nsec) and compare u64s directly. WDYT?
-
-> +
-> +       errno = ENODATA;
-> +       return NULL;
-> +}
-> --
-> 2.37.1
->
+-- 
+John Hubbard
+NVIDIA

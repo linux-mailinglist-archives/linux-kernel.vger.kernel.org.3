@@ -2,149 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AE359FEBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1923859FEBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239759AbiHXPrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S238366AbiHXPrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239874AbiHXPrW (ORCPT
+        with ESMTP id S239921AbiHXPrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:47:22 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69333D59D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:45:49 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id BD1B32B060D6;
-        Wed, 24 Aug 2022 11:45:46 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 24 Aug 2022 11:45:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661355946; x=1661363146; bh=k0jUUwZlCp
-        Fb8RacICxbFXp0XcVVSWVRMQYkg+IsL/w=; b=VsZuzuWdjynggiS089ISUrX+XF
-        H2BRJSxCBnBl3CsIA/QQl6XyiPxYXEfJYDVkH8/TAg+/TsZe1jPkooNoJ83yeDKd
-        wRQBdZMq+S+bTTTLPcNRVTGL+MBWRp/ueuJ0Ho0ZfZv1c6/HlOwwpuGL8Kfe9XM8
-        CTzUtb7o/5LsIiWM4LJDLDOz30et9eWxW0pxZGZJruPuDw4uugRPT1L9w7w9n+P5
-        wxEqFw8WZNGMkyxBzthn64/wOHoKdoowcqtim7edifBOtwSHRhWg+Iu8XwSG6TY8
-        eb3k1LgRZ9QuHbUpIbIHfABQkHgNCBOo3KE01SYM7MsWkprPEtBIScI9pgdg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661355946; x=1661363146; bh=k0jUUwZlCpFb8RacICxbFXp0XcVV
-        SWVRMQYkg+IsL/w=; b=0Imn5JCOC0WiGzpT0k91VjTy8yvPpQT21DKTMRYUaOIU
-        sVYc6lcCAKUzlsO7M0g9ZuyY85s14FiF7Jv6lyJNc+tUikgsJoSnyDn7tgRhOghN
-        t3A9B2Rl3JSuSRFuPeWO4D1Ykh3svlsQpHq24F6szaCQCRG3hH1X/U7fRev/WeoS
-        KKE4COiFBTvEKSDPFGC9Hh0IvugYt1lQxOqR9gMDTzQgGRrWS+uscDrs37LCL+ll
-        EHLDmBjd9DFlg7L0b2Zy0CBa6yITRDksQMNFzkjHCGLojYQsP7Pq1oMQP3i50VpJ
-        CuEn8xamB0p+mtmm+8YF28aDUd774vLyoMtRVNrLxw==
-X-ME-Sender: <xms:qUcGYzDFrcpSHuvMtYDZYCmk3OqqfBUNHEHNQRr47kQ_AzR2afIyIg>
-    <xme:qUcGY5gxXBuPRXb7sxz-fD3XY1K28G2HCR-RvP38qj6v37MMQtWuZzLkuflXKz6hS
-    T87sk6NzGExfyCcTEI>
-X-ME-Received: <xmr:qUcGY-kFUPrn5v4AZYHh9aAI1eHSI_0zzF-GVUOwsOwOCrZ2qMRsINvOscBW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
-    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:qUcGY1xGET_pULNFhGqvRG7BMhJOOVXBW1PlHuuLfiGF87hbYnxCwQ>
-    <xmx:qUcGY4RhpUBWSdpBficCdhAPILHPAM02fbxTamOx4Uo_5Z2mW7Rolw>
-    <xmx:qUcGY4a5nfolhfg1OrHPchsQpZQXLra_1S2Z5ttkhMUYzjn83OUf6w>
-    <xmx:qkcGY3A3Xa53RJusfXMGoi1NFvbhxZYRynCLfPYcniNVbVPTK5RITUscqak>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 24 Aug 2022 11:45:44 -0400 (EDT)
-Date:   Wed, 24 Aug 2022 17:45:43 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
- command-line option
-Message-ID: <20220824154543.bdtpz2evwzsjrdrz@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-34-3d53ae722097@cerno.tech>
- <eedb1a86-c1fb-cc76-2a43-4ed349d7d826@tronnes.org>
+        Wed, 24 Aug 2022 11:47:24 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0FC31ECD
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:45:57 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id b5so16987625wrr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/4CgS497YurVrqQ2wYhTl+ey6pjS27PxE7RLVw+qVns=;
+        b=MeaL150z8K8Z4J6A3U+FHkz+XdjoKxR25a2hjxsYZchm8L73rVZEHCh9UBSh5hLUrT
+         Gcw2VGA8nYAefk456KE2pUJgYV8hEdQmcLRBthCQ0TlwyeXjFgCSLwpz+bFkAPd3xeAQ
+         d+leLLYqJXF2QcVcq704qQqi+5Q2FJs4U9jVv1URSz4uiY3iFGvnUiPgeS2b0UrWemOK
+         n0kpTyida6gC8ki6S/3w50j39LH3G8abubMzMV+SBKBC4X66CR7tprBI7xvFQTV7nz6s
+         g36bGh9NJQQ5fn6z9Rglid0i1Xcy04vMQ6skhWS3XtJCHylW8ZiRnRa0RmblU2Pyg6ji
+         V1dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/4CgS497YurVrqQ2wYhTl+ey6pjS27PxE7RLVw+qVns=;
+        b=sP3rO6QCAyGyB6SAUdKOlMLqq3w1AKNa98OvayqPPyCnQmzp50S8jb+DCfmIYt3cUh
+         DE6CinP5lobujbHJxO/xpBIFZNVH5E2Yu6MPdJgx1rWq/hvkEKZFop1gxnLbGzcCCwaO
+         Ea3OBhDDz3m8nZh5U16mw3hy6bBdYoSDL3V045hGxJTtIQiDXe/B53GhnZG6wNqnW2FG
+         I/PFERoM2zBGHT+jOnTZdM3SvamOJxcEWFArxlKmWsSFAP7Yq8oqPFYUxBEUPU1jeraS
+         LaxjTZa/uSkNQBraCBF32VzR8cxc2fPEPux3yt/udJgowGdZBc8SirqcNGF3KJ3aZQTg
+         QnPA==
+X-Gm-Message-State: ACgBeo2RkYK7mqbg83O0GTfpZVYsMNtxmV9wo4K3/CnOELN4HAmCPGfM
+        rmByL7e2Mk+xofOfuc9FJtoRemTLhpBqc24W1rMVQQ==
+X-Google-Smtp-Source: AA6agR6axg1+gK7f80oGloC+qkVYm0uTADt/QTSODMXk4vpRlmK9LV5PNwQWAnACDxGvNpfMFZxH4PonWMnsbD4tudE=
+X-Received: by 2002:adf:d1ea:0:b0:225:474b:1061 with SMTP id
+ g10-20020adfd1ea000000b00225474b1061mr10801075wrd.343.1661355956001; Wed, 24
+ Aug 2022 08:45:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fetwu2vf2sqny7wk"
-Content-Disposition: inline
-In-Reply-To: <eedb1a86-c1fb-cc76-2a43-4ed349d7d826@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220824072814.16422-1-adrian.hunter@intel.com> <20220824072814.16422-5-adrian.hunter@intel.com>
+In-Reply-To: <20220824072814.16422-5-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 24 Aug 2022 08:45:44 -0700
+Message-ID: <CAP-5=fVsXgHVwP1=OyvGF3iQT6g0zdu0KkbiMcnagKBMCjwKZQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] perf evlist: Add evlist__{en/dis}able_non_dummy()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 24, 2022 at 12:28 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Dummy events are used to provide sideband information like MMAP events that
+> are always needed even when main events are disabled. Add functions that
+> take that into account.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
---fetwu2vf2sqny7wk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Ian Rogers <irogers@google.com>
 
-Hi Noralf,
+Thanks,
+Ian
 
-On Sat, Aug 20, 2022 at 10:18:47PM +0200, Noralf Tr=F8nnes wrote:
-> Den 29.07.2022 18.35, skrev Maxime Ripard:
-> > Our new tv mode option allows to specify the TV mode from a property.
-> > However, it can still be useful, for example to avoid any boot time
-> > artifact, to set that property directly from the kernel command line.
-> >=20
-> > Let's add some code to allow it, and some unit tests to exercise that c=
-ode.
-> >=20
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >=20
->=20
-> In the subject it says "tv_mode property", but the property is called
-> "tv norm", so the option should be tv_norm?
+> ---
+>  tools/perf/util/evlist.c | 30 ++++++++++++++++++++++++------
+>  tools/perf/util/evlist.h |  2 ++
+>  2 files changed, 26 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 4c5e6e9f8d11..3cfe730c12b8 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -480,7 +480,7 @@ static int evlist__is_enabled(struct evlist *evlist)
+>         return false;
+>  }
+>
+> -static void __evlist__disable(struct evlist *evlist, char *evsel_name)
+> +static void __evlist__disable(struct evlist *evlist, char *evsel_name, bool excl_dummy)
+>  {
+>         struct evsel *pos;
+>         struct evlist_cpu_iterator evlist_cpu_itr;
+> @@ -502,6 +502,8 @@ static void __evlist__disable(struct evlist *evlist, char *evsel_name)
+>                                 continue;
+>                         if (pos->disabled || !evsel__is_group_leader(pos) || !pos->core.fd)
+>                                 continue;
+> +                       if (excl_dummy && evsel__is_dummy_event(pos))
+> +                               continue;
+>                         if (pos->immediate)
+>                                 has_imm = true;
+>                         if (pos->immediate != imm)
+> @@ -518,6 +520,8 @@ static void __evlist__disable(struct evlist *evlist, char *evsel_name)
+>                         continue;
+>                 if (!evsel__is_group_leader(pos) || !pos->core.fd)
+>                         continue;
+> +               if (excl_dummy && evsel__is_dummy_event(pos))
+> +                       continue;
+>                 pos->disabled = true;
+>         }
+>
+> @@ -533,15 +537,20 @@ static void __evlist__disable(struct evlist *evlist, char *evsel_name)
+>
+>  void evlist__disable(struct evlist *evlist)
+>  {
+> -       __evlist__disable(evlist, NULL);
+> +       __evlist__disable(evlist, NULL, false);
+> +}
+> +
+> +void evlist__disable_non_dummy(struct evlist *evlist)
+> +{
+> +       __evlist__disable(evlist, NULL, true);
 
-Yeah... I don't know. mode is taken but it's obviously the best name. So
-I went with norm to avoid the (internal) conflict but I left mode for
-the user facing property.
+nit: I think it is better to  prefer to name the argument when passing
+constants, it can avoid errors if later constants are introduced, etc.
+It can also be checked by compiler warnings. As this is limited to the
+same file it is not hugely critical.
 
-I'm not sure what's best here, or maybe we can pick another name entirely?
-
-Maxime
-
---fetwu2vf2sqny7wk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwZHpwAKCRDj7w1vZxhR
-xb3AAP9tWGleJEtkD6UwMhukbZIQ59/uDegXZyj1E6YRYC78RAEApPnjLjYnLERA
-E4Ahd6Pzh7p0TuGpdjYkO1Ufgfim2AA=
-=Le3o
------END PGP SIGNATURE-----
-
---fetwu2vf2sqny7wk--
+>  }
+>
+>  void evlist__disable_evsel(struct evlist *evlist, char *evsel_name)
+>  {
+> -       __evlist__disable(evlist, evsel_name);
+> +       __evlist__disable(evlist, evsel_name, false);
+>  }
+>
+> -static void __evlist__enable(struct evlist *evlist, char *evsel_name)
+> +static void __evlist__enable(struct evlist *evlist, char *evsel_name, bool excl_dummy)
+>  {
+>         struct evsel *pos;
+>         struct evlist_cpu_iterator evlist_cpu_itr;
+> @@ -560,6 +569,8 @@ static void __evlist__enable(struct evlist *evlist, char *evsel_name)
+>                         continue;
+>                 if (!evsel__is_group_leader(pos) || !pos->core.fd)
+>                         continue;
+> +               if (excl_dummy && evsel__is_dummy_event(pos))
+> +                       continue;
+>                 evsel__enable_cpu(pos, evlist_cpu_itr.cpu_map_idx);
+>         }
+>         affinity__cleanup(affinity);
+> @@ -568,6 +579,8 @@ static void __evlist__enable(struct evlist *evlist, char *evsel_name)
+>                         continue;
+>                 if (!evsel__is_group_leader(pos) || !pos->core.fd)
+>                         continue;
+> +               if (excl_dummy && evsel__is_dummy_event(pos))
+> +                       continue;
+>                 pos->disabled = false;
+>         }
+>
+> @@ -581,12 +594,17 @@ static void __evlist__enable(struct evlist *evlist, char *evsel_name)
+>
+>  void evlist__enable(struct evlist *evlist)
+>  {
+> -       __evlist__enable(evlist, NULL);
+> +       __evlist__enable(evlist, NULL, false);
+> +}
+> +
+> +void evlist__enable_non_dummy(struct evlist *evlist)
+> +{
+> +       __evlist__enable(evlist, NULL, true);
+>  }
+>
+>  void evlist__enable_evsel(struct evlist *evlist, char *evsel_name)
+>  {
+> -       __evlist__enable(evlist, evsel_name);
+> +       __evlist__enable(evlist, evsel_name, false);
+>  }
+>
+>  void evlist__toggle_enable(struct evlist *evlist)
+> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+> index 3a464585d397..3a8474406738 100644
+> --- a/tools/perf/util/evlist.h
+> +++ b/tools/perf/util/evlist.h
+> @@ -205,6 +205,8 @@ void evlist__enable(struct evlist *evlist);
+>  void evlist__toggle_enable(struct evlist *evlist);
+>  void evlist__disable_evsel(struct evlist *evlist, char *evsel_name);
+>  void evlist__enable_evsel(struct evlist *evlist, char *evsel_name);
+> +void evlist__disable_non_dummy(struct evlist *evlist);
+> +void evlist__enable_non_dummy(struct evlist *evlist);
+>
+>  void evlist__set_selected(struct evlist *evlist, struct evsel *evsel);
+>
+> --
+> 2.25.1
+>

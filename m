@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87FB59F4DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E0F59F4E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbiHXIRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S235641AbiHXITo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbiHXIRS (ORCPT
+        with ESMTP id S234045AbiHXITl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:17:18 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6808037E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:17:17 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x19so15025794plc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:17:17 -0700 (PDT)
+        Wed, 24 Aug 2022 04:19:41 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B598A1E2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:19:39 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id s3-20020a17090a2f0300b001facfc6fdbcso791786pjd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:19:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=ozY6u65Wi+tb61B+PChTsXWw55lG3sk+g53XzCkY8H8=;
-        b=adyUncsaZuyugIqkgE+MiXTuAYgrLURFpzhiOdHp5Linka3Yr0Y467uxQ0WUvLXnp4
-         3ruxQKf3TzItSDkp6T+24017+iGgltSAqABJTCfD1x/KMC7NVrv3eb56rjVRr4cDHmhK
-         +iGt4a40f5kWEz3+o1WDZ6SRlaZhyt4ezP0Sht9IvbK2bf9gjrOyOulPROdjN2pQ8kMc
-         PrCSJk+se4jBDgWrX91IqlXOIp7V2JpK7IX/wmEycjshQSPUT1+AA8U40mnz1e/I7xw5
-         ea+xIisJifimHPSi7vEWpPGCgo2Ljew7gH9UDTaBthdbEVOtKkKrud6CUBPdQDXHgyQB
-         RGwQ==
+        bh=sIwNmqerjqaiTdP/9SuVUBFcXcyvJnbToq4VHqojaB8=;
+        b=Om+ippFq5VDjfampfj8skRptXpd8NK2EmMp93WkO1WFM2P+9cmvM50W9OIQ8PYKZ3Z
+         V7YaOExX88F5cnsKw+Yx6nnJ1spX+YL2qWPVeXJyCeECldNQm/Yy9dajP8ZBfunV0mZT
+         VKAK8TXVEQs6Bso6BAxV40s72baz1S0t1fRI77xf4iTajYadAHra4Z6LEo6mexc/KEVH
+         TZ7EcwSaIQtHsiCvDWxTC6jHbBxc8LbvGRrhqGsgCDqPIHrTyUhZpFm2DX48W6DSAFxL
+         NsRG6zAsn4cyfoRZjvWKOHogMQwNFHla7+6OrD+EXHdzhEuSDeoOqq+igUU8PuC2KTTV
+         SmgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=ozY6u65Wi+tb61B+PChTsXWw55lG3sk+g53XzCkY8H8=;
-        b=wAUWdGPDLw0lsP3YUl0YM84TT7Zm3ELmwKeHMAqhnmbTNsTm22STn4HAQg4cJxbsL5
-         C6iuxGz9XG2Mwh221ZqWB0yzpFOzku1COl16znDhuA2oTGNju/0vVp7+z39o7WgS2YWl
-         m/loh0O9usRhCxcAIqjvaH6Yo/DWM+0L7twrpG2l9cFAmzmgNp0TOCQkUqW2hn0vaA12
-         nqYemnjAgt1puo7Cjkc0Io39SfujbM/yzqLX3vl1uAk4NsZZSBBRrye5MZ+nltwOwbLS
-         6VjeMBVDFmvHaYX2lDss0ORAD+A5J0Gkfu7TPJVtrKQecefQTFoPpnQHeLTOnSTE0pm9
-         29AA==
-X-Gm-Message-State: ACgBeo0XY4HJ7gQg1MuWV/om9yRYbRTbu2G+FznLNFTQI9x2IBlThE08
-        s9YKoc61tPTQyQL+booL2PK7VIcJD47p56Y=
-X-Google-Smtp-Source: AA6agR6rjNVqUfcFvWmii8TDq32o5AzK/lk3X020Lbxg7Jc9EA12wtGdXpulliMTcEUWMN6OiPG+zA==
-X-Received: by 2002:a17:903:1ce:b0:16f:145c:a842 with SMTP id e14-20020a17090301ce00b0016f145ca842mr27483329plh.83.1661329037147;
-        Wed, 24 Aug 2022 01:17:17 -0700 (PDT)
-Received: from localhost.localdomain ([166.111.133.51])
-        by smtp.gmail.com with ESMTPSA id j2-20020a63fc02000000b0041a615381d5sm10508288pgi.4.2022.08.24.01.17.15
+        bh=sIwNmqerjqaiTdP/9SuVUBFcXcyvJnbToq4VHqojaB8=;
+        b=g9v6sHudThk1Yv3F1d6CqGplJDAyPlizFsiID9JXvjaVpc1Z4zboft/ZM7o7FhAQUq
+         2jt/E1jDtzXHcxDOeyK3dFsmtShllCW2QOQ3zwlkJ0eXF6ntEAXgqUpIsekWizBRi0eU
+         plYyJYt73DJYc6g5xAa7XStC43F49LDE5eiqp40qWQni1DbU0mXA580WCwRlhOB0ctIS
+         6Za/lET4ow4cs/Mb8/x8FVRe4JaQ9pH1w3kMKoSnodIycKU6hD7qLDfSxQmSo58TwueP
+         UQgNOnNN/WhY9lHwpmNgYMiVADBCeRZiqz1b4eVQ2coswGcnWn0wjGyh2GhyR4GILqz1
+         41cw==
+X-Gm-Message-State: ACgBeo3Q1M+0byhOfwvv5NkXS747QmFSOHc5AiEoa6dvDV+/6teXRh6w
+        URvgK+ImOpdNiVjUN/wxpueIhg==
+X-Google-Smtp-Source: AA6agR4NpnRl7tswuvOVEEShny7ZGZFjiBpQFwhiy6DYHpH87TljkmO6cvTMvAAr/laPHWUTA38cbA==
+X-Received: by 2002:a17:90a:e7ce:b0:1fb:3f8b:95ee with SMTP id kb14-20020a17090ae7ce00b001fb3f8b95eemr7301543pjb.110.1661329179179;
+        Wed, 24 Aug 2022 01:19:39 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.244])
+        by smtp.gmail.com with ESMTPSA id q31-20020a635c1f000000b00421841943dfsm10486587pgb.12.2022.08.24.01.19.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 01:17:16 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Zheyu Ma <zheyuma97@gmail.com>, Takashi Iwai <tiwai@suse.de>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: control: Fix an out-of-bounds bug in get_ctl_id_hash()
-Date:   Wed, 24 Aug 2022 16:16:54 +0800
-Message-Id: <20220824081654.3767739-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 24 Aug 2022 01:19:38 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com,
+        surenb@google.com
+Cc:     gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
+        peterz@infradead.org, songmuchun@bytedance.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v3 00/10] sched/psi: some optimization and extension
+Date:   Wed, 24 Aug 2022 16:18:19 +0800
+Message-Id: <20220824081829.33748-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,48 +71,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the user can control the arguments provided to the kernel by the
-ioctl() system call, an out-of-bounds bug occurs when the 'id->name'
-provided by the user does not end with '\0'.
+Hi all,
 
-The following log can reveal it:
+This patch series are some optimizations and extensions for PSI.
 
-[    10.002313] BUG: KASAN: stack-out-of-bounds in snd_ctl_find_id+0x36c/0x3a0
-[    10.002895] Read of size 1 at addr ffff888109f5fe28 by task snd/439
-[    10.004934] Call Trace:
-[    10.007140]  snd_ctl_find_id+0x36c/0x3a0
-[    10.007489]  snd_ctl_ioctl+0x6cf/0x10e0
+patch 1/10 fix periodic aggregation shut off problem introduced by earlier
+commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups").
 
-Fix this by checking the bound of 'id->name' in the loop.
+patch 2-4 are some misc optimizations, so put them in front of this series.
 
-Fixes: c27e1efb61c5 ("ALSA: control: Use xarray for faster lookups")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- sound/core/control.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+patch 5/10 optimize task switch inside shared cgroups when in_memstall status
+of prev task and next task are different.
 
-diff --git a/sound/core/control.c b/sound/core/control.c
-index f3e893715369..e8fc4c511e5f 100644
---- a/sound/core/control.c
-+++ b/sound/core/control.c
-@@ -385,14 +385,14 @@ static bool elem_id_matches(const struct snd_kcontrol *kctl,
- #define MULTIPLIER	37
- static unsigned long get_ctl_id_hash(const struct snd_ctl_elem_id *id)
- {
-+	int i;
- 	unsigned long h;
--	const unsigned char *p;
- 
- 	h = id->iface;
- 	h = MULTIPLIER * h + id->device;
- 	h = MULTIPLIER * h + id->subdevice;
--	for (p = id->name; *p; p++)
--		h = MULTIPLIER * h + *p;
-+	for (i = 0; id->name[i] && i < SNDRV_CTL_ELEM_ID_NAME_MAXLEN; i++)
-+		h = MULTIPLIER * h + id->name[i];
- 	h = MULTIPLIER * h + id->index;
- 	h &= LONG_MAX;
- 	return h;
+patch 6/10 remove NR_ONCPU task accounting to save 4 bytes in the first
+cacheline to be used by the following patch 7/10, which introduce new
+PSI resource PSI_IRQ to track IRQ/SOFTIRQ pressure stall information.
+
+patch 8-9 cache parent psi_group in struct psi_group to speed up
+the hot iteration path.
+
+patch 10/10 introduce a per-cgroup interface "cgroup.pressure" to disable
+or re-enable PSI in the cgroup level, and we implement hiding and unhiding
+the pressure files per Tejun's suggestion[1], which depends on his work[2].
+
+[1] https://lore.kernel.org/all/YvqjhqJQi2J8RG3X@slm.duckdns.org/
+[2] https://lore.kernel.org/all/20220820000550.367085-1-tj@kernel.org/
+
+Performance test using mmtests/config-scheduler-perfpipe in /user.slice/user-0.slice/session-4.scope
+
+                                 next                patched       patched/only-leaf
+Min       Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+1st-qrtle Time        8.90 (   0.00%)        8.58 (   3.63%)        8.05 (   9.58%)
+2nd-qrtle Time        8.94 (   0.00%)        8.61 (   3.65%)        8.09 (   9.50%)
+3rd-qrtle Time        8.99 (   0.00%)        8.65 (   3.75%)        8.15 (   9.35%)
+Max-1     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+Max-5     Time        8.82 (   0.00%)        8.49 (   3.74%)        8.00 (   9.32%)
+Max-10    Time        8.84 (   0.00%)        8.55 (   3.20%)        8.04 (   9.05%)
+Max-90    Time        9.04 (   0.00%)        8.67 (   4.10%)        8.18 (   9.51%)
+Max-95    Time        9.04 (   0.00%)        8.68 (   4.03%)        8.20 (   9.26%)
+Max-99    Time        9.07 (   0.00%)        8.73 (   3.82%)        8.25 (   9.11%)
+Max       Time        9.12 (   0.00%)        8.89 (   2.54%)        8.27 (   9.29%)
+Amean     Time        8.95 (   0.00%)        8.62 *   3.67%*        8.11 *   9.43%*
+
+Thanks!
+
+Changes in v3:
+ - Rebase on linux-next and reorder patches to put misc optimizations
+   patches in the front of this series.
+ - Drop patch "sched/psi: don't change task psi_flags when migrate CPU/group"
+   since it caused a little performance regression and it's just
+   code refactoring, so drop it.
+ - Don't define PSI_IRQ and PSI_IRQ_FULL when !CONFIG_IRQ_TIME_ACCOUNTING,
+   in which case they are not used.
+ - Add patch 8/10 "sched/psi: consolidate cgroup_psi()" make cgroup_psi()
+   can handle all cgroups including root cgroup, make patch 9/10 simpler.
+ - Rename interface to "cgroup.pressure" and add some explanation
+   per Michal's suggestion.
+ - Hide and unhide pressure files when disable/re-enable cgroup PSI,
+   depends on Tejun's work.
+
+Changes in v2:
+ - Add Acked-by tags from Johannes Weiner. Thanks for review!
+ - Fix periodic aggregation wakeup for common ancestors in
+   psi_task_switch().
+ - Add patch 7/10 from Johannes Weiner, which remove NR_ONCPU
+   task accounting to save 4 bytes in the first cacheline.
+ - Remove "psi_irq=" kernel cmdline parameter in last version.
+ - Add per-cgroup interface "cgroup.psi" to disable/re-enable
+   PSI stats accounting in the cgroup level.
+
+Chengming Zhou (9):
+  sched/psi: fix periodic aggregation shut off
+  sched/psi: don't create cgroup PSI files when psi_disabled
+  sched/psi: save percpu memory when !psi_cgroups_enabled
+  sched/psi: move private helpers to sched/stats.h
+  sched/psi: optimize task switch inside shared cgroups again
+  sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
+  sched/psi: consolidate cgroup_psi()
+  sched/psi: cache parent psi_group to speed up groups iterate
+  sched/psi: per-cgroup PSI accounting disable/re-enable interface
+
+Johannes Weiner (1):
+  sched/psi: remove NR_ONCPU task accounting
+
+ Documentation/admin-guide/cgroup-v2.rst |  23 +++
+ include/linux/cgroup-defs.h             |   3 +
+ include/linux/cgroup.h                  |   5 -
+ include/linux/psi.h                     |  12 +-
+ include/linux/psi_types.h               |  29 ++-
+ kernel/cgroup/cgroup.c                  |  94 ++++++++-
+ kernel/sched/core.c                     |   1 +
+ kernel/sched/psi.c                      | 256 +++++++++++++++++-------
+ kernel/sched/stats.h                    |   6 +
+ 9 files changed, 338 insertions(+), 91 deletions(-)
+
 -- 
-2.25.1
+2.37.2
 

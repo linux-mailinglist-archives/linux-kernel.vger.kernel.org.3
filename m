@@ -2,182 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FAF59FF78
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E710259FF7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238174AbiHXQ0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S239161AbiHXQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbiHXQ0l (ORCPT
+        with ESMTP id S238057AbiHXQ07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:26:41 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2BA82F8D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:26:39 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id l23so5875210lji.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Xn8hCbME0CLHtDY+K08rpqn2b9T5jOnQqHQ0Tadc/E8=;
-        b=fsVxa4KsdNTFpBXWYWfXcWhQCndK1yvR28rVyy2ZXL0xF2XIYfsr+5nz6wGzLlVQba
-         DETEQuUq+inOiyV6lseZ1wlCLQo9HvS8vXgcp9IsVe1874ZrKBcrlHEZ+lWX+zpG6fHs
-         mC37yvBFNseAUS+NbZAnczJYPyjhn5vIKkPLZo2ddOlRsKkPdp96N0v9uus392KOoVR2
-         nESmwB5yG2T3ogfuRlDRnU5FLIZsmKa9NIF0fNl68dqm2cnXm8mSBzK+CjBovWzMZWnl
-         /iurdUX3ZfCbNelFsY9S9UvWx2emY24dHOWtfy7krWkRycYuHkzbM4GcASNyMOQTHO14
-         fkBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Xn8hCbME0CLHtDY+K08rpqn2b9T5jOnQqHQ0Tadc/E8=;
-        b=BU0mQX8kEjVCI2hcX0n+47MyAtMUQoy8O3PoBW1qDl/sLelaWa7Vl9bJsDNnjEg29F
-         2Cut+A+AQ/mssRNuXcpj+FbNEk3I8tX8PhhrIjTMb2XzaukPjNFk2MvxNt36yTKgYItO
-         ok6S2orA5l+B9uVCfSaDpmcCeHD2fT5UqyQFI3HnzUGlPIXxX5qaIrLZsTMFoPQYOykf
-         /XdY38K8CATBbTCiiMfTeO8Xv3lqTmqOeVK+WpaQY/JACVGkX+Gp6+j9rWAQxRe3p5yc
-         jsKqiQlE0ojpb7zew1DlJyOu4fboQaSloeY5iI+pJyAHqsiUC7hBIyb2L1V5eVt3Lin8
-         r0VA==
-X-Gm-Message-State: ACgBeo32CbzzHScL0D44RqEB8lNkdEq1vcR6N/mV0qCMtVNN9HiVWZAo
-        vksIvbKVGzmhibJLOT9GPjxTVw==
-X-Google-Smtp-Source: AA6agR43a3Gy3O6UhENmyBSqR+hKIEWrMQCOO0g/hZqfu4+t+cQWfiBElqHDj3umAMwpJmnZsfZkhw==
-X-Received: by 2002:a2e:2e02:0:b0:261:cc4f:1ab3 with SMTP id u2-20020a2e2e02000000b00261cc4f1ab3mr5234lju.83.1661358397508;
-        Wed, 24 Aug 2022 09:26:37 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id v3-20020a056512348300b0048af6242892sm1541019lfr.14.2022.08.24.09.26.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 09:26:36 -0700 (PDT)
-Message-ID: <9e52af46-113f-e419-6cbd-729ae8caf36e@linaro.org>
-Date:   Wed, 24 Aug 2022 19:26:35 +0300
+        Wed, 24 Aug 2022 12:26:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143FA8C015;
+        Wed, 24 Aug 2022 09:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661358415;
+        bh=VhhqfxDhlo8MSrH5FBk/zyn3/We7sr7S1F+UoYwEGWs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=HU9hLBn3Vi3A77jjDtGhfk2yUGgGkkdS0ONVaBgpCWkkHOM1YYzUaVC49h27U4hxf
+         1EKpkeBUN7WehD4SLBO/A7uuaVzL4XHdgZfak/0tjPrKkE0Z1Tg1MSRtmE7TuAJFke
+         EoP1I+39WKe4Qcn3gTQ58n1yYb5iO8/WYzOzQSPc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from silverpad ([82.113.106.57]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1M4JmT-1oRACM2kgj-000IRy; Wed, 24
+ Aug 2022 18:26:55 +0200
+From:   Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     JFLF <jflf_kernel@gmx.com>
+Subject: [PATCH v2] usb: add quirks for Lenovo OneLink+ Dock
+Date:   Wed, 24 Aug 2022 18:26:41 +0200
+Message-Id: <20220824162641.11805-1-jflf_kernel@gmx.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v7 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA
- manager
-Content-Language: en-US
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
-        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
-        dg@emlix.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-References: <20220824150114.17504-1-i.bornyakov@metrotek.ru>
- <20220824150114.17504-3-i.bornyakov@metrotek.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220824150114.17504-3-i.bornyakov@metrotek.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jSPMEo50wRO62CAmqE7u576h2yfH11dV2rqcW2IgT6+OPVlFR0I
+ QHQpR5xGYhBsieYgCAOxDRcF4LaBrcH7AkwLpgQ++iXrdXdRjEpEvtxrVxgrNwEqwkqobj1
+ IwxhQnP+88cf0nZmY6bLDnjplJJg6SY71ojSkF6Lm6DS5nY16GlSfK228OIu46W9Gtm1FjU
+ 4yVH6RSqHHR9UtspOO0rw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:11DWyJJdY+Q=:U/PYIa+NVqm4pneOZL6ttA
+ /PqOojtWKw3X8/H8YJnhgn+ccadWAfFb+B4JYVG5TMI4nFyEvAbjl7Bo1eChqmi5C6wkxK/iL
+ p7uTXY1w9t6gRLtvlYvYIi2P5hhKKTshxbfs99FTrlMUqW0/c7ZHlowXf11jIXxnFTnQmhPkc
+ +j1P7R3mKlqpM4s5xbYYm9bUt0gjqyg5wK5nBJHR6JHtExO6kk++fbGgyM7kZpquBhEZFJfjG
+ t/hhYaU0jOBvrTu6sPN4/0aQ6hYegmknky/BZoLztxkIEbQ9Hxu3wph/eJs76VNpwEeBw0sEG
+ j06AYEbcK4i72jdBagABXmk5BvyaCtxML5odWPjheS0Khq/gbkQXI6LjrKDq4jP1tGR+ZI8H2
+ ghyLaUf0PefT68AKhkXxr1zjbX+YTrnFv3wCNuQnRuXudN1nx74naDizYLdlRT8797VyvdioQ
+ k1VCRxMcHagJgu0CzD0n3MdCq0dSD1MSqBXqzNldBDWCAoic8V+k0+BkT37DGTFo7xz58DLzF
+ 1SeslRajbJOloGYIvC2ZTuElQLtlNOqtLAns+u/KCQ4moUJOHVeLuimB1+dpuP+IGEXH/veGe
+ yp1fpYU0kR1a6dkVczKR0UnbwfBPCDIGkOSJwrTxsTtCON0Dx9jVXD/JJbNyKBKp1h2fEOMma
+ 52bPaC8D3gHjdGYGCXw4+a9OQ2HlWSx6hMtXGJMC3O+06IvDIEwlGckrtQv8JSHbKr6+VNPoe
+ w8wlIEGfrNNRY8oulaJDUW8f01GRpUyWR3Fpvn4r80awJB6W/p9Lv2OeEJDbuw5tRP3LS3/DB
+ p2Y4uuqC5o9OLJc32wd5FMp61Y9LjQzcqYi0YXCamkJUWkv0UIk2jWcDJ5LEEVlhBA7732lvD
+ /timy9nHUoS2HJXLR55dnUcjHZSY6ccCLYNeuteopqryT+ihlcgMi7b5AG2fYjiI50McmniCs
+ OsYkrbvEHWoCk8mxI98DTLyAhkbgkVhmcuaJc7VNs+llGliGSkFlZ8rAiwO3RHzWC+5P304zV
+ NC8f7qisdfBWG31FtnlQsVwDFxUxeJJ/9nDC1pJHDYQH/kosN0sDjSkMTTC58zItznQxBP6UB
+ PU3O64rmjuj/OBt4EzkS2EavSG9mFOV6CkJCl6PDA64kHZZACawY3e29Q==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 18:01, Ivan Bornyakov wrote:
-> Add Device Tree Binding doc for configuring Lattice ECP5 and MachXO2
-> FPGAs over Slave SPI sysCONFIG interface.
-> 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
->  .../bindings/fpga/lattice,sysconfig.yaml      | 103 ++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-> new file mode 100644
-> index 000000000000..596776427a00
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-> @@ -0,0 +1,103 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Lattice Slave SPI sysCONFIG FPGA manager
-> +
-> +maintainers:
-> +  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> +
-> +description: |
-> +  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-> +  have Slave Serial Peripheral Interface. Only full reconfiguration is
-> +  supported.
-> +
-> +  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-> +  format into FPGA's SRAM configuration memory.
-> +
-> +  Programming of MachXO2 is done by writing configuration data into device's
-> +  internal non-volatile Flash memory, then Self-Download of data from Flash
-> +  into SRAM is issued.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - lattice,ecp5-fpga-mgr
-> +      - lattice,machxo2-fpga-mgr
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: lattice,machxo2-fpga-mgr
-> +    then:
-> +      properties:
-> +        spi-max-frequency:
-> +          maximum: 66000000
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: lattice,ecp5-fpga-mgr
-> +    then:
-> +      properties:
-> +        spi-max-frequency:
-> +          maximum: 60000000
-> +        program-gpios:
-> +          description:
-> +            A GPIO line connected to PROGRAMN (active low) pin of the device.
-> +            Initiates configuration sequence.
-> +          maxItems: 1
-> +        init-gpios:
-> +          description:
-> +            A GPIO line connected to INITN (active low) pin of the device.
-> +            Indicates that the FPGA is ready to be configured.
-> +          maxItems: 1
-> +        done-gpios:
-> +          description:
-> +            A GPIO line connected to DONE (active high) pin of the device.
-> +            Indicates that the configuration sequence is complete.
-> +          maxItems: 1
+From: JFLF <jflf_kernel@gmx.com>
 
-Define instead the properties in top-level properties and disallow them
-for other variant (program-gpios: false). Required can stay.
+The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
+17ef:1018 upstream
+17ef:1019 downstream
 
-> +      required:
-> +        - program-gpios
-> +        - init-gpios
-> +        - done-gpios
-> +
+Those two controllers both have problems with some USB3.0 devices,
+particularly self-powered ones. Typical error messages include:
 
+  Timeout while waiting for setup device command
+  device not accepting address X, error -62
+  unable to enumerate USB device
 
-Best regards,
-Krzysztof
+By process of elimination the controllers themselves were identified as
+the cause of the problem. Through trial and error the issue was solved
+by using USB_QUIRK_RESET_RESUME for both chips.
+
+Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+=2D--
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f99a65a64..999b7c969 100644
+=2D-- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -437,6 +437,10 @@ static const struct usb_device_id usb_quirk_list[] =
+=3D {
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =3D
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+
++	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) *=
+/
++	{ USB_DEVICE(0x17ef, 0x1018), .driver_info =3D USB_QUIRK_RESET_RESUME },
++	{ USB_DEVICE(0x17ef, 0x1019), .driver_info =3D USB_QUIRK_RESET_RESUME },
++
+ 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
+ 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info =3D USB_QUIRK_NO_LPM },
+
+=2D-
+2.34.1
+

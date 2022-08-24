@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C9C59F334
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A8559F337
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiHXFv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 01:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S234164AbiHXFwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 01:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234884AbiHXFvK (ORCPT
+        with ESMTP id S231311AbiHXFwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 01:51:10 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E6089814
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:50:45 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id q81so4999971iod.9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=AC7zCaF3e8Y+iHmuxARbY9jPts0EPE4BM5zbxUNhoek=;
-        b=dDGkvgzoflDmqWDoHb48wLOOAS1PQAqS5JRc+aY/3J/NRzkRHugIWZ67703oSCDJAP
-         MU89etvAPwtSuig/F6UsnBBPEyRODvTmo/qfxb4HtLucIbtlqNCo6w3r25lkDOpSb/u9
-         iBSOYvHDhbSaGDeFrimVXcyYU2g7OhhpSbmcnB7NB7HVPh4Qw1kp0EMfkFchF+1pBco2
-         aX6+pZ+tfwaGVXAQ5Qcu4suv3M31YH6dot3T4NKx1bGtN1Xi1D1qT+/cX86Rd0tfsieU
-         eZNXZnT702X6vv6mLwEoYb3uhzyIJ9n1SgaumaXKWtI35yjaPq7kvi+aDE8QwFne2tcw
-         dKwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=AC7zCaF3e8Y+iHmuxARbY9jPts0EPE4BM5zbxUNhoek=;
-        b=osjKWa6HH2bbjo5YOhAUpr/n4663/FyvJ+1ripilOhYbZYGy0k0eh06z11AiUkk2z0
-         aTg1nOd3xfMgr6dhPRrPSPTXfYnUbUCxgVsYAH+qYiCnO5kKJgo5T6A0qNmOH4KTCZLX
-         2t+cLrac+inRJK/S/rSF3W/NbADFEB91M6WeatXiOfwzyiafIQWWHm43lkYqSSBa+oiO
-         9cs+nHYMPZ6PZqUVhSgUdEtBjgbfMpAsr1vamsQW37N+Vn5kdFxA+brUasUzKRVDbYaa
-         +aEuArYdvm0rE8zPqB9PNabuN3IIahrf46AS501E7J49Z53NVXc1+cWwxJXW3yc/Tcj6
-         lmwA==
-X-Gm-Message-State: ACgBeo3aDt1fcRVnTjYYRPgZC/uoBmdzdLFHq2whV09GDFT/i51OPHhP
-        yWHP5peidUsijQy/McJQCKhY1PX7dxWQQIb7b0wi4g==
-X-Google-Smtp-Source: AA6agR72tjvf/Lk7mASJIUYOIujsj/pk0L0uiHQFWZ0A0yMSn6X8gEoBJezHh/k+tO0XnGTlYUyXQ3YRs1IZ3jdKcho=
-X-Received: by 2002:a5d:8988:0:b0:67c:625:ee3 with SMTP id m8-20020a5d8988000000b0067c06250ee3mr12484340iol.150.1661320244042;
- Tue, 23 Aug 2022 22:50:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220823211958.2519055-1-adelg@google.com> <YwWx07EbaB90jDUN@kroah.com>
-In-Reply-To: <YwWx07EbaB90jDUN@kroah.com>
-From:   Andrew Delgadillo <adelg@google.com>
-Date:   Tue, 23 Aug 2022 22:50:33 -0700
-Message-ID: <CAEHm+vHHRLW1c2fhrgCx0Nh63udxMLCSwone-JTm22o2Q37abA@mail.gmail.com>
+        Wed, 24 Aug 2022 01:52:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD076B668;
+        Tue, 23 Aug 2022 22:52:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D47B5B822F0;
+        Wed, 24 Aug 2022 05:51:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07A9C433D6;
+        Wed, 24 Aug 2022 05:51:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661320317;
+        bh=Uxw3C6Y366ppcVDZN6bcHHE2ruNtTnaTVER0kdIwvX8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hBtQDC7DpVTTiMIzApH1yLy2h0wSykqDlDdhNSrfSlkahCWM0DII5keYpZyOhIxu2
+         90o7alSuMMbCLgIDyABtnLXvs5fUAcEBgYjRXWSIg6/4psWEbJu7+Ofh7zCnrNjgVB
+         B5tn3QwnRdM8d5yqnWN8wyoEZ9/Hym4w9eXDWHqk=
+Date:   Wed, 24 Aug 2022 07:51:54 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Andrew Delgadilo <adelg@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, dylanbhatch@google.com,
+        sashalevin@google.com, gthelen@google.com
 Subject: Re: [PATCH] selftests: Add a taint selftest
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Dylan Hatch <dylanbhatch@google.com>,
-        Sasha Levin <sashalevin@google.com>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Message-ID: <YwW8eo1rbo9tmpVK@kroah.com>
+References: <20220823211958.2519055-1-adelg@google.com>
+ <YwWx07EbaB90jDUN@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwWx07EbaB90jDUN@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,47 +53,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:06 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
+On Wed, Aug 24, 2022 at 07:06:27AM +0200, Greg KH wrote:
 > On Tue, Aug 23, 2022 at 09:19:58PM +0000, Andrew Delgadilo wrote:
 > > From: Andrew Delgadillo <adelg@google.com>
-> >
+> > 
 > > When testing a kernel, one of the earliest signals one can get is if a
 > > kernel has become tainted. For example, an organization might be
 > > interested in mass testing commits on their hardware. An obvious first
 > > step would be to make sure every commit boots, and a next step would be
 > > to make sure there are no warnings/crashes/lockups, hence the utility of
 > > a taint test.
->
+> 
 > What's wrong with the tools/debugging/kernel-chktaint script?
->
+> 
 > Why do we need another "get what the taint status is" program?
 
-The main functionality that this selftests has that kernel-chktaint
-does not is that it exits with a non-zero status code if the kernel is
-tainted. kernel-chktaint outputs information to stdout based on the
-taint status, but will always exit 0.
+Ah, looks like that script should probably be changed to return an error
+code if a taint is found, but that should be a simpler patch rather than
+create a whole new script.
 
-The issue with this is that it cannot be plugged into a test runner
-that checks the exit code of a test script. In other words, if I
-wanted to plug it into git bisect, I would have to wrap
-kernel-chktaint in a command that transformed the output to an exit
-code. Sure that is doable, but it is not as simple as it could be.
+thanks,
 
-More concretely, I am setting kselftest runs against kernel commits
-(with a harness that logs kselftest runs into some other
-infrastructure), and such a test that is missing is a kselftest that
-checks the kernel's taint status. One could argue that one should just
-create a kselftest target that calls into kernel-chktaint and parse
-the output there to determine what the exit status is, but that seems
-fragile as a change in the underlying script could break it. For
-example, if I want to test for taint #18, and I am grepping for the
-string " * an in-kernel test has been run (#18)", I will actually get
-a false positive because the underlying script does not check for
-taint #18. Contrived example yes, but I think it shows that textual
-grepping for errors is error prone (as an aside, I'll send a patch to
-update the script to check for the new taint bit).
-
-> thanks,
->
-> greg k-h
+greg k-h

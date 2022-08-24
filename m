@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761CD59F5D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858C859F5DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiHXJAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S236182AbiHXJBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235453AbiHXJAV (ORCPT
+        with ESMTP id S235694AbiHXJBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:00:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2004A4E84F;
-        Wed, 24 Aug 2022 02:00:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9E2AB8238F;
-        Wed, 24 Aug 2022 09:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79ED6C433D7;
-        Wed, 24 Aug 2022 09:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661331617;
-        bh=pLVCx13ITieI3fq1FFMfOLXjtbLgufn9497mkH0nEuc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SJerzTaMktaYW+/+oO42SHfH23OumBYzXN2m5nF6rc+7xvlYaRS+L271SWEMk/jM+
-         Qxy44jW3KyZbHcmvoe9nTzXU1/0niTw0GMtZCoLTtH41MVGl+Nb72zrBGOXIu5CdfJ
-         /4gV8kaJ/ShLw8Kb3n2Lte4EQJu/0LdzpSoGEdi7h7SzEBUeDYPjJ4Y1vbjH9edHo2
-         TNkcrXldCw3Exzo5I+4jqk30iSC5RLA6EU/SRJaVmiJm2ljsiZmQfuloQlx4zY6N4C
-         GpRYOxk54an5Sl0EnMepoRIuHK+8yV42ZNNYvHQqSflj+a5vhxJRtGp6h4yV3qO9xW
-         FKaJ3muuBBwOA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6612BE1CF31;
-        Wed, 24 Aug 2022 09:00:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 24 Aug 2022 05:01:20 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281347435C
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:01:18 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id r6so3170996qtx.6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=HhxCZvae4Tf9kz9NcsjXMEcY8sfHg3Ouyy3SX130F2Y=;
+        b=NljGLElc99FfmYIVG0KKvVV2zUnquTWsHwvb1zZGVomY/peegybQGRT/Tqtu9Y1yrD
+         GDknq/k9ni53Ny4kmKdmKkwr8km9PXVmfJhPTCrD4Kjl9RWOZDkx/lhfvct5S2e6ra4l
+         P+RMO+QPGtfpUDhtoaE8V3tL1dvax3jBu0nWcElCUP2ck/ZL9uqiiXedLWv5rT1dTtnf
+         GzZ/YUfG56KhcqCwIxF4L3dgwfIdLwF2e8EM4i+5osbvFqS7TBOaixINkBtxuK3Ci7xk
+         93xA74g5+UfPT/8SjsQrZcmOpxwfuU+DUyzeX2W4XWs7taqKEd8cPqHa9jfRqlmpmf9x
+         i2HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=HhxCZvae4Tf9kz9NcsjXMEcY8sfHg3Ouyy3SX130F2Y=;
+        b=clEC5hwpFapWVQSKHwyePpQDtwd8IievEXHYqqK6QQLCM3I6Y67LbPUsrOxyioplTr
+         f643oj//iTHxn6Vb7bWNQkNKH3pscMmqFFgyNbhVPqFgTxec5tOox6W9g1q7o9SJ21qz
+         QZrXG/harQNKHf5vdmfLKABif/2sx0YkfgPoFdXBEiew+Y6n2n7AN4esmcChCzgktHSz
+         6WKxPMk/XWx8LsjlIZu5qwyrLKrAQllvOnE7t5QfZFTV2ICcwpqNHlFH0w/C/OioDvCT
+         8piD9UUcYILC/rP58hq0hXHYMpOpCk0kYFPCvV+laOHsKuXagttmwPlg46HOr4fLYqoW
+         AIRg==
+X-Gm-Message-State: ACgBeo0LTaBF+sjfPW73RK+JkQmX0XA4BsaTvd9GRak4lV3msN3bb8fl
+        Q1ENF3Jm9vQGWOHuXWVGQqgHnQ/nZCHbLVPORlc=
+X-Google-Smtp-Source: AA6agR7LZmjCNCLMXXWlp2k23GexHuVg/Vd+1zc8jeLzHuHcI8ZFAnYSBm6IicpyHUKA93sCXq9O5J9AxItSMB1Pgxs=
+X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
+ p17-20020a05622a049100b0034495bf8f05mr21568523qtx.61.1661331677075; Wed, 24
+ Aug 2022 02:01:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5] net: skb: prevent the split of kfree_skb_reason()
- by gcc
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166133161741.23661.3276364041204544927.git-patchwork-notify@kernel.org>
-Date:   Wed, 24 Aug 2022 09:00:17 +0000
-References: <20220821051858.228284-1-imagedong@tencent.com>
-In-Reply-To: <20220821051858.228284-1-imagedong@tencent.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     kuba@kernel.org, miguel.ojeda.sandonis@gmail.com,
-        segher@kernel.crashing.org, ndesaulniers@google.com,
-        ojeda@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, asml.silence@gmail.com, imagedong@tencent.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220824012624.2826445-1-yury.norov@gmail.com>
+In-Reply-To: <20220824012624.2826445-1-yury.norov@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 24 Aug 2022 12:00:41 +0300
+Message-ID: <CAHp75VddCDWo3pkX9oJUUYqndmZbKm5eB_3HU7ytsjjwFnsnRA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] lib: optimize find_bit() functions
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, Aug 24, 2022 at 4:39 AM Yury Norov <yury.norov@gmail.com> wrote:
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+...
 
-On Sun, 21 Aug 2022 13:18:58 +0800 you wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> Sometimes, gcc will optimize the function by spliting it to two or
-> more functions. In this case, kfree_skb_reason() is splited to
-> kfree_skb_reason and kfree_skb_reason.part.0. However, the
-> function/tracepoint trace_kfree_skb() in it needs the return address
-> of kfree_skb_reason().
-> 
-> [...]
+> v1: https://lore.kernel.org/all/20220728161208.865420-2-yury.norov@gmail.com/T/
+>
+> Yury Norov (3):
+>   lib/find_bit: introduce FIND_FIRST_BIT() macro
+>   lib/find_bit: create find_first_zero_bit_le()
+>   lib/find_bit: optimize find_next_bit() functions
+>
+>  MAINTAINERS          |   2 +
+>  include/linux/find.h |  46 +++++++++++++------
+>  lib/Makefile         |   1 +
+>  lib/find_bit.c       | 104 ++++++++++++-------------------------------
+>  lib/find_bit.h       |  45 +++++++++++++++++++
+>  lib/find_bit_be.c    |  42 +++++++++++++++++
+>  6 files changed, 152 insertions(+), 88 deletions(-)
+>  create mode 100644 lib/find_bit.h
+>  create mode 100644 lib/find_bit_be.c
+>
+> --
+> 2.34.1
 
-Here is the summary with links:
-  - [net-next,v5] net: skb: prevent the split of kfree_skb_reason() by gcc
-    https://git.kernel.org/netdev/net-next/c/c205cc7534a9
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Seems like the cover letter is generated by Git, but it has 0/4 in the
+Subject while the rest of the series is n/3. What happened on your
+side with the numbering of the patches?
 
 
+--
+With Best Regards,
+Andy Shevchenko

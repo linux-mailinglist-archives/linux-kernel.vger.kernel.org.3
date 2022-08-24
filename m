@@ -2,165 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9A55A0163
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C0D5A016A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239594AbiHXSdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
+        id S240118AbiHXSer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234401AbiHXSdt (ORCPT
+        with ESMTP id S239788AbiHXSem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:33:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10725EDDE
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661366027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0n4dqY837mNTXGdz/cVnVTltMFIhOJZdTntnOSeC6R4=;
-        b=bGIA6wwv0UKbEakUGclm5S+WvNi90UuiD3xxEcwsX0+WJbwcfaFWDxiJIsKHittn4bzG6m
-        7k2rgklJqT9d6zgBeq4nQt0y6TwhtgceszjzKxPEZJqk4hKkJhLmUkb4ryg+mkJ4P31m0K
-        N1NuyF9OezHSD9bV42BuxSnT+QgXO0A=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-649-a8uOHua3NrOJEWdyQtlBnw-1; Wed, 24 Aug 2022 14:33:46 -0400
-X-MC-Unique: a8uOHua3NrOJEWdyQtlBnw-1
-Received: by mail-qk1-f197.google.com with SMTP id h20-20020a05620a245400b006bb0c6074baso15291686qkn.6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:33:46 -0700 (PDT)
+        Wed, 24 Aug 2022 14:34:42 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33E07A515;
+        Wed, 24 Aug 2022 11:34:40 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33db4e5ab43so1368647b3.4;
+        Wed, 24 Aug 2022 11:34:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=0n4dqY837mNTXGdz/cVnVTltMFIhOJZdTntnOSeC6R4=;
-        b=pBeJcjiqTlk3GEcBUAiVNiOlI+mLWQwAVPi8A19KaKmlTO8R8vG4fyWPKDLBX4BP4P
-         eW9rHS7nZaslOmh6/m0cFfsVR5S5QQZZkwoA28U0SzMXDVg+0ppPKhDIl7TySlwfTJb7
-         IVjpcO9vz7nZqFEJDSlBWoUT5MoVigQAb5u7pDDbIKSxy+wKQZGiIXYGrBQ4x/O7+6OZ
-         ec/W3HwRF2JWRYifAKTYQV3ZI/5m8J3+5nJebonrYAe9oU1Fsx/vE88F+gdJtHFeu/4X
-         4pZ3QsWx11T/bQ0CMNy6h1RwvvE3jHc/EuO0O9OVZhsje+uVaw3thonq4JI5bH2v8HBS
-         mvZA==
-X-Gm-Message-State: ACgBeo1lCKsE15OfTulm6L41Fizm84hBGrWyKf2yulbUoiMOAknOaR9m
-        0FlGl+0EaWYmklhShekYRMuZ7sv3BEQUyG6V+YsGZTeUVrGDe5XRNI7udSTjHK82iDigcbLtqLQ
-        4m1YYqr7qYwiVWr44JhDPaXEoXUPwIjRpktMVtvOm
-X-Received: by 2002:a05:620a:29c3:b0:6bb:33ac:9130 with SMTP id s3-20020a05620a29c300b006bb33ac9130mr419561qkp.701.1661366025737;
-        Wed, 24 Aug 2022 11:33:45 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5YNAMRcfgkNYZIACaTJO3W9NnhhxFU0G/NCwVzCMPMo5UtCoVhNkGA66kcYnnRPVt3gi8apd5nzE3r9HNR9ho=
-X-Received: by 2002:a05:620a:29c3:b0:6bb:33ac:9130 with SMTP id
- s3-20020a05620a29c300b006bb33ac9130mr419546qkp.701.1661366025540; Wed, 24 Aug
- 2022 11:33:45 -0700 (PDT)
+        bh=0fJKE51ZwEoPTaUMc8JUaf3dO19a2GBvZUGjA8lc9aM=;
+        b=ZwAmpYJALVf29JVgH/ycyVZHqUcyuoaZ6sYEDbMsahFUFuGFpzyCXTn0WU5ndQ/tpA
+         mq5tv9ClbV+js8SHHUsqFNeWqmvIafm3M/Ne2avIuO31a6Mdjppt0a56ys2i/J/1QXO2
+         q2L/XFYyja+gUKO3GxH6imB/nQfSIj9ayY4MFNJii5HDYlyxN5FYHo6qOIhzbDDTQEDS
+         hcd7drI46ljsW6UPWFvRx3nSn7Eskf2+CRT9/1OlEHbx1m+pKVdVhpEEk5fW0y2+G1Qs
+         SMOFt3fl3Dwivwj4jaPzWwEAfnQrQSArFq9Gc9Eb9c9vQfxt/4ydt+6YoS2WAJJ0Gynq
+         hJZQ==
+X-Gm-Message-State: ACgBeo0G1FhTBOxPa//btogDVvolGNl9lEfsd9goR8xGd1h31cINtu9S
+        Z7nHOAhI1DcMxjNxdvU1ZpAgMfV/386trPfSKdo=
+X-Google-Smtp-Source: AA6agR5aJcrYwH49iHESjxTPAWqPBe0D8n9Ip5MMV3jUkGvXtNya+iOVTI3qvJUxh/NHkFav+oANxQPheMLPeXRe+wM=
+X-Received: by 2002:a25:664a:0:b0:695:e7cc:9a20 with SMTP id
+ z10-20020a25664a000000b00695e7cc9a20mr415847ybm.153.1661366079973; Wed, 24
+ Aug 2022 11:34:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220816025217.618181-1-kai.heng.feng@canonical.com>
- <87leror4sl.fsf@intel.com> <CAAd53p76ut7QRFdM4NjaRua=Hc4bu9_=7+Q_t8ExJysEAhJf=Q@mail.gmail.com>
-In-Reply-To: <CAAd53p76ut7QRFdM4NjaRua=Hc4bu9_=7+Q_t8ExJysEAhJf=Q@mail.gmail.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Wed, 24 Aug 2022 20:33:34 +0200
-Message-ID: <CACO55tubRD3egnjLd=Qg2u+4_qmURmDY7kb0DxqW7s41_5hS9g@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when it's supported
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        tvrtko.ursulin@linux.intel.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>, rodrigo.vivi@intel.com,
-        Zenghui Yu <yuzenghui@huawei.com>
+References: <12036348.O9o76ZdvQC@kreacher> <2196460.iZASKD2KPV@kreacher>
+ <5857822.lOV4Wx5bFT@kreacher> <CAHp75VcjxUjH4p_NOEQjOuFO8LcSdUU_stEvfWvtbQc8hfud0w@mail.gmail.com>
+In-Reply-To: <CAHp75VcjxUjH4p_NOEQjOuFO8LcSdUU_stEvfWvtbQc8hfud0w@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 Aug 2022 20:34:28 +0200
+Message-ID: <CAJZ5v0hm8NszTDsq-KJ4iO452WZ7C7u4ufbfTDdFXX9YnXmTDw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] ACPI: Drop parent field from struct acpi_device
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 7:50 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
+On Wed, Aug 24, 2022 at 8:23 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> On Tue, Aug 16, 2022 at 4:06 PM Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> On Wed, Aug 24, 2022 at 8:13 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 > >
-> > On Tue, 16 Aug 2022, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> > > On mobile workstations like HP ZBook Fury G8, iGFX's DP-IN can switch to
-> > > dGFX so external monitors are routed to dGFX, and more monitors can be
-> > > supported as result.
-> > >
-> > > To switch the DP-IN to dGFX, the driver needs to invoke _DSM function 20
-> > > on intel_dsm_guid2. This method is described in Intel document 632107.
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Is this the policy decision that we want to unconditionally make,
-> > though?
+> > The parent field in struct acpi_device is, in fact, redundant,
+> > because the dev.parent field in it effectively points to the same
+> > object and it is used by the driver core.
+> >
+> > Accordingly, the parent field can be dropped from struct acpi_device
+> > and for this purpose define acpi_dev_parent() to retrieve a parent
+> > struct acpi_device pointer from the dev.parent field in struct
+> > acpi_device.  Next, update all of the users of the parent field
+> > in struct acpi_device to use acpi_dev_parent() instead of it and
+> > drop it.
+> >
+> > While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
+> > in one place in a confusing way.
+> >
+> > No intentional functional impact.
 >
-> I believes so, so more external monitors can be supported at the same time.
+> Side note: Should we not convert these to use acpi_dev_parent()?
 >
+> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/acpi/property.c#L1271
+> https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/bus/hisi_lpc.c#L397
 
-if there wouldn't be any drawbacks, yes, but sadly there are and I
-don't see that hurting _all_ users affected with this by making their
-system consume/generate around 10-15W more power/heat just that maybe
-one user can use 4 instead of 3 displays at 4K is really worth it...
-
-> Kai-Heng
->
-> >
-> > BR,
-> > Jani.
-> >
-> > >
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > ---
-> > >  drivers/gpu/drm/i915/display/intel_acpi.c | 18 +++++++++++++++++-
-> > >  1 file changed, 17 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/i915/display/intel_acpi.c b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > index e78430001f077..3bd5930e2769b 100644
-> > > --- a/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > +++ b/drivers/gpu/drm/i915/display/intel_acpi.c
-> > > @@ -20,6 +20,7 @@ static const guid_t intel_dsm_guid =
-> > >                 0xa8, 0x54, 0x0f, 0x13, 0x17, 0xb0, 0x1c, 0x2c);
-> > >
-> > >  #define INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED 0 /* No args */
-> > > +#define INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX 20 /* No args */
-> > >
-> > >  static const guid_t intel_dsm_guid2 =
-> > >       GUID_INIT(0x3e5b41c6, 0xeb1d, 0x4260,
-> > > @@ -187,6 +188,7 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> > >       struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
-> > >       acpi_handle dhandle;
-> > >       union acpi_object *obj;
-> > > +     int supported = 0;
-> > >
-> > >       dhandle = ACPI_HANDLE(&pdev->dev);
-> > >       if (!dhandle)
-> > > @@ -194,8 +196,22 @@ void intel_dsm_get_bios_data_funcs_supported(struct drm_i915_private *i915)
-> > >
-> > >       obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2, INTEL_DSM_REVISION_ID,
-> > >                               INTEL_DSM_FN_GET_BIOS_DATA_FUNCS_SUPPORTED, NULL);
-> > > -     if (obj)
-> > > +     if (obj) {
-> > > +             if (obj->type == ACPI_TYPE_INTEGER)
-> > > +                     supported = obj->integer.value;
-> > > +
-> > >               ACPI_FREE(obj);
-> > > +     }
-> > > +
-> > > +     /* Tiger Lake H DP-IN Boot Time Switching from iGfx to dGfx */
-> > > +     if (supported & BIT(20)) {
-> > > +             obj = acpi_evaluate_dsm(dhandle, &intel_dsm_guid2,
-> > > +                                     INTEL_DSM_REVISION_ID,
-> > > +                                     INTEL_DSM_FN_DP_IN_SWITCH_TO_DGFX,
-> > > +                                     NULL);
-> > > +             if (obj)
-> > > +                     ACPI_FREE(obj);
-> > > +     }
-> > >  }
-> > >
-> > >  /*
-> >
-> > --
-> > Jani Nikula, Intel Open Source Graphics Center
->
-
+That can be done later, but thanks for the pointers!

@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC4859F140
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71ED59F149
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbiHXCHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 22:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S233839AbiHXCJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 22:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiHXCHW (ORCPT
+        with ESMTP id S231663AbiHXCJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 22:07:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9C26EF34
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:07:20 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MC8W55gFrzXf3N;
-        Wed, 24 Aug 2022 10:02:41 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 10:06:56 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
- 2022 10:06:56 +0800
-Message-ID: <3d479f53-9028-1640-985f-0fdd084c5037@huawei.com>
-Date:   Wed, 24 Aug 2022 10:06:53 +0800
+        Tue, 23 Aug 2022 22:09:16 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099F678204
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IJecDar43kdupdb0naFO7jk1K+JciYxqU4t2RPnE8WY=; b=WYX5v4BqwzrvznlNhWXpD3EZMk
+        1zq/VDNKJEgwGO8KzRxpLvhHeFs3SRaokPhCh0Ky7ec0rQrFalCT5sVD/TQLkamtSXNqouMXRffBO
+        z6fhzXdkWuP20iNAqgGdI0yzEGeMmml6XqwpfhW6ViTgM/6jXBnsRrqdc6pGS8vAom4+17cA4NZHx
+        VVv8MvFrAWGy5f7htaO8a1MccdHabW6c8RXeuAPax6oCX+QPoeSxOCPUHUsKMGlA8v/6Y+4ohpF4G
+        2TCrsGHtETU+GGTYTbhfFHgeDkFX+aEvgesvMgZYPEi5cVw2z48KisoxjX9eoRvaD56geUyCIE1+m
+        I/tKblIA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oQfpM-007cKy-10;
+        Wed, 24 Aug 2022 02:09:08 +0000
+Date:   Wed, 24 Aug 2022 03:09:07 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
+ triggered by is_signed_type()
+Message-ID: <YwWIQ/3BDQHOiTek@ZenIV>
+References: <20220821000737.328590235@goodmis.org>
+ <20220821000844.510643400@goodmis.org>
+ <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
+ <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org>
+ <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
+ <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk>
+ <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+ <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
+ <CAHk-=wiwr2Ff_1SKzRkjSbNLFYfk4KurvZhLuwVuTT-m9w5_6A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] objtool: replace _ASM_PTR with quad in macros
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "bp@suse.de" <bp@suse.de>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "sv@linux.ibm.com" <sv@linux.ibm.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
-References: <20220823133124.55914-1-chenzhongjin@huawei.com>
- <27c6906c-baf3-6802-9843-50b27df74a71@csgroup.eu>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <27c6906c-baf3-6802-9843-50b27df74a71@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiwr2Ff_1SKzRkjSbNLFYfk4KurvZhLuwVuTT-m9w5_6A@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,117 +65,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/24 0:47, Christophe Leroy wrote:
->
-> Le 23/08/2022 à 15:31, Chen Zhongjin a écrit :
->> Macros STACK_FRAME_NON_STANDARD and ANNOTATE_NOENDBR uses
->> _ASM_PTR. It switch between .long and .quad based on 32bit
->> or 64bit. However objtool doesn't work for 32bit, so _ASM_PTR
->> makes no sense.
->>
->> Considering that _ASM_PTR comes from asm.h, which is x86
->> specific head file, while objtool.h is generic. Replace
->> _ASM_PTR with quad and remove asm.h reference.
-> objtool is about to be used on powerpc on both PPC32 and PPC64, see
-> https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=312955&state=*
->
-> So if this part is meant to be used by all architectures, we need
-> nothing that also works on 32 bits, don't we ?
->
-> Christophe
->
-ANNOTATE_NOENDBR affects nothing because it's for x86 IBT. Leaving this 
-macro here is harmless now, but I think maybe it's better to move this 
-to arch-specific.
+On Tue, Aug 23, 2022 at 04:57:00PM -0700, Linus Torvalds wrote:
+> On Tue, Aug 23, 2022 at 4:18 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Can you try the sparse version at
+> >
+> >    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/sparse.git
+> >
+> > which I just set up temporarily with some patches of mine.
+> 
+> Ugh, and while testing this with sparse, I noticed that sparse itself
+> got that whole 'is_signed_type()' check wrong.
+> 
+> The sparse fix was to remove one line of code, but that one worries
+> me, because that one line was clearly very intentional:
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/sparse.git/commit/?id=7e5f1c2eba1426e414698071dd0de7d039eb385d
+> 
+> Adding Al, since he's actually the original source of that bitwise
+> code (and did a lot of other sparse code on the type handling and
+> preprocessor side in particular).
 
-The problem is STACK_FRAME_NON_STANDARD. The C version macro uses 
-function pointer so the reloc symbol type can change between 32 and 64 bit.
+Ouch...  That'll take quite a bit of swap-in (and digging through the
+old notes).  I'll take a look, but there's an unrelated problem:
+	ANY ordered comparisons should spew warnings on bitwise
+And we really want that to happen - things like
+#define MASK cpu_to_le32(1023)
+	if (foo->len > MASK)
+		return -EINVAL;
+	something(le32_to_cpu(foo->len));
+should trigger warnings and I have seen real bugs of that sort.
 
-Although I think quad is workable for both 32 and 64 bit, and this macro 
-is .discard so it won't affect something else, but it may not keep reloc 
-symbol type consistency.
+So I'm not sure how is that supposed to work without sparse getting
+loudly unhappy.
 
-
-Anyway, NO _ASM_PTR and asm.h, they are arch-specific and will break 
-compiling on other arches.
-
-
-Maybe we should create a macro similar to _ASM_PTR for other arches. 
-Till now I didn't find one.
-
-I'll send v2 patch to make this and Peter can judge.
-
-
-Best,
-
-Chen
-
->> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
->> ---
->>    include/linux/objtool.h       | 6 ++----
->>    tools/include/linux/objtool.h | 6 ++----
->>    2 files changed, 4 insertions(+), 8 deletions(-)
->>
->> diff --git a/include/linux/objtool.h b/include/linux/objtool.h
->> index 62c54ffbeeaa..d2413cb78037 100644
->> --- a/include/linux/objtool.h
->> +++ b/include/linux/objtool.h
->> @@ -45,8 +45,6 @@ struct unwind_hint {
->>    
->>    #ifdef CONFIG_OBJTOOL
->>    
->> -#include <asm/asm.h>
->> -
->>    #ifndef __ASSEMBLY__
->>    
->>    #define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
->> @@ -87,7 +85,7 @@ struct unwind_hint {
->>    #define ANNOTATE_NOENDBR					\
->>    	"986: \n\t"						\
->>    	".pushsection .discard.noendbr\n\t"			\
->> -	_ASM_PTR " 986b\n\t"					\
->> +	".quad 986b\n\t"					\
->>    	".popsection\n\t"
->>    
->>    #define ASM_REACHABLE							\
->> @@ -144,7 +142,7 @@ struct unwind_hint {
->>    
->>    .macro STACK_FRAME_NON_STANDARD func:req
->>    	.pushsection .discard.func_stack_frame_non_standard, "aw"
->> -	_ASM_PTR \func
->> +	.quad \func
->>    	.popsection
->>    .endm
->>    
->> diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
->> index 62c54ffbeeaa..d2413cb78037 100644
->> --- a/tools/include/linux/objtool.h
->> +++ b/tools/include/linux/objtool.h
->> @@ -45,8 +45,6 @@ struct unwind_hint {
->>    
->>    #ifdef CONFIG_OBJTOOL
->>    
->> -#include <asm/asm.h>
->> -
->>    #ifndef __ASSEMBLY__
->>    
->>    #define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
->> @@ -87,7 +85,7 @@ struct unwind_hint {
->>    #define ANNOTATE_NOENDBR					\
->>    	"986: \n\t"						\
->>    	".pushsection .discard.noendbr\n\t"			\
->> -	_ASM_PTR " 986b\n\t"					\
->> +	".quad 986b\n\t"					\
->>    	".popsection\n\t"
->>    
->>    #define ASM_REACHABLE							\
->> @@ -144,7 +142,7 @@ struct unwind_hint {
->>    
->>    .macro STACK_FRAME_NON_STANDARD func:req
->>    	.pushsection .discard.func_stack_frame_non_standard, "aw"
->> -	_ASM_PTR \func
->> +	.quad \func
->>    	.popsection
->>    .endm
->>    
-
+Al, going to look through that thread and then try to reconstruct sparse-related
+notes...

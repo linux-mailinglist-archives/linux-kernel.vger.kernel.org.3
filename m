@@ -2,243 +2,594 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6176459FEDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C54159FEDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237385AbiHXPwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S238125AbiHXPxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236946AbiHXPwj (ORCPT
+        with ESMTP id S237669AbiHXPxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:52:39 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0251372FC9;
-        Wed, 24 Aug 2022 08:52:37 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34B1D1EC056A;
-        Wed, 24 Aug 2022 17:52:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1661356352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=PBu2N2uipsqYRGU8bx2yq7gJv2+9Y2U5mdyTj0+/pTM=;
-        b=NB6YSRe/Ed3rUtDV9uiZDCWOh1AmqVaLjJr7swohSQBgEXc9Ml8+K+1qPwkVzabBT+Lz+T
-        0msrtdaC0S4A2mcX1OGqoxMuRHKbJNsW4RW5QLHEAY54tdqwlaA3FCXV6qpt2FqWjsiKmf
-        lRgsjSTC8LFhYEx4jgXYcDjls9XERvQ=
-Date:   Wed, 24 Aug 2022 17:52:31 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jia He <justin.he@arm.com>
-Cc:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com, "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-doc@vger.kernel.org
-Subject: Re: [RESEND PATCH v3 4/9] EDAC/ghes: Move ghes_edac.force_load to
- setup parameter
-Message-ID: <YwZJP25sfKcfw9eT@zn.tnic>
-References: <20220822154048.188253-1-justin.he@arm.com>
- <20220822154048.188253-5-justin.he@arm.com>
+        Wed, 24 Aug 2022 11:53:13 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EC072EFB
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:53:11 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id ay12so8975413wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=+q1VAwhF1EdpGOt2l8P3hpLXQpV4wpKsbOGCS4axWqc=;
+        b=Hhi5YcVI4mNsew0/GcSY3VXxeGRxZWxiNAAN/3+tW/XAaMH0qio5e+upB5cZeQr65P
+         I9roRQgmLV3x/wr95BT3THCh6dNf+5A+W63NDwD2Or646lamDGec45lXPD4XABLPpSOt
+         ynQyf86H6SFuOKQDLWlSca8LbOpaYOXfsPPWPv+AfMnhrYIAVHUlpv8wSFcdJOHy2ZI5
+         0o+ARUj59NvVYxeTlX8uzAwJND4Y8eRR+ssabm9ojOJ8wq9uE0RPX4R9lIKPpl7yH8eD
+         jukAJKoXlW5sljx2MS6vzcf3kvqHw4bkjdVgZNmzfWxbh4ZMVrTaQ6WOWteNaiAqQfjo
+         PWEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+q1VAwhF1EdpGOt2l8P3hpLXQpV4wpKsbOGCS4axWqc=;
+        b=mf/hXVi+fymdDNcUCDiSK0zNZJ98HiH9b0EMmz48oxwDel64IbCzlKKSymznBS2KP9
+         lydnDCc6y6N7zqsMPy330uKo4MVxw2vFJzqH5tdAT22W8WKBFqPsVvvHpN5dOChV4377
+         vZtOdxktgSY67c8IzOZOhcHbfp1WZuf6+lQbO2OT1ApDztR6lV7EbHcvnfK42sPUtQY/
+         ET0L7pE/D/WvKaegCx8xEExY/tZDW47VCjDEN8Xt6U0G/N2DyHCwhP2E0down0DUzOza
+         jxKLxddXw0dUaMTvYGp9PcOviy9B5hkqwEDLEzzCI8xIzKwRVA8MCDICelnyjTvsTvDf
+         89UQ==
+X-Gm-Message-State: ACgBeo2VjxNiRtk3tQdVnjWirAEZExrTsJu5vna/qlq5+M0d6yR4OsHw
+        BX3nHDtllMaHD8M76t5PTgCH3yQcdqVM6iwJXmN3gA==
+X-Google-Smtp-Source: AA6agR4eKDA5dsWNvv2FRaXsomKJjPMY9MUldnJZ3YHzZ7VRxY1e2L9HV3/Fz+tkCxk9AdJqSRkIzslctAChL5FWxiM=
+X-Received: by 2002:a05:600c:19c8:b0:3a5:ec6a:8d16 with SMTP id
+ u8-20020a05600c19c800b003a5ec6a8d16mr5586280wmq.182.1661356389860; Wed, 24
+ Aug 2022 08:53:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220822154048.188253-5-justin.he@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220824072814.16422-1-adrian.hunter@intel.com> <20220824072814.16422-6-adrian.hunter@intel.com>
+In-Reply-To: <20220824072814.16422-6-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 24 Aug 2022 08:52:57 -0700
+Message-ID: <CAP-5=fWwAEgj_X2dKCuZF7MdgnH-V-VEuYdaN8AQAvbAqPY-MA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] perf record: Allow multiple recording time ranges
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 03:40:43PM +0000, Jia He wrote:
-> ghes_edac_init() is too late to set this module flag ghes_edac.force_load.
-> Also, other edac drivers should not be able to control this flag.
-> 
-> Move this flag to setup parameter in ghes.
-> 
-> Suggested-by: Toshi Kani <toshi.kani@hpe.com>
-> Signed-off-by: Jia He <justin.he@arm.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         |  5 +++
->  drivers/acpi/apei/ghes.c                      | 24 +++++++++++-
->  drivers/edac/ghes_edac.c                      | 38 +++++++------------
->  include/acpi/ghes.h                           |  7 +++-
->  4 files changed, 46 insertions(+), 28 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index d7f30902fda0..a5f0ee0d7727 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1593,6 +1593,11 @@
->  			When zero, profiling data is discarded and associated
->  			debugfs files are removed at module unload time.
->  
-> +	ghes_edac_force= [X86] Skip the platform check and forcibly load the
+On Wed, Aug 24, 2022 at 12:28 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> AUX area traces can produce too much data to record successfully or
+> analyze subsequently. Add another means to reduce data collection by
+> allowing multiple recording time ranges.
+>
+> This is useful, for instance, in cases where a workload produces
+> predictably reproducible events in specific time ranges.
+>
+> Today we only have perf record -D <msecs> to start at a specific region, or
+> some complicated approach using snapshot mode and external scripts sending
+> signals or using the fifos. But these approaches are difficult to set up
+> compared with simply having perf do it.
+>
+> Extend perf record option -D/--delay option to specifying relative time
+> stamps for start stop controlled by perf with the right time offset, for
+> instance:
+>
+>     perf record -e intel_pt// -D 10-20,30-40
+>
+> to record 10ms to 20ms into the trace and 30ms to 40ms.
 
-So there already is ghes.disable which is using the module param thing.
-Why don't you do that too?
+Could you add a test like this in:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/shell/record.sh?h=perf/core
+If for no other reason than code coverage. It would also be
+interesting to see what happens if floating point values are passed,
+ranges are incomplete, etc. As the functionality is generic the event
+could be cycles or instructions rather than intel_pt.
 
-> +			ghes_edac modules.
+Thanks,
+Ian
 
-"module" - singular.
-
-> +			Format: <bool>
-> +			default: false (0)
-> +
->  	goldfish	[X86] Enable the goldfish android emulator platform.
->  			Don't use this when you are not running on the
->  			android emulator
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 9c52183e3ad9..e17e0ee8f842 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -94,6 +94,26 @@
->  #define FIX_APEI_GHES_SDEI_CRITICAL	__end_of_fixed_addresses
->  #endif
->  
-> +/*
-> + * "ghes_edac_force=1" forcibly loads ghes_edac and skips the platform
-> + * check.
-> + */
-> +bool __read_mostly ghes_edac_force;
-> +EXPORT_SYMBOL(ghes_edac_force);
-> +
-> +static int __init setup_ghes_edac_load(char *str)
-> +{
-> +	if (str)
-> +		if (!strcmp("true", str) || !strcmp("1", str))
-> +			ghes_edac_force = true;
-> +
-> +	if (!IS_ENABLED(CONFIG_X86))
-> +		ghes_edac_force = true;
-> +
-> +	return 1;
-> +}
-> +__setup("ghes_edac_force=", setup_ghes_edac_load);
-
-Why all that?
-
-Isn't specifying
-
-ghes.edac_force_load
-
-on the kernel command line enough? I.e., you don't need to parse the
-passed in option - just the presence of the parameter is enough.
-
-> +
->  static ATOMIC_NOTIFIER_HEAD(ghes_report_chain);
->  
->  static inline bool is_hest_type_generic_v2(struct ghes *ghes)
-> @@ -1517,13 +1537,13 @@ static struct acpi_platform_list plat_list[] = {
->  	{ } /* End */
->  };
->  
-> -struct list_head *ghes_get_devices(bool force)
-> +struct list_head *ghes_get_devices(void)
+> Example:
+>
+>  The example workload is:
+>
+>  $ cat repeat-usleep.c
+>
+>  int usleep(useconds_t usec);
+>
+>  int usage(int ret, const char *msg)
 >  {
->  	int idx = -1;
->  
->  	if (IS_ENABLED(CONFIG_X86)) {
->  		idx = acpi_match_platform_list(plat_list);
-> -		if (idx < 0 && !force)
-> +		if (idx < 0 && !ghes_edac_force)
->  			return NULL;
->  	}
->  
-> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-> index bb3ea42ba70b..6a2b54cc7240 100644
-> --- a/drivers/edac/ghes_edac.c
-> +++ b/drivers/edac/ghes_edac.c
-> @@ -54,10 +54,6 @@ static DEFINE_MUTEX(ghes_reg_mutex);
->   */
->  static DEFINE_SPINLOCK(ghes_lock);
->  
-> -/* "ghes_edac.force_load=1" skips the platform check */
-> -static bool __read_mostly force_load;
-> -module_param(force_load, bool, 0);
-> -
->  static bool system_scanned;
->  
->  static struct list_head *ghes_devs;
-> @@ -437,23 +433,12 @@ static int ghes_edac_register(struct device *dev)
->  	mci->ctl_name = "ghes_edac";
->  	mci->dev_name = "ghes";
->  
-> -	if (fake) {
-> -		pr_info("This system has a very crappy BIOS: It doesn't even list the DIMMS.\n");
-> -		pr_info("Its SMBIOS info is wrong. It is doubtful that the error report would\n");
-> -		pr_info("work on such system. Use this driver with caution\n");
-> -	} else if (force_load) {
-> -		pr_info("This EDAC driver relies on BIOS to enumerate memory and get error reports.\n");
-> -		pr_info("Unfortunately, not all BIOSes reflect the memory layout correctly.\n");
-> -		pr_info("So, the end result of using this driver varies from vendor to vendor.\n");
-> -		pr_info("If you find incorrect reports, please contact your hardware vendor\n");
-> -		pr_info("to correct its BIOS.\n");
-> -		pr_info("This system has %d DIMM sockets.\n", ghes_hw.num_dimms);
-> -	}
-> -
->  	if (!fake) {
->  		struct dimm_info *src, *dst;
->  		int i = 0;
->  
-> +		pr_info("This system has %d DIMM sockets.\n", ghes_hw.num_dimms);
+>          if (msg)
+>                  fprintf(stderr, "%s\n", msg);
+>
+>          fprintf(stderr, "Usage is: repeat-usleep <microseconds>\n");
+>
+>          return ret;
+>  }
+>
+>  int main(int argc, char *argv[])
+>  {
+>          unsigned long usecs;
+>          char *end_ptr;
+>
+>          if (argc != 2)
+>                  return usage(1, "Error: Wrong number of arguments!");
+>
+>          errno = 0;
+>          usecs = strtoul(argv[1], &end_ptr, 0);
+>          if (errno || *end_ptr || usecs > UINT_MAX)
+>                  return usage(1, "Error: Invalid argument!");
+>
+>          while (1) {
+>                  int ret = usleep(usecs);
+>
+>                  if (ret & errno != EINTR)
+>                          return usage(1, "Error: usleep() failed!");
+>          }
+>
+>          return 0;
+>  }
+>
+>  $ perf record -e intel_pt//u --delay 10-20,40-70,110-160 -- ./repeat-usleep 500
+>  Events disabled
+>  Events enabled
+>  Events disabled
+>  Events enabled
+>  Events disabled
+>  Events enabled
+>  Events disabled
+>  [ perf record: Woken up 5 times to write data ]
+>  [ perf record: Captured and wrote 0.204 MB perf.data ]
+>  Terminated
+>
+>  A dlfilter is used to determine continuous data collection (timestamps
+>  less than 1ms apart):
+>
+>  $ cat dlfilter-show-delays.c
+>
+>  static __u64 start_time;
+>  static __u64 last_time;
+>
+>  int start(void **data, void *ctx)
+>  {
+>          printf("%-17s\t%-9s\t%-6s\n", " Time", " Duration", " Delay");
+>          return 0;
+>  }
+>
+>  int filter_event_early(void *data, const struct perf_dlfilter_sample *sample, void *ctx)
+>  {
+>          __u64 delta;
+>
+>          if (!sample->time)
+>                  return 1;
+>          if (!last_time)
+>                  goto out;
+>          delta = sample->time - last_time;
+>          if (delta < 1000000)
+>                  goto out2;;
+>          printf("%17.9f\t%9.1f\t%6.1f\n", start_time / 1000000000.0, (last_time - start_time) / 1000000.0, delta / 1000000.0);
+>  out:
+>          start_time = sample->time;
+>  out2:
+>          last_time = sample->time;
+>          return 1;
+>  }
+>
+>  int stop(void *data, void *ctx)
+>  {
+>          printf("%17.9f\t%9.1f\n", start_time / 1000000000.0, (last_time - start_time) / 1000000.0);
+>          return 0;
+>  }
+>
+>  The result shows the times roughly match the --delay option:
+>
+>  $ perf script --itrace=qb --dlfilter dlfilter-show-delays.so
+>   Time                    Duration        Delay
+>    39215.302317300             9.7         20.5
+>    39215.332480217            30.4         40.9
+>    39215.403837717            49.8
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/Documentation/perf-record.txt |   6 +-
+>  tools/perf/builtin-record.c              |  24 ++-
+>  tools/perf/util/evlist.c                 | 234 +++++++++++++++++++++++
+>  tools/perf/util/evlist.h                 |   9 +
+>  4 files changed, 269 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+> index 099817ef5150..953b9663522a 100644
+> --- a/tools/perf/Documentation/perf-record.txt
+> +++ b/tools/perf/Documentation/perf-record.txt
+> @@ -430,8 +430,10 @@ if combined with -a or -C options.
+>  -D::
+>  --delay=::
+>  After starting the program, wait msecs before measuring (-1: start with events
+> -disabled). This is useful to filter out the startup phase of the program, which
+> -is often very different.
+> +disabled), or enable events only for specified ranges of msecs (e.g.
+> +-D 10-20,30-40 means wait 10 msecs, enable for 10 msecs, wait 10 msecs, enable
+> +for 10 msecs, then stop). Note, delaying enabling of events is useful to filter
+> +out the startup phase of the program, which is often very different.
+>
+>  -I::
+>  --intr-regs::
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index cefb3028f565..7fdb1dd9a0a8 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -2498,6 +2498,10 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
+>                 }
+>         }
+>
+> +       err = event_enable_timer__start(rec->evlist->eet);
+> +       if (err)
+> +               goto out_child;
 > +
->  		mci_for_each_dimm(mci, dst) {
->  			src = &ghes_hw.dimms[i];
->  
-
-This hunk...
-
-> @@ -478,6 +463,17 @@ static int ghes_edac_register(struct device *dev)
->  	} else {
->  		struct dimm_info *dimm = edac_get_dimm(mci, 0, 0, 0);
->  
-> +		pr_info("This system has a very crappy BIOS: It doesn't even list the DIMMS.\n");
-> +		pr_info("Its SMBIOS info is wrong. It is doubtful that the error report would\n");
-> +		pr_info("work on such system. Use this driver with caution\n");
+>         trigger_ready(&auxtrace_snapshot_trigger);
+>         trigger_ready(&switch_output_trigger);
+>         perf_hooks__invoke_record_start();
+> @@ -2621,6 +2625,14 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
+>                         }
+>                 }
+>
+> +               err = event_enable_timer__process(rec->evlist->eet);
+> +               if (err < 0)
+> +                       goto out_child;
+> +               if (err) {
+> +                       err = 0;
+> +                       done = 1;
+> +               }
 > +
-> +		if (ghes_edac_force) {
-> +			pr_info("This EDAC driver relies on BIOS to enumerate memory and get\n");
-> +			pr_info("error reports. Unfortunately, not all BIOSes reflect the\n");
-> +			pr_info("memory layout correctly. If you find incorrect reports, please\n");
-> +			pr_info("contact your hardware vendor for its in correct BIOS.\n");
-> +		}
+>                 /*
+>                  * When perf is starting the traced process, at the end events
+>                  * die with the process and we wait for that. Thus no need to
+> @@ -2842,6 +2854,12 @@ static int perf_record_config(const char *var, const char *value, void *cb)
+>         return 0;
+>  }
+>
+> +static int record__parse_event_enable_time(const struct option *opt, const char *str, int unset)
+> +{
+> +       struct record *rec = (struct record *)opt->value;
 > +
->  		dimm->nr_pages = 1;
->  		dimm->grain = 128;
->  		dimm->mtype = MEM_UNKNOWN;
-
-... and this hunk look unrelated to what this patch is doing. What are
-they for?
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> +       return evlist__parse_event_enable_time(rec->evlist, &rec->opts, str, unset);
+> +}
+>
+>  static int record__parse_affinity(const struct option *opt, const char *str, int unset)
+>  {
+> @@ -3303,8 +3321,10 @@ static struct option __record_options[] = {
+>         OPT_CALLBACK('G', "cgroup", &record.evlist, "name",
+>                      "monitor event in cgroup name only",
+>                      parse_cgroups),
+> -       OPT_INTEGER('D', "delay", &record.opts.initial_delay,
+> -                 "ms to wait before starting measurement after program start (-1: start with events disabled)"),
+> +       OPT_CALLBACK('D', "delay", &record, "ms",
+> +                    "ms to wait before starting measurement after program start (-1: start with events disabled), "
+> +                    "or ranges of time to enable events e.g. '-D 10-20,30-40'",
+> +                    record__parse_event_enable_time),
+>         OPT_BOOLEAN(0, "kcore", &record.opts.kcore, "copy /proc/kcore"),
+>         OPT_STRING('u', "uid", &record.opts.target.uid_str, "user",
+>                    "user to profile"),
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 3cfe730c12b8..fcfe5bcc0bcf 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -15,6 +15,7 @@
+>  #include "target.h"
+>  #include "evlist.h"
+>  #include "evsel.h"
+> +#include "record.h"
+>  #include "debug.h"
+>  #include "units.h"
+>  #include "bpf_counter.h"
+> @@ -40,12 +41,14 @@
+>  #include <sys/ioctl.h>
+>  #include <sys/mman.h>
+>  #include <sys/prctl.h>
+> +#include <sys/timerfd.h>
+>
+>  #include <linux/bitops.h>
+>  #include <linux/hash.h>
+>  #include <linux/log2.h>
+>  #include <linux/err.h>
+>  #include <linux/string.h>
+> +#include <linux/time64.h>
+>  #include <linux/zalloc.h>
+>  #include <perf/evlist.h>
+>  #include <perf/evsel.h>
+> @@ -147,6 +150,7 @@ static void evlist__purge(struct evlist *evlist)
+>
+>  void evlist__exit(struct evlist *evlist)
+>  {
+> +       event_enable_timer__exit(&evlist->eet);
+>         zfree(&evlist->mmap);
+>         zfree(&evlist->overwrite_mmap);
+>         perf_evlist__exit(&evlist->core);
+> @@ -2167,6 +2171,236 @@ int evlist__ctlfd_process(struct evlist *evlist, enum evlist_ctl_cmd *cmd)
+>         return err;
+>  }
+>
+> +/**
+> + * struct event_enable_time - perf record -D/--delay single time range.
+> + * @start: start of time range to enable events in milliseconds
+> + * @end: end of time range to enable events in milliseconds
+> + *
+> + * N.B. this structure is also accessed as an array of int.
+> + */
+> +struct event_enable_time {
+> +       int     start;
+> +       int     end;
+> +};
+> +
+> +static int parse_event_enable_time(const char *str, struct event_enable_time *range, bool first)
+> +{
+> +       const char *fmt = first ? "%u - %u %n" : " , %u - %u %n";
+> +       int ret, start, end, n;
+> +
+> +       ret = sscanf(str, fmt, &start, &end, &n);
+> +       if (ret != 2 || end <= start)
+> +               return -EINVAL;
+> +       if (range) {
+> +               range->start = start;
+> +               range->end = end;
+> +       }
+> +       return n;
+> +}
+> +
+> +static ssize_t parse_event_enable_times(const char *str, struct event_enable_time *range)
+> +{
+> +       int incr = !!range;
+> +       bool first = true;
+> +       ssize_t ret, cnt;
+> +
+> +       for (cnt = 0; *str; cnt++) {
+> +               ret = parse_event_enable_time(str, range, first);
+> +               if (ret < 0)
+> +                       return ret;
+> +               /* Check no overlap */
+> +               if (!first && range && range->start <= range[-1].end)
+> +                       return -EINVAL;
+> +               str += ret;
+> +               range += incr;
+> +               first = false;
+> +       }
+> +       return cnt;
+> +}
+> +
+> +/**
+> + * struct event_enable_timer - control structure for perf record -D/--delay.
+> + * @evlist: event list
+> + * @times: time ranges that events are enabled (N.B. this is also accessed as an
+> + *         array of int)
+> + * @times_cnt: number of time ranges
+> + * @timerfd: timer file descriptor
+> + * @pollfd_pos: position in @evlist array of file descriptors to poll (fdarray)
+> + * @times_step: current position in (int *)@times)[],
+> + *              refer event_enable_timer__process()
+> + *
+> + * Note, this structure is only used when there are time ranges, not when there
+> + * is only an initial delay.
+> + */
+> +struct event_enable_timer {
+> +       struct evlist *evlist;
+> +       struct event_enable_time *times;
+> +       size_t  times_cnt;
+> +       int     timerfd;
+> +       int     pollfd_pos;
+> +       size_t  times_step;
+> +};
+> +
+> +static int str_to_delay(const char *str)
+> +{
+> +       char *endptr;
+> +       long d;
+> +
+> +       d = strtol(str, &endptr, 10);
+> +       if (*endptr || d > INT_MAX || d < -1)
+> +               return 0;
+> +       return d;
+> +}
+> +
+> +int evlist__parse_event_enable_time(struct evlist *evlist, struct record_opts *opts,
+> +                                   const char *str, int unset)
+> +{
+> +       enum fdarray_flags flags = fdarray_flag__nonfilterable | fdarray_flag__non_perf_event;
+> +       struct event_enable_timer *eet;
+> +       ssize_t times_cnt;
+> +       ssize_t ret;
+> +       int err;
+> +
+> +       if (unset)
+> +               return 0;
+> +
+> +       opts->initial_delay = str_to_delay(str);
+> +       if (opts->initial_delay)
+> +               return 0;
+> +
+> +       ret = parse_event_enable_times(str, NULL);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       times_cnt = ret;
+> +       if (times_cnt == 0)
+> +               return -EINVAL;
+> +
+> +       eet = zalloc(sizeof(*eet));
+> +       if (!eet)
+> +               return -ENOMEM;
+> +
+> +       eet->times = calloc(times_cnt, sizeof(*eet->times));
+> +       if (!eet->times) {
+> +               err = -ENOMEM;
+> +               goto free_eet;
+> +       }
+> +
+> +       if (parse_event_enable_times(str, eet->times) != times_cnt) {
+> +               err = -EINVAL;
+> +               goto free_eet_times;
+> +       }
+> +
+> +       eet->times_cnt = times_cnt;
+> +
+> +       eet->timerfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC);
+> +       if (eet->timerfd == -1) {
+> +               err = -errno;
+> +               pr_err("timerfd_create failed: %s\n", strerror(errno));
+> +               goto free_eet_times;
+> +       }
+> +
+> +       eet->pollfd_pos = perf_evlist__add_pollfd(&evlist->core, eet->timerfd, NULL, POLLIN, flags);
+> +       if (eet->pollfd_pos < 0) {
+> +               err = eet->pollfd_pos;
+> +               goto close_timerfd;
+> +       }
+> +
+> +       eet->evlist = evlist;
+> +       evlist->eet = eet;
+> +       opts->initial_delay = eet->times[0].start;
+> +
+> +       return 0;
+> +
+> +close_timerfd:
+> +       close(eet->timerfd);
+> +free_eet_times:
+> +       free(eet->times);
+> +free_eet:
+> +       free(eet);
+> +       return err;
+> +}
+> +
+> +static int event_enable_timer__set_timer(struct event_enable_timer *eet, int ms)
+> +{
+> +       struct itimerspec its = {
+> +               .it_value.tv_sec = ms / MSEC_PER_SEC,
+> +               .it_value.tv_nsec = (ms % MSEC_PER_SEC) * NSEC_PER_MSEC,
+> +       };
+> +       int err = 0;
+> +
+> +       if (timerfd_settime(eet->timerfd, 0, &its, NULL) < 0) {
+> +               err = -errno;
+> +               pr_err("timerfd_settime failed: %s\n", strerror(errno));
+> +       }
+> +       return err;
+> +}
+> +
+> +int event_enable_timer__start(struct event_enable_timer *eet)
+> +{
+> +       int ms;
+> +
+> +       if (!eet)
+> +               return 0;
+> +
+> +       ms = eet->times[0].end - eet->times[0].start;
+> +       eet->times_step = 1;
+> +
+> +       return event_enable_timer__set_timer(eet, ms);
+> +}
+> +
+> +int event_enable_timer__process(struct event_enable_timer *eet)
+> +{
+> +       struct pollfd *entries;
+> +       short revents;
+> +
+> +       if (!eet)
+> +               return 0;
+> +
+> +       entries = eet->evlist->core.pollfd.entries;
+> +       revents = entries[eet->pollfd_pos].revents;
+> +       entries[eet->pollfd_pos].revents = 0;
+> +
+> +       if (revents & POLLIN) {
+> +               size_t step = eet->times_step;
+> +               size_t pos = step / 2;
+> +
+> +               if (step & 1) {
+> +                       evlist__disable_non_dummy(eet->evlist);
+> +                       pr_info(EVLIST_DISABLED_MSG);
+> +                       if (pos >= eet->times_cnt - 1) {
+> +                               /* Disarm timer */
+> +                               event_enable_timer__set_timer(eet, 0);
+> +                               return 1; /* Stop */
+> +                       }
+> +               } else {
+> +                       evlist__enable_non_dummy(eet->evlist);
+> +                       pr_info(EVLIST_ENABLED_MSG);
+> +               }
+> +
+> +               step += 1;
+> +               pos = step / 2;
+> +
+> +               if (pos < eet->times_cnt) {
+> +                       int *times = (int *)eet->times; /* Accessing 'times' as array of int */
+> +                       int ms = times[step] - times[step - 1];
+> +
+> +                       eet->times_step = step;
+> +                       return event_enable_timer__set_timer(eet, ms);
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +void event_enable_timer__exit(struct event_enable_timer **ep)
+> +{
+> +       if (!ep || !*ep)
+> +               return;
+> +       free((*ep)->times);
+> +       zfree(ep);
+> +}
+> +
+>  struct evsel *evlist__find_evsel(struct evlist *evlist, int idx)
+>  {
+>         struct evsel *evsel;
+> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+> index 3a8474406738..9d967fe3953a 100644
+> --- a/tools/perf/util/evlist.h
+> +++ b/tools/perf/util/evlist.h
+> @@ -48,6 +48,8 @@ enum bkw_mmap_state {
+>         BKW_MMAP_EMPTY,
+>  };
+>
+> +struct event_enable_timer;
+> +
+>  struct evlist {
+>         struct perf_evlist core;
+>         bool             enabled;
+> @@ -79,6 +81,7 @@ struct evlist {
+>                 int     ack;    /* ack file descriptor for control commands */
+>                 int     pos;    /* index at evlist core object to check signals */
+>         } ctl_fd;
+> +       struct event_enable_timer *eet;
+>  };
+>
+>  struct evsel_str_handler {
+> @@ -426,6 +429,12 @@ int evlist__ctlfd_ack(struct evlist *evlist);
+>  #define EVLIST_ENABLED_MSG "Events enabled\n"
+>  #define EVLIST_DISABLED_MSG "Events disabled\n"
+>
+> +int evlist__parse_event_enable_time(struct evlist *evlist, struct record_opts *opts,
+> +                                   const char *str, int unset);
+> +int event_enable_timer__start(struct event_enable_timer *eet);
+> +void event_enable_timer__exit(struct event_enable_timer **ep);
+> +int event_enable_timer__process(struct event_enable_timer *eet);
+> +
+>  struct evsel *evlist__find_evsel(struct evlist *evlist, int idx);
+>
+>  int evlist__scnprintf_evsels(struct evlist *evlist, size_t size, char *bf);
+> --
+> 2.25.1
+>

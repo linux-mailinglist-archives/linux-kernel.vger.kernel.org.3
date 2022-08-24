@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD12B59F226
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A207559F227
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234109AbiHXDpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 23:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S234205AbiHXDqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 23:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiHXDpg (ORCPT
+        with ESMTP id S230245AbiHXDq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 23:45:36 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5648983BF7;
-        Tue, 23 Aug 2022 20:45:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCBnm1f4Nz4x1J;
-        Wed, 24 Aug 2022 13:45:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661312732;
-        bh=6y/TMB8qS12dSKw6GYNrawVI+5PHIab7zWx33lBdJ6Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bSkvyXOVBdxEK2ddSs4ITy16vJ0M+Ke1shIY13cn6q+IEqnaQB+ox5RooFhUPI31R
-         8wi73TBr6gCQQph3uuq29C8S9hcyy3P/KcNVwI4E1zZ9A3/KWkvYSV69jn7iMSyoL1
-         b9pMXnhpfKPd7I30kun6OzjwU5o0BFaErKJuRgEta8HPtX3V/AxU2WRoPSv3su28Xh
-         D1qRuFj54Xs6ACb2nN+3VBpwQq/2Os8mjYW5tT7ZSHvN+GstF9GfVI1Zmx1UbNxPT9
-         hAeySknpsEcO5sx/AdCtGQHYaKGVDI8gzCagjSvc1vOaq/NlUs+0yG2c12nt4rHj8k
-         9hPePNR0HsUug==
-Date:   Wed, 24 Aug 2022 13:45:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the slab tree
-Message-ID: <20220824134530.1b10e768@canb.auug.org.au>
+        Tue, 23 Aug 2022 23:46:28 -0400
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58295857D2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:46:27 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id y141so15300601pfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:46:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=jI2M6Sw53Oq7pQkHggixa18lBUiaB/W0BgqIO3iCnzs=;
+        b=x5AoG4AVZV95Iyhjg850g6fFYQTzlUbiysYsvi8LeX9RXgOgmHv1UzZBp/ODXhfE6z
+         iAfKIKvAIJJ5TBQauvmtXawweohpvJ4ZD7NWtQLull6SDMhHGmSQwEH0adIs7nNTjDfN
+         TW4lyqdcG+BpxEJna8BGeET+H3wfBtcG+ALyTFSztDEUy5bBHl9JJfUJbMiwY3sVIMiT
+         tyLLdQDbDs+lnWX+E3i1GKLgtbCDY49d/wfzpcEnQLzz2eM/riFcEF7di5oYHlPTmw4p
+         4rQsZAJ1l0wmFCbi3fGSMLmNhHNfgqeNnSbY6Ij1WuonvErEw9nVNrNcKE61QeccBb56
+         eZjw==
+X-Gm-Message-State: ACgBeo2LPBGiyZg1nfuiMqV1m+Oey5S7ftZt+vlpp5foN1VaL/xdwWXB
+        zuPmo5po8DVMJeU9LNSZvLA=
+X-Google-Smtp-Source: AA6agR6FpSsiM06J3o1hicVHJa1ZT7wAhJEaHPKyn0f8iSCcD7nIcZPE3dXUERtNcbugZ4AFom4rPQ==
+X-Received: by 2002:a05:6a00:2302:b0:536:c7c2:10a9 with SMTP id h2-20020a056a00230200b00536c7c210a9mr9654034pfh.11.1661312786688;
+        Tue, 23 Aug 2022 20:46:26 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id w1-20020a1709027b8100b0016c16648213sm11074642pll.20.2022.08.23.20.46.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 20:46:25 -0700 (PDT)
+Message-ID: <b1ee4daa-d21d-27bc-527a-cc5e989a2876@acm.org>
+Date:   Tue, 23 Aug 2022 20:46:23 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e4G=+4=H=X8s=EX41usEeV8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
+ triggered by is_signed_type()
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+References: <20220821000737.328590235@goodmis.org>
+ <20220821000844.510643400@goodmis.org>
+ <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
+ <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org>
+ <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
+ <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk>
+ <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+ <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
+ <b79c83af-e9fc-9fa0-dff7-f3a8a39887ff@acm.org>
+ <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/e4G=+4=H=X8s=EX41usEeV8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 8/23/22 18:49, Linus Torvalds wrote:
+> That's the
+> 
+>> It does require that kernel change to make
+>>
+>>    #define is_signed_type(type)   (((type)(-1)) <= (type)0)
+> 
+> part I was talking about.
+> 
+> So your kernel side patch looks fine, except I don't think you need
+> the '__force' - the sparse patches in my tree should make sparse happy
+> about casting '-1'.
 
-Hi all,
+Thank you for having provided this feedback. If I change the
+is_signed_type() definition into the above (no __force), the sparse
+warnings shown in my previous email disappear. Now I'm puzzled about
+how this is possible. I guess I should take a closer look at the sparse
+patches.
 
-After merging the slab tree, today's linux-next build (htmldocs) produced
-these warnings:
-
-mm/slab_common.c:964: warning: Function parameter or member 'object' not de=
-scribed in 'kfree'
-mm/slab_common.c:964: warning: Excess function parameter 'objp' description=
- in 'kfree'
-
-Introduced by commit
-
-  79c7527b9805 ("mm/sl[au]b: generalize kmalloc subsystem")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/e4G=+4=H=X8s=EX41usEeV8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMFntoACgkQAVBC80lX
-0Gxoxgf+N6Bq/+M+Tpf1FSSWz58zmuI9BZAEDNXAP2QMjL9B5y59ri9pP0/togkV
-Sl+TgLy619LVpmplrFDvdibBSQlvExe/vFcCss3h2jG6lYNWJAyUU6rp/9iiQORy
-WyvaHAhGpnkjV0MLnP7TsIKYFGT+YzlZG9IUGC1T3J9QuivwlLI9gZuHRQmxRXGR
-RJI9iWlREGdenipl2JTbudmd1laSIrWL5MsFTmn4/ZTsUsGY3mBWmCvN6g5HUdNd
-plmieqV5Gsm2ty4047d0E7ZySdDIIvdXHkx1nmr9gvm1rgCW3f1yTSaOES3InxJK
-noATSBcpu2s/kLWlAvH1XTWopI/W3A==
-=lq1g
------END PGP SIGNATURE-----
-
---Sig_/e4G=+4=H=X8s=EX41usEeV8--
+Bart.

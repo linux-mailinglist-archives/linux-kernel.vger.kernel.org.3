@@ -2,136 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640E159F4C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C8259F4C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235553AbiHXIJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S235121AbiHXIK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235092AbiHXIJ4 (ORCPT
+        with ESMTP id S235679AbiHXIK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:09:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1956BCDD;
-        Wed, 24 Aug 2022 01:09:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7979F2008D;
-        Wed, 24 Aug 2022 08:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661328591; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TLtgpnjQlGtD1ZAJ+2wQtkWv5tNE69LQcLT1NXtK3ms=;
-        b=j20rO/LUe+ZNPgoL3sgzAB9Uo0qwAB2hz+HKpI+VJ7OoO+6WpFy0JbHRnKNinUUW3p3sEP
-        GzKu+ecTUHYR9qtLYWUjlMmuHioEtPsuPQUiwYNfsppQDRn7at24wWWLnp0VSI3Oaejk+C
-        Yd/1GdFhE3kj7bIhJi3Ge1qoMFLQ71c=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5904A13AC0;
-        Wed, 24 Aug 2022 08:09:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xBYSFc/cBWNvXgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 24 Aug 2022 08:09:51 +0000
-Date:   Wed, 24 Aug 2022 10:09:50 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     lizhe.67@bytedance.com
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz, mhiramat@kernel.org,
-        keescook@chromium.org, Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
-        rostedt@goodmis.org, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        lizefan.x@bytedance.com, yuanzhu@bytedance.com
-Subject: Re: [PATCH v2] page_ext: introduce boot parameter 'early_page_ext'
-Message-ID: <YwXczj8Dh0uI0EA9@dhcp22.suse.cz>
-References: <20220824065058.81051-1-lizhe.67@bytedance.com>
+        Wed, 24 Aug 2022 04:10:26 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D33E857C7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:10:24 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id bf22so16296735pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=9/eyKaPfuteIwHEnAMNI1rBDayjT1OLnm5QHb0/XnpM=;
+        b=cPxFHkHRNoi1QBAXIZO2yurpDn3w+3l34l7pBPurq8rCROhaUjmamifjcijzDGua/m
+         YRIcg6wAzqTPTsp320ufVQc0Kb8NnQtL8yx25moUm5SswdFzVU9kYjWoc5jiCIF3uM2r
+         3DyVOi1J8LAaxEvuVcahNa7DE7YdictCKevdI2TcRCvNDOUrIbX47U+KCKlVtPTWh9X6
+         F6N3hXERQBk9dAvoiTRiFLR02mSYLOKIvrv9rnQst77WFHPvwKGYFm7utnSPnackgNwb
+         LmYnZiPxuBIGZVPiSGBTcZINkXsugVVl2OktUjldWgZtHgmsxdOzfAyVEOkEYQRcr6GR
+         ZcqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=9/eyKaPfuteIwHEnAMNI1rBDayjT1OLnm5QHb0/XnpM=;
+        b=SIG0cpZPpxljk1OhdxYk9iecKv1N5JJ2bEB/qVVfRyR3Ngi1f2Gpf7ASAYvrg8nSXs
+         GwwJrxzpBz56Wsknu4zFQoO/MUCumIDXuJuAXzbAbanFKqzjKYWx4zmoyfNkRxyZRqEd
+         WtcuPEGwNCsgNt8N1bq+cP6GjQ79ClmuxLd5QSSxu5yQ6gngg9HsJaNO2VZNtVOPhkZZ
+         lEJ2AyIj0lR2a3FAxJo1w0wCk5hYOpyhRK7Ia+aBJvclsyx1hTDjJETogTZWjFPKcBHg
+         YjoWL40OCLHJ/SgkjNuR89TYYgMcH/a0/T25SNRpKJGmpNS8u4NXqIPf0nP9XmXZccxe
+         yJcQ==
+X-Gm-Message-State: ACgBeo1WjbyRuq9J9qHEuN83QeRJqoCs6KuZBPveMnK0QxjEaNg1Ct1I
+        yc7sCwkxuYykQHMw5H6bs0TqWPkg0XHquDn1oW4=
+X-Google-Smtp-Source: AA6agR7mOlL6iWB+csFRao6aJppvPwxrM+PSC03oib3/MwvPJvTec2P0Wk4/CsnZda2KXSiwddkoqNaUXpxd2g1w8jk=
+X-Received: by 2002:a17:90b:4a05:b0:1f5:62d5:4155 with SMTP id
+ kk5-20020a17090b4a0500b001f562d54155mr7417749pjb.6.1661328623952; Wed, 24 Aug
+ 2022 01:10:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824065058.81051-1-lizhe.67@bytedance.com>
+References: <20220824055637.10676-1-zhouzhouyi@gmail.com> <8d8bfc81-b584-20f4-65ae-d626f019cdf4@csgroup.eu>
+ <CAABZP2w7jw4OHXPDANNabaD1L1BbUG8ymu9zLGEt5xA8YgZ3ow@mail.gmail.com> <66f0770d-83ee-34cb-2dea-b8d957613c7f@csgroup.eu>
+In-Reply-To: <66f0770d-83ee-34cb-2dea-b8d957613c7f@csgroup.eu>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 24 Aug 2022 16:10:12 +0800
+Message-ID: <CAABZP2ybddBG1KVTemcg4PvHsObVfP7Z+UMUkMCpZSBjBwFKbg@mail.gmail.com>
+Subject: Re: [PATCH linux-next] mm: fix used but uninitialized variable
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 24-08-22 14:50:58, lizhe.67@bytedance.com wrote:
-[...]
-> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
-> index fabb2e1e087f..3e081cf8a1ec 100644
-> --- a/include/linux/page_ext.h
-> +++ b/include/linux/page_ext.h
-> @@ -38,19 +38,22 @@ struct page_ext {
->  
->  extern unsigned long page_ext_size;
->  extern void pgdat_page_ext_init(struct pglist_data *pgdat);
-> +#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> +extern bool early_page_ext_enable(void);
-> +#endif
->  
->  #ifdef CONFIG_SPARSEMEM
->  static inline void page_ext_init_flatmem(void)
->  {
->  }
-> -extern void page_ext_init(void);
-> +extern void page_ext_init(bool early);
->  static inline void page_ext_init_flatmem_late(void)
->  {
->  }
->  #else
->  extern void page_ext_init_flatmem(void);
->  extern void page_ext_init_flatmem_late(void);
-> -static inline void page_ext_init(void)
-> +static inline void page_ext_init(bool early)
->  {
->  }
->  #endif
-
-Why do you need to make it CONFIG_DEFERRED_STRUCT_PAGE_INIT
-dependant?
-
-[...]
-> diff --git a/init/main.c b/init/main.c
-> index 91642a4e69be..3760c0326525 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -849,6 +849,8 @@ static void __init mm_init(void)
->  	pgtable_init();
->  	debug_objects_mem_init();
->  	vmalloc_init();
-> +	/* Should be run after vmap initialization */
-> +	page_ext_init(true);
-
-you can just 
-	if (early_page_ext)
-		page_ext_init();
-
->  	/* Should be run before the first non-init thread is created */
->  	init_espfix_bsp();
->  	/* Should be run after espfix64 is set up. */
-> @@ -1606,7 +1608,7 @@ static noinline void __init kernel_init_freeable(void)
->  	padata_init();
->  	page_alloc_init_late();
->  	/* Initialize page ext after all struct pages are initialized. */
-> -	page_ext_init();
-> +	page_ext_init(false);
-
-	if (!early_page_ext)
-		page_ext_init();
->  
->  	do_basic_setup();
->  
-
-and without the ifdefery it all becomes much more simple.
--- 
-Michal Hocko
-SUSE Labs
+On Wed, Aug 24, 2022 at 2:49 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 24/08/2022 =C3=A0 08:41, Zhouyi Zhou a =C3=A9crit :
+> > Thank Christophe for reviewing my patch
+> >
+> > On Wed, Aug 24, 2022 at 2:10 PM Christophe Leroy
+> > <christophe.leroy@csgroup.eu> wrote:
+> >>
+> >>
+> >>
+> >> Le 24/08/2022 =C3=A0 07:56, Zhouyi Zhou a =C3=A9crit :
+> >>> In function walk_hugetlb_range, the local variable err may
+> >>> be used uninitialzed when:
+> >>> ops->pte_hole in side of "else if (ops->pte_hole)" is false.
+> >>>
+> >>> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> >>> ---
+> >>> Dear mm Developers:
+> >>>
+> >>> When I build kernel using "make CC=3Dclang-14"
+> >>> the compiler complains following:
+> >>>
+> >>> CC      mm/pagewalk.o
+> >>> mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whe=
+never 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+> >>>                   else if (ops->pte_hole)
+> >>>                            ^~~~~~~~~~~~~
+> >>> mm/pagewalk.c:321:7: note: uninitialized use occurs here
+> >>>                   if (err)
+> >>>                       ^~~
+> >>> mm/pagewalk.c:318:8: note: remove the 'if' if its condition is always=
+ true
+> >>>                   else if (ops->pte_hole)
+> >>>                        ^~~~~~~~~~~~~~~~~~
+> >>> mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence =
+this warning
+> >>>                   int err;
+> >>>                          ^
+> >>>                           =3D 0
+> >>> 1 error generated.
+> >>> make[1]: *** [scripts/Makefile.build:250: mm/pagewalk.o] Error 1
+> >>> make: *** [Makefile:2006: mm] Error 2
+> >>>
+> >>> I initialize that variable outside of the for loop because we can ass=
+ign 0 to err
+> >>> only once in this function.
+> >>>
+> >>> After my fix, I can compile the kernel.
+> >>>
+> >>> Many Thanks
+> >>> Zhouyi
+> >>> --
+> >>>    mm/pagewalk.c | 2 +-
+> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+> >>> index 54b2a1beeeb3..b6eb330e8ecd 100644
+> >>> --- a/mm/pagewalk.c
+> >>> +++ b/mm/pagewalk.c
+> >>> @@ -306,9 +306,9 @@ static int walk_hugetlb_range(unsigned long addr,=
+ unsigned long end,
+> >>>        unsigned long hmask =3D huge_page_mask(h);
+> >>>        unsigned long sz =3D huge_page_size(h);
+> >>>        const struct mm_walk_ops *ops =3D walk->ops;
+> >>> +     int err =3D 0;
+> >>
+> >> Why do you move it back outside of the for loop allthough it is
+> >> exclusively used inside the loop ?
+> > I move it outside of the for loop for performance consideration. Becaus=
+e
+> > if we initialize err inside, there will be an assignment statement
+> > every iteration.
+>
+> I think GCC is smart enough to do the assignment only when necessary,
+> maybe have a look at the generated assembly in order to confirm.
+Thank Christophe for your guidance, I disassembled the GCC generated
+code, it optimized away int err =3D 0 on both X86 and PowerPC platforms.
+The disassembled instructions are quite long, so I prefer not to paste
+in my email unless someone asks me to do so ;-)
+>
+> >>
+> >>>
+> >>>        for (; addr < end; addr =3D next) {
+> >>> -             int err;
+> >>
+> >> Another solution would be to add an explicit else, setting err =3D 0 i=
+n
+> >> the if/else if sequence.
+> > Thank Christophe for your valuable advice, I am going to prepare a 2nd =
+version
+>
+Thank Christophe for your reminder, I only subscribed to the RCU
+mailing list currently, so I submitted duplicated work.  I should be
+more devoted to the Linux community. I am sorry.
+> Don't spend too much time on that, there are already other people
+> looking at it, see
+> https://lore.kernel.org/linux-mm/20220823153055.2517764-1-nathan@kernel.o=
+rg/T/
+>
+> >
+> > Thanks
+> > Zhouyi
+Many thanks
+Zhouyi
+> >>
+> >>>                pte_t *pte =3D huge_pte_offset(walk->mm, addr & hmask,=
+ sz);
+> >>>
+> >>>                next =3D hugetlb_entry_end(h, addr, end);

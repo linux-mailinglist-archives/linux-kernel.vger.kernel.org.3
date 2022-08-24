@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AA059F3E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF3C59F3EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbiHXHEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 03:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+        id S234151AbiHXHGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 03:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiHXHES (ORCPT
+        with ESMTP id S230441AbiHXHGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 03:04:18 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6289291D2C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 00:04:17 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661324655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6tvwkfCP3dZ+ZrJ0eNLvzLAz7UpWICuxq3NpSBeqntU=;
-        b=JunrwnnLdI6piFW4nALnDaW6RyDeknYztEVEEq1kYXEcDlQDHTBFWTvP8zNva/nFBj7Jxq
-        QepF3Va2IjydiNXNph8l3Is8C6a5p7We4mMSMhRFhSpyNugZV2Ruqu96o5gAM6ppHqVPEU
-        o4s67SknytA+VlP/1MMoBlMJW2LD4U4=
+        Wed, 24 Aug 2022 03:06:16 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F697DF59;
+        Wed, 24 Aug 2022 00:06:13 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id p18so14886535plr.8;
+        Wed, 24 Aug 2022 00:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=XqGUICYz7Zw54SNfXIRQ78xuqfCvfxchv+yQyCaLiC0=;
+        b=Ccs5gIJlALVkZMYQRBKffJLoMSIU6S1D4P/0MPQNXrM89qOXLrwcHL9WYO/fr1ZUum
+         vhyRK0P6JnvfmdXrMl0ZfMeVAmqIi/IBtnP4VvdLg8L5kmfCbvMcJ9+vWeqo3/z2pO5M
+         /HRtLPcoycQubkoiu8IF/N8fll8EAeHfhU5vcs+wOwv+R17SoG0SKRFF56Av94y/waFK
+         r5cFpsTlyC0uwoPPLi3U8548BZSYs5NOTBpSjIn9Lg+mEFPfMSaUTkc3GkRfxAXDGyRn
+         p3XeCBPiJ7tiCSFYMDQe7yRn7KPM3/8yhxeI8ewVzbCGWWf0i7jjxzhyKYsTO2+vMrr2
+         YG2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=XqGUICYz7Zw54SNfXIRQ78xuqfCvfxchv+yQyCaLiC0=;
+        b=VAkO0s97YP//S3nyl+7t0JbUAsvigtBREiWAuevv+bHbQ4u7/kNVoIjEsdZOuhE+gW
+         HEXEMYqEgMQUY7SkYVVIuThRzkIuWFiu8V61wsSlzp8y+qM5dNEktx520+lEg0IFPe82
+         QD4PBiTKYpsdF4GPgOUcC34LKwlqpmYElEbq8exstFsJgKoRp8dsQbLTnM6wPbjwSbeG
+         tHaNmegTgya5OFLbARXrv90A9grEa0mdMCYLG4i0DgeQbwceHrNQv7HBYWdzYIoBGeS5
+         CXGfwWg8xc76Jz51sJUSLAfWyqDNlu0AG6ATNyovvY9YpxsEwZa8R2mYUG/NCtW+Tjhi
+         uKLw==
+X-Gm-Message-State: ACgBeo2cBEiB41XzJeLLMvef82JcvIwvQvuNJsZD9CSfJquUMnUxGzdO
+        42SAyTe2MWGfLeXsnADFa/k=
+X-Google-Smtp-Source: AA6agR4GfHBzh+i+b0rp8F5AiL44jnY65Qku9UKBluG9fvI984XvOigaasEIYwqOFly+ucyk+9AxHA==
+X-Received: by 2002:a17:90a:1b69:b0:1fa:f9de:fbcf with SMTP id q96-20020a17090a1b6900b001faf9defbcfmr6781656pjq.201.1661324773218;
+        Wed, 24 Aug 2022 00:06:13 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j1-20020a17090a7e8100b001fae01779c8sm583776pjl.7.2022.08.24.00.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 00:06:12 -0700 (PDT)
+From:   xu xin <cgel.zte@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     akpm@linux-foundation.org
+Cc:     bagasdotme@gmail.com, adobriyan@gmail.com, willy@infradead.org,
+        hughd@google.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        xu xin <xu.xin16@zte.com.cn>
+Subject: [PATCH v3 0/2] ksm: count allocated rmap_items and update documentation
+Date:   Wed, 24 Aug 2022 07:05:59 +0000
+Message-Id: <20220824070559.219977-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm: fix pgdat->kswap accessed concurrently
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <16cf184f-95ec-a763-0606-7423db8dcb0f@huawei.com>
-Date:   Wed, 24 Aug 2022 15:03:50 +0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2B0D6AB9-736E-40EB-996F-C0B6200EE749@linux.dev>
-References: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
- <1E87F09C-4904-49E2-B45C-C408DD5F6F62@linux.dev>
- <20220820135955.1520aa480fe04ab31d4fce1f@linux-foundation.org>
- <abe568d8-2d48-7e73-fe66-822915c0bd74@huawei.com>
- <16cf184f-95ec-a763-0606-7423db8dcb0f@huawei.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+KSM can save memory by merging identical pages, but also can consume
+additional memory, because it needs to generate rmap_items to save
+each scanned page's brief rmap information.
+
+To determine how beneficial the ksm-policy (like madvise), they are using
+brings, so we add a new interface /proc/<pid>/ksm_alloced_items for each
+process to indicate the total allocated ksm rmap_items of this process.
+
+The detailed description can be seen in the following patches' commit message.
+
+v2->v3:
+remake the patches based on the latest linux-next branch.
+
+v1->v2:
+Add documentation for the new item.
 
 
-> On Aug 23, 2022, at 22:47, Kefeng Wang <wangkefeng.wang@huawei.com> =
-wrote:
->=20
->=20
-> On 2022/8/23 9:07, Kefeng Wang wrote:
->>=20
->> On 2022/8/21 4:59, Andrew Morton wrote:
->>> On Sat, 20 Aug 2022 15:33:04 +0800 Muchun Song =
-<muchun.song@linux.dev> wrote:
->>>=20
->>>>=20
->>>>> +    if (IS_ERR(t)) {
->>>>>         /* failure at boot is fatal */
->>>>>         BUG_ON(system_state < SYSTEM_RUNNING);
->>>>>         pr_err("Failed to start kswapd on node %d\n", nid);
->>>>> -        pgdat->kswapd =3D NULL;
->>>>> +        WRITE_ONCE(pgdat->kswapd, NULL);
->>>>> +    } else {
->>>>> +        WRITE_ONCE(pgdat->kswapd, t);
->>>>>     }
->>>>> }
->>>> IIUC, the race is like the followings:
->>>>=20
->>>> CPU 0:                    CPU 1:
->>>>=20
->>>> kswapd_run()
->>>>     pgdat->kswapd =3D kthread_run()
->>>>     if (IS_ERR(pgdat->kswapd))
->>>>                     kswapd_is_running
->>>>                         // load pgdat->kswapd and it is NOT NULL.
->>>>         pgdat->kswapd =3D NULL
->>>>                         task_is_running(pgdat->kswapd); // NULL =
-pointer dereference
->>>>=20
->>> But don't we still have a bug?  Sure, kswapd_is_running() will no
->>> longer deref a null pointer.  But it now runs kswapd_is_running()
->>> against a task which has exited - a use-after-free?
->=20
-> The UAF is caused by race between kswapd_stop() and kcompactd(), =
-right?
->=20
-> so  kcompactd() should be stop before kswapd_stop() to avoid the above =
-UAF.
->=20
-> $ git diff
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index fad6d1f2262a..2fd45ccbce45 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1940,8 +1940,8 @@ int __ref offline_pages(unsigned long start_pfn, =
-unsigned long nr_pages,
->=20
->         node_states_clear_node(node, &arg);
->         if (arg.status_change_nid >=3D 0) {
-> -               kswapd_stop(node);
->                 kcompactd_stop(node);
-> +               kswapd_stop(node);
->         }
->=20
->         writeback_set_ratelimit();
 
-The changes make sense to me. Again:
+*** BLURB HERE ***
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+xu xin (2):
+  ksm: count allocated ksm rmap_items for each process
+  ksm: add profit monitoring documentation
 
-Thanks.
+ Documentation/admin-guide/mm/ksm.rst | 36 ++++++++++++++++++++++++++++
+ fs/proc/base.c                       | 15 ++++++++++++
+ include/linux/mm_types.h             |  5 ++++
+ mm/ksm.c                             |  2 ++
+ 4 files changed, 58 insertions(+)
 
->=20
->> we could add get/put_task_struct() to avoid the UAF=EF=BC=8C will =
-update=EF=BC=8C thanks.
->=20
-> sorry, the task refcount won't fix anything.
->=20
->=20
->> .
+
+base-commit: 68a00424bf69036970ced7930f9e4d709b4a6423
+-- 
+2.25.1
 

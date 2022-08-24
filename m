@@ -2,109 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0487A5A025E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936455A026B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbiHXT4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 15:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S239998AbiHXUDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbiHXT4r (ORCPT
+        with ESMTP id S233529AbiHXUC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 15:56:47 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234447C319
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 12:56:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=XfI2zVgSybuOFKHs2O2v3i5/yydH
-        RuHPYDuh8ZRgJUs=; b=Swji6jBeHIh+BLay/t9qq7wLzAC/ChVuYStJRqnbb/cA
-        5gK9jYsPk/78DkcmgW6d5/dIHHexz6Zt/vLFijqHvZv/P/VlZlgo5wFZQ6IhigE5
-        95s/clSwPPp1KPeAdT7qYOymeivsKP+G4IKpw/TayHSnAbEJZVoa08pqab/HuyU=
-Received: (qmail 2364728 invoked from network); 24 Aug 2022 21:56:40 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2022 21:56:40 +0200
-X-UD-Smtp-Session: l3s3148p1@P0dLFALn3r4gAwDtxwoDABxA2q3xYuRb
-Date:   Wed, 24 Aug 2022 21:56:39 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Duncan Sands <duncan.sands@free.fr>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH] usb: move from strlcpy with unused retval to strscpy
-Message-ID: <YwaCd6BkBMKMv6kj@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Duncan Sands <duncan.sands@free.fr>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-References: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
- <Yv9TWTnYc4T3tkqA@kroah.com>
+        Wed, 24 Aug 2022 16:02:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBA07C1F9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:02:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49E56617E0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 20:02:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92128C433C1;
+        Wed, 24 Aug 2022 20:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661371376;
+        bh=unxW9Qi6JH0z2onbNULdSwd+TxNQ1BVAlQ1Duh4IOWs=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=HgiJBW6GKNHD5d08CRjJ349ggpAY8WPUFTeIXQ6qNaH1Gr3Agc+CVX/L9AXWiwtF2
+         OPjevjrvmjoDpYyhmyqZAAPKj6q/Sl553GUHwsfR5CfYDnD1f1T78cIBs7I62UPE8v
+         CRvWqKnojLzIZy9PT+89ErltIvfwmZAnabF/zHg8DgfjBlx6g9ZaLWsKRaysDrzBjG
+         HK3ZWhE/LkNfdCa+vrTsu3VXoF7t72RC2AYzlshvs5aUHdXn4z+hYG8aamI/w65cFf
+         CoCbm4wCr8xsN8dwjlmWk3EdgDnvGS/BvEo/rd1SHCJaXfz/zPxOHFsDF2xav0vTMj
+         1lokFcnkEp90w==
+Date:   Wed, 24 Aug 2022 13:02:54 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 1/2] f2fs: flush pending checkpoints when freezing super
+Message-ID: <YwaD7mJpMLhEm5wd@google.com>
+References: <20220819231514.3609958-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v5ByJUCPpsV/XVJP"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yv9TWTnYc4T3tkqA@kroah.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220819231514.3609958-1-jaegeuk@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This avoids -EINVAL when trying to freeze f2fs.
 
---v5ByJUCPpsV/XVJP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
 
+ Change log from v1:
+  - do not check cprc->f2fs_issue_ckpt in f2fs_flush_ckpt_thread
 
->   =E2=9C=97 BADSIG: DKIM/sang-engineering.com
+ fs/f2fs/checkpoint.c | 24 ++++++++++++++++++------
+ fs/f2fs/f2fs.h       |  1 +
+ fs/f2fs/super.c      |  5 ++---
+ 3 files changed, 21 insertions(+), 9 deletions(-)
 
-Strange. When I save the message into a file and check locally, it seems
-OK. I also never received a similar report from other b4 users.
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 7de48e791920..7bf1feb5ac78 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -1893,15 +1893,27 @@ int f2fs_start_ckpt_thread(struct f2fs_sb_info *sbi)
+ void f2fs_stop_ckpt_thread(struct f2fs_sb_info *sbi)
+ {
+ 	struct ckpt_req_control *cprc = &sbi->cprc_info;
++	struct task_struct *ckpt_task;
+ 
+-	if (cprc->f2fs_issue_ckpt) {
+-		struct task_struct *ckpt_task = cprc->f2fs_issue_ckpt;
++	if (!cprc->f2fs_issue_ckpt)
++		return;
+ 
+-		cprc->f2fs_issue_ckpt = NULL;
+-		kthread_stop(ckpt_task);
++	ckpt_task = cprc->f2fs_issue_ckpt;
++	cprc->f2fs_issue_ckpt = NULL;
++	kthread_stop(ckpt_task);
+ 
+-		flush_remained_ckpt_reqs(sbi, NULL);
+-	}
++	f2fs_flush_ckpt_thread(sbi);
++}
++
++void f2fs_flush_ckpt_thread(struct f2fs_sb_info *sbi)
++{
++	struct ckpt_req_control *cprc = &sbi->cprc_info;
++
++	flush_remained_ckpt_reqs(sbi, NULL);
++
++	/* Let's wait for the previous dispatched checkpoint. */
++	while (atomic_read(&cprc->queued_ckpt))
++		io_schedule_timeout(DEFAULT_IO_TIMEOUT);
+ }
+ 
+ void f2fs_init_ckpt_req_control(struct f2fs_sb_info *sbi)
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 6770210aae70..088c3d1574b8 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3711,6 +3711,7 @@ static inline bool f2fs_need_rand_seg(struct f2fs_sb_info *sbi)
+  * checkpoint.c
+  */
+ void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io);
++void f2fs_flush_ckpt_thread(struct f2fs_sb_info *sbi);
+ struct page *f2fs_grab_meta_page(struct f2fs_sb_info *sbi, pgoff_t index);
+ struct page *f2fs_get_meta_page(struct f2fs_sb_info *sbi, pgoff_t index);
+ struct page *f2fs_get_meta_page_retry(struct f2fs_sb_info *sbi, pgoff_t index);
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index e910f0e39d76..4f2ff50b247c 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -1671,9 +1671,8 @@ static int f2fs_freeze(struct super_block *sb)
+ 	if (is_sbi_flag_set(F2FS_SB(sb), SBI_IS_DIRTY))
+ 		return -EINVAL;
+ 
+-	/* ensure no checkpoint required */
+-	if (!llist_empty(&F2FS_SB(sb)->cprc_info.issue_list))
+-		return -EINVAL;
++	/* Let's flush checkpoints and stop the thread. */
++	f2fs_flush_ckpt_thread(F2FS_SB(sb));
+ 
+ 	/* to avoid deadlock on f2fs_evict_inode->SB_FREEZE_FS */
+ 	set_sbi_flag(F2FS_SB(sb), SBI_IS_FREEZING);
+-- 
+2.37.1.595.g718a3a8f04-goog
 
-=3D=3D=3D
-
-$ cat message | dkimverify
-signature ok
-
-
---v5ByJUCPpsV/XVJP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMGgnMACgkQFA3kzBSg
-KbZ0cw/9FAwUMwXibHECPDn27lqmPu+9+JcL1bW+8klud63Gu9NuQelmHjOeQiW/
-mK08FGs/unPDv4AYzZjtuPcii4BjA2BKMDM3FR87lkTVYOf5JGRHKzz8OeqTuIsi
-Rtz/b+qS0vdzNQfByCCvjUSIp2aygxY5n28eOlLzNQsESO/hH8btVqUY9Kc3+i1b
-8fgwnkblqfk5rsR0bo2rf99gMbmxflfLL16EUPryAp6os1QtC7UV5IWfV4D4z965
-tycqvPES1/HxJO0+6KRjN7umL8qZoWDkWEbU0tyE/HWQCDia/RB/hqMlDOKgeO+a
-rOWRI4YoY2oJRxQ9wtGc/5662ASs05pcHAky/J7BALv96+PbopbiAK2PdByBAGgF
-3GfCwUvEAZRLb0ZRp8vaBRunwbNXBur3NSJWi/wDRQy4Rx0t75pvTIqb0plPlZVn
-WdNmYyMjV9Yw9gEe0ecbAh0UPIy8H7xMS+2sLTgOeGkRdc52EDYgzAoTu7rfTSSv
-K9SmrX7Asff8TDStQMhwgOaOK5bkXY//242EMnoIxyTgNULe89+M7oitNdnBDYj1
-J6EJKVEN+6ZOtdoPlJmi5nU0IAQ0q0sLdkXZ0rLEPp7P5hGHHnM0r7PhLKhpFOJg
-efRTKdLWHExE6jJMmAD2+As3Q6dNNzMySYXNvyr1iJ6yh40piPs=
-=qKuh
------END PGP SIGNATURE-----
-
---v5ByJUCPpsV/XVJP--

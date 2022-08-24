@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0786F5A00FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647A25A0101
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240642AbiHXSCU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 Aug 2022 14:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S240528AbiHXSCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240304AbiHXSBv (ORCPT
+        with ESMTP id S240304AbiHXSCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:01:51 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD7D4DF22;
-        Wed, 24 Aug 2022 11:00:39 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oQug4-0004qH-Mb; Wed, 24 Aug 2022 20:00:32 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, Conor.Dooley@microchip.com
-Cc:     daniel.lezcano@linaro.org, anup@brainfault.org,
-        Conor.Dooley@microchip.com, guoren@kernel.org,
-        sagar.kadam@sifive.com, jrtc27@jrtc27.com, ajones@ventanamicro.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        qemu-riscv@nongnu.org, robh@kernel.org
-Subject: Re: [PATCH v4 2/4] dt-bindings: interrupt-controller: sifive,plic: add legacy riscv compatible
-Date:   Wed, 24 Aug 2022 20:00:31 +0200
-Message-ID: <7260367.4vTCxPXJkl@diego>
-In-Reply-To: <95fe8df7-581e-f7ec-be1f-1c6e06cb30a4@microchip.com>
-References: <20220823183319.3314940-1-mail@conchuod.ie> <3948407.AJdgDx1Vlc@diego> <95fe8df7-581e-f7ec-be1f-1c6e06cb30a4@microchip.com>
+        Wed, 24 Aug 2022 14:02:22 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01A813CCD
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:01:28 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3378303138bso440845637b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=DGuV+oKzfmFfApe8NxA2paN6tKmjViwBVg9JpKKUVew=;
+        b=aK7CLkv5P2RcCIQ4lBOyr8TSYIWgo/S7IAXUY+CksZwIzy0GAUD2JwRUYl1mFSlNy1
+         AlZYZ+MSnfLOvbuZkVTyk5hYpkNwyfw7XjHdVZIEBzoniE+PdMWI3Dkur8HhBI1VH++3
+         zG2zC0bKMzKEiqxXi/wzfVrA6uOVxHU694jVkzxalWH/7oz6JhUVaNQgLaUVbsF4Ja+t
+         m3unpH32vONLlCtLiTtPrym5TcCuV3jdyoTEvGYk3Tv3xyUaF9kJPtsQZ62M2XcawYY2
+         /Xq7h71eB0GYT/81B4VArgq0LRAgwploebcVMZfOKDuGJ6M4fYqAWEeqcb1m1QMMjszm
+         Wn2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=DGuV+oKzfmFfApe8NxA2paN6tKmjViwBVg9JpKKUVew=;
+        b=C4dnNQwAjN0H/oNLfSwS1xI2ObpSWNLp56bUDfgMyzmDTCAvdr76BBnpsbD5x58wC9
+         D2qb92pf/N1ShQHqoT/jSAjbkUHe2LRyNulcm8qVOZ54LbSH5PKFfzEMSJ/alXQ590C6
+         OyJGk3qZHnPEEu4VufXl+lbtDiFvM4+r1j5//+wqq/2dE/hemPfh98hi8Q4mU4jDi5Rh
+         fYKPB11p6VhND1K9QSdPdTA2hSSvb53WyVeKI+mbCFdOeFA2asid0Ug9RWSASW3bT/4C
+         MJ3x3npl1l2VfcDZxkQpqdHcab2GyTzaVGKH75ECXXuoQfcGHV4hiYadIMyyZOGpiEdw
+         r2bQ==
+X-Gm-Message-State: ACgBeo0jD0rwdACipWgSqvmtqn9PMPxzLeuVY0JAATpbV0tX/eYoL5oG
+        Eo7CZAkdejgGMh7V2K7NbWMUr1/v6PzUyrJTPAe4uA==
+X-Google-Smtp-Source: AA6agR4krDxQhq5Y+22wT3eQhzuO1h8jJucGBjy3TIVyLauaMRohf/vMydVZsogFXj4WyTvzKkerLZ1BkZP/rZzLJXI=
+X-Received: by 2002:a81:6f43:0:b0:335:9e7e:ad25 with SMTP id
+ k64-20020a816f43000000b003359e7ead25mr347464ywc.518.1661364087931; Wed, 24
+ Aug 2022 11:01:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220307213356.2797205-1-brijesh.singh@amd.com> <20220307213356.2797205-44-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-44-brijesh.singh@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Wed, 24 Aug 2022 11:01:16 -0700
+Message-ID: <CAAH4kHYm1BhjJXUMH12kzR0Xun=fUTj-3Hy6At0XR_09Bf0Ccw@mail.gmail.com>
+Subject: Re: [PATCH v12 43/46] virt: Add SEV-SNP guest driver
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:X86 KVM CPUs" <kvm@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com,
+        Marc Orr <marcorr@google.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 24. August 2022, 19:55:17 CEST schrieb Conor.Dooley@microchip.com:
-> On 24/08/2022 18:44, Heiko Stübner wrote:
-> > Am Dienstag, 23. August 2022, 20:33:18 CEST schrieb Conor Dooley:
-> >> From: Conor Dooley <conor.dooley@microchip.com>
-> >>
-> >> While "real" hardware might not use the compatible string "riscv,plic0"
-> >> it is present in the driver & QEMU uses it for automatically generated
-> >> virt machine dtbs. To avoid dt-validate problems with QEMU produced
-> >> dtbs, such as the following, add it to the binding.
-> >>
-> >> riscv-virt.dtb: plic@c000000: compatible: 'oneOf' conditional failed, one must be fixed:
-> >>         'sifive,plic-1.0.0' is not one of ['sifive,fu540-c000-plic', 'starfive,jh7100-plic', 'canaan,k210-plic']
-> >>         'sifive,plic-1.0.0' is not one of ['allwinner,sun20i-d1-plic']
-> >>         'sifive,plic-1.0.0' was expected
-> >>         'thead,c900-plic' was expected
-> >> riscv-virt.dtb: plic@c000000: '#address-cells' is a required property
-> >>
-> >> Reported-by: Rob Herring <robh@kernel.org>
-> >> Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> >> ---
-> >>  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml     | 5 +++++
-> >>  1 file changed, 5 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> >> index 92e0f8c3eff2..99e01f4d0a69 100644
-> >> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> >> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> >> @@ -66,6 +66,11 @@ properties:
-> >>            - enum:
-> >>                - allwinner,sun20i-d1-plic
-> >>            - const: thead,c900-plic
-> >> +      - items:
-> >> +          - const: sifive,plic-1.0.0
-> >> +          - const: riscv,plic0
-> >> +        deprecated: true
-> > 
-> > hmm, when setting this to deprecated, does this mean qemu was changed
-> > to not use that compatible anymore?
-> > 
-> > I.e. reading deprecated I'd assume that this is kept around for old qemu builds?
-> 
-> I did not make that change to QEMU. From v1 [0]:
-> 
-> Rob:
-> > Conor:
-> >> In arm's virt.c they use the generic gic compatible & I don't see any
-> >> evidence of other archs using "qemu,foo" bindings. I suppose there's
-> >> always the option of just removing the "riscv,plic0" from the riscv's
-> >> virt.c
-> >
-> > I think we're pretty much stuck with what's in use already.
-> 
-> > I'm on the fence whether to mark it deprecated though if there is no 
-> > plan to 'fix' it. Doesn't really matter until the tools can selectively 
-> > remove deprecated properties from validation.
-> 
-> My interpretation was "do not use this compatible in any new devicetrees".
-> 
-> I don't really have any strong feelings here. Maybe the description is
-> sufficient?
+Apologies for the necropost, but I noticed strange behavior testing my
+own Golang-based wrapper around the /dev/sev-guest driver.
 
-that makes sense then. Existing users can keep using it, but no-one should
-create new usages of it, so this looks good then
+> +
+> +static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
+> +                               u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+> +                               u32 resp_sz, __u64 *fw_err)
+> +{
+> +       unsigned long err;
+> +       u64 seqno;
+> +       int rc;
+> +
+> +       /* Get message sequence and verify that its a non-zero */
+> +       seqno = snp_get_msg_seqno(snp_dev);
+> +       if (!seqno)
+> +               return -EIO;
+> +
+> +       memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
+> +
+> +       /* Encrypt the userspace provided payload */
+> +       rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
+> +       if (rc)
+> +               return rc;
+> +
+> +       /* Call firmware to process the request */
+> +       rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
+> +       if (fw_err)
+> +               *fw_err = err;
+> +
+> +       if (rc)
+> +               return rc;
+> +
 
-Heiko
+The fw_err is written back regardless of rc, so since err is
+uninitialized, you can end up with garbage written back. I've worked
+around this by only caring about fw_err when the result is -EIO, but
+thought that I should bring this up.
 
-
+--
+-Dionna Glaze, PhD (she/her)

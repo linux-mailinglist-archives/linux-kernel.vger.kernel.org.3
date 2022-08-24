@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB77C5A0029
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDF05A002F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239940AbiHXROb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S239996AbiHXRPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239953AbiHXROZ (ORCPT
+        with ESMTP id S240189AbiHXRPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:14:25 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987287C185;
-        Wed, 24 Aug 2022 10:14:24 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id o198so5180208vko.4;
-        Wed, 24 Aug 2022 10:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=N5GzBDlpn4EAy1yExQjv95F81OM6b4JNo1+K78vn1fE=;
-        b=EjvZ10hXWj/xCJOyKmuLlZ7knk21Gxk4pGI1Z/MFTvr8KSoVkMcnmTy4496TbPYhie
-         Xy4EwDWylzaF9wrp6g5eD5nxha+0wZQIQLaO7y8b76i5gduHQFOQimnwTMQBr2FPvQvC
-         HD/j8LigLyudys9yS6O2HsGCCGJJE3Ai8Qdsq1NhOqbL4xh189bpXLf+HoxAzEm8YM8C
-         5IJB2S3GAug5DBiPnUXdcOMdt029tXTEtz1WvMgcNo7JdX1EZmFCVVQrytAj82A/SpM0
-         OkpbtLcPrmTgyMxR9EoBUW42JqEbKXusmgAGqb1X8wznAo8p2sADZLXG3PYxq9KDDIBf
-         Ocmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=N5GzBDlpn4EAy1yExQjv95F81OM6b4JNo1+K78vn1fE=;
-        b=yjQ411Vjpur1J9tXyVXIcWlLJFloNFVpOBBrF28hN7X1vCQcdNHAuRyV3wyrjvDm/S
-         KF31mr3iCgRYCebD/pauBSIixJ+PysNCRDtdB6K9EkRIx/D2bAernS63qzJ+17k1r/3R
-         O8hkXXUIFnrTwuAuaY8b4G3CSU0VWxyhg671t4O9cRmT2dETgsNT7c6bsn5IpwhfmU5y
-         VfKdMGIpW6pBI7qVgpf9ZaGO1RBxfXdb2v3dgTn84Y/ENBFtCweknbJBXS8A4EZL3j2W
-         wcQxu1FXLLR8CE0gnqc7BhueVVR1L8nx7+A7dFlsk7S6mE6g6UbdBUDjqWfnoS1KDhoD
-         2cFg==
-X-Gm-Message-State: ACgBeo22xG2yrJPIx7F+bqYFbfafxtQ697ClHDQuOh+4CRoQ7SFqfpJV
-        OlqrRqyNRzLk3XL3N59MpRTwELO5iJWJC/KMqg7TBSEE9cA=
-X-Google-Smtp-Source: AA6agR7ZpnpkqgwFqvHOtTclzdI7w8u9Oj5tTxrFqxR6dxTykEVNr6HgQA4A3O9nVneqArcSBJDRrpUey46P9yRfJbg=
-X-Received: by 2002:a1f:5c42:0:b0:382:3eac:56f7 with SMTP id
- q63-20020a1f5c42000000b003823eac56f7mr11965442vkb.24.1661361263464; Wed, 24
- Aug 2022 10:14:23 -0700 (PDT)
+        Wed, 24 Aug 2022 13:15:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF031DA5E;
+        Wed, 24 Aug 2022 10:15:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD5AAB82543;
+        Wed, 24 Aug 2022 17:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14508C433D6;
+        Wed, 24 Aug 2022 17:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661361341;
+        bh=k9o2Q3E5+a/u89eGTTu8XHPHlJiTDB5A9FmQy5ppO5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VAy+gShcDYcWO9hFSgnkNy5y3RLT6XAjxEmrWSiIPnKcyjLlGYZUUH9T0pyCXcj+w
+         k/HlDAzvheWoSms85NAW7NOJ+QzDlXsRYPARMWxRKFJZYlJetu0iIolqgLsn7wxIIj
+         EMLzbJj3+XF4471lOZ8qjbrwnZAez1UiNKlgbC4LkgbYvfZG75VqPXJt4wZR+xv32i
+         Jhi3jqy8TBZ18+ZY4QqJE2R4jUvGMZExpavr+mFdcrE/z+GfkA6S5JAbEzg6w5lYuU
+         4E0nxg8vowXYOIlrZ/BUEcbI153x6h+rTf/kJZX0UmknchVjVGa4z1QwFYRdhzDf6N
+         0Hv+8uERlxueA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 36C07404A1; Wed, 24 Aug 2022 14:15:36 -0300 (-03)
+Date:   Wed, 24 Aug 2022 14:15:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alibek Omarov <a1ba.omarov@gmail.com>,
+        Kornilios Kourtis <kornilios@isovalent.com>,
+        Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
+Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
+ entries)
+Message-ID: <YwZcuCj49wMkr18W@kernel.org>
+References: <YwQRKkmWqsf/Du6A@kernel.org>
+ <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 24 Aug 2022 12:14:12 -0500
-Message-ID: <CAH2r5muO1OkOV0jjJo89Zpvj43u_X95smuujg66-emQFgSXfgQ@mail.gmail.com>
-Subject: "Fixes:" vs. "Cc: stable ..."
-To:     Stable <stable@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,11 +63,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do changesets that already included the "Fixes:" tag in the commit
-description also need to include the "Cc: stable@vger.kernel.org" in
-order to be included in stable?
+Em Wed, Aug 24, 2022 at 09:24:49AM -0700, Nathan Chancellor escreveu:
+> Hi Arnaldo,
+> 
+> On Mon, Aug 22, 2022 at 08:28:42PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Hi,
+> >   
+> > 	The v1.24 release of pahole and its friends is out, with faster
+> > BTF generation by parallelizing the encoding part in addition to the
+> > previoulsy parallelized DWARF loading, support for 64-bit BTF enumeration
+> > entries, signed BTF encoding of 'char', exclude/select DWARF loading
+> > based on the language that generated the objects, etc.
+> 
+> <snip>
+> 
+> > - Introduce --lang and --lang_exclude to specify the language the
+> >   DWARF compile units were originated from to use or filter.
+> 
+> This appears to break building pahole with older versions of libdw (?).
+> I build container images with older versions of compilers for easy
+> matrix testing and my gcc-5 and gcc-6 images (based off Ubuntu Xenial
+> and Debian Stretch respectively) fail to build.
+
+I do it for perf, should have done it for pahole :-\
+
+So I'll have to come up with a patch that checks if those are defined
+and if not, define it :-\ Ooops, its an enumeration :-\ I'll have to
+check how to fix this, thanks for the report!
+
+Will rebuild it with the containers I have to see if there are other
+cases.
+
+- Arnaldo
+ 
+>     $ podman run --rm -ti -v $TMP_FOLDER/dwarves-1.24.tar.xz:/tmp/dwarves-1.24.tar.xz:ro docker.io/ubuntu:xenial
+>     # apt update
+>     # apt install build-essential cmake libdw-dev libelf-dev xz-utils zlib1g-dev
+>     # cd $(mktemp -d)
+>     # tar -xJf /tmp/dwarves-1.24.tar.xz
+>     # mkdir build
+>     # cd build
+>     # cmake -DBUILD_SHARED_LIBS=OFF -D__LIB=lib ../dwarves-1.24
+>     # make -j$(nproc)
+>     ...
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c: In function 'lang__str2int':
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
+>       [DW_LANG_BLISS]   = "bliss",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: error: 'DW_LANG_C_plus_plus_03' undeclared (first use in this function)
+>       [DW_LANG_C_plus_plus_03] = "c++03",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: error: 'DW_LANG_Dylan' undeclared (first use in this function)
+>       [DW_LANG_Dylan]   = "dylan",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: error: 'DW_LANG_Julia' undeclared (first use in this function)
+>       [DW_LANG_Julia]   = "julia",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: error: 'DW_LANG_Modula3' undeclared (first use in this function)
+>       [DW_LANG_Modula3]  = "modula3",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: error: 'DW_LANG_OCaml' undeclared (first use in this function)
+>       [DW_LANG_OCaml]   = "ocaml",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: error: 'DW_LANG_OpenCL' undeclared (first use in this function)
+>       [DW_LANG_OpenCL]  = "opencl",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: error: 'DW_LANG_PLI' undeclared (first use in this function)
+>       [DW_LANG_PLI]   = "pli",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: error: 'DW_LANG_RenderScript' undeclared (first use in this function)
+>       [DW_LANG_RenderScript]  = "renderscript",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: error: 'DW_LANG_Rust' undeclared (first use in this function)
+>       [DW_LANG_Rust]   = "rust",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: note: (near initialization for 'languages')
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: error: 'DW_LANG_Swift' undeclared (first use in this function)
+>       [DW_LANG_Swift]   = "swift",
+>        ^
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: error: array index in initializer not of integer type
+>     /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: note: (near initialization for 'languages')
+>     CMakeFiles/dwarves.dir/build.make:62: recipe for target 'CMakeFiles/dwarves.dir/dwarves.c.o' failed
+>     ...
+> 
+> If there is any additional information I can provide or patches I can
+> test, please let me know!
+> 
+> Cheers,
+> Nathan
 
 -- 
-Thanks,
 
-Steve
+- Arnaldo

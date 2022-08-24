@@ -2,206 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C45D5A03A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4765A03B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240861AbiHXWEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 18:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        id S240892AbiHXWGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 18:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiHXWEL (ORCPT
+        with ESMTP id S232122AbiHXWGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:04:11 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102F477576;
-        Wed, 24 Aug 2022 15:04:07 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id n7so17922642ejh.2;
-        Wed, 24 Aug 2022 15:04:06 -0700 (PDT)
+        Wed, 24 Aug 2022 18:06:08 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323297CB53
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:06:06 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id p185so3347810pfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:06:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Tvo4KEWB4BfarSnzwYPGZG4zYGwhj32j+2JFcJaFoGA=;
-        b=G/ilqra0+ovuT46s5RdJ3m/DQbXsjTUKnXiiNflrpsTbr0X2WP1W5p5SPRPt4KPOOo
-         gYQnH9cHNuSvDSmPRNJTsXOMS5oSv6ea8ZUJhdMYtTlq/gSrUF5EnewoudZVltDpi/RY
-         gBDlsYV8EpIPUJJKlP4ij+hl+PxA5rjUMF3I/odN83cMUbcWK1ElpjOzLbZFWpbhmbun
-         ukTmBASCj+i0ZPsr75B6/OsTHykbnKdvgy+3YZwvdRei2PEa5tLNpKck+JsJwPllxfu5
-         qOpz8ENbnCmNLXuGWp1UTxOWOGxpdB4QW1Lu+0y05Wwrk15ydYTy3h0X6hu+kb3tfECp
-         mQbg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=nJk22XJ7wOcvuCzoRyIGvhgc9X2oEpNpAmvbdRYC9rU=;
+        b=tUTOy/np2IJItYhuVGMMnsrVV+ydgrkxKJ+hYrUWTxm8CN+LahtWN5HL5rBpOxN1Ll
+         HaSnQBQJoGwN/gJUgT53N+Sb7uHbUmEO/A1JtN7AdFlLyLSBsAGc/pQb/p4j0mLzC6wM
+         8XTxdBUnMNqZvR46FJNZQb4s4rhCuTBLox4PkBdTgDZayH7cCle+3f5Xs9UdZwLzRy8U
+         qIOIjtPp24yLO6PZWUCpafE8jlzslVX/sYBHu1NBOtHHeu6v/qp9sdmVQTw5JK4/HavL
+         fTwLARDDsxC9bUo6LKINSnvapDHbN+ubIqs/NI4dqQ3opt4imjH19+mKz6dJLVL1xx/G
+         wkDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Tvo4KEWB4BfarSnzwYPGZG4zYGwhj32j+2JFcJaFoGA=;
-        b=QMDwMX95HvQHFJ91YPc6sPQyH0SvZiSJYGN4vKW0YyZHXYW7jg/YGtp1/2Wi/IUkAr
-         SGfmELXFxKJJKeCCi5KXTxL5MYRUYTQjeufJi1uid8czmZdSG+/Eeqx/bztM1oxywHxZ
-         fUNxuKH57gVxX1sJPLnbEVUPnLyugLuI2BuRPXHVpZKOeN5oyHISFbzm3VWdoERI/K5+
-         M8a7fy6PqZA6PsdvYJSldAaTiqXIBi6Jguwicmx7JiuBoSzc7DytoYuKXKzAdeeeOXqt
-         oTPRUNKHzm7fWY3820h9ucEeV7N2rExCPVZRclfpC2QzDzWZmK2y/Vg5mYibhPnGM9m/
-         C4Wg==
-X-Gm-Message-State: ACgBeo3uyi4cS/jxmm5sCZty53QR7IqaqPKmXXRc0tvN37v+LJOY4RZu
-        FdZyJEqxPUAx5A1zif88Xnzdrz3SUUurCE7zHgA=
-X-Google-Smtp-Source: AA6agR5CbOOqDDFFpDZjt7mwWG0f9rU+1+4u9f8xbl3T5fQ2MTP1r/13FInffVcHgYty4rPAOzbKBUxZoYjJ1CX7obg=
-X-Received: by 2002:a17:907:7e9e:b0:73d:ae12:5f11 with SMTP id
- qb30-20020a1709077e9e00b0073dae125f11mr630572ejc.176.1661378645504; Wed, 24
- Aug 2022 15:04:05 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=nJk22XJ7wOcvuCzoRyIGvhgc9X2oEpNpAmvbdRYC9rU=;
+        b=vCPzT5+YqB5nxVSZPZoAvVSK8NuN/Ap54gzMNZQvV69x7+DFsrVQRTbbEzNu4LILFr
+         T7BdLPNpGGswh0991VHvnuUEBXvDzj7ocKxh6mKm17SKGf0kroU+0mICQun+//DtxTBF
+         0P20ZDk1U3iyW3cw2lNGePcKkTSJQ9COSOhVHXiMxLpMfFie3Sq5a5bT7S7K/mMDjcDg
+         ArCUr+0qf0ZuRFY5Av/X8Zbyi4BW6nXdQxEYn/eAeny9C9XDb5wh80drx2wbdgbXBT3M
+         Bvz8+2pAWf7zlY1XeBwn4vTIfyE8zRBduBVdRFr+OVuhk7SD+pAL/7uwXvlc58K0vt6y
+         ovPw==
+X-Gm-Message-State: ACgBeo3HTOm+ehG+whs1eufVhcQZE4RPd8o8tfEo9DJqh1uT/Hs97wzM
+        J33zBWlh8ba5Mc5FiGys8ROFpQ==
+X-Google-Smtp-Source: AA6agR4nCg320FC5ogznqsjn0vPK5nuwzVFzRHaOV7SdrQv7eMc2KV4zVEPpadFc/buFs9qVKWflIA==
+X-Received: by 2002:a65:4cc7:0:b0:41a:4df2:4839 with SMTP id n7-20020a654cc7000000b0041a4df24839mr768027pgt.37.1661378765493;
+        Wed, 24 Aug 2022 15:06:05 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170902e5c900b00172fad607b3sm5234217plf.207.2022.08.24.15.06.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 15:06:05 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 22:06:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 07/13] KVM: x86: emulator/smm: add structs for KVM's
+ smram layout
+Message-ID: <YwagyQu5X8N/w8UV@google.com>
+References: <20220803155011.43721-1-mlevitsk@redhat.com>
+ <20220803155011.43721-8-mlevitsk@redhat.com>
 MIME-Version: 1.0
-References: <20220818221212.464487-1-void@manifault.com> <20220818221212.464487-5-void@manifault.com>
-In-Reply-To: <20220818221212.464487-5-void@manifault.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 24 Aug 2022 15:03:54 -0700
-Message-ID: <CAEf4Bzbj0ACUmZqQLhRR5DvEX9Zphqz5UwBWdkTdXfKqxWM0mQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] selftests/bpf: Add selftests validating the user ringbuf
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803155011.43721-8-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 3:12 PM David Vernet <void@manifault.com> wrote:
->
-> This change includes selftests that validate the expected behavior and
-> APIs of the new BPF_MAP_TYPE_USER_RINGBUF map type.
->
-> Signed-off-by: David Vernet <void@manifault.com>
+On Wed, Aug 03, 2022, Maxim Levitsky wrote:
+> Those structs will be used to read/write the smram state image.
+> 
+> Also document the differences between KVM's SMRAM layout and SMRAM
+> layout that is used by real Intel/AMD cpus.
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 > ---
->  .../selftests/bpf/prog_tests/user_ringbuf.c   | 755 ++++++++++++++++++
->  .../selftests/bpf/progs/user_ringbuf_fail.c   | 177 ++++
->  .../bpf/progs/user_ringbuf_success.c          | 220 +++++
->  .../testing/selftests/bpf/test_user_ringbuf.h |  35 +
->  4 files changed, 1187 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
->  create mode 100644 tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
->  create mode 100644 tools/testing/selftests/bpf/progs/user_ringbuf_success.c
->  create mode 100644 tools/testing/selftests/bpf/test_user_ringbuf.h
->
-
-[...]
-
-> +       /* Write some number of samples to the ring buffer. */
-> +       for (i = 0; i < num_samples; i++) {
-> +               struct sample *entry;
-> +               int read;
+>  arch/x86/kvm/emulate.c     |   6 +
+>  arch/x86/kvm/kvm_emulate.h | 218 +++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/x86.c         |   1 +
+>  3 files changed, 225 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 18551611cb13af..55d9328e6074a2 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -5864,3 +5864,9 @@ bool emulator_can_use_gpa(struct x86_emulate_ctxt *ctxt)
+>  
+>  	return true;
+>  }
 > +
-> +               entry = user_ring_buffer__reserve(ringbuf, sizeof(*entry));
-> +               if (!entry) {
-> +                       err = -errno;
-> +                       goto done;
-> +               }
-> +
-> +               entry->pid = getpid();
-> +               entry->seq = i;
-> +               entry->value = i * i;
-> +
-> +               read = snprintf(entry->comm, sizeof(entry->comm), "%u", i);
-> +               if (read <= 0) {
-> +                       /* Only invoke CHECK on the error path to avoid spamming
-> +                        * logs with mostly success messages.
-> +                        */
-> +                       CHECK(read <= 0, "snprintf_comm",
-> +                             "Failed to write index %d to comm\n", i);
-
-please, no CHECK() use in new tests, we have ASSERT_xxx() covering all
-common cases
-
-> +                       err = read;
-> +                       user_ring_buffer__discard(ringbuf, entry);
-> +                       goto done;
-> +               }
-> +
-> +               user_ring_buffer__submit(ringbuf, entry);
-> +       }
-> +
-
-[...]
-
-> +static long
-> +bad_access1(struct bpf_dynptr *dynptr, void *context)
+> +void  __init kvm_emulator_init(void)
 > +{
-> +       const struct sample *sample;
+> +	__check_smram32_offsets();
+> +	__check_smram64_offsets();
+> +}
+
+...
+
+> +static inline void __check_smram64_offsets(void)
+
+Why double underscores?  Same question for the macros.
+
+> +{
+> +#define __CHECK_SMRAM64_OFFSET(field, offset) \
+> +	ASSERT_STRUCT_OFFSET(struct kvm_smram_state_64, field, offset - 0xFE00)
 > +
-> +       sample = bpf_dynptr_data(dynptr - 1, 0, sizeof(*sample));
-> +       bpf_printk("Was able to pass bad pointer %lx\n", (__u64)dynptr - 1);
-> +
-> +       return 0;
+> +	__CHECK_SMRAM64_OFFSET(es,			0xFE00);
+> +	__CHECK_SMRAM64_OFFSET(cs,			0xFE10);
+> +	__CHECK_SMRAM64_OFFSET(ss,			0xFE20);
+> +	__CHECK_SMRAM64_OFFSET(ds,			0xFE30);
+> +	__CHECK_SMRAM64_OFFSET(fs,			0xFE40);
+> +	__CHECK_SMRAM64_OFFSET(gs,			0xFE50);
+> +	__CHECK_SMRAM64_OFFSET(gdtr,			0xFE60);
+> +	__CHECK_SMRAM64_OFFSET(ldtr,			0xFE70);
+> +	__CHECK_SMRAM64_OFFSET(idtr,			0xFE80);
+> +	__CHECK_SMRAM64_OFFSET(tr,			0xFE90);
+> +	__CHECK_SMRAM64_OFFSET(io_restart_rip,		0xFEA0);
+> +	__CHECK_SMRAM64_OFFSET(io_restart_rcx,		0xFEA8);
+> +	__CHECK_SMRAM64_OFFSET(io_restart_rsi,		0xFEB0);
+> +	__CHECK_SMRAM64_OFFSET(io_restart_rdi,		0xFEB8);
+> +	__CHECK_SMRAM64_OFFSET(io_restart_dword,	0xFEC0);
+> +	__CHECK_SMRAM64_OFFSET(reserved1,		0xFEC4);
+> +	__CHECK_SMRAM64_OFFSET(io_inst_restart,		0xFEC8);
+> +	__CHECK_SMRAM64_OFFSET(auto_hlt_restart,	0xFEC9);
+> +	__CHECK_SMRAM64_OFFSET(reserved2,		0xFECA);
+> +	__CHECK_SMRAM64_OFFSET(efer,			0xFED0);
+> +	__CHECK_SMRAM64_OFFSET(svm_guest_flag,		0xFED8);
+> +	__CHECK_SMRAM64_OFFSET(svm_guest_vmcb_gpa,	0xFEE0);
+> +	__CHECK_SMRAM64_OFFSET(svm_guest_virtual_int,	0xFEE8);
+> +	__CHECK_SMRAM64_OFFSET(reserved3,		0xFEF0);
+> +	__CHECK_SMRAM64_OFFSET(smm_revison,		0xFEFC);
+> +	__CHECK_SMRAM64_OFFSET(smbase,			0xFF00);
+> +	__CHECK_SMRAM64_OFFSET(reserved4,		0xFF04);
+> +	__CHECK_SMRAM64_OFFSET(ssp,			0xFF18);
+> +	__CHECK_SMRAM64_OFFSET(svm_guest_pat,		0xFF20);
+> +	__CHECK_SMRAM64_OFFSET(svm_host_efer,		0xFF28);
+> +	__CHECK_SMRAM64_OFFSET(svm_host_cr4,		0xFF30);
+> +	__CHECK_SMRAM64_OFFSET(svm_host_cr3,		0xFF38);
+> +	__CHECK_SMRAM64_OFFSET(svm_host_cr0,		0xFF40);
+> +	__CHECK_SMRAM64_OFFSET(cr4,			0xFF48);
+> +	__CHECK_SMRAM64_OFFSET(cr3,			0xFF50);
+> +	__CHECK_SMRAM64_OFFSET(cr0,			0xFF58);
+> +	__CHECK_SMRAM64_OFFSET(dr7,			0xFF60);
+> +	__CHECK_SMRAM64_OFFSET(dr6,			0xFF68);
+> +	__CHECK_SMRAM64_OFFSET(rflags,			0xFF70);
+> +	__CHECK_SMRAM64_OFFSET(rip,			0xFF78);
+> +	__CHECK_SMRAM64_OFFSET(gprs,			0xFF80);
+> +#undef __CHECK_SMRAM64_OFFSET
 > +}
 > +
-> +/* A callback that accesses a dynptr in a bpf_user_ringbuf_drain callback should
-> + * not be able to read before the pointer.
-> + */
-> +SEC("?raw_tp/sys_nanosleep")
-
-there is no sys_nanosleep raw tracepoint, use SEC("?raw_tp") to
-specify type, that's enough
-
-> +int user_ringbuf_callback_bad_access1(void *ctx)
-> +{
-> +       bpf_user_ringbuf_drain(&user_ringbuf, bad_access1, NULL, 0);
-> +
-> +       return 0;
-> +}
-> +
-
-[...]
-
-> diff --git a/tools/testing/selftests/bpf/test_user_ringbuf.h b/tools/testing/selftests/bpf/test_user_ringbuf.h
-> new file mode 100644
-> index 000000000000..1643b4d59ba7
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/test_user_ringbuf.h
-
-nit: I'd probably put it under progs/test_user_ringbuf.h so it's
-closer to BPF source code. As it is right now, it's neither near
-user-space part of tests nor near BPF part.
-
-> @@ -0,0 +1,35 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-> +
-> +#ifndef _TEST_USER_RINGBUF_H
-> +#define _TEST_USER_RINGBUF_H
-> +
-> +#define TEST_OP_64 4
-> +#define TEST_OP_32 2
-> +
-> +enum test_msg_op {
-> +       TEST_MSG_OP_INC64,
-> +       TEST_MSG_OP_INC32,
-> +       TEST_MSG_OP_MUL64,
-> +       TEST_MSG_OP_MUL32,
-> +
-> +       // Must come last.
-> +       TEST_MSG_OP_NUM_OPS,
+> +union kvm_smram {
+> +	struct kvm_smram_state_64 smram64;
+> +	struct kvm_smram_state_32 smram32;
+> +	u8 bytes[512];
 > +};
 > +
-> +struct test_msg {
-> +       enum test_msg_op msg_op;
-> +       union {
-> +               __s64 operand_64;
-> +               __s32 operand_32;
-> +       };
-> +};
+> +void  __init kvm_emulator_init(void);
 > +
-> +struct sample {
-> +       int pid;
-> +       int seq;
-> +       long value;
-> +       char comm[16];
-> +};
 > +
-> +#endif /* _TEST_USER_RINGBUF_H */
-> --
-> 2.37.1
->
+
+Unnecessary newline.
+
+>  /* Host execution mode. */
+>  #if defined(CONFIG_X86_32)
+>  #define X86EMUL_MODE_HOST X86EMUL_MODE_PROT32
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 33560bfa0cac6e..bea7e5015d592e 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -13355,6 +13355,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_vmgexit_msr_protocol_exit);
+>  static int __init kvm_x86_init(void)
+>  {
+>  	kvm_mmu_x86_module_init();
+> +	kvm_emulator_init();
+
+Please don't add an init call that is nop at runtime, e.g. I was _really_ curious
+what initialization needed to be done in the emulator.  And it makes it look like
+kvm_x86_exit() forgot to call kvm_emulator_exit().
+
+em_rsm() already ends up with
+
+	BUILD_BUG_ON(sizeof(smram) != 512);
+
+just put all the assertions there.
+
+>  	return 0;
+>  }
+>  module_init(kvm_x86_init);
+> -- 
+> 2.26.3
+> 

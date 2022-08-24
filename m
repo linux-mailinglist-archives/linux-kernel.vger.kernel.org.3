@@ -2,72 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA8259FF41
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B434959FF43
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239540AbiHXQO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S233460AbiHXQOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238525AbiHXQOD (ORCPT
+        with ESMTP id S239329AbiHXQOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:14:03 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247159AF97
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:13:59 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id h24so21368346wrb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=AY5Gj63eapxUT4qMtWVRtgy0+Cmp8OUrfb4J0LxivUk=;
-        b=CIQb0XBbm5S5nLcFhYWKofqHvJ/WtS1sfdb6Se1L60+IQmDMxB9wMOF/WKDOlUE22K
-         oviwiS9HfXRlOVmxRPPeE/9nKkGcrGOulr970gdahEn1bD9u2KWM2EzMmoonGUFgjP6f
-         BcF1DjdhGOJfXsMTz+nQCoIyp4ckuhUEPsw+PaP1Zljq+nmrCHJFMVrFBX0aoC7Naut/
-         K+dgttTRb/FwoZViQ8ewwjl6DDAztkaF7YISy3AFIEGL4Bf6UYDcS015Qv1xvbOjSL8s
-         79F/4cx276g2CGg8NzB9SmxTR4ENW2lAtIjYbT7BTGR5hwTnX6rymMMuaACciVd+BbeO
-         KXuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=AY5Gj63eapxUT4qMtWVRtgy0+Cmp8OUrfb4J0LxivUk=;
-        b=UL+yCNfPc81M45HIlfddDRxqZdbl/WBRNBQgfUH7NDvpmGgLl9mIlknOO9jR+YMmNu
-         kyKhWjcmTNFrV9Ru2ak5vgOAtDHbm5mvVo+00lcI9uHSeJhmEaUqqadmrpLFaAsurwBq
-         S/e5PJx+v6hTpr64UMtAnJ+pQbvrFGuQCuy5+VSCpru7UDiXHpADZBB7Z2HCg88Xu2Gu
-         fCRWtPjCgfUwz/fwGUlCtL85Re3a7QM91DrKJkXJeAroWb3fiiOfPVEGRVQzSmPDoRYh
-         zz13sZO06N7Xfz2bw14dzkeM8GZuCnlEnOvJ2eeW71HP9pen0qxOSSReR28aVTUwLmGQ
-         sbXA==
-X-Gm-Message-State: ACgBeo0s5aPwIAbpY26oA20gzWRn6PQyauKpsSCb8BSvPt85YH5sJfN1
-        O3OjmdASrJ3anm6dKhajk58uvA==
-X-Google-Smtp-Source: AA6agR5C2lJWB8q4B5x7MBbdEN5DHs6MGNRoKPT7qO6X/cyD1FCzM3o7IxHHc3lvkxdQGWoN/zTueA==
-X-Received: by 2002:a5d:4e41:0:b0:225:5b3d:3942 with SMTP id r1-20020a5d4e41000000b002255b3d3942mr5554wrt.78.1661357637598;
-        Wed, 24 Aug 2022 09:13:57 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id i14-20020a5d438e000000b002253604bbefsm15679816wrq.75.2022.08.24.09.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 09:13:57 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 17:13:54 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: Re: [PATCH 4.19 025/287] selftests/bpf: Fix test_align verifier log
- patterns
-Message-ID: <YwZOQv/dqReP8XfU@myrica>
-References: <20220823080100.268827165@linuxfoundation.org>
- <20220823080101.125479106@linuxfoundation.org>
+        Wed, 24 Aug 2022 12:14:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A87F1857CC;
+        Wed, 24 Aug 2022 09:14:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71299106F;
+        Wed, 24 Aug 2022 09:14:05 -0700 (PDT)
+Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EF5D3FAF5;
+        Wed, 24 Aug 2022 09:14:01 -0700 (PDT)
+Message-ID: <f08d1b2e-9367-6a47-b0e4-81797afa0961@arm.com>
+Date:   Wed, 24 Aug 2022 11:14:00 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823080101.125479106@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 1/2] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.or, lenb@kernel.org,
+        robert.moore@intel.com, punit.agrawal@bytedance.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+References: <20220818211619.4193362-1-jeremy.linton@arm.com>
+ <20220818211619.4193362-2-jeremy.linton@arm.com>
+ <20220824061337.dtgfmhgossyhzjpy@vireshk-i7>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <20220824061337.dtgfmhgossyhzjpy@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,171 +53,160 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Tue, Aug 23, 2022 at 10:23:14AM +0200, Greg Kroah-Hartman wrote:
-> From: Ovidiu Panait <ovidiu.panait@windriver.com>
+On 8/24/22 01:13, Viresh Kumar wrote:
+> On 18-08-22, 16:16, Jeremy Linton wrote:
+>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>> +bool cppc_perf_ctrs_in_pcc(void)
+>> +{
+>> +	int cpu;
+>> +
+>> +	for_each_present_cpu(cpu) {
+>> +		struct cpc_register_resource *ref_perf_reg;
+>> +		struct cpc_desc *cpc_desc;
+>> +
+>> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>> +
+>> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+>> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+>> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+>> +			return true;
+>> +
+>> +
+>> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+>> +
+>> +		/*
+>> +		 * If reference perf register is not supported then we should
+>> +		 * use the nominal perf value
+>> +		 */
+>> +		if (!CPC_SUPPORTED(ref_perf_reg))
+>> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+>> +
+>> +		if (CPC_IN_PCC(ref_perf_reg))
+>> +			return true;
+>> +	}
 > 
-> From: Stanislav Fomichev <sdf@google.com>
-> 
-> commit 5366d2269139ba8eb6a906d73a0819947e3e4e0a upstream.
-> 
-> Commit 294f2fc6da27 ("bpf: Verifer, adjust_scalar_min_max_vals to always
-> call update_reg_bounds()") changed the way verifier logs some of its state,
-> adjust the test_align accordingly. Where possible, I tried to not copy-paste
-> the entire log line and resorted to dropping the last closing brace instead.
-> 
-> Fixes: 294f2fc6da27 ("bpf: Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()")
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Link: https://lore.kernel.org/bpf/20200515194904.229296-1-sdf@google.com
-> [OP: adjust for 4.19 selftests]
-> Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Add a blank line here please.
 
-I believe this one shouldn't be applied as-is either, only partially. See
-https://lore.kernel.org/stable/20220824144327.277365-1-jean-philippe@linaro.org/
+Sure,
 
-Ovidiu, do you want to resend this one with only the fixes for "bpf:
-Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()"?
+> 
+>> +	return false;
+>> +}
+>> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+>> +
+>>   /**
+>>    * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+>>    * @cpunum: CPU from which to read counters.
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index 24eaf0ec344d..32fcb0bf74a4 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
+>>   
+>>   static struct cpufreq_driver cppc_cpufreq_driver;
+>>   
+>> +static enum {
+>> +	FIE_UNSET = -1,
+>> +	FIE_ENABLED,
+>> +	FIE_DISABLED
+>> +} fie_disabled = FIE_UNSET;
+>> +
+>>   #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+>> +module_param(fie_disabled, int, 0444);
+>> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+>>   
+>>   /* Frequency invariance support */
+>>   struct cppc_freq_invariance {
+>> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>>   	struct cppc_freq_invariance *cppc_fi;
+>>   	int cpu, ret;
+>>   
+>> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+>> +	if (fie_disabled)
+>>   		return;
+>>   
+>>   	for_each_cpu(cpu, policy->cpus) {
+>> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>>   	struct cppc_freq_invariance *cppc_fi;
+>>   	int cpu;
+>>   
+>> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+>> +	if (fie_disabled)
+>>   		return;
+>>   
+>>   	/* policy->cpus will be empty here, use related_cpus instead */
+>> @@ -229,7 +237,21 @@ static void __init cppc_freq_invariance_init(void)
+>>   	};
+>>   	int ret;
+>>   
+>> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+>> +	switch (fie_disabled) {
+>> +	/* honor user request */
+>> +	case FIE_DISABLED:
+>> +	case FIE_ENABLED:
+>> +		break;
+>> +	case FIE_UNSET:
+>> +	default:
+>> +		fie_disabled = FIE_ENABLED;
+>> +		if (cppc_perf_ctrs_in_pcc()) {
+>> +			pr_info("FIE not enabled on systems with registers in PCC\n");
+>> +			fie_disabled = FIE_DISABLED;
+>> +		}
+>> +		break;
+>> +	}
+> 
+> here too.
 
-Thanks,
-Jean
+Sure,
+
+> 
+>> +	if (fie_disabled)
+>>   		return;
+>>   
+>>   	kworker_fie = kthread_create_worker(0, "cppc_fie");
+>> @@ -247,7 +269,7 @@ static void __init cppc_freq_invariance_init(void)
+>>   
+>>   static void cppc_freq_invariance_exit(void)
+>>   {
+>> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+>> +	if (fie_disabled)
+>>   		return;
+>>   
+>>   	kthread_destroy_worker(kworker_fie);
+>> @@ -936,6 +958,7 @@ static void cppc_check_hisi_workaround(void)
+>>   		    wa_info[i].oem_revision == tbl->oem_revision) {
+>>   			/* Overwrite the get() callback */
+>>   			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
+>> +			fie_disabled = FIE_DISABLED;
+>>   			break;
+>>   		}
+>>   	}
+>> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+>> index f73d357ecdf5..c5614444031f 100644
+>> --- a/include/acpi/cppc_acpi.h
+>> +++ b/include/acpi/cppc_acpi.h
+>> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+>>   extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>>   extern int cppc_set_enable(int cpu, bool enable);
+>>   extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+>> +extern bool cppc_perf_ctrs_in_pcc(void);
+>>   extern bool acpi_cpc_valid(void);
+>>   extern bool cppc_allow_fast_switch(void);
+>>   extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+>> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+>>   {
+>>   	return -ENOTSUPP;
+>>   }
+>> +static inline bool cppc_perf_ctrs_in_pcc(void)
+>> +{
+>> +	return false;
+>> +}
+>>   static inline bool acpi_cpc_valid(void)
+>>   {
+>>   	return false;
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
 
 
-> ---
->  tools/testing/selftests/bpf/test_align.c |   41 +++++++++++++++----------------
->  1 file changed, 21 insertions(+), 20 deletions(-)
-> 
-> --- a/tools/testing/selftests/bpf/test_align.c
-> +++ b/tools/testing/selftests/bpf/test_align.c
-> @@ -359,15 +359,15 @@ static struct bpf_align_test tests[] = {
->  			 * is still (4n), fixed offset is not changed.
->  			 * Also, we create a new reg->id.
->  			 */
-> -			{29, "R5_w=pkt(id=4,off=18,r=0,umax_value=2040,var_off=(0x0; 0x7fc))"},
-> +			{29, "R5_w=pkt(id=4,off=18,r=0,umax_value=2040,var_off=(0x0; 0x7fc)"},
->  			/* At the time the word size load is performed from R5,
->  			 * its total fixed offset is NET_IP_ALIGN + reg->off (18)
->  			 * which is 20.  Then the variable offset is (4n), so
->  			 * the total offset is 4-byte aligned and meets the
->  			 * load's requirements.
->  			 */
-> -			{33, "R4=pkt(id=4,off=22,r=22,umax_value=2040,var_off=(0x0; 0x7fc))"},
-> -			{33, "R5=pkt(id=4,off=18,r=22,umax_value=2040,var_off=(0x0; 0x7fc))"},
-> +			{33, "R4=pkt(id=4,off=22,r=22,umax_value=2040,var_off=(0x0; 0x7fc)"},
-> +			{33, "R5=pkt(id=4,off=18,r=22,umax_value=2040,var_off=(0x0; 0x7fc)"},
->  		},
->  	},
->  	{
-> @@ -410,15 +410,15 @@ static struct bpf_align_test tests[] = {
->  			/* Adding 14 makes R6 be (4n+2) */
->  			{9, "R6_w=inv(id=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
->  			/* Packet pointer has (4n+2) offset */
-> -			{11, "R5_w=pkt(id=1,off=0,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
-> -			{13, "R4=pkt(id=1,off=4,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
-> +			{11, "R5_w=pkt(id=1,off=0,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc)"},
-> +			{13, "R4=pkt(id=1,off=4,r=0,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc)"},
->  			/* At the time the word size load is performed from R5,
->  			 * its total fixed offset is NET_IP_ALIGN + reg->off (0)
->  			 * which is 2.  Then the variable offset is (4n+2), so
->  			 * the total offset is 4-byte aligned and meets the
->  			 * load's requirements.
->  			 */
-> -			{15, "R5=pkt(id=1,off=0,r=4,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc))"},
-> +			{15, "R5=pkt(id=1,off=0,r=4,umin_value=14,umax_value=1034,var_off=(0x2; 0x7fc)"},
->  			/* Newly read value in R6 was shifted left by 2, so has
->  			 * known alignment of 4.
->  			 */
-> @@ -426,15 +426,15 @@ static struct bpf_align_test tests[] = {
->  			/* Added (4n) to packet pointer's (4n+2) var_off, giving
->  			 * another (4n+2).
->  			 */
-> -			{19, "R5_w=pkt(id=2,off=0,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc))"},
-> -			{21, "R4=pkt(id=2,off=4,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc))"},
-> +			{19, "R5_w=pkt(id=2,off=0,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc)"},
-> +			{21, "R4=pkt(id=2,off=4,r=0,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc)"},
->  			/* At the time the word size load is performed from R5,
->  			 * its total fixed offset is NET_IP_ALIGN + reg->off (0)
->  			 * which is 2.  Then the variable offset is (4n+2), so
->  			 * the total offset is 4-byte aligned and meets the
->  			 * load's requirements.
->  			 */
-> -			{23, "R5=pkt(id=2,off=0,r=4,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc))"},
-> +			{23, "R5=pkt(id=2,off=0,r=4,umin_value=14,umax_value=2054,var_off=(0x2; 0xffc)"},
->  		},
->  	},
->  	{
-> @@ -469,16 +469,16 @@ static struct bpf_align_test tests[] = {
->  		.matches = {
->  			{4, "R5_w=pkt_end(id=0,off=0,imm=0)"},
->  			/* (ptr - ptr) << 2 == unknown, (4n) */
-> -			{6, "R5_w=inv(id=0,smax_value=9223372036854775804,umax_value=18446744073709551612,var_off=(0x0; 0xfffffffffffffffc))"},
-> +			{6, "R5_w=inv(id=0,smax_value=9223372036854775804,umax_value=18446744073709551612,var_off=(0x0; 0xfffffffffffffffc)"},
->  			/* (4n) + 14 == (4n+2).  We blow our bounds, because
->  			 * the add could overflow.
->  			 */
-> -			{7, "R5=inv(id=0,var_off=(0x2; 0xfffffffffffffffc))"},
-> +			{7, "R5=inv(id=0,smin_value=-9223372036854775806,smax_value=9223372036854775806,umin_value=2,umax_value=18446744073709551614,var_off=(0x2; 0xfffffffffffffffc)"},
->  			/* Checked s>=0 */
-> -			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
-> +			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
->  			/* packet pointer + nonnegative (4n+2) */
-> -			{11, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
-> -			{13, "R4=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
-> +			{11, "R6_w=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
-> +			{13, "R4=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
->  			/* NET_IP_ALIGN + (4n+2) == (4n), alignment is fine.
->  			 * We checked the bounds, but it might have been able
->  			 * to overflow if the packet pointer started in the
-> @@ -486,7 +486,7 @@ static struct bpf_align_test tests[] = {
->  			 * So we did not get a 'range' on R6, and the access
->  			 * attempt will fail.
->  			 */
-> -			{15, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
-> +			{15, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372034707292158,var_off=(0x2; 0x7fffffff7ffffffc)"},
->  		}
->  	},
->  	{
-> @@ -528,7 +528,7 @@ static struct bpf_align_test tests[] = {
->  			/* New unknown value in R7 is (4n) */
->  			{11, "R7_w=inv(id=0,umax_value=1020,var_off=(0x0; 0x3fc))"},
->  			/* Subtracting it from R6 blows our unsigned bounds */
-> -			{12, "R6=inv(id=0,smin_value=-1006,smax_value=1034,var_off=(0x2; 0xfffffffffffffffc))"},
-> +			{12, "R6=inv(id=0,smin_value=-1006,smax_value=1034,umin_value=2,umax_value=18446744073709551614,var_off=(0x2; 0xfffffffffffffffc)"},
->  			/* Checked s>= 0 */
->  			{14, "R6=inv(id=0,umin_value=2,umax_value=1034,var_off=(0x2; 0x7fc))"},
->  			/* At the time the word size load is performed from R5,
-> @@ -537,7 +537,8 @@ static struct bpf_align_test tests[] = {
->  			 * the total offset is 4-byte aligned and meets the
->  			 * load's requirements.
->  			 */
-> -			{20, "R5=pkt(id=1,off=0,r=4,umin_value=2,umax_value=1034,var_off=(0x2; 0x7fc))"},
-> +			{20, "R5=pkt(id=1,off=0,r=4,umin_value=2,umax_value=1034,var_off=(0x2; 0x7fc)"},
-> +
->  		},
->  	},
->  	{
-> @@ -579,18 +580,18 @@ static struct bpf_align_test tests[] = {
->  			/* Adding 14 makes R6 be (4n+2) */
->  			{11, "R6_w=inv(id=0,umin_value=14,umax_value=74,var_off=(0x2; 0x7c))"},
->  			/* Subtracting from packet pointer overflows ubounds */
-> -			{13, "R5_w=pkt(id=1,off=0,r=8,umin_value=18446744073709551542,umax_value=18446744073709551602,var_off=(0xffffffffffffff82; 0x7c))"},
-> +			{13, "R5_w=pkt(id=1,off=0,r=8,umin_value=18446744073709551542,umax_value=18446744073709551602,var_off=(0xffffffffffffff82; 0x7c)"},
->  			/* New unknown value in R7 is (4n), >= 76 */
->  			{15, "R7_w=inv(id=0,umin_value=76,umax_value=1096,var_off=(0x0; 0x7fc))"},
->  			/* Adding it to packet pointer gives nice bounds again */
-> -			{16, "R5_w=pkt(id=2,off=0,r=0,umin_value=2,umax_value=1082,var_off=(0x2; 0x7fc))"},
-> +			{16, "R5_w=pkt(id=2,off=0,r=0,umin_value=2,umax_value=1082,var_off=(0x2; 0xfffffffc)"},
->  			/* At the time the word size load is performed from R5,
->  			 * its total fixed offset is NET_IP_ALIGN + reg->off (0)
->  			 * which is 2.  Then the variable offset is (4n+2), so
->  			 * the total offset is 4-byte aligned and meets the
->  			 * load's requirements.
->  			 */
-> -			{20, "R5=pkt(id=2,off=0,r=4,umin_value=2,umax_value=1082,var_off=(0x2; 0x7fc))"},
-> +			{20, "R5=pkt(id=2,off=0,r=4,umin_value=2,umax_value=1082,var_off=(0x2; 0xfffffffc)"},
->  		},
->  	},
->  };
-> 
-> 
-> 
+Thanks for looking at this.

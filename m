@@ -2,205 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1923859FEBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AEB59FEBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238366AbiHXPrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S239971AbiHXPsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239921AbiHXPrY (ORCPT
+        with ESMTP id S239856AbiHXPrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:47:24 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0FC31ECD
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:45:57 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b5so16987625wrr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=/4CgS497YurVrqQ2wYhTl+ey6pjS27PxE7RLVw+qVns=;
-        b=MeaL150z8K8Z4J6A3U+FHkz+XdjoKxR25a2hjxsYZchm8L73rVZEHCh9UBSh5hLUrT
-         Gcw2VGA8nYAefk456KE2pUJgYV8hEdQmcLRBthCQ0TlwyeXjFgCSLwpz+bFkAPd3xeAQ
-         d+leLLYqJXF2QcVcq704qQqi+5Q2FJs4U9jVv1URSz4uiY3iFGvnUiPgeS2b0UrWemOK
-         n0kpTyida6gC8ki6S/3w50j39LH3G8abubMzMV+SBKBC4X66CR7tprBI7xvFQTV7nz6s
-         g36bGh9NJQQ5fn6z9Rglid0i1Xcy04vMQ6skhWS3XtJCHylW8ZiRnRa0RmblU2Pyg6ji
-         V1dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=/4CgS497YurVrqQ2wYhTl+ey6pjS27PxE7RLVw+qVns=;
-        b=sP3rO6QCAyGyB6SAUdKOlMLqq3w1AKNa98OvayqPPyCnQmzp50S8jb+DCfmIYt3cUh
-         DE6CinP5lobujbHJxO/xpBIFZNVH5E2Yu6MPdJgx1rWq/hvkEKZFop1gxnLbGzcCCwaO
-         Ea3OBhDDz3m8nZh5U16mw3hy6bBdYoSDL3V045hGxJTtIQiDXe/B53GhnZG6wNqnW2FG
-         I/PFERoM2zBGHT+jOnTZdM3SvamOJxcEWFArxlKmWsSFAP7Yq8oqPFYUxBEUPU1jeraS
-         LaxjTZa/uSkNQBraCBF32VzR8cxc2fPEPux3yt/udJgowGdZBc8SirqcNGF3KJ3aZQTg
-         QnPA==
-X-Gm-Message-State: ACgBeo2RkYK7mqbg83O0GTfpZVYsMNtxmV9wo4K3/CnOELN4HAmCPGfM
-        rmByL7e2Mk+xofOfuc9FJtoRemTLhpBqc24W1rMVQQ==
-X-Google-Smtp-Source: AA6agR6axg1+gK7f80oGloC+qkVYm0uTADt/QTSODMXk4vpRlmK9LV5PNwQWAnACDxGvNpfMFZxH4PonWMnsbD4tudE=
-X-Received: by 2002:adf:d1ea:0:b0:225:474b:1061 with SMTP id
- g10-20020adfd1ea000000b00225474b1061mr10801075wrd.343.1661355956001; Wed, 24
- Aug 2022 08:45:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220824072814.16422-1-adrian.hunter@intel.com> <20220824072814.16422-5-adrian.hunter@intel.com>
-In-Reply-To: <20220824072814.16422-5-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 24 Aug 2022 08:45:44 -0700
-Message-ID: <CAP-5=fVsXgHVwP1=OyvGF3iQT6g0zdu0KkbiMcnagKBMCjwKZQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] perf evlist: Add evlist__{en/dis}able_non_dummy()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Wed, 24 Aug 2022 11:47:43 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553C76BD75;
+        Wed, 24 Aug 2022 08:47:05 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2DE814A8;
+        Wed, 24 Aug 2022 17:47:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661356023;
+        bh=D/UW03G27r2Le51fZi7KAiViwBYUC3IpZ2H1I2m/cRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nX66Vk/jr9yirBx/GAbeggRH0GGoauIox4MZLJKaAexUnUEtvzKuEW44TjR8VSjbj
+         zu3SIKMgeCxHyOv37/n+SWV2GUvGaC7SOoFMboJ7KqEA7Qjf83032QC2ktf4p6Cv+w
+         E1+bktobQVuxs9YD0zl5M6P/eGBNJj1o5tmSpvao=
+Date:   Wed, 24 Aug 2022 18:46:58 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] usb/uvc: fix repeated words in comments
+Message-ID: <YwZH8qMVCl6HD0FN@pendragon.ideasonboard.com>
+References: <20220824130827.44560-1-yuanjilin@cdjrlc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220824130827.44560-1-yuanjilin@cdjrlc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:28 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Dummy events are used to provide sideband information like MMAP events that
-> are always needed even when main events are disabled. Add functions that
-> take that into account.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Wed, Aug 24, 2022 at 09:08:27PM +0800, Jilin Yuan wrote:
+>  Delete the redundant word 'the'.
 
-Acked-by: Ian Rogers <irogers@google.com>
+Have you searched the mailing list archives to see if a similar patch
+has been submitted recently ?
 
-Thanks,
-Ian
-
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 > ---
->  tools/perf/util/evlist.c | 30 ++++++++++++++++++++++++------
->  tools/perf/util/evlist.h |  2 ++
->  2 files changed, 26 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 4c5e6e9f8d11..3cfe730c12b8 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -480,7 +480,7 @@ static int evlist__is_enabled(struct evlist *evlist)
->         return false;
->  }
->
-> -static void __evlist__disable(struct evlist *evlist, char *evsel_name)
-> +static void __evlist__disable(struct evlist *evlist, char *evsel_name, bool excl_dummy)
->  {
->         struct evsel *pos;
->         struct evlist_cpu_iterator evlist_cpu_itr;
-> @@ -502,6 +502,8 @@ static void __evlist__disable(struct evlist *evlist, char *evsel_name)
->                                 continue;
->                         if (pos->disabled || !evsel__is_group_leader(pos) || !pos->core.fd)
->                                 continue;
-> +                       if (excl_dummy && evsel__is_dummy_event(pos))
-> +                               continue;
->                         if (pos->immediate)
->                                 has_imm = true;
->                         if (pos->immediate != imm)
-> @@ -518,6 +520,8 @@ static void __evlist__disable(struct evlist *evlist, char *evsel_name)
->                         continue;
->                 if (!evsel__is_group_leader(pos) || !pos->core.fd)
->                         continue;
-> +               if (excl_dummy && evsel__is_dummy_event(pos))
-> +                       continue;
->                 pos->disabled = true;
->         }
->
-> @@ -533,15 +537,20 @@ static void __evlist__disable(struct evlist *evlist, char *evsel_name)
->
->  void evlist__disable(struct evlist *evlist)
->  {
-> -       __evlist__disable(evlist, NULL);
-> +       __evlist__disable(evlist, NULL, false);
-> +}
-> +
-> +void evlist__disable_non_dummy(struct evlist *evlist)
-> +{
-> +       __evlist__disable(evlist, NULL, true);
+>  drivers/media/usb/uvc/uvc_video.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index 6d3dfa4e0bb2..5aaee916045d 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -1077,7 +1077,7 @@ static int uvc_video_decode_start(struct uvc_streaming *stream,
+>  	}
+>  
+>  	/* Synchronize to the input stream by waiting for the FID bit to be
+> -	 * toggled when the the buffer state is not UVC_BUF_STATE_ACTIVE.
+> +	 * toggled when the buffer state is not UVC_BUF_STATE_ACTIVE.
+>  	 * stream->last_fid is initialized to -1, so the first isochronous
+>  	 * frame will always be in sync.
+>  	 *
 
-nit: I think it is better to  prefer to name the argument when passing
-constants, it can avoid errors if later constants are introduced, etc.
-It can also be checked by compiler warnings. As this is limited to the
-same file it is not hugely critical.
+-- 
+Regards,
 
->  }
->
->  void evlist__disable_evsel(struct evlist *evlist, char *evsel_name)
->  {
-> -       __evlist__disable(evlist, evsel_name);
-> +       __evlist__disable(evlist, evsel_name, false);
->  }
->
-> -static void __evlist__enable(struct evlist *evlist, char *evsel_name)
-> +static void __evlist__enable(struct evlist *evlist, char *evsel_name, bool excl_dummy)
->  {
->         struct evsel *pos;
->         struct evlist_cpu_iterator evlist_cpu_itr;
-> @@ -560,6 +569,8 @@ static void __evlist__enable(struct evlist *evlist, char *evsel_name)
->                         continue;
->                 if (!evsel__is_group_leader(pos) || !pos->core.fd)
->                         continue;
-> +               if (excl_dummy && evsel__is_dummy_event(pos))
-> +                       continue;
->                 evsel__enable_cpu(pos, evlist_cpu_itr.cpu_map_idx);
->         }
->         affinity__cleanup(affinity);
-> @@ -568,6 +579,8 @@ static void __evlist__enable(struct evlist *evlist, char *evsel_name)
->                         continue;
->                 if (!evsel__is_group_leader(pos) || !pos->core.fd)
->                         continue;
-> +               if (excl_dummy && evsel__is_dummy_event(pos))
-> +                       continue;
->                 pos->disabled = false;
->         }
->
-> @@ -581,12 +594,17 @@ static void __evlist__enable(struct evlist *evlist, char *evsel_name)
->
->  void evlist__enable(struct evlist *evlist)
->  {
-> -       __evlist__enable(evlist, NULL);
-> +       __evlist__enable(evlist, NULL, false);
-> +}
-> +
-> +void evlist__enable_non_dummy(struct evlist *evlist)
-> +{
-> +       __evlist__enable(evlist, NULL, true);
->  }
->
->  void evlist__enable_evsel(struct evlist *evlist, char *evsel_name)
->  {
-> -       __evlist__enable(evlist, evsel_name);
-> +       __evlist__enable(evlist, evsel_name, false);
->  }
->
->  void evlist__toggle_enable(struct evlist *evlist)
-> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-> index 3a464585d397..3a8474406738 100644
-> --- a/tools/perf/util/evlist.h
-> +++ b/tools/perf/util/evlist.h
-> @@ -205,6 +205,8 @@ void evlist__enable(struct evlist *evlist);
->  void evlist__toggle_enable(struct evlist *evlist);
->  void evlist__disable_evsel(struct evlist *evlist, char *evsel_name);
->  void evlist__enable_evsel(struct evlist *evlist, char *evsel_name);
-> +void evlist__disable_non_dummy(struct evlist *evlist);
-> +void evlist__enable_non_dummy(struct evlist *evlist);
->
->  void evlist__set_selected(struct evlist *evlist, struct evsel *evsel);
->
-> --
-> 2.25.1
->
+Laurent Pinchart

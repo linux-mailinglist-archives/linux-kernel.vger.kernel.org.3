@@ -2,117 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C0E5A049E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802225A04A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiHXX2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 19:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S229607AbiHXXb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 19:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiHXX2a (ORCPT
+        with ESMTP id S229457AbiHXXbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 19:28:30 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7C56EF16
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:28:29 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id 83so12273313pfw.6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:28:29 -0700 (PDT)
+        Wed, 24 Aug 2022 19:31:24 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0D87B291
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:31:21 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-32a115757b6so317948557b3.13
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=zZwPGYUVJye6hZOHHzL0X28s658FnIs2YBQ2ocWzCss=;
+        b=cF1xK3komi00uoI0hPSNz3kMkkbunVkLbCE3VZvLP3r/nUdWxRw8BTi49FuJQq6/u4
+         yvuZwkaZqDjiGwE34UthXs7XHnRhYLTsSHGnhvZmuyhTLnaPROG4ixeeaVZJaO4Gl+md
+         25xA99ZOqiiCQufTqmoxtf0dEXM6sSXSH1TXCbzCHG8pF3o62tU8snvkW25W/PfgrlNg
+         2qS0UbTr8qAuuT30FikKFUFzXTcV6q/6oatK6uqSvujVbmx/C9DJOzkKdyPQeBiePLzi
+         RJR+AJniQqx47Fhzu90eGQ9cG6YmBzDACuguPuG5o63WZVhxFqLd0y/dPJp8GzBN5kEw
+         VnTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=G0ySZZcLlbrtg1sbUR0T0eGd+OHbyJMxGcV3YBMLCvg=;
-        b=1rT/ChS8YO0DgK8G1nr8mt6aqXCxEhNtJ2/3Zyk3+g08XKCgU77fbvG1K+z1d6XUeD
-         j0KJ05E1Qtbxs5rkJAPs6aO04dQw0urMz58xTkGxBC5Za7b0kONxM/fb91HNyzxiWVRb
-         /krvOxEuuxfOWw93++6oeYztQRPMdlzJOEDgxupt7tls66ql2mHoVCxTFfjtARc4JyWu
-         B/49ky5piEwTopWX2iq6sRANXFDS8Z3w8uhjGEycpH9C0yPTus9wNMeX6Zp+3V0wGv8s
-         u5ExH8Aoq00pTP4+qwyv0Jru7nyA6gnIHYetwq06LGobKtEHpLMkZFTcr3qDP7nsjM8a
-         vczQ==
-X-Gm-Message-State: ACgBeo0/pCYgntvmsA0sZeWTLx6zpzYOu/WfSSZIyoRok+jMF71PQ3/N
-        Vv6O293x2UxZmuyb5A2BWknDMRtEYNA=
-X-Google-Smtp-Source: AA6agR4iSCV+nKUZ/rufe1pIn5xoSf6icKagqHKE9ogrdTsNvHfJLaYz9+irf7VB10KoQCBZpA7pYQ==
-X-Received: by 2002:a65:6849:0:b0:42b:3b1b:94bf with SMTP id q9-20020a656849000000b0042b3b1b94bfmr955024pgt.168.1661383708749;
-        Wed, 24 Aug 2022 16:28:28 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:222f:dc9c:99a3:dfb8? ([2620:15c:211:201:222f:dc9c:99a3:dfb8])
-        by smtp.gmail.com with ESMTPSA id 203-20020a6215d4000000b005350ea966c7sm13682161pfv.154.2022.08.24.16.28.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 16:28:27 -0700 (PDT)
-Message-ID: <353e5bbd-cdd1-f818-6a2f-9a7c800f9879@acm.org>
-Date:   Wed, 24 Aug 2022 16:28:25 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
- triggered by is_signed_type()
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20220821000737.328590235@goodmis.org>
- <20220821000844.510643400@goodmis.org>
- <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
- <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org>
- <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
- <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk>
- <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
- <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
- <b79c83af-e9fc-9fa0-dff7-f3a8a39887ff@acm.org>
- <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=zZwPGYUVJye6hZOHHzL0X28s658FnIs2YBQ2ocWzCss=;
+        b=YYeSYMS1Zw+6W3/48GZ+J4z2zIw6PkqGQYmL6cOG5//rBw4Fy8K61X/q7ewgX+vswU
+         RgyK6fh9QFJxl1oNeBBxFL3QLEm1CUslGJdk3IfV9ztK/1ezrI6LAl4Xs0Tg6WqyoECM
+         ERdzKGDaJOaZrtwd9z7lnDlx7etrgKZJg04njqgZg89hLqkKKDUUIedY7Z62Zvrul4nk
+         PP0pQKz9F4/F5N6xyhiZOHIpsqwvpJ9Kn05YWIhspKtIMHMhph2SA37qV6T8xqlQcvaE
+         sz840X3IaxrSV4oTQUWzQ+38tRThO0wRLd8puN+7W9Ptzr09cMdgnZC9GCXTy9SKE11L
+         qX6g==
+X-Gm-Message-State: ACgBeo3DHSTgl94lehkCUT03Ob/L+BHdZyxTIR/UakHz+k+L4CTFunwi
+        YiTs76zKx8e3UG4jrYw6p7h7g8cVAyv7hOrnCMRVnXli70RijQk8slTU6/alfM4K5NKbAP/PYmP
+        nG2RFC8AkDkIgdJxIQh52mq/6dmoPue8Knr+ksqycNt6DP05Ha4F0WVHLWyRSQlSxwBWqJA==
+X-Google-Smtp-Source: AA6agR5h5uQJogh7+IKIhgXKhJ1iYlE71No2XmYIz3F89/R2dsXV0+PlSKiuaGYk/gFRdhN/S99ls/4tQYU=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2d4:203:9854:5a1:b9e2:6545])
+ (user=haoluo job=sendgmr) by 2002:a05:6902:154e:b0:695:c309:935f with SMTP id
+ r14-20020a056902154e00b00695c309935fmr1316772ybu.573.1661383880734; Wed, 24
+ Aug 2022 16:31:20 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 16:31:12 -0700
+Message-Id: <20220824233117.1312810-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [RESEND PATCH bpf-next v9 0/5] bpf: rstat: cgroup hierarchical
+From:   Hao Luo <haoluo@google.com>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 18:49, Linus Torvalds wrote:
-> On Tue, Aug 23, 2022 at 5:09 PM Bart Van Assche <bvanassche@acm.org> wrote:
->>
->> I'm probably doing something wrong but even with sparse commit 658ee8e0f631
->> ("unrestricted values are unrestricted even after a cast") I see warnings
->> being triggered by users of the is_signed_type() macro, warnings that
->> disappear if I change the definition of the is_signed_type() macro into 0:
-> 
-> That's the
-> 
->> It does require that kernel change to make
->>
->>    #define is_signed_type(type)   (((type)(-1)) <= (type)0)
-> 
-> part I was talking about.
-> 
-> So your kernel side patch looks fine, except I don't think you need
-> the '__force' - the sparse patches in my tree should make sparse happy
-> about casting '-1'.
-> 
-> But I didn't do very much testing.
+This patch series allows for using bpf to collect hierarchical cgroup
+stats efficiently by integrating with the rstat framework. The rstat
+framework provides an efficient way to collect cgroup stats percpu and
+propagate them through the cgroup hierarchy.
 
-Hi Linus,
+The stats are exposed to userspace in textual form by reading files in
+bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+- walking a cgroup's descendants in pre-order.
+- walking a cgroup's descendants in post-order.
+- walking a cgroup's ancestors.
+- process only a single object.
 
-Can you take a look at the following report from the kernel test robot:
-https://lore.kernel.org/all/202208250433.EVz5pZkB-lkp@intel.com/ ?
+When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+created from attaching. This cgroup can be passed either as a file
+descriptor or a cgroup id. That cgroup serves as the starting point of
+the walk.
 
-Do I see correctly that gcc reports a new warning for the above 
-definition of is_signed_type() with W=1? I'm not sure how to get rid of 
-that new gcc warning without reintroducing a sparse warning.
+One can also terminate the walk early by returning 1 from the iter
+program.
 
-The tree that the kernel robot tested is available here: 
-https://github.com/bvanassche/linux/tree/tracing
+Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+program is called with cgroup_mutex held.
 
-Thanks,
+** Background on rstat for stats collection **
+(I am using a subscriber analogy that is not commonly used)
 
-Bart.
+The rstat framework maintains a tree of cgroups that have updates and
+which cpus have updates. A subscriber to the rstat framework maintains
+their own stats. The framework is used to tell the subscriber when
+and what to flush, for the most efficient stats propagation. The
+workflow is as follows:
+
+- When a subscriber updates a cgroup on a cpu, it informs the rstat
+  framework by calling cgroup_rstat_updated(cgrp, cpu).
+
+- When a subscriber wants to read some stats for a cgroup, it asks
+  the rstat framework to initiate a stats flush (propagation) by calling
+  cgroup_rstat_flush(cgrp).
+
+- When the rstat framework initiates a flush, it makes callbacks to
+  subscribers to aggregate stats on cpus that have updates, and
+  propagate updates to their parent.
+
+Currently, the main subscribers to the rstat framework are cgroup
+subsystems (e.g. memory, block). This patch series allow bpf programs to
+become subscribers as well.
+
+Patches in this series are organized as follows:
+* Patches 1-2 introduce cgroup_iter prog, and a selftest.
+* Patches 3-5 allow bpf programs to integrate with rstat by adding the
+  necessary hook points and kfunc. A comprehensive selftest that
+  demonstrates the entire workflow for using bpf and rstat to
+  efficiently collect and output cgroup stats is added.
+
+---
+Changelog:
+v8 -> v9:
+- Make UNSPEC (an invalid option) as the default order for cgroup_iter.
+- Use enum for specifying cgroup_iter order, instead of u32.
+- Add BPF_ITER_RESHCED to cgroup_iter.
+- Add cgroup_hierarchical_stats to s390x denylist.
+
+v7 -> v8:
+- Removed the confusing BPF_ITER_DEFAULT (Andrii)
+- s/SELF/SELF_ONLY/g
+- Fixed typo (e.g. outputing) (Andrii)
+- Use "descendants_pre", "descendants_post" etc. instead of "pre",
+  "post" (Andrii)
+
+v6 -> v7:
+- Updated commit/comments in cgroup_iter for read() behavior (Yonghong)
+- Extracted BPF_ITER_SELF and other options out of cgroup_iter, so
+  that they can be used in other iters. Also renamed them. (Andrii)
+- Supports both cgroup_fd and cgroup_id when specifying target cgroup.
+  (Andrii)
+- Avoided using macro for formatting expected output in cgroup_iter
+  selftest. (Andrii)
+- Applied 'static' on all vars and functions in cgroup_iter selftest.
+  (Andrii)
+- Fixed broken buf reading in cgroup_iter selftest. (Andrii)
+- Switched to use bpf_link__destroy() unconditionally. (Andrii)
+- Removed 'volatile' for non-const global vars in selftests. (Andrii)
+- Started using bpf_core_enum_value() to get memory_cgrp_id. (Andrii)
+
+v5 -> v6:
+- Rebased on bpf-next
+- Tidy up cgroup_hierarchical_stats test (Andrii)
+  * 'static' and 'inline'
+  * avoid using libbpf_get_error()
+  * string literals of cgroup paths.
+- Rename patch 8/8 to 'selftests/bpf' (Yonghong)
+- Fix cgroup_iter comments (e.g. PAGE_SIZE and uapi) (Yonghong)
+- Make sure further read() returns OK after previous read() finished
+  properly (Yonghong)
+- Release cgroup_mutex before the last call of show() (Kumar)
+
+v4 -> v5:
+- Rebased on top of new kfunc flags infrastructure, updated patch 1 and
+  patch 6 accordingly.
+- Added docs for sleepable kfuncs.
+
+v3 -> v4:
+- cgroup_iter:
+  * reorder fields in bpf_link_info to avoid break uapi (Yonghong)
+  * comment the behavior when cgroup_fd=0 (Yonghong)
+  * comment on the limit of number of cgroups supported by cgroup_iter.
+    (Yonghong)
+- cgroup_hierarchical_stats selftest:
+  * Do not return -1 if stats are not found (causes overflow in userspace).
+  * Check if child process failed to join cgroup.
+  * Make buf and path arrays in get_cgroup_vmscan_delay() static.
+  * Increase the test map sizes to accomodate cgroups that are not
+    created by the test.
+
+v2 -> v3:
+- cgroup_iter:
+  * Added conditional compilation of cgroup_iter.c in kernel/bpf/Makefile
+    (kernel test) and dropped the !CONFIG_CGROUP patch.
+  * Added validation of traversal_order when attaching (Yonghong).
+  * Fixed previous wording "two modes" to "three modes" (Yonghong).
+  * Fixed the btf_dump selftest broken by this patch (Yonghong).
+  * Fixed ctx_arg_info[0] to use "PTR_TO_BTF_ID_OR_NULL" instead of
+    "PTR_TO_BTF_ID", because the "cgroup" pointer passed to iter prog can
+     be null.
+- Use __diag_push to eliminate __weak noinline warning in
+  bpf_rstat_flush().
+- cgroup_hierarchical_stats selftest:
+  * Added write_cgroup_file_parent() helper.
+  * Added error handling for failed map updates.
+  * Added null check for cgroup in vmscan_flush.
+  * Fixed the signature of vmscan_[start/end].
+  * Correctly return error code when attaching trace programs fail.
+  * Make sure all links are destroyed correctly and not leaking in
+    cgroup_hierarchical_stats selftest.
+  * Use memory.reclaim instead of memory.high as a more reliable way to
+    invoke reclaim.
+  * Eliminated sleeps, the test now runs faster.
+
+v1 -> v2:
+- Redesign of cgroup_iter from v1, based on Alexei's idea [1]:
+  * supports walking cgroup subtree.
+  * supports walking ancestors of a cgroup. (Andrii)
+  * supports terminating the walk early.
+  * uses fd instead of cgroup_id as parameter for iter_link. Using fd is
+    a convention in bpf.
+  * gets cgroup's ref at attach time and deref at detach.
+  * brought back cgroup1 support for cgroup_iter.
+- Squashed the patches adding the rstat flush hook points and kfuncs
+  (Tejun).
+- Added a comment explaining why bpf_rstat_flush() needs to be weak
+  (Tejun).
+- Updated the final selftest with the new cgroup_iter design.
+- Changed CHECKs in the selftest with ASSERTs (Yonghong, Andrii).
+- Removed empty line at the end of the selftest (Yonghong).
+- Renamed test files to cgroup_hierarchical_stats.c.
+- Reordered CGROUP_PATH params order to match struct declaration
+  in the selftest (Michal).
+- Removed memory_subsys_enabled() and made sure memcg controller
+  enablement checks make sense and are documented (Michal).
+
+
+RFC v2 -> v1:
+- Instead of introducing a new program type for rstat flushing, add an
+  empty hook point, bpf_rstat_flush(), and use fentry bpf programs to
+  attach to it and flush bpf stats.
+- Instead of using helpers, use kfuncs for rstat functions.
+- These changes simplify the patchset greatly, with minimal changes to
+  uapi.
+
+RFC v1 -> RFC v2:
+- Instead of rstat flush programs attach to subsystems, they now attach
+  to rstat (global flushers, not per-subsystem), based on discussions
+  with Tejun. The first patch is entirely rewritten.
+- Pass cgroup pointers to rstat flushers instead of cgroup ids. This is
+  much more flexibility and less likely to need a uapi update later.
+- rstat helpers are now only defined if CGROUP_CONFIG.
+- Most of the code is now only defined if CGROUP_CONFIG and
+  CONFIG_BPF_SYSCALL.
+- Move rstat helper protos from bpf_base_func_proto() to
+  tracing_prog_func_proto().
+- rstat helpers argument (cgroup pointer) is now ARG_PTR_TO_BTF_ID, not
+  ARG_ANYTHING.
+- Rewrote the selftest to use the cgroup helpers.
+- Dropped bpf_map_lookup_percpu_elem (already added by Feng).
+- Dropped patch to support cgroup v1 for cgroup_iter.
+- Dropped patch to define some cgroup_put() when !CONFIG_CGROUP. The
+  code that calls it is no longer compiled when !CONFIG_CGROUP.
+
+cgroup_iter was originally introduced in a different patch series[2].
+Hao and I agreed that it fits better as part of this series.
+RFC v1 of this patch series had the following changes from [2]:
+- Getting the cgroup's reference at the time at attaching, instead of
+  at the time when iterating. (Yonghong)
+- Remove .init_seq_private and .fini_seq_private callbacks for
+  cgroup_iter. They are not needed now. (Yonghong)
+
+[1] https://lore.kernel.org/bpf/20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com/
+[2] https://lore.kernel.org/lkml/20220225234339.2386398-9-haoluo@google.com/
+
+Hao Luo (2):
+  bpf: Introduce cgroup iter
+  selftests/bpf: Test cgroup_iter.
+
+Yosry Ahmed (3):
+  cgroup: bpf: enable bpf programs to integrate with rstat
+  selftests/bpf: extend cgroup helpers
+  selftests/bpf: add a selftest for cgroup hierarchical stats collection
+
+ include/linux/bpf.h                           |   8 +
+ include/uapi/linux/bpf.h                      |  30 ++
+ kernel/bpf/Makefile                           |   3 +
+ kernel/bpf/cgroup_iter.c                      | 284 ++++++++++++++
+ kernel/cgroup/rstat.c                         |  48 +++
+ tools/include/uapi/linux/bpf.h                |  30 ++
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ tools/testing/selftests/bpf/cgroup_helpers.c  | 202 ++++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.h  |  19 +-
+ .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+ .../prog_tests/cgroup_hierarchical_stats.c    | 357 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/cgroup_iter.c    | 224 +++++++++++
+ tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+ .../bpf/progs/cgroup_hierarchical_stats.c     | 226 +++++++++++
+ .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++
+ 15 files changed, 1433 insertions(+), 49 deletions(-)
+ create mode 100644 kernel/bpf/cgroup_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+
+-- 
+2.37.1.595.g718a3a8f04-goog
+

@@ -2,215 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6163D59F8D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC9359F8D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236973AbiHXLtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        id S237078AbiHXLve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 07:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235888AbiHXLtt (ORCPT
+        with ESMTP id S236272AbiHXLvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 07:49:49 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20F038BF;
-        Wed, 24 Aug 2022 04:49:46 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 281835FD0D;
-        Wed, 24 Aug 2022 14:49:45 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1661341785;
-        bh=Gc1Ehx0muehVG5YGju2xkrdTmR1ENRgiKV3WzwoEykI=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=J/Y4E53t3As/HZ+Zwly3fui6Tv7C2xxii6luazqq9hmhfTJM4uzT89jRPeQ7x2bi2
-         06QKV2d3ANNd29LS/zCb0N0w248We8z+ZZwuin/MWaWBA8cameFkrfQn+iVW/PlUrh
-         LMMV44GQkGnNktvFZHSC1QD9VNBkzYb17kqbPs8Ionwbgpvk2G+KRvW+0PrVDvFc6r
-         +pCSAkZw7mRHBW7BT1miqWfMMICxcJkxmdW8eydb105IIOBqzmeayuWBCb4ueNEmXc
-         S8B1RdH9YdVkyw1gUQOxXl+13j8GulnO9TKEqzAystvt184EpKTphmS8jUKkwo0j8m
-         eBxbRdaDX98XQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 24 Aug 2022 14:49:44 +0300 (MSK)
-From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Raphael Teysseyre <rteysseyre@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>
-CC:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>,
-        Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Subject: [PATCH v1] leds: trigger: pattern: notify userpace if pattern finished
-Date:   Wed, 24 Aug 2022 14:49:27 +0300
-Message-ID: <20220824114927.79231-1-mmkurbanov@sberdevices.ru>
-X-Mailer: git-send-email 2.37.2
+        Wed, 24 Aug 2022 07:51:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CA882D17;
+        Wed, 24 Aug 2022 04:51:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0C8161965;
+        Wed, 24 Aug 2022 11:51:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4146C433D7;
+        Wed, 24 Aug 2022 11:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661341890;
+        bh=MQHLAPHxwZoEhShjrCExL3cR38x99rl36T1mPKu0zhU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h0f2U2vXy/wN1zi0LZtjUj3FFYhDdW9gLLo3g1UcG43kc12LsZq9uwOL6O5fOdjPI
+         wkSaQrnmRwKbbqgraDjzpPnUrlbc/MUlsD1VSYSrFtjAynUSw0gcitLC0SQZETzIKy
+         d/jvdT0EDTDLEVvhGr+h0UNVGquXdBz3BOzxZcLapK2ckEXZ6B28Z6GhkCaAgU01G5
+         r15/p1wHQ94rr7J+xetUmCkxwwNfmU95trB8+pih/YaKboNjrA3r8qajm5JiosmZAS
+         mkrLPeazuAFwgvEo3x4s+MoJG8eYe+CZdLQOEiwCBDokgZr28uLF+aW5bBvKJ/5frl
+         RMiLv7uB/9mSg==
+Date:   Wed, 24 Aug 2022 14:51:26 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Niels Dossche <dossche.niels@gmail.com>
+Cc:     cgel.zte@gmail.com, dennis.dalessandro@cornelisnetworks.com,
+        jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] infiniband: remove unnecessary null check
+Message-ID: <YwYQvm48ReVaFQ0v@unreal>
+References: <20220824080503.221680-1-chi.minghao@zte.com.cn>
+ <1ce29a1e-2db7-2953-b71e-c0408559ecff@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/24 08:05:00 #20147978
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ce29a1e-2db7-2953-b71e-c0408559ecff@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the current moment, userspace caller can schedule led pattern with
-appropriate parameters, but it doesn't have ability to listen any events
-indicated pattern finished. This patch implements such an event using
-sysfs node and sysfs_notify_dirent() call.
+On Wed, Aug 24, 2022 at 10:15:56AM +0200, Niels Dossche wrote:
+> On 8/24/22 10:05, cgel.zte@gmail.com wrote:
+> > From: Minghao Chi <chi.minghao@zte.com.cn>
+> > 
+> > container_of is never null, so this null check is
+> > unnecessary.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> > ---
+> >  drivers/infiniband/sw/rdmavt/vt.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/drivers/infiniband/sw/rdmavt/vt.c b/drivers/infiniband/sw/rdmavt/vt.c
+> > index 59481ae39505..b2d83b4958fc 100644
+> > --- a/drivers/infiniband/sw/rdmavt/vt.c
+> > +++ b/drivers/infiniband/sw/rdmavt/vt.c
+> > @@ -50,8 +50,6 @@ struct rvt_dev_info *rvt_alloc_device(size_t size, int nports)
+> >  	struct rvt_dev_info *rdi;
+> >  
+> >  	rdi = container_of(_ib_alloc_device(size), struct rvt_dev_info, ibdev);
+> > -	if (!rdi)
+> > -		return rdi;
+> >  
+> >  	rdi->ports = kcalloc(nports, sizeof(*rdi->ports), GFP_KERNEL);
+> >  	if (!rdi->ports)
+> 
+> I believe this patch is incorrect because "_ib_alloc_device" may return a null pointer.
+> Note that the first member of "rvt_dev_info" is "ib_device", so the check on container_of effectively checks if the allocation failed, which is necessary to check.
 
-Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
----
- drivers/leds/trigger/ledtrig-pattern.c | 64 +++++++++++++++++++++++++-
- 1 file changed, 63 insertions(+), 1 deletion(-)
+You are absolutely right, this container_of() and check later are done
+on purpose. It is open-coded variant of ib_alloc_device(...) macro.
 
-diff --git a/drivers/leds/trigger/ledtrig-pattern.c b/drivers/leds/trigger/ledtrig-pattern.c
-index 43a265dc4696..54c4b957052f 100644
---- a/drivers/leds/trigger/ledtrig-pattern.c
-+++ b/drivers/leds/trigger/ledtrig-pattern.c
-@@ -33,7 +33,9 @@ struct pattern_trig_data {
- 	int delta_t;
- 	bool is_indefinite;
- 	bool is_hw_pattern;
-+	bool running;
- 	struct timer_list timer;
-+	struct kernfs_node *pattern_ended;
- };
-
- static void pattern_trig_update_patterns(struct pattern_trig_data *data)
-@@ -76,8 +78,14 @@ static void pattern_trig_timer_function(struct timer_list *t)
- 	struct pattern_trig_data *data = from_timer(data, t, timer);
-
- 	for (;;) {
--		if (!data->is_indefinite && !data->repeat)
-+		if (!data->is_indefinite && !data->repeat) {
-+			data->running = false;
-+
-+			if (data->pattern_ended)
-+				sysfs_notify_dirent(data->pattern_ended);
-+
- 			break;
-+		}
-
- 		if (data->curr->brightness == data->next->brightness) {
- 			/* Step change of brightness */
-@@ -137,6 +145,7 @@ static int pattern_trig_start_pattern(struct led_classdev *led_cdev)
- 	data->curr = data->patterns;
- 	data->next = data->patterns + 1;
- 	data->timer.expires = jiffies;
-+	data->running = true;
- 	add_timer(&data->timer);
-
- 	return 0;
-@@ -176,6 +185,7 @@ static ssize_t repeat_store(struct device *dev, struct device_attribute *attr,
- 	mutex_lock(&data->lock);
-
- 	del_timer_sync(&data->timer);
-+	data->running = false;
-
- 	if (data->is_hw_pattern)
- 		led_cdev->pattern_clear(led_cdev);
-@@ -268,6 +278,7 @@ static ssize_t pattern_trig_store_patterns(struct led_classdev *led_cdev,
- 	mutex_lock(&data->lock);
-
- 	del_timer_sync(&data->timer);
-+	data->running = false;
-
- 	if (data->is_hw_pattern)
- 		led_cdev->pattern_clear(led_cdev);
-@@ -330,6 +341,17 @@ static ssize_t hw_pattern_store(struct device *dev,
-
- static DEVICE_ATTR_RW(hw_pattern);
-
-+static ssize_t pattern_ended_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	struct led_classdev *led_cdev = dev_get_drvdata(dev);
-+	struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", !data->running);
-+}
-+
-+static DEVICE_ATTR_RO(pattern_ended);
-+
- static umode_t pattern_trig_attrs_mode(struct kobject *kobj,
- 				       struct attribute *attr, int index)
- {
-@@ -385,9 +407,41 @@ static void pattern_init(struct led_classdev *led_cdev)
- 	kfree(pattern);
- }
-
-+static int pattern_trig_add_pattern_ended(struct led_classdev *led_cdev)
-+{
-+	struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
-+	struct device *dev = led_cdev->dev;
-+	int ret;
-+
-+	ret = device_create_file(dev, &dev_attr_pattern_ended);
-+	if (ret) {
-+		dev_err(dev,
-+			"Error creating pattern_ended (%pe)\n", ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	data->pattern_ended = sysfs_get_dirent(dev->kobj.sd, "pattern_ended");
-+	if (!data->pattern_ended) {
-+		dev_err(dev, "Error getting pattern_ended kernelfs\n");
-+		device_remove_file(dev, &dev_attr_pattern_ended);
-+		return -ENXIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static void pattern_trig_remove_pattern_ended(struct led_classdev *led_cdev)
-+{
-+	struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
-+
-+	sysfs_put(data->pattern_ended);
-+	device_remove_file(led_cdev->dev, &dev_attr_pattern_ended);
-+}
-+
- static int pattern_trig_activate(struct led_classdev *led_cdev)
- {
- 	struct pattern_trig_data *data;
-+	int err;
-
- 	data = kzalloc(sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -406,6 +460,13 @@ static int pattern_trig_activate(struct led_classdev *led_cdev)
- 	data->led_cdev = led_cdev;
- 	led_set_trigger_data(led_cdev, data);
- 	timer_setup(&data->timer, pattern_trig_timer_function, 0);
-+
-+	err = pattern_trig_add_pattern_ended(led_cdev);
-+	if (err)
-+		dev_warn(led_cdev->dev,
-+			 "pattern ended notifications disabled (%pe)\n",
-+			 ERR_PTR(err));
-+
- 	led_cdev->activated = true;
-
- 	if (led_cdev->flags & LED_INIT_DEFAULT_TRIGGER) {
-@@ -431,6 +492,7 @@ static void pattern_trig_deactivate(struct led_classdev *led_cdev)
- 		led_cdev->pattern_clear(led_cdev);
-
- 	del_timer_sync(&data->timer);
-+	pattern_trig_remove_pattern_ended(led_cdev);
-
- 	led_set_brightness(led_cdev, LED_OFF);
- 	kfree(data);
---
-2.37.2
-
+Thanks

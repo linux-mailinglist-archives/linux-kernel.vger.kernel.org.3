@@ -2,151 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBDD59FDFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EF459FDFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239319AbiHXPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S239425AbiHXPNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238039AbiHXPMz (ORCPT
+        with ESMTP id S239407AbiHXPNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:12:55 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581DA94ECB
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:12:55 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OF9Upx019278;
-        Wed, 24 Aug 2022 15:12:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=+rCBXlE2eJPtNFiByAojb+nVkMIi1BdWNzyL7YYx3oo=;
- b=Amo78HK9jQC+fNJUBj1jjooU5Rdgugbpevq4CpiTrHfbF76hz6plTItjGy4XrgcHfCWl
- yUPsSh5d0yjdRx4PRlcJNvJ9tGk5sem94LFsfAKlzh/sVn0uCuWLu241kGWQMHufqQnD
- 2C6oCXHxyRqEGCUqjpdYPy8NVBBszbksouUVZIV49tr0q8ozbZx6C5zGkFtltrBvEp2a
- sTVecYXXrdVJOQax6ZDZ5dMj1OGsTQqz95hhHk2D9j+0A+ZX1R2akUQYjqsRBSyo+SQp
- 3ynko2kB5UUIwXa8BtXMqUrdWFFm19nLlrIz7/34WrRAsXVzI8F3A0+UWSn0v/xbjV3K lA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4w23uv07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Aug 2022 15:12:46 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27OEp40d008184;
-        Wed, 24 Aug 2022 15:12:44 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n7abv6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Aug 2022 15:12:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gl+baWVn0Sj8X0mBnHfqrCTqTVoB7AOMkP58e0gcBgGMnyiE6y+zVgmsOsbvJuOXtcvz8dsNisMjNqtOkBHWP14zXa7JpNqnxZvIse+zYl8slf6kfbWWuJ1mz5lmvEuaDuye2xAyDnuARXuS47XIFIOGp03MqLc7cZmIM0V5qywZaaZ3KLfftq9dgyrG9UXPjvy+Flzm0U+uV1jAU2J/g32Y999pc0IERIN8DgTk2B/gjoDYT7eVh17C3XzcuveiMwZhiLjXlwkMiB03RNVPjBJ/CN3//dPu7XiDGjRE5BooMUSIPfGikcESDdWhpvQ+IlXmHdNuQyqNB76btX/6vQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+rCBXlE2eJPtNFiByAojb+nVkMIi1BdWNzyL7YYx3oo=;
- b=g0k9SRT1H0Rtfq5c2RUiKxfRkZLuXMFYcax2xJeTofJ5XmnKunUvA6sBUHEdMbAE6iX4nb17WHHYLXqlFeL+mdtsA0Am3hfqbUhuNrl0wlj0YCWZhzJJTZKYMjnNb38PD3wYAMJDTTBX2rA9cBdSZF68EiZwAV6BAS5VE71CEVXNhv3GqXX6hB/hEbsD8xsyBCxjjU0rYR+6or0kak3BIQZaHr8lVMEJMytNZRZ3YKqW4bH+I/MnKT4I+iREeMFW28IC+RKynJqWxeD6d0LJdDGKVZ8MQZkvrUmHdjy3vfTZMvsewm4gvSlbMqIefKyWOQ7IHeEfTW1izee2IGtejA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+rCBXlE2eJPtNFiByAojb+nVkMIi1BdWNzyL7YYx3oo=;
- b=Vg5tkbDWOucXeMRP/F1KsfLTHhMqwfHcidg9ODdTlXDOxTmL/N7Z9DhUJ5QzHw8OOiHHemin0GKeuVBD0JTlfb05vvqGF5MsuSXFAQZVG5jluN/3DadsX7otL4yZrQbM3gUtf7g3vvcCV0ecnFp/nJIT5Pb+n8GrNOFZH3gQpgc=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by DM5PR10MB1530.namprd10.prod.outlook.com (2603:10b6:3:14::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Wed, 24 Aug
- 2022 15:12:42 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::3d34:ebb5:d9df:98b3]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::3d34:ebb5:d9df:98b3%5]) with mapi id 15.20.5546.023; Wed, 24 Aug 2022
- 15:12:42 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>
-CC:     Liam Howlett <liam.howlett@oracle.com>
-Subject: [PATCH] fs/proc/base: use maple tree iterators in place of linked
- list
-Thread-Topic: [PATCH] fs/proc/base: use maple tree iterators in place of
- linked list
-Thread-Index: AQHYt8v0Vq3Ph7IqdUqrxirJlcBD3g==
-Date:   Wed, 24 Aug 2022 15:12:42 +0000
-Message-ID: <20220824151129.2023451-1-Liam.Howlett@oracle.com>
-References: <20220824012121.aj2qkzrmdyywu45t@offworld>
-In-Reply-To: <20220824012121.aj2qkzrmdyywu45t@offworld>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8e06a02a-f36d-4d36-78b5-08da85e3175c
-x-ms-traffictypediagnostic: DM5PR10MB1530:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wC8g/DIZf3Q7HnzPYM+qTzaS3mDjP7Ru3KyYSoxGlIw/9rUk89cI+tsrVRh9s4El0iOsj5v75h8zHJb36PFMx2JUEg7CpkbDU/ptPuqyxapKBeFGaRK1FXMdO6UVPKJp59qnseytbxQf2YTCodm7pZ8SCwO6uoxtCKX+OPhM45t+TKNKOURJLUrLrNC8zzQM+184FwsDL/jHau0QeslN+UuN5jBMCfn1s9yCQ594/4F7WliReLRB/3LEYptLJynhMrY7RZa53kr4ygMI6OVFvLnj3s1lm93Zgpj80ydZ2RgsIblAyEuKmEWe13fXfGMV9PEtNRraV5VDEqxZStwO0sY8eb0POjOclOx4wg/UnOj7VlJ4I/bQFSyuzxjId9w46raire8Rv05ZfK2ZCQiqRLdzN8/rnBCVYt3XMsZ1vTMbBCl9Sh93TixqckZ7TK0pldE/cbRz7ohqXiRGHLDiTAWh4N+5ImJQMQPtuZc/YkY++yCM5AbyS9+r5pDmMgvuhI5GdF5V7H4s7EXkK1mQr2lvAZLhTBQTAWGrgAjFKBnVOjw03mm/yJuTZX62Kaa4fb3u9hjPpIFCqBP43gu+kpowe0JFd9iK7667//ehm2ni9sFQaSLDGD20lgFY7ofrFkicKiRMLnaHa6k57MPFZwxIQ6lTpinnpNjtIxsaRwcZVw3IzKwETh1Qux0pRL82N4yUgxPS8BYGIZXyRXw574GmEmq3+3F5mRCOCNIyjqPH8cpo7YJpQHegIqwNu1o3XnvqaNKGvPloS1W6MNELng==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(39860400002)(366004)(346002)(136003)(376002)(2906002)(107886003)(83380400001)(1076003)(2616005)(186003)(122000001)(38100700002)(38070700005)(26005)(316002)(66556008)(110136005)(76116006)(91956017)(64756008)(66946007)(8936002)(5660300002)(66476007)(8676002)(66446008)(6512007)(41300700001)(36756003)(86362001)(6506007)(478600001)(71200400001)(6486002)(44832011)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?3om9B7XF+i3bvijKJOPEgbWORAXjiZXcrQL4MVrhYjW5DN2Sl7/SOTSzex?=
- =?iso-8859-1?Q?ooZ6VrP42AWwVK/BKllP63RJtBe4x32x/y7LBIAdlWdDfPc6kAXPcYGQwQ?=
- =?iso-8859-1?Q?+Nd5HNIe7KLx4Ui841+AupdZprZQ9mjlSCC/qvtfES3YFRF8oVjxBXn+K0?=
- =?iso-8859-1?Q?Fbk2g6nYtB24ZjpWCRrVpeBXW2uI944wkhB9UZ25oOqj3PG9DXtFL86n9M?=
- =?iso-8859-1?Q?GhQnaeYzneepAdSu7kagyKlHC5D1TRDUv6yVZori2emoJgX0gyfRtdqGNq?=
- =?iso-8859-1?Q?aanqfoO9XfXPNfTdC1Y9yH8cwfOo5Frk3uH2mSUorD+ogN7/osnQ7fb7qU?=
- =?iso-8859-1?Q?g6TRGxMbrCfsmL+Bcu+h2EDu3gPW1KhH9IQx1vxMGIJMYLv+H14Ls2Vzbj?=
- =?iso-8859-1?Q?oK5MawW1WgaXup300G0VEnHeNnBnERAoY2G6XPIlbdkPNwED8rBcpy2ier?=
- =?iso-8859-1?Q?j1T7MlOmIDEsIm3Sc0XBw3SL+wO8gkffcPQs0O9gc1OPo5q2VN6DB4VIG9?=
- =?iso-8859-1?Q?QA0XVf+1gr6pQ0nyxS3ovkxMt38eRaxIunDxAiwco9MdHT7rLBVl0fYPxk?=
- =?iso-8859-1?Q?xNKiBaraHyVFRt1daI0rOHPUS3aJc/vNsywK2nykGrsK6iB0LCZGHUd37q?=
- =?iso-8859-1?Q?sXOwoIfcg95y1rurVD4YA/RpKUMgKDUk1Me3LzqO9RH8DrVai9bc7V0ONK?=
- =?iso-8859-1?Q?lxVm5Km3FvdKA9dlWEPBGf3iWUKDx9hLhPKv+17UVXYfgbb1pOUgprLTkD?=
- =?iso-8859-1?Q?jnKZZyz3vgYJNkDjKAQRUchh6hwsSWCdyROmFWjVMkWTV+jmxGF9cNEVfJ?=
- =?iso-8859-1?Q?PtJzaQbaaJlHUPMaVN6/WVzmlOKX3xr204kb2Hnzrg0fk/hnXbWW1ADkBR?=
- =?iso-8859-1?Q?g/4xV52aluehl0/yA9IyFPwzsLovjjUYjXfDHs64sIMJyN13DgD5PSUVVC?=
- =?iso-8859-1?Q?cx6kG24Sg9mKlhNOIebs4XzfM1QP42ohvqLzE6HuKX4KZmiwrSful7rizv?=
- =?iso-8859-1?Q?1+hMFwcq0f7L7h52ijdzj446dsFikz9EIDiHKVzWYkfVthslVAFoD9VPM4?=
- =?iso-8859-1?Q?VgQN8vzEhBYWIojF0rFanZeN9GfXLsj6cPugo014rJXdaO0drfBYmZFpFB?=
- =?iso-8859-1?Q?BAwBHnARo+7MaMekr+ZTYZaOCDt92uW9N6gnLZIO444k/X2cWjMCvtQEJg?=
- =?iso-8859-1?Q?AzfzisqJgZKIJXYB8KgB3kPRs3PvNmYVHDc0dqtkP9lnkoPEEaPdpnVFD+?=
- =?iso-8859-1?Q?edisXll44Grbo2X6Cw+ge//ynlw0jfFNKd9JK4SjKORHBV4RGjJsgyEztI?=
- =?iso-8859-1?Q?Z+sELlCwS6ISYbuVWrVeq28GPi2icAmnZk7QWmCiJ2HKR8MH/ina8INtzl?=
- =?iso-8859-1?Q?gxJaBsos1GA1pmiIkDeSglOFla83M7YyD1wc9VndIMKd3K27YPlSmefux3?=
- =?iso-8859-1?Q?MZ9UJqUfYs0YsHM14cqWMOGf5fmSKKjnFU1KgVntagX7T9bsqus2oovsLK?=
- =?iso-8859-1?Q?IHx7Q6NceGBzBUDUYhauQlddIS+NRK/uPp/bG+mlDrPfDXrli6eF7bqw+S?=
- =?iso-8859-1?Q?d7AKFApBrN/Ac+dl6gyIlUBGF3/LUkkx+t/qkEh016X52Kc6rzJkyAtIho?=
- =?iso-8859-1?Q?Ekxhn9BKWRkmLvTcpWEH182gvIMXO+TqhCTGbh15fuC4BDaDWBYenQTw?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 24 Aug 2022 11:13:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529C494ECB
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661353994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j2EkIK7Ec5CQ3JRJQv0sZNP7yIn77zqG02uFB5xCBSA=;
+        b=JIFvWt+QeJW9Vy3UIIJao9/u+WeNHHxtak4j4fdNe4ozRoiAa0cLp5suhjLYWiGyVhPGt8
+        TIUMMnRX1xPrVEU7a2wrU422z3YL4q264yMEcJAc9ok5UZ6pJzmz4zthmoeB5WVfXOfnE4
+        lfV2mUj/5KTZpNtIH2XQP16stiDXVPU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-490-YYQj_3iKP9WbwiSlSuRzMw-1; Wed, 24 Aug 2022 11:13:11 -0400
+X-MC-Unique: YYQj_3iKP9WbwiSlSuRzMw-1
+Received: by mail-wm1-f69.google.com with SMTP id v64-20020a1cac43000000b003a4bea31b4dso954336wme.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:13:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=j2EkIK7Ec5CQ3JRJQv0sZNP7yIn77zqG02uFB5xCBSA=;
+        b=5En5tk6zlf/SQGQnAx2tGq95MwsVgyOXf+O5O7xPsCJrU2o5Xm+UgfuLn6ZaxhUnTH
+         eXDNxm4KMb/h1S65Y+8vMhpVJnPErybOIEmoe888FLOVOddRczWzNjsg3c646VzdT7SH
+         wk27t4gZFlCSR++TMWL1vTfmn2v6e8v0iFvEuJa7S57V3+y61iCBcadDM4C1WZhPieEX
+         XH0Ruxx1xFeSasmNdOMszlXfhX7wmLMIO7fQWnFL2wYCHUSv02bKzhJSG3MCRKNvPd0l
+         IOofZ5GoX+b9Z1My0Y1apTmuMCuNYfFg06XhIkQn9mFLKgDCR1eLfGyVbbVSH7nrMwRv
+         0QkQ==
+X-Gm-Message-State: ACgBeo1YCYaXsCijfy+vvVoxmV6hiBxLV5r3DROtxQofNP/LqOz0zl/L
+        aGkLBBt6/tiUlSjQ0WX/tiwAmGRCIhcbFD0rdRiWnqFnMq1XqI2vHUZZWgrmy+YE8r2sra+FwdR
+        3OLV6ummf34BBjY1xSkc3gR+q
+X-Received: by 2002:a5d:6d0b:0:b0:222:955a:8774 with SMTP id e11-20020a5d6d0b000000b00222955a8774mr15635922wrq.129.1661353989959;
+        Wed, 24 Aug 2022 08:13:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5eD/LyvKaPYC90/Ro6Oi2I+AixQD/rYEgcR6MD39YuKJ1MCboIQxsYUXNDYeJ3+NHjX5DxnQ==
+X-Received: by 2002:a5d:6d0b:0:b0:222:955a:8774 with SMTP id e11-20020a5d6d0b000000b00222955a8774mr15635903wrq.129.1661353989644;
+        Wed, 24 Aug 2022 08:13:09 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:c500:5445:cf40:2e32:6e73? (p200300cbc707c5005445cf402e326e73.dip0.t-ipconnect.de. [2003:cb:c707:c500:5445:cf40:2e32:6e73])
+        by smtp.gmail.com with ESMTPSA id p6-20020a1c5446000000b003a500b612fcsm2137004wmi.12.2022.08.24.08.13.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 08:13:09 -0700 (PDT)
+Message-ID: <6e2539b7-b4c7-95dc-e4ac-27692d955936@redhat.com>
+Date:   Wed, 24 Aug 2022 17:13:08 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e06a02a-f36d-4d36-78b5-08da85e3175c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 15:12:42.2196
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cM6FRFpaAV0yOXTARqZf8bZt0dW5cQCT0M+QxhJf/PP1GMV/4a+N5BKacUcd1bhAmiR7gsMMCBfWXnza0P/ogg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1530
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-24_08,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 mlxscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208240058
-X-Proofpoint-ORIG-GUID: ibJRgoS7bjdcCD8JhEltV7jibkTBnt-A
-X-Proofpoint-GUID: ibJRgoS7bjdcCD8JhEltV7jibkTBnt-A
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
+ size hugetlb page
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
+ <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
+ <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
+ <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
+ <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com> <YwVo7xSO+VebkIfQ@monkey>
+ <64669c0a-4a6e-f034-a15b-c4a8deea9e5d@linux.alibaba.com>
+ <7ee73879-e402-9175-eae8-41471d80d59e@redhat.com>
+ <f7544713-d856-0875-41dd-52a5c27ba015@linux.alibaba.com>
+ <041e2e43-2227-1681-743e-5f82e245b5ea@redhat.com>
+ <f5f08e69-83d0-78af-39fb-f2180d13086d@linux.alibaba.com>
+ <0f736dc5-1798-10ad-c506-9a2a38841359@redhat.com>
+ <22585fc8-b0bc-0e14-d121-2767cd178424@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <22585fc8-b0bc-0e14-d121-2767cd178424@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,48 +95,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On 24.08.22 17:06, Baolin Wang wrote:
+> 
+> 
+> On 8/24/2022 10:33 PM, David Hildenbrand wrote:
+>> On 24.08.22 16:30, Baolin Wang wrote:
+>>>
+>>>
+>>> On 8/24/2022 7:55 PM, David Hildenbrand wrote:
+>>>> On 24.08.22 11:41, Baolin Wang wrote:
+>>>>>
+>>>>>
+>>>>> On 8/24/2022 3:31 PM, David Hildenbrand wrote:
+>>>>>>>>>>
+>>>>>>>>>> IMHO, these follow_huge_xxx() functions are arch-specified at first and
+>>>>>>>>>> were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm:
+>>>>>>>>>> hugetlb: Copy general hugetlb code from x86 to mm"), and now there are
+>>>>>>>>>> still some arch-specified follow_huge_xxx() definition, for example:
+>>>>>>>>>> ia64: follow_huge_addr
+>>>>>>>>>> powerpc: follow_huge_pd
+>>>>>>>>>> s390: follow_huge_pud
+>>>>>>>>>>
+>>>>>>>>>> What I mean is that follow_hugetlb_page() is a common and
+>>>>>>>>>> not-arch-specified function, is it suitable to change it to be
+>>>>>>>>>> arch-specified?
+>>>>>>>>>> And thinking more, can we rename follow_hugetlb_page() as
+>>>>>>>>>> hugetlb_page_faultin() and simplify it to only handle the page faults of
+>>>>>>>>>> hugetlb like the faultin_page() for normal page? That means we can make
+>>>>>>>>>> sure only follow_page_mask() can handle hugetlb.
+>>>>>>>>>>
+>>>>>>>>
+>>>>>>>> Something like that might work, but you still have two page table walkers
+>>>>>>>> for hugetlb.  I like David's idea (if I understand it correctly) of
+>>>>>>>
+>>>>>>> What I mean is we may change the hugetlb handling like normal page:
+>>>>>>> 1) use follow_page_mask() to look up a hugetlb firstly.
+>>>>>>> 2) if can not get the hugetlb, then try to page fault by
+>>>>>>> hugetlb_page_faultin().
+>>>>>>> 3) if page fault successed, then retry to find hugetlb by
+>>>>>>> follow_page_mask().
+>>>>>>
+>>>>>> That implies putting more hugetlbfs special code into generic GUP,
+>>>>>> turning it even more complicated. But of course, it depends on how the
+>>>>>> end result looks like. My gut feeling was that hugetlb is better handled
+>>>>>> in follow_hugetlb_page() separately (just like we do with a lot of other
+>>>>>> page table walkers).
+>>>>>
+>>>>> OK, fair enough.
+>>>>>
+>>>>>>>
+>>>>>>> Just a rough thought, and I need more investigation for my idea and
+>>>>>>> David's idea.
+>>>>>>>
+>>>>>>>> using follow_hugetlb_page for both cases.  As noted, it will need to be
+>>>>>>>> taught how to not trigger faults in the follow_page_mask case.
+>>>>>>>
+>>>>>>> Anyway, I also agree we need some cleanup, and firstly I think we should
+>>>>>>> cleanup these arch-specified follow_huge_xxx() on some architectures
+>>>>>>> which are similar with the common ones. I will look into these.
+>>>>>>
+>>>>>> There was a recent discussion on that, e.g.:
+>>>>>>
+>>>>>> https://lkml.kernel.org/r/20220818135717.609eef8a@thinkpad
+>>>>>
+>>>>> Thanks.
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>> However, considering cleanup may need more investigation and
+>>>>>>> refactoring, now I prefer to make these bug-fix patches of this patchset
+>>>>>>> into mainline firstly, which are suitable to backport to old version to
+>>>>>>> fix potential race issues. Mike and David, how do you think? Could you
+>>>>>>> help to review these patches? Thanks.
+>>>>>>
+>>>>>> Patch #1 certainly add more special code just to handle another hugetlb
+>>>>>> corner case (CONT pages), and maybe just making it all use
+>>>>>> follow_hugetlb_page() would be even cleaner and less error prone.
+>>>>>>
+>>>>>> I agree that locking is shaky, but I'm not sure if we really want to
+>>>>>> backport this to stable trees:
+>>>>>>
+>>>>>> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+>>>>>>
+>>>>>> "It must fix a real bug that bothers people (not a, “This could be a
+>>>>>> problem...” type thing)."
+>>>>>>
+>>>>>>
+>>>>>> Do we actually have any instance of this being a real (and not a
+>>>>>> theoretical) problem? If not, I'd rather clean it all up right away.
+>>>>>
+>>>>> I think this is a real problem (not theoretical), and easy to write some
+>>>>> code to show the issue. For example, suppose thread A is trying to look
+>>>>> up a CONT-PTE size hugetlb page under the lock, however antoher thread B
+>>>>> can migrate the CONT-PTE hugetlb page at the same time, which will cause
+>>>>> thread A to get an incorrect page, if thread A want to do something for
+>>>>> this incorrect page, error occurs.
+>>>>>
+>>>>> Actually we also want to backport these fixes to the distro with old
+>>>>> kernel versions to make the hugetlb more stable. Otherwise we must hit
+>>>>> these issues sooner or later if the customers use CONT-PTE/PMD hugetlb.
+>>>>>
+>>>>> Anyway, if you and Mike still think these issues are not important
+>>>>> enough to be fixed in the old versions, I can do the cleanup firstly.
+>>>>>
+>>>>
+>>>> [asking myself which follow_page() users actually care about hugetlb,
+>>>> and why we need this handling in follow_page at all]
+>>>>
+>>>> Which follow_page() user do we care about here? Primarily mm/migrate.c
+>>>> only I assume?
+>>>
+>>> Right, mainly affects the move_pages() syscall I think. Yes, I can not
+>>> know all of the users of the move_pages() syscall now or in the future
+>>> in our data center, but like I said the move_pages() syscall + hugetlb
+>>> can be a real potential stability issue.
+>>>
+>>
+>> I wonder if we can get rid of follow_page() completely, there are not
+>> too many users. Or alternatively simply make it use general GUP
+>> infrastructure more clearly. We'd need something like FOLL_NOFAULT that
+>> also covers "absolutely no faults".
+> 
+> I am not sure I get your point. So you want change to use 
+> __get_user_pages() (or silimar wrappers) to look up a normal page or 
+> hugetlb instead of follow_page()? and adding a new FOLL_NOFAULT flag to 
+> __get_user_pages().
 
-Use mas_for_each to iterate the list of VMAs instead of a for loop
-across the linked list.
+Essentially just getting rid of follow_page() completely or making it a
+wrapper of __get_user_pages().
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
----
- fs/proc/base.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> If I understand correctly, we still need more work to move those 
+> arch-specified follow_huge_xxx() into follow_hugetlb_page() firstly like 
+> we disscussed before? Which seems not backportable too.
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 93f7e3d971e4..0b72a6d8aac3 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -2350,6 +2350,7 @@ proc_map_files_readdir(struct file *file, struct dir_=
-context *ctx)
- 	GENRADIX(struct map_files_info) fa;
- 	struct map_files_info *p;
- 	int ret;
-+	MA_STATE(mas, NULL, 0, 0);
-=20
- 	genradix_init(&fa);
-=20
-@@ -2377,6 +2378,7 @@ proc_map_files_readdir(struct file *file, struct dir_=
-context *ctx)
- 	}
-=20
- 	nr_files =3D 0;
-+	mas.tree =3D &mm->mm_mt;
-=20
- 	/*
- 	 * We need two passes here:
-@@ -2388,7 +2390,8 @@ proc_map_files_readdir(struct file *file, struct dir_=
-context *ctx)
- 	 * routine might require mmap_lock taken in might_fault().
- 	 */
-=20
--	for (vma =3D mm->mmap, pos =3D 2; vma; vma =3D vma->vm_next) {
-+	pos =3D 2;
-+	mas_for_each(&mas, vma, ULONG_MAX) {
- 		if (!vma->vm_file)
- 			continue;
- 		if (++pos <=3D ctx->pos)
---=20
-2.35.1
+I'm not sure we need all that magic in these arch specific helpers after
+all. I haven't looked into the details, but I really wonder why they
+handle something that follow_hugetlb_page() cannot easily handle. It all
+smells like legacy cruft.
+
+> 
+> I am not againt your idea, and I also agree that we should do some 
+> cleanup. But the point is if we need backport patches to fix this issue, 
+> which affects move_pages() syscall, if the answer is yes, I think my 
+> current fixes are suitable to backport.
+
+I really don't like adding more make-legacy-cruft-happy code unless
+there is *real* need for it. (you could always just fix old kernels you
+care about with your patches here -- do they have to be in mainline?
+don't think so)
+
+But of course, it's up to Mike to decide, just my 2 cents :)
+
+-- 
+Thanks,
+
+David / dhildenb
+

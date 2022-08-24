@@ -2,124 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F2A59FDCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6969359FDD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239385AbiHXPD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S237612AbiHXPFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237612AbiHXPDy (ORCPT
+        with ESMTP id S232143AbiHXPFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:03:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C3898A5D;
-        Wed, 24 Aug 2022 08:03:48 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B8806601E8F;
-        Wed, 24 Aug 2022 16:03:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661353426;
-        bh=ss7Re+WGJ6gPDf+07fuRLgmV2oF07ngUyzhkLngogMo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oAR0YvOOYSafNUGMl1oNd0JDpIq3FDAHC3HSFM85TQLAtdUKWV9S7/KMulX1yzdJU
-         ynpYz4YtIeU371JqvKb8/c29/d8CPVp3PGsQrb8kJYYp7JpoSNHveANuXdDGoXqRHL
-         p9edkNfznNFe0vL1B7KsPf3EQ1iqD0q15Jh9BVqB7qaGinbAx23HtsmgAfze7Sezsa
-         5eCHp4KjFs2i46CRc/qn7EZjWd/w/c9qg+8YOKS0kgwlBEA5uFkOiS4rzy8gfpu2eT
-         /NbO6kk31WXQ6hWLjRcZaGob2toZeqNH+aU5AQGrgKbdtAC0glWaondyOLmCNSr5lf
-         VJAAXcJe1ilqw==
-Message-ID: <4af793fd-eccc-ad70-65c3-de78dced71f0@collabora.com>
-Date:   Wed, 24 Aug 2022 18:03:42 +0300
+        Wed, 24 Aug 2022 11:05:08 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E6D804A7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:05:06 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so2101109wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=hGnu2y59OBtorqhLwIUK+o18oWZXjlL2FYRhWhdiwO0=;
+        b=A6qlhecpQzmKJXTAJ7hZpGEQ0tMojsLooAjp0kAbavqDICMZpjH1pwvI1G8L0tjCWi
+         ycOKn2MiSSesS42WM/CAowwbPcvQVWoC98UuZQI5M90uIIcUvi3+w44rEi3XmpI4VAnq
+         8nzhyoAINFfyiULvZZsFG+mKujIQxjBQrXR2C0v8VSzUgqAhmHTA4eBN5w6ge2fTdMCD
+         hngOOap17HTbtL22wpij4w8HdbNW4lzpLQD+wsR3s02n7ivLZgO8n2gFqr8lNrd/G69M
+         kQZPrzjC+uWt/BWrQBe+8q88lVJ8a8imDUDxpnAUSpX2N1B2bgFXxM1EUyHZOVbXS4hW
+         LjSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=hGnu2y59OBtorqhLwIUK+o18oWZXjlL2FYRhWhdiwO0=;
+        b=UHdP8Am3UNQiNHawM6pYxSJAnvUiUl/XZLUotfGU7a7Z1OJkNtD3xU9VCo6iabdTxK
+         XWpxvRP7+e6+vabvqvWHqwK2kAi4mZXl0IToQ72G73lrNUJQJBP0aAnVLhvadPJtYGw5
+         q7OWCv3n35QWpw+gBqmAcL1PxMqCudnjRxN8lpg5v7IbpO8a9BjAp0ENUhl+XFXYuseZ
+         SWLH6QMFtrorgDHQUaHmomhJvBI3PCurDIIyF84kVX6jG5b4ufy5l3FsbVBIB3dwF9Ga
+         JifdK2pnoi8eOuHcPQQeDlA2FducJotf0tMC+uQs/GMXl/r4McLY0s6aeJa0FNNdTtdT
+         WaIg==
+X-Gm-Message-State: ACgBeo0QusNb1wGml3NfLI5O8FhHd8gq112SJzfZJufG6gAHgydulAUl
+        MhTxM0IkJGq2cj2iyypfCjzGV7vugT5Q3ZJSARKpiw==
+X-Google-Smtp-Source: AA6agR499WDzKJBSZv898v0PqTQOgUe7hv6qsT+KpXp2Cc1g39NpRfCYua8LxewTzPevm6USVRlixpygLB9iau6ycVw=
+X-Received: by 2002:a05:600c:25ce:b0:3a5:a3b7:bbfe with SMTP id
+ 14-20020a05600c25ce00b003a5a3b7bbfemr5784783wml.115.1661353504851; Wed, 24
+ Aug 2022 08:05:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 6/9] dma-buf: Move dma-buf attachment to dynamic
- locking specification
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lima@lists.freedesktop.org
-References: <20220824102248.91964-1-dmitry.osipenko@collabora.com>
- <20220824102248.91964-7-dmitry.osipenko@collabora.com>
- <17181951-1b40-cd39-48df-58b43cad117d@amd.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <17181951-1b40-cd39-48df-58b43cad117d@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823220922.256001-1-irogers@google.com> <20220823220922.256001-8-irogers@google.com>
+ <02152f40-1dc5-7f1b-ad88-61ecb146a3da@intel.com>
+In-Reply-To: <02152f40-1dc5-7f1b-ad88-61ecb146a3da@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 24 Aug 2022 08:04:53 -0700
+Message-ID: <CAP-5=fWZaN94M1OS2xRYo6M012mi-cRP_boeBi=p6VPnhbOS7g@mail.gmail.com>
+Subject: Re: [PATCH v2 07/18] perf record: Update use of pthread mutex
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Dario Petrillo <dario.pk1@gmail.com>,
+        Hewenliang <hewenliang4@huawei.com>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        Wenyu Liu <liuwenyu7@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        William Cohen <wcohen@redhat.com>,
+        Andres Freund <andres@anarazel.de>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        Colin Ian King <colin.king@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Fangrui Song <maskray@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 17:08, Christian König wrote:
-> Am 24.08.22 um 12:22 schrieb Dmitry Osipenko:
->> Move dma-buf attachment API functions to the dynamic locking
->> specification.
->> The strict locking convention prevents deadlock situations for dma-buf
->> importers and exporters.
->>
->> Previously, the "unlocked" versions of the attachment API functions
->> weren't taking the reservation lock and this patch makes them to take
->> the lock.
-> 
-> Didn't we concluded that we need to keep the attach and detach callbacks
-> without the lock and only move the map/unmap callbacks over?
-> 
-> Otherwise it won't be possible for drivers to lock multiple buffers if
-> they have to shuffle things around for a specific attachment.
+On Wed, Aug 24, 2022 at 3:15 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 24/08/22 01:09, Ian Rogers wrote:
+> > Switch to the use of mutex wrappers that provide better error checking
+> > for synth_lock.
+>
+> It would be better to distinguish patches that make drop-in
+> replacements from patches like this that change logic.
 
-We did conclude that. The attach/detach dma-buf ops are unlocked, but
-the map_dma_buf/unmap_dma_buf must be invoked under lock and
-dma_buf_dynamic_attach_unlocked() maps dma-buf if either importer or
-exporter can't handle the dynamic mapping [1].
+The only change here is PTHREAD_MUTEX_INITIALIZER to mutex_init
+because PTHREAD_MUTEX_INITIALIZER doesn't have error checking. The two
+are morally equivalent and so no logic change is intended - although
+one may inadvertently happen by the moving initialization from compile
+time to runtime.
 
-[1]
-https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/dma-buf/dma-buf.c#L869
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/builtin-record.c | 13 +++++++++----
+> >  1 file changed, 9 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> > index 4713f0f3a6cf..02eb85677e99 100644
+> > --- a/tools/perf/builtin-record.c
+> > +++ b/tools/perf/builtin-record.c
+> > @@ -21,6 +21,7 @@
+> >  #include "util/evsel.h"
+> >  #include "util/debug.h"
+> >  #include "util/mmap.h"
+> > +#include "util/mutex.h"
+> >  #include "util/target.h"
+> >  #include "util/session.h"
+> >  #include "util/tool.h"
+> > @@ -608,17 +609,18 @@ static int process_synthesized_event(struct perf_tool *tool,
+> >       return record__write(rec, NULL, event, event->header.size);
+> >  }
+> >
+> > +static struct mutex synth_lock;
+> > +
+> >  static int process_locked_synthesized_event(struct perf_tool *tool,
+> >                                    union perf_event *event,
+> >                                    struct perf_sample *sample __maybe_unused,
+> >                                    struct machine *machine __maybe_unused)
+> >  {
+> > -     static pthread_mutex_t synth_lock = PTHREAD_MUTEX_INITIALIZER;
+> >       int ret;
+> >
+> > -     pthread_mutex_lock(&synth_lock);
+> > +     mutex_lock(&synth_lock);
+> >       ret = process_synthesized_event(tool, event, sample, machine);
+> > -     pthread_mutex_unlock(&synth_lock);
+> > +     mutex_unlock(&synth_lock);
+> >       return ret;
+> >  }
+> >
+> > @@ -1917,6 +1919,7 @@ static int record__synthesize(struct record *rec, bool tail)
+> >       }
+> >
+> >       if (rec->opts.nr_threads_synthesize > 1) {
+> > +             mutex_init(&synth_lock, /*pshared=*/false);
+>
+> It would be better to have mutex_init() and mutex_init_shared()
+> since /*pshared=*/true is rarely used.
 
-Hence I re-arranged the dma_resv_lock() in
-dma_buf_dynamic_attach_unlocked() to move both pinning and mapping under
-the held lock.
+Will change in v3.
 
--- 
-Best regards,
-Dmitry
+Thanks,
+Ian
+
+> >               perf_set_multithreaded();
+> >               f = process_locked_synthesized_event;
+> >       }
+> > @@ -1930,8 +1933,10 @@ static int record__synthesize(struct record *rec, bool tail)
+> >                                                   rec->opts.nr_threads_synthesize);
+> >       }
+> >
+> > -     if (rec->opts.nr_threads_synthesize > 1)
+> > +     if (rec->opts.nr_threads_synthesize > 1) {
+> >               perf_set_singlethreaded();
+> > +             mutex_destroy(&synth_lock);
+> > +     }
+> >
+> >  out:
+> >       return err;
+>

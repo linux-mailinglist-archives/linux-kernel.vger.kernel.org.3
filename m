@@ -2,95 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3505A00F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599715A00F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240484AbiHXSB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
+        id S240547AbiHXSCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240753AbiHXSAy (ORCPT
+        with ESMTP id S240540AbiHXSBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:00:54 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564112A92
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:00:05 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id w19so35045099ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:00:05 -0700 (PDT)
+        Wed, 24 Aug 2022 14:01:30 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116EE3335A;
+        Wed, 24 Aug 2022 11:00:21 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id s6so13821204lfo.11;
+        Wed, 24 Aug 2022 11:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ZH0AW3c9ztNqQzucg5KecEsPcM7OXPYg9d2t9+QVkjo=;
-        b=hwRf6JyOT1Jyp0yqMsQEH6rdf0/piRq37jqkfAP9b+yj4UgKieh1p5lJ1PeSPPku84
-         Q3fgiavUUAOWFzbMHBjemM2EeNkp+0hFoRZsEJ/w8iL0FZCQspTvI5uiJGUuSao7RTjr
-         OD0dVfYQ3C2R84vUtaqXCpY+azqvbS7HdWLIE=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=N0TsJICXLt6lhZJlGwrS6fgHuWKVkASuAnCszKy9/5I=;
+        b=HPLcovaeo0KkN8cXAJTQK01A70U6hwfn+p4aW9u0supgtOC2rSDnQz472K0BG3RKhF
+         kDV+3PquM44PFWQN+7pRbAt1dFj+787Ll/rflFFfSevyDMNf4P/EhsTd3whQsmIW3T7F
+         /ag3wJhtYzYFYLdT4XFIsSYidSVrSfH8RTJIcMtBghd6Jf9cv+WH9dVCtPC1bG0KY4Uo
+         GQu1ZrFh6OmNkRHX1gAKMiIXmqwXRwra4HQguCoVjwaj6ijsTOQFbopBFsHDTwYXua0C
+         r3L3l2iHDzgbqKqQphVD2+aFpJ0JGty8U4e6gZxpVmXAeK8uehFM6Sog69b51ayxqgaq
+         NQyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZH0AW3c9ztNqQzucg5KecEsPcM7OXPYg9d2t9+QVkjo=;
-        b=RiUZUbeSp1ruiJWbTYX3/d3CEmTgCTw5suV1B61LPKZ/h6vrqa78ZpKQ9EACY/e5e6
-         b0UJQKqbHPLmxsFJBZTaNe3N0sJWVpJrRoIgZKVOFNOeBfHU1IcqJuxv2sqbKysBqXNe
-         dUZgp7awbVrSnNYsrO/RW58TPxQjr4fKyTBv9V393YdbBKGvwJqgGBm38jHDcCwIf71R
-         h6JIcxtO+JhMgGkz0zIkNM91Xfk43oUttiG47dKJmq+G3Uba1qWLINKZWQfazPl7++2h
-         66Jm89sx4G3Zmw+cVycwM13BAYzwIpb+IU0B/sMqDKfaifyTsc5xcAI8PNWr/Y/nJ2Pt
-         uTGw==
-X-Gm-Message-State: ACgBeo0f2trsaZVuXTnsjx0S6beHTvugLS+CVrzGfUgNY4TwfJFTNcn6
-        lkjA4sl6JSVV7hMh4zPAR3UfgRS/qBb+vuGH
-X-Google-Smtp-Source: AA6agR5ENRR7eYtG+We8t5qvY3uFWLKXtBcpSppB4zuATajYVMcs7N3vGHNQotOQpCp0NV8L5Wtggg==
-X-Received: by 2002:a17:906:9b84:b0:73d:8324:487e with SMTP id dd4-20020a1709069b8400b0073d8324487emr99631ejc.98.1661364001610;
-        Wed, 24 Aug 2022 11:00:01 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id 11-20020a170906308b00b0072abb95eaa4sm1417780ejv.215.2022.08.24.11.00.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 11:00:00 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id bs25so21731706wrb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:00:00 -0700 (PDT)
-X-Received: by 2002:a05:6000:136f:b0:225:2fad:dde7 with SMTP id
- q15-20020a056000136f00b002252faddde7mr210002wrz.274.1661364000263; Wed, 24
- Aug 2022 11:00:00 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=N0TsJICXLt6lhZJlGwrS6fgHuWKVkASuAnCszKy9/5I=;
+        b=7A8muozoMgxrKbml81cZ0pL05lQo3YU5d1mWv6sq87XUQ5ZGIgIvATa5uJOZiNdo0u
+         g5i8UtJ9CnV5ST5yrBVtNKxcwT96XUQKFeuyyTTv0TfssVvlkWbKxDr/ve2QiAsSY/Ea
+         LFMaadVh8bbYsNF5Kb1TCOqf17bFX/Y0jRVBgAdebFqTkWuuhSVM+vHUQzqq30qI1INW
+         5p8ATo8brStQbwRBDQVeKwSuE2QiFTrTWL001fXoPumgBRqeQqs8ooZgij2eJq6BuUEe
+         kU3TSFFEOkHciDZQhZfIGhhyQapkYlOa4aeyp7Mq6oC+lOBH9Ee25L67qlKm+2xLkvAy
+         Yf/A==
+X-Gm-Message-State: ACgBeo1CoBIztpvsdxwTmUC+mPNnGzNX5J3eMdiTzzeGnfRicqvsU9lG
+        CR9nNxoiQCsXtl4RiBqoZr8=
+X-Google-Smtp-Source: AA6agR5iL4qkSLU4Ha6eLHlP1Mc7KxLj8xjA493tylrAViR+UDJHK2LK7IAxbvvD9OKfLzt2vwxmNg==
+X-Received: by 2002:a05:6512:c07:b0:493:ae4:aa52 with SMTP id z7-20020a0565120c0700b004930ae4aa52mr39092lfu.550.1661364019572;
+        Wed, 24 Aug 2022 11:00:19 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id z17-20020a05651c11d100b0025e0396786dsm19432ljo.93.2022.08.24.11.00.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 11:00:18 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 21:00:16 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v5 00/24] dmaengine: dw-edma: Add RP/EP local DMA
+ controllers support
+Message-ID: <20220824180016.ckkf7jugycyai345@mobilestation>
+References: <20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220824163916.GA2784109@bhelgaas>
 MIME-Version: 1.0
-References: <20220824012624.2826445-1-yury.norov@gmail.com> <20220824012624.2826445-2-yury.norov@gmail.com>
-In-Reply-To: <20220824012624.2826445-2-yury.norov@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 24 Aug 2022 10:59:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiRJ1_kmvgkDCD+bp5zH_=KJ5217a9HqQji7XWBhp3nXA@mail.gmail.com>
-Message-ID: <CAHk-=wiRJ1_kmvgkDCD+bp5zH_=KJ5217a9HqQji7XWBhp3nXA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] lib/find_bit: introduce FIND_FIRST_BIT() macro
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Dennis Zhou <dennis@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220824163916.GA2784109@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 6:26 PM Yury Norov <yury.norov@gmail.com> wrote:
->
-> +
-> +#ifndef word_op
-> +#define word_op
-> +#endif
-> +
-> +#define FIND_FIRST_BIT(EXPRESSION, size)                                       \
+On Wed, Aug 24, 2022 at 11:39:16AM -0500, Bjorn Helgaas wrote:
+> On Mon, Aug 22, 2022 at 09:53:08PM +0300, Serge Semin wrote:
+> > This is a final patchset in the series created in the framework of
+> > my Baikal-T1 PCIe/eDMA-related work:
+> > 
+> > [1: Done v5] PCI: dwc: Various fixes and cleanups
+> > Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
+> > Merged: kernel 6.0-rc1
+> > [2: Done v4] PCI: dwc: Add hw version and dma-ranges support
+> > Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru
+> > Merged: kernel 6.0-rc1
+> > [3: In-review v5] PCI: dwc: Add generic resources and Baikal-T1 support
+> > Link: https://lore.kernel.org/linux-pci/20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru/
+> > [4: Done v5] dmaengine: dw-edma: Add RP/EP local DMA support
+> > Link: ---you are looking at it---
+> > ...
+> 
+> > Please note originally this series was self content, but due to Frank
+> > being a bit faster in his work submission I had to rebase my patchset onto
+> > his one. So now this patchset turns to be dependent on the Frank' work:
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
+> 
 
-Please just make 'word_op' be an macro argument, the same way 'EXPRESSION' is.
+> I think this paragraph is obsolete, since the "Enable designware PCI
+> EP EDMA locally" series you reference is already upstream:
+> https://git.kernel.org/linus/94d13317bef3
 
-That way the LE/BE cases can be handled without any odd tricks.
+Right.
 
-              Linus
+> 
+> What remains are items 3 and 4.
+> 
+
+Right.
+
+> 3 is mostly drivers/pci/ and DT bindings (Lorenzo).  4 is mostly
+> drivers/dma/dw-edma/ stuff (Gustavo).  I guess Lorenzo and Gustavo can
+> figure out where it makes the most sense to merge it.
+
+As I already said to you two months ago:
+Link: https://lore.kernel.org/linux-pci/20220617104143.yj2mlnj4twoxoeld@mobilestation/
+Neither Gustavo Pimentel nor Jingoo Han have given any sign of
+activity during all the time the patches being on review, discussed,
+resubmitted while both of them are the DW PCIe and eDMA drivers
+maintainers. Moreover none of them have been active in kernel for more
+than a year:
+Last Gustavo' tag could be tracked at Apr' 2021.
+Last Han' tag could be found at Nov' 2020 commit.
+So it's very much unluckily they'll just get back any time soon. We
+can't wait for their opinion especially seeing that my patches have
+been on review for almost half a year.
+
+So as we already agreed with you the best solution would be to merge
+this and the patchset #3 via your repo (or Lorenzo' repo if he is back
+from his long-term absence). Vinod already acked the DMA-patches of
+this series:
+Link: https://lore.kernel.org/linux-pci/YtlDivjaXfSEK1Xg@matsya/
+
+So the only thing left to settle is the DT-related part of the
+patchset #3. Which I hope will be done before the next kernel merge
+window. After it's done I'll ping you and Lorenzo. Ok?
+
+-Sergey
+
+> 
+> Bjorn

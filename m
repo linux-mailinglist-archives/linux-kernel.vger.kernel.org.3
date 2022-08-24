@@ -2,63 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1CC559F5A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13BC59F59D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236117AbiHXIr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S236244AbiHXIqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236126AbiHXIp6 (ORCPT
+        with ESMTP id S236169AbiHXIqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:45:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA82772FE9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661330755; x=1692866755;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rIBijWYDCuJCpKPJprGFsO7FPm8DX5/N35/ZVITEqGo=;
-  b=iy911PyXMISMCafGEqr2Op9uXaOpb7ohrL6EDLhA6Ssq5YCiPQkXOZGy
-   cgtC09XYIRmltQpLuTUrwFFFKIErdss+zppdKCc3VUKPEpsSUwKSRWz5g
-   hUVz7m9MF2Sp8krPb2GnhsA4PazUZAW4uuXQaVDIEL/A6h6xmYoJG3wmg
-   /zS4xJOsM+fQGy4PDDbW+LDwv3JoAF1A93c72yyLj/WBFxKYWqZnjcDZR
-   bgPG4NBJwHobvwmBpq+TWH9iCO+SAX2h4FvtvEwr3voSWoNhpKIioXPCJ
-   km9St1ZlepWi3w+RmKnobcaA0RemHJpn/7tSkiVHJPwRtEg/ejddEjKqu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="357882564"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="357882564"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 01:45:55 -0700
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="785554080"
-Received: from yuhsuanc-mobl.gar.corp.intel.com (HELO paris.amr.corp.intel.com) ([10.254.38.238])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 01:45:52 -0700
-From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-To:     intel-gfx@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        mchehab@kernel.org, chris@chris-wilson.co.uk,
-        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
-        jani.nikula@intel.com, nirmoy.das@intel.com, airlied@linux.ie,
-        daniel@ffwll.ch, andi.shyti@linux.intel.com,
-        andrzej.hajda@intel.com, keescook@chromium.org,
-        mauro.chehab@linux.intel.com,
-        intel-gfx-trybot@lists.freedesktop.org
-Subject: [PATCH v9 8/8] drm/i915: Remove truncation warning for large objects
-Date:   Wed, 24 Aug 2022 17:45:14 +0900
-Message-Id: <20220824084514.2261614-9-gwan-gyeong.mun@intel.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220824084514.2261614-1-gwan-gyeong.mun@intel.com>
-References: <20220824084514.2261614-1-gwan-gyeong.mun@intel.com>
+        Wed, 24 Aug 2022 04:46:04 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CBC74DE3;
+        Wed, 24 Aug 2022 01:46:00 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oQm1O-0005uy-OU; Wed, 24 Aug 2022 10:45:58 +0200
+Message-ID: <64f160e0-dd9d-ff01-08bd-464da5725f01@leemhuis.info>
+Date:   Wed, 24 Aug 2022 10:45:58 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: Regression in 5.19.0: USB errors during boot
+Content-Language: en-US
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <25342.20092.262450.330346@wylie.me.uk>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <25342.20092.262450.330346@wylie.me.uk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661330761;a6886e98;
+X-HE-SMSGID: 1oQm1O-0005uy-OU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,59 +43,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris@chris-wilson.co.uk>
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-Having addressed the issues surrounding incorrect types for local
-variables and potential integer truncation in using the scatterlist API,
-we have closed all the loop holes we had previously identified with
-dangerously large object creation. As such, we can eliminate the warning
-put in place to remind us to complete the review.
+On 18.08.22 16:36, Alan J. Wylie wrote:
+> 
+> Apologies for the delay in reporting this: I messed up my first attempt at
+> bisecting, then I've spent a week going to, enjoying, returning from and
+> recovering from a music festival.
+> 
+> Up to and including 5.18.18 things are fine. With 5.19.0 (and .1 and .2)  I see
+> lots of errors and hangs on the USB2 chipset, e.g.
+> 
+> $ grep "usb 9-4" dmesg.5.19.2
+> [    6.669075] usb 9-4: new full-speed USB device number 2 using ohci-pci
+> [    6.829087] usb 9-4: device descriptor read/64, error -32
+> [    7.097094] usb 9-4: device descriptor read/64, error -32
+> [    7.361087] usb 9-4: new full-speed USB device number 3 using ohci-pci
+> [    7.521152] usb 9-4: device descriptor read/64, error -32
+> [    7.789066] usb 9-4: device descriptor read/64, error -32
+> [    8.081070] usb 9-4: new full-speed USB device number 4 using ohci-pci
+> [    8.497138] usb 9-4: device not accepting address 4, error -32
+> [    8.653140] usb 9-4: new full-speed USB device number 5 using ohci-pci
+> [    9.069141] usb 9-4: device not accepting address 5, error -32
+> $
+> 
+> $ grep "usb 1-2" dmesg.5.19.2
+> [    5.917102] usb 1-2: new high-speed USB device number 2 using ehci-pci
+> [    6.277076] usb 1-2: device descriptor read/64, error -71
+> [    6.513143] usb 1-2: device descriptor read/64, error -32
+> [    6.753146] usb 1-2: new high-speed USB device number 3 using ehci-pci
+> [    6.881143] usb 1-2: device descriptor read/64, error -32
+> [    7.117144] usb 1-2: device descriptor read/64, error -32
+> [    7.429141] usb 1-2: new high-speed USB device number 4 using ehci-pci
+> [    7.845134] usb 1-2: device not accepting address 4, error -32
+> [    7.977142] usb 1-2: new high-speed USB device number 5 using ehci-pci
+> [    8.393158] usb 1-2: device not accepting address 5, error -32
+> $
+> 
+> the USB port is then no longer usable
+> 
+> This is not reproducible on the other chipset (USB3) on this machine,
+> nor on two other systems. Swapping USB cables doesn't help.
+> 
+> I have bisected it to
+> 
+> $ git bisect bad
+> 78013eaadf696d2105982abb4018fbae394ca08f is the first bad commit
+> commit 78013eaadf696d2105982abb4018fbae394ca08f
+> Author: Christoph Hellwig <hch@lst.de>
+> Date:   Mon Feb 14 14:11:44 2022 +0100
+> 
+>     x86: remove the IOMMU table infrastructure
+> 
+> however it will not easily revert
+> 
+> I'll be more than happy to assist with any debugging/testing.
+> 
+> $ git revert 78013eaadf696d2105982abb4018fbae394ca08f
+> Auto-merging arch/x86/include/asm/dma-mapping.h
+> CONFLICT (content): Merge conflict in arch/x86/include/asm/dma-mapping.h
+> Auto-merging arch/x86/include/asm/iommu.h
+> Auto-merging arch/x86/include/asm/xen/swiotlb-xen.h
+> Auto-merging arch/x86/kernel/Makefile
+> Auto-merging arch/x86/kernel/pci-dma.c
+> CONFLICT (content): Merge conflict in arch/x86/kernel/pci-dma.c
+> Auto-merging arch/x86/kernel/vmlinux.lds.S
+> Auto-merging drivers/iommu/amd/init.c
+> Auto-merging drivers/iommu/amd/iommu.c
+> CONFLICT (content): Merge conflict in drivers/iommu/amd/iommu.c
+> Auto-merging drivers/iommu/intel/dmar.c
+> error: could not revert 78013eaadf69... x86: remove the IOMMU table infrastructure
+> 
+> # dmidecode  | grep -A2 "^Base Board"
+> Base Board Information
+>      Manufacturer: Gigabyte Technology Co., Ltd.
+>      Product Name: 970A-DS3P
+> #
+> 
+> # lspci -nn | grep -i usb
+> 00:12.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+> 00:12.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+> 00:13.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+> 00:13.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+> 00:14.5 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI2 Controller [1002:4399]
+> 00:16.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+> 00:16.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+> 02:00.0 USB controller [0c03]: VIA Technologies, Inc. VL805/806 xHCI USB 3.0 Controller [1106:3483] (rev 01)
+> #
+> 
+> # lspci -v -s 00:12
+> 00:12.0 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller (prog-if 10 [OHCI])
+> 	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
+> 	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 18
+> 	Memory at fe50a000 (32-bit, non-prefetchable) [size=4K]
+> 	Kernel driver in use: ohci-pci
+> 				 	Kernel modules: ohci_pci
+> 00:12.2 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller (prog-if 20 [EHCI])
+> 	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
+> 	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 17
+> 	Memory at fe509000 (32-bit, non-prefetchable) [size=256]
+> 	Capabilities: [c0] Power Management version 2
+> 	Capabilities: [e4] Debug port: BAR=1 offset=00e0
+> 	Kernel driver in use: ehci-pci
+> 	Kernel modules: ehci_pci
+> #
+> 
+> # lsusb
+> Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 009 Device 002: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port / Mobile Action MA-8910P
+> Bus 009 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+> Bus 008 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+> Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 007 Device 002: ID 03f0:0317 HP, Inc LaserJet 1200
+> Bus 007 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+> Bus 001 Device 002: ID 04e8:6860 Samsung Electronics Co., Ltd Galaxy A5 (MTP)
+> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 006 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+> Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 002 Device 002: ID 2109:3431 VIA Labs, Inc. Hub
+> Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> #
+> 
+> $ git bisect log
+> git bisect start
+> # good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+> git bisect good 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+> # good: [07e0b709cab7dc987b5071443789865e20481119] Linux 5.18.18
+> git bisect good 07e0b709cab7dc987b5071443789865e20481119
+> # bad: [3d7cb6b04c3f3115719235cc6866b10326de34cd] Linux 5.19
+> git bisect bad 3d7cb6b04c3f3115719235cc6866b10326de34cd
+> # bad: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+> git bisect bad c011dd537ffe47462051930413fed07dbdc80313
+> # good: [7e062cda7d90543ac8c7700fc7c5527d0c0f22ad] Merge tag 'net-next-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+> git bisect good 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
+> # good: [f8122500a039abeabfff41b0ad8b6a2c94c1107d] Merge branch 'etnaviv/next' of https://git.pengutronix.de/git/lst/linux into drm-next
+> git bisect good f8122500a039abeabfff41b0ad8b6a2c94c1107d
+> # good: [2518f226c60d8e04d18ba4295500a5b0b8ac7659] Merge tag 'drm-next-2022-05-25' of git://anongit.freedesktop.org/drm/drm
+> git bisect good 2518f226c60d8e04d18ba4295500a5b0b8ac7659
+> # good: [f7a344468105ef8c54086dfdc800e6f5a8417d3e] ASoC: max98090: Move check for invalid values before casting in max98090_put_enab_tlv()
+> git bisect good f7a344468105ef8c54086dfdc800e6f5a8417d3e
+> # good: [fbe86daca0ba878b04fa241b85e26e54d17d4229] Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> git bisect good fbe86daca0ba878b04fa241b85e26e54d17d4229
+> # good: [709c8632597c3276cd21324b0256628f1a7fd4df] xfs: rework deferred attribute operation setup
+> git bisect good 709c8632597c3276cd21324b0256628f1a7fd4df
+> # bad: [babf0bb978e3c9fce6c4eba6b744c8754fd43d8e] Merge tag 'xfs-5.19-for-linus' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux
+> git bisect bad babf0bb978e3c9fce6c4eba6b744c8754fd43d8e
+> # bad: [8b728edc5be161799434cc17e1279db2f8eabe29] Merge tag 'fs_for_v5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs
+> git bisect bad 8b728edc5be161799434cc17e1279db2f8eabe29
+> # bad: [3f70356edf5611c28a68d8d5a9c2b442c9eb81e6] swiotlb: merge swiotlb-xen initialization into swiotlb
+> git bisect bad 3f70356edf5611c28a68d8d5a9c2b442c9eb81e6
+> # good: [f39f8d0eb081407e470396fd4cc376c526d13066] MIPS/octeon: use swiotlb_init instead of open coding it
+> git bisect good f39f8d0eb081407e470396fd4cc376c526d13066
+> # bad: [c6af2aa9ffc9763826607bc2664ef3ea4475ed18] swiotlb: make the swiotlb_init interface more useful
+> git bisect bad c6af2aa9ffc9763826607bc2664ef3ea4475ed18
+> # bad: [a3e230926708125205ffd06d3dc2175a8263ae7e] x86: centralize setting SWIOTLB_FORCE when guest memory encryption is enabled
+> git bisect bad a3e230926708125205ffd06d3dc2175a8263ae7e
+> # bad: [78013eaadf696d2105982abb4018fbae394ca08f] x86: remove the IOMMU table infrastructure
+> git bisect bad 78013eaadf696d2105982abb4018fbae394ca08f
+> # first bad commit: [78013eaadf696d2105982abb4018fbae394ca08f] x86: remove the IOMMU table infrastructure
+> $
 
-Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Cc: Brian Welty <brian.welty@intel.com>
-Cc: Matthew Auld <matthew.auld@intel.com>
-Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Testcase: igt@gem_create@create-massive
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4991
-Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_object.h | 15 ---------------
- 1 file changed, 15 deletions(-)
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.h b/drivers/gpu/drm/i915/gem/i915_gem_object.h
-index 0cf31adbfd41..dd2762da332f 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_object.h
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_object.h
-@@ -20,25 +20,10 @@
- 
- enum intel_region_id;
- 
--/*
-- * XXX: There is a prevalence of the assumption that we fit the
-- * object's page count inside a 32bit _signed_ variable. Let's document
-- * this and catch if we ever need to fix it. In the meantime, if you do
-- * spot such a local variable, please consider fixing!
-- *
-- * We can check for invalidly typed locals with typecheck(), see for example
-- * i915_gem_object_get_sg().
-- */
--#define GEM_CHECK_SIZE_OVERFLOW(sz) \
--	GEM_WARN_ON((sz) >> PAGE_SHIFT > INT_MAX)
--
- static inline bool i915_gem_object_size_2big(u64 size)
- {
- 	struct drm_i915_gem_object *obj;
- 
--	if (GEM_CHECK_SIZE_OVERFLOW(size))
--		return true;
--
- 	if (overflows_type(size, obj->base.size))
- 		return true;
- 
--- 
-2.37.1
+#regzbot ^introduced 78013eaadf696d2105982abb4018fbae394ca08
+#regzbot title dma/iommu/gart/usb: USB errors during boot
+#regzbot ignore-activity
 
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.

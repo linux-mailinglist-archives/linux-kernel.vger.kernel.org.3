@@ -2,87 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C16559F9F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0E859FA01
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237049AbiHXMaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
+        id S237118AbiHXMab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiHXMaI (ORCPT
+        with ESMTP id S237247AbiHXMaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:30:08 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63B12018F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:05 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id gt3so20779351ejb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:05 -0700 (PDT)
+        Wed, 24 Aug 2022 08:30:21 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95D23F1FD
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id bf22so16863331pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=A4ebziFGIGKWedk4/E9Y9YHWqlnnQT7eJEB+itOg6jY=;
-        b=JV4NxLJrrSRlvhdBCQR0BmBXWvBPD2WWY57yL9lQtZiNURXqJpW+V5TxKtgglU8sfr
-         8h0saIQScUeus/RY4HdeNiEsA6CqBZsV5Z9pDrACaY0tZcAxGuVb7q083EomrLNDC40e
-         odwPYLn28lzNGxZNRAjiuAPURDYf9lpPS9WKBAGU5Ly214gBijHGAUB5XOWefa2WXJTh
-         I4V+h/62ngM8TNNQUcvs4g16JwsYe9ZtdRvwBVyGQqgULED08G3uMVf1nyDa14i+tesK
-         7IHifg30XF+EjhDYcPgPLX+unpTE3yx0aumKCsZoelIzFF3+cnpPGECjoTxRKYH5Khuq
-         e3Dw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=lTq05bQ1OKgNVfwpDwHO25M6SddSlDeTyGdeeuSYq38=;
+        b=WyIluVrrWEn0m/dxKECPZMN1MjW96MEQ6xtJw5kNo8GII3mlN9wXxjQtk3PdhhaxQW
+         xKyi7HsXS36xIqfZ/mmgjKAxY3MTOUvntjjxHwrTjd9kgvbAVWhyRZwGfbYtObWsUD2r
+         r2SXCYIELN7Jc/YgtBLEWKp/LQjAxZJaxFSgFozwOsR5Y+YSN9gn4bs8EYXOjaPjkGcg
+         PxCamYjPckL5Akc36wPkha+b7Zv3GLrgUXLtdlOPO11Kwngn+OGr95XilNwnsfUAYsZb
+         juAXjm0Of3/QiuLd33Ou9EZl5tx9w+uOrS/HEidBDdDSYe2e98U8uuN5Yq+7XI05ifCc
+         Htog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=A4ebziFGIGKWedk4/E9Y9YHWqlnnQT7eJEB+itOg6jY=;
-        b=KaVxXEhYSTEep+BqQZpMopDav4UP9UHzqaskDZmE5mV+9EGoq/Msd3NEKxbZegA8XA
-         iRCKHVytqnSUX+lZp5Q6C+v6nlJF71fwWMeP6pbbVBa0P+xqGD4Cl85mX3QgPnjVILtc
-         +CuNoxGyNntmyvs4zWLL0pK4/quPB72T6PFMwWVq0m1XaZ/0RKqUDi68E4hcowkNGUJI
-         FqWmlU2LYminEXqYwcFaVDsTtx2nMkEu7SomFnDx0+WATXke4ZxkLi8Fs8OL/3q48QIU
-         ER/4Q19LiY1vVTyMl2nRpDezWKGa2RFSFbQrnTLCgaHi/ts7UNvlVeqBTj94QAoV0AQX
-         NphQ==
-X-Gm-Message-State: ACgBeo3ixsrmBwEaY9XpGHa/QKOMiO8bNTBiMNcwcOXQGYQNpjVsLhMa
-        SQsPREnsZ0aMKKacLtl4EYY86r3tfOwQA2EcLyGoNQ==
-X-Google-Smtp-Source: AA6agR4y8IkROVTTFYuvJGLyuFpJlX7rUg/lBd9WKIqzPf1600ZmKhkQ1tKmij2PmJr9CSFfVIP2c0YYAvxPH8SXo4Y=
-X-Received: by 2002:a17:907:6293:b0:73d:b27b:e594 with SMTP id
- nd19-20020a170907629300b0073db27be594mr2746905ejc.526.1661344204322; Wed, 24
- Aug 2022 05:30:04 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=lTq05bQ1OKgNVfwpDwHO25M6SddSlDeTyGdeeuSYq38=;
+        b=KM44dokrXxxbg5qoVom4jmJbbt1VFNDZnXakYUZUTmelYccbp9ZUDrCOxkRFVcTBD4
+         mCLS55uj6JLvJXDCKTA+xue/2vm2htk+55jF8gd0t2kMl1kr+6rxUPxu/k+RaeGN4QSh
+         jh3Af/QvO0aNwHZVU7ZmzmcTrn77SL4sPc79BsX3OAIgLFGUg1XxfhxhIh2df56L7bYD
+         8HV2sneIskvSNQb+qK8mP1bRgkb6R90GztAjjEw3XkC5yZVQXubbkjuTKDhWDvN4E1Zx
+         dfC+XmSLWubgPP1BI0/aaNb5iK905dl1ZUYVM44QW9ZDjHYG2iZI7iG86v53lcj5GrfH
+         gScA==
+X-Gm-Message-State: ACgBeo3U3ATyMuT3NOQkMozmzdREFaayqrN3NGApEqOzRaBpzX0nWbW/
+        wCmBUy9xaGrz7Y6yCe7Qhe8U
+X-Google-Smtp-Source: AA6agR77/hmpgiMkWbIPOaXWY41ErdUJYXUbD6I5NF8OpqnxJZASur5kkaI6mV2CcfVbJ/+u4ItHuA==
+X-Received: by 2002:a17:902:6542:b0:172:95d8:a777 with SMTP id d2-20020a170902654200b0017295d8a777mr28453985pln.61.1661344219362;
+        Wed, 24 Aug 2022 05:30:19 -0700 (PDT)
+Received: from localhost.localdomain ([117.207.24.28])
+        by smtp.gmail.com with ESMTPSA id b3-20020a1709027e0300b00173031308fdsm3539220plm.158.2022.08.24.05.30.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 05:30:18 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@ti.com, gregkh@linuxfoundation.org, lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mie@igel.co.jp, kw@linux.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/5] pci_endpoint_test: Fix the return value of IOCTLs
+Date:   Wed, 24 Aug 2022 18:00:05 +0530
+Message-Id: <20220824123010.51763-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220823145649.3118479-4-robh@kernel.org>
-In-Reply-To: <20220823145649.3118479-4-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 24 Aug 2022 14:29:52 +0200
-Message-ID: <CACRpkdb28sHn3XOEJD_rqYRWU1GxWGX1udMpk8Cdu3Qn-rxS0g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mfd: Add missing (unevaluated|additional)Properties
- on child nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Robert Jones <rjones@gateworks.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        - <patches@opensource.cirrus.com>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        Chris Zhong <zyw@rock-chips.com>,
-        Zhang Qing <zhangqing@rock-chips.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Renner Berthing <kernel@esmil.dk>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -93,15 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 4:57 PM Rob Herring <robh@kernel.org> wrote:
+During the review of a patch for pci_endpoint_test driver [1], Greg spotted
+the wrong usage of the return value of IOCTLs in the driver. This series
+fixes that by returning 0 for success and negative error code for failure.
+Relevant change is also made to the userspace tool and the Documentation.
 
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Along with those, there are couple more patches fixing other small issues
+I noted.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+NOTE: I have just compile tested this series. So it'd be good if someone
+can test it on the PCI endpoint setup.
 
-Yours,
-Linus Walleij
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/all/20220816100617.90720-1-mie@igel.co.jp/
+
+Changes in v2:
+
+* Fixed the error numbers in pci_endpoint_test
+* Added Fixes tag and CCed stable list for relevant patches. The patches
+  should get backported until 5.10 kernel only. Since for the LTS kernels
+  before that, the pci_endpoint_test driver was not supporting all commands.
+
+Manivannan Sadhasivam (5):
+  misc: pci_endpoint_test: Fix the return value of IOCTL
+  tools: PCI: Fix parsing the return value of IOCTLs
+  Documentation: PCI: endpoint: Use the correct return value of
+    pcitest.sh
+  misc: pci_endpoint_test: Remove unnecessary WARN_ON
+  tools: PCI: Fix memory leak
+
+ Documentation/PCI/endpoint/pci-test-howto.rst | 152 ++++++++--------
+ drivers/misc/pci_endpoint_test.c              | 167 ++++++++----------
+ tools/pci/pcitest.c                           |  48 ++---
+ 3 files changed, 179 insertions(+), 188 deletions(-)
+
+-- 
+2.25.1
+

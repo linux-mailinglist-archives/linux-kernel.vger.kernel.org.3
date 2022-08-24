@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D3B5A01DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105785A01F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234967AbiHXTOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 15:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S232084AbiHXTPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 15:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbiHXTOS (ORCPT
+        with ESMTP id S239657AbiHXTPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 15:14:18 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9AF65240;
-        Wed, 24 Aug 2022 12:14:16 -0700 (PDT)
+        Wed, 24 Aug 2022 15:15:38 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D861BE0E2;
+        Wed, 24 Aug 2022 12:15:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661368454;
-        bh=Wf+PgvEMxVLzIEkHcy0ZAH85uq9spAuazl+zPdNjBpc=;
+        s=badeba3b8450; t=1661368520;
+        bh=uIvt0oF2zqE3yCPJ59JRPqlEWFJymwqLIf9WiRpbsSA=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=MSVaIYBJDTVZPe+Y5zdglJAkgXaWuHmY47lpMPqe87nQfw6n7ALxH/0gsqo3jO+F8
-         BAFPIX1ShzI6zswgafYwZ5agCQ6jleMmQeqXN/pA5hVE9AIs+6NeqHMlWwhFd8kyGA
-         l3ymQ5xG5dKDSk+FMVPO3T0AWZ1Xhthxu9IdsoWI=
+        b=HtIIxLEo6ZzHNLhGsiXIuYquj7+lW1eBf0xCE81uVQsWKUkYnVvyj7ZbMSS9UOVVS
+         29LMF/NffhpoJzDmy/6lt+TTrndJKpaf0npEt4sCynBnvASjqXbYaj5hZiVopUZfB3
+         Vsy9/CwfuVY7Qyi4XixxAOvzMs7Q6iw7l0rVG4Aw=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from silverpad ([89.204.135.131]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mqs0X-1pDgrE3Z0z-00mqrV; Wed, 24
- Aug 2022 21:14:14 +0200
+Received: from silverpad ([89.204.135.131]) by mail.gmx.net (mrgmx005
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MgNcz-1p5TOh1ZL5-00hv5r; Wed, 24
+ Aug 2022 21:15:20 +0200
 From:   Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     oliver@neukum.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
-Subject: [PATCH v3] usb: add quirks for Lenovo OneLink+ Dock
-Date:   Wed, 24 Aug 2022 21:13:21 +0200
-Message-Id: <20220824191320.17883-1-jflf_kernel@gmx.com>
+Subject: [PATCH v3] r8152: add PID for the Lenovo OneLink+ Dock
+Date:   Wed, 24 Aug 2022 21:14:36 +0200
+Message-Id: <20220824191435.17910-1-jflf_kernel@gmx.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:oC3+so+41R2EyHHJ2AN93nJq1sJqJgGMVDu43fxDbWm7rWjz+K4
- vfdv5/FlFIDOAvUItqOQz14zYlfwbT8m63QonQgXO34eqcuYEKt3W4ma8CPsJlrz6ZJHdPW
- 8enCachOymIRNjvrix9VnhbKKIhVNEBsVF/RA98bdU4t5cEzL7llpurQQBDciLTTi2AFSD6
- v1qgQNGIdIZyV535QhH5g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2foCDcNJHi8=:WX+rB6uxNjd6ec8zY4NMcD
- PCfWYJcp6TmnzRZkcAc7WOclVd/vCjvKmZSQxTynFXsr5Suu+ndZn5okE1oA2hKatTgVmG0lj
- RHCQ46/lQZER+TWzPiyLlN6zCKYl5FWeUSwJE1PVw9wFn7g5OkYHHdvO+qn3yJpaAfc1Y8qQp
- jUTz4LkuVOdb4Y+9FVy7CiIAGXmgJhUxyGkTPwneUeaTDjBqQdD4x/RlRTkzNRJjoo5JwKW/b
- dDYxaILlz9T0U2AY75BkE8dfef9ZBOtrlEN0KVgiKPWY4O1blf7jcxVcommNrdxQBdE+z58gg
- P5jK1amojHxRAYzsOPkPBBxlHgNYR3Qt9mPbnXD2ILdBVGfyVT31QveFgpZtU0L9GuggZaH8n
- wpSAn+Mg8IsM30dVW/YFy9vVt4D2BJp01td+b+sYa/hMomNdt/1BOV0F+SqrC2qkyn+O4Vvdf
- SYgO9ZmK5DWFX7Ci9bvltGAGq2h0fbphIgyZ/cr6vDC5xggCd1o8kuYP5imYI3YqNqC5SGVkQ
- BXJyjH6v2TSV5mZAZDYAxzO8SaJjNLnYW4h5xFbe+evhlTskn5aIf9zoFtKd5hWLu/qsQKyqQ
- PFjnKlHYEVvjDHVSIk3yK8MW3jfFOMKZbqJX1OKFmOhnkAeqV0R+4d+mApv4p1ISoSRj+1rJE
- pK2rZuTZqGbU1nCCj5Y+uQsF5jmWqK6RZKWOzEf7DcSE3zPRw0yvLJ2Oqg8SNXBoPWEy/gVdr
- 5M6Z25HbzsMoLt/00z/ZiSo9mvoS5xKHSm9NZIRTcJbXMAznPSDrABwAuYtZltaIGBbrTyQFu
- 2JUJ1mhlZjy4fYLb0WPswD/1OA2oXoy+7CSNySYk3dqKevL2e8JzO8NnKniIcoM3omQuRTP9v
- AYT+ChPilrllyGc7iN6eBuEL2m0AwKSwZSZbr4WlFHrNLQxsYpcqh6ZNiS1ZTJOT4OMuYfRC7
- +fzRYNzYySL+S9oGkpZWonMDs4fcPTjCWC9KBLTJjsOnb/VusyrpUIrYzUb5X6VS1HOyF+KCB
- czotvjtN0HgxoRWvteyB+vGmVCvNpXPxV4EcYm//Wn2wCgis9W0TiMRHmS4jPMVGMZ5zQrMJH
- noLHzTd4NLyhp9Jyor7zhcnrCtDlfpoJ9al+54NjzkRCU32gRQNTkx2Cw==
+X-Provags-ID: V03:K1:i4CYBF3hj89H3McJjNdj1uVYhJzwCVJmjfsyEwCC0v5u5+oDlBW
+ hY0vKP2sjbQKu8MySLFit3Tv/yVqxkaBScOozHoFTH/sI1aQnML5nXnQ6TxrOXrx5TNVa55
+ phl+gk2pfJhqRrljxYvJN3LZcNhqFJEO5cjf6h0mBejz9dQPKMp28XvbLAhofWYG/EYMFSx
+ +NP/hKDikTqTVGPs3Bl3g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eF0Hp2Ge24I=:T8/AcajRVXkyPojZqW0JHF
+ cdN6uGGpllioMgAZLEh9yIidcM+xCY8qD7uTFi7Wh7uRzFs5MYWcFtIUwB5d6Mbeq1KtSlY1Q
+ qCq6kWbAO8P57wvpstAb+Hmbwi1KkNuWO3oLrvy4/P/pigfzS50H1V9e2+Kc6RcFVKrhSowgQ
+ s22LGs4jXGBIQmERrGVpR/ClWXc48+JlWEKXiFUiluUW+SSdkFngLA12j9aLKTj+Fq6eHx+1w
+ ufT2EpPXdtEysbDvFUFHfb9X9jHKj/uDvG9j+qU/GXyevNtTNyDOCmxid2id+nx/jp7t/hLZ9
+ ia+MPpW5b3xZTl/9drva4b1CcWiaHO4/teZmYW9FIofuEZSiDUo7J9vH30WW+l2IaGV8zpC8B
+ Orqp9JaYVQIbNSMHtQl7wS9rdxuomRwoTNvXVABG1AWRsKjxyCGhORfLtHVvSJEtxPF7XzmSh
+ ulB5kwdSAv7QddWW4ZhIpLZhGo/ifEedgVGsGPrZ+ZpnPAyaJ5sXEp0tJb3Fe0CYdAO5cO59I
+ 7wGJ7mXG7fDN8rCn2qU1jjxnnu3ZrioCDnbHYjUbaT/ho87KMpBhFy67D93Hx+kUJvx5kFv/0
+ EOLRmX3DsLo3TFjdlJ+Qj3fbBTXqyyaRPAdTl1xDNrbRBeIs8Re9KX9GxoRpYntZx06Q6iumE
+ NrdxP+EsmItQ8TWiAQD/tQPmDsuJePTDLAfItkIZvm5reH11ZVP3OUKHqyF5knJCexdqz/n4Z
+ 0VnYED3qmYBpTIcBent+6VvgvkvuG/pfG+2DtKR7BgimOVym2v3MdSrZcJqIbZzKjlZF+3045
+ Aq/+xLasyaHfK0to+X7/1J/EjbMFQcF/fKcTUtUo8mULKgNHx0KPalytNgZIzP/6eT/ksQKEV
+ BQkrAi52wEyh2n8EMVe+o5jv/AydpWTOsv9+j+9uN/2z/CZKmJXLir4h1otjvhdZ9nFdgc4RY
+ /aLohgwEDCpvc16WeTSzW992H4/Zje0qDJjY1iYshWRjPzdR1WQn5ouSz/yp/QQHAAxPBgN+W
+ pTZPVTWgGVijA3UXXBVM723wJ3pUS1fgiHFEThjVdwkc3xLjiVP5By1ixWsVbCugJ+QlVc8Un
+ pUKNrP1C3vKwf+H61meUQyeVQBE+fS43n0C+Yq+eMOkEQnV68XRA5NJAA==
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,20 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
-17ef:1018 upstream
-17ef:1019 downstream
+The Lenovo OneLink+ Dock contains an RTL8153 controller that behaves as
+a broken CDC device by default. Add the custom Lenovo PID to the r8152
+driver to support it properly.
 
-Those two controllers both have problems with some USB3.0 devices,
-particularly self-powered ones. Typical error messages include:
+Also, systems compatible with this dock provide a BIOS option to enable
+MAC address passthrough (as per Lenovo document "ThinkPad Docking
+Solutions 2017"). Add the custom PID to the MAC passthrough list too.
 
-  Timeout while waiting for setup device command
-  device not accepting address X, error -62
-  unable to enumerate USB device
+Tested on a ThinkPad 13 1st gen with the expected results:
 
-By process of elimination the controllers themselves were identified as
-the cause of the problem. Through trial and error the issue was solved
-by using USB_QUIRK_RESET_RESUME for both chips.
+passthrough disabled: Invalid header when reading pass-thru MAC addr
+passthrough enabled:  Using pass-thru MAC addr XX:XX:XX:XX:XX:XX
 
 Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
 =2D--
@@ -88,26 +87,58 @@ v2 -> v3: fix commit email address, add revision details
 v1 -> v2: use full author name
 
 
- drivers/usb/core/quirks.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/usb/cdc_ether.c | 7 +++++++
+ drivers/net/usb/r8152.c     | 3 +++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index f99a65a64..999b7c969 100644
-=2D-- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -437,6 +437,10 @@ static const struct usb_device_id usb_quirk_list[] =
-=3D {
- 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =3D
- 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index 2de09ad5b..e11f70911 100644
+=2D-- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -777,6 +777,13 @@ static const struct usb_device_id	products[] =3D {
+ },
+ #endif
 
-+	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) *=
-/
-+	{ USB_DEVICE(0x17ef, 0x1018), .driver_info =3D USB_QUIRK_RESET_RESUME },
-+	{ USB_DEVICE(0x17ef, 0x1019), .driver_info =3D USB_QUIRK_RESET_RESUME },
++/* Lenovo ThinkPad OneLink+ Dock (based on Realtek RTL8153) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3054, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info =3D 0,
++},
 +
- 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
- 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info =3D USB_QUIRK_NO_LPM },
+ /* ThinkPad USB-C Dock (based on Realtek RTL8153) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0x3062, USB_CLASS_COMM,
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 0f6efaaba..e692a1576 100644
+=2D-- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -770,6 +770,7 @@ enum rtl8152_flags {
+ 	RX_EPROTO,
+ };
 
++#define DEVICE_ID_THINKPAD_ONELINK_PLUS_DOCK		0x3054
+ #define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
+ #define DEVICE_ID_THINKPAD_USB_C_DONGLE			0x720c
+ #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+@@ -9584,6 +9585,7 @@ static bool rtl8152_supports_lenovo_macpassthru(stru=
+ct usb_device *udev)
+
+ 	if (vendor_id =3D=3D VENDOR_ID_LENOVO) {
+ 		switch (product_id) {
++		case DEVICE_ID_THINKPAD_ONELINK_PLUS_DOCK:
+ 		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+ 		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
+@@ -9831,6 +9833,7 @@ static const struct usb_device_id rtl8152_table[] =
+=3D {
+ 	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927),
+ 	REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101),
+ 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f),
++	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3054),
+ 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062),
+ 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069),
+ 	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082),
 =2D-
 2.34.1
 

@@ -2,268 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7655A01C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47655A020A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiHXTE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 15:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
+        id S239332AbiHXTWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 15:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236884AbiHXTEu (ORCPT
+        with ESMTP id S237759AbiHXTWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 15:04:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD7BBD9;
-        Wed, 24 Aug 2022 12:04:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76C5C617A1;
-        Wed, 24 Aug 2022 19:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7ACC4347C;
-        Wed, 24 Aug 2022 19:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661367884;
-        bh=nLY1dWX+NvnobV3U/O2MJdRhHPtd9rugDGykeghL9C0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rY03dinX+fIfbIRN9zrOTLpoSqa8ObzafZuN0mIg5x+l1aZ/xDyacffHq+vvc5O2l
-         9Wy5AYkL5OmarB9JMbmwoTqOYWd8ZzZsuxOznyHIanFzEDsMxWr46mePz2VfJqYDQV
-         /CfQJx2ktwIkvbDqngyACp680p2LmhmZ4WtdJ6N1s9IM+1IOY5MqEX0e4sjb2W5cJT
-         Wv7NommO7hTGxSYZcHj2x7na9zmJQBs8ZxrQaFD4UqUwCnNtF4IrI7ZkFm7Ys0lpEl
-         +G0amuOmhkSc27x+I4rxltFM2gTQIxVphg6stEYXcDfc8sFh7OXLUGswWpGk8g7/MQ
-         WSF7/qGPKNXxQ==
-Received: by mail-ua1-f52.google.com with SMTP id d15so7077518uak.11;
-        Wed, 24 Aug 2022 12:04:44 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2fOfAn7qg4pGwD5U5ThKAq+5N5jF0q1dM6Umiel9YL5eZZJhKR
-        UX+ySay8yy92KXGZAv1FUhnZt8FOgM+ZHoT+YQ==
-X-Google-Smtp-Source: AA6agR7+X17CRMoPpoVupslgTTLLUBypMe9v+axiCCGH7mCEo+eSbyZ4gKfbeV10FTOa57uB9+WTdkZhPE0G97wRKq8=
-X-Received: by 2002:ab0:1053:0:b0:391:9c29:7ca8 with SMTP id
- g19-20020ab01053000000b003919c297ca8mr155684uab.86.1661367883513; Wed, 24 Aug
- 2022 12:04:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220721212718.1980905-1-robh@kernel.org>
-In-Reply-To: <20220721212718.1980905-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 24 Aug 2022 14:04:31 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJCGPSxYb5CqiEM9YAmJjQE4wp_0HCWgBSqPDBBAJRMBA@mail.gmail.com>
-Message-ID: <CAL_JsqJCGPSxYb5CqiEM9YAmJjQE4wp_0HCWgBSqPDBBAJRMBA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: coresight: Add 'power-domains' property
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Coresight ML <coresight@lists.linaro.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 24 Aug 2022 15:22:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2337D6C745
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 12:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661368930; x=1692904930;
+  h=from:to:cc:subject:date:message-id;
+  bh=MVptU6GhFZMTidyLjYU8LrlEG2EhWu7IElQGwI91KoI=;
+  b=OecIZ/n/DOVq3i3FCpzjj/jkf5JTUUxtuYpIH9TLqH5Gy3BDqkbCcQzG
+   r4Pu/zA5fay/UTx+5FsitTtOAaBQqLdZPHlHJTH4nUQq8E1ilcI8H5eLD
+   UMFQmgRop8C4gcpeOFZrSOpWp4E8vG9ycXyKndSDQyhNqjHM5QpdIdybP
+   qhvo0268/ccwxHp/rHt1pkOHZDUa/A6txlFM2spkO1pV5StrTdC5tbuXt
+   yYHwX/xLC/uAgp6/rU9XMz8Y50w6jVLutuurwluNE69Kd68bBkNk1FzVg
+   8szn4I1q6pMJ/I7Vb2pzGnKz1eBYdB6HPkH5INK9uJB7zUDLzeWXfeBEE
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="292801031"
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="292801031"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 12:22:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="606140552"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by orsmga007.jf.intel.com with ESMTP; 24 Aug 2022 12:22:07 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, chang.seok.bae@intel.com
+Subject: [PATCH 0/3] x86/fpu: Improve the init_fpstate setup code
+Date:   Wed, 24 Aug 2022 12:12:20 -0700
+Message-Id: <20220824191223.1248-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 4:27 PM Rob Herring <robh@kernel.org> wrote:
->
-> Coresight components may be in a power domain which is the case for the Arm
-> Juno board. Allow a single 'power-domains' entry for Coresight components.
+Hi all,
 
-Ping.
+This set of patches fixes the init_fpstate code. So this first version is
+sent to the maintainers hoping the fix is reviewable.
 
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml  | 3 +++
->  Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml   | 3 +++
->  .../devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml  | 3 +++
->  .../bindings/arm/arm,coresight-dynamic-replicator.yaml         | 3 +++
->  Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml | 3 +++
->  Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml   | 3 +++
->  .../devicetree/bindings/arm/arm,coresight-static-funnel.yaml   | 3 +++
->  .../bindings/arm/arm,coresight-static-replicator.yaml          | 3 +++
->  Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml   | 3 +++
->  Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml   | 3 +++
->  Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml  | 3 +++
->  .../devicetree/bindings/arm/arm,embedded-trace-extension.yaml  | 3 +++
->  12 files changed, 36 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
-> index d783d9276124..2bae06eed693 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
-> @@ -61,6 +61,9 @@ properties:
->      maxItems: 1
->      description: Address translation error interrupt
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    in-ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->      additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
-> index 72ffe4d1e948..0c5b875cb654 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
-> @@ -98,6 +98,9 @@ properties:
->        base cti node if compatible string arm,coresight-cti-v8-arch is used,
->        or may appear in a trig-conns child node when appropriate.
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    arm,cti-ctm-id:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description:
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
-> index 1eeedc22857c..44a1041cb0fc 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
-> @@ -54,6 +54,9 @@ properties:
->        - const: apb_pclk
->        - const: atclk
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    in-ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
-> index a26ed9214e00..03792e9bd97a 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
-> @@ -54,6 +54,9 @@ properties:
->        - const: apb_pclk
->        - const: atclk
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    qcom,replicator-loses-context:
->      type: boolean
->      description:
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
-> index fd06ede26ceb..90679788e0bf 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
-> @@ -54,6 +54,9 @@ properties:
->        - const: apb_pclk
->        - const: atclk
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    in-ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->      additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
-> index e0377ce48537..01200f67504a 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
-> @@ -73,6 +73,9 @@ properties:
->        - const: apb_pclk
->        - const: atclk
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    arm,coresight-loses-context-with-cpu:
->      type: boolean
->      description:
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
-> index b9da30ab9ccd..06a1d346982c 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
-> @@ -27,6 +27,9 @@ properties:
->    compatible:
->      const: arm,coresight-static-funnel
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    in-ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
-> index 66ee97370fb2..5178e7fdff0b 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
-> @@ -27,6 +27,9 @@ properties:
->    compatible:
->      const: arm,coresight-static-replicator
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    in-ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->      additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
-> index 905008faa012..378380c3f5aa 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
-> @@ -61,6 +61,9 @@ properties:
->        - const: apb_pclk
->        - const: atclk
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    out-ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->      additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> index 3463b6e53aef..e0b88a71356a 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-> @@ -55,6 +55,9 @@ properties:
->        - const: apb_pclk
->        - const: atclk
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    arm,buffer-size:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      deprecated: true
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
-> index e80d48200c37..61a0cdc27745 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
-> @@ -54,6 +54,9 @@ properties:
->        - const: apb_pclk
->        - const: atclk
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    in-ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->      additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml b/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
-> index 5f07fb166c56..108460627d9a 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
-> @@ -33,6 +33,9 @@ properties:
->        Handle to the cpu this ETE is bound to.
->      $ref: /schemas/types.yaml#/definitions/phandle
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    out-ports:
->      description: |
->        Output connections from the ETE to legacy CoreSight trace bus.
-> --
-> 2.34.1
->
+Thanks,
+Chang
+
+== Background ==
+
+The init_fpstate is an XSAVE image that records init states during the boot
+time. It is presumed to cover all the supported and enabled features. The
+setup code has been recently optimized to capture legacy states only as all
+of the other init states are all zeros.
+
+== Problem with AMX state ==
+
+When AMX is enabled, this buffer is too small to include AMX TILE_DATA
+(8KB) as it is statically allocated with about a page. But, the buffer is
+formatted to have them all although using the compacted format.
+
+This also leads to a noisy splat with XRSTORS as it expects all the buffer
+memory accessible. This is mentioned in Intel SDM Vol.1 13.13 Memory Access
+By The XSAVE Feature Set:
+    "An execution of an instruction in the XSAVE feature set may access any
+     byte of any state component on which that execution operates."
+
+== Other minor issues ==
+
+The existing sanity check could help finding this issue as it checks
+whether the allocated init_fpstate is enough for the expected size or not.
+But what is currently measured is not matched -- the size without the AMX
+state.
+
+Also, these size and features are better to be configured first before
+setting up the init image.
+
+== Patchset ==
+
+As AMX requires the compacted format, init_fpstate may exclude dynamic
+states. The series also includes other improvments:
+* Set up the init_fpstate buffer after its scope is clarified.
+* Fix the size that is validated against the static allocation.
+
+Chang S. Bae (3):
+  x86/fpu: Configure init_fpstate attributes orderly
+  x86/fpu: Fix the init_fpstate size check with the actual size
+  x86/fpu: Exclude dynamic states from init_fpstate
+
+ arch/x86/kernel/fpu/init.c   |  8 --------
+ arch/x86/kernel/fpu/xstate.c | 33 ++++++++++++++-------------------
+ 2 files changed, 14 insertions(+), 27 deletions(-)
+
+
+base-commit: cf90f46223eef9d5f389b4b88ee2fc7914458b06
+-- 
+2.17.1
+

@@ -2,267 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC21759F7F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2EE59F80A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236910AbiHXKkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S236422AbiHXKoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236679AbiHXKkK (ORCPT
+        with ESMTP id S235468AbiHXKn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:40:10 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D078D80F49;
-        Wed, 24 Aug 2022 03:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1661337609;
-  x=1692873609;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+bgCTnGLO80zLn5pKZiWdX/V5zTz497jUqF+cyjA6Qw=;
-  b=kAi7jzPA6+g0qOBTy7lJwGcSx+QbJ5fx49Z+OyShIwNm9N485LD6z0Tc
-   HxYyc0S7zaSzHnHf6z1IvTvkbxoyV+ApMPLTVQ+jZ9/qmHKKGOLKNNcJa
-   LI6UFfh3+XHE8Hhznbebz+j7pVfkfvxv0js4Qi+kzbEulVjqj3FeGfZHS
-   2OVbdhsr7gFTawJ0fn5Olrl85cPLmWPTnpbP2L+zVomhwB/68g58A3K2d
-   Erc6Jr1oOiHmfkDlNw1+wCqn0iOBY+2k17Ulg9ezk/3UONqEKyot0KH2P
-   KckPVPLb5S5HOFXcRl2bLVbB0dDZkAOX63aY8tdjxKogh3pziNMHkqEK6
-   A==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <jic23@kernel.org>
-CC:     <kernel@axis.com>, <lars@metafoo.de>, <axel.jonsson@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] iio: adc: mcp320x: add triggered buffer support
-Date:   Wed, 24 Aug 2022 12:40:02 +0200
-Message-ID: <20220824104002.2749075-3-vincent.whitchurch@axis.com>
+        Wed, 24 Aug 2022 06:43:58 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FA382D3D;
+        Wed, 24 Aug 2022 03:43:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1661337795; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=V8wuVU/hNynQg7qL5KKj79KU2uvTdKcQEHSN+Sw2nob+vVldqgwoNBtvaB3oWO5uaaT3sPBE90bZS5qNYadE1IJTTWCkVDIUmlu9kcXFVkKI5IYf4QverM7yzEwPtC8uQok0qjgaILJ9Kz7E64KxhdnfNV5/fl/aZIqKwqBkSjw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1661337795; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=WMCxlPsl40flIpJ321yhlNA4xMKLAO8BUfBREIrIJvU=; 
+        b=JJMpF9HrC4TrKi3sKrgQnaYtXmo2TFH42drXwkfpzJKwWC60HIk9gBk/JCLJA5/IUEeqckWBDKrquB1en9F1/fyTtyFlIGaH3vW3v1N8oLDEh2MJdFCNXskmMz+DZZVep6LVp9gop+x4DxXAq3s0fh1dvVsecEHFyXDQ8p/3hpE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661337795;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=WMCxlPsl40flIpJ321yhlNA4xMKLAO8BUfBREIrIJvU=;
+        b=K3agrN48Emhnpyu77XElWQgWTnJtB3/KCD9j9iytvc6TX5R7afSVmPh8/jyNeWAI
+        Em0tzS93qxC8nK9Zftxzzk388+610Ut9F6dpO4zdDAvUfN6y/Ff9c7QJy+fx0+ByfFB
+        VZLAu56L0sqXVSRplPq2sllJ2urLNvOuaclDD7HY=
+Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1661337793893739.3704277913475; Wed, 24 Aug 2022 03:43:13 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH v5 0/7] completely rework mediatek,mt7530 binding
+Date:   Wed, 24 Aug 2022 13:40:33 +0300
+Message-Id: <20220824104040.17527-1-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220824104002.2749075-1-vincent.whitchurch@axis.com>
-References: <20220824104002.2749075-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Axel Jonsson <axel.jonsson@axis.com>
+Hello.
 
-Add support for triggered buffers.  Just read the channels in a loop to
-keep things simple.
+This patch series brings complete rework of the mediatek,mt7530 binding.
 
-Signed-off-by: Axel Jonsson <axel.jonsson@axis.com>
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- drivers/iio/adc/Kconfig   |   2 +
- drivers/iio/adc/mcp320x.c | 130 ++++++++++++++++++++++++++++----------
- 2 files changed, 99 insertions(+), 33 deletions(-)
+The binding is checked with "make dt_binding_check
+DT_SCHEMA_FILES=mediatek,mt7530.yaml".
 
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 48ace7412874..9f2628120885 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -696,6 +696,8 @@ config MAX9611
- config MCP320X
- 	tristate "Microchip Technology MCP3x01/02/04/08 and MCP3550/1/3"
- 	depends on SPI
-+	select IIO_BUFFER
-+	select IIO_TRIGGERED_BUFFER
- 	help
- 	  Say yes here to build support for Microchip Technology's
- 	  MCP3001, MCP3002, MCP3004, MCP3008, MCP3201, MCP3202, MCP3204,
-diff --git a/drivers/iio/adc/mcp320x.c b/drivers/iio/adc/mcp320x.c
-index 28398f34628a..9782cbd37728 100644
---- a/drivers/iio/adc/mcp320x.c
-+++ b/drivers/iio/adc/mcp320x.c
-@@ -43,6 +43,10 @@
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/iio/iio.h>
-+#include <linux/interrupt.h>
-+#include <linux/iio/buffer.h>
-+#include <linux/iio/triggered_buffer.h>
-+#include <linux/iio/trigger_consumer.h>
- #include <linux/regulator/consumer.h>
- 
- enum {
-@@ -231,37 +235,51 @@ static int mcp320x_read_raw(struct iio_dev *indio_dev,
- 	return ret;
- }
- 
--#define MCP320X_VOLTAGE_CHANNEL(num)				\
--	{							\
--		.type = IIO_VOLTAGE,				\
--		.indexed = 1,					\
--		.channel = (num),				\
--		.address = (num),				\
--		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),	\
--		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE) \
-+#define MCP320X_VOLTAGE_CHANNEL(num)					\
-+	{								\
-+		.type = IIO_VOLTAGE,					\
-+		.indexed = 1,						\
-+		.channel = (num),					\
-+		.address = (num),					\
-+		.scan_index = (num),					\
-+		.scan_type = {						\
-+			.sign = 's',					\
-+			.realbits = 32,					\
-+			.storagebits = 32,				\
-+			.endianness = IIO_CPU,				\
-+		},							\
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-+		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE)	\
- 	}
- 
--#define MCP320X_VOLTAGE_CHANNEL_DIFF(chan1, chan2)		\
--	{							\
--		.type = IIO_VOLTAGE,				\
--		.indexed = 1,					\
--		.channel = (chan1),				\
--		.channel2 = (chan2),				\
--		.address = (chan1),				\
--		.differential = 1,				\
--		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),	\
--		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE) \
-+#define MCP320X_VOLTAGE_CHANNEL_DIFF(chan1, chan2, diffoff)		\
-+	{								\
-+		.type = IIO_VOLTAGE,					\
-+		.indexed = 1,						\
-+		.channel = (chan1),					\
-+		.channel2 = (chan2),					\
-+		.address = (chan1),					\
-+		.scan_index = (chan1 + diffoff),			\
-+		.scan_type = {						\
-+			.sign = 's',					\
-+			.realbits = 32,					\
-+			.storagebits = 32,				\
-+			.endianness = IIO_CPU,				\
-+		},							\
-+		.differential = 1,					\
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-+		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE)	\
- 	}
- 
- static const struct iio_chan_spec mcp3201_channels[] = {
--	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1, 1),
- };
- 
- static const struct iio_chan_spec mcp3202_channels[] = {
- 	MCP320X_VOLTAGE_CHANNEL(0),
- 	MCP320X_VOLTAGE_CHANNEL(1),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(1, 0),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1, 2),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(1, 0, 2),
- };
- 
- static const struct iio_chan_spec mcp3204_channels[] = {
-@@ -269,10 +287,10 @@ static const struct iio_chan_spec mcp3204_channels[] = {
- 	MCP320X_VOLTAGE_CHANNEL(1),
- 	MCP320X_VOLTAGE_CHANNEL(2),
- 	MCP320X_VOLTAGE_CHANNEL(3),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(1, 0),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(2, 3),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(3, 2),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1, 4),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(1, 0, 4),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(2, 3, 4),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(3, 2, 4),
- };
- 
- static const struct iio_chan_spec mcp3208_channels[] = {
-@@ -284,14 +302,14 @@ static const struct iio_chan_spec mcp3208_channels[] = {
- 	MCP320X_VOLTAGE_CHANNEL(5),
- 	MCP320X_VOLTAGE_CHANNEL(6),
- 	MCP320X_VOLTAGE_CHANNEL(7),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(1, 0),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(2, 3),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(3, 2),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(4, 5),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(5, 4),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(6, 7),
--	MCP320X_VOLTAGE_CHANNEL_DIFF(7, 6),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(0, 1, 8),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(1, 0, 8),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(2, 3, 8),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(3, 2, 8),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(4, 5, 8),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(5, 4, 8),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(6, 7, 8),
-+	MCP320X_VOLTAGE_CHANNEL_DIFF(7, 6, 8),
- };
- 
- static const struct iio_info mcp320x_info = {
-@@ -371,6 +389,46 @@ static const struct mcp320x_chip_info mcp320x_chip_infos[] = {
- 	},
- };
- 
-+static irqreturn_t mcp320x_buffer_trigger_handler(int irq, void *pollfunc)
-+{
-+	struct iio_poll_func *pf = pollfunc;
-+	struct iio_dev *indio_dev = pf->indio_dev;
-+	struct mcp320x *adc = iio_priv(indio_dev);
-+	s32 data[ARRAY_SIZE(mcp3208_channels)];
-+	int device_index;
-+	int i = 0;
-+	int chan;
-+
-+	device_index = spi_get_device_id(adc->spi)->driver_data;
-+
-+	mutex_lock(&adc->lock);
-+
-+	for_each_set_bit(chan, indio_dev->active_scan_mask, indio_dev->masklength) {
-+		const struct iio_chan_spec *spec = &indio_dev->channels[chan];
-+		int ret, val;
-+
-+		ret = mcp320x_adc_conversion(adc, spec->address,
-+					     spec->differential, device_index,
-+					     &val);
-+		if (ret < 0) {
-+			dev_err_ratelimited(&adc->spi->dev, "Failed to read data: %d\n",
-+					    ret);
-+			goto out;
-+		}
-+
-+		data[i++] = val;
-+	}
-+
-+	iio_push_to_buffers(indio_dev, data);
-+
-+out:
-+	mutex_unlock(&adc->lock);
-+
-+	iio_trigger_notify_done(indio_dev->trig);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static void mcp320x_reg_disable(void *reg)
- {
- 	regulator_disable(reg);
-@@ -456,6 +514,12 @@ static int mcp320x_probe(struct spi_device *spi)
- 
- 	mutex_init(&adc->lock);
- 
-+	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev, NULL,
-+					      mcp320x_buffer_trigger_handler,
-+					      NULL);
-+	if (ret)
-+		return ret;
-+
- 	return devm_iio_device_register(&spi->dev, indio_dev);
- }
- 
--- 
-2.34.1
+If anyone knows the GIC bit for interrupt for multi-chip module MT7530 in
+MT7623AI SoC, let me know. I'll add it to the examples.
+
+If anyone got a Unielec U7623 or another MT7623AI board, please reach out.
+
+v5:
+- Remove lists for single items.
+- Split fix reset lines patch, add new patch to fix mediatek,mcm property.
+- Remove Rob's Reviewed-by: from first patch because of new changes.
+- Add Krzysztof's Reviewed-by: and Acked-by: to where they're given.
+
+v4:
+- Define reg property on $defs as it's the same for all switch models.
+
+v3:
+- Add Rob's Reviewed-by: to first patch.
+- Explain why to invalidating reset-gpios and mediatek,mcm.
+- Do not change ethernet-ports to ports on examples.
+- Remove platform and, when possible, ethernet nodes from examples.
+- Remove pinctrl binding from examples.
+- Combine removing unnecesary lines patch with relocating port binding.
+- Define $defs of mt7530 and mt7531 port binding and refer to them in each
+compatible device.
+- Remove allOf: for cases where there's only a single if:.
+- Use else: for cpu port 6 which simplifies the binding.
+- State clearly that the DSA driver does not support the MT7530 switch in
+MT7620 SoCs.
+
+v2:
+- Change the way of adding descriptions for each compatible string.
+- Split the patch for updating the json-schema.
+- Make slight changes on the patch for the binding description.
+
+Arınç ÜNAL (7):
+  dt-bindings: net: dsa: mediatek,mt7530: make trivial changes
+  dt-bindings: net: dsa: mediatek,mt7530: fix description of mediatek,mcm
+  dt-bindings: net: dsa: mediatek,mt7530: fix reset lines
+  dt-bindings: net: dsa: mediatek,mt7530: update examples
+  dt-bindings: net: dsa: mediatek,mt7530: define port binding per switch
+  dt-bindings: net: dsa: mediatek,mt7530: define phy-mode for switch models
+  dt-bindings: net: dsa: mediatek,mt7530: update binding description
+
+ .../bindings/net/dsa/mediatek,mt7530.yaml       | 677 +++++++++++++++----
+ 1 file changed, 538 insertions(+), 139 deletions(-)
+
 

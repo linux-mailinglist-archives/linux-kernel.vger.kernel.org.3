@@ -2,304 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EA159F030
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E9859F03B
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiHXAZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S229775AbiHXAga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiHXAZC (ORCPT
+        with ESMTP id S229615AbiHXAg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:25:02 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E68D25FB
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:25:00 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-11c5505dba2so18778617fac.13
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=LJAfA7GotYMc2sBImpvtvpZqft2fC+cWg+7aSAi+MUI=;
-        b=J8Z/QwaoEtvIKAD3GGv0vJiORTtrZK6BWnFjNAbedgZFY47B1xacZGex+76dIqSRpw
-         o8hIeegzWId5M5Rrs8YN3/UNLLbZOaABDosP3QkOXhvYQApsNgpuG+D0b6sv2WQJJ01U
-         iOvKqbWOIx9TBvcUVyg3pOxQYDy3W2ygUmMGQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=LJAfA7GotYMc2sBImpvtvpZqft2fC+cWg+7aSAi+MUI=;
-        b=Vb17G+XYwFc10AvD+CeLaH2ns6/ZYURWHgL4OQhlkGWkhecklYZfkkxyZwNKvsPjAU
-         tA+n3lVZyR+gsekDNC/mjafglTkc0ZK5KOKOBNAl9GsyrCudWKaIXeTTC1Z1+J8GXr4m
-         /I5diH24aR7A5dCwr+TUp3UdwMRe1z1p7qqbLIE/rRsM8b3zSsV82va/Kve7B2NVxlG6
-         kNZerd8fy4/HH0rD4eZOzdg72ILoSdea9LHkII0d3zr4eben4xxYwZY6mgOdXEe44Ts/
-         PcFNn4QLTd2Yzp9An8QmC3XCmA01hAwCXp21sE6kwnZxhwpIdGEDLNbEvDgtFmdGHOX3
-         2nxg==
-X-Gm-Message-State: ACgBeo31aLvI316uHPaY5qmuK7nYC9xdlmPtFxkH1rYEqPmUHBCe7mJO
-        hRwwLBIBzyjNsVWbjqM4IEBVLg==
-X-Google-Smtp-Source: AA6agR5xRrsm0J1Ep+Om0FKDcYfwDXf/B6TbGlwLEb8cEHiHs/ivqpi9BYzu6oK91U++QCzMGiC8MQ==
-X-Received: by 2002:a05:6870:8912:b0:11b:a59c:f533 with SMTP id i18-20020a056870891200b0011ba59cf533mr2525842oao.220.1661300699430;
-        Tue, 23 Aug 2022 17:24:59 -0700 (PDT)
-Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v23-20020a0568301bd700b0063711a0010bsm4154466ota.76.2022.08.23.17.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 17:24:58 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, mailhol.vincent@wanadoo.fr,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongren Zenithal Zheng <i@zenithal.me>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v2] usbip: add USBIP_URB_* URB transfer flags
-Date:   Tue, 23 Aug 2022 18:24:56 -0600
-Message-Id: <20220824002456.94605-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 23 Aug 2022 20:36:26 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2073.outbound.protection.outlook.com [40.107.114.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0376E897
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:36:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gVIvDpFTN+E/7SZHZq8VyzLKB2DlAZTSTPqT1xka5yJ/E/OQ38OXX0EIyWwLLQT2hCdzcnevk18Gv1aOElb1FgrZyfsBGvMiE9/5FcimhuVON7toHOm3pP1US2Tz4G1pFtLTzs28lDGJCbCreL1IzG1zsMvKp114WtZalyWGqxjFTQUXoUNx9TkFgoVIEUZSSKi0ZMn5WN3413Aa4MmzZPRTsvDBRMkyy8g5Q/95aMIPijSRYm+MTN/Ez0tofmghJxaH7Nv2E2l35LKOIc6Y9czROse6t0y+jHYvEjCYhqzUqI/UKqdgE0Slcwr2IUp2T/ln3vW5WGNbHlL3zIFNYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aQI/FnwMT0gazALIRm2EBw/9C5sGIhstTGtpfxa1z0k=;
+ b=EdmwpBZoSET1od4gk8lc+ma/I98F5GW8HvcFcwoZWgUzNA5esfEmWOg4EqSkuC5tKz0ORXTKKSv/W7d5VRKCd8mStsH69Bd/eNmd3DQ6YxQhKCOJlv/2xlrYZ/Fh/NeyWcCJvotaf0Em7KJm6tTR///pYXmkrNBh22SPdAFYPdhvhSUoyMJhBL0Uqz1Xye4ayFvzhB6P4uD5/o9lsJ4ZXdFlUwaZBIk5VMswjPOWtUFdnD+RCHRUAMuFVYsSdR5le6YWa6xO2OK8nvnslg09htBclxAOM/q83Ep06yN7LgBIc99+mM2emadYAK5uYyJhEbYJbNvA8XyN8r8X9uuaZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aQI/FnwMT0gazALIRm2EBw/9C5sGIhstTGtpfxa1z0k=;
+ b=EfM533d9FIXnavLb1yoJxotBDHtzVBi+D5e9bzNgKq99v2xLJciG4/BsqA6yJRnK5Y8zvhn7mJNldGb31l37u+/Tr1tNh548myUf/ITmbEHizCm2v2+rKYYjtJfs47MaFUIaDhp+ShakVQzmdQKn1MK8A2L0+FILSOHsJXCcJ/A=
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
+ by OSBPR01MB2871.jpnprd01.prod.outlook.com (2603:1096:604:1a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
+ 2022 00:36:22 +0000
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::442c:db3a:80:287a]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::442c:db3a:80:287a%6]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
+ 00:36:22 +0000
+From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/6] mm, hwpoison: fix possible use-after-free in
+ mf_dax_kill_procs()
+Thread-Topic: [PATCH v2 4/6] mm, hwpoison: fix possible use-after-free in
+ mf_dax_kill_procs()
+Thread-Index: AQHYtp/boXf1kMZ4skKbcQTJzvLWTq29NdCA
+Date:   Wed, 24 Aug 2022 00:36:22 +0000
+Message-ID: <20220824003621.GA811648@hori.linux.bs1.fc.nec.co.jp>
+References: <20220823032346.4260-1-linmiaohe@huawei.com>
+ <20220823032346.4260-5-linmiaohe@huawei.com>
+In-Reply-To: <20220823032346.4260-5-linmiaohe@huawei.com>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4329fb68-20c4-4647-fca2-08da8568ab24
+x-ms-traffictypediagnostic: OSBPR01MB2871:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nuqdUGxfPHq+UilFlguUzcYrUdpMP5DiA6gUHwaRqW9Itj8Vo91je3+7sblUx3XXVz4yoIcADc5pk449gIDVACgrfPLUsYTO3K9wdr+wX8NzxE/m3Tpw0my+wV0gdiIj+gGosQkYAApFfoymb9Y8idiL2I1qNxYwpkhaAfmOusWm29x0z7lCsBWS7AZPB+YW5Gl3dxr97WWpsmHjMQmU4gtA1W1mrptwuLqlbI0GGWuV7TXcCiOJazNZXjbaSVV/Uf3tjvyiF666l2byEJQbLNgo6sPEGVc5OusT3t+IU760Wt6B0v4rHjQKS9p413DjAx9PIanV6cn8FWP8ukiGjj4ZteO0/3yn6GhdsVXx10qTNGPf3v+94fwp4Jcvq6Wu84CkhtTAq9VQweXnCb6ZGieuK5HISWnJEs5FZeEtiX+5bu9x4Xp0MiaLYVIjLSs/7uUpLCRokIBKYSa4YMvB1gHnj+01NRgbH3Pk6OUM/yLr8GB1mBNRlRP5M28W3wMw0Rsij/g6O4A4JNLs3y47kHEGMJT0womdfK3miRwihEm4FMvz1XKGkOYfwLGuNOQfNPkkUigcwaizlQXLvvtdd2WegmZl0LEybwZO4gztKRZS1HkaD+Rihc+5/kgq1ZEK8PTsoIiodBhzS8+pWOiBiN0D5AQ9A1b3PyMqqmmWv1jyBO1ZeBcJOL5pqyzQIZZQbpLZC1KCrosN0IbQY4OBj0Ehd+/FO31jE3OzxFHCSJnwmSksl667MjkAxYrniMV5EwOc2+nz0fa8CNeJqEGH3Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(346002)(39860400002)(376002)(38100700002)(122000001)(38070700005)(86362001)(82960400001)(33656002)(186003)(1076003)(83380400001)(85182001)(2906002)(316002)(54906003)(6916009)(5660300002)(478600001)(66446008)(4326008)(8676002)(76116006)(64756008)(66946007)(66556008)(66476007)(6506007)(41300700001)(8936002)(26005)(9686003)(6512007)(6486002)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YUFRM1ZuK2I1NWk2YmcrNFlxVXoyOGNlRjlIemNCc2wweEdEL0VPNEpZTVNT?=
+ =?utf-8?B?YlBQR2xLTkVCL2QzaEhUTEt3SFdYR2doYTZ4dFVpTTFkWUF3MEl1UDAxZFov?=
+ =?utf-8?B?Ym9EaTBsa1pQSmRmQXN0OEZUcGxyS1hFQUxIcWZtV2RORllYTXdqNGpTaThu?=
+ =?utf-8?B?bnN1RnFvd2tYYVFMdW1lWlVXY3VGaURVRzg1TFJYYnE2cVBuQVFEZXZSNER1?=
+ =?utf-8?B?WUZQR3FyMTFReXlJSW5ZZzF6SnBVZnZVQzBXc2VVOGM5NWxEbzQ3WG02TjlG?=
+ =?utf-8?B?SkdwNDRzaUFmTTBxak80eTB5R2p2RHNueS9RKzhqWWl6N3hjRXF3YVVvdlBw?=
+ =?utf-8?B?N1VVODlsWUxhbUVDU0pxeUVNUGV4ZXJvWlZYbEp3OFc2azExbkVpRkovYVN5?=
+ =?utf-8?B?VzNuMkFjZFJOOExZV1czdkJ0U2VjY0VpVDg2dFZYRmtKdlc3K1lRSUFqaUZX?=
+ =?utf-8?B?VmxmMk5UaFpIdXlOOG44dGZUbzAvUFpSK01xdVVlcXNnNTIrMVEzUm1WQjd6?=
+ =?utf-8?B?b2hCeXBMam9oQjJUcXFRaTJrcXp3TVdJRFMzVE9ucHEreU5QMkQ2d3hwOTQ4?=
+ =?utf-8?B?T0diRFdzYnlXRkNzVnUrcHpFVis5VTZxbGJIMDVQNGRvSGQxbFdXODBPMk5i?=
+ =?utf-8?B?QklHbCtUUjJjZ0ZYemRwK25LbDhaUDVZSDExaEVFOEQ1YVFBTi9zWHdRV09l?=
+ =?utf-8?B?TWVvdTNvZWVYU0pKdEM5czFHR1k4Z05DUUlWMTFQTzNJSCtnNE1XWSszY0pW?=
+ =?utf-8?B?TVNDdTlWeWdQN3ZtY1Y2V3JMNXJJWTl4b1F6bW9Mc0hRKy82NXVJY0FJclZY?=
+ =?utf-8?B?MXlyQTNHcHU1MTNIMzFrblpJVXJGaHNPb2NQdkk4UUpNdFRrR0krOTJVTDRE?=
+ =?utf-8?B?SUNvMEExaWZGN0tibmJUaEdzVkZRSmU1Wjd3VXRJVmNKbVJxOTF0Nm1SUWJV?=
+ =?utf-8?B?N1JYV2lmalFXWUZrVEQyNWIzSVRkMjY4UnZnb2FNb2ptbzV2c2Rpdk4yZ0ZK?=
+ =?utf-8?B?L2ZvK0hMYzB2cDg5c0srZEFKM2dpMndDT2w4UlN2Ym5Qb2laOXlhRTJGYWRm?=
+ =?utf-8?B?RWlORVUrNUw2cklWNldPemU4RlM2c3JYZmZPcXptSThjckczZndRNzJFY0RR?=
+ =?utf-8?B?VWE3WnNQZGxYaHVFenFDbThXQkxNUEY2elRCc2RsMnp2MlRhRW51dExRTzFp?=
+ =?utf-8?B?MWZxSXNxT2Q5Q1N1U0FCbkQ2OFoyQlZvZzZFWDVaWkFKQTdkVGlIQWtDZjNI?=
+ =?utf-8?B?dEx5Yitac1E2Zk5ka1hPUlpIYVdxSzBYS0Jzcit0L0NzV1Vvc3VBVlNOek1R?=
+ =?utf-8?B?L3hpVGF3ODBMK1BlNDlHWmxsN2ZENUlOWUpKaEhzamQyZC90b2d4VDJtY3ZY?=
+ =?utf-8?B?UEw2T2pjTDBKTXlMN3JoalhQdG9yN25MYkxMSUZlVTdFdnJod0NsT2RIWGds?=
+ =?utf-8?B?d2Z3dlI5QWxWR2Z5TWlmZGd1K1NiMnJDZDhtMDZQS2loUjd1TUJmY05NYkNi?=
+ =?utf-8?B?RHFINFR2Y01MZTBWVlpVNjloQVhNdndjNWFGTk1jaUxqRnA4NWdsMDVscnE0?=
+ =?utf-8?B?WHBmOUZUdXprbkZSV21hcGxONmtPSE1RY0Zqa1k1M2c2QlI3Tll6ZVJ6ZGZD?=
+ =?utf-8?B?a1kzTUlFVXNRVHZLUWwvMm9HWnhieHZ6Q2d0bUNRV3VBNmc1c24xeWZSRDI0?=
+ =?utf-8?B?Wi9JMGluRStKZmw1QzQ3ZGNGZkZSWlZpcWkyb2ptSHBMWHljTWhMa0xLYzI5?=
+ =?utf-8?B?SWJ2d0lhNHNRSEJsOU45U3Rwd0xiVnJ0ekprbjhmSFRJVUtnUjFpZnhkNU83?=
+ =?utf-8?B?VFZmT2k0cFovV2Q5TkJLRGc2UDBMS1FWa0U5ZG9EWVdtVC9GUGthMHVyMUVF?=
+ =?utf-8?B?TjlYa1pZQzJhd1Btd091ODF1QjdWYVNuSXFITXpWQUxvOFc3NjhpeGhZRkJY?=
+ =?utf-8?B?VFNLeG9xUmMvcnZiWnNkVHplSU8yRFpBYmFVTHRBK3VwbkFKa01Yc0xDUjZj?=
+ =?utf-8?B?cGpvQzVzaUxDVzhWVXJEUWpTaDdhTXNsNWg4U1J3S1BTYXVkdjk3L0xLcUZB?=
+ =?utf-8?B?blhnMHVPbnhKcG8zY0M0cEpCa0J2SVVmQ3pHOU9RclFjN1ZKMmlKdGxkV3Ri?=
+ =?utf-8?B?NytqQ0N4c2c5bi9JM2JCRHFlSFBDaGMzWlo2N2NXVVJXb3RnWkVCYlZqT2p4?=
+ =?utf-8?B?OUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <243BBEC7E3F2AB4BB95309D7198FC231@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4329fb68-20c4-4647-fca2-08da8568ab24
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 00:36:22.0611
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fzevAWyKG7aWVnGUW/3Huy7mpNFErSpLzEJfW7vOpnK/+xEwyq8dhwRyc8q7F2FPHYZMEr8q10kJqCDr032LAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB2871
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USBIP driver packs URB transfer flags in network packets that are
-exchanged between Server (usbip_host) and Client (vhci_hcd).
-
-URB_* flags are internal to kernel and could change. Where as USBIP
-URB flags exchanged in network packets are USBIP user API must not
-change.
-
-Add USBIP_URB* flags to make this an explicit API and change the
-client and server to map them. Details as follows:
-
-Client tx path (USBIP_CMD_SUBMIT):
-- Maps URB_* to USBIP_URB_* when it sends USBIP_CMD_SUBMIT packet.
-
-Server rx path (USBIP_CMD_SUBMIT):
-- Maps USBIP_URB_* to URB_* when it receives USBIP_CMD_SUBMIT packet.
-
-Flags aren't included in USBIP_CMD_UNLINK and USBIP_RET_SUBMIT packets
-and no special handling is needed for them in the following cases:
-
-- Server rx path (USBIP_CMD_UNLINK)
-- Client rx path & Server tx path (USBIP_RET_SUBMIT)
-
-Update protocol documentation to reflect the change.
-
-Suggested-by: Hongren Zenithal Zheng <i@zenithal.me>
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
-
-Changes since v1: addressed review comments
-
- Documentation/usb/usbip_protocol.rst | 13 ++--
- drivers/usb/usbip/stub_rx.c          |  4 +-
- drivers/usb/usbip/usbip_common.c     | 91 +++++++++++++++++++++++++++-
- include/uapi/linux/usbip.h           | 26 ++++++++
- 4 files changed, 122 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
-index 0b8541fda4d8..adc158967cc6 100644
---- a/Documentation/usb/usbip_protocol.rst
-+++ b/Documentation/usb/usbip_protocol.rst
-@@ -340,13 +340,12 @@ USBIP_CMD_SUBMIT:
- | 0         | 20     | usbip_header_basic, 'command' shall be 0x00000001 |
- +-----------+--------+---------------------------------------------------+
- | 0x14      | 4      | transfer_flags: possible values depend on the     |
--|           |        | URB transfer_flags (refer to URB doc in           |
--|           |        | Documentation/driver-api/usb/URB.rst)             |
--|           |        | but with URB_NO_TRANSFER_DMA_MAP masked. Refer to |
--|           |        | function usbip_pack_cmd_submit and function       |
--|           |        | tweak_transfer_flags in drivers/usb/usbip/        |
--|           |        | usbip_common.c. The following fields may also ref |
--|           |        | to function usbip_pack_cmd_submit and URB doc     |
-+|           |        | USBIP_URB transfer_flags.                         |
-+|           |        | Refer to include/uapi/linux/usbip.h and           |
-+|           |        | Documentation/driver-api/usb/URB.rst.             |
-+|           |        | Refer to usbip_pack_cmd_submit() and              |
-+|           |        | tweak_transfer_flags() in drivers/usb/usbip/      |
-+|           |        | usbip_common.c.                                   |
- +-----------+--------+---------------------------------------------------+
- | 0x18      | 4      | transfer_buffer_length:                           |
- |           |        | use URB transfer_buffer_length                    |
-diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-index 5dd41e8215e0..fc01b31bbb87 100644
---- a/drivers/usb/usbip/stub_rx.c
-+++ b/drivers/usb/usbip/stub_rx.c
-@@ -464,7 +464,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
- 	int nents;
- 	int num_urbs = 1;
- 	int pipe = get_pipe(sdev, pdu);
--	int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
-+	int use_sg = pdu->u.cmd_submit.transfer_flags & USBIP_URB_DMA_MAP_SG;
- 	int support_sg = 1;
- 	int np = 0;
- 	int ret, i;
-@@ -514,7 +514,7 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
- 				num_urbs = nents;
- 				priv->completed_urbs = 0;
- 				pdu->u.cmd_submit.transfer_flags &=
--								~URB_DMA_MAP_SG;
-+								~USBIP_URB_DMA_MAP_SG;
- 			}
- 		} else {
- 			buffer = kzalloc(buf_len, GFP_KERNEL);
-diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-index 2ab99244bc31..053a2bca4c47 100644
---- a/drivers/usb/usbip/usbip_common.c
-+++ b/drivers/usb/usbip/usbip_common.c
-@@ -344,6 +344,91 @@ static unsigned int tweak_transfer_flags(unsigned int flags)
- 	return flags;
- }
- 
-+/*
-+ * USBIP driver packs URB transfer flags in PDUs that are exchanged
-+ * between Server (usbip_host) and Client (vhci_hcd). URB_* flags
-+ * are internal to kernel and could change. Where as USBIP URB flags
-+ * exchanged in PDUs are USBIP user API must not change.
-+ *
-+ * USBIP_URB* flags are exported as explicit API and client and server
-+ * do mapping from kernel flags to USBIP_URB*. Details as follows:
-+ *
-+ * Client tx path (USBIP_CMD_SUBMIT):
-+ * - Maps URB_* to USBIP_URB_* when it sends USBIP_CMD_SUBMIT packet.
-+ *
-+ * Server rx path (USBIP_CMD_SUBMIT):
-+ * - Maps USBIP_URB_* to URB_* when it receives USBIP_CMD_SUBMIT packet.
-+ *
-+ * Flags aren't included in USBIP_CMD_UNLINK and USBIP_RET_SUBMIT packets
-+ * and no special handling is needed for them in the following cases:
-+ * - Server rx path (USBIP_CMD_UNLINK)
-+ * - Client rx path & Server tx path (USBIP_RET_SUBMIT)
-+ *
-+ * Code paths:
-+ * usbip_pack_pdu() is the common routine that handles packing pdu from
-+ * urb and unpack pdu to an urb.
-+ *
-+ * usbip_pack_cmd_submit() and usbip_pack_ret_submit() handle
-+ * USBIP_CMD_SUBMIT and USBIP_RET_SUBMIT respectively.
-+ *
-+ * usbip_map_urb_to_usbip() and usbip_map_usbip_to_urb() are used
-+ * by usbip_pack_cmd_submit() and usbip_pack_ret_submit() to map
-+ * flags.
-+ */
-+
-+struct urb_to_usbip_flags {
-+	u32 urb_flag;
-+	u32 usbip_flag;
-+};
-+
-+#define NUM_USBIP_FLAGS	17
-+
-+static const struct urb_to_usbip_flags flag_map[NUM_USBIP_FLAGS] = {
-+	{URB_SHORT_NOT_OK, USBIP_URB_SHORT_NOT_OK},
-+	{URB_ISO_ASAP, USBIP_URB_ISO_ASAP},
-+	{URB_NO_TRANSFER_DMA_MAP, USBIP_URB_NO_TRANSFER_DMA_MAP},
-+	{URB_ZERO_PACKET, USBIP_URB_ZERO_PACKET},
-+	{URB_NO_INTERRUPT, USBIP_URB_NO_INTERRUPT},
-+	{URB_FREE_BUFFER, USBIP_URB_FREE_BUFFER},
-+	{URB_DIR_IN, USBIP_URB_DIR_IN},
-+	{URB_DIR_OUT, USBIP_URB_DIR_OUT},
-+	{URB_DIR_MASK, USBIP_URB_DIR_MASK},
-+	{URB_DMA_MAP_SINGLE, USBIP_URB_DMA_MAP_SINGLE},
-+	{URB_DMA_MAP_PAGE, USBIP_URB_DMA_MAP_PAGE},
-+	{URB_DMA_MAP_SG, USBIP_URB_DMA_MAP_SG},
-+	{URB_MAP_LOCAL, USBIP_URB_MAP_LOCAL},
-+	{URB_SETUP_MAP_SINGLE, USBIP_URB_SETUP_MAP_SINGLE},
-+	{URB_SETUP_MAP_LOCAL, USBIP_URB_SETUP_MAP_LOCAL},
-+	{URB_DMA_SG_COMBINED, USBIP_URB_DMA_SG_COMBINED},
-+	{URB_ALIGNED_TEMP_BUFFER, USBIP_URB_ALIGNED_TEMP_BUFFER},
-+};
-+
-+static unsigned int urb_to_usbip(unsigned int flags)
-+{
-+	unsigned int map_flags = 0;
-+	int loop;
-+
-+	for (loop = 0; loop < NUM_USBIP_FLAGS; loop++) {
-+		if (flags & flag_map[loop].urb_flag)
-+			map_flags |= flag_map[loop].usbip_flag;
-+	}
-+
-+	return map_flags;
-+}
-+
-+static unsigned int usbip_to_urb(unsigned int flags)
-+{
-+	unsigned int map_flags = 0;
-+	int loop;
-+
-+	for (loop = 0; loop < NUM_USBIP_FLAGS; loop++) {
-+		if (flags & flag_map[loop].usbip_flag)
-+			map_flags |= flag_map[loop].urb_flag;
-+	}
-+
-+	return map_flags;
-+}
-+
- static void usbip_pack_cmd_submit(struct usbip_header *pdu, struct urb *urb,
- 				  int pack)
- {
-@@ -354,14 +439,14 @@ static void usbip_pack_cmd_submit(struct usbip_header *pdu, struct urb *urb,
- 	 * will be discussed when usbip is ported to other operating systems.
- 	 */
- 	if (pack) {
--		spdu->transfer_flags =
--			tweak_transfer_flags(urb->transfer_flags);
-+		/* map after tweaking the urb flags */
-+		spdu->transfer_flags = urb_to_usbip(tweak_transfer_flags(urb->transfer_flags));
- 		spdu->transfer_buffer_length	= urb->transfer_buffer_length;
- 		spdu->start_frame		= urb->start_frame;
- 		spdu->number_of_packets		= urb->number_of_packets;
- 		spdu->interval			= urb->interval;
- 	} else  {
--		urb->transfer_flags         = spdu->transfer_flags;
-+		urb->transfer_flags         = usbip_to_urb(spdu->transfer_flags);
- 		urb->transfer_buffer_length = spdu->transfer_buffer_length;
- 		urb->start_frame            = spdu->start_frame;
- 		urb->number_of_packets      = spdu->number_of_packets;
-diff --git a/include/uapi/linux/usbip.h b/include/uapi/linux/usbip.h
-index fd393d908d8a..e4421ad55b2e 100644
---- a/include/uapi/linux/usbip.h
-+++ b/include/uapi/linux/usbip.h
-@@ -24,4 +24,30 @@ enum usbip_device_status {
- 	VDEV_ST_USED,
- 	VDEV_ST_ERROR
- };
-+
-+/* USB URB Transfer flags:
-+ *
-+ * USBIP server and client (vchi) pack URBs in TCP packets. The following
-+ * are the transfer type defines used in USBIP protocol.
-+ */
-+
-+#define USBIP_URB_SHORT_NOT_OK		0x0001
-+#define USBIP_URB_ISO_ASAP		0x0002
-+#define USBIP_URB_NO_TRANSFER_DMA_MAP	0x0004
-+#define USBIP_URB_ZERO_PACKET		0x0040
-+#define USBIP_URB_NO_INTERRUPT		0x0080
-+#define USBIP_URB_FREE_BUFFER		0x0100
-+#define USBIP_URB_DIR_IN		0x0200
-+#define USBIP_URB_DIR_OUT		0
-+#define USBIP_URB_DIR_MASK		USBIP_URB_DIR_IN
-+
-+#define USBIP_URB_DMA_MAP_SINGLE	0x00010000
-+#define USBIP_URB_DMA_MAP_PAGE		0x00020000
-+#define USBIP_URB_DMA_MAP_SG		0x00040000
-+#define USBIP_URB_MAP_LOCAL		0x00080000
-+#define USBIP_URB_SETUP_MAP_SINGLE	0x00100000
-+#define USBIP_URB_SETUP_MAP_LOCAL	0x00200000
-+#define USBIP_URB_DMA_SG_COMBINED	0x00400000
-+#define USBIP_URB_ALIGNED_TEMP_BUFFER	0x00800000
-+
- #endif /* _UAPI_LINUX_USBIP_H */
--- 
-2.34.1
-
+T24gVHVlLCBBdWcgMjMsIDIwMjIgYXQgMTE6MjM6NDRBTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
+ZToNCj4gQWZ0ZXIga2lsbF9wcm9jcygpLCB0ayB3aWxsIGJlIGZyZWVkIHdpdGhvdXQgYmVpbmcg
+cmVtb3ZlZCBmcm9tIHRoZSB0b19raWxsDQo+IGxpc3QuIEluIHRoZSBuZXh0IGl0ZXJhdGlvbiwg
+dGhlIGZyZWVkIGxpc3QgZW50cnkgaW4gdGhlIHRvX2tpbGwgbGlzdCB3aWxsDQo+IGJlIGFjY2Vz
+c2VkLCB0aHVzIGxlYWRpbmcgdG8gdXNlLWFmdGVyLWZyZWUgaXNzdWUuIEFkZGluZyBsaXN0X2Rl
+bCgpIGluDQo+IGtpbGxfcHJvY3MoKSB0byBmaXggdGhlIGlzc3VlLg0KPiANCj4gRml4ZXM6IGMz
+NmUyMDI0OTU3MSAoIm1tOiBpbnRyb2R1Y2UgbWZfZGF4X2tpbGxfcHJvY3MoKSBmb3IgZnNkYXgg
+Y2FzZSIpDQo+IFNpZ25lZC1vZmYtYnk6IE1pYW9oZSBMaW4gPGxpbm1pYW9oZUBodWF3ZWkuY29t
+Pg0KDQpUaGFuayB5b3UgZm9yIHRoZSB1cGRhdGUuDQoNCkFja2VkLWJ5OiBOYW95YSBIb3JpZ3Vj
+aGkgPG5hb3lhLmhvcmlndWNoaUBuZWMuY29tPg0KDQo+IC0tLQ0KPiAgbW0vbWVtb3J5LWZhaWx1
+cmUuYyB8IDMgKystDQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0
+aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvbW0vbWVtb3J5LWZhaWx1cmUuYyBiL21tL21lbW9y
+eS1mYWlsdXJlLmMNCj4gaW5kZXggMWQ3OWU2OTNmMWI5Li5mODI2MmY1NzdiYWYgMTAwNjQ0DQo+
+IC0tLSBhL21tL21lbW9yeS1mYWlsdXJlLmMNCj4gKysrIGIvbW0vbWVtb3J5LWZhaWx1cmUuYw0K
+PiBAQCAtNDEzLDcgKzQxMyw3IEBAIHN0YXRpYyB2b2lkIGtpbGxfcHJvY3Moc3RydWN0IGxpc3Rf
+aGVhZCAqdG9fa2lsbCwgaW50IGZvcmNla2lsbCwgYm9vbCBmYWlsLA0KPiAgew0KPiAgCXN0cnVj
+dCB0b19raWxsICp0aywgKm5leHQ7DQo+ICANCj4gLQlsaXN0X2Zvcl9lYWNoX2VudHJ5X3NhZmUg
+KHRrLCBuZXh0LCB0b19raWxsLCBuZCkgew0KPiArCWxpc3RfZm9yX2VhY2hfZW50cnlfc2FmZSh0
+aywgbmV4dCwgdG9fa2lsbCwgbmQpIHsNCj4gIAkJaWYgKGZvcmNla2lsbCkgew0KPiAgCQkJLyoN
+Cj4gIAkJCSAqIEluIGNhc2Ugc29tZXRoaW5nIHdlbnQgd3Jvbmcgd2l0aCBtdW5tYXBwaW5nDQo+
+IEBAIC00MzcsNiArNDM3LDcgQEAgc3RhdGljIHZvaWQga2lsbF9wcm9jcyhzdHJ1Y3QgbGlzdF9o
+ZWFkICp0b19raWxsLCBpbnQgZm9yY2VraWxsLCBib29sIGZhaWwsDQo+ICAJCQkJcHJfZXJyKCIl
+I2x4OiBDYW5ub3Qgc2VuZCBhZHZpc29yeSBtYWNoaW5lIGNoZWNrIHNpZ25hbCB0byAlczolZFxu
+IiwNCj4gIAkJCQkgICAgICAgcGZuLCB0ay0+dHNrLT5jb21tLCB0ay0+dHNrLT5waWQpOw0KPiAg
+CQl9DQo+ICsJCWxpc3RfZGVsKCZ0ay0+bmQpOw0KPiAgCQlwdXRfdGFza19zdHJ1Y3QodGstPnRz
+ayk7DQo+ICAJCWtmcmVlKHRrKTsNCj4gIAl9DQo+IC0tIA0KPiAyLjIzLjA=

@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771405A0346
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B500F5A0349
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240662AbiHXVYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 17:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S239786AbiHXV1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 17:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238348AbiHXVYq (ORCPT
+        with ESMTP id S238348AbiHXV13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 17:24:46 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5CB2C2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:24:44 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b16so23706029edd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:24:44 -0700 (PDT)
+        Wed, 24 Aug 2022 17:27:29 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A627C76A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:27:28 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id l5so13812100qtv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:27:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8UmQe9mjyzQMIzAHku/CvBjci5VrIDcuQ8+b3z/8gco=;
-        b=fprWR6gke99VgICWutjxM3pyW/rrXtibUK7GGb45qIHnuTR4U3pqQ5NyAoun1nw+Cp
-         3QKuXCVIpUapFw3fH6RIgqQFBXuS+1xcCPdlOqndVtIgmLX0ApAu5jUqea8R+J84mF13
-         CAnz0koxe/kyuBkQUqTEd/wLRmJxCEEj6PJfg=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=NrHh48Gf19GlQMqAuAe/NxXBbY/CiWw/bN0ZZpZssVk=;
+        b=Hn+k/ujBweFlPuihiZhFdJsivHBvjwnCG0HCpC4oENGJoEFa0bCxazOwVm5o5IRsTv
+         usIGaWcI0y1qatxjb7sQVOOENpdPO2pxTSf8VW4hrcPmWo8qBA5aHCyKCO3LIuQ3jy3R
+         GAfUD9ZlLtWLS4aYw+tuzZArUx3FGSakUD3bJ8LrlXt0nsRAaqQdQGAowHbn+uu/IqZL
+         Qe0iUTJVyQTZINW0S4TbDaQxNR/lfjDk/uj/INvsgkTfotxDGPf9uVlFfQXM1nX3LHnV
+         Dt+pwqcQHZNl0z5Wz0CIs54oqU7fZDdaXRs/Iuzh7yRhV6M/QmEv16vuIcNhXXcQPCld
+         AzfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8UmQe9mjyzQMIzAHku/CvBjci5VrIDcuQ8+b3z/8gco=;
-        b=6pHqX+Iyw+KToLCnTZBH73BhKt/kmRjUxtX3JcE07gNXyoa2PxtyhslYkwfpfF2x0i
-         KMR7R4nUNR+WLIgTFQDH/wMqoupzpb69D9FyJq1i6SMrKK19cD8OjthiEBvlGxZ9Wyq6
-         F+xUtfarE934t1pe8xS+koM5QE3WRrVFw8ILN5vKC87B4ECxLBflBTwSd3vmXbr6/AeJ
-         qnVY7ohaVgsEdXuv25BcnsqtNSmYAn9G/D3PqNGbEe9KX1saLeQ/BXmnWXppOWufoabC
-         rDpqAf/7ztSUwg3TwVBD3Th5mwlTQZN/AI+w8sBNeGu9TpKvukRgIjDKI5uw7Xb40i1W
-         OgbQ==
-X-Gm-Message-State: ACgBeo1+PWvkwyHSE+nIeJ6wU5Oz0ZZxYJA8qpaGcX43J6gUDIvZZ/CC
-        t5pQCmug8PVL76exzzdTdwpXcia2mttYJrUY
-X-Google-Smtp-Source: AA6agR4ZA8D1zCNvx4xhGsaWb37kRMcot9p7tjUaLPgFixOtyvhpkvQ3FNceH2k+6BZGJShFumWZkg==
-X-Received: by 2002:a05:6402:378f:b0:43a:d3f5:79f2 with SMTP id et15-20020a056402378f00b0043ad3f579f2mr730153edb.338.1661376282965;
-        Wed, 24 Aug 2022 14:24:42 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id ez5-20020a056402450500b00445bda73fbesm3653063edb.33.2022.08.24.14.24.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 14:24:42 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so1616826wmk.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:24:42 -0700 (PDT)
-X-Received: by 2002:a05:600c:5008:b0:3a6:1cd8:570d with SMTP id
- n8-20020a05600c500800b003a61cd8570dmr373142wmr.57.1661376282074; Wed, 24 Aug
- 2022 14:24:42 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=NrHh48Gf19GlQMqAuAe/NxXBbY/CiWw/bN0ZZpZssVk=;
+        b=b48EyeRKRtXp8nCkvu5bclLy1iwYG3odEFpvPZLY7GJQBhgaIaSbsy4xDVvlKq6RcY
+         4Lh6qJHmvHzHJofz5NsuZYXAp/bOWQw0LuOch3QInEWmXZ2nFSyEtQAscJ1n7c8PBiTd
+         1De8WQVSa2KPbl7aLaLnH0lM5mFH4h1u9Jocwj+xkSa+/mwNdTYQGbBTAwQBZkGsdgnV
+         LHPbcxgk9+aEOq7OsGUtMmjnzhvXIyZ+NT8EhmF7bsm04zU2RUs0pZrN7a39lfg3+Yhf
+         hAwECayoJcH04YHiBPRbpXRfT9niPGk5PhpMQhw85jtBjeJnNMX2Z0fxbPB8DAFHYSzA
+         HJHg==
+X-Gm-Message-State: ACgBeo2gDdEvRmGQ2pjyf4l2AWcD+nS2zfpUlxJOFrmFM8aO/+tDzDqm
+        5weBTaK1b+nz+oY9QUCdeqk=
+X-Google-Smtp-Source: AA6agR5Hd0O/42pHYfqMUlwgpkfZvsFI6xVGd2lr90dapcRYklrPnpIOIDi6u2zbfsJXx9lk3qcgww==
+X-Received: by 2002:ac8:7dc4:0:b0:343:622d:5fda with SMTP id c4-20020ac87dc4000000b00343622d5fdamr1115818qte.197.1661376447268;
+        Wed, 24 Aug 2022 14:27:27 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:2270:5a54:d9d9:c2a4:527e])
+        by smtp.gmail.com with ESMTPSA id r17-20020ac85e91000000b00344c29bc045sm6078438qtx.25.2022.08.24.14.27.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 14:27:26 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 14:27:26 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>
+Subject: Re: [PATCH v2 3/3] lib/find_bit: optimize find_next_bit() functions
+Message-ID: <YwaXvphVpy5A7fSs@yury-laptop>
+References: <20220824012624.2826445-1-yury.norov@gmail.com>
+ <20220824012624.2826445-4-yury.norov@gmail.com>
+ <CAHp75Ve4QTSs_mSB7uMqOK4q+A-z-O1tc2k5=2qaRHTdAC3yog@mail.gmail.com>
+ <YwYtQ7t+3grPF16n@yury-laptop>
+ <CAHp75VfeZVjv_3r4e1uib0BOfxaKTr6Sx59xiUZr=oQ+z_2Fig@mail.gmail.com>
+ <CAHp75Vcbkt09J1_reRJFeYAkjoTF1abfvHi1LWc4JyWPpLD=YQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220823131629.RFT.1.I137e6bef4f6d517be7b081be926059321102fd3d@changeid>
- <20220823221429.3bte2tgtyniur4wb@halaneylaptop> <CAD=FV=WSSrObW2PthmUL+t=VYJ+mN6Z763pozCQDbOdPtAXyQA@mail.gmail.com>
- <YwVZfyDflFuzFAOX@sirena.org.uk>
-In-Reply-To: <YwVZfyDflFuzFAOX@sirena.org.uk>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 24 Aug 2022 14:24:28 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XZTzwROoVtA+qrpy5rrrM2RH3+tZFR0-KFTu79ea4rig@mail.gmail.com>
-Message-ID: <CAD=FV=XZTzwROoVtA+qrpy5rrrM2RH3+tZFR0-KFTu79ea4rig@mail.gmail.com>
-Subject: Re: [RFT PATCH] regulator: core: Require regulator drivers to check
- uV for get_optimum_mode()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vcbkt09J1_reRJFeYAkjoTF1abfvHi1LWc4JyWPpLD=YQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,20 +84,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Aug 24, 2022 at 08:56:02PM +0300, Andy Shevchenko wrote:
+> On Wed, Aug 24, 2022 at 8:54 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Wed, Aug 24, 2022 at 4:53 PM Yury Norov <yury.norov@gmail.com> wrote:
+> > > On Wed, Aug 24, 2022 at 12:19:05PM +0300, Andy Shevchenko wrote:
+> > > > On Wed, Aug 24, 2022 at 4:56 AM Yury Norov <yury.norov@gmail.com> wrote:
+> 
+> ...
+> 
+> > > > > +#define FIND_NEXT_BIT(EXPRESSION, size, start)                                 \
+> > > > > +({                                                                             \
+> > > > > +       unsigned long mask, idx, tmp, sz = (size), __start = (start);           \
+> > > > > +                                                                               \
+> > > > > +       if (unlikely(__start >= sz))                                            \
+> > > > > +               goto out;                                                       \
+> > > > > +                                                                               \
+> > > > > +       mask = word_op(BITMAP_FIRST_WORD_MASK(__start));                        \
+> > > > > +       idx = __start / BITS_PER_LONG;                                          \
+> > > > > +                                                                               \
+> > > > > +       for (tmp = (EXPRESSION) & mask; !tmp; tmp = (EXPRESSION)) {             \
+> > > >
+> > > > for (unsigned long tmp ...;
+> > > > But hey, why not loop over idx (which probably should be named as
+> > > > offset)
+> > >
+> > > Offset in structure, index in array, isn't?
+> > >
+> > > > as I proposed in the first patch? You will drop a lot of
+> > > > divisions / multiplications, no?
+> > >
+> > > Those divisions and multiplications are optimized away, and
+> > > what you suggested blows up the EXPRESSION.
+> > >
+> > > I tried like this:
+> > >    mask = word_op(BITMAP_FIRST_WORD_MASK(__start));
+> > >    idx = __start / BITS_PER_LONG;
+> > >    tmp = (EXPRESSION);
+> > >
+> > >    while (1) {
+> > >         if (tmp) {
+> > >                sz = min(idx * BITS_PER_LONG + __ffs(word_op(tmp)), sz);
+> > >                break;
+> > >         }
+> > >
+> > >         if (++idx > sz)
+> > >                 break;
+> > >
+> > >         tmp = (EXPRESSION);
+> > >    }
+> > >
+> > > And it generated the same code, but looks less expressive to me.
+> > > If you have some elegant approach in mind - can you please share
+> > > it, and how the generated code looks?
+> >
+> > for (unsigned long idx = 0; idx < sz; idx++) {
+> 
+> Of source 0 should be changed to whatever start you have there.
+> 
+> >   unsigned long tmp;
+> >
+> >   tmp = (EXPRESSION);
+> >   if (tmp) {
+> >     ...
+> >   }
+> > }
+> >
+> > No?
 
-On Tue, Aug 23, 2022 at 3:49 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Aug 23, 2022 at 03:32:44PM -0700, Doug Anderson wrote:
->
-> > I guess maybe we could add the "initial mode" as an implicitly allowed
-> > mode? I guess the other option is to implicitly disable
-> > regulator-allow-set-load if no allowed modes are listed? Both of these
->
-> We should do the former, or equivalently just noop out of set_load() via
-> set_optimium_mode() if no modes are allowed.
+No. For the first iteration, the tmp can't be calculated inside the loop
+(my example above is wrong) because we need to clear first bits:
 
-OK, v2 posted where I kept patch #1 exactly the same and added a
-second patch to address this case. Hopefully it works for you.
+   mask = BITMAP_FIRST_WORD_MASK(__start);
+   idx = __start / BITS_PER_LONG;
+   tmp = (EXPRESSION) & mask;   // First fetch is here
 
--Doug
+   while (1) {
+        if (tmp) {              // Evaluate here
+               sz = min(idx * BITS_PER_LONG + __ffs(tmp), sz);
+               break;
+        }
+
+        if (++idx > sz)         // Increment here
+                break;
+
+        tmp = (EXPRESSION);     // Other fetches here
+   }
+
+Trying to move iterator increment inside the for-loop, like you suggested
+would break the sequence - common-case word fetch will happen before the
+idx++.

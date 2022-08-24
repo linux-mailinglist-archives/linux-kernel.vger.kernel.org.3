@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D34E59FA3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB1A59FA4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236791AbiHXMqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S234979AbiHXMre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234876AbiHXMqt (ORCPT
+        with ESMTP id S237373AbiHXMrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:46:49 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF18790C7E;
-        Wed, 24 Aug 2022 05:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=uSxtp6cCO/JPJLp/Y5uU09OcFls/853lMuOjjJI3vmg=; b=yBwxcpvlq6AVp6sl0roNiulO7G
-        9zTsPRWFSQ+hKKHxduJWNf8atR40bQyrZTzzrCvt6Qye61ELVuCs0qkUyrZzt56GKISn8w17anntT
-        a+w42OOTECaukHBlbqttIJOHfb31EAhQBOeGlj3tLbG4l9PdfauvpVUMldWG5tTU2Nzg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oQpmC-00ERhp-AT; Wed, 24 Aug 2022 14:46:32 +0200
-Date:   Wed, 24 Aug 2022 14:46:32 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     Dmitry Safonov <dima@arista.com>, David Ahern <dsahern@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH 00/31] net/tcp: Add TCP-AO support
-Message-ID: <YwYdqEFQuQjXxATb@lunn.ch>
-References: <20220818170005.747015-1-dima@arista.com>
- <fc05893d-7733-1426-3b12-7ba60ef2698f@gmail.com>
- <a83e24c9-ab25-6ca0-8b81-268f92791ae5@kernel.org>
- <8097c38e-e88e-66ad-74d3-2f4a9e3734f4@arista.com>
- <7ad5a9be-4ee9-bab2-4a70-b0f661f91beb@gmail.com>
+        Wed, 24 Aug 2022 08:47:22 -0400
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD34F915CF;
+        Wed, 24 Aug 2022 05:47:20 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.108.16.97])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id 545DF23F37B;
+        Wed, 24 Aug 2022 12:47:19 +0000 (UTC)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Wed, 24 Aug
+ 2022 14:47:18 +0200
+Message-ID: <d858ff7b-e835-bda5-a779-8acd42237923@traphandler.com>
+Date:   Wed, 24 Aug 2022 14:47:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ad5a9be-4ee9-bab2-4a70-b0f661f91beb@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 3/4] dt-bindings: leds: Add binding for a multicolor
+ group of LEDs
+Content-Language: en-US
+To:     Sascha Hauer <sha@pengutronix.de>
+CC:     <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <sven.schwermer@disruptive-technologies.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <johan+linaro@kernel.org>,
+        <marijn.suijten@somainline.org>, <bjorn.andersson@linaro.org>,
+        <andy.shevchenko@gmail.com>, <linux-leds@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+References: <20220824103032.163451-1-jjhiblot@traphandler.com>
+ <20220824103032.163451-4-jjhiblot@traphandler.com>
+ <20220824122156.GQ17485@pengutronix.de>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <20220824122156.GQ17485@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG1EX1.emp2.local (172.16.2.1) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 2150187350555900369
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgheejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepuefgvedvledufeekjeeltedvjeeuuddvtdetjeefjedvveehkeeufeeihfelgfeknecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhofedttdeg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,22 +62,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I think it would make sense to push key validity times and the key selection
-> policy entirely in the kernel so that it can handle key rotation/expiration
-> by itself. This way userspace only has to configure the keys and doesn't
-> have to touch established connections at all.
 
-I know nothing aobut TCP-AO, nor much about kTLS. But doesn't kTLS
-have the same issue? Is there anything which can be learnt from kTLS?
-Maybe the same mechanisms can be used? No point inventing something
-new if you can copy/refactor working code?
+On 24/08/2022 14:21, Sascha Hauer wrote:
+> On Wed, Aug 24, 2022 at 12:30:31PM +0200, Jean-Jacques Hiblot wrote:
+>> This allows to group multiple monochromatic LEDs into a multicolor
+>> LED, e.g. RGB LEDs.
+>>
+>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>>   .../bindings/leds/leds-group-multicolor.yaml  | 61 +++++++++++++++++++
+>>   1 file changed, 61 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+>> new file mode 100644
+>> index 000000000000..79e5882a08e2
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+>> @@ -0,0 +1,61 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/leds/leds-group-multicolor.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Multi-color LED built with monochromatic LEDs
+>> +
+>> +maintainers:
+>> +  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>> +
+>> +description: |
+>> +  This driver combines several monochromatic LEDs into one multi-color
+>> +  LED using the multicolor LED class.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: leds-group-multicolor
+>> +
+>> +  leds:
+>> +    description:
+>> +      An aray of monochromatic leds
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +
+>> +required:
+>> +  - leds
+>> +
+>> +allOf:
+>> +  - $ref: leds-class-multicolor.yaml#
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +    #include <dt-bindings/leds/common.h>
+>> +
+>> +    monochromatic-leds {
+>> +        compatible = "gpio-leds";
+>> +
+>> +        led0: led-0 {
+>> +            gpios = <&mcu_pio 0 GPIO_ACTIVE_LOW>;
+>> +        };
+>> +
+>> +        led1: led-1 {
+>> +            gpios = <&mcu_pio 1 GPIO_ACTIVE_HIGH>;
+>> +        };
+>> +
+>> +        led2: led-2 {
+>> +            gpios = <&mcu_pio 1 GPIO_ACTIVE_HIGH>;
+>> +        };
+> led-2 has the same GPIO as led-1, should likely be <&mcu_pio 2 GPIO_ACTIVE_HIGH>;
+ok.
+>
+>> +    };
+>> +
+>> +    multi-led {
+>> +        compatible = "leds-group-multicolor";
+>> +        color = <LED_COLOR_ID_RGB>;
+>> +        function = LED_FUNCTION_INDICATOR;
+>> +        leds = <&led0>, <&led1>, <&led2>;
+>> +    };
+> When reading this I wondered how the driver knows which LED has which
+> color. Should you assign colors to the individual LEDs to make that
+> clear in the example?
 
-> My series has a "flags" field on the key struct where it can filter by IP,
-> prefix, ifindex and so on. It would be possible to add additional flags for
-> making the key only valid between certain times (by wall time).
+Good point. I'll add this to the example. Thanks.
 
-What out for wall clock time, it jumps around in funny ways. Plus the
-kernel has no idea what time zone the wall the wall clock is mounted
-on is in.
+JJ
 
-    Andrew
+>
+> Sascha
+>

@@ -2,101 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B855159FB58
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C1059FB62
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbiHXN1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S237247AbiHXN25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236495AbiHXN1S (ORCPT
+        with ESMTP id S238271AbiHXN2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:27:18 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE9F72EDE
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:27:17 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id m3so18309943lfg.10
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=c45lYX8RXqinZK4YfOxUYn7I1dL1A9tsyXH/7KdT7zo=;
-        b=j17KyB8x4HHjQgrh7HEBJuDHYBcdyG5IYrfjIAfF29/vOt5ceX5mYiEN9Lhr26iEHT
-         uguDoQY5k75hXyfRORn/LIoIIZXgnfjsRkknswONFXYgOB6hu46c6q1jCnKRxMozx+U8
-         IwKzb8fz1FtUJ3u86SjBVR7KbiYwf8HBMfLUmwVCJ/UuLhWIKFo4Pdl6hhFe/FfHb6id
-         K2GtQCOpwdX/IHCXHISI4qDW0RlADt+S/e7StA3OHH++Kzi3UWW0QFVE0vImgiKB0Nm1
-         QLkXkED2ft0zCWwkSHcqsPk5AtknEvFaxsj74ToimQwyfjoBNeAZhSssV2mdV5JY0KkE
-         N+jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=c45lYX8RXqinZK4YfOxUYn7I1dL1A9tsyXH/7KdT7zo=;
-        b=SWlo8HiIlJz1FTG+PLOteDThTeR71IHpZ7OVXp7lr18JHQs17inwb7qS9BmvEgPgxu
-         cZfQ4hdp/hPzy5RlpvVad/jCg/Da2y+7sFJjzJZSdWw9PbHq+PuT7x2NMYlZKHsVAS3f
-         DwI3XLoRrRBOmeJUryA15xKQwhkak+vxF58mUHm364NNSYUQdDitIID6hVcYiJ5LQlQ4
-         1zwAJ+HZdANisFMuxvSWP1bsgHbs+4tXdj6idllUgj/cnlfnNY4DhSzuSNeuSjuehDKU
-         tqpc4Xqpdyd8VAS6swwaUsXwMEGCStIh8lrcYme0YwayIMn4WhHv4usUIPTiYT504qhe
-         J3Ig==
-X-Gm-Message-State: ACgBeo1gsxPQdazK3FwsrGFFhdsrCV/k6moSqdXOySD6ovVaVjtB3TVk
-        PqZmBSYGQnGN12RE+TjpfNzLSA==
-X-Google-Smtp-Source: AA6agR5+dvoQAGR9/rB/GV9HncXOGxbKuFJefiohubaUP2MqmRN7gCj3f7ww8Mwsdzj3XsY8oLCoKg==
-X-Received: by 2002:ac2:4465:0:b0:493:b4:c4ac with SMTP id y5-20020ac24465000000b0049300b4c4acmr1848654lfl.446.1661347636057;
-        Wed, 24 Aug 2022 06:27:16 -0700 (PDT)
-Received: from [10.243.4.185] (107-129-159-217.sta.estpak.ee. [217.159.129.107])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056512376d00b0049288e0bd61sm3028871lft.58.2022.08.24.06.27.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 06:27:15 -0700 (PDT)
-Message-ID: <a9125027-a23a-ef58-cede-0b1d019f362c@linaro.org>
-Date:   Wed, 24 Aug 2022 16:27:14 +0300
+        Wed, 24 Aug 2022 09:28:52 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB7A7333B;
+        Wed, 24 Aug 2022 06:28:43 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1661347670tno5dbrc
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 24 Aug 2022 21:27:48 +0800 (CST)
+X-QQ-SSF: 01000000002000C0E000B00A0000000
+X-QQ-FEAT: CR3LFp2JE4lVtJqGAORANqiWrRevsg+dieOK12peJxs2yEGyZUhWECAnOnNqJ
+        MZLX2vJX1MpnKW3M8wDrxMK9+tj26mG0q4eGSlgozF/CTscRjNSEsK00RBXQiLaQA/6xoo0
+        KjnjX/KzliG+aIcrcvCofG8B/Pqeqm6pHLiQ/jzFKR+b6UmfQzprP8Xw1DtbF95mX8HpJ9M
+        kygev5/m0XTYAaTmqZKyM++4XSU0ghyhHgPXh3AONWnwgP1fz+T0xtKZw6ZPTFjrp3/M0Oy
+        xcc6/F+zuhElebHu67y3skXwDP5ExBLiB4PIRCi+84C0Z9ZeEK1OR0sYjYS8uBmRwOYYblq
+        FDWjKOKGQkIKe7MDGIwwG92dR2akgyIDNe9YRQHh0rhITlsc5hIstMwOSF7QXtlu/19AoqN
+        oei+Szaqc9g=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     awalls@md.metrocast.net, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] pci/cx18: fix repeated words in comments
+Date:   Wed, 24 Aug 2022 21:27:42 +0800
+Message-Id: <20220824132742.62005-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 2/5] dt-bindings: clk: document PolarFire SoC fabric
- clocks
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Hugh Breslin <hugh.breslin@microchip.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20220824093342.187844-1-conor.dooley@microchip.com>
- <20220824093342.187844-3-conor.dooley@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220824093342.187844-3-conor.dooley@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 12:33, Conor Dooley wrote:
-> On PolarFire SoC there are 4 PLL/DLL blocks, located in each of the
-> ordinal corners of the chip, which our documentation refers to as
-> "Clock Conditioning Circuitry". PolarFire SoC is an FPGA, these are
-> highly configurable & many of the input clocks are optional.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+ Delete the redundant word 'is'.
 
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/media/pci/cx18/cx18-av-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/media/pci/cx18/cx18-av-core.c b/drivers/media/pci/cx18/cx18-av-core.c
+index 76e5a504df8c..0ac62d3e85de 100644
+--- a/drivers/media/pci/cx18/cx18-av-core.c
++++ b/drivers/media/pci/cx18/cx18-av-core.c
+@@ -339,7 +339,7 @@ void cx18_av_std_setup(struct cx18 *cx)
+ 
+ 		/*
+ 		 * For a 13.5 Mpps clock and 15,625 Hz line rate, a line is
+-		 * is 864 pixels = 720 active + 144 blanking.  ITU-R BT.601
++		 * 864 pixels = 720 active + 144 blanking.  ITU-R BT.601
+ 		 * specifies 12 luma clock periods or ~ 0.9 * 13.5 Mpps after
+ 		 * the end of active video to start a horizontal line, so that
+ 		 * leaves 132 pixels of hblank to ignore.
+@@ -399,7 +399,7 @@ void cx18_av_std_setup(struct cx18 *cx)
+ 
+ 		/*
+ 		 * For a 13.5 Mpps clock and 15,734.26 Hz line rate, a line is
+-		 * is 858 pixels = 720 active + 138 blanking.  The Hsync leading
++		 * 858 pixels = 720 active + 138 blanking.  The Hsync leading
+ 		 * edge should happen 1.2 us * 13.5 Mpps ~= 16 pixels after the
+ 		 * end of active video, leaving 122 pixels of hblank to ignore
+ 		 * before active video starts.
+-- 
+2.36.1
 
-
-Best regards,
-Krzysztof

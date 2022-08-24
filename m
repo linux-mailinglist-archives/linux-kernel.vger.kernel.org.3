@@ -2,187 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB47F59F42D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B0059F430
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbiHXHZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 03:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S235399AbiHXH0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 03:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbiHXHZ4 (ORCPT
+        with ESMTP id S234728AbiHXH0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 03:25:56 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2115.outbound.protection.outlook.com [40.107.21.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50273B6B;
-        Wed, 24 Aug 2022 00:25:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jpi9YMY22CEphsOeHHo4S6ewQr3lhByFvIqBeuU3JisX23N+3B97QNsUDdKZluxKIZJ46XM+/ghDLv/FZzRQyI26oNmPYELAe0hTYaU/upkQC0izcYgSeqlPhsNMtGiZuGthVPGfSM5/l9w9u9BJogTYGPNUbVUboc8dl6YgtHFIb2JU0D3zd15PM3/GCQFUfGD0UlFe1OE+6sdU19dufWVANrU0A7tWcYdxfNcDha+ivOSGnV0sUTTUk8sAEgaYxHDfnt687rWK1i76geAbNK6EPXOfI58xo0lq1ZS4H3fw9psX/NfGjXk04uYHlq7yWKAUDNkT24A9iSJg+h9azw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vt79qw+PDajQF8MfgZnryCeGYbSAvy25JB4KceSJv7Q=;
- b=kJqePjWKuWWOYHzXP69NMluTF4Wnv2E/PSaOW9/81GyT7kpJtwh9s5AfGzoe3sEwzS4OmEsLC5nmQZaZIkcuXagZ2lKCPxqvGLxh5CTnnKiwW9Akb5Lh4bSyUyZiGEJ13zbqqT35x9O9sto9d+4j9YXgBQjah181omelQ1Cz4gcnjsFi/DvBehIb1cUnQEqtiNADKoscCFnOFQaOjDKGDWLjvZatbMAM+oW8VcarklN+3HVkIAW3JzHDXebboc8XYVxW2tBB/l6401JVnLZd3RlMw4ys55B+t8STb8v94L7cdX/ACQhJM04DNx9xmBytEnvSzGd3maDiKTbj6d6MvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vt79qw+PDajQF8MfgZnryCeGYbSAvy25JB4KceSJv7Q=;
- b=Kii7lWseX006q1fhEvVRGyj41xS9ODzVQ8CWYduTaN5MxBTir0s0/y6lUvTS5vZbWTc4sv8BSWsuDkLk1qyAU4/kR45WQ1+olEf7mX+rlrTyfQe/lTAbNuTMokQ7D1+2sMu/aT/5NwywSyKgbyudaI62K4ldc5tgYl8c/C8Jmrw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by DB7PR02MB5307.eurprd02.prod.outlook.com (2603:10a6:10:7a::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
- 2022 07:25:46 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::1d88:3306:c280:3179]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::1d88:3306:c280:3179%6]) with mapi id 15.20.5566.015; Wed, 24 Aug 2022
- 07:25:40 +0000
-Message-ID: <102125ad-fbec-7f23-bb17-b73ff49fe57b@axentia.se>
-Date:   Wed, 24 Aug 2022 09:25:39 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/3] docs: i2c: i2c-topology: reorder sections more
- logically
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220822091050.47099-1-luca.ceresoli@bootlin.com>
- <20220822091050.47099-3-luca.ceresoli@bootlin.com>
- <19a22449-c9fb-1eba-9a47-3e3d340a13a1@axentia.se>
- <20220823230110.115a3fc5@booty>
-From:   Peter Rosin <peda@axentia.se>
-In-Reply-To: <20220823230110.115a3fc5@booty>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0012.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:a::31) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
+        Wed, 24 Aug 2022 03:26:18 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665DA48C9D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 00:26:16 -0700 (PDT)
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A98993F80B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1661325974;
+        bh=RKMDC66Hnqek9iMZSAeuthSntMHl0KNHEil6I2t6IMA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=GICaK9pl6x5F3sZtFQPmMI79L4xDKxKB9fuicIzOnEBrMnRfS5ONkqkJ0ICQtA2PY
+         74RBk7FddhYm1JXP1CsifRbeDyxtFrUlBM2f6HggDr3eHjNxF33PfkSOPJxIRXgJQG
+         ij+g72j4u3xPsAEh7g9Rnu4oEsrbmOetu71rmWzBUznER/EHzYr38eYTv7tRG1f8Fk
+         9Txe39/ftfK6DIvLYwtZJkRbZRjNaPly58712jyi5TLhQZl4Txz7RxnU1PkeYvjPqI
+         hspIElZ4ECKhrI+gEZonJi037tW9GZGkKlGm8/Sl0VFpwYFBy+OnVjhJ+3iuMM3fIH
+         +pntVCpq/NcXg==
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-11ba59dbdb5so5002556fac.18
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 00:26:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RKMDC66Hnqek9iMZSAeuthSntMHl0KNHEil6I2t6IMA=;
+        b=lUxeZwkdGVtAsIctV25ZDjJEWEJm1fzr99ppttdcalnYDpuuaM06g5Reaf10TEqz0x
+         grdX/vPCioIxkSzj5Gz2yidw4jbongJsdmfnrbehyUt9l9jRo4jVk+YqtR7ZQCJtwp3f
+         7kU13nV30Kvf/dpYNYDj4Mh8OlT/7V1L1nG6SGmePNs53J/Au1WUNAwhkkrarYmYNM52
+         Xs0U5ny3PKTh9/LovInCVz8Cx9j6KDgqTyP/uIc1eUZ+Tjael2B0N6A0qt+Tx4KrZuF7
+         BM9/4k31ZPK6FtCWBn7MW/uRGjSI3LFnA9PD1rOoVc87PANIePD2UCxhKnHwp54hGgD5
+         moWw==
+X-Gm-Message-State: ACgBeo09jWF/OazTiwZKV8jMO0nIhTnneyz/6PdJp175H80Dv8riMPVi
+        1iTjox7D/mW3xQm+EvJ3Oa5prHNo5fjudXyHW54k2no6m3koLaB0oiMVHysarREZp1gWjcUmlUi
+        r2rfQ9jS5sBy7J5/raOISqE4hHZzTV7hX8RXijR/3bt5qf8qiwSXG1UqPjg==
+X-Received: by 2002:a05:6870:8901:b0:11d:416d:2ccb with SMTP id i1-20020a056870890100b0011d416d2ccbmr2927262oao.176.1661325973575;
+        Wed, 24 Aug 2022 00:26:13 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7FmkwklTHwZ2basUPCHATRktTE3mGiZpq0BKWnXooCwDXZa9gowJyAQI1ujHRJlvLbbbs+3ciwprQMKznfcgI=
+X-Received: by 2002:a05:6870:8901:b0:11d:416d:2ccb with SMTP id
+ i1-20020a056870890100b0011d416d2ccbmr2927246oao.176.1661325973206; Wed, 24
+ Aug 2022 00:26:13 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3211e37b-44e4-4b2b-01a1-08da85a1d933
-X-MS-TrafficTypeDiagnostic: DB7PR02MB5307:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: as5W+PD9ytKeBxV1jlEWWnun4yAaUEFJ6vU+sAjdZMPmchlkW5g2hBhh4DpK6r80wKL0Axmj/uJzwIOvsM2aXa7+0RwV5aF3lUHObFm96VDpYk5bw8EPCD4AbG+ge0zw6soYpkVZbBpUtcwhQf10O3DZlMQQlfOeQ8DutQufPpmyhf7ZUU9yQ5mEfUjFO2LDJ5IpfQqpy4owfc20eBG0Ggvk0LbWvHqkaOsEBGbm2neMRM6l8qdGAz9nianFbhYtLJPj9EfEVsteRv0ZkPeD39zaSji1UNehrOxTdNBDR4G6lnE9iEy5Yc1+ufUWMtGczX3YoP9/jK0XuoDtlP2afdHCs5i3DBDYbO6JblzvQCSvc+SxQGkh0RrCkjoekvND6fz8+ia5o7iJamb1auGIQywZkxh4rCXQafbIXRSK4dIBwTnR115Wi3D1IAfhKS382aueGTu89Yv8wAtfIAUVaFe/LdTOWr/kObUmXCpphZnr+Fc5g0NmMwLNTxeuMSa6nRlTysNFr9ablDpKfQuI6p4/ExKBp0R56EWltWTgR0vWtbZQ4twC8JqwmYwMX8IaMqhHTZ0nlhwuu9OBmCvjcQK1mjtej+lfwLQq32oYr/R72pwAuRzGocdB39BAwsCPavdxTLCFoN+Bs9AvquUym+ZnltAGSYjZNrX+gp4ttjfdTM4nGXofszNAC1P75Jc7NGy1vaeDF4O9M6UeIoJnpqHVfO3/lEU1si465+X1B/5lMPtmn/5yT02XOZ1owW6LKyZxL1PACTdNrcJib6Yjq/LDoY79rTLwfg+ViotxWFU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(39840400004)(376002)(366004)(346002)(31696002)(38100700002)(83380400001)(66476007)(478600001)(66556008)(8676002)(4326008)(6486002)(5660300002)(66946007)(8936002)(6916009)(316002)(41300700001)(186003)(2616005)(6506007)(2906002)(86362001)(6512007)(31686004)(26005)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eVhsWnpOMHlrcU9zYTlvUkNqMzRRYmg1Q3lkODIrb01uVW14UmQ2cFJOZnJ4?=
- =?utf-8?B?dUdDLy9zWXFoRE5Kbm5PTmEzaktJWC9pdFhadEpHTm96cWVGOUZCbjA0VTNs?=
- =?utf-8?B?TVY1ODRHMEh5T2wxVkRtQk1uTFRPWmxvUy9sZmxBYWRvcWYyOEJ5b2VrYUVN?=
- =?utf-8?B?em45SGxYWGFkVDdGSTkyVUg0dXlIS2hnRHljZGo0M3hyREdZUzhya3B3Wlli?=
- =?utf-8?B?QzVYN0dodE1LYTBDMjErdkhWcEEzd0V4TVREWlMyeTRqaWtTU2QyV3I0Vk43?=
- =?utf-8?B?SUNHTE9iNm5VU0JPQkk1elVMdWdrMjJIbEJXZW1rTFdkc2VxM1g0OWw4S0o2?=
- =?utf-8?B?T2dlTzhQSEFyWlN5bGlXZC9hcVdKSU9GZXhjT05vaXlvWmdnK1NIbXA5ODE5?=
- =?utf-8?B?NllHSnd1Znk5dDJJZkp5Y1pSSUVWMGMyWWdiOHFBekNYU2FWcit1QmozeHFr?=
- =?utf-8?B?aEdDTnNnWHgvTkg1S284ZTJBd1hSTmVFNU1rbnVMaFFFM1J5ZTFZU0UwdlBi?=
- =?utf-8?B?QjRwdDRZS0QxSDlkM2ZaVUtWUEdTdWlMMDUrUTlIaURtWXE4Z29RKzZsSjZX?=
- =?utf-8?B?RFczOTZ3aitWQ1JEMmdkSDFTS0RxcXJ0V005RWVweU9ma2JabC9IVTNzQTIw?=
- =?utf-8?B?cjJuZlIrU1hRM1JHV0Y1WUpCL0ptdnE5WlA2ZXYxWUw3YXI1UTNvY2VOUjNq?=
- =?utf-8?B?alU0dVJvaFlBVjMxb0lJQ0NPdVE0bGk0RUhDYTh1NXVUVE0zWkgwVXV1RXRH?=
- =?utf-8?B?N0ZBTWFDWXpVejZjbytrODNIRFM0aFRyQ29VRjBORFJZaWRZMmRpN2FISlJH?=
- =?utf-8?B?Tks5ZWdROERQRHpEdUljSzEyQlhPdmNSVGdZbzNaTkhrRXVqZWYyeERXQjNp?=
- =?utf-8?B?ajUvVG1kRnQrQ1hGUnZTVGwvZmVQcndTOGxLV2VteE42NE1FZGlTWVQ5cUF1?=
- =?utf-8?B?QnpXeVdkdkl4ZEJTSHZ4cXdWMEgyd1pGeGowMEl0cWRxOWx0ZnFUeGVMVk9Y?=
- =?utf-8?B?ZDhOTzRGUW1MeDhqOG1kNk95THlWaEU5TUR2bUh6NGQwOFpoUmNJdnBhOThi?=
- =?utf-8?B?b3ptNXl4U2R2elY3V3gyUmpmT3RHTmRyVU5tSDNyRW9tMUNKNUlFSllELzRw?=
- =?utf-8?B?NG5IYWQyUFltZVFTVnVKRE5xRi9HeWxBWmRTcVhkSXlhVE1NMHU4NXYxQ0Vz?=
- =?utf-8?B?SXR5a29TZVc2RXJvVmJwWDE3Si9VWGxqRFp6Rkx4MFdMc3dBM1RnZXhDSENM?=
- =?utf-8?B?L091RHRZUDVkVDY3Mk1JbEUrTnJoVzZhaGJTTnJTbnZua09sTnVJZGtZOVB2?=
- =?utf-8?B?QlVEUFpGM20yRkxxUkhXU1VCaHJJNFdCM0tWaTFnUy9rNWNvTGNQSDM4NmRW?=
- =?utf-8?B?ajZYVTYrVW5USG9Jd3U0cmhrREtOZUJJUXRMV1k5emQvV1M4MWZzYjJuTE9w?=
- =?utf-8?B?RzdMYWZ6ZU5PeFI4YWpxM3ByVlJLdStHSzRKaTIvb3JxcFZJU0FmWU84d1lj?=
- =?utf-8?B?SUhzZ05SQWZYQlNrRkt6S2ZJWmpaY09saFQxVGEwdmJIMXMyUlFhYktzVFlq?=
- =?utf-8?B?NnlyQUxmTGg3NzllcUtiQnU0Y1ozSnZkak85aG1POXJkMkM4QmRhZjRKZEZD?=
- =?utf-8?B?dnN0MllKU2EyanNTdjlwNXNoR3V5OWR5S1JJTlU0NncxZ2FrSWlVZ2swTkJS?=
- =?utf-8?B?enZtVlN6RE91SnJWZU1oSFV2cDVwRVpnOTllOWxLeVVqQ0kzUWtkOC9WYi9l?=
- =?utf-8?B?M0c4aWxhdk1iVWNvbDVCYVE3YmxscEFHSzJJS3lMdnJNVU9CWG9CeEVFNFdy?=
- =?utf-8?B?dFNOaGp6NDBUbjBhdUh3WGlsQlJzQjlGUSs4d3QvUldHUVpWL2VuQnRaWE9V?=
- =?utf-8?B?SHQ0YXAzS1h3bU5EbmdkK0p4ejZoaVF0WWpMT3NhZk9SSEZib0hncm1za3kx?=
- =?utf-8?B?eHFjVmtzaG5EYUY3d0NuTEtLRzRvVDVES1UvRVVUV2Ntc09JMUhxQWVicy8w?=
- =?utf-8?B?enREeG9MU2VtTHZqcENpRHpRQmZZS2JRdGYyZlIwSTlkOElMWjlZR1llbWtj?=
- =?utf-8?B?TzJOdkNPT25jZ1hQMWtKMGV4dEw1Nm9QVnYwM3pFUTAySncreVgzMjhNeEtv?=
- =?utf-8?Q?+cu+RNxUyqyO3z7lR2ihk1cmN?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3211e37b-44e4-4b2b-01a1-08da85a1d933
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 07:25:40.8448
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pAwwlqkjGbiESnYEscMAgzRrIo1uAIq9ZbimVymCR6Wix/8i285SeqHF5UzUAJop
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR02MB5307
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220706123244.18056-1-kai.heng.feng@canonical.com> <20220819234949.GA2515897@bhelgaas>
+In-Reply-To: <20220819234949.GA2515897@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 24 Aug 2022 15:26:00 +0800
+Message-ID: <CAAd53p74M2=gEoTiS3L7wC1a2YRJv+w=fV8_jPVaLtr4+Vvabg@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Disable upstream port PTM during suspend
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-08-23 at 23:01, Luca Ceresoli wrote:
-> Hi Peter,
-> 
-> On Tue, 23 Aug 2022 11:26:51 +0200
-> Peter Rosin <peda@axentia.se> wrote:
-> 
->> 2022-08-22 at 11:10, luca.ceresoli@bootlin.com wrote:
->>> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
->>>
->>> The sequence of sections is a bit confusing here:
->>>
->>>  * we list the mux locking scheme for existing drivers before introducing
->>>    what mux locking schemes are
->>>  * we list the caveats for each locking scheme (which are tricky) before
->>>    the example of the simple use case
->>>
->>> Restructure it entirely with the following logic:
->>>
->>>  * Intro ("I2C muxes and complex topologies")
->>>  * Locking
->>>    - mux-locked
->>>      - example
->>>      - caveats
->>>    - parent-locked
->>>      - example
->>>      - caveats
->>>  * Complex examples
->>>  * Mux type of existing device drivers
->>>
->>> While there, also apply some other improvements:
->>>
->>>  * convert the caveat list from a table (with only one column carrying
->>>    content) to a bullet list.  
->>
->> I want to be able to refer to a specific caveat if/when someone has
->> questions, so I prefer to have the caveats "named". Not that this is
->> very frequent, but if we do remove the tags now I'm sure I'm going
->> to need them a few minutes later...
-> 
-> Now I realize the reason for those labels. Thank you for taking time to
-> explain!
-> 
-> What about this one:
-> 
->   [ML1]
->     If you build a topology with ...
-> 
-> It's a definition list, and the [ML1] gets rendered in bold.
-> 
-> The advantage is the text is still rendered as a regular paragraph,
-> with the same font etc, except the left margin is increased.
+On Sat, Aug 20, 2022 at 7:49 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Wed, Jul 06, 2022 at 08:32:44PM +0800, Kai-Heng Feng wrote:
+> > On Intel Alder Lake platforms, Thunderbolt entering D3cold can cause
+> > some errors reported by AER:
+>
+> What's the connection with Thunderbolt?  I see "thunderbolt
+> 0000:0a:00.0" in dmesg, but I think we see that message only because
+> 0a:00.0 happens to be in the hierarchy below the 00:1d.0 Root Port,
+> not specifically because it's a Thunderbolt device.
 
-Sounds very good to me, go ahead! And feel free to add my ack right
-away with those changes...
+I mentioned "Thunderbolt" because those bridge devices are part of
+Thunderbolt chip. Sorry for the confusing.
 
-Cheers,
-Peter
+>
+> Here's the hierarchy:
+>
+>   0000:00:1d.0 Root Port              to [bus 08-71]
+>   0000:08:00.0 Switch Upstream Port   to [bus 09-71]
+>   0000:09:00.0 Switch Downstream Port to [bus 0a]
+>   0000:0a:00.0 Endpoint (USB controller)
+>   0000:09:01.0 Switch Downstream Port to [bus 0b-3d]
+>   0000:09:02.0 Switch Downstream Port to [bus 3e]
+>   0000:3e:00.0 Endpoint (USB controller)
+>   0000:09:03.0 Switch Downstream Port to [bus 3f-71]
+>
+> The error logged by 00:1d.0 is an Unsupported Request with Requester
+> ID 08:00.0.
+>
+> I think the only relevant thing is that 08:00.0 has PTM enabled and
+> 00:1d.0 has PTM disabled because pci_prepare_to_sleep() only disables
+> PTM for Root Ports.  The same thing could happen if 08:00.0 were an
+> Endpoint or a non-Thunderbolt Switch Upstream Port.
+>
+> Is entering D3cold relevant here?  I don't know how to tell from dmesg
+> that we're entering D3cold.  If we actually put 08:00.0 in D3cold, I
+> don't think we would see the Unsupported Request because 08:00.0 can't
+> send PTM requests from D3cold.
+
+Right, the D3cold is achieved when power resources of 00:1d.0 is off.
+So when the PTM request is logged, 08:00.0 is still at D3hot.
+
+>
+> > pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+> > pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> > pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+> > pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+> > pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+> > thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
+> > xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
+> > pcieport 0000:00:1d.0: AER: device recovery failed
+> >
+> > In addition to that, it can also block system from suspending when
+> > a Thunderbolt dock is attached to the same system.
+>
+>
+> > The original approach [1] is to disable AER and DPC when link is in
+> > L2/L3 Ready, L2 and L3, but Bjorn identified the root cause is the Unsupported
+> > Request:
+> >   - 08:00.0 sent a PTM Request Message (a Posted Request)
+> >   - 00:1d.0 received the PTM Request Message
+> >   - The link transitioned to DL_Down
+> >   - Per sec 2.9.1, 00:1d.0 discarded the Request and reported an
+> >     Unsupported Request
+> >   - Or, per sec 6.21.3, if 00:1d.0 received a PTM Request when its
+> >     own PTM Enable was clear, it would also be treated as an
+> >     Unsupported Request
+> >
+> > And further: 'David did something like this [1], but just for Root Ports. That
+> > looks wrong to me because sec 6.21.3 says we should not have PTM enabled in an
+> > Upstream Port (i.e., in a downstream device like 08:00.0) unless it is already
+> > enabled in the Downstream Port (i.e., in the Root Port 00:1d.0).'
+> >
+> > So also disable upstream port PTM to make the PCI driver conform to the spec
+> > and solve the issue.
+> >
+> > [1] https://lore.kernel.org/all/20220408153159.106741-1-kai.heng.feng@canonical.com/
+> > [2] https://lore.kernel.org/all/20220422222433.GA1464120@bhelgaas/
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216210
+> > Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: David E. Box <david.e.box@linux.intel.com>
+> > Cc: Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>
+> >
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> >  drivers/pci/pci.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index cfaf40a540a82..8ba8a0e12946e 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -2717,7 +2717,8 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+> >        * port to enter a lower-power PM state and the SoC to reach a
+> >        * lower-power idle state as a whole.
+> >        */
+> > -     if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> > +     if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+> > +         pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
+> >               pci_disable_ptm(dev);
+> >
+> >       pci_enable_wake(dev, target_state, wakeup);
+> > @@ -2775,7 +2776,8 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+> >        * port to enter a lower-power PM state and the SoC to reach a
+> >        * lower-power idle state as a whole.
+> >        */
+> > -     if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> > +     if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+> > +         pci_pcie_type(dev) == PCI_EXP_TYPE_UPSTREAM)
+> >               pci_disable_ptm(dev);
+> >
+> >       __pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
+>
+> What do you think of the following possible rework?  I think it's
+> functionally the same except that it disables PTM on Endpoints as well
+> as Switch Upstream Ports.
+
+Your rework works for me, with much better comment :)
+
+Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+>
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 95bc329e74c0..96487a9ce5bf 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2707,14 +2707,19 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+>                 return -EIO;
+>
+>         /*
+> -        * There are systems (for example, Intel mobile chips since Coffee
+> -        * Lake) where the power drawn while suspended can be significantly
+> -        * reduced by disabling PTM on PCIe root ports as this allows the
+> -        * port to enter a lower-power PM state and the SoC to reach a
+> -        * lower-power idle state as a whole.
+> +        * We want to disable PTM on Root Ports because that allows some
+> +        * chips, e.g., Intel mobile chips since Coffee Lake, to enter a
+> +        * lower-power PM state.
+> +        *
+> +        * PCIe r6.0, sec 2.2.8, strongly recommends that functions support
+> +        * generation of messages in non-D0 states, so we assume Switch
+> +        * Upstream Ports or Endpoints may send PTM Requests while in D1,
+> +        * D2, and D3hot.  A PTM message received by a Downstream Port
+> +        * (including a Root Port) with PTM disabled must be treated as an
+> +        * Unsupported Request (sec 6.21.3).  To prevent this error,
+> +        * disable PTM in *all* devices, not just Root Ports.
+>          */
+> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -               pci_disable_ptm(dev);
+> +       pci_disable_ptm(dev);
+>
+>         pci_enable_wake(dev, target_state, wakeup);
+>
+> @@ -2764,15 +2769,8 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+>         if (target_state == PCI_POWER_ERROR)
+>                 return -EIO;
+>
+> -       /*
+> -        * There are systems (for example, Intel mobile chips since Coffee
+> -        * Lake) where the power drawn while suspended can be significantly
+> -        * reduced by disabling PTM on PCIe root ports as this allows the
+> -        * port to enter a lower-power PM state and the SoC to reach a
+> -        * lower-power idle state as a whole.
+> -        */
+> -       if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -               pci_disable_ptm(dev);
+> +       /* See rationale above for disabling PTM */
+> +       pci_disable_ptm(dev);
+>
+>         __pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
+>
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index 368a254e3124..ec338470d13f 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -31,12 +31,18 @@ static void pci_ptm_info(struct pci_dev *dev)
+>
+>  void pci_disable_ptm(struct pci_dev *dev)
+>  {
+> -       int ptm;
+> +       int type, ptm;
+>         u16 ctrl;
+>
+>         if (!pci_is_pcie(dev))
+>                 return;
+>
+> +       type = pci_pcie_type(dev);
+> +       if (!(type == PCI_EXP_TYPE_ROOT_PORT ||
+> +             type == PCI_EXP_TYPE_UPSTREAM ||
+> +             type == PCI_EXP_TYPE_ENDPOINT))
+> +               return;
+> +
+>         ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
+>         if (!ptm)
+>                 return;

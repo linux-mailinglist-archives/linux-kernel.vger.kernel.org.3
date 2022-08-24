@@ -2,110 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6969359FDD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D6759FDD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237612AbiHXPFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S238587AbiHXPGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiHXPFI (ORCPT
+        with ESMTP id S237876AbiHXPGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:05:08 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E6D804A7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:05:06 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so2101109wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hGnu2y59OBtorqhLwIUK+o18oWZXjlL2FYRhWhdiwO0=;
-        b=A6qlhecpQzmKJXTAJ7hZpGEQ0tMojsLooAjp0kAbavqDICMZpjH1pwvI1G8L0tjCWi
-         ycOKn2MiSSesS42WM/CAowwbPcvQVWoC98UuZQI5M90uIIcUvi3+w44rEi3XmpI4VAnq
-         8nzhyoAINFfyiULvZZsFG+mKujIQxjBQrXR2C0v8VSzUgqAhmHTA4eBN5w6ge2fTdMCD
-         hngOOap17HTbtL22wpij4w8HdbNW4lzpLQD+wsR3s02n7ivLZgO8n2gFqr8lNrd/G69M
-         kQZPrzjC+uWt/BWrQBe+8q88lVJ8a8imDUDxpnAUSpX2N1B2bgFXxM1EUyHZOVbXS4hW
-         LjSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hGnu2y59OBtorqhLwIUK+o18oWZXjlL2FYRhWhdiwO0=;
-        b=UHdP8Am3UNQiNHawM6pYxSJAnvUiUl/XZLUotfGU7a7Z1OJkNtD3xU9VCo6iabdTxK
-         XWpxvRP7+e6+vabvqvWHqwK2kAi4mZXl0IToQ72G73lrNUJQJBP0aAnVLhvadPJtYGw5
-         q7OWCv3n35QWpw+gBqmAcL1PxMqCudnjRxN8lpg5v7IbpO8a9BjAp0ENUhl+XFXYuseZ
-         SWLH6QMFtrorgDHQUaHmomhJvBI3PCurDIIyF84kVX6jG5b4ufy5l3FsbVBIB3dwF9Ga
-         JifdK2pnoi8eOuHcPQQeDlA2FducJotf0tMC+uQs/GMXl/r4McLY0s6aeJa0FNNdTtdT
-         WaIg==
-X-Gm-Message-State: ACgBeo0QusNb1wGml3NfLI5O8FhHd8gq112SJzfZJufG6gAHgydulAUl
-        MhTxM0IkJGq2cj2iyypfCjzGV7vugT5Q3ZJSARKpiw==
-X-Google-Smtp-Source: AA6agR499WDzKJBSZv898v0PqTQOgUe7hv6qsT+KpXp2Cc1g39NpRfCYua8LxewTzPevm6USVRlixpygLB9iau6ycVw=
-X-Received: by 2002:a05:600c:25ce:b0:3a5:a3b7:bbfe with SMTP id
- 14-20020a05600c25ce00b003a5a3b7bbfemr5784783wml.115.1661353504851; Wed, 24
- Aug 2022 08:05:04 -0700 (PDT)
+        Wed, 24 Aug 2022 11:06:22 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54C698377
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:06:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VN7yLvj_1661353574;
+Received: from 30.0.163.227(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VN7yLvj_1661353574)
+          by smtp.aliyun-inc.com;
+          Wed, 24 Aug 2022 23:06:15 +0800
+Message-ID: <22585fc8-b0bc-0e14-d121-2767cd178424@linux.alibaba.com>
+Date:   Wed, 24 Aug 2022 23:06:25 +0800
 MIME-Version: 1.0
-References: <20220823220922.256001-1-irogers@google.com> <20220823220922.256001-8-irogers@google.com>
- <02152f40-1dc5-7f1b-ad88-61ecb146a3da@intel.com>
-In-Reply-To: <02152f40-1dc5-7f1b-ad88-61ecb146a3da@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 24 Aug 2022 08:04:53 -0700
-Message-ID: <CAP-5=fWZaN94M1OS2xRYo6M012mi-cRP_boeBi=p6VPnhbOS7g@mail.gmail.com>
-Subject: Re: [PATCH v2 07/18] perf record: Update use of pthread mutex
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
+ size hugetlb page
+To:     David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
+ <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
+ <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
+ <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
+ <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com> <YwVo7xSO+VebkIfQ@monkey>
+ <64669c0a-4a6e-f034-a15b-c4a8deea9e5d@linux.alibaba.com>
+ <7ee73879-e402-9175-eae8-41471d80d59e@redhat.com>
+ <f7544713-d856-0875-41dd-52a5c27ba015@linux.alibaba.com>
+ <041e2e43-2227-1681-743e-5f82e245b5ea@redhat.com>
+ <f5f08e69-83d0-78af-39fb-f2180d13086d@linux.alibaba.com>
+ <0f736dc5-1798-10ad-c506-9a2a38841359@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <0f736dc5-1798-10ad-c506-9a2a38841359@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,88 +55,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 3:15 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 24/08/22 01:09, Ian Rogers wrote:
-> > Switch to the use of mutex wrappers that provide better error checking
-> > for synth_lock.
->
-> It would be better to distinguish patches that make drop-in
-> replacements from patches like this that change logic.
 
-The only change here is PTHREAD_MUTEX_INITIALIZER to mutex_init
-because PTHREAD_MUTEX_INITIALIZER doesn't have error checking. The two
-are morally equivalent and so no logic change is intended - although
-one may inadvertently happen by the moving initialization from compile
-time to runtime.
 
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-record.c | 13 +++++++++----
-> >  1 file changed, 9 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index 4713f0f3a6cf..02eb85677e99 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -21,6 +21,7 @@
-> >  #include "util/evsel.h"
-> >  #include "util/debug.h"
-> >  #include "util/mmap.h"
-> > +#include "util/mutex.h"
-> >  #include "util/target.h"
-> >  #include "util/session.h"
-> >  #include "util/tool.h"
-> > @@ -608,17 +609,18 @@ static int process_synthesized_event(struct perf_tool *tool,
-> >       return record__write(rec, NULL, event, event->header.size);
-> >  }
-> >
-> > +static struct mutex synth_lock;
-> > +
-> >  static int process_locked_synthesized_event(struct perf_tool *tool,
-> >                                    union perf_event *event,
-> >                                    struct perf_sample *sample __maybe_unused,
-> >                                    struct machine *machine __maybe_unused)
-> >  {
-> > -     static pthread_mutex_t synth_lock = PTHREAD_MUTEX_INITIALIZER;
-> >       int ret;
-> >
-> > -     pthread_mutex_lock(&synth_lock);
-> > +     mutex_lock(&synth_lock);
-> >       ret = process_synthesized_event(tool, event, sample, machine);
-> > -     pthread_mutex_unlock(&synth_lock);
-> > +     mutex_unlock(&synth_lock);
-> >       return ret;
-> >  }
-> >
-> > @@ -1917,6 +1919,7 @@ static int record__synthesize(struct record *rec, bool tail)
-> >       }
-> >
-> >       if (rec->opts.nr_threads_synthesize > 1) {
-> > +             mutex_init(&synth_lock, /*pshared=*/false);
->
-> It would be better to have mutex_init() and mutex_init_shared()
-> since /*pshared=*/true is rarely used.
+On 8/24/2022 10:33 PM, David Hildenbrand wrote:
+> On 24.08.22 16:30, Baolin Wang wrote:
+>>
+>>
+>> On 8/24/2022 7:55 PM, David Hildenbrand wrote:
+>>> On 24.08.22 11:41, Baolin Wang wrote:
+>>>>
+>>>>
+>>>> On 8/24/2022 3:31 PM, David Hildenbrand wrote:
+>>>>>>>>>
+>>>>>>>>> IMHO, these follow_huge_xxx() functions are arch-specified at first and
+>>>>>>>>> were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm:
+>>>>>>>>> hugetlb: Copy general hugetlb code from x86 to mm"), and now there are
+>>>>>>>>> still some arch-specified follow_huge_xxx() definition, for example:
+>>>>>>>>> ia64: follow_huge_addr
+>>>>>>>>> powerpc: follow_huge_pd
+>>>>>>>>> s390: follow_huge_pud
+>>>>>>>>>
+>>>>>>>>> What I mean is that follow_hugetlb_page() is a common and
+>>>>>>>>> not-arch-specified function, is it suitable to change it to be
+>>>>>>>>> arch-specified?
+>>>>>>>>> And thinking more, can we rename follow_hugetlb_page() as
+>>>>>>>>> hugetlb_page_faultin() and simplify it to only handle the page faults of
+>>>>>>>>> hugetlb like the faultin_page() for normal page? That means we can make
+>>>>>>>>> sure only follow_page_mask() can handle hugetlb.
+>>>>>>>>>
+>>>>>>>
+>>>>>>> Something like that might work, but you still have two page table walkers
+>>>>>>> for hugetlb.  I like David's idea (if I understand it correctly) of
+>>>>>>
+>>>>>> What I mean is we may change the hugetlb handling like normal page:
+>>>>>> 1) use follow_page_mask() to look up a hugetlb firstly.
+>>>>>> 2) if can not get the hugetlb, then try to page fault by
+>>>>>> hugetlb_page_faultin().
+>>>>>> 3) if page fault successed, then retry to find hugetlb by
+>>>>>> follow_page_mask().
+>>>>>
+>>>>> That implies putting more hugetlbfs special code into generic GUP,
+>>>>> turning it even more complicated. But of course, it depends on how the
+>>>>> end result looks like. My gut feeling was that hugetlb is better handled
+>>>>> in follow_hugetlb_page() separately (just like we do with a lot of other
+>>>>> page table walkers).
+>>>>
+>>>> OK, fair enough.
+>>>>
+>>>>>>
+>>>>>> Just a rough thought, and I need more investigation for my idea and
+>>>>>> David's idea.
+>>>>>>
+>>>>>>> using follow_hugetlb_page for both cases.  As noted, it will need to be
+>>>>>>> taught how to not trigger faults in the follow_page_mask case.
+>>>>>>
+>>>>>> Anyway, I also agree we need some cleanup, and firstly I think we should
+>>>>>> cleanup these arch-specified follow_huge_xxx() on some architectures
+>>>>>> which are similar with the common ones. I will look into these.
+>>>>>
+>>>>> There was a recent discussion on that, e.g.:
+>>>>>
+>>>>> https://lkml.kernel.org/r/20220818135717.609eef8a@thinkpad
+>>>>
+>>>> Thanks.
+>>>>
+>>>>>
+>>>>>>
+>>>>>> However, considering cleanup may need more investigation and
+>>>>>> refactoring, now I prefer to make these bug-fix patches of this patchset
+>>>>>> into mainline firstly, which are suitable to backport to old version to
+>>>>>> fix potential race issues. Mike and David, how do you think? Could you
+>>>>>> help to review these patches? Thanks.
+>>>>>
+>>>>> Patch #1 certainly add more special code just to handle another hugetlb
+>>>>> corner case (CONT pages), and maybe just making it all use
+>>>>> follow_hugetlb_page() would be even cleaner and less error prone.
+>>>>>
+>>>>> I agree that locking is shaky, but I'm not sure if we really want to
+>>>>> backport this to stable trees:
+>>>>>
+>>>>> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+>>>>>
+>>>>> "It must fix a real bug that bothers people (not a, “This could be a
+>>>>> problem...” type thing)."
+>>>>>
+>>>>>
+>>>>> Do we actually have any instance of this being a real (and not a
+>>>>> theoretical) problem? If not, I'd rather clean it all up right away.
+>>>>
+>>>> I think this is a real problem (not theoretical), and easy to write some
+>>>> code to show the issue. For example, suppose thread A is trying to look
+>>>> up a CONT-PTE size hugetlb page under the lock, however antoher thread B
+>>>> can migrate the CONT-PTE hugetlb page at the same time, which will cause
+>>>> thread A to get an incorrect page, if thread A want to do something for
+>>>> this incorrect page, error occurs.
+>>>>
+>>>> Actually we also want to backport these fixes to the distro with old
+>>>> kernel versions to make the hugetlb more stable. Otherwise we must hit
+>>>> these issues sooner or later if the customers use CONT-PTE/PMD hugetlb.
+>>>>
+>>>> Anyway, if you and Mike still think these issues are not important
+>>>> enough to be fixed in the old versions, I can do the cleanup firstly.
+>>>>
+>>>
+>>> [asking myself which follow_page() users actually care about hugetlb,
+>>> and why we need this handling in follow_page at all]
+>>>
+>>> Which follow_page() user do we care about here? Primarily mm/migrate.c
+>>> only I assume?
+>>
+>> Right, mainly affects the move_pages() syscall I think. Yes, I can not
+>> know all of the users of the move_pages() syscall now or in the future
+>> in our data center, but like I said the move_pages() syscall + hugetlb
+>> can be a real potential stability issue.
+>>
+> 
+> I wonder if we can get rid of follow_page() completely, there are not
+> too many users. Or alternatively simply make it use general GUP
+> infrastructure more clearly. We'd need something like FOLL_NOFAULT that
+> also covers "absolutely no faults".
 
-Will change in v3.
+I am not sure I get your point. So you want change to use 
+__get_user_pages() (or silimar wrappers) to look up a normal page or 
+hugetlb instead of follow_page()? and adding a new FOLL_NOFAULT flag to 
+__get_user_pages().
 
-Thanks,
-Ian
+If I understand correctly, we still need more work to move those 
+arch-specified follow_huge_xxx() into follow_hugetlb_page() firstly like 
+we disscussed before? Which seems not backportable too.
 
-> >               perf_set_multithreaded();
-> >               f = process_locked_synthesized_event;
-> >       }
-> > @@ -1930,8 +1933,10 @@ static int record__synthesize(struct record *rec, bool tail)
-> >                                                   rec->opts.nr_threads_synthesize);
-> >       }
-> >
-> > -     if (rec->opts.nr_threads_synthesize > 1)
-> > +     if (rec->opts.nr_threads_synthesize > 1) {
-> >               perf_set_singlethreaded();
-> > +             mutex_destroy(&synth_lock);
-> > +     }
-> >
-> >  out:
-> >       return err;
->
+I am not againt your idea, and I also agree that we should do some 
+cleanup. But the point is if we need backport patches to fix this issue, 
+which affects move_pages() syscall, if the answer is yes, I think my 
+current fixes are suitable to backport.

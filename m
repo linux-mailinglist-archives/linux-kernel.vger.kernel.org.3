@@ -2,153 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AC759FE77
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED89C59FE79
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238258AbiHXPhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S237404AbiHXPir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237255AbiHXPhX (ORCPT
+        with ESMTP id S236248AbiHXPip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:37:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC344D273;
-        Wed, 24 Aug 2022 08:37:22 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EBDF71EC0532;
-        Wed, 24 Aug 2022 17:37:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1661355437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=JYAdElWSvwdqbqowgbtvuq6MWUw4TqGpXu8bQC/7Pm0=;
-        b=UvaT53Lw6sp3lDU5FY7nZjsV1hbuTZWYAMmqdC8eKRyh9ltPO6tLwxIlwKk+8WTRQWWyyA
-        AMVCFJSIqSBkfPt8bkMdizEECMfOW+s1lKwp+rXmY5TNNh3+/CH31j9ASnJsPM2WPV/yIF
-        o75/irqxga5m3fD7BkiINcNIrsXo/Xg=
-Date:   Wed, 24 Aug 2022 17:37:12 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jia He <justin.he@arm.com>
-Cc:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com, "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-doc@vger.kernel.org, stable@kernel.org
-Subject: Re: [RESEND PATCH v3 3/9] EDAC/ghes: Make ghes_edac a proper module
- to remove the dependency on ghes
-Message-ID: <YwZFqHvcEzVpAxzn@zn.tnic>
-References: <20220822154048.188253-1-justin.he@arm.com>
- <20220822154048.188253-4-justin.he@arm.com>
+        Wed, 24 Aug 2022 11:38:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4417198C;
+        Wed, 24 Aug 2022 08:38:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fHn/HurE6G7lQKnc8g7UWWop7cNMxA3yDLWtujI6evg=; b=da2rKDt/rAXyxvZ704clMkCQP8
+        AfMfpXFLtvIgLih9jukwzpYIS3e4LgxqaqFyGVlig0Y9LvNIHVkM62yXtAJHNrE+il3cNzJMZBhgK
+        JnR3DSilRVQ6j3daaBpoJba25Vy7bhNiLXpZK/vV8POiPDz9DSRf8iFop+8wjiTz+QfM2Mc1Gi1H0
+        rS6EmcA1ww6ljbbEtl0SRwg0F2WTOPlIY8M2bHgIArBg5q+zxeTp2urnti7nnoSncCQU855rA5WDy
+        osM2l+mXM6VJOxcPZbpqPpDGIKvRpWxUiDeidzuV8+cc7UyNGLc9gLtPycmmBrHJtidmanA8s7GMm
+        ZnO5FIiw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oQsSb-00GRSU-2m; Wed, 24 Aug 2022 15:38:31 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0FCB0980BE2; Wed, 24 Aug 2022 17:38:27 +0200 (CEST)
+Date:   Wed, 24 Aug 2022 17:38:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     X86 ML <x86@kernel.org>, Michael Matz <matz@suse.de>,
+        linux-toolchains@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/sev: Mark snp_abort() noreturn
+Message-ID: <YwZF8pvWHqFYQOVB@worktop.programming.kicks-ass.net>
+References: <20220824152420.20547-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822154048.188253-4-justin.he@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220824152420.20547-1-bp@alien8.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 03:40:42PM +0000, Jia He wrote:
-> Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
-> apci_init()") introduced a bug that ghes_edac_register() would be invoked
-> before edac_init(). Because at that time, the bus "edac" hadn't been even
-> registered, this created sysfs /devices/mc0 instead of
-> /sys/devices/system/edac/mc/mc0 on an Ampere eMag server.
+On Wed, Aug 24, 2022 at 05:24:20PM +0200, Borislav Petkov wrote:
+> From: Borislav Petkov <bp@suse.de>
 > 
-> To remove the dependency of ghes_edac on ghes, make it a proper module. Use
-> a list to save the probing devices in ghes_probe(), and defer the
-> ghes_edac_register() to module_init() of the new ghes_edac module by
-> iterating over the devices list.
+> Mark both the function prototype and definition as noreturn in order to
+> prevent the compiler from doing transformations which confuse objtool
+> like so:
 > 
-> Co-developed-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Jia He <justin.he@arm.com>
-> Fixes: dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in apci_init()")
-> Cc: stable@kernel.org
+>   vmlinux.o: warning: objtool: sme_enable+0x71: unreachable instruction
+> 
+> This triggers with gcc-12.
 
-Why is this marked for stable?
+You'll probably also have to add it to the
+objtool/check.c:global_noreturn[] list, for the case where objtool fails
+to recognise it as noreturn.
 
-The prerequisite patches are needed too. I guess this needs to be
-communicated to stable folks somehow by doing
-
-Cc: stable@kernel.org # needs commits X, Y, ...
-
-but I guess the committer needs to do that because only at commit time
-will X and Y be known...
-
-So, is there any particular reason why this should be in stable?
-
-> @@ -1442,7 +1449,9 @@ static int ghes_remove(struct platform_device *ghes_dev)
->  
->  	ghes_fini(ghes);
->  
-> -	ghes_edac_unregister(ghes);
-> +	mutex_lock(&ghes_devs_mutex);
-> +	list_del_rcu(&ghes->elist);
-
-Is that list RCU-protected?
-
-> +	mutex_unlock(&ghes_devs_mutex);
->  
->  	kfree(ghes);
-
-...
-
-> @@ -566,3 +549,35 @@ void ghes_edac_unregister(struct ghes *ghes)
->  unlock:
->  	mutex_unlock(&ghes_reg_mutex);
->  }
-> +
-> +static int __init ghes_edac_init(void)
-> +{
-> +	struct ghes *g, *g_tmp;
-> +
-> +	if (!IS_ENABLED(CONFIG_X86))
-> +		force_load = true;
-
-No, this is not how this works.
-
-> +	ghes_devs = ghes_get_devices(force_load);
-> +	if (!ghes_devs)
-> +		return -ENODEV;
-
-You simply need to check force_load here.
-
-> +	list_for_each_entry_safe(g, g_tmp, ghes_devs, elist) {
-> +		ghes_edac_register(g->dev);
-> +	}
-> +
-> +	return 0;
-> +}
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

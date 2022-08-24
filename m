@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5768659F201
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEB359F1FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbiHXDV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 23:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S234612AbiHXDWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 23:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbiHXDVb (ORCPT
+        with ESMTP id S234308AbiHXDVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 23 Aug 2022 23:21:31 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14756816B2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:28 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id a19-20020aa780d3000000b0052bccd363f8so6876480pfn.22
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:28 -0700 (PDT)
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623F682D12
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:30 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id q73-20020a17090a1b4f00b001fb633703fcso167565pjq.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:reply-to:from:to:cc;
-        bh=0Zu9CHYeQLsVtyyQt2AMWvNl6eTy619WBuTXQTtixSA=;
-        b=D55RlPmRHY3855ha+O8WFuydY7xxV00RTpgiyt0tc+7sqW+ZITwJ8rHH4cS6Rgj2Tp
-         EHuWTZwJYb/z5yGCzhd4wR6f3rStHwPGFgRn6L9kMUUWot/3PnViuvUo20Btnb7i66Tw
-         dO9NyUSAB9cSeN4t5FJi7jZBt1djQF7nRCc7u2BDQCLlF0FJx0JuKeXkajK/Bb3xsZqK
-         6tk7zhNHVsj4IdF9tAKxyVew8z6dGtaEOw8q0I3USCIsdic62o4PAhO7p8dmL04RYw3+
-         vJCAytqgW15ccVK1stFdEfYnKwvHjs8FRvcUj5bQpNDEkEcfzdtOUCoq+wKJQBUaP8ql
-         g1NA==
+        bh=ID0LEN54g4SKI12YiNIJ9Ou03DYNCbuKZq4SDDiKjA0=;
+        b=MIyLxnBhPREuMmCFGfdXhP05WPcmtjb1vwHFIbVVRFVs4jR2fonrTaIHNxayLeWFvI
+         vRIjETuqqQtEl/oOfOlexNo6GSKg/65OOqECKXQJ9aAlA6XqJOBIwRcWgqfXOosk9D8j
+         VPRBAhNwIIePzlmHjVuRHYhBIqcj0KGWUssusNH9xb3aVQ1PlhWKDMm/JNNBiztkl5/a
+         dYhqP9ERH/fzgi8b5B88DLfvDynm0gh2FDpbyJuPInhEFP5GUhGS+IgiPBueJYfLLNjJ
+         Ba+i6EfGZxmNdAYIRxaAyRtMlp9m8RqE/9c+o55oeMkydrSq6gQyilcJhm8JhRVM3xYo
+         aHYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=0Zu9CHYeQLsVtyyQt2AMWvNl6eTy619WBuTXQTtixSA=;
-        b=MU5S0ihdUWeNLFxaI8RP8u4yv+vBfWv9Bfp8aKKn+0DOgY9kVv5G59MA3TBzq/+7JO
-         NQSFXb8c8SeMXTm+moTW7bKH8GuBSguKMRZ1N+TUhtE49Gk5q41BO3IvKMN7nLDAqWYz
-         f32+A+3JNpJPFz/hnk6uJSYxeZa+moqxWllBU8R0AW0p7lVMoYRy4Y8pzJag5zigv+L1
-         73FaXJRLmYAhr77jeE7vHrjcgGxENxkutyuqF2hQipy8pRV2TzXkoNOuoYq/h0BG9O97
-         TnBkyXb9Z7ibPiwgj9+eFC30Yd+pCSYHabvq8bl1rL414nVL8CBRkK5YuonqR+jct80y
-         cC7A==
-X-Gm-Message-State: ACgBeo3RbfxfmcV93xuHlMqN/Cf57+wH9DXPh9J5kQbn2LpJR7hzy+YK
-        d07FPxXTdFYiNvDyCq2HrJXbrML1ckU=
-X-Google-Smtp-Source: AA6agR573qzRI9fRUFVPY21n41Xn0zzpTI2fab3hBfHK20jtmnw9qYoXs3mBXpBUgtjKB0V2MjEeiqR0SSg=
+        bh=ID0LEN54g4SKI12YiNIJ9Ou03DYNCbuKZq4SDDiKjA0=;
+        b=7+mWxzWOX/AMVFZSsAFLnveE6B48j4BPcM1kW5bR8DJoQBK5Zn5XJ+tA6CmJlvJI1b
+         k4BcRscwY+xIYVSJXa0Lf1tY66btBKQo22NPBxFeSjDSg4wnTRmi4itI6Oc5cpdrvq4d
+         CECOH/Z6uSQd7xFzptVdLt5RiIDeSsYV5gaq5rTnO43ZZqWZNCBBQcbRcMvYPmvdzU8T
+         0t614o/CHHk3JeSEyo+yVl4IT0omLToeP1bPhNNrpikgNE8sCkSbo9lXhZMAqrNHmAXN
+         6TOeaiMwcZcd53V7h/q8pRyKefuxpgscGw1itcEPn1p68n+iYbFga695Duov3NcPGp/4
+         AwDw==
+X-Gm-Message-State: ACgBeo3hM/Jlx3GivCEh8s83SGX99uxfCF5VaiAk/rdhOGBLDwdHDvlq
+        yhGES0PLCtIAPfFawGQQqEijWTcyY2c=
+X-Google-Smtp-Source: AA6agR7qJXZ060IVlHFYw5MostRiExgVNSpQSb5aqpoFfJhg5KBymx9MNvVNgiIbEitImrJ5lWzWN1hYAyQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:814d:0:b0:535:c875:dd4f with SMTP id
- d13-20020aa7814d000000b00535c875dd4fmr27515181pfn.4.1661311287578; Tue, 23
- Aug 2022 20:21:27 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:a14:b0:1fa:bc6e:e5e8 with SMTP id
+ gg20-20020a17090b0a1400b001fabc6ee5e8mr154528pjb.1.1661311289328; Tue, 23 Aug
+ 2022 20:21:29 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 24 Aug 2022 03:21:14 +0000
+Date:   Wed, 24 Aug 2022 03:21:15 +0000
 In-Reply-To: <20220824032115.3563686-1-seanjc@google.com>
-Message-Id: <20220824032115.3563686-6-seanjc@google.com>
+Message-Id: <20220824032115.3563686-7-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220824032115.3563686-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v4 5/6] KVM: selftests: Make arm64's MMIO ucall multi-VM friendly
+Subject: [PATCH v4 6/6] KVM: selftests: Add ucall pool based implementation
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Anup Patel <anup@brainfault.org>,
@@ -83,122 +83,241 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a mostly-theoretical bug where ARM's ucall MMIO setup could result in
-different VMs stomping on each other by cloberring the global pointer.
+From: Peter Gonda <pgonda@google.com>
 
-Fix the most obvious issue by saving the MMIO gpa into the VM.
+To play nice with guests whose stack memory is encrypted, e.g. AMD SEV,
+introduce a new "ucall pool" implementation that passes the ucall struct
+via dedicated memory (which can be mapped shared, a.k.a. as plain text).
 
-A more subtle bug is that creating VMs in parallel (on multiple tasks)
-could result in a VM using the wrong address.  Synchronizing a global to
-a guest effectively snapshots the value on a per-VM basis, i.e. the
-"global" is already prepped to work with multiple VMs, but setting the
-global in the host and copying it to the guest needs to happen atomically.
-To fix that bug, add atomic_sync_global_pointer_to_guest() to sync
-"global" pointers that hold per-VM values, i.e. technically need to be
-handled in a thread-safe manner.
+Because not all architectures have access to the vCPU index in the guest,
+use a bitmap with atomic accesses to track which entries in the pool are
+free/used.  A list+lock could also work in theory, but synchronizing the
+individual pointers to the guest would be a mess.
 
+Note, there's no need to rewalk the bitmap to ensure success.  If all
+vCPUs are simply allocating, success is guaranteed because there are
+enough entries for all vCPUs.  If one or more vCPUs are freeing and then
+reallocating, success is guaranteed because vCPUs _always_ walk the
+bitmap from 0=>N; if vCPU frees an entry and then wins a race to
+re-allocate, then either it will consume the entry it just freed (bit is
+the first free bit), or the losing vCPU is guaranteed to see the freed
+bit (winner consumes an earlier bit, which the loser hasn't yet visited).
+
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h     | 16 +++++++++++++++
- .../testing/selftests/kvm/lib/aarch64/ucall.c | 20 ++++++++++++++-----
- 2 files changed, 31 insertions(+), 5 deletions(-)
+ .../selftests/kvm/include/ucall_common.h      | 14 ++--
+ .../testing/selftests/kvm/lib/aarch64/ucall.c |  7 +-
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |  2 +-
+ tools/testing/selftests/kvm/lib/s390x/ucall.c |  2 +-
+ .../testing/selftests/kvm/lib/ucall_common.c  | 83 ++++++++++++++++++-
+ .../testing/selftests/kvm/lib/x86_64/ucall.c  |  2 +-
+ 6 files changed, 89 insertions(+), 21 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 24fde97f6121..9ec7fbe941aa 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -16,6 +16,7 @@
- #include <linux/kvm.h>
- #include "linux/rbtree.h"
- 
-+#include <asm/atomic.h>
- 
- #include <sys/ioctl.h>
- 
-@@ -81,6 +82,7 @@ struct kvm_vm {
- 	struct sparsebit *vpages_mapped;
- 	bool has_irqchip;
- 	bool pgd_created;
-+	vm_paddr_t ucall_mmio_addr;
- 	vm_paddr_t pgd;
- 	vm_vaddr_t gdt;
- 	vm_vaddr_t tss;
-@@ -714,6 +716,20 @@ kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
- 	memcpy(&(g), _p, sizeof(g));				\
- })
- 
-+/*
-+ * Sync a global pointer to the guest that has a per-VM value, in which case
-+ * writes to the host copy of the "global" must be serialized (in case a test
-+ * is being truly crazy and spawning multiple VMs concurrently).
-+ */
-+#define atomic_sync_global_pointer_to_guest(vm, g, val) ({	\
-+	typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));	\
-+								\
-+	while (cmpxchg(&g, NULL, val))				\
-+		;						\
-+	memcpy(_p, &(g), sizeof(g));				\
-+	WRITE_ONCE(g, NULL);					\
-+})
+diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+index 8077a6d8b1ba..360397e3cbf5 100644
+--- a/tools/testing/selftests/kvm/include/ucall_common.h
++++ b/tools/testing/selftests/kvm/include/ucall_common.h
+@@ -22,6 +22,9 @@ enum {
+ struct ucall {
+ 	uint64_t cmd;
+ 	uint64_t args[UCALL_MAX_ARGS];
 +
- void assert_on_unhandled_exception(struct kvm_vcpu *vcpu);
++	/* Host virtual address of this struct. */
++	struct ucall *hva;
+ };
  
- void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu,
+ void ucall_arch_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa);
+@@ -32,15 +35,8 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
+ void ucall(uint64_t cmd, int nargs, ...);
+ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+ 
+-static inline void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
+-{
+-	ucall_arch_init(vm, mmio_gpa);
+-}
+-
+-static inline void ucall_uninit(struct kvm_vm *vm)
+-{
+-	ucall_arch_uninit(vm);
+-}
++void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa);
++void ucall_uninit(struct kvm_vm *vm);
+ 
+ #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
+ 				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
 diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-index f02ae27c3e43..acb47c813477 100644
+index acb47c813477..5f79c9fc72d7 100644
 --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
 +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-@@ -6,20 +6,30 @@
-  */
- #include "kvm_util.h"
+@@ -43,12 +43,9 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
  
+ 	if (run->exit_reason == KVM_EXIT_MMIO &&
+ 	    run->mmio.phys_addr == vcpu->vm->ucall_mmio_addr) {
+-		vm_vaddr_t gva;
+-
+-		TEST_ASSERT(run->mmio.is_write && run->mmio.len == 8,
++		TEST_ASSERT(run->mmio.is_write && run->mmio.len == sizeof(uint64_t),
+ 			    "Unexpected ucall exit mmio address access");
+-		memcpy(&gva, run->mmio.data, sizeof(gva));
+-		return addr_gva2hva(vcpu->vm, gva);
++		return (void *)(*((uint64_t *)run->mmio.data));
+ 	}
+ 
+ 	return NULL;
+diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+index c58ecb8a0981..9526a200d038 100644
+--- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
++++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+@@ -59,7 +59,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+ 	    run->riscv_sbi.extension_id == KVM_RISCV_SELFTESTS_SBI_EXT) {
+ 		switch (run->riscv_sbi.function_id) {
+ 		case KVM_RISCV_SELFTESTS_SBI_UCALL:
+-			return addr_gva2hva(vcpu->vm, run->riscv_sbi.args[0]);
++			return (void *)run->riscv_sbi.args[0];
+ 		case KVM_RISCV_SELFTESTS_SBI_UNEXP:
+ 			vcpu_dump(stderr, vcpu, 2);
+ 			TEST_ASSERT(0, "Unexpected trap taken by guest");
+diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+index 208f0f04299b..1efdeac60b4e 100644
+--- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
++++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+@@ -30,7 +30,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+ 	    (run->s390_sieic.ipb >> 16) == 0x501) {
+ 		int reg = run->s390_sieic.ipa & 0xf;
+ 
+-		return addr_gva2hva(vcpu->vm, run->s.regs.gprs[reg]);
++		return (void *)run->s.regs.gprs[reg];
+ 	}
+ 	return NULL;
+ }
+diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+index ced480860746..29f8cb614382 100644
+--- a/tools/testing/selftests/kvm/lib/ucall_common.c
++++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+@@ -1,22 +1,97 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include "kvm_util.h"
++#include "linux/types.h"
++#include "linux/bitmap.h"
++#include "linux/atomic.h"
++
++struct ucall_header {
++	DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
++	struct ucall ucalls[KVM_MAX_VCPUS];
++};
++
 +/*
 + * This "global" holds different per-VM values, it must not be accessed from
 + * host code except to sync the guest value, and that must be done atomically.
 + */
- static vm_vaddr_t *ucall_exit_mmio_addr;
- 
-+static void ucall_set_mmio_addr(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
-+{
-+	vm->ucall_mmio_addr = mmio_gpa;
++static struct ucall_header *ucall_pool;
 +
-+	atomic_sync_global_pointer_to_guest(vm, ucall_exit_mmio_addr,
-+					    (vm_vaddr_t *)mmio_gpa);
++static void ucall_set_pool(struct kvm_vm *vm, struct ucall_header *val)
++{
++	atomic_sync_global_pointer_to_guest(vm, ucall_pool, val);
 +}
 +
- void ucall_arch_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
- {
- 	virt_pg_map(vm, mmio_gpa, mmio_gpa);
++void ucall_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
++{
++	struct ucall_header *hdr;
++	struct ucall *uc;
++	vm_vaddr_t vaddr;
++	int i;
++
++	vaddr = vm_vaddr_alloc(vm, sizeof(*hdr), KVM_UTIL_MIN_VADDR);
++	hdr = (struct ucall_header *)addr_gva2hva(vm, vaddr);
++	memset(hdr, 0, sizeof(*hdr));
++
++	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
++		uc = &hdr->ucalls[i];
++		uc->hva = uc;
++	}
++
++	ucall_set_pool(vm, (void *)vaddr);
++
++	ucall_arch_init(vm, mmio_gpa);
++}
++
++void ucall_uninit(struct kvm_vm *vm)
++{
++	ucall_set_pool(vm, NULL);
++
++	ucall_arch_uninit(vm);
++}
++
++static struct ucall *ucall_alloc(void)
++{
++	struct ucall *uc;
++	int i;
++
++	GUEST_ASSERT(ucall_pool && ucall_pool->in_use);
++
++	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
++		if (!atomic_test_and_set_bit(i, ucall_pool->in_use)) {
++			uc = &ucall_pool->ucalls[i];
++			memset(uc->args, 0, sizeof(uc->args));
++			return uc;
++		}
++	}
++	GUEST_ASSERT(0);
++	return NULL;
++}
++
++static noinline void ucall_free(struct ucall *uc)
++{
++	/* Beware, here be pointer arithmetic.  */
++	clear_bit(uc - ucall_pool->ucalls, ucall_pool->in_use);
++}
  
--	ucall_exit_mmio_addr = (vm_vaddr_t *)mmio_gpa;
--	sync_global_to_guest(vm, ucall_exit_mmio_addr);
-+	ucall_set_mmio_addr(vm, mmio_gpa);
+ void ucall(uint64_t cmd, int nargs, ...)
+ {
+-	struct ucall uc = {};
++	struct ucall *uc;
+ 	va_list va;
+ 	int i;
+ 
+-	WRITE_ONCE(uc.cmd, cmd);
++	uc = ucall_alloc();
++
++	WRITE_ONCE(uc->cmd, cmd);
+ 
+ 	nargs = min(nargs, UCALL_MAX_ARGS);
+ 
+ 	va_start(va, nargs);
+ 	for (i = 0; i < nargs; ++i)
+-		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
++		WRITE_ONCE(uc->args[i], va_arg(va, uint64_t));
+ 	va_end(va);
+ 
+-	ucall_arch_do_ucall((vm_vaddr_t)&uc);
++	ucall_arch_do_ucall((vm_vaddr_t)uc->hva);
++
++	ucall_free(uc);
  }
  
- void ucall_arch_uninit(struct kvm_vm *vm)
- {
--	ucall_exit_mmio_addr = 0;
--	sync_global_to_guest(vm, ucall_exit_mmio_addr);
-+	ucall_set_mmio_addr(vm, (vm_paddr_t)NULL);
+ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+index 016a0487cf72..82e7f6ae7811 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+@@ -30,7 +30,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+ 		struct kvm_regs regs;
+ 
+ 		vcpu_regs_get(vcpu, &regs);
+-		return addr_gva2hva(vcpu->vm, regs.rdi);
++		return (void *)regs.rdi;
+ 	}
+ 	return NULL;
  }
- 
- void ucall_arch_do_ucall(vm_vaddr_t uc)
-@@ -32,7 +42,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
- 	struct kvm_run *run = vcpu->run;
- 
- 	if (run->exit_reason == KVM_EXIT_MMIO &&
--	    run->mmio.phys_addr == (uint64_t)ucall_exit_mmio_addr) {
-+	    run->mmio.phys_addr == vcpu->vm->ucall_mmio_addr) {
- 		vm_vaddr_t gva;
- 
- 		TEST_ASSERT(run->mmio.is_write && run->mmio.len == 8,
 -- 
 2.37.1.595.g718a3a8f04-goog
 

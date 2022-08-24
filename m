@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A80359F0D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BD859F0DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiHXBZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S232291AbiHXB0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiHXBZE (ORCPT
+        with ESMTP id S231307AbiHXB0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:25:04 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57001D74
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:25:03 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MC7bw05sHzlWG1;
-        Wed, 24 Aug 2022 09:21:48 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 09:25:01 +0800
-Message-ID: <096cb71d-1001-0a78-73c8-bfef84868d96@huawei.com>
-Date:   Wed, 24 Aug 2022 09:25:00 +0800
+        Tue, 23 Aug 2022 21:26:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445D55A158
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:26:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661304375; x=1692840375;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xu4VVtueXMaHSDEe4yYtFLEzk4+U/4f/7RXVJQpv/tw=;
+  b=EAIJJgrzEeLxgBLM4e4em//JfIMYFk4GO7cy7F01YLzqSfkIXp1e2FiY
+   fdzqz4ULFs4NyKmUAy3c8uIFrMcQEqNMVwY/ABlbCsNzidACzWoUjpklj
+   adzm8gNS62SIgkkTSbm+7BQbYKlOa4kR/x4id4h8g+O1CMQgk4U9b5HDW
+   n2hNbQ4RNNK4qhEJF57Tt8STfWrVHevxrJ58Kd8OjEt70eXEAq21PKNT8
+   /B2/ZULCgI7C8jjeptijNACQ7quUyIaiotQEfh3M5WbtoPn6pjKnHQtDz
+   poNCUG4c23vzhtDxGjkvDE0vwaE0I3R1jzZzl6TZEiLsiwaDxqueJzlw/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="380128025"
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="380128025"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 18:26:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="586222105"
+Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 23 Aug 2022 18:26:13 -0700
+Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQf9o-0000o5-2g;
+        Wed, 24 Aug 2022 01:26:12 +0000
+Date:   Wed, 24 Aug 2022 09:25:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mark:arm64/alternatives/rework 17/18]
+ arch/arm64/kernel/alternative.c:146:6: warning: no previous prototype for
+ 'summarize_alternatives'
+Message-ID: <202208240954.ZdCvNcRi-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH -next] trace: wwnr: Make local symbol 'rv_wwnr' static
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <rostedt@goodmis.org>,
-        <mingo@redhat.com>
-References: <20220822063056.3890045-1-zengheng4@huawei.com>
- <378d61ab-8866-8026-d6ad-b8f6718ff345@kernel.org>
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <378d61ab-8866-8026-d6ad-b8f6718ff345@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500022.china.huawei.com (7.185.36.162)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,71 +62,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Got it, it's pleasure. And I will re-send the below patch series ASAP.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/alternatives/rework
+head:   fad62c713602c963008575fd972d316569a32d12
+commit: 6f13524469effb9785e5692389b94113f994c100 [17/18] HACK: dump summary of alternatives
+config: arm64-buildonly-randconfig-r005-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240954.ZdCvNcRi-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=6f13524469effb9785e5692389b94113f994c100
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/alternatives/rework
+        git checkout 6f13524469effb9785e5692389b94113f994c100
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kernel/alternative.c:146:6: warning: no previous prototype for 'summarize_alternatives' [-Wmissing-prototypes]
+     146 | void summarize_alternatives(const struct alt_region *region)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/alternative.c:330:14: warning: no previous prototype for 'alt_cb_patch_nops' [-Wmissing-prototypes]
+     330 | noinstr void alt_cb_patch_nops(struct alt_instr *alt, __le32 *origptr,
+         |              ^~~~~~~~~~~~~~~~~
 
 
-B.R.,
+vim +/summarize_alternatives +146 arch/arm64/kernel/alternative.c
 
-Zeng Heng
+   140	
+   141	#define for_each_region_alt(region, alt)		\
+   142		for (struct alt_instr *alt = (region)->begin;	\
+   143		     (alt) < (region)->end;			\
+   144		     (alt)++)
+   145	
+ > 146	void summarize_alternatives(const struct alt_region *region)
+   147	{
+   148		unsigned int entries[ARM64_NCAPS] = { 0 };
+   149		unsigned int orig_len[ARM64_NCAPS] = { 0 };
+   150		unsigned int repl_len[ARM64_NCAPS] = { 0 };
+   151		unsigned int callbacks[ARM64_NCAPS] = { 0 };
+   152	
+   153		unsigned int total_entries = 0;
+   154		unsigned int total_orig = 0;
+   155		unsigned int total_repl = 0;
+   156		unsigned int total_callbacks = 0;
+   157	
+   158		for_each_region_alt(region, alt) {
+   159			int cap = ALT_CAP(alt);
+   160	
+   161			entries[cap]++;
+   162			total_entries++;
+   163	
+   164			orig_len[cap] += alt->orig_len;
+   165			total_orig += alt->orig_len;
+   166	
+   167			repl_len[cap] += alt->alt_len;
+   168			total_repl += alt->alt_len;
+   169	
+   170			if (ALT_HAS_CB(alt)) {
+   171				callbacks[cap]++;
+   172				total_callbacks++;
+   173			}
+   174		}
+   175	
+   176		pr_info("Alternatives summary:\n"
+   177			"    entries:      %5d\n"
+   178			"    instructions: %5d\n"
+   179			"    replacements: %5d\n"
+   180			"    callbacks:    %5d\n",
+   181			total_entries,
+   182			total_orig / AARCH64_INSN_SIZE,
+   183			total_repl / AARCH64_INSN_SIZE,
+   184			total_callbacks);
+   185	
+   186		for (int i = 0; i < ARM64_NCAPS; i++) {
+   187			if (!entries[i])
+   188				continue;
+   189	
+   190			pr_info("cpucap %2d => entries: %5d orig: %5d, repl: %5d, cb: %5d\n",
+   191				i,
+   192				entries[i],
+   193				orig_len[i] / AARCH64_INSN_SIZE,
+   194				repl_len[i] / AARCH64_INSN_SIZE,
+   195				callbacks[i]);
+   196		}
+   197	}
+   198	
 
-
-在 2022/8/23 22:05, Daniel Bristot de Oliveira 写道:
-> On 8/22/22 08:30, Zeng Heng wrote:
->> The sparse tool complains as follows:
->>
->> kernel/trace/rv/monitors/wwnr/wwnr.c:18:19:
->> warning: symbol 'rv_wwnr' was not declared. Should it be static?
->>
->> The `rv_wwnr` symbol is not dereferenced by other exter files,
->> so add static qualifier for it.
-> Would you mind re-sending this patch with some changes?
->
-> - Use "rv/monitors:" as the subsystem
-> - Do the same change for wip monitor
-> - Add the fixes tags:
->    Fixes:	ccc319dcb450 ("rv/monitor: Add the wwnr monitor")
->    Fixes:	8812d21219b9 ("rv/monitor: Add the wip monitor skeleton created by dot2k")
->
-> Also, to fix this problem for new monitors, do another patch changing the dot2k
-> templates files, adding the same 'static' attribute. The files are:
->
-> - tools/verification/dot2/dot2k_templates/main_global.c
-> - tools/verification/dot2/dot2k_templates/main_per_cpu.c
-> - tools/verification/dot2/dot2k_templates/main_per_task.c
->
-> In this second patch, add the subsystem as "rv/dot2k" and the following tags:
->
->    Fixes:	24bce201d798 ("tools/rv: Add dot2k")
->    Suggested-by: Daniel Bristot de Oliveira <bristot@kernel.org>
->
-> Thanks!
-> -- Daniel
->
->
->> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
->> ---
->>   kernel/trace/rv/monitors/wwnr/wwnr.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.c b/kernel/trace/rv/monitors/wwnr/wwnr.c
->> index 599225d9cf38..a063b93c6a1d 100644
->> --- a/kernel/trace/rv/monitors/wwnr/wwnr.c
->> +++ b/kernel/trace/rv/monitors/wwnr/wwnr.c
->> @@ -15,7 +15,7 @@
->>   
->>   #include "wwnr.h"
->>   
->> -struct rv_monitor rv_wwnr;
->> +static struct rv_monitor rv_wwnr;
->>   DECLARE_DA_MON_PER_TASK(wwnr, unsigned char);
->>   
->>   static void handle_switch(void *data, bool preempt, struct task_struct *p,
->> @@ -59,7 +59,7 @@ static void disable_wwnr(void)
->>   	da_monitor_destroy_wwnr();
->>   }
->>   
->> -struct rv_monitor rv_wwnr = {
->> +static struct rv_monitor rv_wwnr = {
->>   	.name = "wwnr",
->>   	.description = "wakeup while not running per-task testing model.",
->>   	.enable = enable_wwnr,
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

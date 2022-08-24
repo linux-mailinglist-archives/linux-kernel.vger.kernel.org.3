@@ -2,146 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639865A04CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138D15A04D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiHXXmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 19:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S231299AbiHXXn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 19:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiHXXmQ (ORCPT
+        with ESMTP id S230135AbiHXXnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 19:42:16 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B164F65B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:42:15 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id z18-20020a170903019200b00172dd6da065so7433916plg.14
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=GgNtt8XHsncrMgE4IbFRR5+V66rX8top3EG46fAYnRQ=;
-        b=TkwbARh0dZMRE7NNmMKzQlT77SIZaFyNqwvglcl62fiCu+FaVN1DDQfnQNcqxl1vll
-         PhPkHhlVODagqIz4tOQH43BaiM2ryWm+xZSXhAossnzohFLZSs+2A8oX3zn//MSOMIEB
-         urVepvzcnyoWCw8fvVDJPxIuspFkyvYUrga4TCZ14ZMrMeVpUJJMfRYK5dD0aP+Sossv
-         cU6qmYxY2kKa5AlDkc3R705d9YOAeNYmXbHg2hE5AnBn51FwPSreQ31kq4W8fi2ILaCi
-         o5uUEvWoWzQnYliEL6hJCdZ55gk3zSKWuIxJm4oZY3fzNdDPICAZzK1Q09wgMrreTAl4
-         f5LA==
+        Wed, 24 Aug 2022 19:43:16 -0400
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9053875389;
+        Wed, 24 Aug 2022 16:43:14 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so3190434pjj.4;
+        Wed, 24 Aug 2022 16:43:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=GgNtt8XHsncrMgE4IbFRR5+V66rX8top3EG46fAYnRQ=;
-        b=6HzOJuaTBHYGqAC8iP945eWC/K8SPRP84gNoU3Abq3zxK1xZQZ6fg3nMXQWhm1a+4c
-         01wlqHHL4fbvJ1/6XtA33Zs3Ru4fhoALKofVdKKHKR8Ve9eqZeXQLVr97Sajd9Ulvbh6
-         E0b7kRfA8aclYGIURWMHJEYY/B7MLZU3pRF9dq8nDwYRs+MzVDB5Hpk1huQSLgq+Pn5f
-         G3acRJOaN70c96PWOY+OnL60qqkaNL0ha3/jrGa/t7lgy8iFXoI/IeOVUg2SBDkPmeij
-         3hZtLilXixteWwU15zaovRAJ7v6Q/eC6btN8mJbIezy70jRZQMTTgH5us7UKSxQ6duaZ
-         WHrw==
-X-Gm-Message-State: ACgBeo36K6lKVBUXr3F9daKWY9K3uTC2qKwcqrYjgoLVjhzih7Aw0j8B
-        heCi2YQ50V8oCBI9udLaRjMWi/38VTM=
-X-Google-Smtp-Source: AA6agR6x5JpK2ntXNc8GBL28Et5asGmcl9MZgoMJ3jvSRbAgpvHAOAHK5SwfyRyWL8p/UZjWA2Fo4nhGynM=
-X-Received: from pshier-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b0b])
- (user=pshier job=sendgmr) by 2002:a17:90b:33d2:b0:1fb:971b:c5e9 with SMTP id
- lk18-20020a17090b33d200b001fb971bc5e9mr1509609pjb.90.1661384534988; Wed, 24
- Aug 2022 16:42:14 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 16:42:11 -0700
-Message-Id: <20220824234211.1625026-1-pshier@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2] intel_idle: avoid tracing MSR writes while idling
-From:   Peter Shier <pshier@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Roth <michael.roth@amd.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Peter Shier <pshier@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=EPlW+LT0JWjQkhBvgWfOXTs2CfL6vJ2ig51kjDOzuvE=;
+        b=1xMVEC/M5SMnScySwHqHAb+7Po1HAE1vfG7aZlZscWaTJytMyKp1v+3DGnEmXwSxl4
+         tnY+NdKBXLNqSmIHE+4FY/oh+VKdAE9fob902S9L6jIZO/TNM1zB2r4gdhoM7sHJRKWo
+         NESNhuRDGAIU8kfcC+wzcakufwrwSswBu2ydvC6NaUNlrwI9rxD61NWpOB6svcezROtM
+         c8NMS2UjYyX4cDX4PkgebJttG3mFoqsBtfCx+OaBxfz5pEVsIcg3hdXXCRPIqSe7zJ1n
+         CVQRwauVCBBjmvttxlrNVTIsVEvPO9XE/qwAqOsJI4kW2nT0pcYK7yGh8R3k8j6UW9+t
+         rqGg==
+X-Gm-Message-State: ACgBeo1Fqd3nWRxYnP6uoyZwcwSAzdXsoje9fVjtHN66EXJ+iJf9lf+x
+        HTVUypcSKXafzHkL0yOVuqE=
+X-Google-Smtp-Source: AA6agR7Mb+gBrHZFZa0PQclCVYsledOVzIfWAydKgjAvBC0iL0nu5UUGGqPzSq+P7kwYhTCFCJNDMA==
+X-Received: by 2002:a17:902:e742:b0:172:fdcc:a52f with SMTP id p2-20020a170902e74200b00172fdcca52fmr1150155plf.40.1661384593748;
+        Wed, 24 Aug 2022 16:43:13 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:222f:dc9c:99a3:dfb8? ([2620:15c:211:201:222f:dc9c:99a3:dfb8])
+        by smtp.gmail.com with ESMTPSA id y4-20020a17090322c400b0016c0c82e85csm13195300plg.75.2022.08.24.16.43.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 16:43:12 -0700 (PDT)
+Message-ID: <89b2bb4b-1848-22cc-9814-6cb6726afc18@acm.org>
+Date:   Wed, 24 Aug 2022 16:43:11 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [ANNOUNCE] CFP: Zoned Storage Microconference - Linux Plumbers
+ Conference 2022
+Content-Language: en-US
+To:     Adam Manzanares <a.manzanares@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "mb@lightnvm.io" <mb@lightnvm.io>, "hare@suse.de" <hare@suse.de>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>
+References: <CGME20220522220139uscas1p1e3426b4457e0753c701e9917fe3ec6d2@uscas1p1.samsung.com>
+ <20220522220128.GA347919@bgt-140510-bm01>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220522220128.GA347919@bgt-140510-bm01>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit bf5835bcdb963 ("intel_idle: Disable IBRS during long idle"),
-enabling wrmsr trace with CONFIG_LOCKDEP causes "suspicious
-rcu_dereference_check() usage" warning because do_trace_write_msr does not
-use trace_write_msr_rcuidle.
+On 5/22/22 15:01, Adam Manzanares wrote:
+> Zoned Storage Devices (SMR HDDs and ZNS SSDs) have demonstrated that they can
+> improve storage capacity, throughput, and latency over conventional storage
+> devices for many workloads. Zoned storage technology is deployed at scale in
+> some of the largest data centers in the world. There's already a
+> well-established set of storage vendors with increasing device availability and
+> a mature software foundation for interacting with zoned storage devices is
+> available. Zoned storage software support is evolving and their is room for
+> increased file-system support and additional userspace applications.
+> 
+> The Zoned Storage microconference focuses on evolving the Linux zoned
+> storage ecosystem by improving kernel support, file systems, and applications.
+> In addition, the forum allows us to open the discussion to incorporate and grow
+> the zoned storage community making sure to meet everyone's needs and
+> expectations. Finally, it is an excellent opportunity for anyone interested in
+> zoned storage devices to meet and discuss how we can move the ecosystem forward
+> together.
 
-Change intel_idle_ibrs to use native_wrmsr to avoid tracing
+Hi Adam,
 
-Sample warning:
-============================
-WARNING: suspicious RCU usage
-6.0.0-dbg-DEV #7 Tainted: G S         O
------------------------------
-arch/x86/include/asm/msr-trace.h:48 suspicious rcu_dereference_check() usage!
+On https://lpc.events/event/16/contributions/1147/ I see four speakers 
+but no agenda? Will an agenda be added before the microconference starts?
 
-other info that might help us debug this:
+Thanks,
 
-rcu_scheduler_active = 2, debug_locks = 1
-RCU used illegally from extended quiescent state!
-no locks held by swapper/59/0.
-
-stack backtrace:
-CPU: 59 PID: 0 Comm: swapper/59 Tainted: G S         O       6.0.0-dbg-DEV #7
-Call Trace:
- dump_stack_lvl
- dump_stack
- lockdep_rcu_suspicious
- trace_write_msr
- do_trace_write_msr
- intel_idle_ibrs
- cpuidle_enter_state
- cpuidle_enter
- do_idle
- cpu_startup_entry
- start_secondary
- secondary_startup_64_no_verify
-
-Tested on skylake using:
-echo "msr:write_msr" >/sys/kernel/debug/tracing/set_event
-with and without patch.
-
-Signed-off-by: Peter Shier <pshier@google.com>
----
-
-v2:
-- changed to avoid tracing
-
-v1: https://lore.kernel.org/all/20220823234353.937002-1-pshier@google.com/
-
- drivers/idle/intel_idle.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 3e101719689a..df129c73786f 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -187,12 +187,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
- 	int ret;
- 
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-+		native_wrmsr(MSR_IA32_SPEC_CTRL, 0);
- 
- 	ret = __intel_idle(dev, drv, index);
- 
- 	if (smt_active)
--		wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-+		native_wrmsr(MSR_IA32_SPEC_CTRL, spec_ctrl);
- 
- 	return ret;
- }
--- 
+Bart.

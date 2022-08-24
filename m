@@ -2,135 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779C559FDB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F6F59FDC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238338AbiHXPB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56996 "EHLO
+        id S238389AbiHXPDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239429AbiHXPAc (ORCPT
+        with ESMTP id S235466AbiHXPDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:00:32 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0911275D1;
-        Wed, 24 Aug 2022 08:00:30 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 10:00:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661353229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wpdpInv50s3/tIr2zAWlDOu11BVdoLVMcL8Ge4aE150=;
-        b=vCNG6VW0yVkpK30QQEGBHc0IONpr09WwKoJRzM318XHzyPpdYjdo72Wro1vDzdAr0MYNLs
-        EYH9TmimgWflNvzHC80WrzVMIezIPbQfNXq8NkEMiF6hjZuJQrG4iKwHF5FaWtL6Sovhst
-        w05T8HvT2UqbKDR9ZLtxGz/iI8pVsbI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Colton Lewis <coltonlewis@google.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>
-Subject: Re: [PATCH v4 5/6] KVM: selftests: Make arm64's MMIO ucall multi-VM
- friendly
-Message-ID: <YwY9BYDUeiT87/Vs@google.com>
-References: <20220824032115.3563686-1-seanjc@google.com>
- <20220824032115.3563686-6-seanjc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824032115.3563686-6-seanjc@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+        Wed, 24 Aug 2022 11:03:00 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A26901B3;
+        Wed, 24 Aug 2022 08:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=dKKj2XiJiPISvRFKj7mprTx5FT4U88/otN6k4wC2i0Q=;
+        b=eW1zmmxByi0xrwd2BEwCcEB6CbVbfghcTYN0KnbabwPbn7YLo17mR9E35Cla8KFkgJWVvTfa8u0xc
+         3msfg51EwDcOwEMwhZtHkD0tOaFDQA+8+mpy5COxcs3D+X0vEGc4GNsNjEams8QcEauniJmpIaYBRP
+         3qVoVCIGvZUAqx10jSYC0PKxhrZn9yt9dtLqU9BygA3KiFIiiW2macv7vCRf9uP+t4iEZQ+Wia3Ac2
+         CNNx5t5pBVU7SAPP4s5k4sWMKdCq5E+5jvj63CrOsLT5grC4yY3SVuut06Ox9Xtx0cGRLUim+jlDXD
+         bzQW1REZO3D7ku7bb2/2id1qdWPu3hQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000010,0.009934)], BW: [Enabled, t: (0.000016,0.000001)], RTDA: [Enabled, t: (0.078946), Hit: No, Details: v2.41.0; Id: 15.52k01o.1gb8608vv.5t; mclb], total: 0(700)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 24 Aug 2022 18:02:15 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: [PATCH v7 0/2] Lattice sysCONFIG SPI FPGA manager
+Date:   Wed, 24 Aug 2022 18:01:12 +0300
+Message-Id: <20220824150114.17504-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Add support to the FPGA manager for programming Lattice FPGAs over slave
+SPI sysCONFIG interface. ECP5 and MachXO2 are supported.
 
-On Wed, Aug 24, 2022 at 03:21:14AM +0000, Sean Christopherson wrote:
-> Fix a mostly-theoretical bug where ARM's ucall MMIO setup could result in
-> different VMs stomping on each other by cloberring the global pointer.
-> 
-> Fix the most obvious issue by saving the MMIO gpa into the VM.
-> 
-> A more subtle bug is that creating VMs in parallel (on multiple tasks)
-> could result in a VM using the wrong address.  Synchronizing a global to
-> a guest effectively snapshots the value on a per-VM basis, i.e. the
-> "global" is already prepped to work with multiple VMs, but setting the
-> global in the host and copying it to the guest needs to happen atomically.
-> To fix that bug, add atomic_sync_global_pointer_to_guest() to sync
-> "global" pointers that hold per-VM values, i.e. technically need to be
-> handled in a thread-safe manner.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h     | 16 +++++++++++++++
->  .../testing/selftests/kvm/lib/aarch64/ucall.c | 20 ++++++++++++++-----
->  2 files changed, 31 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 24fde97f6121..9ec7fbe941aa 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -16,6 +16,7 @@
->  #include <linux/kvm.h>
->  #include "linux/rbtree.h"
->  
-> +#include <asm/atomic.h>
->  
->  #include <sys/ioctl.h>
->  
-> @@ -81,6 +82,7 @@ struct kvm_vm {
->  	struct sparsebit *vpages_mapped;
->  	bool has_irqchip;
->  	bool pgd_created;
-> +	vm_paddr_t ucall_mmio_addr;
->  	vm_paddr_t pgd;
->  	vm_vaddr_t gdt;
->  	vm_vaddr_t tss;
-> @@ -714,6 +716,20 @@ kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
->  	memcpy(&(g), _p, sizeof(g));				\
->  })
->  
-> +/*
-> + * Sync a global pointer to the guest that has a per-VM value, in which case
-> + * writes to the host copy of the "global" must be serialized (in case a test
-> + * is being truly crazy and spawning multiple VMs concurrently).
-> + */
+WARNING: I only have HW with ECP5, so can't vouch for the MachXO2.
+	 MachXO2's support is based on existing machxo2-spi.c and
+	 publicly available documentation, it's not tested on real
+	 hardware.
 
-Do we even care about writes to the host's copy of the global pointer?
-I don't see how the host pointer is used beyond serializing writes into
-a guest.
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+  v5 -> v6:
+    * ecp5-spi: lock SPI bus for exclusive usage in
+      ecp5_ops_write_init(), release in ecp5_ops_write_complete()
+      or on error
+  v6 -> v7:
+    * ecp5-spi.c -> lattice-sysconfig-spi.c. Reworked to represent
+      generalized sysCONFIG port with implementations for ECP5 and
+      MachXO2
+    * lattice,ecp5-fpga-mgr.yaml -> lattice,sysconfig.yaml. Reworked to
+      document both ECP5 and MachXO2 sysCONFIG.
+    * dt-bindings: remove "Reviewed-by: Krzysztof Kozlowski" tag as doc
+      was rewritten by a considerable amount.
 
-IOW, it looks as though we could skip the whole global illusion
-altogether and write straight into guest memory.
+Ivan Bornyakov (2):
+  fpga: lattice-sysconfig-spi: add Lattice sysCONFIG FPGA manager
+  dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
 
---
-Thanks,
-Oliver
+ .../bindings/fpga/lattice,sysconfig.yaml      | 103 +++
+ drivers/fpga/Kconfig                          |   7 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/lattice-sysconfig-spi.c          | 630 ++++++++++++++++++
+ 4 files changed, 741 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+ create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+
+-- 
+2.37.2
+
+

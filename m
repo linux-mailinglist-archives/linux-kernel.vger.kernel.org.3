@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8164959F392
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A9D59F394
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiHXGWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S235009AbiHXGYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234976AbiHXGWU (ORCPT
+        with ESMTP id S234971AbiHXGYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:22:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04BD74369;
-        Tue, 23 Aug 2022 23:22:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0DF5B822DF;
-        Wed, 24 Aug 2022 06:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A21E6C433C1;
-        Wed, 24 Aug 2022 06:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661322137;
-        bh=MYjRFOzykWU4kB11CjnKF1aMAQUHKau4D0BfKC6M+4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bct2qLW7uslz+3YYfM0fh0QW9VkMkAvCSPk4DVlQBwkIOiLLxWcoF0n3NwQb4/EaQ
-         Sm0KKn8eHd4jxmc6FgKx8qL2BiQj6UoVumxcUaP72p6rvHFVti4cuihtRjjKC+nAeG
-         Sa9wjKwDuS58gO/DRCpTCI411Xlj6i34GTG0NhrA=
-Date:   Wed, 24 Aug 2022 08:22:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andrew Delgadillo <adelg@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Dylan Hatch <dylanbhatch@google.com>,
-        Sasha Levin <sashalevin@google.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH] selftests: Add a taint selftest
-Message-ID: <YwXDljUktgWqkl75@kroah.com>
-References: <20220823211958.2519055-1-adelg@google.com>
- <YwWx07EbaB90jDUN@kroah.com>
- <CAEHm+vHHRLW1c2fhrgCx0Nh63udxMLCSwone-JTm22o2Q37abA@mail.gmail.com>
+        Wed, 24 Aug 2022 02:24:12 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD5E7D7A6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:24:11 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id j21so26162292ejs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xKUXcbAPBOq11H+4QEHn3yYp1D7gUFKGviI1AJuCBnA=;
+        b=V6/Kg/74LzGP/QlTxxYXT6Yq4usDmUaqQssbNz872AmDRFKpvl/MNWPUTy03ovttw6
+         g/wx13eAePIy3OzlnAqCyksvh/ER6CCUHhs0o6cwIyN47EmEunYuCssocm6v67LuzGzT
+         HlgXPUHLOGqr9uU5EBIXjp4NHc/tCwpjwQcx9VAVaUBaWKh3qh6rEkFzfTANlP3AYMWh
+         RGMTfdk0cyV7++i/CitmcxCpqwQD0WXUC1nXSpQUyl/LZibCCO4ghT3kT8po67yxwfgw
+         6KEoJxqFLfcXGwqHDp34GnBn7okZSRGh6cc5gtq6VaZimyZFxogc0y4rdpkCHxP1ghVo
+         P+Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xKUXcbAPBOq11H+4QEHn3yYp1D7gUFKGviI1AJuCBnA=;
+        b=ty7yESYm21LCTLsxoUF4bKyHju0hpsAvHhUYNmx0xCHKHuiHCTMY3QCwrlHGsNVbfv
+         yNzBepWajfLINcJsXWCnJx7ZXR3d8sZrdEho+t7aRHKuwkXiqgYbwLwiBJNNZaO+ToAX
+         mQDYIbr2DLxU3o43mY3m0/6qhU7dk4PYeofS6NIMs2Q2NvMZXT8yRgMX9pcTYqVsUfXv
+         kFRxNC/U0w7VJHNdkXCzIkmT84YRwYrsZ1OWLM5MQHhOzQzy0F7PBZ71RFm+Lsg/+Du+
+         6MuxgqA/1hW89h2C+gPB1N52LwLfvGttaDrF3eZ8juX/sNtBBoiX0W1Be0Rs06wvO4al
+         yptQ==
+X-Gm-Message-State: ACgBeo3pIiKukpi7op4JL1St8c9cjx8LwWttkMtnZrRd1BtFm02y2w8e
+        d+ssPV1byKw236cnIsEqyElYF4DPxs0yWNPiF3Xyvw==
+X-Google-Smtp-Source: AA6agR4+ZMU9vx3INscM1LxzzEs5XsNmUEJwRDvLpufPS5vvdkpP5Fun0Zi1rveW8LYxokqLLXX4SbjxyCqm83kkvGU=
+X-Received: by 2002:a17:907:7f9f:b0:73d:6e87:17ce with SMTP id
+ qk31-20020a1709077f9f00b0073d6e8717cemr1896854ejc.366.1661322249442; Tue, 23
+ Aug 2022 23:24:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEHm+vHHRLW1c2fhrgCx0Nh63udxMLCSwone-JTm22o2Q37abA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220823080053.202747790@linuxfoundation.org>
+In-Reply-To: <20220823080053.202747790@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 24 Aug 2022 11:53:57 +0530
+Message-ID: <CA+G9fYvjKT4QW_dj6xUcZm6J1ZcvTSA4ac_ovLZCThWCRGM0kw@mail.gmail.com>
+Subject: Re: [PATCH 4.14 000/229] 4.14.291-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,53 +70,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 10:50:33PM -0700, Andrew Delgadillo wrote:
-> On Tue, Aug 23, 2022 at 10:06 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Aug 23, 2022 at 09:19:58PM +0000, Andrew Delgadilo wrote:
-> > > From: Andrew Delgadillo <adelg@google.com>
-> > >
-> > > When testing a kernel, one of the earliest signals one can get is if a
-> > > kernel has become tainted. For example, an organization might be
-> > > interested in mass testing commits on their hardware. An obvious first
-> > > step would be to make sure every commit boots, and a next step would be
-> > > to make sure there are no warnings/crashes/lockups, hence the utility of
-> > > a taint test.
-> >
-> > What's wrong with the tools/debugging/kernel-chktaint script?
-> >
-> > Why do we need another "get what the taint status is" program?
-> 
-> The main functionality that this selftests has that kernel-chktaint
-> does not is that it exits with a non-zero status code if the kernel is
-> tainted. kernel-chktaint outputs information to stdout based on the
-> taint status, but will always exit 0.
+On Tue, 23 Aug 2022 at 14:05, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.291 release.
+> There are 229 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.291-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Great, then change that, don't create a whole new script :)
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> The issue with this is that it cannot be plugged into a test runner
-> that checks the exit code of a test script. In other words, if I
-> wanted to plug it into git bisect, I would have to wrap
-> kernel-chktaint in a command that transformed the output to an exit
-> code. Sure that is doable, but it is not as simple as it could be.
-> 
-> More concretely, I am setting kselftest runs against kernel commits
-> (with a harness that logs kselftest runs into some other
-> infrastructure), and such a test that is missing is a kselftest that
-> checks the kernel's taint status. One could argue that one should just
-> create a kselftest target that calls into kernel-chktaint and parse
-> the output there to determine what the exit status is, but that seems
-> fragile as a change in the underlying script could break it. For
-> example, if I want to test for taint #18, and I am grepping for the
-> string " * an in-kernel test has been run (#18)", I will actually get
-> a false positive because the underlying script does not check for
-> taint #18. Contrived example yes, but I think it shows that textual
-> grepping for errors is error prone (as an aside, I'll send a patch to
-> update the script to check for the new taint bit).
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Then modify the existing script to handle your use case, let's not have
-duplicate ones in the tree.
+## Build
+* kernel: 4.14.291-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 4d54ef55c38e2d37b9c16b20b9d1b3febf73a2e2
+* git describe: v4.14.290-230-g4d54ef55c38e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14.290-230-g4d54ef55c38e
 
-thanks,
+## No test Regressions (compared to v4.14.290)
 
-greg k-h
+## No metric Regressions (compared to v4.14.290)
+
+## No test Fixes (compared to v4.14.290)
+
+## No metric Fixes (compared to v4.14.290)
+
+## Test result summary
+total: 85673, pass: 77996, fail: 641, skip: 6721, xfail: 315
+
+## Build Summary
+* arc: 20 total, 20 passed, 0 failed
+* arm: 561 total, 551 passed, 10 failed
+* arm64: 100 total, 94 passed, 6 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 60 total, 60 passed, 0 failed
+* parisc: 24 total, 24 passed, 0 failed
+* powerpc: 32 total, 32 passed, 0 failed
+* s390: 24 total, 18 passed, 6 failed
+* sh: 48 total, 48 passed, 0 failed
+* sparc: 24 total, 24 passed, 0 failed
+* x86_64: 96 total, 94 passed, 2 failed
+
+## Test suites summary
+* fwts
+* kunit
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

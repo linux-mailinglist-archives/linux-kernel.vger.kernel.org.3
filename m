@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1505A0207
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3375A020D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238841AbiHXTVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 15:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S239633AbiHXTXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 15:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237759AbiHXTVe (ORCPT
+        with ESMTP id S229597AbiHXTXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 15:21:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB925B074;
-        Wed, 24 Aug 2022 12:21:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 24 Aug 2022 15:23:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1E86CD31
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 12:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661369022;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UKFxxgqM+hdKn0qfi1wk5p78nvboH54nB3BoRTaw6o0=;
+        b=NDAzUqcrqoJvTM8HjUPEczfIrjzr9Fx5sOIzKmtw+dfQGKHcYszFdULRaX8HR9rP5cbdmV
+        llZ2oN2STgCBY1TIpox+o10+qPLBSFAH+fK1bGk09PTjFTR/e3FqhJO/EQ87V7k8VHx09F
+        T2qCOAJ5Uh67FatHwTOL/MFq82yzwIY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-34-UnvEm3s5NzSTVuIL-nR3uw-1; Wed, 24 Aug 2022 15:23:38 -0400
+X-MC-Unique: UnvEm3s5NzSTVuIL-nR3uw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88735B82660;
-        Wed, 24 Aug 2022 19:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF44C433D6;
-        Wed, 24 Aug 2022 19:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661368890;
-        bh=sSUP1soFdnM84s15NQ7LYscruLuO6dP0arOnIGJ7h90=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XMDu8XhMJx0rsy/rJ2rpKKgnKf8QbCT+PZGopvuw85IPjO8eYQhho0XHOjV2JE8pz
-         MHy7dPW9MVusnJ3Nt/PU3vVenz15TXFtayFs6qON5DTJnbnF9RQ0H0+KLQItIcQdw6
-         Q7lNmlx/zSOsLZkxQ05/1yxQ36So/si7CUVZ1gWXvv9LB+nAWWBC44s4SARCYdIeHZ
-         r6K4LVqm4btxJkUV7K0yxGy1uV8ZDV8qAutwTVnXGywTKoCvh0egyGOafzEt9sQeD9
-         B9++OAP08sM6ywcb/XyH+LEg3pUH4tK3Z3xHWMd22mjiExn9hLmAhxHBsz7rRJceXq
-         rNktdWdfZaZhg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A55D95C055D; Wed, 24 Aug 2022 12:21:29 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 12:21:29 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Pingfan Liu <kernelfans@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Price <steven.price@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, boqun.feng@gmail.com
-Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
-Message-ID: <20220824192129.GE6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220822021520.6996-1-kernelfans@gmail.com>
- <20220822021520.6996-7-kernelfans@gmail.com>
- <20220822024528.GC6159@paulmck-ThinkPad-P17-Gen-1>
- <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
- <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1>
- <CAFgQCTup0uTqnKi79Tu+5Q0POYVdcE4UkGes8KfHXBd6VR552A@mail.gmail.com>
- <20220824162050.GA6159@paulmck-ThinkPad-P17-Gen-1>
- <de70b840-df04-5a52-c36f-9eaed839aa7c@joelfernandes.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDCA4101E98A;
+        Wed, 24 Aug 2022 19:23:37 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.193.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4A43B141510F;
+        Wed, 24 Aug 2022 19:23:34 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        David Laight <David.Laight@ACULAB.COM>, stable@vger.kernel.org
+Subject: [PATCH 5.19-stable] mm/gup: fix FOLL_FORCE COW security issue and remove FOLL_COW
+Date:   Wed, 24 Aug 2022 21:23:33 +0200
+Message-Id: <20220824192333.287405-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de70b840-df04-5a52-c36f-9eaed839aa7c@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,69 +66,311 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 01:26:01PM -0400, Joel Fernandes wrote:
-> 
-> 
-> On 8/24/2022 12:20 PM, Paul E. McKenney wrote:
-> > On Wed, Aug 24, 2022 at 09:53:11PM +0800, Pingfan Liu wrote:
-> >> On Tue, Aug 23, 2022 at 11:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >>>
-> >>> On Tue, Aug 23, 2022 at 09:50:56AM +0800, Pingfan Liu wrote:
-> >>>> On Sun, Aug 21, 2022 at 07:45:28PM -0700, Paul E. McKenney wrote:
-> >>>>> On Mon, Aug 22, 2022 at 10:15:16AM +0800, Pingfan Liu wrote:
-> >>>>>> In order to support parallel, rcu_state.n_online_cpus should be
-> >>>>>> atomic_dec()
-> >>>>>>
-> >>>>>> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> >>>>>
-> >>>>> I have to ask...  What testing have you subjected this patch to?
-> >>>>>
-> >>>>
-> >>>> This patch subjects to [1]. The series aims to enable kexec-reboot in
-> >>>> parallel on all cpu. As a result, the involved RCU part is expected to
-> >>>> support parallel.
-> >>>
-> >>> I understand (and even sympathize with) the expectation.  But results
-> >>> sometimes diverge from expectations.  There have been implicit assumptions
-> >>> in RCU about only one CPU going offline at a time, and I am not sure
-> >>> that all of them have been addressed.  Concurrent CPU onlining has
-> >>> been looked at recently here:
-> >>>
-> >>> https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
-> >>>
-> >>> You did us atomic_dec() to make rcu_state.n_online_cpus decrementing be
-> >>> atomic, which is good.  Did you look through the rest of RCU's CPU-offline
-> >>> code paths and related code paths?
-> >>
-> >> I went through those codes at a shallow level, especially at each
-> >> cpuhp_step hook in the RCU system.
-> > 
-> > And that is fine, at least as a first step.
-> > 
-> >> But as you pointed out, there are implicit assumptions about only one
-> >> CPU going offline at a time, I will chew the google doc which you
-> >> share.  Then I can come to a final result.
-> > 
-> > Boqun Feng, Neeraj Upadhyay, Uladzislau Rezki, and I took a quick look,
-> > and rcu_boost_kthread_setaffinity() seems to need some help.  As it
-> > stands, it appears that concurrent invocations of this function from the
-> > CPU-offline path will cause all but the last outgoing CPU's bit to be
-> > (incorrectly) set in the cpumask_var_t passed to set_cpus_allowed_ptr().
-> > 
-> > This should not be difficult to fix, for example, by maintaining a
-> > separate per-leaf-rcu_node-structure bitmask of the concurrently outgoing
-> > CPUs for that rcu_node structure.  (Similar in structure to the
-> > ->qsmask field.)
-> > 
-> > There are probably more where that one came from.  ;-)
-> 
-> Should rcutree_dying_cpu() access to rnp->qsmask have a READ_ONCE() ? I was
-> thinking grace period initialization or qs reporting paths racing with that. Its
-> just tracing, still :)
+commit 5535be3099717646781ce1540cf725965d680e7b upstream.
 
-Looks like it should be regardless of Pingfan's patches, given that
-the grace-period kthread might report a quiescent state concurrently.
+Ever since the Dirty COW (CVE-2016-5195) security issue happened, we know
+that FOLL_FORCE can be possibly dangerous, especially if there are races
+that can be exploited by user space.
 
-Good catch!
+Right now, it would be sufficient to have some code that sets a PTE of a
+R/O-mapped shared page dirty, in order for it to erroneously become
+writable by FOLL_FORCE.  The implications of setting a write-protected PTE
+dirty might not be immediately obvious to everyone.
 
-							Thanx, Paul
+And in fact ever since commit 9ae0f87d009c ("mm/shmem: unconditionally set
+pte dirty in mfill_atomic_install_pte"), we can use UFFDIO_CONTINUE to map
+a shmem page R/O while marking the pte dirty.  This can be used by
+unprivileged user space to modify tmpfs/shmem file content even if the
+user does not have write permissions to the file, and to bypass memfd
+write sealing -- Dirty COW restricted to tmpfs/shmem (CVE-2022-2590).
+
+To fix such security issues for good, the insight is that we really only
+need that fancy retry logic (FOLL_COW) for COW mappings that are not
+writable (!VM_WRITE).  And in a COW mapping, we really only broke COW if
+we have an exclusive anonymous page mapped.  If we have something else
+mapped, or the mapped anonymous page might be shared (!PageAnonExclusive),
+we have to trigger a write fault to break COW.  If we don't find an
+exclusive anonymous page when we retry, we have to trigger COW breaking
+once again because something intervened.
+
+Let's move away from this mandatory-retry + dirty handling and rely on our
+PageAnonExclusive() flag for making a similar decision, to use the same
+COW logic as in other kernel parts here as well.  In case we stumble over
+a PTE in a COW mapping that does not map an exclusive anonymous page, COW
+was not properly broken and we have to trigger a fake write-fault to break
+COW.
+
+Just like we do in can_change_pte_writable() added via commit 64fe24a3e05e
+("mm/mprotect: try avoiding write faults for exclusive anonymous pages
+when changing protection") and commit 76aefad628aa ("mm/mprotect: fix
+soft-dirty check in can_change_pte_writable()"), take care of softdirty
+and uffd-wp manually.
+
+For example, a write() via /proc/self/mem to a uffd-wp-protected range has
+to fail instead of silently granting write access and bypassing the
+userspace fault handler.  Note that FOLL_FORCE is not only used for debug
+access, but also triggered by applications without debug intentions, for
+example, when pinning pages via RDMA.
+
+This fixes CVE-2022-2590. Note that only x86_64 and aarch64 are
+affected, because only those support CONFIG_HAVE_ARCH_USERFAULTFD_MINOR.
+
+Fortunately, FOLL_COW is no longer required to handle FOLL_FORCE. So
+let's just get rid of it.
+
+Thanks to Nadav Amit for pointing out that the pte_dirty() check in
+FOLL_FORCE code is problematic and might be exploitable.
+
+Note 1: We don't check for the PTE being dirty because it doesn't matter
+	for making a "was COWed" decision anymore, and whoever modifies the
+	page has to set the page dirty either way.
+
+Note 2: Kernels before extended uffd-wp support and before
+	PageAnonExclusive (< 5.19) can simply revert the problematic
+	commit instead and be safe regarding UFFDIO_CONTINUE. A backport to
+	v5.19 requires minor adjustments due to lack of
+	vma_soft_dirty_enabled().
+
+Link: https://lkml.kernel.org/r/20220809205640.70916-1-david@redhat.com
+Fixes: 9ae0f87d009c ("mm/shmem: unconditionally set pte dirty in mfill_atomic_install_pte")
+Signed-off-by: David Hildenbrand <david@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Axel Rasmussen <axelrasmussen@google.com>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: David Laight <David.Laight@ACULAB.COM>
+Cc: <stable@vger.kernel.org>	[5.16]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ include/linux/mm.h |  1 -
+ mm/gup.c           | 69 +++++++++++++++++++++++++++++++---------------
+ mm/huge_memory.c   | 65 +++++++++++++++++++++++++++++--------------
+ 3 files changed, 91 insertions(+), 44 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 7898e29bcfb5..25b8860f47cc 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2939,7 +2939,6 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+ #define FOLL_MIGRATION	0x400	/* wait for page to replace migration entry */
+ #define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
+ #define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
+-#define FOLL_COW	0x4000	/* internal GUP flag */
+ #define FOLL_ANON	0x8000	/* don't do file mappings */
+ #define FOLL_LONGTERM	0x10000	/* mapping lifetime is indefinite: see below */
+ #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
+diff --git a/mm/gup.c b/mm/gup.c
+index e2a39e30756d..d2fd46b50102 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -478,14 +478,43 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
+ 	return -EEXIST;
+ }
+ 
+-/*
+- * FOLL_FORCE can write to even unwritable pte's, but only
+- * after we've gone through a COW cycle and they are dirty.
+- */
+-static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
++/* FOLL_FORCE can write to even unwritable PTEs in COW mappings. */
++static inline bool can_follow_write_pte(pte_t pte, struct page *page,
++					struct vm_area_struct *vma,
++					unsigned int flags)
+ {
+-	return pte_write(pte) ||
+-		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
++	/* If the pte is writable, we can write to the page. */
++	if (pte_write(pte))
++		return true;
++
++	/* Maybe FOLL_FORCE is set to override it? */
++	if (!(flags & FOLL_FORCE))
++		return false;
++
++	/* But FOLL_FORCE has no effect on shared mappings */
++	if (vma->vm_flags & (VM_MAYSHARE | VM_SHARED))
++		return false;
++
++	/* ... or read-only private ones */
++	if (!(vma->vm_flags & VM_MAYWRITE))
++		return false;
++
++	/* ... or already writable ones that just need to take a write fault */
++	if (vma->vm_flags & VM_WRITE)
++		return false;
++
++	/*
++	 * See can_change_pte_writable(): we broke COW and could map the page
++	 * writable if we have an exclusive anonymous page ...
++	 */
++	if (!page || !PageAnon(page) || !PageAnonExclusive(page))
++		return false;
++
++	/* ... and a write-fault isn't required for other reasons. */
++	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) &&
++	    !(vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
++		return false;
++	return !userfaultfd_pte_wp(vma, pte);
+ }
+ 
+ static struct page *follow_page_pte(struct vm_area_struct *vma,
+@@ -528,12 +557,19 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 	}
+ 	if ((flags & FOLL_NUMA) && pte_protnone(pte))
+ 		goto no_page;
+-	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags)) {
+-		pte_unmap_unlock(ptep, ptl);
+-		return NULL;
+-	}
+ 
+ 	page = vm_normal_page(vma, address, pte);
++
++	/*
++	 * We only care about anon pages in can_follow_write_pte() and don't
++	 * have to worry about pte_devmap() because they are never anon.
++	 */
++	if ((flags & FOLL_WRITE) &&
++	    !can_follow_write_pte(pte, page, vma, flags)) {
++		page = NULL;
++		goto out;
++	}
++
+ 	if (!page && pte_devmap(pte) && (flags & (FOLL_GET | FOLL_PIN))) {
+ 		/*
+ 		 * Only return device mapping pages in the FOLL_GET or FOLL_PIN
+@@ -967,17 +1003,6 @@ static int faultin_page(struct vm_area_struct *vma,
+ 		return -EBUSY;
+ 	}
+ 
+-	/*
+-	 * The VM_FAULT_WRITE bit tells us that do_wp_page has broken COW when
+-	 * necessary, even if maybe_mkwrite decided not to set pte_write. We
+-	 * can thus safely do subsequent page lookups as if they were reads.
+-	 * But only do so when looping for pte_write is futile: in some cases
+-	 * userspace may also be wanting to write to the gotten user page,
+-	 * which a read fault here might prevent (a readonly page might get
+-	 * reCOWed by userspace write).
+-	 */
+-	if ((ret & VM_FAULT_WRITE) && !(vma->vm_flags & VM_WRITE))
+-		*flags |= FOLL_COW;
+ 	return 0;
+ }
+ 
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 834f288b3769..164d13b62079 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -977,12 +977,6 @@ struct page *follow_devmap_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 
+ 	assert_spin_locked(pmd_lockptr(mm, pmd));
+ 
+-	/*
+-	 * When we COW a devmap PMD entry, we split it into PTEs, so we should
+-	 * not be in this function with `flags & FOLL_COW` set.
+-	 */
+-	WARN_ONCE(flags & FOLL_COW, "mm: In follow_devmap_pmd with FOLL_COW set");
+-
+ 	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+ 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+ 			 (FOLL_PIN | FOLL_GET)))
+@@ -1348,14 +1342,43 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 	return VM_FAULT_FALLBACK;
+ }
+ 
+-/*
+- * FOLL_FORCE can write to even unwritable pmd's, but only
+- * after we've gone through a COW cycle and they are dirty.
+- */
+-static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags)
++/* FOLL_FORCE can write to even unwritable PMDs in COW mappings. */
++static inline bool can_follow_write_pmd(pmd_t pmd, struct page *page,
++					struct vm_area_struct *vma,
++					unsigned int flags)
+ {
+-	return pmd_write(pmd) ||
+-	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) && pmd_dirty(pmd));
++	/* If the pmd is writable, we can write to the page. */
++	if (pmd_write(pmd))
++		return true;
++
++	/* Maybe FOLL_FORCE is set to override it? */
++	if (!(flags & FOLL_FORCE))
++		return false;
++
++	/* But FOLL_FORCE has no effect on shared mappings */
++	if (vma->vm_flags & (VM_MAYSHARE | VM_SHARED))
++		return false;
++
++	/* ... or read-only private ones */
++	if (!(vma->vm_flags & VM_MAYWRITE))
++		return false;
++
++	/* ... or already writable ones that just need to take a write fault */
++	if (vma->vm_flags & VM_WRITE)
++		return false;
++
++	/*
++	 * See can_change_pte_writable(): we broke COW and could map the page
++	 * writable if we have an exclusive anonymous page ...
++	 */
++	if (!page || !PageAnon(page) || !PageAnonExclusive(page))
++		return false;
++
++	/* ... and a write-fault isn't required for other reasons. */
++	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) &&
++	    !(vma->vm_flags & VM_SOFTDIRTY) && !pmd_soft_dirty(pmd))
++		return false;
++	return !userfaultfd_huge_pmd_wp(vma, pmd);
+ }
+ 
+ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+@@ -1364,12 +1387,16 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+ 				   unsigned int flags)
+ {
+ 	struct mm_struct *mm = vma->vm_mm;
+-	struct page *page = NULL;
++	struct page *page;
+ 
+ 	assert_spin_locked(pmd_lockptr(mm, pmd));
+ 
+-	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags))
+-		goto out;
++	page = pmd_page(*pmd);
++	VM_BUG_ON_PAGE(!PageHead(page) && !is_zone_device_page(page), page);
++
++	if ((flags & FOLL_WRITE) &&
++	    !can_follow_write_pmd(*pmd, page, vma, flags))
++		return NULL;
+ 
+ 	/* Avoid dumping huge zero page */
+ 	if ((flags & FOLL_DUMP) && is_huge_zero_pmd(*pmd))
+@@ -1377,10 +1404,7 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+ 
+ 	/* Full NUMA hinting faults to serialise migration in fault paths */
+ 	if ((flags & FOLL_NUMA) && pmd_protnone(*pmd))
+-		goto out;
+-
+-	page = pmd_page(*pmd);
+-	VM_BUG_ON_PAGE(!PageHead(page) && !is_zone_device_page(page), page);
++		return NULL;
+ 
+ 	if (!pmd_write(*pmd) && gup_must_unshare(flags, page))
+ 		return ERR_PTR(-EMLINK);
+@@ -1397,7 +1421,6 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+ 	page += (addr & ~HPAGE_PMD_MASK) >> PAGE_SHIFT;
+ 	VM_BUG_ON_PAGE(!PageCompound(page) && !is_zone_device_page(page), page);
+ 
+-out:
+ 	return page;
+ }
+ 
+-- 
+2.37.1
+

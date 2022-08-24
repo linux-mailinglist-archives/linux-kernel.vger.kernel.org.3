@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC20359FD15
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130C659FD17
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238308AbiHXOSu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 Aug 2022 10:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S237701AbiHXOUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiHXOSr (ORCPT
+        with ESMTP id S238463AbiHXOUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:18:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F3E99241
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:18:45 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-278-NAqDrFa6OFK4f2CDO1KAlQ-1; Wed, 24 Aug 2022 15:18:42 +0100
-X-MC-Unique: NAqDrFa6OFK4f2CDO1KAlQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.38; Wed, 24 Aug 2022 15:18:40 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.040; Wed, 24 Aug 2022 15:18:40 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Yury Norov' <yury.norov@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Dennis Zhou" <dennis@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Subject: RE: [PATCH v2 1/3] lib/find_bit: introduce FIND_FIRST_BIT() macro
-Thread-Topic: [PATCH v2 1/3] lib/find_bit: introduce FIND_FIRST_BIT() macro
-Thread-Index: AQHYt7wjkucH+HuwAkOnYFo2ww3faK2+F4Aw
-Date:   Wed, 24 Aug 2022 14:18:40 +0000
-Message-ID: <eed65809f99d49acbbbf3ba3ce6568a0@AcuMS.aculab.com>
-References: <20220824012624.2826445-1-yury.norov@gmail.com>
- <20220824012624.2826445-2-yury.norov@gmail.com>
- <CAHp75VcB08oTrB8R9Zyo4Ja=c_XqybqdCw46fY4_MNqvSSCtLQ@mail.gmail.com>
- <YwYlWjlWO3fFrtQp@yury-laptop>
-In-Reply-To: <YwYlWjlWO3fFrtQp@yury-laptop>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 24 Aug 2022 10:20:15 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAE265F8
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:20:14 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id x7-20020a056e021ca700b002ea01be6018so3967530ill.18
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:20:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=rZtrk0HP2tziIl8gfTDQtUr1nJmW8X6DR7NwgCcyZhA=;
+        b=2We7TfhGE2KH4htW5Zp1mLc04pvrp3yN2StdFm+nFXKcL5KDhnIZaG1plK+Ay3pxJ5
+         Bz0pfgsbNl/NkIKD9NlPhikUrl9x9tT+p3jmxplPSC9d36B1PlDSkegVQL9uOLCVXB9H
+         Km6fJHZBz60e6m4Nfr6iAwXpZlLUlM5hlakF9aPjwX71WTxEB2wlenuhaOVt3wHxXSN4
+         uxtiD3tOyXk8kC/kJdMZMU0HYjsCaxWqIyEwoHddKv0ZOyuaQGX5WDpByExbPGQM43pT
+         7Jzqit5w7mP+vzx+kUBCDKG6DmbHWHy04SWx1YkFfL7l7lqY5XEPuuDtqEyHGTFVvhmk
+         ErUQ==
+X-Gm-Message-State: ACgBeo0yWvJBhsLL0HSSHQbK4hxxActuMz5tVCFAiOfjCQ7IWg/SZLLS
+        KyF17auKuSi6nSvjsyQeteVHIOI8MUxTyICoWq39Yuq85bSo
+X-Google-Smtp-Source: AA6agR7thrK+df2sbX3PCoO0TROu3P+YrW44olm31e2KIpETP5QsIzIEKa/Mjgqhh3jAmDv+Awd7fZYdQaKmrSZ8nBLu/8F+OhUM
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:1691:b0:349:d047:3943 with SMTP id
+ f17-20020a056638169100b00349d0473943mr8064889jat.201.1661350813807; Wed, 24
+ Aug 2022 07:20:13 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 07:20:13 -0700
+In-Reply-To: <20220824120207.2433-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001abba405e6fd6146@google.com>
+Subject: Re: [syzbot] INFO: trying to register non-static key in __access_remote_vm
+From:   syzbot <syzbot+d011b5a27f77c61c6345@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,90 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-...
-> And generated code looks almost the same, except that
-> on x86_64 your version is bigger. Compare before:
-> 0000000000000000 <_find_first_bit>:
->    0:   mov    %rsi,%rax
->    3:   test   %rsi,%rsi
->    6:   je     35 <_find_first_bit+0x35>
->    8:   xor    %edx,%edx
->    a:   jmp    19 <_find_first_bit+0x19>
->    c:   add    $0x40,%rdx               // Track bits and
->   10:   add    $0x8,%rdi                // index separately
+Hello,
 
-That add is free - happens in parallel with other instrutcions
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
->   14:   cmp    %rax,%rdx
->   17:   jae    35 <_find_first_bit+0x35>
+Reported-and-tested-by: syzbot+d011b5a27f77c61c6345@syzkaller.appspotmail.com
 
-The instructions below will (probably/hopefully) be
-speculatively executed in parallel with the cmp/jae above
+Tested on:
 
->   19:   mov    (%rdi),%rcx
->   1c:   test   %rcx,%rcx
->   1f:   je     c <_find_first_bit+0xc>
->   21:   tzcnt  %rcx,%rcx
->   26:   add    %rdx,%rcx
->   29:   cmp    %rcx,%rax
->   2c:   cmova  %rcx,%rax
->   30:   jmp    35 <_find_first_bit+0x35>
->   35:   jmp    3a <_find_first_bit+0x3a>
->   3a:   nopw   0x0(%rax,%rax,1)
-> 
-> And after:
-> 0000000000000000 <_find_first_bit>:
->    0:   mov    %rsi,%rax
->    3:   test   %rsi,%rsi
->    6:   je     39 <_find_first_bit+0x39>
->    8:   xor    %edx,%edx
->    a:   jmp    15 <_find_first_bit+0x15>
->    c:   add    $0x40,%rdx               // Track bits only
->   10:   cmp    %rdx,%rax
->   13:   jbe    39 <_find_first_bit+0x39>
->   15:   mov    %rdx,%rcx
->   18:   shr    $0x6,%rcx                // But divide here
->   1c:   mov    (%rdi,%rcx,8),%rcx
->   20:   test   %rcx,%rcx
+commit:         8755ae45 Add linux-next specific files for 20220819
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1340610b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
+dashboard link: https://syzkaller.appspot.com/bug?extid=d011b5a27f77c61c6345
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1286ee0b080000
 
-That is a long register dependency chain involving %cx.
-It will limit the execution speed to (at least 6) clocks/iteration.
-The older version might be 3 clocks/iteration.
-So this could easily run at half the speed.
-
-	David
-
->   23:   je     c <_find_first_bit+0xc>
->   25:   tzcnt  %rcx,%rcx
->   2a:   add    %rcx,%rdx
->   2d:   cmp    %rdx,%rax
->   30:   cmova  %rdx,%rax
->   34:   jmp    39 <_find_first_bit+0x39>
->   39:   jmp    3e <_find_first_bit+0x3e>
->   3e:   xchg   %ax,%ax                  // Which adds 4 bytes to .text
-> 
-> Thanks,
-> Yury
-> 
-> > > +               val = (EXPRESSION);                                             \
-> > > +               if (val) {                                                      \
-> > > +                       sz = min(idx * BITS_PER_LONG + __ffs(word_op(val)), sz);\
-> >
-> > sz = min(idx + __ffs(...));
-> >
-> > > +                       break;                                                  \
-> > > +               }                                                               \
-> > > +       }                                                                       \
-> > > +                                                                               \
-> > > +       sz;                                                                     \
-> > > +})
-> >
-> >
-> > --
-> > With Best Regards,
-> > Andy Shevchenko
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Note: testing is done by a robot and is best-effort only.

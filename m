@@ -2,178 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF13259F4C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640E159F4C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbiHXIJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
+        id S235553AbiHXIJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiHXIJH (ORCPT
+        with ESMTP id S235092AbiHXIJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:09:07 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073E483BD2;
-        Wed, 24 Aug 2022 01:09:06 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id h22so21729576ejk.4;
-        Wed, 24 Aug 2022 01:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=HBCsLrC+BZ57dXA8p6JgMF0Isv3MyvvLN8lewLj3GQI=;
-        b=asEj1SbHqJwc2sRjdvudUmZk3hffx1BUlTwt05WxXJUw9eneEoO5Y6RIivyXDlbIyk
-         67/bbf0ogqhhdnvEz2Cwph4cq4wzc+N/5S5Ci0KLfHxFETDNUccuktrEsw5eN68nhoXm
-         srMxk204nWWr4k5UJgbNNVvJH3yOsIApOebiMaDIQadoHYYpLdVvpktxGiSAI+q64faA
-         P109tL6WCnbKRUKYOL/tSdM3Whm3X1Ot/4P2P3oTHJeLelB16MvwkTdtfFVwkBexuBxN
-         Ga5Ou124oJPExczaAOZBjjxgGMtqiPwO4RqtIr/R3TmSZpZn/rEobE1XpD17ghPyXHL/
-         esPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=HBCsLrC+BZ57dXA8p6JgMF0Isv3MyvvLN8lewLj3GQI=;
-        b=I9j3Q93aXnteHyx7yp1XYY3znWq9Y9BMMHe3uKq1z7FOYv8RcY+uusPzMC648d/b4I
-         ZYIiLiDKHfmWOm4ZRZWBRoJaxgFNKUXHg9bp81yiUymDa0EvaivtyorHgsVqMuZYMlZ1
-         PhGjIRNatlszIHH6eiS87mHqzPQ9HeQvGXQWuSbptjmgSJW9UMuWWntRB3JryAwUjWYb
-         y84xQiPP5qPDmz3DIHpAEgL5ApUyPw2vlE+JInRfmXjHo/IKgctm9o5VWlrEfn2IDJSh
-         RxDAPOAOim6lx0QhNZh3f9mkImpqAwMVNtaNFqQbnsn3gIreJ8qoWcEdacUcMDYyfq69
-         jDtA==
-X-Gm-Message-State: ACgBeo3cJTpSIw/qOrkkBzSY+khg3AasfK5RkfSa5JFoeuj+beRhvqIU
-        B59Dt1xofgdpZ5qg12iI67Q=
-X-Google-Smtp-Source: AA6agR7nFEPUMYXzTXuq9byRWDY/PHXv4rvG+IqBfsUw0kWABOiUIHQGuB4b5OUKJUfGV/4NXktuCA==
-X-Received: by 2002:a17:907:a073:b0:73d:8503:a55e with SMTP id ia19-20020a170907a07300b0073d8503a55emr2088246ejc.315.1661328544228;
-        Wed, 24 Aug 2022 01:09:04 -0700 (PDT)
-Received: from felia.fritz.box (200116b82606de00690367f10e5093c9.dip.versatel-1u1.de. [2001:16b8:2606:de00:6903:67f1:e50:93c9])
-        by smtp.gmail.com with ESMTPSA id d6-20020a50fb06000000b0043a5bcf80a2sm2610603edq.60.2022.08.24.01.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 01:09:03 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] docs: Update version number from 5.x to 6.x in README.rst
-Date:   Wed, 24 Aug 2022 10:08:36 +0200
-Message-Id: <20220824080836.23087-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 24 Aug 2022 04:09:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1956BCDD;
+        Wed, 24 Aug 2022 01:09:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7979F2008D;
+        Wed, 24 Aug 2022 08:09:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661328591; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TLtgpnjQlGtD1ZAJ+2wQtkWv5tNE69LQcLT1NXtK3ms=;
+        b=j20rO/LUe+ZNPgoL3sgzAB9Uo0qwAB2hz+HKpI+VJ7OoO+6WpFy0JbHRnKNinUUW3p3sEP
+        GzKu+ecTUHYR9qtLYWUjlMmuHioEtPsuPQUiwYNfsppQDRn7at24wWWLnp0VSI3Oaejk+C
+        Yd/1GdFhE3kj7bIhJi3Ge1qoMFLQ71c=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5904A13AC0;
+        Wed, 24 Aug 2022 08:09:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xBYSFc/cBWNvXgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 24 Aug 2022 08:09:51 +0000
+Date:   Wed, 24 Aug 2022 10:09:50 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     lizhe.67@bytedance.com
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz, mhiramat@kernel.org,
+        keescook@chromium.org, Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
+        rostedt@goodmis.org, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lizefan.x@bytedance.com, yuanzhu@bytedance.com
+Subject: Re: [PATCH v2] page_ext: introduce boot parameter 'early_page_ext'
+Message-ID: <YwXczj8Dh0uI0EA9@dhcp22.suse.cz>
+References: <20220824065058.81051-1-lizhe.67@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220824065058.81051-1-lizhe.67@bytedance.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A quick 'grep "5\.x" . -R' on Documentation shows that README.rst,
-2.Process.rst and applying-patches.rst all mention the version number "5.x"
-for kernel releases.
+On Wed 24-08-22 14:50:58, lizhe.67@bytedance.com wrote:
+[...]
+> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+> index fabb2e1e087f..3e081cf8a1ec 100644
+> --- a/include/linux/page_ext.h
+> +++ b/include/linux/page_ext.h
+> @@ -38,19 +38,22 @@ struct page_ext {
+>  
+>  extern unsigned long page_ext_size;
+>  extern void pgdat_page_ext_init(struct pglist_data *pgdat);
+> +#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> +extern bool early_page_ext_enable(void);
+> +#endif
+>  
+>  #ifdef CONFIG_SPARSEMEM
+>  static inline void page_ext_init_flatmem(void)
+>  {
+>  }
+> -extern void page_ext_init(void);
+> +extern void page_ext_init(bool early);
+>  static inline void page_ext_init_flatmem_late(void)
+>  {
+>  }
+>  #else
+>  extern void page_ext_init_flatmem(void);
+>  extern void page_ext_init_flatmem_late(void);
+> -static inline void page_ext_init(void)
+> +static inline void page_ext_init(bool early)
+>  {
+>  }
+>  #endif
 
-As the next release will be version 6.0, updating the version number to 6.x
-in README.rst seems reasonable.
+Why do you need to make it CONFIG_DEFERRED_STRUCT_PAGE_INIT
+dependant?
 
-The description in 2.Process.rst is just a description of recent kernel
-releases, it was last updated in the beginning of 2020, and can be
-revisited at any time on a regular basis, independent of changing the
-version number from 5 to 6. So, there is no need to update this document
-now when transitioning from 5.x to 6.x numbering.
+[...]
+> diff --git a/init/main.c b/init/main.c
+> index 91642a4e69be..3760c0326525 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -849,6 +849,8 @@ static void __init mm_init(void)
+>  	pgtable_init();
+>  	debug_objects_mem_init();
+>  	vmalloc_init();
+> +	/* Should be run after vmap initialization */
+> +	page_ext_init(true);
 
-The document applying-patches.rst is probably obsolete for most users
-anyway, a reader will sufficiently well understand the steps, even it
-mentions version 5 rather than version 6. So, do not update that to a
-version 6.x numbering scheme.
+you can just 
+	if (early_page_ext)
+		page_ext_init();
 
-Update version number from 5.x to 6.x in README.rst only.
+>  	/* Should be run before the first non-init thread is created */
+>  	init_espfix_bsp();
+>  	/* Should be run after espfix64 is set up. */
+> @@ -1606,7 +1608,7 @@ static noinline void __init kernel_init_freeable(void)
+>  	padata_init();
+>  	page_alloc_init_late();
+>  	/* Initialize page ext after all struct pages are initialized. */
+> -	page_ext_init();
+> +	page_ext_init(false);
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- Documentation/admin-guide/README.rst | 30 ++++++++++++++--------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+	if (!early_page_ext)
+		page_ext_init();
+>  
+>  	do_basic_setup();
+>  
 
-diff --git a/Documentation/admin-guide/README.rst b/Documentation/admin-guide/README.rst
-index caa3c09a5c3f..9eb6b9042f75 100644
---- a/Documentation/admin-guide/README.rst
-+++ b/Documentation/admin-guide/README.rst
-@@ -1,9 +1,9 @@
- .. _readme:
- 
--Linux kernel release 5.x <http://kernel.org/>
-+Linux kernel release 6.x <http://kernel.org/>
- =============================================
- 
--These are the release notes for Linux version 5.  Read them carefully,
-+These are the release notes for Linux version 6.  Read them carefully,
- as they tell you what this is all about, explain how to install the
- kernel, and what to do if something goes wrong.
- 
-@@ -63,7 +63,7 @@ Installing the kernel source
-    directory where you have permissions (e.g. your home directory) and
-    unpack it::
- 
--     xz -cd linux-5.x.tar.xz | tar xvf -
-+     xz -cd linux-6.x.tar.xz | tar xvf -
- 
-    Replace "X" with the version number of the latest kernel.
- 
-@@ -72,12 +72,12 @@ Installing the kernel source
-    files.  They should match the library, and not get messed up by
-    whatever the kernel-du-jour happens to be.
- 
-- - You can also upgrade between 5.x releases by patching.  Patches are
-+ - You can also upgrade between 6.x releases by patching.  Patches are
-    distributed in the xz format.  To install by patching, get all the
-    newer patch files, enter the top level directory of the kernel source
--   (linux-5.x) and execute::
-+   (linux-6.x) and execute::
- 
--     xz -cd ../patch-5.x.xz | patch -p1
-+     xz -cd ../patch-6.x.xz | patch -p1
- 
-    Replace "x" for all versions bigger than the version "x" of your current
-    source tree, **in_order**, and you should be ok.  You may want to remove
-@@ -85,13 +85,13 @@ Installing the kernel source
-    that there are no failed patches (some-file-name# or some-file-name.rej).
-    If there are, either you or I have made a mistake.
- 
--   Unlike patches for the 5.x kernels, patches for the 5.x.y kernels
-+   Unlike patches for the 6.x kernels, patches for the 6.x.y kernels
-    (also known as the -stable kernels) are not incremental but instead apply
--   directly to the base 5.x kernel.  For example, if your base kernel is 5.0
--   and you want to apply the 5.0.3 patch, you must not first apply the 5.0.1
--   and 5.0.2 patches. Similarly, if you are running kernel version 5.0.2 and
--   want to jump to 5.0.3, you must first reverse the 5.0.2 patch (that is,
--   patch -R) **before** applying the 5.0.3 patch. You can read more on this in
-+   directly to the base 6.x kernel.  For example, if your base kernel is 6.0
-+   and you want to apply the 6.0.3 patch, you must not first apply the 6.0.1
-+   and 6.0.2 patches. Similarly, if you are running kernel version 6.0.2 and
-+   want to jump to 6.0.3, you must first reverse the 6.0.2 patch (that is,
-+   patch -R) **before** applying the 6.0.3 patch. You can read more on this in
-    :ref:`Documentation/process/applying-patches.rst <applying_patches>`.
- 
-    Alternatively, the script patch-kernel can be used to automate this
-@@ -114,7 +114,7 @@ Installing the kernel source
- Software requirements
- ---------------------
- 
--   Compiling and running the 5.x kernels requires up-to-date
-+   Compiling and running the 6.x kernels requires up-to-date
-    versions of various software packages.  Consult
-    :ref:`Documentation/process/changes.rst <changes>` for the minimum version numbers
-    required and how to get updates for these packages.  Beware that using
-@@ -132,12 +132,12 @@ Build directory for the kernel
-    place for the output files (including .config).
-    Example::
- 
--     kernel source code: /usr/src/linux-5.x
-+     kernel source code: /usr/src/linux-6.x
-      build directory:    /home/name/build/kernel
- 
-    To configure and build the kernel, use::
- 
--     cd /usr/src/linux-5.x
-+     cd /usr/src/linux-6.x
-      make O=/home/name/build/kernel menuconfig
-      make O=/home/name/build/kernel
-      sudo make O=/home/name/build/kernel modules_install install
+and without the ifdefery it all becomes much more simple.
 -- 
-2.17.1
-
+Michal Hocko
+SUSE Labs

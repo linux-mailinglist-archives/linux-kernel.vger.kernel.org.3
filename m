@@ -2,161 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713A95A012D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E78F5A0135
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbiHXSNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S239051AbiHXSQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239717AbiHXSN0 (ORCPT
+        with ESMTP id S239335AbiHXSQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:13:26 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCE86D57D;
-        Wed, 24 Aug 2022 11:13:24 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id bn9so9629728ljb.6;
-        Wed, 24 Aug 2022 11:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=0lbGMmFuLLALNWNwg1IFLsjuEsYjoBL8hbke8mOWVoI=;
-        b=Aofr0GgWtsbO+tksHCUzbtLNRJML9u9bqdG1Q/NKZHzU2wpBZVi53bbaV2j8B2n+cd
-         jYV8RwOFAtTzcotGJLVc2rM8x9xAsK+NBzfbQhrPJQD9U88qDGWY9URxnZ4pc6HPEkj+
-         ZB/oZn0OcB9GDiABotSVaIPA56PZny2gjpsD3tH3GtvO3fBxm2QB3AjmhoRCCTaZjENk
-         6w9c3to/qfJueaxivE0IYILzyLjAezRwccVbMyec4PFC/nayKsdmAKnj0dUH76gTai66
-         L3Td55qhlBs/lFvhf8LR7/QQhKWiXkoQ8vidIdn1hZ8gNqNVxeu2gWcoVlPkOsBHvXIN
-         c78w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=0lbGMmFuLLALNWNwg1IFLsjuEsYjoBL8hbke8mOWVoI=;
-        b=rvugMedwu3mWn7ok+4hpQ/fAEYhcfFIEPUsVXspWTVekxYD1zFFltNZmIkNkqjWgOz
-         pe1QJ5FifuBw4ZqW2nCcwEYNTfyiMWqkg4tKmmjQAkGyPFH+HYq5vPLZ5tsdibHrFJLc
-         mDVEDii29ScP8yZ1exc08I1JbOAabDV47BgUHe3u+kibpPeU85jZ2a4XzFs8PGnKAwdT
-         Ix7OUDJJ6kea7xb7hmdOhI6ouO0C/AdAuaD41YoP4qMqQqRaNgsXrORSJBMu7GyPJXWo
-         yZkkSL+Tx5WwfXu2XXAv+E5BykccmC20cGh52T55lId4Z2p0T+9IuXvvF4mcUWbt+09S
-         wQLQ==
-X-Gm-Message-State: ACgBeo1Xly0W76d5X1NgrDqDPy+7EPyA2qIjzfoqqq6LWCUrYQhlCkHp
-        VFkKkTmlBnYorczBWIvD9nA=
-X-Google-Smtp-Source: AA6agR6uuSX5p/1AMJ2xGzDZ9ew8C7pezBI/KpjLKg7RFpww0yD6Ulr63mnPVzqrTcqdf0aciKeE1w==
-X-Received: by 2002:a2e:a78f:0:b0:25f:dedf:efb8 with SMTP id c15-20020a2ea78f000000b0025fdedfefb8mr93629ljf.317.1661364802678;
-        Wed, 24 Aug 2022 11:13:22 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id o13-20020ac24e8d000000b00492f37e428asm31397lfr.172.2022.08.24.11.13.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 11:13:22 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 21:13:19 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 24/24] PCI: dwc: Add DW eDMA engine support
-Message-ID: <20220824181319.wkj4256a5jp2xjlp@mobilestation>
-References: <20220822185332.26149-25-Sergey.Semin@baikalelectronics.ru>
- <20220824165118.GA2785269@bhelgaas>
+        Wed, 24 Aug 2022 14:16:11 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957A776750
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661364968; x=1692900968;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=c/S0eX7GP40YmWzS5fu0WgIGqmES/7R/7RCOdpbrjD8=;
+  b=S6DhharXDd68Xz3M+Gbhw+jy86MNY5Mtc/OoAAze2+ExM0Ln5t+Wz5Gp
+   zT9foWDoIaxHHaU3ma0p5wp886T9ilC3u7KmMUVlWBKF3WxGZdn2VoU3+
+   QlIYYkVqKwZQ/fELwC+CNMNpS30VE8Hfu9QzPEADAs7qkilWbL2a43try
+   cLRBKZpIbB4WFfSmNlDb+GSlDQcd8C9Ds5/xMC3yMxOpg0uD3CqGDGj8Q
+   kQ1jp6MWyhm7H8G8HURVCwSekoL0w7xBkxzY8Jv87eYvYXOSrJoNHXAOI
+   X9U0miqWiDnwKwKzNDc6gp3Yf1b169zFlV4ashjvlcSVDLuVtDPNnNl/c
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="320107235"
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="320107235"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 11:16:08 -0700
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="639233957"
+Received: from cceisenm-mobl1.amr.corp.intel.com (HELO [10.212.174.196]) ([10.212.174.196])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 11:16:07 -0700
+Message-ID: <1481d6c6-7d59-cd06-2c44-2ed534d3070a@linux.intel.com>
+Date:   Wed, 24 Aug 2022 11:16:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824165118.GA2785269@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v9 0/6] Add TDX Guest Attestation support
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <bb006b7a-525a-3f1b-0fc4-1620bb5bd3ba@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <bb006b7a-525a-3f1b-0fc4-1620bb5bd3ba@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 11:51:18AM -0500, Bjorn Helgaas wrote:
-> On Mon, Aug 22, 2022 at 09:53:32PM +0300, Serge Semin wrote:
-> > Since the DW eDMA driver now supports eDMA controllers embedded into the
-> > locally accessible DW PCIe Root Ports and Endpoints, we can use the
-> > updated interface to register DW eDMA as DMA engine device if it's
-> > available. In order to successfully do that the DW PCIe core driver need
-> > to perform some preparations first. First of all it needs to find out the
-> > eDMA controller CSRs base address, whether they are accessible over the
-> > Port Logic or iATU unrolled space. Afterwards it can try to auto-detect
-> > the eDMA controller availability and number of it's read/write channels.
+Hi,
+
+On 8/24/22 10:12 AM, Dave Hansen wrote:
+> On 7/27/22 20:44, Kuppuswamy Sathyanarayanan wrote:
+>> An Intel SGX Quoting Enclave (QE), written specifically to support
+>> quoting Intel TDX TDs, uses EVERIFYREPORT2, to help check the integrity
+>> of the TDG.MR.REPORT. If it passes, the QE can use a certified quote
+>> signing key to sign a quote containing the guest TD’s measurements and
+>> the additional data being quoted.
 > 
-
-> s/it's//
-
-Ok.
-
+> (maintainer hat firmly in place, not speaking as an Intel person here...)
 > 
-> > If none was found the procedure will just silently halt with no error
-> > returned. Secondly the platform is supposed to provide either combined or
-> > per-channel IRQ signals. If no valid IRQs set is found the procedure will
-> > also halt with no error returned so to be backward compatible with the
-> > platforms where DW PCIe controllers have eDMA embedded but lack of the
-> > IRQs defined for them. Finally before actually probing the eDMA device we
-> > need to allocate LLP items buffers. After that the DW eDMA can be
-> > registered. If registration is successful the info-message regarding the
-> > number of detected Read/Write eDMA channels will be printed to the system
-> > log in the similar way as it's done for the iATU settings.
+> Let's say Intel tires of SGX and zaps it from server CPUs just like it
+> did clients.  Or, that Intel decides that TDX is really cool and wants
+> it on SGX-free clients in addition to servers.
 > 
+> Can the guest ABI which is introduced here work for a future attestation
+> architecture that does not involve SGX?
 
-> s/in the similar way as it's done/as is done/
+Yes. ABI introduced here is agnostic to QE implementation. For getting a
+signed Quote, the guest will pass TDREPORT with length as input and expect
+signed Quote with length as output. This requirement is valid irrespective
+of QE implementation(SGX/no-SGX).
 
-Ok
+As you can see below, in our ABI we pass TDREPORT with "tdx_quote_hdr" in a
+buffer. Upon successful completion of the request, we expect Quote in the
+same buffer with proper header details. Such header format is generic and
+should work well in non-SGX environment you have mentioned as well.
 
-> 
-> > +static int dw_pcie_edma_find_chip(struct dw_pcie *pci)
-> > +{
-> > +	u32 val;
-> > +
-> > +	val = dw_pcie_readl_dbi(pci, PCIE_DMA_VIEWPORT_BASE + PCIE_DMA_CTRL);
-> > +	if (val == 0xFFFFFFFF && pci->edma.reg_base) {
-> > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
-> > +
-> > +		val = dw_pcie_readl_dma(pci, PCIE_DMA_CTRL);
-> > +	} else if (val != 0xFFFFFFFF) {
-> 
+Input buffer -> [tdx_quote_hdr][TDREPORT]
+Output buffer -> [tdx_quote_hdr][Quote]
 
-> Consider PCI_POSSIBLE_ERROR() as an annotation about the meaning of
-> 0xFFFFFFFF and something to grep for.
+struct tdx_quote_hdr {
+        /* Quote version, filled by TD */
+        __u64 version;
+        /* Status code of Quote request, filled by VMM */
+        __u64 status;
+        /* Length of TDREPORT, filled by TD */
+        __u32 in_len;
+        /* Length of Quote, filled by VMM */
+        __u32 out_len;
+        /* Actual Quote data or TDREPORT on input */
+        __u64 data[0];
+};
 
-In this case FFs don't mean an error but a special value, which
-indicates that the eDMA is mapped via the unrolled CSRs space. The
-similar approach has been implemented for the iATU legacy/unroll setup
-auto-detection. So I don't see much reasons to have it grepped, so as
-to have a macro-based parametrization since the special value will
-unluckily change while having the explicit literal utilized gives a
-better understanding of the way the algorithm works.
+/* struct tdx_quote_req: Request to generate TD Quote using TDREPORT
+ *
+ * @buf         : Pass user data that includes TDREPORT as input. Upon
+ *                successful completion of IOCTL, output is copied
+ *                back to the same buffer.
+ * @len         : Length of the Quote buffer.
+ */
+struct tdx_quote_req {
+        __u64 buf; // buf with header and data
+        __u64 len;
+};
 
-> 
-> > +		pci->edma.mf = EDMA_MF_EDMA_LEGACY;
-> > +
-> > +		pci->edma.reg_base = pci->dbi_base + PCIE_DMA_VIEWPORT_BASE;
-> > +	} else {
-> > +		return -ENODEV;
-> > +	}
-> 
-> > + * eDMA CSRs. DW PCIe IP-core v4.70a and older had the eDMA registers accessible
-> > + * over the Port Logic registers space. Afterwords the unrolled mapping was
-> 
-
-> s/Afterwords/Afterwards/
-
-Ok.
-
--Sergey
-
-> 
-> > + * introduced so eDMA and iATU could be accessed via a dedicated registers
-> > + * space.
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

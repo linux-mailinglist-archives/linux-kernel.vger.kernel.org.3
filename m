@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29D159F07D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6DC59F0AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiHXBCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S232665AbiHXBNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiHXBCg (ORCPT
+        with ESMTP id S229999AbiHXBNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:02:36 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1DA86FF4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:02:35 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id w7-20020a5d9607000000b0067c6030dfb8so8472163iol.10
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:02:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=SA8V6FJE4OHwfldzxq2ieRP3SNYCMLDZIdmCi4W19xI=;
-        b=kUYrMbAXUatLvgwhOzqLwBfK5j748bGxBO/Ct9lIDvszvHOo1ya4ecjZKXJoO9seAf
-         50rDmC0G6kVSzOJyIzo2oUBxZseZfpD9OmjPcb8kEU9KSEGw8V/oBJdMcJvLYbbizPcW
-         IBl9cH1sA5JnhtZH08Y5tRGIJ6mHxe2p+pjZM9p/sVVUUlucvMB+VIe6ktO38U8xOghY
-         xy3yfzy9pEtc1oY6HC6rbE2S/8lD5OhtRYohqqY8GuBnLtcQi8VA295EZPSlDqbD3UNG
-         NXyL2OtabGeWYoBBrZbzc0THp095nQPBvNh8e0YHmoUZCENDO0/W59pdNdf4IQmlPCEL
-         Vs1g==
-X-Gm-Message-State: ACgBeo2gLaM7SGFtPKxzyPHLSFXHz9DBygK0Tgp7unN8MQ0B9SWKz5ri
-        slzpBf8CICK0wmV1M9tSRE74Jmh58acS9iqThA7jDk8pWvTh
-X-Google-Smtp-Source: AA6agR6IJ8T6DvHiwgiJ7ZXB1RnxVxOeAenNs+p1YW01lAQCSCQsxiZNVIfoAo83ZIPY6PTfaDDa5V24cZXihXRseIqIGX5sH6Tj
+        Tue, 23 Aug 2022 21:13:40 -0400
+Received: from mail-m11885.qiye.163.com (mail-m11885.qiye.163.com [115.236.118.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1826CD30;
+        Tue, 23 Aug 2022 18:13:38 -0700 (PDT)
+Received: from localhost (unknown [103.29.142.67])
+        by mail-m11885.qiye.163.com (Hmail) with ESMTPA id 3242A4C03C0;
+        Wed, 24 Aug 2022 09:13:32 +0800 (CST)
+From:   Jeffy Chen <jeffy.chen@rock-chips.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Jianqun Xu <jay.xu@rock-chips.com>,
+        Jeffy Chen <jeffy.chen@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] gpio/rockchip: Convert to generic_handle_domain_irq()
+Date:   Wed, 24 Aug 2022 09:06:05 +0800
+Message-Id: <20220824010605.14256-1-jeffy.chen@rock-chips.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:6903:0:b0:2e5:8f47:22e0 with SMTP id
- e3-20020a926903000000b002e58f4722e0mr1040920ilc.97.1661302954887; Tue, 23 Aug
- 2022 18:02:34 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 18:02:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007d901905e6f23c23@google.com>
-Subject: [syzbot] WARNING: CPU: NUM PID: NUM at mm/huge_memory.c:LINE split_huge_page_to_l
-From:   syzbot <syzbot+2184d61af7d9d86337fc@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSE1NVkodGkNPHR1PTUIfQ1UTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpLSFVJQlVKT0lVTUxZV1kWGg8SFR0UWUFZT0tIVUpKS0hKQ1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OC46CCo5AT0wSg8iLxMjATgJ
+        LQkKCU5VSlVKTU1KSEtITUpMSktCVTMWGhIXVREeHR0CVRgTHhU7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlKS0hVSUJVSk9JVU1MWVdZCAFZQUlDS043Bg++
+X-HM-Tid: 0a82cd69633c2eb9kusn3242a4c03c0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,36 +49,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Follow commit dbd1c54fc820 ("gpio: Bulk conversion to
+generic_handle_domain_irq()").
 
-syzbot found the following issue on:
-
-HEAD commit:    680fb5b009e8 Merge tag 'arm64-upstream' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13d186a5080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4557ad2600fc45f4
-dashboard link: https://syzkaller.appspot.com/bug?extid=2184d61af7d9d86337fc
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c0bffd080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1217ce8d080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2184d61af7d9d86337fc@syzkaller.appspotmail.com
-
-raw: 05ffc00000010801 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000002ffffffff 0000000000000000
-page dumped because: VM_WARN_ON_ONCE_PAGE(is_hzp)
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3026 at mm/huge_memory.c:2555 split_huge_page_to_l
-
-
+Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Changes in v2:
+Use for_each_set_bit().
+
+ drivers/gpio/gpio-rockchip.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index e342a6dc4c6c..03b05a56a66f 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -324,26 +324,15 @@ static void rockchip_irq_demux(struct irq_desc *desc)
+ {
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct rockchip_pin_bank *bank = irq_desc_get_handler_data(desc);
+-	u32 pend;
++	unsigned long pending;
++	unsigned int irq;
+ 
+ 	dev_dbg(bank->dev, "got irq for bank %s\n", bank->name);
+ 
+ 	chained_irq_enter(chip, desc);
+ 
+-	pend = readl_relaxed(bank->reg_base + bank->gpio_regs->int_status);
+-
+-	while (pend) {
+-		unsigned int irq, virq;
+-
+-		irq = __ffs(pend);
+-		pend &= ~BIT(irq);
+-		virq = irq_find_mapping(bank->domain, irq);
+-
+-		if (!virq) {
+-			dev_err(bank->dev, "unmapped irq %d\n", irq);
+-			continue;
+-		}
+-
++	pending = readl_relaxed(bank->reg_base + bank->gpio_regs->int_status);
++	for_each_set_bit(irq, &pending, 32) {
+ 		dev_dbg(bank->dev, "handling irq %d\n", irq);
+ 
+ 		/*
+@@ -377,7 +366,7 @@ static void rockchip_irq_demux(struct irq_desc *desc)
+ 			} while ((data & BIT(irq)) != (data_old & BIT(irq)));
+ 		}
+ 
+-		generic_handle_irq(virq);
++		generic_handle_domain_irq(bank->domain, irq);
+ 	}
+ 
+ 	chained_irq_exit(chip, desc);
+-- 
+2.20.1
+

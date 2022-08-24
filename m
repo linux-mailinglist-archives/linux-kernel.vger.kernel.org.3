@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341A85A02B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948FF5A02BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240270AbiHXU3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S236466AbiHXU3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235537AbiHXU3I (ORCPT
+        with ESMTP id S237076AbiHXU31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:29:08 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBDB6AA2E;
-        Wed, 24 Aug 2022 13:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661372948; x=1692908948;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vCFPdZPhrFOyAb/BVzSWzMNxWwy6MKuSUQZA094hqP8=;
-  b=bNNvrlHokcKK5x5S7AmTiukKdts+rcdDTdOqviSZT5y4YpbqW67HeY1N
-   UjtjFx2kZZEB3rQ6XTkXc13Bxna3DOkwKfpljRmDdlr60Kh44K5X6sWqg
-   Qrflb5WlpjRoiAfxR70cJ2K49gKazVpPZ2BVvYdy4eIhziKWoY/J/ywmZ
-   pFPNIRli6we5hLNt2ly6kBLKGi45si3ACNUs+wuTUZWzgIpnbKW2IzNGZ
-   I5TgHlYf1Gdw5O/nmRX5bwaVrj1ykUZn4e/Qtlv4IrcPSmEmwNSyRsn3R
-   k0U+5/Pz4Gtnd4Nu2WXwRhh93dnnyVvtWfbjp3ZNPRWdOZQVXxQqLF3eh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="355794799"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="355794799"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 13:29:04 -0700
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="678187365"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.213.178.56]) ([10.213.178.56])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 13:29:04 -0700
-Message-ID: <1417f4ce-2573-5c88-6c92-fda5c57ebceb@intel.com>
-Date:   Wed, 24 Aug 2022 13:29:03 -0700
+        Wed, 24 Aug 2022 16:29:27 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DCC6B17A;
+        Wed, 24 Aug 2022 13:29:23 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C7A9E188444D;
+        Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id BEA8025032B7;
+        Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id B7D589EC0004; Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.12.0
-Subject: Re: [PATCH] dmaengine: idxd: Set workqueue state to disabled before
- trying to re-enable
-Content-Language: en-US
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org
-References: <20220824192913.2425634-1-jsnitsel@redhat.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220824192913.2425634-1-jsnitsel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Wed, 24 Aug 2022 22:29:20 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YwHZ1J9DZW00aJDU@shredder>
+References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
+ <YvkM7UJ0SX+jkts2@shredder>
+ <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
+ <YwHZ1J9DZW00aJDU@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <7016ed2ce9a30537e4278e37878900d8@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-08-21 09:08, Ido Schimmel wrote:
+> 
+> I assume you want a hub to simulate multiple MACs behind the same port.
+> You don't need a hub for that. You can set the MAC using mausezahn. See
+> '-a' option:
+> 
+> "
+>    -a <src-mac|keyword>
+>        Use specified source MAC address with hexadecimal notation such
+> as 00:00:aa:bb:cc:dd.  By default the interface MAC address will be
+> used. The  keywords  ''rand''
+>        and  ''own''  refer to a random MAC address (only unicast
+> addresses are created) and the own address, respectively. You can also
+> use the keywords mentioned below
+>        although broadcast-type source addresses are officially invalid.
+> "
+> 
 
-On 8/24/2022 12:29 PM, Jerry Snitselaar wrote:
-> For a software reset idxd_device_reinit() is called, which will walk
-> the device workqueues to see which ones were enabled, and try to
-> re-enable them. It keys off wq->state being iDXD_WQ_ENABLED, but the
-> first thing idxd_enable_wq() will do is see that the state of the
-> workqueue is enabled, and return 0 instead of attempting to issue
-> a command to enable the workqueue.
->
-> So once a workqueue is found that needs to be re-enabled,
-> set the state to disabled prior to calling idxd_enable_wq().
-> This would accurately reflect the state if the enable fails
-> as well.
->
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: dmaengine@vger.kernel.org
-> Fixes: bfe1d56091c1 ("dmaengine: idxd: Init and probe for Intel data accelerators")
-> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> ---
->   drivers/dma/idxd/irq.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
-> index 743ead5ebc57..723eeb5328d6 100644
-> --- a/drivers/dma/idxd/irq.c
-> +++ b/drivers/dma/idxd/irq.c
-> @@ -52,6 +52,7 @@ static void idxd_device_reinit(struct work_struct *work)
->   		struct idxd_wq *wq = idxd->wqs[i];
->   
->   		if (wq->state == IDXD_WQ_ENABLED) {
-> +			wq->state = IDXD_WQ_DISABLED;
-Might be better off to insert this line in idxd_wq_disable_cleanup(). I 
-think that should put it in sane state.
->   			rc = idxd_wq_enable(wq);
->   			if (rc < 0) {
->   				dev_warn(dev, "Unable to re-enable wq %s\n",
+
+Ido, I am not so known to the selftests, so I am wondering why I don't 
+see either check_err or check_fail fail, whichever I use, when I think 
+they should and then they are not really checking...
+
+
+         local mac=10:20:30:30:20:10
+
+
+         $MZ $h1 -t udp -a $mac -b rand
+         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
+locked"
+         check_err $? "MAB station move: no locked entry on first 
+injection"
+
+         $MZ $h2 -t udp -a $mac -b rand
+         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
+locked"
+         check_err $? "MAB station move: locked entry did not move"
+
+What is wrong here?
+
+For a mv88e6xxx test I guess I can make a check to verify that this 
+driver is in use?

@@ -2,142 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A451C59FD94
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5312659FD96
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239340AbiHXOyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S239373AbiHXOyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236283AbiHXOyg (ORCPT
+        with ESMTP id S239362AbiHXOyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:54:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7D6792EF;
-        Wed, 24 Aug 2022 07:54:35 -0700 (PDT)
-Received: from [10.3.2.12] (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 94B596601E78;
-        Wed, 24 Aug 2022 15:54:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661352874;
-        bh=CVvG9u5fZgNaOo7ULIGJkLzIljQ//NxCzX6yHS/62rg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=NR7CNznfTPjbBb6Ysl26B0Dw9uhrILYohGczNHFHvapI7yJufzs8OtN84tqRAnA/G
-         6H9BUd7yACXyNZgjw6iGl+ukq0+5dDfO5ICfre3puaM6NKFBF6rBAWeDbnRHc18ndy
-         FCASu+2JCVK2RpNizY8Dmu+TTJN8qyADhHchH3pA/mIdLXVzAbnbA3pgOyS9vKaXc3
-         a0DeUsG6SejB8qoohy2Y3Kqny/JCkOi3lH7Ra90ttntGvYQACjXgM3IaiE1Hl8dGEi
-         AM441ay1cffjemUG1UE9Q6N+Y0kU+MRtQPz0JjSB5n8JKyxN/IUkt3jX+pptqIB1wW
-         sjR161ZHWLEzw==
-Message-ID: <8d8413be9ec10852ca40e091a26db19436d23b71.camel@collabora.com>
-Subject: Re: [RFC PATCH] gpio: pca953x: Support for pcal6534
-From:   Martyn Welch <martyn.welch@collabora.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Wed, 24 Aug 2022 15:54:30 +0100
-In-Reply-To: <CAHp75Vc84yV40XwHdzHyWR7iM383iwvtQrxEXroJ6Lb41piCxA@mail.gmail.com>
-References: <20220817112818.787771-1-martyn.welch@collabora.com>
-         <CAHp75Vc1bnUGt66LYRAVuJP+OnhLTaU=AN1JdvfiH44O9_eO8g@mail.gmail.com>
-         <370beac7c85da4f1b57d8d78715d2a0676d19cf9.camel@collabora.com>
-         <CAHp75Vc84yV40XwHdzHyWR7iM383iwvtQrxEXroJ6Lb41piCxA@mail.gmail.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4-1+b1 
+        Wed, 24 Aug 2022 10:54:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0D57E00A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661352882;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mrZSLuJn7B95IjdTvMo0o8DoEvcK6JOywKMgoVwD7sU=;
+        b=gaxgVd7BW5ZYJhHfOYahw1otJvN7J7kcnY+lmv7dtq80Gt6HohEcc0Gu9yNc79JyMP1Tej
+        VwvwRqQZJSbqOx9RMkKQSgUpaYuMwHwVbGOlSdfM+SPSOygALDYnhCwklVoRrIwzW2uWuW
+        3NKYscBROuhcfI6gl7ImRxhh7SNA2L8=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-344-bQ0vFxE0OSuUiwFOPEVbIA-1; Wed, 24 Aug 2022 10:54:41 -0400
+X-MC-Unique: bQ0vFxE0OSuUiwFOPEVbIA-1
+Received: by mail-qk1-f198.google.com with SMTP id bq19-20020a05620a469300b006bb70e293ccso14776805qkb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:54:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=mrZSLuJn7B95IjdTvMo0o8DoEvcK6JOywKMgoVwD7sU=;
+        b=l9HoUnfQCaYvDy15iJXOzgJhJJSD9NPTgmZfaeJbVDj+U6rNUkUDgSoBk5K2jV3t14
+         U82IU9NDpFzlQ+X4jQfoktqdw4IAlCkyDwlQ71nwQUP73FN4QEF5cYhi9QTbcVAnw+Jb
+         29ZCIbf4ZofW4phepJ1juoAbQRaedXa4lfihCwdmtzvg9SDkg9nFO4ChbPCivHnWtuz1
+         FX9S/yTgSQjSt5PWuZb2qxZVu2r7VIgcS8/C212oxPeMH5thc1tMPuAd0NZOFNDzDHHO
+         BvCX4L33ixu/1+y5RfRJcxcOwy/lh7lCxpJxCiSKS7A03/iKHRj3dLkmRi0XrPgGdPWl
+         FA2Q==
+X-Gm-Message-State: ACgBeo1srht1c8tMMXf6UgnfY90HtO5yYQ12BYrDV7o6NIXGRSFRoRDi
+        IALa+xldfmR5PNo9pasPSHvksFxGLIVK0/5e7BhG4n2RUjMOJXvFcNrquJ4WU3Vt64ypz8IPrW3
+        AIOxNIx0G+g28x8CGGFn2NbX4
+X-Received: by 2002:ad4:5bc1:0:b0:496:fd12:3ece with SMTP id t1-20020ad45bc1000000b00496fd123ecemr7680924qvt.27.1661352880150;
+        Wed, 24 Aug 2022 07:54:40 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR72UV2K5dJzouj4ToPdOWBwcYlwAP0Cd9FyhdTNvGwm0EbEWDmnYH4YmbPekZsiI1DdyE3m+g==
+X-Received: by 2002:ad4:5bc1:0:b0:496:fd12:3ece with SMTP id t1-20020ad45bc1000000b00496fd123ecemr7680904qvt.27.1661352879925;
+        Wed, 24 Aug 2022 07:54:39 -0700 (PDT)
+Received: from [192.168.98.18] ([107.12.98.143])
+        by smtp.gmail.com with ESMTPSA id q30-20020a37f71e000000b006baef6daa45sm14408647qkj.119.2022.08.24.07.54.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 07:54:39 -0700 (PDT)
+Message-ID: <aafa0c1e-647a-1c76-ed20-1d424d222768@redhat.com>
+Date:   Wed, 24 Aug 2022 10:54:38 -0400
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] MAINTAINERS: rectify file entry in BONDING DRIVER
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220824072945.28606-1-lukas.bulwahn@gmail.com>
+From:   Jonathan Toppins <jtoppins@redhat.com>
+In-Reply-To: <20220824072945.28606-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTA4LTIyIGF0IDExOjU2ICswMzAwLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6
-Cj4gCj4gCj4gT24gTW9uZGF5LCBBdWd1c3QgMjIsIDIwMjIsIE1hcnR5biBXZWxjaCA8bWFydHlu
-LndlbGNoQGNvbGxhYm9yYS5jb20+Cj4gd3JvdGU6Cj4gPiBPbiBTYXQsIDIwMjItMDgtMjAgYXQg
-MDE6MzUgKzAzMDAsIEFuZHkgU2hldmNoZW5rbyB3cm90ZToKPiA+ID4gT24gV2VkLCBBdWcgMTcs
-IDIwMjIgYXQgMjoyOSBQTSBNYXJ0eW4gV2VsY2gKPiA+ID4gPG1hcnR5bi53ZWxjaEBjb2xsYWJv
-cmEuY29tPiB3cm90ZToKPiA+ID4gPiDCoAo+ID4gPiA+IC3CoMKgwqDCoMKgwqAgaW50IGJhbmtf
-c2hpZnQgPSBwY2E5NTN4X2Jhbmtfc2hpZnQoY2hpcCk7Cj4gPiA+ID4gLcKgwqDCoMKgwqDCoCBp
-bnQgYmFuayA9IChyZWcgJiBSRUdfQUREUl9NQVNLKSA+PiBiYW5rX3NoaWZ0Owo+ID4gPiA+IC3C
-oMKgwqDCoMKgwqAgaW50IG9mZnNldCA9IHJlZyAmIChCSVQoYmFua19zaGlmdCkgLSAxKTsKPiA+
-ID4gPiArwqDCoMKgwqDCoMKgIGludCBiYW5rOwo+ID4gPiA+ICvCoMKgwqDCoMKgwqAgaW50IG9m
-ZnNldDsKPiA+ID4gPiArCj4gPiA+ID4gK8KgwqDCoMKgwqDCoCBpZiAoY2hpcC0+ZHJpdmVyX2Rh
-dGEgJiBQQ0FMNjUzNF9BTElHTikgewo+ID4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGJhbmsgPSAocmVnICYgUkVHX0FERFJfTUFTSykgLyBOQkFOSyhjaGlwKTsKPiA+ID4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBvZmZzZXQgPSByZWcgLSAoYmFuayAqIE5CQU5L
-KGNoaXApKTsKPiA+ID4gPiArwqDCoMKgwqDCoMKgIH0gZWxzZSB7Cj4gPiA+ID4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgaW50IGJhbmtfc2hpZnQgPSBwY2E5NTN4X2Jhbmtfc2hpZnQo
-Y2hpcCk7Cj4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYmFuayA9IChyZWcg
-JiBSRUdfQUREUl9NQVNLKSA+PiBiYW5rX3NoaWZ0Owo+ID4gPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIG9mZnNldCA9IHJlZyAmIChCSVQoYmFua19zaGlmdCkgLSAxKTsKPiA+ID4g
-PiArwqDCoMKgwqDCoMKgIH0KPiA+ID4gCj4gPiA+IEknbSB3b25kZXJpbmcgaWYgaXQgY2FuIGJl
-IG1vdmVkIHRvIGJhbmtfc2hpZnQoKcKgIGFuZCBwb3NzaWJseSBhCj4gPiA+IG5ldwo+ID4gPiBo
-ZWxwZXIgdG8gZ2V0IGFuIG9mZnNldC4KPiA+ID4gCj4gPiAKPiA+IER1ZSB0byB0aGUgZGlmZmVy
-ZW50IHJlZ2lzdGVyIHNwYWNpbmcsIEkgZG9uJ3QgdGhpbmsgdGhlc2UgY2hpcHMKPiA+IG9iZXkK
-PiA+IGFueSBvZmZzZXQgYmFzZWQgcnVsZXMuIEZvciB0aGUgcmVjb3JkLCBJJ3ZlIGRvbmUgYSBi
-aXQgbW9yZSB3b3JrCj4gPiBoZXJlCj4gPiB0byBnZXQgaXQgcmV0dXJuaW5nIHRoZSBjb3JyZWN0
-IHZhbHVlcyBmb3IgYWxsIHRoZSBleHRlbmRlZAo+ID4gcmVnaXN0ZXJzLgo+ID4gV2hhdCBJIGN1
-cnJlbnRseSBoYXZlIGlzIHRoaXMgKHdoaWNoIEkgZG9uJ3QgcGFydGljdWxhcmx5IGxpa2UgYW5k
-Cj4gPiB3b3VsZCBiZSBvcGVuIHRvIGFsdGVybmF0aXZlIGltcGxlbWVudGF0aW9ucyk6Cj4gPiAK
-PiA+IAo+ID4gwqBzdGF0aWMgdTggcGNhOTUzeF9yZWNhbGNfYWRkcihzdHJ1Y3QgcGNhOTUzeF9j
-aGlwICpjaGlwLCBpbnQgcmVnLAo+ID4gaW50Cj4gPiBvZmYpCj4gPiDCoHsKPiA+IC3CoCDCoCDC
-oCDCoGludCBiYW5rX3NoaWZ0ID0gcGNhOTUzeF9iYW5rX3NoaWZ0KGNoaXApOwo+ID4gLcKgIMKg
-IMKgIMKgaW50IGFkZHIgPSAocmVnICYgUENBTF9HUElPX01BU0spIDw8IGJhbmtfc2hpZnQ7Cj4g
-PiAtwqAgwqAgwqAgwqBpbnQgcGluY3RybCA9IChyZWcgJiBQQ0FMX1BJTkNUUkxfTUFTSykgPDwg
-MTsKPiA+IC3CoCDCoCDCoCDCoHU4IHJlZ2FkZHIgPSBwaW5jdHJsIHwgYWRkciB8IChvZmYgLyBC
-QU5LX1NaKTsKPiA+ICvCoCDCoCDCoCDCoGludCBiYW5rX3NoaWZ0Owo+ID4gK8KgIMKgIMKgIMKg
-aW50IGFkZHI7Cj4gPiArwqAgwqAgwqAgwqBpbnQgcGluY3RybDsKPiA+ICvCoCDCoCDCoCDCoHU4
-IHJlZ2FkZHI7Cj4gPiArCj4gPiArwqAgwqAgwqAgwqBpZiAoY2hpcC0+ZHJpdmVyX2RhdGEgJiBQ
-Q0FMNjUzNF9BTElHTikgewo+ID4gK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgYWRkciA9IChyZWcg
-JiBQQ0FMX0dQSU9fTUFTSykgKiBOQkFOSyhjaGlwKTsKPiA+ICsKPiA+ICvCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoHN3aXRjaChyZWcpIHsKPiA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGNhc2Ug
-UENBTDk1M1hfT1VUX1NUUkVOR1RIOgo+ID4gK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgY2FzZSBQ
-Q0FMOTUzWF9JTl9MQVRDSDoKPiA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGNhc2UgUENBTDk1
-M1hfUFVMTF9FTjoKPiA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGNhc2UgUENBTDk1M1hfUFVM
-TF9TRUw6Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBjYXNlIFBDQUw5NTNYX0lOVF9NQVNL
-Ogo+ID4gK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgY2FzZSBQQ0FMOTUzWF9JTlRfU1RBVDoKPiA+
-ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGNhc2UgUENBTDk1M1hfT1VUX0NPTkY6Cj4gPiArwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBwaW5jdHJsID0gKChyZWcgJiBQQ0FMX1BJ
-TkNUUkxfTUFTSykgPj4gMSkKPiA+ICsKPiA+IDB4MjA7Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqBicmVhazsKPiA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGNhc2Ug
-UENBTDY1MjRfSU5UX0VER0U6Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBjYXNlIFBDQUw2
-NTI0X0lOVF9DTFI6Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBjYXNlIFBDQUw2NTI0X0lO
-X1NUQVRVUzoKPiA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGNhc2UgUENBTDY1MjRfT1VUX0lO
-RENPTkY6Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBjYXNlIFBDQUw2NTI0X0RFQk9VTkNF
-Ogo+ID4gK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgcGluY3RybCA9ICgocmVn
-ICYgUENBTF9QSU5DVFJMX01BU0spID4+IDEpCj4gPiArCj4gPiAweDFjOwo+ID4gK8KgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgYnJlYWs7Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqB9Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqByZWdhZGRyID0gcGluY3RybCArIGFk
-ZHIgKyAob2ZmIC8gQkFOS19TWik7Cj4gPiArwqAgwqAgwqAgwqB9IGVsc2Ugewo+ID4gK8KgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgYmFua19zaGlmdCA9IHBjYTk1M3hfYmFua19zaGlmdChjaGlwKTsK
-PiA+ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoGFkZHIgPSAocmVnICYgUENBTF9HUElPX01BU0sp
-IDw8IGJhbmtfc2hpZnQ7Cj4gPiArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBwaW5jdHJsID0gKHJl
-ZyAmIFBDQUxfUElOQ1RSTF9NQVNLKSA8PCAxOwo+ID4gK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-cmVnYWRkciA9IHBpbmN0cmwgfCBhZGRyIHwgKG9mZiAvIEJBTktfU1opOwo+ID4gK8KgIMKgIMKg
-IMKgfQo+ID4gCj4gPiDCoCDCoCDCoCDCoCByZXR1cm4gcmVnYWRkcjsKPiA+IMKgfQo+ID4gCj4g
-PiBBcyBJIHNhaWQsIHdoaWxzdCB0aGUgZnVuY3Rpb25hbGl0eSBvZiB0aGlzIGNoaXAgc2VlbXMg
-dG8gY2xvc2VseQo+ID4gbWF0Y2gKPiA+IHNvbWUgb2YgdGhlIG90aGVycyBkcml2ZW4gYnkgdGhp
-cyBkcml2ZXIsIHRoZSByZWdpc3RlciBvZmZzZXRzIGFyZQo+ID4gcXVpdGUgZGlmZmVyZW50IGFu
-ZCBoYXJkIHRvIGluY29ycG9yYXRlIGNsZWFubHkgaW4gdGhpcyBkcml2ZXIgZHVlCj4gPiB0bwo+
-ID4gdGhlIHdheSBpdCBkZXRlcm1pbmVzIHJlZ2lzdGVyIGxvY2F0aW9ucy4KPiA+IAo+IAo+IAo+
-IEkgdGhpbmsgaXQgY2FuIGJlIGRvbmUgbXVjaCBlYXNpZXIgd2l0aCB0aGUgc3BlY2lmaWMgcmVn
-bWFwIGNhbGxiYWNrcwo+IHNwZWNpZmljIHRvIHRoZXNlIGtpbmQgb2YgY2hpcHMuCj4gwqAKCkFy
-ZSB5b3UgdGhpbmtpbmcgb2YgZGVmaW5pbmcgZnVuY3Rpb25zIHZpYSBzdHJ1Y3QgcmVnbWFwX2J1
-cz8gwqBJZiBzbywKSSdtIG5vdCBzdXJlIGhvdyB0aGlzIGhlbHBzLiBVbmxlc3MgSSd2ZSBtaXNz
-IHVuZGVyc3Rvb2QgaG93IHRoYXQgd291bGQKd29yaywgdGhvc2Ugd291bGQgY29tZSBpbnRvIHBs
-YXkgYWZ0ZXIgcmVnbWFwX2J1bGtfd3JpdGUoKSwgZXRjIGFyZQpjYWxsZWQsIGJ5IHdoaWNoIHBv
-aW50IHRoZSBkZXNpcmVkIChhbmQgaW4gdGhpcyBjYXNlIHdyb25nKSBvZmZzZXQgd2lsbApoYXZl
-IGFscmVhZHkgYmVlbiBjYWxjdWxhdGVkIGluIHBjYTk1M3hfcmVjYWxjX2FkZHIoKS4KCkFtIEkg
-bWlzc2luZyBzb21ldGhpbmc/CgpNYXJ0eW4K
+On 8/24/22 03:29, Lukas Bulwahn wrote:
+> Commit c078290a2b76 ("selftests: include bonding tests into the kselftest
+> infra") adds the bonding tests in the directory:
+> 
+>    tools/testing/selftests/drivers/net/bonding/
+> 
+> The file entry in MAINTAINERS for the BONDING DRIVER however refers to:
+> 
+>    tools/testing/selftests/net/bonding/
+> 
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken file pattern.
+> 
+> Repair this file entry in BONDING DRIVER.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Jonathan, please ack.
+> Jakub, please pick this on top of the commit above.
+> 
+>   MAINTAINERS | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2ce15257725b..7d2141516758 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3671,7 +3671,7 @@ F:	Documentation/networking/bonding.rst
+>   F:	drivers/net/bonding/
+>   F:	include/net/bond*
+>   F:	include/uapi/linux/if_bonding.h
+> -F:	tools/testing/selftests/net/bonding/
+> +F:	tools/testing/selftests/drivers/net/bonding/
+>   
+>   BOSCH SENSORTEC BMA400 ACCELEROMETER IIO DRIVER
+>   M:	Dan Robertson <dan@dlrobertson.com>
+
+Acked-by: Jonathan Toppins <jtoppins@redhat.com>
 

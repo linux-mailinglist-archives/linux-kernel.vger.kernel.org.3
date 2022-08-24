@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AE75A0034
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8958F5A0032
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240012AbiHXRSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S240000AbiHXRQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238271AbiHXRRx (ORCPT
+        with ESMTP id S238625AbiHXRQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:17:53 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BF67C1BF
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661361471; x=1692897471;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z1/O7amcxbtN985zP7+aET+15/X1umd9NB3glHzKYzc=;
-  b=DUBgrFnENRJ/9eiGR3goJktbRbDtptkUmaXllEHdqeH60pUb8dp6Tkaw
-   AFdeTYj0MJeRn1P+O6gR30Z9btE8eW9+1utrDNvUCBOseFrYwNM68N888
-   q3Za+7Uy3IBG1pv0xJXXWIXaZ9ubbmP0hPrC8UtNHSzdxaedtotftFyQh
-   ItPPwoybk42J+D6aYJ3Up+xxXgivycFHbtwYVtvRKAR9huRSto7y6sy4W
-   cTlihmptlhSKxf2o0U2jl43WIkTrYg1VRYr9+BAzBIFXY1OVBv1aDWVmT
-   7vq3kK6QCO1wEZZxdX017ztphyIcn5P1XPk2wV6Hwxbj5mHZ6+EfpPD2O
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="355750989"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="355750989"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 10:17:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="586516159"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 24 Aug 2022 10:17:26 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQu0L-0000t9-1U;
-        Wed, 24 Aug 2022 17:17:25 +0000
-Date:   Thu, 25 Aug 2022 01:16:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:vfio_iommufd 28/29] drivers/vfio/vfio_main.c:618:6:
- warning: no previous prototype for 'vfio_assert_device_open'
-Message-ID: <202208250108.KV0cgfXO-lkp@intel.com>
+        Wed, 24 Aug 2022 13:16:56 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705B97C192
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:16:55 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id v125so20171378oie.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xH1Eh5z9tkUCDvtKIBQEtl0pleKDswE2sHWuXsvAcw0=;
+        b=NsQBcHWGLr6oKTDzceDUWnHHpP7nUmIJa/T1MYZjObZKbcmEaYGtC3QHf2cMnptmuB
+         +DIHBikwmq4vqES5qVSv+ILUA5HZbOYmtabmfRarE872HH2gC5t40PJsuj3INT/jfGI6
+         98swjjo91Qcj16FVsGmWU/KVXeUEzSMoUDXhbH2HfnAP9JmEiao/SD4h4RTqWVnnE6Z9
+         Rl5B0bGRew5yX7LmB08tSGtXR+PH/UqniywSKypYn0ZwYel64JvKcMTOZ6jiYI6STq5S
+         NjyFEpKE/I3//FdFd2MU40jiTUBI91bVckHJEk7UILlyuYMU0N0DS7gBnHCa06yLJY2D
+         eDWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xH1Eh5z9tkUCDvtKIBQEtl0pleKDswE2sHWuXsvAcw0=;
+        b=5Q99Sz12Ez6v6htcAk3g7ai+ehVTj7armP1wQkW50Pe04upbUoTBabmMkHvUxun+Y4
+         vQ6r73WwH8op82yu+QaYB9kkc/noMSMcxnt447m81/OHp7AcWQ832qFk4uTqOlsDyFW8
+         vN6NIKYaKB92u5xCBZ9OItWoo2f9Culh0DmSyERcNfcABI/yL92/ldeBcthK0pLSTOKG
+         qYPntZ80yO4TrIJiY5sL0ppY9Im//8/xELphkBrugms3uzg/N8RDfqE8qQNN0tE3OvW6
+         TZNXjvXNqGb9FOMasrnD6ukJ/yuO98hF1ym2Uo1rcNKtRZYK5kVeGRqUK19117OorN56
+         f0MQ==
+X-Gm-Message-State: ACgBeo0uxnD8Lu/KVLLbrv3sh7KU9ynOuVFJOlH0pNAxQRFL7TqlPGdR
+        W8QSjYyhfFEZVn6+GMJWIH+1QnH5PNwgQ4gKS7ZF/A==
+X-Google-Smtp-Source: AA6agR5DvE8z8vHQGiXGONrNTnfLOoN/gC8Pk9vmYNfXaeUyq1afrkIGeTkjg4811k+u7x6T4BhaIhxgfE2UecdRHAs=
+X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
+ u15-20020a056808150f00b00343320291cfmr3657938oiw.112.1661361414498; Wed, 24
+ Aug 2022 10:16:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <163244601049.30292.5855870305350227855.stgit@bmoger-ubuntu>
+ <CALMp9eSKcwChbc=cgYpdrTCtt49S1uuRdYoe83yph3tXGN6a2Q@mail.gmail.com> <e3718025-682d-469c-eac9-b4995e91dc11@redhat.com>
+In-Reply-To: <e3718025-682d-469c-eac9-b4995e91dc11@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 24 Aug 2022 10:16:42 -0700
+Message-ID: <CALMp9eQCcy-MjB8Su+654XyL3zfR876tdh4QHUjvB7EiNjCU9A@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: Expose Predictive Store Forwarding Disable
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Babu Moger <babu.moger@amd.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        joro@8bytes.org, tony.luck@intel.com, peterz@infradead.org,
+        kyung.min.park@intel.com, wei.huang2@amd.com, jgross@suse.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux vfio_iommufd
-head:   d2ab4343c9f524e9404059830828188b0f8a15b6
-commit: 5016830b7f1d1bf8af24d4ee80fc07a68d835af4 [28/29] vfio: Make vfio_container optionally compiled
-config: sparc64-randconfig-r014-20220824 (https://download.01.org/0day-ci/archive/20220825/202208250108.KV0cgfXO-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/5016830b7f1d1bf8af24d4ee80fc07a68d835af4
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe vfio_iommufd
-        git checkout 5016830b7f1d1bf8af24d4ee80fc07a68d835af4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/vfio/
+On Wed, Aug 24, 2022 at 10:13 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 8/23/22 23:26, Jim Mattson wrote:
+> > For consistency, should this feature be renamed AMD_PSFD, now that
+> > Intel is enumerating PSFD with CPUID.(EAX=7,ECX=2):EDX.PSFD[bit 0]?
+> > Seehttps://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/cpuid-enumeration-and-architectural-msrs.html.
+> >
+> > And, Paolo, why are we carrying X86_FEATURE_PSFD as a private #define
+> > in KVM rather than putting it where it belongs in cpufeatures.h?
+> >
+>
+> Borislav asked to not show psfd in /proc/cpuinfo, because Linux had
+> decided not to control PSF separately; instead it just piggybacked
+> on SSBD which should disable PSF as well.  Honestly I disagree but
+> it's not my area of maintenance.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/vfio/vfio_main.c:618:6: warning: no previous prototype for 'vfio_assert_device_open' [-Wmissing-prototypes]
-     618 | bool vfio_assert_device_open(struct vfio_device *device)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/vfio_assert_device_open +618 drivers/vfio/vfio_main.c
-
-cba3345cc494ad drivers/vfio/vfio.c      Alex Williamson 2012-07-31  616  
-eadd86f835c637 drivers/vfio/vfio.c      Jason Gunthorpe 2022-05-11  617  /* true if the vfio_device has open_device() called but not close_device() */
-79d394f0b0cd09 drivers/vfio/vfio_main.c Jason Gunthorpe 2022-02-18 @618  bool vfio_assert_device_open(struct vfio_device *device)
-eadd86f835c637 drivers/vfio/vfio.c      Jason Gunthorpe 2022-05-11  619  {
-eadd86f835c637 drivers/vfio/vfio.c      Jason Gunthorpe 2022-05-11  620  	return !WARN_ON_ONCE(!READ_ONCE(device->open_count));
-eadd86f835c637 drivers/vfio/vfio.c      Jason Gunthorpe 2022-05-11  621  }
-eadd86f835c637 drivers/vfio/vfio.c      Jason Gunthorpe 2022-05-11  622  
-
-:::::: The code at line 618 was first introduced by commit
-:::::: 79d394f0b0cd096e2eadbcc0e84b9035efa529c8 vfio: Move container code into vfio_container.c
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Do we expose PSFD in KVM for the use of another popular guest OS?

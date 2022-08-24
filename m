@@ -2,224 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA9A59F88D
+	by mail.lfdr.de (Postfix) with ESMTP id D722159F88E
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236655AbiHXLWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S236794AbiHXLW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 07:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234876AbiHXLWV (ORCPT
+        with ESMTP id S235208AbiHXLWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 Aug 2022 07:22:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAC567C82;
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E86555B;
         Wed, 24 Aug 2022 04:22:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F3E61922;
-        Wed, 24 Aug 2022 11:22:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EEEBC433D6;
-        Wed, 24 Aug 2022 11:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661340139;
-        bh=w5MRzI3MoHHAY4MXV0XlJX6VfKgZJhARha/BRw+zguc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MAwD2VBf9fo9j91gaEv74b3534F8vPF4hST2mqIaMAUS9qQd5TNwy9Q5p9qkNGMkm
-         UkR4leHJqjvSiDhWYKkC00Np7PtLrOdaxaCQYBdqUXvXC3LIAnCViE2nvZsF2nyiEf
-         TINsfv2sqRcU5Q6EkwO8Wd7eFTfmTe3lKHGBjmY5LdzVFRrnBC/9zAgRE9ezhW5N0W
-         r5JoGVk79XeDFvtdH9aJDYDiZG4NOHQrRS9ZZj/47ijChK0muX4yiYhXO19uYb1Soj
-         aK0Sy5A2QTc0Sy292WyupMsXI5ENo7WwGpetRc2eHlvyluK5GL23eP1G1th2/m2yxa
-         2vSvNJ/nTb/CQ==
-Received: by pali.im (Postfix)
-        id CEEA57DA; Wed, 24 Aug 2022 13:22:15 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] PCI: pci-bridge-emul: Set position of PCI capabilities to real HW value
-Date:   Wed, 24 Aug 2022 13:21:24 +0200
-Message-Id: <20220824112124.21675-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220703104627.27058-1-pali@kernel.org>
-References: <20220703104627.27058-1-pali@kernel.org>
+Received: by mail-il1-x130.google.com with SMTP id y19so5868697ilq.9;
+        Wed, 24 Aug 2022 04:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=6H2VCsroSwSsOLzUIr02/aGqdyNOr0x+cKsTlTDmAA0=;
+        b=eiIo6d6uy+0dwAXj3EjHaVAu4zFtq3v/3gRH1ubXYl80iimBeVcT8pAGWQKMWOCJuX
+         E+7f18DINDNVsQiHJmdzTNKwhfeE51yiZa9o1Hxm+uV4XJJwnVoe2OB9ZAuidoLeXOH6
+         jq074poFgm+lvwveJqpzBPD8HccBIyndV0ikYMy+SG/PjJm94pD6J5yRNDntSSXx9a99
+         RhyagH3MwqHBb9iwZOBavHuOPinzXzXW9wCv39Kdui7q746cDVxq3wwBrrB4KQs9obyL
+         YjfrhTGUWMCu0h2/fKGO41IZYhi3IBumkw0S/Io0YaW0J017+UftwTtHa26qFIIrMe1g
+         +BXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=6H2VCsroSwSsOLzUIr02/aGqdyNOr0x+cKsTlTDmAA0=;
+        b=I+jApSbPXQw+Elt6YTrzdxhpWFilYxtiWksj6eJqlpgRoIytiLW5uVNdwbI4o5vL90
+         Nfc1+Pcd8rKHLCxV8wrqdbyoIvQkp57okGk6VdEJMfPh9uqc/+hFBm00NISTPmEK/2s/
+         ibxyBKt1TnwC826qlZ1aKtSKP7Al7RjdjcWTlpeSLaf9LCbTS+kr3fKq5YUgcrQU4IAT
+         8si8yULwws1bccWeHTu4Siksv3z6pLt/bPB4fkuWEI0t19rjpyDeKxGT5qCVATGmbxVe
+         K/v/MbF6q9wQxKaRPyXIZdizgJ3J5aWhsRtwkpLjf/x5iE+BBsqGLcKk8DAaXeCk3X0i
+         zdyA==
+X-Gm-Message-State: ACgBeo3gdtCdIovBwKIpZtDR6Y5LaS4vqWfCbs4rPoAqdq2IV1/AO9RM
+        tPLI1G5zEpLMLO4T9wBsPXzdrTeNr2QlYXaHv4w=
+X-Google-Smtp-Source: AA6agR5BpXLO61wS45MEiXcvDBq4DkMt5K0/2ZJw8+Cg7gc798me1DZ5O7mcPgfyHk1hRhflEO5i1L8sN8B4nv/8+o0=
+X-Received: by 2002:a05:6e02:148c:b0:2de:c3b:91d with SMTP id
+ n12-20020a056e02148c00b002de0c3b091dmr1884602ilk.95.1661340139510; Wed, 24
+ Aug 2022 04:22:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
+ <20220823182758.13401-3-khalid.masum.92@gmail.com> <YwW9dBW/0TKHPnC1@kroah.com>
+In-Reply-To: <YwW9dBW/0TKHPnC1@kroah.com>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+Date:   Wed, 24 Aug 2022 17:22:08 +0600
+Message-ID: <CAABMjtHg3Fe3QQgdDd4p=b25JWHKVFtibczLhk1hG0idMyrJhg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: ehci: Prevent possible modulo by zero
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mvebu and aardvark HW have PCIe capabilities on different offset in PCI
-config space. Extend pci-bridge-emul.c code to allow setting custom driver
-custom value where PCIe capabilities starts.
+On Wed, Aug 24, 2022 at 11:56 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 
-With this change PCIe capabilities of both drivers are reported at the same
-location as where they are reported by U-Boot - in their real HW offset.
+>
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
-Changes in v3:
-* Correctly initialize pcie_conf.next pointer for SSID capability (if it is
-  after the PCIe capability)
+> Odd tag format, is that in the documentation?
 
-Changes in v2:
-* Rebase on top of v6.0-rc1, fix usage of PCIE_CAP_PCIEXP
----
- drivers/pci/controller/pci-aardvark.c |  1 +
- drivers/pci/controller/pci-mvebu.c    |  1 +
- drivers/pci/pci-bridge-emul.c         | 48 +++++++++++++++++----------
- drivers/pci/pci-bridge-emul.h         |  2 ++
- 4 files changed, 35 insertions(+), 17 deletions(-)
+You are right. I should have used "Addresses-coverity".
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index 966c8b48bd96..4834198cc86b 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1078,6 +1078,7 @@ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
- 	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
- 
- 	bridge->has_pcie = true;
-+	bridge->pcie_start = PCIE_CORE_PCIEXP_CAP;
- 	bridge->data = pcie;
- 	bridge->ops = &advk_pci_bridge_emul_ops;
- 
-diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-index af915c951f06..0fdbb5585fec 100644
---- a/drivers/pci/controller/pci-mvebu.c
-+++ b/drivers/pci/controller/pci-mvebu.c
-@@ -946,6 +946,7 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
- 	bridge->subsystem_vendor_id = ssdev_id & 0xffff;
- 	bridge->subsystem_id = ssdev_id >> 16;
- 	bridge->has_pcie = true;
-+	bridge->pcie_start = PCIE_CAP_PCIEXP;
- 	bridge->data = port;
- 	bridge->ops = &mvebu_pci_bridge_emul_ops;
- 
-diff --git a/drivers/pci/pci-bridge-emul.c b/drivers/pci/pci-bridge-emul.c
-index 9c2ca28e3ecf..9334b2dd4764 100644
---- a/drivers/pci/pci-bridge-emul.c
-+++ b/drivers/pci/pci-bridge-emul.c
-@@ -22,11 +22,7 @@
- 
- #define PCI_BRIDGE_CONF_END	PCI_STD_HEADER_SIZEOF
- #define PCI_CAP_SSID_SIZEOF	(PCI_SSVID_DEVICE_ID + 2)
--#define PCI_CAP_SSID_START	PCI_BRIDGE_CONF_END
--#define PCI_CAP_SSID_END	(PCI_CAP_SSID_START + PCI_CAP_SSID_SIZEOF)
- #define PCI_CAP_PCIE_SIZEOF	(PCI_EXP_SLTSTA2 + 2)
--#define PCI_CAP_PCIE_START	PCI_CAP_SSID_END
--#define PCI_CAP_PCIE_END	(PCI_CAP_PCIE_START + PCI_CAP_PCIE_SIZEOF)
- 
- /**
-  * struct pci_bridge_reg_behavior - register bits behaviors
-@@ -324,7 +320,7 @@ pci_bridge_emul_read_ssid(struct pci_bridge_emul *bridge, int reg, u32 *value)
- 	switch (reg) {
- 	case PCI_CAP_LIST_ID:
- 		*value = PCI_CAP_ID_SSVID |
--			(bridge->has_pcie ? (PCI_CAP_PCIE_START << 8) : 0);
-+			((bridge->pcie_start > bridge->ssid_start) ? (bridge->pcie_start << 8) : 0);
- 		return PCI_BRIDGE_EMUL_HANDLED;
- 
- 	case PCI_SSVID_VENDOR_ID:
-@@ -365,18 +361,33 @@ int pci_bridge_emul_init(struct pci_bridge_emul *bridge,
- 	if (!bridge->pci_regs_behavior)
- 		return -ENOMEM;
- 
--	if (bridge->subsystem_vendor_id)
--		bridge->conf.capabilities_pointer = PCI_CAP_SSID_START;
--	else if (bridge->has_pcie)
--		bridge->conf.capabilities_pointer = PCI_CAP_PCIE_START;
--	else
--		bridge->conf.capabilities_pointer = 0;
-+	/* If ssid_start and pcie_start were not specified then choose the lowest possible value. */
-+	if (!bridge->ssid_start && !bridge->pcie_start) {
-+		if (bridge->subsystem_vendor_id)
-+			bridge->ssid_start = PCI_BRIDGE_CONF_END;
-+		if (bridge->has_pcie)
-+			bridge->pcie_start = bridge->ssid_start + PCI_CAP_SSID_SIZEOF;
-+	} else if (!bridge->ssid_start && bridge->subsystem_vendor_id) {
-+		if (bridge->pcie_start - PCI_BRIDGE_CONF_END >= PCI_CAP_SSID_SIZEOF)
-+			bridge->ssid_start = PCI_BRIDGE_CONF_END;
-+		else
-+			bridge->ssid_start = bridge->pcie_start + PCI_CAP_PCIE_SIZEOF;
-+	} else if (!bridge->pcie_start && bridge->has_pcie) {
-+		if (bridge->ssid_start - PCI_BRIDGE_CONF_END >= PCI_CAP_PCIE_SIZEOF)
-+			bridge->pcie_start = PCI_BRIDGE_CONF_END;
-+		else
-+			bridge->pcie_start = bridge->ssid_start + PCI_CAP_SSID_SIZEOF;
-+	}
-+
-+	bridge->conf.capabilities_pointer = min(bridge->ssid_start, bridge->pcie_start);
- 
- 	if (bridge->conf.capabilities_pointer)
- 		bridge->conf.status |= cpu_to_le16(PCI_STATUS_CAP_LIST);
- 
- 	if (bridge->has_pcie) {
- 		bridge->pcie_conf.cap_id = PCI_CAP_ID_EXP;
-+		bridge->pcie_conf.next = (bridge->ssid_start > bridge->pcie_start) ?
-+					 bridge->ssid_start : 0;
- 		bridge->pcie_conf.cap |= cpu_to_le16(PCI_EXP_TYPE_ROOT_PORT << 4);
- 		bridge->pcie_cap_regs_behavior =
- 			kmemdup(pcie_cap_regs_behavior,
-@@ -459,15 +470,17 @@ int pci_bridge_emul_conf_read(struct pci_bridge_emul *bridge, int where,
- 		read_op = bridge->ops->read_base;
- 		cfgspace = (__le32 *) &bridge->conf;
- 		behavior = bridge->pci_regs_behavior;
--	} else if (reg >= PCI_CAP_SSID_START && reg < PCI_CAP_SSID_END && bridge->subsystem_vendor_id) {
-+	} else if (reg >= bridge->ssid_start && reg < bridge->ssid_start + PCI_CAP_SSID_SIZEOF &&
-+		   bridge->subsystem_vendor_id) {
- 		/* Emulated PCI Bridge Subsystem Vendor ID capability */
--		reg -= PCI_CAP_SSID_START;
-+		reg -= bridge->ssid_start;
- 		read_op = pci_bridge_emul_read_ssid;
- 		cfgspace = NULL;
- 		behavior = NULL;
--	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
-+	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
-+		   bridge->has_pcie) {
- 		/* Our emulated PCIe capability */
--		reg -= PCI_CAP_PCIE_START;
-+		reg -= bridge->pcie_start;
- 		read_op = bridge->ops->read_pcie;
- 		cfgspace = (__le32 *) &bridge->pcie_conf;
- 		behavior = bridge->pcie_cap_regs_behavior;
-@@ -538,9 +551,10 @@ int pci_bridge_emul_conf_write(struct pci_bridge_emul *bridge, int where,
- 		write_op = bridge->ops->write_base;
- 		cfgspace = (__le32 *) &bridge->conf;
- 		behavior = bridge->pci_regs_behavior;
--	} else if (reg >= PCI_CAP_PCIE_START && reg < PCI_CAP_PCIE_END && bridge->has_pcie) {
-+	} else if (reg >= bridge->pcie_start && reg < bridge->pcie_start + PCI_CAP_PCIE_SIZEOF &&
-+		   bridge->has_pcie) {
- 		/* Our emulated PCIe capability */
--		reg -= PCI_CAP_PCIE_START;
-+		reg -= bridge->pcie_start;
- 		write_op = bridge->ops->write_pcie;
- 		cfgspace = (__le32 *) &bridge->pcie_conf;
- 		behavior = bridge->pcie_cap_regs_behavior;
-diff --git a/drivers/pci/pci-bridge-emul.h b/drivers/pci/pci-bridge-emul.h
-index 71392b67471d..2a0e59c7f0d9 100644
---- a/drivers/pci/pci-bridge-emul.h
-+++ b/drivers/pci/pci-bridge-emul.h
-@@ -131,6 +131,8 @@ struct pci_bridge_emul {
- 	struct pci_bridge_reg_behavior *pci_regs_behavior;
- 	struct pci_bridge_reg_behavior *pcie_cap_regs_behavior;
- 	void *data;
-+	u8 pcie_start;
-+	u8 ssid_start;
- 	bool has_pcie;
- 	u16 subsystem_vendor_id;
- 	u16 subsystem_id;
--- 
-2.20.1
+> You only ever use likely/unlikely if you can document how it matters
+> with a benchmark or other way to notice the difference.  Otherwise let
+> the compiler and the CPU do their magic, they know how to do this better
+> than us.
 
+Thanks for the important information.
+>
+> > +             return -1;
+
+I noticed. The function returns -1 on failure, everywhere so I used that.
+I guess making them return correct error numbers using macros would
+be a patch.
+>
+> A real error number should be returned here if this was valid.
+>
+> But as Alan said, coverity is often wrong, and unless you can prove
+> otherwise, this patch isn't valid.
+
+Got you.
+>
+> thanks,
+>
+> greg k-h
+
+  -- Khalid Masum

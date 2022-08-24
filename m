@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000DD59FFA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F2859FFAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238483AbiHXQjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S238866AbiHXQlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiHXQjl (ORCPT
+        with ESMTP id S238780AbiHXQkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:39:41 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C732B9C8C5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:39:39 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id f3so5906853ilq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=YYuOmDFh7du2x98VE/mOc51jJKR8qw9B+E6i0d7pP4c=;
-        b=2osH0E3s2aIGIgpQfUr6UMVnb9OemU/K9P+fKPp15btx/lt4v2xQGvvdHQW/BrGVGo
-         xMaOA7imJR1O+dCiuYnf5gCne3/L2zGa8Xb7xIdCupIpBTi6kQfeW+8AwfJV2EKc5Rhg
-         R4zzTDc3Qkf+7uFjnDBhpcek2fqlr4Bh06zla4uKHdxai8u45aSjFxipfU8ytsTTDATS
-         3Umob1+60IC2+/39kbEisYTeZEvk3QxNCbpDInTa7RgzHsuk+qWbKifk4grBgA1JnACm
-         5JPz6Cpq0r3ZrNJyJLnVNfz2SJCP41REAuHUL2D3Em73C9Pe7mHbQ20LH13JPqwipbu6
-         fBAQ==
+        Wed, 24 Aug 2022 12:40:17 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA323B4AE;
+        Wed, 24 Aug 2022 09:40:14 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id c2so16151688plo.3;
+        Wed, 24 Aug 2022 09:40:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=YYuOmDFh7du2x98VE/mOc51jJKR8qw9B+E6i0d7pP4c=;
-        b=F2Q1aMGtEeJN2Ftw90fq6x88H1BOV3tzZYhx/Fvs6k/c1bz+MyZXYVFDfj/dpG1QZH
-         ym9w0qpRShQ/l92+aeroKUtgfCpAQIeAtKoyr81yVxMLh2p1I7cO9ZpS2VmqqGxIVuI4
-         o1V2cqR67xLumIU8P1/aoFSDahWrVehE9ymHNJLA1TYX4AxHArkGZ+FUPUrlmI0sVXfr
-         U9BYtKEkQYvSpuS1rG/wcFtOlo00Xmx8jK0TrtFSPrmcHC67Oow1W1NGT/8NetkeaQl/
-         BAEzB08begzpzUARF+T4p9LU26wg64PpFqcaaqhtNtniOl9JeH6saBycjLnk1Ll0rJK/
-         PLrA==
-X-Gm-Message-State: ACgBeo1MpEDfj+/aeT0tFvs9FsHNsfsdxLPpEgexL2ZR2WMD187bYC5a
-        irvv9D/3nXKSBM3oceK73cnJow==
-X-Google-Smtp-Source: AA6agR4WxPc6UpX/RJ2bhYh0u8Q+cvbo3acY5MP+3p1XcM8uRlUW1OUyzidoJKCRjfyt1stqUfwAig==
-X-Received: by 2002:a92:cf52:0:b0:2e8:7021:6c03 with SMTP id c18-20020a92cf52000000b002e870216c03mr2411659ilr.193.1661359179189;
-        Wed, 24 Aug 2022 09:39:39 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id p9-20020a022909000000b00349f40c61edsm2026714jap.73.2022.08.24.09.39.38
+        bh=kCL4BW6wndWM8jV/We7eMfUU516GeaRGxdOb22z1qxA=;
+        b=29wWt4rfV4BfD8PqMI+VDB+eVzmrzNr2x1o947HHK9kEKQYEMmR7VOxe0aNxqS9hcm
+         YAOw5Lwko+iu0Z7yopNqxXHNLUNS/q2GUQ9Y6tbHMpFJ7nQauVJMbH2cSFl/nQe4580u
+         aKVzK2cdxIQySnqL8EIet7ZhfjCu2rHqG1Dm1TLuu4V1LHAo+0vwEKv7tdOhCFR6b7qK
+         jvsKhWPddWiHAHWb0Gx+ZE3sk5D7NlFnN8llgneqkM+6i0NxLx1e8eUBhcSTSl1/nOAn
+         l6iLdIXlPAN4RAjQ608xMvPS/RIahOIxaY1BydTmxm9ZmXptXYENpA0VNwez/7H9Wpzf
+         FCxg==
+X-Gm-Message-State: ACgBeo1mOZoYm5P/iR/xZGKoUqF2Fc/pSYNcKO1aIUJiH8+DooqeIjnd
+        f5+RSreDazLQytRmu/q6sO4=
+X-Google-Smtp-Source: AA6agR6uPDXioeTI1NTOxX6jKOOFXqiJrzzdPMLFlc9WedHU9zymkMUveLdDcV9EyfGywdAMjRHegg==
+X-Received: by 2002:a17:90b:3ec9:b0:1f5:7e38:1fd1 with SMTP id rm9-20020a17090b3ec900b001f57e381fd1mr9075919pjb.101.1661359214307;
+        Wed, 24 Aug 2022 09:40:14 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:222f:dc9c:99a3:dfb8? ([2620:15c:211:201:222f:dc9c:99a3:dfb8])
+        by smtp.gmail.com with ESMTPSA id j18-20020a170902da9200b00172a4b6bb15sm6544241plx.13.2022.08.24.09.40.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 09:39:38 -0700 (PDT)
-Message-ID: <fa23ffc2-755e-7e04-362d-68fad7d69c85@kernel.dk>
-Date:   Wed, 24 Aug 2022 10:39:37 -0600
+        Wed, 24 Aug 2022 09:40:12 -0700 (PDT)
+Message-ID: <9bd8c0f6-f7d2-e5ae-fbe9-d9a9a569adaa@acm.org>
+Date:   Wed, 24 Aug 2022 09:40:10 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [syzbot] general protection fault in __io_sync_cancel
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] scsi: ufs: ufsfbo: Introduce File Based Optimization
+ feature
 Content-Language: en-US
-To:     syzbot <syzbot+bf76847df5f7359c9e09@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000e9f4e905e6ff4495@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000e9f4e905e6ff4495@google.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Bean Huo <huobean@gmail.com>,
+        Jiaming Li <lijiamingsofine@gmail.com>, avri.altman@wdc.com,
+        alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lijiaming3 <lijiaming3@xiaomi.com>
+References: <20220824084633.14428-1-lijiamingsofine@gmail.com>
+ <347dae29c07fe13e6974b0e59e127c399f63ef69.camel@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <347dae29c07fe13e6974b0e59e127c399f63ef69.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,9 +68,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.dk/linux-block io_uring-6.0
+On 8/24/22 07:16, Bean Huo wrote:
+> Is this a UFS extended standard or vendor specific feature?
 
--- 
-Jens Axboe
+Hi Bean,
 
+This feature has been standardized by JEDEC. My feedback to the sponsors 
+of this feature a few months ago was that FBO will become obsolete once 
+all UFS devices support Zoned storage for UFS. The FBO standard defines 
+an interface for telling UFS devices about the relationship between LBAs 
+and files. This allows UFS devices to defragment files. UFS devices 
+won't need that information for zoned LUNs since for zoned LUNs the host 
+software will be responsible for ensuring that files occupy a contiguous 
+range of LBAs.
 
+Thanks,
+
+Bart.

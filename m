@@ -2,87 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED705A0188
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AED5A0194
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239788AbiHXSox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
+        id S239889AbiHXSs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbiHXSou (ORCPT
+        with ESMTP id S235430AbiHXSsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:44:50 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84E362D9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:44:48 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id l8so7676234lfc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JTYkOn2/lJTDmbf1Y5o6kNVGh/wX3WwhysufbkHfkwE=;
-        b=ITiSSNp34hiy/4MmcU+rJfM6ZUYMX8XQuWeU/gRfqufx92hmheTjQV9dQ4RZT/X6AW
-         mGKIVuBDQskZHbvErnRVFXnY30xzHX4/muyCFkPLdW67IjnLDOA2GvMPoM+ZIlEIu6cY
-         CPob6W8ogYEDqiUNIvxloyOBGeV3mwQqDk8gCmCjOudypaMdUaxZKLMKNtb4yjMPqXap
-         fQgm/iH26WfW5w/6T0GJAMGjh9I7IYX7mhfVs5ZaKENu59/AcP6QIjoMxXrIjrOE/U3B
-         hTQrXaAmlCkSF/eKm5pMbYbG6Ux7ZSyiMkrWrdSD5rJUEk3KZe0UrIXbGIM/XaBIMa3N
-         tXKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JTYkOn2/lJTDmbf1Y5o6kNVGh/wX3WwhysufbkHfkwE=;
-        b=JTFKWQ8+77zLsPSVXnqTSrQ8R/uZGR8zAvWc3HgUyyPQir8bBULMqs9L3aApVoZYhF
-         LHtWY78CxqavVL0kXDwKT93WTuCM+lhP9bBmOlB1jqd80FXktXGjBJshOqO3tT1oomhc
-         nYoJQzim8BEEbr4t6A0G/mpr/LJLKt1WP6o2F7uHb6wOorZKNjk7o/Rx5DexmHd3DJ5t
-         FaYZmqZnL87B9dquPXIISDNhPX/YDutoHVZd+4P/yLqjDhFKWvIlNl/YrPjYSdZCLvai
-         YCb19v0Dwx7UTG03y4D04vfqGonLJHOTnI0AscJRHCOSsvlNEkbWLdglg2OcJUwe93XR
-         XkZw==
-X-Gm-Message-State: ACgBeo3YB00PF0uOUEb3G6RIhRv9WldgwI8ZgFg9etiOw+Crn93Ecp/f
-        DbIqpm4JaC4ZJeIhygEyCpjazHSkYwF3Ry7PQvErgUEhpFc=
-X-Google-Smtp-Source: AA6agR7E6A7xBhZ8TnKs/WZv8qFVsc3CQb2aM5QheWrBMPV8dC7OHW37Q6b9CHQSET33+I8e7EyDdD0eop33I/LPo/8=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr83360lfr.647.1661366686878; Wed, 24 Aug
- 2022 11:44:46 -0700 (PDT)
+        Wed, 24 Aug 2022 14:48:54 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C5D7AC29;
+        Wed, 24 Aug 2022 11:48:53 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F7DD1EC0589;
+        Wed, 24 Aug 2022 20:48:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661366928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=WK0v1hXG889a9fqR0dwBxVsBZk9FUHaTtJZfPydUhIc=;
+        b=pqc6eljUoZBxhlQgJ2cDUW+RwMQZhRdZ1mo8y3pqZKKKvvGBXhK38x2By3ZTBXhsRdXiJl
+        yZY8O9TbYmwKKqC2xzAFirjjOaUzktvF15qckD8yWgmTXaaHBH58L/aBc/rhFzLLqc29PT
+        yp+B98UZgihGoEdu8p8pRdaIJaZvcx0=
+Date:   Wed, 24 Aug 2022 20:48:44 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Asish Kalra <ashish.kalra@amd.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH] x86/sev: Don't use cc_platform_has() for early SEV-SNP
+ calls
+Message-ID: <YwZyjE6BmnvxHXcR@zn.tnic>
+References: <0c9b9a6c33ff4b8ce17a87a6c09db44d3b52bad3.1661291751.git.thomas.lendacky@amd.com>
+ <10bc452f-3564-e41b-836d-e135a8f4260d@intel.com>
 MIME-Version: 1.0
-References: <20220824152420.20547-1-bp@alien8.de> <20220824172929.GA25951@gate.crashing.org>
-In-Reply-To: <20220824172929.GA25951@gate.crashing.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 24 Aug 2022 11:44:35 -0700
-Message-ID: <CAKwvOdm+yFhZ2pYLJ5vpj1YyNJmG=UVF4cTz_m+0UfDGNGsRbQ@mail.gmail.com>
-Subject: Re: [PATCH] x86/sev: Mark snp_abort() noreturn
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
-        Michael Matz <matz@suse.de>, linux-toolchains@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <10bc452f-3564-e41b-836d-e135a8f4260d@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 10:33 AM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> Hi!
->
-> On Wed, Aug 24, 2022 at 05:24:20PM +0200, Borislav Petkov wrote:
-> > Mark both the function prototype and definition as noreturn in order to
-> > prevent the compiler from doing transformations which confuse objtool
-> > like so:
-> >
-> >   vmlinux.o: warning: objtool: sme_enable+0x71: unreachable instruction
->
-> Would -Wmissing-noreturn have caught this?
+On Wed, Aug 24, 2022 at 11:43:10AM -0700, Dave Hansen wrote:
+> So, we don't have *ANY* control over where the compiler uses jump
+> tables.  The kernel just happened to add some code that uses them, fell
+> over, and this adds a hack to get booting again.
+> 
+> Isn't this a bigger problem?
 
-Oh, that's shiny. Is that relatively new?
+I had the same question already. Was thinking of maybe disabling
+the compiler from producing jump tables in the ident-mapped code.
+Tom's argument is that that might prevent the compiler from doing
+optimizations but I haven't talked to compiler folks whether those
+optimizations are even worth the effort.
+
+Regardless, the potential problem is limited:
+
+"# (jump-tables are implicitly disabled by RETPOLINE)"
+
+i.e., only RETPOLINE=n builds for now which should be a minority?
+
+I guess when this explodes somewhere else again, we will have to
+generalize a fix.
+
+Thx.
+
 -- 
-Thanks,
-~Nick Desaulniers
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

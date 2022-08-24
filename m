@@ -2,347 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43AD59F346
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501A259F348
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbiHXF6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 01:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S234770AbiHXF67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 01:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiHXF6q (ORCPT
+        with ESMTP id S234187AbiHXF6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 01:58:46 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FEA910B5;
-        Tue, 23 Aug 2022 22:58:45 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-335624d1e26so434789247b3.4;
-        Tue, 23 Aug 2022 22:58:45 -0700 (PDT)
+        Wed, 24 Aug 2022 01:58:53 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD156915CA;
+        Tue, 23 Aug 2022 22:58:52 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id w188so8508298vsb.10;
+        Tue, 23 Aug 2022 22:58:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=PU8cmQdn0F5wEVMHI2WgiLgc0xHjaY5+OAnGBiLennw=;
-        b=IyBm7nbVJ5OtlgAoyBHDaodNuky5oJ/6uR5nK76nonqETiuZBtSCgOTKKoaVQs4ufj
-         /qtuF2grwjFCq9OwTXHoxIH8fr+iBzO7jzdKgRX9BCuYOY9/qCfKN17ZhG416GtA96+9
-         hivNuxERnjuS3C3s3mjXTnkMKg7rOKwfDz9/0VCms8GLcvZ4GKedM3nP9MKJVKFOSgcx
-         +Hl4YSYglcbi7s/MZ2UMHAfA077qBQWolGjOz+95YnSQ8rYs4IsYmt84g684dpFko+zu
-         BUJwy2a2eeKJNpeWRrPGsXIaCQq2S9mobthw6toLyty4J4xI8ukxox7Vo8VphHQ8/MAm
-         P2vg==
+        bh=cyO/HiQvv5LR5kyCr52FjQTo+TbPW6VjEcp4BAuXvbw=;
+        b=aLJz5dXNnZFTQkeHOg0b4GBOITFuCZA3r9BV8r4dSNcyG7d+8IQNiK5HF7RmN0PJu6
+         0c4jnfl9wrG+TRq6f3GBc3SWjkfvVaia5IlSoTKx6hXsHptqxUyi5l7xkuC65t0oYM/P
+         G4oUGIxpgiXhsNYlwn+Wa4AknRwLWeUYHMTRsoG8iD5CSQtWBADBRfc72cE8VVcqlj8e
+         Xu/k9Br3Q8wVOxAX1sfJgh2fCSJU/vyW04QwqxALGFeFktmG7AWJc7x5/4ANjPq+BUDx
+         3vMiCKGQw+oBO2m2C25BuiWS+tidxf5dnsBT7g7khphYtYGrVFZvfRgOGfhKQqABt9y2
+         g13g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=PU8cmQdn0F5wEVMHI2WgiLgc0xHjaY5+OAnGBiLennw=;
-        b=slAs5UoNF125Qt2VpJkpsecmkQt9AKxmx7qT8HZBmhZACepkfsya1BHysmEp4ipweC
-         2hymQ3BSikovgsp/ux6TZs+FNdTNwuhAP1hvjkUxKQLxG+BGPUSFXwtMRYFntUcN29X2
-         0lpTwA0JMOUHL5t8uzves4awVejBLKdaG0IzlGMoq/uMTTE1WeVKLhsmiIYsghdLU4ee
-         LEqZjNrH2tD+Wh/m7kHprA9xNcjlLpUZ9mAmxlNaybtMU44+67xD6mObpK3zI44lEO5G
-         VF32YQMOLLwSBgemhr8ouTgab0tS/BBFLXUkbiI8nNbAGE4v6DqG1D0dGS6SMIdQZVKG
-         Titw==
-X-Gm-Message-State: ACgBeo3Wb4Yhh9JQEBsVlSw8L8sBRASnqtR95jafQfypb/B0yUbCSpWD
-        3UtX9aud+lRLxEkwvrlv3RXM9zGIM7Tq/IxPvBxToUVL7CoMcw==
-X-Google-Smtp-Source: AA6agR4+xVrjmoQhzAbX6hhI6O2iaAe0MZdaLyNA8+V56iuXkGonxPvM5EFFyQEKYNv6vj+GFQxL7C7DZ5abI9igMBE=
-X-Received: by 2002:a81:7c2:0:b0:335:90cb:1962 with SMTP id
- 185-20020a8107c2000000b0033590cb1962mr29118746ywh.173.1661320724399; Tue, 23
- Aug 2022 22:58:44 -0700 (PDT)
+        bh=cyO/HiQvv5LR5kyCr52FjQTo+TbPW6VjEcp4BAuXvbw=;
+        b=jqVRNU3FqZOCk7d5V5z48UO1qnuMQQPwktGDsdNuod9rN0oAPOlNWVIjEFrB0isV0D
+         zT79PqcrSkxfzTbhIYDodR02Og18jbJHckjgtjrRBcarUu35k4CMrTwN5tMkBlJ/XJcY
+         REdON2xvwDMj4IDRfeYYmQtL5puWY4A44QdmSRr/hhuwBmYOxT6HF6b7ZS2rIQ47pX0v
+         EKBrG6j1xvudWYiG4vdWogFDytognf6pIdbH/sxJC49K+D8Ik/Z+HRP5A+nQQOp1a7dc
+         V6+za4PrJz9nVKfkKTTUqQtiFTdiDHyg0rbWy05iquzlR7ULz7hj8xWoJZWaRj6rqRx1
+         6waA==
+X-Gm-Message-State: ACgBeo1g+Fzx18x3UYm7EA7Ru7qqsPqcEjoexXdpfnJ5BTqllPYt4HvP
+        No4e3d4mQSgnxfle+g6An4VIpgMPB6SKkgtgHi8=
+X-Google-Smtp-Source: AA6agR79RFxCJ7V2XPxa+/SFic6Z9RotTxvMBTKU1BwN/Q29XEwR1tZ4M5bE8LWuae9pCvYR6BWb3uxqADEeYz399Gc=
+X-Received: by 2002:a67:ce90:0:b0:388:4905:1533 with SMTP id
+ c16-20020a67ce90000000b0038849051533mr11623736vse.17.1661320731578; Tue, 23
+ Aug 2022 22:58:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <1660878283-9512-1-git-send-email-Duke.Du@quantatw.com> <20220819133458.GC3108215@roeck-us.net>
-In-Reply-To: <20220819133458.GC3108215@roeck-us.net>
-From:   Duke Du <dukedu83@gmail.com>
-Date:   Wed, 24 Aug 2022 13:58:33 +0800
-Message-ID: <CAJqQiD39b=n-Lsza_YUPQR2jm49a3ZLxT-x7eYUv=yhD4fiDJQ@mail.gmail.com>
-Subject: Re: [PATCH v3] hwmon: Add driver for the TEXAS TPS546D24 Buck Converter.
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fran.hsu@quantatw.com, charles.hsu@quantatw.com,
-        george.hung@quantatw.com, duke.du@quantatw.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <166126004083.548536.11195647088995116235.stgit@warthog.procyon.org.uk>
+ <166126007561.548536.12315282792952269215.stgit@warthog.procyon.org.uk>
+In-Reply-To: <166126007561.548536.12315282792952269215.stgit@warthog.procyon.org.uk>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 24 Aug 2022 00:58:40 -0500
+Message-ID: <CAH2r5mur6vxRqwdmV8hLhvb3SZLKRvdUJjmMFJoVLev9a7TM3A@mail.gmail.com>
+Subject: Re: [PATCH 5/5] smb3: fix temporary data corruption in insert range
+To:     David Howells <dhowells@redhat.com>
+Cc:     Steve French <sfrench@samba.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000106b8c05e6f6609b"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
-Thanks for your reply !
-But I have some confusion as following, please help to give me some feedback.
-Thanks a lot !
+--000000000000106b8c05e6f6609b
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 19, 2022 at 9:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
+lightly updated to move inode lock down one line and fix signed off
+
+On Tue, Aug 23, 2022 at 8:24 AM David Howells via samba-technical
+<samba-technical@lists.samba.org> wrote:
 >
-> On Fri, Aug 19, 2022 at 11:04:43AM +0800, Duke Du wrote:
-> > Add the pmbus driver for TEXAS tps546d24 Buck Converter. The
-> > tps546d24 PMBUS_VOUT_MODE is 0x97 (i.e. the bit 5~7 are 100)
-> > which could not meet the standard pmbus spec, the standard mode
-> > of PMBUS_VOUT_MODE must be 000 (linear foramt) or 001 (vid format).
-> > Make the tps546d24 PMBUS_VOUT_MODE return value 0x17 (i.e. the
-> > bit5~7 are 000), VOUT returned value is linear11.
-> >
+> insert range doesn't discard the affected cached region
+> so can risk temporarily corrupting file data.
 >
-> First of all, the above should be documented as comment in the
-> implementation.
+> Also includes some minor cleanup (avoiding rereading
+> inode size repeatedly unnecessarily) to make it clearer.
 >
-> Second, this is actually problematic. In PMBus version 1.3.1, bit
-> 7 of PMBUS_VOUT_MODE no longer describes the mode (linear, vid, direct,
-> IEEE) but Absolute vs/ Relative VOUT voltages. This affects vout fault
-> and warning limits. If the relative mode bit is set, those limits
-> are supposed to reflect percentages, not absolute voltages.
+> Cc: stable@vger.kernel.org
+> Fixes: 7fe6fe95b9360 ("cifs: FALLOC_FL_INSERT_RANGE support")
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Signed-off-by: Steve French <stfrench@microsoft.com>
+> cc: Ronnie Sahlberg <lsahlber@redhat.com>
+> ---
 >
-> This means that the driver interprets vout voltage limits wrongly,
-> at least if the chip works as described in the datasheet. Changing
-> the reported value of PMBUS_VOUT_MODE is actually counter-productive.
+>  fs/cifs/smb2ops.c |   24 ++++++++++++++++--------
+>  1 file changed, 16 insertions(+), 8 deletions(-)
 >
-> This means we'll need a number of changes. At the very least, the
-> PMBus core needs to be be modified to only use bit 5 and 6 to determine
-> the mode. On top of that, the driver probe function should update
-> VOUT_MODE and clear bit 7. It might also make sense to warn in the
-> PMBus core if mode bit 7 is set.
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index 5b5ddc1b4638..00c8d6a715c7 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -3722,35 +3722,43 @@ static long smb3_insert_range(struct file *file, struct cifs_tcon *tcon,
+>         struct cifsFileInfo *cfile = file->private_data;
+>         struct inode *inode = file_inode(file);
+>         __le64 eof;
+> -       __u64  count;
+> +       __u64  count, old_eof;
+> +
+> +       inode_lock(inode);
+>
+>         xid = get_xid();
+>
+> -       if (off >= i_size_read(inode)) {
+> +       old_eof = i_size_read(inode);
+> +       if (off >= old_eof) {
+>                 rc = -EINVAL;
+>                 goto out;
+>         }
+>
+> -       count = i_size_read(inode) - off;
+> -       eof = cpu_to_le64(i_size_read(inode) + len);
+> +       count = old_eof - off;
+> +       eof = cpu_to_le64(old_eof + len);
+>
+> +       filemap_invalidate_lock(inode->i_mapping);
+>         filemap_write_and_wait(inode->i_mapping);
+> +       truncate_pagecache_range(inode, off, old_eof);
+>
+>         rc = SMB2_set_eof(xid, tcon, cfile->fid.persistent_fid,
+>                           cfile->fid.volatile_fid, cfile->pid, &eof);
+>         if (rc < 0)
+> -               goto out;
+> +               goto out_2;
+>
+>         rc = smb2_copychunk_range(xid, cfile, cfile, off, count, off + len);
+>         if (rc < 0)
+> -               goto out;
+> +               goto out_2;
+>
+> -       rc = smb3_zero_range(file, tcon, off, len, 1);
+> +       rc = smb3_zero_data(file, tcon, off, len, xid);
+>         if (rc < 0)
+> -               goto out;
+> +               goto out_2;
+>
+>         rc = 0;
+> +out_2:
+> +       filemap_invalidate_unlock(inode->i_mapping);
+>   out:
+> +       inode_unlock(inode);
+>         free_xid(xid);
+>         return rc;
+>  }
+>
+>
 >
 
-When the vout mode bit 7 is set, we update vout mode and clear bit 7
-in the driver probe function, this operation is the same as changing
-the reported value of PMBUS_VOUT_MODE ?
-Maybe I misunderstood, could you please help to explain clearly about this ?
-Thanks again for your help :)
 
+-- 
 Thanks,
-Duke
 
-> An alternative to the second change would be to implement relative
-> vout support in the PMBus core, but that would be much more complex.
-> We could also clear the relative bit in the PMBus core, but that might
-> lead to unexpected side effects (we don't know how various chips
-> respond to that) and thus probably not be a good idea.
->
-> > Signed-off-by: Duke Du <Duke.Du@quantatw.com>
->
-> This e-mail address does not match the e-mail address used to send
-> the patch, resulting in a checkpatch warning. Please fix.
->
-> More comments inline.
->
-> Thanks,
-> Guenter
->
-> > ---
-> > Change in v1:
-> >     Initial patchset.
-> > Change in v2:
-> >     Correct the tps546d24.rst format.
-> > Change in v3:
-> >     1. Modify the patch description.
-> >     2. Put the change log between the dashes and diffstat.
-> > ---
-> > ---
-> >  Documentation/hwmon/index.rst     |  1 +
-> >  Documentation/hwmon/tps546d24.rst | 35 +++++++++++++++++++
-> >  MAINTAINERS                       |  7 ++++
-> >  drivers/hwmon/pmbus/Kconfig       |  9 +++++
-> >  drivers/hwmon/pmbus/Makefile      |  1 +
-> >  drivers/hwmon/pmbus/tps546d24.c   | 73 +++++++++++++++++++++++++++++++++++++++
-> >  6 files changed, 126 insertions(+)
-> >  create mode 100644 Documentation/hwmon/tps546d24.rst
-> >  create mode 100644 drivers/hwmon/pmbus/tps546d24.c
-> >
-> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> > index f7113b0..d3eede4 100644
-> > --- a/Documentation/hwmon/index.rst
-> > +++ b/Documentation/hwmon/index.rst
-> > @@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
-> >     tps23861
-> >     tps40422
-> >     tps53679
-> > +   tps546d24
-> >     twl4030-madc-hwmon
-> >     ucd9000
-> >     ucd9200
-> > diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
-> > new file mode 100644
-> > index 0000000..3061fd8
-> > --- /dev/null
-> > +++ b/Documentation/hwmon/tps546d24.rst
-> > @@ -0,0 +1,35 @@
-> > +.. SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +Kernel driver tps546d24
-> > +======================
-> > +
-> > +Supported chips:
-> > +
-> > +  * TI TPS546D24
-> > +
-> > +    Prefix: 'tps546d24'
-> > +
-> > +    Addresses scanned: -
-> > +
-> > +    Datasheet: https://www.ti.com/lit/gpn/tps546d24
-> > +
-> > +Author: Duke Du <dukedu83@gmail.com>
->
-> This needs to match Author and Signed-off-by:. This applies to all
-> e-mail addresses.
->
-> > +
-> > +
-> > +Description
-> > +-----------
-> > +
-> > +The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
-> > +of high frequency operation and 40-A current output from a 7-mm x 5-mm
-> > +package.
-> > +
-> > +Two, three, and four TPS546D24A devices can be interconnected
-> > +to provide up to 160 A on a single output. The device has an option to
-> > +overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
-> > +pin to improve efficiency and reduce power dissipation of the converter.
-> > +
-> > +
-> > +Platform data support
-> > +---------------------
-> > +
-> > +The driver supports standard PMBus driver platform data.
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 8a5012b..fa2d4fb 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -20583,6 +20583,13 @@ Q:   https://patchwork.kernel.org/project/linux-integrity/list/
-> >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> >  F:   drivers/char/tpm/
-> >
-> > +TPS546D24 DRIVER
-> > +M:   Duke Du <dukedu83@gmail.com>
-> > +L:   linux-hwmon@vger.kernel.org
-> > +S:   Maintained
-> > +F:   Documentation/hwmon/tps546d24.rst
-> > +F:   drivers/hwmon/pmbus/tps546d24.c
-> > +
-> >  TRACING
-> >  M:   Steven Rostedt <rostedt@goodmis.org>
-> >  M:   Ingo Molnar <mingo@redhat.com>
-> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> > index 951e4a9..89668af 100644
-> > --- a/drivers/hwmon/pmbus/Kconfig
-> > +++ b/drivers/hwmon/pmbus/Kconfig
-> > @@ -397,6 +397,15 @@ config SENSORS_TPS53679
-> >         This driver can also be built as a module. If so, the module will
-> >         be called tps53679.
-> >
-> > +config SENSORS_TPS546D24
-> > +     tristate "TPS546D24"
-> > +     help
-> > +       If you say yes here you get hardware monitoring support for TEXAS
-> > +       TPS546D24.
-> > +
-> > +       This driver can also be built as a module. If so, the module will
-> > +       be called tps546d24
-> > +
-> >  config SENSORS_UCD9000
-> >       tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
-> >       help
-> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> > index e2fe86f..0002dbe 100644
-> > --- a/drivers/hwmon/pmbus/Makefile
-> > +++ b/drivers/hwmon/pmbus/Makefile
-> > @@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)    += q54sj108a2.o
-> >  obj-$(CONFIG_SENSORS_STPDDC60)       += stpddc60.o
-> >  obj-$(CONFIG_SENSORS_TPS40422)       += tps40422.o
-> >  obj-$(CONFIG_SENSORS_TPS53679)       += tps53679.o
-> > +obj-$(CONFIG_SENSORS_TPS546D24)      += tps546d24.o
-> >  obj-$(CONFIG_SENSORS_UCD9000)        += ucd9000.o
-> >  obj-$(CONFIG_SENSORS_UCD9200)        += ucd9200.o
-> >  obj-$(CONFIG_SENSORS_XDPE122)        += xdpe12284.o
-> > diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
-> > new file mode 100644
-> > index 0000000..f6f79d3
-> > --- /dev/null
-> > +++ b/drivers/hwmon/pmbus/tps546d24.c
-> > @@ -0,0 +1,73 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Hardware monitoring driver for TEXAS TPS546D24 buck converter
-> > + */
-> > +
-> > +#include <linux/err.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/init.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/pmbus.h>
-> > +#include "pmbus.h"
-> > +
-> > +static int tps546d24_read_byte_data(struct i2c_client *client, int page, int reg)
-> > +{
-> > +     int ret;
-> > +
-> > +     switch (reg) {
-> > +     case PMBUS_VOUT_MODE:
-> > +             ret = 0x17;
-> > +             break;
-> > +     default:
-> > +             ret = -ENODATA;
-> > +             break;
-> > +     }
-> > +     return ret;
-> > +}
-> > +
-> > +static struct pmbus_driver_info tps546d24_info = {
-> > +     .pages = 1,
-> > +     .format[PSC_VOLTAGE_IN] = linear,
-> > +     .format[PSC_VOLTAGE_OUT] = linear,
-> > +     .format[PSC_TEMPERATURE] = linear,
-> > +     .format[PSC_CURRENT_OUT] = linear,
-> > +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
-> > +         PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT |
-> > +             PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
-> > +             PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> > +     .read_byte_data = tps546d24_read_byte_data,
->
-> The chip supports multiple phases, and per-phase telemetry.
-> Have you considered supporting it ?
->
-> > +};
-> > +
-> > +static int tps546d24_probe(struct i2c_client *client)
-> > +{
-> > +     return pmbus_do_probe(client, &tps546d24_info);
-> > +}
-> > +
-> > +static const struct i2c_device_id tps546d24_id[] = {
-> > +     {"tps546d24", 0},
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(i2c, tps546d24_id);
-> > +
-> > +static const struct of_device_id __maybe_unused tps546d24_of_match[] = {
-> > +     {.compatible = "tps546d24"},
->
-> This needs a vendor prefix.
->
-> > +     {}
-> > +};
-> > +
-> > +/* This is the driver that will be inserted */
-> > +static struct i2c_driver tps546d24_driver = {
-> > +     .driver = {
-> > +                .name = "tps546d24",
-> > +                .of_match_table = of_match_ptr(tps546d24_of_match),
-> > +        },
-> > +     .probe_new = tps546d24_probe,
-> > +     .id_table = tps546d24_id,
-> > +};
-> > +
-> > +module_i2c_driver(tps546d24_driver);
-> > +
-> > +MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
-> > +MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_IMPORT_NS(PMBUS);
-> > --
-> > 2.7.4
-> >
+Steve
+
+--000000000000106b8c05e6f6609b
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-smb3-fix-temporary-data-corruption-in-insert-range.patch"
+Content-Disposition: attachment; 
+	filename="0001-smb3-fix-temporary-data-corruption-in-insert-range.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l777gmnn0>
+X-Attachment-Id: f_l777gmnn0
+
+RnJvbSBiMDQ0YjRkZDYwNDgxOGVmYTNkNzAzNmQxNGI5NzUwZTNkZWI5YmYzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBEYXZpZCBIb3dlbGxzIHZpYSBzYW1iYS10ZWNobmljYWwgPHNh
+bWJhLXRlY2huaWNhbEBsaXN0cy5zYW1iYS5vcmc+CkRhdGU6IFR1ZSwgMjMgQXVnIDIwMjIgMTQ6
+MDc6NTUgKzAxMDAKU3ViamVjdDogW1BBVENIXSBzbWIzOiBmaXggdGVtcG9yYXJ5IGRhdGEgY29y
+cnVwdGlvbiBpbiBpbnNlcnQgcmFuZ2UKCmluc2VydCByYW5nZSBkb2Vzbid0IGRpc2NhcmQgdGhl
+IGFmZmVjdGVkIGNhY2hlZCByZWdpb24Kc28gY2FuIHJpc2sgdGVtcG9yYXJpbHkgY29ycnVwdGlu
+ZyBmaWxlIGRhdGEuCgpBbHNvIGluY2x1ZGVzIHNvbWUgbWlub3IgY2xlYW51cCAoYXZvaWRpbmcg
+cmVyZWFkaW5nCmlub2RlIHNpemUgcmVwZWF0ZWRseSB1bm5lY2Vzc2FyaWx5KSB0byBtYWtlIGl0
+IGNsZWFyZXIuCgpDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwpGaXhlczogN2ZlNmZlOTViOTM2
+MCAoImNpZnM6IEZBTExPQ19GTF9JTlNFUlRfUkFOR0Ugc3VwcG9ydCIpClNpZ25lZC1vZmYtYnk6
+IERhdmlkIEhvd2VsbHMgPGRob3dlbGxzQHJlZGhhdC5jb20+CmNjOiBSb25uaWUgU2FobGJlcmcg
+PGxzYWhsYmVyQHJlZGhhdC5jb20+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVu
+Y2hAbWljcm9zb2Z0LmNvbT4KLS0tCiBmcy9jaWZzL3NtYjJvcHMuYyB8IDI0ICsrKysrKysrKysr
+KysrKystLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDggZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvZnMvY2lmcy9zbWIyb3BzLmMgYi9mcy9jaWZzL3NtYjJvcHMu
+YwppbmRleCA1YjVkZGMxYjQ2MzguLjdjOTQxY2UxZTdhOSAxMDA2NDQKLS0tIGEvZnMvY2lmcy9z
+bWIyb3BzLmMKKysrIGIvZnMvY2lmcy9zbWIyb3BzLmMKQEAgLTM3MjIsMzUgKzM3MjIsNDMgQEAg
+c3RhdGljIGxvbmcgc21iM19pbnNlcnRfcmFuZ2Uoc3RydWN0IGZpbGUgKmZpbGUsIHN0cnVjdCBj
+aWZzX3Rjb24gKnRjb24sCiAJc3RydWN0IGNpZnNGaWxlSW5mbyAqY2ZpbGUgPSBmaWxlLT5wcml2
+YXRlX2RhdGE7CiAJc3RydWN0IGlub2RlICppbm9kZSA9IGZpbGVfaW5vZGUoZmlsZSk7CiAJX19s
+ZTY0IGVvZjsKLQlfX3U2NCAgY291bnQ7CisJX191NjQgIGNvdW50LCBvbGRfZW9mOwogCiAJeGlk
+ID0gZ2V0X3hpZCgpOwogCi0JaWYgKG9mZiA+PSBpX3NpemVfcmVhZChpbm9kZSkpIHsKKwlpbm9k
+ZV9sb2NrKGlub2RlKTsKKworCW9sZF9lb2YgPSBpX3NpemVfcmVhZChpbm9kZSk7CisJaWYgKG9m
+ZiA+PSBvbGRfZW9mKSB7CiAJCXJjID0gLUVJTlZBTDsKIAkJZ290byBvdXQ7CiAJfQogCi0JY291
+bnQgPSBpX3NpemVfcmVhZChpbm9kZSkgLSBvZmY7Ci0JZW9mID0gY3B1X3RvX2xlNjQoaV9zaXpl
+X3JlYWQoaW5vZGUpICsgbGVuKTsKKwljb3VudCA9IG9sZF9lb2YgLSBvZmY7CisJZW9mID0gY3B1
+X3RvX2xlNjQob2xkX2VvZiArIGxlbik7CiAKKwlmaWxlbWFwX2ludmFsaWRhdGVfbG9jayhpbm9k
+ZS0+aV9tYXBwaW5nKTsKIAlmaWxlbWFwX3dyaXRlX2FuZF93YWl0KGlub2RlLT5pX21hcHBpbmcp
+OworCXRydW5jYXRlX3BhZ2VjYWNoZV9yYW5nZShpbm9kZSwgb2ZmLCBvbGRfZW9mKTsKIAogCXJj
+ID0gU01CMl9zZXRfZW9mKHhpZCwgdGNvbiwgY2ZpbGUtPmZpZC5wZXJzaXN0ZW50X2ZpZCwKIAkJ
+CSAgY2ZpbGUtPmZpZC52b2xhdGlsZV9maWQsIGNmaWxlLT5waWQsICZlb2YpOwogCWlmIChyYyA8
+IDApCi0JCWdvdG8gb3V0OworCQlnb3RvIG91dF8yOwogCiAJcmMgPSBzbWIyX2NvcHljaHVua19y
+YW5nZSh4aWQsIGNmaWxlLCBjZmlsZSwgb2ZmLCBjb3VudCwgb2ZmICsgbGVuKTsKIAlpZiAocmMg
+PCAwKQotCQlnb3RvIG91dDsKKwkJZ290byBvdXRfMjsKIAotCXJjID0gc21iM196ZXJvX3Jhbmdl
+KGZpbGUsIHRjb24sIG9mZiwgbGVuLCAxKTsKKwlyYyA9IHNtYjNfemVyb19kYXRhKGZpbGUsIHRj
+b24sIG9mZiwgbGVuLCB4aWQpOwogCWlmIChyYyA8IDApCi0JCWdvdG8gb3V0OworCQlnb3RvIG91
+dF8yOwogCiAJcmMgPSAwOworb3V0XzI6CisJZmlsZW1hcF9pbnZhbGlkYXRlX3VubG9jayhpbm9k
+ZS0+aV9tYXBwaW5nKTsKICBvdXQ6CisJaW5vZGVfdW5sb2NrKGlub2RlKTsKIAlmcmVlX3hpZCh4
+aWQpOwogCXJldHVybiByYzsKIH0KLS0gCjIuMzQuMQoK
+--000000000000106b8c05e6f6609b--

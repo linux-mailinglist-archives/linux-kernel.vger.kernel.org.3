@@ -2,199 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C3159F03F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8E259F063
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiHXAkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S232999AbiHXAoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiHXAkh (ORCPT
+        with ESMTP id S232838AbiHXAoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:40:37 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2087.outbound.protection.outlook.com [40.107.255.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7007FE51;
-        Tue, 23 Aug 2022 17:40:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F3HhlGOcX5qLBCciKnnlasPOiUr1jwCr18DFvcOrs5TzGCYQEN2Y4eBVrNksSSYRr9KeTUah8eI5IAD7Eloranr09ZXL0PS8x76Ys82VXxhpRjVBe+irbqvgzxsMQbgQliEQnuz1v6XRM9D6G+2ZPlIqRqcHIEBee1diVuL6+5Rz1gkQ5SgNMzdO8EwDZl6kXAbvr6IdfZLKkrt3mPWz1Jnrbisf/e2D6fWCA0HE7nlYqY2nuwAGRI2eUIQdDNHHY7F9ub2FsjpGVSyhELkSO4BcLIPxN0UBaxwh8po0QMNBZv3v60mJM/JiXGhtZDvQ2GWR/+Nb3pr4xAnS+ighIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FrPgOC5iILR8HfePoQYsiofgFo2vc7oXlvh1k69H3CA=;
- b=G9YSYy7+7saXRsUh140n89l9Fa49UszQdh7AOYRCMHtznJUoksSJ/CaFlwCpjEf/hrOMP5aGCjDu7VUgk31iiP9j0LqHTL6zCiYTwuarZ6bN1xGssqcOVtSBIeBAdbXoQYo4+ltbPkCcwBrdi1V1SezLIcHI61Mfmk9bP1oj023qwd4WVSAdP6nc1HEx+SAmRfL+wjPCiVlqCIL2G4+oQmAaK3+2+0GoubsS/zX5zeTk2LWXoWdVYgpqBzMAiYV6BIcgg7u9V2j5nIjtNi5rXqrA/1P0Oid8/TZ73QTeJUl3fhgNfw6Wz1xCc3zMd1X9MmJLA1X9asVCnTUSFwWJQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
- dkim=pass header.d=wiwynn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FrPgOC5iILR8HfePoQYsiofgFo2vc7oXlvh1k69H3CA=;
- b=0WZpqwUhHHyx1cwNi74PRfSpAoFpAHa5aiWPS6O9SbQ1fOb49kSbVoykw2aAcyq5MeA7vjXRl7FZEpsfAiC4kFDhJUZb+u1/wFLAKVL1Y9AIOZbDgsGcUFMwokqQXfZawmbmHDWhPRh1cI4E3Naa4PlbtuotJLgGIbZQAdD7+ovlFQ2BPsLxU+aAvEh7U/WFyh7Y4izVxuQpS7+KepgXdEu1yH5FObwIot+08ikqH6S8RR8C53MuOwvhJsj9L+ntK6OOBvQYbAXFVY1rtMjVJP5yNU1eavAGjYciBnikvpsBkp8nuy9iFRF2nM/9kjH0cgNs5WlXjX5k/9syzaO17g==
-Received: from HK0PR04MB3105.apcprd04.prod.outlook.com (2603:1096:203:8e::20)
- by PUZPR04MB6464.apcprd04.prod.outlook.com (2603:1096:301:f8::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
- 2022 00:40:32 +0000
-Received: from HK0PR04MB3105.apcprd04.prod.outlook.com
- ([fe80::d87:1955:b41f:4b13]) by HK0PR04MB3105.apcprd04.prod.outlook.com
- ([fe80::d87:1955:b41f:4b13%4]) with mapi id 15.20.5546.024; Wed, 24 Aug 2022
- 00:40:32 +0000
-From:   Bonnie Lo/WYHQ/Wiwynn <Bonnie_Lo@wiwynn.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "BMC-SW@aspeedtech.com" <BMC-SW@aspeedtech.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
-Subject: RE: [PATCH] watchdog: aspeed_wdt: Reorder output signal register
- configuration
-Thread-Topic: [PATCH] watchdog: aspeed_wdt: Reorder output signal register
- configuration
-Thread-Index: AQHYs7D0uN4boim1rEaXFKnwiugQQq22GsqAgAcg3zA=
-Date:   Wed, 24 Aug 2022 00:40:32 +0000
-Message-ID: <HK0PR04MB310516FD4FE71B22690F4224F8739@HK0PR04MB3105.apcprd04.prod.outlook.com>
-References: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
- <20220819114449.GF3106213@roeck-us.net>
-In-Reply-To: <20220819114449.GF3106213@roeck-us.net>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wiwynn.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 24b995a1-80ea-4460-7ce5-08da85694094
-x-ms-traffictypediagnostic: PUZPR04MB6464:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TrX5uUOC5o7JmDN0/hhEj48zEQhOLP/vx6pdCi4G6esnQqZjYkqjGJ4prnoyqrDmPYiF267uQhYWuMaPCmDmwYwBPu06Rlssg6lB/XNM4MbgP2suKeS4RCqhu8BJmMu7UkF5OhAg4NKI1iHcTIuKHVKV6bb2NWrM5wF2MgOWBdrFD/g8B1MJ3lSLqyEXZD7oSsyP2rYoHo66Ust0M/RLi+HLTFyHzGZH/PWl7IdN8XK2EZrxE2yPlO8XQNloxvz3yJ/p9ht46d39OmUc54itLbkwrUkyTvXzbIWtmoXK8W9sqMGtz7HVcoGiCz6f5N5b2WfBwUN9NKJ6DYxN6GaPOzeJSUjGwtkJSvebcM0HRAouE15comdm8IOqHBT+wxuN3m0C4+J7HUqHFSjBQQY78ULtgq1LSfgjWPAZfH00O2X4SGgFCDqyqugVmFfURWaHCwdrmRh3T3Izn/5pYH7fsBAWIGBWq4/hfsUSlSbZZ2StQXw7jfQ19+UGiPMRRj/lJ/vRnTUd7673MAcnEI/uvNPEc1B1jnGPkxqQegwE4LuwkzJAV4+1RIrYj6lNyRGRge4rxaANBnJnxBGazltIadxY6ELAU9wTfMRF2rKFP+ffHnLUNKH9OXSpOHDaqexl0aYHcAuZgo9X7fsCoN0ptGH/XqSQ+yM0RpFIacW99+pEtSF3QIajfoQJaE6KUAuZRP2Y789sOOS2oIwT1swvKc0u1VH/XfSzjk17uKUWUZ13Ws6iBoyP76B/vqno6TS2jn/9oQe6utJ53mKqeQFZCw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3105.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(376002)(366004)(39860400002)(136003)(64756008)(66556008)(66476007)(66446008)(76116006)(66946007)(122000001)(110136005)(8676002)(4326008)(86362001)(38100700002)(33656002)(38070700005)(26005)(186003)(9686003)(83380400001)(53546011)(71200400001)(7696005)(6506007)(478600001)(41300700001)(5660300002)(316002)(54906003)(55016003)(7416002)(2906002)(52536014)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Arv4Osxds0YZpYIdgFs4LHckhRheCd7qTSa1L5ws4MDxvpWnhWZy/TkYyj2A?=
- =?us-ascii?Q?e/QGkffT5M4sybINUWBRDgOXjKfAq2kFGvsW91RnVv9TwVvviYbS1jjDbdxn?=
- =?us-ascii?Q?YeKbGnvSitaHsF+tTeMYFsgU1IFB1tHOcOvuvaqiu4xU4LtTydKWonuc+qLK?=
- =?us-ascii?Q?ORmTf4xV4I7fQ4XLnckxTmboXkki4rdL91y/igXttA8XgG0IUJ9agd1wtSp9?=
- =?us-ascii?Q?3LzGK98Ga/yuTMlzdmtoHpYEEdF8SSN0Lzsv4LlMcKHUT69erGb+I7A+arwX?=
- =?us-ascii?Q?arbnspxoH5W8KZgWzMG2UB6kycUeY5Vzq0lzcXhSF+bYusEHTzZIys/rAKNG?=
- =?us-ascii?Q?5waxEn6vgFUKIdnfR9EGjK0S0tKWYfVt09BlIxvOrWVyc/dwjaWS5Txisnqt?=
- =?us-ascii?Q?cI+nzatD168J8mp4JLyRtqaTYi9WW6BPk8m2Jevu3/boTkvOIyijJQn+eKyy?=
- =?us-ascii?Q?Jq3O+MxpGfZzlCBeS722TjJXlMDisbEp17ysKNhIavb5uynUMDABEc/VLwzB?=
- =?us-ascii?Q?C9kcQcrik4Q4l8aJZbqn5t9Sv6bS65vYK5giCkAdq6egfucJatd3gWN5fHrN?=
- =?us-ascii?Q?9IbsiOIXu6kNohj9OXOvoViQTZTHKhh0zWvhhPWibYbcl4o9baPRafh5j4O7?=
- =?us-ascii?Q?zaBAF8z75R1U6erVudonnrKEKl/QSCiK1DTX8AikcN6stJrSXKZJzo38kMDT?=
- =?us-ascii?Q?Hpx+Xd+xA1Fj9+HSle0szU+VPz/InX7mFgEd4G5RS/pS6C+HJ5QgjEjtOcgy?=
- =?us-ascii?Q?WFrst7WdAhOOKAprgPFqZX1+9rd5LYPBJIpBp8CNNVs3vjhkP1xhnoA3ql8j?=
- =?us-ascii?Q?GJFNPrWvVlRdTZVe+1RhAbSSXl4aIj9tVvgM/YhpOoZp5ZdHZ+r3AyNH1zLu?=
- =?us-ascii?Q?21OBtcBiZUMNwzMhapk5nmBu3LrUrxTKGQI97KssQ0ySD+iVmApTIR5xSb93?=
- =?us-ascii?Q?6HtE2EFL1p6xpvgwH7OzGSzPhfz/3dZtvnS+2tUNacAAUPteUYN4zMJ7/9er?=
- =?us-ascii?Q?Vyco+xt8lUo9nfZt6m4GqEqgVxJ7SsXBDkA/3b0DWREXjpAMK2XzNSX52B4b?=
- =?us-ascii?Q?nv7v8gIAgHRZBX/Ubzu+lBpCybE9ZSN1ATH51CjPkxXuVvdXg7o6E/xi2jzB?=
- =?us-ascii?Q?QquM7OOifDeBpY7+AFuVtfYI8+HtoWY7SANvIWV2+jWYM20+ciyYq7nNtSCf?=
- =?us-ascii?Q?0jk7o/8Ls23XSxAB2448cqEKnahN2Lx8IFbcGoh6ms+0O3D19WDssRSQ1OvS?=
- =?us-ascii?Q?m+GSR5E1076lmlTgFvivqYoaN/Wd/AX2avYwPD652KvkAlY+eBicaR4C5qwN?=
- =?us-ascii?Q?/j1fExhO4BgAa+WnFgjPtIAwvdrMzsPSksJyK/pxYc1JNkzcH9V/MdZ/iSlE?=
- =?us-ascii?Q?TIsnCnvmBPHPZmGFIXhLq0QjRBVSn6Tx2xnyPUAR2/70M0qRX3dhfQDd/ys1?=
- =?us-ascii?Q?X2s1Cu4F3b0SoAQXQFzNihxkw0Rtoga/hZ0NSJNsAtUq119owQ3ysItxL4vN?=
- =?us-ascii?Q?Bwz7VN/y4HLN3u11EY6L8RsWtglOxFyzJU+7ZYnHlInOtgD4pv2HlYubR0gS?=
- =?us-ascii?Q?CwneqaezpFJid4zFoO5XvvQvLAN4KKHW0OZSGS6i?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 23 Aug 2022 20:44:03 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9348E47D;
+        Tue, 23 Aug 2022 17:43:40 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MC6gs0G4hzkWNW;
+        Wed, 24 Aug 2022 08:40:09 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 08:43:38 +0800
+Message-ID: <ea32a2ed-e0c0-4010-7488-42ee91b26ce7@huawei.com>
+Date:   Wed, 24 Aug 2022 08:43:37 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3105.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24b995a1-80ea-4460-7ce5-08da85694094
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 00:40:32.7723
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: toiqR3hFecHK0I020c9RC62Y8uee858TGxUTKkX3Wy7gBA7bVp8M8pLUpCSX17PCRXHFBBBHWk12PCId67E7rQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR04MB6464
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH net-next] net: sched: delete duplicate cleanup of backlog
+ and qlen
+To:     Eric Dumazet <edumazet@google.com>
+CC:     netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Gomes <vinicius.gomes@intel.com>,
+        <weiyongjun1@huawei.com>, YueHaibing <yuehaibing@huawei.com>
+References: <20220823075717.28072-1-shaozhengchao@huawei.com>
+ <CANn89iKta=-C43_jQpVVra_v3HxfCjvx+pJFj6NfLoa_GTXfAQ@mail.gmail.com>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <CANn89iKta=-C43_jQpVVra_v3HxfCjvx+pJFj6NfLoa_GTXfAQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Friday, August 19, 2022 7:45 PM
-> To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> Cc: wim@linux-watchdog.org; joel@jms.id.au; andrew@aj.id.au;
-> BMC-SW@aspeedtech.com; linux-watchdog@vger.kernel.org;
-> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
-> openbmc@lists.ozlabs.org; Bonnie Lo/WYHQ/Wiwynn
-> <Bonnie_Lo@wiwynn.com>
-> Subject: Re: [PATCH] watchdog: aspeed_wdt: Reorder output signal register
-> configuration
->
->   Security Reminder: Please be aware that this email was sent by an
-> external sender.
->
-> On Fri, Aug 19, 2022 at 05:49:05PM +0800, Chin-Ting Kuo wrote:
-> > If the output driving type is push-pull mode, the output polarity
-> > should be selected in advance. Otherwise, an unexpected value will be
-> > output at the moment of changing to push-pull mode.
-> > Thus, output polarity, WDT18[31], must be configured before changing
-> > driving type, WDT18[30].
-> >
-> > Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->
 
-Tested-by: Bonnie Lo <Bonnie_Lo@wiwynn.com>
 
-> > ---
-> >  drivers/watchdog/aspeed_wdt.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/watchdog/aspeed_wdt.c
-> > b/drivers/watchdog/aspeed_wdt.c index 436571b6fc79..a03e4ff812a2
-> > 100644
-> > --- a/drivers/watchdog/aspeed_wdt.c
-> > +++ b/drivers/watchdog/aspeed_wdt.c
-> > @@ -325,18 +325,18 @@ static int aspeed_wdt_probe(struct
-> platform_device *pdev)
-> >               u32 reg =3D readl(wdt->base + WDT_RESET_WIDTH);
-> >
-> >               reg &=3D config->ext_pulse_width_mask;
-> > -             if (of_property_read_bool(np, "aspeed,ext-push-pull"))
-> > -                     reg |=3D WDT_PUSH_PULL_MAGIC;
-> > +             if (of_property_read_bool(np, "aspeed,ext-active-high"))
-> > +                     reg |=3D WDT_ACTIVE_HIGH_MAGIC;
-> >               else
-> > -                     reg |=3D WDT_OPEN_DRAIN_MAGIC;
-> > +                     reg |=3D WDT_ACTIVE_LOW_MAGIC;
-> >
-> >               writel(reg, wdt->base + WDT_RESET_WIDTH);
-> >
-> >               reg &=3D config->ext_pulse_width_mask;
-> > -             if (of_property_read_bool(np, "aspeed,ext-active-high"))
-> > -                     reg |=3D WDT_ACTIVE_HIGH_MAGIC;
-> > +             if (of_property_read_bool(np, "aspeed,ext-push-pull"))
-> > +                     reg |=3D WDT_PUSH_PULL_MAGIC;
-> >               else
-> > -                     reg |=3D WDT_ACTIVE_LOW_MAGIC;
-> > +                     reg |=3D WDT_OPEN_DRAIN_MAGIC;
-> >
-> >               writel(reg, wdt->base + WDT_RESET_WIDTH);
-> >       }
-> > --
-> > 2.25.1
-> >
-WIWYNN PROPRIETARY This email (and any attachments) contains proprietary or=
- confidential information and is for the sole use of its intended recipient=
-. Any unauthorized review, use, copying or distribution of this email or th=
-e content of this email is strictly prohibited. If you are not the intended=
- recipient, please notify the sender and delete this email immediately.
+On 2022/8/24 0:29, Eric Dumazet wrote:
+> On Tue, Aug 23, 2022 at 12:54 AM Zhengchao Shao
+> <shaozhengchao@huawei.com> wrote:
+>>
+>> The qdisc_reset function has cleared the backlog and qlen of the qdisc.
+>> There is no need to clear them again in the specific reset function.
+> 
+> changelog is slightly inaccurate.
+> 
+> qdisc_reset() is clearing qdisc->q.qlen and qdisc->qstats.backlog
+> _after_ calling qdisc->ops->reset,
+> not before.
+> 
+>>
+>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+>> ---
+>>   include/net/sch_generic.h | 1 -
+>>   net/sched/sch_atm.c       | 1 -
+>>   net/sched/sch_cbq.c       | 1 -
+>>   net/sched/sch_choke.c     | 2 --
+>>   net/sched/sch_drr.c       | 2 --
+>>   net/sched/sch_dsmark.c    | 2 --
+>>   net/sched/sch_etf.c       | 3 ---
+>>   net/sched/sch_ets.c       | 2 --
+>>   net/sched/sch_fq_codel.c  | 2 --
+>>   net/sched/sch_fq_pie.c    | 3 ---
+>>   net/sched/sch_hfsc.c      | 2 --
+>>   net/sched/sch_htb.c       | 2 --
+>>   net/sched/sch_multiq.c    | 1 -
+>>   net/sched/sch_prio.c      | 2 --
+>>   net/sched/sch_qfq.c       | 2 --
+>>   net/sched/sch_red.c       | 2 --
+>>   net/sched/sch_sfb.c       | 2 --
+>>   net/sched/sch_skbprio.c   | 3 ---
+>>   net/sched/sch_taprio.c    | 2 --
+>>   net/sched/sch_tbf.c       | 2 --
+>>   net/sched/sch_teql.c      | 1 -
+>>   21 files changed, 40 deletions(-)
+>>
+>> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+>> index ec693fe7c553..f2958fb5ae08 100644
+>> --- a/include/net/sch_generic.h
+>> +++ b/include/net/sch_generic.h
+>> @@ -1137,7 +1137,6 @@ static inline void __qdisc_reset_queue(struct qdisc_skb_head *qh)
+>>   static inline void qdisc_reset_queue(struct Qdisc *sch)
+>>   {
+>>          __qdisc_reset_queue(&sch->q);
+>> -       sch->qstats.backlog = 0;
+>>   }
+>>
+>>   static inline struct Qdisc *qdisc_replace(struct Qdisc *sch, struct Qdisc *new,
+>> diff --git a/net/sched/sch_atm.c b/net/sched/sch_atm.c
+>> index 4c8e994cf0a5..816fd0d7ba38 100644
+>> --- a/net/sched/sch_atm.c
+>> +++ b/net/sched/sch_atm.c
+>> @@ -577,7 +577,6 @@ static void atm_tc_reset(struct Qdisc *sch)
+>>          pr_debug("atm_tc_reset(sch %p,[qdisc %p])\n", sch, p);
+>>          list_for_each_entry(flow, &p->flows, list)
+>>                  qdisc_reset(flow->q);
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void atm_tc_destroy(struct Qdisc *sch)
+>> diff --git a/net/sched/sch_cbq.c b/net/sched/sch_cbq.c
+>> index af126eb3e431..b026daca160e 100644
+>> --- a/net/sched/sch_cbq.c
+>> +++ b/net/sched/sch_cbq.c
+>> @@ -975,7 +975,6 @@ cbq_reset(struct Qdisc *sch)
+>>                          cl->cpriority = cl->priority;
+>>                  }
+>>          }
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>
+>> diff --git a/net/sched/sch_choke.c b/net/sched/sch_choke.c
+>> index 2adbd945bf15..25d2daaa8122 100644
+>> --- a/net/sched/sch_choke.c
+>> +++ b/net/sched/sch_choke.c
+>> @@ -315,8 +315,6 @@ static void choke_reset(struct Qdisc *sch)
+>>                  rtnl_qdisc_drop(skb, sch);
+>>          }
+>>
+>> -       sch->q.qlen = 0;
+>> -       sch->qstats.backlog = 0;
+>>          if (q->tab)
+>>                  memset(q->tab, 0, (q->tab_mask + 1) * sizeof(struct sk_buff *));
+>>          q->head = q->tail = 0;
+>> diff --git a/net/sched/sch_drr.c b/net/sched/sch_drr.c
+>> index 18e4f7a0b291..4e5b1cf11b85 100644
+>> --- a/net/sched/sch_drr.c
+>> +++ b/net/sched/sch_drr.c
+>> @@ -441,8 +441,6 @@ static void drr_reset_qdisc(struct Qdisc *sch)
+>>                          qdisc_reset(cl->qdisc);
+>>                  }
+>>          }
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void drr_destroy_qdisc(struct Qdisc *sch)
+>> diff --git a/net/sched/sch_dsmark.c b/net/sched/sch_dsmark.c
+>> index 4c100d105269..7da6dc38a382 100644
+>> --- a/net/sched/sch_dsmark.c
+>> +++ b/net/sched/sch_dsmark.c
+>> @@ -409,8 +409,6 @@ static void dsmark_reset(struct Qdisc *sch)
+>>          pr_debug("%s(sch %p,[qdisc %p])\n", __func__, sch, p);
+>>          if (p->q)
+>>                  qdisc_reset(p->q);
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void dsmark_destroy(struct Qdisc *sch)
+>> diff --git a/net/sched/sch_etf.c b/net/sched/sch_etf.c
+>> index c48f91075b5c..d96103b0e2bf 100644
+>> --- a/net/sched/sch_etf.c
+>> +++ b/net/sched/sch_etf.c
+>> @@ -445,9 +445,6 @@ static void etf_reset(struct Qdisc *sch)
+>>          timesortedlist_clear(sch);
+>>          __qdisc_reset_queue(&sch->q);
+>>
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>> -
+>>          q->last = 0;
+>>   }
+>>
+>> diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
+>> index d73393493553..8de4365886e8 100644
+>> --- a/net/sched/sch_ets.c
+>> +++ b/net/sched/sch_ets.c
+>> @@ -727,8 +727,6 @@ static void ets_qdisc_reset(struct Qdisc *sch)
+>>          }
+>>          for (band = 0; band < q->nbands; band++)
+>>                  qdisc_reset(q->classes[band].qdisc);
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void ets_qdisc_destroy(struct Qdisc *sch)
+>> diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
+>> index 839e1235db05..23a042adb74d 100644
+>> --- a/net/sched/sch_fq_codel.c
+>> +++ b/net/sched/sch_fq_codel.c
+>> @@ -347,8 +347,6 @@ static void fq_codel_reset(struct Qdisc *sch)
+>>                  codel_vars_init(&flow->cvars);
+>>          }
+>>          memset(q->backlogs, 0, q->flows_cnt * sizeof(u32));
+>> -       sch->q.qlen = 0;
+>> -       sch->qstats.backlog = 0;
+>>          q->memory_usage = 0;
+>>   }
+>>
+>> diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
+>> index d6aba6edd16e..35c35465226b 100644
+>> --- a/net/sched/sch_fq_pie.c
+>> +++ b/net/sched/sch_fq_pie.c
+>> @@ -521,9 +521,6 @@ static void fq_pie_reset(struct Qdisc *sch)
+>>                  INIT_LIST_HEAD(&flow->flowchain);
+>>                  pie_vars_init(&flow->vars);
+>>          }
+>> -
+>> -       sch->q.qlen = 0;
+>> -       sch->qstats.backlog = 0;
+>>   }
+>>
+>>   static void fq_pie_destroy(struct Qdisc *sch)
+>> diff --git a/net/sched/sch_hfsc.c b/net/sched/sch_hfsc.c
+>> index d3979a6000e7..03efc40e42fc 100644
+>> --- a/net/sched/sch_hfsc.c
+>> +++ b/net/sched/sch_hfsc.c
+>> @@ -1484,8 +1484,6 @@ hfsc_reset_qdisc(struct Qdisc *sch)
+>>          }
+>>          q->eligible = RB_ROOT;
+>>          qdisc_watchdog_cancel(&q->watchdog);
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void
+>> diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
+>> index 23a9d6242429..cb5872d22ecf 100644
+>> --- a/net/sched/sch_htb.c
+>> +++ b/net/sched/sch_htb.c
+>> @@ -1008,8 +1008,6 @@ static void htb_reset(struct Qdisc *sch)
+>>          }
+>>          qdisc_watchdog_cancel(&q->watchdog);
+>>          __qdisc_reset_queue(&q->direct_queue);
+>> -       sch->q.qlen = 0;
+>> -       sch->qstats.backlog = 0;
+>>          memset(q->hlevel, 0, sizeof(q->hlevel));
+>>          memset(q->row_mask, 0, sizeof(q->row_mask));
+>>   }
+>> diff --git a/net/sched/sch_multiq.c b/net/sched/sch_multiq.c
+>> index cd8ab90c4765..f28050c7f12d 100644
+>> --- a/net/sched/sch_multiq.c
+>> +++ b/net/sched/sch_multiq.c
+>> @@ -152,7 +152,6 @@ multiq_reset(struct Qdisc *sch)
+>>
+>>          for (band = 0; band < q->bands; band++)
+>>                  qdisc_reset(q->queues[band]);
+>> -       sch->q.qlen = 0;
+>>          q->curband = 0;
+>>   }
+>>
+>> diff --git a/net/sched/sch_prio.c b/net/sched/sch_prio.c
+>> index 3b8d7197c06b..c03a11dd990f 100644
+>> --- a/net/sched/sch_prio.c
+>> +++ b/net/sched/sch_prio.c
+>> @@ -135,8 +135,6 @@ prio_reset(struct Qdisc *sch)
+>>
+>>          for (prio = 0; prio < q->bands; prio++)
+>>                  qdisc_reset(q->queues[prio]);
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static int prio_offload(struct Qdisc *sch, struct tc_prio_qopt *qopt)
+>> diff --git a/net/sched/sch_qfq.c b/net/sched/sch_qfq.c
+>> index d4ce58c90f9f..13246a9dc5c1 100644
+>> --- a/net/sched/sch_qfq.c
+>> +++ b/net/sched/sch_qfq.c
+>> @@ -1458,8 +1458,6 @@ static void qfq_reset_qdisc(struct Qdisc *sch)
+>>                          qdisc_reset(cl->qdisc);
+>>                  }
+>>          }
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void qfq_destroy_qdisc(struct Qdisc *sch)
+>> diff --git a/net/sched/sch_red.c b/net/sched/sch_red.c
+>> index 40adf1f07a82..f1e013e3f04a 100644
+>> --- a/net/sched/sch_red.c
+>> +++ b/net/sched/sch_red.c
+>> @@ -176,8 +176,6 @@ static void red_reset(struct Qdisc *sch)
+>>          struct red_sched_data *q = qdisc_priv(sch);
+>>
+>>          qdisc_reset(q->qdisc);
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>          red_restart(&q->vars);
+>>   }
+>>
+>> diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
+>> index 3d061a13d7ed..31717fa45a4f 100644
+>> --- a/net/sched/sch_sfb.c
+>> +++ b/net/sched/sch_sfb.c
+>> @@ -453,8 +453,6 @@ static void sfb_reset(struct Qdisc *sch)
+>>          struct sfb_sched_data *q = qdisc_priv(sch);
+>>
+>>          qdisc_reset(q->qdisc);
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>          q->slot = 0;
+>>          q->double_buffering = false;
+>>          sfb_zero_all_buckets(q);
+>> diff --git a/net/sched/sch_skbprio.c b/net/sched/sch_skbprio.c
+>> index 7a5e4c454715..df72fb83d9c7 100644
+>> --- a/net/sched/sch_skbprio.c
+>> +++ b/net/sched/sch_skbprio.c
+>> @@ -213,9 +213,6 @@ static void skbprio_reset(struct Qdisc *sch)
+>>          struct skbprio_sched_data *q = qdisc_priv(sch);
+>>          int prio;
+>>
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>> -
+>>          for (prio = 0; prio < SKBPRIO_MAX_PRIORITY; prio++)
+>>                  __skb_queue_purge(&q->qdiscs[prio]);
+>>
+>> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+>> index 0b941dd63d26..db88a692ef81 100644
+>> --- a/net/sched/sch_taprio.c
+>> +++ b/net/sched/sch_taprio.c
+>> @@ -1636,8 +1636,6 @@ static void taprio_reset(struct Qdisc *sch)
+>>                          if (q->qdiscs[i])
+>>                                  qdisc_reset(q->qdiscs[i]);
+>>          }
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void taprio_destroy(struct Qdisc *sch)
+>> diff --git a/net/sched/sch_tbf.c b/net/sched/sch_tbf.c
+>> index 72102277449e..d0288e223542 100644
+>> --- a/net/sched/sch_tbf.c
+>> +++ b/net/sched/sch_tbf.c
+>> @@ -330,8 +330,6 @@ static void tbf_reset(struct Qdisc *sch)
+>>          struct tbf_sched_data *q = qdisc_priv(sch);
+>>
+>>          qdisc_reset(q->qdisc);
+>> -       sch->qstats.backlog = 0;
+>> -       sch->q.qlen = 0;
+>>          q->t_c = ktime_get_ns();
+>>          q->tokens = q->buffer;
+>>          q->ptokens = q->mtu;
+>> diff --git a/net/sched/sch_teql.c b/net/sched/sch_teql.c
+>> index 6af6b95bdb67..79aaab51cbf5 100644
+>> --- a/net/sched/sch_teql.c
+>> +++ b/net/sched/sch_teql.c
+>> @@ -124,7 +124,6 @@ teql_reset(struct Qdisc *sch)
+>>          struct teql_sched_data *dat = qdisc_priv(sch);
+>>
+>>          skb_queue_purge(&dat->q);
+>> -       sch->q.qlen = 0;
+>>   }
+>>
+>>   static void
+>> --
+>> 2.17.1
+>>
+
+Hi Eric:
+	Thank you for your reply. I will modify changelog in v2.
+
+Zhengchao Shao

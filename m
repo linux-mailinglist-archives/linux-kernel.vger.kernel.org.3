@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AD359F4DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9087A59F4DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 10:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235057AbiHXIQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 04:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S233226AbiHXIRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 04:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiHXIQA (ORCPT
+        with ESMTP id S231846AbiHXIRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 04:16:00 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376A37AC25;
-        Wed, 24 Aug 2022 01:15:59 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id b44so784504edf.9;
-        Wed, 24 Aug 2022 01:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=t+aZeiVlAe5lh3K/X4ugpJOclmyPgg9VuIl3dEAp86Y=;
-        b=RwDOce9fW9ntXysRk36Zwo/dNQgieL4D1Psds2402Ua9G612KbPfZ3ywrawVqJ1LG9
-         BoR61Fd7PcYWIU7t9kei0WDtZ7GFA98MqONFcnkWXf8/WoM9NvZNZpuiukjkP9z31xFd
-         poQ3TPC8/YnhKDMUBPb2NH/eKgwBpvrFjZGuAptTXvdDt9yGyypjFl+nXQGYCL6TodmB
-         SCRfQZ5Ll0QReowdWBRx27ySciQegCzT8pq4b3oR2OEX3Z8jCSfMnkX7Flm/826/VB8i
-         vjt1jVPgPXGRyRTT9PRL0fN1VpRAe99IpnzK7AkQGn/iSw4EF6/dR8dsindF52H6qrBD
-         0B/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=t+aZeiVlAe5lh3K/X4ugpJOclmyPgg9VuIl3dEAp86Y=;
-        b=HepzZuca/tU//pWSWA+V1DeynOurr/PH9kyx8xw1+1eiYAXOVfjjY58U/BTJzygADm
-         23GNJyTzlWVLFKqN6g1uYpHgUyCNfki4/gVgCYbfLBbqM3z3p3v9hQoUtUQCZ3Byt69o
-         sC8Un8JWp3iEEtFwxtGb17F6ZN3o1wvkpsnkU6IT8gkpAWI/lA1V3ZLQxQB3wxUvKISx
-         /Hl3QQY0R73b3lJG2S9uaemiF4HuoYoanzYvk0iQA9CKfXEGiWaGFZVBDGZZBpA5l/Kx
-         FduafUH0pjM8zxpRQMpUglrobPoFfWdDUZkh40p3YgUOk3LyFPdAvibyBrMFh1ChTVxb
-         0TKw==
-X-Gm-Message-State: ACgBeo1s+AHDdDao+7NGXmWx8f20PeJUWX+qCBU4L3outYOBIMrBX66F
-        Gx5eMYqd+TDRXWKTKOA46zM=
-X-Google-Smtp-Source: AA6agR5WH9cs54GXa7c0sIrJtFNUOlFjguUIT6fJ54OYlQdQkrAW01KvKXoTr/lw8ix8/uTgzgKCRg==
-X-Received: by 2002:a05:6402:e98:b0:441:a982:45bc with SMTP id h24-20020a0564020e9800b00441a98245bcmr6471619eda.239.1661328957691;
-        Wed, 24 Aug 2022 01:15:57 -0700 (PDT)
-Received: from [172.17.235.233] (nata195.ugent.be. [157.193.240.195])
-        by smtp.gmail.com with ESMTPSA id f14-20020a170906c08e00b00711edab7622sm839529ejz.40.2022.08.24.01.15.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 01:15:57 -0700 (PDT)
-Message-ID: <1ce29a1e-2db7-2953-b71e-c0408559ecff@gmail.com>
-Date:   Wed, 24 Aug 2022 10:15:56 +0200
+        Wed, 24 Aug 2022 04:17:00 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777DD7FF89
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 01:16:59 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-99-VjYIZqc7OMC0qgo4WoO8vA-1; Wed, 24 Aug 2022 09:16:56 +0100
+X-MC-Unique: VjYIZqc7OMC0qgo4WoO8vA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.38; Wed, 24 Aug 2022 09:16:54 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.040; Wed, 24 Aug 2022 09:16:54 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
+        Baoquan He <bhe@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v2 01/11] mm/ioremap: change the return value of
+ io[re|un]map_allowed and rename
+Thread-Topic: [PATCH v2 01/11] mm/ioremap: change the return value of
+ io[re|un]map_allowed and rename
+Thread-Index: AQHYtCxluEXLt15y9kSkQpSsai/RVK26d60AgAEsPgCAAFTlgIAApOwAgAADPgCAARm6UA==
+Date:   Wed, 24 Aug 2022 08:16:54 +0000
+Message-ID: <b193efbff3a74343839c3dee1702f73c@AcuMS.aculab.com>
+References: <20220820003125.353570-1-bhe@redhat.com>
+ <20220820003125.353570-2-bhe@redhat.com>
+ <d5272f42-f3e3-b2a8-428e-bd7815cf7518@csgroup.eu>
+ <YwQdRg/IS0+3tbNu@MiWiFi-R3L-srv>
+ <a4a9ba6f-9891-cc4c-e512-d221141d998f@csgroup.eu>
+ <YwTu1kzcIUxsTL4j@MiWiFi-R3L-srv>
+ <429cb367-923f-bb3d-ccf0-57dce0c7f35b@csgroup.eu>
+In-Reply-To: <429cb367-923f-bb3d-ccf0-57dce0c7f35b@csgroup.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] infiniband: remove unnecessary null check
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     cgel.zte@gmail.com, dennis.dalessandro@cornelisnetworks.com
-Cc:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220824080503.221680-1-chi.minghao@zte.com.cn>
-From:   Niels Dossche <dossche.niels@gmail.com>
-In-Reply-To: <20220824080503.221680-1-chi.minghao@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22 10:05, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> container_of is never null, so this null check is
-> unnecessary.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  drivers/infiniband/sw/rdmavt/vt.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/infiniband/sw/rdmavt/vt.c b/drivers/infiniband/sw/rdmavt/vt.c
-> index 59481ae39505..b2d83b4958fc 100644
-> --- a/drivers/infiniband/sw/rdmavt/vt.c
-> +++ b/drivers/infiniband/sw/rdmavt/vt.c
-> @@ -50,8 +50,6 @@ struct rvt_dev_info *rvt_alloc_device(size_t size, int nports)
->  	struct rvt_dev_info *rdi;
->  
->  	rdi = container_of(_ib_alloc_device(size), struct rvt_dev_info, ibdev);
-> -	if (!rdi)
-> -		return rdi;
->  
->  	rdi->ports = kcalloc(nports, sizeof(*rdi->ports), GFP_KERNEL);
->  	if (!rdi->ports)
+RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAyMyBBdWd1c3QgMjAyMiAxNjoyNg0KPiAN
+Cj4gTGUgMjMvMDgvMjAyMiDDoCAxNzoxNCwgQmFvcXVhbiBIZSBhIMOpY3JpdMKgOg0KPiA+IE9u
+IDA4LzIzLzIyIGF0IDA1OjI0YW0sIENocmlzdG9waGUgTGVyb3kgd3JvdGU6DQo+ID4+DQo+ID4+
+DQo+ID4+IExlIDIzLzA4LzIwMjIgw6AgMDI6MjAsIEJhb3F1YW4gSGUgYSDDqWNyaXTCoDoNCj4g
+Pj4+IE9uIDA4LzIyLzIyIGF0IDA2OjI1YW0sIENocmlzdG9waGUgTGVyb3kgd3JvdGU6DQo+ID4+
+Pj4NCj4gPj4+Pg0KPiA+Pj4+IExlIDIwLzA4LzIwMjIgw6AgMDI6MzEsIEJhb3F1YW4gSGUgYSDD
+qWNyaXTCoDoNCj4gPj4+Pj4gSW4gc29tZSBhcmNoaXRlY3R1cmVzLCB0aGVyZSBhcmUgQVJDSCBz
+cGVjaWZpY2kgaW8gYWRkcmVzcyBtYXBwaW5nDQo+ID4+Pj4+IGhhbmRsaW5nIHdoZW4gY2FsbGlu
+ZyBpb3JlbWFwKCkgb3IgaW9yZW1hcF9wcm90KCksIGUuZywgYXJjLCBpYTY0LA0KPiA+Pj4+PiBv
+cGVucmlzYywgczM5MCwgc2guDQo+ID4+Pj4+DQo+ID4+Pj4+IEluIG9kZXIgdG8gY29udmVydCB0
+aGVtIHRvIHRha2UgR0VORVJJQ19JT1JFTUFQIG1ldGhvZCwgd2UgbmVlZCBjaGFuZ2UNCj4gPj4+
+Pj4gdGhlIHJldHVybiB2YWx1ZSBvZiBob29rIGlvcmVtYXBfYWxsb3dlZCgpIGFuZCBpb3VubWFw
+X2FsbG93ZWQoKS4NCj4gPj4+Pj4gTWVhbndoaWxlLCByZW5hbWUgdGhlbSB0byBhcmNoX2lvcmVt
+YXAoKSBhbmQgYXJjaF9pb3VubWFwKCkgdG8gcmVmbGVjdA0KPiA+Pj4+PiB0aGVpciBjdXJyZW50
+IGJlaGF2aW91ci4NCj4gPj4+DQo+ID4+PiBUaGFua3MgZm9yIHJldmlld2luZy4NCj4gPj4+DQo+
+ID4+Pj4NCj4gPj4+PiBQbGVhc2UgZG9uJ3QganVzdCBzYXkgeW91IG5lZWQgdG8gY2hhbmdlIHRo
+ZSByZXR1cm4gdmFsdWUuIEV4cGxhaW4gd2h5Lg0KPiA+Pj4NCj4gPj4+IFRoZSAxc3QgcGFyYWdy
+YXBoIGFuZCB0aGUgc2VudGVuY2UgJ0luIG9kZXIgdG8gY29udmVydCB0aGVtIHRvIHRha2UNCj4g
+Pj4+IEdFTkVSSUNfSU9SRU1BUCBtZXRob2QnIHRlbGwgdGhlIHJlYXNvbiwgbm8/DQo+ID4+DQo+
+ID4+IFdoYXQgSSB3b3VsZCBsaWtlIHRvIHJlYWQgaXMgX3doeV8geW91IG5lZWQgdG8gY2hhbmdl
+IHRoZSByZXR1cm4gdmFsdWUNCj4gPj4gaW4gb3JkZXIgdG8gY29udmVydCB0byBHRU5FUklDX0lP
+UkVNQVANCj4gPg0KPiA+IEkgcmVwaHJhc2UgdGhlIGxvZyBhcyBiZWxvdywgaXQncyBPSyB0byB5
+b3U/IE9yIHBsZWFzZSBoZWxwIGNoZWNrIGFuZA0KPiA+IHRlbGwgd2hhdCBJIG5lZWQgdG8gaW1w
+cm92ZSB0byBiZXR0ZXIgZXhwbGFpbiB0aGUgcmVhc29uLg0KPiA+DQo+ID4gPT09PQ0KPiA+IFRo
+ZSBjdXJyZW50IGlvW3JlfHVuXW1hcF9hbGxvd2VkKCkgaG9va3MgYXJlIHVzZWQgdG8gY2hlY2sg
+aWYgdGhlDQo+ID4gaW9bcmV8dW5dbWFwKCkgYWN0aW9ucyBhcmUgcXVhbGlmaWVkIHRvIHByb2Nl
+ZWQgd2hlbiB0YWtpbmcNCj4gPiBHRU5FUklDX0lPUkVNQVAgd2F5IHRvIGRvIGlvcmVtYXAoKS9p
+b3VubWFwKCkuIE90aGVyd2lzZSBpb1tyZXx1bl1tYXAoKQ0KPiA+IHdpbGwgcmV0dXJuIE5VTEwu
+DQo+ID4NCj4gPiBPbiBzb21lIGFyY2hpdGVjdHVyZXMgbGlrZSBhcmMsIGlhNjQsIG9wZW5yaXMs
+IHMzOTAsIHNoLCB0aGVyZSBhcmUNCj4gPiBBUkNIIHNwZWNpZmljIGlvIGFkZHJlc3MgbWFwcGlu
+ZyB0byB0cmFuc2xhdGUgdGhlIHBhc3NlZCBpbiBwaHlzaWNhbA0KPiA+IGFkZHJlc3MgdG8gaW8g
+YWRkcmVzcyB3aGVuIGNhbGxpbmcgaW9yZW1hcCgpLiBJbiBvcmRlciB0byBjb252ZXJ0DQo+ID4g
+dGhlc2UgYXJjaGl0ZWN0dXJlcyB0byB0YWtlIEdFTkVSSUNfSU9SRU1BUCB3YXkgdG8gaW9yZW1h
+cCgpLCB3ZSBuZWVkDQo+ID4gY2hhbmdlIHRoZSByZXR1cm4gdmFsdWUgb2YgaG9vayBpb3JlbWFw
+X2FsbG93ZWQoKSBhbmQgaW91bm1hcF9hbGxvd2VkKCkuDQo+ID4gV2l0aCB0aGUgY2hhbmdlLCB3
+ZSBjYW4gbW92ZSB0aGUgYXJjaGl0ZWN0dXJlIHNwZWNpZmljIGlvIGFkZHJlc3MNCj4gPiBtYXBw
+aW5nIGludG8gaW9yZW1hcF9hbGxvd2VkKCkgaG9vaywgYW5kIGdpdmUgdGhlIG1hcHBlZCBpbyBh
+ZGRyZXNzDQo+ID4gb3V0IHRvIGxldCBpb3JlbWFwX3Byb3QoKSByZXR1cm4gaXQuIFdoaWxlIGF0
+IGl0LCByZW5hbWUgdGhlIGhvb2tzIHRvDQo+ID4gYXJjaF9pb3JlbWFwKCkgYW5kIGFyY2hfaW91
+bm1hcCgpIHRvIHJlZmxlY3QgdGhlaXIgbmV3IGJlaGF2aW91ci4NCj4gPiA9PT09DQo+ID4NCj4g
+DQo+IFRoYXQgbG9va3MgbW9yZSBpbiBsaW5lIHdpdGggdGhlIHR5cGUgb2YgZXhwbGFuYXRpb24g
+SSBmb3Jlc2VlIGluIHRoZQ0KPiBjb21taXQgbWVzc2FnZSwgdGhhbmtzLg0KDQpJIHRoaW5rIHlv
+dSBhbHNvIG5lZWQgdG8gc3VtbWFyaXNlIHRoZSBjaGFuZ2UgaXRzZWxmLg0KSWYgdGhlIHN1Y2Nl
+c3MvZmFpbCByZXR1cm4gYWN0dWFsbHkgY2hhbmdlcyB0aGVuIHlvdSByZWFsbHkNCm5lZWQgdG8g
+Y2hhbmdlIHNvbWV0aGluZyBzbyB0aGUgY29tcGlsZXIgZXJyb3JzIHVuY2hhbmdlZCBjb2RlLg0K
+T3RoZXJ3aXNlIGl0IGlzIGEgY29tcGxldGUgcmVjaXBlIGZvciBkaXNhc3Rlci4NCg0KCURhdmlk
+DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
+YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
+IChXYWxlcykNCg==
 
-I believe this patch is incorrect because "_ib_alloc_device" may return a null pointer.
-Note that the first member of "rvt_dev_info" is "ib_device", so the check on container_of effectively checks if the allocation failed, which is necessary to check.

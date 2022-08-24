@@ -2,156 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0141E59FF73
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FAF59FF78
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235208AbiHXQZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S238174AbiHXQ0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238977AbiHXQY4 (ORCPT
+        with ESMTP id S236354AbiHXQ0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:24:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0062C121;
-        Wed, 24 Aug 2022 09:24:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 193DDB825C4;
-        Wed, 24 Aug 2022 16:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 402E9C433C1;
-        Wed, 24 Aug 2022 16:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661358291;
-        bh=lrE15h5VJPmZzV9dWh6JsVYc+o1YiOd+6WU2aXZYLp4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tesOcLeUBhxTxfpO3YEeJ92V55wvXkRHMKetD3LMUacnm6KUcaBwBFF4GJWfdHQsh
-         GvWbO9LOc9VspJUf5nVTzPiQZo0MlG4I5q/JbJS7RhlzwFV8aorikM62McnS0xXy2H
-         UieLm2Y/XxJXhF0Jf7dL88/0HnwhsaccIQH/HCC6AJRj1DzltNiAVcrwjxEUmRsC9P
-         j9Tmte7vlEL2Ows3Pme112NMv+PuTykx0AmGkTdWBh7SyG1czuDyumrTDvjM8E4svz
-         PY8VWpjRqU8InO0Gydrpgjao7DkWx8AlePxiNRTeMMbisZ1w03TllxMX5mYD3TwNhT
-         MvmndtRW6JkvQ==
-Date:   Wed, 24 Aug 2022 09:24:49 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alibek Omarov <a1ba.omarov@gmail.com>,
-        Kornilios Kourtis <kornilios@isovalent.com>,
-        Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
- entries)
-Message-ID: <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X>
-References: <YwQRKkmWqsf/Du6A@kernel.org>
+        Wed, 24 Aug 2022 12:26:41 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2BA82F8D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:26:39 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id l23so5875210lji.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Xn8hCbME0CLHtDY+K08rpqn2b9T5jOnQqHQ0Tadc/E8=;
+        b=fsVxa4KsdNTFpBXWYWfXcWhQCndK1yvR28rVyy2ZXL0xF2XIYfsr+5nz6wGzLlVQba
+         DETEQuUq+inOiyV6lseZ1wlCLQo9HvS8vXgcp9IsVe1874ZrKBcrlHEZ+lWX+zpG6fHs
+         mC37yvBFNseAUS+NbZAnczJYPyjhn5vIKkPLZo2ddOlRsKkPdp96N0v9uus392KOoVR2
+         nESmwB5yG2T3ogfuRlDRnU5FLIZsmKa9NIF0fNl68dqm2cnXm8mSBzK+CjBovWzMZWnl
+         /iurdUX3ZfCbNelFsY9S9UvWx2emY24dHOWtfy7krWkRycYuHkzbM4GcASNyMOQTHO14
+         fkBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Xn8hCbME0CLHtDY+K08rpqn2b9T5jOnQqHQ0Tadc/E8=;
+        b=BU0mQX8kEjVCI2hcX0n+47MyAtMUQoy8O3PoBW1qDl/sLelaWa7Vl9bJsDNnjEg29F
+         2Cut+A+AQ/mssRNuXcpj+FbNEk3I8tX8PhhrIjTMb2XzaukPjNFk2MvxNt36yTKgYItO
+         ok6S2orA5l+B9uVCfSaDpmcCeHD2fT5UqyQFI3HnzUGlPIXxX5qaIrLZsTMFoPQYOykf
+         /XdY38K8CATBbTCiiMfTeO8Xv3lqTmqOeVK+WpaQY/JACVGkX+Gp6+j9rWAQxRe3p5yc
+         jsKqiQlE0ojpb7zew1DlJyOu4fboQaSloeY5iI+pJyAHqsiUC7hBIyb2L1V5eVt3Lin8
+         r0VA==
+X-Gm-Message-State: ACgBeo32CbzzHScL0D44RqEB8lNkdEq1vcR6N/mV0qCMtVNN9HiVWZAo
+        vksIvbKVGzmhibJLOT9GPjxTVw==
+X-Google-Smtp-Source: AA6agR43a3Gy3O6UhENmyBSqR+hKIEWrMQCOO0g/hZqfu4+t+cQWfiBElqHDj3umAMwpJmnZsfZkhw==
+X-Received: by 2002:a2e:2e02:0:b0:261:cc4f:1ab3 with SMTP id u2-20020a2e2e02000000b00261cc4f1ab3mr5234lju.83.1661358397508;
+        Wed, 24 Aug 2022 09:26:37 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id v3-20020a056512348300b0048af6242892sm1541019lfr.14.2022.08.24.09.26.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 09:26:36 -0700 (PDT)
+Message-ID: <9e52af46-113f-e419-6cbd-729ae8caf36e@linaro.org>
+Date:   Wed, 24 Aug 2022 19:26:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwQRKkmWqsf/Du6A@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v7 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA
+ manager
+Content-Language: en-US
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        dg@emlix.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+References: <20220824150114.17504-1-i.bornyakov@metrotek.ru>
+ <20220824150114.17504-3-i.bornyakov@metrotek.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220824150114.17504-3-i.bornyakov@metrotek.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+On 24/08/2022 18:01, Ivan Bornyakov wrote:
+> Add Device Tree Binding doc for configuring Lattice ECP5 and MachXO2
+> FPGAs over Slave SPI sysCONFIG interface.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  .../bindings/fpga/lattice,sysconfig.yaml      | 103 ++++++++++++++++++
+>  1 file changed, 103 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> new file mode 100644
+> index 000000000000..596776427a00
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lattice Slave SPI sysCONFIG FPGA manager
+> +
+> +maintainers:
+> +  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> +
+> +description: |
+> +  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
+> +  have Slave Serial Peripheral Interface. Only full reconfiguration is
+> +  supported.
+> +
+> +  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
+> +  format into FPGA's SRAM configuration memory.
+> +
+> +  Programming of MachXO2 is done by writing configuration data into device's
+> +  internal non-volatile Flash memory, then Self-Download of data from Flash
+> +  into SRAM is issued.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - lattice,ecp5-fpga-mgr
+> +      - lattice,machxo2-fpga-mgr
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: lattice,machxo2-fpga-mgr
+> +    then:
+> +      properties:
+> +        spi-max-frequency:
+> +          maximum: 66000000
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: lattice,ecp5-fpga-mgr
+> +    then:
+> +      properties:
+> +        spi-max-frequency:
+> +          maximum: 60000000
+> +        program-gpios:
+> +          description:
+> +            A GPIO line connected to PROGRAMN (active low) pin of the device.
+> +            Initiates configuration sequence.
+> +          maxItems: 1
+> +        init-gpios:
+> +          description:
+> +            A GPIO line connected to INITN (active low) pin of the device.
+> +            Indicates that the FPGA is ready to be configured.
+> +          maxItems: 1
+> +        done-gpios:
+> +          description:
+> +            A GPIO line connected to DONE (active high) pin of the device.
+> +            Indicates that the configuration sequence is complete.
+> +          maxItems: 1
 
-On Mon, Aug 22, 2022 at 08:28:42PM -0300, Arnaldo Carvalho de Melo wrote:
-> Hi,
->   
-> 	The v1.24 release of pahole and its friends is out, with faster
-> BTF generation by parallelizing the encoding part in addition to the
-> previoulsy parallelized DWARF loading, support for 64-bit BTF enumeration
-> entries, signed BTF encoding of 'char', exclude/select DWARF loading
-> based on the language that generated the objects, etc.
+Define instead the properties in top-level properties and disallow them
+for other variant (program-gpios: false). Required can stay.
 
-<snip>
+> +      required:
+> +        - program-gpios
+> +        - init-gpios
+> +        - done-gpios
+> +
 
-> - Introduce --lang and --lang_exclude to specify the language the
->   DWARF compile units were originated from to use or filter.
 
-This appears to break building pahole with older versions of libdw (?).
-I build container images with older versions of compilers for easy
-matrix testing and my gcc-5 and gcc-6 images (based off Ubuntu Xenial
-and Debian Stretch respectively) fail to build.
-
-    $ podman run --rm -ti -v $TMP_FOLDER/dwarves-1.24.tar.xz:/tmp/dwarves-1.24.tar.xz:ro docker.io/ubuntu:xenial
-    # apt update
-    # apt install build-essential cmake libdw-dev libelf-dev xz-utils zlib1g-dev
-    # cd $(mktemp -d)
-    # tar -xJf /tmp/dwarves-1.24.tar.xz
-    # mkdir build
-    # cd build
-    # cmake -DBUILD_SHARED_LIBS=OFF -D__LIB=lib ../dwarves-1.24
-    # make -j$(nproc)
-    ...
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
-      [DW_LANG_BLISS]   = "bliss",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2093:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: error: 'DW_LANG_C_plus_plus_03' undeclared (first use in this function)
-      [DW_LANG_C_plus_plus_03] = "c++03",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2100:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: error: 'DW_LANG_Dylan' undeclared (first use in this function)
-      [DW_LANG_Dylan]   = "dylan",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2105:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: error: 'DW_LANG_Julia' undeclared (first use in this function)
-      [DW_LANG_Julia]   = "julia",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2114:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: error: 'DW_LANG_Modula3' undeclared (first use in this function)
-      [DW_LANG_Modula3]  = "modula3",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2116:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: error: 'DW_LANG_OCaml' undeclared (first use in this function)
-      [DW_LANG_OCaml]   = "ocaml",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2119:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: error: 'DW_LANG_OpenCL' undeclared (first use in this function)
-      [DW_LANG_OpenCL]  = "opencl",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2120:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: error: 'DW_LANG_PLI' undeclared (first use in this function)
-      [DW_LANG_PLI]   = "pli",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2122:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: error: 'DW_LANG_RenderScript' undeclared (first use in this function)
-      [DW_LANG_RenderScript]  = "renderscript",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2124:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: error: 'DW_LANG_Rust' undeclared (first use in this function)
-      [DW_LANG_Rust]   = "rust",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2125:3: note: (near initialization for 'languages')
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: error: 'DW_LANG_Swift' undeclared (first use in this function)
-      [DW_LANG_Swift]   = "swift",
-       ^
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: error: array index in initializer not of integer type
-    /tmp/tmp.pQ2GsHbGAx/dwarves-1.24/dwarves.c:2126:3: note: (near initialization for 'languages')
-    CMakeFiles/dwarves.dir/build.make:62: recipe for target 'CMakeFiles/dwarves.dir/dwarves.c.o' failed
-    ...
-
-If there is any additional information I can provide or patches I can
-test, please let me know!
-
-Cheers,
-Nathan
+Best regards,
+Krzysztof

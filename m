@@ -2,226 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A146E59F029
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8248C59F02E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiHXAX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S232411AbiHXAX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbiHXAXW (ORCPT
+        with ESMTP id S231684AbiHXAX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:23:22 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6014F6B4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:23:20 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id f4so11572188qkl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:23:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=nOzcA3rS/YzoTQm3mufkwndpYmIoKltWyuaOARH3bwA=;
-        b=CqnNoNuKzKtmwalCFcLeGz1LmHJ73g0Dse/GMHn4DR7qOKXYreU2u8N2oH0ODaRuWC
-         gx9lddxHfhEUOekQk/OZvVZKF+SArj56AxbRrrfq0xpMYiiDQiyq6ZdiktbLLwjnLmGN
-         UcOoJFOnyzOXDNoj0++moct4tSDn5oaT8ZFn1nl7O8ZdrPb7uEMSp0Z0X5YmNtI760Dc
-         QZT0wWvUJr7ov67GUePvmiTqC0KbtFLJZLkXo3uAJifPVycLCQngLSG6KvKaakGjs9Nf
-         Pf6rdT9KB0MnpC+HC8qnYOdDkM8SAn98eScFjM4KZFnKv59X+TFTlt/B3IbcqsZkESae
-         UYxQ==
+        Tue, 23 Aug 2022 20:23:57 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DD950075;
+        Tue, 23 Aug 2022 17:23:56 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id r124so2359753oig.11;
+        Tue, 23 Aug 2022 17:23:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nOzcA3rS/YzoTQm3mufkwndpYmIoKltWyuaOARH3bwA=;
-        b=knJYIaA3DW1+qadYDnoK01wnIRVhheOaGgpSjybDmKtoAGUuUB7+RMpnQu0XYovf2f
-         COZVFjfyNRuzYUUghecUqqdPSgAPNEx4qUR4iWKZDdXyMXWfiuv1l3zlk9/YuTT24OZu
-         2UPLUcu+Gf0TTBjZbKoewzxKdXmix+BKq3RDmOEFdqauglNHNjmS8p9gfkiU8uvPc4h6
-         qn0I2yTDYXHp+SCmVRnI4KZw6sGhMRbDYWHWHotAnIsTwg8HOW6/od/flnoob2dv4us3
-         KF4nB2jtrv9jGQ/dPbax1Pimz9td1hjgAaZjjyOWV6GjICs4jJNSkmEGWELaRlLfwuEs
-         3HrA==
-X-Gm-Message-State: ACgBeo3XlZNAhhE8QD1wQOZaHTlFEAuAS78YuOpImDEJFqo5P0dd5RFP
-        3hvd41guUC0QjxxVb/eJQwS00ljRegN7UAalY+qqFw==
-X-Google-Smtp-Source: AA6agR5fh4lw+gR4Rr1eIVp31Mm/w0enQgEM9jwiLmzHxu7UZxc0kEH6XrUL55nPhhbfQ/gg7jv1XIK59UWESv6mjMY=
-X-Received: by 2002:a05:620a:458c:b0:6bb:848a:b86b with SMTP id
- bp12-20020a05620a458c00b006bb848ab86bmr18083896qkb.267.1661300599003; Tue, 23
- Aug 2022 17:23:19 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=z3gbS+dvNMlzyhJK3RThDNWfcjbn/dU0DQZBMqseXn0=;
+        b=kYfxqaqaOUoPAN51plqIWtQjSFJ+NkddUfQUREc+EcgU3Syffzs5Mnvppds5G8Qesm
+         OSK2irWsWpkYPxParH3hf0pw6KjmNrjPviGI5nYPnW0q6bylQ6FxiPyFLqD5soY/N2Rn
+         mzzEKgbaJIC/mB1Hbw+7LC3umwDstea+ooHwjfjzCRKFSwpYhtJatCfw7LjFoMPybaRR
+         t6iNWniUXXCcQPLPdh1hnCOhjlKqDEToQ6OmeYWttrLiD0V8hQdwVoxYv4ZraBxX+TzH
+         UfCtfXJVmT3sU/DNKLes2uT/URGa3g8l3NGe0dpS5KvOhxZBoQYypTkY1YfPjS5+4HVK
+         IzEg==
+X-Gm-Message-State: ACgBeo2dh1gNV3fXt1rYBvqQVbx+UVjzDwYR0JWiRMelUa/XML++iPa7
+        ozKYGbLzuTeg1MMn50I7mJDNGQqmCQ==
+X-Google-Smtp-Source: AA6agR6mxgCTl0NfIJJjwFJDTc6t76xpU9NN2dg7Q7Pt77XqKHCJGPxaRenqC5Re0V2UnAbPZaSujg==
+X-Received: by 2002:a05:6808:23cd:b0:345:efa:2a40 with SMTP id bq13-20020a05680823cd00b003450efa2a40mr2229844oib.294.1661300636163;
+        Tue, 23 Aug 2022 17:23:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k37-20020a05687095a500b00101bc3380a5sm669853oao.12.2022.08.23.17.23.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 17:23:55 -0700 (PDT)
+Received: (nullmailer pid 521915 invoked by uid 1000);
+        Wed, 24 Aug 2022 00:23:55 -0000
+Date:   Tue, 23 Aug 2022 19:23:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        linux-kbuild@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: fix wrong use of if_changed_rule
+Message-ID: <20220824002355.GA391120-robh@kernel.org>
+References: <20220817152027.16928-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <20220812202802.3774257-1-haoluo@google.com> <20220812202802.3774257-2-haoluo@google.com>
- <CAEf4BzbuD+vLzxVkXpiX=yKu2WbHLrekrZS8hx2TWU04m0h-kA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbuD+vLzxVkXpiX=yKu2WbHLrekrZS8hx2TWU04m0h-kA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 23 Aug 2022 17:23:08 -0700
-Message-ID: <CA+khW7gnAM0+dre+kF4z4-DB2FhemsZRBFKsjXVvVH5U6O4EPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 1/5] bpf: Introduce cgroup iter
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817152027.16928-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 9:17 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Aug 12, 2022 at 1:28 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
-> >
-> >  - walking a cgroup's descendants in pre-order.
-> >  - walking a cgroup's descendants in post-order.
-> >  - walking a cgroup's ancestors.
-> >  - process only the given cgroup.
-> >
-> > When attaching cgroup_iter, one can set a cgroup to the iter_link
-> > created from attaching. This cgroup is passed as a file descriptor
-> > or cgroup id and serves as the starting point of the walk. If no
-> > cgroup is specified, the starting point will be the root cgroup v2.
-> >
-> > For walking descendants, one can specify the order: either pre-order or
-> > post-order. For walking ancestors, the walk starts at the specified
-> > cgroup and ends at the root.
-> >
-> > One can also terminate the walk early by returning 1 from the iter
-> > program.
-> >
-> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
-> > program is called with cgroup_mutex held.
-> >
-> > Currently only one session is supported, which means, depending on the
-> > volume of data bpf program intends to send to user space, the number
-> > of cgroups that can be walked is limited. For example, given the current
-> > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
-> > cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
-> > be walked is 512. This is a limitation of cgroup_iter. If the output
-> > data is larger than the kernel buffer size, after all data in the
-> > kernel buffer is consumed by user space, the subsequent read() syscall
-> > will signal EOPNOTSUPP. In order to work around, the user may have to
-> > update their program to reduce the volume of data sent to output. For
-> > example, skip some uninteresting cgroups. In future, we may extend
-> > bpf_iter flags to allow customizing buffer size.
-> >
-> > Acked-by: Yonghong Song <yhs@fb.com>
-> > Acked-by: Tejun Heo <tj@kernel.org>
-> > Signed-off-by: Hao Luo <haoluo@google.com>
-> > ---
-> >  include/linux/bpf.h                           |   8 +
-> >  include/uapi/linux/bpf.h                      |  35 +++
-> >  kernel/bpf/Makefile                           |   3 +
-> >  kernel/bpf/cgroup_iter.c                      | 283 ++++++++++++++++++
-> >  tools/include/uapi/linux/bpf.h                |  35 +++
-> >  .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
-> >  6 files changed, 366 insertions(+), 2 deletions(-)
-> >  create mode 100644 kernel/bpf/cgroup_iter.c
-> >
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index a627a02cf8ab..ecb8c61178a1 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -48,6 +48,7 @@ struct mem_cgroup;
-> >  struct module;
-> >  struct bpf_func_state;
-> >  struct ftrace_ops;
-> > +struct cgroup;
-> >
-> >  extern struct idr btf_idr;
-> >  extern spinlock_t btf_idr_lock;
-> > @@ -1730,7 +1731,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
-> >         int __init bpf_iter_ ## target(args) { return 0; }
-> >
-> >  struct bpf_iter_aux_info {
-> > +       /* for map_elem iter */
-> >         struct bpf_map *map;
-> > +
-> > +       /* for cgroup iter */
-> > +       struct {
-> > +               struct cgroup *start; /* starting cgroup */
-> > +               int order;
->
-> why not using enum as a type here?
->
+On Thu, Aug 18, 2022 at 12:20:26AM +0900, Masahiro Yamada wrote:
+> The intent for if_changed_rule is to re-run the rule when the command
+> line is changed, but this if_changed_rule does not do anything for it.
 
-Sorry Andrii, I missed your reply.
+This is the issue with DT_SCHEMA_FILES changes not causing a rebuild?
 
-No special reasons. Will use enum in the next version.
+> $(cmd-check) for this rule is always empty because:
+> 
+>  [1] $(cmd_$@) is empty because .processed-schema.json.cmd does not exist
+>  [2] $(cmd_$1) is empty because cmd_chkdt is not defined
+> 
+> To address [1], use cmd_and_cmdsave instead of cmd.
+> 
+> To address [2], rename rule_chkdt to rule_mk_schema so that the stem
+> parts of cmd_* and rule_* match, like commit 7a0496056064 ("kbuild:
+> fix DT binding schema rule to detect command line changes").
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+> Another possibility might be to split out yamllint and chk_bindings
+> as standalone build rules instead of running them as a side-effect
+> of the schema build. (but it it up to Rob's preference)
 
-> > +       } cgroup;
-> >  };
-> >
-> >  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 7d1e2794d83e..bc3c901b9f70 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -87,10 +87,34 @@ struct bpf_cgroup_storage_key {
-> >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
-> >  };
-> >
-> > +enum bpf_iter_order {
-> > +       BPF_ITER_DESCENDANTS_PRE = 0,   /* walk descendants in pre-order. */
-> > +       BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
-> > +       BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
-> > +       BPF_ITER_SELF_ONLY,             /* process only a single object. */
-> > +};
-> > +
-> >  union bpf_iter_link_info {
-> >         struct {
-> >                 __u32   map_fd;
-> >         } map;
-> > +       struct {
-> > +               /* Users must specify order using one of the following values:
-> > +                *  - BPF_ITER_DESCENDANTS_PRE
-> > +                *  - BPF_ITER_DESCENDANTS_POST
-> > +                *  - BPF_ITER_ANCESTORS_UP
-> > +                *  - BPF_ITER_SELF_ONLY
-> > +                */
-> > +               __u32   order;
->
-> same, we just declared the UAPI enum above, why not specify that this
-> is that enum here?
->
+That is the direction I'd like to go. Something like the below patch 
+perhaps.
 
-Will use enum.
+The main issue (or feature?) is that 'dt_binding_lint' and 
+'dt_binding_schema' targets are still rerun every time even with the 
+dummy target files.
 
-> > +
-> > +               /* At most one of cgroup_fd and cgroup_id can be non-zero. If
-> > +                * both are zero, the walk starts from the default cgroup v2
-> > +                * root. For walking v1 hierarchy, one should always explicitly
-> > +                * specify cgroup_fd.
-> > +                */
-> > +               __u32   cgroup_fd;
-> > +               __u64   cgroup_id;
->
-> for my own education, does root cgroup has cgroup_id == 0?
->
+I think the top level makefile can be simplified a bit more with this 
+change, but this is what I got to being somewhat functional.
 
-Yeah, unfortunately, the root cgroup has cgroup_id == 1. :(
-
-> > +       } cgroup;
-> >  };
-> >
->
-> [...]
+diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
+index 1eaccf135b30..ec3d8a926331 100644
+--- a/Documentation/devicetree/bindings/Makefile
++++ b/Documentation/devicetree/bindings/Makefile
+@@ -34,11 +34,13 @@ CHK_DT_DOCS := $(shell $(find_cmd))
+ quiet_cmd_yamllint = LINT    $(src)
+       cmd_yamllint = ($(find_cmd) | \
+                      xargs -n200 -P$$(nproc) \
+-		     $(DT_SCHEMA_LINT) -f parsable -c $(srctree)/$(src)/.yamllint >&2) || true
++		     $(DT_SCHEMA_LINT) -f parsable -c $(srctree)/$(src)/.yamllint >&2) || true; \
++                     touch $(obj)/dt_binding_lint.checked
+ 
+-quiet_cmd_chk_bindings = CHKDT   $@
++quiet_cmd_chk_bindings = CHKDT   $(src)
+       cmd_chk_bindings = ($(find_cmd) | \
+-                         xargs -n200 -P$$(nproc) $(DT_DOC_CHECKER) -u $(srctree)/$(src)) || true
++                         xargs -n200 -P$$(nproc) $(DT_DOC_CHECKER) -u $(srctree)/$(src)) || true; \
++                         touch $(obj)/dt_binding_schema.checked
+ 
+ quiet_cmd_mk_schema = SCHEMA  $@
+       cmd_mk_schema = f=$$(mktemp) ; \
+@@ -46,12 +48,6 @@ quiet_cmd_mk_schema = SCHEMA  $@
+                       $(DT_MK_SCHEMA) -j $(DT_MK_SCHEMA_FLAGS) @$$f > $@ ; \
+ 		      rm -f $$f
+ 
+-define rule_chkdt
+-	$(if $(DT_SCHEMA_LINT),$(call cmd,yamllint),)
+-	$(call cmd,chk_bindings)
+-	$(call cmd,mk_schema)
+-endef
+-
+ DT_DOCS = $(patsubst $(srctree)/%,%,$(shell $(find_all_cmd)))
+ 
+ override DTC_FLAGS := \
+@@ -64,8 +60,25 @@ override DTC_FLAGS := \
+ # Disable undocumented compatible checks until warning free
+ override DT_CHECKER_FLAGS ?=
+ 
+-$(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
+-	$(call if_changed_rule,chkdt)
++dt_binding_lint: $(obj)/dt_binding_lint.checked
++
++$(obj)/dt_binding_lint.checked: $(CHK_DT_DOCS) $(src)/.yamllint FORCE
++	$(call if_changed,yamllint)
++
++dt_binding_schema: $(obj)/dt_binding_schema.checked
++
++$(obj)/dt_binding_schema.checked: $(CHK_DT_DOCS) check_dtschema_version FORCE
++	$(call if_changed,chk_bindings)
++
++dt_binding_examples: CHECK_DT_BINDING = y
++
++dt_binding_examples: $(obj)/processed-schema.json $(patsubst $(srctree)/%.yaml,%.example.dtb, $(CHK_DT_DOCS))
++
++dt_binding_check: dt_binding_lint dt_binding_examples dt_binding_schema
++
++
++$(obj)/processed-schema.json: $(DT_DOCS) check_dtschema_version FORCE
++	$(call if_changed,mk_schema)
+ 
+ always-y += processed-schema.json
+ always-$(CHECK_DT_BINDING) += $(patsubst $(srctree)/$(src)/%.yaml,%.example.dts, $(CHK_DT_DOCS))
+diff --git a/Makefile b/Makefile
+index c7705f749601..0f197e3bd1f9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1391,7 +1391,7 @@ dtbs_prepare: include/config/kernel.release scripts_dtc
+ 
+ ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
+ export CHECK_DTBS=y
+-dtbs: dt_binding_check
++dtbs: dt_binding_schema
+ endif
+ 
+ dtbs_check: dtbs
+@@ -1409,13 +1409,14 @@ PHONY += scripts_dtc
+ scripts_dtc: scripts_basic
+ 	$(Q)$(MAKE) $(build)=scripts/dtc
+ 
+-ifneq ($(filter dt_binding_check, $(MAKECMDGOALS)),)
++ifneq ($(filter dt_binding_examples, $(MAKECMDGOALS)),)
+ export CHECK_DT_BINDING=y
+ endif
+ 
+-PHONY += dt_binding_check
+-dt_binding_check: scripts_dtc
+-	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings
++DT_BINDING_TARGETS := dt_binding_check dt_binding_lint dt_binding_schema dt_binding_examples
++PHONY += $(DT_BINDING_TARGETS)
++$(DT_BINDING_TARGETS): scripts_dtc
++	$(Q)$(MAKE) $(build)=Documentation/devicetree/bindings $@
+ 
+ # ---------------------------------------------------------------------------
+ # Modules

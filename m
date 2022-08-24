@@ -2,164 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631CD59FD53
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9897959FD52
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239350AbiHXOam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S237751AbiHXOaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239248AbiHXOaW (ORCPT
+        with ESMTP id S237759AbiHXOav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:30:22 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75E22B605
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:30:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VN7nuZl_1661351412;
-Received: from 30.0.163.227(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VN7nuZl_1661351412)
-          by smtp.aliyun-inc.com;
-          Wed, 24 Aug 2022 22:30:13 +0800
-Message-ID: <f5f08e69-83d0-78af-39fb-f2180d13086d@linux.alibaba.com>
-Date:   Wed, 24 Aug 2022 22:30:23 +0800
+        Wed, 24 Aug 2022 10:30:51 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A4E11468
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:30:48 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ca13so22623363ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=L3nhJ1oXEm66RN5YJpQxUjYOJUVJImLsdXQEym3JVNE=;
+        b=JknGb3YsYH4h74OZgzf06J8m47ndvTj3jgsEk0rjExh7+xILbqdCRyR3KJTRo+duLR
+         hA53EAUmakg+IufPqNIoL6KWa3OqcL4hQ69tCuysPX8XjWwj/jzIecMvLaWcrmCw91+2
+         DFzU5c0PchnPoJl0qbWieoCGz0skfMDvvX7GQFZY1IJ/YzRMBqJWG8fPu7tNYScujZV6
+         490SVTH8k41vKxRoEYvdxVesrC2gc1KQaPsY8qqc1d7htSN9iXEx/KKGobTM/s3iKP0s
+         veZl7MtzPqRa+N8zTtaZ/xX/lX0auzQXObqigTpv2GhnKRHii0LMSaKr4z5VZw+XK8Pc
+         SkVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=L3nhJ1oXEm66RN5YJpQxUjYOJUVJImLsdXQEym3JVNE=;
+        b=SGXOObehWvW6jJqHRGN41q4Qo+xcRIxqW4/9IPA01tcS19rvShVbnS+UiQL/xgbJxo
+         H955XoRtacq+7MkUuLJ+HTwp456hR5qIMEelQCGeNujAiCow2HJesLp3VJSlOBDN4PNp
+         jCwgTSDdlgIo6oNCh1RKmxxXKU9vLVktZtME4aJFSgnBzeyUxdJStd1zQ5+WV2Gg6OG1
+         jbYJl98UdZ3nvTVFaw2kZwYGElguxy9hhGo7DxrJTWDsP5bvrZ6s+KG7xa49+TLrqNIg
+         KpuLLCTi1iidVwtaWcY5WXp28LA4ds0zlBYyiRMSpD/PHmCexL7TNgo4xeaIypwkwp9F
+         0fQg==
+X-Gm-Message-State: ACgBeo3CgO71rxiGlEHEYGcGKAZrzLVVLcCI410EHHycKpnlICOpKCML
+        XZ6gBMEg+gVrr9/fqLoRnuTKzxGfymZRdHhQX4PAfFWTD8A=
+X-Google-Smtp-Source: AA6agR5NSfYqi4aiOyXY9NpkX/lrFYOyG2xevy89Tqs7/R3UIxulmNH7LSzKVDzuc7IdiZ6U+faz2D2VvV5PDq9QSvM=
+X-Received: by 2002:a17:906:5d07:b0:73d:a136:760c with SMTP id
+ g7-20020a1709065d0700b0073da136760cmr3000625ejt.435.1661351447121; Wed, 24
+ Aug 2022 07:30:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
- size hugetlb page
-To:     David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
- <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
- <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
- <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
- <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com> <YwVo7xSO+VebkIfQ@monkey>
- <64669c0a-4a6e-f034-a15b-c4a8deea9e5d@linux.alibaba.com>
- <7ee73879-e402-9175-eae8-41471d80d59e@redhat.com>
- <f7544713-d856-0875-41dd-52a5c27ba015@linux.alibaba.com>
- <041e2e43-2227-1681-743e-5f82e245b5ea@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <041e2e43-2227-1681-743e-5f82e245b5ea@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220824075213.221397-1-ye.xingchen@zte.com.cn>
+In-Reply-To: <20220824075213.221397-1-ye.xingchen@zte.com.cn>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Wed, 24 Aug 2022 16:30:36 +0200
+Message-ID: <CAMGffEm=Ss1=Qvg_pd3MUT=XsKr+tvKn4bVaLUu4GEpDxHoC_g@mail.gmail.com>
+Subject: Re: [PATCH linux-next] block/rnbd-clt: Remove the unneeded result variable
+To:     cgel.zte@gmail.com
+Cc:     axboe@kernel.dk, haris.iqbal@ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/24/2022 7:55 PM, David Hildenbrand wrote:
-> On 24.08.22 11:41, Baolin Wang wrote:
->>
->>
->> On 8/24/2022 3:31 PM, David Hildenbrand wrote:
->>>>>>>
->>>>>>> IMHO, these follow_huge_xxx() functions are arch-specified at first and
->>>>>>> were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm:
->>>>>>> hugetlb: Copy general hugetlb code from x86 to mm"), and now there are
->>>>>>> still some arch-specified follow_huge_xxx() definition, for example:
->>>>>>> ia64: follow_huge_addr
->>>>>>> powerpc: follow_huge_pd
->>>>>>> s390: follow_huge_pud
->>>>>>>
->>>>>>> What I mean is that follow_hugetlb_page() is a common and
->>>>>>> not-arch-specified function, is it suitable to change it to be
->>>>>>> arch-specified?
->>>>>>> And thinking more, can we rename follow_hugetlb_page() as
->>>>>>> hugetlb_page_faultin() and simplify it to only handle the page faults of
->>>>>>> hugetlb like the faultin_page() for normal page? That means we can make
->>>>>>> sure only follow_page_mask() can handle hugetlb.
->>>>>>>
->>>>>
->>>>> Something like that might work, but you still have two page table walkers
->>>>> for hugetlb.  I like David's idea (if I understand it correctly) of
->>>>
->>>> What I mean is we may change the hugetlb handling like normal page:
->>>> 1) use follow_page_mask() to look up a hugetlb firstly.
->>>> 2) if can not get the hugetlb, then try to page fault by
->>>> hugetlb_page_faultin().
->>>> 3) if page fault successed, then retry to find hugetlb by
->>>> follow_page_mask().
->>>
->>> That implies putting more hugetlbfs special code into generic GUP,
->>> turning it even more complicated. But of course, it depends on how the
->>> end result looks like. My gut feeling was that hugetlb is better handled
->>> in follow_hugetlb_page() separately (just like we do with a lot of other
->>> page table walkers).
->>
->> OK, fair enough.
->>
->>>>
->>>> Just a rough thought, and I need more investigation for my idea and
->>>> David's idea.
->>>>
->>>>> using follow_hugetlb_page for both cases.  As noted, it will need to be
->>>>> taught how to not trigger faults in the follow_page_mask case.
->>>>
->>>> Anyway, I also agree we need some cleanup, and firstly I think we should
->>>> cleanup these arch-specified follow_huge_xxx() on some architectures
->>>> which are similar with the common ones. I will look into these.
->>>
->>> There was a recent discussion on that, e.g.:
->>>
->>> https://lkml.kernel.org/r/20220818135717.609eef8a@thinkpad
->>
->> Thanks.
->>
->>>
->>>>
->>>> However, considering cleanup may need more investigation and
->>>> refactoring, now I prefer to make these bug-fix patches of this patchset
->>>> into mainline firstly, which are suitable to backport to old version to
->>>> fix potential race issues. Mike and David, how do you think? Could you
->>>> help to review these patches? Thanks.
->>>
->>> Patch #1 certainly add more special code just to handle another hugetlb
->>> corner case (CONT pages), and maybe just making it all use
->>> follow_hugetlb_page() would be even cleaner and less error prone.
->>>
->>> I agree that locking is shaky, but I'm not sure if we really want to
->>> backport this to stable trees:
->>>
->>> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->>>
->>> "It must fix a real bug that bothers people (not a, “This could be a
->>> problem...” type thing)."
->>>
->>>
->>> Do we actually have any instance of this being a real (and not a
->>> theoretical) problem? If not, I'd rather clean it all up right away.
->>
->> I think this is a real problem (not theoretical), and easy to write some
->> code to show the issue. For example, suppose thread A is trying to look
->> up a CONT-PTE size hugetlb page under the lock, however antoher thread B
->> can migrate the CONT-PTE hugetlb page at the same time, which will cause
->> thread A to get an incorrect page, if thread A want to do something for
->> this incorrect page, error occurs.
->>
->> Actually we also want to backport these fixes to the distro with old
->> kernel versions to make the hugetlb more stable. Otherwise we must hit
->> these issues sooner or later if the customers use CONT-PTE/PMD hugetlb.
->>
->> Anyway, if you and Mike still think these issues are not important
->> enough to be fixed in the old versions, I can do the cleanup firstly.
->>
-> 
-> [asking myself which follow_page() users actually care about hugetlb,
-> and why we need this handling in follow_page at all]
-> 
-> Which follow_page() user do we care about here? Primarily mm/migrate.c
-> only I assume?
-
-Right, mainly affects the move_pages() syscall I think. Yes, I can not 
-know all of the users of the move_pages() syscall now or in the future 
-in our data center, but like I said the move_pages() syscall + hugetlb 
-can be a real potential stability issue.
+On Wed, Aug 24, 2022 at 9:52 AM <cgel.zte@gmail.com> wrote:
+>
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Return the value from rtrs_clt_rdma_cq_direct() directly instead of
+> storing it in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
+thx!
+> ---
+>  drivers/block/rnbd/rnbd-clt.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/block/rnbd/rnbd-clt.c b/drivers/block/rnbd/rnbd-clt.c
+> index 9d01e7ab33e4..78334da74d8b 100644
+> --- a/drivers/block/rnbd/rnbd-clt.c
+> +++ b/drivers/block/rnbd/rnbd-clt.c
+> @@ -1159,10 +1159,8 @@ static int rnbd_rdma_poll(struct blk_mq_hw_ctx *hctx, struct io_comp_batch *iob)
+>  {
+>         struct rnbd_queue *q = hctx->driver_data;
+>         struct rnbd_clt_dev *dev = q->dev;
+> -       int cnt;
+>
+> -       cnt = rtrs_clt_rdma_cq_direct(dev->sess->rtrs, hctx->queue_num);
+> -       return cnt;
+> +       return rtrs_clt_rdma_cq_direct(dev->sess->rtrs, hctx->queue_num);
+>  }
+>
+>  static void rnbd_rdma_map_queues(struct blk_mq_tag_set *set)
+> --
+> 2.25.1

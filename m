@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314835A001A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935425A001D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239897AbiHXRKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
+        id S239899AbiHXRMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238177AbiHXRKV (ORCPT
+        with ESMTP id S238988AbiHXRMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:10:21 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399A76EF02
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:10:19 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9859329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9859:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 713C21EC0589;
-        Wed, 24 Aug 2022 19:10:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1661361014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=uGkGQRvpWdC5b+qAsVTNWX4lG8tnFLromneBNpYOMJ4=;
-        b=qWNv6vnKZ0BLkAcUWnMCnUvorYsKGcpsuMn8NZwvulUrKCBM06PbQgYUlPxBjEEBtQeJxT
-        XjizTj8L+ZRsZTvQPOlIPtexL/UUjNk7ZBZxBBQalr8waU9QsrQ0syyDbDTXl16GkVo8gK
-        63m8nsy6haLaYKKeT+sfpOL2O1fk5Qs=
-Date:   Wed, 24 Aug 2022 19:10:10 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 1/2] x86/tdx: Add TDX Guest attestation interface
- driver
-Message-ID: <YwZbcpvmJt50YDa/@zn.tnic>
-References: <20220804003323.1441376-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Wed, 24 Aug 2022 13:12:17 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7AB63B9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:12:15 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id p185so2629120pfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=5vMlpqF4uchxRz9nRlu+nbG1ZWJEWykhLsSWI33KOcE=;
+        b=cdG4rt0Thdi2yrVwst1w8/+IzxcEYbzIuYPuGl41PzQxJyjbviOFDtG8mMWYyNuS/n
+         R5hnMof+VXhZ6J4YRfzCJOvsHcXFAsHH4cypr/40luSEhceIdS6yNbWIq5FEIAlaIzeV
+         gF9BQ2DN42onkjt1HW6r+pkaO+GbDr1Hy+eWA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=5vMlpqF4uchxRz9nRlu+nbG1ZWJEWykhLsSWI33KOcE=;
+        b=iiuuAoVNdkrbGPebRbT/h9eod8pniWbfwbMGHm/9PElLpcqs3t6mAcazyMQrzrbnai
+         3nD5D7QxYphiw2pM17sMyna2+/ZheSzVv3VqnGFBBKRYOQVUvsgqEGfFIggdKCRbO5ni
+         xkcQTogBHB+s6XyyWErtbxmTD3YUr8HnGNxtHoo8eyYJX9dvJ6PWIRnNOEo2o3H62n3c
+         qfNfap6zFSvHJAC+Y6R3+n6r0zfow9KTBinmXZiIpsQHKaMFZHjVCJ02+lEWyp6M6h4r
+         ubU5gEdoJLmNqP9D+antBrxVpS/3C1XWYYwVWFp9+aV0HSMYP73ex5HFc9WkgoHtQqT3
+         VNKg==
+X-Gm-Message-State: ACgBeo2EloNjmmbRdTysKCwvFFG3kWe/QvzuC1eZdk9pSiTmF5wcfhjh
+        TBJvkAEZgJIgiquHGL/xRWY/BQ==
+X-Google-Smtp-Source: AA6agR5oufg8VQ+GbXwnnRQMwizZMaD2QZfb9V2z1jHcfsQP0Y/LuKHuQY+aWacd38dGHcMoiu2UJw==
+X-Received: by 2002:a63:125c:0:b0:427:a637:3414 with SMTP id 28-20020a63125c000000b00427a6373414mr2189pgs.80.1661361134569;
+        Wed, 24 Aug 2022 10:12:14 -0700 (PDT)
+Received: from 51aa44355c3d ([203.220.223.63])
+        by smtp.gmail.com with ESMTPSA id v2-20020a626102000000b005361708275fsm10780673pfb.217.2022.08.24.10.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 10:12:12 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 17:12:04 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/362] 5.19.4-rc2 review
+Message-ID: <20220824171204.GA1669513@51aa44355c3d>
+References: <20220824065936.861377531@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220804003323.1441376-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220824065936.861377531@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 05:33:22PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> In TDX guest, attestation is used to verify the trustworthiness of a TD
-> to other entities before provisioning secrets to the TD. Such attestation
-> process is required by 3rd party servers before sending sensitive
-> information to TD guests. One usage example is to get encryption keys
-> from the key server for mounting the encrypted rootfs or secondary drive.
+On Wed, Aug 24, 2022 at 09:01:14AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.4 release.
+> There are 362 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 26 Aug 2022 06:58:34 +0000.
+> Anything received after that time might be too late.
 
-Just a reminder to fix this up wrt TDX and TD. I know Intel
-documentation wants to talk about trust domains and the guest being one
-but then if you wanna formulate it that way, you need to define the
-nomenclature you're using and then stick with it.
+Hi Greg,
 
-Otherwise, confusion.
+5.19.4-rc2 tested.
 
-Example: "In TDX guest, ... Such attestation... before sending
-information to TD guests."
+Run tested on:
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
-And here I go: What, there's a TDX guest and TD guest?
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-Just simplify it.
-
-I'll review our v11 properly after you've addressed comments from v9 too.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

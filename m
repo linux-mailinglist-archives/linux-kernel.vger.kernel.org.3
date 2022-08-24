@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCBE59F361
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654C759F366
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234261AbiHXGEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
+        id S234803AbiHXGEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiHXGES (ORCPT
+        with ESMTP id S234405AbiHXGEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:04:18 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478C591D35
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:04:17 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso288868wmc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=lsuk7uZDIF33aCvdAlHfM9T/aKm08zp1jKT0JyGS+SI=;
-        b=VzrgHJZNFCfHZQ9fDt9SbYSikK8Y0QeLsMWnTDaa3Ix8v93UQNvX51iK8Aoq3a9kXs
-         SWCp2DAPymGn6PGxdEAwS0akx6eUrCJAFPzpVwMx4YK9aTBOJA1AJ6wYp9FTo5CVtRBN
-         ApdUT3nd+A64YDwcE8f4kG5hUou6P5Bi1WiSDJYckr0lsQWZBIkh/2nxKjLrIv1tboNk
-         ZObFnZpbGDuQaPveoTACNVm1OPssUHaFZtwiS4GYFgP9ljHr8loiRerP4X6tdJ7G+G1g
-         yLzvLSLd8ttipDNaOFq67D7kQ5EghWyuOytfWd+X3keyBTdAE+2fqV2DAJ00SlPgkpbN
-         8wzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=lsuk7uZDIF33aCvdAlHfM9T/aKm08zp1jKT0JyGS+SI=;
-        b=QYpn7gEZcvM+gQl0qhv9QPKJGLKdzA5mA7j8st5444tvxTsbMgdfsNZbOn8G49eY85
-         jjUXDgFcxbdZb3zuKGaAIjwicBx2yO2biOpbdhFZiIAxrOnWezJCxOZoOCULJB5gOgRu
-         DWyj0oj/OLU84rhREhCjLBX49yCtp3ugRCbn9oybjyXvR3LUjeuQxlvVrt6FNm+giPKb
-         npo2tTGPkixRV/r0mjZg57GbMZilMIxkPJ4xTvlUDYyNaZuuUCNISXCiESnYCxBfu9nn
-         mwlIJEyE2rqQ+hhmx3JiPt4xLkFFdM6jNbevR/am8zjYYXrktRnmKOJL77YRGamfCcrD
-         fSFA==
-X-Gm-Message-State: ACgBeo3ELW1N+mefXp1ZeeqrYImefPwhFwamWeVRCKvOXHTASKh/2zvV
-        LrgEjpt3Slf87a/s1d+IaXsqAwnO4aromzAcwDg=
-X-Google-Smtp-Source: AA6agR6gLcnIAF65A5WR/1TeCNW+l0dGibWgolm9qc0u3hhP8UVQrooTgJ8GPtXmbgrFA6kqilJCT9yamyoPLmuWfvY=
-X-Received: by 2002:a05:600c:3d05:b0:3a5:dd21:e201 with SMTP id
- bh5-20020a05600c3d0500b003a5dd21e201mr4068777wmb.132.1661321055864; Tue, 23
- Aug 2022 23:04:15 -0700 (PDT)
+        Wed, 24 Aug 2022 02:04:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358E091D35;
+        Tue, 23 Aug 2022 23:04:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF2C4B822DF;
+        Wed, 24 Aug 2022 06:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10050C433C1;
+        Wed, 24 Aug 2022 06:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661321078;
+        bh=Vg8rTF4/cdtBoLL5ouYQ0cWuabQoYYlJa7ce+p3Xejs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VjcVhUpolXkOJk2e7Xbrrmm38DHGKJUqEQ00X9L5/ERNz4hgHNGGcDmsoZztq5NVl
+         b7FlUW3xjkdUD6WyiHQxb5qoxbKQvrsY+cqOOr5MJiRYI0DnevOFXDAPh0EybbK7nv
+         XlxhPjuGxasFT70mMeEtHy3TuazFglf1unjI9UCU=
+Date:   Wed, 24 Aug 2022 08:04:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mazin Al Haddad <mazinalhaddad05@gmail.com>
+Cc:     pontus.fuchs@gmail.com, netdev@vger.kernel.org, kvalo@kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com,
+        edumazet@google.com, paskripkin@gmail.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel-mentees@lists.linuxfoundation.org,
+        davem@davemloft.net
+Subject: Re: [PATCH] ar5523: check endpoints type and direction in probe()
+Message-ID: <YwW/cw2cXLEd5xFo@kroah.com>
+References: <20220823222436.514204-1-mazinalhaddad05@gmail.com>
 MIME-Version: 1.0
-References: <20220713134823.95141-1-schspa@gmail.com>
-In-Reply-To: <20220713134823.95141-1-schspa@gmail.com>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Wed, 24 Aug 2022 14:04:03 +0800
-Message-ID: <CAMA88TrptsGYJqf_hTgE-UVC+dfuHJ1hcOZdJEE1yuKFw_A-8A@mail.gmail.com>
-Subject: Re: [PATCH v7 1/2] sched/rt: fix bad task migration for rt tasks
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
-        Schspa Shi <schspa@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823222436.514204-1-mazinalhaddad05@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,16 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Valentin, Steven, Dietmar:
+On Wed, Aug 24, 2022 at 01:24:38AM +0300, Mazin Al Haddad wrote:
+> Fixes a bug reported by syzbot, where a warning occurs in usb_submit_urb()
+> due to the wrong endpoint type. There is no check for both the number
+> of endpoints and the type which causes an error as the code tries to
+> send a URB to the wrong endpoint.
+> 
+> Fix it by adding a check for the number of endpoints and the
+> direction/type of the endpoints. If the endpoints do not match the 
+> expected configuration -ENODEV is returned.
+> 
+> Syzkaller report:
+> 
+> usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+> WARNING: CPU: 1 PID: 71 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+> Modules linked in:
+> CPU: 1 PID: 71 Comm: kworker/1:2 Not tainted 5.19.0-rc7-syzkaller-00150-g32f02a211b0a #0
+> Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>  <TASK>
+>  ar5523_cmd+0x420/0x790 drivers/net/wireless/ath/ar5523/ar5523.c:275
+>  ar5523_cmd_read drivers/net/wireless/ath/ar5523/ar5523.c:302 [inline]
+>  ar5523_host_available drivers/net/wireless/ath/ar5523/ar5523.c:1376 [inline]
+>  ar5523_probe+0xc66/0x1da0 drivers/net/wireless/ath/ar5523/ar5523.c:1655
+> 
+> 
+> Link: https://syzkaller.appspot.com/bug?extid=1bc2c2afd44f820a669f
+> Reported-and-tested-by: syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
+> Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
+> ---
+>  drivers/net/wireless/ath/ar5523/ar5523.c | 31 ++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/drivers/net/wireless/ath/ar5523/ar5523.c b/drivers/net/wireless/ath/ar5523/ar5523.c
+> index 6f937d2cc126..5451bf9ab9fb 100644
+> --- a/drivers/net/wireless/ath/ar5523/ar5523.c
+> +++ b/drivers/net/wireless/ath/ar5523/ar5523.c
+> @@ -1581,8 +1581,39 @@ static int ar5523_probe(struct usb_interface *intf,
+>  	struct usb_device *dev = interface_to_usbdev(intf);
+>  	struct ieee80211_hw *hw;
+>  	struct ar5523 *ar;
+> +	struct usb_host_interface *host = intf->cur_altsetting;
+>  	int error = -ENOMEM;
+>  
+> +	if (host->desc.bNumEndpoints != 4) {
+> +		dev_err(&dev->dev, "Wrong number of endpoints\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	for (int i = 0; i < host->desc.bNumEndpoints; ++i) {
+> +		struct usb_endpoint_descriptor *ep = &host->endpoint[i].desc;
+> +		// Check for type of endpoint and direction.
+> +		switch (i) {
+> +		case 0:
+> +		case 1:
+> +			if ((ep->bEndpointAddress & USB_DIR_OUT) &&
+> +			    ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
+> +			     == USB_ENDPOINT_XFER_BULK)){
 
-Could you help to review this V7 patch again ?
+Did you run your change through checkpatch?
 
-I have been testing on our platform for more than a month, and it
-seems that the system has no adverse reactions.
+> +				dev_err(&dev->dev, "Wrong type of endpoints\n");
+> +				return -ENODEV;
+> +			}
+> +			break;
+> +		case 2:
+> +		case 3:
+> +			if ((ep->bEndpointAddress & USB_DIR_IN) &&
+> +			    ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
+> +			     == USB_ENDPOINT_XFER_BULK)){
+> +				dev_err(&dev->dev, "Wrong type of endpoints\n");
+> +				return -ENODEV;
+> +			}
+> +			break;
+> +		}
 
-Thank you very much.
+We have usb helper functions for all of this, why not use them instead
+of attempting to roll your own?
 
+thanks,
 
---
-BRs
-Schspa Shi
+greg k-h

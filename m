@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2819B59F2D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 06:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A6359F2DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbiHXEuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 00:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
+        id S233735AbiHXFBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 01:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbiHXEtd (ORCPT
+        with ESMTP id S229445AbiHXFBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 00:49:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF4F68FD56;
-        Tue, 23 Aug 2022 21:49:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 886A91655;
-        Tue, 23 Aug 2022 21:49:35 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.43.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E6D503F67D;
-        Tue, 23 Aug 2022 21:49:25 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, acme@kernel.org, mark.rutland@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH V7 8/8] perf/tools: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
-Date:   Wed, 24 Aug 2022 10:18:22 +0530
-Message-Id: <20220824044822.70230-9-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220824044822.70230-1-anshuman.khandual@arm.com>
-References: <20220824044822.70230-1-anshuman.khandual@arm.com>
+        Wed, 24 Aug 2022 01:01:00 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92B31CFEA;
+        Tue, 23 Aug 2022 22:00:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCDSh5hxmz4x3w;
+        Wed, 24 Aug 2022 15:00:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661317253;
+        bh=V2ilpx+/EsqvKqbwObJy2UqScwcG7aG1Mhl1qA8pYzI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OM4s5ZrOEVhFLWFxGyPgqQLyk4FDkogZ+LvEyZIcRmfEW62mgU+uKp8nFu+9io0Z7
+         5aXlGTthUH6UsS7FPutnr0hTjMlKBaWMIqmVXD3TD6aUd7rO1SllKm1Bk8Po0Vq3GW
+         iz3mSsfo2r/92205QM0pfHqrvyZnQesSxWIY/aga/asOZLW7SOr5tBlzop5sQlZNiW
+         VulDVuUB7e3aohoAYrT7cepa/xKhbe2OQwq/5hp1DfaEGwUGjyNBAubd4XPeSVQoTE
+         GbMrqg/pf3aC6yyrKghSVQ1ZYN3gFygmaBJJwpBTV8Yz3QJ52G5l5IKSMwPEeY435Q
+         z90wJ5mdw3zpQ==
+Date:   Wed, 24 Aug 2022 15:00:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the bpf-next tree
+Message-ID: <20220824150051.54eb7748@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This updates the perf tool with arch specific branch type classification
-used for BRBE on arm64 platform as added in the kernel earlier.
+--Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- tools/include/uapi/linux/perf_event.h |  6 ++++++
- tools/perf/util/branch.c              | 13 +++++++++++++
- 2 files changed, 19 insertions(+)
+Hi all,
 
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 51168e22f4d8..c2230c5aa1c7 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -282,6 +282,12 @@ enum {
- 	PERF_BR_PRIV_HV		= 3,
- };
- 
-+#define PERF_BR_ARM64_FIQ		PERF_BR_NEW_ARCH_1
-+#define PERF_BR_ARM64_DEBUG_HALT	PERF_BR_NEW_ARCH_2
-+#define PERF_BR_ARM64_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
-+#define PERF_BR_ARM64_DEBUG_INST	PERF_BR_NEW_ARCH_4
-+#define PERF_BR_ARM64_DEBUG_DATA	PERF_BR_NEW_ARCH_5
-+
- #define PERF_SAMPLE_BRANCH_PLM_ALL \
- 	(PERF_SAMPLE_BRANCH_USER|\
- 	 PERF_SAMPLE_BRANCH_KERNEL|\
-diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-index 6d962b0a4532..d40776c44b06 100644
---- a/tools/perf/util/branch.c
-+++ b/tools/perf/util/branch.c
-@@ -45,11 +45,24 @@ const char *branch_new_type_name(int new_type)
- 		"FAULT_ALGN",
- 		"FAULT_DATA",
- 		"FAULT_INST",
-+/*
-+ * TODO: This switch should happen on 'session->header.env.arch'
-+ * instead, because an arm64 platform perf recording could be
-+ * opened for analysis on other platforms as well.
-+ */
-+#ifdef __aarch64__
-+		"ARM64_FIQ",
-+		"ARM64_DEBUG_HALT",
-+		"ARM64_DEBUG_EXIT",
-+		"ARM64_DEBUG_INST",
-+		"ARM64_DEBUG_DATA"
-+#else
- 		"ARCH_1",
- 		"ARCH_2",
- 		"ARCH_3",
- 		"ARCH_4",
- 		"ARCH_5"
-+#endif
- 	};
- 
- 	if (new_type >= 0 && new_type < PERF_BR_NEW_MAX)
--- 
-2.25.1
+In commit
 
+  2e5e0e8ede02 ("bpf: Fix reference state management for synchronous callba=
+cks")
+
+Fixes tag
+
+  Fixes: 69c87ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMFsIMACgkQAVBC80lX
+0Gwn/Qf/YynmSHmle53V+9cdHuxUwPON+9vpRfj36MmdOYqEHDuZOJpFqECYo5OQ
+PcNC9AM8b5E6BmLlwHX4H3JGK5heGt2USj2uIRcWkbQ0nhNmwvWyh/AImNSDXoI9
+/9IK295MTGOWn89cfxLudTlTVVDW/emnS3qooISTq7BNVnjJg5n50nDwFErHn44F
+DTl1uY22rWjkvOqyOXsqYd6w/A25rnB5zpGE+CccmqQq6+2fp91xo4WI/R/LXfpc
+hw+8MxfR7+IGiRtfDEZiEyuqCGWeJDy6aPzmpgPE1LnYmzJ8FWHXHsq5Ql+pvp6k
+qxwBzbGzodidqfmf7DMvAfpjhAFv4Q==
+=LNUe
+-----END PGP SIGNATURE-----
+
+--Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy--

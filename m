@@ -2,282 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9951059FDD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7104759FDB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbiHXPGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S238895AbiHXPAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237923AbiHXPGL (ORCPT
+        with ESMTP id S239152AbiHXO75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:06:11 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE2C8C003
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=C5zZpSROsAEjBXSTdYZODsv0la2OfM73GAkSkwQIiXo=; b=B2TSGZSBwDNbuQwEDUmQNtiCFF
-        sYpzKiUzw5m5AfjCT8MRrXvR3mKbnc5epkmog0IgYy3A0d6Aq/4LbgKu/kt+ldieiha5e6aju5dDl
-        Ht1pPigQ3KuG6tW0lUtYlgxv2ZkFPcCzVjJ2WwkV0Bm/fTtaCiCQTXbfTsMvmTFJUa+eCMMCoP8lc
-        Niivxz8Wu8RPHps36oDAO9FVj/puHN/Dkz1XfsN8MNqCP1knQ7zib/F5FY+B56N1UNcQeGR1fd01b
-        PyXqgg8vCoFi8/7TvHmf4C/+E/Zm8wPyDqPFiBnT4Pevl3fdLFIa2ByahiAbLOr287EN0NBolB0QN
-        DRGcIHlg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQrws-005lDG-Vr; Wed, 24 Aug 2022 15:05:43 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7F5D4980BE2; Wed, 24 Aug 2022 16:59:07 +0200 (CEST)
-Date:   Wed, 24 Aug 2022 16:59:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-Message-ID: <YwY8u7gx6bO+RBcg@worktop.programming.kicks-ass.net>
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
- <YwYWUbVvSAYseDaO@worktop.programming.kicks-ass.net>
+        Wed, 24 Aug 2022 10:59:57 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9BF1DA52
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:59:55 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id s23so8902798wmj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=sbZIaGa4QVmZRTFbraQQZevk8nVhmZ/pbqV32QkN6gU=;
+        b=VavZxXcbB/bPsgnzbW8Hx/R60HQE12AcTrw529x+3AMBgTAc5I8aPa58AejE95oWsr
+         Ifi10JcJCLSiEr//DMm/XKYjRquRROeQbmQTLEO/eo1BviBTOP/AVQh+C+MEXyAfomEx
+         iV3iL8buZoDXJRLTWH+1yIY6MQmp+5MO63rtm56kr2PuBZbmuvcAL36CXuhfYdNrhi2e
+         XJ/c/Goo9ooeY2ZbsPhRQWohLFvY+dTrB0udaij8gf7RGRmGSsyWqdkDaaTeuA+ZnQQh
+         qHlQNd5WmJt6XPpqq4wJPsHewlVPuyWZfMxKCX2S125yAFfOf16UVv5ihmALI88jjgPa
+         TLgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=sbZIaGa4QVmZRTFbraQQZevk8nVhmZ/pbqV32QkN6gU=;
+        b=o37oZppbeh25pykoVNjLT+ioxHrqO4iXCV7sDqx/91LRdFGieJk0Fi0xRyU+MoP3lf
+         yHu/alEpaXNg2TA4MExnv93DA12meD3pnyvgCaUA1bRofzQrAE8EIOeLp5wfEUTSiM//
+         Uq8Ac0CfsBThMmuST798g/AOB6rtZUybJGcD9UUyjyWqm4vi5Fhiv4oqJnVDrthSlI1l
+         xksMyUQJOkvYX4SsdEcoYPD6T+52Tf87tAuFIdPmKiumzez58N4f5NrGDTr4dxgjJkrb
+         +jzESuXEq8RM64Q1Qys3mym2CRjQ8TmPkUZDGHwUZUoyZ+hKQV63z3uuCfKfxpHRU6d4
+         iRYA==
+X-Gm-Message-State: ACgBeo1m3ASIRIWyXJS8ULrdjxBf+ome1Sl4LYxYbj+rQmKU3ABYFdcy
+        IS2HmJsMEwSRC/FrQ75Eow1s0Mnxz39L9N+uWSdZTw==
+X-Google-Smtp-Source: AA6agR6KMlxmPHZIXHOv/GJkDnT1ChvjMBSHpcTZwphYaN9oZrc+DZ8YxP6haY58K4OSAEutEUfQ5Ao6v8GibTnqLCQ=
+X-Received: by 2002:a05:600c:1d89:b0:3a5:c1db:21c6 with SMTP id
+ p9-20020a05600c1d8900b003a5c1db21c6mr5290057wms.174.1661353193783; Wed, 24
+ Aug 2022 07:59:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwYWUbVvSAYseDaO@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220824043825.322827-1-irogers@google.com> <YwYpiuN3VlzVyCiw@kernel.org>
+In-Reply-To: <YwYpiuN3VlzVyCiw@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 24 Aug 2022 07:59:42 -0700
+Message-ID: <CAP-5=fUp5Cf+yfid70OzOAPOm2CJh84RN_NvW9aRhUAX5RPMGg@mail.gmail.com>
+Subject: Re: [PATCH] perf sched: Fix memory leaks in __cmd_record
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 02:15:13PM +0200, Peter Zijlstra wrote:
-> On Mon, Jun 13, 2022 at 04:35:11PM +0200, Peter Zijlstra wrote:
-> >  void x86_pmu_update_cpu_context(struct pmu *pmu, int cpu)
+On Wed, Aug 24, 2022 at 6:37 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Aug 23, 2022 at 09:38:25PM -0700, Ian Rogers escreveu:
+> > An array of strings is passed to cmd_record but not freed. As
+> > cmd_record modifies the array, add another array as a copy that can be
+> > mutated allowing the original array contents to all be freed.
+> >
+> > Detected with -fsanitize=3Daddress.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/builtin-sched.c | 21 ++++++++++++++++-----
+> >  1 file changed, 16 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> > index 2f6cd1b8b662..59ba14d2321c 100644
+> > --- a/tools/perf/builtin-sched.c
+> > +++ b/tools/perf/builtin-sched.c
+> > @@ -3355,7 +3355,8 @@ static bool schedstat_events_exposed(void)
+> >  static int __cmd_record(int argc, const char **argv)
 > >  {
-> > -	struct perf_cpu_context *cpuctx;
-> > +	/* XXX: Don't need this quirk anymore */
-> > +	/*struct perf_cpu_context *cpuctx;
-> >  
-> >  	if (!pmu->pmu_cpu_context)
-> >  		return;
-> >  
-> >  	cpuctx = per_cpu_ptr(pmu->pmu_cpu_context, cpu);
-> > -	cpuctx->ctx.pmu = pmu;
-> > +	cpuctx->ctx.pmu = pmu;*/
+> >       unsigned int rec_argc, i, j;
+> > -     const char **rec_argv;
+> > +     char **rec_argv;
+> > +     const char **rec_argv_copy;
+> >       const char * const record_args[] =3D {
+> >               "record",
+> >               "-a",
+> > @@ -3384,6 +3385,7 @@ static int __cmd_record(int argc, const char **ar=
+gv)
+> >               ARRAY_SIZE(schedstat_args) : 0;
+> >
+> >       struct tep_event *waking_event;
+> > +     int ret;
+> >
+> >       /*
+> >        * +2 for either "-e", "sched:sched_wakeup" or
+> > @@ -3391,14 +3393,15 @@ static int __cmd_record(int argc, const char **=
+argv)
+> >        */
+> >       rec_argc =3D ARRAY_SIZE(record_args) + 2 + schedstat_argc + argc =
+- 1;
+> >       rec_argv =3D calloc(rec_argc + 1, sizeof(char *));
+> > +     rec_argv_copy =3D calloc(rec_argc + 1, sizeof(char *));
+> >
+> > -     if (rec_argv =3D=3D NULL)
+> > +     if (rec_argv =3D=3D NULL || rec_argv_copy =3D=3D NULL)
+> >               return -ENOMEM;
+>
+> Here you=C2=B4re leaking rec_argv if rec_argv_copy fails to be allocated,=
+ no?
+
+Done in v2.
+
+Thanks,
+Ian
+
+> - Arnaldo
+>
+> >
+> >       for (i =3D 0; i < ARRAY_SIZE(record_args); i++)
+> >               rec_argv[i] =3D strdup(record_args[i]);
+> >
+> > -     rec_argv[i++] =3D "-e";
+> > +     rec_argv[i++] =3D strdup("-e");
+> >       waking_event =3D trace_event__tp_format("sched", "sched_waking");
+> >       if (!IS_ERR(waking_event))
+> >               rec_argv[i++] =3D strdup("sched:sched_waking");
+> > @@ -3409,11 +3412,19 @@ static int __cmd_record(int argc, const char **=
+argv)
+> >               rec_argv[i++] =3D strdup(schedstat_args[j]);
+> >
+> >       for (j =3D 1; j < (unsigned int)argc; j++, i++)
+> > -             rec_argv[i] =3D argv[j];
+> > +             rec_argv[i] =3D strdup(argv[j]);
+> >
+> >       BUG_ON(i !=3D rec_argc);
+> >
+> > -     return cmd_record(i, rec_argv);
+> > +     memcpy(rec_argv_copy, rec_argv, sizeof(char*) * rec_argc);
+> > +     ret =3D cmd_record(rec_argc, rec_argv_copy);
+> > +
+> > +     for (i =3D 0; i < rec_argc; i++)
+> > +             free(rec_argv[i]);
+> > +     free(rec_argv);
+> > +     free(rec_argv_copy);
+> > +
+> > +     return ret;
 > >  }
-> 
-> Confirmed; my ADL seems to work fine without all that.
-
-Additionally; this doesn't insta crash.
-
----
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index cb69ff1e6138..016072a89f8f 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -1019,10 +1019,10 @@ static int armv8pmu_set_event_filter(struct hw_perf_event *event,
- 	return 0;
- }
- 
--static int armv8pmu_filter_match(struct perf_event *event)
-+static bool armv8pmu_filter(struct pmu *pmu, int cpu)
- {
--	unsigned long evtype = event->hw.config_base & ARMV8_PMU_EVTYPE_EVENT;
--	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
-+	struct arm_pmu *armpmu = to_arm_pmu(pmu);
-+	return !cpumask_test_cpu(smp_processor_id(), &armpmu->supported_cpus);
- }
- 
- static void armv8pmu_reset(void *info)
-@@ -1253,7 +1253,7 @@ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
- 	cpu_pmu->stop			= armv8pmu_stop;
- 	cpu_pmu->reset			= armv8pmu_reset;
- 	cpu_pmu->set_event_filter	= armv8pmu_set_event_filter;
--	cpu_pmu->filter_match		= armv8pmu_filter_match;
-+	cpu_pmu->filter			= armv8pmu_filter;
- 
- 	cpu_pmu->pmu.event_idx		= armv8pmu_user_event_idx;
- 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 7a2d12ad6d1f..a8f1e38c66a7 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -86,6 +86,8 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_swap_task_ctx, *x86_pmu.swap_task_ctx);
- DEFINE_STATIC_CALL_NULL(x86_pmu_drain_pebs,   *x86_pmu.drain_pebs);
- DEFINE_STATIC_CALL_NULL(x86_pmu_pebs_aliases, *x86_pmu.pebs_aliases);
- 
-+DEFINE_STATIC_CALL_NULL(x86_pmu_filter, *x86_pmu.filter);
-+
- /*
-  * This one is magic, it will get called even when PMU init fails (because
-  * there is no PMU), in which case it should simply return NULL.
-@@ -2038,6 +2040,7 @@ static void x86_pmu_static_call_update(void)
- 	static_call_update(x86_pmu_pebs_aliases, x86_pmu.pebs_aliases);
- 
- 	static_call_update(x86_pmu_guest_get_msrs, x86_pmu.guest_get_msrs);
-+	static_call_update(x86_pmu_filter, x86_pmu.filter);
- }
- 
- static void _x86_pmu_read(struct perf_event *event)
-@@ -2668,12 +2671,13 @@ static int x86_pmu_aux_output_match(struct perf_event *event)
- 	return 0;
- }
- 
--static int x86_pmu_filter_match(struct perf_event *event)
-+static bool x86_pmu_filter(struct pmu *pmu, int cpu)
- {
--	if (x86_pmu.filter_match)
--		return x86_pmu.filter_match(event);
-+	bool ret = false;
- 
--	return 1;
-+	static_call_cond(x86_pmu_filter)(pmu, cpu, &ret);
-+
-+	return ret;
- }
- 
- static struct pmu pmu = {
-@@ -2704,7 +2708,7 @@ static struct pmu pmu = {
- 
- 	.aux_output_match	= x86_pmu_aux_output_match,
- 
--	.filter_match		= x86_pmu_filter_match,
-+	.filter			= x86_pmu_filter,
- };
- 
- void arch_perf_update_userpage(struct perf_event *event,
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 768771e5e4e9..40cebd9b90a1 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -4675,12 +4675,11 @@ static int intel_pmu_aux_output_match(struct perf_event *event)
- 	return is_intel_pt_event(event);
- }
- 
--static int intel_pmu_filter_match(struct perf_event *event)
-+static void intel_pmu_filter(struct pmu *pmu, int cpu, bool *ret)
- {
--	struct x86_hybrid_pmu *pmu = hybrid_pmu(event->pmu);
--	unsigned int cpu = smp_processor_id();
-+	struct x86_hybrid_pmu *hpmu = hybrid_pmu(pmu);
- 
--	return cpumask_test_cpu(cpu, &pmu->supported_cpus);
-+	*ret = !cpumask_test_cpu(cpu, &hpmu->supported_cpus);
- }
- 
- PMU_FORMAT_ATTR(offcore_rsp, "config1:0-63");
-@@ -6348,7 +6347,7 @@ __init int intel_pmu_init(void)
- 		x86_pmu.update_topdown_event = adl_update_topdown_event;
- 		x86_pmu.set_topdown_event_period = adl_set_topdown_event_period;
- 
--		x86_pmu.filter_match = intel_pmu_filter_match;
-+		x86_pmu.filter = intel_pmu_filter;
- 		x86_pmu.get_event_constraints = adl_get_event_constraints;
- 		x86_pmu.hw_config = adl_hw_config;
- 		x86_pmu.limit_period = spr_limit_period;
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 9c835ecb232e..b3ff55fc5794 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -924,7 +924,7 @@ struct x86_pmu {
- 
- 	int (*aux_output_match) (struct perf_event *event);
- 
--	int (*filter_match)(struct perf_event *event);
-+	void (*filter)(struct pmu *pmu, int cpu, bool *ret);
- 	/*
- 	 * Hybrid support
- 	 *
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 0407a38b470a..0f9519874fde 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -99,7 +99,7 @@ struct arm_pmu {
- 	void		(*stop)(struct arm_pmu *);
- 	void		(*reset)(void *);
- 	int		(*map_event)(struct perf_event *event);
--	int		(*filter_match)(struct perf_event *event);
-+	bool		(*filter)(struct pmu *pmu, int cpu);
- 	int		num_events;
- 	bool		secure_access; /* 32-bit ARM only */
- #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 7847818e5397..4be3aaae89be 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -519,9 +519,10 @@ struct pmu {
- 					/* optional */
- 
- 	/*
--	 * Filter events for PMU-specific reasons.
-+	 * Skip programming this PMU on the given CPU. Typically needed for
-+	 * big.LITTLE things.
- 	 */
--	int (*filter_match)		(struct perf_event *event); /* optional */
-+	bool (*filter)			(struct pmu *pmu, int cpu); /* optional */
- 
- 	/*
- 	 * Check period value for PERF_EVENT_IOC_PERIOD ioctl.
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index c6b64a48dea6..180842ba8473 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -2181,38 +2181,11 @@ static bool is_orphaned_event(struct perf_event *event)
- 	return event->state == PERF_EVENT_STATE_DEAD;
- }
- 
--static inline int __pmu_filter_match(struct perf_event *event)
--{
--	struct pmu *pmu = event->pmu;
--	return pmu->filter_match ? pmu->filter_match(event) : 1;
--}
--
--/*
-- * Check whether we should attempt to schedule an event group based on
-- * PMU-specific filtering. An event group can consist of HW and SW events,
-- * potentially with a SW leader, so we must check all the filters, to
-- * determine whether a group is schedulable:
-- */
--static inline int pmu_filter_match(struct perf_event *event)
--{
--	struct perf_event *sibling;
--
--	if (!__pmu_filter_match(event))
--		return 0;
--
--	for_each_sibling_event(sibling, event) {
--		if (!__pmu_filter_match(sibling))
--			return 0;
--	}
--
--	return 1;
--}
--
- static inline int
- event_filter_match(struct perf_event *event)
- {
- 	return (event->cpu == -1 || event->cpu == smp_processor_id()) &&
--	       perf_cgroup_match(event) && pmu_filter_match(event);
-+	       perf_cgroup_match(event);
- }
- 
- static void
-@@ -3661,6 +3634,9 @@ static noinline int visit_groups_merge(struct perf_event_context *ctx,
- 	struct perf_event **evt;
- 	int ret;
- 
-+	if (pmu->filter && pmu->filter(pmu, cpu))
-+		return 0;
-+
- 	if (!ctx->task) {
- 		cpuctx = this_cpu_ptr(&cpu_context);
- 		event_heap = (struct min_heap){
+> >
+> >  int cmd_sched(int argc, const char **argv)
+> > --
+> > 2.37.2.609.g9ff673ca1a-goog
+>
+> --
+>
+> - Arnaldo

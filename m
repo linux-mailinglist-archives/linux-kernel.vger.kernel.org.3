@@ -2,136 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178625A0116
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4F35A0117
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239749AbiHXSHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
+        id S240008AbiHXSHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbiHXSHS (ORCPT
+        with ESMTP id S240373AbiHXSHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:07:18 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B132A439;
-        Wed, 24 Aug 2022 11:07:16 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z8so2472047edb.0;
-        Wed, 24 Aug 2022 11:07:16 -0700 (PDT)
+        Wed, 24 Aug 2022 14:07:33 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B386BCC1;
+        Wed, 24 Aug 2022 11:07:33 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id o13so5084111ilt.3;
+        Wed, 24 Aug 2022 11:07:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=1ptMVCcgWCcBFSWJsXP+IAhY1ErZK6Q+RidWU37Y4N4=;
-        b=aZrFvfvzMnUtLsqP7V41QakV8hN05HYa4XI0wfsh1eE/2Q44J7Q+lDaYZmyczMgbFS
-         kSZxA+dmIt1HbrdEtKNt+8Axt0EBgG1wnkL0Ka4mkbfGzKeH0rgK39v/JPytHokNlj5E
-         JwTqNgQZWe5EjbmIxdVm8kIp2xevmKUbhWaAlhowrWlAm2+J2eWNj4EIPj3CzZWh4mY/
-         NH+Y3sDQDMwG7NgOucLpjDDxZj6KSK5Wei8wVqXUqwKmLPKGW9KgyNcqc7opWnm/Y+K1
-         5TzlZxzfRx0gRDaInwIF0NXm0RFUEgWltNsH5mxQld4F9V/idGZtck0PLUmm+lVDtk7q
-         igYw==
+        bh=n6VLsvWXIz4UjtHlsmuUC9VbAunQhpMZsf7gkqqQZ2Y=;
+        b=faDH/HocgmiiUZY09EKlXYCW1XuMalpCM2E3GILA4rvtRzE8DS5T7K0CD6GHLX9ayy
+         ayLhx6PEn1Bho8YSpGR6NiXGoYu0DzMS8gHaXWAEvfB7rMzBCpxtT6bLUKW9T806sFRp
+         eln1H6Xt6A2Am9jEIPcTdR8/E0TkDvPZIWdUT8Uvb3fDFQvokCnQNplgIegXgRFkF1f5
+         wc1af73fVLrdAfoxo7GWRz8+/3XmHiXw/1diHj8FGQp1lJI+cU1CCtzbCrzP80m4DfFk
+         yxwVJTmChD8B8Phyv47IFU//4RHqu7UZubLSZ3jjk2O38eT67cqV28GjB7Qecgzzifaz
+         r2dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=1ptMVCcgWCcBFSWJsXP+IAhY1ErZK6Q+RidWU37Y4N4=;
-        b=nBobASaxvPI4Fe4SC5Qg8KNPVOVieoMDVFnsbHEM+dGDlU6q1olqY1dCw3zA0jvNSX
-         63Q0C+1nrYcvH1Y3vUsgo0rUdw48I4U8k6DybU5cjKu45fplxzrkQBi7NQqvrrxHZvZI
-         o5a3e9rukB4LSuZklD9cZ3drTywVFNu+diH5OLrpmpkPgNrAw1PvIZA8pqG4RenhMB5+
-         YiqK4R01fkC0rY5sSXx5zxrxq6hCY6WIBSKwOffWOWISGNND1NLXXjHAxFmuJdXlqJ1D
-         5C5guk/WqeEAeSsv0JF/tI13c0v9JtO2Er2Kku+EQ5mQ4gJRWbGhq8YvKbayZY/YVmxy
-         AqdA==
-X-Gm-Message-State: ACgBeo27j6/OXUqm3x4Xa8peUDUXgTjjkzHgfeiLIi7YpB1r15SA9urK
-        Z+mka5xdAqrHKG3gJHlfvpbTooP2J8BGAvrEEFs=
-X-Google-Smtp-Source: AA6agR45Yfd8ga/MJY9kfIHJ/O1mIVLcZWiaNcK9cgPJ+PHkuCzPUsm9JXr/S5f6gJwgZ0mZjSBhVlQCCuk906dwPmU=
-X-Received: by 2002:a05:6402:2792:b0:446:8864:26c1 with SMTP id
- b18-20020a056402279200b00446886426c1mr216306ede.70.1661364435052; Wed, 24 Aug
- 2022 11:07:15 -0700 (PDT)
+        bh=n6VLsvWXIz4UjtHlsmuUC9VbAunQhpMZsf7gkqqQZ2Y=;
+        b=COxHnxoS7aPqnZn7SvoyvK1QcJPQe68UoKGK8Tq50slUqB/aTrKDomOaKLgw1le55d
+         PHgcitOPFB7NZ3ZZ0TY5BqX14/jL3VcgAhntCB4EhUdKV9LMBkkXBBlaNXVQJqLDdjZa
+         UWaTUjFhyGhWs6zcOjWmVmcu8Va50akvontkrmPmtSQ+LS4EzT66QouuKa+MteeL511G
+         gOrxm67yTkqnQzL9o75OVj3ZC4Ze2whsaoarJzLvEonmhU6uXZAlfiAXiRzE7LhzoEUf
+         BX9zQFmh5EVOB7OsMGwaWIb9ISHyJ80eJefdGNRUWDFGBE1jP6xwGEI7/HV/GdNcyROE
+         YvNA==
+X-Gm-Message-State: ACgBeo08X6c8S/7ubMoIboBENgG6P21AToPJyaFZO0+7jgFjDgma0RjF
+        gMDXwwNj7C/io0LEPATEu+3KTrnVvC86r4qEDNqblA5USLE=
+X-Google-Smtp-Source: AA6agR7RlBHQbobnbPFqBFroqbpCV4A75VEHEvpnsT0oRzEEXEX0TD4FmvwEHuVA+Kl3BAWYsdsyC3JLx0a4XAZ1ods=
+X-Received: by 2002:a05:6e02:20c1:b0:2e9:f747:ad54 with SMTP id
+ 1-20020a056e0220c100b002e9f747ad54mr141644ilq.144.1661364452449; Wed, 24 Aug
+ 2022 11:07:32 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:906:1f4f:b0:738:5e95:4b25 with HTTP; Wed, 24 Aug 2022
- 11:07:13 -0700 (PDT)
-In-Reply-To: <20220824111712.5999-1-sunshouxin@chinatelecom.cn>
-References: <20220824111712.5999-1-sunshouxin@chinatelecom.cn>
-From:   Jay Vosburgh <j.vosburgh@gmail.com>
-Date:   Wed, 24 Aug 2022 11:07:13 -0700
-Message-ID: <CAAoacNmKa5oM10J6DTLJ6PANmdS8k80Lcxygv_vXd_0DduXM4A@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] bonding: Remove unnecessary check
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
-Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        huyd12@chinatelecom.cn
+References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
+ <20220823182758.13401-2-khalid.masum.92@gmail.com> <YwU2vp0FSR5dS/FX@rowland.harvard.edu>
+ <CAABMjtH7q2evZ4R7FGC8m3a716ec9+e8+KdmrvnqB4_r6rF2Jg@mail.gmail.com> <YwY3yHB/Ia+cPa1L@rowland.harvard.edu>
+In-Reply-To: <YwY3yHB/Ia+cPa1L@rowland.harvard.edu>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+Date:   Thu, 25 Aug 2022 00:07:21 +0600
+Message-ID: <CAABMjtE96E78YgVe3Psba-5G+ELTXWFgGuUWWeb-o06iJHOi6w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: ehci: Prevent possible modulo by zero
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/24/22, Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
-> This code is intended to support bond alb interface added to
-> Linux bridge by modifying MAC, however, it doesn't work for
-> one bond alb interface with vlan added to bridge.
-> Since commit d5410ac7b0ba("net:bonding:support balance-alb
-> interface with vlan to bridge"), new logic is adapted to handle
-> bond alb with or without vlan id, and then the code is deprecated.
+> The usb_maxpacket() routine does a two-step computation.  First, it
+> looks up the endpoint number in the pipe to get a usb_host_endpoint
+> pointer, and then it uses the pointer to get the maxpacket value.
+> Coverity complained that the lookup in the first step can fail, and that
+> is in fact true: If there is an interface or configuration change before
+> usb_maxpacket() is called, the endpoint number table can change and the
+> lookup may fail.
+>
+> But it turns out the first step isn't needed here at all, since the
+> endpoint pointer is already stored in the URB (by the code in
 
-I think this could still be clearer; the actual changes relate to the stack of
-interfaces (e.g., eth0 -> bond0 -> vlan123 -> bridge0), not what VLAN tags
-incoming traffic contains.
+That makes sense. Thanks for explaining.
+> usb_submit_urb() that I pointed out earlier).  So an appropriate way to
+> fix the problem is to carry out just the second step:
+>
+> -       maxpacket = usb_maxpacket(urb->dev, urb->pipe);
+> +       maxpacket = usb_endpoint_maxp(&urb->ep->desc);
+>
+> This holds for both of your patches.
 
-The code being removed here is specifically for the case of
-eth0 -> bond0 -> bridge0, without an intermediate VLAN interface
-in the stack (because, if memory serves, netif_is_bridge_port doesn't
-transfer through to the bond if there's a VLAN interface in between).
+Got you.
+>
+> Alan Stern
 
-Also, this code is for incoming traffic, assigning the bond's MAC to
-traffic arriving on interfaces other than the active interface (which bears
-the bond's MAC in alb mode; the other interfaces have different MACs).
-Commit d5410ac7b0ba affects the balance assignments for outgoing ARP
-traffic.  I'm not sure that d5410 is an exact replacement for the code this
-patch removes.
-
-       -J
-
->
-> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
-> ---
->  drivers/net/bonding/bond_main.c | 13 -------------
->  1 file changed, 13 deletions(-)
->
-> diff --git a/drivers/net/bonding/bond_main.c
-> b/drivers/net/bonding/bond_main.c
-> index 50e60843020c..6b0f0ce9b9a1 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -1578,19 +1578,6 @@ static rx_handler_result_t bond_handle_frame(struct
-> sk_buff **pskb)
->
->  	skb->dev = bond->dev;
->
-> -	if (BOND_MODE(bond) == BOND_MODE_ALB &&
-> -	    netif_is_bridge_port(bond->dev) &&
-> -	    skb->pkt_type == PACKET_HOST) {
-> -
-> -		if (unlikely(skb_cow_head(skb,
-> -					  skb->data - skb_mac_header(skb)))) {
-> -			kfree_skb(skb);
-> -			return RX_HANDLER_CONSUMED;
-> -		}
-> -		bond_hw_addr_copy(eth_hdr(skb)->h_dest, bond->dev->dev_addr,
-> -				  bond->dev->addr_len);
-> -	}
-> -
->  	return ret;
->  }
->
-> --
-> 2.27.0
->
->
+-- Khalid Masum

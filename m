@@ -2,134 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313A059F13E
+	by mail.lfdr.de (Postfix) with ESMTP id 7982D59F13F
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbiHXCHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 22:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S232974AbiHXCG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 22:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbiHXCHh (ORCPT
+        with ESMTP id S229700AbiHXCG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 22:07:37 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481D871BEF;
-        Tue, 23 Aug 2022 19:07:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BW0HOr41CDsV/wGrunk2Lm/J85BAU40eEviEHRs5HMkeP/sEftGmpDq3jpPFAZoATKUIRb+aDlxf4/oANzS05JhunIQtgPPct0ut54CyS0gHR1nNmDas1oBgjPRe5xm8QOlb0EREAQ/FL6HZh3hhAZLVEbPkbB1iSwZ6+L2TZHxIP/o19HZyki1wWgsuDT+BnMqPbwmioR/KTCCyQKRSCkgsFYjyK7npbTjNGj+W7ObCYniAU1bLSMMONx4HU97gHc02svu3BvB2Boq549aJSK1JlkF6ToLt5jONjiTSV/8/wdPLtZoTK3U7UPlv0h0L0MUvHLUrikWaxHOwkYmXvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/EsHsBSpkl01Xgx6E992Gm8GA/HDYoWLZnjRlByMO6c=;
- b=i/Pb4VlzU5vTjxaaqGRkwEPTK7M3uHrfzzF2un4WZk0DwVr3VueGmNPwgdj9YzvEGNuKUqbpS1KO/iU3NvPmL/0lmcmB4PVVR11ELFZXrso41NOyz3NJXoZmx1cONlLuVwW3EZTclhr4UQzBwciV/OGLrje2XqLrnJi7dQrU8TCQHgF/400q1qd+bVR99cnslBs3JFPL2LsRKJRU4LbYfK0QRAXnOORS5KREjy7JBn45l4ErO78CuOWF9fvcrusi91At+UlOlb6eY/4uLwqvxJqlGyE9mIoqmkR+0ZdogXAcw5rewccsdcnFb55L+TqgnHSyme3j3NK5LeMkN0auuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/EsHsBSpkl01Xgx6E992Gm8GA/HDYoWLZnjRlByMO6c=;
- b=QWOxPO9Z2UDNra3ELXopKNR8DJ4hwzrnvL6BevAQlnbwv0irnyb7EBFGFvZylVGQIJoEyggjmXxsNxw20HivdHUkyS5BAQAnYDpA1B/w3NmV/7oX1HD2sRqwEeuTXUZxGGXjfLMxp5HR7+Vm7PNfV0x6gNbnbnwJcgBmZCmWhEy3Te0j6wO8OQ7MRw0sRSkX2BMts7IGJUc6tEI+S9ex/0xhxFN7mrmRSTnCgosTAtDiNHJKUeXh9XMv2esPTbJA8akB8ZE5ya6doyob6WXDT+xgw0RbHggp1XCjVar2SvtXvAEJ7vnMnQnQIbe+7YnGOL5gz/wF8I3uEpPtixfBaQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by BY5PR12MB4918.namprd12.prod.outlook.com (2603:10b6:a03:1df::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Wed, 24 Aug
- 2022 02:07:34 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::7432:2749:aa27:722c]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::7432:2749:aa27:722c%7]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
- 02:07:33 +0000
-References: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
- <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
- <Yvv/eGfi3LW8WxPZ@xz-m1.local> <871qtfvdlw.fsf@nvdebian.thelocal>
- <YvxWUY9eafFJ27ef@xz-m1.local> <87o7wjtn2g.fsf@nvdebian.thelocal>
- <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
- <Yv1BJKb5he3dOHdC@xz-m1.local>
- <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yv5QXkS4Bm9pTBeG@xz-m1.local>
- <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-agent: mu4e 1.6.9; emacs 27.1
-From:   Alistair Popple <apopple@nvidia.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Peter Xu <peterx@redhat.com>, Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-Date:   Wed, 24 Aug 2022 11:56:25 +1000
-In-reply-to: <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Message-ID: <87czcqiecd.fsf@nvdebian.thelocal>
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0191.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::16) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Tue, 23 Aug 2022 22:06:26 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E876DF90
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:06:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VN57Dgm_1661306781;
+Received: from 30.97.48.45(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VN57Dgm_1661306781)
+          by smtp.aliyun-inc.com;
+          Wed, 24 Aug 2022 10:06:21 +0800
+Message-ID: <64669c0a-4a6e-f034-a15b-c4a8deea9e5d@linux.alibaba.com>
+Date:   Wed, 24 Aug 2022 10:06:32 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a5fc7fcf-eb26-4461-e1d3-08da85756851
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4918:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AZ0ERyiZQbgOuusr6wIrkirtipLx3fxd0p93qmdogTeS0jvGNpoLpsdSxunIB5vtIlsxyPB4EO8IU75QXFPJ6b0AwYgx6MIG+l/f5r6WMU3jDZEzaU7Drq9CclGy2Tk72Rd+SSkOxryOkoAVISfIrBHpHP6dRwClvawmf4sZplj84FaaljpYGXAjsZa0+8VQosUSy3XALE9AtQMNzNLmoMVVBj6ILkYoubbjDES0FIVIhmtZttE9NHHpbTmyH0C3cXE/nBlVHMNKdGJznrvCS7Yf0oaQJI1WxM/nBx4JKkxuqR80CkE24+TILt1Wtdm/5TdHUdQCas75LexjYOwEhv3i7WZUCKpOOVty2kHgH8alXAx2Om0Q6EkJuGg7/Sagem+uSR19Vxrn27V7rRQimwAMHoV0fh8gww9WbBbT3Fe1py+ydTA+H6XNcSHmHi8jfepA7sswCGHr4FhFgvN2m9g1qrzm46OjQp15bXo66n590EziaGIJHR8AhW1rhhDSP6LK4RWwdCuAFVImswFLeUQ5EdVXTesn6+xttXffiNPybNBESKD6ZnPE3V+663uuQ1rtqghHaMedu2WWaTwnNulzUrgd/WpyqMnaQJPlWlDylUn6ENIUoED8e5ugKE+THbJquGJ2AoQ8NHEpH51Y87roGj1SQ1oUh04ZIQNngVT1zGVOKhI8tgBH56atp7DizeI4oDJSkmePn3Ajzcpd0dcw2RdTzaGyN9QCCaQ/Hh4GZXdm1rI9MB8eHz5fGovG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(376002)(366004)(346002)(26005)(2906002)(86362001)(6506007)(6512007)(9686003)(186003)(38100700002)(83380400001)(54906003)(6916009)(8936002)(316002)(4326008)(66476007)(6666004)(66946007)(8676002)(66556008)(478600001)(6486002)(7416002)(5660300002)(41300700001)(14143004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/6fK4Tc8EN+t3UKDjkLLwN1vrOkj2LEFVherEZU190HpKJL6++AEvqw4HDTp?=
- =?us-ascii?Q?iZ+iWnPK7wppbWZqIQnoU7C4BTlYp1qmOs7wHh76T3LohfX+g0stMN9NIZ84?=
- =?us-ascii?Q?cP6/6k/bcOP7FT2LF6tatb5d0to5GFXGy3dkYC6AnPr8qe7MrUfwvsCjAxC5?=
- =?us-ascii?Q?Oq6H56XWBGB6MNHf2UAB5/WIHZ2LQg04rGnTbtsrfvz8xRicSS21DUOoul8j?=
- =?us-ascii?Q?xM7U4asLqVbnfH2284H+gz1ilvDyEmu1c5zQq6lM/EB259W+Z6Y2/JkN7rHw?=
- =?us-ascii?Q?/ULtweEd9eXNFhliL8E762OzesWYiXoeG/6DCH05SOrfido0dEm7dS44EdP+?=
- =?us-ascii?Q?jdBNRwep+oTmu9i+AqIdEulCin+Umd6qJThNyDx4lDAbFR62XiKBD4QwHMYY?=
- =?us-ascii?Q?iAsyvNZCY2SZiWo6yng2TaR94SlHb2ehUGDUhtKTK3Udd3b7ronbiWJyYHzM?=
- =?us-ascii?Q?OkccaHwqL8RL9+z80w39i4zRmYrmfyJ2BiVfwlif5nFv281SuRjNXIt+PWiK?=
- =?us-ascii?Q?QPAVjksGT7xhWgPExRa0dsKcO6TZUUCsZ+rxFlBxnfY5wgSamBdaUgJxh91G?=
- =?us-ascii?Q?s5I0y/E4xl2mG9+sjmRVcULOh6p1Yy+CLZu0Vh3zOOGJNkho8wCGaRtSqJBv?=
- =?us-ascii?Q?JHLSu/1rZLDdGqQTOAr59+pBtR3ySzaghM6X2CgLqgedkA9BomViZAMFNSfg?=
- =?us-ascii?Q?H4xzOdk0uvYtZcG3B3gIaFCy+JbMVJqnQ0SUFYDoxVvO4uqZ3dsWfd3UhUZp?=
- =?us-ascii?Q?vnQ7cZpfPD6Z59h7KP2ohSEIyF9OYbt1cRhgtc/FHYwMd9H+1KQ/4k/Sk0Tg?=
- =?us-ascii?Q?AoIB0yyFe01P5wgbkp+A27ZYDYXapmnffZpgXaMyCViFUxSfjVk/NWNauJNb?=
- =?us-ascii?Q?xRpw/w77h8MsAGBD3RG2QJW0sAnZwGOwgdGP4EcH75UOdEw7Oznuh74evVtw?=
- =?us-ascii?Q?aCe3IsELi2mPCxQtBuXiBFgB2Dlt6iLxarWCwNpZAcJWTyH3DmA1D5348GqM?=
- =?us-ascii?Q?/bW+9NZ4PQzxHQ7OqDpd2Cuiv2cVKbHSw3MV8yc9pr2WzwLSENW0n2BsHGtS?=
- =?us-ascii?Q?iEubZqKQ0JNRmT/TTIwlfcuTJ+25E3a2cO/5wOdqT9MWw3HIAMuO64lqWcVF?=
- =?us-ascii?Q?xxJCFp8RbBWqZUtavLRXY8B4KMOC0n6Ot+IR6dss67dfEUoVaVnjCzXFkRRy?=
- =?us-ascii?Q?QeyYcizh0xcoNj5qBFuOT1kgAY+I2eP/Xra7Yvkn8glp1F1xlLC+XYCqXy21?=
- =?us-ascii?Q?WNoORWc0Bij5x7+hL53yT/LFfXMURNJD+oDH5dQSCcOvmbRoeYM+l5GgoGgl?=
- =?us-ascii?Q?0VK+rJ67WzStwmzCr9bYZXxDQa5EgRZQLEJPGXKMAJn7TpnnPiHJHkMK+Hkm?=
- =?us-ascii?Q?s5bWhEVXqhxnQ8dW0jefgCzAGAKklOr+W8jl6qzUxYlDJxlplhH8GoBHq4nR?=
- =?us-ascii?Q?wq7TWpaDW4tqoyDGeEmJX7HVkl9MxvcsjlJSkydbMSdCfzuvzsAPXG93ieGN?=
- =?us-ascii?Q?gykzrgcmX6uooBSacv6Plqy4XYHDCRnERaae/Roq9CPJErxquzm5FodoISU1?=
- =?us-ascii?Q?D1TrxP02fMPG3Xu0QnZheLrY3NVIrp9wVpTbOt48?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5fc7fcf-eb26-4461-e1d3-08da85756851
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 02:07:33.7335
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RQXgCX74IYU1+4DNPdhzNTO0u8EKAa7l7w1vu6iXDq717ms42rJt/KrnrRLj8KRJmYEBHogq/6UIbtFMZC8l6Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4918
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
+ size hugetlb page
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
+ <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
+ <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
+ <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
+ <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com> <YwVo7xSO+VebkIfQ@monkey>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YwVo7xSO+VebkIfQ@monkey>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -138,59 +51,221 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-"Huang, Ying" <ying.huang@intel.com> writes:
 
-> Peter Xu <peterx@redhat.com> writes:
->
->> On Thu, Aug 18, 2022 at 02:34:45PM +0800, Huang, Ying wrote:
->>> > In this specific case, the only way to do safe tlb batching in my mind is:
->>> >
->>> > 	pte_offset_map_lock();
->>> > 	arch_enter_lazy_mmu_mode();
->>> >         // If any pending tlb, do it now
->>> >         if (mm_tlb_flush_pending())
->>> > 		flush_tlb_range(vma, start, end);
->>> >         else
->>> >                 flush_tlb_batched_pending();
+On 8/24/2022 7:55 AM, Mike Kravetz wrote:
+> On 08/23/22 12:23, David Hildenbrand wrote:
+>> On 23.08.22 12:02, Baolin Wang wrote:
 >>>
->>> I don't think we need the above 4 lines.  Because we will flush TLB
->>> before we access the pages.
+>>>
+>>> On 8/23/2022 4:29 PM, David Hildenbrand wrote:
+>>>> On 23.08.22 09:50, Baolin Wang wrote:
+>>>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>>>>> hugetlb, which means it can support not only PMD/PUD size hugetlb
+>>>>> (2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
+>>>>> specified.
+>>>>>
+>>>>> So when looking up a CONT-PTE size hugetlb page by follow_page(), it
+>>>>> will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
+>>>>> size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
+>>>>> for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
+>>>>> get the correct lock, which is mm->page_table_lock.
+>>>>>
+>>>>> That means the pte entry of the CONT-PTE size hugetlb under current
+>>>>> pte lock is unstable in follow_page_pte(), we can continue to migrate
+>>>>> or poison the pte entry of the CONT-PTE size hugetlb, which can cause
+>>>>> some potential race issues, and following pte_xxx() validation is also
+>>>>> unstable in follow_page_pte(), even though they are under the 'pte lock'.
+>>>>>
+>>>>> Moreover we should use huge_ptep_get() to get the pte entry value of
+>>>>> the CONT-PTE size hugetlb, which already takes into account the subpages'
+>>>>> dirty or young bits in case we missed the dirty or young state of the
+>>>>> CONT-PTE size hugetlb.
+>>>>>
+>>>>> To fix above issues, introducing a new helper follow_huge_pte() to look
+>>>>> up a CONT-PTE size hugetlb page, which uses huge_pte_lock() to get the
+>>>>> correct pte entry lock to make the pte entry stable, as well as
+>>>>> supporting non-present pte handling.
+>>>>>
+>>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>>> ---
+>>>>>    include/linux/hugetlb.h |  8 ++++++++
+>>>>>    mm/gup.c                | 11 ++++++++++
+>>>>>    mm/hugetlb.c            | 53 +++++++++++++++++++++++++++++++++++++++++++++++++
+>>>>>    3 files changed, 72 insertions(+)
+>>>>>
+>>>>> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+>>>>> index 3ec981a..d491138 100644
+>>>>> --- a/include/linux/hugetlb.h
+>>>>> +++ b/include/linux/hugetlb.h
+>>>>> @@ -207,6 +207,8 @@ struct page *follow_huge_addr(struct mm_struct *mm, unsigned long address,
+>>>>>    struct page *follow_huge_pd(struct vm_area_struct *vma,
+>>>>>    			    unsigned long address, hugepd_t hpd,
+>>>>>    			    int flags, int pdshift);
+>>>>> +struct page *follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
+>>>>> +			     pmd_t *pmd, int flags);
+>>>>>    struct page *follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+>>>>>    				pmd_t *pmd, int flags);
+>>>>>    struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
+>>>>> @@ -312,6 +314,12 @@ static inline struct page *follow_huge_pd(struct vm_area_struct *vma,
+>>>>>    	return NULL;
+>>>>>    }
+>>>>>    
+>>>>> +static inline struct page *follow_huge_pte(struct vm_area_struct *vma,
+>>>>> +				unsigned long address, pmd_t *pmd, int flags)
+>>>>> +{
+>>>>> +	return NULL;
+>>>>> +}
+>>>>> +
+>>>>>    static inline struct page *follow_huge_pmd(struct mm_struct *mm,
+>>>>>    				unsigned long address, pmd_t *pmd, int flags)
+>>>>>    {
+>>>>> diff --git a/mm/gup.c b/mm/gup.c
+>>>>> index 3b656b7..87a94f5 100644
+>>>>> --- a/mm/gup.c
+>>>>> +++ b/mm/gup.c
+>>>>> @@ -534,6 +534,17 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+>>>>>    	if (unlikely(pmd_bad(*pmd)))
+>>>>>    		return no_page_table(vma, flags);
+>>>>>    
+>>>>> +	/*
+>>>>> +	 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
+>>>>> +	 * ARM64 architecture.
+>>>>> +	 */
+>>>>> +	if (is_vm_hugetlb_page(vma)) {
+>>>>> +		page = follow_huge_pte(vma, address, pmd, flags);
+>>>>> +		if (page)
+>>>>> +			return page;
+>>>>> +		return no_page_table(vma, flags);
+>>>>> +	}
+>>>>> +
+>>>>>    	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
+>>>>>    	pte = *ptep;
+>>>>>    	if (!pte_present(pte)) {
+>>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>>>> index 6c00ba1..cf742d1 100644
+>>>>> --- a/mm/hugetlb.c
+>>>>> +++ b/mm/hugetlb.c
+>>>>> @@ -6981,6 +6981,59 @@ struct page * __weak
+>>>>>    	return NULL;
+>>>>>    }
+>>>>>    
+>>>>> +/* Support looking up a CONT-PTE size hugetlb page. */
+>>>>> +struct page * __weak
+>>>>> +follow_huge_pte(struct vm_area_struct *vma, unsigned long address,
+>>>>> +		pmd_t *pmd, int flags)
+>>>>> +{
+>>>>> +	struct mm_struct *mm = vma->vm_mm;
+>>>>> +	struct hstate *hstate = hstate_vma(vma);
+>>>>> +	unsigned long size = huge_page_size(hstate);
+>>>>> +	struct page *page = NULL;
+>>>>> +	spinlock_t *ptl;
+>>>>> +	pte_t *ptep, pte;
+>>>>> +
+>>>>> +	/*
+>>>>> +	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+>>>>> +	 * follow_hugetlb_page().
+>>>>> +	 */
+>>>>> +	if (WARN_ON_ONCE(flags & FOLL_PIN))
+>>>>> +		return NULL;
+>>>>> +
+>>>>> +	ptep = huge_pte_offset(mm, address, size);
+>>>>> +	if (!ptep)
+>>>>> +		return NULL;
+>>>>> +
+>>>>> +retry:
+>>>>> +	ptl = huge_pte_lock(hstate, mm, ptep);
+>>>>> +	pte = huge_ptep_get(ptep);
+>>>>> +	if (pte_present(pte)) {
+>>>>> +		page = pte_page(pte);
+>>>>> +		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+>>>>> +			page = NULL;
+>>>>> +			goto out;
+>>>>> +		}
+>>>>> +	} else {
+>>>>> +		if (!(flags & FOLL_MIGRATION)) {
+>>>>> +			page = NULL;
+>>>>> +			goto out;
+>>>>> +		}
+>>>>> +
+>>>>> +		if (is_hugetlb_entry_migration(pte)) {
+>>>>> +			spin_unlock(ptl);
+>>>>> +			__migration_entry_wait_huge(ptep, ptl);
+>>>>> +			goto retry;
+>>>>> +		}
+>>>>> +		/*
+>>>>> +		 * hwpoisoned entry is treated as no_page_table in
+>>>>> +		 * follow_page_mask().
+>>>>> +		 */
+>>>>> +	}
+>>>>> +out:
+>>>>> +	spin_unlock(ptl);
+>>>>> +	return page;
+>>>>> +}
+>>>>> +
+>>>>>    struct page * __weak
+>>>>>    follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+>>>>>    		pmd_t *pmd, int flags)
+>>>>
+>>>>
+>>>> Can someone explain why:
+>>>> * follow_page() goes via follow_page_mask() for hugetlb
+>>>> * __get_user_pages() goes via follow_hugetlb_page() and never via
+>>>>     follow_page_mask() for hugetlb?
+>>>>
+>>>> IOW, why can't we make follow_page_mask() just not handle hugetlb and
+>>>> route everything via follow_hugetlb_page() -- we primarily only have to
+>>>> teach it to not trigger faults.
+> 
+> I have no idea how we got into this situation, and do agree that it
+> makes little sense for both follow_page_mask and follow_hugetlb_page to
+> do page table walking differently for hugetlb pages.
+> 
+> I think I have noted elsewhere that all those follow_huge_p*d rotines
+> will look the same.  It seems they were just added as needed when the
+> follow_page_mask page table walking code was fleshed out.  This also
+> needs a cleanup.  If we eliminate hugetlb handling from follow_page_mask,
+> perhaps we can get rid of all these?
+> 
+>>>
+>>> IMHO, these follow_huge_xxx() functions are arch-specified at first and
+>>> were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm:
+>>> hugetlb: Copy general hugetlb code from x86 to mm"), and now there are
+>>> still some arch-specified follow_huge_xxx() definition, for example:
+>>> ia64: follow_huge_addr
+>>> powerpc: follow_huge_pd
+>>> s390: follow_huge_pud
+>>>
+>>> What I mean is that follow_hugetlb_page() is a common and
+>>> not-arch-specified function, is it suitable to change it to be
+>>> arch-specified?
+>>> And thinking more, can we rename follow_hugetlb_page() as
+>>> hugetlb_page_faultin() and simplify it to only handle the page faults of
+>>> hugetlb like the faultin_page() for normal page? That means we can make
+>>> sure only follow_page_mask() can handle hugetlb.
+>>>
+> 
+> Something like that might work, but you still have two page table walkers
+> for hugetlb.  I like David's idea (if I understand it correctly) of
 
-I agree. For migration the TLB flush is only important if the PTE is
-present, and in that case we do a TLB flush anyway.
+What I mean is we may change the hugetlb handling like normal page:
+1) use follow_page_mask() to look up a hugetlb firstly.
+2) if can not get the hugetlb, then try to page fault by 
+hugetlb_page_faultin().
+3) if page fault successed, then retry to find hugetlb by 
+follow_page_mask().
 
->> Could you elaborate?
->
-> As you have said below, we don't use non-present PTEs and flush present
-> PTEs before we access the pages.
->
->>> Can you find any issue if we don't use the above 4 lines?
->>
->> It seems okay to me to leave stall tlb at least within the scope of this
->> function. It only collects present ptes and flush propoerly for them.  I
->> don't quickly see any other implications to other not touched ptes - unlike
->> e.g. mprotect(), there's a strong barrier of not allowing further write
->> after mprotect() returns.
->
-> Yes.  I think so too.
->
->> Still I don't know whether there'll be any side effect of having stall tlbs
->> in !present ptes because I'm not familiar enough with the private dev swap
->> migration code.  But I think having them will be safe, even if redundant.
+Just a rough thought, and I need more investigation for my idea and 
+David's idea.
 
-What side-effect were you thinking of? I don't see any issue with not
-TLB flushing stale device-private TLBs prior to the migration because
-they're not accessible anyway and shouldn't be in any TLB.
+> using follow_hugetlb_page for both cases.  As noted, it will need to be
+> taught how to not trigger faults in the follow_page_mask case.
 
-> I don't think it's a good idea to be redundant.  That may hide the real
-> issue.
->
-> Best Regards,
-> Huang, Ying
+Anyway, I also agree we need some cleanup, and firstly I think we should 
+cleanup these arch-specified follow_huge_xxx() on some architectures 
+which are similar with the common ones. I will look into these.
 
-Thanks all for the discussion. Having done some more reading I agree
-that it's safe to assume HW dirty bits are write-through, so will remove
-the ptep_clear_flush() and use ptep_get_and_clear() instead. Will split
-out the TLB flushing fix into a separate patch in this series.
-
- - Alistair
+However, considering cleanup may need more investigation and 
+refactoring, now I prefer to make these bug-fix patches of this patchset 
+into mainline firstly, which are suitable to backport to old version to 
+fix potential race issues. Mike and David, how do you think? Could you 
+help to review these patches? Thanks.

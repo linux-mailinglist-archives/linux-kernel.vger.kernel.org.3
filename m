@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B1059F624
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC2659F627
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiHXJZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
+        id S234825AbiHXJ0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235158AbiHXJZD (ORCPT
+        with ESMTP id S229542AbiHXJ0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:25:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FA05A83D;
-        Wed, 24 Aug 2022 02:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661333102; x=1692869102;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kBqGvGk3EMLX0tGgGU4hl4gNziKpyEA9hY1b6ZILIeU=;
-  b=Mp3ncYEdmK2kRSj4GVgkHh5yLQlzz0zQBSr+lnCjzel7ZI6Cc4mir9Hf
-   c7sNIHyHojtLO9QYooGZ1dxIR3EYVLBo0tiOcLXRNJVsJw2WsqbVMU0iK
-   a6WwEOFejOHeYj5bXFJGtK0lJYDGiw3C/Ev5+zkice6Uq3T4/yb4+7fhS
-   W0hn5yAfM+Kf7xJunHeyXziLFqf/jrQbH69cnr5BDJTfg201dZIO6QS8Z
-   6H8namw5DYfDax5DNCj+wk9LKW27fRFv9Jlf53EzcETbb4qzM9mwFk/SH
-   LRqgDym3cRAfGkbgpFvwUT4cEaxEuQA216qLkjo7HCQouYB9+6mgrHfRa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="274304810"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="274304810"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 02:25:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="677972129"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Aug 2022 02:25:00 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQmd9-0000BB-2L;
-        Wed, 24 Aug 2022 09:24:59 +0000
-Date:   Wed, 24 Aug 2022 17:24:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-doc@vger.kernel.org
-Subject: [linux-stable-rc:linux-5.4.y 4226/5188] htmldocs: Warning:
- Documentation/admin-guide/sysctl/kernel.rst references a file that doesn't
- exist: Documentation/filesystems/devpts.rst
-Message-ID: <202208241747.vdIjFCwW-lkp@intel.com>
+        Wed, 24 Aug 2022 05:26:19 -0400
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3033832F3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:26:16 -0700 (PDT)
+Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id 3582880308C8
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:26:06 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 78ABA100425D7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:24:43 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id QmcsoynIFsbE6Qmcto0Xhp; Wed, 24 Aug 2022 09:24:43 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=EegN/NqC c=1 sm=1 tr=0 ts=6305ee5b
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=NEB7zk9S/UrcHKcsoG4dsO4AhOSULEbS7qIvDAgAkF0=; b=SDe9t48lw6TFxQzVzQNtqUrMCb
+        Xh6usf8x2o9wiVssUpsutAYy2LM1aezYMIJ3AgrOlQTYy9K3aHf5DQm9//1hOP3yRcdVWXBvnDETa
+        8R70l+zyuJaa7/YWq2gabe5lEmG1FOOGiVF1/dCZta+Erpf8ZYUYNOS2RLuE3FqW8uHCoeipesiEu
+        9R7BI7Aqx2/PQXBphLe5Qv2RuuXtXZAMyc70o9egLp+n+eYs5TU/iSPsvzNnuTbOS+mvI7LoPvMhA
+        v6OKfNNsr2koXH03hM8NRVBUorqrjccBcvh6cqeei3VnYYDqqDlNdPyq3rDRMadGT/3gE3V9gLHMa
+        7GfKlaVQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:41550 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oQmcr-000i6v-Ja;
+        Wed, 24 Aug 2022 03:24:41 -0600
+Subject: Re: [PATCH 5.19 000/362] 5.19.4-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220824065936.861377531@linuxfoundation.org>
+In-Reply-To: <20220824065936.861377531@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <6994e85a-3081-693c-d865-4021562937df@w6rz.net>
+Date:   Wed, 24 Aug 2022 02:24:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oQmcr-000i6v-Ja
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:41550
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-head:   1cece69eaa889a27cf3e9f2051fcc57eda957271
-commit: 42a9a7e807505b485f7c6a7ffb0ffb7dab8e1b51 [4226/5188] random: always wake up entropy writers after extraction
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=42a9a7e807505b485f7c6a7ffb0ffb7dab8e1b51
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.4.y
-        git checkout 42a9a7e807505b485f7c6a7ffb0ffb7dab8e1b51
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+On 8/24/22 12:01 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.4 release.
+> There are 362 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 26 Aug 2022 06:58:34 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.4-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-All warnings (new ones prefixed by >>):
+Tested-by: Ron Economos <re@w6rz.net>
 
->> Warning: Documentation/admin-guide/sysctl/kernel.rst references a file that doesn't exist: Documentation/filesystems/devpts.rst
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

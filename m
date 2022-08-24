@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3909659F61D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E9959F620
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiHXJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
+        id S235945AbiHXJYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbiHXJXK (ORCPT
+        with ESMTP id S231561AbiHXJYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:23:10 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2312B83F24
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:23:10 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id y4so12424764qvp.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:23:10 -0700 (PDT)
+        Wed, 24 Aug 2022 05:24:50 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00825D3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:24:48 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id cb8so12300917qtb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=xWe+ZWv+j/DBZNUi9i5IoxbVooEDeShD1NU+nnYJNXA=;
-        b=gp773N5DOmVojdNAUa1mrNy4Pfqyv6ZLwgIWUY2J8rlNHYAVh8MGtgBx+13uSVw3gK
-         BXZKwrhhY8lJcbdbY4/hJ4VGtZzysEZiuNHFI4W9EnMxZ9ueJXIQJcaOC1CaHnLhrLZm
-         9fM6R4fi3R68FLw8nulsKIZxAu/CAdxEwNFP7LJUEwa2KwYJ2+0uHEjDnhG0tZSaLqdO
-         p0DbtPTqxGcW6WxkePGNPLblV3lpz+j9YTcxUKLchhao9pk7j3fDQvu8qckBq0SE9a9X
-         oJ/BdPAC467Ryhms/QrVBxAD8umb3dFVPigVC/q6Ho5daMIcQa0bUYsdHFg73h7CGRP4
-         Jrzg==
+        bh=APYUm7pTLg0UMmA20sdSUDSCMnCFPm5AUCvgM2nCBfE=;
+        b=UMizMcqTQ/q/pLQ7Fw4rY6/aegr+1otQV1K/yWFQ0U4q8llDJ4weYOrvSGxYLOE9Cp
+         yig6Bd5E3DZp483bb1okP3dH1AtSdo+MjH4gnwCxqrM1Tx4xofwviUQ1EG/aANOgarKJ
+         a3RX+vlqbd2jBK6Fgiw7ZMWU1DJxkt2oH8MVh5RrZDDQ/WlUDZSyXDjEB9xnvRUhTP4M
+         bq+y0UPwv3Cx1VjOe9VrypbWaQrWVM3ZHws3NJMVkxBtSKUg4W6dCqn3BEy32/xECh8S
+         7L7tmi8+QmKqj1J6sELrdpTjOinDcM3Fle26D6xx+LFMBtXUpjc6TVruQJvnWuogV6wU
+         NnmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=xWe+ZWv+j/DBZNUi9i5IoxbVooEDeShD1NU+nnYJNXA=;
-        b=zzp/guif0cgvX4fkbYV5BoUS++fvjdJ0QDNj6gvhRVZFNSMpdMr1RCGUUKhxqKUIdR
-         WaKUmhPR5L6zp+FHGizWDy3g+/so6o9n/YOCIDpTFe5n+0IQe5si9k8Cc0F4RtxSCxnn
-         yVCr9oeRJcpLHqldRJlAelZbTQi7Ay5u+VdGRAH+LhzUQFkJu9F8/QIouxisR5Qq5YqG
-         H/+DwaeIlg5lmbAhOjtfwUYtIm8/JaTsux7zz0sUJpW7OMBi/nGrJ2BH2e29M7kuS0Lm
-         0k/x/OabvY0ROThHW23/qhotpgoaN7haouozFZ7WDVFtrFNHtpDPxHjaAD75UyZkgONe
-         lPLg==
-X-Gm-Message-State: ACgBeo1kU5/LwfZ1BWCpgqFqyc/3aBZTtdM2zMg74tPUqhSkGE9v/nfd
-        Ldt9J5RpJehsDTUfAaXhPkLBPSCteNiGfittx7Y=
-X-Google-Smtp-Source: AA6agR4+nBwGguvI1TocNXQnQepP9HPl6F1Gzap9lirrw8XsRCc77Rl+5alq4xmmvOHIjoENZfXk5mbg7+d6SRNQHcE=
-X-Received: by 2002:a0c:aadb:0:b0:497:1283:c849 with SMTP id
- g27-20020a0caadb000000b004971283c849mr2011106qvb.11.1661332989119; Wed, 24
- Aug 2022 02:23:09 -0700 (PDT)
+        bh=APYUm7pTLg0UMmA20sdSUDSCMnCFPm5AUCvgM2nCBfE=;
+        b=pF6biJj1MaMfd4Tyb1OacoXpjHyYYPpQFcVFsZ5aCFmf0J6mkSNV/T8avxYAHI5REQ
+         JsA+8RkQis6UijJoyROK/4rxGOdBMTy/BZghz1E+7s7FgFAxwYjMTNaKr38E7AUkTTNV
+         bFNA7E//Ut0xTceiz9kyhKNSyereHDWnAi21bNJzXlCt6L6ZspXarbLtkncwqErkWBT5
+         XAS82szfEGTubxzWQjHdr9BfWTCPl5pwstc1g+udIxscccYta1KEmtG4LgOFuLVwVt8j
+         sfjt1t+exf/coaazPtjjfNzVUGjYmJo2NFboM0KSUoTZYD6N1/m5JuIXOR8XmKYIr4p9
+         NUBg==
+X-Gm-Message-State: ACgBeo3I4cc/ok2qonReg8jGLwgHFuIOC4jDb8oGV0DT0/OcMSBXbfYM
+        AtQrpp+fxlGQ5gCAssJkserXjBid+GdWhVJSJktkh3BWgVY=
+X-Google-Smtp-Source: AA6agR6NeKFnojkjNkBuW2m80DnoKp7Dk6eBwitHQSG6cBexDxjTyEbzlqXCspc/FUKvRHoHIf5DFCgIDy/eaNXZLsA=
+X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
+ v6-20020ac85786000000b003433051170dmr22894132qta.429.1661333087519; Wed, 24
+ Aug 2022 02:24:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824012624.2826445-1-yury.norov@gmail.com> <20220824012624.2826445-3-yury.norov@gmail.com>
-In-Reply-To: <20220824012624.2826445-3-yury.norov@gmail.com>
+References: <20220824012624.2826445-1-yury.norov@gmail.com>
+ <20220824012624.2826445-3-yury.norov@gmail.com> <CAHp75VdgXBFH_vxUNYZLc2ahOrC8oBj0x=2GWXZr+CLGX1qyTg@mail.gmail.com>
+In-Reply-To: <CAHp75VdgXBFH_vxUNYZLc2ahOrC8oBj0x=2GWXZr+CLGX1qyTg@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 24 Aug 2022 12:22:33 +0300
-Message-ID: <CAHp75VdgXBFH_vxUNYZLc2ahOrC8oBj0x=2GWXZr+CLGX1qyTg@mail.gmail.com>
+Date:   Wed, 24 Aug 2022 12:24:11 +0300
+Message-ID: <CAHp75VdxXVezM90AdCn=1HnNY9uDbg5OzWDL5RS66yGppZCQ_A@mail.gmail.com>
 Subject: Re: [PATCH v2 2/3] lib/find_bit: create find_first_zero_bit_le()
 To:     Yury Norov <yury.norov@gmail.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -75,34 +76,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 5:17 AM Yury Norov <yury.norov@gmail.com> wrote:
->
-> find_first_zero_bit_le() is an alias to find_next_zero_bit_le(),
-> despite that 'next' is known to be slower than the 'first' version.
->
-> Now that we have a common FIND_FIRST_BIT() macro helper, it's trivial
-> to implement find_first_zero_bit_le() as a real function.
->
-> Moving find_*_le() to a separate file helps to fit the FIND_FIRST_BIT()
-> to the _le needs by wiring word_op to swab.
->
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
-> Like other find_*_le() functions, the new one takes void *addr, instead
-> of unsigned long *. This should be fixed for all in a separate series.
-
-From this comment it is unclear to me why we can't fix them first and
-then apply this with the correct type?
+On Wed, Aug 24, 2022 at 12:22 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Wed, Aug 24, 2022 at 5:17 AM Yury Norov <yury.norov@gmail.com> wrote:
 
 ...
 
-> +#define word_op swab
-> +#include "find_bit.h"
+> > +#define word_op swab
+> > +#include "find_bit.h"
+>
+> Looking at this, I would rather always require to define __ffs_word_op
+> (or whatever name) in the user and replace #ifndef in the find_bit.h
+> with
+> #error "The __ffs_word_op must be defined before including find_bit.h!"
 
-Looking at this, I would rather always require to define __ffs_word_op
-(or whatever name) in the user and replace #ifndef in the find_bit.h
-with
-#error "The __ffs_word_op must be defined before including find_bit.h!"
+The rationale is that the missed definition may give wrong results
+while being compiled with no errors. With the above, the developer
+must think about what they are doing.
 
 -- 
 With Best Regards,

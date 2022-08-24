@@ -2,177 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CA959FE63
+	by mail.lfdr.de (Postfix) with ESMTP id 6502859FE64
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbiHXPbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S238870AbiHXPbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235300AbiHXPa2 (ORCPT
+        with ESMTP id S239542AbiHXPaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:30:28 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1FADEB2;
-        Wed, 24 Aug 2022 08:30:26 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OFDjwh024804;
-        Wed, 24 Aug 2022 15:30:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=AlgD0tRJZancLsm5tjdFdyG0SXTnhtFLMqnPKtXUupo=;
- b=iW9lv4HWZjY1FZWRcPPxN6V8AaZ8PFc3be9arX09imaJcQvoz96h8HAObp0421lteM2L
- 2HpfofsPOBzZyxQl0fmy9hwX92ousYPstawghhZqLRIkvGgI3unYswcxTcjEdIQ9CqaI
- S5EC7C077WcT/NJm4+n9Q3am9b0w63C5PKItUUJcve866XscHFn6Nun2RVVkJhwvzWoI
- qn/jcEMmcS1yQZMaF8D8ODE+VImAgTwenpcgPPIoSVp7QK7UJHNh12M4f5CsWjn1Ma9A
- ujcLl5WjFJjqxXG2b9nc7wndr2Oh1DKOVfY8quxhKnu5kPnaLoixYwnAf2gybldLEHKl Bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j5pemrgwx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Aug 2022 15:30:22 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27OFDinv024795;
-        Wed, 24 Aug 2022 15:30:21 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j5pemrgw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Aug 2022 15:30:21 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27OFLLt7008739;
-        Wed, 24 Aug 2022 15:30:19 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3j2q88w9pg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Aug 2022 15:30:19 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27OFUGu631981862
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Aug 2022 15:30:16 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2021CAE055;
-        Wed, 24 Aug 2022 15:30:16 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3370AE051;
-        Wed, 24 Aug 2022 15:30:15 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 24 Aug 2022 15:30:15 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: s390: Pass initialized arg even if unused
-Date:   Wed, 24 Aug 2022 17:30:11 +0200
-Message-Id: <20220824153011.4004573-1-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 24 Aug 2022 11:30:55 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659101900D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:30:52 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id c16-20020a17090aa61000b001fb3286d9f7so3607008pjq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Nr6VDxQ+9Z3MRjk/tSo9PTiJ5/YnHSGlAbzSQvtKymc=;
+        b=qmjOD5wPUNDa8iTubLMf8v2s9M6JFSV1346e97d8+/FNWBwZ2rxbX0DX6lGi4Rhsim
+         9Jju7OGBeF35kUbBqdgzumB8y0J0rYYdHqGts5j2+GE56XmLVT+6nI7SY9al0GMs0x62
+         OTM6yf8WgWUY7pPvvb9P+GRM3OXq1+JGe3wJDAvEjFWB2YuetvY8J7IFCxhQckNs0rk9
+         tGYYH2zB6V0VEe528zfagh6OLsIomAMjIY63L/i+/4dhst6HTC5iuV1mGz2MRe966WtE
+         8r0Qx8bJLjfLSbtP88LDHqKAFr0whNygXd7u67EK7O8Hc/4BvDsDfila4lT8Yuf3g8K2
+         OUVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Nr6VDxQ+9Z3MRjk/tSo9PTiJ5/YnHSGlAbzSQvtKymc=;
+        b=agOiHx0thtleATFfSZ5zQddAosvuvL4z3pf0x21NpY6LE6i8er9EaY4dnLxzszFjy4
+         vz+neDwD/XCDoGqwJcVQakZHSw/fSIcv6AzOdFhSI8Ur0bMFiEvIyq1g35QRSos0J8Ye
+         f2VDdi+txpnAqyJOv2mixwTZBwc9zSVQzw4kFrG/y8gpugPZnyKQwxtcmtpHyuXNIBDX
+         u01e8I72zcCzaOR99g6N1Da0DB1Z2t7XymsxM9Olm8yC2XeYBDWSAHpkd2K2frKLpfXI
+         8Gw4l1/QXxV57OgB6ZQ2/L4CEKudwMxwnGXLxDRW/XRdAUX+kteCyZK1HVcZITbIJOrK
+         jDzA==
+X-Gm-Message-State: ACgBeo22EIxhrIZklss1LRhmrltrMDN6iSUW9leqkKrRA4sHgTSks7QL
+        N76GwdyKt6GqcHQ8Czy6m+TJsw==
+X-Google-Smtp-Source: AA6agR6TP7sJqf+FINNYGFswGkM7+NtmO+2XnKI4HuSUdqvl/BoQjFdrpoX3DJyaLGg41oZcQizYyg==
+X-Received: by 2002:a17:902:f641:b0:172:9642:1bf1 with SMTP id m1-20020a170902f64100b0017296421bf1mr29706364plg.36.1661355051780;
+        Wed, 24 Aug 2022 08:30:51 -0700 (PDT)
+Received: from [10.254.35.15] ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id 82-20020a621555000000b0053655af14easm9094253pfv.45.2022.08.24.08.30.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 08:30:50 -0700 (PDT)
+Message-ID: <7faa16c2-0488-e9df-da65-94265444b28d@bytedance.com>
+Date:   Wed, 24 Aug 2022 23:30:44 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4e7T6gqiij7L_CGOGcuryjplXCHzmwma
-X-Proofpoint-ORIG-GUID: 6TBa3dtzGeF1ThkojpgOzt90lCDzYBxm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-24_07,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- malwarescore=0 clxscore=1011 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 mlxscore=0 impostorscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208240057
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v3 05/10] sched/psi: optimize task switch inside shared
+ cgroups again
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     tj@kernel.org, mkoutny@suse.com, surenb@google.com,
+        gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
+        peterz@infradead.org, songmuchun@bytedance.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220824081829.33748-1-zhouchengming@bytedance.com>
+ <20220824081829.33748-6-zhouchengming@bytedance.com>
+ <YwYwUIjAGHLtRGue@cmpxchg.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YwYwUIjAGHLtRGue@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This silences smatch warnings reported by kbuild bot:
-arch/s390/kvm/gaccess.c:859 guest_range_to_gpas() error: uninitialized symbol 'prot'.
-arch/s390/kvm/gaccess.c:1064 access_guest_with_key() error: uninitialized symbol 'prot'.
+On 2022/8/24 22:06, Johannes Weiner wrote:
+> On Wed, Aug 24, 2022 at 04:18:24PM +0800, Chengming Zhou wrote:
+>> commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
+>> defer prev task sleep handling to psi_task_switch(), so we don't need
+>> to clear and set TSK_ONCPU state for common cgroups.
+>>
+>>     A
+>>     |
+>>     B
+>>    / \
+>>   C   D
+>>  /     \
+>> prev   next
+>>
+>> After that commit psi_task_switch() do:
+>> 1. psi_group_change(next, .set=TSK_ONCPU) for D
+>> 2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C
+>> 3. psi_group_change(prev, .clear=TSK_RUNNING) for B, A
+>>
+>> But there is a limitation "prev->psi_flags == next->psi_flags" that
+>> if not satisfied, will make this cgroups optimization unusable for both
+>> sleep switch or running switch cases. For example:
+>>
+>> prev->in_memstall != next->in_memstall when sleep switch:
+>> 1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
+>> 2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C, B, A
+>>
+>> prev->in_memstall != next->in_memstall when running switch:
+>> 1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
+>> 2. psi_group_change(prev, .clear=TSK_ONCPU) for C, B, A
+>>
+>> The reason why this limitation exist is that we consider a group is
+>> PSI_MEM_FULL if the CPU is actively reclaiming and nothing productive
+>> could run even if it were runnable. So when CPU curr changed from prev
+>> to next and their in_memstall status is different, we have to change
+>> PSI_MEM_FULL status for their common cgroups.
+>>
+>> This patch remove this limitation by making psi_group_change() change
+>> PSI_MEM_FULL status depend on CPU curr->in_memstall status.
+>>
+>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> 
+> Hoo boy, that took me a second.
+> 
 
-This is because it cannot tell that the value is not used in this case.
-The trans_exc* only examine prot if code is PGM_PROTECTION.
-Pass a dummy value for other codes.
+Thanks for your time. :-)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
- arch/s390/kvm/gaccess.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> Way back when PSI_MEM_FULL was accounted from the timer tick, task
+> switching could simply iterate next and prev to the common ancestor to
+> update TSK_ONCPU and be done.
+> 
+> Then memstall ticks were replaced with checking curr->in_memstall
+> directly in psi_group_change(). That meant that now if the task switch
+> was between a memstall and a !memstall task, we had to iterate through
+> the common ancestors at least ONCE to fix up their state_masks.
+> 
+> We added the identical_state filter to make sure the common ancestor
+> elimination was skipped in that case. It seems that was always a
+> little too eager, because it caused us to walk the common ancestors
+> *twice* instead of the required once: the iteration for next could
+> have stopped at the common ancestor; prev could have updated TSK_ONCPU
+> up to the common ancestor, then finish to the root without changing
+> any flags, just to get the new curr->in_memstall into the state_masks.
+> 
+> This patch recognizes this and makes it so that we walk to the root
+> exactly once if state_mask needs updating.
+> 
+> 
+> Unless I missed anything, would you mind adding this to the changelog?
 
-diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-index 082ec5f2c3a5..89186701116a 100644
---- a/arch/s390/kvm/gaccess.c
-+++ b/arch/s390/kvm/gaccess.c
-@@ -489,6 +489,8 @@ enum prot_type {
- 	PROT_TYPE_ALC  = 2,
- 	PROT_TYPE_DAT  = 3,
- 	PROT_TYPE_IEP  = 4,
-+	/* Dummy value for passing an initialized value when code != PGM_PROTECTION */
-+	PROT_NONE,
- };
- 
- static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
-@@ -503,6 +505,7 @@ static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva,
- 
- 	switch (code) {
- 	case PGM_PROTECTION:
-+		WARN(unlikely(prot == PROT_NONE), "Invalid prot argument");
- 		switch (prot) {
- 		case PROT_TYPE_IEP:
- 			tec->b61 = 1;
-@@ -519,6 +522,8 @@ static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva,
- 		case PROT_TYPE_DAT:
- 			tec->b61 = 1;
- 			break;
-+		case PROT_NONE:
-+			/* We should never get here, acts like termination */
- 		}
- 		if (terminate) {
- 			tec->b56 = 0;
-@@ -968,8 +973,10 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
- 				return rc;
- 		} else {
- 			gpa = kvm_s390_real_to_abs(vcpu, ga);
--			if (kvm_is_error_gpa(vcpu->kvm, gpa))
-+			if (kvm_is_error_gpa(vcpu->kvm, gpa)) {
- 				rc = PGM_ADDRESSING;
-+				prot = PROT_NONE;
-+			}
- 		}
- 		if (rc)
- 			return trans_exc(vcpu, rc, ga, ar, mode, prot);
-@@ -1112,8 +1119,6 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
- 		if (rc == PGM_PROTECTION && try_storage_prot_override)
- 			rc = access_guest_page_with_key(vcpu->kvm, mode, gpas[idx],
- 							data, fragment_len, PAGE_SPO_ACC);
--		if (rc == PGM_PROTECTION)
--			prot = PROT_TYPE_KEYC;
- 		if (rc)
- 			break;
- 		len -= fragment_len;
-@@ -1123,6 +1128,10 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
- 	if (rc > 0) {
- 		bool terminate = (mode == GACC_STORE) && (idx > 0);
- 
-+		if (rc == PGM_PROTECTION)
-+			prot = PROT_TYPE_KEYC;
-+		else
-+			prot = PROT_NONE;
- 		rc = trans_exc_ending(vcpu, rc, ga, ar, mode, prot, terminate);
- 	}
- out_unlock:
--- 
-2.34.1
+Your explanation is very clear and accurate, will add it.
+
+> 
+> I'm not quite sure how 4117cebf1a9f ("psi: Optimize task switch inside
+> shared cgroups") fits into the picture. That optimized the sleep case,
+> but the sleep case never had the common ancestor optimization (the dq
+> would have already cleared TSK_ONCPU up to the root). Let me know if I
+> am mistaken.
+
+That commit skiped clearing TSK_ONCPU in dequeue when sleep, so also have
+the common ancestor optimization.
+
+> 
+> AFAICS I can see, this patch here is simply catching up on a missed
+> optimization that could have been done in 7fae6c8171d2 ("psi: Use
+> ONCPU state tracking machinery to detect reclaim") directly already.
+
+Yes, apart from catching on a missed optimization, I later found in testing
+this patch is necessary for the next patch 06/10.
+
+Imaging we walk the common ancestors twice:
+(1) psi_group_change(.clear = 0, .set = TSK_ONCPU)
+(2) psi_group_change(.clear = TSK_ONCPU, .set = 0)
+
+We previously used tasks[NR_ONCPU] to record TSK_ONCPU, so tasks[NR_ONCPU]++
+in (1) then tasks[NR_ONCPU]-- in (2), tasks[NR_ONCPU] still be correct.
+
+The patch 06/10 change to use one bit in state mask to record TSK_ONCPU,
+so PSI_ONCPU bit will be set in (1), but then be cleared in (2), which
+cause the psi_group_cpu has task running but without PSI_ONCPU bit set!
+
+With this patch, we will never walk the common ancestors twice, so don't
+have above problem anymore.
+
+> 
+> So I think it all makes sense. I have just two notes on the diff:
+> 
+>> @@ -820,8 +820,6 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+>>  	u64 now = cpu_clock(cpu);
+>>  
+>>  	if (next->pid) {
+>> -		bool identical_state;
+>> -
+>>  		psi_flags_change(next, 0, TSK_ONCPU);
+>>  		/*
+>>  		 * When switching between tasks that have an identical
+>> @@ -829,11 +827,9 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+>>  		 * we reach the first common ancestor. Iterate @next's
+>>  		 * ancestors only until we encounter @prev's ONCPU.
+>>  		 */
+> 
+> The comment is rather stale now. Could you change it to this?
+
+Good, will update the comment.
+
+> 
+> 		/*
+> 		 * Set TSK_ONCPU on @next's cgroups. If @next shares any
+> 		 * ancestors with @prev, those will already have @prev's
+> 		 * TSK_ONCPU bit set, and we can stop the iteration there.
+> 		 */
+> 
+>> -		identical_state = prev->psi_flags == next->psi_flags;
+>>  		iter = NULL;
+>>  		while ((group = iterate_groups(next, &iter))) {
+>> -			if (identical_state &&
+>> -			    per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
+>> +			if (per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
+>>  				common = group;
+>>  				break;
+>>  			}
+>> @@ -880,7 +876,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+>>  		 * TSK_ONCPU is handled up to the common ancestor. If we're tasked
+>>  		 * with dequeuing too, finish that for the rest of the hierarchy.
+>>  		 */
+>> -		if (sleep) {
+>> +		if (sleep || unlikely(prev->in_memstall != next->in_memstall)) {
+>>  			clear &= ~TSK_ONCPU;
+>>  			for (; group; group = iterate_groups(prev, &iter))
+>>  				psi_group_change(group, cpu, clear, set, now, wake_clock);
+> 
+> Okay, this computes too. But it is somewhat special-cased, without
+> explaining why the memstall state in particular matters. Instead of
+> focusing on the exceptions though, can we just generalize this a bit?
+> 
+> 		/*
+> 		 * TSK_ONCPU is handled up to the common ancestor. If there are
+> 		 * any other differences between the two tasks (e.g. prev goes
+> 		 * to sleep, or only one task is memstall), finish propagating
+> 		 * those differences all the way up to the root.
+> 		 */
+> 		if ((prev->psi_flags ^ next->psi_flags) & ~TSK_ONCPU) {
+> 			clear &= ~TSK_ONCPU;
+> 			for (; group; group = iterate_groups(prev, &iter))
+> 				psi_group_change(group, cpu, clear, set, now, wake_clock);
+> 		}
+
+I think this is much better and the comment is very clear!
+
+Thanks.
 

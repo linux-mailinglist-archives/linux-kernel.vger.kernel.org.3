@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0FA59F65B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD4859F656
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235997AbiHXJem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S236090AbiHXJer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235620AbiHXJee (ORCPT
+        with ESMTP id S235680AbiHXJef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:34:34 -0400
+        Wed, 24 Aug 2022 05:34:35 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9CA84EEA;
-        Wed, 24 Aug 2022 02:34:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EB885F82;
+        Wed, 24 Aug 2022 02:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661333672; x=1692869672;
+  t=1661333674; x=1692869674;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+YKUXG//uJeIm7gMQnJPpEQWgkp1jqNV7Pu3cfQPyD0=;
-  b=dMVC5yYfjoWUCkHolkfitbkNgGtUNrOaxJjvMqBaS1okTNz6xRKRJSP1
-   ryCAN4wisr7DykHB6dith+dVtM8BLxs/se33xbGt6mk2qg3iZD3/I3ogG
-   LoTKmu0CNtxNyThJj35/OGUYwiW3bWjYM0pqzS5Jcj6ive/7GUPFdc826
-   aA3gNaVctFLlERWecoqgkMopS6S8VmgNVPKpZPOqMr7v885LEiHDERzwq
-   sfusg8E4/HjmdCbXiDNYeNNS6VeC5dyGxpDF1Q6+VQizqsvQlpWim+l8y
-   KspSjdahfEvpCbfOkxfJgxGhKiLdwArTM1K+6dcwNbm23sqYy5uDVIfMe
-   w==;
+  bh=AoTjF84+5kjo+c9X22M8nu7imt7Yf53AM1e1Wqcdbis=;
+  b=NvCJEgFoVcKSnzNCS0hRV3k5RmisEyFWovuKIb+57b123VJJupWcAZyc
+   w+DUHN6FaTBPWTGINyWtawG7+OfXLtBU8mDvY+pFhGb8jfac9xNBOmr4T
+   WsMsAaCqEpIDmvFRv2tnLpyvztLzj8WJBfE7iMc7mZFVPeM2yM3gSbGzq
+   L+tBJ8/2yB7BwFmOuxiIo5Ie9qs0PcqkSgbVUC6qpiF/rEpTfHIn4zZjK
+   JuKKib7tNyQmA1BfBvCIYjRJS9Gg+nhuvySCmHsL01q7amY69doPNbKzk
+   0k42MQnvMmoGfxlL2soVbzFM8okdrZ/FE6FD2EqKdlUM3mZ1utlPZ8A6Y
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="110474299"
+   d="scan'208";a="110474304"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 02:34:31 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 02:34:32 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 24 Aug 2022 02:34:28 -0700
+ 15.1.2507.12; Wed, 24 Aug 2022 02:34:31 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Wed, 24 Aug 2022 02:34:26 -0700
+ Transport; Wed, 24 Aug 2022 02:34:29 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -52,9 +52,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
-Subject: [PATCH v3 4/5] clk: microchip: add PolarFire SoC fabric clock support
-Date:   Wed, 24 Aug 2022 10:33:42 +0100
-Message-ID: <20220824093342.187844-5-conor.dooley@microchip.com>
+Subject: [PATCH v3 5/5] riscv: dts: microchip: add the mpfs' fabric clock control
+Date:   Wed, 24 Aug 2022 10:33:43 +0100
+Message-ID: <20220824093342.187844-6-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220824093342.187844-1-conor.dooley@microchip.com>
 References: <20220824093342.187844-1-conor.dooley@microchip.com>
@@ -71,329 +71,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a driver to support the PLLs in PolarFire SoC's Clock Conditioning
-Circuitry, an instance of which is located in each ordinal corner of
-the FPGA. Only get_rate() is supported as these clocks are intended to
-be statically configured by the FPGA design. Currently, the DLLs are
-not supported by this driver. For more information on the hardware, see
-"PolarFire SoC FPGA Clocking Resources" in the link below.
+The "fabric clocks" in current PolarFire SoC device trees are not
+really fixed clocks. Their frequency is set by the bitstream, so having
+them located in -fabric.dtsi is not a problem - they're just as "fixed"
+as the IP blocks etc used in the FPGA fabric.
+However, their configuration can be read at runtime (and to an extent
+they can be controlled, although the intended usage is static
+configurations set by the bitstream) through the system controller bus.
 
-Link: https://onlinedocs.microchip.com/pr/GUID-8F0CC4C0-0317-4262-89CA-CE7773ED1931-en-US-1/index.html
+In the v2209 reference design a single CCC (north-west corner) is
+enabled, using a 50 MHz off-chip oscillator as its reference.
+
+Updating to the v2209 reference design is required.
+
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/clk/microchip/Makefile       |   1 +
- drivers/clk/microchip/clk-mpfs-ccc.c | 293 +++++++++++++++++++++++++++
- 2 files changed, 294 insertions(+)
- create mode 100644 drivers/clk/microchip/clk-mpfs-ccc.c
+ .../dts/microchip/mpfs-icicle-kit-fabric.dtsi | 27 +++++++++------
+ .../boot/dts/microchip/mpfs-icicle-kit.dts    |  4 +++
+ .../dts/microchip/mpfs-polarberry-fabric.dtsi |  5 +++
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       | 34 +++++++++++++++++--
+ 4 files changed, 58 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/clk/microchip/Makefile b/drivers/clk/microchip/Makefile
-index 5fa6dcf30a9a..13250e04e46c 100644
---- a/drivers/clk/microchip/Makefile
-+++ b/drivers/clk/microchip/Makefile
-@@ -2,3 +2,4 @@
- obj-$(CONFIG_COMMON_CLK_PIC32) += clk-core.o
- obj-$(CONFIG_PIC32MZDA) += clk-pic32mzda.o
- obj-$(CONFIG_MCHP_CLK_MPFS) += clk-mpfs.o
-+obj-$(CONFIG_MCHP_CLK_MPFS) += clk-mpfs-ccc.o
-diff --git a/drivers/clk/microchip/clk-mpfs-ccc.c b/drivers/clk/microchip/clk-mpfs-ccc.c
-new file mode 100644
-index 000000000000..2a34034c2c6e
---- /dev/null
-+++ b/drivers/clk/microchip/clk-mpfs-ccc.c
-@@ -0,0 +1,293 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Conor Dooley <conor.dooley@microchip.com>
-+ *
-+ * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-+ */
-+#include "asm-generic/errno-base.h"
-+#include <linux/clk-provider.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <dt-bindings/clock/microchip,mpfs-clock.h>
-+
-+/* address offset of control registers */
-+#define MPFS_CCC_PLL_CR			0x04u
-+#define MPFS_CCC_REF_CR			0x08u
-+#define MPFS_CCC_SSCG_2_CR		0x2Cu
-+#define MPFS_CCC_POSTDIV01_CR		0x10u
-+#define MPFS_CCC_POSTDIV23_CR		0x14u
-+
-+#define MPFS_CCC_FBDIV_SHIFT		0x00u
-+#define MPFS_CCC_FBDIV_WIDTH		0x0Cu
-+#define MPFS_CCC_POSTDIV0_SHIFT		0x08u
-+#define MPFS_CCC_POSTDIV1_SHIFT		0x18u
-+#define MPFS_CCC_POSTDIV2_SHIFT		MPFS_CCC_POSTDIV0_SHIFT
-+#define MPFS_CCC_POSTDIV3_SHIFT		MPFS_CCC_POSTDIV1_SHIFT
-+#define MPFS_CCC_POSTDIV_WIDTH		0x06u
-+#define MPFS_CCC_REFCLK_SEL		BIT(6)
-+#define MPFS_CCC_REFDIV_SHIFT		0x08u
-+#define MPFS_CCC_REFDIV_WIDTH		0x06u
-+
-+#define MPFS_CCC_FIXED_DIV		4
-+#define MPFS_CCC_OUTPUTS_PER_PLL	4
-+#define MPFS_CCC_REFS_PER_PLL		2
-+
-+struct mpfs_ccc_data {
-+	void __iomem **pll_base;
-+	struct device *dev;
-+	struct clk_hw_onecell_data hw_data;
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
+index 0d28858b83f2..f17cb00df467 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
++++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
+@@ -2,14 +2,14 @@
+ /* Copyright (c) 2020-2021 Microchip Technology Inc */
+ 
+ / {
+-	compatible = "microchip,mpfs-icicle-reference-rtlv2203", "microchip,mpfs";
++	compatible = "microchip,mpfs-icicle-reference-rtlv2209", "microchip,mpfs";
+ 
+ 	core_pwm0: pwm@41000000 {
+ 		compatible = "microchip,corepwm-rtl-v4";
+ 		reg = <0x0 0x41000000 0x0 0xF0>;
+ 		microchip,sync-update-mask = /bits/ 32 <0>;
+ 		#pwm-cells = <2>;
+-		clocks = <&fabric_clk3>;
++		clocks = <&ccc_nw CLK_CCC_PLL0_OUT0>;
+ 		status = "disabled";
+ 	};
+ 
+@@ -18,22 +18,29 @@ i2c2: i2c@44000000 {
+ 		reg = <0x0 0x44000000 0x0 0x1000>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		clocks = <&fabric_clk3>;
++		clocks = <&ccc_nw CLK_CCC_PLL0_OUT3>;
+ 		interrupt-parent = <&plic>;
+ 		interrupts = <122>;
+ 		clock-frequency = <100000>;
+ 		status = "disabled";
+ 	};
+ 
+-	fabric_clk3: fabric-clk3 {
++	refclk_ccc: cccrefclk {
+ 		compatible = "fixed-clock";
+ 		#clock-cells = <0>;
+-		clock-frequency = <62500000>;
+ 	};
++};
+ 
+-	fabric_clk1: fabric-clk1 {
+-		compatible = "fixed-clock";
+-		#clock-cells = <0>;
+-		clock-frequency = <125000000>;
+-	};
++&ccc_nw {
++	clocks = <&refclk_ccc>, <&refclk_ccc>, <&refclk_ccc>, <&refclk_ccc>,
++		 <&refclk_ccc>, <&refclk_ccc>;
++	clock-names = "pll0_ref0", "pll0_ref1", "pll1_ref0", "pll1_ref1",
++		      "dll0_ref", "dll1_ref";
++	status = "okay";
 +};
 +
-+struct mpfs_ccc_pll_hw_clock {
-+	void __iomem *base;
-+	const char *name;
-+	const struct clk_parent_data *parents;
-+	unsigned int id;
-+	u32 reg_offset;
-+	u32 shift;
-+	u32 width;
-+	u32 flags;
-+	struct clk_hw hw;
-+	struct clk_init_data init;
++&pcie {
++	clocks = <&ccc_nw CLK_CCC_PLL0_OUT0>, <&ccc_nw CLK_CCC_PLL0_OUT1>,
++		 <&ccc_nw CLK_CCC_PLL0_OUT3>;
++	clock-names = "fic0", "fic1", "fic3";
+ };
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+index 044982a11df5..d361d1e38b16 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
++++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
+@@ -140,6 +140,10 @@ &refclk {
+ 	clock-frequency = <125000000>;
+ };
+ 
++&refclk_ccc {
++	clock-frequency = <50000000>;
 +};
 +
-+#define to_mpfs_ccc_clk(_hw) container_of(_hw, struct mpfs_ccc_pll_hw_clock, hw)
+ &rtc {
+ 	status = "okay";
+ };
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+index 49380c428ec9..3beb450b4259 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
++++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+@@ -14,3 +14,8 @@ fabric_clk1: fabric-clk1 {
+ 		clock-frequency = <125000000>;
+ 	};
+ };
 +
-+/*
-+ * mpfs_ccc_lock prevents anything else from writing to a fabric ccc
-+ * while a software locked register is being written.
-+ */
-+static DEFINE_SPINLOCK(mpfs_ccc_lock);
-+
-+static const struct clk_parent_data mpfs_ccc_pll0_refs[] = {
-+	{ .fw_name = "pll0_ref0" },
-+	{ .fw_name = "pll0_ref1" },
++&pcie {
++	clocks = <&fabric_clk1>, <&fabric_clk1>, <&fabric_clk3>;
++	clock-names = "fic0", "fic1", "fic3";
 +};
+diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+index 499c2e63ad35..b23390e7504e 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
++++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+@@ -236,6 +236,38 @@ clkcfg: clkcfg@20002000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
++		ccc_se: clock-controller@38010000 {
++			compatible = "microchip,mpfs-ccc";
++			reg = <0x0 0x38010000 0x0 0x1000>, <0x0 0x38020000 0x0 0x1000>,
++			      <0x0 0x39010000 0x0 0x1000>, <0x0 0x39020000 0x0 0x1000>;
++			#clock-cells = <1>;
++			status = "disabled";
++		};
 +
-+static const struct clk_parent_data mpfs_ccc_pll1_refs[] = {
-+	{ .fw_name = "pll1_ref0" },
-+	{ .fw_name = "pll1_ref1" },
-+};
++		ccc_ne: clock-controller@38040000 {
++			compatible = "microchip,mpfs-ccc";
++			reg = <0x0 0x38040000 0x0 0x1000>, <0x0 0x38080000 0x0 0x1000>,
++			      <0x0 0x39040000 0x0 0x1000>, <0x0 0x39080000 0x0 0x1000>;
++			#clock-cells = <1>;
++			status = "disabled";
++		};
 +
-+static unsigned long mpfs_ccc_pll_recalc_rate(struct clk_hw *hw, unsigned long prate)
-+{
-+	struct mpfs_ccc_pll_hw_clock *ccc_hw = to_mpfs_ccc_clk(hw);
-+	void __iomem *mult_addr = ccc_hw->base + ccc_hw->reg_offset;
-+	void __iomem *ref_div_addr = ccc_hw->base + MPFS_CCC_REF_CR;
-+	u32 mult, ref_div;
++		ccc_nw: clock-controller@38100000 {
++			compatible = "microchip,mpfs-ccc";
++			reg = <0x0 0x38100000 0x0 0x1000>, <0x0 0x38200000 0x0 0x1000>,
++			      <0x0 0x39100000 0x0 0x1000>, <0x0 0x39200000 0x0 0x1000>;
++			#clock-cells = <1>;
++			status = "disabled";
++		};
 +
-+	mult = readl_relaxed(mult_addr) >> MPFS_CCC_FBDIV_SHIFT;
-+	mult &= clk_div_mask(MPFS_CCC_FBDIV_WIDTH);
-+	ref_div = readl_relaxed(ref_div_addr) >> MPFS_CCC_REFDIV_SHIFT;
-+	ref_div &= clk_div_mask(MPFS_CCC_REFDIV_WIDTH);
++		ccc_sw: clock-controller@38400000 {
++			compatible = "microchip,mpfs-ccc";
++			reg = <0x0 0x38400000 0x0 0x1000>, <0x0 0x38800000 0x0 0x1000>,
++			      <0x0 0x39400000 0x0 0x1000>, <0x0 0x39800000 0x0 0x1000>;
++			#clock-cells = <1>;
++			status = "disabled";
++		};
 +
-+	return prate * mult / (ref_div * MPFS_CCC_FIXED_DIV);
-+}
-+
-+static u8 mpfs_ccc_pll_get_parent(struct clk_hw *hw)
-+{
-+	struct mpfs_ccc_pll_hw_clock *ccc_hw = to_mpfs_ccc_clk(hw);
-+	void __iomem *pll_cr_addr = ccc_hw->base + MPFS_CCC_PLL_CR;
-+
-+	return !!(readl_relaxed(pll_cr_addr) & MPFS_CCC_REFCLK_SEL);
-+}
-+
-+static const struct clk_ops mpfs_ccc_pll_ops = {
-+	.recalc_rate = mpfs_ccc_pll_recalc_rate,
-+	.get_parent = mpfs_ccc_pll_get_parent,
-+};
-+
-+#define CLK_CCC_PLL(_id, _parents, _shift, _width, _flags, _offset) {		\
-+	.id = _id,									\
-+	.shift = _shift,								\
-+	.width = _width,								\
-+	.reg_offset = _offset,								\
-+	.flags = _flags,								\
-+	.parents = _parents,\
-+}
-+
-+static struct mpfs_ccc_pll_hw_clock mpfs_ccc_pll_clks[] = {
-+	CLK_CCC_PLL(CLK_CCC_PLL0, mpfs_ccc_pll0_refs, MPFS_CCC_FBDIV_SHIFT,
-+		    MPFS_CCC_FBDIV_WIDTH, 0, MPFS_CCC_SSCG_2_CR),
-+	CLK_CCC_PLL(CLK_CCC_PLL1, mpfs_ccc_pll1_refs, MPFS_CCC_FBDIV_SHIFT,
-+		    MPFS_CCC_FBDIV_WIDTH, 0, MPFS_CCC_SSCG_2_CR),
-+};
-+
-+struct mpfs_ccc_out_hw_clock {
-+	struct clk_divider divider;
-+	struct clk_init_data init;
-+	unsigned int id;
-+	u32 reg_offset;
-+};
-+
-+#define CLK_CCC_OUT(_id, _shift, _width, _flags, _offset) {	\
-+	.id = _id,						\
-+	.divider.shift = _shift,				\
-+	.divider.width = _width,				\
-+	.reg_offset = _offset,					\
-+	.divider.flags = _flags,				\
-+	.divider.lock = &mpfs_ccc_lock,				\
-+}
-+
-+static struct mpfs_ccc_out_hw_clock mpfs_ccc_pll0out_clks[] = {
-+	CLK_CCC_OUT(CLK_CCC_PLL0_OUT0, MPFS_CCC_POSTDIV0_SHIFT, MPFS_CCC_POSTDIV_WIDTH,
-+		    CLK_DIVIDER_ONE_BASED, MPFS_CCC_POSTDIV01_CR),
-+	CLK_CCC_OUT(CLK_CCC_PLL0_OUT1, MPFS_CCC_POSTDIV1_SHIFT, MPFS_CCC_POSTDIV_WIDTH,
-+		    CLK_DIVIDER_ONE_BASED, MPFS_CCC_POSTDIV01_CR),
-+	CLK_CCC_OUT(CLK_CCC_PLL0_OUT2, MPFS_CCC_POSTDIV2_SHIFT, MPFS_CCC_POSTDIV_WIDTH,
-+		    CLK_DIVIDER_ONE_BASED, MPFS_CCC_POSTDIV23_CR),
-+	CLK_CCC_OUT(CLK_CCC_PLL0_OUT3, MPFS_CCC_POSTDIV3_SHIFT, MPFS_CCC_POSTDIV_WIDTH,
-+		    CLK_DIVIDER_ONE_BASED, MPFS_CCC_POSTDIV23_CR),
-+};
-+
-+static struct mpfs_ccc_out_hw_clock mpfs_ccc_pll1out_clks[] = {
-+	CLK_CCC_OUT(CLK_CCC_PLL1_OUT0, MPFS_CCC_POSTDIV0_SHIFT, MPFS_CCC_POSTDIV_WIDTH, 0,
-+		    MPFS_CCC_POSTDIV01_CR),
-+	CLK_CCC_OUT(CLK_CCC_PLL1_OUT1, MPFS_CCC_POSTDIV1_SHIFT, MPFS_CCC_POSTDIV_WIDTH, 0,
-+		    MPFS_CCC_POSTDIV01_CR),
-+	CLK_CCC_OUT(CLK_CCC_PLL1_OUT2, MPFS_CCC_POSTDIV2_SHIFT, MPFS_CCC_POSTDIV_WIDTH, 0,
-+		    MPFS_CCC_POSTDIV23_CR),
-+	CLK_CCC_OUT(CLK_CCC_PLL1_OUT3, MPFS_CCC_POSTDIV3_SHIFT, MPFS_CCC_POSTDIV_WIDTH, 0,
-+		    MPFS_CCC_POSTDIV23_CR),
-+};
-+
-+static struct mpfs_ccc_out_hw_clock *mpfs_ccc_pllout_clks[] = {
-+	mpfs_ccc_pll0out_clks, mpfs_ccc_pll1out_clks
-+};
-+
-+static int mpfs_ccc_register_outputs(struct device *dev, struct mpfs_ccc_out_hw_clock *out_hws,
-+				     unsigned int num_clks, struct mpfs_ccc_data *data,
-+				     struct mpfs_ccc_pll_hw_clock *parent)
-+{
-+	int ret;
-+
-+	for (unsigned int i = 0; i < num_clks; i++) {
-+		struct mpfs_ccc_out_hw_clock *out_hw = &out_hws[i];
-+		char *name = devm_kzalloc(dev, 23, GFP_KERNEL);
-+
-+		snprintf(name, 23, "%s_out%u", parent->name, i);
-+		out_hw->divider.hw.init = CLK_HW_INIT_HW(name, &parent->hw, &clk_divider_ops, 0);
-+		out_hw->divider.reg = data->pll_base[i / MPFS_CCC_OUTPUTS_PER_PLL] +
-+			out_hw->reg_offset;
-+
-+		ret = devm_clk_hw_register(dev, &out_hw->divider.hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to register clock id: %d\n",
-+					     out_hw->id);
-+
-+		data->hw_data.hws[out_hw->id] = &out_hw->divider.hw;
-+	}
-+
-+	return 0;
-+}
-+
-+#define CLK_HW_INIT_PARENTS_DATA_FIXED_SIZE(_name, _parents, _ops, _flags)	\
-+	(&(struct clk_init_data) {						\
-+		.flags		= _flags,					\
-+		.name		= _name,					\
-+		.parent_data	= _parents,					\
-+		.num_parents	= MPFS_CCC_REFS_PER_PLL,			\
-+		.ops		= _ops,						\
-+	})
-+
-+static int mpfs_ccc_register_plls(struct device *dev, struct mpfs_ccc_pll_hw_clock *pll_hws,
-+				  unsigned int num_clks, struct mpfs_ccc_data *data)
-+{
-+	int ret;
-+
-+	for (unsigned int i = 0; i < num_clks; i++) {
-+		struct mpfs_ccc_pll_hw_clock *pll_hw = &pll_hws[i];
-+		char *name = devm_kzalloc(dev, 18, GFP_KERNEL);
-+
-+		pll_hw->base = data->pll_base[i];
-+		snprintf(name, 18, "ccc%s_pll%u", strchrnul(dev->of_node->full_name, '@'), i);
-+		pll_hw->name = (const char *)name;
-+		pll_hw->hw.init = CLK_HW_INIT_PARENTS_DATA_FIXED_SIZE(pll_hw->name,
-+								      pll_hw->parents,
-+								      &mpfs_ccc_pll_ops, 0);
-+
-+		ret = devm_clk_hw_register(dev, &pll_hw->hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to register ccc id: %d\n",
-+					     pll_hw->id);
-+
-+		data->hw_data.hws[pll_hw->id] = &pll_hw->hw;
-+
-+		ret = mpfs_ccc_register_outputs(dev, mpfs_ccc_pllout_clks[i],
-+						MPFS_CCC_OUTPUTS_PER_PLL, data, pll_hw);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mpfs_ccc_probe(struct platform_device *pdev)
-+{
-+	struct mpfs_ccc_data *clk_data;
-+	void __iomem *pll_base[ARRAY_SIZE(mpfs_ccc_pll_clks)];
-+	unsigned int num_clks;
-+	int ret;
-+
-+	num_clks = ARRAY_SIZE(mpfs_ccc_pll_clks) + ARRAY_SIZE(mpfs_ccc_pll0out_clks)
-+		+ ARRAY_SIZE(mpfs_ccc_pll1out_clks);
-+
-+	clk_data = devm_kzalloc(&pdev->dev, struct_size(clk_data, hw_data.hws, num_clks),
-+				GFP_KERNEL);
-+	if (!clk_data)
-+		return -ENOMEM;
-+
-+	pll_base[0] = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(pll_base[0]))
-+		return PTR_ERR(pll_base[0]);
-+
-+	pll_base[1] = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(pll_base[1]))
-+		return PTR_ERR(pll_base[1]);
-+
-+	clk_data->pll_base = pll_base;
-+	clk_data->dev = &pdev->dev;
-+
-+	ret = mpfs_ccc_register_plls(clk_data->dev, mpfs_ccc_pll_clks,
-+				     ARRAY_SIZE(mpfs_ccc_pll_clks), clk_data);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_of_clk_add_hw_provider(clk_data->dev, of_clk_hw_onecell_get,
-+					  &clk_data->hw_data);
-+	if (ret)
-+		return ret;
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id mpfs_ccc_of_match_table[] = {
-+	{ .compatible = "microchip,mpfs-ccc", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mpfs_ccc_of_match_table);
-+
-+static struct platform_driver mpfs_ccc_driver = {
-+	.probe = mpfs_ccc_probe,
-+	.driver	= {
-+		.name = "microchip-mpfs-ccc",
-+		.of_match_table = mpfs_ccc_of_match_table,
-+	},
-+};
-+
-+static int __init clk_ccc_init(void)
-+{
-+	return platform_driver_register(&mpfs_ccc_driver);
-+}
-+core_initcall(clk_ccc_init);
-+
-+static void __exit clk_ccc_exit(void)
-+{
-+	platform_driver_unregister(&mpfs_ccc_driver);
-+}
-+module_exit(clk_ccc_exit);
-+
-+MODULE_DESCRIPTION("Microchip PolarFire SoC Clock Conditioning Circuitry Driver");
-+MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
-+MODULE_LICENSE("GPL");
+ 		mmuart0: serial@20000000 {
+ 			compatible = "ns16550a";
+ 			reg = <0x0 0x20000000 0x0 0x400>;
+@@ -480,8 +512,6 @@ pcie: pcie@2000000000 {
+ 					<0 0 0 3 &pcie_intc 2>,
+ 					<0 0 0 4 &pcie_intc 3>;
+ 			interrupt-map-mask = <0 0 0 7>;
+-			clocks = <&fabric_clk1>, <&fabric_clk1>, <&fabric_clk3>;
+-			clock-names = "fic0", "fic1", "fic3";
+ 			ranges = <0x3000000 0x0 0x8000000 0x20 0x8000000 0x0 0x80000000>;
+ 			msi-parent = <&pcie>;
+ 			msi-controller;
 -- 
 2.36.1
 

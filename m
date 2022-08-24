@@ -2,128 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBE55A0350
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EA15A0355
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbiHXVeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 17:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
+        id S240133AbiHXVlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 17:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240133AbiHXVeH (ORCPT
+        with ESMTP id S234345AbiHXVlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 17:34:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41C25FF58
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661376844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2cnZB4/kxG5SzSCN2CWQT4rDr7KWqDzVyVVIFcXfgQM=;
-        b=bTTVmU3kWUL7LBdJxTQHczpEHBc7qZnbK9S4/lnlzkldm+y6MWq2vMboA2krGV0txPSnf5
-        QWXdkmxMwcu6ylEtnKEhNUBb4veCyGFsDruaKUyVSIizm6U9Ha2RmUsKPE9IIKVS6wcQUk
-        fPxl59R0Vr9zBSgMl3e5OyzLjlWIzU0=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-119-twTP8OvkOECN9_gUSWB76w-1; Wed, 24 Aug 2022 17:34:03 -0400
-X-MC-Unique: twTP8OvkOECN9_gUSWB76w-1
-Received: by mail-qk1-f197.google.com with SMTP id w22-20020a05620a445600b006bb7f43d1cfso15778439qkp.16
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:34:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=2cnZB4/kxG5SzSCN2CWQT4rDr7KWqDzVyVVIFcXfgQM=;
-        b=r2RwT2+YWmDXPBri824khdaWa2nVpTuMCDAiyQXMZxAe5pvBkPtm/xBQmoNPczL0t2
-         cI6bLKypwM/q9W7Fok4PGnpwGv5AEOXLkXPpToDfyIAi6GTzpIxSVEzAgc8HV87CI84j
-         /Yhg9LY4gywnd8MhQf3cuAoZ9nby4e0tWNRiPXz9LlRWQiVFWZrKsfVER/UawjAwKzc4
-         Dwv+y3YakmClygSZmehwLZ7V1vI5VnAMzRKAysJSluYaN5uIAqSdQdk5pJGqrkb24zSX
-         3ZFdRAhMMegZ5vfh7UUEySCeqvCpgunIIrgW96twONLlsLkGUVsJsocFkZ8hRwMM0XDd
-         yNGw==
-X-Gm-Message-State: ACgBeo2xjMrzYAfqh82QlB+x7q6NBc9nrRS0HPbdvqQNbF0au7SvDHku
-        KRj6mRMBfPHSgtd7v5yilbxvSCMNEZbqpXpKxfHph0H7Rrs4JQtlJIWyzfJ4k70KYh93kJ2Iw0n
-        AFUR2wuylsvcSDj/nQQI65Njg
-X-Received: by 2002:a0c:8ec4:0:b0:47a:aa82:58b6 with SMTP id y4-20020a0c8ec4000000b0047aaa8258b6mr1101008qvb.46.1661376842602;
-        Wed, 24 Aug 2022 14:34:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7LxUBZZyk1oZ838GhE3PkTke8FDXLF93qqatyFqk9FsKOChbuDqNEDTkPMPH0cwnstfTqidg==
-X-Received: by 2002:a0c:8ec4:0:b0:47a:aa82:58b6 with SMTP id y4-20020a0c8ec4000000b0047aaa8258b6mr1100986qvb.46.1661376842404;
-        Wed, 24 Aug 2022 14:34:02 -0700 (PDT)
-Received: from [192.168.1.52] (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id b17-20020ac84f11000000b0031e9ab4e4cesm13337901qte.26.2022.08.24.14.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 14:34:01 -0700 (PDT)
-Message-ID: <33a546ea17fe62ca9fc763041fe340ad5e4945fe.camel@redhat.com>
-Subject: Re: [PATCH v2] dmaengine: idxd: avoid deadlock in
- process_misc_interrupts()
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Zhu, Tony" <tony.zhu@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>
-Date:   Wed, 24 Aug 2022 14:34:00 -0700
-In-Reply-To: <IA1PR11MB6097988CC9C2C1C713E3D8339B739@IA1PR11MB6097.namprd11.prod.outlook.com>
-References: <20220823162435.2099389-1-jsnitsel@redhat.com>
-         <20220823163709.2102468-1-jsnitsel@redhat.com>
-         <905d3feb-f75b-e91c-f3de-b69718aa5c69@intel.com>
-         <20220824005435.jyexxvjxj3z7tc2f@cantor>
-         <223e5a43-95a5-da54-0ff7-c2e088a072e3@intel.com>
-         <38e416b47bb30fa161e52f24ecbcf95015480fed.camel@redhat.com>
-         <IA1PR11MB6097988CC9C2C1C713E3D8339B739@IA1PR11MB6097.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 24 Aug 2022 17:41:49 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E0C2723
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:41:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661377308; x=1692913308;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u55x3BMC6IdX0hvusvjBKoB9KItycF/ELPuKXOiG878=;
+  b=gS4KbHPssnrAbUf+yMx6R3/E5BBaHFY4EqmAHmFni2d3YhWOkQ53v2ug
+   MboVBj5ykoX1R5QpnlU9mqGt7MMZ4OCYDDHKEO8Y9/rS9U1GFTFer+5jU
+   YwiF57oX34unEywQe12x0xSQkVf+OsoxJdeMCpQPE0MZS1c2OTeEwNYLX
+   tH+vwmRCw5vY94YKtUJnAA1FaOmYIDd+EfuBOkv7kufo8u3xeQQUBRxHY
+   zimaw3aOXtq0ziy5S+xyCLk5GicYKQ+tHsjI0dib+scQZrueb/kuso6M2
+   DZ7bINK7p4DMo4V+helUwpDhjrCugZKHDs3YDiZA/o5HOf1sm1jJVCSHa
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291651068"
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="291651068"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 14:41:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="938069235"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Aug 2022 14:41:47 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQy8A-0001FH-2D;
+        Wed, 24 Aug 2022 21:41:46 +0000
+Date:   Thu, 25 Aug 2022 05:41:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [axboe-block:io_uring-6.0 14/14] io_uring/net.c:1053:36: warning:
+ variable 'addr' is uninitialized when used here
+Message-ID: <202208250535.oP4RWEEL-lkp@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-24 at 21:11 +0000, Yu, Fenghua wrote:
-> Hi, Jerry,
->=20
-> > I see another potential issue. If a software reset is attempted
-> > idxd_device_reinit()
-> > will be called which walks the wqs, and if a wq has the state
-> > IDXD_WQ_ENABLED it calls idxd_wq_enable(), but the first thing
-> > idxd_wq_enable() does is see that the state is IDXD_WQ_ENABLED and
-> > returns 0.
-> > Without the wq enable command being sent, it will not be re-
-> > enabled, yes?
->=20
-> Could you please describe how to reproduce the issues and test case?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-6.0
+head:   0596fa5ef9aff29219021fa6f0117b604ff83d09
+commit: 0596fa5ef9aff29219021fa6f0117b604ff83d09 [14/14] io_uring/net: save address for sendzc async execution
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220825/202208250535.oP4RWEEL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=0596fa5ef9aff29219021fa6f0117b604ff83d09
+        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+        git fetch --no-tags axboe-block io_uring-6.0
+        git checkout 0596fa5ef9aff29219021fa6f0117b604ff83d09
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Nothing special, just running dsa_user_test_runner.sh from idxd-config
-(3.4.6.3) with intel_iommu=3Don,sm_on (default is lazy dma domain) on an
-Intel supplied SPR system. During the run there is a dmar fault, halts
-the device with it needing an flr reset. That is where the deadlock was
-noticed. Then after the dsa_user_runner.sh fails, if you do modprobe -r
-idxd, you hit the warning in devm_iounmap().
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The idxd_device_reinit() case I haven't reproduced, I'm just looking at
-the code.
+All warnings (new ones prefixed by >>):
 
-I should note that I've only run into an issue with that model
-of system. The other models of SPR systems don't hit an issue. This is
-with a 6.0-rc1 kernel, and our kernel. I'm guessing there is an issue
-with that model of system/fw. I've seen both fault reasons 0x50 and
-0x58 when it faults.
+>> io_uring/net.c:1053:36: warning: variable 'addr' is uninitialized when used here [-Wuninitialized]
+                           return io_setup_async_addr(req, addr, issue_flags);
+                                                           ^~~~
+   io_uring/net.c:978:42: note: initialize the variable 'addr' to silence this warning
+           struct sockaddr_storage __address, *addr;
+                                                   ^
+                                                    = NULL
+   1 warning generated.
 
-Regards,
-Jerry
 
->=20
-> Thanks.
->=20
-> -Fenghua
+vim +/addr +1053 io_uring/net.c
 
+   975	
+   976	int io_sendzc(struct io_kiocb *req, unsigned int issue_flags)
+   977	{
+   978		struct sockaddr_storage __address, *addr;
+   979		struct io_ring_ctx *ctx = req->ctx;
+   980		struct io_sendzc *zc = io_kiocb_to_cmd(req, struct io_sendzc);
+   981		struct io_notif_slot *notif_slot;
+   982		struct io_kiocb *notif;
+   983		struct msghdr msg;
+   984		struct iovec iov;
+   985		struct socket *sock;
+   986		unsigned msg_flags;
+   987		int ret, min_ret = 0;
+   988	
+   989		if (!(req->flags & REQ_F_POLLED) &&
+   990		    (zc->flags & IORING_RECVSEND_POLL_FIRST))
+   991			return -EAGAIN;
+   992	
+   993		if (issue_flags & IO_URING_F_UNLOCKED)
+   994			return -EAGAIN;
+   995		sock = sock_from_file(req->file);
+   996		if (unlikely(!sock))
+   997			return -ENOTSOCK;
+   998	
+   999		notif_slot = io_get_notif_slot(ctx, zc->slot_idx);
+  1000		if (!notif_slot)
+  1001			return -EINVAL;
+  1002		notif = io_get_notif(ctx, notif_slot);
+  1003		if (!notif)
+  1004			return -ENOMEM;
+  1005	
+  1006		msg.msg_name = NULL;
+  1007		msg.msg_control = NULL;
+  1008		msg.msg_controllen = 0;
+  1009		msg.msg_namelen = 0;
+  1010	
+  1011		if (zc->addr) {
+  1012			if (req_has_async_data(req)) {
+  1013				struct io_async_msghdr *io = req->async_data;
+  1014	
+  1015				msg.msg_name = &io->addr;
+  1016			} else {
+  1017				ret = move_addr_to_kernel(zc->addr, zc->addr_len, &__address);
+  1018				if (unlikely(ret < 0))
+  1019					return ret;
+  1020				msg.msg_name = (struct sockaddr *)&__address;
+  1021			}
+  1022			msg.msg_namelen = zc->addr_len;
+  1023		}
+  1024	
+  1025		if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
+  1026			ret = io_import_fixed(WRITE, &msg.msg_iter, req->imu,
+  1027						(u64)(uintptr_t)zc->buf, zc->len);
+  1028			if (unlikely(ret))
+  1029				return ret;
+  1030		} else {
+  1031			ret = import_single_range(WRITE, zc->buf, zc->len, &iov,
+  1032						  &msg.msg_iter);
+  1033			if (unlikely(ret))
+  1034				return ret;
+  1035			ret = io_notif_account_mem(notif, zc->len);
+  1036			if (unlikely(ret))
+  1037				return ret;
+  1038		}
+  1039	
+  1040		msg_flags = zc->msg_flags | MSG_ZEROCOPY;
+  1041		if (issue_flags & IO_URING_F_NONBLOCK)
+  1042			msg_flags |= MSG_DONTWAIT;
+  1043		if (msg_flags & MSG_WAITALL)
+  1044			min_ret = iov_iter_count(&msg.msg_iter);
+  1045	
+  1046		msg.msg_flags = msg_flags;
+  1047		msg.msg_ubuf = &io_notif_to_data(notif)->uarg;
+  1048		msg.sg_from_iter = io_sg_from_iter;
+  1049		ret = sock_sendmsg(sock, &msg);
+  1050	
+  1051		if (unlikely(ret < min_ret)) {
+  1052			if (ret == -EAGAIN && (issue_flags & IO_URING_F_NONBLOCK))
+> 1053				return io_setup_async_addr(req, addr, issue_flags);
+  1054	
+  1055			if (ret > 0 && io_net_retry(sock, msg.msg_flags)) {
+  1056				zc->len -= ret;
+  1057				zc->buf += ret;
+  1058				zc->done_io += ret;
+  1059				req->flags |= REQ_F_PARTIAL_IO;
+  1060				return io_setup_async_addr(req, addr, issue_flags);
+  1061			}
+  1062			if (ret == -ERESTARTSYS)
+  1063				ret = -EINTR;
+  1064			req_set_fail(req);
+  1065		} else if (zc->flags & IORING_RECVSEND_NOTIF_FLUSH) {
+  1066			io_notif_slot_flush_submit(notif_slot, 0);
+  1067		}
+  1068	
+  1069		if (ret >= 0)
+  1070			ret += zc->done_io;
+  1071		else if (zc->done_io)
+  1072			ret = zc->done_io;
+  1073		io_req_set_res(req, ret, 0);
+  1074		return IOU_OK;
+  1075	}
+  1076	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

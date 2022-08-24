@@ -2,92 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2E159FAA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8F459FAAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237785AbiHXM63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S237886AbiHXM6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237818AbiHXM6Y (ORCPT
+        with ESMTP id S237622AbiHXM6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:58:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C1B97B11
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:58:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8D346162F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 12:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F93C433D6;
-        Wed, 24 Aug 2022 12:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661345901;
-        bh=d37TvzEEwV/Y4PGipJK/1XGqv3smEB6DxMlu5+fnV+A=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=pEiH716iUzx0z4CkedRKooX9m+2QGfaaBlPRgPyvrcvjyAm2bfZPg9kyoj4GRDsIW
-         HkOpjMKDIKKJ7WURG+sB2E1FY7zfTZ7Jny9YaLzwxVXUlGDDU6y8/+GWPPaixtli0H
-         t4lQ3yjtS/TkqzLxd9W+m4IgAQ9LJov5mVFeGEkfkArexirnufQ7jCOhaiEEOIyr/I
-         oQuIqr+/hZa334npq348Cxk19Is7jTUYsIsEZy/uHEtKmKPUy1cpivmoRDGZTgfovl
-         g9HmNgQNVneBckdPurpdQ6EWvUnWu0Xl7rTZGA8h6py4X/USE8F9JC7BC8SH/mzBr3
-         I2y/L77R/6baQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org,
-        sound-open-firmware@alsa-project.org, linux-kernel@vger.kernel.org,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        alsa-devel@alsa-project.org
-Cc:     daniel.baluta@nxp.com, shengjiu.wang@nxp.com, peng.zhang_8@nxp.com
-In-Reply-To: <20220824013234.375738-1-yangyingliang@huawei.com>
-References: <20220824013234.375738-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH -next 1/2] ASoC: SOF: imx8ulp: change es8326_regmap_config to static
-Message-Id: <166134589925.62446.9609144399973742023.b4-ty@kernel.org>
-Date:   Wed, 24 Aug 2022 13:58:19 +0100
+        Wed, 24 Aug 2022 08:58:39 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8F697B2E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:58:36 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id q18so15344282ljg.12
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:58:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=1GfWJHR/x5piPvfICRZ+8DXyaOC916mUwAEahhmR7Bg=;
+        b=xBMINWQ/VnjaGVPCE/q0Fg7SvC3mM4CUg/N4QetunqsFUfusnDwjb+M95+dciFHrQu
+         RXlojLQTdMp+7djTrK32e70yvN5IzgLipK1UT80IVRp2h7k2At44LN7Pf/hyMTwZuPDb
+         77vCF+CW41bFOsBe6RDO2fGdGEsWgScEAQM0D0Sgbsu3aZc8m9eQpKecHe9vFggTmiAt
+         yU/KxNpwD+1ufHNstHzvPNZQbh75kXQ2xHT3/I5gs/l3iu4DFaEEbZYIfIvbj3RnEl24
+         05LRsymk14UyFyYOrqDGfHgmXs9cfRYI3oNNm4Q/mpZ3rex/mFE2DElbJJ7jpzqdhc8B
+         K8ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=1GfWJHR/x5piPvfICRZ+8DXyaOC916mUwAEahhmR7Bg=;
+        b=TFgpDX+PwD88iDFU04sQ3s3DZ9JKQb1aXhM0uXqghie7qeB5AAw9p2gBw4LVQq9dfX
+         ZJltts1a6ZwzvWuVTOHpXDObq9UVhvfzaJtzQwjgWrxnQZFf89f7qYGe8XTgBAJksuSf
+         Cq5fEm2xMwmZzCC+R5vplIHP+T8dRbJXrETgiFaYYRiT+jhfDkglc8608GT7SjOIInfq
+         +hFd4R9cV4QNXtwjyzd5Dks1Qb7GedHmkZOavcvuiRc7HYli8WkazU/HkdZW/Qlp7TEe
+         pRlALGI99rWwyR8+Exuj7p69dN0Ea7zVnie9dSsVkuNFk1rttZY/QSte+b2GJcQaQgMp
+         LLYQ==
+X-Gm-Message-State: ACgBeo2vQX0icpTKkHu1V7ymavVxe75MpLtoXQwEVUbGBt/RjE9BNOwc
+        PCD+64MYYJ8b5p28+8xEQCtW6g==
+X-Google-Smtp-Source: AA6agR4upOTeoaIh6uzUsa5JU0XIzx+xlCiRe2cq6nttWmYYcb46rp7T/8gMTufYlDHBD4XEHFXbeA==
+X-Received: by 2002:a2e:bf07:0:b0:261:cafb:d4a8 with SMTP id c7-20020a2ebf07000000b00261cafbd4a8mr4318756ljr.268.1661345914326;
+        Wed, 24 Aug 2022 05:58:34 -0700 (PDT)
+Received: from [10.243.4.185] ([194.157.23.230])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05651205ce00b0048bd7136ef3sm3012084lfo.221.2022.08.24.05.58.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 05:58:33 -0700 (PDT)
+Message-ID: <f7c9c8ee-675b-216c-0e2d-28d11890477a@linaro.org>
+Date:   Wed, 24 Aug 2022 15:58:31 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-0c1df
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/4] bindings: fpga: Add binding doc for the zynqmp afi
+ config driver
+Content-Language: en-US
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>, git@amd.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
+        yilun.xu@intel.com, trix@redhat.com, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, ronak.jain@xilinx.com,
+        rajan.vaja@xilinx.com, abhyuday.godhasara@xilinx.com,
+        piyush.mehta@xilinx.com, lakshmi.sai.krishna.potthuri@xilinx.com,
+        harsha.harsha@xilinx.com, linus.walleij@linaro.org,
+        nava.manne@xilinx.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20220824035542.706433-1-nava.kishore.manne@amd.com>
+ <20220824035542.706433-3-nava.kishore.manne@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220824035542.706433-3-nava.kishore.manne@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022 09:32:33 +0800, Yang Yingliang wrote:
-> sof_imx8ulp_ops is only used in imx8ulp.c now, change it to static.
+On 24/08/2022 06:55, Nava kishore Manne wrote:
+> Xilinx Zynq US+ MPSoC platform connect the PS to the programmable
+> logic(PL) through the AXI port. This AXI port helps to establish
+
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
+
+> the data path between the PS and PL. In-order to establish the proper
+> communication data path between PS and PL the AXI port data path should
+> be configured with the proper Bus-width values.
 > 
+> This patch adds the binding document for the zynqmp afi config driver
+> to handle the AXI port bus-width configurations and PS-PL resets.
+
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
 > 
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+>  .../bindings/fpga/xlnx,zynqmp-afi-fpga.yaml   | 100 ++++++++++++++++++
+>  1 file changed, 100 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
+> new file mode 100644
+> index 000000000000..faae4951e991
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-afi-fpga.yaml
+> @@ -0,0 +1,100 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fpga/xlnx,zynqmp-afi-fpga.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx ZynqMP AFI interface Manager.
+> +
+> +maintainers:
+> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
+> +
+> +description: The Zynq UltraScale+ MPSoC Processing System core provides access
+> +  from PL masters to PS internal peripherals, and memory through AXI FIFO
+> +  interface(AFI)
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-Applied to
+No items, you have only one item.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> +      - enum:
+> +          - xlnx,zynqmp-afi-fpga
+> +
+> +  resets:
+> +    description:
+> +      A list of phandles for resets listed in reset-names.
 
-Thanks!
+You need maxItems:4
 
-[1/2] ASoC: SOF: imx8ulp: change es8326_regmap_config to static
-      (no commit info)
-[2/2] ASoC: SOF: imx8ulp: add missing of_node_put() in imx8ulp_probe()
-      commit: adc641f1dbce48914445efb79f302380ff10df10
+> +
+> +  reset-names:
+> +    items:
+> +      - const: pl0-rst
+> +      - const: pl1-rst
+> +      - const: pl2-rst
+> +      - const: pl3-rst
+> +
+> +patternProperties:
+> +  "^xlnx,afifm[0-6]-rd-bus-width$":
+> +    description: bus width used to configure the afifm-rd interface.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 32, 64, 128 ]
+> +
+> +  "^xlnx,afifm[0-6]-wr-bus-width$":
+> +    description: bus width used to configure the afifm-wr interface.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 32, 64, 128 ]
+> +
+> +  "^xlnx,afifs-ss[0-2]-bus-width$":
+> +    description: bus width used to configure the afifs interface.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 32, 64, 128 ]
+> +
+> +required:
+> +  - compatible
+> +  - xlnx,afifm0-rd-bus-width
+> +  - xlnx,afifm1-rd-bus-width
+> +  - xlnx,afifm2-rd-bus-width
+> +  - xlnx,afifm3-rd-bus-width
+> +  - xlnx,afifm4-rd-bus-width
+> +  - xlnx,afifm5-rd-bus-width
+> +  - xlnx,afifm6-rd-bus-width
+> +  - xlnx,afifm0-wr-bus-width
+> +  - xlnx,afifm1-wr-bus-width
+> +  - xlnx,afifm2-wr-bus-width
+> +  - xlnx,afifm3-wr-bus-width
+> +  - xlnx,afifm4-wr-bus-width
+> +  - xlnx,afifm5-wr-bus-width
+> +  - xlnx,afifm6-wr-bus-width
+> +  - xlnx,afifs-ss0-bus-width
+> +  - xlnx,afifs-ss1-bus-width
+> +  - xlnx,afifs-ss2-bus-width
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/xlnx-zynqmp-resets.h>
+> +    zynqmp-afi {
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+Krzysztof

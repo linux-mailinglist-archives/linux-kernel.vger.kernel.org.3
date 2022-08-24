@@ -2,103 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6536B5A0415
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64625A041B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiHXWej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 18:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S230010AbiHXWhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 18:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiHXWeh (ORCPT
+        with ESMTP id S229454AbiHXWhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:34:37 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9CF1570B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:34:36 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo3064251pjd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=hIBl+NKPOq9B830RCZZr13TZkfTjSQ1qG+Cn7l1J9W4=;
-        b=eKaGdeOzZHTemPIaMidSyugctA+XVf9pmKFc6+bBqUs7RzQ/Frlpc14eGSn1yxsmnQ
-         T//qMXgIxYfk6twfYhrZY3Ww+vT25OUES8c30ez7Hby6nRsKl9hoRwaHK7MJJy2Miwfq
-         mbZAa6oFGWBj9acSEK6AP/TgU2zJX1HnVdxUHxL+WWfAgu2pUELhvEJhkIKK20GEWWVT
-         VOBpSFDLa71HfBHzj6B2VN2qq3w84BqlJKRVh5xh1juHQJficEYa6RCshSQns0zo74rs
-         +3Zbt/qHvFu+QfNZvDlA60hSD6e2SB8igE98TNf+oJcRjXqTgB5wJM21L9eqxR8fG5Fq
-         4oiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=hIBl+NKPOq9B830RCZZr13TZkfTjSQ1qG+Cn7l1J9W4=;
-        b=gsyYdYKeTugI03epNkNp2x0ENYG7PJ3m1z0s5dBOPuLi0W9xrqvhkZt6tMtMNozjSy
-         W4DMygEirE0UCinPJs/N+rmUDyB4xcHzDEU4n3ZPgIz9czywpQocjw0kdQmsU+PwaxMb
-         et60/yUxtCbbU23m1WonfFyjwocOiE1qhtLn9fWZ10pBaCZKEXYRlD2wBFStTIO/d8Oa
-         8BSbL99wqh6JJi+DiSpFzx2pP7ntmZsg7Q2Rr5zd9K96vgH2Nh5VW5zbHS99sU1rsmw1
-         AUzBkl+Vj8xT90rjwyiMyQhlP1pMpZjw0a2f+ixO7kVz21Pse1Sn09JsOuczCho7Ftgi
-         mBVg==
-X-Gm-Message-State: ACgBeo1ZlZsUKV1L9JZWoHovhpDoZ0QpvycE1H0nsBudb0K9HGj9NvOB
-        NLi9MUBngVhCOKQ1T+yi0vUbvw==
-X-Google-Smtp-Source: AA6agR4daW+hXlRTu4EWnhGoSW9ryqqPfb4LDLZ/rLEUpa7uB8LHuAbBLypwzLMY83nLN3ia6xtbnA==
-X-Received: by 2002:a17:90b:4a41:b0:1fb:77e0:3ff2 with SMTP id lb1-20020a17090b4a4100b001fb77e03ff2mr7358808pjb.161.1661380476105;
-        Wed, 24 Aug 2022 15:34:36 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b187-20020a62cfc4000000b0053641e66825sm10212130pfg.173.2022.08.24.15.34.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 15:34:35 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 22:34:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 10/13] KVM: x86: emulator/smm: use smram struct for 64
- bit smram load/restore
-Message-ID: <Ywand7dcvFTNgKep@google.com>
-References: <20220803155011.43721-1-mlevitsk@redhat.com>
- <20220803155011.43721-11-mlevitsk@redhat.com>
+        Wed, 24 Aug 2022 18:37:08 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094B95725F;
+        Wed, 24 Aug 2022 15:37:07 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 71CEB1A13D8;
+        Thu, 25 Aug 2022 00:37:06 +0200 (CEST)
+Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 33C731A13D3;
+        Thu, 25 Aug 2022 00:37:06 +0200 (CEST)
+Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.134])
+        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id D8FA84060A;
+        Wed, 24 Aug 2022 15:37:04 -0700 (MST)
+From:   Li Yang <leoyang.li@nxp.com>
+To:     shawnguo@kernel.org, devicetree@vger.kernel.org
+Cc:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>
+Subject: [PATCH 00/11] accumulated dts updates for ls1043a
+Date:   Wed, 24 Aug 2022 17:36:51 -0500
+Message-Id: <20220824223700.32442-1-leoyang.li@nxp.com>
+X-Mailer: git-send-email 2.25.1.377.g2d2118b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220803155011.43721-11-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022, Maxim Levitsky wrote:
-> @@ -9909,57 +9906,51 @@ static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, struct kvm_smram_stat
->  }
->  
->  #ifdef CONFIG_X86_64
-> -static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, char *buf)
-> +static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, struct kvm_smram_state_64 *smram)
+Hou Zhiqiang (2):
+  arm64: dts: ls1043a: Add SCFG phandle for PCIe nodes
+  arm64: dts: ls1043a: Add big-endian property for PCIe nodes
 
-Please put these on different lines.
+Laurentiu Tudor (2):
+  arm64: dts: ls1043a: add missing dma ranges property
+  arm64: dts: ls1043a: use a pseudo-bus to constrain usb and sata dma
+    size
 
->  	struct desc_ptr dt;
-> -	struct kvm_segment seg;
->  	unsigned long val;
->  	int i;
->  
->  	for (i = 0; i < 16; i++)
-> -		put_smstate(u64, buf, 0x7ff8 - i * 8, kvm_register_read_raw(vcpu, i));
-> +		smram->gprs[15 - i] = kvm_register_read_raw(vcpu, i);
+Li Yang (7):
+  arm64: dts: ls1043a: fix the wrong size of dcfg space
+  arm64: dts: ls1043a: Enable usb3-lpm-capable for usb3 node
+  arm64: dts: ls1043a: use pcie aer/pme interrupts
+  arm64: dts: ls1043a: make dma-coherent global to the SoC
+  arm64: dts: ls1043a: add gpio based i2c recovery information
+  arm64: dts: ls1043a-qds: add mmio based mdio-mux support
+  arm64: dts: ls1043a-rdb: add pcf85263 rtc node
 
-Blech, why do I get the feeling that the original layout was designed so that
-ucode could use PUSHAD?  This look so weird...
+ .../boot/dts/freescale/fsl-ls1043a-qds.dts    | 173 +++++++++++++++++-
+ .../boot/dts/freescale/fsl-ls1043a-rdb.dts    |  10 +
+ .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi | 131 +++++++------
+ 3 files changed, 256 insertions(+), 58 deletions(-)
+
+-- 
+2.37.1
+

@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CE559F217
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBA259F216
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 05:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbiHXDgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 23:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
+        id S233840AbiHXDgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 23:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHXDgG (ORCPT
+        with ESMTP id S232414AbiHXDgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 23:36:06 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891BD786D1
+        Tue, 23 Aug 2022 23:36:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7E678BE0
         for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 20:36:05 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MCBVl2Pmmz1N7HZ;
-        Wed, 24 Aug 2022 11:32:31 +0800 (CST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MCBTq4c87zXf0y;
+        Wed, 24 Aug 2022 11:31:43 +0800 (CST)
 Received: from huawei.com (10.175.103.91) by dggpemm500022.china.huawei.com
  (7.185.36.162) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
@@ -25,9 +25,9 @@ Received: from huawei.com (10.175.103.91) by dggpemm500022.china.huawei.com
 From:   Zeng Heng <zengheng4@huawei.com>
 To:     <bristot@kernel.org>, <mingo@redhat.com>, <rostedt@goodmis.org>
 CC:     <linux-kernel@vger.kernel.org>, <zengheng4@huawei.com>
-Subject: [PATCH -next 1/2] rv/monitors: add 'static' qualifier for local symbols
-Date:   Wed, 24 Aug 2022 11:43:56 +0800
-Message-ID: <20220824034357.2014202-2-zengheng4@huawei.com>
+Subject: [PATCH -next 2/2] rv/dot2K: add 'static' qualifier for local variable
+Date:   Wed, 24 Aug 2022 11:43:57 +0800
+Message-ID: <20220824034357.2014202-3-zengheng4@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220824034357.2014202-1-zengheng4@huawei.com>
 References: <20220824034357.2014202-1-zengheng4@huawei.com>
@@ -47,68 +47,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sparse tool complains as follows:
+Following Daniel's suggestion, fix similar warning
+in template files, which would prevent new monitors
+from such warning.
 
-kernel/trace/rv/monitors/wwnr/wwnr.c:18:19:
-warning: symbol 'rv_wwnr' was not declared. Should it be static?
-
-The `rv_wwnr` symbol is not dereferenced by other extern files,
-so add static qualifier for it.
-
-So does wip module.
-
-Fixes:	ccc319dcb450 ("rv/monitor: Add the wwnr monitor")
-Fixes:	8812d21219b9 ("rv/monitor: Add the wip monitor skeleton created by dot2k")
+Fixes:	24bce201d798 ("tools/rv: Add dot2k")
+Suggested-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 ---
- kernel/trace/rv/monitors/wip/wip.c   | 4 ++--
- kernel/trace/rv/monitors/wwnr/wwnr.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ tools/verification/dot2/dot2k_templates/main_global.c   | 4 ++--
+ tools/verification/dot2/dot2k_templates/main_per_cpu.c  | 4 ++--
+ tools/verification/dot2/dot2k_templates/main_per_task.c | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/trace/rv/monitors/wip/wip.c b/kernel/trace/rv/monitors/wip/wip.c
-index 83cace53b9fa..1a989bc142f3 100644
---- a/kernel/trace/rv/monitors/wip/wip.c
-+++ b/kernel/trace/rv/monitors/wip/wip.c
-@@ -16,7 +16,7 @@
+diff --git a/tools/verification/dot2/dot2k_templates/main_global.c b/tools/verification/dot2/dot2k_templates/main_global.c
+index f4b712dbc92e..dcd1162dced8 100644
+--- a/tools/verification/dot2/dot2k_templates/main_global.c
++++ b/tools/verification/dot2/dot2k_templates/main_global.c
+@@ -27,7 +27,7 @@
+  *
+  * The rv monitor reference is needed for the monitor declaration.
+  */
+-struct rv_monitor rv_MODEL_NAME;
++static struct rv_monitor rv_MODEL_NAME;
+ DECLARE_DA_MON_GLOBAL(MODEL_NAME, MIN_TYPE);
  
- #include "wip.h"
+ /*
+@@ -63,7 +63,7 @@ TRACEPOINT_DETACH
+ /*
+  * This is the monitor register section.
+  */
+-struct rv_monitor rv_MODEL_NAME = {
++static struct rv_monitor rv_MODEL_NAME = {
+ 	.name = "MODEL_NAME",
+ 	.description = "auto-generated MODEL_NAME",
+ 	.enable = enable_MODEL_NAME,
+diff --git a/tools/verification/dot2/dot2k_templates/main_per_cpu.c b/tools/verification/dot2/dot2k_templates/main_per_cpu.c
+index 4080d1ca3354..8f877e86a22f 100644
+--- a/tools/verification/dot2/dot2k_templates/main_per_cpu.c
++++ b/tools/verification/dot2/dot2k_templates/main_per_cpu.c
+@@ -27,7 +27,7 @@
+  *
+  * The rv monitor reference is needed for the monitor declaration.
+  */
+-struct rv_monitor rv_MODEL_NAME;
++static struct rv_monitor rv_MODEL_NAME;
+ DECLARE_DA_MON_PER_CPU(MODEL_NAME, MIN_TYPE);
  
--struct rv_monitor rv_wip;
-+static struct rv_monitor rv_wip;
- DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+ /*
+@@ -63,7 +63,7 @@ TRACEPOINT_DETACH
+ /*
+  * This is the monitor register section.
+  */
+-struct rv_monitor rv_MODEL_NAME = {
++static struct rv_monitor rv_MODEL_NAME = {
+ 	.name = "MODEL_NAME",
+ 	.description = "auto-generated MODEL_NAME",
+ 	.enable = enable_MODEL_NAME,
+diff --git a/tools/verification/dot2/dot2k_templates/main_per_task.c b/tools/verification/dot2/dot2k_templates/main_per_task.c
+index 89197175384f..8c2fdb824634 100644
+--- a/tools/verification/dot2/dot2k_templates/main_per_task.c
++++ b/tools/verification/dot2/dot2k_templates/main_per_task.c
+@@ -27,7 +27,7 @@
+  *
+  * The rv monitor reference is needed for the monitor declaration.
+  */
+-struct rv_monitor rv_MODEL_NAME;
++static struct rv_monitor rv_MODEL_NAME;
+ DECLARE_DA_MON_PER_TASK(MODEL_NAME, MIN_TYPE);
  
- static void handle_preempt_disable(void *data, unsigned long ip, unsigned long parent_ip)
-@@ -60,7 +60,7 @@ static void disable_wip(void)
- 	da_monitor_destroy_wip();
- }
- 
--struct rv_monitor rv_wip = {
-+static struct rv_monitor rv_wip = {
- 	.name = "wip",
- 	.description = "wakeup in preemptive per-cpu testing monitor.",
- 	.enable = enable_wip,
-diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.c b/kernel/trace/rv/monitors/wwnr/wwnr.c
-index 599225d9cf38..a063b93c6a1d 100644
---- a/kernel/trace/rv/monitors/wwnr/wwnr.c
-+++ b/kernel/trace/rv/monitors/wwnr/wwnr.c
-@@ -15,7 +15,7 @@
- 
- #include "wwnr.h"
- 
--struct rv_monitor rv_wwnr;
-+static struct rv_monitor rv_wwnr;
- DECLARE_DA_MON_PER_TASK(wwnr, unsigned char);
- 
- static void handle_switch(void *data, bool preempt, struct task_struct *p,
-@@ -59,7 +59,7 @@ static void disable_wwnr(void)
- 	da_monitor_destroy_wwnr();
- }
- 
--struct rv_monitor rv_wwnr = {
-+static struct rv_monitor rv_wwnr = {
- 	.name = "wwnr",
- 	.description = "wakeup while not running per-task testing model.",
- 	.enable = enable_wwnr,
+ /*
+@@ -63,7 +63,7 @@ TRACEPOINT_DETACH
+ /*
+  * This is the monitor register section.
+  */
+-struct rv_monitor rv_MODEL_NAME = {
++static struct rv_monitor rv_MODEL_NAME = {
+ 	.name = "MODEL_NAME",
+ 	.description = "auto-generated MODEL_NAME",
+ 	.enable = enable_MODEL_NAME,
 -- 
 2.25.1
 

@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D745A0305
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6064B5A0308
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240540AbiHXUu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S240575AbiHXUw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240529AbiHXUuq (ORCPT
+        with ESMTP id S240513AbiHXUwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:50:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A57E786C5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661374245; x=1692910245;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qTQyDimqLczvXe7qOc2XYZAeqDkH+iES8idreQ3skn8=;
-  b=J5w/vCG4D0XLeh9bhcntiYDX51T+yCIIfGw7RPHV9hyCl7lHi0vyPKSW
-   rfiGYLlMaSIDBDvBHFyuLysA3yp2aAacmQP7swheAgykq0F+MQuL69TGr
-   9ytT2T+S3MiekASNT+kAUBlI7hdGjfnmT1MaH4m9mvu7FlYpgY5rMqSRj
-   qxceJWAvF1/TLqGF+8cDO4jm2mB1mZsHo+JOteca3IvaKAP4Y17KvNmnS
-   C5tYN8O56bG35YPdiIevZru2U6Sy3mIv+vnLAJlEouXPVJbt3z2CyXdNh
-   B4k+0jRH7bSFQfzk8zaYnCf6g6Fv9lWW2FUGM+sbBGM3t0+VnGr/OyMzH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="274462333"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="274462333"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 13:50:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="752225118"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Aug 2022 13:50:43 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQxKl-0001Ar-0S;
-        Wed, 24 Aug 2022 20:50:43 +0000
-Date:   Thu, 25 Aug 2022 04:50:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [bvanassche:tracing 2/2] include/linux/compiler.h:246:47: warning:
- ordered comparison of pointer with null pointer
-Message-ID: <202208250433.EVz5pZkB-lkp@intel.com>
+        Wed, 24 Aug 2022 16:52:24 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E5E72EEB;
+        Wed, 24 Aug 2022 13:52:23 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sd33so14457240ejc.8;
+        Wed, 24 Aug 2022 13:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=2XP4mZfXexRtRi5IJFuPKtcayDeVUjgs1C9agqXamXw=;
+        b=VHaxq1ZDVZzU+ChxTLuUXHDCxfK6CJBhs6Hr3NqxvPLkP3b5EokdUXp5iu3jwAC6fz
+         v+jzg9rAp26m9G8xw70n2xE/Fws2Dnu7GTXN6ufoMzbXKbkAN/WjvgTzQ96EUqEluykd
+         M45Pjmf4DNIPoRuzbhNc3qT7TlnOrdcCCNpCwGEJMbZGh5jrmwlJ4UYXnA7wtzTUBm0o
+         kXJRsSJ6N02Iw1/oyUvgaoR4v36lpkxPnaeQmTBo7KFhQBfdQHLyFgi/aqJMeI2kpTJ7
+         lphQasqKPmtvcB3ees9wUY8UwvdbyhfvFahiQqAtXpH0QILpisFiWwraPEwM6rj+pl2d
+         uMBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2XP4mZfXexRtRi5IJFuPKtcayDeVUjgs1C9agqXamXw=;
+        b=Uy4rEcfNCeskg/rvFbmpp837Sm8kfoyRyMUGkKfJyNsZ3pZ28e81Nz/pKst6Nmu+nj
+         TXRkrwQb0Bk/rFeQadxJWIn4iCc7IIrIi3CVPDygIE3hRTY6sim2NIec2FibTPZVHw+k
+         DjJyXfoZG1hn1rzl0YsuMW6MO+yu2XboOy0vAh8GP8q878UKDj4pFqNrAxKXdtPQq6O9
+         LXlSBSYHMnip5YsaWjYOdnSJfsEhcWFKJPE4sAXpV4mvMvMBubooaWZI+T+/T/q6RFa/
+         kjiSu/m66gShUrlghbSnYHY3gcKQpjEJnwvzQaV+4V1aZvdO0Ys6N7l5ElYgsLnGiEhF
+         7jfA==
+X-Gm-Message-State: ACgBeo30CoxZ2sZ0cVNLZPgmm1fHH8LXXVc7R3CbLe66Q47GK5m0RgQb
+        Bn1kWfV2CqggloSoW2fBlrNEZO2pxiVqcacYy7c=
+X-Google-Smtp-Source: AA6agR4bWqaXzrMfAuWVUlGSauhzfUBElkoPylyAvoNSnorSGhAqryJpPx4nBeFm9b6j/Mqmg/8T0l5I1I0peyn4Kg0=
+X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
+ s5-20020a17090699c500b0073d70c51a4fmr438420ejn.302.1661374341791; Wed, 24 Aug
+ 2022 13:52:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220818221212.464487-1-void@manifault.com> <20220818221212.464487-2-void@manifault.com>
+In-Reply-To: <20220818221212.464487-2-void@manifault.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 24 Aug 2022 13:52:10 -0700
+Message-ID: <CAEf4Bza=Ra8uC3HuQgcaDx4s78mdRtrD+z7=qStCX5MTnJ7fOg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] bpf: Define new BPF_MAP_TYPE_USER_RINGBUF map type
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,66 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux tracing
-head:   e50691460d5ea5a49b903e0ea50276e942b6f34f
-commit: e50691460d5ea5a49b903e0ea50276e942b6f34f [2/2] tracing: Define is_signed_type() once
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220825/202208250433.EVz5pZkB-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/e50691460d5ea5a49b903e0ea50276e942b6f34f
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche tracing
-        git checkout e50691460d5ea5a49b903e0ea50276e942b6f34f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/
+On Thu, Aug 18, 2022 at 3:12 PM David Vernet <void@manifault.com> wrote:
+>
+> We want to support a ringbuf map type where samples are published from
+> user-space, to be consumed by BPF programs. BPF currently supports a kernel
+> -> user-space circular ringbuffer via the BPF_MAP_TYPE_RINGBUF map type.
+> We'll need to define a new map type for user-space -> kernel, as none of
+> the helpers exported for BPF_MAP_TYPE_RINGBUF will apply to a user-space
+> producer ringbuffer, and we'll want to add one or more helper functions
+> that would not apply for a kernel-producer ringbuffer.
+>
+> This patch therefore adds a new BPF_MAP_TYPE_USER_RINGBUF map type
+> definition. The map type is useless in its current form, as there is no way
+> to access or use it for anything until we one or more BPF helpers. A
+> follow-on patch will therefore add a new helper function that allows BPF
+> programs to run callbacks on samples that are published to the ringbuffer.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+LGTM.
 
-All warnings (new ones prefixed by >>):
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-   In file included from include/trace/define_trace.h:102,
-                    from drivers/net/wireless/mediatek/mt7601u/trace.h:392,
-                    from drivers/net/wireless/mediatek/mt7601u/trace.c:11:
->> include/linux/compiler.h:246:47: warning: ordered comparison of pointer with null pointer [-Wextra]
-     246 | #define is_signed_type(type)    (((type)(-1)) <= (type)0)
-         |                                               ^~
-   include/trace/trace_events.h:244:9: note: in definition of macro 'DECLARE_EVENT_CLASS'
-     244 |         tstruct                                                         \
-         |         ^~~~~~~
-   include/trace/trace_events.h:43:30: note: in expansion of macro 'PARAMS'
-      43 |                              PARAMS(tstruct),                  \
-         |                              ^~~~~~
-   drivers/net/wireless/mediatek/mt7601u/./trace.h:98:1: note: in expansion of macro 'TRACE_EVENT'
-      98 | TRACE_EVENT(mt_vend_req,
-         | ^~~~~~~~~~~
-   drivers/net/wireless/mediatek/mt7601u/./trace.h:102:9: note: in expansion of macro 'TP_STRUCT__entry'
-     102 |         TP_STRUCT__entry(
-         |         ^~~~~~~~~~~~~~~~
-   include/trace/stages/stage4_event_fields.h:11:22: note: in expansion of macro 'is_signed_type'
-      11 |         .is_signed = is_signed_type(_type), .filter_type = _filter_type },
-         |                      ^~~~~~~~~~~~~~
-   include/trace/stages/stage4_event_fields.h:20:33: note: in expansion of macro '__field_ext'
-      20 | #define __field(type, item)     __field_ext(type, item, FILTER_OTHER)
-         |                                 ^~~~~~~~~~~
-   drivers/net/wireless/mediatek/mt7601u/./trace.h:105:56: note: in expansion of macro '__field'
-     105 |                 __field(u16, val) __field(u16, offset) __field(void*, buf)
-         |                                                        ^~~~~~~
+>  include/linux/bpf_types.h      |  1 +
+>  include/uapi/linux/bpf.h       |  1 +
+>  kernel/bpf/ringbuf.c           | 62 ++++++++++++++++++++++++++++++----
+>  kernel/bpf/verifier.c          |  3 ++
+>  tools/include/uapi/linux/bpf.h |  1 +
+>  tools/lib/bpf/libbpf.c         |  1 +
+>  6 files changed, 63 insertions(+), 6 deletions(-)
 
-
-vim +246 include/linux/compiler.h
-
-   241	
-   242	/*
-   243	 * Whether 'type' is a signed type or an unsigned type. Supports scalar types,
-   244	 * bool and also pointer types.
-   245	 */
- > 246	#define is_signed_type(type)	(((type)(-1)) <= (type)0)
-   247	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[...]

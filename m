@@ -2,162 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C44259F0B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C8759F0BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiHXBPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S233145AbiHXBPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbiHXBPT (ORCPT
+        with ESMTP id S233176AbiHXBPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:15:19 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D84E13D30;
-        Tue, 23 Aug 2022 18:15:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661303718; x=1692839718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zyagp7MUjz6nulHFPOeDLK55YHm0lYhUAU3L6WSjbP0=;
-  b=VT1oszFSZrDKzZPX4sbDpHiPfqWKpJWgBq5fpmPklvD+ud+WPbK69ivJ
-   yCC/2380drhD0eNg+KyHGybl52KnkrSiUlK9p3CIcxzomRWlmXjxy1uVb
-   nc50hBtSWAEe8eNndAn1LdBBC2doXGDhdxD2uIdo6gyyXWNjSwxE9+Raq
-   Fu++r/LUi0v/L9qG3RLYRHSQFhOVLNGGIKFTFeqP3ZC0obAe2VnNKBUt9
-   EKBke7gUtoaWvr65sm3+Ig7sUKWkRrBSNDsnSFOed60crZPVdyz1LwI/r
-   cdc0y4t8RI2SpJxBXc7+dss4nahkZkGpZ63UzjYL6yrBvKhg2PTYKVxoX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="295118222"
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="295118222"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 18:15:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
-   d="scan'208";a="677839471"
-Received: from lkp-server02.sh.intel.com (HELO 9bbcefcddf9f) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2022 18:15:13 -0700
-Received: from kbuild by 9bbcefcddf9f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQezA-0000nC-1e;
-        Wed, 24 Aug 2022 01:15:12 +0000
-Date:   Wed, 24 Aug 2022 09:15:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/20] EDAC/synopsys: Unify the driver entities naming
-Message-ID: <202208240904.liSrmM2A-lkp@intel.com>
-References: <20220822190730.27277-20-Sergey.Semin@baikalelectronics.ru>
+        Tue, 23 Aug 2022 21:15:36 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E763B942;
+        Tue, 23 Aug 2022 18:15:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MC7Qv4vmsz6S686;
+        Wed, 24 Aug 2022 09:13:59 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgBXQLy0ewVjY6sPAw--.59906S3;
+        Wed, 24 Aug 2022 09:15:33 +0800 (CST)
+Subject: Re: [PATCH v8 1/4] blk-throttle: fix that io throttle can only work
+ for single bio
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, ming.lei@redhat.com, mkoutny@suse.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220823033130.874230-1-yukuai1@huaweicloud.com>
+ <20220823033130.874230-2-yukuai1@huaweicloud.com>
+ <YwUXTL+8E/sPcEUB@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <73c72914-e27d-b261-e040-2dd31e8a6b9f@huaweicloud.com>
+Date:   Wed, 24 Aug 2022 09:15:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822190730.27277-20-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YwUXTL+8E/sPcEUB@slm.duckdns.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgBXQLy0ewVjY6sPAw--.59906S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4xZr4fGr13Xr18Zr15CFg_yoWfWrc_ZF
+        4YyrWxGw18uFs7AF1jyF45WrZIgrWfW3s7uw4vgFy7tw1rA3s09Fs5Kr92yrW5X3yrKr9I
+        qw109ayrCryS9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j
+        6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY
+        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Serge,
+Hi, Tejun
 
-I love your patch! Yet something to improve:
+ÔÚ 2022/08/24 2:07, Tejun Heo Ð´µÀ:
+> Hello,
+> 
+> Should have asked you earlier but with the BIO_THROTTLED flag setting from
+> clone removed, with single BIO_THROTTLED flag, does the fix still require
+> bytes subtraction? If we can do single flag and we don't need the bytes
+> subtraction, might as well just stay with single flag?
 
-[auto build test ERROR on ras/edac-for-next]
-[also build test ERROR on robh/for-next linus/master v6.0-rc2 next-20220823]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Do you mean 'compensate the over-accounting' for bytes subtraction? If
+so, yes, it's not required.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/EDAC-mc-synopsys-Various-fixes-and-cleanups/20220823-031020
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-config: arm-buildonly-randconfig-r006-20220823 (https://download.01.org/0day-ci/archive/20220824/202208240904.liSrmM2A-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9c500fa8dbd08021742d8f5a48403c8f6292741c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Serge-Semin/EDAC-mc-synopsys-Various-fixes-and-cleanups/20220823-031020
-        git checkout 9c500fa8dbd08021742d8f5a48403c8f6292741c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/edac/
+This patch actually set two flags when bio is throttled and
+dispatched, and only iops flag is cleared after the original bio is
+split. If only one flag can be used, the way that I come up with is
+that let iops limit become default, which means bio is always counted
+for iops limit each time blk_throtl_bio() is called. I'm not quite
+sure yet if iops limit can be counted excessively this way in some
+special scenario...
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks,
+Kuai
+> 
+> Thanks.
+> 
 
-All errors (new ones prefixed by >>):
-
-   drivers/edac/synopsys_edac.c: In function 'snps_enable_irq':
->> drivers/edac/synopsys_edac.c:398:36: error: 'SYNPS_ZYNQMP_IRQ_REGS' undeclared (first use in this function); did you mean 'SNPS_ZYNQMP_IRQ_REGS'?
-     398 |         if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
-         |                                    ^~~~~~~~~~~~~~~~~~~~~
-         |                                    SNPS_ZYNQMP_IRQ_REGS
-   drivers/edac/synopsys_edac.c:398:36: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/edac/synopsys_edac.c: In function 'snps_disable_irq':
-   drivers/edac/synopsys_edac.c:419:36: error: 'SYNPS_ZYNQMP_IRQ_REGS' undeclared (first use in this function); did you mean 'SNPS_ZYNQMP_IRQ_REGS'?
-     419 |         if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
-         |                                    ^~~~~~~~~~~~~~~~~~~~~
-         |                                    SNPS_ZYNQMP_IRQ_REGS
-   drivers/edac/synopsys_edac.c: In function 'snps_get_dtype':
-   drivers/edac/synopsys_edac.c:485:18: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
-     485 |         regval = FIELD_GET(DDR_MSTR_DEV_CFG_MASK, regval);
-         |                  ^~~~~~~~~
-         |                  FOLL_GET
-   drivers/edac/synopsys_edac.c: In function 'snps_mc_init':
-   drivers/edac/synopsys_edac.c:600:32: warning: variable 'priv' set but not used [-Wunused-but-set-variable]
-     600 |         struct snps_edac_priv *priv;
-         |                                ^~~~
-   cc1: some warnings being treated as errors
-
-
-vim +398 drivers/edac/synopsys_edac.c
-
-ae9b56e3996dad Punnaiah Choudary Kalluri 2015-01-06  392  
-9c500fa8dbd080 Serge Semin               2022-08-22  393  static void snps_enable_irq(struct snps_edac_priv *priv)
-4bcffe941758ee Sherry Sun                2022-04-27  394  {
-b8ee875dfc73be Serge Semin               2022-08-22  395  	unsigned long flags;
-b8ee875dfc73be Serge Semin               2022-08-22  396  
-4bcffe941758ee Sherry Sun                2022-04-27  397  	/* Enable UE/CE Interrupts */
-b8ee875dfc73be Serge Semin               2022-08-22 @398  	if (priv->p_data->quirks & SYNPS_ZYNQMP_IRQ_REGS) {
-4bcffe941758ee Sherry Sun                2022-04-27  399  		writel(DDR_QOSUE_MASK | DDR_QOSCE_MASK,
-4bcffe941758ee Sherry Sun                2022-04-27  400  		       priv->baseaddr + DDR_QOS_IRQ_EN_OFST);
-4bcffe941758ee Sherry Sun                2022-04-27  401  
-b8ee875dfc73be Serge Semin               2022-08-22  402  		return;
-b8ee875dfc73be Serge Semin               2022-08-22  403  	}
-b8ee875dfc73be Serge Semin               2022-08-22  404  
-b8ee875dfc73be Serge Semin               2022-08-22  405  	/* IRQs Enable/Disable feature has been available since v3.10a */
-b8ee875dfc73be Serge Semin               2022-08-22  406  	spin_lock_irqsave(&priv->lock, flags);
-b8ee875dfc73be Serge Semin               2022-08-22  407  
-b8ee875dfc73be Serge Semin               2022-08-22  408  	writel(ECC_CTRL_EN_CE_IRQ | ECC_CTRL_EN_UE_IRQ,
-b8ee875dfc73be Serge Semin               2022-08-22  409  	       priv->baseaddr + ECC_CLR_OFST);
-b8ee875dfc73be Serge Semin               2022-08-22  410  
-b8ee875dfc73be Serge Semin               2022-08-22  411  	spin_unlock_irqrestore(&priv->lock, flags);
-4bcffe941758ee Sherry Sun                2022-04-27  412  }
-4bcffe941758ee Sherry Sun                2022-04-27  413  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

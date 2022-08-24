@@ -2,154 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F66F59F49B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532C359F49E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235263AbiHXH4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 03:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S235107AbiHXHz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 03:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiHXHz4 (ORCPT
+        with ESMTP id S234831AbiHXHz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 Aug 2022 03:55:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8464884ECB;
-        Wed, 24 Aug 2022 00:55:52 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 07:55:47 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661327750;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RqO7cPBchLBpZJwMWF5WuJhfv0vBB4rQmXh3A6TUueo=;
-        b=NPw5GD31FlHYtyCGbO+Rl1Vmj3IFxDhxZ+uGgNNri9Yx1a8wha+dHnTAuehc/ySLH71Onv
-        JZn9bwvh50YItOcJ0zE/jficatsUNeUkzylVs6GXXs7NKnd/+0XlASVlz800s2Mnrcxv+S
-        OR3pN3vMWuhVBjO33uKWihA4LkzEiovDX+Cuuk1NnKaJnpbX2yAQ2/7UPJMzyrw6vpAxUk
-        ND4zndEJReccqSBG1YgkjPmH/zj7ewt+RJUOvvOx66NCtI5xBmO4jWAZQQ0K66UTLlhNWc
-        mgimHnjZIxAc+y88pozeFWIuonNlsJ+n+Y/4ysbnxtY38X3Ah8uwjyDopu5TyA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661327750;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RqO7cPBchLBpZJwMWF5WuJhfv0vBB4rQmXh3A6TUueo=;
-        b=E/HyooXtINpkPP91QrjafI7AQgUiiPP0OK1K1KH2bJoUgq+KpL1N3LYxpupOoOO25VTajh
-        lz9btSPcQSYILsBA==
-From:   "tip-bot2 for Michael Roth" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/boot: Don't propagate uninitialized
- boot_params->cc_blob_address
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        watnuss@gmx.de, Michael Roth <michael.roth@amd.com>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220823160734.89036-1-michael.roth@amd.com>
-References: <20220823160734.89036-1-michael.roth@amd.com>
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36C484EEA
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 00:55:53 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id QlEroa3jzPMmaQlEropAN6; Wed, 24 Aug 2022 09:55:50 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 24 Aug 2022 09:55:50 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH] hwspinlock: sprd: Use devm_clk_get_enabled() helper
+Date:   Wed, 24 Aug 2022 09:55:47 +0200
+Message-Id: <f962d22bfdbd09133d8923152133eeff9213dcee.1661324434.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <166132774791.401.13991431396549405975.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+The devm_clk_get_enabled() helper:
+   - calls devm_clk_get()
+   - calls clk_prepare_enable() and registers what is needed in order to
+     call clk_disable_unprepare() when needed, as a managed resource.
 
-Commit-ID:     4b1c742407571eff58b6de9881889f7ca7c4b4dc
-Gitweb:        https://git.kernel.org/tip/4b1c742407571eff58b6de9881889f7ca7c4b4dc
-Author:        Michael Roth <michael.roth@amd.com>
-AuthorDate:    Tue, 23 Aug 2022 11:07:34 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 24 Aug 2022 09:03:04 +02:00
+This simplifies the code, the error handling paths and avoid the need of
+a dedicated function used with devm_add_action_or_reset().
 
-x86/boot: Don't propagate uninitialized boot_params->cc_blob_address
+Based on my test with allyesconfig, this reduces the .o size from:
+   text	   data	    bss	    dec	    hex	filename
+   3423	   1528	      0	   4951	   1357	drivers/hwspinlock/sprd_hwspinlock.o
+down to:
+   3025	   1392	      0	   4417	   1141	drivers/hwspinlock/sprd_hwspinlock.o
 
-In some cases, bootloaders will leave boot_params->cc_blob_address
-uninitialized rather than zeroing it out. This field is only meant to be
-set by the boot/compressed kernel in order to pass information to the
-uncompressed kernel when SEV-SNP support is enabled.
-
-Therefore, there are no cases where the bootloader-provided values
-should be treated as anything other than garbage. Otherwise, the
-uncompressed kernel may attempt to access this bogus address, leading to
-a crash during early boot.
-
-Normally, sanitize_boot_params() would be used to clear out such fields
-but that happens too late: sev_enable() may have already initialized
-it to a valid value that should not be zeroed out. Instead, have
-sev_enable() zero it out unconditionally beforehand.
-
-Also ensure this happens for !CONFIG_AMD_MEM_ENCRYPT as well by also
-including this handling in the sev_enable() stub function.
-
-  [ bp: Massage commit message and comments. ]
-
-Fixes: b190a043c49a ("x86/sev: Add SEV-SNP feature detection/setup")
-Reported-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Reported-by: watnuss@gmx.de
-Signed-off-by: Michael Roth <michael.roth@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216387
-Link: https://lore.kernel.org/r/20220823160734.89036-1-michael.roth@amd.com
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- arch/x86/boot/compressed/misc.h | 12 +++++++++++-
- arch/x86/boot/compressed/sev.c  |  8 ++++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+devm_clk_get_enabled() is new and is part of 6.0-rc1
+---
+ drivers/hwspinlock/sprd_hwspinlock.c | 23 ++---------------------
+ 1 file changed, 2 insertions(+), 21 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index 4910bf2..62208ec 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -132,7 +132,17 @@ void snp_set_page_private(unsigned long paddr);
- void snp_set_page_shared(unsigned long paddr);
- void sev_prep_identity_maps(unsigned long top_level_pgt);
- #else
--static inline void sev_enable(struct boot_params *bp) { }
-+static inline void sev_enable(struct boot_params *bp)
-+{
-+	/*
-+	 * bp->cc_blob_address should only be set by boot/compressed kernel.
-+	 * Initialize it to 0 unconditionally (thus here in this stub too) to
-+	 * ensure that uninitialized values from buggy bootloaders aren't
-+	 * propagated.
-+	 */
-+	if (bp)
-+		bp->cc_blob_address = 0;
-+}
- static inline void sev_es_shutdown_ghcb(void) { }
- static inline bool sev_es_check_ghcb_fault(unsigned long address)
- {
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 52f989f..c93930d 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -277,6 +277,14 @@ void sev_enable(struct boot_params *bp)
- 	bool snp;
+diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
+index 22e2ffb91743..cb37706f61be 100644
+--- a/drivers/hwspinlock/sprd_hwspinlock.c
++++ b/drivers/hwspinlock/sprd_hwspinlock.c
+@@ -76,18 +76,11 @@ static const struct hwspinlock_ops sprd_hwspinlock_ops = {
+ 	.relax = sprd_hwspinlock_relax,
+ };
  
- 	/*
-+	 * bp->cc_blob_address should only be set by boot/compressed kernel.
-+	 * Initialize it to 0 to ensure that uninitialized values from
-+	 * buggy bootloaders aren't propagated.
-+	 */
-+	if (bp)
-+		bp->cc_blob_address = 0;
-+
-+	/*
- 	 * Setup/preliminary detection of SNP. This will be sanity-checked
- 	 * against CPUID/MSR values later.
- 	 */
+-static void sprd_hwspinlock_disable(void *data)
+-{
+-	struct sprd_hwspinlock_dev *sprd_hwlock = data;
+-
+-	clk_disable_unprepare(sprd_hwlock->clk);
+-}
+-
+ static int sprd_hwspinlock_probe(struct platform_device *pdev)
+ {
+ 	struct sprd_hwspinlock_dev *sprd_hwlock;
+ 	struct hwspinlock *lock;
+-	int i, ret;
++	int i;
+ 
+ 	if (!pdev->dev.of_node)
+ 		return -ENODEV;
+@@ -102,24 +95,12 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
+ 	if (IS_ERR(sprd_hwlock->base))
+ 		return PTR_ERR(sprd_hwlock->base);
+ 
+-	sprd_hwlock->clk = devm_clk_get(&pdev->dev, "enable");
++	sprd_hwlock->clk = devm_clk_get_enabled(&pdev->dev, "enable");
+ 	if (IS_ERR(sprd_hwlock->clk)) {
+ 		dev_err(&pdev->dev, "get hwspinlock clock failed!\n");
+ 		return PTR_ERR(sprd_hwlock->clk);
+ 	}
+ 
+-	ret = clk_prepare_enable(sprd_hwlock->clk);
+-	if (ret)
+-		return ret;
+-
+-	ret = devm_add_action_or_reset(&pdev->dev, sprd_hwspinlock_disable,
+-				       sprd_hwlock);
+-	if (ret) {
+-		dev_err(&pdev->dev,
+-			"Failed to add hwspinlock disable action\n");
+-		return ret;
+-	}
+-
+ 	/* set the hwspinlock to record user id to identify subsystems */
+ 	writel(HWSPINLOCK_USER_BITS, sprd_hwlock->base + HWSPINLOCK_RECCTRL);
+ 
+-- 
+2.34.1
+

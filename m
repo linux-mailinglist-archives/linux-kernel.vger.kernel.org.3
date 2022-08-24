@@ -2,74 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C2059F177
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665C059F17E
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiHXCqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 22:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S230520AbiHXCsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 22:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiHXCqB (ORCPT
+        with ESMTP id S229790AbiHXCsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 22:46:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A2D3D585;
-        Tue, 23 Aug 2022 19:45:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87C3BB822DC;
-        Wed, 24 Aug 2022 02:45:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 34A71C43470;
-        Wed, 24 Aug 2022 02:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661309157;
-        bh=gjnhOAGSUFLCZ+8mbIbzZxTplYWXZUIiS5eNiwoQAEs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=q1AbfK8C937pTNGDsIPsVzf11UeFqtdarYkTwJs5qB2ZtgbKucXX1kRUbhEsbWugQ
-         ok/Nb0mynYe4LpU5bX2NIDLNFAWj0Vm8hCy4icu3/2tObPvnAgFS61FjMiSBantsYl
-         RqnsbBVc1sguGzZQ4TW9+yb9hyAc6vc45AYlvaTFWpKdYoZAFNVsYnZwkziTdGaBhR
-         Nqj32HGUK8Le2lpR12YnPWbQJyY693S+fp9KDGp1XRqTNtqgqUN9GpEGIkPJ+B2Ldr
-         UfGQwgdwyPuuziZKPKexjTZN0iBarQpELHUmwNgNLTT1mp8cYIY14o+7WZni8bdm6S
-         MRDS8xXkTsl0Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 160FCC0C3EC;
-        Wed, 24 Aug 2022 02:45:57 +0000 (UTC)
-Subject: Re: [GIT PULL] cgroup fixes for v6.0-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YwVmlMzNMS5ym9JI@slm.duckdns.org>
-References: <YwVmlMzNMS5ym9JI@slm.duckdns.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YwVmlMzNMS5ym9JI@slm.duckdns.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.0-rc2-fixes
-X-PR-Tracked-Commit-Id: 763f4fb76e24959c370cdaa889b2492ba6175580
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c40e8341e3b3bb27e3a65b06b5b454626234c4f0
-Message-Id: <166130915708.7543.10455408281357977924.pr-tracker-bot@kernel.org>
-Date:   Wed, 24 Aug 2022 02:45:57 +0000
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 22:48:11 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8D36A4BD
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:48:09 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MC9RV1KKCz1N7Td;
+        Wed, 24 Aug 2022 10:44:38 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 10:48:01 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
+ 2022 10:48:01 +0800
+Message-ID: <48ca5e9e-eb03-3fb1-96d0-4755e1d39c3f@huawei.com>
+Date:   Wed, 24 Aug 2022 10:48:01 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] objtool: replace _ASM_PTR with quad in macros
+Content-Language: en-US
+To:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        "peterz@infradead.org" <peterz@infradead.org>
+CC:     <jpoimboe@kernel.org>, <bp@suse.de>, <mhiramat@kernel.org>,
+        <sv@linux.ibm.com>, <christophe.leroy@csgroup.eu>,
+        <naveen.n.rao@linux.vnet.ibm.com>
+References: <20220823133124.55914-1-chenzhongjin@huawei.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20220823133124.55914-1-chenzhongjin@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 23 Aug 2022 13:45:24 -1000:
+On 2022/8/23 21:31, Chen Zhongjin wrote:
+> Macros STACK_FRAME_NON_STANDARD and ANNOTATE_NOENDBR uses
+> _ASM_PTR. It switch between .long and .quad based on 32bit
+> or 64bit. However objtool doesn't work for 32bit, so _ASM_PTR
+> makes no sense.
+>
+> Considering that _ASM_PTR comes from asm.h, which is x86
+> specific head file, while objtool.h is generic. Replace
+> _ASM_PTR with quad and remove asm.h reference.
+>
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>   include/linux/objtool.h       | 6 ++----
+>   tools/include/linux/objtool.h | 6 ++----
+>   2 files changed, 4 insertions(+), 8 deletions(-)
+>
+> diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+> index 62c54ffbeeaa..d2413cb78037 100644
+> --- a/include/linux/objtool.h
+> +++ b/include/linux/objtool.h
+> @@ -45,8 +45,6 @@ struct unwind_hint {
+>   
+>   #ifdef CONFIG_OBJTOOL
+>   
+> -#include <asm/asm.h>
+> -
+>   #ifndef __ASSEMBLY__
+>   
+>   #define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
+> @@ -87,7 +85,7 @@ struct unwind_hint {
+>   #define ANNOTATE_NOENDBR					\
+>   	"986: \n\t"						\
+>   	".pushsection .discard.noendbr\n\t"			\
+> -	_ASM_PTR " 986b\n\t"					\
+> +	".quad 986b\n\t"					\
+>   	".popsection\n\t"
+>   
+>   #define ASM_REACHABLE							\
+> @@ -144,7 +142,7 @@ struct unwind_hint {
+>   
+>   .macro STACK_FRAME_NON_STANDARD func:req
+>   	.pushsection .discard.func_stack_frame_non_standard, "aw"
+> -	_ASM_PTR \func
+> +	.quad \func
+>   	.popsection
+>   .endm
+>   
+> diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+> index 62c54ffbeeaa..d2413cb78037 100644
+> --- a/tools/include/linux/objtool.h
+> +++ b/tools/include/linux/objtool.h
+> @@ -45,8 +45,6 @@ struct unwind_hint {
+>   
+>   #ifdef CONFIG_OBJTOOL
+>   
+> -#include <asm/asm.h>
+> -
+>   #ifndef __ASSEMBLY__
+>   
+>   #define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
+> @@ -87,7 +85,7 @@ struct unwind_hint {
+>   #define ANNOTATE_NOENDBR					\
+>   	"986: \n\t"						\
+>   	".pushsection .discard.noendbr\n\t"			\
+> -	_ASM_PTR " 986b\n\t"					\
+> +	".quad 986b\n\t"					\
+>   	".popsection\n\t"
+>   
+>   #define ASM_REACHABLE							\
+> @@ -144,7 +142,7 @@ struct unwind_hint {
+>   
+>   .macro STACK_FRAME_NON_STANDARD func:req
+>   	.pushsection .discard.func_stack_frame_non_standard, "aw"
+> -	_ASM_PTR \func
+> +	.quad \func
+>   	.popsection
+>   .endm
+>   
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.0-rc2-fixes
+As ppc said they will use objtool for both 32 and 64bit, maybe we still 
+need a switchable symbol type for this.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c40e8341e3b3bb27e3a65b06b5b454626234c4f0
+How about this one?
 
-Thank you!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index 62c54ffbeeaa..14af2bcc460b 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -45,10 +45,14 @@ struct unwind_hint {
+
+  #ifdef CONFIG_OBJTOOL
+
+-#include <asm/asm.h>
+-
+  #ifndef __ASSEMBLY__
+
++#ifdef CONFIG_64BIT
++#define _RELOC_PTR __stringify(.quad)
++#else
++#define _RELOC_PTR __stringify(.long)
++#endif
++
+  #define UNWIND_HINT(sp_reg, sp_offset, type, end)              \
+         "987: \n\t"                                             \
+         ".pushsection .discard.unwind_hints\n\t"                \
+@@ -87,7 +91,7 @@ struct unwind_hint {
+  #define ANNOTATE_NOENDBR                                       \
+         "986: \n\t"                                             \
+         ".pushsection .discard.noendbr\n\t"                     \
+-       _ASM_PTR " 986b\n\t"                                    \
++       _RELOC_PTR " 986b\n\t"                                  \
+         ".popsection\n\t"
+
+  #define ASM_REACHABLE                                                  \
+@@ -98,6 +102,12 @@ struct unwind_hint {
+
+  #else /* __ASSEMBLY__ */
+
++#ifdef CONFIG_64BIT
++#define _RELOC_PTR .quad
++#else
++#define _RELOC_PTR .long
++#endif
++
+  /*
+   * This macro indicates that the following intra-function call is valid.
+   * Any non-annotated intra-function call will cause objtool to issue a 
+warning.
+@@ -144,7 +154,7 @@ struct unwind_hint {
+
+  .macro STACK_FRAME_NON_STANDARD func:req
+         .pushsection .discard.func_stack_frame_non_standard, "aw"
+-       _ASM_PTR \func
++       _RELOC_PTR \func
+         .popsection
+  .endm
+
+
+

@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A9959FFED
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBD559FFEE
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239664AbiHXQ70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S239697AbiHXQ7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239141AbiHXQ7V (ORCPT
+        with ESMTP id S239686AbiHXQ7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:59:21 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AB56E8A9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:59:20 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id m3so19160632lfg.10
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:from:to:cc;
-        bh=G82ihWj63KmrZTbNAM/UHivXSnuDSm1fupsjpoYLhDQ=;
-        b=ftQ5CKHIBQWfNPo5g81XGiva+GwFlrcerSnJrQBQCJJeoaidvCPKD6uXoTh/koiu2i
-         IJMMx3aVbOysnPqfl8kMWBhLA0YYhCEdMwB6db5hAcjW6KG31Q6CvL3nSbLrkrMBOu6m
-         KQNymPiBiKVm3hs6kVoF0nCKXmyRBEQT1+7X1MSCGyIRK4fM1mZVzooY6bu3fIP+o+Pq
-         uVO0e6XYDC8GXCtTIfEZkjhEtcvE7BJTJg/aCByHvv3hMnCoaKFm85qay6Fp9JCzyLMu
-         qiEJ6OUFKRQeVmhhCoOVhb4GNPttwjvS0pIocjNxF74S8pp45y4eQ40da0WCDzUJosWj
-         VJUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc;
-        bh=G82ihWj63KmrZTbNAM/UHivXSnuDSm1fupsjpoYLhDQ=;
-        b=MqGPF97H3UZm3FlbMwxnXAOnddMtqBZt2CB40OovZzEoZxudQ7bqiP+iciIPQ+F10y
-         AYFnpGrp96QG+7+ipoiCCfBzUD2i6ZqqBHWQitVxAcP7LiXISQqoJVM+HFf1HxPwfsHm
-         2zopqr7IO74TI8YUcuVHd7IDa1sWmGDFUu3XI6nxSFHWbPUFDWTQT2Bayb0EW4NTVQAI
-         ntYpaVamqJAl19r76e38itS0j22LS7+4BHW+jjDbVc3Q9byg2ikfTrYJaZPgEZMIKj+D
-         g6RxlefZggd4p0DgSBS/b10Lfm+opimEZlitANnHIxsacZzQXu4hx1Hz1bZIEQvntKJk
-         xlrA==
-X-Gm-Message-State: ACgBeo3Kbt8D2MJdLRvgRk+BxBqih8C5XQ1wlU+DJpxR1Kp7YhU5MnuD
-        mtvZ1A00xqnsBF+7kbbdiDw=
-X-Google-Smtp-Source: AA6agR7fnL/ZvcDcHwypYRSYkpoEHzQlH2Kbb9U7WlU6MfPD9bSoUMZqe83drqSNUCrLLqJYv5uOuQ==
-X-Received: by 2002:a05:6512:3e09:b0:492:f8e5:5eb5 with SMTP id i9-20020a0565123e0900b00492f8e55eb5mr2552048lfv.498.1661360358306;
-        Wed, 24 Aug 2022 09:59:18 -0700 (PDT)
-Received: from [10.10.53.53] (81-18-220-16.static.chello.pl. [81.18.220.16])
-        by smtp.googlemail.com with ESMTPSA id k4-20020a05651210c400b0048d1101d0d6sm3941lfg.121.2022.08.24.09.59.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 09:59:17 -0700 (PDT)
-From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
-X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <b5b458bd-ec4b-0144-5ae2-378fda723ecf@gmail.com>
-Date:   Wed, 24 Aug 2022 18:59:16 +0200
+        Wed, 24 Aug 2022 12:59:37 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8136E89B;
+        Wed, 24 Aug 2022 09:59:33 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OEoShA026506;
+        Wed, 24 Aug 2022 16:59:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=/t5RQop/phOFBe9ulIx9iVn7qs9x7+8q6SRazKH2JD8=;
+ b=jAOIdaNwvCoGEcQDQvahjkYfSCxz9E/IZ5n4R/I07pu9OLoIMgtVttFXILNnG+ZG1Cow
+ DZelo/RBaOOuzHEB4ipChtXwqSgDpk6gMXPDsMN3Oo6ZPAHuPeZf3iIgDgi1uMgL7WWW
+ M4XrTi48208Y2P7iyFK3bSvwDRLfizOZT26KVqfRz/Is3XwnDtnPvXPHHnlN78y9eY2d
+ mV1uo0/HbGW7k2AHNRRYZegcn+4S9SkU43az9UGstqQGT2bQ3By4TOFbBBW0uw0DugLL
+ TWCKSCA1qy6Hqnb8JoXycehEZMkvN+2Oize/nj1feGj1/BGWGZ8tiBtGINx10zW3NTz4 3g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52pnm17a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 16:59:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27OGxPXt017342
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Aug 2022 16:59:25 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 24 Aug 2022 09:59:24 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dp: correct 1.62G link rate at dp_catalog_ctrl_config_msa()
+Date:   Wed, 24 Aug 2022 09:59:16 -0700
+Message-ID: <1661360356-21948-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 24/35] drm/vc4: vec: Add support for more analog TV
- standards
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-24-3d53ae722097@cerno.tech>
- <0e7bebe2-3f45-0a1b-a4b6-bb783f8de7b6@gmail.com>
- <20220815083702.ipcmdwzkh2fxvdp7@houat>
-In-Reply-To: <20220815083702.ipcmdwzkh2fxvdp7@houat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ejxF6MI92RkW-q2NFlLHs_B7qV5P1jIR
+X-Proofpoint-GUID: ejxF6MI92RkW-q2NFlLHs_B7qV5P1jIR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-24_09,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=977 clxscore=1015
+ bulkscore=0 phishscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208240064
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+At current implementation there is an extra 0 at 1.62G link rate which cause
+no correct pixel_div selected for 1.62G link rate to calculate mvid and nvid.
+This patch delete the extra 0 to have mvid and nvid be calculated correctly.
 
-W dniu 15.08.2022 o 10:37, Maxime Ripard pisze:
-> Hi,
->
-> On Fri, Jul 29, 2022 at 07:55:30PM +0200, Mateusz Kwiatkowski wrote:
->> Hi Maxime,
->>
->> I think that declaring PAL-B and SECAM-B as the only supported 576i
->> norms is a bit random.
->
-> Starting with this patch, PAL-N should be supported as well, right?
+Fixes: 937f941ca06f  "drm/msm/dp: Use qmp phy for DP PLL and PHY"
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_catalog.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Oh, sure. I forgot about it. My brain was too focused on the "standard PAL"
-modes, which excludes PAL-N.
+diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+index 7257515..676279d 100644
+--- a/drivers/gpu/drm/msm/dp/dp_catalog.c
++++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+@@ -431,7 +431,7 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
+ 
+ 	if (rate == link_rate_hbr3)
+ 		pixel_div = 6;
+-	else if (rate == 1620000 || rate == 270000)
++	else if (rate == 162000 || rate == 270000)
+ 		pixel_div = 2;
+ 	else if (rate == link_rate_hbr2)
+ 		pixel_div = 4;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
->
->> Norms B, D, G, H, I, K, K1 and L (for both PAL and SECAM) are
->> essentially identical if we're talking about baseband signals, AFAIK
->> they only differ when those are modulated as RF signals. I'm not sure
->> if there's a point to differentiating those (that's more about patch
->> 05/35) unless we need to deal with some device that actually features
->> an RF modulator.
->
-> What I was aiming for is to have all the cases we have in all the
-> drivers covered so that we can make that property generic. i915
-> declares and uses all those variants:
->
-> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/i915/display/intel_sdvo.c#L68
->
-> Especially since it's i915 and it's pretty much the standard as far as
-> the uAPI goes, I'd rather avoid any regression there.
-
-OK, if there are already drivers that differentiate those, then it doesn't make
-sense to introduce regressions. And yes, there is plenty of software already out
-there that differentiate between those modes in the context of composite video.
-It still doesn't make much sense from the engineering point of view, though.
-
->
->> But if we do want to have all those norms separate, then I'd say that
->> VC4 should declare support for all of those, and all should map to the
->> same VEC settings. Some users from e.g. the UK might think that they
->> won't get proper picture if PAL-I is not on the list of supported
->> norms. Same goes for e.g. SECAM-D/K in the former Soviet territories,
->> and so on.
->
-> I'd be open to it, but we can always extend vc4 to support those modes
-> later on. The work you did to make that easier should make it trivial.
-
-Doing that in the future is OK as well. I just wanted to point out that
-PAL-B/D/G/H/I/K/K1/L (and same for SECAM) is the same exact thing as far as
-baseband composite video is concerned, so declaring only one of those as
-supported is potentially misleading for anybody who is not aware of that fact.
-
->
-> Maxime
-
-Best regards,
-Mateusz Kwiatkowski

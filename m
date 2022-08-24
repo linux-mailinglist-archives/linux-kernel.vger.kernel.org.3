@@ -2,38 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F84A59F2B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 06:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1697D59F2B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 06:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233830AbiHXEiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 00:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S234290AbiHXEik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 00:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiHXEiD (ORCPT
+        with ESMTP id S230245AbiHXEih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 00:38:03 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4B15FAC6
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:38:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=rocking@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VN5nYf._1661315871;
-Received: from localhost(mailfrom:rocking@linux.alibaba.com fp:SMTPD_---0VN5nYf._1661315871)
-          by smtp.aliyun-inc.com;
-          Wed, 24 Aug 2022 12:37:58 +0800
-From:   Peng Wang <rocking@linux.alibaba.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] sched/fair: select waker's cpu for wakee on sync wakeup
-Date:   Wed, 24 Aug 2022 12:37:50 +0800
-Message-Id: <1508aa17d1a169077c8d8d8c22d2bd529101af0e.1661313074.git.rocking@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Wed, 24 Aug 2022 00:38:37 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5B87DF5B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:38:34 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-336c3b72da5so267961657b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=3opLk4Oz93lm77lsPTBWHBXIaH3afs5uHa/1mKNusGU=;
+        b=PctrHBniebv3hCjyLQ/5fSwmIVjcOOdCc30ReMbNTAzpDzM8H6J4TyM5Q9Y+PLbJ6e
+         JWUBxLGHfwoQIKNTvAEekL2u6Wx8QQAqvhHl2PwJbBPgJx1riqGt1ef66Vfznfnp+k2b
+         Q7+yynShR+LtUQYVLK+PSQ6PxEyMqS86bMY7fO4fgibOgamEGhRP6/Eq6DHcb1IxCJKR
+         iqTPUdlgWFwrY6qGykUmbKC7WigW2cba9zOwlmz0b//n9X63AIsBf7kaRm3V3iq/r5XZ
+         RfBdtIpRzMxE7KBYL54weUCMdD3IqBBoJ9DhPLMfNYz3EGPotmSbwRIL2nMVY23wpkXw
+         462Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=3opLk4Oz93lm77lsPTBWHBXIaH3afs5uHa/1mKNusGU=;
+        b=umaFRhBvVV+pxR/buG2I4GsIMd6u8JOU3rNRTwZbn/PWXU7viMPiTh2VErU7X9s64H
+         Er389c6jnCU9KhHrHi7jICa4t+aRIOccHtVxG9pQEAyJN8YTyoLAqggLIE8RtYEC7/2D
+         YH1EipcB+G1ftiVb+SF4QS9CZIeG2JcX8spnP57Pdr6RY6rsQhs1wblA3MYZv9x36AC6
+         L0ShE/P8v3cvwHVclRhk0Oh29gUk2CwR1IIbDgsoflCe2eyvT8CUQGACmPGr2ZKIfK2E
+         cOHtpSvXSbVwJW1fDBX5YOIoPmZCIAyjGGtfUT+YQ8esYx8cm8OGLJ/e2S7zO1WLDLVs
+         8F7Q==
+X-Gm-Message-State: ACgBeo3FE7zQemnMXW3aabI8Jus79kJoKw5TrDz3XYYFljr+tNEW+zvb
+        C7lxCUzjqENqZlbnw1cvyxwCygHwA1Ad
+X-Google-Smtp-Source: AA6agR4uUgDd/+U54aisjGd42CsqA7eYed/AKyUrKuesNWvHwO2T7cy58ZG7JxjlpX2p90jcd0327ukTJqjp
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7dbd:c08f:de81:c2a3])
+ (user=irogers job=sendgmr) by 2002:a25:4a06:0:b0:695:c6a0:c8e1 with SMTP id
+ x6-20020a254a06000000b00695c6a0c8e1mr10110095yba.181.1661315914190; Tue, 23
+ Aug 2022 21:38:34 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 21:38:25 -0700
+Message-Id: <20220824043825.322827-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
+Subject: [PATCH] perf sched: Fix memory leaks in __cmd_record
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,161 +72,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On sync wakeup, waker is about to sleep, and if it is the only
-running task, wakee can get warm data on waker's cpu.
+An array of strings is passed to cmd_record but not freed. As
+cmd_record modifies the array, add another array as a copy that can be
+mutated allowing the original array contents to all be freed.
 
-Unixbench, schbench, and hackbench are tested on
-Intel(R) Xeon(R) Platinum 8163 CPU @ 2.50GHz (192 logic CPUs)
+Detected with -fsanitize=address.
 
-Unixbench get +20.7% improvement with full threads mainly
-because of the pipe-based context switch and fork test.
-
-No obvious impact on schbench.
-
-This change harms hackbench with lower concurrency, while gets improvement
-when concurrency increases.
-
-Unixbench: ./Run
-(Higher score is better)
-(One thread)				   /o patch   w/ patch
-
-Dhrystone 2 using register variables         2666.8     2689.7    +0.9%
-Double-Precision Whetstone                   1040.0     1040.4     0.0%
-Execl Throughput                              979.1      981.7    +0.3%
-File Copy 1024 bufsize 2000 maxblocks        2892.8     2904.2    -0.4%
-File Copy 256 bufsize 500 maxblocks          1885.6     1887.6    +0.1%
-File Copy 4096 bufsize 8000 maxblocks        5850.2     5881.4    +0.5%
-Pipe Throughput                              1533.0     1542.4    +0.6%
-Pipe-based Context Switching                  541.3      769.3   +42.1%
-Process Creation                              579.6      573.6    -1.0%
-Shell Scripts (1 concurrent)                 1777.1     1727.7    -2.8%
-Shell Scripts (8 concurrent)                 5596.4     5426.5    +3.0%
-System Call Overhead                         1217.2     1213.8    +0.3%
-                                           ========   ========
-System Benchmarks Index Score                1679.7     1723.3    +2.6%
-
-(192 full threads)		          w/o patch    w/ patch
-
-Dhrystone 2 using register variables       367559.1    356451.8    -3.0%
-Double-Precision Whetstone                 172899.3    172906.7     0.0%
-Execl Throughput                             4112.6      4228.2    +2.8%
-File Copy 1024 bufsize 2000 maxblocks         972.3       993.8    +2.2%
-File Copy 256 bufsize 500 maxblocks           578.4       570.1    +1.4%
-File Copy 4096 bufsize 8000 maxblocks        2020.9      1951.4    -3.4%
-Pipe Throughput                            179361.6    179381.0     0.0%
-Pipe-based Context Switching                 7818.4     83949.3  +973.7%
-Process Creation                             4008.6      4419.6   +10.3%
-Shell Scripts (1 concurrent)                17632.9     18370.2    +4.1%
-Shell Scripts (8 concurrent)                16811.1     17525.5    +4.2%
-System Call Overhead                         1599.2      1658.7    +3.7%
-                                           ========    ========
-System Benchmarks Index Score                9807.1     12139.2   +20.7%
-
-./schbench -m 12 -t 16 -r 10
-w/o patch:
-Latency percentiles (usec)
-        50.0th: 21 (5282 samples)
-        75.0th: 29 (2549 samples)
-        90.0th: 36 (1561 samples)
-        95.0th: 39 (464 samples)
-        *99.0th: 48 (397 samples)
-        99.5th: 53 (53 samples)
-        99.9th: 83 (40 samples)
-        min=1, max=6341
-
-w/ patch:
-Latency percentiles (usec)
-        50.0th: 22 (5395 samples)
-        75.0th: 30 (2392 samples)
-        90.0th: 36 (1622 samples)
-        95.0th: 39 (509 samples)
-        *99.0th: 46 (345 samples)
-        99.5th: 51 (37 samples)
-        99.9th: 124 (41 samples)
-        min=1, max=2197
-
-./hackbench -g $1 --thread --pipe -l 6000
-(less time is better)
-
-		  w/o patch			 w/ patch
-grp
-1	0.194   (+/- 5.96%)  		0.400 (+/- 4.50%)	+106.2%
-2	0.418   (+/- 2.17%)  	        0.491 (+/- 5.69%)        +17.5%
-4	0.520   (+/- 8.62%)             0.462 (+/- 2.31%)	 -11.1%
-8	0.539   (+/- 2.50%)             0.514 (+/- 2.75%)	  -4.6%
-16     10.825  (+/- 10.61%)             9.556 (+/- 7.06%)	 -11.7%
-32      5.464   (+/- 0.56%)             5.537 (+/- 0.05%)	  +1.3%
-64	9.007   (+/- 0.93%)             8.293 (+/- 3.00%)	  -7.9%
-128	9.616   (+/- 3.02%)             8.470 (+/- 4.12%)	 -11.9%
-256    14.278   (+/- 9.87%)            12.330 (+/- 5.39%)	 -13.6%
-
-Signed-off-by: Peng Wang <rocking@linux.alibaba.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- kernel/sched/fair.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ tools/perf/builtin-sched.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 914096c5b1ae..41ceb8581d36 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -776,7 +776,7 @@ static u64 sched_vslice(struct cfs_rq *cfs_rq, struct sched_entity *se)
- #include "pelt.h"
- #ifdef CONFIG_SMP
- 
--static int select_idle_sibling(struct task_struct *p, int prev_cpu, int cpu);
-+static int select_idle_sibling(struct task_struct *p, int prev_cpu, int cpu, int sync_affine);
- static unsigned long task_h_load(struct task_struct *p);
- static unsigned long capacity_of(int cpu);
- 
-@@ -6515,7 +6515,7 @@ static inline bool asym_fits_capacity(unsigned long task_util, int cpu)
- /*
-  * Try and locate an idle core/thread in the LLC cache domain.
-  */
--static int select_idle_sibling(struct task_struct *p, int prev, int target)
-+static int select_idle_sibling(struct task_struct *p, int prev, int target, int sync_affine)
+diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+index 2f6cd1b8b662..59ba14d2321c 100644
+--- a/tools/perf/builtin-sched.c
++++ b/tools/perf/builtin-sched.c
+@@ -3355,7 +3355,8 @@ static bool schedstat_events_exposed(void)
+ static int __cmd_record(int argc, const char **argv)
  {
- 	bool has_idle_core = false;
- 	struct sched_domain *sd;
-@@ -6536,7 +6536,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	unsigned int rec_argc, i, j;
+-	const char **rec_argv;
++	char **rec_argv;
++	const char **rec_argv_copy;
+ 	const char * const record_args[] = {
+ 		"record",
+ 		"-a",
+@@ -3384,6 +3385,7 @@ static int __cmd_record(int argc, const char **argv)
+ 		ARRAY_SIZE(schedstat_args) : 0;
+ 
+ 	struct tep_event *waking_event;
++	int ret;
+ 
+ 	/*
+ 	 * +2 for either "-e", "sched:sched_wakeup" or
+@@ -3391,14 +3393,15 @@ static int __cmd_record(int argc, const char **argv)
  	 */
- 	lockdep_assert_irqs_disabled();
+ 	rec_argc = ARRAY_SIZE(record_args) + 2 + schedstat_argc + argc - 1;
+ 	rec_argv = calloc(rec_argc + 1, sizeof(char *));
++	rec_argv_copy = calloc(rec_argc + 1, sizeof(char *));
  
--	if ((available_idle_cpu(target) || sched_idle_cpu(target)) &&
-+	if ((available_idle_cpu(target) || sched_idle_cpu(target) || sync_affine) &&
- 	    asym_fits_capacity(task_util, target))
- 		return target;
+-	if (rec_argv == NULL)
++	if (rec_argv == NULL || rec_argv_copy == NULL)
+ 		return -ENOMEM;
  
-@@ -7017,7 +7017,7 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
- 	struct sched_domain *tmp, *sd = NULL;
- 	int cpu = smp_processor_id();
- 	int new_cpu = prev_cpu;
--	int want_affine = 0;
-+	int want_affine = 0, sync_affine = 0;
- 	/* SD_flags and WF_flags share the first nibble */
- 	int sd_flag = wake_flags & 0xF;
+ 	for (i = 0; i < ARRAY_SIZE(record_args); i++)
+ 		rec_argv[i] = strdup(record_args[i]);
  
-@@ -7046,6 +7046,12 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
- 		 */
- 		if (want_affine && (tmp->flags & SD_WAKE_AFFINE) &&
- 		    cpumask_test_cpu(prev_cpu, sched_domain_span(tmp))) {
-+			/*
-+			 * If waker is the only running task and about to sleep,
-+			 * there may be some data ready for wakee on this cpu.
-+			 */
-+			if (sched_feat(WA_IDLE) && sync && cpu_rq(cpu)->nr_running == 1)
-+				sync_affine = 1;
- 			if (cpu != prev_cpu)
- 				new_cpu = wake_affine(tmp, p, cpu, prev_cpu, sync);
+-	rec_argv[i++] = "-e";
++	rec_argv[i++] = strdup("-e");
+ 	waking_event = trace_event__tp_format("sched", "sched_waking");
+ 	if (!IS_ERR(waking_event))
+ 		rec_argv[i++] = strdup("sched:sched_waking");
+@@ -3409,11 +3412,19 @@ static int __cmd_record(int argc, const char **argv)
+ 		rec_argv[i++] = strdup(schedstat_args[j]);
  
-@@ -7069,7 +7075,7 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
- 		new_cpu = find_idlest_cpu(sd, p, cpu, prev_cpu, sd_flag);
- 	} else if (wake_flags & WF_TTWU) { /* XXX always ? */
- 		/* Fast path */
--		new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
-+		new_cpu = select_idle_sibling(p, prev_cpu, new_cpu, sync_affine);
- 	}
- 	rcu_read_unlock();
+ 	for (j = 1; j < (unsigned int)argc; j++, i++)
+-		rec_argv[i] = argv[j];
++		rec_argv[i] = strdup(argv[j]);
  
+ 	BUG_ON(i != rec_argc);
+ 
+-	return cmd_record(i, rec_argv);
++	memcpy(rec_argv_copy, rec_argv, sizeof(char*) * rec_argc);
++	ret = cmd_record(rec_argc, rec_argv_copy);
++
++	for (i = 0; i < rec_argc; i++)
++		free(rec_argv[i]);
++	free(rec_argv);
++	free(rec_argv_copy);
++
++	return ret;
+ }
+ 
+ int cmd_sched(int argc, const char **argv)
 -- 
-2.27.0
+2.37.2.609.g9ff673ca1a-goog
 

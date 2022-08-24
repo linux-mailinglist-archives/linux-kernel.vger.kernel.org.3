@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1697D59F2B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 06:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EC259F2B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 06:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234290AbiHXEik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 00:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S234314AbiHXElU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 00:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiHXEih (ORCPT
+        with ESMTP id S232848AbiHXElR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 00:38:37 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5B87DF5B
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:38:34 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-336c3b72da5so267961657b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:38:34 -0700 (PDT)
+        Wed, 24 Aug 2022 00:41:17 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB678768F
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:41:16 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id l26so6305627uai.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 21:41:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=3opLk4Oz93lm77lsPTBWHBXIaH3afs5uHa/1mKNusGU=;
-        b=PctrHBniebv3hCjyLQ/5fSwmIVjcOOdCc30ReMbNTAzpDzM8H6J4TyM5Q9Y+PLbJ6e
-         JWUBxLGHfwoQIKNTvAEekL2u6Wx8QQAqvhHl2PwJbBPgJx1riqGt1ef66Vfznfnp+k2b
-         Q7+yynShR+LtUQYVLK+PSQ6PxEyMqS86bMY7fO4fgibOgamEGhRP6/Eq6DHcb1IxCJKR
-         iqTPUdlgWFwrY6qGykUmbKC7WigW2cba9zOwlmz0b//n9X63AIsBf7kaRm3V3iq/r5XZ
-         RfBdtIpRzMxE7KBYL54weUCMdD3IqBBoJ9DhPLMfNYz3EGPotmSbwRIL2nMVY23wpkXw
-         462Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=jyM+DlYcD9A/G8Fef/I8BBdoma6QXrqxs0cWoQwzDvA=;
+        b=G943f1VIXrxzd6Yqo1a5RZqUIYTZtThxytht4j4A8ST85FUeyioHc5A5vVEVXWqNlN
+         bsTh6H8CHuPmMzFL+ycXagq80aRfZ6DM1R40CwZBVb4KddxhaEVLW3XQS6sZmYGyUikV
+         O0gkLM4Mqtg0UVWWAUYebTu3+I8I5FQ9lAwZJDqVykdo3ChiJS0/eBUDMmw+HaIT6wCj
+         C0uPkt1ZwqUHFP16yRAQZZW1MTkLoCq7iy4V1YyV7BpjUxk5AzWD6hCCU7/TlYw4BaBM
+         Q8UY7WpPtQJu8SqIyOaFAlpSH9bqOpredDgM8jK1MCAil9a8s1olFRdk4ir/Yi//HziZ
+         zpFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=3opLk4Oz93lm77lsPTBWHBXIaH3afs5uHa/1mKNusGU=;
-        b=umaFRhBvVV+pxR/buG2I4GsIMd6u8JOU3rNRTwZbn/PWXU7viMPiTh2VErU7X9s64H
-         Er389c6jnCU9KhHrHi7jICa4t+aRIOccHtVxG9pQEAyJN8YTyoLAqggLIE8RtYEC7/2D
-         YH1EipcB+G1ftiVb+SF4QS9CZIeG2JcX8spnP57Pdr6RY6rsQhs1wblA3MYZv9x36AC6
-         L0ShE/P8v3cvwHVclRhk0Oh29gUk2CwR1IIbDgsoflCe2eyvT8CUQGACmPGr2ZKIfK2E
-         cOHtpSvXSbVwJW1fDBX5YOIoPmZCIAyjGGtfUT+YQ8esYx8cm8OGLJ/e2S7zO1WLDLVs
-         8F7Q==
-X-Gm-Message-State: ACgBeo3FE7zQemnMXW3aabI8Jus79kJoKw5TrDz3XYYFljr+tNEW+zvb
-        C7lxCUzjqENqZlbnw1cvyxwCygHwA1Ad
-X-Google-Smtp-Source: AA6agR4uUgDd/+U54aisjGd42CsqA7eYed/AKyUrKuesNWvHwO2T7cy58ZG7JxjlpX2p90jcd0327ukTJqjp
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7dbd:c08f:de81:c2a3])
- (user=irogers job=sendgmr) by 2002:a25:4a06:0:b0:695:c6a0:c8e1 with SMTP id
- x6-20020a254a06000000b00695c6a0c8e1mr10110095yba.181.1661315914190; Tue, 23
- Aug 2022 21:38:34 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 21:38:25 -0700
-Message-Id: <20220824043825.322827-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH] perf sched: Fix memory leaks in __cmd_record
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=jyM+DlYcD9A/G8Fef/I8BBdoma6QXrqxs0cWoQwzDvA=;
+        b=H6FSofbhhOx5vDZ6EN4nSXmG5U+aFOcO+yt0TvhQy2OJg1oToPoqByVCEHpjUzDa86
+         DJvpJszIZAhi1CMlsrGR5Hs0g4QFT4ol2ozg16dntqASuPO2LQu2NrvVM7aM5A3tiq6K
+         kvCvVfFPkH1RpHQhyWjsVBfUEDuoT2QMS0DhwLsDRv3h7hc4p0apN9alStMi9qZvT2wk
+         tCxoJhgjHTRBcXqW/fHSWAQmxkoPC42Rujw0Incvp/sSzleeSug7KnlNugfB5WBHZFSG
+         2Q+6LDtGhxQn2GMxWcEAIZ3XxRvqM4hJ2AeEolOC3XN95wbckJKDz1R5cTPWkpWyHHSB
+         s8xw==
+X-Gm-Message-State: ACgBeo3uOIbCKmvZgTYQdvxfMfZPzjs34Ggsu9aqnvVCpz9BBGKKAPgY
+        Cyn0J8StAzBdt2pT5XqZShvz66M4o7ycwALJKV0IOw==
+X-Google-Smtp-Source: AA6agR6FQESuZ0FBhtQMo50aezoe4eGpFObkOCwhnBfWh3vCD76M7IOJXr3j5BRZaSgdisrFo3s/rl07WBmwp8DzqGk=
+X-Received: by 2002:ab0:3b09:0:b0:39a:82bc:88e5 with SMTP id
+ n9-20020ab03b09000000b0039a82bc88e5mr10792971uaw.26.1661316075879; Tue, 23
+ Aug 2022 21:41:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220824041933.822838-1-joefradley@google.com>
+In-Reply-To: <20220824041933.822838-1-joefradley@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 24 Aug 2022 12:41:04 +0800
+Message-ID: <CABVgOSki72Yqb1DBSCgi-qk+FbNniL4GX+19MXwq=K9VEzAyoA@mail.gmail.com>
+Subject: Re: [PATCH v2] tools: Add new "test" taint to kernel-chktaint
+To:     Joe Fradley <joefradley@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Jonathan Corbet <corbet@lwn.net>, kernel-team@android.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000093b46c05e6f54a38"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,79 +73,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An array of strings is passed to cmd_record but not freed. As
-cmd_record modifies the array, add another array as a copy that can be
-mutated allowing the original array contents to all be freed.
+--00000000000093b46c05e6f54a38
+Content-Type: text/plain; charset="UTF-8"
 
-Detected with -fsanitize=address.
+On Wed, Aug 24, 2022 at 12:19 PM Joe Fradley <joefradley@google.com> wrote:
+>
+> Commit c272612cb4a2 ("kunit: Taint the kernel when KUnit tests are run")
+> added a new taint flag for when in-kernel tests run. This commit adds
+> recognition of this new flag in kernel-chktaint.
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Signed-off-by: Joe Fradley <joefradley@google.com>
+> ---
+> Changes in v2:
+> - based off of kselftest/kunit branch
+> - Added David's Reviewed-by tag
+>
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/builtin-sched.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+This still looks good to me.
 
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index 2f6cd1b8b662..59ba14d2321c 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -3355,7 +3355,8 @@ static bool schedstat_events_exposed(void)
- static int __cmd_record(int argc, const char **argv)
- {
- 	unsigned int rec_argc, i, j;
--	const char **rec_argv;
-+	char **rec_argv;
-+	const char **rec_argv_copy;
- 	const char * const record_args[] = {
- 		"record",
- 		"-a",
-@@ -3384,6 +3385,7 @@ static int __cmd_record(int argc, const char **argv)
- 		ARRAY_SIZE(schedstat_args) : 0;
- 
- 	struct tep_event *waking_event;
-+	int ret;
- 
- 	/*
- 	 * +2 for either "-e", "sched:sched_wakeup" or
-@@ -3391,14 +3393,15 @@ static int __cmd_record(int argc, const char **argv)
- 	 */
- 	rec_argc = ARRAY_SIZE(record_args) + 2 + schedstat_argc + argc - 1;
- 	rec_argv = calloc(rec_argc + 1, sizeof(char *));
-+	rec_argv_copy = calloc(rec_argc + 1, sizeof(char *));
- 
--	if (rec_argv == NULL)
-+	if (rec_argv == NULL || rec_argv_copy == NULL)
- 		return -ENOMEM;
- 
- 	for (i = 0; i < ARRAY_SIZE(record_args); i++)
- 		rec_argv[i] = strdup(record_args[i]);
- 
--	rec_argv[i++] = "-e";
-+	rec_argv[i++] = strdup("-e");
- 	waking_event = trace_event__tp_format("sched", "sched_waking");
- 	if (!IS_ERR(waking_event))
- 		rec_argv[i++] = strdup("sched:sched_waking");
-@@ -3409,11 +3412,19 @@ static int __cmd_record(int argc, const char **argv)
- 		rec_argv[i++] = strdup(schedstat_args[j]);
- 
- 	for (j = 1; j < (unsigned int)argc; j++, i++)
--		rec_argv[i] = argv[j];
-+		rec_argv[i] = strdup(argv[j]);
- 
- 	BUG_ON(i != rec_argc);
- 
--	return cmd_record(i, rec_argv);
-+	memcpy(rec_argv_copy, rec_argv, sizeof(char*) * rec_argc);
-+	ret = cmd_record(rec_argc, rec_argv_copy);
-+
-+	for (i = 0; i < rec_argc; i++)
-+		free(rec_argv[i]);
-+	free(rec_argv);
-+	free(rec_argv_copy);
-+
-+	return ret;
- }
- 
- int cmd_sched(int argc, const char **argv)
--- 
-2.37.2.609.g9ff673ca1a-goog
+Unless anyone objects, I guess we'll take this through the KUnit
+branch (which, after all, is where the taint was originally added).
+I've added it to the list for 6.1, but it technically could be
+considered a fix for 6.0 as well.
 
+Cheers,
+-- David
+
+>  tools/debugging/kernel-chktaint | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/tools/debugging/kernel-chktaint b/tools/debugging/kernel-chktaint
+> index f1af27ce9f20..279be06332be 100755
+> --- a/tools/debugging/kernel-chktaint
+> +++ b/tools/debugging/kernel-chktaint
+> @@ -187,6 +187,7 @@ else
+>         echo " * auxiliary taint, defined for and used by distros (#16)"
+>
+>  fi
+> +
+>  T=`expr $T / 2`
+>  if [ `expr $T % 2` -eq 0 ]; then
+>         addout " "
+> @@ -195,6 +196,14 @@ else
+>         echo " * kernel was built with the struct randomization plugin (#17)"
+>  fi
+>
+> +T=`expr $T / 2`
+> +if [ `expr $T % 2` -eq 0 ]; then
+> +       addout " "
+> +else
+> +       addout "N"
+> +       echo " * an in-kernel test (such as a KUnit test) has been run (#18)"
+> +fi
+> +
+>  echo "For a more detailed explanation of the various taint flags see"
+>  echo " Documentation/admin-guide/tainted-kernels.rst in the Linux kernel sources"
+>  echo " or https://kernel.org/doc/html/latest/admin-guide/tainted-kernels.html"
+> --
+> 2.37.1.595.g718a3a8f04-goog
+>
+
+--00000000000093b46c05e6f54a38
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDL
+jRsIlJhHPhSYlcrBO1Psk79xQJDmlE8lbUEXzZXK2TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MjQwNDQxMTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAU8OtJ/GXgv8cMfCyCVYt
+OW/VsbZUcd+376MVa/NVmtFULAdfu+LP7RanS6z7oLPAuyHCC52oNPZ+pJnOyEMbvIOXrWydiFsi
+MDQELPhfpbO4+KUNOQmz422Mld2R6UsMMPGNEJ3ych87hWRfw+fL1GYgkHvBZfomfIDz9fbHyGgz
+kSDVFM20kqs6BOAmCTVQoEheMmbO/Zg60AS7NYxmOWu5GHikvCHmdTRA+u0yLYur4e0BoKs5Zc0+
+Okh9NM0sYn9v6kQuK7LD06kHvQamDlVSZaK0U9/KnuGgENyn5PRonpOoWkPadchr7C6sYYMq0QZ8
+HSQ2+uez/LrVHQQKIA==
+--00000000000093b46c05e6f54a38--

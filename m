@@ -2,155 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FB05A0218
+	by mail.lfdr.de (Postfix) with ESMTP id B19A05A021A
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238958AbiHXT3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 15:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S235764AbiHXT30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 15:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236263AbiHXT3C (ORCPT
+        with ESMTP id S239798AbiHXT3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 15:29:02 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA0E78BC5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 12:29:00 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id k22so2678966ljg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 12:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ud6LSmJPhrEe1O3tH9bfACVlWJ+Fj1pwj346rUu8aFw=;
-        b=Z2jM1L6bkJVPjP2DKAJljcsyrOOrVaGqJLAqzlKrZ639M1ou4W+gt6VEnZfM9GIMCF
-         SeUBSTwTEy/ugCEIoJSMg5gpQiXV/YW8/zFDEiaz/lWm7DXElQFdhc17HKi9O+Y2CZkL
-         LhgOKoPXstdnGWEeMhiyY+aOF3HfM663rHuZK+6w6NIL9v3qCSiPAEZX+aiF0FQg3jWf
-         pv7cfJk+q0TMm2WecwsV5HTEjCEihc3UL8NuZ65x8xj93UAjZQQwIdmU3F/yvrkvP4aa
-         azCkdsSTY4R3TVzoCkUDFq7dX8KwGtjjKyO7z02ZdXK1aG1zPFzRiwWJpd0Ss4+9b9BD
-         INIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ud6LSmJPhrEe1O3tH9bfACVlWJ+Fj1pwj346rUu8aFw=;
-        b=ZOKHGRwoo4ATllpmWZ/mSnDS8SX5ektzHJDprq6c8D5gArPb/pkxwIsIw4QYf9kNB4
-         aSvWMcVzsm4e2LmOZBBXBCwjUO2JS5wxFwa0/p+RervxormO3x3GumpoYZ2lZntDlMg3
-         12r+Zlkb07a/r9SE1BvEBnkatGnTwm0La9YOgIOSdrmdS5mdhJEbRXpHjBzM1JfpMxN/
-         7ZaSChmcDTn+xp0pWY6DdkidFrUtuDTS9PN05dBCqphasMa4a+JlqqAJx9PKuS9W5LaX
-         g+2SbhZaFEQcsW/FsUXP+lfBdT5sOaM5axwIdS/GQCRvFNw9MH/e7WIT+u9ZlZhD3f3/
-         psaQ==
-X-Gm-Message-State: ACgBeo1XGvHtoMe3huKUZmk1TnJOe6ggwnm4CC2uuS14+YXXYMltkK3j
-        fVViP3JZ3kClVWy2plWw0QYKAj+62UAOpYxIY44TLA==
-X-Google-Smtp-Source: AA6agR6qzB+SDh82GOibU+ibPmxm9norlNaWBI74hZciCbfvsiOsZDachVztTY0d9cfRDTTu6O2cHU/LynXQAo0SUJw=
-X-Received: by 2002:a2e:9ad2:0:b0:261:cbdd:1746 with SMTP id
- p18-20020a2e9ad2000000b00261cbdd1746mr181526ljj.486.1661369338801; Wed, 24
- Aug 2022 12:28:58 -0700 (PDT)
+        Wed, 24 Aug 2022 15:29:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D3178BED
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 12:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661369357;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1madC+R9UQ0sdGYZ6Rb4RFre0WnX4XbXDajpRgvIHys=;
+        b=Q0jxUF2qt4yNu/r52wJPQbO2WNwefbiwbf7edZM2dDYYK4oWre6oyt1Wfw6S34IG/Ml941
+        xdrjOvkrpoZ7UGI2jiO61kcddkTVLv40pdA+7cgli81xcEzpz07XLDsXOnnH9sBUowfRb0
+        wh6VSG0BDfwBb3JjWQz6qzI5XjbydDU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-79-pGYwyQFlM8qip7dsuiawMg-1; Wed, 24 Aug 2022 15:29:16 -0400
+X-MC-Unique: pGYwyQFlM8qip7dsuiawMg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E132A18A6507;
+        Wed, 24 Aug 2022 19:29:15 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 517FB492C3B;
+        Wed, 24 Aug 2022 19:29:15 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Subject: [PATCH] dmaengine: idxd: Set workqueue state to disabled before trying to re-enable
+Date:   Wed, 24 Aug 2022 12:29:13 -0700
+Message-Id: <20220824192913.2425634-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-44-brijesh.singh@amd.com> <CAAH4kHYm1BhjJXUMH12kzR0Xun=fUTj-3Hy6At0XR_09Bf0Ccw@mail.gmail.com>
-In-Reply-To: <CAAH4kHYm1BhjJXUMH12kzR0Xun=fUTj-3Hy6At0XR_09Bf0Ccw@mail.gmail.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Wed, 24 Aug 2022 13:28:47 -0600
-Message-ID: <CAMkAt6oKQ3CnmNdrJLMWreExkN56t9vs=B883_JD+HtiNYw9HA@mail.gmail.com>
-Subject: Re: [PATCH v12 43/46] virt: Add SEV-SNP guest driver
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:X86 KVM CPUs" <kvm@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Marc Orr <marcorr@google.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:01 PM Dionna Amalie Glaze
-<dionnaglaze@google.com> wrote:
->
-> Apologies for the necropost, but I noticed strange behavior testing my
-> own Golang-based wrapper around the /dev/sev-guest driver.
->
-> > +
-> > +static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
-> > +                               u8 type, void *req_buf, size_t req_sz, void *resp_buf,
-> > +                               u32 resp_sz, __u64 *fw_err)
-> > +{
-> > +       unsigned long err;
-> > +       u64 seqno;
-> > +       int rc;
-> > +
-> > +       /* Get message sequence and verify that its a non-zero */
-> > +       seqno = snp_get_msg_seqno(snp_dev);
-> > +       if (!seqno)
-> > +               return -EIO;
-> > +
-> > +       memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
-> > +
-> > +       /* Encrypt the userspace provided payload */
-> > +       rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
-> > +       if (rc)
-> > +               return rc;
-> > +
-> > +       /* Call firmware to process the request */
-> > +       rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-> > +       if (fw_err)
-> > +               *fw_err = err;
-> > +
-> > +       if (rc)
-> > +               return rc;
-> > +
->
-> The fw_err is written back regardless of rc, so since err is
-> uninitialized, you can end up with garbage written back. I've worked
-> around this by only caring about fw_err when the result is -EIO, but
-> thought that I should bring this up.
+For a software reset idxd_device_reinit() is called, which will walk
+the device workqueues to see which ones were enabled, and try to
+re-enable them. It keys off wq->state being iDXD_WQ_ENABLED, but the
+first thing idxd_enable_wq() will do is see that the state of the
+workqueue is enabled, and return 0 instead of attempting to issue
+a command to enable the workqueue.
 
-I also noticed that we use a u64 in snp_guest_request_ioctl.fw_err and
-u32 in sev_issue_cmd.error when these should be errors from the
-sev_ret_code enum IIUC.
+So once a workqueue is found that needs to be re-enabled,
+set the state to disabled prior to calling idxd_enable_wq().
+This would accurately reflect the state if the enable fails
+as well.
 
-We can fix snp_issue_guest_request() to set |fw_err| to zero when it
-returns 0 but what should we return to userspace if we encounter an
-error that prevents the FW from even being called? In ` crypto: ccp -
-Ensure psp_ret is always init'd in __sev_platform_init_locked()` we
-set the return to -1 so we could continue that convection here and
-better codify it in the sev_ret_code enum.
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Fixes: bfe1d56091c1 ("dmaengine: idxd: Init and probe for Intel data accelerators")
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/dma/idxd/irq.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->
-> --
-> -Dionna Glaze, PhD (she/her)
+diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
+index 743ead5ebc57..723eeb5328d6 100644
+--- a/drivers/dma/idxd/irq.c
++++ b/drivers/dma/idxd/irq.c
+@@ -52,6 +52,7 @@ static void idxd_device_reinit(struct work_struct *work)
+ 		struct idxd_wq *wq = idxd->wqs[i];
+ 
+ 		if (wq->state == IDXD_WQ_ENABLED) {
++			wq->state = IDXD_WQ_DISABLED;
+ 			rc = idxd_wq_enable(wq);
+ 			if (rc < 0) {
+ 				dev_warn(dev, "Unable to re-enable wq %s\n",
+-- 
+2.37.2
+

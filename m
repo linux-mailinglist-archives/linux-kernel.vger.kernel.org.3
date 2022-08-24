@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72FF59F66B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B28959F631
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbiHXJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S235502AbiHXJ30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236401AbiHXJga (ORCPT
+        with ESMTP id S233776AbiHXJ3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:36:30 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C26D95E78
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:36:26 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3246910dac3so444891357b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=aqKb1J0sUYKRxFSx8BTKcr3FtUOkogBHLhJ4EzMaqDI=;
-        b=frLiu8gAjQ0kpxVUy9iux+0KZBGaas40KedmyZg1S18F99UNtbnKu4hhRcDttjsiJd
-         0CwO3QisP0/EAOdV209Ke7wOk79MP83THWvb1oOu8ufAVd3wpqg8eBBxrJaXcD7lG8M2
-         QCkTI9ixDBfjW6AfbuxNQqr+KvY7jj9h7ZgpA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=aqKb1J0sUYKRxFSx8BTKcr3FtUOkogBHLhJ4EzMaqDI=;
-        b=CoTW6kkUTfv7A1Cay69Fun1PcqKn0Fa+GQ5Jlv0n1A9DqHA3ulPaANPeLNX6Fz2G1n
-         QPDyMErazy46zNCqyXDbYCpv/EdGq/LTnNo37HPqEGPh4DX6RE+Nl3tmKunii4NfIrqJ
-         ASka4r/FjfRksOoa8uM54jnlBnwnq8Px1/b6meIbj62QFRZwEhkTF6Pu9c7gV0kej6JN
-         cpoy0LHbQcJHS/Z6sH6uXGIl5iwrkbiGi+tKiidKPHbZhAvmTCNtUUiHNHrZWtntgr7K
-         27SoBrtN82ltWcILmUVabqaBebIeMzTNFIAJ77387vktz/XfK9PwKqJEaWw8jrKI9Kft
-         1RdQ==
-X-Gm-Message-State: ACgBeo35PFv8ruGSJ/xDzeO84oMtlkoBj5hDiDcHrE+zSnm9U04MiNFe
-        Ee99hsaz+uDcXfePp3lXcmz52KA5HbRHeE8/BVTjSQ==
-X-Google-Smtp-Source: AA6agR5u4zZdD5BUdh1+uP1ur82Idc4dh5due5UwgX6YLLUPiWMyvuRnCFUobBbL4xkzsp3eJyxT/mfgO5BtEv9ddcc=
-X-Received: by 2002:a0d:d897:0:b0:33d:1aa7:2425 with SMTP id
- a145-20020a0dd897000000b0033d1aa72425mr11107499ywe.224.1661333785427; Wed, 24
- Aug 2022 02:36:25 -0700 (PDT)
+        Wed, 24 Aug 2022 05:29:23 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFAB844CA;
+        Wed, 24 Aug 2022 02:29:22 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MCLLk3lYZzQwNg;
+        Wed, 24 Aug 2022 17:26:06 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 17:29:20 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
+ 2022 17:29:20 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-parisc@vger.kernel.org>
+CC:     <liqiong@nfschina.com>, <deller@gmx.de>
+Subject: [PATCH -next] parisc: ccio-dma: Add missing iounmap in error path in ccio_probe()
+Date:   Wed, 24 Aug 2022 17:36:57 +0800
+Message-ID: <20220824093657.3365027-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
- <YvBK/8yeohLhu2Za@google.com> <BY5PR04MB6327431615BFFFD735EB2502ED6B9@BY5PR04MB6327.namprd04.prod.outlook.com>
-In-Reply-To: <BY5PR04MB6327431615BFFFD735EB2502ED6B9@BY5PR04MB6327.namprd04.prod.outlook.com>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Wed, 24 Aug 2022 19:36:14 +1000
-Message-ID: <CAONX=-cXDcekWznHf6h1WwtJfELyFxSPAZ4bnA5t3xOrmUQZ5Q@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size function
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Cc:     "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        Avi Shchislowski <Avi.Shchislowski@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Daniil Lunev <dlunev@chromium.org>
+Add missing iounmap() before return from ccio_probe(), if ccio_init_resources()
+fails.
+
+Fixes: d46c742f827f ("parisc: ccio-dma: Handle kmalloc failure in ccio_init_resources()")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/parisc/ccio-dma.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
+index f223afe47d10..a66386043aa6 100644
+--- a/drivers/parisc/ccio-dma.c
++++ b/drivers/parisc/ccio-dma.c
+@@ -1546,6 +1546,7 @@ static int __init ccio_probe(struct parisc_device *dev)
+ 	}
+ 	ccio_ioc_init(ioc);
+ 	if (ccio_init_resources(ioc)) {
++		iounmap(ioc->ioc_regs);
+ 		kfree(ioc);
+ 		return -ENOMEM;
+ 	}
+-- 
+2.25.1
+

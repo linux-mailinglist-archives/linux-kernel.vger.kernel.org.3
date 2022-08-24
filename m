@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4DC5A04D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2263F5A04D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbiHXXoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 19:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
+        id S229569AbiHXXuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 19:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiHXXn5 (ORCPT
+        with ESMTP id S229490AbiHXXuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 19:43:57 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BB17F11F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661384636; x=1692920636;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5JSha+aKJzOjucXhnTBEdqAuhvfknuGNhuc9Esd3yIA=;
-  b=bFx09EIzXc5rgP7cG//QbdNQOSEyjN4pxFaaQYgvNTLxR9vCVNqQrT3w
-   BU0+zhH1cKDS4NwF0hrcSbeHHYHhTU5bC2uwyyAqWBJ2W9hVqDTNGhYbA
-   YAOxiJJfc1AaU4wS37g5fxQPF9Xu0f/w3fxAuBD7+U/8YrR7DWErDIHv5
-   GK+bXvWC2yeAg20IiosO17XlayrIc7JgiO5aL2SL0Sru7JPs/1YEduJFU
-   Jupho2qO5ldOeWLCry0pTM1nJbRctpdFmRXdI/7kSPwdN2+kV8i9nG9BS
-   t7T5XmHgJPMOVXb6eQp71WcS1afMxFgKRjK+ZRSUkjmXs981NYvu4TxCz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="355828331"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="355828331"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 16:43:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="643041806"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 24 Aug 2022 16:43:55 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oR02M-0001Ov-1P;
-        Wed, 24 Aug 2022 23:43:54 +0000
-Date:   Thu, 25 Aug 2022 07:43:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/fscache-fixes 1/4]
- security/selinux/hooks.c:2772:45: warning: variable 'root_isec' set but not
- used
-Message-ID: <202208250749.ugs8aIcf-lkp@intel.com>
+        Wed, 24 Aug 2022 19:50:14 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05EAE0F3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id p13so5678733pld.6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Rtwz6fTrcBg1TFOL4QPsRuemhonZKT/5mDP1AugotzM=;
+        b=E7AVGBdju1UilU2hXPAD9L9HDIi8n4+7AYJ4RUcSBRnETl2cJwY+/KYkuRgm9hjPxq
+         5sJeOck29St3C8/W/HJNzpu90bBcuMtKeoAxYdB1ONfwbA+3opFpQdjIsMWUue28wonP
+         reaMSiF8olj9of04DketTD+5jIg69xEPL4dzNbo56JQmiAcjkQlxK9B7yJnSW/jFX/6c
+         XB+5P1f1Gs0cjTJ5gdnmBD2Td+Hmp0GlikNorn79ayUxu99bTuzp/YY7ajNFjIA4CO7C
+         UjCIcYx+FTpVEUT/+/E1jqkzZYkS2fq84cw4HBhShBBfE/jPEJI//fqKpq4X9WOOYBrf
+         +5ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Rtwz6fTrcBg1TFOL4QPsRuemhonZKT/5mDP1AugotzM=;
+        b=FaEgYBRyqZYukFX2UhLwykWPoYNi4e62tf3w6iuxkAcOE0SCk1G/n9uPfHcMjs8zy3
+         M7wqJmmxAyt+xtzNIY/kJV4/XncCKKnPCtbgYsIToF1hZBixbR6qMMe3FYoIlDiWJAsp
+         T/g37FPV/ezMfgAVQozo5s+iSCkEh8qnRu30MNaOJIyqKCkB6nSj0bcbOJFmqV/Q73W9
+         ruVKWwE4gI8h1OhoHcAgd4EJoKh3LXCoiSiKxdDxkqyxb5Kp7tulsTb6nqxrY9ubo7z2
+         VOHIMONC3KINDN1Jh12UTeyPdZj09Ux7YM989+XGhKjHraKzkOy2IjIkDwzAkq784a7L
+         IG5Q==
+X-Gm-Message-State: ACgBeo1f/rrZfhZ3/NSBcYrF+1846IrU4ZEvWLTdSLm5CfHP9LjFx0vV
+        Io41Ye9bPjKairiiIetmDkI8IQ==
+X-Google-Smtp-Source: AA6agR4fl4nEP7dCRJhxPprT2MslA2V+Sjpudndncruk7Aw8ByEaiFr52iVnF3+aNwZiEzdhhorhkA==
+X-Received: by 2002:a17:90b:4b8d:b0:1fb:4def:1fc1 with SMTP id lr13-20020a17090b4b8d00b001fb4def1fc1mr1528016pjb.121.1661385007388;
+        Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n3-20020aa79843000000b005368341381fsm7842821pfq.106.2022.08.24.16.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 23:50:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 13/13] KVM: x86: emulator/smm: preserve interrupt
+ shadow in SMRAM
+Message-ID: <Ywa5K3qVO0kDfTW9@google.com>
+References: <20220803155011.43721-1-mlevitsk@redhat.com>
+ <20220803155011.43721-14-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220803155011.43721-14-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/fscache-fixes
-head:   900828ab172a767a0819d99718dcceb778be0d63
-commit: de284e31dcfda8ae7b56eaef89efe60be34ecdf9 [1/4] vfs, security: Fix automount superblock LSM init problem, preventing NFS sb sharing
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20220825/202208250749.ugs8aIcf-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/de284e31dcfda8ae7b56eaef89efe60be34ecdf9
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/fscache-fixes
-        git checkout de284e31dcfda8ae7b56eaef89efe60be34ecdf9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash security/selinux/
+On Wed, Aug 03, 2022, Maxim Levitsky wrote:
+> @@ -518,7 +519,8 @@ struct kvm_smram_state_32 {
+>  	u32 reserved1[62];
+>  	u32 smbase;
+>  	u32 smm_revision;
+> -	u32 reserved2[5];
+> +	u32 reserved2[4];
+> +	u32 int_shadow; /* KVM extension */
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Looking at this with fresh(er) eyes, I agree with Jim: KVM shouldn't add its own
+fields in SMRAM.  There's no need to use vmcb/vmcs memory either, just add fields
+in kvm_vcpu_arch to save/restore the state across SMI/RSM, and then borrow VMX's
+approach of supporting migration by adding flags to do out-of-band migration,
+e.g. KVM_STATE_NESTED_SMM_STI_BLOCKING and KVM_STATE_NESTED_SMM_MOV_SS_BLOCKING.
 
-All warnings (new ones prefixed by >>):
+	/* SMM state that's not saved in SMRAM. */
+	struct {
+		struct {
+			u8 interruptibility;
+		} smm;
+	} nested;
 
-   security/selinux/hooks.c: In function 'selinux_fs_context_init':
->> security/selinux/hooks.c:2772:45: warning: variable 'root_isec' set but not used [-Wunused-but-set-variable]
-    2772 |         const struct inode_security_struct *root_isec;
-         |                                             ^~~~~~~~~
-
-
-vim +/root_isec +2772 security/selinux/hooks.c
-
-  2767	
-  2768	static int selinux_fs_context_init(struct fs_context *fc,
-  2769					   struct dentry *reference)
-  2770	{
-  2771		const struct superblock_security_struct *sbsec;
-> 2772		const struct inode_security_struct *root_isec;
-  2773		struct selinux_mnt_opts *opts;
-  2774	
-  2775		if (fc->purpose == FS_CONTEXT_FOR_SUBMOUNT) {
-  2776			opts = kzalloc(sizeof(*opts), GFP_KERNEL);
-  2777			if (!opts)
-  2778				return -ENOMEM;
-  2779	
-  2780			root_isec = backing_inode_security(reference->d_sb->s_root);
-  2781			sbsec = selinux_superblock(reference->d_sb);
-  2782			if (sbsec->flags & FSCONTEXT_MNT)
-  2783				opts->fscontext_sid	= sbsec->sid;
-  2784			if (sbsec->flags & CONTEXT_MNT)
-  2785				opts->context_sid	= sbsec->mntpoint_sid;
-  2786			if (sbsec->flags & DEFCONTEXT_MNT)
-  2787				opts->defcontext_sid	= sbsec->def_sid;
-  2788			fc->security = opts;
-  2789		}
-  2790	
-  2791		return 0;
-  2792	}
-  2793	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+That'd finally give us an excuse to move nested_run_pending to common code too :-)

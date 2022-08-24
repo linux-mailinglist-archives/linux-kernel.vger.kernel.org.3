@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2263F5A04D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48145A04D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 01:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiHXXuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 19:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S229684AbiHXXwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 19:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiHXXuO (ORCPT
+        with ESMTP id S229490AbiHXXw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 19:50:14 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05EAE0F3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p13so5678733pld.6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
+        Wed, 24 Aug 2022 19:52:29 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C36A66A7F
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:52:29 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id x26so779011pfo.8
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 16:52:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Rtwz6fTrcBg1TFOL4QPsRuemhonZKT/5mDP1AugotzM=;
-        b=E7AVGBdju1UilU2hXPAD9L9HDIi8n4+7AYJ4RUcSBRnETl2cJwY+/KYkuRgm9hjPxq
-         5sJeOck29St3C8/W/HJNzpu90bBcuMtKeoAxYdB1ONfwbA+3opFpQdjIsMWUue28wonP
-         reaMSiF8olj9of04DketTD+5jIg69xEPL4dzNbo56JQmiAcjkQlxK9B7yJnSW/jFX/6c
-         XB+5P1f1Gs0cjTJ5gdnmBD2Td+Hmp0GlikNorn79ayUxu99bTuzp/YY7ajNFjIA4CO7C
-         UjCIcYx+FTpVEUT/+/E1jqkzZYkS2fq84cw4HBhShBBfE/jPEJI//fqKpq4X9WOOYBrf
-         +5ew==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=P01vQ2JoR/cM4D+rwWuj6mVSlL9X74ZSvC3QMeu2a8E=;
+        b=TZ34PH53vQZrTsICY9qFnL84MauGTrc07dOBsJc2OGqbJ/4z8bu4E9n6EZp3prNNz7
+         z4gfmp2ITAiEQht6HdlmtLyMQtttmE3db6sL/juAUaJSj5EzYkfCwAD2pWvlyEKkLS5z
+         SslGg3VYRw0x99+9Nh/V2QO/gL6z62G+DEvRk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Rtwz6fTrcBg1TFOL4QPsRuemhonZKT/5mDP1AugotzM=;
-        b=FaEgYBRyqZYukFX2UhLwykWPoYNi4e62tf3w6iuxkAcOE0SCk1G/n9uPfHcMjs8zy3
-         M7wqJmmxAyt+xtzNIY/kJV4/XncCKKnPCtbgYsIToF1hZBixbR6qMMe3FYoIlDiWJAsp
-         T/g37FPV/ezMfgAVQozo5s+iSCkEh8qnRu30MNaOJIyqKCkB6nSj0bcbOJFmqV/Q73W9
-         ruVKWwE4gI8h1OhoHcAgd4EJoKh3LXCoiSiKxdDxkqyxb5Kp7tulsTb6nqxrY9ubo7z2
-         VOHIMONC3KINDN1Jh12UTeyPdZj09Ux7YM989+XGhKjHraKzkOy2IjIkDwzAkq784a7L
-         IG5Q==
-X-Gm-Message-State: ACgBeo1f/rrZfhZ3/NSBcYrF+1846IrU4ZEvWLTdSLm5CfHP9LjFx0vV
-        Io41Ye9bPjKairiiIetmDkI8IQ==
-X-Google-Smtp-Source: AA6agR4fl4nEP7dCRJhxPprT2MslA2V+Sjpudndncruk7Aw8ByEaiFr52iVnF3+aNwZiEzdhhorhkA==
-X-Received: by 2002:a17:90b:4b8d:b0:1fb:4def:1fc1 with SMTP id lr13-20020a17090b4b8d00b001fb4def1fc1mr1528016pjb.121.1661385007388;
-        Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n3-20020aa79843000000b005368341381fsm7842821pfq.106.2022.08.24.16.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 16:50:07 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 23:50:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 13/13] KVM: x86: emulator/smm: preserve interrupt
- shadow in SMRAM
-Message-ID: <Ywa5K3qVO0kDfTW9@google.com>
-References: <20220803155011.43721-1-mlevitsk@redhat.com>
- <20220803155011.43721-14-mlevitsk@redhat.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=P01vQ2JoR/cM4D+rwWuj6mVSlL9X74ZSvC3QMeu2a8E=;
+        b=t0dw7KQYFF0ks3uwroP7cmkjN1BmyM3Ih7DvOpDNcb6jmkfZUDq6zGkeUi1iLJ/wVS
+         dmcPeUIuFL5glMeDArJlGADuLbKgfzBq5nP76fWamM483IoLIJQ39wnEm3ZCgL5mRF3j
+         byUzkLNc2mXVeeXonoA+PArGL0SEQRvvVefJkqY6POKLNCT2jQTzST4h6WNFoqdZ9K3r
+         do0ZiUtyNkHlVPeWqN5jd9j4MLRX1lAivoSCPq/FdT/HLFZ4JPQMm/TwswqTvmDggyOZ
+         FD3kHYKBHg2EJImVKxm1F/T3Pw1iXPOjkUAJBoXc5Nm+ZZabh3NUBl5ESI5k90FxRZby
+         wRTg==
+X-Gm-Message-State: ACgBeo0XwzDw1zSDwEKcpHGVelUmEVQWDgPzjlh4h2W2G70nl72pDMO4
+        QmfGAqDvgxKiMAK3Z/99kD0h5A==
+X-Google-Smtp-Source: AA6agR6TF1fyhY/TfS+Vh5mVLXYztqpQzvQ486UBYIe1rb9aucrxhOqGeHgm9BMDH/f7NbykghxETQ==
+X-Received: by 2002:a05:6a00:21c5:b0:52b:fc9c:295b with SMTP id t5-20020a056a0021c500b0052bfc9c295bmr1513014pfj.56.1661385148815;
+        Wed, 24 Aug 2022 16:52:28 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:b7d8:1c85:ef67:47be])
+        by smtp.gmail.com with UTF8SMTPSA id q7-20020a170902a3c700b00172bf229dfdsm11380069plb.97.2022.08.24.16.52.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 16:52:28 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] drivers: base: Print error code on synthetic uevent failure
+Date:   Wed, 24 Aug 2022 16:52:16 -0700
+Message-Id: <20220824165213.1.Ifdb98af3d0c23708a11d8d5ae5697bdb7e96a3cc@changeid>
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220803155011.43721-14-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022, Maxim Levitsky wrote:
-> @@ -518,7 +519,8 @@ struct kvm_smram_state_32 {
->  	u32 reserved1[62];
->  	u32 smbase;
->  	u32 smm_revision;
-> -	u32 reserved2[5];
-> +	u32 reserved2[4];
-> +	u32 int_shadow; /* KVM extension */
+If we're going to log the failure, we might as well log the return code
+too.
 
-Looking at this with fresh(er) eyes, I agree with Jim: KVM shouldn't add its own
-fields in SMRAM.  There's no need to use vmcb/vmcs memory either, just add fields
-in kvm_vcpu_arch to save/restore the state across SMI/RSM, and then borrow VMX's
-approach of supporting migration by adding flags to do out-of-band migration,
-e.g. KVM_STATE_NESTED_SMM_STI_BLOCKING and KVM_STATE_NESTED_SMM_MOV_SS_BLOCKING.
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
 
-	/* SMM state that's not saved in SMRAM. */
-	struct {
-		struct {
-			u8 interruptibility;
-		} smm;
-	} nested;
+ drivers/base/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That'd finally give us an excuse to move nested_run_pending to common code too :-)
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 753e7cca0f40..fd0410329046 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2509,7 +2509,7 @@ static ssize_t uevent_store(struct device *dev, struct device_attribute *attr,
+ 	rc = kobject_synth_uevent(&dev->kobj, buf, count);
+ 
+ 	if (rc) {
+-		dev_err(dev, "uevent: failed to send synthetic uevent\n");
++		dev_err(dev, "uevent: failed to send synthetic uevent: %d\n", rc);
+ 		return rc;
+ 	}
+ 
+-- 
+2.37.2.672.g94769d06f0-goog
+

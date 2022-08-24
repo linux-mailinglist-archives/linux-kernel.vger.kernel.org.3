@@ -2,148 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC95259F342
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4D059F340
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234686AbiHXF4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 01:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
+        id S231791AbiHXF5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 01:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiHXF4n (ORCPT
+        with ESMTP id S234695AbiHXF5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 01:56:43 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B0C89CCA
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:56:42 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 2so12642104edx.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:56:42 -0700 (PDT)
+        Wed, 24 Aug 2022 01:57:01 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41408B2FC
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:57:00 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v4so14113230pgi.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=IqQH8glAVc4Uz1KdvwFFC42e+CS3+BpGZdq1n3kfHOA=;
-        b=CDer5OdErg8Gx/O21HaRV2uFcEIz/Tyr7apVmI7Tw5XhFJkDgkbRFgZnRFNJsiAeWi
-         AYUe3M7LzpP46p8VczdGCayqXYEm1VR3I1DrazocSwDdC0LSmEJagG1fElE7pCjBueUH
-         ZT3yxy62CiBxdNmWWEtTiG7otVCcClaBPtDss=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=YSPT0Qki7Ju6xZPR8zVKpd/3Y86SHIvAxlRRGYCf6+4=;
+        b=cJxCFckjGJmmRH3AxuVSwOTHmKPDvNUdHzsphspcL7MitfDj8cpemzRzFld9ka1JzG
+         WnlEJmWoRnoQ0gxoov7Yt2rf6aTE+TfXoQJvWIXYocISArwgddH0SidAHEq6rI3BEAyN
+         lTCzC7TZlFS/gWBvSe7q4HjuJZm2PmzxhmH39KjiNT25T3wxl6rd+nx3TTAEHqkRjefB
+         GdI9uw+uu7SgshMtpf8Q4Pap89vTe6dJteYBtDjWBy3J1GMWr5EsxKSpmmXX0h4FUQtj
+         GhPxiJ6N14F3KQEG3Fsuq79NI0Rt8cZtb/ZaylWiz9B1X/yS1OJIoDWBzLdxviW9YVnq
+         xjlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=IqQH8glAVc4Uz1KdvwFFC42e+CS3+BpGZdq1n3kfHOA=;
-        b=N2XturfkraKjvXjcGdGlpCWnixf8LjHNTt+DsURqBRzQ5Lc8omnVQpNA4LAJBMh2s4
-         Wgw+B32zhIBb6DQP5FnHgyz/f4me8aCIeZLaUXSVN9BVKjZmH1hh0fpcAgPemHq+ZqyZ
-         7xkB7CsIGcTcyqFA6bTbSSy4QPnpHkReAvJPKlXNgaKDKpxu6J4zPiryiM273o0i0TBQ
-         WyyDEZvICZhrb+XLLtJOU95E1p3XIhrL6RrtNlxeWZvIXmSEB50i6uNmjlswFVi4+VdC
-         vh2pVCUNILi98L6l5rj3xuEicvxTh2I5+gntzb2F8LgDjR0KT8OrJ/3/19vZN2tH1XPA
-         9/fA==
-X-Gm-Message-State: ACgBeo1EeA+f7AI9fjltYM6xwJVdLp6RXAolsO5fRl1XPgCze/fc5neA
-        XOpE5Opxvy1AwC66KBn/PVRgdxBKi5f9sPMR
-X-Google-Smtp-Source: AA6agR5d7mypuqQu0rV1k1Ma2ki5cuvj4oxIpfvfOSHfSGKOpBm97UY6/gmBJsF3ih36mO3LwXbgzw==
-X-Received: by 2002:a05:6402:2381:b0:446:7a73:e704 with SMTP id j1-20020a056402238100b004467a73e704mr6304455eda.244.1661320600394;
-        Tue, 23 Aug 2022 22:56:40 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170906770400b007389c5a45f0sm682585ejm.148.2022.08.23.22.56.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 22:56:39 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id h24so19416668wrb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:56:38 -0700 (PDT)
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
- a8-20020a056000188800b00222ca41dc26mr14194866wri.442.1661320598478; Tue, 23
- Aug 2022 22:56:38 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=YSPT0Qki7Ju6xZPR8zVKpd/3Y86SHIvAxlRRGYCf6+4=;
+        b=Q5aEQGt+wlJouk0crXRdHOM1QK+JLq2BgCim4HdJ6z/TcmtnKvSZo7flDRoTyvw5VL
+         QarmIAos7a3SaOzeQleEe+R6EAV7xWZpKG51L3HJXLgdDLI4yb/UbAhH305FTMTbl7IB
+         DiCaoZkqpIgBk3eN4vRP6Q+VcV6kSEWvlMP2D5QRkeqgW6zn45ASxtOvsVAcNs2xnyPM
+         lpE2fwbnxwKE4ZsTkftXHKZG35BuwZwX3WwUHTCfmo0LyqGWtdOFpeDo2zJ6luOD7FvJ
+         s2v1xUwKimEqw3A7udPHTxl8DvWsrQ4AqLfK8L9uYXXI0tGWbv2PzdoJhPLTofOzV8D8
+         G+mA==
+X-Gm-Message-State: ACgBeo2iPAeXKY1QkXf/87bk3SMFsWAai/EWra9Osjiz74BqcKiLHMpo
+        48lgGjRwPGdnzr/7724KzFo=
+X-Google-Smtp-Source: AA6agR6SU5V/MTOUdkMzfuBJ885alWNFmMOeIBJqlCJlfH7pKsFBZWwp8COvHDCLw/dA8nRjvHlUeA==
+X-Received: by 2002:a63:de02:0:b0:428:9e02:5f3e with SMTP id f2-20020a63de02000000b004289e025f3emr23286847pgg.592.1661320620513;
+        Tue, 23 Aug 2022 22:57:00 -0700 (PDT)
+Received: from localhost.localdomain ([64.64.123.33])
+        by smtp.gmail.com with ESMTPSA id q4-20020a170902eb8400b0016c9e5f291bsm11423473plg.111.2022.08.23.22.56.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 22:56:59 -0700 (PDT)
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+To:     akpm@linux-foundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: [PATCH linux-next] mm: fix used but uninitialized variable
+Date:   Wed, 24 Aug 2022 13:56:37 +0800
+Message-Id: <20220824055637.10676-1-zhouzhouyi@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220821000737.328590235@goodmis.org> <20220821000844.510643400@goodmis.org>
- <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
- <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org> <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
- <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk> <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
- <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
- <CAHk-=wiwr2Ff_1SKzRkjSbNLFYfk4KurvZhLuwVuTT-m9w5_6A@mail.gmail.com>
- <YwWIQ/3BDQHOiTek@ZenIV> <YwWWoQXmVc8uasBh@ZenIV>
-In-Reply-To: <YwWWoQXmVc8uasBh@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 23 Aug 2022 22:56:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whmx4Pqw70NDmujGMQY1BrVi54pLnB5b7qpPThjiHatOw@mail.gmail.com>
-Message-ID: <CAHk-=whmx4Pqw70NDmujGMQY1BrVi54pLnB5b7qpPThjiHatOw@mail.gmail.com>
-Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
- triggered by is_signed_type()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 8:10 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> Any operations like ordered comparisons would trigger unrestrict() on
-> these suckers, which would warn and convert to underlying type.
->
-> Your addition of "ordered comparison with 0 or -1" evades unrestrict().
+In function walk_hugetlb_range, the local variable err may
+be used uninitialzed when:
+ops->pte_hole in side of "else if (ops->pte_hole)" is false.
 
-No. Look. Try this modification to that test, and use
-'./test-linearize' to see what sparse turns it into without my patch
-to keep the signedness.
+Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+---
+Dear mm Developers:
 
-    static long test(void)
-    {
-        return (le32) 0xffffffff;
-    }
+When I build kernel using "make CC=clang-14"
+the compiler complains following:
 
-yes, yes, it warns (twice, actually), but it also then generates
+CC      mm/pagewalk.o
+mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+                else if (ops->pte_hole)
+                         ^~~~~~~~~~~~~
+mm/pagewalk.c:321:7: note: uninitialized use occurs here
+                if (err)
+                    ^~~
+mm/pagewalk.c:318:8: note: remove the 'if' if its condition is always true
+                else if (ops->pte_hole)
+                     ^~~~~~~~~~~~~~~~~~
+mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence this warning
+                int err;
+                       ^
+                        = 0
+1 error generated.
+make[1]: *** [scripts/Makefile.build:250: mm/pagewalk.o] Error 1
+make: *** [Makefile:2006: mm] Error 2
 
-        ret.64      $-1
+I initialize that variable outside of the for loop because we can assign 0 to err
+only once in this function.
 
-for that return.
+After my fix, I can compile the kernel. 
 
-Why? Because it thinks that 'le32' is a signed 32-bit thing due to the
-clearing of the MOD_UNSIGNED bit, so when it casts it to 'long' it
-will sign-extend it.
+Many Thanks
+Zhouyi
+--
+ mm/pagewalk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So the sign confusion exists and is visible regardless of the added
-ordered comparison.
+diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+index 54b2a1beeeb3..b6eb330e8ecd 100644
+--- a/mm/pagewalk.c
++++ b/mm/pagewalk.c
+@@ -306,9 +306,9 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
+ 	unsigned long hmask = huge_page_mask(h);
+ 	unsigned long sz = huge_page_size(h);
+ 	const struct mm_walk_ops *ops = walk->ops;
++	int err = 0;
+ 
+ 	for (; addr < end; addr = next) {
+-		int err;
+ 		pte_t *pte = huge_pte_offset(walk->mm, addr & hmask, sz);
+ 
+ 		next = hugetlb_entry_end(h, addr, end);
+-- 
+2.34.1
 
-Now, we normally don't *notice* any of this, because we obviously
-don't rely on sparse generating any code. And we _do_ cast those
-bitwise things in many places, although we use "__force" to show that
-it's intentional. Including, very much, those kinds of widening casts
-where the signedness matters.
-
-See for example very much the csum code:
-
-    __wsum csum_partial(const void *buff, int len, __wsum wsum)
-    {
-        unsigned int sum = (__force unsigned int)wsum;
-
-which is *exactly* that kind of code where it's fundamentally
-important that 'wsum' is an unsigned type, and casting it to 'unsigned
-int' does not sign-extend it.
-
-So no. This has absolutely nothing to do with the new ordered comparisons.
-
-Those bitwise types have always been integers, just with special rules
-for warning about mis-using them.
-
-And the sign handling has always been wrong.
-
-It just so happens that me using 'test-linearize' to double-check what
-sparse does for that signedness check *uncovered* that pre-existing
-bug.
-
-It was not introduced by the new code, and the ordered comparisons are
-not AT ALL different from the equality comparisons, except for the
-fact that they actually care about the signedness being right.
-
-           Linus

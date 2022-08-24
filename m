@@ -2,85 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BAF59F753
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AFC59F756
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236776AbiHXKTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
+        id S236709AbiHXKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiHXKT3 (ORCPT
+        with ESMTP id S236824AbiHXKUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:19:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769A775FD4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661336367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VPCYtTaUZWpL796MsnlJYTznsS4pYxjYV+Pv2KRlCtI=;
-        b=EyeY3UukD9gOBM9bHAPCCHTjyPMvB82s1huRZAUS6ROrR3pCRrL3W87ZMpQ6A6cssLqi3C
-        i/rHkEHz2YVKS6V0PI9VyfOvB0kvXCRb5BbS4pQEl4t68wyWV0cJu68S/PY3ymeEvozPWW
-        gBnASNeCj6kxYc39bNHHMB4Gr48J2yU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-363-5WK-AnyhMUS1qtFcUUl9XA-1; Wed, 24 Aug 2022 06:19:25 -0400
-X-MC-Unique: 5WK-AnyhMUS1qtFcUUl9XA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E95E185A599;
-        Wed, 24 Aug 2022 10:19:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D2D8418ECC;
-        Wed, 24 Aug 2022 10:19:23 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220818125038.2247720-1-sunke32@huawei.com>
-References: <20220818125038.2247720-1-sunke32@huawei.com>
-To:     Sun Ke <sunke32@huawei.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, jefflexu@linux.alibaba.com
-Subject: Re: [PATCH v3] cachefiles: fix error return code in cachefiles_ondemand_copen()
+        Wed, 24 Aug 2022 06:20:02 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7952F391
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:19:56 -0700 (PDT)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 429091004C13A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:19:46 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id QnU9odGXmpnCyQnUAotvuM; Wed, 24 Aug 2022 10:19:46 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=d5kwdTvE c=1 sm=1 tr=0 ts=6305fb42
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sK5kmj1Shu1tMYxfyucNT9Q2rjv6zSAekoNQwtRFOD8=; b=lzqMyf4R7ND9nQ0oVNTGv+2/OV
+        7DvuL0fHPT5fwuqXKKNrMEfsyxPQSHhaeaUTfkNHzFeXdNHOD29Lk5yD+Fm+ZOG0OsQ4Zh6QsGhM/
+        s2nmuTQi1oPRpKFVJbyE1QYhTyeoNJXKCINSgaE65fwtNm0f0GavWukY30zCd8HTWTddeEKQOkwCL
+        ff8tmJQrn/UkLSRVt09HBQvjjaWN03wOZHuEU42kJkXwHN92eEWC8MuC7pec60VCIbc5hGPgmGwQF
+        OjnvCkvDRLsi6e+TyqEKbmSnI5fGjP58cjDiAVpO2x4M613J6X89MQjoXb9t8LqV/bBh32I06JHry
+        SdQurYMA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:41584 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oQnU8-0011dK-F4;
+        Wed, 24 Aug 2022 04:19:44 -0600
+Subject: Re: [PATCH 5.15 000/242] 5.15.63-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220824065913.068916566@linuxfoundation.org>
+In-Reply-To: <20220824065913.068916566@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <1291d62d-9cc7-eefc-6909-8e8ef9eabe44@w6rz.net>
+Date:   Wed, 24 Aug 2022 03:19:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3700078.1661336363.1@warthog.procyon.org.uk>
-Date:   Wed, 24 Aug 2022 11:19:23 +0100
-Message-ID: <3700079.1661336363@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oQnU8-0011dK-F4
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:41584
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	/* fail OPEN request if copen format is invalid */
-	ret = kstrtol(psize, 0, &size);
-	if (ret) {
-		req->error = ret;
-		goto out;
-	}
+On 8/24/22 12:01 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.63 release.
+> There are 242 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 26 Aug 2022 06:58:31 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.63-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-	/* fail OPEN request if daemon reports an error */
-	if (size < 0) {
-		if (!IS_ERR_VALUE(size))
-			ret = size = -EINVAL;
-		req->error = size;
-		goto out;
-	}
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Should ret get set to the error in size?
-
-David
+Tested-by: Ron Economos <re@w6rz.net>
 

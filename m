@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D6759FDD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B943059FDE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238587AbiHXPGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S232675AbiHXPIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237876AbiHXPGW (ORCPT
+        with ESMTP id S237858AbiHXPIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:06:22 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54C698377
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:06:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VN7yLvj_1661353574;
-Received: from 30.0.163.227(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VN7yLvj_1661353574)
-          by smtp.aliyun-inc.com;
-          Wed, 24 Aug 2022 23:06:15 +0800
-Message-ID: <22585fc8-b0bc-0e14-d121-2767cd178424@linux.alibaba.com>
-Date:   Wed, 24 Aug 2022 23:06:25 +0800
+        Wed, 24 Aug 2022 11:08:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD2598A5D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:08:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD1E618CD
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434F1C433C1;
+        Wed, 24 Aug 2022 15:08:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661353689;
+        bh=tU6B0BG1UHnHAoMKPgWcGVLqH2nUONmFmE9trFqxNww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YJfG3FMjAIJtjpl2xQ1ePVd6EGaCkFYP3ExWdnUVdxapmWC9Nng4gpke02wcyH/Jr
+         jFsmBl9mxtCIRqm1fbEHmcaOMpKFqnYbBMRrVDYwVB2VxqC2AQz8ieCuB3cGTcIRs6
+         RcEnbELd0YeoA60p3L5vS2pGnzc24XyfZvhtf0yeDdNKXfDcu32oH86hLViswEhklM
+         YFpXKPnO2JsvakVE64lHCuSBVkLgXw6W3zqqhL2Jllhw6rdd9k4uQYwnKk7KJWtCmZ
+         1VVyUmhBGyBwfRN7F/cIIO6dK7flOGje2dF/TngLPm5GSBkfiohmZ5W+bh1RV8iT0a
+         6Q/gN+eFyXyFQ==
+Date:   Wed, 24 Aug 2022 08:08:07 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Rolf Eike Beer <eb@emlix.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH 7/6] mm: pagewalk: add back missing variable
+ initializations
+Message-ID: <YwY+1xD52ep54M3y@dev-arch.thelio-3990X>
+References: <3200642.44csPzL39Z@devpool047>
+ <2123960.ggj6I0NvhH@mobilepool36.emlix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/5] mm/hugetlb: fix races when looking up a CONT-PTE
- size hugetlb page
-To:     David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cover.1661240170.git.baolin.wang@linux.alibaba.com>
- <0e5d92da043d147a867f634b17acbcc97a7f0e64.1661240170.git.baolin.wang@linux.alibaba.com>
- <4c24b891-04ce-2608-79d2-a75dc236533f@redhat.com>
- <376d2e0a-d28a-984b-903c-1f6451b04a15@linux.alibaba.com>
- <7d4e7f47-30a5-3cc6-dc9f-aa89120847d8@redhat.com> <YwVo7xSO+VebkIfQ@monkey>
- <64669c0a-4a6e-f034-a15b-c4a8deea9e5d@linux.alibaba.com>
- <7ee73879-e402-9175-eae8-41471d80d59e@redhat.com>
- <f7544713-d856-0875-41dd-52a5c27ba015@linux.alibaba.com>
- <041e2e43-2227-1681-743e-5f82e245b5ea@redhat.com>
- <f5f08e69-83d0-78af-39fb-f2180d13086d@linux.alibaba.com>
- <0f736dc5-1798-10ad-c506-9a2a38841359@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <0f736dc5-1798-10ad-c506-9a2a38841359@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+In-Reply-To: <2123960.ggj6I0NvhH@mobilepool36.emlix.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,136 +58,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/24/2022 10:33 PM, David Hildenbrand wrote:
-> On 24.08.22 16:30, Baolin Wang wrote:
->>
->>
->> On 8/24/2022 7:55 PM, David Hildenbrand wrote:
->>> On 24.08.22 11:41, Baolin Wang wrote:
->>>>
->>>>
->>>> On 8/24/2022 3:31 PM, David Hildenbrand wrote:
->>>>>>>>>
->>>>>>>>> IMHO, these follow_huge_xxx() functions are arch-specified at first and
->>>>>>>>> were moved into the common hugetlb.c by commit 9e5fc74c3025 ("mm:
->>>>>>>>> hugetlb: Copy general hugetlb code from x86 to mm"), and now there are
->>>>>>>>> still some arch-specified follow_huge_xxx() definition, for example:
->>>>>>>>> ia64: follow_huge_addr
->>>>>>>>> powerpc: follow_huge_pd
->>>>>>>>> s390: follow_huge_pud
->>>>>>>>>
->>>>>>>>> What I mean is that follow_hugetlb_page() is a common and
->>>>>>>>> not-arch-specified function, is it suitable to change it to be
->>>>>>>>> arch-specified?
->>>>>>>>> And thinking more, can we rename follow_hugetlb_page() as
->>>>>>>>> hugetlb_page_faultin() and simplify it to only handle the page faults of
->>>>>>>>> hugetlb like the faultin_page() for normal page? That means we can make
->>>>>>>>> sure only follow_page_mask() can handle hugetlb.
->>>>>>>>>
->>>>>>>
->>>>>>> Something like that might work, but you still have two page table walkers
->>>>>>> for hugetlb.  I like David's idea (if I understand it correctly) of
->>>>>>
->>>>>> What I mean is we may change the hugetlb handling like normal page:
->>>>>> 1) use follow_page_mask() to look up a hugetlb firstly.
->>>>>> 2) if can not get the hugetlb, then try to page fault by
->>>>>> hugetlb_page_faultin().
->>>>>> 3) if page fault successed, then retry to find hugetlb by
->>>>>> follow_page_mask().
->>>>>
->>>>> That implies putting more hugetlbfs special code into generic GUP,
->>>>> turning it even more complicated. But of course, it depends on how the
->>>>> end result looks like. My gut feeling was that hugetlb is better handled
->>>>> in follow_hugetlb_page() separately (just like we do with a lot of other
->>>>> page table walkers).
->>>>
->>>> OK, fair enough.
->>>>
->>>>>>
->>>>>> Just a rough thought, and I need more investigation for my idea and
->>>>>> David's idea.
->>>>>>
->>>>>>> using follow_hugetlb_page for both cases.  As noted, it will need to be
->>>>>>> taught how to not trigger faults in the follow_page_mask case.
->>>>>>
->>>>>> Anyway, I also agree we need some cleanup, and firstly I think we should
->>>>>> cleanup these arch-specified follow_huge_xxx() on some architectures
->>>>>> which are similar with the common ones. I will look into these.
->>>>>
->>>>> There was a recent discussion on that, e.g.:
->>>>>
->>>>> https://lkml.kernel.org/r/20220818135717.609eef8a@thinkpad
->>>>
->>>> Thanks.
->>>>
->>>>>
->>>>>>
->>>>>> However, considering cleanup may need more investigation and
->>>>>> refactoring, now I prefer to make these bug-fix patches of this patchset
->>>>>> into mainline firstly, which are suitable to backport to old version to
->>>>>> fix potential race issues. Mike and David, how do you think? Could you
->>>>>> help to review these patches? Thanks.
->>>>>
->>>>> Patch #1 certainly add more special code just to handle another hugetlb
->>>>> corner case (CONT pages), and maybe just making it all use
->>>>> follow_hugetlb_page() would be even cleaner and less error prone.
->>>>>
->>>>> I agree that locking is shaky, but I'm not sure if we really want to
->>>>> backport this to stable trees:
->>>>>
->>>>> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->>>>>
->>>>> "It must fix a real bug that bothers people (not a, “This could be a
->>>>> problem...” type thing)."
->>>>>
->>>>>
->>>>> Do we actually have any instance of this being a real (and not a
->>>>> theoretical) problem? If not, I'd rather clean it all up right away.
->>>>
->>>> I think this is a real problem (not theoretical), and easy to write some
->>>> code to show the issue. For example, suppose thread A is trying to look
->>>> up a CONT-PTE size hugetlb page under the lock, however antoher thread B
->>>> can migrate the CONT-PTE hugetlb page at the same time, which will cause
->>>> thread A to get an incorrect page, if thread A want to do something for
->>>> this incorrect page, error occurs.
->>>>
->>>> Actually we also want to backport these fixes to the distro with old
->>>> kernel versions to make the hugetlb more stable. Otherwise we must hit
->>>> these issues sooner or later if the customers use CONT-PTE/PMD hugetlb.
->>>>
->>>> Anyway, if you and Mike still think these issues are not important
->>>> enough to be fixed in the old versions, I can do the cleanup firstly.
->>>>
->>>
->>> [asking myself which follow_page() users actually care about hugetlb,
->>> and why we need this handling in follow_page at all]
->>>
->>> Which follow_page() user do we care about here? Primarily mm/migrate.c
->>> only I assume?
->>
->> Right, mainly affects the move_pages() syscall I think. Yes, I can not
->> know all of the users of the move_pages() syscall now or in the future
->> in our data center, but like I said the move_pages() syscall + hugetlb
->> can be a real potential stability issue.
->>
+On Wed, Aug 24, 2022 at 01:00:11PM +0200, Rolf Eike Beer wrote:
+> These initializations accidentially got lost during refactoring.
 > 
-> I wonder if we can get rid of follow_page() completely, there are not
-> too many users. Or alternatively simply make it use general GUP
-> infrastructure more clearly. We'd need something like FOLL_NOFAULT that
-> also covers "absolutely no faults".
+> The first one can't actually be used without initialization, because
+> walk_p4d_range() is only called when one of the 4 callbacks is set, but relying
+> on this seems fragile.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Rolf Eike Beer <eb@emlix.com>
 
-I am not sure I get your point. So you want change to use 
-__get_user_pages() (or silimar wrappers) to look up a normal page or 
-hugetlb instead of follow_page()? and adding a new FOLL_NOFAULT flag to 
-__get_user_pages().
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-If I understand correctly, we still need more work to move those 
-arch-specified follow_huge_xxx() into follow_hugetlb_page() firstly like 
-we disscussed before? Which seems not backportable too.
-
-I am not againt your idea, and I also agree that we should do some 
-cleanup. But the point is if we need backport patches to fix this issue, 
-which affects move_pages() syscall, if the answer is yes, I think my 
-current fixes are suitable to backport.
+> ---
+>  mm/pagewalk.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> Looks like my testing had just the right callbacks set so I never hit this. In 
+> case you want to have this squashed into the original one just drop me a note 
+> and I'll redo the whole series.
+> 
+> diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+> index d8be8a30b272..22e4bcca9bee 100644
+> --- a/mm/pagewalk.c
+> +++ b/mm/pagewalk.c
+> @@ -223,7 +223,7 @@ static int walk_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
+>  
+>  	p4d = p4d_offset(pgd, addr);
+>  	do {
+> -		int err;
+> +		int err = 0;
+>  
+>  		next = p4d_addr_end(addr, end);
+>  		if (p4d_none_or_clear_bad(p4d)) {
+> @@ -262,7 +262,7 @@ static int walk_pgd_range(unsigned long addr, unsigned long end,
+>  	else
+>  		pgd = pgd_offset(walk->mm, addr);
+>  	do {
+> -		int err;
+> +		int err = 0;
+>  
+>  		next = pgd_addr_end(addr, end);
+>  		if (pgd_none_or_clear_bad(pgd)) {
+> @@ -308,7 +308,7 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
+>  	const struct mm_walk_ops *ops = walk->ops;
+>  
+>  	for (; addr < end; addr = next) {
+> -		int err;
+> +		int err = 0;
+>  		pte_t *pte = huge_pte_offset(walk->mm, addr & hmask, sz);
+>  
+>  		next = hugetlb_entry_end(h, addr, end);
+> -- 
+> 2.37.2
+> 
+> -- 
+> Rolf Eike Beer, emlix GmbH, https://www.emlix.com
+> Fon +49 551 30664-0, Fax +49 551 30664-11
+> Gothaer Platz 3, 37083 Göttingen, Germany
+> Sitz der Gesellschaft: Göttingen, Amtsgericht Göttingen HR B 3160
+> Geschäftsführung: Heike Jordan, Dr. Uwe Kracke – Ust-IdNr.: DE 205 198 055
+> 
+> emlix - smart embedded open source
+> 
+> 

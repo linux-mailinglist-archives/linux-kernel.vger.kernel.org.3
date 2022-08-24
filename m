@@ -2,42 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFA659FD13
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC20359FD15
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239120AbiHXOSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S238308AbiHXOSu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 24 Aug 2022 10:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238549AbiHXOSQ (ORCPT
+        with ESMTP id S236375AbiHXOSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:18:16 -0400
-Received: from outbound-smtp07.blacknight.com (outbound-smtp07.blacknight.com [46.22.139.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB8298D3B
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:18:14 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp07.blacknight.com (Postfix) with ESMTPS id 135151C3D92
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:18:13 +0100 (IST)
-Received: (qmail 8923 invoked from network); 24 Aug 2022 14:18:12 -0000
-Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 24 Aug 2022 14:18:12 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 1/1] mm/page_alloc: Leave IRQs enabled for per-cpu page allocations
-Date:   Wed, 24 Aug 2022 15:18:02 +0100
-Message-Id: <20220824141802.23395-1-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.35.3
+        Wed, 24 Aug 2022 10:18:47 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F3E99241
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:18:45 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-278-NAqDrFa6OFK4f2CDO1KAlQ-1; Wed, 24 Aug 2022 15:18:42 +0100
+X-MC-Unique: NAqDrFa6OFK4f2CDO1KAlQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.38; Wed, 24 Aug 2022 15:18:40 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.040; Wed, 24 Aug 2022 15:18:40 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Yury Norov' <yury.norov@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Dennis Zhou" <dennis@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>
+Subject: RE: [PATCH v2 1/3] lib/find_bit: introduce FIND_FIRST_BIT() macro
+Thread-Topic: [PATCH v2 1/3] lib/find_bit: introduce FIND_FIRST_BIT() macro
+Thread-Index: AQHYt7wjkucH+HuwAkOnYFo2ww3faK2+F4Aw
+Date:   Wed, 24 Aug 2022 14:18:40 +0000
+Message-ID: <eed65809f99d49acbbbf3ba3ce6568a0@AcuMS.aculab.com>
+References: <20220824012624.2826445-1-yury.norov@gmail.com>
+ <20220824012624.2826445-2-yury.norov@gmail.com>
+ <CAHp75VcB08oTrB8R9Zyo4Ja=c_XqybqdCw46fY4_MNqvSSCtLQ@mail.gmail.com>
+ <YwYlWjlWO3fFrtQp@yury-laptop>
+In-Reply-To: <YwYlWjlWO3fFrtQp@yury-laptop>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -47,292 +70,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
-allocating from the PCP must not re-enter the allocator from IRQ context.
-In each instance where IRQ-reentrancy is possible, the lock is acquired using
-pcp_spin_trylock_irqsave() even though IRQs are disabled and re-entrancy
-is impossible.
+...
+> And generated code looks almost the same, except that
+> on x86_64 your version is bigger. Compare before:
+> 0000000000000000 <_find_first_bit>:
+>    0:   mov    %rsi,%rax
+>    3:   test   %rsi,%rsi
+>    6:   je     35 <_find_first_bit+0x35>
+>    8:   xor    %edx,%edx
+>    a:   jmp    19 <_find_first_bit+0x19>
+>    c:   add    $0x40,%rdx               // Track bits and
+>   10:   add    $0x8,%rdi                // index separately
 
-Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
-case at the cost of some IRQ allocations taking a slower path. If the PCP
-lists need to be refilled, the zone lock still needs to disable IRQs but
-that will only happen on PCP refill and drain. If an IRQ is raised when
-a PCP allocation is in progress, the trylock will fail and fallback to
-using the buddy lists directly. Note that this may not be a universal win
-if an interrupt-intensive workload also allocates heavily from interrupt
-context and contends heavily on the zone->lock as a result.
+That add is free - happens in parallel with other instrutcions
 
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- mm/page_alloc.c | 93 +++++++++++++++----------------------------------
- 1 file changed, 28 insertions(+), 65 deletions(-)
+>   14:   cmp    %rax,%rdx
+>   17:   jae    35 <_find_first_bit+0x35>
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e5486d47406e..6a8f07a0a548 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -169,21 +169,12 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
- 	_ret;								\
- })
- 
--#define pcpu_spin_lock_irqsave(type, member, ptr, flags)		\
-+#define pcpu_spin_trylock(type, member, ptr)				\
- ({									\
- 	type *_ret;							\
- 	pcpu_task_pin();						\
- 	_ret = this_cpu_ptr(ptr);					\
--	spin_lock_irqsave(&_ret->member, flags);			\
--	_ret;								\
--})
+The instructions below will (probably/hopefully) be
+speculatively executed in parallel with the cmp/jae above
+
+>   19:   mov    (%rdi),%rcx
+>   1c:   test   %rcx,%rcx
+>   1f:   je     c <_find_first_bit+0xc>
+>   21:   tzcnt  %rcx,%rcx
+>   26:   add    %rdx,%rcx
+>   29:   cmp    %rcx,%rax
+>   2c:   cmova  %rcx,%rax
+>   30:   jmp    35 <_find_first_bit+0x35>
+>   35:   jmp    3a <_find_first_bit+0x3a>
+>   3a:   nopw   0x0(%rax,%rax,1)
+> 
+> And after:
+> 0000000000000000 <_find_first_bit>:
+>    0:   mov    %rsi,%rax
+>    3:   test   %rsi,%rsi
+>    6:   je     39 <_find_first_bit+0x39>
+>    8:   xor    %edx,%edx
+>    a:   jmp    15 <_find_first_bit+0x15>
+>    c:   add    $0x40,%rdx               // Track bits only
+>   10:   cmp    %rdx,%rax
+>   13:   jbe    39 <_find_first_bit+0x39>
+>   15:   mov    %rdx,%rcx
+>   18:   shr    $0x6,%rcx                // But divide here
+>   1c:   mov    (%rdi,%rcx,8),%rcx
+>   20:   test   %rcx,%rcx
+
+That is a long register dependency chain involving %cx.
+It will limit the execution speed to (at least 6) clocks/iteration.
+The older version might be 3 clocks/iteration.
+So this could easily run at half the speed.
+
+	David
+
+>   23:   je     c <_find_first_bit+0xc>
+>   25:   tzcnt  %rcx,%rcx
+>   2a:   add    %rcx,%rdx
+>   2d:   cmp    %rdx,%rax
+>   30:   cmova  %rdx,%rax
+>   34:   jmp    39 <_find_first_bit+0x39>
+>   39:   jmp    3e <_find_first_bit+0x3e>
+>   3e:   xchg   %ax,%ax                  // Which adds 4 bytes to .text
+> 
+> Thanks,
+> Yury
+> 
+> > > +               val = (EXPRESSION);                                             \
+> > > +               if (val) {                                                      \
+> > > +                       sz = min(idx * BITS_PER_LONG + __ffs(word_op(val)), sz);\
+> >
+> > sz = min(idx + __ffs(...));
+> >
+> > > +                       break;                                                  \
+> > > +               }                                                               \
+> > > +       }                                                                       \
+> > > +                                                                               \
+> > > +       sz;                                                                     \
+> > > +})
+> >
+> >
+> > --
+> > With Best Regards,
+> > Andy Shevchenko
+
 -
--#define pcpu_spin_trylock_irqsave(type, member, ptr, flags)		\
--({									\
--	type *_ret;							\
--	pcpu_task_pin();						\
--	_ret = this_cpu_ptr(ptr);					\
--	if (!spin_trylock_irqsave(&_ret->member, flags)) {		\
-+	if (!spin_trylock(&_ret->member)) {				\
- 		pcpu_task_unpin();					\
- 		_ret = NULL;						\
- 	}								\
-@@ -196,27 +187,16 @@ static DEFINE_MUTEX(pcp_batch_high_lock);
- 	pcpu_task_unpin();						\
- })
- 
--#define pcpu_spin_unlock_irqrestore(member, ptr, flags)			\
--({									\
--	spin_unlock_irqrestore(&ptr->member, flags);			\
--	pcpu_task_unpin();						\
--})
--
- /* struct per_cpu_pages specific helpers. */
- #define pcp_spin_lock(ptr)						\
- 	pcpu_spin_lock(struct per_cpu_pages, lock, ptr)
- 
--#define pcp_spin_lock_irqsave(ptr, flags)				\
--	pcpu_spin_lock_irqsave(struct per_cpu_pages, lock, ptr, flags)
--
--#define pcp_spin_trylock_irqsave(ptr, flags)				\
--	pcpu_spin_trylock_irqsave(struct per_cpu_pages, lock, ptr, flags)
-+#define pcp_spin_trylock(ptr)						\
-+	pcpu_spin_trylock(struct per_cpu_pages, lock, ptr)
- 
- #define pcp_spin_unlock(ptr)						\
- 	pcpu_spin_unlock(lock, ptr)
- 
--#define pcp_spin_unlock_irqrestore(ptr, flags)				\
--	pcpu_spin_unlock_irqrestore(lock, ptr, flags)
- #ifdef CONFIG_USE_PERCPU_NUMA_NODE_ID
- DEFINE_PER_CPU(int, numa_node);
- EXPORT_PER_CPU_SYMBOL(numa_node);
-@@ -1536,6 +1516,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 					struct per_cpu_pages *pcp,
- 					int pindex)
- {
-+	unsigned long flags;
- 	int min_pindex = 0;
- 	int max_pindex = NR_PCP_LISTS - 1;
- 	unsigned int order;
-@@ -1551,8 +1532,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 	/* Ensure requested pindex is drained first. */
- 	pindex = pindex - 1;
- 
--	/* Caller must hold IRQ-safe pcp->lock so IRQs are disabled. */
--	spin_lock(&zone->lock);
-+	spin_lock_irqsave(&zone->lock, flags);
- 	isolated_pageblocks = has_isolate_pageblock(zone);
- 
- 	while (count > 0) {
-@@ -1601,7 +1581,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 		} while (count > 0 && !list_empty(list));
- 	}
- 
--	spin_unlock(&zone->lock);
-+	spin_unlock_irqrestore(&zone->lock, flags);
- }
- 
- static void free_one_page(struct zone *zone,
-@@ -3118,10 +3098,10 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
- 			unsigned long count, struct list_head *list,
- 			int migratetype, unsigned int alloc_flags)
- {
-+	unsigned long flags;
- 	int i, allocated = 0;
- 
--	/* Caller must hold IRQ-safe pcp->lock so IRQs are disabled. */
--	spin_lock(&zone->lock);
-+	spin_lock_irqsave(&zone->lock, flags);
- 	for (i = 0; i < count; ++i) {
- 		struct page *page = __rmqueue(zone, order, migratetype,
- 								alloc_flags);
-@@ -3155,7 +3135,7 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
- 	 * pages added to the pcp list.
- 	 */
- 	__mod_zone_page_state(zone, NR_FREE_PAGES, -(i << order));
--	spin_unlock(&zone->lock);
-+	spin_unlock_irqrestore(&zone->lock, flags);
- 	return allocated;
- }
- 
-@@ -3172,16 +3152,9 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
- 	batch = READ_ONCE(pcp->batch);
- 	to_drain = min(pcp->count, batch);
- 	if (to_drain > 0) {
--		unsigned long flags;
--
--		/*
--		 * free_pcppages_bulk expects IRQs disabled for zone->lock
--		 * so even though pcp->lock is not intended to be IRQ-safe,
--		 * it's needed in this context.
--		 */
--		spin_lock_irqsave(&pcp->lock, flags);
-+		spin_lock(&pcp->lock);
- 		free_pcppages_bulk(zone, to_drain, pcp, 0);
--		spin_unlock_irqrestore(&pcp->lock, flags);
-+		spin_unlock(&pcp->lock);
- 	}
- }
- #endif
-@@ -3195,12 +3168,9 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
- 
- 	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
- 	if (pcp->count) {
--		unsigned long flags;
--
--		/* See drain_zone_pages on why this is disabling IRQs */
--		spin_lock_irqsave(&pcp->lock, flags);
-+		spin_lock(&pcp->lock);
- 		free_pcppages_bulk(zone, pcp->count, pcp, 0);
--		spin_unlock_irqrestore(&pcp->lock, flags);
-+		spin_unlock(&pcp->lock);
- 	}
- }
- 
-@@ -3466,7 +3436,6 @@ static void free_unref_page_commit(struct zone *zone, struct per_cpu_pages *pcp,
-  */
- void free_unref_page(struct page *page, unsigned int order)
- {
--	unsigned long flags;
- 	unsigned long __maybe_unused UP_flags;
- 	struct per_cpu_pages *pcp;
- 	struct zone *zone;
-@@ -3494,10 +3463,10 @@ void free_unref_page(struct page *page, unsigned int order)
- 
- 	zone = page_zone(page);
- 	pcp_trylock_prepare(UP_flags);
--	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
-+	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
- 	if (pcp) {
- 		free_unref_page_commit(zone, pcp, page, migratetype, order);
--		pcp_spin_unlock_irqrestore(pcp, flags);
-+		pcp_spin_unlock(pcp);
- 	} else {
- 		free_one_page(zone, page, pfn, order, migratetype, FPI_NONE);
- 	}
-@@ -3512,7 +3481,6 @@ void free_unref_page_list(struct list_head *list)
- 	struct page *page, *next;
- 	struct per_cpu_pages *pcp = NULL;
- 	struct zone *locked_zone = NULL;
--	unsigned long flags;
- 	int batch_count = 0;
- 	int migratetype;
- 
-@@ -3542,10 +3510,10 @@ void free_unref_page_list(struct list_head *list)
- 		/* Different zone, different pcp lock. */
- 		if (zone != locked_zone) {
- 			if (pcp)
--				pcp_spin_unlock_irqrestore(pcp, flags);
-+				pcp_spin_unlock(pcp);
- 
- 			locked_zone = zone;
--			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
-+			pcp = pcp_spin_lock(locked_zone->per_cpu_pageset);
- 		}
- 
- 		/*
-@@ -3564,14 +3532,14 @@ void free_unref_page_list(struct list_head *list)
- 		 * a large list of pages to free.
- 		 */
- 		if (++batch_count == SWAP_CLUSTER_MAX) {
--			pcp_spin_unlock_irqrestore(pcp, flags);
-+			pcp_spin_unlock(pcp);
- 			batch_count = 0;
--			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
-+			pcp = pcp_spin_lock(locked_zone->per_cpu_pageset);
- 		}
- 	}
- 
- 	if (pcp)
--		pcp_spin_unlock_irqrestore(pcp, flags);
-+		pcp_spin_unlock(pcp);
- }
- 
- /*
-@@ -3783,15 +3751,11 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
- 	struct per_cpu_pages *pcp;
- 	struct list_head *list;
- 	struct page *page;
--	unsigned long flags;
- 	unsigned long __maybe_unused UP_flags;
- 
--	/*
--	 * spin_trylock may fail due to a parallel drain. In the future, the
--	 * trylock will also protect against IRQ reentrancy.
--	 */
-+	/* spin_trylock may fail due to a parallel drain or IRQ reentrancy. */
- 	pcp_trylock_prepare(UP_flags);
--	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
-+	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
- 	if (!pcp) {
- 		pcp_trylock_finish(UP_flags);
- 		return NULL;
-@@ -3805,7 +3769,7 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
- 	pcp->free_factor >>= 1;
- 	list = &pcp->lists[order_to_pindex(migratetype, order)];
- 	page = __rmqueue_pcplist(zone, order, migratetype, alloc_flags, pcp, list);
--	pcp_spin_unlock_irqrestore(pcp, flags);
-+	pcp_spin_unlock(pcp);
- 	pcp_trylock_finish(UP_flags);
- 	if (page) {
- 		__count_zid_vm_events(PGALLOC, page_zonenum(page), 1);
-@@ -5329,7 +5293,6 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 			struct page **page_array)
- {
- 	struct page *page;
--	unsigned long flags;
- 	unsigned long __maybe_unused UP_flags;
- 	struct zone *zone;
- 	struct zoneref *z;
-@@ -5411,9 +5374,9 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 	if (unlikely(!zone))
- 		goto failed;
- 
--	/* Is a parallel drain in progress? */
-+	/* spin_trylock may fail due to a parallel drain or IRQ reentrancy. */
- 	pcp_trylock_prepare(UP_flags);
--	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
-+	pcp = pcp_spin_trylock(zone->per_cpu_pageset);
- 	if (!pcp)
- 		goto failed_irq;
- 
-@@ -5432,7 +5395,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 		if (unlikely(!page)) {
- 			/* Try and allocate at least one page */
- 			if (!nr_account) {
--				pcp_spin_unlock_irqrestore(pcp, flags);
-+				pcp_spin_unlock(pcp);
- 				goto failed_irq;
- 			}
- 			break;
-@@ -5447,7 +5410,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 		nr_populated++;
- 	}
- 
--	pcp_spin_unlock_irqrestore(pcp, flags);
-+	pcp_spin_unlock(pcp);
- 	pcp_trylock_finish(UP_flags);
- 
- 	__count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
--- 
-2.35.3
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

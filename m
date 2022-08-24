@@ -2,88 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8175A03ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9CC5A03F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiHXW0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 18:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
+        id S229608AbiHXW2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 18:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiHXW0J (ORCPT
+        with ESMTP id S229441AbiHXW2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:26:09 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4DC6D566
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:26:08 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id w19so36205142ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:26:07 -0700 (PDT)
+        Wed, 24 Aug 2022 18:28:51 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1A67EFC3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:28:50 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id 67so9676564pfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+ajTV7s62W1buFOBU//XnEVu0hO13KdLtqXDbl3tmPE=;
-        b=io0+e8FIXTSQk1g3wDnwByFBPdYF9s3ZfdaG/RVPfDS0+g1Cf8HeP05gu2l4YJx0s6
-         YZCxo5E0NzrIspU7PnlluB/jxieN42x24fvDfo/A6K/5tjdw627ED+XY74QfvAA/U+MX
-         VyjsfAxKdG7W8BC5sB6IgnC83poZeX1OhO2zzNpOISyodk4R5s2UkPdC4EoYtOfcfX4R
-         Lxzya/OdzuFbnZnbLNDRSMDHdjxAVP70Iqq5dr4HmbWJAXZo9n9bSs+0SGP5xpsQS98y
-         ScEdM5Mqyounm3LQ9JSMcQkTQT7X2W8+DewaPkmp2hPvf6J3rit/x2nSIKrdIGCWT9OY
-         dVtg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=yAEeUYWmYhxNKGYcVjQKExoIw8PLAY9dFJ2qCbmO4Fk=;
+        b=FfHIVto/5ebxp1vTr806NuYVnNp5UiwDZlbaiR9KnThDMHyfTOihi1DEIOZmHlS6D9
+         dCNsyTUdjVjvBuAY8rqv1FD1sKvRSOuTc9h8iH9Mlg5/4Vi1x9ZItOC2UrGZbWy5bCkg
+         BGwWL4rf/WnZwYPn9tAz9MdhnX3vy5Niy+Mps7z4MnVsdndAl+jrCaMlgZHBR3a5LYcC
+         KhjqHBDWw3Td01XdjFyNCYAagwkBRr8F1DmIVzmTOTR8nEn26Rq8UrxCIOWJNMEsFd2N
+         lEwpqGQKifpyBT/L6VLqqhQ08TfwQMgRWiN98qos9ni78APzNVfE5WJxHMch5fcvUmkC
+         c3YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+ajTV7s62W1buFOBU//XnEVu0hO13KdLtqXDbl3tmPE=;
-        b=elSC79S55cqfgFAca24rzIPV6rIcnNOxHluIF3w7RqVv5yRiZmPMlHBmacQ6zAHKTm
-         gWSvgcy7fgeAhbPdbZyhETdvb79ldbvEQPOWFEgveIO0wkqOJA0BNNTFphidk7CHrvUx
-         y8BX+BAeKzcGSgOcHxVj821WKzVhAQxzwbYH8FSgIoXHsoKfTyuTGCDHsfa76tlC6qzN
-         AT7EYtW3d2cV0cvxSVwekVbmv8Z/YHMyzGCaB3SUbTFl6fM08pIyUnSYssWKPW+Ok2PF
-         4/rIUzGff+ObewhirgjAZksyO1nVUfu7DvdYZRsSkPFSC2iw5qNsGQ7TVr8nqapGZqgH
-         k1hw==
-X-Gm-Message-State: ACgBeo3/Baw/PZLbPFeL/WIprqYqK3gTOAKqlr+/ytSks+6D9CJPoDt/
-        wYwLVmJX2c++iUHzQoBsC76YGhB2skNpjrG4ZQC7Ng==
-X-Google-Smtp-Source: AA6agR5p/xUIeIsNjIdgP8K8L1dDugg9o6K1q4VmFAeXWY2JRKLaX9si4wdK9/4rP+CDDJDtHdAgKonzsr/NdUZqeqU=
-X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
- dd6-20020a1709069b8600b0073d72cf72afmr661185ejc.440.1661379966637; Wed, 24
- Aug 2022 15:26:06 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=yAEeUYWmYhxNKGYcVjQKExoIw8PLAY9dFJ2qCbmO4Fk=;
+        b=sAERnQiFOjP/PkycKq9cQPITOwtN6pdhz8Jar6yP1HzROejZxgF0uzQ415LgHHSgII
+         Vi/PVdT++84Kac7vb0kUy51HeoUEXDUt6KlDM+UHY/0I0rv9CuwIuLY0afEfOUjDY6g2
+         6W1674z7bdJPKvP0bfe3GmLXc5hG+ODowg2XQqWSUTUDk6aCQI4ANwjNDiVmLEdPRLGc
+         Xu+ZaS1rMHp9iQHOPuirls91OZ69OWXNOiXNvb2UsQ8KMdpEy84s7duJCeLLtqUzhIDZ
+         3UyywCX8pBu60sapySJ18XazFi3vegjsm2ApwRm1qdQalbmYQD49FQrBhOv3QrdEr0Cd
+         Izwg==
+X-Gm-Message-State: ACgBeo0LFBaBkk3Y8Iy7fBXpVWu8kWlJ1T9xCHTAs1YFGedhL/+LTttE
+        JAENiVPi74S3FYgbR2E93OPv0w==
+X-Google-Smtp-Source: AA6agR5M1oj1tY8sjh+PX/x/v1cTVy+qrcbir+JM822+YF/uxToEwAzb6pXj5Ytn3T0bMyscSGJd+w==
+X-Received: by 2002:a65:6d0f:0:b0:42b:42f8:efe0 with SMTP id bf15-20020a656d0f000000b0042b42f8efe0mr816349pgb.197.1661380129390;
+        Wed, 24 Aug 2022 15:28:49 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902ee8200b0016bdcb8fbcdsm11297046pld.47.2022.08.24.15.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 15:28:49 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 22:28:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 09/13] KVM: x86: emulator/smm: use smram struct for 32
+ bit smram load/restore
+Message-ID: <YwamHYLokbGX96cG@google.com>
+References: <20220803155011.43721-1-mlevitsk@redhat.com>
+ <20220803155011.43721-10-mlevitsk@redhat.com>
 MIME-Version: 1.0
-References: <20220816054917.7893-1-patrick.rudolph@9elements.com> <20220816054917.7893-3-patrick.rudolph@9elements.com>
-In-Reply-To: <20220816054917.7893-3-patrick.rudolph@9elements.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 25 Aug 2022 00:25:55 +0200
-Message-ID: <CACRpkdYc=KQo2dt_6NmQnbf-6VhYc4og0xm0mD-AVEE=K=BgpA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] pinctrl: Add Cypress cy8c95x0 support
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803155011.43721-10-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 7:50 AM Patrick Rudolph
-<patrick.rudolph@9elements.com> wrote:
+On Wed, Aug 03, 2022, Maxim Levitsky wrote:
+> Use kvm_smram_state_32 struct to save/restore 32 bit SMM state
+> (used when X86_FEATURE_LM is not present in the guest CPUID).
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/emulate.c | 81 +++++++++++++++---------------------------
+>  arch/x86/kvm/x86.c     | 75 +++++++++++++++++---------------------
+>  2 files changed, 60 insertions(+), 96 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 610978d00b52b0..3339d542a25439 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -2371,25 +2371,17 @@ static void rsm_set_desc_flags(struct desc_struct *desc, u32 flags)
+>  	desc->type = (flags >>  8) & 15;
+>  }
+>  
+> -static int rsm_load_seg_32(struct x86_emulate_ctxt *ctxt, const char *smstate,
+> +static void rsm_load_seg_32(struct x86_emulate_ctxt *ctxt,
+> +			   const struct kvm_smm_seg_state_32 *state,
 
-> Add support for cypress I2C GPIO expanders cy8c9520, cy8c9540 and
-> cy8c9560. The GPIO expanders feature a PWM mode, thus add it as
-> pinctrl driver.
->
-> The chip features multiple drive modes for each pin when configured
-> as output and multiple bias settings when configured as input.
->
-> Tested all three components and verified that all functionality
-> is fully working.
->
-> Datasheet: https://www.cypress.com/file/37971/download
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+Alignment is off by one.
 
-Patch applied!
+> +			   u16 selector,
+>  			   int n)
 
-Yours,
-Linus Walleij
+These can go on a single line.
+
+static void rsm_load_seg_32(struct x86_emulate_ctxt *ctxt,
+			    const struct kvm_smm_seg_state_32 *state,
+			    u16 selector, int n)
+
+>  	struct desc_struct desc;
+> -	int offset;
+> -	u16 selector;
+> -
+> -	selector = GET_SMSTATE(u32, smstate, 0x7fa8 + n * 4);
+> -
+> -	if (n < 3)
+> -		offset = 0x7f84 + n * 12;
+> -	else
+> -		offset = 0x7f2c + (n - 3) * 12;
+>  
+> -	set_desc_base(&desc,      GET_SMSTATE(u32, smstate, offset + 8));
+> -	set_desc_limit(&desc,     GET_SMSTATE(u32, smstate, offset + 4));
+> -	rsm_set_desc_flags(&desc, GET_SMSTATE(u32, smstate, offset));
+> +	set_desc_base(&desc,      state->base);
+> +	set_desc_limit(&desc,     state->limit);
+> +	rsm_set_desc_flags(&desc, state->flags);
+>  	ctxt->ops->set_segment(ctxt, selector, &desc, 0, n);
+> -	return X86EMUL_CONTINUE;
+>  }
+>  
+
+...
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index cbbe49bdc58787..6abe35f7687e2c 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9833,22 +9833,18 @@ static u32 enter_smm_get_segment_flags(struct kvm_segment *seg)
+>  	return flags;
+>  }
+>  
+> -static void enter_smm_save_seg_32(struct kvm_vcpu *vcpu, char *buf, int n)
+> +static void enter_smm_save_seg_32(struct kvm_vcpu *vcpu,
+> +					 struct kvm_smm_seg_state_32 *state,
+> +					 u32 *selector,
+> +					 int n)
+
+Similar issues here.
+
+static void enter_smm_save_seg_32(struct kvm_vcpu *vcpu,
+				  struct kvm_smm_seg_state_32 *state,
+				  u32 *selector, int n)
+>  {
+>  	struct kvm_segment seg;
+> -	int offset;
+>  
+>  	kvm_get_segment(vcpu, &seg, n);
+> -	put_smstate(u32, buf, 0x7fa8 + n * 4, seg.selector);
+> -
+> -	if (n < 3)
+> -		offset = 0x7f84 + n * 12;
+> -	else
+> -		offset = 0x7f2c + (n - 3) * 12;
+> -
+> -	put_smstate(u32, buf, offset + 8, seg.base);
+> -	put_smstate(u32, buf, offset + 4, seg.limit);
+> -	put_smstate(u32, buf, offset, enter_smm_get_segment_flags(&seg));
+> +	*selector = seg.selector;
+> +	state->base = seg.base;
+> +	state->limit = seg.limit;
+> +	state->flags = enter_smm_get_segment_flags(&seg);
+>  }
+>  
+>  #ifdef CONFIG_X86_64
+> @@ -9869,54 +9865,47 @@ static void enter_smm_save_seg_64(struct kvm_vcpu *vcpu, char *buf, int n)
+>  }
+>  #endif
+>  
+> -static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, char *buf)
+> +static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, struct kvm_smram_state_32 *smram)
+
+Please wrap, no reason to run long.
+
+static void enter_smm_save_state_32(struct kvm_vcpu *vcpu,
+				    struct kvm_smram_state_32 *smram)
+
+

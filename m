@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E32E59FFA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000DD59FFA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237225AbiHXQjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S238483AbiHXQjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiHXQjU (ORCPT
+        with ESMTP id S232226AbiHXQjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:39:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16A19C506;
-        Wed, 24 Aug 2022 09:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F03761A39;
-        Wed, 24 Aug 2022 16:39:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEF0C433B5;
-        Wed, 24 Aug 2022 16:39:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661359158;
-        bh=P9NJxmLjZQ10oJJJpdAAG7ttOIVT5PbWRk2gfsQM17s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=kVQFbC3ee769vaKefbEA8RdkpMhpWOTPVOcfXC4a24isFzPJw8YEEm8p/HWns9aNb
-         klLRBSIhXK1c5shCjD5CqliS0TL+Q8RA4GTuUArWCtYsUb433hUAaX1Zg3OxoWiFBt
-         yv9ZcjCHaRSw3OBgwzNHs0ZP0kv1h01kS9DDTWLPhWeBYMPq1djcd+lD6ohpsFqbVL
-         +dQqwPt1avhWGgSfjBpXyv0ft8xf1HGJ5xMuMkXG6Al/WSSqZ7UlvF1zsKlkP16Eim
-         GGEDytLxPfFrJ1+8RL/mE2Uxh/MGlQB22Idph8sLRTnBK5Spw11sHCuzswvid9ZAAi
-         ZjtgTvm061hYQ==
-Date:   Wed, 24 Aug 2022 11:39:16 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 00/24] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220824163916.GA2784109@bhelgaas>
+        Wed, 24 Aug 2022 12:39:41 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C732B9C8C5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:39:39 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id f3so5906853ilq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=YYuOmDFh7du2x98VE/mOc51jJKR8qw9B+E6i0d7pP4c=;
+        b=2osH0E3s2aIGIgpQfUr6UMVnb9OemU/K9P+fKPp15btx/lt4v2xQGvvdHQW/BrGVGo
+         xMaOA7imJR1O+dCiuYnf5gCne3/L2zGa8Xb7xIdCupIpBTi6kQfeW+8AwfJV2EKc5Rhg
+         R4zzTDc3Qkf+7uFjnDBhpcek2fqlr4Bh06zla4uKHdxai8u45aSjFxipfU8ytsTTDATS
+         3Umob1+60IC2+/39kbEisYTeZEvk3QxNCbpDInTa7RgzHsuk+qWbKifk4grBgA1JnACm
+         5JPz6Cpq0r3ZrNJyJLnVNfz2SJCP41REAuHUL2D3Em73C9Pe7mHbQ20LH13JPqwipbu6
+         fBAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=YYuOmDFh7du2x98VE/mOc51jJKR8qw9B+E6i0d7pP4c=;
+        b=F2Q1aMGtEeJN2Ftw90fq6x88H1BOV3tzZYhx/Fvs6k/c1bz+MyZXYVFDfj/dpG1QZH
+         ym9w0qpRShQ/l92+aeroKUtgfCpAQIeAtKoyr81yVxMLh2p1I7cO9ZpS2VmqqGxIVuI4
+         o1V2cqR67xLumIU8P1/aoFSDahWrVehE9ymHNJLA1TYX4AxHArkGZ+FUPUrlmI0sVXfr
+         U9BYtKEkQYvSpuS1rG/wcFtOlo00Xmx8jK0TrtFSPrmcHC67Oow1W1NGT/8NetkeaQl/
+         BAEzB08begzpzUARF+T4p9LU26wg64PpFqcaaqhtNtniOl9JeH6saBycjLnk1Ll0rJK/
+         PLrA==
+X-Gm-Message-State: ACgBeo1MpEDfj+/aeT0tFvs9FsHNsfsdxLPpEgexL2ZR2WMD187bYC5a
+        irvv9D/3nXKSBM3oceK73cnJow==
+X-Google-Smtp-Source: AA6agR4WxPc6UpX/RJ2bhYh0u8Q+cvbo3acY5MP+3p1XcM8uRlUW1OUyzidoJKCRjfyt1stqUfwAig==
+X-Received: by 2002:a92:cf52:0:b0:2e8:7021:6c03 with SMTP id c18-20020a92cf52000000b002e870216c03mr2411659ilr.193.1661359179189;
+        Wed, 24 Aug 2022 09:39:39 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id p9-20020a022909000000b00349f40c61edsm2026714jap.73.2022.08.24.09.39.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 09:39:38 -0700 (PDT)
+Message-ID: <fa23ffc2-755e-7e04-362d-68fad7d69c85@kernel.dk>
+Date:   Wed, 24 Aug 2022 10:39:37 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [syzbot] general protection fault in __io_sync_cancel
+Content-Language: en-US
+To:     syzbot <syzbot+bf76847df5f7359c9e09@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000e9f4e905e6ff4495@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <000000000000e9f4e905e6ff4495@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 09:53:08PM +0300, Serge Semin wrote:
-> This is a final patchset in the series created in the framework of
-> my Baikal-T1 PCIe/eDMA-related work:
-> 
-> [1: Done v5] PCI: dwc: Various fixes and cleanups
-> Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
-> Merged: kernel 6.0-rc1
-> [2: Done v4] PCI: dwc: Add hw version and dma-ranges support
-> Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru
-> Merged: kernel 6.0-rc1
-> [3: In-review v5] PCI: dwc: Add generic resources and Baikal-T1 support
-> Link: https://lore.kernel.org/linux-pci/20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru/
-> [4: Done v5] dmaengine: dw-edma: Add RP/EP local DMA support
-> Link: ---you are looking at it---
-> ...
+#syz test: git://git.kernel.dk/linux-block io_uring-6.0
 
-> Please note originally this series was self content, but due to Frank
-> being a bit faster in his work submission I had to rebase my patchset onto
-> his one. So now this patchset turns to be dependent on the Frank' work:
-> 
-> Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
+-- 
+Jens Axboe
 
-I think this paragraph is obsolete, since the "Enable designware PCI
-EP EDMA locally" series you reference is already upstream:
-https://git.kernel.org/linus/94d13317bef3
 
-What remains are items 3 and 4.
-
-3 is mostly drivers/pci/ and DT bindings (Lorenzo).  4 is mostly
-drivers/dma/dw-edma/ stuff (Gustavo).  I guess Lorenzo and Gustavo can
-figure out where it makes the most sense to merge it.
-
-Bjorn

@@ -2,183 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12305A02F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D745A0305
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240220AbiHXUsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S240540AbiHXUu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240492AbiHXUsp (ORCPT
+        with ESMTP id S240529AbiHXUuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:48:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0160C786C9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:48:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661374123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/rRnDONf/MIAcvQvaU+OL/iys5bxrMY05ODAN/aEOnI=;
-        b=aj/+ET2UnjpBLdj4Z8sxjtg36aqNF85XMtJ6JREFtjObE2EctYcMtdHYVXrsKzTP2orppa
-        pHIwK90PoLNe+1XTWX6XU5UcREmVmLv7BiZRQyXom6GqT1DO7NxRJDFvvHR7iAKArigtU8
-        MS5VMR6NRj21Dqp1Mt2986CqLAdUbPs=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-225-8-2xqIANN2eg0SV0V9-69A-1; Wed, 24 Aug 2022 16:48:42 -0400
-X-MC-Unique: 8-2xqIANN2eg0SV0V9-69A-1
-Received: by mail-qt1-f198.google.com with SMTP id s2-20020ac85cc2000000b00342f8ad1f40so13688017qta.12
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:48:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/rRnDONf/MIAcvQvaU+OL/iys5bxrMY05ODAN/aEOnI=;
-        b=6ZPxaY323pxhgsHh/aAm2Cm98n6If6QleAE07CtZBNUtm7ako/6S451HTsGIRLIyAJ
-         Aa0leZ2FFm5bt/dU1Q4TFtnKujZOFCV8OHcjA9fEzhkkNnGGbHrv2VP+S21NmMPixXbH
-         qpVf6bTMlFg86B9v5/NzTjkabKDo921bKimPLuh8yN5GV0cW7EPYT8gDUpV2Ycph2CEd
-         9x28Yf2KZojF2vwdadDicosM5oaJAePaiFsRyFQdNr4f642OqX1Rp5PMFZ17e5pimS9s
-         BcvHnSntaBQg5ILqFxhrJy+MM2Tpm/qQCXWbMELsxoZMzE8nOq3+oMZWIISe9BO8lj6C
-         0SXA==
-X-Gm-Message-State: ACgBeo3CSvrxOExfkkEsnRDtmMiE7FfYlpCQTH/0zd++Lfp4qQg0wvrx
-        bJEQ2mtcKtUGtkglvzCwCwaWzqoPmlV/+gk9Io7/Q4q3QFnAzOIpJnC2rd8kDT+gnB7CYeKVKdj
-        LyXebf++lVMw/ytTIOGR4+WYd
-X-Received: by 2002:ad4:4eaf:0:b0:496:ac46:2d9c with SMTP id ed15-20020ad44eaf000000b00496ac462d9cmr868924qvb.82.1661374121416;
-        Wed, 24 Aug 2022 13:48:41 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4s25beJjrLygCxW4UWpRepdZLtdhOdc0j/yJivVpKekwHMGeWPIw0hJ6uQX5trRhdvaC3qCw==
-X-Received: by 2002:ad4:4eaf:0:b0:496:ac46:2d9c with SMTP id ed15-20020ad44eaf000000b00496ac462d9cmr868905qvb.82.1661374121119;
-        Wed, 24 Aug 2022 13:48:41 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id g9-20020ac85809000000b00344576bcfefsm13976258qtg.70.2022.08.24.13.48.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 13:48:40 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 16:48:38 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-Message-ID: <YwaOpj54/qUb5fXa@xz-m1.local>
-References: <YvxWUY9eafFJ27ef@xz-m1.local>
- <87o7wjtn2g.fsf@nvdebian.thelocal>
- <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
- <Yv1BJKb5he3dOHdC@xz-m1.local>
- <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yv5QXkS4Bm9pTBeG@xz-m1.local>
- <874jy9aqts.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87czcqiecd.fsf@nvdebian.thelocal>
- <YwaJSBnp2eyMlkjw@xz-m1.local>
+        Wed, 24 Aug 2022 16:50:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A57E786C5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661374245; x=1692910245;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qTQyDimqLczvXe7qOc2XYZAeqDkH+iES8idreQ3skn8=;
+  b=J5w/vCG4D0XLeh9bhcntiYDX51T+yCIIfGw7RPHV9hyCl7lHi0vyPKSW
+   rfiGYLlMaSIDBDvBHFyuLysA3yp2aAacmQP7swheAgykq0F+MQuL69TGr
+   9ytT2T+S3MiekASNT+kAUBlI7hdGjfnmT1MaH4m9mvu7FlYpgY5rMqSRj
+   qxceJWAvF1/TLqGF+8cDO4jm2mB1mZsHo+JOteca3IvaKAP4Y17KvNmnS
+   C5tYN8O56bG35YPdiIevZru2U6Sy3mIv+vnLAJlEouXPVJbt3z2CyXdNh
+   B4k+0jRH7bSFQfzk8zaYnCf6g6Fv9lWW2FUGM+sbBGM3t0+VnGr/OyMzH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="274462333"
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="274462333"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 13:50:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="752225118"
+Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Aug 2022 13:50:43 -0700
+Received: from kbuild by 34e741d32628 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQxKl-0001Ar-0S;
+        Wed, 24 Aug 2022 20:50:43 +0000
+Date:   Thu, 25 Aug 2022 04:50:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:tracing 2/2] include/linux/compiler.h:246:47: warning:
+ ordered comparison of pointer with null pointer
+Message-ID: <202208250433.EVz5pZkB-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwaJSBnp2eyMlkjw@xz-m1.local>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 04:25:44PM -0400, Peter Xu wrote:
-> On Wed, Aug 24, 2022 at 11:56:25AM +1000, Alistair Popple wrote:
-> > >> Still I don't know whether there'll be any side effect of having stall tlbs
-> > >> in !present ptes because I'm not familiar enough with the private dev swap
-> > >> migration code.  But I think having them will be safe, even if redundant.
-> > 
-> > What side-effect were you thinking of? I don't see any issue with not
-> > TLB flushing stale device-private TLBs prior to the migration because
-> > they're not accessible anyway and shouldn't be in any TLB.
-> 
-> Sorry to be misleading, I never meant we must add them.  As I said it's
-> just that I don't know the code well so I don't know whether it's safe to
-> not have it.
-> 
-> IIUC it's about whether having stall system-ram stall tlb in other
-> processor would matter or not here.  E.g. some none pte that this code
-> collected (boosted both "cpages" and "npages" for a none pte) could have
-> stall tlb in other cores that makes the page writable there.
+tree:   https://github.com/bvanassche/linux tracing
+head:   e50691460d5ea5a49b903e0ea50276e942b6f34f
+commit: e50691460d5ea5a49b903e0ea50276e942b6f34f [2/2] tracing: Define is_signed_type() once
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220825/202208250433.EVz5pZkB-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/e50691460d5ea5a49b903e0ea50276e942b6f34f
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche tracing
+        git checkout e50691460d5ea5a49b903e0ea50276e942b6f34f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/
 
-For this one, let me give a more detailed example.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-It's about whether below could happen:
+All warnings (new ones prefixed by >>):
 
-       thread 1                thread 2                 thread 3
-       --------                --------                 --------
-                          write to page P (data=P1)
-                            (cached TLB writable)
-  zap_pte_range()
-    pgtable lock
-    clear pte for page P
-    pgtable unlock
-    ...
-                                                     migrate_vma_collect
-                                                       pte none, npages++, cpages++
-                                                       allocate device page
-                                                       copy data (with P1)
-                                                       map pte as device swap 
-                          write to page P again
-                          (data updated from P1->P2)
-  flush tlb
+   In file included from include/trace/define_trace.h:102,
+                    from drivers/net/wireless/mediatek/mt7601u/trace.h:392,
+                    from drivers/net/wireless/mediatek/mt7601u/trace.c:11:
+>> include/linux/compiler.h:246:47: warning: ordered comparison of pointer with null pointer [-Wextra]
+     246 | #define is_signed_type(type)    (((type)(-1)) <= (type)0)
+         |                                               ^~
+   include/trace/trace_events.h:244:9: note: in definition of macro 'DECLARE_EVENT_CLASS'
+     244 |         tstruct                                                         \
+         |         ^~~~~~~
+   include/trace/trace_events.h:43:30: note: in expansion of macro 'PARAMS'
+      43 |                              PARAMS(tstruct),                  \
+         |                              ^~~~~~
+   drivers/net/wireless/mediatek/mt7601u/./trace.h:98:1: note: in expansion of macro 'TRACE_EVENT'
+      98 | TRACE_EVENT(mt_vend_req,
+         | ^~~~~~~~~~~
+   drivers/net/wireless/mediatek/mt7601u/./trace.h:102:9: note: in expansion of macro 'TP_STRUCT__entry'
+     102 |         TP_STRUCT__entry(
+         |         ^~~~~~~~~~~~~~~~
+   include/trace/stages/stage4_event_fields.h:11:22: note: in expansion of macro 'is_signed_type'
+      11 |         .is_signed = is_signed_type(_type), .filter_type = _filter_type },
+         |                      ^~~~~~~~~~~~~~
+   include/trace/stages/stage4_event_fields.h:20:33: note: in expansion of macro '__field_ext'
+      20 | #define __field(type, item)     __field_ext(type, item, FILTER_OTHER)
+         |                                 ^~~~~~~~~~~
+   drivers/net/wireless/mediatek/mt7601u/./trace.h:105:56: note: in expansion of macro '__field'
+     105 |                 __field(u16, val) __field(u16, offset) __field(void*, buf)
+         |                                                        ^~~~~~~
 
-Then at last from processor side P should have data P2 but actually from
-device memory it's P1. Data corrupt.
 
-> 
-> When I said I'm not familiar with the code, it's majorly about one thing I
-> never figured out myself, in that migrate_vma_collect_pmd() has this
-> optimization to trylock on the page, collect if it succeeded:
-> 
->   /*
->    * Optimize for the common case where page is only mapped once
->    * in one process. If we can lock the page, then we can safely
->    * set up a special migration page table entry now.
->    */
->    if (trylock_page(page)) {
->           ...
->    } else {
->           put_page(page);
->           mpfn = 0;
->    }
-> 
-> But it's kind of against a pure "optimization" in that if trylock failed,
-> we'll clear the mpfn so the src[i] will be zero at last.  Then will we
-> directly give up on this page, or will we try to lock_page() again
-> somewhere?
-> 
-> The future unmap op is also based on this "cpages", not "npages":
-> 
-> 	if (args->cpages)
-> 		migrate_vma_unmap(args);
-> 
-> So I never figured out how this code really works.  It'll be great if you
-> could shed some light to it.
-> 
-> Thanks,
-> 
-> -- 
-> Peter Xu
+vim +246 include/linux/compiler.h
+
+   241	
+   242	/*
+   243	 * Whether 'type' is a signed type or an unsigned type. Supports scalar types,
+   244	 * bool and also pointer types.
+   245	 */
+ > 246	#define is_signed_type(type)	(((type)(-1)) <= (type)0)
+   247	
 
 -- 
-Peter Xu
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

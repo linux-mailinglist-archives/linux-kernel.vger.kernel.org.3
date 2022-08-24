@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3258F5A0340
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034705A0342
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240745AbiHXVXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 17:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S240770AbiHXVXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 17:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240688AbiHXVXY (ORCPT
+        with ESMTP id S240757AbiHXVXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 17:23:24 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E041AD9A
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:23:23 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y127so14754714pfy.5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:23:23 -0700 (PDT)
+        Wed, 24 Aug 2022 17:23:42 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456297B294
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:23:41 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u9so6961145ejy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:23:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=O8J+aRusf0vNSpyQnmEfPgTAvHg6H/KrJETEg87gmiI=;
-        b=MXaLbZ+2HUFWTAFYtFfAR8tleYpmXNtX8WzCU7mTlsMZDW4VnT0HN8SbHMHeyjuVtn
-         hhOCI4Yd4svP+933UgbPlTPU4mzWbsG5D9PUhO+PobwB5SDh3DWpt1gJlgOGbVC7aS0C
-         1pN5E9GHqvpVLvZdr13jf6WVirxI3R9HekU7g=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=A2kk3oH6ZgjIg5ImjgLbFi4dMOHdw3cz12ar0HLiZeg=;
+        b=T21RsIJpp+xKHQiDQTQT8kcxtT8s6QLQZD57IplVHHHthyg33k2ZZAiVKAtlw5KOsP
+         VNNIRl21l4a6j7JJDUsuNJ8ISVanjp0Cp7mcIw8wi+7+ORgoRmGmflaSB43NJVM8xJok
+         gv/V3h5uBlgAV5XtRE937GW8kwM3JnXDEGjcKvka3vAdGjVnPs39PuN3J6c2qzS5fxAk
+         j/rRU+kWP0xvzfKNrwImtvcDqmbrnlbiUlIEGUocPY7A2MVVFIVhaR2+hkaVt+MaQ1GT
+         bv593Bkm7gWySsPV2oR5rx1K8Sq1JSmfvyO+uc5mcKRLdcKtgoyu2fIUkrmPCGJil/Nh
+         /f4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=O8J+aRusf0vNSpyQnmEfPgTAvHg6H/KrJETEg87gmiI=;
-        b=b9MwVTdmD5K59icIPycbGhyQv0dolImPn22/RZR9xSKbGdjcBEkRfi1lxvzljRniDn
-         jnp1LFGbOmcH2sPOkKKbELESLvfmx1XtPgvMafvl1PizkOu2p45Y1cUZLCRtJKp4/aBR
-         1GuddkbULMXtUjqVERpuyonMLkH/fatv5A0ARbYP2sgptbuvQzVa6UqBRo4u54uw4B4v
-         wc3gmmg2XTZqdB9y+sKuN0NRDYh4xEBMc21h27XAf1bg+WwjfPH6m4fA7pEpedCkpW0e
-         qxeSx46zXfNxJARYi+robesf1Zkr4TNXvTN/1iFSjtE52956Vy+g8PWgi6Uy56MnxXL4
-         GZVQ==
-X-Gm-Message-State: ACgBeo3RfkXQuyNofYShPd8+dhUcUzqFgvBmgJPi7iQiegCXy+ItFeUt
-        FmylZMD8PXg3xGu48lZEQV+i/g==
-X-Google-Smtp-Source: AA6agR6vPHfyrMXbItMKjP2oNSLNVTfKT4fHP0QQmRgImhGgHDtLA0/WWGNRSmEWaYXs9o430/SmqQ==
-X-Received: by 2002:a05:6a00:1a93:b0:536:5dca:a685 with SMTP id e19-20020a056a001a9300b005365dcaa685mr992583pfv.13.1661376202869;
-        Wed, 24 Aug 2022 14:23:22 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:c671:5829:2fab:9fe4])
-        by smtp.gmail.com with ESMTPSA id z124-20020a626582000000b00536531536adsm9494699pfb.47.2022.08.24.14.23.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 14:23:22 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFT PATCH v2 2/2] regulator: core: Don't err if allow-set-load but no allowed-modes
-Date:   Wed, 24 Aug 2022 14:22:57 -0700
-Message-Id: <20220824142229.RFT.v2.2.I6f77860e5cd98bf5c67208fa9edda4a08847c304@changeid>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-In-Reply-To: <20220824142229.RFT.v2.1.I137e6bef4f6d517be7b081be926059321102fd3d@changeid>
-References: <20220824142229.RFT.v2.1.I137e6bef4f6d517be7b081be926059321102fd3d@changeid>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=A2kk3oH6ZgjIg5ImjgLbFi4dMOHdw3cz12ar0HLiZeg=;
+        b=OSsdYAkgrmDTnFRTpjCIY66KvOgE4tJXp1JUlwgdgOU5/c7qFrfEDwVG4G0mVpEUrM
+         buBpC48E0sFDFSqpHyeQimvTdodG1GrRMlTeSu7MYDdB4WFyGVzG20i9U8EnQpOpIQYI
+         nxmfYuULtCommmYQPTma5vpUR7t+MpXJRiqazSWxo9T1BdX54/75+Mcg8FsaUCBlKauX
+         7tpLyLCwKGjvTrQahJsLKiHU8UFflsOXIDct7GB3NxrlczSntNvp3CekPTcW3VyGNLWL
+         NZ8MRNq/5MD0kHWeVbIGi/7a3fMfOw0cTOomoiI2bztPsNZtmf9BV0L0j74CXB/Ky26A
+         EDJA==
+X-Gm-Message-State: ACgBeo2WXjdXwANpJBZphB+ihbvBCAtzHuceiJAbFPCMybP8svZiZH2B
+        SeF7y7ECAfp+b3lAQbwtKIhkQeRaMOgnRhSloV2NFw==
+X-Google-Smtp-Source: AA6agR6P1TOV2lFPufHzX/Iwm2PdGXudt6c9ck6mBKv6BEX8oCWp7OXEffF23YqO1jU/CqzZmBRTzZK9xPM4jlkKBRE=
+X-Received: by 2002:a17:907:e8c:b0:73d:8146:9aa1 with SMTP id
+ ho12-20020a1709070e8c00b0073d81469aa1mr495505ejc.253.1661376219619; Wed, 24
+ Aug 2022 14:23:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220824065856.174558929@linuxfoundation.org>
+In-Reply-To: <20220824065856.174558929@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 25 Aug 2022 02:53:27 +0530
+Message-ID: <CA+G9fYsBwosupoqi6qkpxSOQ7FYOiBz6jrN9Q5hjNQoX5DZZbg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/157] 5.10.138-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,76 +70,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apparently the device trees of some boards have the property
-"regulator-allow-set-load" for some of their regulators but then they
-don't specify anything for "regulator-allowed-modes". That's not
-really legit, but...
+On Wed, 24 Aug 2022 at 12:31, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.138 release.
+> There are 157 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 26 Aug 2022 06:58:27 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.138-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-...before commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
-get_optimum_mode(), not set_load()") they used to get away with it, at
-least on boards using RPMH regulators. That's because when a regulator
-driver implements set_load() then the core doesn't look at
-"regulator-allowed-modes" when trying to automatically adjust things
-in response to the regulator's load. The core doesn't know what mode
-we'll end up in, so how could it validate it?
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Said another way: before commit efb0cb50c427 ("regulator: qcom-rpmh:
-Implement get_optimum_mode(), not set_load()") some boards _were_
-having the regulator mode adjusted despite listing no allowed
-modes. After commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
-get_optimum_mode(), not set_load()") these same boards were now
-getting an error returned when trying to use their regulators, since
-simply enabling a regulator tries to update its load and that was
-failing.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-We don't really want to go back to the behavior from before commit
-efb0cb50c427 ("regulator: qcom-rpmh: Implement get_optimum_mode(), not
-set_load()"). Boards shouldn't have been changing modes if no allowed
-modes were listed. However, the behavior after commit efb0cb50c427
-("regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()")
-isn't the best because now boards can't even turn their regulators on.
+NOTE:
+riscv clang nightly build failures also noticed on mainline.
 
-Let's choose to detect this case and return "no error" from
-drms_uA_update(). The net-result will be _different_ behavior than we
-had before commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
-get_optimum_mode(), not set_load()"), but this new behavior seems more
-correct. If a board truly needed the mode switched then its device
-tree should be updated to list the allowed modes.
+## Build
+* kernel: 5.10.138-rc3
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 6cf5e7f41f7878702ceba99c95ed66a8e4b825ac
+* git describe: v5.10.137-158-g6cf5e7f41f78
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.137-158-g6cf5e7f41f78
 
-Reported-by: Andrew Halaney <ahalaney@redhat.com>
-Fixes: efb0cb50c427 ("regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+## Test Regressions (compared to v5.10.137)
 
-Changes in v2:
-- Added ("Don't err if allow-set-load but no allowed-modes").
+* riscv, build
+  - clang-nightly-allnoconfig
+  - clang-nightly-defconfig
+  - clang-nightly-tinyconfig
 
- drivers/regulator/core.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+## No metric Regressions (compared to v5.10.137)
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 0bc4b9b0a885..1d030831aeae 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -977,6 +977,18 @@ static int drms_uA_update(struct regulator_dev *rdev)
- 			rdev_err(rdev, "failed to set load %d: %pe\n",
- 				 current_uA, ERR_PTR(err));
- 	} else {
-+		/*
-+		 * Unfortunately in some cases the constraints->valid_ops has
-+		 * REGULATOR_CHANGE_DRMS but there are no valid modes listed.
-+		 * That's not really legit but we won't consider it a fatal
-+		 * error here. We'll treat it as if REGULATOR_CHANGE_DRMS
-+		 * wasn't set.
-+		 */
-+		if (!rdev->constraints->valid_modes_mask) {
-+			rdev_dbg(rdev, "Can change modes; but no valid mode\n");
-+			return 0;
-+		}
-+
- 		/* get output voltage */
- 		output_uV = regulator_get_voltage_rdev(rdev);
- 
--- 
-2.37.2.672.g94769d06f0-goog
+## No test Fixes (compared to v5.10.137)
 
+## No metric Fixes (compared to v5.10.137)
+
+## Test result summary
+total: 96180, pass: 86425, fail: 871, skip: 8788, xfail: 96
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 301 total, 301 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 24 passed, 3 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 53 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

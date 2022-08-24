@@ -2,96 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B280E59F8E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A2F59F8EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236121AbiHXL6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S237151AbiHXMAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbiHXL6G (ORCPT
+        with ESMTP id S236034AbiHXMAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 07:58:06 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A272089906
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:58:05 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id r10so13509718oie.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=NcQgfGWmNtGVcmYOkqhvmNWuEth66CXwSKmPdJfqqgM=;
-        b=VTUfeIEBhloPwJr12CuxHCw2BxQ7ZpXiMjSS5/bVdWEGyjPKY9NYVlGDwVs1gBepbl
-         CWD2evjs920DYE5w+GnT4EsUJVl2V35NywyFvVS3kS2FIKLLMXC5yaHnC2nnfCbGebkW
-         OIw3tWPzikquhwHdze6r9y2oXdMXhnUg8FDuiug/Z8Wk95p03Bhtk9pkDSPxV3aYZGs1
-         lyRIJWdxPFEDrzgxE+x+VXELqbx2ENONUkqqdyQqDJILI4gQW2u9jd6iY9BOm4stOQU3
-         UUOmmWOszFBKzuTe3IE0qfCMJoEMhYqf/LShSHcz1E+uTz2k5HH+lbdOe5fy5plxap/W
-         8xrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=NcQgfGWmNtGVcmYOkqhvmNWuEth66CXwSKmPdJfqqgM=;
-        b=ZftIvfUGaY0MefR7tdcFxw4gwBB/q/ZYNGEYqrNHDZjdPaU7twb/OnfxsT5oU9wHQK
-         fQQNpTDVc08tp2ImIyJsGBdXqbK6vsBu3MEqXp8Qa2xzZDOIWRNq9WY+SLDBaYGrabe2
-         eXUrrUyAbzjk6o/U8vw4sxfE8jlB447HrCQqe6EPPbAsZLGa9HJxIgyB7c3xi7TjkmuZ
-         nWjrc0ZrSkPl4HKIpHk/XFzIp61af0FcsUTlLn7Ux/cdBqnfcZziBim8DCwv2bCUuTg8
-         nou5xqwayjstrkYZqQHgxuRUWzM9IHMCeQafd7XOVsF4m//Bo1xhf60VQw1SnTQhF10I
-         WEDw==
-X-Gm-Message-State: ACgBeo0SA9wk8Yrx+JUtVmD/j/ZivwPwfwVUsHH4Od6eOZ0zx33C43/l
-        FOTkeO671xq0hKSL+q3Uwv/6/M520agxTdEZeqY=
-X-Google-Smtp-Source: AA6agR4n19Bn6PFoFfzIiFJJQk4Ydkhl5NL9ad8OwcaBoueVIZFTImeyGm+dfd/smGqUJBBF6YIedvcBGqTAi+HwLT0=
-X-Received: by 2002:a05:6808:1442:b0:344:a466:83ff with SMTP id
- x2-20020a056808144200b00344a46683ffmr3224767oiv.204.1661342285032; Wed, 24
- Aug 2022 04:58:05 -0700 (PDT)
+        Wed, 24 Aug 2022 08:00:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFCA7657;
+        Wed, 24 Aug 2022 05:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA7FDB823A8;
+        Wed, 24 Aug 2022 12:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81515C433D7;
+        Wed, 24 Aug 2022 12:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661342415;
+        bh=i/aYydtbcIHGvpKiZBWz976v5ct10lPdzWsbaBwMua8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=X3hzYOXEQctM1VqHF6n90ZCi8UHKY8K7HF94VygNY/K3P2LyMTLw1Bhi6HEXibzZk
+         RNvC/mNTQyd/eHp1w1oEVGC+9DSvKs5EQrwh9V+EFNsnh+WX5X79xXri/wrs3jb6Vk
+         1pvLZBxLvG4iCLCvgCz1U76MzBSZzJSOkzlQEWHZvnmh9wbvCmR0ljfflqi+5GwbMk
+         YfojKA2MHyrdjBm4B2O4wDTLHOcSGUKp+3NvZv8YJNPktrzj0YOmZi3VND94jOSzDP
+         ZgGqBzNjbm1nsUoLN2kMpoIhUTHpSzGQrE+kBF80Z8g72GQKAPybf5pa4SfSMxAMyS
+         /PjLP6z5ArZAQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5A39CE2A03B;
+        Wed, 24 Aug 2022 12:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a05:6830:410d:0:0:0:0 with HTTP; Wed, 24 Aug 2022 04:58:04
- -0700 (PDT)
-Reply-To: sgtkaylla202@gmail.com
-From:   Kayla Manthey <mlovemore73@gmail.com>
-Date:   Wed, 24 Aug 2022 11:58:04 +0000
-Message-ID: <CAALJgL-GxnfDc7X2uR_MLO4ZT3VOO7Qb80txtii-gqxhjX5X1w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:22d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4992]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mlovemore73[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [sgtkaylla202[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mlovemore73[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V2 net-next] net: marvell: prestera: implement br_port_locked
+ flag offloading
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166134241536.3394.1114076220521153448.git-patchwork-notify@kernel.org>
+Date:   Wed, 24 Aug 2022 12:00:15 +0000
+References: <20220822180315.3927-1-oleksandr.mazur@plvision.eu>
+In-Reply-To: <20220822180315.3927-1-oleksandr.mazur@plvision.eu>
+To:     Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tchornyi@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bok draga, mogu li razgovarati s tobom, molim te?
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Mon, 22 Aug 2022 21:03:15 +0300 you wrote:
+> Both <port> br_port_locked and <lag> interfaces's flag
+> offloading is supported. No new ABI is being added,
+> rather existing (port_param_set) API call gets extended.
+> 
+> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> 
+> V2:
+>   add missing receipents (linux-kernel, netdev)
+> 
+> [...]
+
+Here is the summary with links:
+  - [V2,net-next] net: marvell: prestera: implement br_port_locked flag offloading
+    https://git.kernel.org/netdev/net-next/c/73ef239cd843
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

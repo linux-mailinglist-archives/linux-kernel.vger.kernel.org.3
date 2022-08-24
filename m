@@ -2,380 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8E259F063
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FDF59F067
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiHXAoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
+        id S231968AbiHXAqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbiHXAoD (ORCPT
+        with ESMTP id S229720AbiHXAqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:44:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9348E47D;
-        Tue, 23 Aug 2022 17:43:40 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MC6gs0G4hzkWNW;
-        Wed, 24 Aug 2022 08:40:09 +0800 (CST)
-Received: from [10.174.178.66] (10.174.178.66) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 08:43:38 +0800
-Message-ID: <ea32a2ed-e0c0-4010-7488-42ee91b26ce7@huawei.com>
-Date:   Wed, 24 Aug 2022 08:43:37 +0800
+        Tue, 23 Aug 2022 20:46:12 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471356270
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:46:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id q7so18213357lfu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hardline-pl.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=+7YC01QZWr2H+Z11+QtNy0peh5GHhPgH8/H+v7UwPXM=;
+        b=jYus24zPijQN5JdrsH5VT1VZPIGdLNSvI5RgeZRHZYlKU/Bb2LSdSpWy4+S9il+dus
+         qCVLvQuBWMzx7ZLbQYbhCgxCfnUanvLgIRc8rgkIADx+sqcmUfn90EP5ZTNzT07z2YOH
+         vofXJYPpoxv3QLCdn6x4bmcs42nnXWi0H01cUyAEhLOYsw4jw+UPlcyCQy3FGptJ63Ap
+         30PbsLQ1e+kA/By/DcH3+fjcrJh/nOV8E8o2I31zlSIs9QWwbKLGJhlDLbPf3fB0wgS0
+         EvVQ7gTXn7JlcfrZ9eX0XSmSbfYLPROtTVPSChYJUp0WuNSVfrpUw+5E9a0w6cLBCW9a
+         8NZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=+7YC01QZWr2H+Z11+QtNy0peh5GHhPgH8/H+v7UwPXM=;
+        b=sELfOqQ6FwGsrneKJSe7ThnYeAwQAPvUivxbh7pUSOh73UPuHLIREH3qJh4SJct197
+         4B6WzLiyOyiL9oBwHd3IQGN9UJjQ0RpZe+1/yJPF0weM827z6C3+j6hqfof/NN4UYEoW
+         koqbn+QonHGMaBKWbbXEwljn8wIda7Lre2nLW418g0+cmAqOJNYOesWboBJeLiw1lQxd
+         LDCAt36jKOQm1bOCLfJeQl4e455tfbiH1NXaSBQHFCSMX4N0jBegA51lS4KeyUnP4nZ4
+         +cbq8VIqYD1YKXO2CJRUES0c9tpcDmEkKoOhnYL6doc6oK9W81nvtp61jN4lSb0X5vvO
+         15xw==
+X-Gm-Message-State: ACgBeo2Ow24Qwe984xNcoSKRSKQKTqoQCJdwHW+GmgpsPrUTZ4HL0Nxv
+        t9q2YkcOLOBUzws4w2IH2Llkxg==
+X-Google-Smtp-Source: AA6agR7sRImMNaAM0Jb12p84NAKhEUSyFvm3ewFa1xEzGiE/jRI1uZfhA1nP8y5VGI92jbu3qrZy4w==
+X-Received: by 2002:a05:6512:1155:b0:48a:fb9a:32d8 with SMTP id m21-20020a056512115500b0048afb9a32d8mr9530380lfg.672.1661301967470;
+        Tue, 23 Aug 2022 17:46:07 -0700 (PDT)
+Received: from localhost (89-64-119-148.dynamic.chello.pl. [89.64.119.148])
+        by smtp.gmail.com with ESMTPSA id g21-20020a2eb5d5000000b00261c19bbb6asm2007841ljn.97.2022.08.23.17.46.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 17:46:06 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 02:46:06 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal@hardline.pl>
+To:     Isabella Basso <isabbasso@riseup.net>
+Cc:     =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>,
+        Matthew Auld <matthew.william.auld@gmail.com>,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        Rodrigo Siqueira <siqueirajordao@riseup.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, n@nfraprado.net,
+        andrealmeid@riseup.net, magalilemes00@gmail.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kunit-dev@googlegroups.com, mwen@igalia.com,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+        tales.aparecida@gmail.com,
+        kernel list <linux-kernel@vger.kernel.org>,
+        leandro.ribeiro@collabora.com,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
+Message-ID: <20220824004606.ufca7rrd4s4xrkms@macragge.hardline.pl>
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-10-maira.canal@usp.br>
+ <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
+ <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
+ <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
+ <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH net-next] net: sched: delete duplicate cleanup of backlog
- and qlen
-To:     Eric Dumazet <edumazet@google.com>
-CC:     netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Gomes <vinicius.gomes@intel.com>,
-        <weiyongjun1@huawei.com>, YueHaibing <yuehaibing@huawei.com>
-References: <20220823075717.28072-1-shaozhengchao@huawei.com>
- <CANn89iKta=-C43_jQpVVra_v3HxfCjvx+pJFj6NfLoa_GTXfAQ@mail.gmail.com>
-From:   shaozhengchao <shaozhengchao@huawei.com>
-In-Reply-To: <CANn89iKta=-C43_jQpVVra_v3HxfCjvx+pJFj6NfLoa_GTXfAQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.66]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/8/24 0:29, Eric Dumazet wrote:
-> On Tue, Aug 23, 2022 at 12:54 AM Zhengchao Shao
-> <shaozhengchao@huawei.com> wrote:
->>
->> The qdisc_reset function has cleared the backlog and qlen of the qdisc.
->> There is no need to clear them again in the specific reset function.
+On Sun, Aug 21, 2022 at 07:22:30PM -0300, Isabella Basso wrote:
+> Hi Michał,
 > 
-> changelog is slightly inaccurate.
+> While I totally understand your point, we have talked about this in our GSoC
+> meetings with mentors, and have found a few reasons as to why a KUnit runner
+> integrated to IGT might be really useful. 
 > 
-> qdisc_reset() is clearing qdisc->q.qlen and qdisc->qstats.backlog
-> _after_ calling qdisc->ops->reset,
-> not before.
+> > Am 22/07/2022 um 1:25 PM schrieb Michał Winiarski <michal@hardline.pl>:
+> > 
+> > On Fri, Jul 22, 2022 at 08:04:51AM -0300, Maíra Canal wrote:
+> >> On 7/22/22 07:35, Matthew Auld wrote:
+> >>> On Fri, 8 Jul 2022 at 21:32, Maíra Canal <maira.canal@usp.br> wrote:
+> >>>> 
+> >>>> From: Arthur Grillo <arthur.grillo@usp.br>
+> >>>> 
+> >>>> Considering the current adoption of the KUnit framework, convert the
+> >>>> DRM mm selftest to the KUnit API.
+> >>> 
+> >>> Is there a plan to convert the corresponding selftest IGT that was
+> >>> responsible for running this (also drm_buddy) to somehow work with
+> >>> kunit? Previously these IGTs were always triggered as part of
+> >>> intel-gfx CI, but it looks like they are no longer run[1].
+> >>> 
+> >>> [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
+> >> 
+> >> Hi Matthew,
+> >> 
+> >> Isabella sent a while ago a patch to IGT adding KUnit compatibility to
+> >> IGT [1], but there wasn't any feedback on the patch. I believe that soon
+> >> she will resend the series in order to make all KUnit DRM tests run on IGT.
+> >> 
+> >> Any feedback on the patch is welcomed so that we can fix this issue as
+> >> soon as possible.
+> >> 
+> >> [1] https://patchwork.freedesktop.org/patch/489985/
+> >> 
+> >> Best Regards,
+> >> - Maíra Canal
+> > 
+> > Hi.
+> > 
+> > Instead of going back to using IGT for *unit* tests, it would be a better idea
+> > to adjust the CI to just run the tests once at "build" time (just like e.g.
+> > checkpatch).
 > 
->>
->> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
->> ---
->>   include/net/sch_generic.h | 1 -
->>   net/sched/sch_atm.c       | 1 -
->>   net/sched/sch_cbq.c       | 1 -
->>   net/sched/sch_choke.c     | 2 --
->>   net/sched/sch_drr.c       | 2 --
->>   net/sched/sch_dsmark.c    | 2 --
->>   net/sched/sch_etf.c       | 3 ---
->>   net/sched/sch_ets.c       | 2 --
->>   net/sched/sch_fq_codel.c  | 2 --
->>   net/sched/sch_fq_pie.c    | 3 ---
->>   net/sched/sch_hfsc.c      | 2 --
->>   net/sched/sch_htb.c       | 2 --
->>   net/sched/sch_multiq.c    | 1 -
->>   net/sched/sch_prio.c      | 2 --
->>   net/sched/sch_qfq.c       | 2 --
->>   net/sched/sch_red.c       | 2 --
->>   net/sched/sch_sfb.c       | 2 --
->>   net/sched/sch_skbprio.c   | 3 ---
->>   net/sched/sch_taprio.c    | 2 --
->>   net/sched/sch_tbf.c       | 2 --
->>   net/sched/sch_teql.c      | 1 -
->>   21 files changed, 40 deletions(-)
->>
->> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
->> index ec693fe7c553..f2958fb5ae08 100644
->> --- a/include/net/sch_generic.h
->> +++ b/include/net/sch_generic.h
->> @@ -1137,7 +1137,6 @@ static inline void __qdisc_reset_queue(struct qdisc_skb_head *qh)
->>   static inline void qdisc_reset_queue(struct Qdisc *sch)
->>   {
->>          __qdisc_reset_queue(&sch->q);
->> -       sch->qstats.backlog = 0;
->>   }
->>
->>   static inline struct Qdisc *qdisc_replace(struct Qdisc *sch, struct Qdisc *new,
->> diff --git a/net/sched/sch_atm.c b/net/sched/sch_atm.c
->> index 4c8e994cf0a5..816fd0d7ba38 100644
->> --- a/net/sched/sch_atm.c
->> +++ b/net/sched/sch_atm.c
->> @@ -577,7 +577,6 @@ static void atm_tc_reset(struct Qdisc *sch)
->>          pr_debug("atm_tc_reset(sch %p,[qdisc %p])\n", sch, p);
->>          list_for_each_entry(flow, &p->flows, list)
->>                  qdisc_reset(flow->q);
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void atm_tc_destroy(struct Qdisc *sch)
->> diff --git a/net/sched/sch_cbq.c b/net/sched/sch_cbq.c
->> index af126eb3e431..b026daca160e 100644
->> --- a/net/sched/sch_cbq.c
->> +++ b/net/sched/sch_cbq.c
->> @@ -975,7 +975,6 @@ cbq_reset(struct Qdisc *sch)
->>                          cl->cpriority = cl->priority;
->>                  }
->>          }
->> -       sch->q.qlen = 0;
->>   }
->>
->>
->> diff --git a/net/sched/sch_choke.c b/net/sched/sch_choke.c
->> index 2adbd945bf15..25d2daaa8122 100644
->> --- a/net/sched/sch_choke.c
->> +++ b/net/sched/sch_choke.c
->> @@ -315,8 +315,6 @@ static void choke_reset(struct Qdisc *sch)
->>                  rtnl_qdisc_drop(skb, sch);
->>          }
->>
->> -       sch->q.qlen = 0;
->> -       sch->qstats.backlog = 0;
->>          if (q->tab)
->>                  memset(q->tab, 0, (q->tab_mask + 1) * sizeof(struct sk_buff *));
->>          q->head = q->tail = 0;
->> diff --git a/net/sched/sch_drr.c b/net/sched/sch_drr.c
->> index 18e4f7a0b291..4e5b1cf11b85 100644
->> --- a/net/sched/sch_drr.c
->> +++ b/net/sched/sch_drr.c
->> @@ -441,8 +441,6 @@ static void drr_reset_qdisc(struct Qdisc *sch)
->>                          qdisc_reset(cl->qdisc);
->>                  }
->>          }
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void drr_destroy_qdisc(struct Qdisc *sch)
->> diff --git a/net/sched/sch_dsmark.c b/net/sched/sch_dsmark.c
->> index 4c100d105269..7da6dc38a382 100644
->> --- a/net/sched/sch_dsmark.c
->> +++ b/net/sched/sch_dsmark.c
->> @@ -409,8 +409,6 @@ static void dsmark_reset(struct Qdisc *sch)
->>          pr_debug("%s(sch %p,[qdisc %p])\n", __func__, sch, p);
->>          if (p->q)
->>                  qdisc_reset(p->q);
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void dsmark_destroy(struct Qdisc *sch)
->> diff --git a/net/sched/sch_etf.c b/net/sched/sch_etf.c
->> index c48f91075b5c..d96103b0e2bf 100644
->> --- a/net/sched/sch_etf.c
->> +++ b/net/sched/sch_etf.c
->> @@ -445,9 +445,6 @@ static void etf_reset(struct Qdisc *sch)
->>          timesortedlist_clear(sch);
->>          __qdisc_reset_queue(&sch->q);
->>
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->> -
->>          q->last = 0;
->>   }
->>
->> diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
->> index d73393493553..8de4365886e8 100644
->> --- a/net/sched/sch_ets.c
->> +++ b/net/sched/sch_ets.c
->> @@ -727,8 +727,6 @@ static void ets_qdisc_reset(struct Qdisc *sch)
->>          }
->>          for (band = 0; band < q->nbands; band++)
->>                  qdisc_reset(q->classes[band].qdisc);
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void ets_qdisc_destroy(struct Qdisc *sch)
->> diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
->> index 839e1235db05..23a042adb74d 100644
->> --- a/net/sched/sch_fq_codel.c
->> +++ b/net/sched/sch_fq_codel.c
->> @@ -347,8 +347,6 @@ static void fq_codel_reset(struct Qdisc *sch)
->>                  codel_vars_init(&flow->cvars);
->>          }
->>          memset(q->backlogs, 0, q->flows_cnt * sizeof(u32));
->> -       sch->q.qlen = 0;
->> -       sch->qstats.backlog = 0;
->>          q->memory_usage = 0;
->>   }
->>
->> diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
->> index d6aba6edd16e..35c35465226b 100644
->> --- a/net/sched/sch_fq_pie.c
->> +++ b/net/sched/sch_fq_pie.c
->> @@ -521,9 +521,6 @@ static void fq_pie_reset(struct Qdisc *sch)
->>                  INIT_LIST_HEAD(&flow->flowchain);
->>                  pie_vars_init(&flow->vars);
->>          }
->> -
->> -       sch->q.qlen = 0;
->> -       sch->qstats.backlog = 0;
->>   }
->>
->>   static void fq_pie_destroy(struct Qdisc *sch)
->> diff --git a/net/sched/sch_hfsc.c b/net/sched/sch_hfsc.c
->> index d3979a6000e7..03efc40e42fc 100644
->> --- a/net/sched/sch_hfsc.c
->> +++ b/net/sched/sch_hfsc.c
->> @@ -1484,8 +1484,6 @@ hfsc_reset_qdisc(struct Qdisc *sch)
->>          }
->>          q->eligible = RB_ROOT;
->>          qdisc_watchdog_cancel(&q->watchdog);
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void
->> diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
->> index 23a9d6242429..cb5872d22ecf 100644
->> --- a/net/sched/sch_htb.c
->> +++ b/net/sched/sch_htb.c
->> @@ -1008,8 +1008,6 @@ static void htb_reset(struct Qdisc *sch)
->>          }
->>          qdisc_watchdog_cancel(&q->watchdog);
->>          __qdisc_reset_queue(&q->direct_queue);
->> -       sch->q.qlen = 0;
->> -       sch->qstats.backlog = 0;
->>          memset(q->hlevel, 0, sizeof(q->hlevel));
->>          memset(q->row_mask, 0, sizeof(q->row_mask));
->>   }
->> diff --git a/net/sched/sch_multiq.c b/net/sched/sch_multiq.c
->> index cd8ab90c4765..f28050c7f12d 100644
->> --- a/net/sched/sch_multiq.c
->> +++ b/net/sched/sch_multiq.c
->> @@ -152,7 +152,6 @@ multiq_reset(struct Qdisc *sch)
->>
->>          for (band = 0; band < q->bands; band++)
->>                  qdisc_reset(q->queues[band]);
->> -       sch->q.qlen = 0;
->>          q->curband = 0;
->>   }
->>
->> diff --git a/net/sched/sch_prio.c b/net/sched/sch_prio.c
->> index 3b8d7197c06b..c03a11dd990f 100644
->> --- a/net/sched/sch_prio.c
->> +++ b/net/sched/sch_prio.c
->> @@ -135,8 +135,6 @@ prio_reset(struct Qdisc *sch)
->>
->>          for (prio = 0; prio < q->bands; prio++)
->>                  qdisc_reset(q->queues[prio]);
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static int prio_offload(struct Qdisc *sch, struct tc_prio_qopt *qopt)
->> diff --git a/net/sched/sch_qfq.c b/net/sched/sch_qfq.c
->> index d4ce58c90f9f..13246a9dc5c1 100644
->> --- a/net/sched/sch_qfq.c
->> +++ b/net/sched/sch_qfq.c
->> @@ -1458,8 +1458,6 @@ static void qfq_reset_qdisc(struct Qdisc *sch)
->>                          qdisc_reset(cl->qdisc);
->>                  }
->>          }
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void qfq_destroy_qdisc(struct Qdisc *sch)
->> diff --git a/net/sched/sch_red.c b/net/sched/sch_red.c
->> index 40adf1f07a82..f1e013e3f04a 100644
->> --- a/net/sched/sch_red.c
->> +++ b/net/sched/sch_red.c
->> @@ -176,8 +176,6 @@ static void red_reset(struct Qdisc *sch)
->>          struct red_sched_data *q = qdisc_priv(sch);
->>
->>          qdisc_reset(q->qdisc);
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>          red_restart(&q->vars);
->>   }
->>
->> diff --git a/net/sched/sch_sfb.c b/net/sched/sch_sfb.c
->> index 3d061a13d7ed..31717fa45a4f 100644
->> --- a/net/sched/sch_sfb.c
->> +++ b/net/sched/sch_sfb.c
->> @@ -453,8 +453,6 @@ static void sfb_reset(struct Qdisc *sch)
->>          struct sfb_sched_data *q = qdisc_priv(sch);
->>
->>          qdisc_reset(q->qdisc);
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>          q->slot = 0;
->>          q->double_buffering = false;
->>          sfb_zero_all_buckets(q);
->> diff --git a/net/sched/sch_skbprio.c b/net/sched/sch_skbprio.c
->> index 7a5e4c454715..df72fb83d9c7 100644
->> --- a/net/sched/sch_skbprio.c
->> +++ b/net/sched/sch_skbprio.c
->> @@ -213,9 +213,6 @@ static void skbprio_reset(struct Qdisc *sch)
->>          struct skbprio_sched_data *q = qdisc_priv(sch);
->>          int prio;
->>
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->> -
->>          for (prio = 0; prio < SKBPRIO_MAX_PRIORITY; prio++)
->>                  __skb_queue_purge(&q->qdiscs[prio]);
->>
->> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
->> index 0b941dd63d26..db88a692ef81 100644
->> --- a/net/sched/sch_taprio.c
->> +++ b/net/sched/sch_taprio.c
->> @@ -1636,8 +1636,6 @@ static void taprio_reset(struct Qdisc *sch)
->>                          if (q->qdiscs[i])
->>                                  qdisc_reset(q->qdiscs[i]);
->>          }
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void taprio_destroy(struct Qdisc *sch)
->> diff --git a/net/sched/sch_tbf.c b/net/sched/sch_tbf.c
->> index 72102277449e..d0288e223542 100644
->> --- a/net/sched/sch_tbf.c
->> +++ b/net/sched/sch_tbf.c
->> @@ -330,8 +330,6 @@ static void tbf_reset(struct Qdisc *sch)
->>          struct tbf_sched_data *q = qdisc_priv(sch);
->>
->>          qdisc_reset(q->qdisc);
->> -       sch->qstats.backlog = 0;
->> -       sch->q.qlen = 0;
->>          q->t_c = ktime_get_ns();
->>          q->tokens = q->buffer;
->>          q->ptokens = q->mtu;
->> diff --git a/net/sched/sch_teql.c b/net/sched/sch_teql.c
->> index 6af6b95bdb67..79aaab51cbf5 100644
->> --- a/net/sched/sch_teql.c
->> +++ b/net/sched/sch_teql.c
->> @@ -124,7 +124,6 @@ teql_reset(struct Qdisc *sch)
->>          struct teql_sched_data *dat = qdisc_priv(sch);
->>
->>          skb_queue_purge(&dat->q);
->> -       sch->q.qlen = 0;
->>   }
->>
->>   static void
->> --
->> 2.17.1
->>
+> First, I’d like to point out that there would be some inherent overhead in
+> doing so, which might actually not be worth it, as KUnit tool would need to
+> compile HEAD in the UML arch, then we’d have to re-compile everything to a real
+> machine’s architecture, like x86_64 (in the least), having in mind still that
+> arch-dependent issues would not show up when we run tests in UML, so there’s
+> still a downside to it even if it’s quick enough.
+> 
+> Even if we don’t run them as UML and instead use a VM, there’s a VM being run
+> just for a couple of tests, which might be slower than adding a step to a
+> dedicated machine that’s (probably) already available, plus the setup and
+> hardware needed to run a VM inside of a CI runner are overheads in themselves,
+> needing dedicated, modern machines.
 
-Hi Eric:
-	Thank you for your reply. I will modify changelog in v2.
+No - we don't need a dedicated machine for running kunit - the machine that we
+just used to compile the code is perfectly fine.
+Builders used in CI systems usually have beefy server-grade CPUs - pretty good
+candidates for running unit tests (even with virtualization overhead).
+Plus - if the unit tests fail, we can consider skipping the deployment and
+not run any regular tests (just like the case where build has failed).
+Meanwhile, one of the "dedicated machines" (ones that are used to run the tests)
+can actually be a low-power device (think tablet). And if the test ends up
+crashing the kernel, it needs to be rebooted. VMs are much easier to work with,
+especially with kunit.py abstracting away all of the qemu interactions.
 
-Zhengchao Shao
+> 
+> > We would then stop executing the same test multiple times on different machines
+> > (note that both DRM selftests and i915 "mock" selftests are pure unit tests - in
+> > other words, they don't need the hardware to be present), which would save some
+> > (small) amount of machine-time that can be utilized to do something that
+> > actually needs the hardware.
+> 
+> I totally agree with your solution in regards to arch-independent tests, though.
+
+There are no arch-specific kunit tests in DRM-core. There shouldn't be any
+arch-specific code in DRM-core. Same thing for drivers (at least for the purpose
+of COMPILE_TEST and by extension, running kunit).
+All of DRM kunit tests should pass on all architectures supported by kunit.
+
+> 
+> > Plus there's no need to maintain the kunit-runner in IGT.
+> > Note - we're currently going to lose "DMESG-WARN" detection if we go this route,
+> > but this is something that can be improved on the kunit-side.
+> > 
+> > -Michał
+> 
+> There’s also a point to be made on maintaining such a runner if we think about
+> companies like AMD, as they rely heavily on IGT, so they have lots of tests
+> written in there, and it'd be difficult for them to accommodate one more
+> non-trivial thing to their CI. Plus I think this might be a good starting point
+> for them to transition their CI to a KUnit-centered approach without stressing
+> engineers unnecessarily.
+
+I agree with the IGT-compatibility angle, however, that would only apply to test
+content that gets converted from selftests to kunit (just like DRM selftests),
+not newly introduced test content (as is the case with amdgpu).
+I also wouldn't call interpreting exit code of "kunit.py run (...)" something
+that's difficult to be added to various CI pipelines.
+Also - do we really want to transition to KUnit-centered approach?
+Regular IGTs are actually about exercising the HW through driver uAPI from
+userspace, not about isolated unit testing (which is what KUnit is about).
+Then we have selftests, which are implemented on the kernel side, and are about
+internal implementation. Selftests may or may not require HW to operate (if HW
+is needed, we're usually doing more of a functional/integration testing, if not
+- it's most likely going to be a pure unit test).
+I view regular IGTs and KUnit (and kselftests that are not isolated, and need
+the HW to be present) as complementary mechanisms, not something to be replaced
+(in other words - we only want to transition unit tests to KUnit).
+
+When it comes to transition, I'm just worried that once the IGT KTAP parser is
+adopted, the transition to kunit.py @ build time will never happen, and we'll
+end up maintaining custom DRM-specific solution instead of participating in
+wider kernel community.
+
+-Michał
+
+> 
+> Cheers,
+> —
+> Isabella
+> 

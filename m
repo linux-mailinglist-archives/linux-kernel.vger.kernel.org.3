@@ -2,255 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694E359F373
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EE859F381
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbiHXGLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        id S234905AbiHXGNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234889AbiHXGLS (ORCPT
+        with ESMTP id S234875AbiHXGNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:11:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134572C132
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661321475; x=1692857475;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=DGF2ZgVElv9qfDJEQqEXyP5CuvwsgjVx3I0BpEli1PM=;
-  b=Tqz3FAyjSA/T7oy1lQq9uS2RZ+fEOrkoI2TKDX8kNoy85XuhuSidKMiS
-   PNWfkHbOtr7Um/NTZVuWD4dkd9LSKC4aa9ERYLNNlMFzGu5dujvwhVOfb
-   7cKgJwTC5KoL+bVLMEG4mBz4folGgMWQXzB33bF9HuKhC6kgCOwhv9X4j
-   h5mjOZckVfwgOpUc/Y9IVeQbqrFf93GSHHFvpSZEvWJNGXEMPjTjkxjA7
-   AeI+jDpgFevV/EvYxoO/Fj1VAlNICyZ/rAyazK7cPfXiihjabqmK4CuTA
-   f4LB2Zl6WHby1rbzDsh4To4waYfxShpqR67e5Li6/ES6rHommSF/4A67P
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="319933931"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="319933931"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 23:11:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="855141414"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Aug 2022 23:10:59 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 23 Aug 2022 23:10:59 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 23 Aug 2022 23:10:58 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 23 Aug 2022 23:10:58 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 23 Aug 2022 23:10:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eYdquxO33ZhYTVeK9eR0b8GQdIVZJ121Q/bcH9aoMins9pICvtnDvXbvljOiuS6pVhz/8MpS52L35r37u2mcT/fCjb9t9UiBzT/fSppjXxPl9aT9cBI5qkuDwh1GAWAs5KabQU9VRKA1HutYZV+ebxxNExBm4DAYrrjSNFXXODLUjGESqkjEhkoG/agXYZNwnKFWYejYo5//8siTPK4qFMT6yh7pzAge7+SGjIfiQBDsGQQ2Vp2B6uoTG0OVWEJkr1nhPhMbgjmlKbHWVTW0tDZ45etH9lwuB8cpELA2bme2Pha9dLclLuhPPKUpLt+DkMywaHuGuoufu9HEEdq1NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DGF2ZgVElv9qfDJEQqEXyP5CuvwsgjVx3I0BpEli1PM=;
- b=CopXdEQHtthUO5Ukg0HfFXtNnyAC5VYhCF9b//qdRrN7Uo620iyr0TCE9+X73xG6cKeGQ8SYuW4MKllHlVE+pWK18nuU3gwYD4wJ3kXtj59WK482UQREoYV0dZojGpFC9+gqWIwBc892/ZGG++hGmMUDG5fmqz0uBSqCBiBB6S3psJyHPys8nO7uUOL6pKsvEG7w9Jn2n8PekawMc1yzi0n7t6mk+Oxuh2ZS8Iaaf/XsY0Fr/dLMlf67QOrMQ3KuDtTQvuF7iT139irSw0Sf5UYumJWY3oGtOxRMNtaEvE2/Pc8wFydaiT3inbqJp1lbtD9ndaZ0CX4J5bDcFVN5BQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5045.namprd11.prod.outlook.com (2603:10b6:510:3f::11)
- by DM5PR1101MB2122.namprd11.prod.outlook.com (2603:10b6:4:54::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Wed, 24 Aug
- 2022 06:10:57 +0000
-Received: from PH0PR11MB5045.namprd11.prod.outlook.com
- ([fe80::4473:d15a:3836:fed1]) by PH0PR11MB5045.namprd11.prod.outlook.com
- ([fe80::4473:d15a:3836:fed1%6]) with mapi id 15.20.5566.014; Wed, 24 Aug 2022
- 06:10:57 +0000
-From:   "Xue, Zhan" <zhan.xue@intel.com>
-To:     "tj@kernel.org" <tj@kernel.org>
-CC:     "florian@mickler.org" <florian@mickler.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: RE: Regarding WQ_MEM_RECLAIM
-Thread-Topic: Regarding WQ_MEM_RECLAIM
-Thread-Index: Adi20TVWwQYki1ZlTMmpLUbjHR8rhQATLfuAAA7oLRAACaYz8A==
-Date:   Wed, 24 Aug 2022 06:10:56 +0000
-Message-ID: <PH0PR11MB50456E21C95359B57223F23994739@PH0PR11MB5045.namprd11.prod.outlook.com>
-References: <PH0PR11MB50451B7F2F155AD8A893E9E894709@PH0PR11MB5045.namprd11.prod.outlook.com>
- <YwUb8UmXvKNHgSrP@slm.duckdns.org>
- <PH0PR11MB5045D2FF3C98EAE995F7897194739@PH0PR11MB5045.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB5045D2FF3C98EAE995F7897194739@PH0PR11MB5045.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-dlp-product: dlpe-windows
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 761b5005-520b-4539-4aef-08da859768b9
-x-ms-traffictypediagnostic: DM5PR1101MB2122:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iOmCha1KiMezBOQF+PmEQDT61oOP4OrtxaS5P/c+4XArBZx4b2js9yoXdAtOrskuHMPclF+7au6LSkmTcNRNSLxswTcmZpxQW9khJ7bzni32fC2xCBt2JaZNmF0xKzPNQSl6/PK0Pt9J1RzBqYmn4kHm0lb/ryTeY0TJ1hVyDvoZMDzhdQm0XrLvp+8uP+wuk/G8fWRoIeBurxmyPJnyd/VrarVmHOXfyw9C7MFpaHb7FntzrFdTUPjgXbyHyWQwUiLvQV6zVh0pHlX+3lx9BRNYX/Bb3wd4zZMhDmQ+/qZ61+cXLtYpCJBlRTvhKou4Pv/t6QUibDQK374roMUYMEVSu3OxWFgLkEdsSCGMo5Pt0JFOnaQXXpPjU0180zM5dKtkMY12s1VS/JekVTXd+ZO9ygZt26L2h4IYiPDBAEEWQ3j42cReXzaLAiheJTwBh6mJWH5tL/3/hgsNcGv8642QVO3FjcOXdzhXEd97EEs5aFs9mo4yPfQuNlC8gBDPvdLiTGe3jawnaGEaea1UCDVRbeQv5gzp3jD1H0rciWIEa0ueFKX3B0LU4pTiTF7msIPcVdKiLZRQ+YUpl0U1TPo16tCOmMT3jD5T1RZYJkt33Awsl+JI+r41bAfBvDLZtUSPLSmRAm3RPwbXjsl53xYWwaNeyCGMIufFkURFgkJ+kYX+Q8AccCpjHqkGUKi8RpyYZgKr1vqZbu+fTQmXZ8uO/k92p2nLON/ZjcORW0xmso0zBNLDHqkSlkmTTcJ70MAV3P1+RbjeT3TxD75Io1susyEeaB7lCa9LVZ2Fhg8BYwFzngxFI3ZKWZFfuTf0hS+S9STQ5S9i/5fbhz3ndg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5045.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(376002)(396003)(39860400002)(366004)(55016003)(966005)(186003)(5660300002)(66946007)(4326008)(64756008)(66446008)(83380400001)(52536014)(66556008)(76116006)(66476007)(8936002)(6506007)(41300700001)(26005)(2940100002)(478600001)(7116003)(33656002)(9686003)(7696005)(8676002)(53546011)(71200400001)(86362001)(82960400001)(122000001)(316002)(6916009)(2906002)(54906003)(38070700005)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?kpBo+2Jph4NPcu6zteE8sDicaTqbqtUGnuzQrOU5ffZa4K19lje8r7ow+e?=
- =?iso-8859-1?Q?N+AY2IcZ7hGSlj6yQHazKRxHJkzfas8w5zTQedIq0DVfVOg+1KaZziWOTC?=
- =?iso-8859-1?Q?jtzOTqfYCghg4mztiEczTq0CThs1KXzl2LwOMwy6JCDS09W7oEsEAxVfJi?=
- =?iso-8859-1?Q?HlNg4e7K5sNzOJsN53PjVjpA8mksGJXYqugdoIh33Hcp7ca/vhLb9aGprO?=
- =?iso-8859-1?Q?MztQhN4R9e49Aj0YtTcSJqurikz6yfgeqhCMcXXHVjOAXYTQ+xabtKTjh+?=
- =?iso-8859-1?Q?iOypvkjYfe6wTngkDgzMArCe1hb0uh2b3knrOw5KA6lrWelEaa2OTjR0gE?=
- =?iso-8859-1?Q?MpvWXLoEDOTgsJamaBWOZ2s1sBa4slgeykU7rVRcIj8h8rjPzYXrOL/uk0?=
- =?iso-8859-1?Q?uDoYjoVLXDEJ+HpGEK2xDro0njI1pTI71NDAf5zEo52AJcQpocTUlzphV9?=
- =?iso-8859-1?Q?iEMhO6vpmTFg9ff4UU0y5mPQWQPDbTEDL1zgPFx0ZHHz3cDP2t2xYAbtD5?=
- =?iso-8859-1?Q?X6TRvKUrhWJwr3G6se1FOuvyupAurNeDdGshuujDbDtXV/1kvzvWV3Blz+?=
- =?iso-8859-1?Q?7NYM0/e6TMt0IDRyAVfccj5OmXfIQNO7xLdBXdwbVLo3th43ibpcHCy8Ii?=
- =?iso-8859-1?Q?344CIc2asajytsmeiB8sbf9jX4v2FlQAy0VvC4M+mH3yZHPpfh2I6K/W88?=
- =?iso-8859-1?Q?hQFP+6nvBHjfrM8jqWCRC91n0B7l1tfxkB7la1hyjxK2Jtv/JMJsI8sWPE?=
- =?iso-8859-1?Q?/K7Fg7/lDQt9ImgHRAGJm4CMGLrWj9xFmztnEHO7drdrGVFahtlAVbZqNg?=
- =?iso-8859-1?Q?UNyPLX1YBqQF/3WK0HxuFdlbG/e3EpdEj9QtjRMqdG737rOij9GxAW5oaD?=
- =?iso-8859-1?Q?yU5cCt0F0+zJGz8yzSLbl/IM0kumcMQ8UNuIwlv7dbOdFIJR6MXQL4kkWO?=
- =?iso-8859-1?Q?Tix9BxTETsJKQPvikT12XawVbyjuMVFZFpwRguaFxdV59QlbYtz+iEqn0V?=
- =?iso-8859-1?Q?E8T9y1fhgxvtwSglTIQrF86j2N3kjYSC0wp3HYQuoHR6g4sf+tUTB8G7e+?=
- =?iso-8859-1?Q?+0jUVgjmxT2fk93CVa8sAvmXOGwz+1AkuLaek0o3yccLLR+q3Tf71CLNLA?=
- =?iso-8859-1?Q?G8+QT5ga+nUeAtt2CMjB3VarTueKOQO3I1waPhH6k8ZcG0XxfT+nA/V0QL?=
- =?iso-8859-1?Q?7B1+ZbpcCkO2f3YWB9mL1fKGan4pcwdApeL8EM56JxJVQH/TruDU7bodij?=
- =?iso-8859-1?Q?lj4TiePPXr8pVFXU6k/mQ/nJDqJFFrHGbtfL2GCQbaj2N0vP9Nd8bPbi+4?=
- =?iso-8859-1?Q?igrLqfZSTgmQ7if8vXbFktCNL3cRRW81KcT/9BAVredyIy7oQRTahl5j3O?=
- =?iso-8859-1?Q?aam+5VEN73qolaculjTG09S1q4O4s+IqEXhVrFWDaPA/K4YquIHiaK8kpp?=
- =?iso-8859-1?Q?n83RZKgjjhJVagcdmU77QHTN2d/JsCWd/OxwxFmrsWaON0nqdmlq9Z5k/x?=
- =?iso-8859-1?Q?7Cor6qLrOmfS93vjP1t51UAre89YYmcRn5nGvqi42vnzLZUw6Kr5F59Qbu?=
- =?iso-8859-1?Q?JzbmRkUW/5UqLrrcTtY6qqNGLYVBeR3LPw9aJ3FwXJOaZXnBxSWkCGecFt?=
- =?iso-8859-1?Q?hluH3tefIQEAbHpnFMX4+qVNpcc52q8n0S?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 24 Aug 2022 02:13:42 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE90422E5
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x63-20020a17090a6c4500b001fabbf8debfso530221pjj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=AjR9XSu1Nnujm9uAtsWKpMZYdgaGmcyKS3pcgGtNRUM=;
+        b=l/pSwXqA6guVnJ/fx7K2+lSbwt6YRJjnrqrTJHpYb5w/lPaPEyCRI2QoDK9P6vhblk
+         fuThyVN/dGpp+Qa47H5eIUfXYMlTxKI/vPK+mX8cGggbUV+ERX/lHsq5kzJbLd8hsd+7
+         /j8Nnj8egrXjVUqmrxGY2F/0XfEoEmNtx5y/uZpVJKTva2JbXG7Y4SOC/NHX3s/W1T6e
+         jSuevNypXxEV2OKm1jYaGvpZ7nsSCDMITwizhqOQis7oPtDvWOKLH8Q/3lVZFo27LCQz
+         i930bzrmqKe+VZIuiDLHFTsoIIAOQYXIGWcPzIxewmQsPGKCHgMAHoLyMuTCq0hvs5Dh
+         1bEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=AjR9XSu1Nnujm9uAtsWKpMZYdgaGmcyKS3pcgGtNRUM=;
+        b=oQ57lR1JocBx4oCF9xeHjiCHOVNlwJkmrceu1UvL/SEJ0z8J+sztKXPpJa/6wFy/hQ
+         k4oqd9v3qdmP4++SUIrEH2ZmQN7NfNfsFBkT3snLMnXobo6G8CQu6rhXVWnIiDvmFSSC
+         8FRAcORHLTMO/kzEw3UqVTboUW14Pc6AdGzDhSsjmmBCNbkyGgbs3fzTj7P+Ro796r/e
+         zybP54KTGYxLvWDUvSkENDCwes/G4sQDnCj/nslolHuZ+jjVECoarcUH0cizGkqmp69z
+         ph4v4+YeceeiajGniEc8aucqP2k933CRfW9YnVEMEU8PLiOEExvnxOj5vT5oMjbVM77w
+         BHdA==
+X-Gm-Message-State: ACgBeo39kOmqcFz/m6HNZlnol9crVV6/kG1xyQrb7SycSGoIYxIM9ENU
+        6tAcyFq+F4PhkS3Rugf8Qg5GDA==
+X-Google-Smtp-Source: AA6agR7q00M3tCfGwdQsjPNGovJMwuhXdx/RcRhLw9z81kXeVR2UCGA4aOdveVFjy27b+5HqazB7tg==
+X-Received: by 2002:a17:902:c945:b0:16d:d425:324a with SMTP id i5-20020a170902c94500b0016dd425324amr26788193pla.7.1661321620331;
+        Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b0016d93c84049sm11572397pln.54.2022.08.23.23.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 23:13:39 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 11:43:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.or, lenb@kernel.org,
+        robert.moore@intel.com, punit.agrawal@bytedance.com,
+        lukasz.luba@arm.com, ionela.voinescu@arm.com,
+        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Message-ID: <20220824061337.dtgfmhgossyhzjpy@vireshk-i7>
+References: <20220818211619.4193362-1-jeremy.linton@arm.com>
+ <20220818211619.4193362-2-jeremy.linton@arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5045.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 761b5005-520b-4539-4aef-08da859768b9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 06:10:56.9720
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MYzzkkNQYR0xbQdUKhuhzFZL8ymYNgq/iCGEHnsQ4jOcK/8aEhG8IbA8ElTuiTee2czm62EgtDqEAvsCLZdEhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2122
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818211619.4193362-2-jeremy.linton@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert to plain text..
+On 18-08-22, 16:16, Jeremy Linton wrote:
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> +bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +	int cpu;
+> +
+> +	for_each_present_cpu(cpu) {
+> +		struct cpc_register_resource *ref_perf_reg;
+> +		struct cpc_desc *cpc_desc;
+> +
+> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +
+> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+> +			return true;
+> +
+> +
+> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+> +
+> +		/*
+> +		 * If reference perf register is not supported then we should
+> +		 * use the nominal perf value
+> +		 */
+> +		if (!CPC_SUPPORTED(ref_perf_reg))
+> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+> +
+> +		if (CPC_IN_PCC(ref_perf_reg))
+> +			return true;
+> +	}
 
-From: Xue, Zhan=20
-Sent: Wednesday, August 24, 2022 1:47 PM
-To: tj@kernel.org
-Cc: florian@mickler.org; LKML <linux-kernel@vger.kernel.org>
-Subject: RE: Regarding WQ_MEM_RECLAIM
+Add a blank line here please.
 
-Hi Tejun,
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 Please refer my inline comments infra. Thx.
+> +	return false;
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+> +
+>  /**
+>   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+>   * @cpunum: CPU from which to read counters.
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 24eaf0ec344d..32fcb0bf74a4 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
+>  
+>  static struct cpufreq_driver cppc_cpufreq_driver;
+>  
+> +static enum {
+> +	FIE_UNSET = -1,
+> +	FIE_ENABLED,
+> +	FIE_DISABLED
+> +} fie_disabled = FIE_UNSET;
+> +
+>  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+> +module_param(fie_disabled, int, 0444);
+> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+>  
+>  /* Frequency invariance support */
+>  struct cppc_freq_invariance {
+> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>  	struct cppc_freq_invariance *cppc_fi;
+>  	int cpu, ret;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	for_each_cpu(cpu, policy->cpus) {
+> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>  	struct cppc_freq_invariance *cppc_fi;
+>  	int cpu;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	/* policy->cpus will be empty here, use related_cpus instead */
+> @@ -229,7 +237,21 @@ static void __init cppc_freq_invariance_init(void)
+>  	};
+>  	int ret;
+>  
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	switch (fie_disabled) {
+> +	/* honor user request */
+> +	case FIE_DISABLED:
+> +	case FIE_ENABLED:
+> +		break;
+> +	case FIE_UNSET:
+> +	default:
+> +		fie_disabled = FIE_ENABLED;
+> +		if (cppc_perf_ctrs_in_pcc()) {
+> +			pr_info("FIE not enabled on systems with registers in PCC\n");
+> +			fie_disabled = FIE_DISABLED;
+> +		}
+> +		break;
+> +	}
 
+here too.
 
-BR
-XueZhan
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	kworker_fie = kthread_create_worker(0, "cppc_fie");
+> @@ -247,7 +269,7 @@ static void __init cppc_freq_invariance_init(void)
+>  
+>  static void cppc_freq_invariance_exit(void)
+>  {
+> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+> +	if (fie_disabled)
+>  		return;
+>  
+>  	kthread_destroy_worker(kworker_fie);
+> @@ -936,6 +958,7 @@ static void cppc_check_hisi_workaround(void)
+>  		    wa_info[i].oem_revision == tbl->oem_revision) {
+>  			/* Overwrite the get() callback */
+>  			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
+> +			fie_disabled = FIE_DISABLED;
+>  			break;
+>  		}
+>  	}
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index f73d357ecdf5..c5614444031f 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+>  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>  extern int cppc_set_enable(int cpu, bool enable);
+>  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+> +extern bool cppc_perf_ctrs_in_pcc(void);
+>  extern bool acpi_cpc_valid(void);
+>  extern bool cppc_allow_fast_switch(void);
+>  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+>  {
+>  	return -ENOTSUPP;
+>  }
+> +static inline bool cppc_perf_ctrs_in_pcc(void)
+> +{
+> +	return false;
+> +}
+>  static inline bool acpi_cpc_valid(void)
+>  {
+>  	return false;
 
------Original Message-----
-From: Tejun Heo <mailto:htejun@gmail.com> On Behalf Of mailto:tj@kernel.org
-Sent: Wednesday, August 24, 2022 2:27 AM
-To: Xue, Zhan <mailto:zhan.xue@intel.com>
-Cc: mailto:florian@mickler.org
-Subject: Re: Regarding WQ_MEM_RECLAIM
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Hello,
-
-On Tue, Aug 23, 2022 at 09:29:07AM +0000, Xue, Zhan wrote:
-> Hi Tejun Heo, Florian Mickler,
->=A0=A0=A0=A0=A0=A0=A0 I see a few patches and discussions regarding WQ_MEM=
-_RECLAIM.=A0 Could you pls confirm the explicit rules?=A0=A0 e.g.=A0 Is=A0 =
-devm_kzalloc with GFP_KERNEL allowed in the work queued to wq marked with W=
-Q_MEM_RECLAIM?=A0 Thx
-
-Yeah, for sure. The only thing WQ_MEM_RECLAIM does is guaranteeing forward =
-progress to work items on the workqueue under memory shortage. The workqueu=
-e can be used for whatever. The thing to be careful about is that the forwa=
-rd progress guarantee is good for one concurrent excecution instance for a =
-workqueue.
-
-[XZ]: =A0We could also say WQ_MEM_RECLAIM can benefit memory pressure mitig=
-ation for the whole system (not only to the current wq or other work items =
-on it)=A0 if some work items are with memory reclaim? =A0=A0=A0
-
-Let's say you have two work items queued on the workqueue and the system is=
- under severe memory pressure, so the rescuer thread is running the first w=
-ork item. If that first work item does a GFP_KERNEL allocation and gets stu=
-ck and the second work item won't be able to run until somebody releases th=
-e memory pressure. If the second work item is actually needed to make forwa=
-rd progress in memory reclaim, the situation isn't great. The second work i=
-tem probably shouldn't have shared the workqueue with the first work item.
-
-[XZ]: =A0if the rescuer thread could distinguish the work items for memory =
-reclaim and choose to execute them first, would it be possible to mitigate =
-such situation?=A0 It needs to =A0add specific tag to indicate if the work =
-item is with memory reclaim or not ( or other mechanism to indicate the dep=
-endency relationship between work items on that wq for execution sequence/p=
-riority).
-
-[XZ]: =A0Also would like to confirm the understanding of check_flush_depend=
-ency (https://docs.kernel.org/core-api/workqueue.html). =A0=A0=A0If the cur=
-rent wq is without WQ_MEM_RECLAIM ( memory reclaim),=A0 there will be no WQ=
-_MEM_RECLAIM requirement for the target wq and it's up to target wq to set =
-WQ_MEM_RECLAIM or not per its need ?
-
-One use case is that the current wq may be with the WQ_MEM_RECLAIM =A0for m=
-emory reclaim (e.g. the work item on current wq may free quite a few pages)=
-=A0 but the target wq (work items on it)=A0 is irrelevant to memory reclaim=
-. =A0=A0There will be a warning " workqueue: WQ_MEM_RECLAIM (current wq) is=
- flushing !WQ_MEM_RECLAIM events:(target wq)" =A0due to the requirement of =
-flush dependency sanity.=A0 To address it there may be several options as b=
-elow. =A0It seems opt1 is preferred? =A0
-
-Opt1: =A0=A0The target wq can be marked with WQ_MEM_RECLAIM as well even it=
- isn't really in any memory reclaim path.=A0=A0 It's to ensure the work ite=
-m on target wq can get flushed (e.g. by its rescuer thread) =A0then the wor=
-k item on current wq can continue the memory reclaim.=20
-Opt2: =A0=A0Having neither current wq nor target wq marked with WQ_MEM_RECL=
-AIM can also pass the check_flush_dependency. =A0
-
-Actually in practice the scenario may be more complicated, e.g. the work it=
-em on current wq may free a big chunk of memory, but before that it may nee=
-d to =A0devm_kzalloc a small piece of memory with GFP_KERNEL for specific p=
-urpose, etc. =A0=A0Sometimes it seems more like a trade-off and needs to me=
-asure the Pros/Cons case by case.
-
-
-> If there are indeed some principles it's good to update them into doc lik=
-e https://www.kernel.org/doc/html/v4.10/core-api/workqueue.html .
-
-Ah yeah, that'd be great. I don't have the bw right now but if anyone wanna=
- take a stab at it, please be my guest.
-
-[XZ]: I feel it's good to have use cases(e.g. if above case mentioned is ap=
-propriate) =A0listed for guidance.
-
-Thanks.
-
---
-tejun
+-- 
+viresh

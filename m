@@ -2,230 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B085559F74B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BAF59F753
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbiHXKS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S236776AbiHXKTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236284AbiHXKSy (ORCPT
+        with ESMTP id S231846AbiHXKT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:18:54 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D7475FD4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:18:52 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id kk26so2878996ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=jYmWHg1umNQmTFAwHrCQ8H6AfC+tenyU3IxwvmYsyvo=;
-        b=qfFFRs5A0nr5chGy5gZIGGb4C9QrEEKgXqfyx/fNmBO9DMO56woexl6r1J5hd6xkVl
-         pLvfy0VeOa50Wh2l1jUgJ+098USlLXKqbAzbAzuiFxp99NBVU11ZvT/9TWP1SCroYNH6
-         dMSlnl7vipOpaSRLvPVYtNwGW3xpuQyDPiH28ME27+igm2RkGKmX+bCJRp7CHYcM8goH
-         Is5alYIwsk0mWIwD0OHL3dFsZqWJTnBf4Icxr3tJI7xGMK86gxIky2SAfYL4pMdJTRcq
-         YLAzLYn54dy/EiDGWopEFP8angsfSlkFeMAazJLpWM1p7yNgDwORj2l/2sryFuDnhPWe
-         9OJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=jYmWHg1umNQmTFAwHrCQ8H6AfC+tenyU3IxwvmYsyvo=;
-        b=walWfHvbv+jir0SzFejr8m0xoaU35GgARXXBGgKOl2QuZcK7urFlRFGDZfT/V+mwgC
-         x/8OUfHAfFCCYLQghXdmAlYnSvNxeZeOpCJ8qSyVShWeRvLYrMNhaXD5zUwL8PMmZETq
-         zWWv0kPqXPukI23FvNVdhPfYvy60F71vdHwb+Yqu8+1CGPfsvZlixGEXNmc4RUQaFxc8
-         yh8f3YJyKnd+rQCNIbAFqPjg0kyZI2ecb9Wbgh0UAmqYOyUgVYLs8GFGaZRqsXSMG371
-         ojsSMVqhk/NDM6bW+Od/WJyxQlw3nbg3rdLZnEnW0NR9Frj+Z+IKsD+UWFlblw2JSH8b
-         hAIg==
-X-Gm-Message-State: ACgBeo2E/5UFh6YNqHJZWTdA/TPjrfZkUMmr2Vo+naQeBqNUaujGRoYL
-        8/ShsTq5QuLl39ZhT5a4ST6bsw==
-X-Google-Smtp-Source: AA6agR7KrEG4ut026LV0Mq54d8UpUznV2OMm471/Cdz0HVJekjcDeZXHFvdU2Ez10kvhxXYz6nrh/Q==
-X-Received: by 2002:a17:907:6d8f:b0:73d:8416:908b with SMTP id sb15-20020a1709076d8f00b0073d8416908bmr2334903ejc.651.1661336330570;
-        Wed, 24 Aug 2022 03:18:50 -0700 (PDT)
-Received: from localhost ([2a02:8070:6389:a4c0:2ca9:6d59:782b:fff3])
-        by smtp.gmail.com with ESMTPSA id fb17-20020a1709073a1100b0072b32de7794sm963537ejc.70.2022.08.24.03.18.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 03:18:49 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 06:18:49 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     tj@kernel.org, mkoutny@suse.com, surenb@google.com,
-        gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
-        peterz@infradead.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 09/10] sched/psi: cache parent psi_group to speed up
- groups iterate
-Message-ID: <YwX7CeeRDDAhV3UH@cmpxchg.org>
-References: <20220824081829.33748-1-zhouchengming@bytedance.com>
- <20220824081829.33748-10-zhouchengming@bytedance.com>
+        Wed, 24 Aug 2022 06:19:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769A775FD4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661336367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VPCYtTaUZWpL796MsnlJYTznsS4pYxjYV+Pv2KRlCtI=;
+        b=EyeY3UukD9gOBM9bHAPCCHTjyPMvB82s1huRZAUS6ROrR3pCRrL3W87ZMpQ6A6cssLqi3C
+        i/rHkEHz2YVKS6V0PI9VyfOvB0kvXCRb5BbS4pQEl4t68wyWV0cJu68S/PY3ymeEvozPWW
+        gBnASNeCj6kxYc39bNHHMB4Gr48J2yU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-363-5WK-AnyhMUS1qtFcUUl9XA-1; Wed, 24 Aug 2022 06:19:25 -0400
+X-MC-Unique: 5WK-AnyhMUS1qtFcUUl9XA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E95E185A599;
+        Wed, 24 Aug 2022 10:19:24 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D2D8418ECC;
+        Wed, 24 Aug 2022 10:19:23 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220818125038.2247720-1-sunke32@huawei.com>
+References: <20220818125038.2247720-1-sunke32@huawei.com>
+To:     Sun Ke <sunke32@huawei.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, jefflexu@linux.alibaba.com
+Subject: Re: [PATCH v3] cachefiles: fix error return code in cachefiles_ondemand_copen()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824081829.33748-10-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3700078.1661336363.1@warthog.procyon.org.uk>
+Date:   Wed, 24 Aug 2022 11:19:23 +0100
+Message-ID: <3700079.1661336363@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chengming,
+	/* fail OPEN request if copen format is invalid */
+	ret = kstrtol(psize, 0, &size);
+	if (ret) {
+		req->error = ret;
+		goto out;
+	}
 
-This looks generally good to me, but I have one comment:
+	/* fail OPEN request if daemon reports an error */
+	if (size < 0) {
+		if (!IS_ERR_VALUE(size))
+			ret = size = -EINVAL;
+		req->error = size;
+		goto out;
+	}
 
-On Wed, Aug 24, 2022 at 04:18:28PM +0800, Chengming Zhou wrote:
-> @@ -772,30 +772,18 @@ static void psi_group_change(struct psi_group *group, int cpu,
->  		schedule_delayed_work(&group->avgs_work, PSI_FREQ);
->  }
->  
-> -static struct psi_group *iterate_groups(struct task_struct *task, void **iter)
-> +static inline struct psi_group *task_psi_group(struct task_struct *task)
->  {
-> -	if (*iter == &psi_system)
-> -		return NULL;
-> -
->  #ifdef CONFIG_CGROUPS
-> -	if (static_branch_likely(&psi_cgroups_enabled)) {
-> -		struct cgroup *cgroup = NULL;
-> -
-> -		if (!*iter)
-> -			cgroup = task->cgroups->dfl_cgrp;
-> -		else
-> -			cgroup = cgroup_parent(*iter);
-> -
-> -		if (cgroup && cgroup_parent(cgroup)) {
-> -			*iter = cgroup;
-> -			return cgroup_psi(cgroup);
-> -		}
-> -	}
-> +	if (static_branch_likely(&psi_cgroups_enabled))
-> +		return cgroup_psi(task_dfl_cgroup(task));
->  #endif
-> -	*iter = &psi_system;
->  	return &psi_system;
->  }
->  
-> +#define for_each_psi_group(group) \
-> +	for (; group; group = group->parent)
+Should ret get set to the error in size?
 
-It would be better to open-code this. It's hiding that it's walking
-ancestors, and the name and single parameter suggest it's walking some
-global list - not that the parameter is iterator AND starting point.
+David
 
-This makes for particularly obscure code in the discontiguous loops in
-psi_task_switch():
-
-	group = task_psi_group(task);
-	for_each_psi_group(group)
-		if (group == common)
-			break;
-	/* This looks like a second full loop: */
-	for_each_psi_group(group)
-		...
-
->  static void psi_flags_change(struct task_struct *task, int clear, int set)
->  {
->  	if (((task->psi_flags & set) ||
-> @@ -815,7 +803,6 @@ void psi_task_change(struct task_struct *task, int clear, int set)
->  {
->  	int cpu = task_cpu(task);
->  	struct psi_group *group;
-> -	void *iter = NULL;
->  	u64 now;
->  
->  	if (!task->pid)
-> @@ -825,7 +812,8 @@ void psi_task_change(struct task_struct *task, int clear, int set)
->  
->  	now = cpu_clock(cpu);
->  
-> -	while ((group = iterate_groups(task, &iter)))
-> +	group = task_psi_group(task);
-> +	for_each_psi_group(group)
->  		psi_group_change(group, cpu, clear, set, now, true);
-
-task_psi_group() is never NULL, so this should be a do-while loop:
-
-	group = task_psi_group(task);
-	do {
-		psi_group_change(group, cpu, clear, set, now, true);
-	} while ((group = group->parent));
-
-> @@ -834,7 +822,6 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  {
->  	struct psi_group *group, *common = NULL;
->  	int cpu = task_cpu(prev);
-> -	void *iter;
->  	u64 now = cpu_clock(cpu);
->  
->  	if (next->pid) {
-> @@ -845,8 +832,8 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  		 * we reach the first common ancestor. Iterate @next's
->  		 * ancestors only until we encounter @prev's ONCPU.
->  		 */
-> -		iter = NULL;
-> -		while ((group = iterate_groups(next, &iter))) {
-> +		group = task_psi_group(next);
-> +		for_each_psi_group(group) {
-
-Ditto.
-
->  			if (per_cpu_ptr(group->pcpu, cpu)->state_mask &
->  			    PSI_ONCPU) {
->  				common = group;
-> @@ -887,9 +874,12 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  
->  		psi_flags_change(prev, clear, set);
->  
-> -		iter = NULL;
-> -		while ((group = iterate_groups(prev, &iter)) && group != common)
-> +		group = task_psi_group(prev);
-> +		for_each_psi_group(group) {
-> +			if (group == common)
-> +				break;
-
-Ditto.
-
->  			psi_group_change(group, cpu, clear, set, now, wake_clock);
-> +		}
->  
->  		/*
->  		 * TSK_ONCPU is handled up to the common ancestor. If we're tasked
-> @@ -897,7 +887,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  		 */
->  		if (sleep || unlikely(prev->in_memstall != next->in_memstall)) {
->  			clear &= ~TSK_ONCPU;
-> -			for (; group; group = iterate_groups(prev, &iter))
-> +			for_each_psi_group(group)
->  				psi_group_change(group, cpu, clear, set, now, wake_clock);
-
-This can stay as is, group may already be NULL here.
-
-> @@ -907,7 +897,6 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  void psi_account_irqtime(struct task_struct *task, u32 delta)
->  {
->  	int cpu = task_cpu(task);
-> -	void *iter = NULL;
->  	struct psi_group *group;
->  	struct psi_group_cpu *groupc;
->  	u64 now;
-> @@ -917,7 +906,8 @@ void psi_account_irqtime(struct task_struct *task, u32 delta)
->  
->  	now = cpu_clock(cpu);
->  
-> -	while ((group = iterate_groups(task, &iter))) {
-> +	group = task_psi_group(task);
-> +	for_each_psi_group(group) {
->  		groupc = per_cpu_ptr(group->pcpu, cpu);
-
-do-while again.
-
-With that,
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-
-Thanks!

@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463E65A0181
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED705A0188
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbiHXSnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S239788AbiHXSox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiHXSnL (ORCPT
+        with ESMTP id S232084AbiHXSou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:43:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0DD7A761;
-        Wed, 24 Aug 2022 11:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661366591; x=1692902591;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6eT7fMb+dHOWan1/ECU9slGyuY/ttLNe4NtX2rjpGl0=;
-  b=P0+wXy29db0FReQCPOhxw+WMqLieGJdlSDL7lZE+yLkv2xA8o1NAwYui
-   kELcD19gvgXlHOS0lu4V5VV8rGlrAFAPxIqzz/BAE0jHKgDBOtoKuxlbu
-   Tlvbj11Ez1dbhwbFmDzCJZJ6OAnwREH+iFBn5B9AvWefgoe5BFnZ19feE
-   AIvXfYiFAcpT0wIN8wHcqNStrOIwodR3cPtFb1T7JH43Q6wvzaZe2iArY
-   34wkt6Cut5+MnA6hJc0v6/rXqWdIdlGuyDy60oLiehrmORrBkYdSu2qpw
-   QuWxiwqSiOv6TiSYqJajRS/yMT2NI1675e08rkOAS+2+1uvVHQqWOZAne
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="274436973"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="274436973"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 11:43:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="938022285"
-Received: from skeshri-mobl.ger.corp.intel.com (HELO [10.212.154.182]) ([10.212.154.182])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 11:43:10 -0700
-Message-ID: <10bc452f-3564-e41b-836d-e135a8f4260d@intel.com>
-Date:   Wed, 24 Aug 2022 11:43:10 -0700
+        Wed, 24 Aug 2022 14:44:50 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84E362D9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:44:48 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id l8so7676234lfc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=JTYkOn2/lJTDmbf1Y5o6kNVGh/wX3WwhysufbkHfkwE=;
+        b=ITiSSNp34hiy/4MmcU+rJfM6ZUYMX8XQuWeU/gRfqufx92hmheTjQV9dQ4RZT/X6AW
+         mGKIVuBDQskZHbvErnRVFXnY30xzHX4/muyCFkPLdW67IjnLDOA2GvMPoM+ZIlEIu6cY
+         CPob6W8ogYEDqiUNIvxloyOBGeV3mwQqDk8gCmCjOudypaMdUaxZKLMKNtb4yjMPqXap
+         fQgm/iH26WfW5w/6T0GJAMGjh9I7IYX7mhfVs5ZaKENu59/AcP6QIjoMxXrIjrOE/U3B
+         hTQrXaAmlCkSF/eKm5pMbYbG6Ux7ZSyiMkrWrdSD5rJUEk3KZe0UrIXbGIM/XaBIMa3N
+         tXKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JTYkOn2/lJTDmbf1Y5o6kNVGh/wX3WwhysufbkHfkwE=;
+        b=JTFKWQ8+77zLsPSVXnqTSrQ8R/uZGR8zAvWc3HgUyyPQir8bBULMqs9L3aApVoZYhF
+         LHtWY78CxqavVL0kXDwKT93WTuCM+lhP9bBmOlB1jqd80FXktXGjBJshOqO3tT1oomhc
+         nYoJQzim8BEEbr4t6A0G/mpr/LJLKt1WP6o2F7uHb6wOorZKNjk7o/Rx5DexmHd3DJ5t
+         FaYZmqZnL87B9dquPXIISDNhPX/YDutoHVZd+4P/yLqjDhFKWvIlNl/YrPjYSdZCLvai
+         YCb19v0Dwx7UTG03y4D04vfqGonLJHOTnI0AscJRHCOSsvlNEkbWLdglg2OcJUwe93XR
+         XkZw==
+X-Gm-Message-State: ACgBeo3YB00PF0uOUEb3G6RIhRv9WldgwI8ZgFg9etiOw+Crn93Ecp/f
+        DbIqpm4JaC4ZJeIhygEyCpjazHSkYwF3Ry7PQvErgUEhpFc=
+X-Google-Smtp-Source: AA6agR7E6A7xBhZ8TnKs/WZv8qFVsc3CQb2aM5QheWrBMPV8dC7OHW37Q6b9CHQSET33+I8e7EyDdD0eop33I/LPo/8=
+X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
+ k3-20020ac24f03000000b0048a6061bd8emr83360lfr.647.1661366686878; Wed, 24 Aug
+ 2022 11:44:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/sev: Don't use cc_platform_has() for early SEV-SNP
- calls
-Content-Language: en-US
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Asish Kalra <ashish.kalra@amd.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>
-References: <0c9b9a6c33ff4b8ce17a87a6c09db44d3b52bad3.1661291751.git.thomas.lendacky@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <0c9b9a6c33ff4b8ce17a87a6c09db44d3b52bad3.1661291751.git.thomas.lendacky@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220824152420.20547-1-bp@alien8.de> <20220824172929.GA25951@gate.crashing.org>
+In-Reply-To: <20220824172929.GA25951@gate.crashing.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 24 Aug 2022 11:44:35 -0700
+Message-ID: <CAKwvOdm+yFhZ2pYLJ5vpj1YyNJmG=UVF4cTz_m+0UfDGNGsRbQ@mail.gmail.com>
+Subject: Re: [PATCH] x86/sev: Mark snp_abort() noreturn
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+        Michael Matz <matz@suse.de>, linux-toolchains@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 14:55, Tom Lendacky wrote:
-> When running identity mapped and depending on the kernel configuration,
-> it is possible that cc_platform_has() can have compiler generated code
-> that uses jump tables. This causes a boot failure because the jump table
-> uses un-mapped kernel virtual addresses, not identity mapped addresses.
-> This has been seen with CONFIG_RETPOLINE=n.
+On Wed, Aug 24, 2022 at 10:33 AM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+>
+> Hi!
+>
+> On Wed, Aug 24, 2022 at 05:24:20PM +0200, Borislav Petkov wrote:
+> > Mark both the function prototype and definition as noreturn in order to
+> > prevent the compiler from doing transformations which confuse objtool
+> > like so:
+> >
+> >   vmlinux.o: warning: objtool: sme_enable+0x71: unreachable instruction
+>
+> Would -Wmissing-noreturn have caught this?
 
-So, we don't have *ANY* control over where the compiler uses jump
-tables.  The kernel just happened to add some code that uses them, fell
-over, and this adds a hack to get booting again.
-
-Isn't this a bigger problem?
+Oh, that's shiny. Is that relatively new?
+-- 
+Thanks,
+~Nick Desaulniers

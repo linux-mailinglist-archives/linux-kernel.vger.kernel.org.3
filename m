@@ -2,254 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6502859FE64
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF4459FE62
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238870AbiHXPbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
+        id S238840AbiHXPbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239542AbiHXPaz (ORCPT
+        with ESMTP id S239577AbiHXPa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:30:55 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659101900D
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:30:52 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id c16-20020a17090aa61000b001fb3286d9f7so3607008pjq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Nr6VDxQ+9Z3MRjk/tSo9PTiJ5/YnHSGlAbzSQvtKymc=;
-        b=qmjOD5wPUNDa8iTubLMf8v2s9M6JFSV1346e97d8+/FNWBwZ2rxbX0DX6lGi4Rhsim
-         9Jju7OGBeF35kUbBqdgzumB8y0J0rYYdHqGts5j2+GE56XmLVT+6nI7SY9al0GMs0x62
-         OTM6yf8WgWUY7pPvvb9P+GRM3OXq1+JGe3wJDAvEjFWB2YuetvY8J7IFCxhQckNs0rk9
-         tGYYH2zB6V0VEe528zfagh6OLsIomAMjIY63L/i+/4dhst6HTC5iuV1mGz2MRe966WtE
-         8r0Qx8bJLjfLSbtP88LDHqKAFr0whNygXd7u67EK7O8Hc/4BvDsDfila4lT8Yuf3g8K2
-         OUVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Nr6VDxQ+9Z3MRjk/tSo9PTiJ5/YnHSGlAbzSQvtKymc=;
-        b=agOiHx0thtleATFfSZ5zQddAosvuvL4z3pf0x21NpY6LE6i8er9EaY4dnLxzszFjy4
-         vz+neDwD/XCDoGqwJcVQakZHSw/fSIcv6AzOdFhSI8Ur0bMFiEvIyq1g35QRSos0J8Ye
-         f2VDdi+txpnAqyJOv2mixwTZBwc9zSVQzw4kFrG/y8gpugPZnyKQwxtcmtpHyuXNIBDX
-         u01e8I72zcCzaOR99g6N1Da0DB1Z2t7XymsxM9Olm8yC2XeYBDWSAHpkd2K2frKLpfXI
-         8Gw4l1/QXxV57OgB6ZQ2/L4CEKudwMxwnGXLxDRW/XRdAUX+kteCyZK1HVcZITbIJOrK
-         jDzA==
-X-Gm-Message-State: ACgBeo22EIxhrIZklss1LRhmrltrMDN6iSUW9leqkKrRA4sHgTSks7QL
-        N76GwdyKt6GqcHQ8Czy6m+TJsw==
-X-Google-Smtp-Source: AA6agR6TP7sJqf+FINNYGFswGkM7+NtmO+2XnKI4HuSUdqvl/BoQjFdrpoX3DJyaLGg41oZcQizYyg==
-X-Received: by 2002:a17:902:f641:b0:172:9642:1bf1 with SMTP id m1-20020a170902f64100b0017296421bf1mr29706364plg.36.1661355051780;
-        Wed, 24 Aug 2022 08:30:51 -0700 (PDT)
-Received: from [10.254.35.15] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id 82-20020a621555000000b0053655af14easm9094253pfv.45.2022.08.24.08.30.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 08:30:50 -0700 (PDT)
-Message-ID: <7faa16c2-0488-e9df-da65-94265444b28d@bytedance.com>
-Date:   Wed, 24 Aug 2022 23:30:44 +0800
+        Wed, 24 Aug 2022 11:30:57 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B75A1901E
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:30:56 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id AAA2732009A3;
+        Wed, 24 Aug 2022 11:30:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 24 Aug 2022 11:30:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1661355054; x=1661441454; bh=UWEjBSdwLo
+        HCpeWHAdeX0Lnymfed3xOveR1DLx5HrYc=; b=ULHgHtn5NHKNfL2UkspRLKeOkb
+        C3ZbnLl18NGByg2tqztaYDv0YsHYf9LV49igzKNItHRPBx+jJ3NejeWJK1Xe8JVb
+        v2CAg6cL1qaKWTcKxIIqxralQgJq4BiaVoNH/gDZdlNSM0c7pcvGrXDOJsfKbsCF
+        ivdwC24HfLpeAr5NKeywdXln+yGNOcwwOjs9n1rVpsgNS7IP9clUSwhU8br5tjxx
+        uX/MGYhiel+05y9K9zuuEs4ad8DvUBpx+lovA2ix82IqLziS81vBworp/6RgTDFd
+        p272BCeB63+q0x1/hTVG8u4TARUHy5lmNmkZWZBryTkc2N9YvO30HtdFQTJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661355054; x=1661441454; bh=UWEjBSdwLoHCpeWHAdeX0Lnymfed
+        3xOveR1DLx5HrYc=; b=VWzW6GMlx8eKa5TW1KStIfs0N4R5dOJlE/nh4T2hoFHI
+        4QFQ23yX5ojZmgXtjuLBRfrilDTz6UuRW8eTOeMxwwswdYslzWcWnzBD7Ho2yhv1
+        dM/pZEUQKLktdPVTj+s3SfhEo1NZuIs80seMCqTpjSOVVzkQJ69KW5i7UDwnyb2Q
+        +z3As3q6RIVzAorbIYPsJ6bra+cIWPTAnqaCQYi/2N1hCIDN2jrQgJNEIxGae9MP
+        K/XSI9dgKBAnJlPXONkU4ZJ42bT5NloSQ6yDEBRm1gcvQJj7yUiSFD8YgN20diQS
+        dOppc/bQ/joy197h44yiip91Xjtxsr14w4Vvlts5rw==
+X-ME-Sender: <xms:LUQGY_MRs5cssNyB3ytj7-9tMKpuf_8SbM_h8LrpWG7lyYIBZzwotg>
+    <xme:LUQGY58SWQfFOlX3ipsFg9GfAwn7-bOhBE9AxTyu37qdeSQS_o4N1luTxXImUasYE
+    fDmlJZ_jQYQTvq3nns>
+X-ME-Received: <xmr:LUQGY-QfnCur25s8h30J1lIKR3V_o-OqJBpaf1N7Siizmfkc0WbygoOLg8Gx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:LUQGYzvYMzkv_wS3yvHVWv1_-LYHb0DZw1X41OwCeo2-1VE9sgHTUQ>
+    <xmx:LUQGY3fX_6vLZg88v5LOWATwzGv8FYsPwgKHCfFQu7dQC8K1FcwWPg>
+    <xmx:LUQGY_1DHmwst_u3iws3Zogo69eAWG-0lJv7Q5Dsz7tPNopLU6VRJQ>
+    <xmx:LkQGY_1PcZ04syCJj8_5KZEpzwFGg-8JMX6VaESkmxIkD8dlMJpTFg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 24 Aug 2022 11:30:53 -0400 (EDT)
+Date:   Wed, 24 Aug 2022 17:30:51 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Charles Mirabile <cmirabil@redhat.com>
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Serge Schneider <serge@raspberrypi.org>,
+        Nicolas Saenz Julienne <nicolassaenzj@gmail.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        rh-kdlp@googlegroups.com, Joel Slebodnick <jslebodn@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Subject: Re: [PATCH v10 0/6] Raspberry Pi Sense HAT driver
+Message-ID: <20220824153051.bx6kfcih76kh3exc@houat>
+References: <20220823174158.45579-1-cmirabil@redhat.com>
+ <fc54a7a3-c67b-79ab-5e87-d468695e5553@i2se.com>
+ <CABe3_aFJ0gkLDFB9k5FEn1SmupbLEKxAn8y=WTt-Rc0xUEK4Dw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH v3 05/10] sched/psi: optimize task switch inside shared
- cgroups again
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     tj@kernel.org, mkoutny@suse.com, surenb@google.com,
-        gregkh@linuxfoundation.org, corbet@lwn.net, mingo@redhat.com,
-        peterz@infradead.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220824081829.33748-1-zhouchengming@bytedance.com>
- <20220824081829.33748-6-zhouchengming@bytedance.com>
- <YwYwUIjAGHLtRGue@cmpxchg.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YwYwUIjAGHLtRGue@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qnkn4bktoy4h2gpu"
+Content-Disposition: inline
+In-Reply-To: <CABe3_aFJ0gkLDFB9k5FEn1SmupbLEKxAn8y=WTt-Rc0xUEK4Dw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/24 22:06, Johannes Weiner wrote:
-> On Wed, Aug 24, 2022 at 04:18:24PM +0800, Chengming Zhou wrote:
->> commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
->> defer prev task sleep handling to psi_task_switch(), so we don't need
->> to clear and set TSK_ONCPU state for common cgroups.
->>
->>     A
->>     |
->>     B
->>    / \
->>   C   D
->>  /     \
->> prev   next
->>
->> After that commit psi_task_switch() do:
->> 1. psi_group_change(next, .set=TSK_ONCPU) for D
->> 2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C
->> 3. psi_group_change(prev, .clear=TSK_RUNNING) for B, A
->>
->> But there is a limitation "prev->psi_flags == next->psi_flags" that
->> if not satisfied, will make this cgroups optimization unusable for both
->> sleep switch or running switch cases. For example:
->>
->> prev->in_memstall != next->in_memstall when sleep switch:
->> 1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
->> 2. psi_group_change(prev, .clear=TSK_ONCPU | TSK_RUNNING) for C, B, A
->>
->> prev->in_memstall != next->in_memstall when running switch:
->> 1. psi_group_change(next, .set=TSK_ONCPU) for D, B, A
->> 2. psi_group_change(prev, .clear=TSK_ONCPU) for C, B, A
->>
->> The reason why this limitation exist is that we consider a group is
->> PSI_MEM_FULL if the CPU is actively reclaiming and nothing productive
->> could run even if it were runnable. So when CPU curr changed from prev
->> to next and their in_memstall status is different, we have to change
->> PSI_MEM_FULL status for their common cgroups.
->>
->> This patch remove this limitation by making psi_group_change() change
->> PSI_MEM_FULL status depend on CPU curr->in_memstall status.
->>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> 
-> Hoo boy, that took me a second.
-> 
 
-Thanks for your time. :-)
+--qnkn4bktoy4h2gpu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Way back when PSI_MEM_FULL was accounted from the timer tick, task
-> switching could simply iterate next and prev to the common ancestor to
-> update TSK_ONCPU and be done.
-> 
-> Then memstall ticks were replaced with checking curr->in_memstall
-> directly in psi_group_change(). That meant that now if the task switch
-> was between a memstall and a !memstall task, we had to iterate through
-> the common ancestors at least ONCE to fix up their state_masks.
-> 
-> We added the identical_state filter to make sure the common ancestor
-> elimination was skipped in that case. It seems that was always a
-> little too eager, because it caused us to walk the common ancestors
-> *twice* instead of the required once: the iteration for next could
-> have stopped at the common ancestor; prev could have updated TSK_ONCPU
-> up to the common ancestor, then finish to the root without changing
-> any flags, just to get the new curr->in_memstall into the state_masks.
-> 
-> This patch recognizes this and makes it so that we walk to the root
-> exactly once if state_mask needs updating.
-> 
-> 
-> Unless I missed anything, would you mind adding this to the changelog?
+On Wed, Aug 24, 2022 at 08:06:59AM -0400, Charles Mirabile wrote:
+> On Tue, Aug 23, 2022 at 5:30 PM Stefan Wahren <stefan.wahren@i2se.com> wr=
+ote:
+> > >    drivers/auxdisplay: sensehat: Raspberry Pi Sense HAT display driver
+> > We don't have an Ack for this display driver. Maybe we should ask Maxime
+> > Ripard and Noralf Tr=F8nnes especially Pavel Machek had concerns about =
+the
+> > right subsystem?
+>
+> I just looked back at the comments from Pavel on v9. I had meant to
+> reply to him, and I actually drafted something but it got lost in the
+> shuffle and I never sent it (also my bad).
+>
+> The driver is an fbdev in the raspberry pi tree, and that is where we
+> started when upstreaming, but right from the outset we were told that
+> it couldn't be an fbdev since that subsystem is being deprecated
+> the replacement is the DRM subsystem
 
-Your explanation is very clear and accurate, will add it.
+Indeed
 
-> 
-> I'm not quite sure how 4117cebf1a9f ("psi: Optimize task switch inside
-> shared cgroups") fits into the picture. That optimized the sleep case,
-> but the sleep case never had the common ancestor optimization (the dq
-> would have already cleared TSK_ONCPU up to the root). Let me know if I
-> am mistaken.
+> but (as Matthias Brugger suggests) that is probably overkill for an
+> 8x8 display. Does that settle the subsystem question?
 
-That commit skiped clearing TSK_ONCPU in dequeue when sleep, so also have
-the common ancestor optimization.
+If you were aiming for an fbdev driver, a KMS driver these days would be
+notably simpler.
 
-> 
-> AFAICS I can see, this patch here is simply catching up on a missed
-> optimization that could have been done in 7fae6c8171d2 ("psi: Use
-> ONCPU state tracking machinery to detect reclaim") directly already.
+We've added simpler and simpler devices, such as the SSD1306 recently,
+so I can't see anything wrong with using KMS either.
 
-Yes, apart from catching on a missed optimization, I later found in testing
-this patch is necessary for the next patch 06/10.
+Maxime
 
-Imaging we walk the common ancestors twice:
-(1) psi_group_change(.clear = 0, .set = TSK_ONCPU)
-(2) psi_group_change(.clear = TSK_ONCPU, .set = 0)
+--qnkn4bktoy4h2gpu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-We previously used tasks[NR_ONCPU] to record TSK_ONCPU, so tasks[NR_ONCPU]++
-in (1) then tasks[NR_ONCPU]-- in (2), tasks[NR_ONCPU] still be correct.
+-----BEGIN PGP SIGNATURE-----
 
-The patch 06/10 change to use one bit in state mask to record TSK_ONCPU,
-so PSI_ONCPU bit will be set in (1), but then be cleared in (2), which
-cause the psi_group_cpu has task running but without PSI_ONCPU bit set!
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwZEKwAKCRDj7w1vZxhR
+xeP5AP49OPG5mL6W0tELzpbzif+x+BpthcKKwThVhaPXEL3JcwD+PBhrC2xNONxU
+yrmVGBo/7cUtnUmAjR/2f1Ih0jR0Kws=
+=QqBo
+-----END PGP SIGNATURE-----
 
-With this patch, we will never walk the common ancestors twice, so don't
-have above problem anymore.
-
-> 
-> So I think it all makes sense. I have just two notes on the diff:
-> 
->> @@ -820,8 +820,6 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->>  	u64 now = cpu_clock(cpu);
->>  
->>  	if (next->pid) {
->> -		bool identical_state;
->> -
->>  		psi_flags_change(next, 0, TSK_ONCPU);
->>  		/*
->>  		 * When switching between tasks that have an identical
->> @@ -829,11 +827,9 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->>  		 * we reach the first common ancestor. Iterate @next's
->>  		 * ancestors only until we encounter @prev's ONCPU.
->>  		 */
-> 
-> The comment is rather stale now. Could you change it to this?
-
-Good, will update the comment.
-
-> 
-> 		/*
-> 		 * Set TSK_ONCPU on @next's cgroups. If @next shares any
-> 		 * ancestors with @prev, those will already have @prev's
-> 		 * TSK_ONCPU bit set, and we can stop the iteration there.
-> 		 */
-> 
->> -		identical_state = prev->psi_flags == next->psi_flags;
->>  		iter = NULL;
->>  		while ((group = iterate_groups(next, &iter))) {
->> -			if (identical_state &&
->> -			    per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
->> +			if (per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
->>  				common = group;
->>  				break;
->>  			}
->> @@ -880,7 +876,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->>  		 * TSK_ONCPU is handled up to the common ancestor. If we're tasked
->>  		 * with dequeuing too, finish that for the rest of the hierarchy.
->>  		 */
->> -		if (sleep) {
->> +		if (sleep || unlikely(prev->in_memstall != next->in_memstall)) {
->>  			clear &= ~TSK_ONCPU;
->>  			for (; group; group = iterate_groups(prev, &iter))
->>  				psi_group_change(group, cpu, clear, set, now, wake_clock);
-> 
-> Okay, this computes too. But it is somewhat special-cased, without
-> explaining why the memstall state in particular matters. Instead of
-> focusing on the exceptions though, can we just generalize this a bit?
-> 
-> 		/*
-> 		 * TSK_ONCPU is handled up to the common ancestor. If there are
-> 		 * any other differences between the two tasks (e.g. prev goes
-> 		 * to sleep, or only one task is memstall), finish propagating
-> 		 * those differences all the way up to the root.
-> 		 */
-> 		if ((prev->psi_flags ^ next->psi_flags) & ~TSK_ONCPU) {
-> 			clear &= ~TSK_ONCPU;
-> 			for (; group; group = iterate_groups(prev, &iter))
-> 				psi_group_change(group, cpu, clear, set, now, wake_clock);
-> 		}
-
-I think this is much better and the comment is very clear!
-
-Thanks.
-
+--qnkn4bktoy4h2gpu--

@@ -2,155 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDB359F49F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D61A59F4A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 09:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235345AbiHXH4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 03:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S234853AbiHXH72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 03:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiHXH4Q (ORCPT
+        with ESMTP id S230002AbiHXH71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 03:56:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EB84ECB
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 00:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661327774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 24 Aug 2022 03:59:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B0D857ED;
+        Wed, 24 Aug 2022 00:59:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E1FC033C7A;
+        Wed, 24 Aug 2022 07:59:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661327964; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=yX/+8Rw7cX7PklWPsILs75376rGACdvLy1y8/1aR3u8=;
-        b=NhJ8m6evaZeCXfmQ76AyfV+dRfZXL0S3+caCnelV76gTtdX99Aph8HrjFZBGp3Zf6qs8hH
-        fujsyyPOMqQtF1EoWd5QL3wczFAvTgC8sznOEVxSRfaUY833fYl8YJHdCDiw6ktTQtFH8u
-        opK4TNPOFlRRkEiHrhy+gYGb7eysfjY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-247-jVYl7HX0O3idmq81f2QM8w-1; Wed, 24 Aug 2022 03:56:12 -0400
-X-MC-Unique: jVYl7HX0O3idmq81f2QM8w-1
-Received: by mail-wr1-f71.google.com with SMTP id v27-20020adfa1db000000b002252854ec99so2577037wrv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 00:56:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=yX/+8Rw7cX7PklWPsILs75376rGACdvLy1y8/1aR3u8=;
-        b=1516WkuVJTwp9gwFleqqwncvpBzHhtH6tpnoVgN/ihDgndiziAXzLU7OScp87dipGO
-         VU9EFqeGfHYbX08C6T4aitME9CDWZFkS5DIqdyjG+Yfg2De2eeE0E9Q5v+VZAW9PiTIn
-         hCOiDoZfCcowhgLbqFvTKyIbufMvbQAIAro6/OfliGJroS0nNXWUSqAgWPbbjaemvWba
-         ZeamvMNzDkiq0NKI+QWMWQC+gHSUwHDPB7iwnJa+LYo9kEswoWIlSGmUOqZXsDKhqNMP
-         rA1j0tCTIpJvCGnk4ud+rgCMCKLFmljI4jWTiP0sZJsXZakgW2Uvibasqk+WHMZC+FbW
-         kt3A==
-X-Gm-Message-State: ACgBeo2wuZPIipeEpsftsljelc9XHkCnfvqoWH3W0s3ZbN1/67SsDrut
-        MeRnBnCLBNDbwJPwfZaaU2/txZDekqNdXVYTuV7L6O0lfcBmMvnRKLFP8vwqrYTMomIAybtmXEO
-        llELiv8ZQtbhdPbmSOqc3KiEI
-X-Received: by 2002:a05:6000:15c5:b0:220:727a:24bf with SMTP id y5-20020a05600015c500b00220727a24bfmr16132370wry.621.1661327771582;
-        Wed, 24 Aug 2022 00:56:11 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5KMVcgjXhsJt9cJZpZ9jn66ZFfTYNIfIB4dQ29fC/nC3ivi5z6k/oNJTkKKauWbbvmnb+4rg==
-X-Received: by 2002:a05:6000:15c5:b0:220:727a:24bf with SMTP id y5-20020a05600015c500b00220727a24bfmr16132354wry.621.1661327771228;
-        Wed, 24 Aug 2022 00:56:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:c500:5445:cf40:2e32:6e73? (p200300cbc707c5005445cf402e326e73.dip0.t-ipconnect.de. [2003:cb:c707:c500:5445:cf40:2e32:6e73])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003a690f704absm216374wmq.4.2022.08.24.00.56.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 00:56:10 -0700 (PDT)
-Message-ID: <38e227e1-63f4-4aa4-e05c-c47c3345a60f@redhat.com>
-Date:   Wed, 24 Aug 2022 09:56:09 +0200
+        bh=V++k96zrKA+x4VrYQcjFRU0h85hnHFbQNXixpGjkrsQ=;
+        b=IqZinnwQdu40DfoRGPFhFDObyG6y9HuBHOxzDQz57qkA5Ptk+105F7+HjvDaP6nShBO1X8
+        78rRkHWteb/XdLdQX3NVO23OP1069frkqE96ClKy5FpdehLuOfo3Bh6L/ioROo3k8bQ/iz
+        9IWCjnsbujxefljz69XX4KKm/cME1x0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C43DC13AC0;
+        Wed, 24 Aug 2022 07:59:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yI+aLVzaBWO2WQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 24 Aug 2022 07:59:24 +0000
+Date:   Wed, 24 Aug 2022 09:59:24 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Shakeel Butt <shakeelb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
+Message-ID: <YwXaXHRhy51xH4rk@dhcp22.suse.cz>
+References: <CALvZod7QdLSMdBoD2WztL72qS8kJe7F79JuCH6t19rRcw6Pn1w@mail.gmail.com>
+ <Yv/EArPDTcCrGqJh@slm.duckdns.org>
+ <YwNpI1ydy0yDnBH0@dhcp22.suse.cz>
+ <CAGWkznEB+R0YBaBFBL7dPqs8R=qKC6+ixTWEGCYy2PaczXkaPA@mail.gmail.com>
+ <YwRjyx6wFLk8WTDe@dhcp22.suse.cz>
+ <CAGWkznGaYTv4u4kOo-rupfyWzDNJXNKTchwP6dbUK-=UXWm47w@mail.gmail.com>
+ <YwSQ4APOu/H7lYGL@dhcp22.suse.cz>
+ <CAGWkznGd6mgareABseMKY5p0f1=5dkfVkj=NS7_B6OkXBYSwyw@mail.gmail.com>
+ <YwS/S9Sd1OWnT81Q@dhcp22.suse.cz>
+ <CAJuCfpH+T9+eOVYDfOv9yNSfAvq=pJtMp4ZaoYaM7iMY9XkaUw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     muchun.song@linux.dev, linux-kernel@vger.kernel.org
-References: <20220824071909.192535-1-wangkefeng.wang@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/2] mm: fix null-ptr-deref in kswapd_is_running()
-In-Reply-To: <20220824071909.192535-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpH+T9+eOVYDfOv9yNSfAvq=pJtMp4ZaoYaM7iMY9XkaUw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.08.22 09:19, Kefeng Wang wrote:
-> The kswapd_run/stop() will set pgdat->kswapd to NULL, which
-> could race with kswapd_is_running() in kcompactd(),
+On Tue 23-08-22 09:21:16, Suren Baghdasaryan wrote:
+> On Tue, Aug 23, 2022 at 4:51 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Tue 23-08-22 17:20:59, Zhaoyang Huang wrote:
+> > > On Tue, Aug 23, 2022 at 4:33 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Tue 23-08-22 14:03:04, Zhaoyang Huang wrote:
+> > > > > On Tue, Aug 23, 2022 at 1:21 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > >
+> > > > > > On Tue 23-08-22 10:31:57, Zhaoyang Huang wrote:
+> > > > [...]
+> > > > > > > I would like to quote the comments from google side for more details
+> > > > > > > which can also be observed from different vendors.
+> > > > > > > "Also be advised that when you enable memcg v2 you will be using
+> > > > > > > per-app memcg configuration which implies noticeable overhead because
+> > > > > > > every app will have its own group. For example pagefault path will
+> > > > > > > regress by about 15%. And obviously there will be some memory overhead
+> > > > > > > as well. That's the reason we don't enable them in Android by
+> > > > > > > default."
+> > > > > >
+> > > > > > This should be reported and investigated. Because per-application memcg
+> > > > > > vs. memcg in general shouldn't make much of a difference from the
+> > > > > > performance side. I can see a potential performance impact for no-memcg
+> > > > > > vs. memcg case but even then 15% is quite a lot.
+> > > > > Less efficiency on memory reclaim caused by multi-LRU should be one of
+> > > > > the reason, which has been proved by comparing per-app memcg on/off.
+> > > > > Besides, theoretically workingset could also broken as LRU is too
+> > > > > short to compose workingset.
+> > > >
+> > > > Do you have any data to back these claims? Is this something that could
+> > > > be handled on the configuration level? E.g. by applying low limit
+> > > > protection to keep the workingset in the memory?
+> > > I don't think so. IMO, workingset works when there are pages evicted
+> > > from LRU and then refault which provide refault distance for pages.
+> > > Applying memcg's protection will have all LRU out of evicted which
+> > > make the mechanism fail.
+> >
+> > It is really hard to help you out without any actual data. The idea was
+> > though to use the low limit protection to adaptively configure
+> > respective memcgs to reduce refaults. You already have data about
+> > refaults ready so increasing the limit for often refaulting memcgs would
+> > reduce the trashing.
 > 
-> kswapd_run/stop()	kcompactd()
-> 			  kswapd_is_running()
-> 				if (pgdat->kswapd) // load non-NULL pgdat->kswapd
->   pgdat->kswapd = NULL
-> 				task_is_running(pgdat->kswapd) // Null pointer derefence
+> Sorry for joining late.
+> A couple years ago I tested root-memcg vs per-app memcg configurations
+> on an Android phone. Here is a snapshot from my findings:
 > 
-> The KASAN report the null-ptr-deref shown below,
+> Problem
+> =======
+> We see tangible increase in major faults and workingset refaults when
+> transitioning from root-only memory cgroup to per-application cgroups
+> on Android.
 > 
->   vmscan: Failed to start kswapd on node 0
->   ...
->   BUG: KASAN: null-ptr-deref in kcompactd+0x440/0x504
->   Read of size 8 at addr 0000000000000024 by task kcompactd0/37
+> Test results
+> ============
+> Results while running memory-demanding workload:
+> root memcg     per-app memcg     delta
+> workingset_refault 1771228 3874281 +118.73%
+> workingset_nodereclaim 4543 13928 +206.58%
+> pgpgin 13319208 20618944 +54.81%
+> pgpgout 1739552 3080664 +77.1%
+> pgpgoutclean 2616571 4805755 +83.67%
+> pswpin 359211 3918716 +990.92%
+> pswpout 1082238 5697463 +426.45%
+> pgfree 28978393 32531010 +12.26%
+> pgactivate 2586562 8731113 +237.56%
+> pgdeactivate 3811074 11670051 +206.21%
+> pgfault 38692510 46096963 +19.14%
+> pgmajfault 441288 4100020 +829.1%
+> pgrefill 4590451 12768165 +178.15%
 > 
->   CPU: 0 PID: 37 Comm: kcompactd0 Kdump: loaded Tainted: G           OE     5.10.60 #1
->   Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
->   Call trace:
->    dump_backtrace+0x0/0x394
->    show_stack+0x34/0x4c
->    dump_stack+0x158/0x1e4
->    __kasan_report+0x138/0x140
->    kasan_report+0x44/0xdc
->    __asan_load8+0x94/0xd0
->    kcompactd+0x440/0x504
->    kthread+0x1a4/0x1f0
->    ret_from_fork+0x10/0x18
-> 
-> For race between kswapd_run() and kcompactd(), adding a temporary value
-> when create a kthread, and only set it to pgdat->kswapd if kthread_run()
-> return successful task_struct to fix the issue.
-> 
-> For race between kswapd_stop() and kcompactd(), let's call kcompactd_stop()
-> before kswapd_stop() to fix the issue.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  mm/memory_hotplug.c | 2 +-
->  mm/vmscan.c         | 8 +++++---
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index fad6d1f2262a..2fd45ccbce45 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1940,8 +1940,8 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
->  
->  	node_states_clear_node(node, &arg);
->  	if (arg.status_change_nid >= 0) {
-> -		kswapd_stop(node);
->  		kcompactd_stop(node);
-> +		kswapd_stop(node);
->  	}
+> Results while running application cycle test (20 apps, 20 cycles):
+> root memcg     per-app memcg     delta
+> workingset_refault 10634691 11429223 +7.47%
+> workingset_nodereclaim 37477 59033 +57.52%
+> pgpgin 70662840 69569516 -1.55%
+> pgpgout 2605968 2695596 +3.44%
+> pgpgoutclean 13514955 14980610 +10.84%
+> pswpin 1489851 3780868 +153.77%
+> pswpout 4125547 8050819 +95.15%
+> pgfree 99823083 105104637 +5.29%
+> pgactivate 7685275 11647913 +51.56%
+> pgdeactivate 14193660 21459784 +51.19%
+> pgfault 89173166 100598528 +12.81%
+> pgmajfault 1856172 4227190 +127.74%
+> pgrefill 16643554 23203927 +39.42%
 
-This looks just fragile to randomly break again in the future when
-people work on this code without being aware of this condition. Or once
-with other (future?) kswapd_is_running() users. We at least need some
-comment explaining that the order here matters and why.
+Thanks! It would be interesting to see per memcg stats as well. Are
+there any outliers? Are there any signs of over-reclaim (more pages
+scanned & reclaimed by both kswapd and direct reclaim?
 
-But I do wonder if we can't handle it in a cleaner, more obvious, way.
+> Tests were conducted on an Android phone with 4GB RAM.
+> Similar regression was reported a couple years ago here:
+> https://www.spinics.net/lists/linux-mm/msg121665.html
+> 
+> I plan on checking the difference again on newer kernels (likely 5.15)
+> after LPC this September.
 
-kswapd_start()/kswapd_stop() should have a proper way to synchronize
-with kswapd_is_running(). Just the matter of finding a suitable locking
-primitive :)
+Thanks, that would be useful!
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Michal Hocko
+SUSE Labs

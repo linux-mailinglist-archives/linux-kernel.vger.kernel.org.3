@@ -2,136 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C35E5A0411
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6536B5A0415
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiHXWc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 18:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S229959AbiHXWej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 18:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiHXWcz (ORCPT
+        with ESMTP id S229451AbiHXWeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:32:55 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBB0BE20
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:32:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661380374; x=1692916374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P+GzUkvuEW3dDb+qIZ8XvSjCR0TNCgtfL1gqFbGWrYo=;
-  b=Y2GHHnls9J8ZLCPAcEjwblvhldXkJSgSL1UholGggmLntKH2Sm656rRy
-   se7DDiBqkPZCVUuO5vEyTIOwFaqTDvl99f+Voa1zc9EHaHNjLJMHY95TV
-   y6ecWeYkT1mtwGdBuTqNmJ3RqwjyXBVQSU07EQKTo+5GscSN+m7EQ+pPM
-   OCRQGsiyJxmROlrtq/rWC0kkmWpQYAfUBzUrQcIZ+pRLYoqPY3WiWLlpo
-   XD3132PV/j+e/g4A5+WyVDBPAASTFpi0SNtEqgwWdjhjYA6fA8QisXsQ2
-   5qI5f/phdj5J41uNHz2I8XilImfvxNumBldSlzPJdpXkOlAFq+vOqYYfd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="355817020"
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="355817020"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 15:32:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
-   d="scan'208";a="752251962"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Aug 2022 15:32:51 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQyva-0001Je-34;
-        Wed, 24 Aug 2022 22:32:50 +0000
-Date:   Thu, 25 Aug 2022 06:32:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Davis <afd@ti.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH] drm: omapdrm: Improve check for contiguous buffers
-Message-ID: <202208250645.sVXFPe8D-lkp@intel.com>
-References: <20220823000326.10056-1-afd@ti.com>
+        Wed, 24 Aug 2022 18:34:37 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9CF1570B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:34:36 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo3064251pjd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 15:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=hIBl+NKPOq9B830RCZZr13TZkfTjSQ1qG+Cn7l1J9W4=;
+        b=eKaGdeOzZHTemPIaMidSyugctA+XVf9pmKFc6+bBqUs7RzQ/Frlpc14eGSn1yxsmnQ
+         T//qMXgIxYfk6twfYhrZY3Ww+vT25OUES8c30ez7Hby6nRsKl9hoRwaHK7MJJy2Miwfq
+         mbZAa6oFGWBj9acSEK6AP/TgU2zJX1HnVdxUHxL+WWfAgu2pUELhvEJhkIKK20GEWWVT
+         VOBpSFDLa71HfBHzj6B2VN2qq3w84BqlJKRVh5xh1juHQJficEYa6RCshSQns0zo74rs
+         +3Zbt/qHvFu+QfNZvDlA60hSD6e2SB8igE98TNf+oJcRjXqTgB5wJM21L9eqxR8fG5Fq
+         4oiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=hIBl+NKPOq9B830RCZZr13TZkfTjSQ1qG+Cn7l1J9W4=;
+        b=gsyYdYKeTugI03epNkNp2x0ENYG7PJ3m1z0s5dBOPuLi0W9xrqvhkZt6tMtMNozjSy
+         W4DMygEirE0UCinPJs/N+rmUDyB4xcHzDEU4n3ZPgIz9czywpQocjw0kdQmsU+PwaxMb
+         et60/yUxtCbbU23m1WonfFyjwocOiE1qhtLn9fWZ10pBaCZKEXYRlD2wBFStTIO/d8Oa
+         8BSbL99wqh6JJi+DiSpFzx2pP7ntmZsg7Q2Rr5zd9K96vgH2Nh5VW5zbHS99sU1rsmw1
+         AUzBkl+Vj8xT90rjwyiMyQhlP1pMpZjw0a2f+ixO7kVz21Pse1Sn09JsOuczCho7Ftgi
+         mBVg==
+X-Gm-Message-State: ACgBeo1ZlZsUKV1L9JZWoHovhpDoZ0QpvycE1H0nsBudb0K9HGj9NvOB
+        NLi9MUBngVhCOKQ1T+yi0vUbvw==
+X-Google-Smtp-Source: AA6agR4daW+hXlRTu4EWnhGoSW9ryqqPfb4LDLZ/rLEUpa7uB8LHuAbBLypwzLMY83nLN3ia6xtbnA==
+X-Received: by 2002:a17:90b:4a41:b0:1fb:77e0:3ff2 with SMTP id lb1-20020a17090b4a4100b001fb77e03ff2mr7358808pjb.161.1661380476105;
+        Wed, 24 Aug 2022 15:34:36 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b187-20020a62cfc4000000b0053641e66825sm10212130pfg.173.2022.08.24.15.34.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 15:34:35 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 22:34:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 10/13] KVM: x86: emulator/smm: use smram struct for 64
+ bit smram load/restore
+Message-ID: <Ywand7dcvFTNgKep@google.com>
+References: <20220803155011.43721-1-mlevitsk@redhat.com>
+ <20220803155011.43721-11-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220823000326.10056-1-afd@ti.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220803155011.43721-11-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On Wed, Aug 03, 2022, Maxim Levitsky wrote:
+> @@ -9909,57 +9906,51 @@ static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, struct kvm_smram_stat
+>  }
+>  
+>  #ifdef CONFIG_X86_64
+> -static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, char *buf)
+> +static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, struct kvm_smram_state_64 *smram)
 
-Thank you for the patch! Yet something to improve:
+Please put these on different lines.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-intel/for-linux-next drm-tip/drm-tip linus/master v6.0-rc2 next-20220824]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>  	struct desc_ptr dt;
+> -	struct kvm_segment seg;
+>  	unsigned long val;
+>  	int i;
+>  
+>  	for (i = 0; i < 16; i++)
+> -		put_smstate(u64, buf, 0x7ff8 - i * 8, kvm_register_read_raw(vcpu, i));
+> +		smram->gprs[15 - i] = kvm_register_read_raw(vcpu, i);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/drm-omapdrm-Improve-check-for-contiguous-buffers/20220823-080542
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220825/202208250645.sVXFPe8D-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5eeaaada78b2038b8f2bf483926b4aee998016ff
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andrew-Davis/drm-omapdrm-Improve-check-for-contiguous-buffers/20220823-080542
-        git checkout 5eeaaada78b2038b8f2bf483926b4aee998016ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/omapdrm/omap_gem.c:151:62: error: unknown type name 'size'; did you mean 'size_t'?
-     151 | static bool omap_gem_sgt_is_contiguous(struct sg_table *sgt, size)
-         |                                                              ^~~~
-         |                                                              size_t
-   drivers/gpu/drm/omapdrm/omap_gem.c: In function 'omap_gem_is_contiguous':
->> drivers/gpu/drm/omapdrm/omap_gem.c:162:13: error: implicit declaration of function 'omap_gem_sgt_is_contiguous'; did you mean 'omap_gem_is_contiguous'? [-Werror=implicit-function-declaration]
-     162 |             omap_gem_sgt_is_contiguous(omap_obj->sgt, omap_obj->base->size))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |             omap_gem_is_contiguous
->> drivers/gpu/drm/omapdrm/omap_gem.c:162:69: error: invalid type argument of '->' (have 'struct drm_gem_object')
-     162 |             omap_gem_sgt_is_contiguous(omap_obj->sgt, omap_obj->base->size))
-         |                                                                     ^~
-   cc1: some warnings being treated as errors
-
-
-vim +151 drivers/gpu/drm/omapdrm/omap_gem.c
-
-   150	
- > 151	static bool omap_gem_sgt_is_contiguous(struct sg_table *sgt, size)
-   152	{
-   153		return !(drm_prime_get_contiguous_size(sgt) < size);
-   154	}
-   155	
-   156	static bool omap_gem_is_contiguous(struct omap_gem_object *omap_obj)
-   157	{
-   158		if (omap_obj->flags & OMAP_BO_MEM_DMA_API)
-   159			return true;
-   160	
-   161		if ((omap_obj->flags & OMAP_BO_MEM_DMABUF) &&
- > 162		    omap_gem_sgt_is_contiguous(omap_obj->sgt, omap_obj->base->size))
-   163			return true;
-   164	
-   165		return false;
-   166	}
-   167	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Blech, why do I get the feeling that the original layout was designed so that
+ucode could use PUSHAD?  This look so weird...

@@ -2,255 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C06359F6C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081F259F6CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbiHXJtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S235891AbiHXJtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiHXJs4 (ORCPT
+        with ESMTP id S233796AbiHXJtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:48:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F238A67461
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661334533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qiF7/qO+yisg9qjBhsaAka2ZWunzOCu9/3xjQqLrf9U=;
-        b=W/bo8nXPtT+PU5WnRFJIDATmKMhacIvKXHQ2QlE8c7KXZM7ev5BWeRzLafoVF3YY62WmFG
-        BV2+Jjuq8roy29BGbfkcfMz6cen2cca5OzZn9z9nUaMWVuPJ88ffyEIcdgiD04kaH567Ig
-        eRUCAUl7KVuLAiVh/tFVJcPnOgUPnFI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-621-RXAJFgQlM4OdnAR1CGXRXA-1; Wed, 24 Aug 2022 05:48:52 -0400
-X-MC-Unique: RXAJFgQlM4OdnAR1CGXRXA-1
-Received: by mail-wr1-f72.google.com with SMTP id v19-20020adf8b53000000b00225728573e6so157432wra.21
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:48:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=qiF7/qO+yisg9qjBhsaAka2ZWunzOCu9/3xjQqLrf9U=;
-        b=F/AJda+xd46q2zo/VKb02eqVN1AHdJ+HFmNhyWfdXVFYEvBTlm55RznFIX9e+5+4EY
-         cZuedM/z0csY5qNmjQEOa8nELkUlo5iSXLJZikrwCswPfRN7EVcu6nzt0IAjgrPo+pdr
-         s4TWOJmD2Z3NcijTJLO5sKPeW6FAShV5o1h/iw0pw+NbGhji5KsnmtRuPG1nOsWngnX9
-         mAOTcZQ/cPaTdftd7T8HykEtIukQZhCB228OZ/ziorEknIe0m7cMqvRuX1nNdsk1jDIn
-         wW/dMBx+vZFoqUDaUyILTiipQUhl6sDOjKuipx3GTrDy6q1bxvOvutOab+b+3UxM/cSI
-         oboQ==
-X-Gm-Message-State: ACgBeo0N77n11whFYX7fCDrTljk3wEbB2+k6Gc6DHN30HGpFOzSpwhfk
-        /csMJeCD96Weoh9ZhtiCdWjlMcTefYfO51DVH6fsqyDdpFpE+uqtxrn4qUVPDus0hJmdotk/+KI
-        9Y/bqSI3HFklGABjNrzphUxA8
-X-Received: by 2002:a5d:5986:0:b0:225:6216:5a79 with SMTP id n6-20020a5d5986000000b0022562165a79mr5828993wri.594.1661334530994;
-        Wed, 24 Aug 2022 02:48:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5QheGVv9qlYiusEVisLJNGRUzET8ghwC3bQSFWUdMe6rMHsgYEyFps6VAi3eF+kzcPiQUQtg==
-X-Received: by 2002:a5d:5986:0:b0:225:6216:5a79 with SMTP id n6-20020a5d5986000000b0022562165a79mr5828965wri.594.1661334530719;
-        Wed, 24 Aug 2022 02:48:50 -0700 (PDT)
-Received: from [192.168.110.200] (82-65-22-26.subs.proxad.net. [82.65.22.26])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c4f8500b003a601a1c2f7sm1367229wmq.19.2022.08.24.02.48.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 02:48:50 -0700 (PDT)
-Message-ID: <f4624a16-ee0b-8e8e-a390-349d38f229b4@redhat.com>
-Date:   Wed, 24 Aug 2022 11:48:49 +0200
+        Wed, 24 Aug 2022 05:49:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5747267464;
+        Wed, 24 Aug 2022 02:49:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2981B8238F;
+        Wed, 24 Aug 2022 09:48:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D732C433B5;
+        Wed, 24 Aug 2022 09:48:55 +0000 (UTC)
+Message-ID: <cf992081-eb0c-009d-f283-1602b74a9293@xs4all.nl>
+Date:   Wed, 24 Aug 2022 11:48:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v7 13/24] HID: initial BPF implementation
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] media: staging: media: zoran: Removed braces for single
+ statement block
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
- <20220721153625.1282007-14-benjamin.tissoires@redhat.com>
- <YuKbCCOAtSvUlI3z@kroah.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-In-Reply-To: <YuKbCCOAtSvUlI3z@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220721150055.52096-1-abhijeet.srivastava2308@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220721150055.52096-1-abhijeet.srivastava2308@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Abhijeet,
 
+Thank you for the zoran patches, unfortunately these are a duplicate of
 
-On 7/28/22 16:19, Greg KH wrote:
-> On Thu, Jul 21, 2022 at 05:36:14PM +0200, Benjamin Tissoires wrote:
->> --- /dev/null
->> +++ b/include/linux/hid_bpf.h
->> @@ -0,0 +1,102 @@
->> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+https://patchwork.linuxtv.org/project/linux-media/patch/20220810115445.2302477-2-hverkuil-cisco@xs4all.nl/
+
+I wish I'd noticed your patches earlier, it would have saved me some work :-(
+
+I'm marking your patches Obsoleted in patchwork.
+
+Regards,
+
+	Hans
+
+On 21/07/2022 17:00, Abhijeet Srivastava wrote:
+> Warning found by checkpatch.pl script.
 > 
-> This is not a uapi .h file, so the "WITH Linux-syscall-note" should not
-> be here, right?
-
-thanks, dropping this syscall note from the series.
-
+> Signed-off-by: Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
+> ---
+>  drivers/staging/media/zoran/zoran_card.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> 
->> +
->> +#ifndef __HID_BPF_H
->> +#define __HID_BPF_H
->> +
->> +#include <linux/spinlock.h>
->> +#include <uapi/linux/hid.h>
->> +#include <uapi/linux/hid_bpf.h>
->> +
->> +struct hid_device;
->> +
->> +/*
->> + * The following is the HID BPF API.
->> + *
->> + * It should be treated as UAPI, so extra care is required
->> + * when making change to this file.
-> 
-> So is this uapi?  If so, shouldn't it go into a uapi include directory
-> so we know this and properly track it and maintain it that way?
-
-IMO it's a grey area. It is not "uapi" because it doesn't export 
-anything that userspace can use. A userspace program can not include 
-that and use it in other words.
-
-So strictly speaking, it's a normal part of a kernel header file, 
-because it's a description of what other kernel users (though here, eBPF 
-programs) can use.
-
-But I really want that part of the API to be considered as "stable" and 
-give some guarantees to the users that I won't change it at every 
-release. Thus the "uapi-like".
-
-> 
->> + */
->> +
->> +/**
->> + * struct hid_bpf_ctx - User accessible data for all HID programs
->> + *
->> + * ``data`` is not directly accessible from the context. We need to issue
->> + * a call to ``hid_bpf_get_data()`` in order to get a pointer to that field.
->> + *
->> + * All of these fields are currently read-only.
->> + *
->> + * @index: program index in the jump table. No special meaning (a smaller index
->> + *         doesn't mean the program will be executed before another program with
->> + *         a bigger index).
->> + * @hid: the ``struct hid_device`` representing the device itself
->> + * @report_type: used for ``hid_bpf_device_event()``
->> + * @size: Valid data in the data field.
->> + *
->> + *        Programs can get the available valid size in data by fetching this field.
->> + */
->> +struct hid_bpf_ctx {
->> +	__u32 index;
->> +	const struct hid_device *hid;
->> +	enum hid_report_type report_type;
->> +	__s32 size;
->> +};
->> +
->> +/* Following functions are tracepoints that BPF programs can attach to */
->> +int hid_bpf_device_event(struct hid_bpf_ctx *ctx);
->> +
->> +/* Following functions are kfunc that we export to BPF programs */
->> +/* only available in tracing */
->> +__u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t __sz);
->> +
->> +/* only available in syscall */
->> +int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags);
->> +
->> +/*
->> + * Below is HID internal
->> + */
->> +
->> +/* internal function to call eBPF programs, not to be used by anybody */
->> +int __hid_bpf_tail_call(struct hid_bpf_ctx *ctx);
->> +
->> +#define HID_BPF_MAX_PROGS_PER_DEV 64
->> +#define HID_BPF_FLAG_MASK (((HID_BPF_FLAG_MAX - 1) << 1) - 1)
->> +
->> +/* types of HID programs to attach to */
->> +enum hid_bpf_prog_type {
->> +	HID_BPF_PROG_TYPE_UNDEF = -1,
->> +	HID_BPF_PROG_TYPE_DEVICE_EVENT,			/* an event is emitted from the device */
->> +	HID_BPF_PROG_TYPE_MAX,
->> +};
->> +
->> +struct hid_bpf_ops {
->> +	struct module *owner;
->> +	struct bus_type *bus_type;
->> +};
->> +
->> +extern struct hid_bpf_ops *hid_bpf_ops;
->> +
->> +struct hid_bpf_prog_list {
->> +	u16 prog_idx[HID_BPF_MAX_PROGS_PER_DEV];
->> +	u8 prog_cnt;
->> +};
->> +
->> +/* stored in each device */
->> +struct hid_bpf {
->> +	struct hid_bpf_prog_list __rcu *progs[HID_BPF_PROG_TYPE_MAX];	/* attached BPF progs */
->> +	bool destroyed;			/* prevents the assignment of any progs */
->> +
->> +	spinlock_t progs_lock;		/* protects RCU update of progs */
->> +};
->> +
->> +#ifdef CONFIG_HID_BPF
->> +int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
->> +				  u32 size, int interrupt);
->> +void hid_bpf_destroy_device(struct hid_device *hid);
->> +void hid_bpf_device_init(struct hid_device *hid);
->> +#else /* CONFIG_HID_BPF */
->> +static inline int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
->> +						u32 size, int interrupt) { return 0; }
->> +static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
->> +static inline void hid_bpf_device_init(struct hid_device *hid) {}
->> +#endif /* CONFIG_HID_BPF */
->> +
->> +#endif /* __HID_BPF_H */
->> diff --git a/include/uapi/linux/hid_bpf.h b/include/uapi/linux/hid_bpf.h
->> new file mode 100644
->> index 000000000000..ba8caf9b60ee
->> --- /dev/null
->> +++ b/include/uapi/linux/hid_bpf.h
->> @@ -0,0 +1,25 @@
->> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> 
-> This is fine, it is in include/uapi/
-> 
-> Other than those minor comments, this all looks good to me!
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-
-Great!
-And thanks a lot for the other reviews.
-
-I finally managed to get some time to work on it after some time off and 
-urgent sh**t happening, so I'll send a new version of the series today.
-
-Cheers,
-Benjamin
-
+> diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+> index 26f978a1cc72..0c138d47d0c3 100644
+> --- a/drivers/staging/media/zoran/zoran_card.c
+> +++ b/drivers/staging/media/zoran/zoran_card.c
+> @@ -1038,9 +1038,9 @@ static int zr36057_init(struct zoran *zr)
+>  	zr->stat_com = dma_alloc_coherent(&zr->pci_dev->dev,
+>  					  BUZ_NUM_STAT_COM * sizeof(u32),
+>  					  &zr->p_sc, GFP_KERNEL);
+> -	if (!zr->stat_com) {
+> +	if (!zr->stat_com) 
+>  		return -ENOMEM;
+> -	}
+> +
+>  	for (j = 0; j < BUZ_NUM_STAT_COM; j++)
+>  		zr->stat_com[j] = cpu_to_le32(1); /* mark as unavailable to zr36057 */
+>  

@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4621759F8B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824BD59F8B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235546AbiHXLi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S237129AbiHXLkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 07:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiHXLix (ORCPT
+        with ESMTP id S236821AbiHXLkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 07:38:53 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F165A82779
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:38:51 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id a4so20449807wrq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:38:51 -0700 (PDT)
+        Wed, 24 Aug 2022 07:40:25 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F426610F;
+        Wed, 24 Aug 2022 04:40:22 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ca13so21700207ejb.9;
+        Wed, 24 Aug 2022 04:40:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=tyoz+ZZrSGkvHCpO1cyzSxybU5YP0IGbdq84Bsreb+U=;
-        b=U9QH3s5/uC4/RmR7JSDanjlRAvwmVrlrdOHKThue/tPlRPhwxv+O7W/LCP/4bhzczX
-         21hq5Q4ChNCjSOQikLFEjlrYPJKBYAQkoQUsvrZ8i4sWh+vxsFk++2rWy6NCd/fwM2OQ
-         s6kCD8bhhcTY/ieEhqLYQyv5aFTZSYVYXlG+7Tgpjpejway3hUBOVQGV8xeakcRbTdGa
-         a6vBdkeu20qqiqQdQAPKEQdb6dJVbevssWInkEkf+rvzdl63pQRywbklHXq+27wLRfCS
-         ynErhiXW8hcYgJqH29U/tVLqO9yzle3JYgr8A9hkvwP+0rS7XWu+hfEHh9u5qaNMNWwT
-         5p2Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=pxKLfOME1R0KZZACiredgYsYKfw4h1/06Dg8Bmv9RjQ=;
+        b=DBL6LzztEwGp8X1U8me4Py7MxcKtdBb9YWUi/PURCPdr8iaMAQDC8JC3zxz4qqE0/m
+         bKiS9swMJ0I5nPY+WOf/aR2SgT5kiL8AiQEtdNwGVF8bxhUe+HlKjaVE6uQdl5UELpDi
+         nOqrp5TCMAWdBs5o5nfC1rfU5e2qXs5dmOvk9/Gd5R+3FZ/hFX5nFrXLNuh4R7eCVAqi
+         FCD5iN/WHnPKHbnfzWuSN5G0k1/px6vzxcTx4TMMx7qF3sPYp0G+KwZA99xomnl42Zmg
+         JZ7XnaY5aKCjIc5pKnlLhwWDnsYB0uqJ+gTcJALUtFK0Nclz4q/LUoSWJvtnF87WM0Di
+         VwFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=tyoz+ZZrSGkvHCpO1cyzSxybU5YP0IGbdq84Bsreb+U=;
-        b=ducnSnNSWpJ6c36oGCal85tbIk+w+pngZQFWCZI+To9onenGTqak/gAk7nmNDlSAd7
-         Q8GFUV2FMSKcCZ8NlyJIfCZwHJPi5nmV6+1qoS2ts1++kxmdsTenf/abgy5l4N+hKqTO
-         8H8ZXg9luT+YyzSpCymhT26JYyeco28UM9vgB6rz1bXIerbWtrpOfd1YVGhaldpftaaH
-         SM6XuiVv1+nMy3NGaoBykXyozedo18/r07eZuPPt3nh7hqIK3VhVlzNyFMPBr6KU7oAj
-         Jiqd/MwY5z9JG4Qp9ZYqwI2vKs7KQpnz/BoqVDjcYiX6LO+Cd83vtoDpthRUdty2Ogf7
-         t64g==
-X-Gm-Message-State: ACgBeo1B7OV2a7+8WHaC865kftZ1H39DqTNf3sKUTShMiW79yawA17eH
-        MFodJ320uyKxHC/FfXjQpAXd3A==
-X-Google-Smtp-Source: AA6agR7O1DuCbTb1dxVtsN2dH5krfG3+E6gm2xuG/xAiILrkhRy3l9IDQgN3rg0Dn8dZFDSJzcuaKg==
-X-Received: by 2002:a5d:64ca:0:b0:225:48a0:d9cb with SMTP id f10-20020a5d64ca000000b0022548a0d9cbmr11121690wri.399.1661341130369;
-        Wed, 24 Aug 2022 04:38:50 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id h188-20020a1c21c5000000b003a63a3b55c3sm1642503wmh.14.2022.08.24.04.38.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 04:38:50 -0700 (PDT)
-Message-ID: <0fc7062d-696a-0794-8730-48ef08bcb8bd@linaro.org>
-Date:   Wed, 24 Aug 2022 13:38:48 +0200
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=pxKLfOME1R0KZZACiredgYsYKfw4h1/06Dg8Bmv9RjQ=;
+        b=so/pfXSmzyGfC0Wzzzrz4w3iIYD/hKhbygw5+FEU6lltqTsgkI1pDQKTtLofHWbV7v
+         /xPmttLl8Ep1BbuzsFvQkbkwwixlfCMRbxcNb+Dprx61iSMNtaot7c0jtsanK+GNvCaZ
+         72C6gFCCFPnwImbb74CKe1p/uzyXJr/78wSvhOZEAKIe5CFNyu+thiZbi181MfLcHcIc
+         UzfFEyM1g5jVug4Zsynqrwr7Xa8E96CIxrlh7wYn22AToF2a0UJGwjbEv4BhkouNxtId
+         adWvDEH/2tZPCNzC3MGAtsxKJGnUv0hYTQDf3crKDe3IHiB33g84LrjNPd38zxcg7sEo
+         HZgQ==
+X-Gm-Message-State: ACgBeo2LfRZarpA/w8+js0xt9UkjPWiwvQhB1zF2swbvqufbikGR83Xj
+        CSq6g+bvvIYTh4mSdBonRZvuHccuZsl0Six/rLfd8PmO
+X-Google-Smtp-Source: AA6agR5Ns6sE/CX5NmrAoDfd3/1lrF0pkxRUfma+oBjhnH3A3CDYJX/3W1+0CRi4pSmkQBkj4rL/neE5GM78cX+RuJ8=
+X-Received: by 2002:a17:906:e9b:b0:730:a6a1:9fc9 with SMTP id
+ p27-20020a1709060e9b00b00730a6a19fc9mr2623390ejf.601.1661341220971; Wed, 24
+ Aug 2022 04:40:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] early thermal changes for v6.1-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220823122117.15757-1-yuanjilin@cdjrlc.com> <48f4a56f-0586-9e9d-c121-6309be65b803@arm.com>
+In-Reply-To: <48f4a56f-0586-9e9d-c121-6309be65b803@arm.com>
+From:   Inki Dae <daeinki@gmail.com>
+Date:   Wed, 24 Aug 2022 20:39:44 +0900
+Message-ID: <CAAQKjZNPBDwEwjL7+rYTvfm7eQ85feXW1rr_P3VCERn3fPPfjQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/exynos: fix repeated words in comments
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>, Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        krzysztof.kozlowski@linaro.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,187 +71,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-Hi Rafael,
+2022=EB=85=84 8=EC=9B=94 23=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 10:37, =
+Robin Murphy <robin.murphy@arm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On 2022-08-23 13:21, Jilin Yuan wrote:
+> >   Delete the redundant word 'next'.
+>
+>  From the context, I'm not sure it is redundant - as far as I can tell
+> this comment seems to be describing a sequence of 3 commands, where
+> "current" is the first, "next" is the second, and "next next" implies
+> the third. The whole comment could certainly be reworded more clearly,
+> but as it stands I suspect a replacement like s/next next/next+1/ is
+> more likely to be correct.
+>
 
-this cycle will contain certainly a higher number of changes than the 
-previous ones. That will come from the rework of the thermal trip 
-handling / consolidation which is still WIP but where the drivers 
-changes are partly acked-by the different maintainers. The result will 
-be great IMO in terms of cleanup, encapsulation and maintainability.
+"next next" is correct. :) As you said, "next next" could be reworded
+more clearly. As of now, the original sentence could make it
+confusing.
 
-The thermal OF cleanup and rework have been consolidated meanwhile.
+Thanks,
+Inki Dae
 
-In order to not have a huge pull request at the end of the v6.1 
-development cycle, I propose to send early but smaller pull requests 
-(release often, release early), so hopefully that will make the changes 
-smooth and may be hit the potential bugs for those who are sticking to 
-linux-pm instead of linux-next.
-
-This pull request is the first one and has been in the linux-next branch 
-since a couple of weeks.
-
-It includes the thermal OF rework, with the corresponding fixes and the 
-monitoring locking scheme path changes.
-
-Thanks
-   -- Daniel
-
-The following changes since commit 8c596324232d22e19f8df59ba03410b9b5b0f3d7:
-
-   dt-bindings: thermal: Fix missing required property (2022-08-15 
-20:38:40 +0200)
-
-are available in the Git repository at:
-
- 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.1-rc1
-
-for you to fetch changes up to 06f36055121769b9eb9b7d28c7499d1cc8269dc3:
-
-   Revert "mlxsw: core: Add the hottest thermal zone detection" 
-(2022-08-17 20:32:27 +0200)
-
-----------------------------------------------------------------
-- Rework the device tree initialization, convert the drivers to the
-   new API and remove the old OF code (Daniel Lezcano)
-
-- Fix return value to -ENODEV when searching for a specific thermal
-   zone which does not exist (Daniel Lezcano)
-
-- Fix the return value inspection in of_thermal_zone_find() (Dan
-   Carpenter)
-
-- Fix kernel panic when kasan is enabled as it detects an use after
-   free when unregistering a thermal zone (Daniel Lezcano)
-
-- Move the set_trip ops inside the thermal sysfs code (Daniel Lezcano)
-
-- Remove unnecessary error message as it is already showed in the
-   underlying function (Jiapeng Chong)
-
-- Rework the monitoring path and move the locks upper in the call
-   stack to fix some potentials race windows (Daniel Lezcano)
-
-- Fix lockdep_assert() warning introduced by the lock rework (Daniel
-   Lezcano)
-
-- Revert the Mellanox 'hotter thermal zone' feature because it is
-   already handled in the thermal framework core code (Daniel Lezcano)
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-       thermal/of: Fix error code in of_thermal_zone_find()
-
-Daniel Lezcano (42):
-       thermal/of: Rework the thermal device tree initialization
-       thermal/of: Return -ENODEV instead of -EINVAL if registration fails
-       thermal/of: Fix free after use in thermal_of_unregister()
-       thermal/of: Make new code and old code co-exist
-       thermal/drivers/rockchip: Switch to new of API
-       thermal/drivers/uniphier: Switch to new of API
-       thermal/drivers/generic-adc: Switch to new of API
-       thermal/drivers/mmio: Switch to new of API
-       thermal/drivers/tegra: Switch to new of API
-       thermal/drivers/sun8i: Switch to new of API
-       thermal/drivers/sprd: Switch to new of API
-       thermal/drivers/broadcom: Switch to new of API
-       thermal/drivers/qcom: Switch to new of API
-       thermal/drivers/st: Switch to new of API
-       thermal/drivers/amlogic: Switch to new of API
-       thermal/drivers/armada: Switch to new of API
-       thermal/drivers/db8500: Switch to new of API
-       thermal/drivers/imx: Switch to new of API
-       thermal/drivers/rcar: Switch to new of API
-       thermal/drivers/rzg2l: Switch to new of API
-       thermal/drivers/qoriq: Switch to new of API
-       thermal/drivers/mtk: Switch to new of API
-       thermal/drivers/banggap: Switch to new of API
-       thermal/drivers/maxim: Switch to new of API
-       thermal/drivers/hisilicon: Switch to new of API
-       thermal/drivers/ti-soc: Switch to new of API
-       ata/drivers/ahci_imx: Switch to new of thermal API
-       hwmon: pm_bus: core: Switch to new of thermal API
-       hwmon/drivers/core: Switch to new of thermal API
-       iio/drivers/sun4i_gpadc: Switch to new of thermal API
-       Input: sun4i-ts - switch to new of thermal API
-       regulator/drivers/max8976: Switch to new of thermal API
-       thermal/drivers/samsung: Switch to new of thermal API
-       thermal/core: Move set_trip_temp ops to the sysfs code
-       thermal/of: Remove old OF code
-       thermal/core: Rearm the monitoring only one time
-       thermal/core: Rework the monitoring a bit
-       thermal/governors: Group the thermal zone lock inside the 
-throttle function
-       thermal/core: Move the thermal zone lock out of the governors
-       thermal/core: Move the mutex inside the 
-thermal_zone_device_update() function
-       thermal/core: Fix lockdep_assert() warning
-       Revert "mlxsw: core: Add the hottest thermal zone detection"
-
-Jiapeng Chong (1):
-       thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary print 
-function dev_err()
-
-  drivers/ata/ahci_imx.c                             |   15 +-
-  drivers/hwmon/hwmon.c                              |   14 +-
-  drivers/hwmon/pmbus/pmbus_core.c                   |   10 +-
-  drivers/hwmon/scpi-hwmon.c                         |   14 +-
-  drivers/iio/adc/sun4i-gpadc-iio.c                  |   14 +-
-  drivers/input/touchscreen/sun4i-ts.c               |   10 +-
-  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |   77 +-
-  drivers/regulator/max8973-regulator.c              |   10 +-
-  drivers/thermal/amlogic_thermal.c                  |   16 +-
-  drivers/thermal/armada_thermal.c                   |   12 +-
-  drivers/thermal/broadcom/bcm2711_thermal.c         |   14 +-
-  drivers/thermal/broadcom/bcm2835_thermal.c         |   14 +-
-  drivers/thermal/broadcom/brcmstb_thermal.c         |   20 +-
-  drivers/thermal/broadcom/ns-thermal.c              |   50 +-
-  drivers/thermal/broadcom/sr-thermal.c              |   16 +-
-  drivers/thermal/db8500_thermal.c                   |    8 +-
-  drivers/thermal/gov_bang_bang.c                    |   10 +-
-  drivers/thermal/gov_fair_share.c                   |    3 +-
-  drivers/thermal/gov_power_allocator.c              |   20 +-
-  drivers/thermal/gov_step_wise.c                    |   10 +-
-  drivers/thermal/hisi_thermal.c                     |   14 +-
-  drivers/thermal/imx8mm_thermal.c                   |   14 +-
-  drivers/thermal/imx_sc_thermal.c                   |   14 +-
-  drivers/thermal/k3_bandgap.c                       |   12 +-
-  drivers/thermal/k3_j72xx_bandgap.c                 |   12 +-
-  drivers/thermal/max77620_thermal.c                 |    8 +-
-  drivers/thermal/mtk_thermal.c                      |   10 +-
-  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   23 +-
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   12 +-
-  drivers/thermal/qcom/tsens.c                       |   16 +-
-  drivers/thermal/qoriq_thermal.c                    |   12 +-
-  drivers/thermal/rcar_gen3_thermal.c                |   16 +-
-  drivers/thermal/rcar_thermal.c                     |   13 +-
-  drivers/thermal/rockchip_thermal.c                 |   14 +-
-  drivers/thermal/rzg2l_thermal.c                    |   10 +-
-  drivers/thermal/samsung/exynos_tmu.c               |   24 +-
-  drivers/thermal/sprd_thermal.c                     |   18 +-
-  drivers/thermal/st/stm_thermal.c                   |   18 +-
-  drivers/thermal/sun8i_thermal.c                    |   14 +-
-  drivers/thermal/tegra/soctherm.c                   |   21 +-
-  drivers/thermal/tegra/tegra-bpmp-thermal.c         |   19 +-
-  drivers/thermal/tegra/tegra30-tsensor.c            |   12 +-
-  drivers/thermal/thermal-generic-adc.c              |   10 +-
-  drivers/thermal/thermal_core.c                     |   63 +-
-  drivers/thermal/thermal_core.h                     |    4 +-
-  drivers/thermal/thermal_helpers.c                  |   73 +-
-  drivers/thermal/thermal_mmio.c                     |   17 +-
-  drivers/thermal/thermal_of.c                       | 1148 
-+++++++-------------
-  drivers/thermal/thermal_sysfs.c                    |   11 +-
-  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   16 +-
-  drivers/thermal/uniphier_thermal.c                 |   10 +-
-  include/linux/thermal.h                            |   85 +-
-  52 files changed, 796 insertions(+), 1324 deletions(-)
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> Robin.
+>
+> > Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> > ---
+> >   drivers/gpu/drm/exynos/exynos_drm_g2d.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/=
+exynos/exynos_drm_g2d.c
+> > index 471fd6c8135f..4f9edca66632 100644
+> > --- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > +++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > @@ -1195,7 +1195,7 @@ int exynos_g2d_set_cmdlist_ioctl(struct drm_devic=
+e *drm_dev, void *data,
+> >        * If don't clear SFR registers, the cmdlist is affected by regis=
+ter
+> >        * values of previous cmdlist. G2D hw executes SFR clear command =
+and
+> >        * a next command at the same time then the next command is ignor=
+ed and
+> > -      * is executed rightly from next next command, so needs a dummy c=
+ommand
+> > +      * is executed rightly from next command, so needs a dummy comman=
+d
+> >        * to next command of SFR clear command.
+> >        */
+> >       cmdlist->data[cmdlist->last++] =3D G2D_SOFT_RESET;

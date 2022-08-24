@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9870B59F67A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620AF59F67F
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236146AbiHXJiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S235831AbiHXJkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbiHXJie (ORCPT
+        with ESMTP id S236247AbiHXJkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:38:34 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6001796742;
-        Wed, 24 Aug 2022 02:38:32 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id w138so13337041pfc.10;
-        Wed, 24 Aug 2022 02:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=SKcPpqHKjW4e2dhAdJ5zvkqLvQknUi1MfWlt2XH7w80=;
-        b=h9RlhLc54hOltb+I54bC5StmQ37NtKmehwI/TwS0dzGaCKZD05iCyNGSpEg32HWW0z
-         3HheDjW0jnjnBqwmR0ywQsIfPY30imJC8OoEXKBm11Kv0XmWmKo2hQwsU54+ZyB7+6d+
-         ZlBNQeaUriKgIpkCck03aEk+XtmH0m5HntfEz0fwHNtUBSHPmwKqObYiFwQsaAlRjxWP
-         WR1yRSzf6N0KIgQFSljyFssDPR3CnVT31xiQ4QYaf9qLi4clcaiIFc9V6HklueBlMPYb
-         G/I7wdhqR68fH4Hv7sy59Xk9N7VoqiVSg7DxDAdNFDOGTamwV0acq1nuXCehDIt5H/BG
-         F6dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=SKcPpqHKjW4e2dhAdJ5zvkqLvQknUi1MfWlt2XH7w80=;
-        b=StLtdT7FKJIt29Ol0OWFyzAb5lnEKR1QY8oMDNojfllhygpNacbQGYIS6QvDumC51J
-         eNe5YEt1+Vp25izInIzxhRSfXBw5sP0JVX/ain8OYO/k1w+YHgG87BrODZBi2gXvDxMM
-         dLfx8WvFD89tILSzEdKw5JrkYRKDPG2lyYI5AmQwfaNUWsGkFvxgM//kViBAWy/PkyDV
-         wAlMnyAD7kktdZLB6wRCqS1U7gCauv71AISVDgLuhGn0vF8FUQtRimzzO3kcH+GYOAYB
-         3XtM9Jr0n539tP7ac+Z4TftvO+qMGqEDbhy7d1KHuLaQoLs60UTTbyhQyE7m8PEz3FBD
-         +S1w==
-X-Gm-Message-State: ACgBeo35Ja/bwPBYBONYL1zTN6bbB8DEMq/NKz9xr0Gj1MociIsBwCNk
-        oK4mhoCZgml4d4BMcLZkS2g=
-X-Google-Smtp-Source: AA6agR7YCKWuZ9M6+27u0mPvnyXfOLCELSkowfRppRNp4tSNBgB+dNOwgPdc1czPKWmmQmhsT0ol2A==
-X-Received: by 2002:a05:6a00:ac6:b0:530:3197:48b6 with SMTP id c6-20020a056a000ac600b00530319748b6mr29136227pfl.80.1661333911296;
-        Wed, 24 Aug 2022 02:38:31 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id mt4-20020a17090b230400b001fb18855440sm914547pjb.31.2022.08.24.02.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 02:38:30 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id CDFA210119B; Wed, 24 Aug 2022 16:38:26 +0700 (WIB)
-Date:   Wed, 24 Aug 2022 16:38:26 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     xu xin <cgel.zte@gmail.com>
-Cc:     akpm@linux-foundation.org, corbet@lwn.net, adobriyan@gmail.com,
-        willy@infradead.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>,
-        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH v3 2/2] ksm: add profit monitoring documentation
-Message-ID: <YwXxkqTM66aO1Y9l@debian.me>
-References: <20220824070559.219977-1-xu.xin16@zte.com.cn>
- <20220824070821.220092-1-xu.xin16@zte.com.cn>
+        Wed, 24 Aug 2022 05:40:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D7CC66;
+        Wed, 24 Aug 2022 02:40:20 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MCLcR2060znTkv;
+        Wed, 24 Aug 2022 17:37:59 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 17:40:08 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 17:40:06 +0800
+Message-ID: <0dc19773-81f7-84c2-2bc7-7d8d987b24b7@huawei.com>
+Date:   Wed, 24 Aug 2022 17:40:06 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6K/xkb9YUOfBCWvM"
-Content-Disposition: inline
-In-Reply-To: <20220824070821.220092-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 2/4] mm/tlbbatch: Introduce
+ arch_tlbbatch_should_defer()
+Content-Language: en-US
+To:     Yicong Yang <yangyicong@huawei.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-arm-kernel@lists.infradead.org>,
+        <x86@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-doc@vger.kernel.org>
+CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <darren@os.amperecomputing.com>,
+        <yangyicong@hisilicon.com>, <huzhanyuan@oppo.com>,
+        <lipeifeng@oppo.com>, <zhangshiming@oppo.com>, <guojian@oppo.com>,
+        <realmz6@gmail.com>, <linux-mips@vger.kernel.org>,
+        <openrisc@lists.librecores.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        Barry Song <21cnbao@gmail.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>, <anshuman.khandual@arm.com>,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>
+References: <20220822082120.8347-1-yangyicong@huawei.com>
+ <20220822082120.8347-3-yangyicong@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20220822082120.8347-3-yangyicong@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,88 +68,71 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---6K/xkb9YUOfBCWvM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2022/8/22 16:21, Yicong Yang wrote:
+> From: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+>
+> The entire scheme of deferred TLB flush in reclaim path rests on the
+> fact that the cost to refill TLB entries is less than flushing out
+> individual entries by sending IPI to remote CPUs. But architecture
+> can have different ways to evaluate that. Hence apart from checking
+> TTU_BATCH_FLUSH in the TTU flags, rest of the decision should be
+> architecture specific.
+>
+> Signed-off-by: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+> [https://lore.kernel.org/linuxppc-dev/20171101101735.2318-2-khandual@linux.vnet.ibm.com/]
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> [Rebase and fix incorrect return value type]
 
-On Wed, Aug 24, 2022 at 07:08:21AM +0000, xu xin wrote:
-> +1) How to determine whether KSM save memory or consume memory in system-=
-wide
-> +range? Here is a simple approximate calculation for reference:
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+
+> ---
+>   arch/x86/include/asm/tlbflush.h | 12 ++++++++++++
+>   mm/rmap.c                       |  9 +--------
+>   2 files changed, 13 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+> index cda3118f3b27..8a497d902c16 100644
+> --- a/arch/x86/include/asm/tlbflush.h
+> +++ b/arch/x86/include/asm/tlbflush.h
+> @@ -240,6 +240,18 @@ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
+>   	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false);
+>   }
+>   
+> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> +{
+> +	bool should_defer = false;
 > +
-> +	general_profit =3D~ pages_sharing * sizeof(page) - (all_rmap_items) *
-> +	         sizeof(rmap_item);
+> +	/* If remote CPUs need to be flushed then defer batch the flush */
+> +	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+> +		should_defer = true;
+> +	put_cpu();
 > +
-> +where all_rmap_items can be easily obtained by summing ``pages_sharing``,
-> +``pages_shared``, ``pages_unshared`` and ``pages_volatile``.
+> +	return should_defer;
+> +}
 > +
-> +2) The KSM profit inner a single process can be similarly obtained by the
-> +following approximate calculation:
-> +
-> +	process_profit =3D~ ksm_merging_sharing * sizeof(page) -
-> +			  ksm_rmp_items * sizeof(rmap_item).
-> +
-
-The profit formula above can be put into code blocks. Also, align the
-numbered list texts, like:
-
----- >8 ----
-
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-gui=
-de/mm/ksm.rst
-index 40bc11f6fa15fa..7e3092fe407e37 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -194,22 +194,22 @@ be merged, but some may not be abled to be merged aft=
-er being checked
- several times, which are unprofitable memory consumed.
-=20
- 1) How to determine whether KSM save memory or consume memory in system-wi=
-de
--range? Here is a simple approximate calculation for reference:
-+   range? Here is a simple approximate calculation for reference::
-=20
- 	general_profit =3D~ pages_sharing * sizeof(page) - (all_rmap_items) *
- 	         sizeof(rmap_item);
-=20
--where all_rmap_items can be easily obtained by summing ``pages_sharing``,
--``pages_shared``, ``pages_unshared`` and ``pages_volatile``.
-+   where all_rmap_items can be easily obtained by summing ``pages_sharing`=
-`,
-+   ``pages_shared``, ``pages_unshared`` and ``pages_volatile``.
-=20
- 2) The KSM profit inner a single process can be similarly obtained by the
--following approximate calculation:
-+   following approximate calculation::
-=20
- 	process_profit =3D~ ksm_merging_sharing * sizeof(page) -
- 			  ksm_rmp_items * sizeof(rmap_item).
-=20
--where both ksm_merging_sharing and ksm_rmp_items are shown under the direc=
-tory
--``/proc/<pid>/``.
-+   where both ksm_merging_sharing and ksm_rmp_items are shown under the
-+   directory ``/proc/<pid>/``.
-=20
- From the perspective of application, a high ratio of ``ksm_rmp_items`` to
- ``ksm_merging_sharing`` means a bad madvise-applied policy, so developers =
-or
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---6K/xkb9YUOfBCWvM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYwXxiQAKCRD2uYlJVVFO
-o9aKAQCeUXLi0ItbLyz2LIdrV2OFgXZOlmIWc6VYlyKgeBA9UAD5AVrDVXP2Ew0h
-0AKb+kU+/YVqox6NvvlZm0p6IPiuLAg=
-=v9oU
------END PGP SIGNATURE-----
-
---6K/xkb9YUOfBCWvM--
+>   static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
+>   {
+>   	/*
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index edc06c52bc82..a17a004550c6 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -687,17 +687,10 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
+>    */
+>   static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
+>   {
+> -	bool should_defer = false;
+> -
+>   	if (!(flags & TTU_BATCH_FLUSH))
+>   		return false;
+>   
+> -	/* If remote CPUs need to be flushed then defer batch the flush */
+> -	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+> -		should_defer = true;
+> -	put_cpu();
+> -
+> -	return should_defer;
+> +	return arch_tlbbatch_should_defer(mm);
+>   }
+>   
+>   /*

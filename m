@@ -2,213 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9D859FD00
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A896159FD0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239110AbiHXOPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S239094AbiHXOQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239094AbiHXOPG (ORCPT
+        with ESMTP id S238480AbiHXOQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:15:06 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33550844C2;
-        Wed, 24 Aug 2022 07:15:05 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y3so7427795ejc.1;
-        Wed, 24 Aug 2022 07:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=3RY0kXIvgqIVojhkrE4Zwlr7wJlH94oU+XFloUi3XjI=;
-        b=k433WZpJORtGGgjLBRUCWg89Ct3eMmhhzzPwfTl6//mc8KZmXsfUkvjXK2CPv2G6j9
-         FW4/JFsVFe8WZ8qXfiG0G2WUSXJhVho/22M2ZvYonWllG8JjwTj6MhS+/biMgV4nO5Zr
-         llPWeve491++YksKYHfxR6w08hbYD3Jv+FtIHtqkeqoTfLN6sUfa2AlD62I2SrAPThJb
-         x/pSysLoKr056pSqqIrDP4Zf5umrg7az72DW3OYvoPJOZdkczmoNmarSqM1+dim8Vhiv
-         BxZj98y4ZeYDVEzsmdne2xhUZzSQUjC7gSpIH2W4w1Iq4MHPRdAGpb04pB6x8cp2I0OU
-         nIBA==
+        Wed, 24 Aug 2022 10:16:49 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E11198D0D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:16:45 -0700 (PDT)
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2B16540B2B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:16:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1661350604;
+        bh=XAZIO9+48GRjlnarFRC1UPi0uDzTdLs9Ete1xQbj9h8=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=n+B5JIdfH1XclXjfuHl1TiTM4QH4CBFAKpfUfrTeDzaSq1bURlwKKnR8y+6tO5MMM
+         xFusNMsREtUKC303QZaqph+UaA0Yb8aRNajAX6SPdR4jttMvjpCfsUl0IAkpxm+W9k
+         fq0pEZY3MkgiWQjeRIz67qaYGTvcSEn5J1Mnx78LNJZt3jB4wMkIyC9xSYuaCDcU0o
+         I3Nbm3CI4/9Vh2b8TxkjOSg/yg4EhdqxHMmlC0C7XOZdAdEyD6aNFNUYnBJ1DC8EsJ
+         IO7UaWIi8qqrem1yU9T0sRsCuSAbujnpieOrzmZd7azC6hTDYPJWT8g84CjlT+X6KY
+         0M9D0nHUpDhfg==
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-11ceb376e16so3320750fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:16:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=3RY0kXIvgqIVojhkrE4Zwlr7wJlH94oU+XFloUi3XjI=;
-        b=qAZ17XQjciWcUbOVrCHCAmxxY8Vmk6qNQLGtXlxJ6c0tIEcKKu21fcGB+LB9BZk67q
-         27wrjz7TrWpuQFTFtswLcZUb6FGVd112d+x47vau4GOPM+6rzojwWLfpJzRbTIjdQY1Y
-         1yvSL2YnQzwEywvfYek3Tm1qySRSQZ1Xh6HjDLF6Y5oZ8BoVczR2ozREZ6NMnDvTMp9D
-         LNgTCvx6uzsTOh6o3TcoOY6xELW1nXW2eDcym6ufJG/05Zm2Xf3gNx0+VbuVv1Slyo2N
-         EGB57uyEaoNpYD1OwHBW74XYnY7frfydzNNV9z3AKeItc30oDkDbjZPgPDsUp0twr3wK
-         k7Aw==
-X-Gm-Message-State: ACgBeo3hM4rE8k21p/2yGXu1ujPYf0XnZ+Q6UaesYfWlPkkSOiwwHnbI
-        cuCEZ4MZECFuzqxWFuHJVP8=
-X-Google-Smtp-Source: AA6agR5vl7eAC3d146n4WFT7uLsC77WQL4B00T85StELI9JlyPgaC5TszQICKao2kaYSaa7iVSFw9A==
-X-Received: by 2002:a17:907:7256:b0:73d:9c6b:35e2 with SMTP id ds22-20020a170907725600b0073d9c6b35e2mr2992627ejc.197.1661350503452;
-        Wed, 24 Aug 2022 07:15:03 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:62ca:57d9:b533:6057? ([2a02:908:1256:79a0:62ca:57d9:b533:6057])
-        by smtp.gmail.com with ESMTPSA id m26-20020a056402051a00b004464c3de6dasm3147684edv.65.2022.08.24.07.15.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 07:15:02 -0700 (PDT)
-Message-ID: <79cf9887-64ad-9cfd-035a-4b6e41b864e0@gmail.com>
-Date:   Wed, 24 Aug 2022 16:15:00 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=XAZIO9+48GRjlnarFRC1UPi0uDzTdLs9Ete1xQbj9h8=;
+        b=D5boesF3kfYnSaftTqxLs4Q1sWr2q08emHvappFWrngg9FK83JKnIwX6lVXc0Eq4xm
+         MSRivj21hLIeKQHmGaAg2TVj6kvJ1KLL0yqXGXaxWn7K2xBjW4Us2NfZ0FEGkjEn93eQ
+         BiGbcT1wuLre783mVR+Rrc8LMAQO/gXOR9L43i79wDMwkZbOYYIm6F/VdK0gnm8ajcdU
+         11NQvwbuVltAcj0kB0+DgdRXLwMmHc3zzebGzH5LKlG4aJVvuKKN8512knO5ZF4eh72T
+         x5cRweG3vHwYYRIeKqM+jqVDWkpS9g4ELzKq6riVavG7OpSGmvSSQgOMaMFQ/gACeqlP
+         RM1Q==
+X-Gm-Message-State: ACgBeo2gYLi4H0IqofPRD7uf9cUxXo94oL3Nb53tgtydSTc1h5IfHPl1
+        xmFQVMRW/RYt/N3pAFsYZlo2JYa9JmyOwogqs4AVRkcC4v8vChnPxIk/Qypv1Pa4KGCt85MoRbn
+        tax0baoLSA1Mc85ZscnGNN2QFKjwi9qZFjNhD2/ujVMsyAcuGTGtK0ylfuQ==
+X-Received: by 2002:a05:6870:8901:b0:11d:416d:2ccb with SMTP id i1-20020a056870890100b0011d416d2ccbmr3609438oao.176.1661350602962;
+        Wed, 24 Aug 2022 07:16:42 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4S/bXPjudD5r+jeg8zjdF8VIIfPTbKsr6UBU4BPdcvaSuYf6QRJqDYyWMLocI8oex7KKC2lxdqQd8jgQ9wzG0=
+X-Received: by 2002:a05:6870:8901:b0:11d:416d:2ccb with SMTP id
+ i1-20020a056870890100b0011d416d2ccbmr3609414oao.176.1661350602662; Wed, 24
+ Aug 2022 07:16:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/9] Move all drivers to a common dma-buf locking
- convention
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lima@lists.freedesktop.org
-References: <20220824102248.91964-1-dmitry.osipenko@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20220824102248.91964-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220823185134.14464-1-mario.limonciello@amd.com> <20220823185134.14464-2-mario.limonciello@amd.com>
+In-Reply-To: <20220823185134.14464-2-mario.limonciello@amd.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 24 Aug 2022 22:16:30 +0800
+Message-ID: <CAAd53p6MfBaRTTNJ5mAFU6XfDndLFJihLHKdrbq8Nq-27LArjg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] ACPI: OSI: Remove Linux-Dell-Video _OSI string
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     rafael@kernel.org, Len Brown <lenb@kernel.org>,
+        nouveau@lists.freedesktop.org, hdegoede@redhat.com,
+        ddadap@nvidia.com, Dell.Client.Kernel@dell.com, kherbst@redhat.com,
+        Lyude Paul <lyude@redhat.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Christian König <christian.koenig@amd.com> to patches #2-#4
+On Wed, Aug 24, 2022 at 2:51 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> This string was introduced because drivers for NVIDIA hardware
+> had bugs supporting RTD3 in the past.  Thoes bugs have been fixed
+> by commit 5775b843a619 ("PCI: Restore config space on runtime resume
+> despite being unbound"). so vendors shouldn't be using this string
+> to modify ASL anymore.
 
-Am 24.08.22 um 12:22 schrieb Dmitry Osipenko:
-> Hello,
->
-> This series moves all drivers to a dynamic dma-buf locking specification.
->  From now on all dma-buf importers are made responsible for holding
-> dma-buf's reservation lock around all operations performed over dma-bufs
-> in accordance to the locking specification. This allows us to utilize
-> reservation lock more broadly around kernel without fearing of a potential
-> deadlocks.
->
-> This patchset passes all i915 selftests. It was also tested using VirtIO,
-> Panfrost, Lima, Tegra, udmabuf, AMDGPU and Nouveau drivers. I tested cases
-> of display+GPU, display+V4L and GPU+V4L dma-buf sharing (where appropriate),
-> which covers majority of kernel drivers since rest of the drivers share
-> same or similar code paths.
->
-> Changelog:
->
-> v3: - Factored out dma_buf_mmap_unlocked() and attachment functions
->        into aseparate patches, like was suggested by Christian König.
->
->      - Corrected and factored out dma-buf locking documentation into
->        a separate patch, like was suggested by Christian König.
->
->      - Intel driver dropped the reservation locking fews days ago from
->        its BO-release code path, but we need that locking for the imported
->        GEMs because in the end that code path unmaps the imported GEM.
->        So I added back the locking needed by the imported GEMs, updating
->        the "dma-buf attachment locking specification" patch appropriately.
->
->      - Tested Nouveau+Intel dma-buf import/export combo.
->
->      - Tested udmabuf import to i915/Nouveau/AMDGPU.
->
->      - Fixed few places in Etnaviv, Panfrost and Lima drivers that I missed
->        to switch to locked dma-buf vmapping in the drm/gem: Take reservation
->        lock for vmap/vunmap operations" patch. In a result invalidated the
->        Christian's r-b that he gave to v2.
->
->      - Added locked dma-buf vmap/vunmap functions that are needed for fixing
->        vmappping of Etnaviv, Panfrost and Lima drivers mentioned above.
->        I actually had this change stashed for the drm-shmem shrinker patchset,
->        but then realized that it's already needed by the dma-buf patches.
->        Also improved my tests to better cover these code paths.
->
-> v2: - Changed locking specification to avoid problems with a cross-driver
->        ww locking, like was suggested by Christian König. Now the attach/detach
->        callbacks are invoked without the held lock and exporter should take the
->        lock.
->
->      - Added "locking convention" documentation that explains which dma-buf
->        functions and callbacks are locked/unlocked for importers and exporters,
->        which was requested by Christian König.
->
->      - Added ack from Tomasz Figa to the V4L patches that he gave to v1.
->
-> Dmitry Osipenko (9):
->    dma-buf: Add _unlocked postfix to function names
->    dma-buf: Add locked variant of dma_buf_vmap/vunmap()
->    drm/gem: Take reservation lock for vmap/vunmap operations
->    dma-buf: Move dma_buf_vmap/vunmap_unlocked() to dynamic locking
->      specification
->    dma-buf: Move dma_buf_mmap_unlocked() to dynamic locking specification
->    dma-buf: Move dma-buf attachment to dynamic locking specification
->    dma-buf: Document dynamic locking convention
->    media: videobuf2: Stop using internal dma-buf lock
->    dma-buf: Remove internal lock
->
->   Documentation/driver-api/dma-buf.rst          |   6 +
->   drivers/dma-buf/dma-buf.c                     | 276 ++++++++++++++----
->   drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c   |   4 +-
->   drivers/gpu/drm/armada/armada_gem.c           |  14 +-
->   drivers/gpu/drm/drm_client.c                  |   4 +-
->   drivers/gpu/drm/drm_gem.c                     |  24 ++
->   drivers/gpu/drm/drm_gem_dma_helper.c          |   6 +-
->   drivers/gpu/drm/drm_gem_framebuffer_helper.c  |   6 +-
->   drivers/gpu/drm/drm_gem_shmem_helper.c        |   2 +-
->   drivers/gpu/drm/drm_gem_ttm_helper.c          |   9 +-
->   drivers/gpu/drm/drm_prime.c                   |  12 +-
->   drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   4 +-
->   drivers/gpu/drm/exynos/exynos_drm_gem.c       |   2 +-
->   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   6 +-
->   drivers/gpu/drm/i915/gem/i915_gem_object.c    |  12 +
->   .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |  20 +-
->   drivers/gpu/drm/lima/lima_sched.c             |   4 +-
->   drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   8 +-
->   drivers/gpu/drm/panfrost/panfrost_dump.c      |   4 +-
->   drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |   6 +-
->   drivers/gpu/drm/qxl/qxl_object.c              |  17 +-
->   drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
->   drivers/gpu/drm/tegra/gem.c                   |  27 +-
->   drivers/infiniband/core/umem_dmabuf.c         |  11 +-
->   .../common/videobuf2/videobuf2-dma-contig.c   |  26 +-
->   .../media/common/videobuf2/videobuf2-dma-sg.c |  23 +-
->   .../common/videobuf2/videobuf2-vmalloc.c      |  17 +-
->   .../platform/nvidia/tegra-vde/dmabuf-cache.c  |  12 +-
->   drivers/misc/fastrpc.c                        |  12 +-
->   drivers/xen/gntdev-dmabuf.c                   |  14 +-
->   include/drm/drm_gem.h                         |   3 +
->   include/linux/dma-buf.h                       |  57 ++--
->   32 files changed, 410 insertions(+), 242 deletions(-)
->
+Add some backgrounds on what happened.
 
+Before proprietary NVIDIA driver supports RTD3, Ubuntu has a mechanism
+that can switch PRIME on and off, though it requires to logout/login
+to make the library switch happen.
+When the PRIME is off, the mechanism unload NVIDIA driver and put the
+device to D3cold, but GPU never came back to D0 again. So ODM use the
+_OSI to expose an old _DSM method to switch the power on/off.
+
+The issue is fixed by the said commit so we can discard the workaround now.
+
+Kai-Heng
+
+>
+> Reviewed-by: Lyude Paul <lyude@redhat.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/acpi/osi.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+>
+> diff --git a/drivers/acpi/osi.c b/drivers/acpi/osi.c
+> index 9f6853809138..c2f6b2f553d9 100644
+> --- a/drivers/acpi/osi.c
+> +++ b/drivers/acpi/osi.c
+> @@ -44,15 +44,6 @@ osi_setup_entries[OSI_STRING_ENTRIES_MAX] __initdata = {
+>         {"Processor Device", true},
+>         {"3.0 _SCP Extensions", true},
+>         {"Processor Aggregator Device", true},
+> -       /*
+> -        * Linux-Dell-Video is used by BIOS to disable RTD3 for NVidia graphics
+> -        * cards as RTD3 is not supported by drivers now.  Systems with NVidia
+> -        * cards will hang without RTD3 disabled.
+> -        *
+> -        * Once NVidia drivers officially support RTD3, this _OSI strings can
+> -        * be removed if both new and old graphics cards are supported.
+> -        */
+> -       {"Linux-Dell-Video", true},
+>         /*
+>          * Linux-Lenovo-NV-HDMI-Audio is used by BIOS to power on NVidia's HDMI
+>          * audio device which is turned off for power-saving in Windows OS.
+> --
+> 2.34.1
+>

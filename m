@@ -2,48 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081F259F6CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5ED59F6DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235891AbiHXJtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S236147AbiHXJuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbiHXJtC (ORCPT
+        with ESMTP id S235974AbiHXJu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:49:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5747267464;
-        Wed, 24 Aug 2022 02:49:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2981B8238F;
-        Wed, 24 Aug 2022 09:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D732C433B5;
-        Wed, 24 Aug 2022 09:48:55 +0000 (UTC)
-Message-ID: <cf992081-eb0c-009d-f283-1602b74a9293@xs4all.nl>
-Date:   Wed, 24 Aug 2022 11:48:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] media: staging: media: zoran: Removed braces for single
- statement block
-Content-Language: en-US
-To:     Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
-Cc:     Corentin Labbe <clabbe@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220721150055.52096-1-abhijeet.srivastava2308@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220721150055.52096-1-abhijeet.srivastava2308@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Wed, 24 Aug 2022 05:50:26 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5B43F1CC;
+        Wed, 24 Aug 2022 02:50:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VN7.oF5_1661334621;
+Received: from localhost(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VN7.oF5_1661334621)
+          by smtp.aliyun-inc.com;
+          Wed, 24 Aug 2022 17:50:21 +0800
+From:   'Guanjun' <guanjun@linux.alibaba.com>
+To:     herbert@gondor.apana.org.au
+Cc:     zelin.deng@linux.alibaba.com, guanjun@linux.alibaba.com,
+        xuchun.shang@linux.alibaba.com, artie.ding@linux.alibaba.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/9] Drivers for Alibaba YCC (Yitian Cryptography Complex) cryptographic accelerator
+Date:   Wed, 24 Aug 2022 17:50:12 +0800
+Message-Id: <1661334621-44413-1-git-send-email-guanjun@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,41 +38,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abhijeet,
+From: Guanjun <guanjun@linux.alibaba.com>
 
-Thank you for the zoran patches, unfortunately these are a duplicate of
+Hi, Herbert
 
-https://patchwork.linuxtv.org/project/linux-media/patch/20220810115445.2302477-2-hverkuil-cisco@xs4all.nl/
+This patch series aims to add drivers for Alibaba YCC (Yitian Cryptography Complex)
+cryptographic accelerator. Enables the on-chip cryptographic accelerator of
+Alibaba Yitian SoCs which based on ARMv9 architecture.
 
-I wish I'd noticed your patches earlier, it would have saved me some work :-(
+It includes PCIe enabling, skcipher, aead, rsa, sm2 support.
 
-I'm marking your patches Obsoleted in patchwork.
+Please help to review.
 
-Regards,
+Thanks,
+Guanjun.
 
-	Hans
 
-On 21/07/2022 17:00, Abhijeet Srivastava wrote:
-> Warning found by checkpatch.pl script.
-> 
-> Signed-off-by: Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
-> ---
->  drivers/staging/media/zoran/zoran_card.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-> index 26f978a1cc72..0c138d47d0c3 100644
-> --- a/drivers/staging/media/zoran/zoran_card.c
-> +++ b/drivers/staging/media/zoran/zoran_card.c
-> @@ -1038,9 +1038,9 @@ static int zr36057_init(struct zoran *zr)
->  	zr->stat_com = dma_alloc_coherent(&zr->pci_dev->dev,
->  					  BUZ_NUM_STAT_COM * sizeof(u32),
->  					  &zr->p_sc, GFP_KERNEL);
-> -	if (!zr->stat_com) {
-> +	if (!zr->stat_com) 
->  		return -ENOMEM;
-> -	}
-> +
->  	for (j = 0; j < BUZ_NUM_STAT_COM; j++)
->  		zr->stat_com[j] = cpu_to_le32(1); /* mark as unavailable to zr36057 */
->  
+Guanjun (3):
+  crypto/ycc: Add skcipher algorithm support
+  crypto/ycc: Add aead algorithm support
+  crypto/ycc: Add rsa algorithm support
+
+Xuchun Shang (1):
+  crypto/ycc: Add sm2 algorithm support
+
+Zelin Deng (5):
+  crypto/ycc: Add YCC (Yitian Cryptography Complex) accelerator driver
+  crypto/ycc: Add ycc ring configuration
+  crypto/ycc: Add irq support for ycc kernel rings
+  crypto/ycc: Add device error handling support for ycc hw errors
+  MAINTAINERS: Add Yitian Cryptography Complex (YCC) driver maintainer
+    entry
+
+ MAINTAINERS                            |   8 +
+ drivers/crypto/Kconfig                 |   2 +
+ drivers/crypto/Makefile                |   1 +
+ drivers/crypto/ycc/Kconfig             |  18 +
+ drivers/crypto/ycc/Makefile            |   4 +
+ drivers/crypto/ycc/sm2signature_asn1.c |  38 ++
+ drivers/crypto/ycc/sm2signature_asn1.h |  13 +
+ drivers/crypto/ycc/ycc_aead.c          | 646 ++++++++++++++++++++++
+ drivers/crypto/ycc/ycc_algs.h          | 176 ++++++
+ drivers/crypto/ycc/ycc_cdev.c          |  86 +++
+ drivers/crypto/ycc/ycc_cdev.h          |  18 +
+ drivers/crypto/ycc/ycc_dev.h           | 157 ++++++
+ drivers/crypto/ycc/ycc_drv.c           | 574 ++++++++++++++++++++
+ drivers/crypto/ycc/ycc_isr.c           | 279 ++++++++++
+ drivers/crypto/ycc/ycc_isr.h           |  12 +
+ drivers/crypto/ycc/ycc_pke.c           | 944 +++++++++++++++++++++++++++++++++
+ drivers/crypto/ycc/ycc_ring.c          | 652 +++++++++++++++++++++++
+ drivers/crypto/ycc/ycc_ring.h          | 168 ++++++
+ drivers/crypto/ycc/ycc_ske.c           | 925 ++++++++++++++++++++++++++++++++
+ 19 files changed, 4721 insertions(+)
+ create mode 100644 drivers/crypto/ycc/Kconfig
+ create mode 100644 drivers/crypto/ycc/Makefile
+ create mode 100644 drivers/crypto/ycc/sm2signature_asn1.c
+ create mode 100644 drivers/crypto/ycc/sm2signature_asn1.h
+ create mode 100644 drivers/crypto/ycc/ycc_aead.c
+ create mode 100644 drivers/crypto/ycc/ycc_algs.h
+ create mode 100644 drivers/crypto/ycc/ycc_cdev.c
+ create mode 100644 drivers/crypto/ycc/ycc_cdev.h
+ create mode 100644 drivers/crypto/ycc/ycc_dev.h
+ create mode 100644 drivers/crypto/ycc/ycc_drv.c
+ create mode 100644 drivers/crypto/ycc/ycc_isr.c
+ create mode 100644 drivers/crypto/ycc/ycc_isr.h
+ create mode 100644 drivers/crypto/ycc/ycc_pke.c
+ create mode 100644 drivers/crypto/ycc/ycc_ring.c
+ create mode 100644 drivers/crypto/ycc/ycc_ring.h
+ create mode 100644 drivers/crypto/ycc/ycc_ske.c
+
+-- 
+1.8.3.1
+

@@ -2,93 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B6159F7FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DBF59F7F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbiHXKmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S236333AbiHXKkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235425AbiHXKmc (ORCPT
+        with ESMTP id S229640AbiHXKkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:42:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB0381B24;
-        Wed, 24 Aug 2022 03:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661337751; x=1692873751;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=lnG4/IetgJJiCFvYl2XSmHM42xhaifZaMgp7nfdirTE=;
-  b=eNZsqDl4c8MZlLJ2p0h20eTzbb5c754AMOUHjTxenfjCe6a5zRuA3vdB
-   JpIIgiJbkGJ2YxTocSYwyLXKU6TW1aEZ4/DimabkqBATW7lS47yBDKJWT
-   RBM3hvH78/yAmYocq20gokL8cRZ2w3XaKOQXMvJIhutN5YJoQC5mZNZYC
-   8kVpnUIzYIHzIGP0nfhPOTzp6JfZn/5ThXoMNwF7ujFQBZXf0OSUERmgK
-   4f9sVKh6c2AkR24KPiw6ew1FgLJwQTrCkqctXLWqcXVrJeYyZbMbbUuYP
-   834PtJ9Jbyia4YGVAeNOAOwcomG+ME3BZ9d6+Y3dbrXZA+7s/Q1o6HNGe
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="355660053"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="355660053"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 03:42:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="605989312"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 24 Aug 2022 03:42:21 -0700
-Date:   Wed, 24 Aug 2022 18:37:38 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <20220824103738.GA1386620@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
- <CAGtprH9xyw6bt4=RBWF6-v2CSpabOCpKq5rPz+e-9co7EisoVQ@mail.gmail.com>
+        Wed, 24 Aug 2022 06:40:07 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488D980F53;
+        Wed, 24 Aug 2022 03:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1661337605;
+  x=1692873605;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Iypsk2nUhwC8TO4v5fBXUx+BdnnNPe5g43NWMsHJBl8=;
+  b=PKILT9gqDl2eXAhV/o+dFIKtSkGhGPxIrgyJAH93Ayz+4gulCBif9KGv
+   ZuJrfGkkJS594/8MOW85QZ8z01BA3w92VMfzdO9N+Q3wrJ9vhCSUbqbwz
+   oHrZHD9oYkChutj0xL1NiU+Hp2R1uL/mx89AJvoO4PH8F+5kwuqrTo5LY
+   LDTUMzO9foo2lJ330x48goAn5jshofoxe0qMOISOhwJUQWLqia86xPRNY
+   TRI/7MTLDcpFxhOH5/IVCcLHz7Sw1W8kZDHq+5J/Ut1y17oNtF0SSlVJp
+   AvVQKR1MS+T58m8wbnkIQvOGH8Kj43Vss+itzLey+C3MVsrHK4qTmNMHD
+   w==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <jic23@kernel.org>
+CC:     <kernel@axis.com>, <lars@metafoo.de>, <axel.jonsson@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] iio: adc: mcp320x: Add triggered buffer support
+Date:   Wed, 24 Aug 2022 12:40:00 +0200
+Message-ID: <20220824104002.2749075-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGtprH9xyw6bt4=RBWF6-v2CSpabOCpKq5rPz+e-9co7EisoVQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,58 +50,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 12:37:42PM -0700, Vishal Annapurve wrote:
-> > ...
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 230c8ff9659c..bb714c2a4b06 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -914,6 +914,35 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
-> >
-> >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
-> >
-> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-> > +#define KVM_MEM_ATTR_PRIVATE   0x0001
-> > +static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl,
-> > +                                            struct kvm_enc_region *region)
-> > +{
-> > +       unsigned long start, end;
-> > +       void *entry;
-> > +       int r;
-> > +
-> > +       if (region->size == 0 || region->addr + region->size < region->addr)
-> > +               return -EINVAL;
-> > +       if (region->addr & (PAGE_SIZE - 1) || region->size & (PAGE_SIZE - 1))
-> > +               return -EINVAL;
-> > +
-> > +       start = region->addr >> PAGE_SHIFT;
-> > +       end = (region->addr + region->size - 1) >> PAGE_SHIFT;
-> > +
-> > +       entry = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION ?
-> > +                               xa_mk_value(KVM_MEM_ATTR_PRIVATE) : NULL;
-> > +
-> > +       r = xa_err(xa_store_range(&kvm->mem_attr_array, start, end,
-> > +                                       entry, GFP_KERNEL_ACCOUNT));
-> 
-> xa_store_range seems to create multi-index entries by default.
-> Subsequent xa_store_range call changes all the entries stored
-> previously.
+This series adds triggered buffer support to the mcp320x ADC driver.  Tested on
+MCP3008.
 
-By using xa_store_range and storing them as multi-index entries I
-expected to save some memory for continuous pages originally.
+Cc: linux-iio@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-But sounds like the current multi-index store behaviour isn't quite
-ready for our usage.
+Axel Jonsson (1):
+  iio: adc: mcp320x: add triggered buffer support
 
-Chao
-> xa_store needs to be used here instead of xa_store_range to achieve
-> the intended behavior.
-> 
-> > +
-> > +       kvm_zap_gfn_range(kvm, start, end + 1);
-> > +
-> > +       return r;
-> > +}
-> > +#endif /* CONFIG_HAVE_KVM_PRIVATE_MEM */
-> > +
-> > ...
+Vincent Whitchurch (1):
+  iio: adc: mcp320x: use device managed functions
+
+ drivers/iio/adc/Kconfig   |   2 +
+ drivers/iio/adc/mcp320x.c | 158 +++++++++++++++++++++++++-------------
+ 2 files changed, 108 insertions(+), 52 deletions(-)
+
+-- 
+2.34.1
+

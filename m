@@ -2,299 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C105A0171
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889C95A0177
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 20:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239550AbiHXSjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 14:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S239274AbiHXSjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 14:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbiHXSjB (ORCPT
+        with ESMTP id S237759AbiHXSjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 14:39:01 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFB0796A3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:38:59 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id s1so22374408lfp.6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=zusELnxGly7QVeMD559QgRc8Hcg/aGQ/B1+zKDEsXlI=;
-        b=tNDR+Cu5c4wrvJ5QCB0SfIfhBG5k9iGbtDPgrydSjCrp0G9wb6hMZO7H8PpKcWuVhH
-         52Kkwsdg0p/YRrTJBrBEAl3ddK/aTlmfIBFi8jkEd2H9UWW8G6wIZarXVxZ4vnePmAcK
-         CEK5FE2nGIGeBE8TphpjDz566KXPqIvmJ5YCwoF3WQXmxjP/jleG/Tv7zSpJ8rb+dVd0
-         Kl7fD2puye4BKjFvk0c/duiQNij67sa84J6Q9q43fDvOaYyN8aJZG1r49wbMDRJT/tvS
-         z9BbrZw2MlVv3h78hUF6UGBhrtKk0l13cV9NVFBMtCpMnL2wZ7zl70YMi4gjbmP2KRQk
-         5oZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=zusELnxGly7QVeMD559QgRc8Hcg/aGQ/B1+zKDEsXlI=;
-        b=SvbkVhWCDtctOj80vo2ofivlwIn9S0Xf5fNuw9PPsq0uQhIA1EPALZNRYZ67K9TSWY
-         EiMW6wsQ0WKu1L0Unveut8ChdyI1lSEPu8huXHCvbQcy7OzSXWIg2kmDFyrKlXSSCONE
-         3b1cIKIiB3gil+4WLVDO8vw4JLIK9Qhr6i0XX/RDTppt3nIKm9J6n5yQkmO9byVhWq4V
-         HmYbh3durotHpcP8ww9x4lhB27j/2QQv874lMVP8ks9nnD2ckfDk/cOtS1YJfrEy7T3u
-         Ju0x5n7AKfxrICWKWsiJNtAYZuwlshhozFm8xa4ceDjGcqbhkhj1WgAIKHq1sMrTPBl7
-         WW7g==
-X-Gm-Message-State: ACgBeo2ozWAZ/HdEcSUQk2CgMhF1bSER+Yjlt2/DwVVXEB0NwPf8Sywh
-        GQB4lIPVsU8Wvk5yRSSEbWeJWasL7qJUIQERtneXv5lSzyihGg==
-X-Google-Smtp-Source: AA6agR52FBwj4MdAunRT29AhIp77KadWqPYBuZoG9ncNTipb2YZLWZheFdTurK56staOfmiAbVaJOT8a2tOjA0o7YGI=
-X-Received: by 2002:a05:6512:29c:b0:492:db8e:5e77 with SMTP id
- j28-20020a056512029c00b00492db8e5e77mr68514lfp.403.1661366337205; Wed, 24 Aug
- 2022 11:38:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220805154231.31257-1-ojeda@kernel.org> <20220805154231.31257-10-ojeda@kernel.org>
- <CAKwvOd=q0uErrBVadCbVVLyTzvXxmgJSdOyRHqahO5at8enN6w@mail.gmail.com>
-In-Reply-To: <CAKwvOd=q0uErrBVadCbVVLyTzvXxmgJSdOyRHqahO5at8enN6w@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 24 Aug 2022 11:38:46 -0700
-Message-ID: <CAKwvOdkc0Qhwu=gfe1+H23TnAa6jnO6A3ZCO687dH6mSrATmDA@mail.gmail.com>
-Subject: Re: [PATCH v9 09/27] rust: add `compiler_builtins` crate
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 24 Aug 2022 14:39:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AE17A759
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 11:39:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6300D61783
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 18:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D47C433D6;
+        Wed, 24 Aug 2022 18:38:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1661366339;
+        bh=6WIIhfjVkCvTJa4ixWHqJBYM6NhXSOMJM2g4EDM++PE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jwKQ9J0fMGJq76G+/qoOsN1iLuKbFwlsAKCve86un7ZXyxcQogKoV6Pd/hAlqAHbQ
+         UvMVBYjLcu5r6vxaiC0mq+LqhffElWlCGqzd2vTdA8C+GngpDPA+wlL+PJz3FPKC9H
+         zBL7oQlZtrrdKFjMUR7s1beyNZcAOb8PbajUglKg=
+Date:   Wed, 24 Aug 2022 11:38:58 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Haiyue Wang <haiyue.wang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, david@redhat.com,
+        apopple@nvidia.com, linmiaohe@huawei.com, ying.huang@intel.com,
+        songmuchun@bytedance.com, naoya.horiguchi@linux.dev,
+        alex.sierra@amd.com, mike.kravetz@oracle.com,
+        gerald.schaefer@linux.ibm.com,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+Subject: Re: [PATCH v7 1/2] mm: migration: fix the FOLL_GET failure on
+ following huge page
+Message-Id: <20220824113858.9f0a2200c4d4875a5f4da31c@linux-foundation.org>
+In-Reply-To: <20220823135841.934465-2-haiyue.wang@intel.com>
+References: <20220823135841.934465-1-haiyue.wang@intel.com>
+        <20220823135841.934465-2-haiyue.wang@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 4:55 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Aug 5, 2022 at 8:44 AM Miguel Ojeda <ojeda@kernel.org> wrote:
-> >
-> > Rust provides `compiler_builtins` as a port of LLVM's `compiler-rt`.
-> > Since we do not need the vast majority of them, we avoid the
-> > dependency by providing our own crate.
-> >
-> > Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> > Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> > Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> > Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> > Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
-> > Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-> > Co-developed-by: Gary Guo <gary@garyguo.net>
-> > Signed-off-by: Gary Guo <gary@garyguo.net>
-> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
->
-> I still really really do not like this patch. Thoughts below.
->
-> > ---
-> >  rust/compiler_builtins.rs | 63 +++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 63 insertions(+)
-> >  create mode 100644 rust/compiler_builtins.rs
-> >
-> > diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
-> > new file mode 100644
-> > index 000000000000..f8f39a3e6855
-> > --- /dev/null
-> > +++ b/rust/compiler_builtins.rs
-> > @@ -0,0 +1,63 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +//! Our own `compiler_builtins`.
-> > +//!
-> > +//! Rust provides [`compiler_builtins`] as a port of LLVM's [`compiler-rt`].
-> > +//! Since we do not need the vast majority of them, we avoid the dependency
-> > +//! by providing this file.
-> > +//!
-> > +//! At the moment, some builtins are required that should not be. For instance,
-> > +//! [`core`] has 128-bit integers functionality which we should not be compiling
->
-> It's not just 128b, these are for double word sizes, so for 32b
-> targets (I recall an earlier version of series supporting armv6) these
-> symbols are for 64b types.
->
-> > +//! in. We will work with upstream [`core`] to provide feature flags to disable
-> > +//! the parts we do not need. For the moment, we define them to [`panic!`] at
-> > +//! runtime for simplicity to catch mistakes, instead of performing surgery
-> > +//! on `core.o`.
->
-> Wait, so Kbuild performs surgery on alloc, but core is off limits? bah
->
-> > +//!
-> > +//! In any case, all these symbols are weakened to ensure we do not override
-> > +//! those that may be provided by the rest of the kernel.
-> > +//!
-> > +//! [`compiler_builtins`]: https://github.com/rust-lang/compiler-builtins
-> > +//! [`compiler-rt`]: https://compiler-rt.llvm.org/
-> > +
-> > +#![feature(compiler_builtins)]
-> > +#![compiler_builtins]
-> > +#![no_builtins]
-> > +#![no_std]
-> > +
-> > +macro_rules! define_panicking_intrinsics(
-> > +    ($reason: tt, { $($ident: ident, )* }) => {
-> > +        $(
-> > +            #[doc(hidden)]
-> > +            #[no_mangle]
-> > +            pub extern "C" fn $ident() {
-> > +                panic!($reason);
-> > +            }
-> > +        )*
-> > +    }
-> > +);
-> > +
-> > +define_panicking_intrinsics!("`f32` should not be used", {
-> > +    __eqsf2,
->
-> I don't see ^ this symbol in core.
->
-> $ llvm-nm rust/core.o | grep "U __" | sort | tr -s " "
->  U __gesf2
->  U __lesf2
->  U __udivti3
->  U __umodti3
->  U __unorddf2
->  U __unordsf2
->  U __x86_indirect_thunk_r11
->
-> so a few of these seem extraneous. Are you sure they're coming from
-> core? (or was it the different arch support that was removed from v8
-> to facilitate v9?)
->
-> __gesf2, __lesf2, and __unordsf2 all seem to be coming from
-> <<f32>::classify> and <<f32>::to_bits::ct_f32_to_u32>.  Surely we can
-> avoid more f32 support by relying on objcopy
-> -N/--strip-symbol=/--strip-symbols=filename to slice out/drop symbols
-> from core.o?
->
-> <core::fmt::num::exp_u128> uses __umodti3+__udivti3
->
-> __unorddf2 is referenced by <<f64>::classify> and
-> <<f64>::to_bits::ct_f64_to_u64>.
->
-> Can we slice those 5 symbols out from core, or are they further
-> referenced from within core?  If we can, we can drop this patch
-> outright, and avoid a false-negative when C code generates references
-> to these symbols from the compiler runtime, for architectures where
-> don't want to provide a full compiler runtime.  (--rtlib=none is a
-> pipe dream; first we need to get to the point where we're not
-> -ffreestanding for all targets...)
->
-> I suspect someone can iteratively whittle down core to avoid these symbols?
->
-> ```
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 7700d3853404..e64a82c21156 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -359,6 +359,7 @@ $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs
-> $(obj)/target.json FORCE
->  $(obj)/compiler_builtins.o: private rustc_objcopy = -w -W '__*'
->  $(obj)/compiler_builtins.o: $(src)/compiler_builtins.rs $(obj)/core.o FORCE
->         $(call if_changed_dep,rustc_library)
-> +       @$(OBJCOPY) --strip-symbols=$(obj)/strip-symbols.txt $(obj)/core.o
->
->  $(obj)/alloc.o: private skip_clippy = 1
->  $(obj)/alloc.o: private skip_flags = -Dunreachable_pub
-> ```
-> then define symbols in rust/strip-symbols.txt?
->
-> I'm getting the sense that no, there are many functions like
-> <usize as core::fmt::UpperExp>::fmt
-> <i64 as core::fmt::UpperExp>::fmt
-> <u64 as core::fmt::UpperExp>::fmt
+On Tue, 23 Aug 2022 21:58:40 +0800 Haiyue Wang <haiyue.wang@intel.com> wrote:
 
-Another idea I had, and Ard mentioned to me this morning that efistub
-does something similar:
+> Not all huge page APIs support FOLL_GET option, so move_pages() syscall
+> will fail to get the page node information for some huge pages.
+> 
+> Like x86 on linux 5.19 with 1GB huge page API follow_huge_pud(), it will
+> return NULL page for FOLL_GET when calling move_pages() syscall with the
+> NULL 'nodes' parameter, the 'status' parameter has '-2' error in array.
+> 
+> Note: follow_huge_pud() now supports FOLL_GET in linux 6.0.
+>       Link: https://lore.kernel.org/all/20220714042420.1847125-3-naoya.horiguchi@linux.dev
+> 
+> But these huge page APIs don't support FOLL_GET:
+>   1. follow_huge_pud() in arch/s390/mm/hugetlbpage.c
+>   2. follow_huge_addr() in arch/ia64/mm/hugetlbpage.c
+>      It will cause WARN_ON_ONCE for FOLL_GET.
+>   3. follow_huge_pgd() in mm/hugetlb.c
 
-I think objcopy can rename symbol references.  So instead of calling
-foo, I think you can use objcopy to call bar instead.
+What happened to the proposal to fix these three sites so this patch is
+not needed?
 
-To avoid the case of Rust core refering to symbols typically provided
-by the --rtlib={libgcc|compiler-rt}, what if we:
-1. build core.o (with reference to the unfavorable symbols)
-2. use objcopy to rename references in core.o to the symbols listed in
-this file; maybe prepend them with `rust_core_` or something.
-3. provide this crate with panic'ing definitions, but for the renamed symbols.
+> This is an temporary solution to mitigate the side effect of the race
+> condition fix by calling follow_page() with FOLL_GET set for huge pages.
+> 
+> After supporting follow huge page by FOLL_GET is done, this fix can be
+> reverted safely.
 
-That way, enabling CONFIG_RUST=y won't hide the case where C code is
-triggering such libcalls from the C compiler?
-
-To restate the concern, I don't want CONFIG_RUST=y to hide that fact
-that someone wrote `float x, y; if (x != y) ...` in C code, where the
-C compiler will likely lower that to a libcall to __nesf2 since with
-the current approach in this patch, linkage would proceed. The current
-behavior is to intentionally fail to link.  I think what I describe
-above may work to keep this intended behavior of the kernel's build
-system.
-
-Ah, looks like there's objcopy flags:
-       --redefine-sym old=new
-           Change the name of a symbol old, to new.  This can be
-useful when one is trying link
-           two things together for which you have no source, and there
-are name collisions.
-
-       --redefine-syms=filename
-           Apply --redefine-sym to each symbol pair "old new" listed
-in the file filename.
-           filename is simply a flat file, with one symbol pair per
-line.  Line comments may be
-           introduced by the hash character.  This option may be given
-more than once.
-
-So probably could start with my diff from above, but use
---redefine-syms=filename instead of --strip-symbols=.
-
-
->
-> > +    __gesf2,
-> > +    __lesf2,
-> > +    __nesf2,
-> > +    __unordsf2,
-> > +});
-> > +
-> > +define_panicking_intrinsics!("`f64` should not be used", {
-> > +    __unorddf2,
-> > +});
-> > +
-> > +define_panicking_intrinsics!("`i128` should not be used", {
-> > +    __ashrti3,
-> > +    __muloti4,
-> > +    __multi3,
-> > +});
-> > +
-> > +define_panicking_intrinsics!("`u128` should not be used", {
-> > +    __ashlti3,
-> > +    __lshrti3,
-> > +    __udivmodti4,
-> > +    __udivti3,
-> > +    __umodti3,
-> > +});
-> > --
-> > 2.37.1
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---
-Thanks,
-~Nick Desaulniers

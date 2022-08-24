@@ -2,53 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C0E59F11F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7130B59F121
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbiHXBpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S233775AbiHXBtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbiHXBpj (ORCPT
+        with ESMTP id S231280AbiHXBtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:45:39 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25D863F29
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:45:31 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id z3-20020a921a43000000b002e9214e10d8so10762567ill.9
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:45:31 -0700 (PDT)
+        Tue, 23 Aug 2022 21:49:47 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0372399
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:49:45 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id t5so20191589edc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=OHeBxohCNlHTlRjKpGtQEToB1/XBYVhvN5GGiz4x9IM=;
+        b=Hqu5fj+YA5mUBXYfWLJSRQ5WIlWLSWXnoMRbUZteOGnyMP6wwBf4U1T8RCHhP3jOE7
+         I7z/t/b4eUJgAyH2dTnO6LpqyzCpCnci62HLUkkNUWXDGHdHAMhR9b0zZrmNEuG3Qh/d
+         tJstcZBZZgWyyWOP1/5a7S6DzyFkhfduK4IK4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=GL2Ggd4mwsa0q8HQeURtEnN4BRyP8Bg8OcXunPbsv08=;
-        b=xajNh379nvnaUwHVUyFWlt2YNBvSsV3l5z8G8fvceblWGDQppfM07POMRjpa5Q8Tje
-         C0w58RJE6KV8d932XtvelrOwRWcKsSe3nbSfSF7Nid4rn4G8ZdLOZao8CpvwDU38klwu
-         ChBklH/JQZKQd9MWdrjCLEWMpJbphCUgN5uF3BSheEEvzONXQ60t1CxeAtXeN/0akRZ2
-         uF73+Zx9SI83yfJUXmnMzu6w69VQdUz2UyGPKp+oC4wtAsFa431P2A3XfgwXLmMAkHja
-         KR84qDk6akwSsRfXbkackTl5vzi7L35EG8xcVhT/BGvv/uXXQjEAUYMl+Mjqzz9zllo5
-         EOSg==
-X-Gm-Message-State: ACgBeo1VgZWkgiDrKSrOE34xsR4jNXlbv12BE2x1iY623G/RDUtAsPML
-        g+25DuO8Q3UuOYZuvOqE6Cy569GjY0Rr/2c4rcXgq+rL6PLV
-X-Google-Smtp-Source: AA6agR6QjUfQB/0wA+RCeXywfVG3NAToTdPcrseIyg1FUZ0kseESRrDv3lrfYk2GI0+VIZ8yC6oEws5ZX3OWnoSzuvYyLZCuBPSZ
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=OHeBxohCNlHTlRjKpGtQEToB1/XBYVhvN5GGiz4x9IM=;
+        b=P7VgRb/BS0Ex6rrgr2KgABuLisI5t6KCinpqJSpZuGL3BgI3tldr/53TSKSQqjP8dU
+         0W0T04nSqswqHCFE1p+2Wqxs75ahNMOrcMmPsSb6qP39wXG8ZWgbERhXz5YiSEqP/QHZ
+         6EMUAow29vcSkNbwgmEqzMIgOsZZgYzdLsCTW2jvakv8tdDVOlTbXj3/9bALgJy8ww/e
+         aa+k/v1o1L7xz3HGes0UzTjD6GVg72trRWlBKUA13rAVpNS9XO2khUg4FwAs4EXgWK8E
+         bRwNPmpqH4XdAUOcxMVwccPC0CAvWcei4N2fJ+SoG1xNTng1XnOzNNaBt1HXd4zYZd+j
+         A20Q==
+X-Gm-Message-State: ACgBeo3ALcPvOB1zgwGN6boNAxLECv7x2nEQaCzgRc/12m1In8i4HtEX
+        g78HEhDXJ2vBe5mIKSqnECuKBtwWZOPJlwNd
+X-Google-Smtp-Source: AA6agR48hrB3CXiH0B0015UfnvVSlP2NfKsli5jH14rkxT7PeN7MVDWqNQwupZp3WTurk9UUF+zhnA==
+X-Received: by 2002:aa7:d1c9:0:b0:446:bfcd:170 with SMTP id g9-20020aa7d1c9000000b00446bfcd0170mr5687206edp.209.1661305784200;
+        Tue, 23 Aug 2022 18:49:44 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id m26-20020a056402051a00b004464c3de6dasm2200798edv.65.2022.08.23.18.49.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 18:49:42 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id ay12so8042448wmb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:49:42 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ece:b0:3a6:28:bc59 with SMTP id
+ g14-20020a05600c4ece00b003a60028bc59mr3624697wmq.154.1661305782219; Tue, 23
+ Aug 2022 18:49:42 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2a43:b0:689:f95d:330b with SMTP id
- k3-20020a0566022a4300b00689f95d330bmr5406689iov.128.1661305531185; Tue, 23
- Aug 2022 18:45:31 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 18:45:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000cc4b605e6f2d6c7@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in __access_remote_vm
-From:   syzbot <syzbot+d011b5a27f77c61c6345@syzkaller.appspotmail.com>
-To:     adobriyan@gmail.com, akpm@linux-foundation.org, brauner@kernel.org,
-        chengzhihao1@huawei.com, deller@gmx.de, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, xu.xin16@zte.com.cn
+References: <20220821000737.328590235@goodmis.org> <20220821000844.510643400@goodmis.org>
+ <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
+ <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org> <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
+ <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk> <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+ <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com> <b79c83af-e9fc-9fa0-dff7-f3a8a39887ff@acm.org>
+In-Reply-To: <b79c83af-e9fc-9fa0-dff7-f3a8a39887ff@acm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 23 Aug 2022 18:49:25 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
+Message-ID: <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
+Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
+ triggered by is_signed_type()
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,130 +83,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Aug 23, 2022 at 5:09 PM Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> I'm probably doing something wrong but even with sparse commit 658ee8e0f631
+> ("unrestricted values are unrestricted even after a cast") I see warnings
+> being triggered by users of the is_signed_type() macro, warnings that
+> disappear if I change the definition of the is_signed_type() macro into 0:
 
-syzbot found the following issue on:
+That's the
 
-HEAD commit:    8755ae45a9e8 Add linux-next specific files for 20220819
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1420bffd080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
-dashboard link: https://syzkaller.appspot.com/bug?extid=d011b5a27f77c61c6345
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=170f3023080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e56b35080000
+> It does require that kernel change to make
+>
+>   #define is_signed_type(type)   (((type)(-1)) <= (type)0)
 
-Bisection is inconclusive: the first bad commit could be any of:
+part I was talking about.
 
-4fae831b3a71 tty: n_gsm: fix packet re-transmission without open control channel
-32dd59f96924 tty: n_gsm: fix race condition in gsmld_write()
+So your kernel side patch looks fine, except I don't think you need
+the '__force' - the sparse patches in my tree should make sparse happy
+about casting '-1'.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=170af485080000
+But I didn't do very much testing.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d011b5a27f77c61c6345@syzkaller.appspotmail.com
-
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 PID: 3617 Comm: syz-executor272 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
-BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1521
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 3617, name: syz-executor272
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-INFO: lockdep is turned off.
-irq event stamp: 4716
-hardirqs last  enabled at (4715): [<ffffffff898354ff>] __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
-hardirqs last  enabled at (4715): [<ffffffff898354ff>] _raw_spin_unlock_irq+0x1f/0x40 kernel/locking/spinlock.c:202
-hardirqs last disabled at (4716): [<ffffffff8983532e>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (4716): [<ffffffff8983532e>] _raw_spin_lock_irqsave+0x4e/0x50 kernel/locking/spinlock.c:162
-softirqs last  enabled at (4594): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last  enabled at (4594): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
-softirqs last disabled at (4561): [<ffffffff81491a33>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last disabled at (4561): [<ffffffff81491a33>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 PID: 3617 Comm: syz-executor272 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
-syz-executor272[3617] cmdline: ./syz-executor2726460068
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
- down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
- mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
- __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
- get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
- get_mm_cmdline fs/proc/base.c:367 [inline]
- get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
- dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
- dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
- dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
- __dump_stack lib/dump_stack.c:121 [inline]
- dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
- assign_lock_key kernel/locking/lockdep.c:979 [inline]
- register_lock_class+0xf1b/0x1120 kernel/locking/lockdep.c:1292
- __lock_acquire+0x109/0x56d0 kernel/locking/lockdep.c:4932
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
- gsmld_write+0x5e/0x140 drivers/tty/n_gsm.c:3023
- do_tty_write drivers/tty/tty_io.c:1024 [inline]
- file_tty_write.constprop.0+0x499/0x8f0 drivers/tty/tty_io.c:1095
- call_write_iter include/linux/fs.h:2188 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x9e9/0xdd0 fs/read_write.c:578
- ksys_write+0x127/0x250 fs/read_write.c:631
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc136bf5289
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc832732f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc136bf5289
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fc136bb9070 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000000000e R11: 0000000000000246 R12: 00007fc136bb9100
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-syz-executor272[3617] cmdline: ./syz-executor2726460068
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- assign_lock_key kernel/locking/lockdep.c:979 [inline]
- register_lock_class+0xf1b/0x1120 kernel/locking/lockdep.c:1292
- __lock_acquire+0x109/0x56d0 kernel/locking/lockdep.c:4932
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
- gsmld_write+0x5e/0x140 drivers/tty/n_gsm.c:3023
- do_tty_write drivers/tty/tty_io.c:1024 [inline]
- file_tty_write.constprop.0+0x499/0x8f0 drivers/tty/tty_io.c:1095
- call_write_iter include/linux/fs.h:2188 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x9e9/0xdd0 fs/read_write.c:578
- ksys_write+0x127/0x250 fs/read_write.c:631
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc136bf5289
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+                     Linus

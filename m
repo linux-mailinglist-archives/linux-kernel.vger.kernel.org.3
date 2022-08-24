@@ -2,86 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BCD59FF58
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F2259FF5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238328AbiHXQUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
+        id S237880AbiHXQVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239555AbiHXQU3 (ORCPT
+        with ESMTP id S239173AbiHXQUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:20:29 -0400
+        Wed, 24 Aug 2022 12:20:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEBE558FF;
-        Wed, 24 Aug 2022 09:20:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57532647D0;
+        Wed, 24 Aug 2022 09:20:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D2E3B825A4;
-        Wed, 24 Aug 2022 16:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAAD6C433C1;
-        Wed, 24 Aug 2022 16:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661358024;
-        bh=bd5Ai7gyV3dh6KUli/6kO2E3a9PeCam1mN3CjAw1CiU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R6VypjWzakqTzUG5kNIyxNgICq9VgEKkXEQrDwe/VZ75GbX0OLRIrcfjrwmW+ZK2k
-         MwxRcvCQjt5W1BRDJqF23neebKRZU9WMRlnKOu3Bg/HQUVvpLBkfGXQaF+dOpLyUMK
-         Qggczk1zGqQty/Wc5BR8cyji7GY2zv/qiBkGoDtY=
-Date:   Wed, 24 Aug 2022 18:20:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: Re: [PATCH 4.19 025/287] selftests/bpf: Fix test_align verifier log
- patterns
-Message-ID: <YwZPxdeZt/dtleeZ@kroah.com>
-References: <20220823080100.268827165@linuxfoundation.org>
- <20220823080101.125479106@linuxfoundation.org>
- <YwZOQv/dqReP8XfU@myrica>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0522CB825A4;
+        Wed, 24 Aug 2022 16:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C7CC433D7;
+        Wed, 24 Aug 2022 16:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661358050;
+        bh=vMKt/FR3QyAvD8amq6k0PFCyA73ecEmPJ9lBbXHQWbA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=j93K/hvscliNMtfDuyS6lRs2U0EGQTErYymd/GINMX84gmzh6+5gWnuafWmB+I9DT
+         Z40wF2qcwthsYtIXUuvLPSm9Bly1xBtfh4SKntD+gcD00swX8REbAhkJliUDPT4E5T
+         ns8nI8u2vWlV6DM/hJwk78TWBtrD8KG6cFwRUNFDVusNykTfgOof2AX+v3z9JP+IE2
+         lD7koa6ffyedYNY7WmTzCfxR//fRDSmnq0bYVJscy8JWefBxWLKeXe8w2gioM3Vjwe
+         Hmu0QEDcyeW6EdZl+o+AuiMKXsxNCpaAzk3qC170wVXwLaHKOABAjqlPiLZpwTL2O2
+         74pQ6xFYYYD6g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3F9385C03F6; Wed, 24 Aug 2022 09:20:50 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 09:20:50 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Price <steven.price@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, boqun.feng@gmail.com
+Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
+Message-ID: <20220824162050.GA6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220822021520.6996-1-kernelfans@gmail.com>
+ <20220822021520.6996-7-kernelfans@gmail.com>
+ <20220822024528.GC6159@paulmck-ThinkPad-P17-Gen-1>
+ <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
+ <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1>
+ <CAFgQCTup0uTqnKi79Tu+5Q0POYVdcE4UkGes8KfHXBd6VR552A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwZOQv/dqReP8XfU@myrica>
+In-Reply-To: <CAFgQCTup0uTqnKi79Tu+5Q0POYVdcE4UkGes8KfHXBd6VR552A@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 05:13:54PM +0100, Jean-Philippe Brucker wrote:
-> Hi,
+On Wed, Aug 24, 2022 at 09:53:11PM +0800, Pingfan Liu wrote:
+> On Tue, Aug 23, 2022 at 11:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Tue, Aug 23, 2022 at 09:50:56AM +0800, Pingfan Liu wrote:
+> > > On Sun, Aug 21, 2022 at 07:45:28PM -0700, Paul E. McKenney wrote:
+> > > > On Mon, Aug 22, 2022 at 10:15:16AM +0800, Pingfan Liu wrote:
+> > > > > In order to support parallel, rcu_state.n_online_cpus should be
+> > > > > atomic_dec()
+> > > > >
+> > > > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+> > > >
+> > > > I have to ask...  What testing have you subjected this patch to?
+> > > >
+> > >
+> > > This patch subjects to [1]. The series aims to enable kexec-reboot in
+> > > parallel on all cpu. As a result, the involved RCU part is expected to
+> > > support parallel.
+> >
+> > I understand (and even sympathize with) the expectation.  But results
+> > sometimes diverge from expectations.  There have been implicit assumptions
+> > in RCU about only one CPU going offline at a time, and I am not sure
+> > that all of them have been addressed.  Concurrent CPU onlining has
+> > been looked at recently here:
+> >
+> > https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
+> >
+> > You did us atomic_dec() to make rcu_state.n_online_cpus decrementing be
+> > atomic, which is good.  Did you look through the rest of RCU's CPU-offline
+> > code paths and related code paths?
 > 
-> On Tue, Aug 23, 2022 at 10:23:14AM +0200, Greg Kroah-Hartman wrote:
-> > From: Ovidiu Panait <ovidiu.panait@windriver.com>
-> > 
-> > From: Stanislav Fomichev <sdf@google.com>
-> > 
-> > commit 5366d2269139ba8eb6a906d73a0819947e3e4e0a upstream.
-> > 
-> > Commit 294f2fc6da27 ("bpf: Verifer, adjust_scalar_min_max_vals to always
-> > call update_reg_bounds()") changed the way verifier logs some of its state,
-> > adjust the test_align accordingly. Where possible, I tried to not copy-paste
-> > the entire log line and resorted to dropping the last closing brace instead.
-> > 
-> > Fixes: 294f2fc6da27 ("bpf: Verifer, adjust_scalar_min_max_vals to always call update_reg_bounds()")
-> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> > Link: https://lore.kernel.org/bpf/20200515194904.229296-1-sdf@google.com
-> > [OP: adjust for 4.19 selftests]
-> > Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> I went through those codes at a shallow level, especially at each
+> cpuhp_step hook in the RCU system.
+
+And that is fine, at least as a first step.
+
+> But as you pointed out, there are implicit assumptions about only one
+> CPU going offline at a time, I will chew the google doc which you
+> share.  Then I can come to a final result.
+
+Boqun Feng, Neeraj Upadhyay, Uladzislau Rezki, and I took a quick look,
+and rcu_boost_kthread_setaffinity() seems to need some help.  As it
+stands, it appears that concurrent invocations of this function from the
+CPU-offline path will cause all but the last outgoing CPU's bit to be
+(incorrectly) set in the cpumask_var_t passed to set_cpus_allowed_ptr().
+
+This should not be difficult to fix, for example, by maintaining a
+separate per-leaf-rcu_node-structure bitmask of the concurrently outgoing
+CPUs for that rcu_node structure.  (Similar in structure to the
+->qsmask field.)
+
+There are probably more where that one came from.  ;-)
+
+> > > [1]: https://lore.kernel.org/linux-arm-kernel/20220822021520.6996-3-kernelfans@gmail.com/T/#mf62352138d7b040fdb583ba66f8cd0ed1e145feb
+> >
+> > Perhaps I am more blind than usual today, but I am not seeing anything
+> > in this patch describing the testing.  At this point, I am thinking in
+> > terms of making rcutorture test concurrent CPU offlining parallel
 > 
-> I believe this one shouldn't be applied as-is either, only partially. See
-> https://lore.kernel.org/stable/20220824144327.277365-1-jean-philippe@linaro.org/
+> Yes, testing results are more convincing in this area.
+> 
+> After making clear the implicit assumptions, I will write some code to
+> bridge my code and rcutorture test. Since the series is a little
+> different from parallel cpu offlining. It happens after all devices
+> are torn down, and there is no way to rollback.
 
-Now dropped, thanks
+Very good, looking forward to seeing what you come up with!
 
-greg k-h
+> > Thoughts?
+> 
+> Need a deeper dive into this field. Hope to bring out something soon.
+
+Again, looking forward to seeing what you find!
+
+							Thanx, Paul

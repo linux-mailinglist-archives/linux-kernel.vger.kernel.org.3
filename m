@@ -2,95 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3F559FFDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6AE59FFE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239622AbiHXQzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S239207AbiHXQ4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239216AbiHXQza (ORCPT
+        with ESMTP id S236806AbiHXQ4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:55:30 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8257679;
-        Wed, 24 Aug 2022 09:55:22 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso2081717pjo.5;
-        Wed, 24 Aug 2022 09:55:22 -0700 (PDT)
+        Wed, 24 Aug 2022 12:56:07 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB22B3DBE0;
+        Wed, 24 Aug 2022 09:56:05 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id f3so5933751ilq.5;
+        Wed, 24 Aug 2022 09:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=nfhKxuSdD9rESx2UwzKNdRt6OgiXjuqyiduyrmCgI28=;
-        b=AheTGGDjRYx7TWsxkrfIA0YLnYVBrz4nMkIjuax4wHtwwHS9zxCWpE4N8wV1ev6XQa
-         ojtKoztl628vuRInyBXiwHGKuIphnkYYqJ/IF+1f1y9tkqv24uTFfktH3JaTi+ITK8Qm
-         we4bN22FTVQUfuX3jbIYPeTnf3nl+v9SHOZT5v4pgwmfl20+GKupRbAjyhh3XwwJVdel
-         tqYctbte01YpdzAFhY2UWUO374wD46PzQRxt0AHia0XCZyUF0JjN5/7Q0z8rJzRkbwtR
-         IU8P72VZjUKx5kATL3R9oh0IrUyJ8IfKd7qsMpCkpk0JLQQK+l/2xjcuXGNEBYscqINZ
-         i6lw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=oLveuyfvOYuaw06GYMOw+ZeCVcoEAdv4UZbUS0ysFDA=;
+        b=c9jHP3iw+q84+psn4+imRWQPyMMtCA6zdmTsSCISMsQqnhcjJ/3BpC1yliL+PlRJ61
+         pLwTpVpFl8yPGrIzRomDZRgQMQCit8yGOxkrCQdF+ykfniNv3aLbvMVk2JyyqeYlVkzN
+         oj8MxEoIW0P4t7YKHR9DSjyDRr7t9/uyB1cGQIiLO4UH5RilwJlbuu9JoPEYHi2GIGcD
+         4IywnpJWzOF9IVfMKtmhW+6z+tzuGGTjOq4l5pyBnWrXVxej6fxD7kRfzp5MpMfFbhiS
+         KV2kBWSHdyGk0/NS9NkM/BjfYm8ENDr7Smb57yDSHZjo7EvKLzznajJuokCBAdbmGQHf
+         wHhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=nfhKxuSdD9rESx2UwzKNdRt6OgiXjuqyiduyrmCgI28=;
-        b=ohjQD58Hvk+I+HtSkjjk4ClYK1Q96BFnf4U0Oh8WyyGvB8bI56Z4wYyVC3greDncM4
-         DG/v36uMqRTOqkIKas4GcKsZuplzcJ4+TPy1OJOxU+KCZy84/Uxc8aD2loWSY5rA6wcX
-         a3J9PfQII7bhiNEAfSiYVLTM8UWmIa/HZf9hZGkKqpvZOJwiYMJJGnlCvhn3Cda0qM4F
-         qhOwbV9Gz77zhHNgGSfOFKzkWjkE5SEITva/0nflK1Q3n3AEs2srk5gdQaKblZKk/RdP
-         yiZEl4sPthi484BgRuRi+gAUMpMVca4YEdvhlH65xnbWnd8ZeZKszN3nPU052L+WhMSX
-         HR9g==
-X-Gm-Message-State: ACgBeo34hI2lBySoo4QMCexTgd6GQ71awAwTqWBJhM/rRtxwJDccioJX
-        NVuaYpt6kOc7QXFMExd9azU=
-X-Google-Smtp-Source: AA6agR60linLHqI81a3bVOjcePvwHQgha1SzlWUxoi4kgudZgX7v+gwAe8PFFj3UZj5z8pGJ+K0Dyg==
-X-Received: by 2002:a17:90a:c402:b0:1f2:ca71:93a5 with SMTP id i2-20020a17090ac40200b001f2ca7193a5mr91381pjt.34.1661360121728;
-        Wed, 24 Aug 2022 09:55:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w1-20020aa79541000000b005361c023874sm11165266pfq.179.2022.08.24.09.55.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 09:55:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 24 Aug 2022 09:55:20 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/242] 5.15.63-rc2 review
-Message-ID: <20220824165520.GB708846@roeck-us.net>
-References: <20220824065913.068916566@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=oLveuyfvOYuaw06GYMOw+ZeCVcoEAdv4UZbUS0ysFDA=;
+        b=ZhDMlu/303u8yJ9wdweNDUBNt3Ik7/+uHAm4UV5go0cEPOv5DoVqts2hbj6J9wjyaX
+         Yc+wXdHxInQbnrl6oJ7fP0jmTLcNAVGCXn6oGeUt35nLyHt5dgx3oLC9o2w6HQ2xZasc
+         TsvJQRkF8ON6uYnUp6Ew9lJLm6l5k/Lap5cOnS7bVjEZLwMiSwU5ZFBAJEsCZuLT2c9k
+         EBBlUen/Xa8F9Kt+ZlcqWBxQUvho7/oyiJHU9JYxHwzygHyXSdoZF0jFAfpEQCeQUkTi
+         0XP6fYO86WgEDObrauZO/OAkg12M6L2jh3iSrU8DT2r0RytpJgqIOJIiYyHuKxMiR7Un
+         LBEQ==
+X-Gm-Message-State: ACgBeo1EGIMWFsZIxf9AnY4vkDJNxDOS3rVW+Rpal3PgiBvA6oB5mTuk
+        GAhSDjHe6t/QKTEs5bXWWa/n5VZj8I1/mTn1J8c=
+X-Google-Smtp-Source: AA6agR7LGjMyFyYuYrqaRzu4thdoenEA2+VIzc7P/z85FxocSwqE5bDd1jdDVHDQvzDQSnH3zoFCHADJGOI7kiSypjI=
+X-Received: by 2002:a05:6e02:20c1:b0:2e9:f747:ad54 with SMTP id
+ 1-20020a056e0220c100b002e9f747ad54mr2777742ilq.144.1661360165111; Wed, 24 Aug
+ 2022 09:56:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220824065913.068916566@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220824130702.10912-1-khalid.masum.92@gmail.com> <YwY4cVdB3tVVMIqJ@rowland.harvard.edu>
+In-Reply-To: <YwY4cVdB3tVVMIqJ@rowland.harvard.edu>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+Date:   Wed, 24 Aug 2022 22:55:54 +0600
+Message-ID: <CAABMjtFjt-j2AUiqWZf-vK9LL0067VCHY=oLha6e0k-Dt6Sbgg@mail.gmail.com>
+Subject: Re: [PATCH] usb: host: Use helper function to get endpoint
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexey Sheplyakov <asheplyakov@basealt.ru>,
+        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 09:01:03AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.63 release.
-> There are 242 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 26 Aug 2022 06:58:31 +0000.
-> Anything received after that time might be too late.
-> 
+On Wed, Aug 24, 2022 at 8:40 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, Aug 24, 2022 at 07:07:02PM +0600, Khalid Masum wrote:
+>
+>         ep = &udev->ep0;
+>
+> with no need to check for NULL.
 
-Build results:
-	total: 159 pass: 159 fail: 0
-Qemu test results:
-	total: 485 pass: 485 fail: 0
+Thanks, I shall send a v2 with this change.
+> Alan Stern
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+-- Khalid Masum

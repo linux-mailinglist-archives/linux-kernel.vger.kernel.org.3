@@ -2,95 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A88459F33E
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC95259F342
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbiHXF4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 01:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S234686AbiHXF4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 01:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiHXF4J (ORCPT
+        with ESMTP id S229551AbiHXF4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 01:56:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCCC86C2C;
-        Tue, 23 Aug 2022 22:56:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D33C618A9;
-        Wed, 24 Aug 2022 05:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9A4C433D6;
-        Wed, 24 Aug 2022 05:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661320568;
-        bh=/lQK6eSyHFmPY9FHfehXTuLBTlCtNaOLxFlDwPC1f/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zU3ILmUfSavbZXEmKsGu1fAYoww8AzQBdd3YPcnxApAGDxwTBCxdrIxAonCW6Hz5Z
-         f9/C+zA/dIP1ip6oHBmKb0AgMm4uvnH0TonlVfIcZwYTSQI3ybgaKjm/bk1dV3yEm1
-         lioqgCBJIpZuHvmqsTx7M1OVFG+pDfxJZZi+Cyp4=
-Date:   Wed, 24 Aug 2022 07:56:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: ehci: Prevent possible modulo by zero
-Message-ID: <YwW9dBW/0TKHPnC1@kroah.com>
-References: <20220823182758.13401-1-khalid.masum.92@gmail.com>
- <20220823182758.13401-3-khalid.masum.92@gmail.com>
+        Wed, 24 Aug 2022 01:56:43 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B0C89CCA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:56:42 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 2so12642104edx.2
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=IqQH8glAVc4Uz1KdvwFFC42e+CS3+BpGZdq1n3kfHOA=;
+        b=CDer5OdErg8Gx/O21HaRV2uFcEIz/Tyr7apVmI7Tw5XhFJkDgkbRFgZnRFNJsiAeWi
+         AYUe3M7LzpP46p8VczdGCayqXYEm1VR3I1DrazocSwDdC0LSmEJagG1fElE7pCjBueUH
+         ZT3yxy62CiBxdNmWWEtTiG7otVCcClaBPtDss=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=IqQH8glAVc4Uz1KdvwFFC42e+CS3+BpGZdq1n3kfHOA=;
+        b=N2XturfkraKjvXjcGdGlpCWnixf8LjHNTt+DsURqBRzQ5Lc8omnVQpNA4LAJBMh2s4
+         Wgw+B32zhIBb6DQP5FnHgyz/f4me8aCIeZLaUXSVN9BVKjZmH1hh0fpcAgPemHq+ZqyZ
+         7xkB7CsIGcTcyqFA6bTbSSy4QPnpHkReAvJPKlXNgaKDKpxu6J4zPiryiM273o0i0TBQ
+         WyyDEZvICZhrb+XLLtJOU95E1p3XIhrL6RrtNlxeWZvIXmSEB50i6uNmjlswFVi4+VdC
+         vh2pVCUNILi98L6l5rj3xuEicvxTh2I5+gntzb2F8LgDjR0KT8OrJ/3/19vZN2tH1XPA
+         9/fA==
+X-Gm-Message-State: ACgBeo1EeA+f7AI9fjltYM6xwJVdLp6RXAolsO5fRl1XPgCze/fc5neA
+        XOpE5Opxvy1AwC66KBn/PVRgdxBKi5f9sPMR
+X-Google-Smtp-Source: AA6agR5d7mypuqQu0rV1k1Ma2ki5cuvj4oxIpfvfOSHfSGKOpBm97UY6/gmBJsF3ih36mO3LwXbgzw==
+X-Received: by 2002:a05:6402:2381:b0:446:7a73:e704 with SMTP id j1-20020a056402238100b004467a73e704mr6304455eda.244.1661320600394;
+        Tue, 23 Aug 2022 22:56:40 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id q4-20020a170906770400b007389c5a45f0sm682585ejm.148.2022.08.23.22.56.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 22:56:39 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id h24so19416668wrb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:56:38 -0700 (PDT)
+X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
+ a8-20020a056000188800b00222ca41dc26mr14194866wri.442.1661320598478; Tue, 23
+ Aug 2022 22:56:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823182758.13401-3-khalid.masum.92@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220821000737.328590235@goodmis.org> <20220821000844.510643400@goodmis.org>
+ <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
+ <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org> <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
+ <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk> <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+ <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
+ <CAHk-=wiwr2Ff_1SKzRkjSbNLFYfk4KurvZhLuwVuTT-m9w5_6A@mail.gmail.com>
+ <YwWIQ/3BDQHOiTek@ZenIV> <YwWWoQXmVc8uasBh@ZenIV>
+In-Reply-To: <YwWWoQXmVc8uasBh@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 23 Aug 2022 22:56:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whmx4Pqw70NDmujGMQY1BrVi54pLnB5b7qpPThjiHatOw@mail.gmail.com>
+Message-ID: <CAHk-=whmx4Pqw70NDmujGMQY1BrVi54pLnB5b7qpPThjiHatOw@mail.gmail.com>
+Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
+ triggered by is_signed_type()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:27:58AM +0600, Khalid Masum wrote:
-> usb_maxpacket() returns 0 if it fails to fetch the endpoint. This
-> value is later used for calculating modulo. Which can cause modulo
-> by zero in qtd_fill.
-> 
-> Prevent this breakage by returning if maxpacket is found to be 0.
-> 
-> Fixes coverity warning: 1487371 ("Division or modulo by zero")
+On Tue, Aug 23, 2022 at 8:10 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> Any operations like ordered comparisons would trigger unrestrict() on
+> these suckers, which would warn and convert to underlying type.
+>
+> Your addition of "ordered comparison with 0 or -1" evades unrestrict().
 
-Odd tag format, is that in the documentation?
+No. Look. Try this modification to that test, and use
+'./test-linearize' to see what sparse turns it into without my patch
+to keep the signedness.
 
-> Fixes: 9841f37a1cca ("usb: ehci: Add support for SINGLE_STEP_SET_FEATURE test of EHSET")
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> ---
->  drivers/usb/host/ehci-q.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-> index eb31d13e9ecd..cf2585e9a09f 100644
-> --- a/drivers/usb/host/ehci-q.c
-> +++ b/drivers/usb/host/ehci-q.c
-> @@ -1221,6 +1221,8 @@ static int ehci_submit_single_step_set_feature(
->  	token |= (1 /* "in" */ << 8);  /*This is IN stage*/
->  
->  	maxpacket = usb_maxpacket(urb->dev, urb->pipe);
-> +	if (unlikely(!maxpacket))
+    static long test(void)
+    {
+        return (le32) 0xffffffff;
+    }
 
-You only ever use likely/unlikely if you can document how it matters
-with a benchmark or other way to notice the difference.  Otherwise let
-the compiler and the CPU do their magic, they know how to do this better
-than us.
+yes, yes, it warns (twice, actually), but it also then generates
 
-> +		return -1;
+        ret.64      $-1
 
-A real error number should be returned here if this was valid.
+for that return.
 
-But as Alan said, coverity is often wrong, and unless you can prove
-otherwise, this patch isn't valid.
+Why? Because it thinks that 'le32' is a signed 32-bit thing due to the
+clearing of the MOD_UNSIGNED bit, so when it casts it to 'long' it
+will sign-extend it.
 
-thanks,
+So the sign confusion exists and is visible regardless of the added
+ordered comparison.
 
-greg k-h
+Now, we normally don't *notice* any of this, because we obviously
+don't rely on sparse generating any code. And we _do_ cast those
+bitwise things in many places, although we use "__force" to show that
+it's intentional. Including, very much, those kinds of widening casts
+where the signedness matters.
+
+See for example very much the csum code:
+
+    __wsum csum_partial(const void *buff, int len, __wsum wsum)
+    {
+        unsigned int sum = (__force unsigned int)wsum;
+
+which is *exactly* that kind of code where it's fundamentally
+important that 'wsum' is an unsigned type, and casting it to 'unsigned
+int' does not sign-extend it.
+
+So no. This has absolutely nothing to do with the new ordered comparisons.
+
+Those bitwise types have always been integers, just with special rules
+for warning about mis-using them.
+
+And the sign handling has always been wrong.
+
+It just so happens that me using 'test-linearize' to double-check what
+sparse does for that signedness check *uncovered* that pre-existing
+bug.
+
+It was not introduced by the new code, and the ordered comparisons are
+not AT ALL different from the equality comparisons, except for the
+fact that they actually care about the signedness being right.
+
+           Linus

@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DEB59FECB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7747F59FEC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237980AbiHXPuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S238684AbiHXPvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238709AbiHXPuH (ORCPT
+        with ESMTP id S237106AbiHXPvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:50:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2502CC87
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:50:05 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661356203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ofO6K+OMSITsaGHE8wMcO5f9lytJ/iLlxdnlabEaK1I=;
-        b=JhAQ6V4+16Gu0NBUcQAaWB5DQVw7zIvVKEKq1ImhWzXV1gpNPmr0C47vKMlFhsZTGAaFvC
-        Zpq2UiNxhNmcfubZKrBjLw1umInlc0KbV7pxvbPYoRQx2pwExH+4Q+UjW8hPUt+EMEEJLH
-        fC7FVVMWmqqa+88Qt+ll9Rhi2ssmSfBOPeFmMChicEXkmlzutUwnFXHv4aw7MC+b6vnLi5
-        iJmUuhNujcXCJjsQZcjfsfj9Ue6qgm0BaYwy12sJmWeMDup7rE8rsOe7owBKHmoJ8vXvZg
-        T7muHnONglPF47wdMZxhJzfx5wJ/Nsv+V+1jCnCTou+6qzg7sOjxQSflypEVjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661356203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ofO6K+OMSITsaGHE8wMcO5f9lytJ/iLlxdnlabEaK1I=;
-        b=rceyqpXABUnxU14b/oZvdTgDd0fvgTIrPw6CSbkO8vumkFD8F/DxDbYPEYopggl/o00niP
-        LVD0UfvOuNn2gZCQ==
-To:     suhui_kernel@163.com, mingo@kernel.org
-Cc:     akpm@linux-foundation.org, bp@alien8.de, dietmar.eggemann@arm.com,
-        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
-        luto@amacapital.net, mgorman@suse.de, peterz@infradead.org,
-        torvalds@linux-foundation.org, vincent.guittot@linaro.org,
-        nhuck@google.com, ndesaulniers@google.com, lukas.bulwahn@gmail.com,
-        masahiroy@kernel.org
-Subject: Re: [PATCH 09/15] sched/headers: Introduce
- kernel/sched/build_policy.c and build multiple .c files there
-In-Reply-To: <20220823074702.2900118-1-suhui_kernel@163.com>
-References: <20220315084247.40783-10-mingo@kernel.org>
- <20220823074702.2900118-1-suhui_kernel@163.com>
-Date:   Wed, 24 Aug 2022 17:50:02 +0200
-Message-ID: <87pmgpy72t.ffs@tglx>
+        Wed, 24 Aug 2022 11:51:03 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F0A56B82;
+        Wed, 24 Aug 2022 08:51:02 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id q2so20485509edb.6;
+        Wed, 24 Aug 2022 08:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=XSXhfnDUfbBy7Q1IY7kNQQfLX8S9OYrluEFXHaozl2U=;
+        b=auLtMCwTrnX2Us0+PsMajvVrOlaOivz3mzZZSDGc+MQmLsNIj9nmXwnYM6QLaRIipM
+         V9TV0fi7tQBLwkPWoTH2FTSTVWrtncVHdYCmlqc1JMGn2xBLcdQhKuuBtZlYNVGu8N46
+         LOGi/Jawvm8CGl1iQlCIQsMwPrkhAI8vVCf9Jq8rcQ/U+xb/4Vw/KTfGYFjpRFWDzB+E
+         I7XNOiFC1xtkkqE0FK61W4nX8SzgTn5DIw+q6tAdsNDYnn6mk8CO/NhF6zia0SdpX6rd
+         LzZ6hhzX0y2z923tJOjh81SPgcx8XVF2Lu2w4YeFje00Rm8lYD+A+m5XiiFhQNRem6AX
+         fobg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=XSXhfnDUfbBy7Q1IY7kNQQfLX8S9OYrluEFXHaozl2U=;
+        b=kgKWA/XrUCBITPkgFXfi+U0OZrixpSQgietGTI1dH93zCtR++LUk4q8/IJQAKVcla+
+         pzMMpZzbb/op+MVxAjq0hnx5TVlAdgvG6c1pGRbRN2V0Ra0nOcFMee8REFkJhH6e3mZk
+         eJu/oVKg0VzNfueOJ+uUmy3R0t97pCaLxaz+M/8dMB5gUMjnG6bhqQ6K73J5QbeHH2fu
+         KVqZwNln8DyUIfP4k3QE7NJBWtsxLgXBFmsVEGO4ZenjqR9X7//puELmre2YDzEoArse
+         6mtN+/sMV6FMlT7zDd9JG7BHLXiN/W/qv0Orc16lOoKQv/D+DUBDz1dFPa7xmcvXomze
+         tjkw==
+X-Gm-Message-State: ACgBeo12jkYiDUJf8C04aMeAJSWVIeGWHkAtkeW8jtv0ksxN/GcHXqnF
+        ykmhIBrkiKXdwWOq18RZf1bVHa71mW4AHU8mVZw=
+X-Google-Smtp-Source: AA6agR6m7eS6OsAU6tFZb4s+iVDazP1DiUS4m3cG7gh3fqkQMNOOTF8pJRt6Cv1D1ju4QRmyORUba5xy6UyF0dZjWI8=
+X-Received: by 2002:a05:6402:298c:b0:446:a97:1800 with SMTP id
+ eq12-20020a056402298c00b004460a971800mr8227547edb.421.1661356260610; Wed, 24
+ Aug 2022 08:51:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <a46dffe36f2570ec91761b1d604ac52fa0a10efb.1661348961.git.mqaio@linux.alibaba.com>
+ <9BE5800D-DA65-485A-8E5E-5B84F59F70BD@fb.com>
+In-Reply-To: <9BE5800D-DA65-485A-8E5E-5B84F59F70BD@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 24 Aug 2022 08:50:49 -0700
+Message-ID: <CAADnVQLF6SjASpwS1i0YP2NT16Ctvn0s3jeCudKimNXQdi9Ebw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix incorrect fcntl call
+To:     Mykola Lysenko <mykolal@fb.com>
+Cc:     Qiao Ma <mqaio@linux.alibaba.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23 2022 at 15:47, suhui kernel wrote:
-> Hi Ingo, Since commit f96eca432015ddc1b621632488ebc345bca06791 merged, the
-> scripts/clang-tools/gen_compile_commands.py can't work very well.
+On Wed, Aug 24, 2022 at 8:13 AM Mykola Lysenko <mykolal@fb.com> wrote:
 >
->   In this patch the build_policy.c and build_utility.c include kernel/sched/xxx.c(
-> such as rt.c idle.c...), so it compile the build_utility.o build_policy.o directly,
-> and it won't generate kernel/sched/xxx.c(such as rt.o idle.o), so the gen_compile_commands.py
-> can't work.
+> Hi Qiao,
+>
+> > On Aug 24, 2022, at 7:01 AM, Qiao Ma <mqaio@linux.alibaba.com> wrote:
+> >
+> > !-------------------------------------------------------------------|
+> >  This Message Is From an External Sender
+> >
+> > |-------------------------------------------------------------------!
+> >
+> > To set socket noblock, we need to use
+> >> fcntl(fd, F_SETFL, O_NONBLOCK);
+> > rather than:
+> >> fcntl(fd, O_NONBLOCK);
+>
+> Can you please add more description on what is it fixing?
+>
+> Additionally, add file name to the title to make it easier to identify th=
+e commit from oneline git log.
 
-gen_compile_commands.py works perfectly fine and generates the entries
-for build_policy.o and built_utility.o as expected.
+file name in commit log? I think it's overkill.
+The file names can be seen with git log --stat
+Let's not put duplicate info into subjects.
 
-gen_compile_commands.py scans the build tree for .cmd files and extracts
-the command line from those files into the the json file. As there is no
-.cmd file for the .c files which are included into build_*.c there wont
-be entries in the json file either.
-
->   It will report "[8/23/2022, 3:24:06 PM] "rt.c" not found in "${workspaceFolder}/compile_commands.json".
-> 'includePath' from c_cpp_properties.json in folder 'linux' will be
-> used for this file instead.".
-
-No idea where this message comes from, but certainly not from
-gen_compile_commands.py because that generates the file.
-
-The clang-tidy kernel build target generates and uses that file and that
-works perfectly fine.
-
-So what exactly broke?
-
-Thanks,
-
-        tglx
-
-
+> Something like =E2=80=9Cselftests/bpf: fix incorrect fcntl call (test_soc=
+kmap.c)=E2=80=9D.

@@ -2,160 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439B959FE51
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E036759FE4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239552AbiHXP1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
+        id S239516AbiHXP1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235966AbiHXP1N (ORCPT
+        with ESMTP id S235966AbiHXP1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:27:13 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 Aug 2022 08:27:08 PDT
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F05CC9A6A0;
-        Wed, 24 Aug 2022 08:27:08 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,260,1654531200"; 
-   d="scan'208";a="28042774"
-Received: from hk-mbx01.mioffice.cn (HELO xiaomi.com) ([10.56.8.121])
-  by outboundhk.mxmail.xiaomi.com with ESMTP; 24 Aug 2022 23:26:04 +0800
-Received: from yz-mbx05.mioffice.cn (10.237.88.125) by HK-MBX01.mioffice.cn
- (10.56.8.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 24 Aug
- 2022 23:26:03 +0800
-Received: from BJ-MBX02.mioffice.cn (10.237.8.122) by yz-mbx05.mioffice.cn
- (10.237.88.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 24 Aug
- 2022 23:26:03 +0800
-Received: from BJ-MBX02.mioffice.cn ([fe80::7475:9ebf:d811:88c2]) by
- BJ-MBX02.mioffice.cn ([fe80::7475:9ebf:d811:88c2%17]) with mapi id
- 15.02.0986.029; Wed, 24 Aug 2022 23:26:03 +0800
-From:   =?utf-8?B?5p2O5L2z6ZOt?= <lijiaming3@xiaomi.com>
-To:     Bean Huo <huobean@gmail.com>,
-        Jiaming Li <lijiamingsofine@gmail.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?utf-8?B?562U5aSNOiBbRXh0ZXJuYWwgTWFpbF1SZTogW1BBVENIXSBzY3NpOiB1ZnM6?=
- =?utf-8?B?IHVmc2ZibzogSW50cm9kdWNlIEZpbGUgQmFzZWQgT3B0aW1pemF0aW9uIGZl?=
- =?utf-8?Q?ature?=
-Thread-Topic: [External Mail]Re: [PATCH] scsi: ufs: ufsfbo: Introduce File
- Based Optimization feature
-Thread-Index: AQHYt8Qh+RcVbZG0DEGTuktm+d7tza2+KseQ
-Date:   Wed, 24 Aug 2022 15:26:03 +0000
-Message-ID: <ce75888f5f2a412283a839ebd0015735@xiaomi.com>
-References: <20220824084633.14428-1-lijiamingsofine@gmail.com>
- <347dae29c07fe13e6974b0e59e127c399f63ef69.camel@gmail.com>
-In-Reply-To: <347dae29c07fe13e6974b0e59e127c399f63ef69.camel@gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.237.8.11]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 24 Aug 2022 11:27:03 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C7F9A684
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:27:00 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 9567D2B05F68;
+        Wed, 24 Aug 2022 11:26:24 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 24 Aug 2022 11:26:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1661354784; x=1661361984; bh=uVniGVlvs8
+        /VCkoClJeb3GLOoc5DfbVlVeAGhJHYCzs=; b=ZohUdrdOe6oHquhp58vsz1bBKW
+        7PpFcRZvPL5/30O13xXZ48fKIdvUtvG1UHo0EH0udeCa46ANWX4agHz7Hlw2ABGT
+        +y6ATFBQDrmjhbqhDXs1KzWTURdH+I+3335K1QvFAEqphvIn7LfEMwRq5JZzfRrx
+        7HbXlTKMvyZWvBYXr4Rj9wse/5oVSKL8xLfYnulgrEyyoJqRa9QkdgI12kTmoPz5
+        +2qmb9ao+VNVrwDGxjkPNigJ6InaXp2U/CMi/D6/Kh6JcQncYn/upOydSlOr6Rn3
+        ps5WU3KRW1mK7R6a91x9uZqjx8564kP6YWr6+pazwtun/+n3xPuKAJkP5eFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661354784; x=1661361984; bh=uVniGVlvs8/VCkoClJeb3GLOoc5D
+        fbVlVeAGhJHYCzs=; b=CRNsZc8gHQ+ZxkLfpS8/NSRYjUVZVWKX2CXvZ4lWxP2+
+        1We9Nm3TLIk9jbAQi/o4euGDgaGFMI07Hym7GVkcxJ86s916UPcq5uvETrct85lD
+        eclNGZwxOIwiaRaSPagxYjSgqJPVuhjTBOKQDyCFDpkO/r50+ZbcayVbZnf/o2i4
+        TQ+SS7HtgbmZmLKcIRhuX0SaVtQKOmUw0D8DoB+abdUttrA3khr/NFqaL2uRTeWW
+        k4FjjhLkPEEOXDL0FVTfVi2/vtw5O/8zLmTx5otNnOdWO7yuyY9cwFHrIuObc9Na
+        NY+ceIMklapWHCgXIbrqkETFeFowp0eyRomr3lnjPQ==
+X-ME-Sender: <xms:HkMGY8agO_-jhd4QU6iPe3aZHqTr6emyQdqVIRQy90KXIFbqP7BJrw>
+    <xme:HkMGY3Z0U3GE7huOj7noW7F0UAJeFHLV6_OouX2UTRaWQDvwwWnVSxsj59xsqDD4w
+    ZYa-W3438YmSKov2yo>
+X-ME-Received: <xmr:HkMGY2_yUuOCnekxGXtiJPXMeTKHxRqIaSfdRTw0OggrGbTaY13siGk56EOQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddgledtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:HkMGY2pfWFVL7uoXenkx6Oc-CrvJOOHFiapBidIWT-bFPSNV3adPMA>
+    <xmx:HkMGY3qgVdqGXAr4tQgVDuDcQC9KWpZ90-1INqNikiUnT-3Var2vqQ>
+    <xmx:HkMGY0SMASJWYckG-Hnzj7JtOEAsG4lZVKe4bP7RyOTALmO0WM6R7g>
+    <xmx:IEMGYwaW3uSisxgPNxzG9eOSephDxqJrulTyfenRj7pLUPrvVsK3UHzwRQ8>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 24 Aug 2022 11:26:21 -0400 (EDT)
+Date:   Wed, 24 Aug 2022 17:26:19 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 23/35] drm/vc4: vec: Convert to the new TV mode
+ property
+Message-ID: <20220824152619.5def5b2puj5b2a3o@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-23-3d53ae722097@cerno.tech>
+ <0255f7c6-0484-6456-350d-cf24f3fee5d6@tronnes.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_SOFTFAIL,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="36wi22d63kleuedj"
+Content-Disposition: inline
+In-Reply-To: <0255f7c6-0484-6456-350d-cf24f3fee5d6@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQmVhbg0KVGhpcyBpcyBhIFVGUyBleHRlbmRlZCBmZWF0dXJlIGluIFVGUzQuMCBKRURFQyBT
-dGFuZGFyZA0KVGhhbmtzDQoNCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7tuS6ujogQmVh
-biBIdW8gPGh1b2JlYW5AZ21haWwuY29tPg0K5Y+R6YCB5pe26Ze0OiAyMDIy5bm0OOaciDI05pel
-IDIyOjE3DQrmlLbku7bkuro6IEppYW1pbmcgTGkgPGxpamlhbWluZ3NvZmluZUBnbWFpbC5jb20+
-OyBhdnJpLmFsdG1hbkB3ZGMuY29tOyBhbGltLmFraHRhckBzYW1zdW5nLmNvbTsgamVqYkBsaW51
-eC5pYm0uY29tOyBidmFuYXNzY2hlQGFjbS5vcmcNCuaKhOmAgTogbGludXgtc2NzaUB2Z2VyLmtl
-cm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IOadjuS9s+mTrSA8bGlqaWFt
-aW5nM0B4aWFvbWkuY29tPg0K5Li76aKYOiBbRXh0ZXJuYWwgTWFpbF1SZTogW1BBVENIXSBzY3Np
-OiB1ZnM6IHVmc2ZibzogSW50cm9kdWNlIEZpbGUgQmFzZWQgT3B0aW1pemF0aW9uIGZlYXR1cmUN
-Cg0KW+WklumDqOmCruS7tl0g5q2k6YKu5Lu25p2l5rqQ5LqO5bCP57Gz5YWs5Y+45aSW6YOo77yM
-6K+36LCo5oWO5aSE55CG44CCDQoNCk9uIFdlZCwgMjAyMi0wOC0yNCBhdCAxNjo0NiArMDgwMCwg
-SmlhbWluZyBMaSB3cm90ZToNCj4gRnJvbTogbGlqaWFtaW5nMyA8bGlqaWFtaW5nM0B4aWFvbWku
-Y29tPg0KPg0KPiBJbXBsZW1lbnQgRmlsZSBCYXNlZCBPcHRpbWl6YXRpb24gaW5pdGlhbGl6YXRp
-b24gYW5kIGFkZCBzeXNmcw0KPiBpbnRlcmZhY2UuDQo+DQo+IFN0b2FnZSBkZXZpY2VzIGhhdmUg
-YSBsb25nIGxpZmVzcGFuLiBEZXZpY2UgcGVyZm9ybWFuY2Ugb3ZlciBpdHMNCj4gbGlmZXNwYW4g
-aXMgbm90IGNvbnN0YW50IGFuZCBtYXkgZGV0ZXJpb3JhdGUgb3ZlciB0aW1lDQo+DQo+IFRoaXMg
-ZmVhdHVyZSBkZXNjcmliZXMgYSBtZXRob2QgdG8gaW1wcm92ZSB0aGUgcGVyZm9ybWFuY2UgcmVn
-cmVzc2lvbi4NCj4gVGhlIGhvc3QgbmVlZHMgdG8gcHJvdmlkZSBGaWxlIFN5c3RlbSBpbmZvcm1h
-dGlvbiB0byBzdG9yYWdlIGRldmljZQ0KPiBmaXJzdC4gQmFzZWQgb24gdGhhdCBpbmZvcm1hdGlv
-biBkZXZpY2UgYW5hbHl6ZXMgdGhlIGZpbGUgc3lzdGVtIGRhdGENCj4gYW5kIHByb3ZpZGVzIHRo
-ZSBob3N0IHRoZSBsZXZlbCBvZiBwZXJmb3JtYW5jZSByZWdyZXNzaW9uLiBUaGUgaG9zdA0KPiB0
-aGVuIG1heSBpbnN0cnVjdCB0aGUgZGV2aWNlIHRvIGV4ZWN1dGUgb3B0aW1pemF0aW9uIHByb2Nl
-ZHVyZSB0bw0KPiBpbXByb3ZlIHRoZSByZWdyZXNzaW9uIGxldmVsLg0KPg0KPiBTaWduZWQtb2Zm
-LWJ5OiBsaWppYW1pbmczIDxsaWppYW1pbmczQHhpYW9taS5jb20+DQo+IC0tLQ0KPiAgYXJjaC9h
-cm02NC9jb25maWdzL2RlZmNvbmZpZyB8ICAgIDEgKw0KPiAgZHJpdmVycy9zY3NpL3Vmcy9LY29u
-ZmlnICAgICB8ICAgIDkgKw0KPiAgZHJpdmVycy9zY3NpL3Vmcy9NYWtlZmlsZSAgICB8ICAgIDEg
-Kw0KPiAgZHJpdmVycy9zY3NpL3Vmcy91ZnMuaCAgICAgICB8ICAgMTMgKw0KPiAgZHJpdmVycy9z
-Y3NpL3Vmcy91ZnNmYm8uYyAgICB8IDEwMDcNCj4gKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKw0KPiAgZHJpdmVycy9zY3NpL3Vmcy91ZnNmYm8uaCAgICB8ICAxNDMgKysrKysNCj4g
-IGRyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMgICAgfCAgIDE1ICsNCj4gIGRyaXZlcnMvc2NzaS91
-ZnMvdWZzaGNkLmggICAgfCAgICA3ICstDQo+ICA4IGZpbGVzIGNoYW5nZWQsIDExOTUgaW5zZXJ0
-aW9ucygrKSwgMSBkZWxldGlvbigtKSAgY3JlYXRlIG1vZGUNCj4gMTAwNjQ0IGRyaXZlcnMvc2Nz
-aS91ZnMvdWZzZmJvLmMgIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiBkcml2ZXJzL3Njc2kvdWZzL3Vm
-c2Ziby5oDQo+DQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmlnDQo+
-IGIvYXJjaC9hcm02NC9jb25maWdzL2RlZmNvbmZpZyBpbmRleCA0OTcyYTgxZDQwZDYuLjEzNjNj
-MjM3YjZmMyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm02NC9jb25maWdzL2RlZmNvbmZpZw0KPiAr
-KysgYi9hcmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmlnDQo+IEBAIC0yODksNiArMjg5LDcgQEAg
-Q09ORklHX1NDU0lfVUZTSENEX1BMQVRGT1JNPXkNCj4gQ09ORklHX1NDU0lfVUZTX1FDT009bSAg
-Q09ORklHX1NDU0lfVUZTX0hJU0k9eQ0KPiBDT05GSUdfU0NTSV9VRlNfRVhZTk9TPXkNCj4gK0NP
-TkZJR19TQ1NJX1VGU19GQk89eQ0KPiAgQ09ORklHX0FUQT15DQo+ICBDT05GSUdfU0FUQV9BSENJ
-PXkNCj4gIENPTkZJR19TQVRBX0FIQ0lfUExBVEZPUk09eQ0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9zY3NpL3Vmcy9LY29uZmlnIGIvZHJpdmVycy9zY3NpL3Vmcy9LY29uZmlnIGluZGV4DQo+IDQz
-MmRmNzZlNjMxOC4uNTdiMGU4YjE0NTQzIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Njc2kvdWZz
-L0tjb25maWcNCj4gKysrIGIvZHJpdmVycy9zY3NpL3Vmcy9LY29uZmlnDQo+IEBAIC0xOTksMyAr
-MTk5LDEyIEBAIGNvbmZpZyBTQ1NJX1VGU19GQVVMVF9JTkpFQ1RJT04NCj4gICAgICAgICBoZWxw
-DQo+ICAgICAgICAgICBFbmFibGUgZmF1bHQgaW5qZWN0aW9uIHN1cHBvcnQgaW4gdGhlIFVGUyBk
-cml2ZXIuIFRoaXMgbWFrZXMNCj4gaXQgZWFzaWVyDQo+ICAgICAgICAgICB0byB0ZXN0IHRoZSBV
-RlMgZXJyb3IgaGFuZGxlciBhbmQgYWJvcnQgaGFuZGxlci4NCj4gKw0KPiArY29uZmlnIFNDU0lf
-VUZTX0ZCTw0KPiArICAgICAgIGJvb2wgIlN1cHBvcnQgVUZTIEZpbGUtYmFzZWQgT3B0aW1pemF0
-aW9uIg0KPiArICAgICAgIGRlcGVuZHMgb24gU0NTSV9VRlNIQ0QNCj4gKyAgICAgICBoZWxwDQo+
-ICsgICAgICAgIFRoZSBVRlMgRkJPIGZlYXR1cmUgaW1wcm92ZXMgU2VxdWVudGlhbCByZWFkIHBl
-cmZvcm1hbmNlLg0KPiBUaGUgSG9zdCBjYW4NCj4gKyAgICAgICAgc2VuZCB0aGUgTEJBIHRvIGRl
-dmljZS4gVGhlIGRldmljZSB3aWxsIHJldHVybiBhIGZyYWdtZW50ZWQNCj4gc3RhdGUuIEl0DQo+
-ICsgICAgICAgIGlzIHVwIHRvIHRoZSBob3N0IHRvIGRlY2lkZSB3aGV0aGVyIHRvIGRlZnJhZy4g
-QWZ0ZXINCj4gZGVmcmFnbWVudCwNCj4gKyAgICAgICAgU2VxdWVudGlhbCByZWFkIHBlcmZvcm1h
-bmNlIGlzIGltcHJvdmVkDQo+IFwgTm8gbmV3bGluZSBhdCBlbmQgb2YgZmlsZQ0KPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9zY3NpL3Vmcy9NYWtlZmlsZSBiL2RyaXZlcnMvc2NzaS91ZnMvTWFrZWZp
-bGUNCj4gaW5kZXggYzQwN2RhOWI1MTcxLi45NTZiZTA3MzgyNjMgMTAwNjQ0DQo+IC0tLSBhL2Ry
-aXZlcnMvc2NzaS91ZnMvTWFrZWZpbGUNCj4gKysrIGIvZHJpdmVycy9zY3NpL3Vmcy9NYWtlZmls
-ZQ0KPiBAQCAtOSw2ICs5LDcgQEAgdWZzaGNkLWNvcmUtJChDT05GSUdfREVCVUdfRlMpICAgICAg
-ICAgICs9IHVmcy0NCj4gZGVidWdmcy5vDQo+ICB1ZnNoY2QtY29yZS0kKENPTkZJR19TQ1NJX1VG
-U19CU0cpICAgICArPSB1ZnNfYnNnLm8NCj4gIHVmc2hjZC1jb3JlLSQoQ09ORklHX1NDU0lfVUZT
-X0NSWVBUTykgICs9IHVmc2hjZC1jcnlwdG8ubw0KPiAgdWZzaGNkLWNvcmUtJChDT05GSUdfU0NT
-SV9VRlNfSFBCKSAgICAgKz0gdWZzaHBiLm8NCj4gK3Vmc2hjZC1jb3JlLSQoQ09ORklHX1NDU0lf
-VUZTX0ZCTykgICAgICs9IHVmc2Ziby5vDQo+ICB1ZnNoY2QtY29yZS0kKENPTkZJR19TQ1NJX1VG
-U19GQVVMVF9JTkpFQ1RJT04pICs9IHVmcy1mYXVsdC0NCj4gaW5qZWN0aW9uLm8NCj4NCj4gIG9i
-ai0kKENPTkZJR19TQ1NJX1VGU19EV0NfVENfUENJKSArPSB0Yy1kd2MtZzIxMC1wY2kubyB1ZnNo
-Y2QtZHdjLm8NCj4gdGMtZHdjLWcyMTAubyBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zY3NpL3Vmcy91
-ZnMuaA0KPiBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzLmggaW5kZXggOGM2YjM4YjFiMTQyLi5iNzUw
-Y2UzZjdkZTkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLmgNCj4gKysrIGIv
-ZHJpdmVycy9zY3NpL3Vmcy91ZnMuaA0KPiBAQCAtMTcwLDYgKzE3MCw3IEBAIGVudW0gZGVzY19p
-ZG4gew0KPiAgICAgICAgIFFVRVJZX0RFU0NfSUROX0dFT01FVFJZICAgICAgICAgPSAweDcsDQo+
-ICAgICAgICAgUVVFUllfREVTQ19JRE5fUE9XRVIgICAgICAgICAgICA9IDB4OCwNCj4gICAgICAg
-ICBRVUVSWV9ERVNDX0lETl9IRUFMVEggICAgICAgICAgID0gMHg5LA0KPiArICAgICAgIFFVRVJZ
-X0RFU0NfSUROX0ZCTyAgICAgICAgICA9IDB4QSwNCkhpIEppYW1pbmcsDQoNCklzIHRoaXMgYSBV
-RlMgZXh0ZW5kZWQgc3RhbmRhcmQgb3IgdmVuZG9yIHNwZWNpZmljIGZlYXR1cmU/DQoNCg0KDQoj
-LyoqKioqKuacrOmCruS7tuWPiuWFtumZhOS7tuWQq+acieWwj+exs+WFrOWPuOeahOS/neWvhuS/
-oeaBr++8jOS7hemZkOS6juWPkemAgee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaI
-lue+pOe7hOOAguemgeatouS7u+S9leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWM
-heaLrOS9huS4jemZkOS6juWFqOmDqOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuOAgeaIluaV
-o+WPke+8ieacrOmCruS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuS6huacrOmCruS7
-tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWIoOmZpOac
-rOmCruS7tu+8gSBUaGlzIGUtbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRhaW4gY29uZmlk
-ZW50aWFsIGluZm9ybWF0aW9uIGZyb20gWElBT01JLCB3aGljaCBpcyBpbnRlbmRlZCBvbmx5IGZv
-ciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNzIGlzIGxpc3RlZCBhYm92ZS4gQW55
-IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhlcmVpbiBpbiBhbnkgd2F5IChpbmNs
-dWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNjbG9zdXJlLCBy
-ZXByb2R1Y3Rpb24sIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUg
-aW50ZW5kZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMg
-ZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1h
-aWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdCEqKioqKiovIw0K
+
+--36wi22d63kleuedj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Sat, Aug 20, 2022 at 07:22:48PM +0200, Noralf Tr=F8nnes wrote:
+> Den 29.07.2022 18.35, skrev Maxime Ripard:
+> > Now that the core can deal fine with analog TV modes, let's convert the=
+ vc4
+> > VEC driver to leverage those new features.
+> >=20
+> > We've added some backward compatibility to support the old TV mode prop=
+erty
+> > and translate it into the new TV norm property.
+> >=20
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >=20
+> > diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_ve=
+c.c
+>=20
+> >  static int vc4_vec_connector_get_modes(struct drm_connector *connector)
+> >  {
+> > -	struct drm_connector_state *state =3D connector->state;
+> >  	struct drm_display_mode *mode;
+> > =20
+> > -	mode =3D drm_mode_duplicate(connector->dev,
+> > -				  vc4_vec_tv_modes[state->tv.mode].mode);
+> > +	mode =3D drm_mode_duplicate(connector->dev, &drm_mode_480i);
+> > +	if (!mode) {
+> > +		DRM_ERROR("Failed to create a new display mode\n");
+> > +		return -ENOMEM;
+> > +	}
+> > +
+> > +	drm_mode_probed_add(connector, mode);
+> > +
+> > +	mode =3D drm_mode_duplicate(connector->dev, &drm_mode_576i);
+>=20
+> Maybe the mode that matches tv.norm should be marked as preferred so
+> userspace knows which one to pick?
+
+I'm not sure how realistic that would be. Doing this based on the driver
+/ cmdline preference is going to be fairly easy, but then it's a
+property, it's going to be updated, and we probably don't want to mess
+around the mode flags based on new property values?
+
+Maxime
+
+--36wi22d63kleuedj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwZDGwAKCRDj7w1vZxhR
+xe5DAP9Z+ZFY+aCR73/Vff7dgZ2qWrSVvFjPY8E7F+CacQmV8wEA7ngIetY5PT9h
+6Cpd1zevB5ugZR1rHGjakT3tMaM5Vgo=
+=YI0f
+-----END PGP SIGNATURE-----
+
+--36wi22d63kleuedj--

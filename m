@@ -2,152 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219F859F118
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4734859F0C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiHXBjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S233326AbiHXBWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiHXBja (ORCPT
+        with ESMTP id S231830AbiHXBWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:39:30 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C3E8C035
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:39:28 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 082FA7E15C1;
-        Wed, 24 Aug 2022 01:39:28 +0000 (UTC)
-Received: from pdx1-sub0-mail-a225 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 58D167E144A;
-        Wed, 24 Aug 2022 01:39:27 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661305167; a=rsa-sha256;
-        cv=none;
-        b=YM8/iN0AEuuGYPyJrF7uRM2ywMduzfIJWbBmrJvEP1L+IcGTsdeM97xekt3ckJcx1jcgI/
-        IkYL9dEYEbBkIT5Ho9A5JfJm3Q57/zJTOYYgkfg0H+PcimsUWR0Y6NLmBLKAfw+w7atp7u
-        BLv5HkQw7jQvbVgV2d2h4KAmvwmaNbb4nCvGVYRB0QQGE3QxXPPKi7WfH27F4w2lNrfM3C
-        20TMkvBRFkY9RtLDU3LrROqElQoh9KtVhXxjcx3lgbqPg6N1UWQHpQVooA+LnMTk1Nnnoo
-        nnt2dGHzJRFDY9GwQz2lnX+VeK05z23be+dNNbaHg5k+qUUlBE80C0WOZ0GIVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661305167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=J+hEYIEjvOwz2IyYKQJbNRKzS/JVrt+rHjvP+egv3pQ=;
-        b=lZs79j5/qHvG3TUe27KhIHgmNldv7Adf2suCPr2Fan8MjAHmvRfwCZ9AANfcyfCxpxpUv8
-        ze4zLjkfViK34iaJPG92KNArlZJ/rGtzr93q0AjaEhRUFB4blq+ymfQap/cJRvV5xX9XVa
-        qHUPjt0Y9UyHLpncEhoEToBkqQhjhuBS1oIi49xmc8bdmCQQk3UWeXLkkGqr25I7wHpaYE
-        KcRdDT5/0j5VPcLgNbvCNYTP62wd6uwdybYnRs0vXAn28gQ6PrBJq0kHg9AriNzkcrter0
-        3lA2MpxfQXvyxnkLYMufUKkXm2EoKC5ZlcoSpMBpNGLhLwZ+jwbXlrLxEJxAgg==
-ARC-Authentication-Results: i=1;
-        rspamd-5cbff9fff7-bjsdh;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Glossy-Dime: 1021f1c555efe553_1661305167619_443955144
-X-MC-Loop-Signature: 1661305167619:473570999
-X-MC-Ingress-Time: 1661305167619
-Received: from pdx1-sub0-mail-a225 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.103.147.30 (trex/6.7.1);
-        Wed, 24 Aug 2022 01:39:27 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a225 (Postfix) with ESMTPSA id 4MC80G5py6z1jh;
-        Tue, 23 Aug 2022 18:39:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1661305167;
-        bh=J+hEYIEjvOwz2IyYKQJbNRKzS/JVrt+rHjvP+egv3pQ=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=SWusiSuECsjBEl+LRWPfdW7Nc75nB1HAFFk+Gf60fCn9oUUWMiTQ/9Ap6yZXd/fqn
-         R9c9AUoIS9Z3AlUc9L7RIqQ7NXbbDHskgPcOwcgl43EWIv6ZaUK3/Yaas1CzGpA4qy
-         VN0FE4p21Hd98YYzI4uvPX9EuqSxtjfMHdbH4sp1WtR2cnLaeRiSbda39ptQos6BQ1
-         oh8V6bBb4GrXBFkDCQUUAmLX7SQTHHfueXnxT/IHI5gFMQkVkX1GDGZVBso9pj8Pf4
-         4RsKts3RfuWjXGNgxw9HTnNvQ4EEKQdq+yvuP4AKp3+tCIREYjm87GW70ONENRhqt5
-         43C/NrLEss2hg==
-Date:   Tue, 23 Aug 2022 18:21:21 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v13 42/70] fs/proc/base: use maple tree iterators in
- place of linked list
-Message-ID: <20220824012121.aj2qkzrmdyywu45t@offworld>
-Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
- <20220822150128.1562046-43-Liam.Howlett@oracle.com>
+        Tue, 23 Aug 2022 21:22:12 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA04558DA;
+        Tue, 23 Aug 2022 18:22:10 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id k9so18969259wri.0;
+        Tue, 23 Aug 2022 18:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=OhLPqZHai+lEZNO/aWIoJdIaImKIb4W7ZXPCAX37T0U=;
+        b=KF010LcSPIWCIFpfDR0DvZsdsFdeGEGkqDXLaLXAt0Unnok8jGtw0Q4tk9n+XysoMX
+         r03afeZ23ebiVSNkurNuFADPlOxXQhFzjduZWLX3Bl/CJxm6zQwiVgaUK9h7Ty/+T0nh
+         vInb3mYztoTvUrmaK8Wq/OIyMxPTmX/RIXZWtcNm31qQ1h/nmUur+eMPnZFqLYD77Pmn
+         8o0AcfuHWr2x6HLbprJOz8iJfmq5e6+iFuWLOtYwL0hJ2St+L09a05yDZv3TUBwBry0b
+         crAoz6xjAaqRs8kpL4U9N+RP0auXPA1k51Qi5V5+cU+paTUZmszTiB3hsNgpuXEO67Mr
+         YFiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=OhLPqZHai+lEZNO/aWIoJdIaImKIb4W7ZXPCAX37T0U=;
+        b=1WHmlTl9VPj4RsA8Qtw+/uTEQjttIdeljFzRu2HXDoKypP7p+AZt+HzVYxgTOp6N46
+         T9jOJGNGKd21pjT1HOqCoEMZ9Qfq3ZqvVHgOlYvuOcmqAA3tdKBML3Bx5fFBMdtTSGiM
+         wfB/dp1VRiWoXXLNP5FRxqUuddB6shcZFmms9smKQZUjbBBpTbrWAL+oYA7oAKbA4G7v
+         KC4lPWhWfO6uJu7cv0Il4yxiWkhYA05DoWy3UdF25bDcd45IbUY6Cp2IwsE4XMoY+jOv
+         h43kEvOwb4g+Z0wQNxUxsaO4f6hakOPy+fP6hkyLMTHu8Bacqi+mWvsbaMYWPa5H+5Y2
+         xCcw==
+X-Gm-Message-State: ACgBeo269iKTpwzZVk6dEROZ60FagOXl+LCmdQ+zCc+3+92eqPDZDTJ1
+        T1r7Qu7MHnAdcxzzaXkiFUlzmaVcMOGTTRlR/4k=
+X-Google-Smtp-Source: AA6agR55uyl5UODy8v/O3d3ed7BqsoPln2Xnk12sc+Vvjm8qw4FB4W647Ss7e/TKFClpln4GHkpL4w==
+X-Received: by 2002:a5d:5487:0:b0:225:3fa7:41c2 with SMTP id h7-20020a5d5487000000b002253fa741c2mr11004598wrv.195.1661304129469;
+        Tue, 23 Aug 2022 18:22:09 -0700 (PDT)
+Received: from localhost.localdomain ([84.255.184.228])
+        by smtp.gmail.com with ESMTPSA id p7-20020a5d48c7000000b00223a50b1be8sm15364601wrs.50.2022.08.23.18.22.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 18:22:08 -0700 (PDT)
+From:   Mazin Al Haddad <mazinalhaddad05@gmail.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Mazin Al Haddad <mazinalhaddad05@gmail.com>,
+        syzbot+f66dd31987e6740657be@syzkaller.appspotmail.com
+Subject: [PATCH v3] media: dvb-usb: fix memory leak in dvb_usb_adapter_init()
+Date:   Wed, 24 Aug 2022 04:21:52 +0300
+Message-Id: <20220824012152.539788-1-mazinalhaddad05@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220822150128.1562046-43-Liam.Howlett@oracle.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022, Liam Howlett wrote:
+Syzbot reports a memory leak in "dvb_usb_adapter_init()".
+The leak is due to not accounting for and freeing current iteration's
+adapter->priv in case of an error. Currently if an error occurs, 
+it will exit before incrementing "num_adapters_initalized", 
+which is used as a reference counter to free all adap->priv 
+in "dvb_usb_adapter_exit()". There are multiple error paths that
+can exit from before incrementing the counter. Including the
+error handling paths for "dvb_usb_adapter_stream_init()", 
+"dvb_usb_adapter_dvb_init()" and "dvb_usb_adapter_frontend_init()"
+within "dvb_usb_adapter_init()".
 
->From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+This means that in case of an error in any of these functions the 
+current iteration is not accounted for and the current iteration's 
+adap->priv is not freed.
 
--ENOCHANGELOG.
+Fix this by freeing the current iteration's adap->priv in the 
+"stream_init_err:" label in the error path. The rest of the 
+(accounted for) adap->priv objects are freed in dvb_usb_adapter_exit()
+as expected using the num_adapters_initalized variable. 
 
->
->Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
->---
-> fs/proc/base.c | 5 ++++-
-> 1 file changed, 4 insertions(+), 1 deletion(-)
->
->diff --git a/fs/proc/base.c b/fs/proc/base.c
->index 93f7e3d971e4..0b72a6d8aac3 100644
->--- a/fs/proc/base.c
->+++ b/fs/proc/base.c
->@@ -2350,6 +2350,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
-> 	GENRADIX(struct map_files_info) fa;
-> 	struct map_files_info *p;
-> 	int ret;
->+	MA_STATE(mas, NULL, 0, 0);
->
-> 	genradix_init(&fa);
->
->@@ -2377,6 +2378,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
-> 	}
->
-> 	nr_files = 0;
->+	mas.tree = &mm->mm_mt;
->
-> 	/*
-> 	 * We need two passes here:
->@@ -2388,7 +2390,8 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
-> 	 * routine might require mmap_lock taken in might_fault().
-> 	 */
->
->-	for (vma = mm->mmap, pos = 2; vma; vma = vma->vm_next) {
->+	pos = 2;
->+	mas_for_each(&mas, vma, ULONG_MAX) {
-> 		if (!vma->vm_file)
-> 			continue;
-> 		if (++pos <= ctx->pos)
->
->-- 
->2.35.1
->
+Syzbot report:
+
+BUG: memory leak
+unreferenced object 0xffff8881172f1a00 (size 512):
+  comm "kworker/0:2", pid 139, jiffies 4294994873 (age 10.960s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+backtrace:
+    [<ffffffff844af012>] dvb_usb_adapter_init drivers/media/usb/dvb-usb/dvb-usb-init.c:75 [inline]
+    [<ffffffff844af012>] dvb_usb_init drivers/media/usb/dvb-usb/dvb-usb-init.c:184 [inline]
+    [<ffffffff844af012>] dvb_usb_device_init.cold+0x4e5/0x79e drivers/media/usb/dvb-usb/dvb-usb-init.c:308
+    [<ffffffff830db21d>] dib0700_probe+0x8d/0x1b0 drivers/media/usb/dvb-usb/dib0700_core.c:883
+    [<ffffffff82d3fdc7>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<ffffffff8274ab37>] call_driver_probe drivers/base/dd.c:542 [inline]
+    [<ffffffff8274ab37>] really_probe.part.0+0xe7/0x310 drivers/base/dd.c:621
+    [<ffffffff8274ae6c>] really_probe drivers/base/dd.c:583 [inline]
+    [<ffffffff8274ae6c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:752
+    [<ffffffff8274af6a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:782
+    [<ffffffff8274b786>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:899
+    [<ffffffff82747c87>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
+    [<ffffffff8274b352>] __device_attach+0x122/0x260 drivers/base/dd.c:970
+    [<ffffffff827498f6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
+    [<ffffffff82745cdb>] device_add+0x5fb/0xdf0 drivers/base/core.c:3405
+    [<ffffffff82d3d202>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
+    [<ffffffff82d4dbfc>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<ffffffff82d3f49c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<ffffffff8274ab37>] call_driver_probe drivers/base/dd.c:542 [inline]
+    [<ffffffff8274ab37>] really_probe.part.0+0xe7/0x310 drivers/base/dd.c:621
+    [<ffffffff8274ae6c>] really_probe drivers/base/dd.c:583 [inline]
+    [<ffffffff8274ae6c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:752
+
+
+Link: https://syzkaller.appspot.com/bug?extid=f66dd31987e6740657be
+Reported-and-tested-by: syzbot+f66dd31987e6740657be@syzkaller.appspotmail.com
+Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
+---
+v2->v3:
+	- Follow standard kernel pattern by moving error handling 
+	to label instead as suggested by Lukas Bulwhan.
+	- Adjust commit description to include syzbot report, 
+	The "Reported-and-tested-by" tag and clarify the commit message. 
+
+ drivers/media/usb/dvb-usb/dvb-usb-init.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+index 61439c8f33ca..58eea8ab5477 100644
+--- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
++++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+@@ -81,7 +81,7 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
+ 
+ 		ret = dvb_usb_adapter_stream_init(adap);
+ 		if (ret)
+-			return ret;
++			goto stream_init_err;
+ 
+ 		ret = dvb_usb_adapter_dvb_init(adap, adapter_nrs);
+ 		if (ret)
+@@ -114,6 +114,8 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
+ 	dvb_usb_adapter_dvb_exit(adap);
+ dvb_init_err:
+ 	dvb_usb_adapter_stream_exit(adap);
++stream_init_err:
++	kfree(adap->priv);
+ 	return ret;
+ }
+ 
+-- 
+2.37.2
+

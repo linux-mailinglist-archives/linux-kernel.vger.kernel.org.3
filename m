@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8253D59F355
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCBE59F361
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbiHXF7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 01:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S234261AbiHXGEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiHXF7v (ORCPT
+        with ESMTP id S229884AbiHXGES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 01:59:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EE56E8A8;
-        Tue, 23 Aug 2022 22:59:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 863E9B820E2;
-        Wed, 24 Aug 2022 05:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF14C433C1;
-        Wed, 24 Aug 2022 05:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661320788;
-        bh=Cqed2AyEOa8HzjSfWn4Ar8N2KOWo4TBNXbZeZFIpcB8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ol81/3hWrML2yIwM4VwH84RQAuBNIHA7A0ik3J4/N5x43VRC1rLrlD2hbrN5Ln/+G
-         l16H3UbpueK26MI4UzbBnSX1viF/6DYCNyfdLHMSBVu5rlvOdHYmmBtVNiP0HpNPOx
-         vxquLbcM158Voe7vqex+yul18dOTsGyiqvNB4+bU=
-Date:   Wed, 24 Aug 2022 07:59:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@intel.corp-partner.google.com>
-Cc:     heikki.krogerus@linux.intel.com, rajat.khandelwal@intel.com,
-        shawn.c.lee@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Enter safe mode only when pins need to be reconfigured
-Message-ID: <YwW+UUrn47MCbNIA@kroah.com>
-References: <20220823170949.2066916-1-rajat.khandelwal@intel.corp-partner.google.com>
- <YwW+LI345ind56ks@kroah.com>
+        Wed, 24 Aug 2022 02:04:18 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478C591D35
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:04:17 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso288868wmc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:04:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=lsuk7uZDIF33aCvdAlHfM9T/aKm08zp1jKT0JyGS+SI=;
+        b=VzrgHJZNFCfHZQ9fDt9SbYSikK8Y0QeLsMWnTDaa3Ix8v93UQNvX51iK8Aoq3a9kXs
+         SWCp2DAPymGn6PGxdEAwS0akx6eUrCJAFPzpVwMx4YK9aTBOJA1AJ6wYp9FTo5CVtRBN
+         ApdUT3nd+A64YDwcE8f4kG5hUou6P5Bi1WiSDJYckr0lsQWZBIkh/2nxKjLrIv1tboNk
+         ZObFnZpbGDuQaPveoTACNVm1OPssUHaFZtwiS4GYFgP9ljHr8loiRerP4X6tdJ7G+G1g
+         yLzvLSLd8ttipDNaOFq67D7kQ5EghWyuOytfWd+X3keyBTdAE+2fqV2DAJ00SlPgkpbN
+         8wzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=lsuk7uZDIF33aCvdAlHfM9T/aKm08zp1jKT0JyGS+SI=;
+        b=QYpn7gEZcvM+gQl0qhv9QPKJGLKdzA5mA7j8st5444tvxTsbMgdfsNZbOn8G49eY85
+         jjUXDgFcxbdZb3zuKGaAIjwicBx2yO2biOpbdhFZiIAxrOnWezJCxOZoOCULJB5gOgRu
+         DWyj0oj/OLU84rhREhCjLBX49yCtp3ugRCbn9oybjyXvR3LUjeuQxlvVrt6FNm+giPKb
+         npo2tTGPkixRV/r0mjZg57GbMZilMIxkPJ4xTvlUDYyNaZuuUCNISXCiESnYCxBfu9nn
+         mwlIJEyE2rqQ+hhmx3JiPt4xLkFFdM6jNbevR/am8zjYYXrktRnmKOJL77YRGamfCcrD
+         fSFA==
+X-Gm-Message-State: ACgBeo3ELW1N+mefXp1ZeeqrYImefPwhFwamWeVRCKvOXHTASKh/2zvV
+        LrgEjpt3Slf87a/s1d+IaXsqAwnO4aromzAcwDg=
+X-Google-Smtp-Source: AA6agR6gLcnIAF65A5WR/1TeCNW+l0dGibWgolm9qc0u3hhP8UVQrooTgJ8GPtXmbgrFA6kqilJCT9yamyoPLmuWfvY=
+X-Received: by 2002:a05:600c:3d05:b0:3a5:dd21:e201 with SMTP id
+ bh5-20020a05600c3d0500b003a5dd21e201mr4068777wmb.132.1661321055864; Tue, 23
+ Aug 2022 23:04:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwW+LI345ind56ks@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220713134823.95141-1-schspa@gmail.com>
+In-Reply-To: <20220713134823.95141-1-schspa@gmail.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Wed, 24 Aug 2022 14:04:03 +0800
+Message-ID: <CAMA88TrptsGYJqf_hTgE-UVC+dfuHJ1hcOZdJEE1yuKFw_A-8A@mail.gmail.com>
+Subject: Re: [PATCH v7 1/2] sched/rt: fix bad task migration for rt tasks
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
+        Schspa Shi <schspa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,35 +69,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 07:59:08AM +0200, Greg KH wrote:
-> On Tue, Aug 23, 2022 at 10:39:49PM +0530, Rajat Khandelwal wrote:
-> > From: Lee Shawn C <shawn.c.lee@intel.com>
-> > 
-> > There is no point to enter safe mode during DP/TBT configuration
-> > if the DP/TBT was already configured in mux. This is because safe
-> > mode is only applicable when there is a need to reconfigure the
-> > pins in order to avoid damage within/to port partner.
-> > 
-> > 1. if HPD interrupt arrives and DP mode was already configured,
-> > safe mode is entered again which is not desired.
-> > 2. in chrome systems, IOM/mux is already configured before OS
-> > comes up. Thus, when driver is probed, it blindly enters safe
-> > mode due to PD negotiations but only after gfx driver lowers
-> > dp_phy_ownership, will the IOM complete safe mode and send
-> > ack to PMC.
-> > Since, that never happens, we see IPC timeout.
-> > 
-> > Hence, allow safe mode only when pin reconfiguration is not
-> > required, which makes sense.
-> > 
-> > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
-> > Signed-off-by: Lee Shawn C <shawn.c.lee@intel.com>
-> 
-> First off, don't use invalid "corp-partner.google.com" email addresses,
-> you know that's not going to work and just bounce everywhere and there's
-> no proof that this has any relationship to your intel address :(
+Hi Valentin, Steven, Dietmar:
 
-Also the email verification fails, so it looks like you just spoofed
-this message, which also makes it impossible for me to accept.
+Could you help to review this V7 patch again ?
 
-greg k-h
+I have been testing on our platform for more than a month, and it
+seems that the system has no adverse reactions.
+
+Thank you very much.
+
+
+--
+BRs
+Schspa Shi

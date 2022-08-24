@@ -2,76 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C1859F077
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29D159F07D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiHXAyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S231165AbiHXBCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232805AbiHXAyl (ORCPT
+        with ESMTP id S229640AbiHXBCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:54:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2363C883FF
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661302479;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mJ2AxATAvltTLcK4EIcLhHTsShpwyuL8fLYe2MzIEMw=;
-        b=h64vq1pN9kRozVIuW7pbQDSkg3ELvFIzkGRHwFwjkKfFnvNLEyqS8eVni8p4+MtySLp/yK
-        QsxDRW7dMuyK1utP/XCJ+RgQqgNn5zfNAXTOncZgYEKh9A1Ij/X7Qw5yLWdJ4YgarrQtfw
-        kFcmUNSriVhwmgfpu1jNX1i2fAWbHIs=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-368-Q7TmKqbSOBSa1blrw4mb8g-1; Tue, 23 Aug 2022 20:54:38 -0400
-X-MC-Unique: Q7TmKqbSOBSa1blrw4mb8g-1
-Received: by mail-qv1-f70.google.com with SMTP id n9-20020a0cfbc9000000b00496bb293f1fso8192501qvp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:54:38 -0700 (PDT)
+        Tue, 23 Aug 2022 21:02:36 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1DA86FF4
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:02:35 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id w7-20020a5d9607000000b0067c6030dfb8so8472163iol.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:02:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=mJ2AxATAvltTLcK4EIcLhHTsShpwyuL8fLYe2MzIEMw=;
-        b=ovRiG/4QK2JqdcIWu3iNDHv7Qem/D5xWdLNP7l4xYFU7OvGweidVSPrxAr2SaEHnnK
-         Nps6D1FQS38O6Tc5XUCorg20mFLJkYp9MkAGzprhOAjLHXMies6GjgNgw0kYfMclPVAT
-         +vL30guQBzTwAetT/po//jAbl1NvMUgKVXP9jsy8VDJLIi+D1tTRNoXPSIKlciMcRnLR
-         1uZBxg3MCBHq3pT9X1FsCJkNrQhBeqs0pHiZR/lZ9U1gADVxtL5sD4APdbNcPZMt0xb0
-         plLIoPjn16oCJsTIqxC9MyYY85RTtOhzFNHEbgB1rLYjbMXOZzHvarnbFFC8Cdd7l5wd
-         YaOQ==
-X-Gm-Message-State: ACgBeo3G0rUnNSMMNIE2WNwdEqFonx+KGILwakkYb0Z8WFuG5Lgv3Pad
-        Bfpt3Ed1S/Uf1+gBwAdAiB3csWBq9BAw2yo+/Vh+7d+P6pC49SmsClzykPekB9YzlrdxNJAwS9z
-        P+O8GX3RYFVWn5GkEfGvhun+7
-X-Received: by 2002:ac8:59cc:0:b0:344:6b04:26df with SMTP id f12-20020ac859cc000000b003446b0426dfmr21723995qtf.208.1661302477655;
-        Tue, 23 Aug 2022 17:54:37 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6agXqBP7WlVJI4qXtGQYvolC0S7vaCx+krWytFSqnd+I2CsB8CpxWhGHKC3wMizB4TZlFPZw==
-X-Received: by 2002:ac8:59cc:0:b0:344:6b04:26df with SMTP id f12-20020ac859cc000000b003446b0426dfmr21723982qtf.208.1661302477477;
-        Tue, 23 Aug 2022 17:54:37 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id g2-20020ac87742000000b003445d06a622sm11871028qtu.86.2022.08.23.17.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 17:54:37 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 17:54:35 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Dave Jiang <dave.jiang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-Subject: Re: [PATCH v2] dmaengine: idxd: avoid deadlock in
- process_misc_interrupts()
-Message-ID: <20220824005435.jyexxvjxj3z7tc2f@cantor>
-References: <20220823162435.2099389-1-jsnitsel@redhat.com>
- <20220823163709.2102468-1-jsnitsel@redhat.com>
- <905d3feb-f75b-e91c-f3de-b69718aa5c69@intel.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=SA8V6FJE4OHwfldzxq2ieRP3SNYCMLDZIdmCi4W19xI=;
+        b=kUYrMbAXUatLvgwhOzqLwBfK5j748bGxBO/Ct9lIDvszvHOo1ya4ecjZKXJoO9seAf
+         50rDmC0G6kVSzOJyIzo2oUBxZseZfpD9OmjPcb8kEU9KSEGw8V/oBJdMcJvLYbbizPcW
+         IBl9cH1sA5JnhtZH08Y5tRGIJ6mHxe2p+pjZM9p/sVVUUlucvMB+VIe6ktO38U8xOghY
+         xy3yfzy9pEtc1oY6HC6rbE2S/8lD5OhtRYohqqY8GuBnLtcQi8VA295EZPSlDqbD3UNG
+         NXyL2OtabGeWYoBBrZbzc0THp095nQPBvNh8e0YHmoUZCENDO0/W59pdNdf4IQmlPCEL
+         Vs1g==
+X-Gm-Message-State: ACgBeo2gLaM7SGFtPKxzyPHLSFXHz9DBygK0Tgp7unN8MQ0B9SWKz5ri
+        slzpBf8CICK0wmV1M9tSRE74Jmh58acS9iqThA7jDk8pWvTh
+X-Google-Smtp-Source: AA6agR6IJ8T6DvHiwgiJ7ZXB1RnxVxOeAenNs+p1YW01lAQCSCQsxiZNVIfoAo83ZIPY6PTfaDDa5V24cZXihXRseIqIGX5sH6Tj
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <905d3feb-f75b-e91c-f3de-b69718aa5c69@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:6903:0:b0:2e5:8f47:22e0 with SMTP id
+ e3-20020a926903000000b002e58f4722e0mr1040920ilc.97.1661302954887; Tue, 23 Aug
+ 2022 18:02:34 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 18:02:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007d901905e6f23c23@google.com>
+Subject: [syzbot] WARNING: CPU: NUM PID: NUM at mm/huge_memory.c:LINE split_huge_page_to_l
+From:   syzbot <syzbot+2184d61af7d9d86337fc@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,39 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 09:46:19AM -0700, Dave Jiang wrote:
-> 
-> On 8/23/2022 9:37 AM, Jerry Snitselaar wrote:
-> > idxd_device_clear_state() now grabs the idxd->dev_lock
-> > itself, so don't grab the lock prior to calling it.
-> > 
-> > This was seen in testing after dmar fault occurred on system,
-> > resulting in lockup stack traces.
-> > 
-> > Cc: Fenghua Yu <fenghua.yu@intel.com>
-> > Cc: Dave Jiang <dave.jiang@intel.com>
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Cc: dmaengine@vger.kernel.org
-> > Fixes: cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on device driver removal")
-> > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> 
-> Thanks Jerry!
-> 
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> 
+Hello,
 
-I noticed another problem while looking at this. When the device ends
-up in the halted state, and needs an flr or system reset, it calls
-idxd_wqs_unmap_portal(). Then if you do a modprobe -r idxd, you hit
-the WARN_ON in devm_iounmap(), because the remove code path calls
-idxd_wq_portal_unmap(), and wq->portal is null. I'm not sure if it
-just needs a simple sanity check in drv_disable_wq() to avoid the call
-in the case that it has already been unmapped, or if more cleanup
-needs to be done, and possibly a state to differentiate between
-halted + soft reset possible, versus halted + flr or system reset
-needed.  You get multiple "Device is HALTED" messages during the
-removal as well.
+syzbot found the following issue on:
 
-Regards,
-Jerry
+HEAD commit:    680fb5b009e8 Merge tag 'arm64-upstream' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=13d186a5080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4557ad2600fc45f4
+dashboard link: https://syzkaller.appspot.com/bug?extid=2184d61af7d9d86337fc
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c0bffd080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1217ce8d080000
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2184d61af7d9d86337fc@syzkaller.appspotmail.com
+
+raw: 05ffc00000010801 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000002ffffffff 0000000000000000
+page dumped because: VM_WARN_ON_ONCE_PAGE(is_hzp)
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3026 at mm/huge_memory.c:2555 split_huge_page_to_l
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

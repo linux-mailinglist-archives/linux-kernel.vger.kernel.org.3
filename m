@@ -2,63 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E3E59F7EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B6159F7FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbiHXKhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S234260AbiHXKmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234401AbiHXKhd (ORCPT
+        with ESMTP id S235425AbiHXKmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:37:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0AE2DAA6
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:37:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D65461901
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7986FC433D7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661337451;
-        bh=I0cd3WdTf5/zBAmu6OTcaBtCLTvCR1Zj2ub50uiUdRA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AMgkgKUTM+KbJiQvsqxlDklS/cS8YY6ivNu4GsDhfnbFQwC+48wXaxvykBpWAE6AS
-         RP0mm848TK6MxmmJWQbJ9oM6UTiLtpd1drKSdU91lr3BvuZO86X4il5BAA4icgPuVD
-         w4pJAhUZsTRSpDw+h2w+zEPAUOqLX0ebMenLH32MsfO8O0Rej5x94vETchKrEvcOt0
-         xgQ5TFvSHLUJZ7zvKc1XoyEAr+FBqEXCLkcdYOmRZSz1QdfidOCEm7xn7lQgyBKmSH
-         J3dVBWQAVzYj+CS+HD1vGiuPh+QolzDfau0kLiQ4f1zWhYMvpMnUqVr2a8KvBCcWJj
-         rD8iQJ23IAyog==
-Received: by mail-ej1-f53.google.com with SMTP id ca13so21403763ejb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:37:31 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2pZOXBnDsq77xnFQa+aInuNeQDXPY+oE5DtenPlwO/0eyiASrp
-        Ta+iq1aFP3pm4FYQVD8TUbGLJPCxog1gmtDApzs=
-X-Google-Smtp-Source: AA6agR6xxyqTl7+HyFIm4H6T5uvQGlwuQI7AV5Ynsj9TdJBoYnlQJCXJrD/4b4WJz2Ijr+W97qcmsyDIKRQxbxO15wA=
-X-Received: by 2002:a17:907:7610:b0:73d:afe8:9837 with SMTP id
- jx16-20020a170907761000b0073dafe89837mr2521634ejc.606.1661337449638; Wed, 24
- Aug 2022 03:37:29 -0700 (PDT)
+        Wed, 24 Aug 2022 06:42:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB0381B24;
+        Wed, 24 Aug 2022 03:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661337751; x=1692873751;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=lnG4/IetgJJiCFvYl2XSmHM42xhaifZaMgp7nfdirTE=;
+  b=eNZsqDl4c8MZlLJ2p0h20eTzbb5c754AMOUHjTxenfjCe6a5zRuA3vdB
+   JpIIgiJbkGJ2YxTocSYwyLXKU6TW1aEZ4/DimabkqBATW7lS47yBDKJWT
+   RBM3hvH78/yAmYocq20gokL8cRZ2w3XaKOQXMvJIhutN5YJoQC5mZNZYC
+   8kVpnUIzYIHzIGP0nfhPOTzp6JfZn/5ThXoMNwF7ujFQBZXf0OSUERmgK
+   4f9sVKh6c2AkR24KPiw6ew1FgLJwQTrCkqctXLWqcXVrJeYyZbMbbUuYP
+   834PtJ9Jbyia4YGVAeNOAOwcomG+ME3BZ9d6+Y3dbrXZA+7s/Q1o6HNGe
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="355660053"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="355660053"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 03:42:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="605989312"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 24 Aug 2022 03:42:21 -0700
+Date:   Wed, 24 Aug 2022 18:37:38 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <20220824103738.GA1386620@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <CAGtprH9xyw6bt4=RBWF6-v2CSpabOCpKq5rPz+e-9co7EisoVQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220818211550.3272321-1-arnd@kernel.org> <20220818211550.3272321-3-arnd@kernel.org>
- <20220821055537.GB25950@lst.de>
-In-Reply-To: <20220821055537.GB25950@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 24 Aug 2022 12:37:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3x5qvEdJJXTMzgu0jXjzXh6LqQRESpGM2XPHiYHm7scg@mail.gmail.com>
-Message-ID: <CAK8P3a3x5qvEdJJXTMzgu0jXjzXh6LqQRESpGM2XPHiYHm7scg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] ARM: footbridge: remove leftover from personal-server
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGtprH9xyw6bt4=RBWF6-v2CSpabOCpKq5rPz+e-9co7EisoVQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,22 +96,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 7:55 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Thu, Aug 18, 2022 at 11:15:48PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Aug 19, 2022 at 12:37:42PM -0700, Vishal Annapurve wrote:
+> > ...
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 230c8ff9659c..bb714c2a4b06 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -914,6 +914,35 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
 > >
-> > The machine was removed a while ago, and the checks are
-> > now useless.
->
-> Curious, should entries for removed machines be kept in the mach-types
-> file?  Because that makes it really easy to leave dead code like this
-> around.
+> >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+> >
+> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > +#define KVM_MEM_ATTR_PRIVATE   0x0001
+> > +static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl,
+> > +                                            struct kvm_enc_region *region)
+> > +{
+> > +       unsigned long start, end;
+> > +       void *entry;
+> > +       int r;
+> > +
+> > +       if (region->size == 0 || region->addr + region->size < region->addr)
+> > +               return -EINVAL;
+> > +       if (region->addr & (PAGE_SIZE - 1) || region->size & (PAGE_SIZE - 1))
+> > +               return -EINVAL;
+> > +
+> > +       start = region->addr >> PAGE_SHIFT;
+> > +       end = (region->addr + region->size - 1) >> PAGE_SHIFT;
+> > +
+> > +       entry = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION ?
+> > +                               xa_mk_value(KVM_MEM_ATTR_PRIVATE) : NULL;
+> > +
+> > +       r = xa_err(xa_store_range(&kvm->mem_attr_array, start, end,
+> > +                                       entry, GFP_KERNEL_ACCOUNT));
+> 
+> xa_store_range seems to create multi-index entries by default.
+> Subsequent xa_store_range call changes all the entries stored
+> previously.
 
-A long time ago it was common to add the entries in mach-types before
-the Kconfig symbol got merged, an  Russell just updated the list
-periodically to drop stale entries. As we remove most board files in
-a coming release, we should probably do this as part of the bigger
-cleanup then.
+By using xa_store_range and storing them as multi-index entries I
+expected to save some memory for continuous pages originally.
 
-        Arnd
+But sounds like the current multi-index store behaviour isn't quite
+ready for our usage.
+
+Chao
+> xa_store needs to be used here instead of xa_store_range to achieve
+> the intended behavior.
+> 
+> > +
+> > +       kvm_zap_gfn_range(kvm, start, end + 1);
+> > +
+> > +       return r;
+> > +}
+> > +#endif /* CONFIG_HAVE_KVM_PRIVATE_MEM */
+> > +
+> > ...

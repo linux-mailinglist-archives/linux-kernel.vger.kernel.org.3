@@ -2,176 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732EF59FEAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDDA59FEB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239935AbiHXPnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S238283AbiHXPrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239944AbiHXPnO (ORCPT
+        with ESMTP id S240066AbiHXPqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:43:14 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E0F8E9BA
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:42:21 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id h5so20453052wru.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Ea0aUnS9aRyq1YnrkoEMZKPYyCD80EXoe550IbvtW0k=;
-        b=kQ3TnPom6kAHKFLObqwZYvCmKyyI3rjukpnieic1InUWxCPrL2PMK1VmusmTmzAUWD
-         2VB8C8tB433vPGjKw3LkTbY6yr45mxuxSUmMQsYNa+5B16M/46hnbmS1okxpC2lRjfcq
-         cGTClaYp+FQNwDfWTYR7JJGeLP/7xlPT+rVSqB/oEKejOY4315PqbPgVudXWfwhATx0u
-         l20frKZr/c133XWM1LjeDsl0YPBmYPCeN4qEn5unv2ytYdpEBrQUfHOJZw3/JnMv2G8L
-         dSwN06tBDLlXHgeqXdWHx4vGuYuFtYvxW9oYY3Z/PqHheAh7s+2HTJ/a8tWax4kXQ302
-         SdRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Ea0aUnS9aRyq1YnrkoEMZKPYyCD80EXoe550IbvtW0k=;
-        b=3ONCkTffShnY/WKx/e96kVvknKuKsGoX4zVCMuBcG18APVysWv7CjUn9dgx5HWAyNv
-         DTxM4SXHJtK8T+EKVvS1ZPGOBWkC66pioFsABlI2UDKf6oDa4/BCD//yLfryO9K791HM
-         fy/RTM4CoCdw/qRITwofN9ZdknwjoSHflp/Mbi5HHhKbIxefWAo8Qx5JtR7KSfDkglaQ
-         bOg2DPrRSt66h5bIBQtEKO+M+uEjH3E9iw90/pVMdgHjRlD609quhyVxaYVfINQ2KsxO
-         qvv8i7PS2gm2OMJH3IdVXdU1tASKbqLG8W3mR6LOCwIvtcrvlCQzckmWQKmLcqRpICYw
-         yo+g==
-X-Gm-Message-State: ACgBeo0oUU2mdRlId75Ea+rNUcupGe9p0P8rW4oeoCillyuRiPx4LsvC
-        96wbNfG93YGIsitaLaXSExQdEhKYuJviKB1vQdi22g==
-X-Google-Smtp-Source: AA6agR7ANYxvdssAK+K3nTjE+1hP5mnsBd27RcutjwPmS45a0R2o0nOeI386FlBdKSG2yye9BVlzbzq5U7qtAZNTGfQ=
-X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id
- f7-20020a0560001a8700b002222c852f5bmr17083474wry.654.1661355740325; Wed, 24
- Aug 2022 08:42:20 -0700 (PDT)
+        Wed, 24 Aug 2022 11:46:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C85A9AFAE
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:44:41 -0700 (PDT)
+Received: from notapiano (unknown [70.107.189.129])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CD5F56601DAD;
+        Wed, 24 Aug 2022 16:44:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661355863;
+        bh=0KfOfe64bh2HPU69YxftLTc3R28G0Jq8SAkkUg1ockU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZRfz46UHhuBFS9V7XPVAuwYelv6ZwNZobLuDdHRFWyo+IcdyurTkYrhkEWVsVlDVa
+         PKK78GlcDoiiESJVtvCAE/GOzmEdbDpFz8mOKYQtdV5qnBci3RFtl0FGCxRPU4dDEh
+         ZzaB3gsEYUYrJk2RPteZLgQIJbNwK9isq+NTNW+0rd1s3ti60CKWP1A79lyRlJSjBH
+         ELAaGrDN1uMwFaRpow2Rfk6er64w6RmL+4q4j47ggW81mF9LYSSDn9UG4kMD4C5LxW
+         v1DQI3pd8dYia0iH33rIv/TfZF+JI1PXd726ywZf3koEaPRuuJNF8qG84UWACV5Vfv
+         myDFu6lKYEKUA==
+Date:   Wed, 24 Aug 2022 11:44:17 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "xinlei.lee" <xinlei.lee@mediatek.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, matthias.bgg@gmail.com, rex-bc.chen@mediatek.com,
+        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
+        yongqiang.niu@mediatek.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Jitao Shi <jitao.shi@mediatek.com>
+Subject: Re: [PATCH v3,2/2] drm: mediatek: Adjust the dpi output format to
+ MT8186
+Message-ID: <20220824154417.5cbfsgqjwajvplvk@notapiano>
+References: <1661235517-23699-1-git-send-email-xinlei.lee@mediatek.com>
+ <1661235517-23699-3-git-send-email-xinlei.lee@mediatek.com>
+ <20220823201622.meedlqvmixf5ukdf@notapiano>
+ <447770ead17338241849dbbb2281fa8b4e31aefa.camel@mediatek.com>
 MIME-Version: 1.0
-References: <20220824072814.16422-1-adrian.hunter@intel.com> <20220824072814.16422-4-adrian.hunter@intel.com>
-In-Reply-To: <20220824072814.16422-4-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 24 Aug 2022 08:42:08 -0700
-Message-ID: <CAP-5=fUsg7xSvcFBt7f8rUfCEKizFpndy9Ax3pL1AvEOnDRUhw@mail.gmail.com>
-Subject: Re: [PATCH 3/5] perf record: Change evlist->ctl_fd to use fdarray_flag__non_perf_event
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <447770ead17338241849dbbb2281fa8b4e31aefa.camel@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:28 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Patch "perf record: Fix way of handling non-perf-event pollfds" added a
-> generic way to handle non-perf-event file descriptors like evlist->ctl_fd.
-> Use it instead of handling evlist->ctl_fd separately.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Wed, Aug 24, 2022 at 09:59:21AM +0800, xinlei.lee wrote:
+> On Tue, 2022-08-23 at 16:16 -0400, Nícolas F. R. A. Prado wrote:
+> > On Tue, Aug 23, 2022 at 02:18:37PM +0800, xinlei.lee@mediatek.com
+> > wrote:
+> > > From: Xinlei Lee <xinlei.lee@mediatek.com>
+> > > 
+> > > Dpi output needs to adjust the output format to dual edge for
+> > > MT8186.
+> > > Because MT8186 HW has been modified at that time, SW needs to
+> > > cooperate.
+> > > And the register (MMSYS) reserved for dpi will be used for output
+> > > format control (dual_edge/single_edge).
+> > > 
+> > > Co-developed-by: Jitao Shi <jitao.shi@mediatek.com>
+> > > Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> > > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> > > 
+> > > ---
+> > 
+> > [..]
+> > > --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> > 
+> > [..]
+> > >   * @yuv422_en_bit: Enable bit of yuv422.
+> > >   * @csc_enable_bit: Enable bit of CSC.
+> > >   * @pixels_per_iter: Quantity of transferred pixels per iteration.
+> > > + * @rgb888_dual_enable: Control output format for mt8186.
+> > 
+> > Let's not mention mt8186 in the description to keep the property
+> > generic. Also,
+> > this description should say what having 'rgb888_dual_enable = true'
+> > indicates
+> > about the hardware (in this case mt8186) and it currently doesn't.
+> > 
+> > Let's take a step back. What does 'dual enable' mean in this context
+> > and how
+> > does it relate to 'dual edge' and the dpi output format? By answering
+> > those
+> > questions we can find a description (and maybe variable name) that
+> > makes more
+> > sense.
+> > 
+> > >   */
+> > 
+> > [..]
+> > > @@ -449,6 +454,9 @@ static void mtk_dpi_dual_edge(struct mtk_dpi
+> > > *dpi)
+> > >  		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING,
+> > >  			     dpi->output_fmt ==
+> > > MEDIA_BUS_FMT_RGB888_2X12_LE ?
+> > >  			     EDGE_SEL : 0, EDGE_SEL);
+> > > +	if (dpi->conf->rgb888_dual_enable)
+> > > +		mtk_mmsys_ddp_dpi_fmt_config(dpi->mmsys_dev,
+> > > DPI_RGB888_DDR_CON,
+> > > +					     DPI_FORMAT_MASK, NULL);
+> > 
+> > This if block should be further indented.
+> > 
+> > >  	} else {
+> > >  		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE,
+> > > 0);
+> > >  	}
+> > 
+> > [..]
+> > > --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> > > @@ -235,4 +235,8 @@
+> > >  #define MATRIX_SEL_RGB_TO_JPEG		0
+> > >  #define MATRIX_SEL_RGB_TO_BT601		2
+> > >  
+> > > +#define DPI_FORMAT_MASK			0x1
+> > > +#define DPI_RGB888_DDR_CON		BIT(0)
+> > > +#define DPI_RGB565_SDR_CON		BIT(1)
+> > 
+> > I'm not sure if it would make more sense to have these definitions in
+> > the mmsys
+> > header since they're configurations of a register in mmsys'
+> > iospace... I think
+> > we can keep them here but at least add a comment above:
+> > 
+> > /* Values for DPI configuration in MMSYS address space */
+> > 
+> > Thanks,
+> > Nícolas
+> 
+> Hi Nícolas:
+> Thanks for your careful review!
+> I will modify the description of this member variable and add the
+> hardware state corresponding to the software setting.
+> (eg. rgb888_dual_enable = true the hardware output rgb888_dual_edge
+> format data)
+> 
+> Your suggestion is very necessary, maybe my name is not accurate
+> enough, this flag is to enable RGB888_dual_edge format output. 
+> Would it be better for the variable to be called
+> RGB888_dual_edge_enable then?
 
-Acked-by: Ian Rogers <irogers@google.com>
+The thing is, we also output in rgb888 dual edge format on mt8183 and mt8192,
+and therefore set DDR_EN in mtk_dpi_dual_edge(), right? But, as you said, we
+don't need to enable this new rgb888_dual_enable variable on those platforms,
+only on mt8186. So that's why I don't think the current name/description is
+suitable. If the variable only needs to be set on mt8186, it should have a name
+and description that shows what is different between mt8186 and the others. But
+without containing the "mt8186" name, since this might happen on other SoCs
+later on.
+
+My understanding is that even though both mt8186 and mt8192 output in the rgb888
+dual edge format, only mt8186 is able to configure the edge setting in MMSYS (so
+on mt8192 it would be hardwired to dual edge and not possible to change). So
+what I propose is
+
+Name: edge_cfg_in_mmsys
+
+Description: "If the edge configuration for DPI's output needs to be set in MMSYS"
+
+But maybe since you know the hardware, you might be able to find an even better
+name/description.
 
 Thanks,
-Ian
-
-> ---
->  tools/perf/builtin-record.c | 15 +--------------
->  tools/perf/util/evlist.c    | 19 ++-----------------
->  tools/perf/util/evlist.h    |  1 -
->  3 files changed, 3 insertions(+), 32 deletions(-)
->
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index e0be48c47f65..cefb3028f565 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -1198,18 +1198,7 @@ static int record__alloc_thread_data(struct record *rec, struct evlist *evlist)
->                         if (ret < 0)
->                                 goto out_free;
->
-> -                       if (evlist->ctl_fd.pos == -1)
-> -                               continue;
-> -                       ret = fdarray__dup_entry_from(&thread_data[t].pollfd, evlist->ctl_fd.pos,
-> -                                                     &evlist->core.pollfd);
-> -                       if (ret < 0) {
-> -                               pr_err("Failed to duplicate descriptor in main thread pollfd\n");
-> -                               goto out_free;
-> -                       }
-> -                       thread_data[t].ctlfd_pos = ret;
-> -                       pr_debug2("thread_data[%p]: pollfd[%d] <- ctl_fd=%d\n",
-> -                                thread_data, thread_data[t].ctlfd_pos,
-> -                                evlist->core.pollfd.entries[evlist->ctl_fd.pos].fd);
-> +                       thread_data[t].ctlfd_pos = -1; /* Not used */
->                 }
->         }
->
-> @@ -2610,8 +2599,6 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->                         err = record__update_evlist_pollfd_from_thread(rec, rec->evlist, thread);
->                         if (err)
->                                 goto out_child;
-> -                       evlist__ctlfd_update(rec->evlist,
-> -                               &thread->pollfd.entries[thread->ctlfd_pos]);
->                 }
->
->                 if (evlist__ctlfd_process(rec->evlist, &cmd) > 0) {
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 0b2222d05577..4c5e6e9f8d11 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -1898,7 +1898,8 @@ int evlist__initialize_ctlfd(struct evlist *evlist, int fd, int ack)
->         }
->
->         evlist->ctl_fd.pos = perf_evlist__add_pollfd(&evlist->core, fd, NULL, POLLIN,
-> -                                                    fdarray_flag__nonfilterable);
-> +                                                    fdarray_flag__nonfilterable |
-> +                                                    fdarray_flag__non_perf_event);
->         if (evlist->ctl_fd.pos < 0) {
->                 evlist->ctl_fd.pos = -1;
->                 pr_err("Failed to add ctl fd entry: %m\n");
-> @@ -2148,22 +2149,6 @@ int evlist__ctlfd_process(struct evlist *evlist, enum evlist_ctl_cmd *cmd)
->         return err;
->  }
->
-> -int evlist__ctlfd_update(struct evlist *evlist, struct pollfd *update)
-> -{
-> -       int ctlfd_pos = evlist->ctl_fd.pos;
-> -       struct pollfd *entries = evlist->core.pollfd.entries;
-> -
-> -       if (!evlist__ctlfd_initialized(evlist))
-> -               return 0;
-> -
-> -       if (entries[ctlfd_pos].fd != update->fd ||
-> -           entries[ctlfd_pos].events != update->events)
-> -               return -1;
-> -
-> -       entries[ctlfd_pos].revents = update->revents;
-> -       return 0;
-> -}
-> -
->  struct evsel *evlist__find_evsel(struct evlist *evlist, int idx)
->  {
->         struct evsel *evsel;
-> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-> index 351ba2887a79..3a464585d397 100644
-> --- a/tools/perf/util/evlist.h
-> +++ b/tools/perf/util/evlist.h
-> @@ -418,7 +418,6 @@ void evlist__close_control(int ctl_fd, int ctl_fd_ack, bool *ctl_fd_close);
->  int evlist__initialize_ctlfd(struct evlist *evlist, int ctl_fd, int ctl_fd_ack);
->  int evlist__finalize_ctlfd(struct evlist *evlist);
->  bool evlist__ctlfd_initialized(struct evlist *evlist);
-> -int evlist__ctlfd_update(struct evlist *evlist, struct pollfd *update);
->  int evlist__ctlfd_process(struct evlist *evlist, enum evlist_ctl_cmd *cmd);
->  int evlist__ctlfd_ack(struct evlist *evlist);
->
-> --
-> 2.25.1
->
+Nícolas

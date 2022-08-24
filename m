@@ -2,309 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC715A00CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1201F5A00CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237458AbiHXRzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        id S240195AbiHXRzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbiHXRzM (ORCPT
+        with ESMTP id S240290AbiHXRzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:55:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E64BE09;
-        Wed, 24 Aug 2022 10:55:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E38CB82619;
-        Wed, 24 Aug 2022 17:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AC7C433D6;
-        Wed, 24 Aug 2022 17:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661363706;
-        bh=m9iiQG1GlHiJ9EAtUJBgeMMhreojHIkPRSsYjz7pVHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FGcXp9/NrWR8V7VYaRXy/y0/qtUgm57XjWFTBsWxwu1OSkAmNYaTQR7r1T4l+uggy
-         9bNWqo9MKpgrS+JtH/7hUlvgbcFe+DCyrOHBXCXoj0a8b8tNQo52ttvOOoaTt4Rj2M
-         hshlRI36wj2EKCVOZ5w1UL4pW3UucN9KJnE3xyxxZyjVJhS9dizEuLL7ThbmMQkCbr
-         VUFh12mms7Zc1jRMITECib8GUarsX4xnDeTVnciDvTm06GBouYEeBHlGzJZK6yiKeE
-         VUKBq/bv5v52RXzYI3PjSNoKjn+VGqjpcldjIjQExsoi5Y1XVD27qzOMsWMfRlagrO
-         o6ceXoH7ipx6A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 87ED9404A1; Wed, 24 Aug 2022 14:55:03 -0300 (-03)
-Date:   Wed, 24 Aug 2022 14:55:03 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alibek Omarov <a1ba.omarov@gmail.com>,
-        Kornilios Kourtis <kornilios@isovalent.com>,
-        Kui-Feng Lee <kuifeng@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: ANNOUNCE: pahole v1.24 (Faster BTF encoding, 64-bit BTF enum
- entries)
-Message-ID: <YwZl9xaRplsFkWXb@kernel.org>
-References: <YwQRKkmWqsf/Du6A@kernel.org>
- <YwZQ0UkLsoa+6VyY@dev-arch.thelio-3990X>
- <YwZcuCj49wMkr18W@kernel.org>
+        Wed, 24 Aug 2022 13:55:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49C413F64;
+        Wed, 24 Aug 2022 10:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661363727; x=1692899727;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=IuoOt1Yin62Q4UTD2qI75cDQ+U5JicfuU7VzUtDEtXc=;
+  b=PeT96wB+HW7u25TtpFbOmb8hcwVg0ePYrrHNJiVQZ54hbXi1LxzOOMG0
+   R0vg4CaAVI/ks0CY3z5UChrLMB+n3igQVyoi2OVdUeSlr7TFzg8RpcUgW
+   l6sjN+qftZh0JmYlCSZY18saMyuH7dYaJ58QxXErF2zr2fwvrLmvlVZ+x
+   81DPuNsKoCSRoB9vKcVhgoPLF6SwiMMnOL4hj5y/JcfAu5uEkc62WbyUP
+   yds9UmNHPksxtz83yRWU9OTWNi4j65c9DYvny8wYm1hFDKuRnufWe0REz
+   BvOetIr2Z/iujtyI5xE5QLCNjgQ2vEoZEpD3+ckwysKRUOjEy5B6Axgow
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,261,1654585200"; 
+   d="scan'208";a="170788986"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 10:55:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 24 Aug 2022 10:55:24 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 24 Aug 2022 10:55:24 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aV4LX7ssi2obP+a2NiMvhlH946aT5EC9lpmW6tw5TuztxYH4bMwFQ8VStO2rWDzMl0F8l7+tsdz/8YConBUsH2TuUy6tkDbvkdhvGZSyPN3VxgtSFz1K/yDbBQwpPKmwqCeLnmev0d9OiKw7e0aCR0kgXVWx0PCikvao8Y91kGlj8peUaWcGaNI3AGmjBkkY3ggSNMi0LduwlId+fYUquNKxYXa9XGXqw+wJA/w62/6p2vW+c917qgiLkma2HdrwYxzTUdeTcq9nlo7AXZa5UB9VMRI/4TUl/GLfozzj6qQVzh9dJrTpS6ghnKtkzYA7ZVcDltE1SSsuRzrO8uUrcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IuoOt1Yin62Q4UTD2qI75cDQ+U5JicfuU7VzUtDEtXc=;
+ b=YB8IzI2A+UG0EkCgrYDksgkIAPvdziSvbRCYqXEpfM8bTLI8T1zp9MIn9T4Zo8F85ZPfTrGoKrsaAOgeG/pqdd43FajbeGlwpmYjTX60h+KVMsQjpmPXGEIjSBVvkJ4nqxQEUCS+Difjx7uWvnEwm2yVlrbQOAN99r8dL6FwNu/uAhHpMHMyW5NexIg8WEgL8i5pRXTMXSpFuvY4NCyC18SpVNGPNyNO9iW/EgRbokFt5QMN/98BuZYP2ub09+GHkcdEXXmOJcKlzp2rCKfS8tnALS3OCT9AK9PGNzVLR/cNin5PljUcXrMY+ZVPKUEwdt8YsoW789xPf1RnIAuApQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IuoOt1Yin62Q4UTD2qI75cDQ+U5JicfuU7VzUtDEtXc=;
+ b=D3pZXCwVfRTRRZpbJrjzQoyh5uJ0HW2+PcAVPUlnFkLvxAGDJdN92XrEDz4ybQrexDHqlkBqvvpxtB1G/wY7SHwlpO577vTHxVYtYaK7t6Vvnu6LOy7DksooGPD4Q2CQjduaiW3AJRuOwAapMn3aetqaGz+yuHP8upmOAnyGb0o=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by DM6PR11MB2553.namprd11.prod.outlook.com (2603:10b6:5:bf::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
+ 2022 17:55:18 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3%9]) with mapi id 15.20.5566.015; Wed, 24 Aug 2022
+ 17:55:17 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <heiko@sntech.de>, <tglx@linutronix.de>, <maz@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>
+CC:     <daniel.lezcano@linaro.org>, <anup@brainfault.org>,
+        <Conor.Dooley@microchip.com>, <guoren@kernel.org>,
+        <sagar.kadam@sifive.com>, <jrtc27@jrtc27.com>,
+        <ajones@ventanamicro.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <qemu-riscv@nongnu.org>,
+        <robh@kernel.org>
+Subject: Re: [PATCH v4 2/4] dt-bindings: interrupt-controller: sifive,plic:
+ add legacy riscv compatible
+Thread-Topic: [PATCH v4 2/4] dt-bindings: interrupt-controller: sifive,plic:
+ add legacy riscv compatible
+Thread-Index: AQHYtx72QjT8DbZ4AUeIZ7mMwDZq162+VAYAgAADEoA=
+Date:   Wed, 24 Aug 2022 17:55:17 +0000
+Message-ID: <95fe8df7-581e-f7ec-be1f-1c6e06cb30a4@microchip.com>
+References: <20220823183319.3314940-1-mail@conchuod.ie>
+ <20220823183319.3314940-3-mail@conchuod.ie> <3948407.AJdgDx1Vlc@diego>
+In-Reply-To: <3948407.AJdgDx1Vlc@diego>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: afdd74e2-3b01-4d14-4925-08da85f9ce2b
+x-ms-traffictypediagnostic: DM6PR11MB2553:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tGMPnvBiRdo4WKUMiNPFYGirNFbYkvGMEgeYkldBNW3Cs/EQP1iZvDE0LzuaLbLCJKzZgoJh0bhKcyllO/Fozix66arYY0kZjqAzhQ21x+JRXEslo+QH2kNkZx5sIYGcycONqXF87BcRKx+uCCcUbab/N/9hlLMflI4IroYjZkMzARk3IdQ861XXtsFY1sveWN3N/ariMQP04h7HBTQJvclQHEvQmK9a6wP67QwltK4W7c5To2nA5ph9joy4XE4//nNtvLP6V8qBf7XRw3HPbigNhjq50ifTcrK9PtyTaYdX1qzlbGVsUJsH187PYQTe9RciXcvcgSlF7UitRUwv5hoL10qoxPdSTbH6dTor6UbMxgM+DsqSL9Yep1bnmPQXc+yNbVQnOA/oJZCWBVQ1AdwgzMQOk5o0XU7xlemGUokZsCwnMd6eJSAZHux78r7LJZGBJFhBCceKZNlT99LGn0Gvtn2D6l2+R0wRV50x0gBVOyXbThI+FmhxAhtMntpsmI7XH/h0lIgMCHoK3hr6Z5XZS63abwjB8LqDl+heBoDlFzAY/9ubhATSYCfsUQqvehVJsyk3Uk5KtpEm84e0bU8x5Hmo/StMd8AdYtGu19Dtuv5laAHLVsNi+3gNpF2qHPDgOHO8CP7RwAht6NU6JxeX9fFJfGQW+mnjq93IHJb5biPaPEU5oMpZnP6PYZPXg4uZCn/5HML4nrCumb463GkwVdzh/LOdMUoDzLGASlJMxYbZ3X4WWrIWdUMPs6absNll5vJ4RO7Yg5XBi6vhyY6JaPVDJ1b7IOxumsdjj5Qg8MLl7rZ6rKm2/xnu1scZ7+nbjXcHwLHtdvKKgzjCcP81iRfwcl099ss5Bwnan3odA+CO/VU1yT7aGjmFEzLKm5jDQD3rACPJuEspRqamLQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(376002)(136003)(366004)(39860400002)(122000001)(2616005)(186003)(38070700005)(86362001)(7416002)(5660300002)(41300700001)(31696002)(8936002)(6506007)(26005)(6512007)(53546011)(2906002)(66574015)(66476007)(83380400001)(38100700002)(110136005)(54906003)(64756008)(8676002)(4326008)(31686004)(76116006)(478600001)(6486002)(66446008)(66946007)(66556008)(91956017)(71200400001)(316002)(36756003)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NTJBZGdwcE9hT1YzaWsvZSt4UTZwZnlhcXdpdE1XVkJKR3pmVGVQazNuWURE?=
+ =?utf-8?B?M3cvYTM3bjNLcDVCQzdLVGowbGhzZER2VmZKKzFKQWdFMEZPdlVEN0pFc2tG?=
+ =?utf-8?B?TG13OG44aVdFYS9DMVo0WVBYbG5wMERKcDcrT2hSY1dqQndtRkhYWk9FZkVK?=
+ =?utf-8?B?aVhIYzZHN2lVZ2FDSW8xYW1zcjFrU01Edmg4WE92bHJFQllManB6WDhPMFd3?=
+ =?utf-8?B?VTlHUnFsb0FNRmZXbFptV1YwN2MxR2dxWnpEdnMrWmZLVzZPQ2l1a05INnFD?=
+ =?utf-8?B?bllpdDVzMlhxaHJPU3A3UXZIcEcyZXRmditwamxubHRuVjJQUEFZN2J5OWsy?=
+ =?utf-8?B?ckdrYldQb29jeEtnWDNFWU0yWExQWmtXaWNadU82Y3pZenBWT3BlRXlRc0lR?=
+ =?utf-8?B?WE9nRjkyby9tYXVhK3hmMVNGWmMreENrY0tVNEZvYytraFAwUnIzNDdXK2NY?=
+ =?utf-8?B?NExaVUMyV1VBZ0swUEgzcTF4YnFhWjBXS1Flam4xYkd2ZmY5ajBJK3VSUjZi?=
+ =?utf-8?B?L3AzbWNCWXVCUXNvTjRjSlBTaUNhUWZuaW40eVlDQitVZ3VScnZTTG1lU3B1?=
+ =?utf-8?B?Ni9hSkU1NFVZdHpoVzJlcTZsYi9kUkcyOGZ0RCtUbzR3ZHZBbUViZTh2NEd6?=
+ =?utf-8?B?T2psdlJSc2k4cGtDdmY3WVFRV28vWHJRTUxDNi9QdWpEUkRkbDRiRWZKTVJk?=
+ =?utf-8?B?SDJCN2p5MWlKT0tkNGJrVThkKzFoZEk4aEtzSHMvTmZ4OHVpKzk2VklYcVZk?=
+ =?utf-8?B?UnJ3bFJwelBYSDYxRjB5WWJhaTZybTVKR2srZVJaOEdCY0QwcHNURmo3UkFV?=
+ =?utf-8?B?d3IxMlZHNi93aEk2WGxkUWdjdURGSDRBNWMwSGNKaHN6SUROYnArU0pycDdq?=
+ =?utf-8?B?NUgyNE0wV0V3RnJJaEozcm9tc1gxdE1nd0xSNk00Qk1KNmMxTXhVTkFObEJ3?=
+ =?utf-8?B?NFZIWGJIN1RtaUdTM1ZjYkxuNEQ0eDlzZlVrYTBwckpaTHIxWjVTRTZZa1RS?=
+ =?utf-8?B?YU5VU3Z5TGdzeHdlQk1OL0s5RUpBTVNjRUZrb1N5NDh4SWxMb0F3TkUxN2dT?=
+ =?utf-8?B?WDkrV2xqejlBZ3dEaTZoSzZIZUhWTDhSbldUTWowY1VmUW1YTTQyWlVjQTZU?=
+ =?utf-8?B?SEFpZ25jdUxwbm5PYjJBTlZZcmtJaEkyWjczWnhWRmFLTEVGZnZUaEVLQzBX?=
+ =?utf-8?B?RHdxQnpkTFJGZG9QeEw2bmorZjFaZWJSWTQ0cFpYT0hZQzQ5czQvSmNGazRW?=
+ =?utf-8?B?MmdsL1JsRmlnWW05Y1VJTmU5ekk1cXdTU2MrbjM4Wmsyb3dpZks0cTM4V043?=
+ =?utf-8?B?RUk3Smxnbk5CMk15bkxtdmd5WEQ4L2JodG10c3AxcnU3RjhJQnJPUGZTcUtz?=
+ =?utf-8?B?bkVmZHFNSklxUmNUMnhhaDROOEk3aS9NbW11VFNKWlJBak1yRXhHQ204MDhE?=
+ =?utf-8?B?OFNtY3gvdjRMc3Mwa0c5S2xLaUNoakNrcEpoT0UxR3RWbjdhMXU3M1FSQVJS?=
+ =?utf-8?B?dm1TTHJDNU1uaXE1VTN3NzlKNFVaNnZWNHNScGV1WU5USlhkK25DdG02Q2Qy?=
+ =?utf-8?B?ZUpZazN0RkNmbmowNG0rNVE3V0U1QlJpK0s2MTYzYlEzc3lwbkgrTEVJczRE?=
+ =?utf-8?B?ZldsUU5vZy9EYmt0dzZuWktBMHNZMWZqUWpCdi9jWTVYQXRRVXZxRGhxMzJu?=
+ =?utf-8?B?S053cTE2cmVLSjBSZVkvY1drRmJ1aDIrYU9jSHF2OTRHNTUyQVRUeThQNHFs?=
+ =?utf-8?B?bk1ESGNEbG5qaWRuV0gvZVRYT1o1UDFRbHV1Z1plbUQ3cS9DUFUySiswNkEz?=
+ =?utf-8?B?YjZXWmF5STN2eERqSHJuVDZKanhYRWsrTVd5SVU4YnIySWt2NkhoUDcvMmRQ?=
+ =?utf-8?B?Q201ME84cEp6UGtEOEFzMEFQclB5U0dYYjROV21LVXZ4RFpXWjJENmFZY2NK?=
+ =?utf-8?B?QjVrMUU5endjaXNuYzk4RnQramdCL3pkUWlwSzZHSDBLOE9VMktvT29OZVhJ?=
+ =?utf-8?B?Wm9URG9GU01ia1lKc0kwQW84RVprRENUd1dqZ2NDdElYSW1INmJab1lIbVl2?=
+ =?utf-8?B?RzVSU0hINEhuZjArNElGeTlxb1RsTFBnYU9wNmV3dlhpSjl2VkpaOUtPSGlY?=
+ =?utf-8?B?Ylo3c2FHNVMyYWhPVzJ0SDc5cHk0RjFCVmMxK1M2UFN0T3VrVFl4eWRvQmo2?=
+ =?utf-8?B?dVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0706E995B07D1E4B87A2B7267F336CC7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwZcuCj49wMkr18W@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NUMERIC_HTTP_ADDR,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: afdd74e2-3b01-4d14-4925-08da85f9ce2b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 17:55:17.8015
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JZFi2C29sEib7AMmYoT9iR/Lrv7ma88U+PwwuZqLQZuLcjnbdNIEUCqR7L5NN9SW3bwcfj/7FsVHrwqjMffNohiazj5cvpEkxH9qwkNG3nQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2553
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Aug 24, 2022 at 02:15:36PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Aug 24, 2022 at 09:24:49AM -0700, Nathan Chancellor escreveu:
-> > Hi Arnaldo,
-> > 
-> > On Mon, Aug 22, 2022 at 08:28:42PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > Hi,
-> > >   
-> > > 	The v1.24 release of pahole and its friends is out, with faster
-> > > BTF generation by parallelizing the encoding part in addition to the
-> > > previoulsy parallelized DWARF loading, support for 64-bit BTF enumeration
-> > > entries, signed BTF encoding of 'char', exclude/select DWARF loading
-> > > based on the language that generated the objects, etc.
-> > 
-> > <snip>
-> > 
-> > > - Introduce --lang and --lang_exclude to specify the language the
-> > >   DWARF compile units were originated from to use or filter.
-> > 
-> > This appears to break building pahole with older versions of libdw (?).
-> > I build container images with older versions of compilers for easy
-> > matrix testing and my gcc-5 and gcc-6 images (based off Ubuntu Xenial
-> > and Debian Stretch respectively) fail to build.
-> 
-> I do it for perf, should have done it for pahole :-\
-> 
-> So I'll have to come up with a patch that checks if those are defined
-> and if not, define it :-\ Ooops, its an enumeration :-\ I'll have to
-> check how to fix this, thanks for the report!
-> 
-> Will rebuild it with the containers I have to see if there are other
-> cases.
-
-Yeah, recent enough distros are all building ok, I'll try and add some
-fallback for old distros.
-
-[perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.86.14/pahole/dwarves-1.24.tar.xz
-[perfbuilder@five ~]$ export BUILD_CMD=buildcmd.sh
-[perfbuilder@five ~]$ time dm
-   1     3.86 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
-   2     3.97 almalinux:9                   : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.1 (Red Hat 13.0.1-1.el9)
-   3     1.06 alpine:3.9                    : FAIL gcc version 8.3.0 (Alpine 8.3.0)
-   4     0.96 alpine:3.10                   : FAIL gcc version 8.3.0 (Alpine 8.3.0)
-   5     0.86 alpine:3.11                   : FAIL gcc version 9.3.0 (Alpine 9.3.0)
-   6     4.77 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
-   7     5.47 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
-   8     5.57 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
-   9     5.37 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
-  10     5.67 alpine:3.16                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 13.0.1
-  11     5.67 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 14.0.6
-  12     2.96 alt:p8                        : FAIL gcc version 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) (GCC)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
-      [DW_LANG_BLISS]   = "bliss",
-       ^
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-    /git/dwarves-1.24/dwarves.c:2093:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2093:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2100:3: error: 'DW_LANG_C_plus_plus_03' undeclared (first use in this function)
-      [DW_LANG_C_plus_plus_03] = "c++03",
-       ^
-    /git/dwarves-1.24/dwarves.c:2100:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2100:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2105:3: error: 'DW_LANG_Dylan' undeclared (first use in this function)
-      [DW_LANG_Dylan]   = "dylan",
-       ^
-    /git/dwarves-1.24/dwarves.c:2105:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2105:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2114:3: error: 'DW_LANG_Julia' undeclared (first use in this function)
-      [DW_LANG_Julia]   = "julia",
-       ^
-    /git/dwarves-1.24/dwarves.c:2114:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2114:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2116:3: error: 'DW_LANG_Modula3' undeclared (first use in this function)
-      [DW_LANG_Modula3]  = "modula3",
-       ^
-    /git/dwarves-1.24/dwarves.c:2116:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2116:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2119:3: error: 'DW_LANG_OCaml' undeclared (first use in this function)
-      [DW_LANG_OCaml]   = "ocaml",
-       ^
-    /git/dwarves-1.24/dwarves.c:2119:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2119:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2120:3: error: 'DW_LANG_OpenCL' undeclared (first use in this function)
-      [DW_LANG_OpenCL]  = "opencl",
-       ^
-    /git/dwarves-1.24/dwarves.c:2120:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2120:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2124:3: error: 'DW_LANG_RenderScript' undeclared (first use in this function)
-      [DW_LANG_RenderScript]  = "renderscript",
-       ^
-    /git/dwarves-1.24/dwarves.c:2124:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2124:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2125:3: error: 'DW_LANG_Rust' undeclared (first use in this function)
-      [DW_LANG_Rust]   = "rust",
-       ^
-    /git/dwarves-1.24/dwarves.c:2125:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2125:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2126:3: error: 'DW_LANG_Swift' undeclared (first use in this function)
-      [DW_LANG_Swift]   = "swift",
-       ^
-    /git/dwarves-1.24/dwarves.c:2126:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2126:3: note: (near initialization for 'languages')
-    make[2]: *** [CMakeFiles/dwarves.dir/dwarves.c.o] Error 1
-  13     4.07 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
-  14     4.17 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
-  15     4.17 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt1) , ALT Linux Team clang version 13.0.1
-  16     3.57 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-15) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
-  17     4.27 amazonlinux:devel             : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.amzn2022)
-  18     4.87 archlinux:base                : Ok   gcc (GCC) 12.1.1 20220730 , clang version 14.0.6
-  19     3.77 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
-  20     4.07 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-15) , clang version 14.0.0 (Red Hat 14.0.0-1.module_el8.7.0+1142+5343df54)
-  21     4.87 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 12.1.1 20220811 releases/gcc-12.1.0-341-g28a7b5df3b
-  22     3.36 debian:9                      : FAIL gcc version 6.3.0 20170516 (Debian 6.3.0-18+deb9u1)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
-      [DW_LANG_BLISS]   = "bliss",
-       ^~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-    /git/dwarves-1.24/dwarves.c:2093:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2093:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2100:3: error: 'DW_LANG_C_plus_plus_03' undeclared (first use in this function)
-      [DW_LANG_C_plus_plus_03] = "c++03",
-       ^~~~~~~~~~~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2100:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2100:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2105:3: error: 'DW_LANG_Dylan' undeclared (first use in this function)
-      [DW_LANG_Dylan]   = "dylan",
-       ^~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2105:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2105:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2114:3: error: 'DW_LANG_Julia' undeclared (first use in this function)
-      [DW_LANG_Julia]   = "julia",
-       ^~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2114:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2114:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2116:3: error: 'DW_LANG_Modula3' undeclared (first use in this function)
-      [DW_LANG_Modula3]  = "modula3",
-       ^~~~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2116:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2116:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2119:3: error: 'DW_LANG_OCaml' undeclared (first use in this function)
-      [DW_LANG_OCaml]   = "ocaml",
-       ^~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2119:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2119:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2120:3: error: 'DW_LANG_OpenCL' undeclared (first use in this function)
-      [DW_LANG_OpenCL]  = "opencl",
-       ^~~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2120:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2120:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2124:3: error: 'DW_LANG_RenderScript' undeclared (first use in this function)
-      [DW_LANG_RenderScript]  = "renderscript",
-       ^~~~~~~~~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2124:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2124:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2125:3: error: 'DW_LANG_Rust' undeclared (first use in this function)
-      [DW_LANG_Rust]   = "rust",
-       ^~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2125:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2125:3: note: (near initialization for 'languages')
-    /git/dwarves-1.24/dwarves.c:2126:3: error: 'DW_LANG_Swift' undeclared (first use in this function)
-      [DW_LANG_Swift]   = "swift",
-       ^~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2126:3: error: array index in initializer not of integer type
-    /git/dwarves-1.24/dwarves.c:2126:3: note: (near initialization for 'languages')
-    CMakeFiles/dwarves.dir/build.make:62: recipe for target 'CMakeFiles/dwarves.dir/dwarves.c.o' failed
-    make[2]: *** [CMakeFiles/dwarves.dir/dwarves.c.o] Error 1
-  23     4.08 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , Debian clang version 11.0.1-2~deb10u1
-  24     3.97 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
-  25     4.77 debian:experimental           : Ok   gcc (Debian 12.1.0-7) 12.1.0 , Debian clang version 14.0.6-2
-  26     3.06 fedora:22                     : FAIL gcc version 5.3.1 20160406 (Red Hat 5.3.1-6) (GCC)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
-      [DW_LANG_BLISS]   = "bliss",
-       ^
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-  27     3.06 fedora:24                     : FAIL gcc version 6.3.1 20161221 (Red Hat 6.3.1-1) (GCC)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
-      [DW_LANG_BLISS]   = "bliss",
-       ^~~~~~~~~~~~~
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-  28     3.17 fedora:25                     : FAIL gcc version 6.4.1 20170727 (Red Hat 6.4.1-1) (GCC)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
-      [DW_LANG_BLISS]   = "bliss",
-       ^~~~~~~~~~~~~
-  29     3.87 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2)
-  30     3.57 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6)
-  31     3.87 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2)
-  32     3.97 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2)
-  33     3.77 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2)
-  34     3.97 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
-  35     4.07 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
-  36     3.97 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
-  37     4.17 fedora:34                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
-  38     3.97 fedora:35                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
-  39     4.27 fedora:36                     : Ok   gcc (GCC) 12.1.1 20220507 (Red Hat 12.1.1-1) , clang version 14.0.0 (Fedora 14.0.0-1.fc36)
-  40     4.57 fedora:37                     : Ok   gcc (GCC) 12.1.1 20220628 (Red Hat 12.1.1-3) , clang version 14.0.5 (Fedora 14.0.5-6.fc37)
-  41     4.67 fedora:38                     : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
-  42     4.56 fedora:rawhide                : Ok   gcc (GCC) 12.1.1 20220810 (Red Hat 12.1.1-4) , clang version 14.0.5 (Fedora 14.0.5-6.fc38)
-  43     4.17 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
-  44     4.47 manjaro:base                  : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
-  45     3.26 opensuse:15.0                 : FAIL gcc version 7.4.1 20190905 [gcc-7-branch revision 275407] (SUSE Linux)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function); did you mean 'DW_LANG_PLI'?
-      [DW_LANG_BLISS]   = "bliss",
-       ^~~~~~~~~~~~~
-       DW_LANG_PLI
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-  46     3.17 opensuse:15.1                 : FAIL gcc version 7.5.0 (SUSE Linux)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function); did you mean 'DW_LANG_PLI'?
-      [DW_LANG_BLISS]   = "bliss",
-       ^~~~~~~~~~~~~
-       DW_LANG_PLI
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-  47     3.16 opensuse:15.2                 : FAIL gcc version 7.5.0 (SUSE Linux)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function); did you mean 'DW_LANG_PLI'?
-      [DW_LANG_BLISS]   = "bliss",
-       ^~~~~~~~~~~~~
-       DW_LANG_PLI
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-  48     3.77 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
-  49     3.96 opensuse:15.4                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 13.0.1
-  50     4.57 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 12.1.1 20220629 [revision 7811663964aa7e31c3939b859bbfa2e16919639f] , clang version 14.0.6
-  51     3.87 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
-  52     3.97 oraclelinux:9                 : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9.4.0.2) , clang version 13.0.1 (Red Hat 13.0.1-1.0.1.el9)
-  53     3.97 rockylinux:8                  : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-10) , clang version 13.0.1 (Red Hat 13.0.1-2.module+el8.6.0+987+d36ea6a1)
-  54     4.17 rockylinux:9                  : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.1 (Red Hat 13.0.1-1.el9)
-  55     3.06 ubuntu:16.04                  : FAIL gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.12)
-    /git/dwarves-1.24/dwarves.c: In function 'lang__str2int':
-    /git/dwarves-1.24/dwarves.c:2093:3: error: 'DW_LANG_BLISS' undeclared (first use in this function)
-      [DW_LANG_BLISS]   = "bliss",
-       ^
-    /git/dwarves-1.24/dwarves.c:2093:3: note: each undeclared identifier is reported only once for each function it appears in
-  56     3.77 ubuntu:18.04                  : Ok   gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
-  57     4.27 ubuntu:20.04                  : Ok   gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-  58     4.17 ubuntu:21.04                  : Ok   gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0 , Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
-  59     4.07 ubuntu:21.10                  : Ok   gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0 , Ubuntu clang version 13.0.0-2
-  60     4.17 ubuntu:22.04                  : Ok   gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0 , Ubuntu clang version 14.0.0-1ubuntu1
-  61     4.37 ubuntu:22.10                  : Ok   gcc (Ubuntu 11.3.0-5ubuntu1) 11.3.0 , Ubuntu clang version 14.0.6-2
-
+T24gMjQvMDgvMjAyMiAxODo0NCwgSGVpa28gU3TDvGJuZXIgd3JvdGU6DQo+IEFtIERpZW5zdGFn
+LCAyMy4gQXVndXN0IDIwMjIsIDIwOjMzOjE4IENFU1Qgc2NocmllYiBDb25vciBEb29sZXk6DQo+
+PiBGcm9tOiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KPj4NCj4+
+IFdoaWxlICJyZWFsIiBoYXJkd2FyZSBtaWdodCBub3QgdXNlIHRoZSBjb21wYXRpYmxlIHN0cmlu
+ZyAicmlzY3YscGxpYzAiDQo+PiBpdCBpcyBwcmVzZW50IGluIHRoZSBkcml2ZXIgJiBRRU1VIHVz
+ZXMgaXQgZm9yIGF1dG9tYXRpY2FsbHkgZ2VuZXJhdGVkDQo+PiB2aXJ0IG1hY2hpbmUgZHRicy4g
+VG8gYXZvaWQgZHQtdmFsaWRhdGUgcHJvYmxlbXMgd2l0aCBRRU1VIHByb2R1Y2VkDQo+PiBkdGJz
+LCBzdWNoIGFzIHRoZSBmb2xsb3dpbmcsIGFkZCBpdCB0byB0aGUgYmluZGluZy4NCj4+DQo+PiBy
+aXNjdi12aXJ0LmR0YjogcGxpY0BjMDAwMDAwOiBjb21wYXRpYmxlOiAnb25lT2YnIGNvbmRpdGlv
+bmFsIGZhaWxlZCwgb25lIG11c3QgYmUgZml4ZWQ6DQo+PiAgICAgICAgICdzaWZpdmUscGxpYy0x
+LjAuMCcgaXMgbm90IG9uZSBvZiBbJ3NpZml2ZSxmdTU0MC1jMDAwLXBsaWMnLCAnc3RhcmZpdmUs
+amg3MTAwLXBsaWMnLCAnY2FuYWFuLGsyMTAtcGxpYyddDQo+PiAgICAgICAgICdzaWZpdmUscGxp
+Yy0xLjAuMCcgaXMgbm90IG9uZSBvZiBbJ2FsbHdpbm5lcixzdW4yMGktZDEtcGxpYyddDQo+PiAg
+ICAgICAgICdzaWZpdmUscGxpYy0xLjAuMCcgd2FzIGV4cGVjdGVkDQo+PiAgICAgICAgICd0aGVh
+ZCxjOTAwLXBsaWMnIHdhcyBleHBlY3RlZA0KPj4gcmlzY3YtdmlydC5kdGI6IHBsaWNAYzAwMDAw
+MDogJyNhZGRyZXNzLWNlbGxzJyBpcyBhIHJlcXVpcmVkIHByb3BlcnR5DQo+Pg0KPj4gUmVwb3J0
+ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+DQo+PiBMaW5rOiBodHRwczovL2xv
+cmUua2VybmVsLm9yZy9saW51eC1yaXNjdi8yMDIyMDgwMzE3MDU1Mi5HQTIyNTAyNjYtcm9iaEBr
+ZXJuZWwub3JnLw0KPj4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+
+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAu
+Y29tPg0KPj4gLS0tDQo+PiAgLi4uL2JpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL3NpZml2
+ZSxwbGljLTEuMC4wLnlhbWwgICAgIHwgNSArKysrKw0KPj4gIDEgZmlsZSBjaGFuZ2VkLCA1IGlu
+c2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL3NpZml2ZSxwbGljLTEuMC4wLnlhbWwgYi9E
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaW50ZXJydXB0LWNvbnRyb2xsZXIvc2lm
+aXZlLHBsaWMtMS4wLjAueWFtbA0KPj4gaW5kZXggOTJlMGY4YzNlZmYyLi45OWUwMWY0ZDBhNjkg
+MTAwNjQ0DQo+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaW50ZXJy
+dXB0LWNvbnRyb2xsZXIvc2lmaXZlLHBsaWMtMS4wLjAueWFtbA0KPj4gKysrIGIvRG9jdW1lbnRh
+dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL3NpZml2ZSxwbGlj
+LTEuMC4wLnlhbWwNCj4+IEBAIC02Niw2ICs2NiwxMSBAQCBwcm9wZXJ0aWVzOg0KPj4gICAgICAg
+ICAgICAtIGVudW06DQo+PiAgICAgICAgICAgICAgICAtIGFsbHdpbm5lcixzdW4yMGktZDEtcGxp
+Yw0KPj4gICAgICAgICAgICAtIGNvbnN0OiB0aGVhZCxjOTAwLXBsaWMNCj4+ICsgICAgICAtIGl0
+ZW1zOg0KPj4gKyAgICAgICAgICAtIGNvbnN0OiBzaWZpdmUscGxpYy0xLjAuMA0KPj4gKyAgICAg
+ICAgICAtIGNvbnN0OiByaXNjdixwbGljMA0KPj4gKyAgICAgICAgZGVwcmVjYXRlZDogdHJ1ZQ0K
+PiANCj4gaG1tLCB3aGVuIHNldHRpbmcgdGhpcyB0byBkZXByZWNhdGVkLCBkb2VzIHRoaXMgbWVh
+biBxZW11IHdhcyBjaGFuZ2VkDQo+IHRvIG5vdCB1c2UgdGhhdCBjb21wYXRpYmxlIGFueW1vcmU/
+DQo+IA0KPiBJLmUuIHJlYWRpbmcgZGVwcmVjYXRlZCBJJ2QgYXNzdW1lIHRoYXQgdGhpcyBpcyBr
+ZXB0IGFyb3VuZCBmb3Igb2xkIHFlbXUgYnVpbGRzPw0KDQpJIGRpZCBub3QgbWFrZSB0aGF0IGNo
+YW5nZSB0byBRRU1VLiBGcm9tIHYxIFswXToNCg0KUm9iOg0KPiBDb25vcjoNCj4+IEluIGFybSdz
+IHZpcnQuYyB0aGV5IHVzZSB0aGUgZ2VuZXJpYyBnaWMgY29tcGF0aWJsZSAmIEkgZG9uJ3Qgc2Vl
+IGFueQ0KPj4gZXZpZGVuY2Ugb2Ygb3RoZXIgYXJjaHMgdXNpbmcgInFlbXUsZm9vIiBiaW5kaW5n
+cy4gSSBzdXBwb3NlIHRoZXJlJ3MNCj4+IGFsd2F5cyB0aGUgb3B0aW9uIG9mIGp1c3QgcmVtb3Zp
+bmcgdGhlICJyaXNjdixwbGljMCIgZnJvbSB0aGUgcmlzY3Yncw0KPj4gdmlydC5jDQo+DQo+IEkg
+dGhpbmsgd2UncmUgcHJldHR5IG11Y2ggc3R1Y2sgd2l0aCB3aGF0J3MgaW4gdXNlIGFscmVhZHku
+DQoNCj4gSSdtIG9uIHRoZSBmZW5jZSB3aGV0aGVyIHRvIG1hcmsgaXQgZGVwcmVjYXRlZCB0aG91
+Z2ggaWYgdGhlcmUgaXMgbm8gDQo+IHBsYW4gdG8gJ2ZpeCcgaXQuIERvZXNuJ3QgcmVhbGx5IG1h
+dHRlciB1bnRpbCB0aGUgdG9vbHMgY2FuIHNlbGVjdGl2ZWx5IA0KPiByZW1vdmUgZGVwcmVjYXRl
+ZCBwcm9wZXJ0aWVzIGZyb20gdmFsaWRhdGlvbi4NCg0KTXkgaW50ZXJwcmV0YXRpb24gd2FzICJk
+byBub3QgdXNlIHRoaXMgY29tcGF0aWJsZSBpbiBhbnkgbmV3IGRldmljZXRyZWVzIi4NCg0KSSBk
+b24ndCByZWFsbHkgaGF2ZSBhbnkgc3Ryb25nIGZlZWxpbmdzIGhlcmUuIE1heWJlIHRoZSBkZXNj
+cmlwdGlvbiBpcw0Kc3VmZmljaWVudD8NCg0KVGhhbmtzLA0KQ29ub3IsDQoNCjAgLSBodHRwczov
+L2xvcmUua2VybmVsLm9yZy9saW51eC1yaXNjdi8yMDIyMDgwOTE0MTQzNi5HQTE3MDYxMjAtcm9i
+aEBrZXJuZWwub3JnLw0KPiANCj4+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBGb3IgdGhlIFFFTVUg
+dmlydCBtYWNoaW5lIG9ubHkNCj4+ICANCj4+ICAgIHJlZzoNCj4+ICAgICAgbWF4SXRlbXM6IDEN
+Cj4+DQo+IA0KPiANCj4gDQo+IA0K

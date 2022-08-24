@@ -2,103 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71ED59F149
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD18A59F14D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 04:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbiHXCJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 22:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
+        id S233688AbiHXCL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 22:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbiHXCJQ (ORCPT
+        with ESMTP id S231663AbiHXCL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 22:09:16 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099F678204
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IJecDar43kdupdb0naFO7jk1K+JciYxqU4t2RPnE8WY=; b=WYX5v4BqwzrvznlNhWXpD3EZMk
-        1zq/VDNKJEgwGO8KzRxpLvhHeFs3SRaokPhCh0Ky7ec0rQrFalCT5sVD/TQLkamtSXNqouMXRffBO
-        z6fhzXdkWuP20iNAqgGdI0yzEGeMmml6XqwpfhW6ViTgM/6jXBnsRrqdc6pGS8vAom4+17cA4NZHx
-        VVv8MvFrAWGy5f7htaO8a1MccdHabW6c8RXeuAPax6oCX+QPoeSxOCPUHUsKMGlA8v/6Y+4ohpF4G
-        2TCrsGHtETU+GGTYTbhfFHgeDkFX+aEvgesvMgZYPEi5cVw2z48KisoxjX9eoRvaD56geUyCIE1+m
-        I/tKblIA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oQfpM-007cKy-10;
-        Wed, 24 Aug 2022 02:09:08 +0000
-Date:   Wed, 24 Aug 2022 03:09:07 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Tue, 23 Aug 2022 22:11:26 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED325853B
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:11:25 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id d1so4944576edn.9
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=C0g7r76Av4npIvjzCVYb/bPcHGD+BQyziIjMEcxSypQ=;
+        b=cUAEJn6uh5zv9UDCfh/cYTtsNLdtoNjuT4vhTLWNckO+veHri8Akk0Z8oMjLOeNAb0
+         eOH0XeQX7/K8gKoUCDOT0bpJ7mOx1nC69ygkK+9ELI6DctclVslnfCOs4NGtqB3oftPk
+         z4X4/KcAP3xeIrCsIWOAgTaIEKLM7MCkwRrVs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=C0g7r76Av4npIvjzCVYb/bPcHGD+BQyziIjMEcxSypQ=;
+        b=QTFUOsy7orwxcvgt3inw8e9ZsAgCYBZqMbMmOozfZ1J2dKqUKeK5qzp/fkzpqaClY0
+         EB9LNGXrzY3p2pd3D6NO65wqBDSelUfSEtQyzM2yW6aTYQh2IPaR99aBGex+8+S2g5uq
+         Pm8cmrex8Zy3O9cCaL84HifsOL4XAVo+DdCrf6cEy717ugQKPYTt4NwBs0GR1XHnBsla
+         e6Hrs9UJV9pzauOqxNMHMhi6rKCo6YDVRgBNMprb5qA1f1330bnD3lecAogS4Y4eeTQh
+         zC2UZWg9quu6Op16r1a6ZJnWwbA7ox899RvPPXOQUiNKnPFH6BASwYbEROBECwbSOfex
+         MWow==
+X-Gm-Message-State: ACgBeo22JnGkUSPz2nhNhNN8DfMF9Ib3l1B3qGG9X8K1dbcRNGDti+tP
+        3wI/5ESNReR/s/6Iq7OP7C96USQ/XuahkuS7
+X-Google-Smtp-Source: AA6agR5WP4Ypflu3uPS4K6a6Dm1zEkxkcGfNv7Z+4R/v9idvn6jHrLlLovPTxBrTD1rFvsw0NBr4QQ==
+X-Received: by 2002:a05:6402:2691:b0:43d:ba10:854b with SMTP id w17-20020a056402269100b0043dba10854bmr5672195edd.158.1661307083888;
+        Tue, 23 Aug 2022 19:11:23 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id c16-20020a50d650000000b0044402ac02f7sm2299122edj.67.2022.08.23.19.11.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 19:11:22 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id v7-20020a1cac07000000b003a6062a4f81so76881wme.1
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 19:11:22 -0700 (PDT)
+X-Received: by 2002:a7b:c399:0:b0:3a5:f3fb:85e0 with SMTP id
+ s25-20020a7bc399000000b003a5f3fb85e0mr3710246wmj.38.1661307082283; Tue, 23
+ Aug 2022 19:11:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220821000737.328590235@goodmis.org> <20220821000844.510643400@goodmis.org>
+ <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
+ <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org> <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
+ <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk> <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
+ <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
+ <b79c83af-e9fc-9fa0-dff7-f3a8a39887ff@acm.org> <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgV1F7_ErXkXT2wd+07LJd_3Vp-yVUKLROPiEgijeoTrQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 23 Aug 2022 19:11:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whjH6p+qzwUdx5SOVVHjS3WvzJQr6mDUwhEyTf6pJWzaQ@mail.gmail.com>
+Message-ID: <CAHk-=whjH6p+qzwUdx5SOVVHjS3WvzJQr6mDUwhEyTf6pJWzaQ@mail.gmail.com>
+Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
+ triggered by is_signed_type()
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Steven Rostedt <rostedt@goodmis.org>,
         linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Jens Axboe <axboe@kernel.dk>
-Subject: Re: [for-linus][PATCH 01/10] tracing: Suppress sparse warnings
- triggered by is_signed_type()
-Message-ID: <YwWIQ/3BDQHOiTek@ZenIV>
-References: <20220821000737.328590235@goodmis.org>
- <20220821000844.510643400@goodmis.org>
- <CAHk-=wjsxu782N0P+oMu35N7rJAOeh3buQFWJaZHZTNmVSB=3Q@mail.gmail.com>
- <5700ac75-f6a9-877e-4011-9b314f12b5ab@acm.org>
- <CAHk-=wjqkWEr0MRO5hWuBoTDgNUj4qQK8V_Y36et=61mdPztJw@mail.gmail.com>
- <02daa3d6-2847-d7e0-e23e-411076c6d4db@rasmusvillemoes.dk>
- <0163b361-14bf-7b4c-751a-14f1a004b1a9@acm.org>
- <CAHk-=wjMLb30d0WT_RyKBCX+JBkg3QQU6pCYkrV8f58Ya4Rgzw@mail.gmail.com>
- <CAHk-=wiwr2Ff_1SKzRkjSbNLFYfk4KurvZhLuwVuTT-m9w5_6A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiwr2Ff_1SKzRkjSbNLFYfk4KurvZhLuwVuTT-m9w5_6A@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 04:57:00PM -0700, Linus Torvalds wrote:
-> On Tue, Aug 23, 2022 at 4:18 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+On Tue, Aug 23, 2022 at 6:49 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> That's the
+>
+> > It does require that kernel change to make
 > >
-> > Can you try the sparse version at
-> >
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/sparse.git
-> >
-> > which I just set up temporarily with some patches of mine.
-> 
-> Ugh, and while testing this with sparse, I noticed that sparse itself
-> got that whole 'is_signed_type()' check wrong.
-> 
-> The sparse fix was to remove one line of code, but that one worries
-> me, because that one line was clearly very intentional:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/sparse.git/commit/?id=7e5f1c2eba1426e414698071dd0de7d039eb385d
-> 
-> Adding Al, since he's actually the original source of that bitwise
-> code (and did a lot of other sparse code on the type handling and
-> preprocessor side in particular).
+> >   #define is_signed_type(type)   (((type)(-1)) <= (type)0)
+>
+> part I was talking about.
 
-Ouch...  That'll take quite a bit of swap-in (and digging through the
-old notes).  I'll take a look, but there's an unrelated problem:
-	ANY ordered comparisons should spew warnings on bitwise
-And we really want that to happen - things like
-#define MASK cpu_to_le32(1023)
-	if (foo->len > MASK)
-		return -EINVAL;
-	something(le32_to_cpu(foo->len));
-should trigger warnings and I have seen real bugs of that sort.
+Side note: I think you could move this into '<linux/compiler.h>' and that would
 
-So I'm not sure how is that supposed to work without sparse getting
-loudly unhappy.
+ (a) make some conceptual sense (unlike "overflow.h" and "trace_events.h")
 
-Al, going to look through that thread and then try to reconstruct sparse-related
-notes...
+and
+
+ (b) mean it gets included automatically in both files.
+
+overflow.h already explicitly includes compiler.h, and trace_events.h
+gets it from
+
+   linux/ring_buffer.h -> linux/mm.h -> linux/bug.h -> asm/bug.h ->
+linux/compiler.h
+
+(it goes other wats too, but those ones are through arch-specific asm
+headers, so the above is the first non-arch-specific unconditional
+chain I found.
+
+And yes, we should have some tool for sorting out these nasty header
+chains. Some automated tool that says "You don't need header X,
+because you already got it" or "You don't need headed X, because
+nothing you do depends on it".
+
+             Linus

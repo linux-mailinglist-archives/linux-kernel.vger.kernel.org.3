@@ -2,101 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC0359FA5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C1959FA65
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 14:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbiHXMsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 08:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S235974AbiHXMtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 08:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237452AbiHXMrs (ORCPT
+        with ESMTP id S237170AbiHXMs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 08:47:48 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7723294EC1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:47:46 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bq23so14796398lfb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 05:47:46 -0700 (PDT)
+        Wed, 24 Aug 2022 08:48:56 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C34094EC5;
+        Wed, 24 Aug 2022 05:48:54 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id 20so15571352plo.10;
+        Wed, 24 Aug 2022 05:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=HCkgWRsW68okr3HXj1aoAUOQtm+hBGu9v0QWmb8CPe0=;
-        b=dWZ3lQkmAteiBhKIEs/l5SZZCUZ8+DJHs4otLWuEp1SbpTaZMfllrzHhq/mFEmZKV1
-         LqkkfKqSJRt3ev3DV5xT0uCY+vPYIQIp2xelATaYKsNjcC2VaqaVDOZASKrYV9GUHk+u
-         NGWbqEo00loFNO8FqKz67PHSIS+7q2nFag2WMRX0FmgX/xHr8hyE8ikCqrXNsOVl7Dhm
-         w+MjdLXOUozbIBTCsOsIKDn2hZzsuTGZj30Dmtu/oASHN8wU5if4RptL8yPwWkzOIKB8
-         90X5WJJaEXaeOLfBz+v5NGi0g0y4OCI9xibJAF2F53ib6vbc9eF/iI5ZRtzG3uaIsdMz
-         LUDQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=3OQD2+oSTaOvMGB6cXQRW5a+Su7VAZ4WsnuVjsdDDzM=;
+        b=SOLX/QZmuIMPp/2Uy5E2CSAvHb3+m0SzUirILcS/EyK012Umz3AIw5jq35bTeKP/W3
+         8hj9kX7BOqCt8zpWftYwwOYR2DAHqy6PKJltIDwnlvBb/VXcpefOZScCwgSFGU2BwMSA
+         lEpxytTHRX6mJkCbRObicYCiC9EGxuBd4YgVLSmc7AwAm4sSue60aeoDTZXDzwE5HW0y
+         auNxftyQXFx6uaXUtp0c7D8IxLutVaWbbIZb9CxGA6BvUWGENUIzvInwHLHfTrQSPpVI
+         dl2go6my+QL5J7TOPuGz5Uz9RgDAE4D2BFvB9u+HJMX6WWXP7qNC5/I2y3g3miYcKnRE
+         6Gew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=HCkgWRsW68okr3HXj1aoAUOQtm+hBGu9v0QWmb8CPe0=;
-        b=d57wUS37WMjv7Pj5ENtBDsFgYVwm9bYUYaXS2ccwiEQ3loGs5kO44SRjUZfcLql0Gj
-         +SWFHdp9f4YcJZT7kflQk00+kAlzeBzJ+TwEagNm8mcu/LXS5yoTBH6KRHEzlceqo0/J
-         trBlGKHyH9nY1AMNrGSkOL61Fgw450XDiBOS4YhkuCSEBKAWP/IZ0u2o+SQlXvCKHIhk
-         l1RnQjIISucNKtSC6D6MInhc6wWK8dcn2La0vaEiHcaNiM/1T3A/kibnhsnBV3V1gGOj
-         AyWSNf1cP58iwOieueD6izwy/OnT7RzgTJ1dydZiqw0/jV4oPwz4NRSShFKwte9Spkr+
-         TXtA==
-X-Gm-Message-State: ACgBeo25zYVDENGh7r2PKVtKE/BMXV34xzIq0EuVz5fo+njSgQH2+Wde
-        WjsIFbfrkCeaCI0xW1FYwNT+Dw==
-X-Google-Smtp-Source: AA6agR4eNUBQjn5HPo5JYDP4s9gU6xJOSJTUVA4FpSM9g3v69U0V1OpMhgoWrItrdVqemUex9AHSKQ==
-X-Received: by 2002:a05:6512:2284:b0:492:ca50:d857 with SMTP id f4-20020a056512228400b00492ca50d857mr8249169lfu.209.1661345264775;
-        Wed, 24 Aug 2022 05:47:44 -0700 (PDT)
-Received: from [10.243.4.185] ([194.157.23.230])
-        by smtp.gmail.com with ESMTPSA id p3-20020a056512138300b0048b07e82b8csm2996630lfa.55.2022.08.24.05.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 05:47:44 -0700 (PDT)
-Message-ID: <91c2bf5f-8bbf-22be-bd57-a535bf4b95e0@linaro.org>
-Date:   Wed, 24 Aug 2022 15:47:40 +0300
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=3OQD2+oSTaOvMGB6cXQRW5a+Su7VAZ4WsnuVjsdDDzM=;
+        b=cqoHtF7RqCahc5hWqar9lX+3vsI1RSL2r/i+7sgIfTzWtJijPspRFvUaJyXayF8uY/
+         sXRLngEgfsP8XrPPwwLRFOFMkfccSceSspmkKV4Yd/WF0AgZWp0byU3jiBGjAgLQQoCE
+         NdQWnFzfWBPRykzrBx1HQB5dRmzXUN3FEa9LWIhkX7xK9JX5THWl0rLaj+7Xx7XukL+f
+         tRcwtPB/sb9Wlge6o17qcwTafo9CbhMQ8TH6MAaYBwwFBlwcoeiq5r1EGo6Ukivl7lDw
+         7j4mxGEVQd9u/jjInaSwuu0BocAhoN8qd9PQaaWDt+fuPtUiCzfirrz6b5ybuNLSLUMx
+         4xnA==
+X-Gm-Message-State: ACgBeo1C3RjbWV9OQmFO7pNE+bIeHYvHisjzWBVGZUIMdiDRMxND/7ma
+        BoN2UdGsxG9UBwZfl+rNFnY=
+X-Google-Smtp-Source: AA6agR7i2f7HdP9QZhENuohXe5QBXSpJvJM6qjCdMoq6KBiyK5/RzX1er86DvyF8scdrDgu1w7RwIA==
+X-Received: by 2002:a17:902:a982:b0:170:d646:5851 with SMTP id bh2-20020a170902a98200b00170d6465851mr29526104plb.134.1661345333276;
+        Wed, 24 Aug 2022 05:48:53 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id e6-20020a17090a7c4600b001ef81574355sm1318786pjl.12.2022.08.24.05.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 05:48:53 -0700 (PDT)
+From:   xu xin <cgel.zte@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     akpm@linux-foundation.org, corbet@lwn.net
+Cc:     bagasdotme@gmail.com, adobriyan@gmail.com, willy@infradead.org,
+        hughd@google.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, xu xin <xu.xin16@zte.com.cn>,
+        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: [PATCH v4 2/2] ksm: add profit monitoring documentation
+Date:   Wed, 24 Aug 2022 12:48:46 +0000
+Message-Id: <20220824124846.223217-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220824124512.223103-1-xu.xin16@zte.com.cn>
+References: <20220824124512.223103-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] ARM: dts: stm32: argon: remove spidev node
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-spi@vger.kernel.org
-Cc:     Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220824082130.21934-1-wsa+renesas@sang-engineering.com>
- <20220824082130.21934-2-wsa+renesas@sang-engineering.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220824082130.21934-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/2022 11:21, Wolfram Sang wrote:
-> Commit 956b200a846e ("spi: spidev: Warn loudly if instantiated from DT
-> as "spidev"") states that there should not be spidev nodes in DTs.
-> Remove this non-HW description. There won't be a regression because it
-> won't bind since 2015 anyhow.
-> 
-> Fixes: 16e3e44c5b87 ("ARM: dts: stm32: Add support for the emtrion emSBC-Argon")
-> Cc: Reinhold Mueller <reinhold.mueller@emtrion.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
+Add the description of KSM profit and how to determine it separately
+in system-wide range and inner a single process.
 
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ Documentation/admin-guide/mm/ksm.rst | 36 ++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
+index b244f0202a03..c2893027cbe6 100644
+--- a/Documentation/admin-guide/mm/ksm.rst
++++ b/Documentation/admin-guide/mm/ksm.rst
+@@ -184,6 +184,42 @@ The maximum possible ``pages_sharing/pages_shared`` ratio is limited by the
+ ``max_page_sharing`` tunable. To increase the ratio ``max_page_sharing`` must
+ be increased accordingly.
+ 
++Monitoring KSM profit
++=====================
++
++KSM can save memory by merging identical pages, but also can consume
++additional memory, because it needs to generate a number of rmap_items to
++save each scanned page's brief rmap information. Some of these pages may
++be merged, but some may not be abled to be merged after being checked
++several times, which are unprofitable memory consumed.
++
++1) How to determine whether KSM save memory or consume memory in system-wide
++   range? Here is a simple approximate calculation for reference::
++
++	general_profit =~ pages_sharing * sizeof(page) - (all_rmap_items) *
++			  sizeof(rmap_item);
++
++   where all_rmap_items can be easily obtained by summing ``pages_sharing``,
++   ``pages_shared``, ``pages_unshared`` and ``pages_volatile``.
++
++2) The KSM profit inner a single process can be similarly obtained by the
++   following approximate calculation::
++
++	process_profit =~ ksm_merging_pages * sizeof(page) -
++			  ksm_rmp_items * sizeof(rmap_item).
++
++   where both ksm_merging_pages and ksm_rmp_items are shown under the
++   directory ``/proc/<pid>/``.
++
++From the perspective of application, a high ratio of ``ksm_rmp_items`` to
++``ksm_merging_pages`` means a bad madvise-applied policy, so developers or
++administrators have to rethink how to change madvise policy. Giving an example
++for reference, a page's size is usually 4K, and the rmap_item's size is
++separately 32B on 32-bit CPU architecture and 64B on 64-bit CPU architecture.
++so if the ``ksm_rmp_items/ksm_merging_pages`` ratio exceeds 64 on 64-bit CPU
++or exceeds 128 on 32-bit CPU, then the app's madvise policy should be dropped,
++because the ksm profit is approximately zero or negative.
++
+ Monitoring KSM events
+ =====================
+ 
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof

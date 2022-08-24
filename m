@@ -2,50 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FE759FD72
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC8D59FD80
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239285AbiHXOlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S238421AbiHXOph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiHXOlm (ORCPT
+        with ESMTP id S239173AbiHXOp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:41:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 055207437C;
-        Wed, 24 Aug 2022 07:41:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0F1023A;
-        Wed, 24 Aug 2022 07:41:44 -0700 (PDT)
-Received: from [10.57.15.162] (unknown [10.57.15.162])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 268853F67D;
-        Wed, 24 Aug 2022 07:41:37 -0700 (PDT)
-Message-ID: <59f3ba6f-b657-2da2-cb2a-9736e1488908@arm.com>
-Date:   Wed, 24 Aug 2022 15:41:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 1/2] ACPI: CPPC: Disable FIE if registers in PCC
- regions
-Content-Language: en-US
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     rafael@kernel.or, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, punit.agrawal@bytedance.com,
-        ionela.voinescu@arm.com, pierre.gondois@arm.com,
-        linux-kernel@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Souvik Chakravarty <souvik.chakravarty@arm.com>
-References: <20220818211619.4193362-1-jeremy.linton@arm.com>
- <20220818211619.4193362-2-jeremy.linton@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220818211619.4193362-2-jeremy.linton@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Wed, 24 Aug 2022 10:45:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC756491EF;
+        Wed, 24 Aug 2022 07:45:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A3F0B82566;
+        Wed, 24 Aug 2022 14:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E537C433D6;
+        Wed, 24 Aug 2022 14:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661352321;
+        bh=qY2vG3+Z/E0B6oHoQ9h18OUyySDy00/TSuXF4/r7CPk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TQhxtmzdMQK0FrBoBHBL1Dc/y4bbiR9u+9GD+uVbzvd3vD7+nQdzeDZiOkDTNR3fa
+         odWVOcLiopRH6Fi9Qo1oWtX28M3GC6BPOw4+Ami2R1lCFbHmsgx9ul52R31X8Mgz+j
+         VUBvgsLsLR3oJ44Lsg07vFrX+6glVLohc21uiMfaU/eEA2AjTWGDNmtggmTfxY5UTs
+         8SDRb9Mq4LwhAaiddXwUGVu5vnCO+9xaOO4/DYlhnqcqKmTThT4orqC89/VPL9lJrm
+         cY2QKR6HqNwqVCN8rasyFLM5+kkAtM0eGv5r+xUIlCCHC1MsrIvv/tnJLi0KPZJJSV
+         GZWjF9zrDrFjQ==
+Received: from [12.191.126.171] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oQrd9-005Smi-0D;
+        Wed, 24 Aug 2022 15:45:19 +0100
+Date:   Wed, 24 Aug 2022 15:45:11 +0100
+Message-ID: <87y1vdr98o.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, dmatlack@google.com, bgardon@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
+In-Reply-To: <YwVgaGp3HOGzC8k2@xz-m1.local>
+References: <20220819005601.198436-1-gshan@redhat.com>
+        <20220819005601.198436-2-gshan@redhat.com>
+        <87lerkwtm5.wl-maz@kernel.org>
+        <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+        <87fshovtu0.wl-maz@kernel.org>
+        <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+        <YwTc++Lz6lh3aR4F@xz-m1.local>
+        <87bksawz0w.wl-maz@kernel.org>
+        <YwVEoM1pj2MPCELp@xz-m1.local>
+        <878rnewpaw.wl-maz@kernel.org>
+        <YwVgaGp3HOGzC8k2@xz-m1.local>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 12.191.126.171
+X-SA-Exim-Rcpt-To: peterx@redhat.com, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,158 +83,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeremy,
-
-+CC Dietmar, Morten and Souvik
-
-On 8/18/22 22:16, Jeremy Linton wrote:
-> PCC regions utilize a mailbox to set/retrieve register values used by
-> the CPPC code. This is fine as long as the operations are
-> infrequent. With the FIE code enabled though the overhead can range
-> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-> based machines.
+On Wed, 24 Aug 2022 00:19:04 +0100,
+Peter Xu <peterx@redhat.com> wrote:
 > 
-> So, before enabling FIE assure none of the registers used by
-> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-> enable a module parameter which can also disable it at boot or module
-> reload.
+> On Tue, Aug 23, 2022 at 11:47:03PM +0100, Marc Zyngier wrote:
+> > On Tue, 23 Aug 2022 22:20:32 +0100,
+> > Peter Xu <peterx@redhat.com> wrote:
+> > > 
+> > > On Tue, Aug 23, 2022 at 08:17:03PM +0100, Marc Zyngier wrote:
+> > > > I don't think we really need this check on the hot path. All we need
+> > > > is to make the request sticky until userspace gets their act together
+> > > > and consumes elements in the ring. Something like:
+> > > > 
+> > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > > index 986cee6fbc7f..e8ed5e1af159 100644
+> > > > --- a/arch/arm64/kvm/arm.c
+> > > > +++ b/arch/arm64/kvm/arm.c
+> > > > @@ -747,6 +747,14 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
+> > > >  
+> > > >  		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
+> > > >  			return kvm_vcpu_suspend(vcpu);
+> > > > +
+> > > > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
+> > > > +		    kvm_dirty_ring_soft_full(vcpu)) {
+> > > > +			kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
+> > > > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+> > > > +			trace_kvm_dirty_ring_exit(vcpu);
+> > > > +			return 0;
+> > > > +		}
+> > > >  	}
+> > > >  
+> > > >  	return 1;
+> > > 
+> > > Right, this seems working.  We can also use kvm_test_request() here.
+> > > 
+> > > > 
+> > > > 
+> > > > However, I'm a bit concerned by the reset side of things. It iterates
+> > > > over the vcpus and expects the view of each ring to be consistent,
+> > > > even if userspace is hacking at it from another CPU. For example, I
+> > > > can't see what guarantees that the kernel observes the writes from
+> > > > userspace in the order they are being performed (the documentation
+> > > > provides no requirements other than "it must collect the dirty GFNs in
+> > > > sequence", which doesn't mean much from an ordering perspective).
+> > > > 
+> > > > I can see that working on a strongly ordered architecture, but on
+> > > > something as relaxed as ARM, the CPUs may^Wwill aggressively reorder
+> > > > stuff that isn't explicitly ordered. I have the feeling that a CAS
+> > > > operation on both sides would be enough, but someone who actually
+> > > > understands how this works should have a look...
+> > > 
+> > > I definitely don't think I 100% understand all the ordering things since
+> > > they're complicated.. but my understanding is that the reset procedure
+> > > didn't need memory barrier (unlike pushing, where we have explicit wmb),
+> > > because we assumed the userapp is not hostile so logically it should only
+> > > modify the flags which is a 32bit field, assuming atomicity guaranteed.
+> > 
+> > Atomicity doesn't guarantee ordering, unfortunately.
 > 
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> ---
->   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->   drivers/cpufreq/cppc_cpufreq.c | 31 +++++++++++++++++++++----
->   include/acpi/cppc_acpi.h       |  5 +++++
->   3 files changed, 73 insertions(+), 4 deletions(-)
+> Right, sorry to be misleading.  The "atomicity" part I was trying to say
+> the kernel will always see consistent update on the fields.
+>
+> The ordering should also be guaranteed, because things must happen with
+> below sequence:
 > 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 1e15a9f25ae9..c840bf606b30 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1240,6 +1240,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
->   }
->   EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->   
-> +/**
-> + * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
-> + *
-> + * CPPC has flexibility about how counters describing CPU perf are delivered.
-> + * One of the choices is PCC regions, which can have a high access latency. This
-> + * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
-> + *
-> + * Return: true if any of the counters are in PCC regions, false otherwise
-> + */
-> +bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +	int cpu;
-> +
-> +	for_each_present_cpu(cpu) {
-> +		struct cpc_register_resource *ref_perf_reg;
-> +		struct cpc_desc *cpc_desc;
-> +
-> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +
-> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> +			return true;
-> +
-> +
-> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +
-> +		/*
-> +		 * If reference perf register is not supported then we should
-> +		 * use the nominal perf value
-> +		 */
-> +		if (!CPC_SUPPORTED(ref_perf_reg))
-> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +
-> +		if (CPC_IN_PCC(ref_perf_reg))
-> +			return true;
-> +	}
+>   (1) kernel publish dirty GFN data (slot, offset)
+>   (2) kernel publish dirty GFN flag (set to DIRTY)
+>   (3) user sees DIRTY, collects (slots, offset)
+>   (4) user sets it to RESET
+>   (5) kernel reads RESET
 
-Do we have a platform which returns false here?
+Maybe. Maybe not. The reset could well be sitting in the CPU write
+buffer for as long as it wants and not be seen by the kernel if the
+read occurs on another CPU. And that's the crucial bit: single-CPU is
+fine, but cross CPU isn't. Unfortunately, the userspace API is per-CPU
+on collection, and global on reset (this seems like a bad decision,
+but it is too late to fix this).
 
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-> +
->   /**
->    * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->    * @cpunum: CPU from which to read counters.
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 24eaf0ec344d..32fcb0bf74a4 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
->   
->   static struct cpufreq_driver cppc_cpufreq_driver;
->   
-> +static enum {
-> +	FIE_UNSET = -1,
-> +	FIE_ENABLED,
-> +	FIE_DISABLED
-> +} fie_disabled = FIE_UNSET;
-> +
->   #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> +module_param(fie_disabled, int, 0444);
-> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
+> 
+> So the ordering of single-entry is guaranteed in that when (5) happens it
+> must be after stablized (1+2).
+> 
+> > Take the
+> > following example: CPU0 is changing a bunch of flags for GFNs A, B, C,
+> > D that exist in the ring in that order, and CPU1 performs an ioctl to
+> > reset the page state.
+> > 
+> > CPU0:
+> >     write_flag(A, KVM_DIRTY_GFN_F_RESET)
+> >     write_flag(B, KVM_DIRTY_GFN_F_RESET)
+> >     write_flag(C, KVM_DIRTY_GFN_F_RESET)
+> >     write_flag(D, KVM_DIRTY_GFN_F_RESET)
+> >     [...]
+> > 
+> > CPU1:
+> >    ioctl(KVM_RESET_DIRTY_RINGS)
+> > 
+> > Since CPU0 writes do not have any ordering, CPU1 can observe the
+> > writes in a sequence that have nothing to do with program order, and
+> > could for example observe that GFN A and D have been reset, but not B
+> > and C. This in turn breaks the logic in the reset code (B, C, and D
+> > don't get reset), despite userspace having followed the spec to the
+> > letter. If each was a store-release (which is the case on x86), it
+> > wouldn't be a problem, but nothing calls it in the documentation.
+> > 
+> > Maybe that's not a big deal if it is expected that each CPU will issue
+> > a KVM_RESET_DIRTY_RINGS itself, ensuring that it observe its own
+> > writes. But expecting this to work across CPUs without any barrier is
+> > wishful thinking.
+> 
+> I see what you meant...
+> 
+> Firstly I'm actually curious whether that'll really happen if the gfns are
+> collected in something like a for loop:
+> 
+>   for(i = 0; i < N; i++)
+>     collect_dirty_gfn(ring, i);
+> 
+> Because since all the gfps to be read will depend on variable "i", IIUC no
+> reordering should happen, but I'm not really sure, so more of a pure
+> question.
 
-Why we need the modules support?
-I would drop this, since the fie_disabled would be set properly when
-needed. The code would be cleaner (more below).
+'i' has no influence on the write ordering. Each write targets a
+different address, there is no inter-write dependencies (this concept
+doesn't exist other than for writes to the same address), so they can
+be reordered at will.
 
->   
->   /* Frequency invariance support */
->   struct cppc_freq_invariance {
-> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->   	struct cppc_freq_invariance *cppc_fi;
->   	int cpu, ret;
->   
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->   		return;
->   
->   	for_each_cpu(cpu, policy->cpus) {
-> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
->   	struct cppc_freq_invariance *cppc_fi;
->   	int cpu;
->   
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->   		return;
->   
->   	/* policy->cpus will be empty here, use related_cpus instead */
-> @@ -229,7 +237,21 @@ static void __init cppc_freq_invariance_init(void)
->   	};
->   	int ret;
->   
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	switch (fie_disabled) {
-> +	/* honor user request */
-> +	case FIE_DISABLED:
-> +	case FIE_ENABLED:
+If you want a proof of this, head to http://diy.inria.fr/www/ and run
+the MP.litmus test (which conveniently gives you a reduction of this
+problem) on both the x86 and AArch64 models. You will see that the
+reordering isn't allowed on x86, but definitely allowed on arm64.
 
-This module's over-write doesn't look 'clean'.
-Is it OK to allow a user to go with the poor performing
-system (likely on many platforms)? Or we assume that there are
-platforms which has a bit faster mailboxes and they already
-have the FIE issue impacting task's utilization measurements.
+> Besides, the other thing to mention is that I think it is fine the RESET
+> ioctl didn't recycle all the gfns got set to reset state.  Taking above
+> example of GFNs A-D, if when reaching the RESET ioctl only A & D's flags
+> are updated, the ioctl will recycle gfn A but stop at gfn B assuming B-D
+> are not reset.  But IMHO it's okay because it means we reset partial of the
+> gfns not all of them, and it's safe to do so.  It means the next ring full
+> event can come earlier because we recycled less, but that's functionally
+> safe to me.
 
-It looks like we are not sure about the solution. On one hand
-we implement those checks in the cppc_perf_ctrs_in_pcc()
-which could set the flag, but on the other hand we allow user
-to decide. IMO this creates diversity that we are not able to control.
-It creates another tunable knob in the kernel, which then is forgotten
-to check.
+It may be safe, but it isn't what the userspace API promises. In other
+words, without further straightening of the API, this doesn't work as
+expected on relaxed memory architectures. So before this gets enabled
+on arm64, this whole ordering issue must be addressed.
 
-I still haven't seen information that the old FIE was an issue on those
-servers and had impact on task utilization measurements. This should be
-a main requirement for this new feature. This would be after we proved
-that the utilization problem was due to the FIE and not something else 
-(like uArch variation or workload variation).
+Thanks,
 
-IMO let's revert the ACPI_CPPC_CPUFREQ_FIE. When we get data that
-FIE is an issue on those servers we can come back to this topic.
+	M.
 
-Regards,
-Lukasz
+-- 
+Without deviation from the norm, progress is not possible.

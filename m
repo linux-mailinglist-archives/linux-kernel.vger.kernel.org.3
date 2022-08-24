@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F086A59F8E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B280E59F8E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237142AbiHXL4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S236121AbiHXL6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 07:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbiHXL4x (ORCPT
+        with ESMTP id S233892AbiHXL6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 07:56:53 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9102889906;
-        Wed, 24 Aug 2022 04:56:49 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id EE9B2580E11;
-        Wed, 24 Aug 2022 07:56:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 24 Aug 2022 07:56:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1661342208; x=
-        1661349408; bh=kuW/qG4JUmJmu4VzPx61uemjjFalqwyag3kx6XOqPOE=; b=o
-        pzymONiwjq65ETafTTr380XapsmSk8TEgFCze/PUAxebjOab59cPNdRbW5I2P5Gc
-        nPQKG4YPRvE++LJQ7/t27UluedPOuvs7txqtYryRE+szjSSAdEz19GlMLM1fa1p6
-        Lg/mfnoslm76AnTcRYz7PmDQ5au0tb4YrubBbqIOCcVqACJIEF1WwW2wzdBGfYTH
-        BXkh+6ZCAdLIsKeQVByEzhFgw3NWWTIOIlCMIEHIQH1MV5kOQRubdSY99Qj/x+wX
-        a6Z931m4w51+xL+9hCbzbx9OFA/lOBTWB6kJ5BgCfd1Y/F2Y8xHr7Dw72Drfi2s2
-        wPa7i8fGjQDU2jFbAkIUA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1661342208; x=1661349408; bh=kuW/qG4JUmJmu
-        4VzPx61uemjjFalqwyag3kx6XOqPOE=; b=BKd1EmuvOpNnAIpXPJJFjSIkFigeG
-        5WPP3Ibfqgn6f+nabolef24CZ62iA40nUXTpU69mHIajgRUJeaPdZKqeeRby1+7R
-        OImR1Cgp49wc6MKbmxueF2Z4rhcVmtBgvDlP/buckg88nSZoV8AGAqyo74MWqQWf
-        cL1vExQMPfwMqwL+3Wstn11DI/v16iRCvmxGkFPGKdv8aY0nVGLRVfm80jl6tV9K
-        qPyRmPnvGD414awHxysN3ma/36/3b0er2sKgT8h0nmLSufblmsK3v4OnfSTC95+6
-        BcUAijw6ggfn3y6AtnoNC1NJ9cKi4J9GoNmGp1ALRk7N50KuUdDpNfyuA==
-X-ME-Sender: <xms:_xEGY0_3uaGI0slJdDTlozWfU31KwX4m5ySru_WAamPhEnUYzqSV-A>
-    <xme:_xEGY8tiKbf9JBRjzog0znkRGzDefHS3WnHdFVEBCMKmsLdH9SQJ6b2uc62_Qe1xZ
-    cV2XmWuz87kQXoF2PE>
-X-ME-Received: <xmr:_xEGY6DK5T_2PH1z13eyzdjJ9YNA8GuZGlXSmB5eqnWH6GQ4xp9GjLffVaerb7T17LbiNi7_s13F35Zf7pRmNE5f4cKJTeCsrgM7>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejuddggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkrhhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegv
-    nhcuuehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrg
-    htthgvrhhnpeduteehgfefudfffeelfffhheejgfdvfffhledvueekudeuieegueejieff
-    vdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmvgessggvnhgsohgvtghkvghlrdhnvght
-X-ME-Proxy: <xmx:_xEGY0dyRnm6I5p5ONdvswQuoH911Qcv4k4ImGelq3Uch2wdQt5f_w>
-    <xmx:_xEGY5M2YhW9IUMVZJ6XQ-y_7KCZgHrFbMNy0dM51kOr9oKnXhoY0w>
-    <xmx:_xEGY-nqQ6Kt_ul1NcmJNFISyhWSNz1xNbbNexnw5rJRg1E6x27NzA>
-    <xmx:ABIGYw_lH9x1hUhEBWjBASxkZJlyL74M8KEWiyffntejBaufUpUfTA>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 24 Aug 2022 07:56:47 -0400 (EDT)
-Date:   Wed, 24 Aug 2022 07:56:46 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, apronin@chromium.org,
-        dlunev@google.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        corbet@lwn.net, jejb@linux.ibm.com,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 04/10] security: keys: trusted: Allow storage of PCR
- values in creation data
-Message-ID: <YwYR/rzvrkvgZzBm@farprobe>
-Reply-To: list.lkml.keyrings@me.benboeckel.net
-References: <20220823222526.1524851-1-evgreen@chromium.org>
- <20220823152108.v2.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+        Wed, 24 Aug 2022 07:58:06 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A272089906
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:58:05 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id r10so13509718oie.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=NcQgfGWmNtGVcmYOkqhvmNWuEth66CXwSKmPdJfqqgM=;
+        b=VTUfeIEBhloPwJr12CuxHCw2BxQ7ZpXiMjSS5/bVdWEGyjPKY9NYVlGDwVs1gBepbl
+         CWD2evjs920DYE5w+GnT4EsUJVl2V35NywyFvVS3kS2FIKLLMXC5yaHnC2nnfCbGebkW
+         OIw3tWPzikquhwHdze6r9y2oXdMXhnUg8FDuiug/Z8Wk95p03Bhtk9pkDSPxV3aYZGs1
+         lyRIJWdxPFEDrzgxE+x+VXELqbx2ENONUkqqdyQqDJILI4gQW2u9jd6iY9BOm4stOQU3
+         UUOmmWOszFBKzuTe3IE0qfCMJoEMhYqf/LShSHcz1E+uTz2k5HH+lbdOe5fy5plxap/W
+         8xrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=NcQgfGWmNtGVcmYOkqhvmNWuEth66CXwSKmPdJfqqgM=;
+        b=ZftIvfUGaY0MefR7tdcFxw4gwBB/q/ZYNGEYqrNHDZjdPaU7twb/OnfxsT5oU9wHQK
+         fQQNpTDVc08tp2ImIyJsGBdXqbK6vsBu3MEqXp8Qa2xzZDOIWRNq9WY+SLDBaYGrabe2
+         eXUrrUyAbzjk6o/U8vw4sxfE8jlB447HrCQqe6EPPbAsZLGa9HJxIgyB7c3xi7TjkmuZ
+         nWjrc0ZrSkPl4HKIpHk/XFzIp61af0FcsUTlLn7Ux/cdBqnfcZziBim8DCwv2bCUuTg8
+         nou5xqwayjstrkYZqQHgxuRUWzM9IHMCeQafd7XOVsF4m//Bo1xhf60VQw1SnTQhF10I
+         WEDw==
+X-Gm-Message-State: ACgBeo0SA9wk8Yrx+JUtVmD/j/ZivwPwfwVUsHH4Od6eOZ0zx33C43/l
+        FOTkeO671xq0hKSL+q3Uwv/6/M520agxTdEZeqY=
+X-Google-Smtp-Source: AA6agR4n19Bn6PFoFfzIiFJJQk4Ydkhl5NL9ad8OwcaBoueVIZFTImeyGm+dfd/smGqUJBBF6YIedvcBGqTAi+HwLT0=
+X-Received: by 2002:a05:6808:1442:b0:344:a466:83ff with SMTP id
+ x2-20020a056808144200b00344a46683ffmr3224767oiv.204.1661342285032; Wed, 24
+ Aug 2022 04:58:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220823152108.v2.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6830:410d:0:0:0:0 with HTTP; Wed, 24 Aug 2022 04:58:04
+ -0700 (PDT)
+Reply-To: sgtkaylla202@gmail.com
+From:   Kayla Manthey <mlovemore73@gmail.com>
+Date:   Wed, 24 Aug 2022 11:58:04 +0000
+Message-ID: <CAALJgL-GxnfDc7X2uR_MLO4ZT3VOO7Qb80txtii-gqxhjX5X1w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:22d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4992]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mlovemore73[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [sgtkaylla202[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mlovemore73[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 15:25:20 -0700, Evan Green wrote:
-> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-> index 0bfb4c33974890..dc9e11bb4824da 100644
-> --- a/Documentation/security/keys/trusted-encrypted.rst
-> +++ b/Documentation/security/keys/trusted-encrypted.rst
-> @@ -199,6 +199,10 @@ Usage::
->         policyhandle= handle to an authorization policy session that defines the
->                       same policy and with the same hash algorithm as was used to
->                       seal the key.
-> +       creationpcrs= hex integer representing the set of PCR values to be
-> +                     included in the PCR creation data. The bit corresponding
-> +		     to each PCR should be 1 to be included, 0 to be ignored.
-> +		     TPM2 only.
-
-There's inconsistent whitespace here. Given the context, I suspect the
-tabs should be expanded to spaces.
-
-As for the docs themselves, this might preferrably mention how large
-this is supposed to be. It seems to be limited to 32bits by the code.
-What happens if fewer are provided? More? Will there always be at most
-32 PCR values? Also, how are the bits interpreted? I presume bit 0 is
-for PCR value 0?
-
-Thanks for including docs.
-
-Thanks,
-
---Ben
+Bok draga, mogu li razgovarati s tobom, molim te?

@@ -2,78 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90BE5A037C
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC2A5A0381
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 23:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240529AbiHXVyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 17:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S240277AbiHXV5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 17:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240350AbiHXVyD (ORCPT
+        with ESMTP id S240098AbiHXV5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 17:54:03 -0400
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD07754B4
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:54:01 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 5393 invoked from network); 24 Aug 2022 23:53:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1661378039; bh=jwWpS/IEJkDxPHdX0InnvrmEPux1NMA8vD9SgE2jV9I=;
-          h=From:To:Subject;
-          b=T7R/VZW8P/HHLnTPdHCIuaAqb1fvr7cFnz2Zw0EtkWQu24o1hf+BAgpdk9siXnqtn
-           Rb+qtdDfOU1i/SKAy4XfPkjApYUu1mDms8fmjW3lMlmm+LszSNNvhkg0+CNcXe0zuV
-           XXO1DvbPT9qqUY/Z0zjQNofbYWzg9eFY/ukiMRFU=
-Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <hauke@hauke-m.de>; 24 Aug 2022 23:53:59 +0200
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     hauke@hauke-m.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, olek2@wp.pl,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v3 3/3] net: lantiq_xrx200: restore buffer if memory allocation failed
-Date:   Wed, 24 Aug 2022 23:54:08 +0200
-Message-Id: <20220824215408.4695-4-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220824215408.4695-1-olek2@wp.pl>
-References: <20220824215408.4695-1-olek2@wp.pl>
+        Wed, 24 Aug 2022 17:57:15 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC675760CA
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:57:13 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id v4so16160561pgi.10
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 14:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=GzeQ8UfnZgFzVsS9nYnsVjGN8/XJ7d4LfMKvcO3JEq8=;
+        b=fJiqL8P2aKKxhbMkesL39klbja+GBE8/578Sh/oxZl+m0V6Zb0QrWGQZMtA0YjQyQ8
+         ptKPk0bn7TO/Ee00EZblLeT2kzuYax7CRD8KE2w5a8O1XDoHo8ntpzVe06zTQmOE4f3f
+         hvVqGNqLeLyg49aKRTu2N4ygCzvXTepUO0qsqg56meDNO3lmV84tdedCGZRvDFY4odb9
+         fGajR1I4gm+j6X1EOxJOEHrtq93+J0O5iWbaLkl2cwf9df+nOxni6TCB7Gqd549TmhNH
+         WAg1Fc9NyOCx870DM6iTg9+cdq7HEXEL2hNIqPSi3Jua/NO4YRD6UZqohW9ScXG1BQod
+         ACUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=GzeQ8UfnZgFzVsS9nYnsVjGN8/XJ7d4LfMKvcO3JEq8=;
+        b=bnBtkkGK6gU6mHcqqTIR2kWKmPL4BC+3rXEwTT4BYdjdXBSGLl+BClhUuSOXwvm1PU
+         cmDf15jRMg3b+kol8B4udfNfvRcG397jF4nJ2HLFiR8w4qoACwi+wGPCOcmW/p84GB8a
+         fWSXlXQkzjksI+4UUdGpsgvFOZDsiP0aDvX2COQXom0RpVkH94DaRW2ijWaogcNxHDM9
+         ygsHinTHuXszYMhMX7jNkEiyB4IbIB0TDLpZ4P+AijqOB6dls/DPl7FB3e6U0mHUjzgA
+         wwPSH8pUxr0mdr7lsGY8vP3VS8yvuA5jW2GIXOEdFsMdhClUhQTRp6vVCF3yIKuX2k1B
+         vbig==
+X-Gm-Message-State: ACgBeo29JmaJcrZp8K+9LF4w58h0q4Nh9Ipwd0V7gqqJ1MPlydg4sMAW
+        ZkIlPBt04k2cTjVtMlHFq+kXWw==
+X-Google-Smtp-Source: AA6agR6E2CfaEKt+0LcgrA7rYehmiX3jf4R/fOcaxvVZV6ibR+u2YkiFO9rOuy5PqoH/tME4tQlQmg==
+X-Received: by 2002:a62:1795:0:b0:536:4e84:5ee9 with SMTP id 143-20020a621795000000b005364e845ee9mr1031193pfx.52.1661378233171;
+        Wed, 24 Aug 2022 14:57:13 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z38-20020a630a66000000b0041a67913d5bsm11498087pgk.71.2022.08.24.14.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 14:57:12 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 21:57:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 05/13] KVM: x86: emulator: update the emulation mode
+ after CR0 write
+Message-ID: <YwaetYqmL4Wfr21I@google.com>
+References: <20220803155011.43721-1-mlevitsk@redhat.com>
+ <20220803155011.43721-6-mlevitsk@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 76d42ead0a5cd8b21ce83a0f3eabf283
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [YdNB]                               
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803155011.43721-6-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a situation where memory allocation fails, an invalid buffer address
-is stored. When this descriptor is used again, the system panics in the
-build_skb() function when accessing memory.
+On Wed, Aug 03, 2022, Maxim Levitsky wrote:
+> CR0.PE toggles real/protected mode, thus its update
 
-Fixes: 7ea6cd16f159 ("lantiq: net: fix duplicated skb in rx descriptor ring")
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/net/ethernet/lantiq_xrx200.c | 1 +
- 1 file changed, 1 insertion(+)
+Uber nit, I like using title case for Real Mode, Protected Mode, etc... so that
+it's more obvious that a changelog/comment is referring to the architectural modes.
 
-diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-index 25adce7f0c7c..57f27cc7724e 100644
---- a/drivers/net/ethernet/lantiq_xrx200.c
-+++ b/drivers/net/ethernet/lantiq_xrx200.c
-@@ -193,6 +193,7 @@ static int xrx200_alloc_buf(struct xrx200_chan *ch, void *(*alloc)(unsigned int
- 
- 	ch->rx_buff[ch->dma.desc] = alloc(priv->rx_skb_size);
- 	if (!ch->rx_buff[ch->dma.desc]) {
-+		ch->rx_buff[ch->dma.desc] = buf;
- 		ret = -ENOMEM;
- 		goto skip;
- 	}
--- 
-2.30.2
+> should update the emulation mode.
+> 
+> This is likely a benign bug because there is no writeback
+> of state, other than the RIP increment, and when toggling
+> CR0.PE, the CPU has to execute code from a very low memory address.
+> 
+> Also CR0.PG toggle when EFER.LMA is set, toggles the long mode.
 
+This last sentence is jumbled, and it probably fits better with the opening
+sentence.  And it's technically EFER.LME; EFER.LMA=1 indicates the Long Mode is
+fully active.  E.g. something like
+
+  Update the emulation mode when handling writes to CR0, toggling CR0.PE switches
+  between Real and Protected Mode, and toggling CR0.PG when EFER.LME=1 switches
+  between Long and Protected Mode.
+
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/emulate.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 5e91b26cc1d8aa..765ec65b2861ba 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -3658,11 +3658,23 @@ static int em_movbe(struct x86_emulate_ctxt *ctxt)
+>  
+>  static int em_cr_write(struct x86_emulate_ctxt *ctxt)
+>  {
+> -	if (ctxt->ops->set_cr(ctxt, ctxt->modrm_reg, ctxt->src.val))
+> +	int cr_num = ctxt->modrm_reg;
+> +	int r;
+> +
+> +	if (ctxt->ops->set_cr(ctxt, cr_num, ctxt->src.val))
+>  		return emulate_gp(ctxt, 0);
+>  
+>  	/* Disable writeback. */
+>  	ctxt->dst.type = OP_NONE;
+> +
+> +	if (cr_num == 0) {
+> +		/* CR0 write might have updated CR0.PE and/or CR0.PG
+> +		 * which can affect the cpu execution mode */
+
+		/*
+		 * Multi-line comment format should look like this.  I need more
+		 * words to make this multiple lines.
+		 */
+
+> +		r = emulator_recalc_and_set_mode(ctxt);
+> +		if (r != X86EMUL_CONTINUE)
+> +			return r;
+> +	}
+> +
+>  	return X86EMUL_CONTINUE;
+>  }
+>  
+> -- 
+> 2.26.3
+> 

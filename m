@@ -2,238 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D6E59F2FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A833459F2FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 07:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234208AbiHXFH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 01:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S234679AbiHXFK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 01:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiHXFH4 (ORCPT
+        with ESMTP id S234594AbiHXFKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 01:07:56 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B0280009
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:07:54 -0700 (PDT)
+        Wed, 24 Aug 2022 01:10:16 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE216457
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 22:10:13 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=icdWEW2l+Um0SKm8Fe19b4v4sJreiOs5ZkFajuO7VZZdli2oViTuN7kaUHP1gYoSl2gAGJsKMc2uJaswsUWcno76aqh4cpmFWvyEf8oJc5VBdhTJZYbPf2F21C19zRzbpFINtmaZ/268zsRelN1ifBcLFs6rOKFCP12hP5Im+N6YF5YcQ0CzN4w3CipYs0w4K1KLKVTltXDFRH1SnLoOGWUWkRGeIREbMeE3Q0g+5Cev8OQGoFi6BcUoaRPBO0Mex7hW+eK6uhTsnxZF5CbrTO836/8MEDb4cUkLeB9TezvMcEEoxDG6vOcSnl1CoBR3xM4I47osYQ3Op4ECr9bkFg==
+ b=MGxzr7UvnTf0Dm5ORkeQzHpUUNQqKHCnzN2r6+JnyznhoWKJcpi0g8yME+ZyERvIZKYYfRRSaWezl0rBc/94OyAxAHpA0Ow9B/e+ViBaUQdrlysiObjIn26phjbKG9oQTKORwvPeHlTygDACzqwHCTcPehxWNI7nOKUc0Wly8OoebCJeLnoyjx/YE4UeBga4Q/TQBs1qjW0m+VU5krj5IsrDowXHRCbN6xdyKUHpQlK8zxlzBNLa+TCi43cLCniEem72YiKcxJcIQBJihSBdySMcOwgfWUdrxFa62GXXOU55XsVDNBeYf/xPIZdodxKJHfzuRATcJ07SL7DC/u0B1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6CHEj5ZnnHMwWsvr9EIthmK67FrnP5fkx5zsYDeI60Y=;
- b=CX7gqei3nrSPCeF5hgDE2qBFkMBZ8SklxWciQ05IVUSweOfRnzRaQlgQ5IKfcGaCtoPd8iKXEaFryu/5jGPBxdlSa+SnX34UdsafBmO8vB/q3rg6Hoc1SSwJR9j8MD7LT4/bqCPBRU25ighmsUQnhEKnDb0Wl20B8XeQn6nHoUyWRNBX1kYJncJ/yBwzFiXASiV8WRCj6V1pBMlBxrqoWmj9LkoD0UgqPb5bO3e7izWVnNSCiL3WuTTfT/tmIa1oHsgHnBaE842jIDwjb8XaPsmyJuvPjlvha+xZGp9RIgVnlRahdHBsCepb35s4flwSGxGhDw5IoT+VuTghQLnDQw==
+ bh=jlPr1u1DasuJLNBQTAijt5mELyMjSf5RQaPl7+4dKkg=;
+ b=NdilfWD16N93EI7spFWpdJ1ahJjuN7bCe/lQX2GQ5EOb2UH5uY2UWbwTQ8dCHLhrxFSE644b8RktzypXhB+rO27CEpaTljeZw6nL/VBTuZ1KVLvwgxRbBsFhP2S41QGrgnNjmLvjW5jGtgQNbJPalY0ko7FQIoSXfy0XzNhxD3i9fafPhT8ytbFkySqahnaQTlUfXz/DfEdtOXBbfZYXispTK1eGuXRpKDmDHgIOUPe1zwSdanaAvMa0IGFQXKRzgn6GLeSr/k0kWoohyKdlQryCsQzljrg83MtXNiyOl4C92oAxN86b5wMkIL4E2FVvapAiUoPQroMef+eFNYzxKA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6CHEj5ZnnHMwWsvr9EIthmK67FrnP5fkx5zsYDeI60Y=;
- b=3dwJ7PkId+XfvteW3LtoAS7hiOH4y2v0rINS/6UOyh2+XPsZoQ1FvPzfdg1iOJOLNT9UkQ/zKspBcOGZL6FxbPYZqT8XJ5/VzAwVMa7B39D5c3DZ6JNLeea9i/c3fWy9zwwjPhi7KD5IFwMEUzHXkMgWHlJG00MHU/iiyNO2cgg=
+ bh=jlPr1u1DasuJLNBQTAijt5mELyMjSf5RQaPl7+4dKkg=;
+ b=mMr/9VgYSv5OYCgD6m8ed/91sVJa21+zIg70f6aiKoMASJvqsffDUSbjv0pFqDHyxCAUV5MHAJDf4k008aFbTBv4qBU3WIlESKwabkmY58NMjFFs3cS9Xz0kMBqWbWQXnHCrom4sAkp98aVyeubhsSTE3lwkqYHJ+NVzNuKSSKUoB9VREm9maYzSS1+P4KN6U1Z7whws4iVauDo7C3MzcX27YWsM6ikgW59lKBxJQXOocGzVQb7TzmD0eTu0qit0MeDsUS2KluTTqc7x8+08e8idBMeIzsPUNFcdGZgRrm2gYD4H8gz6ut/jE1HgI9LPDcrwE0jodAkbGNdLdiajcg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by DM6PR12MB4057.namprd12.prod.outlook.com (2603:10b6:5:213::9) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by BL0PR12MB4657.namprd12.prod.outlook.com (2603:10b6:207:1a::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.20; Wed, 24 Aug
- 2022 05:07:52 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::6958:4b1d:7283:edbd]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::6958:4b1d:7283:edbd%3]) with mapi id 15.20.5566.015; Wed, 24 Aug 2022
- 05:07:51 +0000
-Message-ID: <cf2cdf28-8678-8e61-9992-a460e61d3ce2@amd.com>
-Date:   Wed, 24 Aug 2022 10:37:36 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com, ravi.bangoria@amd.com
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
- <YqdNKJllCVMci3ov@hirez.programming.kicks-ass.net>
- <aab04cfb-2dd5-89dc-213d-7fa253615864@amd.com>
- <YwSWhXW+BUA3WkIE@worktop.programming.kicks-ass.net>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <YwSWhXW+BUA3WkIE@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0085.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:23::30) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Wed, 24 Aug
+ 2022 05:10:11 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::7432:2749:aa27:722c]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::7432:2749:aa27:722c%7]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
+ 05:10:11 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH v6 1/2] mm/gup.c: Don't pass gup_flags to check_and_migrate_movable_pages()
+Date:   Wed, 24 Aug 2022 15:09:51 +1000
+Message-Id: <d611c65a9008ff55887307df457c6c2220ad6163.1661317396.git-series.apopple@nvidia.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR17CA0033.namprd17.prod.outlook.com
+ (2603:10b6:a03:1b8::46) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 277f86b7-6663-438c-3cb2-08da858e97d3
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4057:EE_
+X-MS-Office365-Filtering-Correlation-Id: fd80df3a-e3a6-453c-7ad3-08da858eebb4
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4657:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tPu3ztwhzdgUMo+sJeLQo6zMxxJPLJM9ctj+ZAfEX4k1fGRE1MgH+uZv4+ZIDe+WMa+G7suulrtrwyK+YQa8wAeUUa2mnFiMKerwmGhaTPOs1IfeC/jErtzQ6j2cH9+ZJXxFCc/KWyVHnI88kmNqTvARETIEUN71uquR273/E2TFinTVtHCFFSC3c+85uFETFXrgEwCpUsHd0ha5XRkN0mJIyY1U0LBSCyzyfMg4JnWOFvm9AW6hNtAql5xvWPqnDhF/hVpkstDu5gxAZyEDOJzO0X8Oolv6AITKs9Px5otiGe5cpIOEJ0F8kFqY5o/rzJWhEBXZ3LaNoDKrKvXIxsaDwlXpQRfm4ivzrhMKBrm4wXss4jtI87yZe+f9X83JngcNFheDVWsLcjxReHCSYvp2wtYST2AHWQ0N/XCNEZGxnafX4pnHVhDY4D4Cke285o3kmLg1O4VUuzMFDUGCR2GQczrC++3mL/z06C0Sa0uRVzr3RlhDP+s6ol82Y18mZ3GZYi6kCBuyAHs/2j5Af7kfDflaQjXJ15iCEwU1p6TwLcn/8Toy3tWIreGiO1c0XpjzQGuX+TNWaoKGR7hQ++GuEbSbg2fme/7ruuAaChwmqTC1w1SmSPxjskoVOlvu9B1vAGRMLoxb1NLIPgN2fLKUNl5gin2Q7HxefwqFvq3HtTNmhpU99cWysLcz32Pd8Fcm0wyJJtFjZA4AsOxJa8vKIa6lhmAR4ovK4BQMrqOI3mAWtM5NEb4NvGBt18T7YEpU/jReedVJZd1GbiMUKnwwwALosHWNi86rEQto7mAoeNO4x646kdlryDnOtWVP7xbvB4A7M4G1wWd22e4N4A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(39860400002)(136003)(376002)(396003)(86362001)(31696002)(38100700002)(8936002)(186003)(5660300002)(6666004)(44832011)(7416002)(6916009)(41300700001)(478600001)(31686004)(66476007)(316002)(66946007)(8676002)(4326008)(66556008)(2616005)(36756003)(26005)(83380400001)(6512007)(53546011)(2906002)(6506007)(6486002)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: InXdTtMigDQBz7rTTHz4ZkvpyKs7vZ7TwXiPokk1u4wPBsZh50OduY3xghV07LS7zF/cBo5lNnUyBnFxMtiAnWIDkcGhC0Hd26OBppd/QlngatAx1PBLFfL1ZFZa+uvpB1b3WG6/w9XaeksO4c5SgkwRK17hI3CTG731nOeXNjf/9fOqlXqMwn+LyM0elxagjwYmkX6U4XP10Bnen5/WeVwkLjYEvLryFXV3sNgyTJ88hV3uhW68k7r84/uzL9wxekwTGJ2lr8+dayCEIwc9/hx/rCBAIOG7+S7ZbbP7M+JbKQx+tusQU1sSWXO2/5G4tcm9eBDUiDDRoJzcVwnkirYGp5vC9ywV+ooL6raZY+23ufmhFAlJM3uocEuyS5g7xWlfO+O+SpkFfVWzsSwCLk+nr5b5YzlzQltjAASurdTbnT+IS7bmH9t4I022CUmm2LadgzfUmOIGnsR0MeXKa9O78A6yen8T7bhgAlFlGFXJvMJKW2zs3P+XXEHwDfuVhahZBFfHdeaSYitJodhWdnQ9T1TfnrhsWtiD8rx52Wf2cpa2LXjrR1t+hZBUPLdd9EqMdagHmIg3bRjV0JBo5InVAt4Z9IEmjXGLE7tRUndku/dH0rXJ0uB77oIOBV0iUcXzuFmQPbG36MwzDquAqPxmE/ePMy/mo+o0VSQhqIPZm9a1UHwZtrRPjAvI4LwcCqtARpDjoER50/RWwZIKgA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(2616005)(6506007)(6512007)(26005)(38100700002)(8676002)(7416002)(83380400001)(4326008)(5660300002)(186003)(66946007)(66556008)(8936002)(6486002)(6666004)(66476007)(41300700001)(2906002)(54906003)(86362001)(316002)(36756003)(478600001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1QreC9wNjJPa29FdFlhQ3JINHNNNWpaTElMbFZ0dWdHdTBkNUJpaDhwSlVG?=
- =?utf-8?B?a1VZWjJiOHA2a0U1YnA3UUVLTlFuV0w4SXRxM29kYW1CZXV2WmF0SnF4c0Vj?=
- =?utf-8?B?V2szdFIwZGFleU5JYjVERVRLVDhtUVZ6QTZycnZ0M1hmMHBQWENWZGNCVUlo?=
- =?utf-8?B?ME9RUjZZQjJiN3RDMFFqbkUvQWVEeEc1UmhvME1PU3VMSWJaQ25ZMWlkTnl5?=
- =?utf-8?B?TzlDZWk3QkxHY1pybHYyN1pnVVY2TUY2TFFraFR1STZodXZaQ3pkcThPcmpR?=
- =?utf-8?B?bEM1Vys5M2ZVNGdqb3piWFVBQ1NoSkxjOEJlS3BRcTJHY1plWHFwYTNQTU9i?=
- =?utf-8?B?azZwRkE5a2JlRWJWTitxMi9ZeVRXTnJ0cGxWNVlVc0QwUW5YUW1Tbm9WVFdN?=
- =?utf-8?B?RnRaVmRueVZCTk1SWGttK2ZPTGhnVzRucmw5WnhJY3h0QUlXa3JVdXl5Ymd1?=
- =?utf-8?B?K3pIZlk1Ni9jMTh5UkpZcElHS0JyUUlGem5ueEVnaE15cnIvUlhHNGU1TEFX?=
- =?utf-8?B?WW42WG5zb0pVbWlBYVorNlN3MjNjTGJ6Y3ZLWFRuckZnVHFZZEFNVFpsVVJu?=
- =?utf-8?B?Y1RBemRPZ0FyYmZtdTErM2d2MWN4ckpRdXhCakN6eGc5UDlZamUvNzBvSlNS?=
- =?utf-8?B?U1NzN3VkVXQ4ZlBRT216QWIvMnZ4MkpJUE5yN0xhVlN2M01abXVONHlIdXBo?=
- =?utf-8?B?Nm5zYnpkTHlOTnFCS3Z1YzFQejRSUmtmVnluV3VkNVpkVXdSTXhiZXlhSnNs?=
- =?utf-8?B?bG1KUk1sZXVLWCtHQXFNM3Rqb2VPT2lwYWJBYmR4UGMwZmFTdThnaGs3S2lQ?=
- =?utf-8?B?RFl2ZFpVWk9oS1ptL1RZbVZUSUprd0s5ZTNhdktVcWVLcy9HLzFOWEJvcitB?=
- =?utf-8?B?cDhackk2cXhoblhUckJ2cWZpMXNYRzkvRXBtbzQ2L2YxTVZkWStLUFBKRU5L?=
- =?utf-8?B?czFKaWxiY3hPSGRoSGFybW5JL3E1ZVE2S2YxU00xTXBWazlIUnhQS1lUU00z?=
- =?utf-8?B?ZVZyVmxUdmN2eit3YmtOUG9SUGNFSFdUeW14eC9sMVBzUnY1anFQU0hBM1JE?=
- =?utf-8?B?Q2lkcUZuUU03QUo5VytvZVo5RmdYOUFlN1V0dW1ITGpmVkM3UFF6NURnT3o1?=
- =?utf-8?B?c1o3R3NYMU5HR2hnWXR5U2MwZnhnZmYwMlo3UDFFdXdzSWxCQTBkVzlHY1dT?=
- =?utf-8?B?em1LU0h4NjdKelBDV2pMWmJ5RmRuVE5vWGlQL3ZEdmtodXNLTnU1dmdQaENk?=
- =?utf-8?B?T0J2YitDVFIrWEVETnVnU2l2U1IxK1gzcmphN0dyQVJ5cWJUQnhJcU1KTmk0?=
- =?utf-8?B?R2hxY0cxQXY4Q2dWSG0xKy9SaERmQUczd2xjd3RBRmdwSXZXQi9KMGZUYTFu?=
- =?utf-8?B?ZnhiU3RaWEJYSU9KT1FNNTJnUGRmM3ppVkI0ZnBqcExSb0h1UHIybGowZm9Y?=
- =?utf-8?B?dkFLeStscDdDT1F1STFFUjM1UDRkakpuWXZ4MkVzaW5MMjdRTExTTFhZemtp?=
- =?utf-8?B?TlNOUTJDMzcxb1JNaFRUa3l1Vm9rTnpCM3MyYi9ZdG1EQ3NMSCswNFl4VzNY?=
- =?utf-8?B?bE96amxXb0VSVWw0VDYxOGNIOFpDeFBRTHVqdktrOXBNTm1VNVpyT0ZpOWls?=
- =?utf-8?B?NlNySEc1SlFmTms3N3Z0TElhVmFOYTl4dUFCWEp1Nm5KYktnNjd5NitnQ1J4?=
- =?utf-8?B?RnZ1akljYUNQMXJJeW0rdml6U1pCSWp0bDUwSTNCWDBZTE15THMyV05RejJV?=
- =?utf-8?B?aG01Q3FBb2NYYW9LeDhhZks2YkxuajlIMkhIbi8xN3NVcTFoTUVMejlUL1lZ?=
- =?utf-8?B?OXdrVXJqS3NPTStmZzErN3dhZ2tFRkl0Yi9QdVNiNjRTaVYyNGY2MnE0WTRP?=
- =?utf-8?B?dGhqRnNFSmQ4bW9pa3ZsK2J6d25SZ0d3WDA4Qmhvclh3cTJ4bmJySmp6RDly?=
- =?utf-8?B?MDIwWmlJZnBLNkZKMjYwOEVKRXBvUHhTUDExT3VEaER4T3JydVhHSEU0b1px?=
- =?utf-8?B?MVowUDFIc3BxOUsxblZkd01OeVovZVRKQ1Q0bHg3NlAydzFlS2xhaGdsN0ox?=
- =?utf-8?B?TkkzRDZodEMrWWQvMlJ3emNrYmt1WGpjcVM5YUZjWU81aXFJYXI0VXFkaW5w?=
- =?utf-8?Q?VPnVl0dEVJWqMCTyneam/eaby?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 277f86b7-6663-438c-3cb2-08da858e97d3
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fAFP7Cj+l+tVn+ICQNuOr2GuCqbqZgWEyDGXgKLoT/ngdCQdGsEZi3CnhEqg?=
+ =?us-ascii?Q?HU2qPb62w4S5sw/j5wCfJ1M5aTCkCe0RrFLQi38YNqMvlsiOuY62FbMqPJL2?=
+ =?us-ascii?Q?bsvT3qpAXpjDxXWYCGtZiDYJ3l5Vp5XQTzjizM0iW4D3IMrK7ztFnAtYDium?=
+ =?us-ascii?Q?LI6g1+kBeFbzm77Svs4GVaeYey/62QUBNdfOLwet8MszBXfJ1zpClpTEZHq2?=
+ =?us-ascii?Q?joXrX3ZvXlQphhcg2Z6cRp1AcmgXsmD71WcNpNWBWDI/8ld5XxVwmcQ2lX2v?=
+ =?us-ascii?Q?QWsz6JAiB4lQVb2sW/yyi3/CCBnF55HiKqoCIlmNzCEgLXAk5qmGlbnNBzjm?=
+ =?us-ascii?Q?KdmHM+SC4bpZPk3IeXBp79xYlaI6rD646uUGvjF2bHj8zwZ0WYAYzU0ObOS1?=
+ =?us-ascii?Q?HWH7/unHfteHxQ18FTczol/2ERw+TjaJ4gQ6JvMFGil/vXDowArJZxFje6XT?=
+ =?us-ascii?Q?sQhtiVDDL8H9QfArNGLo9x+EMSYSFD9/LcwuIIAAgh6/zBMZP10VYb86L1X8?=
+ =?us-ascii?Q?V8JEXxlJs/G5kRhBHwT6IHKiqssM7iJwPvsT23OKyTITsEFzj/+ACApAPj1/?=
+ =?us-ascii?Q?FYGFc+OL8soFqJacUCOkjDE+jaNa2TczPDnkmYZ+dBVfFDP84Wm02nwCP0VQ?=
+ =?us-ascii?Q?Feq6FOyLT/sA8lNgETeIKCP+e+EyszLjhjpRiZXfgkCPJjRpD5r8Q0EROacU?=
+ =?us-ascii?Q?C8w8VNHVfPg96HST4GQfp1EWbmwaZoE72unjl8wX+Ohh61EnBvYBNg8dZ7Qq?=
+ =?us-ascii?Q?QZT1REGmRMai4hjq6u2ZrgzVlLdRoCxMzmLHa+NJpfsmlJEAAW2h5WvWa6H2?=
+ =?us-ascii?Q?V84GHN/osCanclt113zjpF3D+hvHCyjHFoqEHFiIsY8nNym9D3zkq7P0n2pR?=
+ =?us-ascii?Q?fSCHAjgImRPZSxh4kmQpNk93YgO4Jl1oIyWBfu49WINx7SttHfe5OoBe1K4R?=
+ =?us-ascii?Q?7WiBPf6XZYWPArzwVahZz8ke8DkmksGwTftEqopi7LDcUAMfH/PPEjkHsODh?=
+ =?us-ascii?Q?vJGecEjC2Qz/EaUAbKDqDmUHavSBNEy0H20USj93sINT4/GgZ4QfEDtHWT1S?=
+ =?us-ascii?Q?b6o5jCX8nt7EF/KodEGstK+DfutTaI3musExwHj6WEGqTnh5IIdJE5WnVa1V?=
+ =?us-ascii?Q?YOlRYn+/902mXrGwzt5Yug5Rd6q78ZDvq0I4CqUJHxJ1m3jGR/HFdusmEKPb?=
+ =?us-ascii?Q?YXchXJHZe/lk2DdDLReMNpYXl2aUTszj+VYDsciVbmMYq92VwLfU1vxV7tIN?=
+ =?us-ascii?Q?JbZF5gVq0BB9u7abBlS7gud7E/pVlN/KwvVGlZ74perAuY7djDcaMBuxeQvP?=
+ =?us-ascii?Q?oOd0Br8GPqbKThRtN4t7NwMj7ccWFK7I9eh2KJApKN5880YUA80Dsb2tscV4?=
+ =?us-ascii?Q?AE3ylkqCwFIBWWt7NTW95mJdudY7L10rTaTFJ3H9lVYbbe8Qqh7yJGCyW6H+?=
+ =?us-ascii?Q?Ud5qA/6cZhwcP0msTHrZhC73/1cvK31VcYl9UqIVfN9WC+mh1qwDYP8yWsRu?=
+ =?us-ascii?Q?av1J7wbT7hW3E+hGdmR9V4hg3NRnwDqGXj50oAnaLy0PlNhH/pUpgMmBDH7d?=
+ =?us-ascii?Q?+fS3MsU1DtNsQlk7yqg4ex0CMsggbbNEAKdKyWsS?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd80df3a-e3a6-453c-7ad3-08da858eebb4
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 05:07:50.9091
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 05:10:11.4076
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 25NnaYmJaWRDLWdph3SXVXvkcPGMeMIhhkH/jXIeMcvsKyrRi7v8R1IMUy+mvHN+TpEeZ6yrbhAZXBOWubs17A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4057
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Tnho5wlvkvsbX0iYQxZNhNoxfnkwUlTojN7u/bzbTNoCigWVAmY7cLKb03uXb0Vaz6mfdHzWATwh/sWv0SaJjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4657
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-Aug-22 2:27 PM, Peter Zijlstra wrote:
-> On Tue, Aug 02, 2022 at 11:46:32AM +0530, Ravi Bangoria wrote:
->> On 13-Jun-22 8:13 PM, Peter Zijlstra wrote:
->>> On Mon, Jun 13, 2022 at 04:35:11PM +0200, Peter Zijlstra wrote:
-> 
->>>> +static void ctx_pinned_sched_in(struct perf_event_context *ctx, struct pmu *pmu)
->>>>  {
->>>> +	struct perf_event_pmu_context *pmu_ctx;
->>>>  	int can_add_hw = 1;
->>>>  
->>>> -	if (ctx != &cpuctx->ctx)
->>>> -		cpuctx = NULL;
->>>> -
->>>> -	visit_groups_merge(cpuctx, &ctx->pinned_groups,
->>>> -			   smp_processor_id(),
->>>> -			   merge_sched_in, &can_add_hw);
->>>> +	if (pmu) {
->>>> +		visit_groups_merge(ctx, &ctx->pinned_groups,
->>>> +				   smp_processor_id(), pmu,
->>>> +				   merge_sched_in, &can_add_hw);
->>>> +	} else {
->>>> +		/*
->>>> +		 * XXX: This can be optimized for per-task context by calling
->>>> +		 * visit_groups_merge() only once with:
->>>> +		 *   1) pmu=NULL
->>>> +		 *   2) Ignoring pmu in perf_event_groups_cmp() when it's NULL
->>>> +		 *   3) Making can_add_hw a per-pmu variable
->>>> +		 *
->>>> +		 * Though, it can not be opimized for per-cpu context because
->>>> +		 * per-cpu rb-tree consist of pmu-subtrees and pmu-subtrees
->>>> +		 * consist of cgroup-subtrees. i.e. a cgroup events of same
->>>> +		 * cgroup but different pmus are seperated out into respective
->>>> +		 * pmu-subtrees.
->>>> +		 */
->>>> +		list_for_each_entry(pmu_ctx, &ctx->pmu_ctx_list, pmu_ctx_entry) {
->>>> +			can_add_hw = 1;
->>>> +			visit_groups_merge(ctx, &ctx->pinned_groups,
->>>> +					   smp_processor_id(), pmu_ctx->pmu,
->>>> +					   merge_sched_in, &can_add_hw);
->>>> +		}
->>>> +	}
->>>>  }
->>>
->>> I'm not sure I follow.. task context can have multiple PMUs just the
->>> same as CPU context can, that's more or less the entire point of the
->>> patch.
->>
->> Current rbtree key is {cpu, cgroup_id, group_idx}. However, effective key for
->> task specific context is {cpu, group_idx} because cgroup_id is always 0. And
->> effective key for cpu specific context is {cgroup_id, group_idx} because cpu
->> is same for entire rbtree.
->>
->> With New design, rbtree key will be {cpu, pmu, cgroup_id, group_idx}. But as
->> explained above, effective key for task specific context will be {cpu, pmu,
->> group_idx}. Thus, we can handle pmu=NULL in visit_groups_merge(), same as you
->> did in the very first RFC[1]. (This may make things more complicated though
->> because we might also need to increase heap size to accommodate all pmu events
->> in single heap. Current heap size is 2 for task specific context, which is
->> sufficient if we iterate over all pmus).
->>
->> Same optimization won't work for cpu specific context because, it's effective
->> key would be {pmu, cgroup_id, group_idx} i.e. each pmu subtree is made up of
->> cgroup subtrees.
-> 
-> Agreed, new order is: {cpu, pmu, cgroup_id, group_idx}
-> 
-> Event scheduling looks at the {cpu, pmu, cgroup_id} subtree to find the
-> leftmost group_idx event to schedule next.
-> 
-> However, since cgroup events are per-cpu events, per-task events will
-> always have cgroup=NULL. Resulting in the subtrees:
-> 
->   {-1, pmu, NULL} and {cpu, pmu, NULL}
-> 
-> Which is what the code does, it iterates ctx->pmu_ctx_list to find all
-> @pmu values and then for each does the schedule dance.
-> 
-> Now, I suppose making that:
-> 
->   {-1, NULL, NULL}, {cpu, NULL, NULL}
-> 
-> could work, but wouldn't iterating the the tree be more expensive than
-> just finding the sub-trees as we do now?
+gup_flags is passed to check_and_migrate_movable_pages() so that it can
+call either put_page() or unpin_user_page() to drop the page reference.
+However check_and_migrate_movable_pages() is only called for
+FOLL_LONGTERM, which implies FOLL_PIN so there is no need to pass
+gup_flags.
 
-pmu=NULL can be used while scheduling entire context. We can just traverse
-through all pmu events of both cpu subtrees.
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
-> 
-> You also talk about extending extending the heap, which I read like
-> doing the heap-merge over:
-> 
->  {-1, pmu0, NULL}, {-1, pmu1, NULL}, ...
->  {cpu, pmu0, NULL}, ...
-> 
-> But that doesn't make sense, the schedule dance is per-pmu.
-> 
-> Or am I just still not getting it?
+---
 
-Ok. Let's not complicate the design. We can go with current approach of
-iterating over all pmus in the first phase and think about optimizing it
-later.
+Changes for v6:
 
-Thanks,
-Ravi
+ - Rebased onto mm-unstable
+
+Changes for v3:
+
+ - Move WARN_ON() out of loop
+---
+ mm/gup.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
+
+diff --git a/mm/gup.c b/mm/gup.c
+index 3b656b7..8d66ee2 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -1934,8 +1934,7 @@ struct page *get_dump_page(unsigned long addr)
+  * migration failure.
+  */
+ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+-					    struct page **pages,
+-					    unsigned int gup_flags)
++					    struct page **pages)
+ {
+ 	unsigned long i;
+ 	struct folio *prev_folio = NULL;
+@@ -1968,10 +1967,8 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+ 			 * Migration will fail if the page is pinned, so convert
+ 			 * the pin on the source page to a normal reference.
+ 			 */
+-			if (gup_flags & FOLL_PIN) {
+-				get_page(&folio->page);
+-				unpin_user_page(&folio->page);
+-			}
++			get_page(&folio->page);
++			unpin_user_page(&folio->page);
+ 
+ 			if (migrate_device_coherent_page(&folio->page)) {
+ 				ret = -EBUSY;
+@@ -2024,10 +2021,7 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+ 		if (!pages[i])
+ 			continue;
+ 
+-		if (gup_flags & FOLL_PIN)
+-			unpin_user_page(pages[i]);
+-		else
+-			put_page(pages[i]);
++		unpin_user_page(pages[i]);
+ 	}
+ 
+ 	if (!list_empty(&movable_page_list)) {
+@@ -2050,8 +2044,7 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+ }
+ #else
+ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+-					    struct page **pages,
+-					    unsigned int gup_flags)
++					    struct page **pages)
+ {
+ 	return 0;
+ }
+@@ -2074,6 +2067,9 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 	if (!(gup_flags & FOLL_LONGTERM))
+ 		return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+ 					       NULL, gup_flags);
++	/* check_and_migrate_movable_pages() assumes pages have been pinned. */
++	if (WARN_ON(!(gup_flags & FOLL_PIN)))
++		return -EINVAL;
+ 	flags = memalloc_pin_save();
+ 	do {
+ 		nr_pinned_pages = __get_user_pages_locked(mm, start, nr_pages,
+@@ -2081,8 +2077,7 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 							  gup_flags);
+ 		if (nr_pinned_pages <= 0)
+ 			break;
+-		rc = check_and_migrate_movable_pages(nr_pinned_pages, pages,
+-						     gup_flags);
++		rc = check_and_migrate_movable_pages(nr_pinned_pages, pages);
+ 	} while (rc == -EAGAIN);
+ 	memalloc_pin_restore(flags);
+ 
+
+base-commit: d711de4adbec4cb0b8769bcae971b13293e6d311
+-- 
+git-series 0.9.1

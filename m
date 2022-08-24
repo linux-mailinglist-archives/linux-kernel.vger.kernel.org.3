@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688D35A024B
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E20E5A023D
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 21:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240016AbiHXTvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 15:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S239494AbiHXTpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 15:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237608AbiHXTvO (ORCPT
+        with ESMTP id S229664AbiHXTo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 15:51:14 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 709995466B;
-        Wed, 24 Aug 2022 12:51:11 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 27OJhneA002823;
-        Wed, 24 Aug 2022 14:43:49 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 27OJhnnE002822;
-        Wed, 24 Aug 2022 14:43:49 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 24 Aug 2022 14:43:49 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
-        Michael Matz <matz@suse.de>, linux-toolchains@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/sev: Mark snp_abort() noreturn
-Message-ID: <20220824194349.GB25951@gate.crashing.org>
-References: <20220824152420.20547-1-bp@alien8.de> <20220824172929.GA25951@gate.crashing.org> <CAKwvOdm+yFhZ2pYLJ5vpj1YyNJmG=UVF4cTz_m+0UfDGNGsRbQ@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Wed, 24 Aug 2022 15:44:58 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1496A2D1F5;
+        Wed, 24 Aug 2022 12:44:57 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-11dca1c9c01so5274729fac.2;
+        Wed, 24 Aug 2022 12:44:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=GGbTiH5MlwiXaRbgDFTCR8WHSkMV+X8PO6SJOF3rCjU=;
+        b=wSp+vyBHWsXKfDv03XgmUgTZVRdH9F2o9+i42RGg1pXtRTNkWmKo5H+/wHvypB++SD
+         k+kEYR3rTMQpVVciI5VXWwpy9hz0k09SZ5skVg0Nb4Y3ql4+yPjqAcMA+K+aToLEKmOy
+         DSrA61Pmoi9jVeW32xTRDcEP9DZ9pjfKcdkCjMm4heHAQMIf/5Hmv0FmNFQG7cV8HNVm
+         LcTM0vCd+TjglWaVjOdLJT1u3UO8I2e4hwvlQ42FsbMq4CeeiBhNMASt+80eoH7SXg9r
+         3+k1lOwJUCjcD5r6ShhpkPMPynPhXM2u61PRCebpXHyoi6hFEScZwOaDJwaz602FmCHe
+         GFYQ==
+X-Gm-Message-State: ACgBeo31gImf7eHZ9QdUAZESo9oEQXQAOoJCwwoepG6CPs4i0Mfehw5N
+        4ajTGH7iRYQnd8/ljTSiog==
+X-Google-Smtp-Source: AA6agR7g9enQ2VOPXxjiBBaQyiivB97fu0ajQpyomq4xaBUyjmklH9YO+Uml4yuCLV96TFgcFbgd0g==
+X-Received: by 2002:a05:6870:f6a3:b0:11d:1ca9:ed55 with SMTP id el35-20020a056870f6a300b0011d1ca9ed55mr4500889oab.121.1661370296312;
+        Wed, 24 Aug 2022 12:44:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p1-20020a544601000000b00344cc0c4606sm4284544oip.58.2022.08.24.12.44.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 12:44:55 -0700 (PDT)
+Received: (nullmailer pid 2768602 invoked by uid 1000);
+        Wed, 24 Aug 2022 19:44:54 -0000
+Date:   Wed, 24 Aug 2022 14:44:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, DENG Qingfang <dqfext@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        devicetree@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com
+Subject: Re: [PATCH v5 1/7] dt-bindings: net: dsa: mediatek,mt7530: make
+ trivial changes
+Message-ID: <20220824194454.GA2768100-robh@kernel.org>
+References: <20220824104040.17527-1-arinc.unal@arinc9.com>
+ <20220824104040.17527-2-arinc.unal@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdm+yFhZ2pYLJ5vpj1YyNJmG=UVF4cTz_m+0UfDGNGsRbQ@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220824104040.17527-2-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 11:44:35AM -0700, Nick Desaulniers wrote:
-> On Wed, Aug 24, 2022 at 10:33 AM Segher Boessenkool
-> <segher@kernel.crashing.org> wrote:
-> > On Wed, Aug 24, 2022 at 05:24:20PM +0200, Borislav Petkov wrote:
-> > > Mark both the function prototype and definition as noreturn in order to
-> > > prevent the compiler from doing transformations which confuse objtool
-> > > like so:
-> > >
-> > >   vmlinux.o: warning: objtool: sme_enable+0x71: unreachable instruction
-> >
-> > Would -Wmissing-noreturn have caught this?
+On Wed, 24 Aug 2022 13:40:34 +0300, Arınç ÜNAL wrote:
+> Make trivial changes on the binding.
 > 
-> Oh, that's shiny. Is that relatively new?
-
-Relatively, yes.
-
-
-commit 0ca3fb0a168e9db2bd5405855d3932f62b08b7c9
-Author: Kaveh R. Ghazi <ghazi@caip.rutgers.edu>
-Date:   Tue Oct 20 07:32:08 1998 +0000
-
-    New warning, `missing-noreturn':
-
-
-The alias -Wsuggest-attribute=noreturn is newer:
-
-
-commit 94ee697923f5a93881edbc5e1b3f810b290f0fc7
-Author: Manuel L�pez-Ib��ez <manu@gcc.gnu.org>
-Date:   Sun Apr 29 09:15:30 2012 +0000
-
-	* common.opt (Wmissing-noreturn): Alias of -Wsuggest-attribute=noret
+> - Update title to include MT7531 switch.
+> - Add me as a maintainer. List maintainers in alphabetical order by first
+> name.
+> - Add description to compatible strings.
+> - Stretch descriptions up to the 80 character limit.
+> - Remove lists for single items.
+> - Remove quotes from $ref: "dsa.yaml#".
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 39 +++++++++++--------
+>  1 file changed, 23 insertions(+), 16 deletions(-)
+> 
 
 
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Segher
+If a tag was not added on purpose, please state why and what changed.
+

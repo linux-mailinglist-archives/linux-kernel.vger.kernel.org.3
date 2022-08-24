@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A7A5A0007
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E575A000A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239863AbiHXRFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S239856AbiHXRFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239816AbiHXRFG (ORCPT
+        with ESMTP id S239792AbiHXRFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:05:06 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3A63DBD4;
-        Wed, 24 Aug 2022 10:05:04 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id h8so5204785ili.11;
-        Wed, 24 Aug 2022 10:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=cFekw/Y+IQbIDxTfIDehvXw11BmvPAaH0UtQ+bMDK5o=;
-        b=n20p82n9cCCwOP4wLqQqlUignSFIAP2ipAFg88S/YrFpMb0oNTPBWVzte4mdu27ZzX
-         l3qBg/eFvK7ulrLKLXNuDTkFNHnFXBvMUyQyhDr+K6kpr3hio0WKyp1rlIqdjUq6ehdA
-         2/9fAUzgE9Uy6nAJ7I5vERrfub5G2BWI957e8sI2r8vxMaiUPZ/AKUM+hep5u7Nd2Egv
-         rSvmfG1XNXlPDsFZ0VCQ/1PCuDoyZiy4lOEBEWs9IHARGDy6uRQqph76gmBW95BExMQ3
-         3f3s7gHKvBo8Ku3QhIHV/hGpWC6/h1ZAnFcJx5tdBDjKwkma28X2Emy/cIqNl74LCWKi
-         2UtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=cFekw/Y+IQbIDxTfIDehvXw11BmvPAaH0UtQ+bMDK5o=;
-        b=vLlWl92lOrJF8/F+vlxVBGayt74afUsSAKSGCHGE+O8chWNeQviFPU7X465kVPoEFn
-         4gDxTbPhtv3j+IWhoOFIth7pb0LGG/BH821rAporb25KhNfAGIa7Z1MJP3qOq3Y/Khvt
-         W2SiYVLbZYfRk0Tfjrzo0EoLqfVNtjhX8bUJ9eR/P7mZXzjWoly2L4IfNmZXxsbvwLpX
-         3yYnfhDO0bEDwTc0xwXLgv4Vfz/jihXA9h742ArKu/naoExHtVxMZEnB6mswZtyAr11n
-         GBtLlWO6N6b1hu6E736cTAqraTQ5zjPrsMtHFR5MUjgm5YDkhhthUIQciCh+mwVKK5ir
-         xRJw==
-X-Gm-Message-State: ACgBeo1u4arum67Z9r6GzFygU1TqXIP5SustxXoCm76UrzJxj1qb8wo7
-        OarvV/zy3QZotGWA8fIKtVxOjcroVulw5JCEzu2vEMCv
-X-Google-Smtp-Source: AA6agR58+ewhL0I0wvERCM92p4ZRdWpiUH5HMg1PnmRSKp2ADqK61WeVh0dBKABae4U8hippyDFkiyQyM2ql/9j7SmQ=
-X-Received: by 2002:a92:ca4e:0:b0:2ea:3f77:a85 with SMTP id
- q14-20020a92ca4e000000b002ea3f770a85mr1622649ilo.219.1661360703886; Wed, 24
- Aug 2022 10:05:03 -0700 (PDT)
+        Wed, 24 Aug 2022 13:05:41 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AC46F257
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661360739; x=1692896739;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=36fc44OWkRyGtqJ6wjJt1++uMpCEpenRE6j/OCl7tvU=;
+  b=TNjaRhZkbIxTVuBF8XFzvmdYPJ67zj2FXcrPtnSRjNNwSWcU/mEAF9Eh
+   sk8CulkMXe/ypwZrebXUkBfZvCLkNXHw04eP9SyJS92QYeJHq2YVh/AqL
+   qTMNdrXARgQugWIQBRbzQDSkF4IAfpRNxCD3kfMVZRTPZwmYqx+W0RRsM
+   YBw/VDUlbdfnYl3HvhCbZK8DkOj+uY5jLwfzL0IjtDLS8VzJgF+EUI9D+
+   WGj70IB8DrrALIUFUByMCmpfAzTaBJCBoI3+YOlYKORKA0dncsmTmrYXe
+   b1PY3tYSVV5s8idTcMSJyXQ4p7V541Jzn3WGfNEbMD8WGN7K17MGDh+c4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="280996138"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="280996138"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 10:05:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="713125087"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Aug 2022 10:05:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 882C7174; Wed, 24 Aug 2022 20:05:50 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH v1 1/1] test_printf: Refactor fwnode_pointer() to make it more readable
+Date:   Wed, 24 Aug 2022 20:05:42 +0300
+Message-Id: <20220824170542.18263-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220824150051.54eb7748@canb.auug.org.au>
-In-Reply-To: <20220824150051.54eb7748@canb.auug.org.au>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Wed, 24 Aug 2022 19:04:26 +0200
-Message-ID: <CAP01T74GyRjXRZaDA-E5CXeaoKaf+FegQFxNP9k6kt8cvbt+EA@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the bpf-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022 at 07:00, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   2e5e0e8ede02 ("bpf: Fix reference state management for synchronous callbacks")
->
-> Fixes tag
->
->   Fixes: 69c87ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Maybe you meant
->
-> Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
->
+Converting fwnode_pointer() to use better swnode API allows to
+make code more readable.
 
-Ugh, really sorry, I must have fat fingered and pressed 'x' in vim
-while editing the commit message. I always generate these using a git
-fixes alias.
+While at it, rename full_name to full_name_third to show exact
+relation in the hierarchy.
 
-> --
-> Cheers,
-> Stephen Rothwell
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ lib/test_printf.c | 26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
+
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index fe13de1bed5f..6f7f179dd8f4 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -704,31 +704,29 @@ flags(void)
+ 
+ static void __init fwnode_pointer(void)
+ {
+-	const struct software_node softnodes[] = {
+-		{ .name = "first", },
+-		{ .name = "second", .parent = &softnodes[0], },
+-		{ .name = "third", .parent = &softnodes[1], },
+-		{ NULL /* Guardian */ }
+-	};
+-	const char * const full_name = "first/second/third";
++	const struct software_node first = { .name = "first" };
++	const struct software_node second = { .name = "second", .parent = &first };
++	const struct software_node third = { .name = "third", .parent = &second };
++	const struct software_node *group[] = { &first, &second, &third, NULL };
+ 	const char * const full_name_second = "first/second";
++	const char * const full_name_third = "first/second/third";
+ 	const char * const second_name = "second";
+ 	const char * const third_name = "third";
+ 	int rval;
+ 
+-	rval = software_node_register_nodes(softnodes);
++	rval = software_node_register_node_group(group);
+ 	if (rval) {
+ 		pr_warn("cannot register softnodes; rval %d\n", rval);
+ 		return;
+ 	}
+ 
+-	test(full_name_second, "%pfw", software_node_fwnode(&softnodes[1]));
+-	test(full_name, "%pfw", software_node_fwnode(&softnodes[2]));
+-	test(full_name, "%pfwf", software_node_fwnode(&softnodes[2]));
+-	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
+-	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
++	test(full_name_second, "%pfw", software_node_fwnode(&second));
++	test(full_name_third, "%pfw", software_node_fwnode(&third));
++	test(full_name_third, "%pfwf", software_node_fwnode(&third));
++	test(second_name, "%pfwP", software_node_fwnode(&second));
++	test(third_name, "%pfwP", software_node_fwnode(&third));
+ 
+-	software_node_unregister_nodes(softnodes);
++	software_node_unregister_node_group(group);
+ }
+ 
+ static void __init fourcc_pointer(void)
+-- 
+2.35.1
+

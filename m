@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4B65A0409
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BDA5A040C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 00:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiHXWa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 18:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
+        id S229799AbiHXWav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 18:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiHXWaV (ORCPT
+        with ESMTP id S229903AbiHXWaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 24 Aug 2022 18:30:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342F0BC93;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88280BE20;
         Wed, 24 Aug 2022 15:30:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C68606196E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD42761978;
         Wed, 24 Aug 2022 22:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D730C43470;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2EE7FC433D7;
         Wed, 24 Aug 2022 22:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661380217;
-        bh=VfX9eQMZ1OK+AhjA11hr6pTWCMVNB6NuAsflTkH6aSI=;
+        bh=lJg/24HXKm7aTVbMP9b8klDDS2GqxYqDTBd11iwmW7s=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OPVPLFH+4dQw1k2RQhkfNg71nn205IxFzn4QLPLz/0rieu2Lnv4bpDui844XK5Ipy
-         pBYS+jEzeDY7M8qpVJq5ReqQPeOyiwlevsRlp6aYI6lhlbqD3qVFhLVshylPtyH43u
-         Fmzng4YvD9qdZpQclGeHNsUj9j8BeX8XBpAqzeb5/Tljp0LP7FX+PWZ4Cf+EEX5EzC
-         Y3+/OJTtKRxG2ovA3HBn1iCkAFHbja56kA2qV3qXEcqzaK+1N5IIAD1LrvrZph7BQj
-         8QWC+hkmUMOx4kOE1IXhdGDMWA7PkVq4LAVRLBjNfyG3+MOxRhct+8KI2iWbCgPFqK
-         3V+uylZYtFP3g==
+        b=daN7edNCFQmNgrfxB43lJZ8AC2iVH4xbzjSoxyUHqN015t0hvMpvpmV81z9y4MbAY
+         lJ/MykKjkhFSOIEWI0IEUm4dRLHJbJtaoXYnl67QEJUoi+lhLgwczudMsklzz9OlUt
+         v5qPHgE/5+sGCfwnfPfs4EFR8gxXTRO2iR1uVLHzsg6Dy4AnZD+hGrdQqqiBFPtULE
+         jTi80t6OivT10BrrVmHtzDdxpWe4/MUTESvZDoP/9lrMNR0sPK9+zHPSoGP3P0CmQm
+         xlMoY/5kI1yuASSsvRyyZFjUXqjlDGe/I7Ld0/iDEJWMg4BoNVhKldG10hMt/TxDGp
+         cIPX44doVCHng==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 029CDC0C3EC;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E7D3E2A03D;
         Wed, 24 Aug 2022 22:30:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [kernel PATCH v3 0/1] Bluetooth: hci_sync: hold hdev->lock when
- cleanup hci_conn
+Subject: Re: [PATCH] Bluetooth: move from strlcpy with unused retval to strscpy
 From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <166138021700.13438.5071641895623832276.git-patchwork-notify@kernel.org>
+Message-Id: <166138021705.13438.9116551765111191759.git-patchwork-notify@kernel.org>
 Date:   Wed, 24 Aug 2022 22:30:17 +0000
-References: <20220823172808.3477638-1-jiangzp@google.com>
-In-Reply-To: <20220823172808.3477638-1-jiangzp@google.com>
-To:     Zhengping Jiang <jiangzp@google.com>
-Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        chromeos-bluetooth-upstreaming@chromium.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, johan.hedberg@gmail.com,
-        luiz.dentz@gmail.com, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20220818210207.8323-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210207.8323-1-wsa+renesas@sang-engineering.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,21 +64,19 @@ Hello:
 This patch was applied to bluetooth/bluetooth-next.git (master)
 by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-On Tue, 23 Aug 2022 10:28:07 -0700 you wrote:
-> Hold hdev->lock for hci_conn_failed. There are possible race conditions
-> which may cause kernel crash.
+On Thu, 18 Aug 2022 23:02:07 +0200 you wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
 > 
-> Changes in v3:
-> - Remove an empty line in commit message between Fixes and SoB
-> 
-> Changes in v2:
-> - Update commit message
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [kernel,v3,1/1] Bluetooth: hci_sync: hold hdev->lock when cleanup hci_conn
-    https://git.kernel.org/bluetooth/bluetooth-next/c/808765508e8e
+  - Bluetooth: move from strlcpy with unused retval to strscpy
+    https://git.kernel.org/bluetooth/bluetooth-next/c/5cc684fb4f0f
 
 You are awesome, thank you!
 -- 

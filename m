@@ -2,118 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706EA59F7A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7027459F7B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiHXK1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S235339AbiHXK2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236971AbiHXK0h (ORCPT
+        with ESMTP id S235759AbiHXK1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:26:37 -0400
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD8A82D17
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:25:19 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id QnZToXm7hBDYDQnZUoinzN; Wed, 24 Aug 2022 12:25:17 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 24 Aug 2022 12:25:17 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] hwmon: (sparx5) Use devm_clk_get_enabled() helper
-Date:   Wed, 24 Aug 2022 12:25:13 +0200
-Message-Id: <cfe4c965074b5ecbe03830b05e038b4594c7b970.1661336689.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Wed, 24 Aug 2022 06:27:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F4E80B75;
+        Wed, 24 Aug 2022 03:27:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AF57A34169;
+        Wed, 24 Aug 2022 10:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661336821; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=svip1HnOF9D7Fl9aKofEvyk0pEgENUVlEuB1mZtboTA=;
+        b=BSwbM9o5a63Dsl3aydVUid7PDlzXWhAjXTXwpvHPRto/Y+Z4jx+DSo3SpxBtt/QERnMVCr
+        Bsy6tdYVt8qrRFwuly1qta1c5/YJ/QwiiPW6MwVlDOnVjadS+2kc3loarhh3eYS9c9OEfd
+        Ry2BcmegFWJQ3RRPza792trSufbhx4o=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8A0F413AC0;
+        Wed, 24 Aug 2022 10:27:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HCidH/X8BWMvGwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 24 Aug 2022 10:27:01 +0000
+Date:   Wed, 24 Aug 2022 12:27:00 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
+Message-ID: <YwX89JCQCKMMYdG9@dhcp22.suse.cz>
+References: <YwNpI1ydy0yDnBH0@dhcp22.suse.cz>
+ <CAGWkznEB+R0YBaBFBL7dPqs8R=qKC6+ixTWEGCYy2PaczXkaPA@mail.gmail.com>
+ <YwRjyx6wFLk8WTDe@dhcp22.suse.cz>
+ <CAGWkznGaYTv4u4kOo-rupfyWzDNJXNKTchwP6dbUK-=UXWm47w@mail.gmail.com>
+ <YwSQ4APOu/H7lYGL@dhcp22.suse.cz>
+ <CAGWkznGd6mgareABseMKY5p0f1=5dkfVkj=NS7_B6OkXBYSwyw@mail.gmail.com>
+ <YwS/S9Sd1OWnT81Q@dhcp22.suse.cz>
+ <CAGWkznGYLyF+njUB0gFF3JVdThnK9JaNsqxXYFhbdSwEQpCxvA@mail.gmail.com>
+ <YwXYVjRpXQjQMsxr@dhcp22.suse.cz>
+ <CAGWkznEqX3DwHW_owiK+HuuQ-HsUYK4vKmLhSxgzGn20Vzid2A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGWkznEqX3DwHW_owiK+HuuQ-HsUYK4vKmLhSxgzGn20Vzid2A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The devm_clk_get_enabled() helper:
-   - calls devm_clk_get()
-   - calls clk_prepare_enable() and registers what is needed in order to
-     call clk_disable_unprepare() when needed, as a managed resource.
+On Wed 24-08-22 17:34:42, Zhaoyang Huang wrote:
+> On Wed, Aug 24, 2022 at 3:50 PM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Wed 24-08-22 10:23:14, Zhaoyang Huang wrote:
+> > > On Tue, Aug 23, 2022 at 7:51 PM Michal Hocko <mhocko@suse.com> wrote:
+> > [...]
+> > > > One way to achieve that would be shaping the hierarchy the following way
+> > > >             root
+> > > >         /         \
+> > > > no_memcg[1]      memcg[2]
+> > > > ||||||||         |||||
+> > > > app_cgroups     app_cgroups
+> > > >
+> > > > with
+> > > > no_memcg.subtree_control = ""
+> > > > memcg.subtree_control = memory
+> > > >
+> > > > no?
+> > > According to my understanding, No as there will be no no_memcg. All
+> > > children groups under root would have its cgroup.controllers = memory
+> > > as long as root has memory enabled.
+> >
+> > Correct
+> >
+> > > Under this circumstance, all
+> > > descendants group under 'no_memcg' will charge memory to its parent
+> > > group.
+> >
+> > Correct. And why is that a problem? I thought you main concern was a per
+> > application LRUs. With the above configuration all app_cgroups which do
+> > not require an explicit memory control will share the same (no_memcg)
+> > LRU and they will be aged together.
+> I can't agree since this indicates the processes want memory free
+> depending on a specific hierarchy which could have been determined by
+> other subsys.
 
-This simplifies the code, the error handling paths and avoid the need of
-a dedicated function used with devm_add_action_or_reset().
+I really fail to understand your requirements.
 
-Based on my test with allyesconfig, this reduces the .o size from:
-   text	   data	    bss	    dec	    hex	filename
-   2419	   1472	      0	   3891	    f33	drivers/hwmon/sparx5-temp.o
-down to:
-   2155	   1472	      0	   3627	    e2b	drivers/hwmon/sparx5-temp.o
+> IMHO, charging the pages which out of explicitly memory
+> enabled group to root could solve all of the above constraints with no
+> harm.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-devm_clk_get_enabled() is new and is part of 6.0-rc1
----
- drivers/hwmon/sparx5-temp.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+This would break the hierarchical property of the controller. So a
+strong no no. Consider the following example
 
-diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
-index 98be48e3a22a..04fd8505e5d6 100644
---- a/drivers/hwmon/sparx5-temp.c
-+++ b/drivers/hwmon/sparx5-temp.c
-@@ -26,13 +26,6 @@ struct s5_hwmon {
- 	struct clk *clk;
- };
- 
--static void s5_temp_clk_disable(void *data)
--{
--	struct clk *clk = data;
--
--	clk_disable_unprepare(clk);
--}
--
- static void s5_temp_enable(struct s5_hwmon *hwmon)
- {
- 	u32 val = readl(hwmon->base + TEMP_CFG);
-@@ -113,7 +106,6 @@ static int s5_temp_probe(struct platform_device *pdev)
- {
- 	struct device *hwmon_dev;
- 	struct s5_hwmon *hwmon;
--	int ret;
- 
- 	hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
- 	if (!hwmon)
-@@ -123,19 +115,10 @@ static int s5_temp_probe(struct platform_device *pdev)
- 	if (IS_ERR(hwmon->base))
- 		return PTR_ERR(hwmon->base);
- 
--	hwmon->clk = devm_clk_get(&pdev->dev, NULL);
-+	hwmon->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(hwmon->clk))
- 		return PTR_ERR(hwmon->clk);
- 
--	ret = clk_prepare_enable(hwmon->clk);
--	if (ret)
--		return ret;
--
--	ret = devm_add_action_or_reset(&pdev->dev, s5_temp_clk_disable,
--				       hwmon->clk);
--	if (ret)
--		return ret;
--
- 	s5_temp_enable(hwmon);
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+       root
+	|
+	A
+controllers="memory"
+memory.max = 1G
+subtree_control=""
+|      |      |
+A1     A2     A3
+
+althought A1,2,3 do not have their memory controller enabled explicitly
+they are still constrained by the A memcg limit. If you just charge to
+the root because it doesn't have memory controller enabled explicitly
+then you just evade that constrain. I hope you understand why that is a
+problem.
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs

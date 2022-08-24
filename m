@@ -2,159 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F8559FE3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD55359FE42
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238953AbiHXPZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        id S238414AbiHXP0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239516AbiHXPZD (ORCPT
+        with ESMTP id S236041AbiHXP0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:25:03 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60089.outbound.protection.outlook.com [40.107.6.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C7D9837E;
-        Wed, 24 Aug 2022 08:25:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PtgK0YF1O7Jsbp2ej+DI4Qj9Q3ocLw2azemJGEDrA2mXCohvNb868anSMtOg/92MWSAIgGimnkGyC0Nlqi7B7i9+1JCu7jbPBayBj1ykvpjW47tsBMmpQ9PVUhWroY12RPK7Ho18Ldl3o9ucmwiFKNm96vNjRmNeW1meBdvm4M37LAqaWp4JaD1hB7qYRmDIaTOCJpvWd+lN1ryqZgTSHPfAj61hBMvovj35OtAetJzl2tthkuFLFNd8jDHr7/AgLsbX/ulSjZCJz74ymhhl58J8JbrD+lvNamNuj5oAwy/ojThdbc8yETVjEdZpEY3Yu4Y4t/MYNIxzdpEk8qtz4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PI28A4FrPeOP9dqo7iEHeN5Xaz0ogKEewQ8CZW2bDy8=;
- b=R649zuY0U1QjteLIzFO6Hei+mu15PG+3GfLZhr/s0DBdpIlf+TS7lNQ8TH8BcTjfqiH8BlAfxPE07WZ5gePoPpHMeCNByOeP4aEP5153MYOAXSrKWWtpH6H2NQ0KAWDp7z7ylcS9ud90Usks+9fMKgqnqXOD1YpdAOZj7rbY5PIESf8n05zZv1jl/zI7A7UXTIN0oTguFBdCgUx7zYjVvTDzbdmO9coeh7oZZjMYg+1BYSYp9QSDkMMhF6zR5Ludb1wbK1hEnI8g8+J1d2nrfAdtajLKn98QWiGobF0hgfQUZ7uudZOhWayoCBUyjJZnXDHcq2ttEGm248/slNIprA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 194.138.21.75) smtp.rcpttodomain=linux-watchdog.org
- smtp.mailfrom=siemens.com; dmarc=fail (p=none sp=none pct=100) action=none
- header.from=siemens.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PI28A4FrPeOP9dqo7iEHeN5Xaz0ogKEewQ8CZW2bDy8=;
- b=S+8AQlCegdKzrCnHIO4T4c60/7ar7YeWHfAJ/ekw4Ot1wI2sbX2XAaHWmySjIlKwtQUBdlBitznLqqd/ICPgpbr2+ZUBaeDlbEUl9QMJ3S67OQ+xlZbv5O+3xdRq7AMStMa97SHV+bn9knrNZwA6SApQL6CfZDL/2W2nq9aVD5nYTdy5iHj7EmEWSF3x/00nzVJeDoTA2vHbdSjs6mS3Gm2u+lRNElXcnHjMwoB8Bm9qTlIUJH4xbe+1muoNWjE3cTPwVJqPC2wnPjC4qe0JUNpKCBEx2sHZv6cmqcM3DeSI5NslacF3Ob5K3/RuaiugrmDAagOaFhkmMR+8UXNmKg==
-Received: from FR3P281CA0165.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:a2::10)
- by AS4PR10MB5576.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4cf::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
- 2022 15:24:59 +0000
-Received: from VE1EUR01FT073.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:d10:a2:cafe::b6) by FR3P281CA0165.outlook.office365.com
- (2603:10a6:d10:a2::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15 via Frontend
- Transport; Wed, 24 Aug 2022 15:24:59 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 194.138.21.75)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=siemens.com;
-Received-SPF: Fail (protection.outlook.com: domain of siemens.com does not
- designate 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.75; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.75) by
- VE1EUR01FT073.mail.protection.outlook.com (10.152.3.38) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5566.15 via Frontend Transport; Wed, 24 Aug 2022 15:24:59 +0000
-Received: from DEMCHDC89XA.ad011.siemens.net (139.25.226.103) by
- DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.9; Wed, 24 Aug 2022 17:24:58 +0200
-Received: from md1za8fc.ad001.siemens.net (139.25.0.80) by
- DEMCHDC89XA.ad011.siemens.net (139.25.226.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.9; Wed, 24 Aug 2022 17:24:58 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH v2] watchdog: w83627hf_wdt: add bootstatus support
-Date:   Wed, 24 Aug 2022 17:24:48 +0200
-Message-ID: <20220824152448.7736-1-henning.schild@siemens.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 24 Aug 2022 11:26:07 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D8D8E99A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:26:05 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ca13so22943020ejb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=+REtIHQgWG0CyX06a0bJ3AbJyKU8duln9BUWF3D/+sc=;
+        b=NS/sWXSH8u/FJaGqY/cQK1Vs9FroETLZmL8iQTV6Vs3gAeO4NYg7ZMBaULqCAeYM8b
+         cehi9lldGwWNNivBjF0I1baLZCNtH1zRBZuTgbAct/hZemxMe+QXpCHw8KaBC+BUrTSM
+         s8TPj55628lFkV8F3PlbbvuvYvn7xXN7imsCc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+REtIHQgWG0CyX06a0bJ3AbJyKU8duln9BUWF3D/+sc=;
+        b=f61FgA1zHy9sz66+vn1abAcp/sZf+U7NANYJS3UI/l/07ufV9vVUFtfUytL3A1PAFB
+         kpG+veRpnD7jDj9cV63TLEHuZNz3riCXYBTvOkekGYIEpOi1qyrVc/6VSeZ3n7Hj1oVH
+         5CeQUeJ9H0/BjSuK0WE9KKxgpyzNhi4rinNRLK1n2Fp1lVwWVAbQj+FQOsS1LqbFYe0w
+         GCfZh0WQJ7Cq0Llyo9Z45C1WJ5/cMYHAotwZiH+X/7Ds51jfEQvPV2YrCQZcucGDT6Tq
+         DLvTmk1SUu/TnwHbUZ5bV1BdBY0x+OY7J4KTkZW3/P1A7Dof2Bf5t+319MR0kv5cyQ3v
+         wE0A==
+X-Gm-Message-State: ACgBeo0DScNWHB4wfD0SewzPAdephgLTMapCOzqoe/hMzVznKDw1uQs/
+        wso8QoTo7+QyAPG95HWDIzmjW6HeHWjLlXxG
+X-Google-Smtp-Source: AA6agR6HwdVldafOfu4AjNrBjBcnnfNL5ZRZfrDI9msrroyE0c1YpJkCfP7lvVhN1IPyhY5LUGjRmg==
+X-Received: by 2002:a17:907:2e01:b0:730:9ecc:cd28 with SMTP id ig1-20020a1709072e0100b007309ecccd28mr3172726ejc.360.1661354763316;
+        Wed, 24 Aug 2022 08:26:03 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id by16-20020a0564021b1000b00446cbc3f206sm3238104edb.93.2022.08.24.08.26.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 08:26:02 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id h24so21199677wrb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:26:01 -0700 (PDT)
+X-Received: by 2002:a05:6000:2ce:b0:225:2c5f:3ba8 with SMTP id
+ o14-20020a05600002ce00b002252c5f3ba8mr16836784wry.138.1661354761632; Wed, 24
+ Aug 2022 08:26:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [139.25.0.80]
-X-ClientProxiedBy: DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) To
- DEMCHDC89XA.ad011.siemens.net (139.25.226.103)
-X-TM-AS-Product-Ver: SMEX-14.0.0.3080-8.6.1018-26680.007
-X-TM-AS-Result: No-10--9.833600-8.000000
-X-TMASE-MatchedRID: k5wM/XNuONYqFSncf8X1z/6cU5Ag0q/uACdiu6hUOTkrT6V6InEuV3qL
-        r3o+NE+IB2QWi8BF5SiKW8BvXyLiE1OPRqTK0eJu09kDLefQujqGFN7r+9GAixo8wYJxWb0OjX0
-        BChis2L2eEPi9wVyFrl8vPNhBIHcIKFlUUoQgfyuAMuqetGVetsgO3bswsOnS3QfwsVk0UbuGrP
-        nef/I+esTZHiN20dwX/gKBLX9WFbKCN8k+5Dteqs09lNSVgfSqVuGAHHweLts=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--9.833600-8.000000
-X-TMASE-Version: SMEX-14.0.0.3080-8.6.1018-26680.007
-X-TM-SNTS-SMTP: 028F728188360FE64F2DDD1BD65EB077DE3CA1ACCFD2E48DEF974D170D6445212000:8
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7c82e0d6-d8b6-44a3-48db-08da85e4ceae
-X-MS-TrafficTypeDiagnostic: AS4PR10MB5576:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ogaXYwMeJ0wDdjJSBBikJXeTKX3B4pVvcMCYcE7s+dhLPgo9R5ghWAVjc7jbnpnUuHtZad7DkAwOlEhzF27c7jJCwH1c1YIbTwiEkkUp829hya3SHGV7D3LwfjLiQwByFcoAHEcouQEVtbn9VNMh44f/EvAaGizHZfv1cnhb4oNQafSHrREPmdhzv8oCRqLRH7nMcaSr4H2p5hpzkkOVvQQ40S/kfvJO1HNCB9PvcLibu11/cJHW3bh65nFk9FgSeXGGCWMXHWGAYz/qiPnjgQ8dDJwlB6L5I+Fy5/bYZ3Ff/GZA/KJa8+Grz9YDIBp+sUoLPW05GX5Q6C2Nh8qaClcrD8bGPjXJI6Hl+XaVDZNIeeJSvpgYAvwvJX/1iQ4J6jVm39tcslS2FDwZH7ynEa/U30fwRJjt8byO2cJura5wk/1Z+FT6zK7x2j0lQeal0DPM0zyp9hYcpIFiRlObTGWGaGvWoQOcsoh9GSLkNZinGlGPkUDOXk8ggc9IQEy6QI8LQiH9yqCwpFEGLpa+jK1x8+RANCL6ZZsfi+bu6UHcDZkqZ0ZM2WzCEc3FfpXEIHmv3EMXd4QXf+6RodgbgiDBd4kshLHOG1RVaBuDNePGN5F2wDHRrZLaDr7uSibvOUcHLEc8Vm4jfwycP0EBdeiPaPzL7hkivkM4tTCHVpyIPg3vT2SOZlcAEeGAvto+oH10LWYzuRl4V0rysjajusPxrhjkLyJJIF0p9SjCGHs+mv8DA5XXMfAU1JO2V0etkBXpaRIFETjJex1XzljPr90UYJJd/XvV8Qjx637afyVp2rZy0VSQZ1ciNnLs1GIjZ0Go+FATGvPfhLXAysrEszIP53zoY27Fmd1nuTgupDI=
-X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(376002)(39860400002)(46966006)(40470700004)(36840700001)(40480700001)(2616005)(956004)(82740400003)(36756003)(83380400001)(5660300002)(47076005)(478600001)(356005)(44832011)(82960400001)(316002)(40460700003)(81166007)(110136005)(2906002)(6666004)(26005)(4326008)(70206006)(8676002)(336012)(16526019)(82310400005)(70586007)(41300700001)(1076003)(186003)(107886003)(8936002)(34020700004)(36860700001)(86362001)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 15:24:59.2443
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c82e0d6-d8b6-44a3-48db-08da85e4ceae
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT073.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5576
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220726094549.263899-1-jinghung.chen3@hotmail.com>
+ <SG2PR03MB5006B0C3E57803E3B1E0EDBCCC949@SG2PR03MB5006.apcprd03.prod.outlook.com>
+ <93bf8a59-34e3-e461-35c9-4f0f344dee32@quicinc.com>
+In-Reply-To: <93bf8a59-34e3-e461-35c9-4f0f344dee32@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 24 Aug 2022 08:25:47 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VNUh7NT5bx0uRT259CKk2ndbji6nh2=xoRNBEC1yg-XA@mail.gmail.com>
+Message-ID: <CAD=FV=VNUh7NT5bx0uRT259CKk2ndbji6nh2=xoRNBEC1yg-XA@mail.gmail.com>
+Subject: Re: [PATCH v8 3/3] arm64: dts: qcom: Add LTE SKUs for sc7280-villager family
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     Jimmy Chen <jinghung.chen3@hotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The status bit in the status and control register can tell us whether
-the last reboot was caused by the watchdog. Make sure to take that into
-the bootstatus before clearing it.
+Hi,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Henning Schild <henning.schild@siemens.com>
----
- drivers/watchdog/w83627hf_wdt.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+On Wed, Aug 24, 2022 at 3:11 AM Sibi Sankar <quic_sibis@quicinc.com> wrote:
+>
+> Hey Jimmy,
+>
+> Thanks for the patch.
+>
+> On 7/26/22 3:15 PM, Jimmy Chen wrote:
+> > This adds LTE skus for villager device tree files.
+> >
+> > Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
+> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> >
+> > (no changes since v6)
+> >
+> > Changes in v6:
+> > - Remove v5 accidentally added sc7280-herobrine-herobrine-r1-lte.dts
+> >
+> > Changes in v5:
+> > - Reorder '.dtb' in Makefile
+> > - Put the "interconnects" line back
+> >
+> > Changes in v4:
+> > - Reorder 'status' last
+> >
+> >   arch/arm64/boot/dts/qcom/Makefile               |  2 ++
+> >   .../boot/dts/qcom/sc7280-chrome-common.dtsi     | 11 -----------
+> >   .../boot/dts/qcom/sc7280-herobrine-crd.dts      |  1 +
+> >   .../dts/qcom/sc7280-herobrine-herobrine-r1.dts  |  1 +
+> >   .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi | 17 +++++++++++++++++
+> >   .../qcom/sc7280-herobrine-villager-r0-lte.dts   | 14 ++++++++++++++
+> >   .../qcom/sc7280-herobrine-villager-r1-lte.dts   | 14 ++++++++++++++
+> >   arch/arm64/boot/dts/qcom/sc7280-idp.dts         |  1 +
+> >   8 files changed, 50 insertions(+), 11 deletions(-)
+> >   create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+> >   create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0-lte.dts
+> >   create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> > index 2c1605e00d349..24eacbf330880 100644
+> > --- a/arch/arm64/boot/dts/qcom/Makefile
+> > +++ b/arch/arm64/boot/dts/qcom/Makefile
+> > @@ -103,7 +103,9 @@ dtb-$(CONFIG_ARCH_QCOM)   += sc7180-trogdor-r1-lte.dtb
+> >   dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-crd.dtb
+> >   dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-herobrine-r1.dtb
+> >   dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-villager-r0.dtb
+> > +dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-villager-r0-lte.dtb
+> >   dtb-$(CONFIG_ARCH_QCOM)     += sc7280-herobrine-villager-r1.dtb
+> > +dtb-$(CONFIG_ARCH_QCOM)      += sc7280-herobrine-villager-r1-lte.dtb
+> >   dtb-$(CONFIG_ARCH_QCOM)     += sc7280-idp.dtb
+> >   dtb-$(CONFIG_ARCH_QCOM)     += sc7280-idp2.dtb
+> >   dtb-$(CONFIG_ARCH_QCOM)     += sc7280-crd-r3.dtb
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> > index cfe2741456a1a..25f31c81b2b74 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> > @@ -83,17 +83,6 @@ spi_flash: flash@0 {
+> >       };
+> >   };
+> >
+> > -/* Modem setup is different on Chrome setups than typical Qualcomm setup */
+> > -&remoteproc_mpss {
+> > -     status = "okay";
+> > -     compatible = "qcom,sc7280-mss-pil";
+> > -     iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
+> > -     interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
+> > -     memory-region = <&mba_mem>, <&mpss_mem>;
+> > -     firmware-name = "qcom/sc7280-herobrine/modem/mba.mbn",
+> > -                     "qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
+> > -};
+> > -
+> >   &remoteproc_wpss {
+> >       status = "okay";
+> >       firmware-name = "ath11k/WCN6750/hw1.0/wpss.mdt";
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > index e9ca6c5d24a16..921eccfec39ae 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > @@ -9,6 +9,7 @@
+> >
+> >   #include "sc7280-herobrine.dtsi"
+> >   #include "sc7280-herobrine-audio-wcd9385.dtsi"
+> > +#include "sc7280-herobrine-lte-sku.dtsi"
+> >
+> >   / {
+> >       model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+)";
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> > index c1647a85a371a..c1a6719687252 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+> > @@ -8,6 +8,7 @@
+> >   /dts-v1/;
+> >
+> >   #include "sc7280-herobrine.dtsi"
+> > +#include "sc7280-herobrine-lte-sku.dtsi"
+> >
+> >   / {
+> >       model = "Google Herobrine (rev1+)";
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+> > new file mode 100644
+> > index 0000000000000..a92eeccd2b2a9
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+> > @@ -0,0 +1,17 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > +/*
+> > + * Google Herobrine dts fragment for LTE SKUs
+> > + *
+> > + * Copyright 2022 Google LLC.
+> > + */
+> > +/* Modem setup is different on Chrome setups than typical Qualcomm setup */
+> > +
+> > +&remoteproc_mpss {
+> > +     compatible = "qcom,sc7280-mss-pil";
+> > +     iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
+> > +     interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
+> > +     memory-region = <&mba_mem>, <&mpss_mem>;
+> > +     firmware-name = "qcom/sc7280-herobrine/modem/mba.mbn",
+> > +                     "qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
+> > +     status = "okay";
+> > +};
+>
+> We shoud probably move the mpss_mem, mba_mem and rmtfs_mem here as
+> well, that way we save an additional ~255M.
 
-diff --git a/drivers/watchdog/w83627hf_wdt.c b/drivers/watchdog/w83627hf_wdt.c
-index 56a4a4030ca9..bc33b63c5a5d 100644
---- a/drivers/watchdog/w83627hf_wdt.c
-+++ b/drivers/watchdog/w83627hf_wdt.c
-@@ -113,6 +113,10 @@ MODULE_PARM_DESC(early_disable, "Disable watchdog at boot time (default=0)");
- #define W836X7HF_WDT_CSR	0xf7
- #define NCT6102D_WDT_CSR	0xf2
- 
-+#define WDT_CSR_STATUS		0x10
-+#define WDT_CSR_KBD		0x40
-+#define WDT_CSR_MOUSE		0x80
-+
- static void superio_outb(int reg, int val)
- {
- 	outb(reg, WDT_EFER);
-@@ -244,8 +248,12 @@ static int w83627hf_init(struct watchdog_device *wdog, enum chips chip)
- 	t = superio_inb(cr_wdt_control) & ~0x0C;
- 	superio_outb(cr_wdt_control, t);
- 
--	/* reset trigger, disable keyboard & mouse turning off watchdog */
--	t = superio_inb(cr_wdt_csr) & ~0xD0;
-+	t = superio_inb(cr_wdt_csr);
-+	if (t & WDT_CSR_STATUS)
-+		wdog->bootstatus |= WDIOF_CARDRESET;
-+
-+	/* reset status, disable keyboard & mouse turning off watchdog */
-+	t &= ~(WDT_CSR_STATUS | WDT_CSR_KBD | WDT_CSR_MOUSE);
- 	superio_outb(cr_wdt_csr, t);
- 
- 	superio_exit();
--- 
-2.35.1
+That sounds like a great idea. I wonder if it would be possible for
+Bjorn to land Jimmy's patches as-is and perhaps you could send a
+follow-up patch?
 
+-Doug

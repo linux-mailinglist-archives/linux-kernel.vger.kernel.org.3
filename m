@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0146F5A009F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEAF5A00A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbiHXRo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S240300AbiHXRpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiHXRo2 (ORCPT
+        with ESMTP id S240290AbiHXRpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:44:28 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70E7FFA2;
-        Wed, 24 Aug 2022 10:44:26 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oQuQN-0004jX-Da; Wed, 24 Aug 2022 19:44:19 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        Rob Herring <robh@kernel.org>, Conor Dooley <mail@conchuod.ie>
-Subject: Re: [PATCH v4 2/4] dt-bindings: interrupt-controller: sifive,plic: add legacy riscv compatible
-Date:   Wed, 24 Aug 2022 19:44:18 +0200
-Message-ID: <3948407.AJdgDx1Vlc@diego>
-In-Reply-To: <20220823183319.3314940-3-mail@conchuod.ie>
-References: <20220823183319.3314940-1-mail@conchuod.ie> <20220823183319.3314940-3-mail@conchuod.ie>
+        Wed, 24 Aug 2022 13:45:46 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AA181B15
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:45:39 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id c9so12117045qkk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3majRtgK1WM50+kP58AFxmfVpFYPY7FKVRe4D0xTAv0=;
+        b=qxBMKiEQGuZvs5Dq43ToYAMt54TMF7Yxv4BNjtRFc9vAvinTZMAwC8bUtp+Lf7j2YI
+         iTlHFUivMbvLhrl8nn2eckkR5yXTOO5gqNA3sq4n+dPxNow71aRHFxezX9H4G02VwG2x
+         x7U0HiQ6NymmNAg9Eu4TBMhEp8dpj+CxRTAXBA6f0GlIQq/loErqqrqTR3K50zwZBUVM
+         krvoWho2zym5qCH3tPnnCM2Pr1mMiph9qPS9LelomKaU1rOahdD5DzJznFwFrjcFLG6j
+         yGiRmjyiLyTk6YIdTnvxeCxD775yZ94eKFe4aNi3OHgpCcp8hg/a7003HUAmBb9hSKL7
+         QOdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3majRtgK1WM50+kP58AFxmfVpFYPY7FKVRe4D0xTAv0=;
+        b=6jGu2UxKCBHJRM+vlxGf9h4JP3QRB9aj57oDoxgao3Hq5sb5VDVuoULIx1E/EZmcWv
+         thI2on6+5iv7JbrCY1+Zjin4BWKNyivtkfYMOrzVzQKR57bA4UmOzKOpQY3DQnvJraWb
+         fmBp/17Ke34+7ZAo3JxZjfHSpEpSd43uJ49Y2eeEDBEv1p+Msh3hT35tsybFPKoEtdGO
+         tRCv0y0UTorDvYQQgmYpDFbVhILGq0RLNjR25E97ldwp3o7YpPwZ9NGcRT3Dzd9Hfy34
+         Eykfoq+yBWQoOk+bXTSeOmXHQINWE21HPyydxoO9OEg54m26yJsiPGvJAt2/pfPFUGIG
+         zAIQ==
+X-Gm-Message-State: ACgBeo1GV4qy8YU1lmo3EbxqaG2GPfcKRdhIZIany+B0x6fJ51yYaxPC
+        LsqU82lXHLdvWSCaN616dRTMTTEHTrljrtWozPQ=
+X-Google-Smtp-Source: AA6agR4QxgDdktn2ZYSf8KdAxCno48xFhw0M2iDD0dOIyCXNsC4KZG/LjTAfmxRn2n+0D7uIhzyYnL5YSjl2/vAA44E=
+X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
+ v17-20020ae9e311000000b006bae711fb27mr305631qkf.320.1661363137961; Wed, 24
+ Aug 2022 10:45:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220824012624.2826445-1-yury.norov@gmail.com>
+ <20220824012624.2826445-2-yury.norov@gmail.com> <CAHp75VcB08oTrB8R9Zyo4Ja=c_XqybqdCw46fY4_MNqvSSCtLQ@mail.gmail.com>
+ <YwYlWjlWO3fFrtQp@yury-laptop>
+In-Reply-To: <YwYlWjlWO3fFrtQp@yury-laptop>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 24 Aug 2022 20:45:01 +0300
+Message-ID: <CAHp75VfrA7S033=mKkUj-SnWWyM9pwEiM_Umrrd4arpf1SNw6Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] lib/find_bit: introduce FIND_FIRST_BIT() macro
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 23. August 2022, 20:33:18 CEST schrieb Conor Dooley:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> While "real" hardware might not use the compatible string "riscv,plic0"
-> it is present in the driver & QEMU uses it for automatically generated
-> virt machine dtbs. To avoid dt-validate problems with QEMU produced
-> dtbs, such as the following, add it to the binding.
-> 
-> riscv-virt.dtb: plic@c000000: compatible: 'oneOf' conditional failed, one must be fixed:
->         'sifive,plic-1.0.0' is not one of ['sifive,fu540-c000-plic', 'starfive,jh7100-plic', 'canaan,k210-plic']
->         'sifive,plic-1.0.0' is not one of ['allwinner,sun20i-d1-plic']
->         'sifive,plic-1.0.0' was expected
->         'thead,c900-plic' was expected
-> riscv-virt.dtb: plic@c000000: '#address-cells' is a required property
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml     | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> index 92e0f8c3eff2..99e01f4d0a69 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> @@ -66,6 +66,11 @@ properties:
->            - enum:
->                - allwinner,sun20i-d1-plic
->            - const: thead,c900-plic
-> +      - items:
-> +          - const: sifive,plic-1.0.0
-> +          - const: riscv,plic0
-> +        deprecated: true
+On Wed, Aug 24, 2022 at 4:19 PM Yury Norov <yury.norov@gmail.com> wrote:
+> On Wed, Aug 24, 2022 at 12:10:02PM +0300, Andy Shevchenko wrote:
+> > On Wed, Aug 24, 2022 at 4:51 AM Yury Norov <yury.norov@gmail.com> wrote:
 
-hmm, when setting this to deprecated, does this mean qemu was changed
-to not use that compatible anymore?
+...
 
-I.e. reading deprecated I'd assume that this is kept around for old qemu builds?
+> > > +#define FIND_FIRST_BIT(EXPRESSION, size)                                       \
+> > > +({                                                                             \
+> > > +       unsigned long idx, val, sz = (size);                                    \
+> > > +                                                                               \
+> > > +       for (idx = 0; idx * BITS_PER_LONG < sz; idx++) {                        \
+> >
+> > I think we can do slightly better:
+> >
+> > for (unsigned long idx = 0; idx < sz; idx += BITS_PER_LONG) {
+> >   unsigned long val;
+>
+> This will blow up the EXPRESSION. We can mitigate it on user side:
 
+I'm not sure I understand how EXPRESSION is involved in all this. What
+I proposed is to replace the for-loop one-by-one to
+one-by-BITS_PER_LONG. But okay, I have re-read the above patch and now
+I see what you are doing, basically you use internal variables of the
+macro in the EXPRESSION. Hmm...
 
-Heiko
-
-> +        description: For the QEMU virt machine only
->  
->    reg:
->      maxItems: 1
-> 
-
-
-
-
+-- 
+With Best Regards,
+Andy Shevchenko

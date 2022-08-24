@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1E35A0035
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7A75A003C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239977AbiHXRR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S239325AbiHXRTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236489AbiHXRRx (ORCPT
+        with ESMTP id S240016AbiHXRTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:17:53 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BF07C1FA
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:17:49 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so12232748oti.9
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=MHYuEVNrNq6xOFLpayXIejomNu0GT0DBxEs7vGrd158=;
-        b=WZmQ7PLNtEHmn6SJrYb0tXJV3lUfaM74pbLSdSKR9LMnaK5kGCvh1f3QY7J38pSoIB
-         ik74LCQK95MUwF5xTdiHJ3JJ/wd36IqnmQneCLEzyFZ4ghGmFUX4vvXUG+dSM9XM77Nv
-         lk/NSNsGdkxOFaxjdiv4zfitg8B6AUUzfSsrc=
+        Wed, 24 Aug 2022 13:19:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952C27C32A
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:19:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661361552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5fR3F9GSGdIyjl4KjQVv2PTUvzcBxFqMQTexQHu1cYQ=;
+        b=IXIqFOeGBGrbRH8Vf4lPvfhRcJ0hhIXVZAPMM5H/Hun7OFC3omKXuFGoMQI/YlwF0X2ACU
+        j7+OAKZgf6NcDrv1uy3U+Bniq9a/EN/Y65ilCmC5osEB0GibAY0fM1Ki2V0WLkQi5E1M9J
+        Z7plCyzfaO3GIai5qDwMdQDW7Nh1Du0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-537-gXakordyOn-QwZ4ZhLXEHw-1; Wed, 24 Aug 2022 13:19:11 -0400
+X-MC-Unique: gXakordyOn-QwZ4ZhLXEHw-1
+Received: by mail-wr1-f70.google.com with SMTP id d11-20020adfc08b000000b002207555c1f6so2907186wrf.7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:19:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=MHYuEVNrNq6xOFLpayXIejomNu0GT0DBxEs7vGrd158=;
-        b=ALB8wUblQ9D9ebfmsaixiIfapymTUE9pq9TFZkdJAFyzftr8kVyq6Dm9BCE5ATlBAu
-         RuAL9h8tMIMVrUraKxVFT69vCqgQxXKbNE5UPQOsCdgMk40nt+44Wdnu1XciaLOk6lSy
-         lQQQ0vafltLZppe8418CqjlvTYTwWeg8XFiXWY7ZSiQ9uioqx9kuijF/EfgOPW5LXNY/
-         vbtMfZxcxxETs/37VQ8Bzjqh6dA9LvBzPrYm6GsyElriMKr3tjpAC9efNZ3srCIFkUlQ
-         P++UcQcRgG++feB+ByhGf7Crfsk9XDHYo7A3QsCGPHe0UhJLdOoEeoVbwDrCUhKg+R9Q
-         h60w==
-X-Gm-Message-State: ACgBeo3zpWwJacVOqRJ64Ltm3OjOOWAwIXZl0C+ptxifzHRZzLv4hlOg
-        cBXI20/5QeRYb9eZ4I5sIJLYobuKP2eB402oHJobjQ==
-X-Google-Smtp-Source: AA6agR4zBshr+gUc3WgavtY1TB1LNAO6aNOk9NTWdc2ol+fbKgwzW7gL98pe4oEy1a7xXcIHJjx4KwfdSoBCPBzli14=
-X-Received: by 2002:a9d:738c:0:b0:638:9962:8cb6 with SMTP id
- j12-20020a9d738c000000b0063899628cb6mr11204441otk.73.1661361468554; Wed, 24
- Aug 2022 10:17:48 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 24 Aug 2022 12:17:47 -0500
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=5fR3F9GSGdIyjl4KjQVv2PTUvzcBxFqMQTexQHu1cYQ=;
+        b=4mg3wIcTodJ0jLM16tHV7eCctdQC00wjmaGZ8ju63EUeOq7pdxLMBv909Y9lYIcLaz
+         /C5d+EOmJ4d/B+Sl25jD62IVP/hL5wKxMY4kD+3zEWuNagVwtLxRZ3pYKaUA7Yfhbkx9
+         H+cJibb2HNKS+JjIzq1npy4xlkt8G3UYr3vPM7gTLr7KFZz4N7OUOontypbZY3sa7UME
+         HFJH6kya35WwO1vrOKXXG/d/LrUcXlOp3yeGXKVQOieDsqTpoQck2CPz6+Gui+A5seMt
+         gAUNELYf82cMfpVZZhimj+jVy43k4za6bt2sHA00jbaTmlyWblNmw2zxtYFl4uzuCjXL
+         2IGg==
+X-Gm-Message-State: ACgBeo0O7QeKcm+Qklig1hzNCLluDct0ecCiZCvXAFoJTAtWALxrXUNE
+        3EVT3J8fRs+nkyTK8yWk+comPYScZkwLz2foP78gKWWZBnvHhuJV1PFX3+MKDuveYS+10megmSu
+        q1nmthSZXVd51vxaFJ18WIhkf
+X-Received: by 2002:a5d:64c3:0:b0:225:4f81:d060 with SMTP id f3-20020a5d64c3000000b002254f81d060mr132901wri.536.1661361550181;
+        Wed, 24 Aug 2022 10:19:10 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5ttdjMug0iYpQ5JQgsxkf6+CYDrKkbKyoW3tlDFCWtG6u7rvpOI69IoXi/6KTMQNrqkEgTuA==
+X-Received: by 2002:a5d:64c3:0:b0:225:4f81:d060 with SMTP id f3-20020a5d64c3000000b002254f81d060mr132886wri.536.1661361549968;
+        Wed, 24 Aug 2022 10:19:09 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id o8-20020a05600c4fc800b003a603fbad5bsm2635447wmq.45.2022.08.24.10.19.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 10:19:09 -0700 (PDT)
+Message-ID: <f1598980-92a8-267c-cade-8f62d7653017@redhat.com>
+Date:   Wed, 24 Aug 2022 19:19:08 +0200
 MIME-Version: 1.0
-In-Reply-To: <1661360356-21948-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1661360356-21948-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 24 Aug 2022 12:17:47 -0500
-Message-ID: <CAE-0n52Mqv-qqb4n_Q4iO-reSncNikWd-2xNVG7pgwvx2ThTHw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: correct 1.62G link rate at dp_catalog_ctrl_config_msa()
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dmitry.baryshkov@linaro.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] KVM: x86: use TPAUSE to replace PAUSE in halt polling
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Dapeng Mi <dapeng1.mi@intel.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, zhenyuw@linux.intel.com
+References: <20220824091117.767363-1-dapeng1.mi@intel.com>
+ <YwZDL4yv7F2Y4JBP@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YwZDL4yv7F2Y4JBP@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-08-24 09:59:16)
-> At current implementation there is an extra 0 at 1.62G link rate which cause
-> no correct pixel_div selected for 1.62G link rate to calculate mvid and nvid.
-> This patch delete the extra 0 to have mvid and nvid be calculated correctly.
->
-> Fixes: 937f941ca06f  "drm/msm/dp: Use qmp phy for DP PLL and PHY"
+On 8/24/22 17:26, Sean Christopherson wrote:
+> I say "if", because I think this needs to come with performance numbers to show
+> the impact on guest latency so that KVM and its users can make an informed decision.
+> And if it's unlikely that anyone will ever want to enable TPAUSE for halt polling,
+> then it's not worth the extra complexity in KVM.
 
-Should be
+Yeah, halt polling works around perhaps the biggest performance issue 
+with VMs compared to bare metal (so much that it's even possible to move 
+halt polling _inside_ the guest for extra performance).
 
-Fixes: 937f941ca06f ("drm/msm/dp: Use qmp phy for DP PLL and PHY")
+I am ready to be proven wrong but I doubt TPAUSE will have a small 
+effect, and if one wants the most power saving they should disable halt 
+polling.  Perhaps KVM could do it automatically if the powersaving 
+governor is in effect?
 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
+Paolo
 
-Good catch! Thanks for fixing it.
-
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>

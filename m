@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A35759FE88
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA0059FE8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239509AbiHXPkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
+        id S239556AbiHXPkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239072AbiHXPkA (ORCPT
+        with ESMTP id S239368AbiHXPkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:40:00 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40578A1BA
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:39:56 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-32a115757b6so299915287b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:39:56 -0700 (PDT)
+        Wed, 24 Aug 2022 11:40:04 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB0B11468
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:40:03 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-335cf0fd1a4so297244817b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 08:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=gT8uGhkPz2QVnzj86f2E281NRyIthHuKkag96DoN/yw=;
-        b=U+0X/kZRQHBs+6EtDK9G1mX43K8ZAL3xn0/TBI+PnH4qGB93szqa60OnaP41kr8dzw
-         9QxineCg1olwLiYSqDFtsZ/DL3qt5W6eR5TCTrDzlgG3t20vGrl7TtoTaTPJqh4ejp+V
-         fOBK2QoavsAeGxc7ZOPJaBPfbn80gRsXO59+l5v0lcwdEKd7o+h2LPa4qhnAKzksgMVp
-         ALL9gtkdn2WUP3jETGiY5QAO1PyxVdYdDQa49bK9WeoWn4gACgU7UhjQ1Dlnp3z9npl2
-         34gO4ZNZnH69GdlCJG3fu7eOy9UXPpE5LPOovQZYlMf6sex3WDh4WqxhHDj1zxBHDbcA
-         ANMg==
+        bh=TZmRLUQ2d7TXmU69l5rNy1CTfW+D1QluUT9t1SCPaRQ=;
+        b=kFt2a2Yy49Okrz/AcL9NH0j2SCcVEr5HYilUar2f5s4z+KrAYcuPMJoWRKa/Ojk36T
+         lB5tOBCLgSmTIjGoOfko2hIAK72mAG/d/XUQ8trQS/ZWIB6jy+tUTZ2tW7JByu6gVYiG
+         vNMAF6YcK/jQBjarFtGteespzwsMUho7CExNdhqE0dyfv/EDaHpnfkl3GVQojcAA4DfM
+         K72V6rhIwSigCRpIR/FsB6JJTjad1SMHnU8dArYTdMvDff9QXAqtgMawgLXU1+w2sXil
+         dUkRiqLK61LuM6M9TRY117nOmUvxd6/sP709qAeQXzl7oPwLK/dCCpVYYh7KI3Od3spX
+         Kmqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=gT8uGhkPz2QVnzj86f2E281NRyIthHuKkag96DoN/yw=;
-        b=yxIMlezOa2v+q09vY3gGXvM5ioP6oOm2vaPRGbMm45nIrE3DTJ53M1MGQgwQzO0biH
-         eVLgp+75x5ua5H80ziLs9D26+4bAO3qeJwjcsVfJD+UWz2X2pZ5ZZg5LR1NjQNYmPnFq
-         mlo6fZQdm9cS+Wk9E5izw/0ZWvWoyKliZO4sJWoCb3mhSy/AO56CwsKTDXAf8xYNpndK
-         fOdp7qu83bDKWTo0395lCSuC4TDT1JgpzjtUsycX7gbMAjH0b9n9S8U5TSoVJgMbwWv4
-         4MMkyxxrXcrk8uXG2iSYeHkkvJYPgm0RH/GuogXQ6+sOBJQ4rqty1LGTbEDFv1lGqUHA
-         BHXw==
-X-Gm-Message-State: ACgBeo10j7i50gIaFa/AOikVztiYIrKvTYCmTICv/hKCoN8SZax4Uq/6
-        cyV1ZaKzqXFHsMMefbGkhCZJ+kE0uWDo
-X-Google-Smtp-Source: AA6agR5ogga8EEBaYLPmvldmteYhwwTHUME0yqOv74tlcAU5d3CrXbpxfPBzolFdoMRAia3otbb1SmJYRf3r
+        bh=TZmRLUQ2d7TXmU69l5rNy1CTfW+D1QluUT9t1SCPaRQ=;
+        b=fxqBZUeZKN6J/KA9KGmGBrGJon7zmlWUss0NIcys7fvLTlCr6me87vgd4QwsvJKIdd
+         Mo9Cef0YeyU5shqlTU9IZGaAuXi+WtQNzQLq7YiQoUyyln6PWAcvlwTo2yb7dr+klor5
+         U4cbOG3MoZsh1vmuqRCZ52m58B7rwQww8Se4/5NiVYsppzMBoRalAramo4lIaAo/zoD0
+         U3v6KEM/hjyBfAP/zi0ZUJQVYTWnnB/JsYCnS1T7R8BvBWpBhKPiTd40RUIJOCL26IjP
+         a4QHPS/dZnpbT0Y9OHy4sXkYw35aJ5w1RpWsFHFicdr7o4eZa2mvUOla6nXWuz0/95Lf
+         7zzA==
+X-Gm-Message-State: ACgBeo3NAKFYmoni+eB3dFGs2w/Qcs8sl/JwmS+DXrCQ98zrYy9Jk82i
+        dvD+vTNLPl7sm9qOC5iJdjmg/nkgdmb3
+X-Google-Smtp-Source: AA6agR7s5Q11LLmEK7bhw9Jv7H9t6qvpGnpsnE2nnoN8CK/3a9IyLjfDH+89vD4ezWXEjVj5AiIRBQMtdryR
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:ab82:a348:500d:1fc4])
- (user=irogers job=sendgmr) by 2002:a25:84cd:0:b0:67a:699e:4e84 with SMTP id
- x13-20020a2584cd000000b0067a699e4e84mr27914790ybm.407.1661355595376; Wed, 24
- Aug 2022 08:39:55 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 08:38:48 -0700
+ (user=irogers job=sendgmr) by 2002:a25:d4cb:0:b0:68f:6452:57ee with SMTP id
+ m194-20020a25d4cb000000b0068f645257eemr26553234ybf.609.1661355602414; Wed, 24
+ Aug 2022 08:40:02 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 08:38:49 -0700
 In-Reply-To: <20220824153901.488576-1-irogers@google.com>
-Message-Id: <20220824153901.488576-6-irogers@google.com>
+Message-Id: <20220824153901.488576-7-irogers@google.com>
 Mime-Version: 1.0
 References: <20220824153901.488576-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v3 05/18] perf bpf: Remove unused pthread.h include
+Subject: [PATCH v3 06/18] perf lock: Remove unused pthread.h include
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -107,31 +107,31 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No pthread usage in bpf-event.h.
+No pthread usage in builtin-lock.c.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/bpf-event.h | 1 -
+ tools/perf/builtin-lock.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
-index 144a8a24cc69..1bcbd4fb6c66 100644
---- a/tools/perf/util/bpf-event.h
-+++ b/tools/perf/util/bpf-event.h
-@@ -4,7 +4,6 @@
- 
- #include <linux/compiler.h>
- #include <linux/rbtree.h>
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index dd11d3471baf..70197c0593b1 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -28,7 +28,6 @@
+ #include <sys/types.h>
+ #include <sys/prctl.h>
+ #include <semaphore.h>
 -#include <pthread.h>
- #include <api/fd/array.h>
- #include <stdio.h>
+ #include <math.h>
+ #include <limits.h>
  
 -- 
 2.37.2.609.g9ff673ca1a-goog

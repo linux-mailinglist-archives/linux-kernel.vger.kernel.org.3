@@ -2,121 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C23A59F8CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6CC59F8C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 13:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236792AbiHXLs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 07:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S233546AbiHXLpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 07:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236121AbiHXLsX (ORCPT
+        with ESMTP id S234103AbiHXLpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 07:48:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93154857CD;
-        Wed, 24 Aug 2022 04:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661341702; x=1692877702;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MZDAJgikHNjzvh5Y3euMJ9onTXF+3A93fahuugd7kik=;
-  b=Yu2zKcZesyumT/T3xMsL8cWwAGseMgPbSbKOjbd3BW0ugdbJsbZSfqEu
-   wfQsYJd5wlNeXVjas8j2Bj4XUv+x0BpZznAc3jNivUKJ66+/3zXIPJD3Z
-   2ygimufaUWQII1k+8BwLykIu6mpYn535WM7XffmNApDFvnI2pQcCE+A3i
-   lFcAlmI0Y+bhdcOvKDqBuBE0/gpgkl6eTNDuQ/pvIyfvjtJxg+yuz0R8J
-   590iPf3BoU3AYjOqlnstT8Ti9b/wXY0xKvEedVKSqvPdN1wXkoSmTmmy+
-   kqG4Fz14zePD/kO+lzoh38GHLB82cFXAdMkq3bNKzcsjWEXxd+cWLmS24
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="170713015"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 04:48:21 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 24 Aug 2022 04:48:20 -0700
-Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 24 Aug 2022 04:48:17 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <rmk+kernel@arm.linux.org.uk>, <claudio@evidence.eu.com>,
-        <rick@efn.org>, <michael@evidence.eu.com>, <ryan@bluewatersys.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH] tty: serial: atmel: Preserve previous USART mode if RS485 disabled
-Date:   Wed, 24 Aug 2022 14:42:57 +0300
-Message-ID: <20220824114255.444655-1-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 24 Aug 2022 07:45:02 -0400
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BCC5A83D
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 04:44:59 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MCPQv52G4zMqBfr;
+        Wed, 24 Aug 2022 13:44:55 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MCPQt0Xxwzlh8TD;
+        Wed, 24 Aug 2022 13:44:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1661341495;
+        bh=1A9w6LBApFmHy8AyI91NBSquKjP8ISZPMKdkvU7c3qU=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=ELdnmWIYHEW0cpvK8yP+KBxoP+OZ3AsDLeVhLwbdZOuSJRUGKAh8nALszvrZcHiBI
+         y+IEb4AcfPcXHE3tmXwOTcBgbcwEqswwR581B1vKVoyvBlpRDEtnw+yenjdP8yC5Eu
+         EptJG+SP34k9or7OMx1YGjN5TzIKbeB090t+hNYs=
+Message-ID: <8cb3b7df-fb2f-3e3f-7805-4b14cf1bdf90@digikod.net>
+Date:   Wed, 24 Aug 2022 13:44:52 +0200
 MIME-Version: 1.0
+User-Agent: 
+Content-Language: en-US
+To:     xiujianfeng <xiujianfeng@huawei.com>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, corbet@lwn.net,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <20220822114701.26975-3-xiujianfeng@huawei.com> <YwPKG3G9PlStYPkz@nuc>
+ <5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net>
+ <6d6edd60-5ed7-0f5d-d641-75e006c0e60e@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH -next 2/5] landlock: add chmod and chown support
+In-Reply-To: <6d6edd60-5ed7-0f5d-d641-75e006c0e60e@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Whenever the atmel_rs485_config driver method would be called,
-the USART mode is reset to normal mode before even checking if
-RS485 flag is set, thus resulting in losing the previous USART
-mode in the case where the checking fails. Some tools, such as
-`linux-serial-test`, lead to the driver calling this method
-when doing the setup of the serial port: after setting the port
-mode (Hardware Flow Control, Normal Mode, RS485 Mode, etc.),
-`linux-serial-test` tries to enable/disable RS485 depending on
-the commandline arguments passed. If we were to, for example, enable
-Hardware Flow Control through `linux-serial-test`, the tool would
-make the driver set the corresponding bit to 1 (ATMEL_US_USMODE_HWHS
-bit in the ATMEL_US_MR register) through the atmel_set_termios method
-and then proceed to disabling RS485. This, in turn, causes the
-ATMEL_US_USMODE_HWHS bit of the ATMEL_US_MR mode register to be unset
-and, if the checking for RS485 fails, leads to having the mode set
-back to the ATMEL_US_USMODE_NORMAL normal mode. Since in hardware
-flow control mode the meanings of the ATMEL_US_RTSDIS and
-ATMEL_US_RTSEN bits are swapped, this leads to our endpoint leaving
-the RTS line to high when wanting to receive, which is the opposite
-of what the other endpoint is expecting in order to start transmitting.
-This fix ensures that this reset is done only if the checking for RS485
-succeeds.
 
-Fixes: e8faff7330a35 ("ARM: 6092/1: atmel_serial: support for RS485 communications")
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
----
- drivers/tty/serial/atmel_serial.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 23/08/2022 14:50, xiujianfeng wrote:
+> 
+> 
+> 在 2022/8/23 5:07, Mickaël Salaün 写道:
+>>
+>> On 22/08/2022 20:25, Günther Noack wrote:
+>>> Hi!
+>>>
+>>> Thanks for sending this patch set! :)
+>>>
+>>> On Mon, Aug 22, 2022 at 07:46:58PM +0800, Xiu Jianfeng wrote:
+>>>> Add two flags LANDLOCK_ACCESS_FS_CHMOD and LANDLOCK_ACCESS_FS_CHOWN to
+>>>> support restriction to chmod(2) and chown(2) with landlock.
+>>>>
+>>>> Also change the landlock ABI version from 3 to 4.
+>>>>
+>>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>>> ---
+>>>>    include/uapi/linux/landlock.h                |  8 ++++++--
+>>>>    security/landlock/fs.c                       | 16 +++++++++++++++-
+>>>>    security/landlock/limits.h                   |  2 +-
+>>>>    security/landlock/syscalls.c                 |  2 +-
+>>>>    tools/testing/selftests/landlock/base_test.c |  2 +-
+>>>>    tools/testing/selftests/landlock/fs_test.c   |  6 ++++--
+>>>>    6 files changed, 28 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/include/uapi/linux/landlock.h
+>>>> b/include/uapi/linux/landlock.h
+>>>> index 735b1fe8326e..5ce633c92722 100644
+>>>> --- a/include/uapi/linux/landlock.h
+>>>> +++ b/include/uapi/linux/landlock.h
+>>>> @@ -141,13 +141,15 @@ struct landlock_path_beneath_attr {
+>>>>     *   directory) parent.  Otherwise, such actions are denied with
+>>>> errno set to
+>>>>     *   EACCES.  The EACCES errno prevails over EXDEV to let user space
+>>>>     *   efficiently deal with an unrecoverable error.
+>>>> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a file.
+>>>> + * - %LANDLOCK_ACCESS_FS_CHOWN: Change the owner and/or group of a
+>>>> file.
+>>
+>> This section talk about "access rights that only apply to the content of
+>> a directory, not the directory itself", which is not correct (see
+>> LANDLOCK_ACCESS_FS_READ_DIR). I'd like these access rights to remain
+>> here but this kernel patch and the related tests need some changes.
+>>
+>> What about a LANDLOCK_ACCESS_FS_CHGRP? I'm not sure if we need to
+>> differentiate these actions or not, but we need arguments to choose.
+>>
+>>
+>>>>     *
+>>>>     * .. warning::
+>>>>     *
+>>>>     *   It is currently not possible to restrict some file-related
+>>>> actions
+>>>>     *   accessible through these syscall families: :manpage:`chdir(2)`,
+>>>> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+>>>> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>>>> + *   :manpage:`stat(2)`, :manpage:`flock(2)`,
+>>>> + *   :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>>>
+>>> *formatting nit*
+>>> We could fill up the full line width here
+>>>
+>>>>     *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`, :manpage:`access(2)`.
+>>>>     *   Future Landlock evolutions will enable to restrict them.
+>>>>     */
+>>>> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
+>>>>    #define LANDLOCK_ACCESS_FS_MAKE_SYM            (1ULL << 12)
+>>>>    #define LANDLOCK_ACCESS_FS_REFER            (1ULL << 13)
+>>>>    #define LANDLOCK_ACCESS_FS_TRUNCATE            (1ULL << 14)
+>>>> +#define LANDLOCK_ACCESS_FS_CHMOD            (1ULL << 15)
+>>>> +#define LANDLOCK_ACCESS_FS_CHOWN            (1ULL << 16)
+>>>>    /* clang-format on */
+>>>>
+>>>>    #endif /* _UAPI_LINUX_LANDLOCK_H */
+>>>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+>>>> index c57f581a9cd5..c25d5f89c8be 100644
+>>>> --- a/security/landlock/fs.c
+>>>> +++ b/security/landlock/fs.c
+>>>> @@ -147,7 +147,9 @@ static struct landlock_object
+>>>> *get_inode_object(struct inode *const inode)
+>>>>        LANDLOCK_ACCESS_FS_EXECUTE | \
+>>>>        LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>>>>        LANDLOCK_ACCESS_FS_READ_FILE | \
+>>>> -    LANDLOCK_ACCESS_FS_TRUNCATE)
+>>>> +    LANDLOCK_ACCESS_FS_TRUNCATE | \
+>>>> +    LANDLOCK_ACCESS_FS_CHMOD | \
+>>>> +    LANDLOCK_ACCESS_FS_CHOWN)
+>>>>    /* clang-format on */
+>>>>
+>>>>    /*
+>>>> @@ -1146,6 +1148,16 @@ static int hook_path_truncate(const struct
+>>>> path *const path)
+>>>>        return current_check_access_path(path,
+>>>> LANDLOCK_ACCESS_FS_TRUNCATE);
+>>>>    }
+>>>>
+>>>> +static int hook_path_chmod(const struct path *const dir, umode_t mode)
+>>
+>> This is not a "dir" but a "path".
+>>
+>>
+>>>> +{
+>>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHMOD);
+>>>> +}
+>>>> +
+>>>> +static int hook_path_chown(const struct path *const dir, kuid_t uid,
+>>>> kgid_t gid)
+>>
+>> Same here.
+>>
+>>
+>>>> +{
+>>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHOWN);
+>>>> +}
+>>>
+>>> One implication of this approach is that the chown+chmod right on a
+>>> directory's contents are always going together with the same rights on
+>>> the directory itself.
+>>>
+>>> For example, if you grant chmod+chown access rights for "datadir/",
+>>> the command "chmod 0600 datadir/file1" will work, but so will the
+>>> command "chmod 0600 datadir". But the approach of checking just the
+>>> parent directory's rights is also inflexible if you think through the
+>>> kinds of rights you can grant with it. (It would also not be possible
+>>> to grant chmod+chown on individual files.)
+>>
+>> Good point. For an initial chmod/chown/chgrp access right, I'd prefer to
+>> be able to set these access rights on a directory but only for its
+>> content, not the directory itself. I think it is much safer and should
+>> be enough for the majority of use cases, but let me know if I'm missing
+>> something. I'm not sure being able to change the root directory access
+>> rights may be a good idea anyway (even for containers). ;)
+>>
+>> A path_beneath rule enables to identify a file hierarchy (i.e. the
+>> content of a directory), not to make modifications visible outside of
+>> the directory identifying the hierarchy (hence the "parent_fd" field),
+>> which would be the case with the current chmod/chown access rights.
+>>
+>>
+>>>
+>>> Do you have any thoughts on how to resolve this if this flexibility
+>>> might be needed?
+>>>
+>>> I wonder whether the right way to resolve this would be to give users
+>>> a way to make that distinction at the level of landlock_add_rule(),
+>>> with an API like this (note the additional flag):
+>>>
+>>>     err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+>>>                             &path_beneath, LANDLOCK_STRICTLY_BENEATH);
+>>>                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>
+>>> Multiple calls of landlock_add_rule() on the same file are already
+>>> today joining the requested access rights, so it would be possible to
+>>> mix-and-match "strict beneath" with "beneath" rights on the same
+>>> directory, and it would work in the same way for other access rights
+>>> as well.
+>>
+>> This kind of option is interesting. For now, some access rights are kind
+>> of "doubled" to enable to differentiate between a file and a directory
+>> (i.e. READ_DIR/READ_FILE, REMOVE_DIR/REMOVE_FILE, WRITE_FILE/MAKE_*)
+>> when it may be useful, but this is different.
+>>
+>> I think this "strictly beneath" behavior should be the default, which is
+>> currently the case.
+>>
+>>
+>>>
+>>> To be clear: I'm proposing this approach not because I think it should
+>>> be part of this patch set, but because it would be good to have a way
+>>> forward if that kind of flexibility is needed in the future.
+>>>
+>>> Does that seem reasonable?
+>>
+>> This is the kind of questions that made such access rights not
+>> appropriate for the initial version of Landlock. But we should talk
+>> about that now.
+> 
+> Hi Günther and Mickaël,
+> 
+> Thanks for your comments, so I think the conclusion here is that we have
+> to make sure that in this patchset chown/chmod access rights can be set
+> on a directory only for its content, not the directory itself, right?
+> any good idea about how to implement this? :)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 0a0b46ee0955..c29b1fb48694 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -298,9 +298,6 @@ static int atmel_config_rs485(struct uart_port *port, struct ktermios *termios,
- 
- 	mode = atmel_uart_readl(port, ATMEL_US_MR);
- 
--	/* Resetting serial mode to RS232 (0x0) */
--	mode &= ~ATMEL_US_USMODE;
--
- 	if (rs485conf->flags & SER_RS485_ENABLED) {
- 		dev_dbg(port->dev, "Setting UART to RS485\n");
- 		if (rs485conf->flags & SER_RS485_RX_DURING_TX)
-@@ -310,6 +307,7 @@ static int atmel_config_rs485(struct uart_port *port, struct ktermios *termios,
- 
- 		atmel_uart_writel(port, ATMEL_US_TTGR,
- 				  rs485conf->delay_rts_after_send);
-+		mode &= ~ATMEL_US_USMODE;
- 		mode |= ATMEL_US_USMODE_RS485;
- 	} else {
- 		dev_dbg(port->dev, "Setting UART to RS232\n");
--- 
-2.25.1
-
+In such hook code, you need to get the parent directory of the path 
+argument. This require to use and refactor the 
+check_access_path_dual/jump_up part in a dedicated helper (and take care 
+of all the corner cases).

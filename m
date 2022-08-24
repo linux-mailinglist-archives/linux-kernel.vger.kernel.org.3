@@ -2,128 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4E85A029F
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 689865A02A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240314AbiHXUVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S240276AbiHXUZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239953AbiHXUVC (ORCPT
+        with ESMTP id S239493AbiHXUZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:21:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F053058509
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 13:21:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B98D61871
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 20:21:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 885FEC433D6;
-        Wed, 24 Aug 2022 20:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661372460;
-        bh=NOf72QKODirrDmUvYantOE0140y5ossinOzMvF5uJG0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=1T6N4sJrTq3MjfG5g87VXI8g4c7/Dn4tjSZz4tvIQQPmNViUj6xvz39G4+GdAJmre
-         NOrv/DLGZQCrHi/J5z//XxHBGJ7E2vVzcM+2YzUvMjdl3Lm5nVYqWpxXs279yyaL05
-         J5vCnaa7AJrCPG+xjqoJqua+Nfnst2txhZ6YQI+o=
-Date:   Wed, 24 Aug 2022 13:20:58 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     atomlin@redhat.com, frederic@kernel.org, cl@linux.com,
-        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v7 2/3] tick/sched: Ensure quiet_vmstat() is called when
- the idle tick was stopped too
-Message-Id: <20220824132058.d88d3230a3cc9c07f38c9237@linux-foundation.org>
-In-Reply-To: <20220817191524.201253713@redhat.com>
-References: <20220817191346.287594886@redhat.com>
-        <20220817191524.201253713@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 24 Aug 2022 16:25:10 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2083.outbound.protection.outlook.com [40.107.101.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B4711C26;
+        Wed, 24 Aug 2022 13:25:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AEhjLVdlYAKaInMm6bDKYJqJkHFSouNANtxMwPNL2XyFDEGwiqiyrqREMsSmm4ELld8OHrEQtK3VLY4fR4c5qmBdEHR5SjuNx60o+kjFtY/NEFfdN47UulmVu9LrZ7CT9hmRMRIq3vBEWyesh+KtniW+9wRZ2TfGqyj3r4DC9dZQV+R22FLy3pZBHraEH0GRr7311Z0Zzr6xeZGrvIc52RAXmkGxpRdJfj8rLB/2h5AEMKTCEFMD6JBAFQ8Ppu/ikopZsACEQGFjUMimsxhBpsklX3FS/lUps+bEF0VeZZz3Ohah87ijA0Brx7BCfctVn8EAqHUMwpMyElTT2B2SvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kobkWjyNfqgeGhRPJPngFMSHtbwaFt6QgTENLMXXy/Y=;
+ b=JHEYdyzMaCukA4fUMHmbYXPPpc/bg7yckvhqzJKCGDt0Cp8xKUGBXxQdXPn5ExkW2am93TCob45PDRQVnnfuI8PIpFSaiuOz5b59pJye/iICNCSLIwW7o9fA3YftPEaBsB6gowkFHyxGo/JY6/ZMhnLJaepsv0O9kEMgKiB/1XwPsEJg2h5BrBkFHQwRXYMLB+JO226tW3Qv5269qmCdPpunF7+jtrSQXX08c+cT7z6118N7xjLVJEF4XH0eg8d6PEHm71ora84Hd4fzfMsHDjE9AwICEqTLK5cM6BM0YTxfrfNdjwg4cR2cQBXvL0USfKZ+xrPLAWB+1gpJmVmyrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kobkWjyNfqgeGhRPJPngFMSHtbwaFt6QgTENLMXXy/Y=;
+ b=RmndNc8wLoicT6h6iCT3mbMDlpeEBALfBRIP0AII2W5y6KFZwZ5FZi1Y7mtkNIBzsAjtP3HKDosLOFJxUPXIQ2b8Jq6YrmWBeZmiFbml5y9czsrkJ0K8/mcpj9+o65q9GFdazole79ezw2F2LRd7rjjnYHSB0coLtMTnMgtqSvg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by MWHPR1201MB0159.namprd12.prod.outlook.com (2603:10b6:301:59::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Wed, 24 Aug
+ 2022 20:25:06 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::e00a:1f8c:dcd1:afc3]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::e00a:1f8c:dcd1:afc3%5]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
+ 20:25:06 +0000
+Message-ID: <8cb42207-b04c-7222-08fa-60c8eb0b3521@amd.com>
+Date:   Wed, 24 Aug 2022 15:25:03 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] drm: amd: amdgpu: ACPI: Add comment about
+ ACPI_FADT_LOW_POWER_S0
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <1831630.tdWV9SEqCh@kreacher>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <1831630.tdWV9SEqCh@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: CH0PR03CA0024.namprd03.prod.outlook.com
+ (2603:10b6:610:b0::29) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 14c37054-fc80-49cd-156f-08da860ebb73
+X-MS-TrafficTypeDiagnostic: MWHPR1201MB0159:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lvmxcgOV8j5YlrWMhOgIx9otVrxcUCBbSvOpZcQcNESv3Vbwp0DFjMvmTPgieciPNH7AXY0aeP5yf/7117BAI5tgYhs8V1q8BI9MXFGRy/jr2mjwpV7MkYiRnGMHIhBcRctE8uNHqzZzJT8CpIZJmMl/q3E/r2mBz+H6deQDvLY0I9XESA7UJMMlEm0ZxSbJcICgwIjgpjNeRWLfGGbMZM8slKdE+PAxYvlMHsvs6MN/8j3GJPLHqg/RB5IS2xAGpD2vn38n1eqh1Jb5gIGbzXjYzXT/PqfgpCmVIok5lwBVZnpxABzf6oj5xvs/N1PeUbafp3a5UYOqnA4zZQdj/cj4fzdNQ8wJmfguLTmr/ejHm2xz8KPNPXWeq2vFRKQFP5hQEOoUSMEwKr/JeJzIDda/+irVdXs4KhADBVYV8JM+Tit7DbIwswL+OF88c2Ve+8v6bZ4FTaDnZbXlIpdyM4UIniBUZMD6k/ejhufE1ACl1DUEZN9YodIqlptBQvJTRZ3xRAYJu4I1Q2eZQcOHfZZ3ZWOmVkYunjvAeuvj0+Fq4caCx44Drg0Y7YHQzDGz+X+OBUnkcbrikDL84xsLOh1IEfQ5Jsfrrkqo0MuCnyxniL6Jeo86x55qQYVdqwzqHo+HB0weOgFkAogi1bVnChOOCCDtRzpBJY1Z2jPXu5WtHv2TTBbj9qcONGgoQBXXEIZCSHInnYDaINBQQNATrsrpC5HqAQW2h1s1rzrvE8YdaLpSHtcS9QtzjsnzS6CwBSzGym3f/tINxQvBuz3M97ltC+olCZzA5FMIgPrO7vpjXNE3jEtdMPbKGsJSm38fOrs7eu7XREIeVvZp7/b3MVNAwC8kF0niJ5Xln7cSSXc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(2616005)(186003)(86362001)(53546011)(2906002)(26005)(6506007)(6512007)(31696002)(84970400001)(38100700002)(83380400001)(8936002)(36756003)(110136005)(6636002)(54906003)(41300700001)(316002)(8676002)(4326008)(66476007)(31686004)(478600001)(5660300002)(66556008)(6666004)(966005)(6486002)(45080400002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RTBRT0w3REFLOTFiK1NIejhrOEVhaE5PU1dXSmgyeVhYOEFWNGFZbVhKY2NN?=
+ =?utf-8?B?UzVTMHRDSGFpREZ5blVwbExWQnFOdDVUVlhJM2paQXVRRUEvZVhNNXdaS291?=
+ =?utf-8?B?VTJrbGJrQnlKYVdlajhZY3ZxYzdUekV6WUFZTjlmUEdYMWpnVk1aRkJCQU1X?=
+ =?utf-8?B?UXlXd2lUOTZvTTVWVDA4dW9WNlZvV2ZSZjRNZ1lJU3JaT3hpZ2sxSFBsS2M0?=
+ =?utf-8?B?a2VWZXN1L0J6ZTc4d2hkalRNd3dCVk9SSFBqSG1RTFdUNStTY1FNaENKT3kz?=
+ =?utf-8?B?RVZpNm9rV1hCdk9TZ203TWdjb05JYSsyZVAzbmhiaDlLdnl4WDVTdWV0eGZH?=
+ =?utf-8?B?eThEOUh3RTc0RWxTTjZzNHpGZXUvUGIwbXc0R005TEx4MUtZdU0vakRMR3Yz?=
+ =?utf-8?B?b2pzNHkwR1ByL2VIVVpFckdSWGxWTEwzYlUwSGtMQU1UbHFzVldienBtdG43?=
+ =?utf-8?B?UElidURuR29FYUFkSzVtU3k4VDcrSHhUM05OaTZQZncxdG1qMkk0YURkdUtV?=
+ =?utf-8?B?d01xZElDdTBRdDQ3Y0xKZDJXRGtjSXpRU1lhYjk3WkhLTzY5MGMwejlHdEhv?=
+ =?utf-8?B?bVR5RXo1dHhkVmx0dVNTc1M2cnljRlh2UTB4eFRJMWZRZk1xMEc4SFVrS1Fk?=
+ =?utf-8?B?MzFmcUV3bmRQemNUNndEY3JiZFIzTWVlcUhqRndNRzhxUFdFYXBiTGVFV3hH?=
+ =?utf-8?B?bnVyQThLNzAvbkZuRVAxNmw0U2tPdGw2bTVVOHdPZDF2ZjlKdWRJSlBwRUlL?=
+ =?utf-8?B?cWs2ZUdzbUdxTkxEakFiYWE4OXlsOXM2RlVsbnNwRG1BWUJjWE1lMHdVVnA0?=
+ =?utf-8?B?ZHBBKzE5a3RzbmdiZW9mOWo5bTRaMktXemFtRWRXQjFpWFRmYUpkazZROXFh?=
+ =?utf-8?B?MGpRcU51UFZEN2xjTlRURVRtemZsQ2JVdzJ1enNFOTdpZXUwc044UTd2cjA3?=
+ =?utf-8?B?LzRxVTFpQXZTbFRXdE5DUDlMOWgzTk5FVVltaTEvZzVqM0xDbUJSa0hxTlcx?=
+ =?utf-8?B?VC94L0wvN3ZTSGxreHdzdCtkVVpPQU4remVjd2NaNEdXdlIyK21Ec0lBTmFL?=
+ =?utf-8?B?RG1IVUVkSEhJS2NSZkxhQ0xmZkJHVXRWbWFnUEx3aXFHeE1KS1B4dHdWenZi?=
+ =?utf-8?B?ZGhWUVJJRVNaTDJhS0lURjJ4dTlaWkVJRWVJWDJjMUZLc3ZHVUlhOCs4Y1NK?=
+ =?utf-8?B?UmpDRjBrcm9DSlBMVUZJQjVLUmR2dzhrWGQyYkg3UGx4SytiYUhqanRReDdB?=
+ =?utf-8?B?Ny8yaDIzSWhtb25rYmlRNFJmMEtVejhWNFFhSk5yV3FVTU83RXNuWDlTNy9Z?=
+ =?utf-8?B?a0FRTVZLUHk0V1Azc3FDcnp2Z20rZVhXcmR4b2tqYmRzWFMyV0k0cFdZTTRI?=
+ =?utf-8?B?dUFIVnNibFpHMXAwQzkzRlI2b1pXZzVua1FpMnlqUWg2LzZtVjgydGliUFJH?=
+ =?utf-8?B?TC9VYmczV0lDZnNUVzZzOEZwWExRRXorQ1VoYUYwNGN5bGVwa1RVR2ErWUNZ?=
+ =?utf-8?B?SXVlMUlNVTFrOHRjbk0vQVZ2NWMwMHNjWDRUSlFJUVRUODNQRXc1R2syck9U?=
+ =?utf-8?B?Sm1iQzBDeW85T3g0aVU3SzluOHNwUWhqUmN0SnFEdDUzdDkrcUlMSEZGK0Jp?=
+ =?utf-8?B?S1pNVk5wNWhRTWdFb3dZaHpTaVdNckd0YUs5Z2l0bk4yMGV6bDl5MFlRYjZO?=
+ =?utf-8?B?WHA0dU9tekhJSEo3NjFCYjVkVStacXhvbzk3UFJmUC9oRzlaVXNyeDM3anZr?=
+ =?utf-8?B?Z2hKdkIxQTFReVRTVjAzblhYb3FzUzVFUTk2c09kREdydkMwMlVxWjI2Myty?=
+ =?utf-8?B?dFBTODNKR2NDRGtkNkJBMGppaWlhTElJeUN4MHJWTVdDMGxVRVorb1BNc1pm?=
+ =?utf-8?B?R0p5SUFDZG9Jck9EZVlQa0ZiQ2lqT1BvOVM4Y0d3dkwzYkZMNWdZOFZNdjBy?=
+ =?utf-8?B?UGJORTU5YUJRai90WVk1NHdBaTRhcTRQNHpUTUJGQUN2Nk0rTlc3c0hPMGdJ?=
+ =?utf-8?B?bjNYbHE2QlpFckp0ejhMTDgwbjhLek5KaUdCOXA5d2UyTmZ5ajE5ZVVJcVdk?=
+ =?utf-8?B?ZkNCWjNuZmFDZFpIM01MVnpwd1k2cytpZmR5WmV2MW5XQkJjN2EvdmRvclUw?=
+ =?utf-8?Q?GXN8Iw0pD0JqN10p1fkTXLWEh?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14c37054-fc80-49cd-156f-08da860ebb73
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 20:25:06.0610
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yByvOSGAjGxYMXjroejoJNYHSzVkgghx7+AjKQ+pd3jSa8kWYKkttdu6l06jgCif68whKXCQE7iiHuJGmKwmQQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0159
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 16:13:48 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
-
-> From: Aaron Tomlin <atomlin@redhat.com>
+On 8/24/2022 12:32, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> In the context of the idle task and an adaptive-tick mode/or a nohz_full
-> CPU, quiet_vmstat() can be called: before stopping the idle tick,
-> entering an idle state and on exit. In particular, for the latter case,
-> when the idle task is required to reschedule, the idle tick can remain
-> stopped and the timer expiration time endless i.e., KTIME_MAX. Now,
-> indeed before a nohz_full CPU enters an idle state, CPU-specific vmstat
-> counters should be processed to ensure the respective values have been
-> reset and folded into the zone specific 'vm_stat[]'. That being said, it
-> can only occur when: the idle tick was previously stopped, and
-> reprogramming of the timer is not required.
+> According to the ACPI specification [1], the ACPI_FADT_LOW_POWER_S0
+> flag merely means that it is better to use low-power S0 idle on the
+> given platform than S3 (provided that the latter is supported) and it
+> doesn't preclude using either of them (which of them will be used
+> depends on the choices made by user space).
+> 
+> However, on some systems that flag is used to indicate whether or not
+> to enable special firmware mechanics allowing the system to save more
+> energy when suspended to idle.  If that flag is unset, doing so is
+> generally risky.
+> 
+> Accordingly, add a comment to explain the ACPI_FADT_LOW_POWER_S0 check
+> in amdgpu_acpi_is_s0ix_active(), the purpose of which is otherwise
+> somewhat unclear.
+> 
+> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fuefi.org%2Fspecs%2FACPI%2F6.4%2F05_ACPI_Software_Programming_Model%2FACPI_Software_Programming_Model.html%23fixed-acpi-description-table-fadt&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7Cf43320dda5114deeb16908da85f69d3b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637969591512297179%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=xp8pNzsXCkLcIJOJFY77yaLkMrvz5he3S%2Bi%2FwaxTwwg%3D&amp;reserved=0 # [1]
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I'd like to see input from tick/sched maintainers before toughing this
-one, please.
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-> --- linux-2.6.orig/kernel/time/tick-sched.c
-> +++ linux-2.6/kernel/time/tick-sched.c
-> @@ -26,6 +26,7 @@
->  #include <linux/posix-timers.h>
->  #include <linux/context_tracking.h>
->  #include <linux/mm.h>
-> +#include <linux/rcupdate.h>
->  
->  #include <asm/irq_regs.h>
->  
-> @@ -519,6 +520,20 @@ void __tick_nohz_task_switch(void)
->  	}
->  }
->  
-> +void __tick_nohz_user_enter_prepare(void)
-> +{
-> +	struct tick_sched *ts;
-> +
-> +	if (tick_nohz_full_cpu(smp_processor_id())) {
-> +		ts = this_cpu_ptr(&tick_cpu_sched);
-> +
-> +		if (ts->tick_stopped)
-> +			quiet_vmstat();
-> +		rcu_nocb_flush_deferred_wakeup();
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(__tick_nohz_user_enter_prepare);
-> +
->  /* Get the boot-time nohz CPU list from the kernel parameters. */
->  void __init tick_nohz_full_setup(cpumask_var_t cpumask)
->  {
-> @@ -890,6 +905,9 @@ static void tick_nohz_stop_tick(struct t
->  		ts->do_timer_last = 0;
->  	}
->  
-> +	/* Attempt to fold when the idle tick is stopped or not */
-> +	quiet_vmstat();
-> +
->  	/* Skip reprogram of event if its not changed */
->  	if (ts->tick_stopped && (expires == ts->next_tick)) {
->  		/* Sanity check: make sure clockevent is actually programmed */
-> @@ -911,7 +929,6 @@ static void tick_nohz_stop_tick(struct t
->  	 */
->  	if (!ts->tick_stopped) {
->  		calc_load_nohz_start();
-> -		quiet_vmstat();
->  
->  		ts->last_tick = hrtimer_get_expires(&ts->sched_timer);
->  		ts->tick_stopped = 1;
-
-Putting vmstat stuff inside core timer code is unattractive, to say the
-least!
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c |    6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> Index: linux-pm/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> +++ linux-pm/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> @@ -1066,6 +1066,12 @@ bool amdgpu_acpi_is_s0ix_active(struct a
+>   	    (pm_suspend_target_state != PM_SUSPEND_TO_IDLE))
+>   		return false;
+>   
+> +	/*
+> +	 * If ACPI_FADT_LOW_POWER_S0 is not set in the FADT, it is generally
+> +	 * risky to do any special firmware-related preparations for entering
+> +	 * S0ix even though the system is suspending to idle, so return false
+> +	 * in that case.
+> +	 */
+>   	if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)) {
+>   		dev_warn_once(adev->dev,
+>   			      "Power consumption will be higher as BIOS has not been configured for suspend-to-idle.\n"
+> 
+> 
+> 
 

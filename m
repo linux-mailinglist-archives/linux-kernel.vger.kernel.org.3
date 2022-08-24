@@ -2,181 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A9559FDC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7007459FDBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 17:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239139AbiHXPDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S238981AbiHXPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 11:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbiHXPDA (ORCPT
+        with ESMTP id S238274AbiHXPB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:03:00 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A750C90185;
-        Wed, 24 Aug 2022 08:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=Lhu0f5pNQ22TS8TwZawkOraQ5AMr2Ds8t812vuWvOlI=;
-        b=NijWWtXnZhHXHj5wp9AtfwO0qbp/JCqFvklJT7kXO1Gpv5DthJzKrTjb2WaFyT/XAL317Tk3AiDnU
-         CZeDX/Cjf9JSf9AZ2egrBWY47OsLpc0BqcgTL9VrX68KaYXh7PZlrbkgNjdSVa1wMvkosZ2X5mN8j3
-         TF8LCQxHIRvNDYPYuRUaGJrpCELdKdz+vX6QRLrfI5bGeiidmL5obWyde7A7pRobV/7hpCzIqvS1oW
-         2cU8pOemi89pZvJECp2RcOuyMn8AfBsnkYex2+rbo0JTm0NZIWOsyMw56phMWCZc+Hv30U3wF+R0mN
-         +ORbpS5Xc86n7rrFByk8jQnkm/5/kBw==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000010,0.014489)], BW: [Enabled, t: (0.000024,0.000001)], RTDA: [Enabled, t: (0.664397), Hit: No, Details: v2.41.0; Id: 15.52k019.1gb860ct5.7g; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Wed, 24 Aug 2022 18:02:19 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, dg@emlix.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: [PATCH v7 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
-Date:   Wed, 24 Aug 2022 18:01:14 +0300
-Message-Id: <20220824150114.17504-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220824150114.17504-1-i.bornyakov@metrotek.ru>
-References: <20220824150114.17504-1-i.bornyakov@metrotek.ru>
+        Wed, 24 Aug 2022 11:01:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA063CBF0;
+        Wed, 24 Aug 2022 08:01:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6555B8238B;
+        Wed, 24 Aug 2022 15:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A39D2C433D6;
+        Wed, 24 Aug 2022 15:01:22 +0000 (UTC)
+Message-ID: <42384aba-d519-1a98-80dc-00a997e7243f@xs4all.nl>
+Date:   Wed, 24 Aug 2022 17:01:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] i2c/cx25840: fix repeated words in comments
+Content-Language: en-US
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220824131619.54027-1-yuanjilin@cdjrlc.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220824131619.54027-1-yuanjilin@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for configuring Lattice ECP5 and MachXO2
-FPGAs over Slave SPI sysCONFIG interface.
+This is a duplicate of:
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
----
- .../bindings/fpga/lattice,sysconfig.yaml      | 103 ++++++++++++++++++
- 1 file changed, 103 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+https://patchwork.linuxtv.org/project/linux-media/patch/20220821151552.58514-1-wangjianli@cdjrlc.com/
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-new file mode 100644
-index 000000000000..596776427a00
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -0,0 +1,103 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Lattice Slave SPI sysCONFIG FPGA manager
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description: |
-+  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-+  have Slave Serial Peripheral Interface. Only full reconfiguration is
-+  supported.
-+
-+  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-+  format into FPGA's SRAM configuration memory.
-+
-+  Programming of MachXO2 is done by writing configuration data into device's
-+  internal non-volatile Flash memory, then Self-Download of data from Flash
-+  into SRAM is issued.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lattice,ecp5-fpga-mgr
-+      - lattice,machxo2-fpga-mgr
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,machxo2-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 66000000
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,ecp5-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 60000000
-+        program-gpios:
-+          description:
-+            A GPIO line connected to PROGRAMN (active low) pin of the device.
-+            Initiates configuration sequence.
-+          maxItems: 1
-+        init-gpios:
-+          description:
-+            A GPIO line connected to INITN (active low) pin of the device.
-+            Indicates that the FPGA is ready to be configured.
-+          maxItems: 1
-+        done-gpios:
-+          description:
-+            A GPIO line connected to DONE (active high) pin of the device.
-+            Indicates that the configuration sequence is complete.
-+          maxItems: 1
-+      required:
-+        - program-gpios
-+        - init-gpios
-+        - done-gpios
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fpga-mgr@0 {
-+            compatible = "lattice,ecp5-fpga-mgr";
-+            reg = <0>;
-+            spi-max-frequency = <20000000>;
-+            program-gpios = <&gpio3 4 GPIO_ACTIVE_LOW>;
-+            init-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
-+            done-gpios = <&gpio3 2 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        fpga-mgr@1 {
-+            compatible = "lattice,machxo2-fpga-mgr";
-+            reg = <1>;
-+            spi-max-frequency = <20000000>;
-+        };
-+    };
--- 
-2.37.2
+Please check for similar patches first in the future.
 
+Why is seemingly everyone suddenly chasing errors like this?
 
+I don't mind taking such patches since typos like this annoy me, but
+having to figure out which patches are duplicates is getting old quickly...
+
+I'll try to go through your patches and see which are duplicates, but
+next time I'd appreciate it if you would check this first.
+
+Regards,
+
+	Hans
+
+On 24/08/2022 15:16, Jilin Yuan wrote:
+>  Delete the redundant word 'of'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/media/i2c/cx25840/cx25840-ir.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/cx25840/cx25840-ir.c b/drivers/media/i2c/cx25840/cx25840-ir.c
+> index 9d7d1d149f1a..8cef9656c612 100644
+> --- a/drivers/media/i2c/cx25840/cx25840-ir.c
+> +++ b/drivers/media/i2c/cx25840/cx25840-ir.c
+> @@ -196,7 +196,7 @@ static u32 clock_divider_to_resolution(u16 divider)
+>  {
+>  	/*
+>  	 * Resolution is the duration of 1 tick of the readable portion of
+> -	 * of the pulse width counter as read from the FIFO.  The two lsb's are
+> +	 * the pulse width counter as read from the FIFO.  The two lsb's are
+>  	 * not readable, hence the << 2.  This function returns ns.
+>  	 */
+>  	return DIV_ROUND_CLOSEST((1 << 2)  * ((u32) divider + 1) * 1000,

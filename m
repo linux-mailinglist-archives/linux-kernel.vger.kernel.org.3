@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A755559F6AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CE059F6AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 11:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbiHXJnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 05:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S235585AbiHXJo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 05:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236422AbiHXJnn (ORCPT
+        with ESMTP id S235102AbiHXJoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:43:43 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B2592F4E
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 02:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=wKt3Dn8j9uSc7B
-        5EhIB4EGLx7pjDxO5kqFp34hJTebQ=; b=J9fEm05uPijF2Yw1vJFwGXMX2QDtxk
-        VPWgoOIw8uFo0ibZdHVCvMjmgtI64LD885Vzw9/bjw1tfUPZSTL19N35QZZQ/FEB
-        nBZ1LwLAWxoCWEOK82vpvFTR0hDoZEW/kcIPIHrL6/AB5yXLqJLDuZLJaI2TNYe9
-        eZHJa2LCH8bV8=
-Received: (qmail 2162710 invoked from network); 24 Aug 2022 11:43:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Aug 2022 11:43:37 +0200
-X-UD-Smtp-Session: l3s3148p1@4LLWg/nmcpsgAwDPXxw3AFlguiwjsjwa
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
-Date:   Wed, 24 Aug 2022 11:43:26 +0200
-Message-Id: <20220824094327.33685-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
-References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
+        Wed, 24 Aug 2022 05:44:08 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91B495AC6;
+        Wed, 24 Aug 2022 02:44:05 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MCLl70cF2z688sd;
+        Wed, 24 Aug 2022 17:43:47 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 24 Aug 2022 11:44:03 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 24 Aug
+ 2022 10:44:02 +0100
+Date:   Wed, 24 Aug 2022 10:44:01 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+CC:     Adam Manzanares <a.manzanares@samsung.com>,
+        "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "widawsk@kernel.org" <widawsk@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cxl: Replace HDM decoder granularity magic numbers
+Message-ID: <20220824104401.00005cd4@huawei.com>
+In-Reply-To: <20220822171703.sfizbmn6retpxggi@offworld>
+References: <CGME20220822170552uscas1p1b1ee530bf38a14806010d65d1b593ab0@uscas1p1.samsung.com>
+        <20220822170510.125082-1-a.manzanares@samsung.com>
+        <20220822171703.sfizbmn6retpxggi@offworld>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Despite the name, R-Car V3U is the first member of the R-Car Gen4
-family. Hence move its compatible value to the R-Car Gen4 section.
+On Mon, 22 Aug 2022 10:17:03 -0700
+Davidlohr Bueso <dave@stgolabs.net> wrote:
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Mon, 22 Aug 2022, Adam Manzanares wrote:
+> 
+> >When reviewing the CFMWS parsing code that deals with the HDM decoders,
+> >I noticed a couple of magic numbers. This commit replaces these magic numbers
+> >with constants defined by the CXL 2.0 specification.  
+> 
+> Please use 3.0 spec :)
+> 
+> Actually the whole drivers/cxl/* could use updating the comments for 3.0.
 
-diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-index 3813e8aaaefd..64faa8d3580a 100644
---- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-+++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-@@ -47,11 +47,11 @@ properties:
-               - renesas,msiof-r8a77980      # R-Car V3H
-               - renesas,msiof-r8a77990      # R-Car E3
-               - renesas,msiof-r8a77995      # R-Car D3
--              - renesas,msiof-r8a779a0      # R-Car V3U
-           - const: renesas,rcar-gen3-msiof  # generic R-Car Gen3 and RZ/G2
-                                             # compatible device
-       - items:
-           - enum:
-+              - renesas,msiof-r8a779a0      # R-Car V3U
-               - renesas,msiof-r8a779f0      # R-Car S4-8
-           - const: renesas,rcar-gen4-msiof  # generic R-Car Gen4
-                                             # compatible device
--- 
-2.35.1
+Interesting point.  What do we want to do on this?  Most similar
+cases I've been involved on rely on referring to 'oldest' compatible spec.
+(this is true for ACPI stuff for example).
 
+I don't care either way, but a policy on this will save us some time
+by ensuring we meet that policy before sending for review.
+
+Jonathan

@@ -2,168 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F4959FFB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E1759FFBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239087AbiHXQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S238289AbiHXQpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235300AbiHXQoS (ORCPT
+        with ESMTP id S239594AbiHXQpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:44:18 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110331B78C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661359458; x=1692895458;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rKl0AX9N3vZk2bVfhKXH8glAnr+LgGgaF2Y1I2CPgns=;
-  b=Ruw9RAlZHZjcPvT3EErYSi6YrCu3zxG2XRgui8IVh6QoYK/iq83csSp8
-   04cRPqKdgRoMQvTCd97IlOHKbZTMiMWCN8F/Lvlb6WnX9LuiqY0bZcx7J
-   zfodXyi2aPABxOwwRdLpP9fUJS/aBXMVOFW3cdULsQyvavq/ofysSkpOP
-   QTU9ejLKZtpEkFgHqttY7s1rpOcwvf9B47SU7k3khcWqCtQVLwAGQvk+F
-   G6gdC6fQRtBLofVgcpsX1VGQ2WEYJD9ehLlAeNc/DVVP67biLB+Yadr0y
-   qp49Xb7+nwivk2UKp459JamWDPgiEHKNj6od4dsUKyWieLixkqER/jE1L
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="274406216"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="274406216"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:44:17 -0700
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="752148073"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:44:17 -0700
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, fenghua.yu@intel.com,
-        tarumizu.kohei@fujitsu.com, x86@kernel.org
-Cc:     hpa@zytor.com, linux-kernel@vger.kernel.org
-Subject: [PATCH V2] x86/resctrl: Fix to restore to original value when re-enabling hardware prefetch register
-Date:   Wed, 24 Aug 2022 09:44:10 -0700
-Message-Id: <eb660f3c2010b79a792c573c02d01e8e841206ad.1661358182.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 24 Aug 2022 12:45:09 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FF325FA
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:45:08 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo2213931pjd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=tU1yBnqhlu3GqyKX52PVBbY7hfY440wN3o9LUS939qw=;
+        b=dMwaDYcQTBZEUAz6w9NArwGUlxFWdZ3Pss5DJq8kQ35DIDbNM2J2BoG/fLJUW7rAsk
+         0QkvfhDnsJ4GpqK+iwL2pNU8/iNzBW0S4Vz8aXQDoTWy5C9oPqxuTmJv7ilJjJwJHmXc
+         Kev/YZH83qJsfs9xjvwGtRFhUI4Bn2u9JNj2hZfiZhr8jSp1vQlhxBzwpdAzhlIPp+ak
+         VdN83DtNcVMzLg9ICJmdmqkTLFRdO/ClUvv+FlSKobXzKj/BQ7yWjJaL7hLXxQelxtQj
+         1Fmqnu76cf5fKgdgEA7VgO+8MnkMbKLlJsxV3HeCVq8ipj8XaQFvLBn7h+plvbH4rhDk
+         TO8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=tU1yBnqhlu3GqyKX52PVBbY7hfY440wN3o9LUS939qw=;
+        b=4gW0J5a8Tz456zU7Rjf7SYy8ZsQIGcx102KIw9SgIAnjCvAAXCiYoP18RJ9zIj5v36
+         Bqx0gTPKUx9kCyLU71f97tJjPaEt23esf2oHpbbhW7fHwDvxSd6Rlq4dI8UsHTRHimAU
+         Ol0BQuIGSwZEgGqk12C5rzs+O8RDOjJ3SzZGXqXfOJ9wmC01wUZZsNDnD9PUP8F5/aGI
+         t6H1h9pNMxpXKGc8rCx3uU5pT/JFSTrFp5wqSwN/e8TvBZtyHmple78ypGAN2SPQXvHR
+         RhSZXaaIumlCHDqzJatO9BGw1RgayfMTerrZTJo/cm4s54o0RFUji9E92WQYE6k5xjOw
+         uOjQ==
+X-Gm-Message-State: ACgBeo2clb79Js49WkUbUln3eplTTAsF1r5gTbcMS0PRMmHWIDRTB4tN
+        QxBg+oh+Gb0vzaGQMPGAme+idA==
+X-Google-Smtp-Source: AA6agR6mRl2fzdjX6KtKC9JWf9pNY+kiiRoR9PXpwCPuruebJXijTYHgPAAsuT/LODAzP52270zQ/w==
+X-Received: by 2002:a17:90b:3684:b0:1fa:f48e:abd0 with SMTP id mj4-20020a17090b368400b001faf48eabd0mr28499pjb.180.1661359507905;
+        Wed, 24 Aug 2022 09:45:07 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id o19-20020aa79793000000b005364944e538sm9721693pfp.99.2022.08.24.09.45.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 09:45:07 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 16:45:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Will McVicker <willmcvicker@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 09/17] perf/core: Use static_call to optimize
+ perf_guest_info_callbacks
+Message-ID: <YwZVj+8H4rGjEHyH@google.com>
+References: <20211111020738.2512932-1-seanjc@google.com>
+ <20211111020738.2512932-10-seanjc@google.com>
+ <YfrQzoIWyv9lNljh@google.com>
+ <CABCJKufg=ONNOvF8+BRXfLoTUfeiZZsdd8TnpV-GaNK_o-HuaA@mail.gmail.com>
+ <202202061011.A255DE55B@keescook>
+ <YgAvhG4wvnslbTqP@hirez.programming.kicks-ass.net>
+ <202202061854.B5B11282@keescook>
+ <CABYd82ZmDbgmEGhdWOJ5Um8tiFd4TeQ-QZ2+xwxwqqQs6oi0xg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABYd82ZmDbgmEGhdWOJ5Um8tiFd4TeQ-QZ2+xwxwqqQs6oi0xg@mail.gmail.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+On Fri, Feb 18, 2022, Will McVicker wrote:
+> On Sun, Feb 6, 2022 at 6:56 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Sun, Feb 06, 2022 at 09:28:52PM +0100, Peter Zijlstra wrote:
+> > > On Sun, Feb 06, 2022 at 10:45:15AM -0800, Kees Cook wrote:
+> > >
+> > > > I'm digging through the macros to sort this out, but IIUC, an example of
+> > > > the problem is:
+> > > >
+> > >
+> > > > so the caller is expecting "unsigned int (*)(void)" but the prototype
+> > > > of __static_call_return0 is "long (*)(void)":
+> > > >
+> > > > long __static_call_return0(void);
+> > > >
+> > > > Could we simply declare a type-matched ret0 trampoline too?
+> > >
+> > > That'll work for this case, but the next case the function will have
+> > > arguments we'll need even more nonsense...
+> >
+> > Shouldn't the typeof() work there too, though? I.e. as long as the
+> > return value can hold a "0", it'd work.
+> >
+> > > And as stated in that other email, there's tb_stub_func() having the
+> > > exact same problem as well.
+> >
+> > Yeah, I'd need to go look at that again.
+> >
+> > > The x86_64 CFI patches had a work-around for this, that could trivially
+> > > be lifted I suppose.
+> >
+> > Yeah, I think it'd be similar. I haven't had a chance to go look at that
+> > again...
 
-The current pseudo_lock.c code overwrites the value of the
-MSR_MISC_FEATURE_CONTROL to 0 even if the original value is not 0.
-Therefore, modify it to save and restore the original values.
-
-Fixes: 018961ae5579 ("x86/intel_rdt: Pseudo-lock region creation/removal core")
-Fixes: 443810fe6160 ("x86/intel_rdt: Create debugfs files for pseudo-locking testing")
-Fixes: 8a2fc0e1bc0c ("x86/intel_rdt: More precise L2 hit/miss measurements")
-Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-Acked-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Changes since V1:
- - V1: https://lore.kernel.org/lkml/20220518045517.2066518-1-tarumizu.kohei@fujitsu.com/
- - No changes to patch diff.
- - Added Reinette's "Acked-by".
- - While there are a few Fixes tags this is not considered stable material
-   because:
-   - Until the rest of Kohei's code lands this code is the only place in
-     the kernel than modifies the MSR_MISC_FEATURE_CONTROL MSR. When the
-     rest of Kohei's code lands this save/restore fix will be required.
-   - Fix does not pass rule #4 of Documentation/process/stable-kernel-rules.rst
-     (It must fix a real bug that bothers people).
-
- arch/x86/kernel/cpu/resctrl/pseudo_lock.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-index db813f819ad6..4d8398986f78 100644
---- a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-+++ b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-@@ -420,6 +420,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	struct pseudo_lock_region *plr = rdtgrp->plr;
- 	u32 rmid_p, closid_p;
- 	unsigned long i;
-+	u64 saved_msr;
- #ifdef CONFIG_KASAN
- 	/*
- 	 * The registers used for local register variables are also used
-@@ -463,6 +464,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	 * the buffer and evict pseudo-locked memory read earlier from the
- 	 * cache.
- 	 */
-+	saved_msr = __rdmsr(MSR_MISC_FEATURE_CONTROL);
- 	__wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 	closid_p = this_cpu_read(pqr_state.cur_closid);
- 	rmid_p = this_cpu_read(pqr_state.cur_rmid);
-@@ -514,7 +516,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	__wrmsr(IA32_PQR_ASSOC, rmid_p, closid_p);
- 
- 	/* Re-enable the hardware prefetcher(s) */
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsrl(MSR_MISC_FEATURE_CONTROL, saved_msr);
- 	local_irq_enable();
- 
- 	plr->thread_done = 1;
-@@ -871,6 +873,7 @@ bool rdtgroup_pseudo_locked_in_hierarchy(struct rdt_domain *d)
- static int measure_cycles_lat_fn(void *_plr)
- {
- 	struct pseudo_lock_region *plr = _plr;
-+	u32 saved_low, saved_high;
- 	unsigned long i;
- 	u64 start, end;
- 	void *mem_r;
-@@ -879,6 +882,7 @@ static int measure_cycles_lat_fn(void *_plr)
- 	/*
- 	 * Disable hardware prefetchers.
- 	 */
-+	rdmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 	mem_r = READ_ONCE(plr->kmem);
- 	/*
-@@ -895,7 +899,7 @@ static int measure_cycles_lat_fn(void *_plr)
- 		end = rdtsc_ordered();
- 		trace_pseudo_lock_mem_latency((u32)(end - start));
- 	}
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	local_irq_enable();
- 	plr->thread_done = 1;
- 	wake_up_interruptible(&plr->lock_thread_wq);
-@@ -940,6 +944,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	u64 hits_before = 0, hits_after = 0, miss_before = 0, miss_after = 0;
- 	struct perf_event *miss_event, *hit_event;
- 	int hit_pmcnum, miss_pmcnum;
-+	u32 saved_low, saved_high;
- 	unsigned int line_size;
- 	unsigned int size;
- 	unsigned long i;
-@@ -973,6 +978,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	/*
- 	 * Disable hardware prefetchers.
- 	 */
-+	rdmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 
- 	/* Initialize rest of local variables */
-@@ -1031,7 +1037,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	 */
- 	rmb();
- 	/* Re-enable hardware prefetchers */
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	local_irq_enable();
- out_hit:
- 	perf_event_release_kernel(hit_event);
--- 
-2.25.1
-
+Peter and/or Kees, can you provide a pointer to the patches that could potentially
+be used as a basis for fixing ARM CFI?  Or even better, send a patch to actually
+fix this?  :-)

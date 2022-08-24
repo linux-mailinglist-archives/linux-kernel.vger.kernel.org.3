@@ -2,162 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6278159F0F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6E659F122
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 03:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbiHXBbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 21:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S233804AbiHXBuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 21:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiHXBb2 (ORCPT
+        with ESMTP id S233815AbiHXBuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:31:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81F548CB3
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:31:26 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MC7k272n1zXdvC;
-        Wed, 24 Aug 2022 09:27:06 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 09:31:24 +0800
-CC:     <yangyicong@hisilicon.com>, <sudeep.holla@arm.com>,
-        <vincent.guittot@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
-        <21cnbao@gmail.com>, <jonathan.cameron@huawei.com>,
-        <linuxarm@huawei.com>, <prime.zeng@huawei.com>
-Subject: Re: [PATCH] arch_topology: Make cluster topology span at least SMT
- CPUs
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-References: <20220823073044.58697-1-yangyicong@huawei.com>
- <YwSKnGii2zdd7Fig@arm.com> <d0bc04af-5481-5df2-ff75-9072b4b047c1@huawei.com>
- <YwUUEzULS1ha1rqY@arm.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <5246777a-4175-e252-1815-fb92ce6d3716@huawei.com>
-Date:   Wed, 24 Aug 2022 09:31:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 23 Aug 2022 21:50:04 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D63FEE39
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 18:49:58 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 6A036227A8;
+        Wed, 24 Aug 2022 01:49:57 +0000 (UTC)
+Received: from pdx1-sub0-mail-a225 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id CB62921B02;
+        Wed, 24 Aug 2022 01:49:51 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661305791; a=rsa-sha256;
+        cv=none;
+        b=WW5z5lEU9noLsABoHpOYtdYsodXbS09xDkty1iJ8fjY0llT386Ys6Ks06PisjtZh0f04mp
+        FwQriGUuQZDtZHMLCK6m+1HBcfyh1JBFckQhpn2NNNiiMVVwnj8PpRR8ARdjaqSHw+VQB1
+        hgmXrrYu7fTqbKmoZ35gkX6DTHrnnDeZ2Gjxp//1u9WOHLsWl38+fYl7KDp8z8Yj8mNyr0
+        cmBOWaW2ZOsrDBECTQP0RJwA+5muKXnvXUZRlOY1yoo/4LaTwLrx5KNBRAFhdfAHGKGWj/
+        0A9bEq4WylfmoKlf2g4V5XTdwrV6bYJ12tP+72EZx/xedN6DQwurEEcLTpfULg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661305791;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=KyQrDQVpcvilEDqykRWXqrH3tFOoyA6DmQ/bB/u6eJI=;
+        b=n5oNR76XbOhvjQua68LlgZWytQR+5I9QjIjB1mMRnTiSi0YO94M9024mrU8E/hx7IxtkVR
+        viI1icKDSghDbE+6/KLUBMjgq7PSg0l3LUQ4+WepIZSwV9JqnS3LRshJ0YJAiF/g1ErQ5T
+        6i3tpSAnBETzzRYKPUcEVj2wLGFKLRTEC9RBQXlE6RtwGsV2CRxeWzMpvkzhAXQ7GgvHtj
+        dKgILfZxI7odjv7vVua34BMXXQ3DxJTQlcX2tmh13M0L2CoGgQA9KL0xYoYAyNlxh4ogcp
+        HwHqdvm/WR2+ASa8G3cISp7Xs4YIzbb8cjU0EdAAeWmw8ynwUzlPuqEa6l/8Ng==
+ARC-Authentication-Results: i=1;
+        rspamd-7499696767-dvgzl;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Squirrel-Macabre: 241804060bb1b80c_1661305792116_504427177
+X-MC-Loop-Signature: 1661305792115:2436232760
+X-MC-Ingress-Time: 1661305792115
+Received: from pdx1-sub0-mail-a225 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.108.161.97 (trex/6.7.1);
+        Wed, 24 Aug 2022 01:49:52 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a225 (Postfix) with ESMTPSA id 4MC8DH0hWlz4S;
+        Tue, 23 Aug 2022 18:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661305791;
+        bh=KyQrDQVpcvilEDqykRWXqrH3tFOoyA6DmQ/bB/u6eJI=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=RtIc/QDvpivM6t9vLzop3hUcEIKVvezNltDg/RgGbsK0vXigJ+v9BQMQOPiSKznyf
+         DLh0cpzqh7J1vlILAW5IKQZ5eLqSaCEzQ40h65KeZQMvjKz7CzHvGE9ux79YlvjlH9
+         OH8aT5hxDpyWxJUmcgkJN7+E6+3tm6UIZhK85XMlD794lbtZN75faoeh1w3711sAc6
+         ujWz7T5772cdONYO7QCoJgh3UCfw8CPG/QFgIkBqC5QnEIDd6IFd99jZ7g6r4pP0Tn
+         8OQDlqATpSjsRX8Sv/AR7pAAQIWzxxk3YWDd11UBryml0CEDWvSp+FlwVFmiIwYLOl
+         +n5Ck0Jny4ATg==
+Date:   Tue, 23 Aug 2022 18:31:46 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v13 38/70] optee: remove vma linked list walk
+Message-ID: <20220824013146.qe3dkfpzfikijky6@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-39-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <YwUUEzULS1ha1rqY@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220822150128.1562046-39-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/24 1:53, Ionela Voinescu wrote:
-> Hi,
-> 
-> On Tuesday 23 Aug 2022 at 21:05:47 (+0800), Yicong Yang wrote:
->> On 2022/8/23 16:06, Ionela Voinescu wrote:
->>> Hi Yicong,
->>>
->>> On Tuesday 23 Aug 2022 at 15:30:44 (+0800), Yicong Yang wrote:
->>>> From: Yicong Yang <yangyicong@hisilicon.com>
->>>>
->>>> Currently cpu_clustergroup_mask() will return CPU mask if cluster span
->>>> more or the same CPUs as cpu_coregroup_mask(). This will result topology
->>>> borken on non-Cluster SMT machines.
->>>
->>> Might be worth adding here:.. "when building with CONFIG_SCHED_CLUSTER=y"
->>>
->>
->> will add this qualifier. thanks.
->>
->>>>
->>>
->>> I thought I had covered this case, but I think I had considered LLC
->>> spanning more than one core (tested on TX2 as well).
->>>
->>> So you'd only hit this if LLC and cluster level span the same cores (a
->>> single core in this case, for non-cluster), in the presence of SMT.
->>>
->>
->> Not sure I understand it correctly but in the below case I think the LLC may span
->> the same core with socket?
-> 
-> Ah, I've jumped to conclusions based on the "non-cluster" mention. Does
-> "non-cluster" just mean that there's no intermediary "cluster" grouping of
-> CPUs between core and LLC? How does the PPTT table look like, by the
-> way?
-> 
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-yes non-cluster means machine has no cluster topology. The PPTT is generated by the
-qemu according to the cmdline so I didn't really check it. See the demo provided in
-the commit.
+>From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+>
+>Use the VMA iterator instead.  Change the calling convention of
+>__check_mem_type() to pass in the mm instead of the first vma in the
+>range.
+>
+>Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-'-smp 48,sockets=2,cores=12,threads=2' builds a mahine with 2 sockets, one socket has
-12 cores and each core has 2 threads. If we want to have a cluster machine we build it
-with '-smp 48,sockets=2,clusters=6,cores=2,threads=2', then we'll have 6 clusters in
-one socket and 2 cores in each cluster, 2 threads for each core.
-
-Thanks.
-
-> Thanks,
-> Ionela.
-> 
->>
->>> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
->>>
->>> Many thanks,
->>> Ionela.
->>>
->>>> Test with:
->>>> qemu-system-aarch64 -enable-kvm -machine virt \
->>>>  -net none \
->>>>  -cpu host \
->>>>  -bios ./QEMU_EFI.fd \
->>>>  -m 2G \
->>>>  -smp 48,sockets=2,cores=12,threads=2 \
->>>>  -kernel $Image \
->>>>  -initrd $Rootfs \
->>>>  -nographic
->>>>  -append "rdinit=init console=ttyAMA0 sched_verbose loglevel=8"
->>>>
->>>> We'll get below error:
->>>> [    3.084568] BUG: arch topology borken
->>>> [    3.084570]      the SMT domain not a subset of the CLS domain
->>>>
->>>> Since cluster is a level higher than SMT, fix this by making cluster
->>>> spans at least SMT CPUs.
->>>>
->>>> Cc: Sudeep Holla <sudeep.holla@arm.com>
->>>> Cc: Vincent Guittot <vincent.guittot@linaro.org>
->>>> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
->>>> Fixes: bfcc4397435d ("arch_topology: Limit span of cpu_clustergroup_mask()")
->>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>>> ---
->>>>  drivers/base/arch_topology.c | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
->>>> index 0424b59b695e..0056a1273275 100644
->>>> --- a/drivers/base/arch_topology.c
->>>> +++ b/drivers/base/arch_topology.c
->>>> @@ -724,7 +724,7 @@ const struct cpumask *cpu_clustergroup_mask(int cpu)
->>>>  	 */
->>>>  	if (cpumask_subset(cpu_coregroup_mask(cpu),
->>>>  			   &cpu_topology[cpu].cluster_sibling))
->>>> -		return get_cpu_mask(cpu);
->>>> +		return cpu_smt_mask(cpu);
->>>>  
->>>>  	return &cpu_topology[cpu].cluster_sibling;
->>>>  }
->>>> -- 
->>>> 2.24.0
->>>>
->>>
->>> .
->>>
-> .
-> 
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

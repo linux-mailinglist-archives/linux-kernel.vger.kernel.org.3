@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8958F5A0032
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1E35A0035
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 19:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240000AbiHXRQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 13:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
+        id S239977AbiHXRR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 13:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238625AbiHXRQ4 (ORCPT
+        with ESMTP id S236489AbiHXRRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 13:16:56 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705B97C192
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:16:55 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id v125so20171378oie.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:16:55 -0700 (PDT)
+        Wed, 24 Aug 2022 13:17:53 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BF07C1FA
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:17:49 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so12232748oti.9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 10:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xH1Eh5z9tkUCDvtKIBQEtl0pleKDswE2sHWuXsvAcw0=;
-        b=NsQBcHWGLr6oKTDzceDUWnHHpP7nUmIJa/T1MYZjObZKbcmEaYGtC3QHf2cMnptmuB
-         +DIHBikwmq4vqES5qVSv+ILUA5HZbOYmtabmfRarE872HH2gC5t40PJsuj3INT/jfGI6
-         98swjjo91Qcj16FVsGmWU/KVXeUEzSMoUDXhbH2HfnAP9JmEiao/SD4h4RTqWVnnE6Z9
-         Rl5B0bGRew5yX7LmB08tSGtXR+PH/UqniywSKypYn0ZwYel64JvKcMTOZ6jiYI6STq5S
-         NjyFEpKE/I3//FdFd2MU40jiTUBI91bVckHJEk7UILlyuYMU0N0DS7gBnHCa06yLJY2D
-         eDWw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=MHYuEVNrNq6xOFLpayXIejomNu0GT0DBxEs7vGrd158=;
+        b=WZmQ7PLNtEHmn6SJrYb0tXJV3lUfaM74pbLSdSKR9LMnaK5kGCvh1f3QY7J38pSoIB
+         ik74LCQK95MUwF5xTdiHJ3JJ/wd36IqnmQneCLEzyFZ4ghGmFUX4vvXUG+dSM9XM77Nv
+         lk/NSNsGdkxOFaxjdiv4zfitg8B6AUUzfSsrc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xH1Eh5z9tkUCDvtKIBQEtl0pleKDswE2sHWuXsvAcw0=;
-        b=5Q99Sz12Ez6v6htcAk3g7ai+ehVTj7armP1wQkW50Pe04upbUoTBabmMkHvUxun+Y4
-         vQ6r73WwH8op82yu+QaYB9kkc/noMSMcxnt447m81/OHp7AcWQ832qFk4uTqOlsDyFW8
-         vN6NIKYaKB92u5xCBZ9OItWoo2f9Culh0DmSyERcNfcABI/yL92/ldeBcthK0pLSTOKG
-         qYPntZ80yO4TrIJiY5sL0ppY9Im//8/xELphkBrugms3uzg/N8RDfqE8qQNN0tE3OvW6
-         TZNXjvXNqGb9FOMasrnD6ukJ/yuO98hF1ym2Uo1rcNKtRZYK5kVeGRqUK19117OorN56
-         f0MQ==
-X-Gm-Message-State: ACgBeo0uxnD8Lu/KVLLbrv3sh7KU9ynOuVFJOlH0pNAxQRFL7TqlPGdR
-        W8QSjYyhfFEZVn6+GMJWIH+1QnH5PNwgQ4gKS7ZF/A==
-X-Google-Smtp-Source: AA6agR5DvE8z8vHQGiXGONrNTnfLOoN/gC8Pk9vmYNfXaeUyq1afrkIGeTkjg4811k+u7x6T4BhaIhxgfE2UecdRHAs=
-X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
- u15-20020a056808150f00b00343320291cfmr3657938oiw.112.1661361414498; Wed, 24
- Aug 2022 10:16:54 -0700 (PDT)
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=MHYuEVNrNq6xOFLpayXIejomNu0GT0DBxEs7vGrd158=;
+        b=ALB8wUblQ9D9ebfmsaixiIfapymTUE9pq9TFZkdJAFyzftr8kVyq6Dm9BCE5ATlBAu
+         RuAL9h8tMIMVrUraKxVFT69vCqgQxXKbNE5UPQOsCdgMk40nt+44Wdnu1XciaLOk6lSy
+         lQQQ0vafltLZppe8418CqjlvTYTwWeg8XFiXWY7ZSiQ9uioqx9kuijF/EfgOPW5LXNY/
+         vbtMfZxcxxETs/37VQ8Bzjqh6dA9LvBzPrYm6GsyElriMKr3tjpAC9efNZ3srCIFkUlQ
+         P++UcQcRgG++feB+ByhGf7Crfsk9XDHYo7A3QsCGPHe0UhJLdOoEeoVbwDrCUhKg+R9Q
+         h60w==
+X-Gm-Message-State: ACgBeo3zpWwJacVOqRJ64Ltm3OjOOWAwIXZl0C+ptxifzHRZzLv4hlOg
+        cBXI20/5QeRYb9eZ4I5sIJLYobuKP2eB402oHJobjQ==
+X-Google-Smtp-Source: AA6agR4zBshr+gUc3WgavtY1TB1LNAO6aNOk9NTWdc2ol+fbKgwzW7gL98pe4oEy1a7xXcIHJjx4KwfdSoBCPBzli14=
+X-Received: by 2002:a9d:738c:0:b0:638:9962:8cb6 with SMTP id
+ j12-20020a9d738c000000b0063899628cb6mr11204441otk.73.1661361468554; Wed, 24
+ Aug 2022 10:17:48 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 24 Aug 2022 12:17:47 -0500
 MIME-Version: 1.0
-References: <163244601049.30292.5855870305350227855.stgit@bmoger-ubuntu>
- <CALMp9eSKcwChbc=cgYpdrTCtt49S1uuRdYoe83yph3tXGN6a2Q@mail.gmail.com> <e3718025-682d-469c-eac9-b4995e91dc11@redhat.com>
-In-Reply-To: <e3718025-682d-469c-eac9-b4995e91dc11@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 24 Aug 2022 10:16:42 -0700
-Message-ID: <CALMp9eQCcy-MjB8Su+654XyL3zfR876tdh4QHUjvB7EiNjCU9A@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: Expose Predictive Store Forwarding Disable
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Babu Moger <babu.moger@amd.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        joro@8bytes.org, tony.luck@intel.com, peterz@infradead.org,
-        kyung.min.park@intel.com, wei.huang2@amd.com, jgross@suse.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+In-Reply-To: <1661360356-21948-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1661360356-21948-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 24 Aug 2022 12:17:47 -0500
+Message-ID: <CAE-0n52Mqv-qqb4n_Q4iO-reSncNikWd-2xNVG7pgwvx2ThTHw@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: correct 1.62G link rate at dp_catalog_ctrl_config_msa()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 10:13 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+Quoting Kuogee Hsieh (2022-08-24 09:59:16)
+> At current implementation there is an extra 0 at 1.62G link rate which cause
+> no correct pixel_div selected for 1.62G link rate to calculate mvid and nvid.
+> This patch delete the extra 0 to have mvid and nvid be calculated correctly.
 >
-> On 8/23/22 23:26, Jim Mattson wrote:
-> > For consistency, should this feature be renamed AMD_PSFD, now that
-> > Intel is enumerating PSFD with CPUID.(EAX=7,ECX=2):EDX.PSFD[bit 0]?
-> > Seehttps://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/cpuid-enumeration-and-architectural-msrs.html.
-> >
-> > And, Paolo, why are we carrying X86_FEATURE_PSFD as a private #define
-> > in KVM rather than putting it where it belongs in cpufeatures.h?
-> >
->
-> Borislav asked to not show psfd in /proc/cpuinfo, because Linux had
-> decided not to control PSF separately; instead it just piggybacked
-> on SSBD which should disable PSF as well.  Honestly I disagree but
-> it's not my area of maintenance.
+> Fixes: 937f941ca06f  "drm/msm/dp: Use qmp phy for DP PLL and PHY"
 
-Do we expose PSFD in KVM for the use of another popular guest OS?
+Should be
+
+Fixes: 937f941ca06f ("drm/msm/dp: Use qmp phy for DP PLL and PHY")
+
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+
+Good catch! Thanks for fixing it.
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

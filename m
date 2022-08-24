@@ -2,222 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FDF59F067
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F8F59F06A
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 02:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbiHXAqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 Aug 2022 20:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S232282AbiHXAqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 23 Aug 2022 20:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiHXAqM (ORCPT
+        with ESMTP id S232339AbiHXAq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 Aug 2022 20:46:12 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471356270
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:46:09 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id q7so18213357lfu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 17:46:09 -0700 (PDT)
+        Tue, 23 Aug 2022 20:46:28 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D47586B65;
+        Tue, 23 Aug 2022 17:46:27 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id h5so18070869wru.7;
+        Tue, 23 Aug 2022 17:46:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hardline-pl.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=+7YC01QZWr2H+Z11+QtNy0peh5GHhPgH8/H+v7UwPXM=;
-        b=jYus24zPijQN5JdrsH5VT1VZPIGdLNSvI5RgeZRHZYlKU/Bb2LSdSpWy4+S9il+dus
-         qCVLvQuBWMzx7ZLbQYbhCgxCfnUanvLgIRc8rgkIADx+sqcmUfn90EP5ZTNzT07z2YOH
-         vofXJYPpoxv3QLCdn6x4bmcs42nnXWi0H01cUyAEhLOYsw4jw+UPlcyCQy3FGptJ63Ap
-         30PbsLQ1e+kA/By/DcH3+fjcrJh/nOV8E8o2I31zlSIs9QWwbKLGJhlDLbPf3fB0wgS0
-         EvVQ7gTXn7JlcfrZ9eX0XSmSbfYLPROtTVPSChYJUp0WuNSVfrpUw+5E9a0w6cLBCW9a
-         8NZw==
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=XGaQkMUxyNcihNRKJRLiIaRtaN1b1CuxNyHRTtmolkM=;
+        b=kUqxJzNVKYfqKUDMRKI8VVAC+gyu48N1ltCtB3CEPciKXABCOLq7ugr6gCvnI48uO9
+         D6imX3IQ/sPcslARwJzPrzLjYxUboqjS0W0TxJQE9YGSr5u5TbLtX3G0kHF1n+k52XaS
+         axHOVIzGKc9NqQAyjQQ2NyDBGOvqtxdFaySWo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=+7YC01QZWr2H+Z11+QtNy0peh5GHhPgH8/H+v7UwPXM=;
-        b=sELfOqQ6FwGsrneKJSe7ThnYeAwQAPvUivxbh7pUSOh73UPuHLIREH3qJh4SJct197
-         4B6WzLiyOyiL9oBwHd3IQGN9UJjQ0RpZe+1/yJPF0weM827z6C3+j6hqfof/NN4UYEoW
-         koqbn+QonHGMaBKWbbXEwljn8wIda7Lre2nLW418g0+cmAqOJNYOesWboBJeLiw1lQxd
-         LDCAt36jKOQm1bOCLfJeQl4e455tfbiH1NXaSBQHFCSMX4N0jBegA51lS4KeyUnP4nZ4
-         +cbq8VIqYD1YKXO2CJRUES0c9tpcDmEkKoOhnYL6doc6oK9W81nvtp61jN4lSb0X5vvO
-         15xw==
-X-Gm-Message-State: ACgBeo2Ow24Qwe984xNcoSKRSKQKTqoQCJdwHW+GmgpsPrUTZ4HL0Nxv
-        t9q2YkcOLOBUzws4w2IH2Llkxg==
-X-Google-Smtp-Source: AA6agR7sRImMNaAM0Jb12p84NAKhEUSyFvm3ewFa1xEzGiE/jRI1uZfhA1nP8y5VGI92jbu3qrZy4w==
-X-Received: by 2002:a05:6512:1155:b0:48a:fb9a:32d8 with SMTP id m21-20020a056512115500b0048afb9a32d8mr9530380lfg.672.1661301967470;
-        Tue, 23 Aug 2022 17:46:07 -0700 (PDT)
-Received: from localhost (89-64-119-148.dynamic.chello.pl. [89.64.119.148])
-        by smtp.gmail.com with ESMTPSA id g21-20020a2eb5d5000000b00261c19bbb6asm2007841ljn.97.2022.08.23.17.46.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 17:46:06 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 02:46:06 +0200
-From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal@hardline.pl>
-To:     Isabella Basso <isabbasso@riseup.net>
-Cc:     =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>,
-        Matthew Auld <matthew.william.auld@gmail.com>,
-        Arthur Grillo <arthur.grillo@usp.br>,
-        Rodrigo Siqueira <siqueirajordao@riseup.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kselftest@vger.kernel.org, n@nfraprado.net,
-        andrealmeid@riseup.net, magalilemes00@gmail.com,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        kunit-dev@googlegroups.com, mwen@igalia.com,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-        tales.aparecida@gmail.com,
-        kernel list <linux-kernel@vger.kernel.org>,
-        leandro.ribeiro@collabora.com,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
-Message-ID: <20220824004606.ufca7rrd4s4xrkms@macragge.hardline.pl>
-References: <20220708203052.236290-1-maira.canal@usp.br>
- <20220708203052.236290-10-maira.canal@usp.br>
- <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
- <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
- <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
- <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=XGaQkMUxyNcihNRKJRLiIaRtaN1b1CuxNyHRTtmolkM=;
+        b=g+T4wCpzlTEeHqB2Cf0MQmgt05Csaqkhn+Hd3i9XvHCeSJ+PJrGHJqPwHahi3W9yD5
+         ALuqDVsy4YDEaPhNvHs9V5JmQBoqm8KMpcr2DAhQVOMydwCu3w9CEFHa8Y/qdZL0vvxd
+         KwLcRDviy75bkAG8FFZjUcQ05gSRXPN5bAyFh1Og39yL7CxGF+6hHlnLKPMmBrJePTiO
+         /yUbtohlwbpVZFhKOsjXctQUDUirwPqoxRSuvPcLmCtDFtBlnaWA7pWrJDLDyxhyoYaG
+         W14DZ8ZqPLLMfW/6gajz4WPWsa8peTfcoep5pOq2nb1vFUJ7ctT5RnubpSnNmQka+iwY
+         jvUg==
+X-Gm-Message-State: ACgBeo2s3qaEo6J3pFLUHyiz0eWe+P3jovRrcoKv7UikLzuZnvTKjYM8
+        am32VlPdxeY0zr68lmNzNcnie+tMsP0HsxnbGRbFAZ7HViNZRA==
+X-Google-Smtp-Source: AA6agR7fuYY9EZSN0oIP//lfh/BqtJq0jICtYK+RauIjd9N8/v0xxKlLpD1fH0FuztD8gB30kSvbc30iqADMMDyJiMU=
+X-Received: by 2002:a05:6000:1c0c:b0:225:569c:dd2c with SMTP id
+ ba12-20020a0560001c0c00b00225569cdd2cmr7029200wrb.628.1661301985880; Tue, 23
+ Aug 2022 17:46:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
+In-Reply-To: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 24 Aug 2022 00:46:13 +0000
+Message-ID: <CACPK8XfeocBz6phbYyuHHMmZhisw5kGr3QpkdWv3LocvAN=WsA@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: aspeed_wdt: Reorder output signal register configuration
+To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, andrew@aj.id.au,
+        BMC-SW@aspeedtech.com, linux-watchdog@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Bonnie_Lo@wiwynn.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 07:22:30PM -0300, Isabella Basso wrote:
-> Hi Michał,
-> 
-> While I totally understand your point, we have talked about this in our GSoC
-> meetings with mentors, and have found a few reasons as to why a KUnit runner
-> integrated to IGT might be really useful. 
-> 
-> > Am 22/07/2022 um 1:25 PM schrieb Michał Winiarski <michal@hardline.pl>:
-> > 
-> > On Fri, Jul 22, 2022 at 08:04:51AM -0300, Maíra Canal wrote:
-> >> On 7/22/22 07:35, Matthew Auld wrote:
-> >>> On Fri, 8 Jul 2022 at 21:32, Maíra Canal <maira.canal@usp.br> wrote:
-> >>>> 
-> >>>> From: Arthur Grillo <arthur.grillo@usp.br>
-> >>>> 
-> >>>> Considering the current adoption of the KUnit framework, convert the
-> >>>> DRM mm selftest to the KUnit API.
-> >>> 
-> >>> Is there a plan to convert the corresponding selftest IGT that was
-> >>> responsible for running this (also drm_buddy) to somehow work with
-> >>> kunit? Previously these IGTs were always triggered as part of
-> >>> intel-gfx CI, but it looks like they are no longer run[1].
-> >>> 
-> >>> [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
-> >> 
-> >> Hi Matthew,
-> >> 
-> >> Isabella sent a while ago a patch to IGT adding KUnit compatibility to
-> >> IGT [1], but there wasn't any feedback on the patch. I believe that soon
-> >> she will resend the series in order to make all KUnit DRM tests run on IGT.
-> >> 
-> >> Any feedback on the patch is welcomed so that we can fix this issue as
-> >> soon as possible.
-> >> 
-> >> [1] https://patchwork.freedesktop.org/patch/489985/
-> >> 
-> >> Best Regards,
-> >> - Maíra Canal
-> > 
-> > Hi.
-> > 
-> > Instead of going back to using IGT for *unit* tests, it would be a better idea
-> > to adjust the CI to just run the tests once at "build" time (just like e.g.
-> > checkpatch).
-> 
-> First, I’d like to point out that there would be some inherent overhead in
-> doing so, which might actually not be worth it, as KUnit tool would need to
-> compile HEAD in the UML arch, then we’d have to re-compile everything to a real
-> machine’s architecture, like x86_64 (in the least), having in mind still that
-> arch-dependent issues would not show up when we run tests in UML, so there’s
-> still a downside to it even if it’s quick enough.
-> 
-> Even if we don’t run them as UML and instead use a VM, there’s a VM being run
-> just for a couple of tests, which might be slower than adding a step to a
-> dedicated machine that’s (probably) already available, plus the setup and
-> hardware needed to run a VM inside of a CI runner are overheads in themselves,
-> needing dedicated, modern machines.
+On Fri, 19 Aug 2022 at 09:49, Chin-Ting Kuo
+<chin-ting_kuo@aspeedtech.com> wrote:
+>
+> If the output driving type is push-pull mode, the output
+> polarity should be selected in advance. Otherwise, an unexpected
+> value will be output at the moment of changing to push-pull mode.
+> Thus, output polarity, WDT18[31], must be configured before
+> changing driving type, WDT18[30].
+>
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 
-No - we don't need a dedicated machine for running kunit - the machine that we
-just used to compile the code is perfectly fine.
-Builders used in CI systems usually have beefy server-grade CPUs - pretty good
-candidates for running unit tests (even with virtualization overhead).
-Plus - if the unit tests fail, we can consider skipping the deployment and
-not run any regular tests (just like the case where build has failed).
-Meanwhile, one of the "dedicated machines" (ones that are used to run the tests)
-can actually be a low-power device (think tablet). And if the test ends up
-crashing the kernel, it needs to be rebooted. VMs are much easier to work with,
-especially with kunit.py abstracting away all of the qemu interactions.
+Thanks Chin-Ting.
 
-> 
-> > We would then stop executing the same test multiple times on different machines
-> > (note that both DRM selftests and i915 "mock" selftests are pure unit tests - in
-> > other words, they don't need the hardware to be present), which would save some
-> > (small) amount of machine-time that can be utilized to do something that
-> > actually needs the hardware.
-> 
-> I totally agree with your solution in regards to arch-independent tests, though.
+Fixes: 012c04601f9d ("watchdog: aspeed: Support configuration of
+external signal properties")
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-There are no arch-specific kunit tests in DRM-core. There shouldn't be any
-arch-specific code in DRM-core. Same thing for drivers (at least for the purpose
-of COMPILE_TEST and by extension, running kunit).
-All of DRM kunit tests should pass on all architectures supported by kunit.
+I wonder if any of these machines hit the bug:
 
-> 
-> > Plus there's no need to maintain the kunit-runner in IGT.
-> > Note - we're currently going to lose "DMESG-WARN" detection if we go this route,
-> > but this is something that can be improved on the kunit-side.
-> > 
-> > -Michał
-> 
-> There’s also a point to be made on maintaining such a runner if we think about
-> companies like AMD, as they rely heavily on IGT, so they have lots of tests
-> written in there, and it'd be difficult for them to accommodate one more
-> non-trivial thing to their CI. Plus I think this might be a good starting point
-> for them to transition their CI to a KUnit-centered approach without stressing
-> engineers unnecessarily.
+$ git grep -l aspeed,ext-push-pull arch/arm/boot/dts/
+arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
+arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
+arch/arm/boot/dts/aspeed-bmc-inspur-fp5280g2.dts
+arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts
+arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts
+arch/arm/boot/dts/aspeed-bmc-opp-swift.dts
+arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
+arch/arm/boot/dts/aspeed-bmc-opp-witherspoon.dts
 
-I agree with the IGT-compatibility angle, however, that would only apply to test
-content that gets converted from selftests to kunit (just like DRM selftests),
-not newly introduced test content (as is the case with amdgpu).
-I also wouldn't call interpreting exit code of "kunit.py run (...)" something
-that's difficult to be added to various CI pipelines.
-Also - do we really want to transition to KUnit-centered approach?
-Regular IGTs are actually about exercising the HW through driver uAPI from
-userspace, not about isolated unit testing (which is what KUnit is about).
-Then we have selftests, which are implemented on the kernel side, and are about
-internal implementation. Selftests may or may not require HW to operate (if HW
-is needed, we're usually doing more of a functional/integration testing, if not
-- it's most likely going to be a pure unit test).
-I view regular IGTs and KUnit (and kselftests that are not isolated, and need
-the HW to be present) as complementary mechanisms, not something to be replaced
-(in other words - we only want to transition unit tests to KUnit).
 
-When it comes to transition, I'm just worried that once the IGT KTAP parser is
-adopted, the transition to kunit.py @ build time will never happen, and we'll
-end up maintaining custom DRM-specific solution instead of participating in
-wider kernel community.
-
--Michał
-
-> 
-> Cheers,
-> —
-> Isabella
-> 
+> ---
+>  drivers/watchdog/aspeed_wdt.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+> index 436571b6fc79..a03e4ff812a2 100644
+> --- a/drivers/watchdog/aspeed_wdt.c
+> +++ b/drivers/watchdog/aspeed_wdt.c
+> @@ -325,18 +325,18 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>                 u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
+>
+>                 reg &= config->ext_pulse_width_mask;
+> -               if (of_property_read_bool(np, "aspeed,ext-push-pull"))
+> -                       reg |= WDT_PUSH_PULL_MAGIC;
+> +               if (of_property_read_bool(np, "aspeed,ext-active-high"))
+> +                       reg |= WDT_ACTIVE_HIGH_MAGIC;
+>                 else
+> -                       reg |= WDT_OPEN_DRAIN_MAGIC;
+> +                       reg |= WDT_ACTIVE_LOW_MAGIC;
+>
+>                 writel(reg, wdt->base + WDT_RESET_WIDTH);
+>
+>                 reg &= config->ext_pulse_width_mask;
+> -               if (of_property_read_bool(np, "aspeed,ext-active-high"))
+> -                       reg |= WDT_ACTIVE_HIGH_MAGIC;
+> +               if (of_property_read_bool(np, "aspeed,ext-push-pull"))
+> +                       reg |= WDT_PUSH_PULL_MAGIC;
+>                 else
+> -                       reg |= WDT_ACTIVE_LOW_MAGIC;
+> +                       reg |= WDT_OPEN_DRAIN_MAGIC;
+>
+>                 writel(reg, wdt->base + WDT_RESET_WIDTH);
+>         }
+> --
+> 2.25.1
+>

@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948FF5A02BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EB45A02BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236466AbiHXU3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S240387AbiHXUaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237076AbiHXU31 (ORCPT
+        with ESMTP id S239786AbiHXU35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:29:27 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DCC6B17A;
-        Wed, 24 Aug 2022 13:29:23 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C7A9E188444D;
-        Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id BEA8025032B7;
-        Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id B7D589EC0004; Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Wed, 24 Aug 2022 16:29:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE3B4B4;
+        Wed, 24 Aug 2022 13:29:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09125B826A7;
+        Wed, 24 Aug 2022 20:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAD1C433D6;
+        Wed, 24 Aug 2022 20:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661372991;
+        bh=dqhGz/nLmt6yUPkMB5rA5qXpiQ+1w7dwGL2hqByBBRc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CpSScSEG6uPmSMHRKF5GulWRgs49MlGGCa/mmee7+PVobFiXEEjj4s7NNsjL7lbyk
+         sEL/ZYKh9RndBrk8yJQPBgbwjbl3t/FxGq99v0LWW1+M1BIw9A2GwHbuR1kYNFeCv3
+         7LNxCL4lRDjNIQtnNuiyQZoKfVF2EEfsSBJXP6w88OT8OAjB6zeDlFRz5auauDO94f
+         0H1KudDibhtwJJle3OaUhrgiDyEKeSIfPH5vjCHjWFvaSIuGCpiDOKe58WWAeEaDjo
+         uffmTJp21NhSVL5j69Tz+aWReWv4wBODbf+VA9WIjMVQjA3yq1OGqOp0tvGWSATDAS
+         qs62ngq64V1oQ==
+Date:   Wed, 24 Aug 2022 15:29:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v5 0/3] PCI: Restrict pci transactions after pci suspend
+Message-ID: <20220824202949.GA2805069@bhelgaas>
 MIME-Version: 1.0
-Date:   Wed, 24 Aug 2022 22:29:20 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YwHZ1J9DZW00aJDU@shredder>
-References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
- <YvkM7UJ0SX+jkts2@shredder>
- <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
- <YwHZ1J9DZW00aJDU@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <7016ed2ce9a30537e4278e37878900d8@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1659526134-22978-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,45 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-21 09:08, Ido Schimmel wrote:
+On Wed, Aug 03, 2022 at 04:58:51PM +0530, Krishna chaitanya chundru wrote:
+> If the endpoint device state is D0 and irq's are not freed, then
+> kernel try to mask interrupts in system suspend path by writing in to
+> the vector table (for MSIX interrupts) and config space (for MSI's).
+
+If clocks are being turned off while the PCI core is still accessing
+the device, I think that means qcom suspend is not implemented
+correctly.
+
+> These transactions are initiated in the pm suspend after pcie clocks got
+> disabled as part of platform driver pm  suspend call. Due to it, these
+> transactions are resulting in un-clocked access and eventually to crashes.
 > 
-> I assume you want a hub to simulate multiple MACs behind the same port.
-> You don't need a hub for that. You can set the MAC using mausezahn. See
-> '-a' option:
+> So added a logic in qcom driver to restrict these unclocked access.
+> And updated the logic to check the link state before masking
+> or unmasking the interrupts.
 > 
-> "
->    -a <src-mac|keyword>
->        Use specified source MAC address with hexadecimal notation such
-> as 00:00:aa:bb:cc:dd.  By default the interface MAC address will be
-> used. The  keywords  ''rand''
->        and  ''own''  refer to a random MAC address (only unicast
-> addresses are created) and the own address, respectively. You can also
-> use the keywords mentioned below
->        although broadcast-type source addresses are officially invalid.
-> "
+> And some devices are taking time to settle the link in L1ss, so added a
+> retry logic in the suspend ops.
 > 
-
-
-Ido, I am not so known to the selftests, so I am wondering why I don't 
-see either check_err or check_fail fail, whichever I use, when I think 
-they should and then they are not really checking...
-
-
-         local mac=10:20:30:30:20:10
-
-
-         $MZ $h1 -t udp -a $mac -b rand
-         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
-locked"
-         check_err $? "MAB station move: no locked entry on first 
-injection"
-
-         $MZ $h2 -t udp -a $mac -b rand
-         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
-locked"
-         check_err $? "MAB station move: locked entry did not move"
-
-What is wrong here?
-
-For a mv88e6xxx test I guess I can make a check to verify that this 
-driver is in use?
+> Krishna chaitanya chundru (3):
+>   PCI: qcom: Add system PM support
+>   PCI: qcom: Restrict pci transactions after pci suspend
+>   PCI: qcom: Add retry logic for link to be stable in L1ss
+> 
+>  drivers/pci/controller/dwc/pcie-designware-host.c |  14 ++-
+>  drivers/pci/controller/dwc/pcie-qcom.c            | 117 +++++++++++++++++++++-
+>  2 files changed, 127 insertions(+), 4 deletions(-)
+> 
+> -- 
+> 2.7.4
+> 

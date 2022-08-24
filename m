@@ -2,184 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF55D59F73A
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8584A59F746
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 12:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236287AbiHXKPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 06:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
+        id S236672AbiHXKR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 06:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiHXKPO (ORCPT
+        with ESMTP id S231846AbiHXKRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 06:15:14 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BAC4454C;
-        Wed, 24 Aug 2022 03:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661336114; x=1692872114;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=F3hdBdWFw9/N+cVdceQJWxxc8Y/utx6ligUGZLp/CII=;
-  b=cQMpBQKt7Yyk96JQ6wAy8DzybVEdQTYXA0B6IyXAvlpq4E1bK/1i7Xoc
-   CJNT2xRLLCDiqCqh4/CHjPy8zwQFE0RObaZ+BJ9rSnKYwcIk/OGm7tWh9
-   bUj3rqvnNoEmTbxMTqi+fVgzmVs8biJg/PlX700eXjgHKM3xTQ8uJRP3h
-   ZJP77B5sr93tp1CL7GbobaGmJ8/ftHrG5BzrOGlyTsgk5XiN5fMGZ69bh
-   OECJR6CwMrE5aKgoPMpnCSmd8oIna3B3vZjPBjQqLUm5qoLbTKtPN6vd/
-   rcno1WJXj0nJE3laUuSZtrVgEuOjvHxt7ClOZ3RLbxbHl+4IvLTsvlB1J
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="380218898"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="380218898"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 03:15:13 -0700
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="586375894"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.108])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 03:15:00 -0700
-Message-ID: <02152f40-1dc5-7f1b-ad88-61ecb146a3da@intel.com>
-Date:   Wed, 24 Aug 2022 13:14:55 +0300
+        Wed, 24 Aug 2022 06:17:53 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B52672B5B
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:17:52 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id n7so20160821wrv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 03:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=2rEDI8nneWR8uBhC0k6la2EvHD4yLzs+a+6fUoYoKU4=;
+        b=VFeU530PAmK3n65fcXn1z65tSUzwYLn85+ojxSycSOPVQcheykt616CE28AJr0U3SN
+         WEwvG4O8Wn+wPOXom3oZdoxlCbYU0rvZSTXRgr8Xn9jVyIc4dbpJrVE9sn2c0xkg9yE4
+         m72FqQyOrhyqyoY4JiFaZOhyOJH095QKXbX/jwHZzpMMGl23vDec+NOLToJ5lkCCTcbQ
+         bxnb/saWP3f2H5q2mDOY6tovIJc4bFcZ/u4UvTf4DiCXiun4CiMT1fB5sEI1EJA/tHxQ
+         ZONjdcHmDa3AnyGz3zLzKDdBmv85QfIdlr9xdYrPKcWJs4/KcjrejIuyx+1R33YoBCYm
+         vAOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2rEDI8nneWR8uBhC0k6la2EvHD4yLzs+a+6fUoYoKU4=;
+        b=cLzxVggLnXVznImxFe35WfJUV94Bo9Gzrkc8IsGYhACKS5QouTkMayvjmPwd/8FSrn
+         4+yG0XhuBNNflg2OR5bsKGjuejsoPWiItTuUh111I7XrjXEQXMJ/qlJo87V88lUdEP4c
+         hk/jlsh1rbpAhsyv9V2QABhZTUDGofgNGI9sb/2wNU6+h2Nt3KBSrLnr+ZjuvCwkealA
+         mij7d+1e6gqN3UDaI1oE7vSgBJqQplfxLfjmU+NW2IvNI9myR6DKMzBKNRqKIirNwApF
+         2jIbGE4xf7kZ4ZZB5ralJqWzGJj2leQN+4QUn158z3fOb/+lQSh8q34xzc7qXXPEbj0i
+         rZIg==
+X-Gm-Message-State: ACgBeo0L9uXotMhfs0biz5iaFrL+xphV0EBpOPIs8BJ1UGhtmezKLaBo
+        tEPKU/x3EFOALYAjgYSoiu1hpmJRWaQCjI4HRm0vXhmeHB8=
+X-Google-Smtp-Source: AA6agR7sQ+Joxq+aq8uIl+CNG/GIrqr+nGL3cJhEBxurQU45bDdJBx8cY5FhIPu5261Cv1lHhcYULOg7B0jFQMr9xIA=
+X-Received: by 2002:a5d:45c1:0:b0:225:2803:e791 with SMTP id
+ b1-20020a5d45c1000000b002252803e791mr15643183wrs.539.1661336270818; Wed, 24
+ Aug 2022 03:17:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 07/18] perf record: Update use of pthread mutex
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Weiguo Li <liwg06@foxmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20220823220922.256001-1-irogers@google.com>
- <20220823220922.256001-8-irogers@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220823220922.256001-8-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220823144728.47068-1-pgwipeout@gmail.com> <86198a8a-96d4-5856-bc2d-44bf352c82fe@wolfvision.net>
+In-Reply-To: <86198a8a-96d4-5856-bc2d-44bf352c82fe@wolfvision.net>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 24 Aug 2022 12:17:39 +0200
+Message-ID: <CAMdYzYopzOJ2RtWtYgP3G4ESVMFhCqU3fOQq_kCc1g51ZDZ=bA@mail.gmail.com>
+Subject: Re: [PATCH v2] phy: rockchip-inno-usb2: Return zero after otg sync
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/08/22 01:09, Ian Rogers wrote:
-> Switch to the use of mutex wrappers that provide better error checking
-> for synth_lock.
+On Wed, Aug 24, 2022 at 7:33 AM Michael Riesch
+<michael.riesch@wolfvision.net> wrote:
+>
+> Hi Peter,
+>
+> On 8/23/22 16:47, Peter Geis wrote:
+> > The otg sync state patch reuses the ret variable, but fails to set it to
+> > zero after use. This leads to a situation when the otg port is in
+> > peripheral mode where the otg phy aborts halfway through setup.  It also
+> > fails to account for a failure to register the extcon notifier. Fix this
+> > by using our own variable and skipping otg sync in case of failure.
+> >
+> > Fixes: 8dc60f8da22f ("phy: rockchip-inno-usb2: Sync initial otg state")
+> >
+> > Reported-by: Markus Reichl <m.reichl@fivetechno.de>
+> > Reported-by: Michael Riesch <michael.riesch@wolfvision.net>
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
+> > Tested-by: Markus Reichl <m.reichl@fivetechno.de>
+> > ---
+> >  drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> > index 0b1e9337ee8e..d579a22c61df 100644
+> > --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> > +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> > @@ -1124,7 +1124,7 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
+> >                                         struct rockchip_usb2phy_port *rport,
+> >                                         struct device_node *child_np)
+> >  {
+> > -     int ret;
+> > +     int ret, id;
+> >
+> >       rport->port_id = USB2PHY_PORT_OTG;
+> >       rport->port_cfg = &rphy->phy_cfg->port_cfgs[USB2PHY_PORT_OTG];
+> > @@ -1164,11 +1164,12 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
+> >                                       EXTCON_USB_HOST, &rport->event_nb);
+> >               if (ret)
+>
+> This needs braces, right?
+>
+>         if (ret) {
+> >                       dev_err(rphy->dev, "register USB HOST notifier failed\n");
+> > +                     goto out;
+>
+>         }
+>
+> With the braces the patch works as expected.
 
-It would be better to distinguish patches that make drop-in
-replacements from patches like this that change logic.
+Yup, thanks for that. I hate working without access to my hardware.
 
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-record.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 4713f0f3a6cf..02eb85677e99 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -21,6 +21,7 @@
->  #include "util/evsel.h"
->  #include "util/debug.h"
->  #include "util/mmap.h"
-> +#include "util/mutex.h"
->  #include "util/target.h"
->  #include "util/session.h"
->  #include "util/tool.h"
-> @@ -608,17 +609,18 @@ static int process_synthesized_event(struct perf_tool *tool,
->  	return record__write(rec, NULL, event, event->header.size);
->  }
->  
-> +static struct mutex synth_lock;
-> +
->  static int process_locked_synthesized_event(struct perf_tool *tool,
->  				     union perf_event *event,
->  				     struct perf_sample *sample __maybe_unused,
->  				     struct machine *machine __maybe_unused)
->  {
-> -	static pthread_mutex_t synth_lock = PTHREAD_MUTEX_INITIALIZER;
->  	int ret;
->  
-> -	pthread_mutex_lock(&synth_lock);
-> +	mutex_lock(&synth_lock);
->  	ret = process_synthesized_event(tool, event, sample, machine);
-> -	pthread_mutex_unlock(&synth_lock);
-> +	mutex_unlock(&synth_lock);
->  	return ret;
->  }
->  
-> @@ -1917,6 +1919,7 @@ static int record__synthesize(struct record *rec, bool tail)
->  	}
->  
->  	if (rec->opts.nr_threads_synthesize > 1) {
-> +		mutex_init(&synth_lock, /*pshared=*/false);
-
-It would be better to have mutex_init() and mutex_init_shared()
-since /*pshared=*/true is rarely used.
-
->  		perf_set_multithreaded();
->  		f = process_locked_synthesized_event;
->  	}
-> @@ -1930,8 +1933,10 @@ static int record__synthesize(struct record *rec, bool tail)
->  						    rec->opts.nr_threads_synthesize);
->  	}
->  
-> -	if (rec->opts.nr_threads_synthesize > 1)
-> +	if (rec->opts.nr_threads_synthesize > 1) {
->  		perf_set_singlethreaded();
-> +		mutex_destroy(&synth_lock);
-> +	}
->  
->  out:
->  	return err;
-
+>
+> Thanks and best regards,
+> Michael
+>
+> >
+> >               if (!of_property_read_bool(rphy->dev->of_node, "extcon")) {
+> >                       /* do initial sync of usb state */
+> > -                     ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
+> > -                     extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
+> > +                     id = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
+> > +                     extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !id);
+> >               }
+> >       }
+> >

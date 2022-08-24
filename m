@@ -2,85 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B3259FFE2
+	by mail.lfdr.de (Postfix) with ESMTP id DB70459FFE4
 	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239413AbiHXQ5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 12:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S230348AbiHXQ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 12:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239365AbiHXQ4q (ORCPT
+        with ESMTP id S239415AbiHXQ5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 12:56:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3772F01F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 09:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661360205; x=1692896205;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yIeg50QGVGV9KR+hBYBpbsyTfpcE1Tvc7wzp43fS3Xw=;
-  b=RffCpPiI4Ie9w68CXqtqibN5+CeQmoryRzf+LTz/RyLEyn/A7Bs71lQx
-   I9qYYy1264mSW9WqNZ2v45AONd38ESQMmoqVu6med/VClJPV13xZPDGhI
-   6U1Quc6IJtozjgggFjNjiDKdDxRkWJDDxXH5ZG/ZKJxEvEwubHPyBhwew
-   J/bUjP4V12Ov3xAo3dPjK/KhU4OHjMwyUFCXRnkqAjOaP0ZvtmSiOmxVX
-   oaErIzgST9BcPOcc3sWjnYMWykdCaODX4UeMCE4zXSYk9cXIXWdir1kpP
-   Bd/Qnqi/Xrv4iUCZr3JHTwSA3ho9nOodwTeANaEv3sF0/hhh97w+uUMO0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="380311767"
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="380311767"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:56:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="586508467"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.241.236.13]) ([10.241.236.13])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 09:56:44 -0700
-Message-ID: <b08a8d19-66b7-b3cc-e994-d0b0b533bfa0@linux.intel.com>
-Date:   Wed, 24 Aug 2022 09:56:44 -0700
+        Wed, 24 Aug 2022 12:57:02 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0A754CAB;
+        Wed, 24 Aug 2022 09:56:56 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id e19so16455026pju.1;
+        Wed, 24 Aug 2022 09:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=SceAg9VDgqxW5h5TCnfh6zvPvCZkruQQG8Pk3ldGenw=;
+        b=jzYcU7x50T5ITKNUyPEPPDKQNhqw28UUFg5fIN8ELKM2tpPHUcJ6LoSSXfXHqgNF40
+         v2leaku+C8o9x1aZ/CxVB049o8GRfjdYBhQr0/hzcNrJweEEEfwf9QdBBB1MfrprQAAA
+         qHPHe8VRXpVxJRNFoyOBaK5zA7lkCVmB8cascsRrOjUOT5MwjeSok1o+5gyQaZ90ON+J
+         GndfjqRkVZGHFq/0+nBwaYNlRonjjRi+XbILqlWlfBtyrMXZI1xqh2j6xvMS2IXYSfFb
+         neekiUkYyRHnASV2j5a2aK0z8DBIunEJ160brYvm0qfPOCXZLdM3nRq9Q9ofDNgbBIwU
+         p+NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=SceAg9VDgqxW5h5TCnfh6zvPvCZkruQQG8Pk3ldGenw=;
+        b=iuQMWGEFEv07fOK5n9kBzUTM8pRKuafpXLsta69ZdghTR5fdi7gdrpg7zUsI2X4EN5
+         m702wYl2KhhDMhRIfYjszySfkpwlQuBcveuYS0UNaFj3gLoX9i9aZiqtkQ9b0xFkmVTs
+         3OEhsfX/NpU+7/UDAuHpSh4tOiIcZj0+yuFwFbAkSqepwzFy5NsPZLApJ2WLevd2qU99
+         OsfJG0+3xLh2vv0Q5oLG1vAU5j00ZWhG/dpb1RbG5AsLRjqPjDFxGUdGz1b+7JczA1lQ
+         MC4gBzM+yjHF7o5Pei27CJclM1lGgf7535XMU9iEmnfI8kQPb4/d8+4HiA+nVkNm+3ya
+         EpQA==
+X-Gm-Message-State: ACgBeo3+9bb3wYItGFJ7vjv4HunJpYwq29sQ7VK+KD6gq9WQ9EHJcT3o
+        8oJryMAfSil0ed5072vk9YI=
+X-Google-Smtp-Source: AA6agR6OyxDY+W+dOYp/afoGy57sW0Sc9RTk1lR8reRhXgts88FIasW8hss9eYNeqb65CgVdtRyd4g==
+X-Received: by 2002:a17:903:1d1:b0:172:e12b:71b2 with SMTP id e17-20020a17090301d100b00172e12b71b2mr1399plh.60.1661360215867;
+        Wed, 24 Aug 2022 09:56:55 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 75-20020a62144e000000b00534a7a127bcsm13199739pfu.164.2022.08.24.09.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 09:56:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 24 Aug 2022 09:56:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/362] 5.19.4-rc2 review
+Message-ID: <20220824165654.GC708846@roeck-us.net>
+References: <20220824065936.861377531@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/5] perf record: Allow multiple recording time ranges
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220824072814.16422-1-adrian.hunter@intel.com>
-From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <20220824072814.16422-1-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220824065936.861377531@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 24, 2022 at 09:01:14AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.4 release.
+> There are 362 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 26 Aug 2022 06:58:34 +0000.
+> Anything received after that time might be too late.
+> 
 
-On 8/24/2022 12:28 AM, Adrian Hunter wrote:
-> Hi
->
-> This patch set extends perf record -D/--delay option to accept time ranges
-> for when events are enabled, for instance:
->
->      perf record -e intel_pt// -D 10-20,30-40
->
-> to record 10ms to 20ms into the trace and 30ms to 40ms.  Refer patch 5 for
-> more details.
+Build results:
+	total: 150 pass: 150 fail: 0
+Qemu test results:
+	total: 489 pass: 489 fail: 0
 
+The spurious s390 build error reported earlier is also seen
+in the mainline kernel and resists bisect due to its randomness.
 
-Great! I just needed that for something.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-
--Andi
-
-
+Guenter

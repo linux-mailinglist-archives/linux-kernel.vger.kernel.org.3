@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EE859F381
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC48959F383
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbiHXGNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S234915AbiHXGOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234875AbiHXGNm (ORCPT
+        with ESMTP id S229884AbiHXGOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:13:42 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE90422E5
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id x63-20020a17090a6c4500b001fabbf8debfso530221pjj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
+        Wed, 24 Aug 2022 02:14:09 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0DA402CA
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:14:08 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id gb36so31493132ejc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=AjR9XSu1Nnujm9uAtsWKpMZYdgaGmcyKS3pcgGtNRUM=;
-        b=l/pSwXqA6guVnJ/fx7K2+lSbwt6YRJjnrqrTJHpYb5w/lPaPEyCRI2QoDK9P6vhblk
-         fuThyVN/dGpp+Qa47H5eIUfXYMlTxKI/vPK+mX8cGggbUV+ERX/lHsq5kzJbLd8hsd+7
-         /j8Nnj8egrXjVUqmrxGY2F/0XfEoEmNtx5y/uZpVJKTva2JbXG7Y4SOC/NHX3s/W1T6e
-         jSuevNypXxEV2OKm1jYaGvpZ7nsSCDMITwizhqOQis7oPtDvWOKLH8Q/3lVZFo27LCQz
-         i930bzrmqKe+VZIuiDLHFTsoIIAOQYXIGWcPzIxewmQsPGKCHgMAHoLyMuTCq0hvs5Dh
-         1bEQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=u3g5QulTSLFvye8ufETPpL4OUU5TpmlskHMheK/Pwxs=;
+        b=dZTKK6y8UcvHPgx6QCd0uYYQ1eazVYyovqg4Z15UeG0spQZWqYPlNxF0rn9z5bOuF5
+         UaqUl71TSYUwWvWHY+ZBTjUas31Nxv6bwlzd2gfd1jU9ktSjtr0rfAvA91H5g3qgxRJO
+         lKSkzV6r5zqRJhrNY2u5hmk9ARjXIt7X59ydViZk84qiH8eKYWVa8R+BbWivE5Qe4FtF
+         FwL+dZH13IA+n7DUg9uTivNcENYkkRk+MJNoeUOb6p/B80wDZDzsS5947Iq9Tvbl/4E8
+         4pXDaCuOWmbYTJj5yxaMMH6fzQsxtVSZcO3pGA9RXzEy3rrQOOGNxnrE53dMQdB+6wU+
+         uDiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=AjR9XSu1Nnujm9uAtsWKpMZYdgaGmcyKS3pcgGtNRUM=;
-        b=oQ57lR1JocBx4oCF9xeHjiCHOVNlwJkmrceu1UvL/SEJ0z8J+sztKXPpJa/6wFy/hQ
-         k4oqd9v3qdmP4++SUIrEH2ZmQN7NfNfsFBkT3snLMnXobo6G8CQu6rhXVWnIiDvmFSSC
-         8FRAcORHLTMO/kzEw3UqVTboUW14Pc6AdGzDhSsjmmBCNbkyGgbs3fzTj7P+Ro796r/e
-         zybP54KTGYxLvWDUvSkENDCwes/G4sQDnCj/nslolHuZ+jjVECoarcUH0cizGkqmp69z
-         ph4v4+YeceeiajGniEc8aucqP2k933CRfW9YnVEMEU8PLiOEExvnxOj5vT5oMjbVM77w
-         BHdA==
-X-Gm-Message-State: ACgBeo39kOmqcFz/m6HNZlnol9crVV6/kG1xyQrb7SycSGoIYxIM9ENU
-        6tAcyFq+F4PhkS3Rugf8Qg5GDA==
-X-Google-Smtp-Source: AA6agR7q00M3tCfGwdQsjPNGovJMwuhXdx/RcRhLw9z81kXeVR2UCGA4aOdveVFjy27b+5HqazB7tg==
-X-Received: by 2002:a17:902:c945:b0:16d:d425:324a with SMTP id i5-20020a170902c94500b0016dd425324amr26788193pla.7.1661321620331;
-        Tue, 23 Aug 2022 23:13:40 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170902684700b0016d93c84049sm11572397pln.54.2022.08.23.23.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 23:13:39 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 11:43:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.or, lenb@kernel.org,
-        robert.moore@intel.com, punit.agrawal@bytedance.com,
-        lukasz.luba@arm.com, ionela.voinescu@arm.com,
-        pierre.gondois@arm.com, linux-kernel@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] ACPI: CPPC: Disable FIE if registers in PCC
- regions
-Message-ID: <20220824061337.dtgfmhgossyhzjpy@vireshk-i7>
-References: <20220818211619.4193362-1-jeremy.linton@arm.com>
- <20220818211619.4193362-2-jeremy.linton@arm.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=u3g5QulTSLFvye8ufETPpL4OUU5TpmlskHMheK/Pwxs=;
+        b=ohHzJc1SI4E7gk7sAZE5hzEPc94kPV6QAn4kvWG31JlsRIPoKKnnUf1lxfJr38h6di
+         HCYqEpHZ83iqDbAjsAtiNMt0XIZQ6crlYOS4kGt1qcKIr7pjI5iOWfFVAXaWv0zz2WLA
+         QNCYGCqgFePUkNihUIPOVOaq2JqL7KgrUjaaHFKRNDSuIQA2oZz5nP63rwXVNsp7VIl+
+         x09PEcqgBK8ueFoVpJyBpiWYiVqHLcv5rK766WA6YmhHx+OfOBj7zDrDd7/ZUiSSVYs8
+         6Er6bTq38bK4oXhsq/P1zrTP72+SoTqY8q/2eAeR/l+Moh87Q6i0G/QG0mIQnG1dFkwS
+         NJ3g==
+X-Gm-Message-State: ACgBeo0b8NNLN5XIDYUH1azSPA5sPSMq26OIf4/h0hyxZQ0FMKN3Jc8S
+        Jch7wCKsYluIA/wjIpeEb/s3T2VKgReGFYv9Kg3Djg==
+X-Google-Smtp-Source: AA6agR6kM8lihKYko6eSpnQ4fn5oWMZhs8JfJ3bDwLRTzZK428FeSQZGicVrY39tiuUjeNbH/0fbg7DuMqf3SZl4hJg=
+X-Received: by 2002:a17:907:7f9f:b0:73d:6e87:17ce with SMTP id
+ qk31-20020a1709077f9f00b0073d6e8717cemr1874828ejc.366.1661321646573; Tue, 23
+ Aug 2022 23:14:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818211619.4193362-2-jeremy.linton@arm.com>
+References: <20220823080034.579196046@linuxfoundation.org>
+In-Reply-To: <20220823080034.579196046@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 24 Aug 2022 11:43:55 +0530
+Message-ID: <CA+G9fYvXcuoi6Z9XEZHUOOUA=zT4wjXD9f2yjqrw6a_=2pZA6w@mail.gmail.com>
+Subject: Re: [PATCH 4.9 000/101] 4.9.326-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -75,152 +70,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-08-22, 16:16, Jeremy Linton wrote:
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> +bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +	int cpu;
-> +
-> +	for_each_present_cpu(cpu) {
-> +		struct cpc_register_resource *ref_perf_reg;
-> +		struct cpc_desc *cpc_desc;
-> +
-> +		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +
-> +		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> +			return true;
-> +
-> +
-> +		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +
-> +		/*
-> +		 * If reference perf register is not supported then we should
-> +		 * use the nominal perf value
-> +		 */
-> +		if (!CPC_SUPPORTED(ref_perf_reg))
-> +			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +
-> +		if (CPC_IN_PCC(ref_perf_reg))
-> +			return true;
-> +	}
+On Tue, 23 Aug 2022 at 13:34, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.326 release.
+> There are 101 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 25 Aug 2022 08:00:15 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.326-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Add a blank line here please.
+Results from Linaro's test farm.
+Regressions on arm and mips build failure.
 
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-> +
->  /**
->   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->   * @cpunum: CPU from which to read counters.
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 24eaf0ec344d..32fcb0bf74a4 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -63,7 +63,15 @@ static struct cppc_workaround_oem_info wa_info[] = {
->  
->  static struct cpufreq_driver cppc_cpufreq_driver;
->  
-> +static enum {
-> +	FIE_UNSET = -1,
-> +	FIE_ENABLED,
-> +	FIE_DISABLED
-> +} fie_disabled = FIE_UNSET;
-> +
->  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> +module_param(fie_disabled, int, 0444);
-> +MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
->  
->  /* Frequency invariance support */
->  struct cppc_freq_invariance {
-> @@ -158,7 +166,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->  	struct cppc_freq_invariance *cppc_fi;
->  	int cpu, ret;
->  
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->  		return;
->  
->  	for_each_cpu(cpu, policy->cpus) {
-> @@ -199,7 +207,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
->  	struct cppc_freq_invariance *cppc_fi;
->  	int cpu;
->  
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->  		return;
->  
->  	/* policy->cpus will be empty here, use related_cpus instead */
-> @@ -229,7 +237,21 @@ static void __init cppc_freq_invariance_init(void)
->  	};
->  	int ret;
->  
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	switch (fie_disabled) {
-> +	/* honor user request */
-> +	case FIE_DISABLED:
-> +	case FIE_ENABLED:
-> +		break;
-> +	case FIE_UNSET:
-> +	default:
-> +		fie_disabled = FIE_ENABLED;
-> +		if (cppc_perf_ctrs_in_pcc()) {
-> +			pr_info("FIE not enabled on systems with registers in PCC\n");
-> +			fie_disabled = FIE_DISABLED;
-> +		}
-> +		break;
-> +	}
+Build failure logs are the same other reports.
 
-here too.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> +	if (fie_disabled)
->  		return;
->  
->  	kworker_fie = kthread_create_worker(0, "cppc_fie");
-> @@ -247,7 +269,7 @@ static void __init cppc_freq_invariance_init(void)
->  
->  static void cppc_freq_invariance_exit(void)
->  {
-> -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-> +	if (fie_disabled)
->  		return;
->  
->  	kthread_destroy_worker(kworker_fie);
-> @@ -936,6 +958,7 @@ static void cppc_check_hisi_workaround(void)
->  		    wa_info[i].oem_revision == tbl->oem_revision) {
->  			/* Overwrite the get() callback */
->  			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
-> +			fie_disabled = FIE_DISABLED;
->  			break;
->  		}
->  	}
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index f73d357ecdf5..c5614444031f 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_set_enable(int cpu, bool enable);
->  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> +extern bool cppc_perf_ctrs_in_pcc(void);
->  extern bool acpi_cpc_valid(void);
->  extern bool cppc_allow_fast_switch(void);
->  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-> @@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
->  {
->  	return -ENOTSUPP;
->  }
-> +static inline bool cppc_perf_ctrs_in_pcc(void)
-> +{
-> +	return false;
-> +}
->  static inline bool acpi_cpc_valid(void)
->  {
->  	return false;
+## Build
+* kernel: 4.9.326-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: 310ef13ccc72259d4df1c9fabbd5b5f8b7bf5563
+* git describe: v4.9.325-102-g310ef13ccc72
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.325-102-g310ef13ccc72
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+## Test Regressions (compared to v4.9.325)
+* arm, build
+  - clang-11-at91_dt_defconfig
+  - clang-11-axm55xx_defconfig
+  - clang-11-exynos_defconfig
+  - clang-11-integrator_defconfig
+  - clang-11-keystone_defconfig
+  - clang-11-multi_v5_defconfig
+  - clang-11-nhk8815_defconfig
+  - clang-11-omap1_defconfig
+  - clang-11-orion5x_defconfig
+  - clang-11-pxa910_defconfig
+  - clang-11-shmobile_defconfig
+  - clang-11-u8500_defconfig
+  - clang-11-vexpress_defconfig
+  - clang-12-at91_dt_defconfig
+  - clang-12-axm55xx_defconfig
+  - clang-12-exynos_defconfig
+  - clang-12-integrator_defconfig
+  - clang-12-keystone_defconfig
+  - clang-12-multi_v5_defconfig
+  - clang-12-nhk8815_defconfig
+  - clang-12-omap1_defconfig
+  - clang-12-orion5x_defconfig
+  - clang-12-pxa910_defconfig
+  - clang-12-shmobile_defconfig
+  - clang-12-u8500_defconfig
+  - clang-12-vexpress_defconfig
+  - clang-13-at91_dt_defconfig
+  - clang-13-axm55xx_defconfig
+  - clang-13-exynos_defconfig
+  - clang-13-integrator_defconfig
+  - clang-13-keystone_defconfig
+  - clang-13-multi_v5_defconfig
+  - clang-13-nhk8815_defconfig
+  - clang-13-omap1_defconfig
+  - clang-13-orion5x_defconfig
+  - clang-13-pxa910_defconfig
+  - clang-13-shmobile_defconfig
+  - clang-13-u8500_defconfig
+  - clang-13-vexpress_defconfig
+  - clang-14-multi_v5_defconfig-45747f0c
+  - clang-nightly-at91_dt_defconfig
+  - clang-nightly-axm55xx_defconfig
+  - clang-nightly-exynos_defconfig
+  - clang-nightly-integrator_defconfig
+  - clang-nightly-keystone_defconfig
+  - clang-nightly-multi_v5_defconfig
+  - clang-nightly-multi_v5_defconfig-45747f0c
+  - clang-nightly-nhk8815_defconfig
+  - clang-nightly-omap1_defconfig
+  - clang-nightly-orion5x_defconfig
+  - clang-nightly-pxa910_defconfig
+  - clang-nightly-shmobile_defconfig
+  - clang-nightly-u8500_defconfig
+  - clang-nightly-vexpress_defconfig
+  - gcc-10-at91_dt_defconfig
+  - gcc-10-axm55xx_defconfig
+  - gcc-10-exynos_defconfig
+  - gcc-10-footbridge_defconfig
+  - gcc-10-imx_v6_v7_defconfig
+  - gcc-10-integrator_defconfig
+  - gcc-10-ixp4xx_defconfig
+  - gcc-10-keystone_defconfig
+  - gcc-10-multi_v5_defconfig
+  - gcc-10-nhk8815_defconfig
+  - gcc-10-omap1_defconfig
+  - gcc-10-orion5x_defconfig
+  - gcc-10-pxa910_defconfig
+  - gcc-10-shmobile_defconfig
+  - gcc-10-u8500_defconfig
+  - gcc-10-vexpress_defconfig
+  - gcc-11-at91_dt_defconfig
+  - gcc-11-axm55xx_defconfig
+  - gcc-11-exynos_defconfig
+  - gcc-11-footbridge_defconfig
+  - gcc-11-imx_v6_v7_defconfig
+  - gcc-11-integrator_defconfig
+  - gcc-11-ixp4xx_defconfig
+  - gcc-11-keystone_defconfig
+  - gcc-11-multi_v5_defconfig
+  - gcc-11-multi_v5_defconfig-45747f0c
+  - gcc-11-nhk8815_defconfig
+  - gcc-11-omap1_defconfig
+  - gcc-11-orion5x_defconfig
+  - gcc-11-pxa910_defconfig
+  - gcc-11-shmobile_defconfig
+  - gcc-11-u8500_defconfig
+  - gcc-11-vexpress_defconfig
+  - gcc-9-at91_dt_defconfig
+  - gcc-9-axm55xx_defconfig
+  - gcc-9-exynos_defconfig
+  - gcc-9-footbridge_defconfig
+  - gcc-9-imx_v6_v7_defconfig
+  - gcc-9-integrator_defconfig
+  - gcc-9-ixp4xx_defconfig
+  - gcc-9-keystone_defconfig
+  - gcc-9-multi_v5_defconfig
+  - gcc-9-nhk8815_defconfig
+  - gcc-9-omap1_defconfig
+  - gcc-9-orion5x_defconfig
+  - gcc-9-pxa910_defconfig
+  - gcc-9-shmobile_defconfig
+  - gcc-9-u8500_defconfig
+  - gcc-9-vexpress_defconfig
 
--- 
-viresh
+* mips, build
+  - gcc-8-cavium_octeon_defconfig
+
+--
+Linaro LKFT
+https://lkft.linaro.org

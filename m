@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4EC59FEFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 18:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AAA59FD49
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238997AbiHXP76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 11:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S238968AbiHXO3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238447AbiHXP7z (ORCPT
+        with ESMTP id S237976AbiHXO3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:59:55 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C66927B3D;
-        Wed, 24 Aug 2022 08:59:54 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id m2so5611637qvq.11;
-        Wed, 24 Aug 2022 08:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7hORbcq/+/qG8SwkVlzbfMOWmi0HkT2VLP96xu1KWXs=;
-        b=ZV/kBVEPZRaG0fH4TYyc75cjY5NOpj9CpPG15QgBOMjpAs8RDetkPOMrBDyd3rL7wA
-         +jKILlJ8KhrEBkYo5Q4vQ/HWTyN+lm4wOGxBwhlvXY5z8/CeeCWbII5IHquvQsZAhBkv
-         O2CYI3gkcYHsypMF690g+zDwEyyPYUqSJ7iWyyg1TRY/9260TJuh6fvU7zxhfIjIvBlw
-         5oRUu6Q/aYKPDILqgcidfUVUx3nKY3d7aViT/0cy3V7zbTk4cUXD/AOZTz+kD1XctOyl
-         mDLmdoPBCvCUDb1sqyceA5qVfRmz/1VeWGywagHqeY2eTO0WJHeJKO8WBcsgNbnp2nYa
-         0mFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7hORbcq/+/qG8SwkVlzbfMOWmi0HkT2VLP96xu1KWXs=;
-        b=fwfOL9UTyMn7pGyCf6rvjibhnQKL9MxET8b/b0xj3J6JZhoHbY+Zqdom87t9SOFYFk
-         XJ+mR1QT1MI1IJtkKnRLrLQ9uZyjR9o+XqfgEPKSBTznwzkLh55bCODJjscPFfRL7dSQ
-         B/yrY2ZONyRephUn1o5tqytAIhyZvX6Ee0syoF3KHYyEzg2N87ZLUARFznHZuLDlZNZ5
-         bGwuoWRDl51Wcq06y2KTP+VwDVF3HcecXdgscf2F/GCCb1YEsyCdwA2PZxtpa+vAhhpP
-         mlWAqAdkj56TGFQYDHTq7qdgUp9HArNUtZmMPkkZMNCIwkLEUTcfv+RHnamX5S/grhVn
-         AgHA==
-X-Gm-Message-State: ACgBeo2sD5x2ep7K64vAgVx6HBP/wZqfV19ZYMZJjHDybBugK/LtM9L+
-        UH70eciBUk4ld5KPGkgZMAFybUcaDVQSWx+IRzM=
-X-Google-Smtp-Source: AA6agR6IH/YQUvcAvIaOUOZc6i6jJnkeQHEC2lXPQYr5m1uMOxJpXvI2FPgxjplaxtJAK3k4brOP372jhbwcCfOHiS0=
-X-Received: by 2002:ad4:5baf:0:b0:476:6a9e:b5e1 with SMTP id
- 15-20020ad45baf000000b004766a9eb5e1mr24691932qvq.64.1661356793655; Wed, 24
- Aug 2022 08:59:53 -0700 (PDT)
+        Wed, 24 Aug 2022 10:29:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E84257542;
+        Wed, 24 Aug 2022 07:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661351355; x=1692887355;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6afhEAvhEDkE/G5SdTBUp5GkN6q4ddNyAjn8YS4qkao=;
+  b=PzNwvwZ5Cqh94X4Ak1e9Qe2kZDVw9LpdSdnp1UDKWTHpaC37frHF2zKa
+   ciE+cS/OnFVIxL0HKfH/+ggTV1Ft6g0qQvjQhH6WaC7aHUey+XxuJVerC
+   8pAD1/roRwVLBfhkx56pFqkNKuV6kBI/Oa9N7gJvL9nNmms2nn4AuwJ0u
+   lt6b/zSbfDyUPlKSY5SK9p3XxT7SkKnotPBiKdit1fzBurEtyTD0W8eEu
+   3wHvOXNwA9X6n9ry/p1ykgpLqEm1/VdlrPSD8nOmNiqSDLIXp6QfRWVo0
+   V15/D5wwRlV2/6pslgC5wibAnAGZ6XhyFqOQpC6QZy5S5LFFB1ojitnrQ
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="187868677"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 07:29:15 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 24 Aug 2022 07:29:14 -0700
+Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 24 Aug 2022 07:29:12 -0700
+From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <gregkh@linuxfoundation.org>,
+        <arnd@arndb.de>, <dragan.cvetic@xilinx.com>,
+        <derek.kiernan@xilinx.com>
+Subject: [PATCH v1 char-misc-next 0/5] misc: microchip: pci1xxxx: Add auxiliary bus driver and the GPIO driver for PIO function of pci1xxxx. 
+Date:   Thu, 25 Aug 2022 01:30:42 +0530
+Message-ID: <20220824200047.150308-1-kumaravel.thiagarajan@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220824140347.1842-1-henning.schild@siemens.com> <20220824140347.1842-2-henning.schild@siemens.com>
-In-Reply-To: <20220824140347.1842-2-henning.schild@siemens.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 24 Aug 2022 18:59:17 +0300
-Message-ID: <CAHp75Vf6agD-G1Ey1UgUvWnub4Q8-ysx3OMV14dR3ed5FRX=Vw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] gpio-f7188x: Add GPIO support for Nuvoton NCT6116
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        simon.guinot@sequanux.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 5:04 PM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> Add GPIO support for Nuvoton NCT6116 chip. Nuvoton SuperIO chips are
-> very similar to the ones from Fintek. In other subsystems they also
-> share drivers and are called a family of drivers.
->
-> For the GPIO subsystem the only difference is that the direction bit is
-> reversed and that there is only one data bit per pin. On the SuperIO
-> level the logical device is another one.
->
-> On a chip level we do not have a manufacturer ID to check and also no
-> revision.
+pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
+downstream ports. PIO function is one of the functions in the
+multi-function endpoint. PIO function combines a GPIO controller and also
+an interface to program pci1xxxx'x OTP & EEPROM. This patch adds an
+auxiliary bus driver that enumerates separate child devices for gpio and
+OTP/EEPROM interface and the gpio controller driver for the first child.
 
-...
+Kumaravel Thiagarajan (5):
+  misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO
+    function in the multi-function endpoint of pci1xxxx device.
+  misc: microchip: pci1xxxx: load gpio driver for the gpio controller
+    auxiliary device enumerated by the auxiliary bus driver.
+  misc: microchip: pci1xxxx: Add functions to configure gpio pins as
+    input / output, get status, handle I/O for gpio pins.
+  misc: microchip: pci1xxxx: Add gpio irq handler and irq helper
+    functions irq_ack, irq_mask, irq_unmask and irq_set_type of
+    irq_chip.
+  misc: microchip: pci1xxxx: Add power management functions - suspend &
+    resume handlers.
 
-> +#define gpio_dir_invert(type)  ((type) == nct6116d)
-> +#define gpio_data_single(type) ((type) == nct6116d)
-
-What you are trying to do here is to put GPIO maintainers / heavy
-contributors on a minefield (basically moving your job to their
-shoulders). Please, provide a proper namespace and not gpio_ one. I'm
-talking in my "GPIO heavy contributor" hat on.
-
-With that fixed I can survive w/o pr_fmt() being in this patch. If you
-are going to address this, you may add my tag in a new version.
+ MAINTAINERS                                   |   8 +
+ drivers/misc/Kconfig                          |   1 +
+ drivers/misc/Makefile                         |   3 +-
+ drivers/misc/mchp_pci1xxxx/Kconfig            |  10 +
+ drivers/misc/mchp_pci1xxxx/Makefile           |   1 +
+ drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c | 166 +++++++
+ drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h |  28 ++
+ .../misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c   | 438 ++++++++++++++++++
+ 8 files changed, 654 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/misc/mchp_pci1xxxx/Kconfig
+ create mode 100644 drivers/misc/mchp_pci1xxxx/Makefile
+ create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
+ create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
+ create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

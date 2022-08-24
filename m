@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5555A0294
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A465A029C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 22:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240410AbiHXUQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 16:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S240251AbiHXUTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 16:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240358AbiHXUQO (ORCPT
+        with ESMTP id S232844AbiHXUT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:16:14 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24811A057;
-        Wed, 24 Aug 2022 13:16:09 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27OJrl6W014974;
-        Wed, 24 Aug 2022 20:16:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=NREg/Sv5sTCvtzp8T5q5YOmhz1/flsdDP2vCt31PiQU=;
- b=UOmrbz5hqN9qkK9fi0hr95ozx4cbIc9g3T5KwToh2hEYB8Tj95JD/CIeBJt5X/mnLyw+
- 4S77XyEOr0D63mTGDq1Kepy/pD9QOnpO5le4TxRfvTNeaOJUY4xa+9awpBI0dNdjPeoi
- w7qI2RtfLr812quRDdW2tG1QiJbX4Fwc2ecZmIGvouVnD+BkE85ScVFTLnMNdEJgFRKa
- 9kz5yss0QXApBR6/b8BJyAQrTkRawi6tDeMvI9tQskABRE+j8JWTQBK1st9qSYvCdjRN
- MWMP/Tb6tKGToTlfVs+qSwzVBS1oChy+THUQAnUdANVJ/oK8UhipzLg7uP2ZMi4Ert0Y vQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j52pqcmkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Aug 2022 20:16:01 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27OKFxhG001578
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Aug 2022 20:15:59 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 24 Aug 2022 13:15:59 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] drm/msm/dp: correct 1.62G link rate at dp_catalog_ctrl_config_msa()
-Date:   Wed, 24 Aug 2022 13:15:50 -0700
-Message-ID: <1661372150-3764-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 24 Aug 2022 16:19:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909BD3E74A;
+        Wed, 24 Aug 2022 13:19:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35491617FF;
+        Wed, 24 Aug 2022 20:19:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6530C433C1;
+        Wed, 24 Aug 2022 20:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661372366;
+        bh=ccfR9j7H5+zwytd5yJssldgbE67m5JiYpCDczl7Vyd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nbE9LA9Kklk3QcaZY3gKIg//jDIRDyS7nx3MLg6fkpOpRPzQa1rlZXPxHnP+Prmb+
+         zEx4KniX38txlsePASkExz7HArpgttcf251MhgokOXhOTVaUXDWBktUkZp2S/RbY2t
+         zss3cIR+PoMGZG52KhiUzN4OijeMfnCDNNR8J2oZ0EZ8wpaB+upajMxSrpRcMPtYSt
+         nj4HND4iNYutJsynl03ETAVJV7gPEpgM8YG3eieQwpIgf6zY3mbZHABrqvfwfOXZcQ
+         7POzXUZDCYNiGPhRWmF2CaJ6tbZBkG00j1GVoYGee9E6wsuO1nRKR753xdXxujVCGJ
+         mpjC0HrAw36Kg==
+Date:   Wed, 24 Aug 2022 13:19:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH 5.19 000/362] 5.19.4-rc2 review
+Message-ID: <YwaHy9An68xJkxdu@dev-arch.thelio-3990X>
+References: <20220824065936.861377531@linuxfoundation.org>
+ <CA+G9fYuTOvKfHz7t0GppiNqLx-9n-yycsLX-rdMQogrh9guX_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QAkP6ZLvjdAqupe2hmG4G8KPKs3X9rWl
-X-Proofpoint-GUID: QAkP6ZLvjdAqupe2hmG4G8KPKs3X9rWl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-24_12,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 spamscore=0
- impostorscore=0 clxscore=1011 adultscore=0 malwarescore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208240074
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuTOvKfHz7t0GppiNqLx-9n-yycsLX-rdMQogrh9guX_w@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At current implementation there is an extra 0 at 1.62G link rate which cause
-no correct pixel_div selected for 1.62G link rate to calculate mvid and nvid.
-This patch delete the extra 0 to have mvid and nvid be calculated correctly.
+Hi Naresh,
 
-Changes in v2:
--- fix Fixes tag's text
+On Thu, Aug 25, 2022 at 01:43:09AM +0530, Naresh Kamboju wrote:
+> On Wed, 24 Aug 2022 at 12:31, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.19.4 release.
+> > There are 362 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Fri, 26 Aug 2022 06:58:34 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.4-rc2.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> Results from Linaro's test farm.
+> No regressions on arm64, arm, x86_64, and i386.
+> 
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> NOTE:
+> x86_64 and arm64 clang nightly allmodconfig build failed.
+> sound/soc/atmel/mchp-spdiftx.c:508:20: error: implicit truncation from
+> 'int' to bit-field changes value from 1 to -1
+> [-Werror,-Wbitfield-constant-conversion]
+> dev->gclk_enabled = 1;
+>                   ^ ~
+> 1 error generated.
 
-Changes in v3:
--- fix misspelling of "Reviewed-by"
+This should be fixed in mainline soon:
 
-Fixes: 937f941ca06f  ("drm/msm/dp: Use qmp phy for DP PLL and PHY")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+https://git.kernel.org/broonie/sound/c/5c5c2baad2b55cc0a4b190266889959642298f79
+https://github.com/ClangBuiltLinux/linux/issues/1686
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_catalog.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It will conflict due to a lack of commit 403fcb5118a0 ("ASoC:
+mchp-spdiftx: remove references to mchp_i2s_caps") in the stable trees
+but I think that change can just be taken along with my change to
+minimize any future conflicts. I'll send a separate email with that
+information when my patch hits mainline.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-index 7257515..676279d 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-@@ -431,7 +431,7 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
- 
- 	if (rate == link_rate_hbr3)
- 		pixel_div = 6;
--	else if (rate == 1620000 || rate == 270000)
-+	else if (rate == 162000 || rate == 270000)
- 		pixel_div = 2;
- 	else if (rate == link_rate_hbr2)
- 		pixel_div = 4;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Thanks as always for all the testing that you do!
 
+Cheers,
+Nathan

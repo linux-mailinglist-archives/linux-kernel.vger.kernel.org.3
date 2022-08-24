@@ -2,104 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D9059FCDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D8B59FCF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 16:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238433AbiHXOLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 10:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S237168AbiHXOMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 10:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbiHXOK7 (ORCPT
+        with ESMTP id S237850AbiHXOMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:10:59 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09B083BC2;
-        Wed, 24 Aug 2022 07:10:57 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z8so1603999edb.0;
-        Wed, 24 Aug 2022 07:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=kqPUQCej5vuqxvtj8Chlk3T/0EwQ6MX8daIfGCr7o8M=;
-        b=jTVBzq0qwP/Jiix3oxmDZ7+wYfTBhEWTauZQdu8hOviYHBGCplvf/sjEo/RV5EynDV
-         F/3igCTqIWBw9y1M+Tz1KtUNZJ/Vc7vYsDCQckxSEEaEAATSUMLMhhZM/uRvXPKJwTID
-         JFPXKVME1YPvW3AWEEt8IY1tnflEl6+s2+VTI3lNdEf9I2/bpW1ED4ELRE0sMfvAneeH
-         /StlMvl5hA5f4v6Ub32YqKj3011/RpihmCQ/mxpFLVUJNkoTI8bwaIrfE8kqKCGPv4z9
-         I+UIpLo6Qj3px/bXQ4vWO4iPykWOgMwW3vwWBjvKVJT+EdtLeVH/fQX5AFSNWc9Rj8ry
-         Hsqg==
+        Wed, 24 Aug 2022 10:12:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44ACE97529
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661350367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yCkPSzN/cwsCtf3kYco4CiqtD7edlWebFhcM0DlPaBI=;
+        b=OD7KgqRyBkLrsuoMcpXW+dldbxZa9cvEadB9fR4WHbMDlKHG/cbSqh1wRDF/o5FXJqfe6p
+        5PbVPPItvaJrdJ6wpeEFGpmR1O+SjRkEznFxjiHjvz76YlSuMYM8uLv3yZqZxfZfO3Y9Cd
+        5ztBP0F9mRJkvpl/10letQKPfJhUE/Y=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-479-Wix4RwChNPmd_Yz4YaN4Gw-1; Wed, 24 Aug 2022 10:12:46 -0400
+X-MC-Unique: Wix4RwChNPmd_Yz4YaN4Gw-1
+Received: by mail-ej1-f70.google.com with SMTP id hb37-20020a170907162500b0073d7f7fbbbfso3086104ejc.17
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 07:12:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=kqPUQCej5vuqxvtj8Chlk3T/0EwQ6MX8daIfGCr7o8M=;
-        b=PIq1m0AObAVPzXc5Bm/EmFVor99DdopRmqrlkATiJ6KNOKqdd0ln+wKD0uWHxjj9ho
-         e+o2TfrOLCXfni3kXnELBqansXdxRLrp6VALzT1CIYFZ5UEnnSTYwAJq5/X+B7OUCM7w
-         d7w36lHqXDOrDHJ/aGhoyd+vzzItdjnkJbmVBF6AP5798CjhQAaUR9RNN4EySSdDjKkj
-         fta9mBXIc8ioGIpeCMncZf1tJGsSIEoy8g4f+EXCcpX1B84K1MBFW8qmLGCFhR8QdND+
-         J5onhcP8PPkAhhp8DhSNtKlqS2VI0uQ7oHXh3Eys0Kd39ifwWNWRrsUZQ+Y0Kl2bJo32
-         3zew==
-X-Gm-Message-State: ACgBeo29ZjQ15BHKiV12CrLk9Rnmi6fNX4Wg482Dqy7Z0xlU+jE0PRtM
-        b8b9R/zr9vZOrpu63Med8l8=
-X-Google-Smtp-Source: AA6agR4FhXaC9pbWpsAk9+dYxjrSjwUKJso4IGx0zPGDwcQGaUM8T/17R/PS2YwW53RL5Bz2crZ4pw==
-X-Received: by 2002:a05:6402:358a:b0:446:da94:e68c with SMTP id y10-20020a056402358a00b00446da94e68cmr7682224edc.356.1661350256435;
-        Wed, 24 Aug 2022 07:10:56 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:62ca:57d9:b533:6057? ([2a02:908:1256:79a0:62ca:57d9:b533:6057])
-        by smtp.gmail.com with ESMTPSA id u18-20020a1709061db200b0073d6d760daesm1229270ejh.60.2022.08.24.07.10.54
+        bh=yCkPSzN/cwsCtf3kYco4CiqtD7edlWebFhcM0DlPaBI=;
+        b=XTgxcKoQfIvtVa4rSy1Ne4pDtmap451+o2Jgg50TS+pgB6RSNrb63QiSpPumUFaBEU
+         sY53QrYiJA83dNWruNqbd+F/fCiUbxTpiceCxdIIQuMP/pZdp3MXjj+GW1RjM0m6t0p8
+         CIc3csGYD7BMUyXxbesBOND6zPWEccr7tyX0mv/ChrbqU9FkP+oZgkvktIJzJPumOdwA
+         H6d2s/3MekX1LIbCNnobUlT8FbYXrFqbTJ4LrE+sARa9Eh04Li0lB1G15GC1fbO+nwym
+         vN1/jFEoy1bjoBzZ8JxggiLVn92X7rUI6xxKCAvRqkly+MRrHzy4IzGMRacVv1pvtny9
+         cEnA==
+X-Gm-Message-State: ACgBeo2jvxQ/xVfVGpesfewVodhJ+aW136uchJKSoJ+jQetwGM/AWPmv
+        TSrb/OEpFIzdpCS98seLdhntmZufM+7hqQV7bnL81WhWSmcBLFFyjzAYnoDotCRZAvprojdqkOv
+        rYQHLiqkatlbVT43O0J0iPyrb
+X-Received: by 2002:a17:907:808:b0:730:54cc:b597 with SMTP id wv8-20020a170907080800b0073054ccb597mr2985282ejb.434.1661350364079;
+        Wed, 24 Aug 2022 07:12:44 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7ZdzW3McIYOgkJWgU5B4o8yxCDFDqU2e+Hks72wJw0+TwESjmYyLmaMHvttgGx9y0Skf8+Wg==
+X-Received: by 2002:a17:907:808:b0:730:54cc:b597 with SMTP id wv8-20020a170907080800b0073054ccb597mr2985272ejb.434.1661350363776;
+        Wed, 24 Aug 2022 07:12:43 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id k15-20020a1709063e0f00b0073c1e339a37sm1209290eji.149.2022.08.24.07.12.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 07:10:55 -0700 (PDT)
-Message-ID: <abb7842a-ca07-59db-927b-06c3dc17974c@gmail.com>
-Date:   Wed, 24 Aug 2022 16:10:53 +0200
+        Wed, 24 Aug 2022 07:12:43 -0700 (PDT)
+Message-ID: <b2ce575a-470c-5a56-2cd0-9f3e7dbac1ad@redhat.com>
+Date:   Wed, 24 Aug 2022 16:12:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 9/9] dma-buf: Remove internal lock
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] asus-wmi: Adjust tablet/lidflip handling to use enum
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lima@lists.freedesktop.org
-References: <20220824102248.91964-1-dmitry.osipenko@collabora.com>
- <20220824102248.91964-10-dmitry.osipenko@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20220824102248.91964-10-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220813092753.6635-1-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220813092753.6635-1-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,106 +81,257 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 24.08.22 um 12:22 schrieb Dmitry Osipenko:
-> The internal dma-buf lock isn't needed anymore because the updated
-> locking specification claims that dma-buf reservation must be locked
-> by importers, and thus, the internal data is already protected by the
-> reservation lock. Remove the obsoleted internal lock.
->
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Hi,
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+On 8/13/22 11:27, Luke D. Jones wrote:
+> Due to multiple types of tablet/lidflip, the existing code for
+> handling these events is refactored to use an enum for each type.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+
+Thank you for the patch, I've merged this but with one change:
 
 > ---
->   drivers/dma-buf/dma-buf.c | 14 ++++----------
->   include/linux/dma-buf.h   |  9 ---------
->   2 files changed, 4 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 696d132b02f4..a0406254f0ae 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -656,7 +656,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
->   
->   	dmabuf->file = file;
->   
-> -	mutex_init(&dmabuf->lock);
->   	INIT_LIST_HEAD(&dmabuf->attachments);
->   
->   	mutex_lock(&db_list.lock);
-> @@ -1503,7 +1502,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_mmap_unlocked, DMA_BUF);
->   int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
->   {
->   	struct iosys_map ptr;
-> -	int ret = 0;
-> +	int ret;
->   
->   	iosys_map_clear(map);
->   
-> @@ -1515,28 +1514,25 @@ int dma_buf_vmap(struct dma_buf *dmabuf, struct iosys_map *map)
->   	if (!dmabuf->ops->vmap)
->   		return -EINVAL;
->   
-> -	mutex_lock(&dmabuf->lock);
->   	if (dmabuf->vmapping_counter) {
->   		dmabuf->vmapping_counter++;
->   		BUG_ON(iosys_map_is_null(&dmabuf->vmap_ptr));
->   		*map = dmabuf->vmap_ptr;
-> -		goto out_unlock;
-> +		return 0;
->   	}
->   
->   	BUG_ON(iosys_map_is_set(&dmabuf->vmap_ptr));
->   
->   	ret = dmabuf->ops->vmap(dmabuf, &ptr);
->   	if (WARN_ON_ONCE(ret))
-> -		goto out_unlock;
-> +		return ret;
->   
->   	dmabuf->vmap_ptr = ptr;
->   	dmabuf->vmapping_counter = 1;
->   
->   	*map = dmabuf->vmap_ptr;
->   
-> -out_unlock:
-> -	mutex_unlock(&dmabuf->lock);
-> -	return ret;
-> +	return 0;
->   }
->   EXPORT_SYMBOL_NS_GPL(dma_buf_vmap, DMA_BUF);
->   
-> @@ -1578,13 +1574,11 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct iosys_map *map)
->   	BUG_ON(dmabuf->vmapping_counter == 0);
->   	BUG_ON(!iosys_map_is_equal(&dmabuf->vmap_ptr, map));
->   
-> -	mutex_lock(&dmabuf->lock);
->   	if (--dmabuf->vmapping_counter == 0) {
->   		if (dmabuf->ops->vunmap)
->   			dmabuf->ops->vunmap(dmabuf, map);
->   		iosys_map_clear(&dmabuf->vmap_ptr);
->   	}
-> -	mutex_unlock(&dmabuf->lock);
->   }
->   EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap, DMA_BUF);
->   
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index d48d534dc55c..aed6695bbb50 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -326,15 +326,6 @@ struct dma_buf {
->   	/** @ops: dma_buf_ops associated with this buffer object. */
->   	const struct dma_buf_ops *ops;
->   
-> -	/**
-> -	 * @lock:
-> -	 *
-> -	 * Used internally to serialize list manipulation, attach/detach and
-> -	 * vmap/unmap. Note that in many cases this is superseeded by
-> -	 * dma_resv_lock() on @resv.
-> -	 */
-> -	struct mutex lock;
+>  drivers/platform/x86/asus-nb-wmi.c | 13 +++---
+>  drivers/platform/x86/asus-wmi.c    | 67 ++++++++++++++++++++----------
+>  drivers/platform/x86/asus-wmi.h    |  9 +++-
+>  3 files changed, 58 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
+> index a81dc4b191b7..3a93e056c4e1 100644
+> --- a/drivers/platform/x86/asus-nb-wmi.c
+> +++ b/drivers/platform/x86/asus-nb-wmi.c
+> @@ -115,12 +115,12 @@ static struct quirk_entry quirk_asus_forceals = {
+>  };
+>  
+>  static struct quirk_entry quirk_asus_use_kbd_dock_devid = {
+> -	.use_kbd_dock_devid = true,
+> +	.tablet_switch_mode = asus_wmi_kbd_dock_devid,
+>  };
+>  
+>  static struct quirk_entry quirk_asus_use_lid_flip_devid = {
+>  	.wmi_backlight_set_devstate = true,
+> -	.use_lid_flip_devid = true,
+> +	.tablet_switch_mode = asus_wmi_lid_flip_devid,
+>  };
+>  
+>  static int dmi_matched(const struct dmi_system_id *dmi)
+> @@ -492,16 +492,13 @@ static void asus_nb_wmi_quirks(struct asus_wmi_driver *driver)
+>  
+>  	switch (tablet_mode_sw) {
+>  	case 0:
+> -		quirks->use_kbd_dock_devid = false;
+> -		quirks->use_lid_flip_devid = false;
+> +		quirks->tablet_switch_mode = asus_wmi_no_tablet_switch;
+>  		break;
+>  	case 1:
+> -		quirks->use_kbd_dock_devid = true;
+> -		quirks->use_lid_flip_devid = false;
+> +		quirks->tablet_switch_mode = asus_wmi_kbd_dock_devid;
+>  		break;
+>  	case 2:
+> -		quirks->use_kbd_dock_devid = false;
+> -		quirks->use_lid_flip_devid = true;
+> +		quirks->tablet_switch_mode = asus_wmi_lid_flip_devid;
+>  		break;
+>  	}
+>  
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 0421ffb81927..b4690ac39147 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -485,8 +485,11 @@ static bool asus_wmi_dev_is_present(struct asus_wmi *asus, u32 dev_id)
+>  
+>  static int asus_wmi_input_init(struct asus_wmi *asus)
+>  {
+> +	struct device *dev;
+>  	int err, result;
+>  
+> +	dev = &asus->platform_device->dev;
+> +
+>  	asus->inputdev = input_allocate_device();
+>  	if (!asus->inputdev)
+>  		return -ENOMEM;
+> @@ -494,35 +497,38 @@ static int asus_wmi_input_init(struct asus_wmi *asus)
+>  	asus->inputdev->name = asus->driver->input_name;
+>  	asus->inputdev->phys = asus->driver->input_phys;
+>  	asus->inputdev->id.bustype = BUS_HOST;
+> -	asus->inputdev->dev.parent = &asus->platform_device->dev;
+> +	asus->inputdev->dev.parent = dev;
+>  	set_bit(EV_REP, asus->inputdev->evbit);
+>  
+>  	err = sparse_keymap_setup(asus->inputdev, asus->driver->keymap, NULL);
+>  	if (err)
+>  		goto err_free_dev;
+>  
+> -	if (asus->driver->quirks->use_kbd_dock_devid) {
+> +	switch (asus->driver->quirks->tablet_switch_mode) {
+> +	case asus_wmi_no_tablet_switch:
+> +		break;
+> +	case asus_wmi_kbd_dock_devid:
+>  		result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_KBD_DOCK);
+>  		if (result >= 0) {
+>  			input_set_capability(asus->inputdev, EV_SW, SW_TABLET_MODE);
+>  			input_report_switch(asus->inputdev, SW_TABLET_MODE, !result);
+>  		} else if (result != -ENODEV) {
+> -			pr_err("Error checking for keyboard-dock: %d\n", result);
+> +			dev_err(dev, "Error checking for keyboard-dock: %d\n", result);
+>  		}
+> -	}
 > -
->   	/**
->   	 * @vmapping_counter:
->   	 *
+> -	if (asus->driver->quirks->use_lid_flip_devid) {
+> +		break;
+> +	case asus_wmi_lid_flip_devid:
+>  		result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_LID_FLIP);
+>  		if (result < 0)
+> -			asus->driver->quirks->use_lid_flip_devid = 0;
+> +			asus->driver->quirks->tablet_switch_mode = asus_wmi_no_tablet_switch;
+>  		if (result >= 0) {
+>  			input_set_capability(asus->inputdev, EV_SW, SW_TABLET_MODE);
+>  			input_report_switch(asus->inputdev, SW_TABLET_MODE, result);
+>  		} else if (result == -ENODEV) {
+> -			pr_err("This device has lid_flip quirk but got ENODEV checking it. This is a bug.");
+> +			dev_err(dev, "This device has lid_flip quirk but got ENODEV checking it. This is a bug.");
+>  		} else {
+> -			pr_err("Error checking for lid-flip: %d\n", result);
+> +			dev_err(dev, "Error checking for lid-flip: %d\n", result);
+>  		}
+> +		break;
+>  	}
+>  
+>  	err = input_register_device(asus->inputdev);
+> @@ -548,8 +554,9 @@ static void asus_wmi_input_exit(struct asus_wmi *asus)
+>  
+>  static void lid_flip_tablet_mode_get_state(struct asus_wmi *asus)
+>  {
+> -	int result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_LID_FLIP);
+> +	int result;
+>  
+> +	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_LID_FLIP);
+>  	if (result >= 0) {
+>  		input_report_switch(asus->inputdev, SW_TABLET_MODE, result);
+>  		input_sync(asus->inputdev);
+> @@ -3044,20 +3051,26 @@ static void asus_wmi_handle_event_code(int code, struct asus_wmi *asus)
+>  		return;
+>  	}
+>  
+> -	if (asus->driver->quirks->use_kbd_dock_devid && code == NOTIFY_KBD_DOCK_CHANGE) {
+
+Given that we need to check for both the tablet_switch_mode as well as
+different event codes, I believe that keep using something like:
+
+	if (asus->driver->quirks->tablet_switch_mode == asus_wmi_kbd_dock_devid &&
+	    code == NOTIFY_KBD_DOCK_CHANGE) {
+
+here is better then doing a switch-case with the code checkes nested under
+
+> -		result = asus_wmi_get_devstate_simple(asus,
+> -						      ASUS_WMI_DEVID_KBD_DOCK);
+> +	switch (asus->driver->quirks->tablet_switch_mode) {
+> +	case asus_wmi_no_tablet_switch:
+> +		break;
+> +	case asus_wmi_kbd_dock_devid:
+> +		if (code == NOTIFY_KBD_DOCK_CHANGE) {
+> +			result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_KBD_DOCK);
+>  		if (result >= 0) {
+>  			input_report_switch(asus->inputdev, SW_TABLET_MODE,
+
+Note the indent of these 2 lines is wrong now, it should be indentend one
+extra step because it is inside the if (code == NOTIFY_KBD_DOCK_CHANGE) {
+block now, sticking with a:
+
+	if (asus->driver->quirks->tablet_switch_mode == asus_wmi_kbd_dock_devid &&
+	    code == NOTIFY_KBD_DOCK_CHANGE) {
+
+is style instead of nesting avoids the need for this extra indentation.
+
+I have fixed this up while merging the patches.
+
+Regards,
+
+Hans
+
+
+
+
+> -					    !result);
+> +						!result);
+>  			input_sync(asus->inputdev);
+>  		}
+>  		return;
+> -	}
+> -
+> -	if (asus->driver->quirks->use_lid_flip_devid && code == NOTIFY_LID_FLIP) {
+> -		lid_flip_tablet_mode_get_state(asus);
+> -		return;
+> +		}
+> +		break;
+> +	case asus_wmi_lid_flip_devid:
+> +		if (code == NOTIFY_LID_FLIP) {
+> +			lid_flip_tablet_mode_get_state(asus);
+> +			return;
+> +		}
+> +		break;
+>  	}
+>  
+>  	if (asus->fan_boost_mode_available && code == NOTIFY_KBD_FBM) {
+> @@ -3700,8 +3713,14 @@ static int asus_hotk_resume(struct device *device)
+>  	if (asus_wmi_has_fnlock_key(asus))
+>  		asus_wmi_fnlock_update(asus);
+>  
+> -	if (asus->driver->quirks->use_lid_flip_devid)
+> +	switch (asus->driver->quirks->tablet_switch_mode) {
+> +	case asus_wmi_no_tablet_switch:
+> +	case asus_wmi_kbd_dock_devid:
+> +		break;
+> +	case asus_wmi_lid_flip_devid:
+>  		lid_flip_tablet_mode_get_state(asus);
+> +		break;
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -3742,8 +3761,14 @@ static int asus_hotk_restore(struct device *device)
+>  	if (asus_wmi_has_fnlock_key(asus))
+>  		asus_wmi_fnlock_update(asus);
+>  
+> -	if (asus->driver->quirks->use_lid_flip_devid)
+> +	switch (asus->driver->quirks->tablet_switch_mode) {
+> +	case asus_wmi_no_tablet_switch:
+> +	case asus_wmi_kbd_dock_devid:
+> +		break;
+> +	case asus_wmi_lid_flip_devid:
+>  		lid_flip_tablet_mode_get_state(asus);
+> +		break;
+> +	}
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/platform/x86/asus-wmi.h b/drivers/platform/x86/asus-wmi.h
+> index b302415bf1d9..413920bad0c6 100644
+> --- a/drivers/platform/x86/asus-wmi.h
+> +++ b/drivers/platform/x86/asus-wmi.h
+> @@ -25,6 +25,12 @@ struct module;
+>  struct key_entry;
+>  struct asus_wmi;
+>  
+> +enum asus_wmi_tablet_switch_mode {
+> +	asus_wmi_no_tablet_switch,
+> +	asus_wmi_kbd_dock_devid,
+> +	asus_wmi_lid_flip_devid,
+> +};
+> +
+>  struct quirk_entry {
+>  	bool hotplug_wireless;
+>  	bool scalar_panel_brightness;
+> @@ -33,8 +39,7 @@ struct quirk_entry {
+>  	bool wmi_backlight_native;
+>  	bool wmi_backlight_set_devstate;
+>  	bool wmi_force_als_set;
+> -	bool use_kbd_dock_devid;
+> -	bool use_lid_flip_devid;
+> +	enum asus_wmi_tablet_switch_mode tablet_switch_mode;
+>  	int wapf;
+>  	/*
+>  	 * For machines with AMD graphic chips, it will send out WMI event
 

@@ -2,114 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F6759F399
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC35159F39C
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbiHXG1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
+        id S235026AbiHXGc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234045AbiHXG1c (ORCPT
+        with ESMTP id S234026AbiHXGc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:27:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410C8792EE
-        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:27:29 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MCGHc2KljzXdxj;
-        Wed, 24 Aug 2022 14:23:08 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+        Wed, 24 Aug 2022 02:32:26 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A036D7E83C
+        for <linux-kernel@vger.kernel.org>; Tue, 23 Aug 2022 23:32:24 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MCGSL05SyzGpmK;
+        Wed, 24 Aug 2022 14:30:42 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 14:27:26 +0800
-Received: from [10.174.179.24] (10.174.179.24) by
- dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ 15.1.2375.24; Wed, 24 Aug 2022 14:31:50 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 24 Aug 2022 14:27:25 +0800
-Subject: Re: [PATCH -next] bootmem: remove the vmemmap pages from kmemleak in
- free_bootmem_page
-To:     Andrew Morton <akpm@linux-foundation.org>
-References: <20220818132104.2144770-1-liushixin2@huawei.com>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-From:   Liu Shixin <liushixin2@huawei.com>
-Message-ID: <ad8ddde7-6828-3af3-f162-cab29f38d044@huawei.com>
-Date:   Wed, 24 Aug 2022 14:27:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+ 15.1.2375.24; Wed, 24 Aug 2022 14:31:49 +0800
+Message-ID: <4063da85-b110-4afd-2023-59d4da41c27f@huawei.com>
+Date:   Wed, 24 Aug 2022 14:31:48 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220818132104.2144770-1-liushixin2@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.24]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm100009.china.huawei.com (7.185.36.113)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v2 0/2]riscv: some refactorings realted to uaccess
+ and extable
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, <Conor.Dooley@microchip.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>
+References: <20220815032025.2685516-1-tongtiangen@huawei.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <20220815032025.2685516-1-tongtiangen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
-
-This patch is superseded by latter patch so don't merge it in next. Just the latter is fine.
+Hi riscv maintainers, kindly ping...
 
 Thanks,
+Tong.
 
-https://lore.kernel.org/all/20220819094005.2928241-1-liushixin2@huawei.com/T/#u
-
-
-On 2022/8/18 21:21, Liu Shixin wrote:
-> The vmemmap pages is marked by kmemleak when allocated from memblock.
-> Remove it from kmemleak when free the page. Otherwise, when we reuse the
-> page, kmemleak may report such an error and then stop working.
->
->  kmemleak: Cannot insert 0xffff98fb6eab3d40 into the object search tree (overlaps existing)
->  kmemleak: Kernel memory leak detector disabled
->  kmemleak: Object 0xffff98fb6be00000 (size 335544320):
->  kmemleak:   comm "swapper", pid 0, jiffies 4294892296
->  kmemleak:   min_count = 0
->  kmemleak:   count = 0
->  kmemleak:   flags = 0x1
->  kmemleak:   checksum = 0
->  kmemleak:   backtrace:
->
-> Fixes: f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages associated with each HugeTLB page")
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->  include/linux/bootmem_info.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/bootmem_info.h b/include/linux/bootmem_info.h
-> index cc35d010fa94..899bc56948f7 100644
-> --- a/include/linux/bootmem_info.h
-> +++ b/include/linux/bootmem_info.h
-> @@ -3,6 +3,7 @@
->  #define __LINUX_BOOTMEM_INFO_H
->  
->  #include <linux/mm.h>
-> +#include <linux/kmemleak.h>
->  
->  /*
->   * Types for free bootmem stored in page->lru.next. These have to be in
-> @@ -38,9 +39,10 @@ static inline void free_bootmem_page(struct page *page)
->  	 */
->  	VM_BUG_ON_PAGE(page_ref_count(page) != 2, page);
->  
-> -	if (magic == SECTION_INFO || magic == MIX_SECTION_INFO)
-> +	if (magic == SECTION_INFO || magic == MIX_SECTION_INFO) {
-> +		kmemleak_free_part(page_to_virt(page), PAGE_SIZE);
->  		put_page_bootmem(page);
-> -	else
-> +	} else
->  		VM_BUG_ON_PAGE(1, page);
->  }
->  #else
-
+在 2022/8/15 11:20, Tong Tiangen 写道:
+> This patchset do some refactorings related to riscv's uaccess and extable,
+> mainly for the usage of __get/put_user_nocheck() which not distinguish user
+> access and kernel access.
+> 
+> v1 -> v2:
+>    According to Conor's suggestion, split into two logically independent
+>    patches.
+> 
+> Tong Tiangen (2):
+>    riscv: uaccess: rename __get/put_user_nocheck to __get/put_mem_nocheck
+>    riscv: extable: add new extable type EX_TYPE_KACCESS_ERR_ZERO support
+> 
+>   arch/riscv/include/asm/asm-extable.h |  12 ++
+>   arch/riscv/include/asm/uaccess.h     | 162 +++++++++++++--------------
+>   arch/riscv/mm/extable.c              |   1 +
+>   3 files changed, 94 insertions(+), 81 deletions(-)
+> 

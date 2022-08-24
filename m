@@ -2,244 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3257959F3BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AA659F3C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 08:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235286AbiHXGoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 02:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
+        id S235083AbiHXGtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 02:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbiHXGoT (ORCPT
+        with ESMTP id S229674AbiHXGtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 02:44:19 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2085.outbound.protection.outlook.com [40.107.20.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E514685FEA;
-        Tue, 23 Aug 2022 23:44:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=knAJN//Va/XBZuWk47ubm8r7/jaOSuAPAWOCGJi9eDdEOZXtjVJ4AGlImUXvHJLbI5QDRrQIvFFMc8ASleN7lS7WvddXAuW6gKqjs3bCGPcqjEBTC+ICtqR4+DE5+GdeKrlMZxbFQtuk+mLVHEFirOhKp1X1jToo3Mtayt6muyTJ42h6jZoAUZhqGrqfoEkVPrTKfYI1GepXc0TdFCuDkkyWdC16gSJE+U+ka2QEsrLv3BuBbUwXs2ayI47cqq46fum6ce/loRDtH89nX1AXEmdM+SNSJgUSaq2dGKTvrP45MzOeUzLe7KyDDYpjJDyN4SRpnqcekRy6ABZoO3vhzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QM9BlDQ67Aqw7MNcAUHb2hLKUAGmCOTSFCc9sh29C7k=;
- b=GOJoWLtozTmtrOm24VaxdgG+Vylhfk9er7L/rIMYDMVbHme5YQH+DrbvXAierqeeakj65+F8q9SNuxP1fTJE4r120dKtBxWLrF/YUD8qlLUSktJX/n/0gNW5vl5iahmy1USzs9NucGqH/LBAADnLTR810hmfcrRe4vVqca1lPgjvg8Hhsc4Tm7xHgPzWU3IZuabYFGEDQnIZZrRXe5GvEyuOYavTrAPAf30Z3XOARLDJRwY40sf03J/pTaiH9z/MYP0M3CNkc+Nv9X5TxSQwdVpaI0GjoddBYq+1ceZ7BoJ2ywWK67D86lfT5B60qOaU3zrfBnNOGFIVZ32NkJxa2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QM9BlDQ67Aqw7MNcAUHb2hLKUAGmCOTSFCc9sh29C7k=;
- b=PBL6f544S6lkny9tCmxkTUT9Ae0aLs3VQC1PsCeleo0hmjHl5i8dxlYZaLsso/C+eoUO8roaV2yXgBQ2RpYhe8lxzMHNNT1H/j6JUY2Kfd6gglQPzneLB44JxeSUMinVbRdBjo7XoOGRxvoOyns+9a155ktBnzUNIci9qB9IbXw=
-Received: from AM6PR04MB6053.eurprd04.prod.outlook.com (2603:10a6:20b:b9::10)
- by VI1PR0402MB3373.eurprd04.prod.outlook.com (2603:10a6:803:a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Wed, 24 Aug
- 2022 06:44:12 +0000
-Received: from AM6PR04MB6053.eurprd04.prod.outlook.com
- ([fe80::6cd5:f11c:4e5c:d79c]) by AM6PR04MB6053.eurprd04.prod.outlook.com
- ([fe80::6cd5:f11c:4e5c:d79c%3]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
- 06:44:11 +0000
-From:   "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 4/7] watchdog: imx7ulp_wdt: Fix RCS timeout issue
-Thread-Topic: [PATCH 4/7] watchdog: imx7ulp_wdt: Fix RCS timeout issue
-Thread-Index: AQHYsSoHMXeYIWNJpEGBMS17guc0sa26/1YAgAEJRICAAGa/AIABMvYw
-Date:   Wed, 24 Aug 2022 06:44:11 +0000
-Message-ID: <AM6PR04MB6053113B803E27D11892C5A1E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
-References: <20220816043643.26569-1-alice.guo@oss.nxp.com>
- <20220816043643.26569-5-alice.guo@oss.nxp.com>
- <20220822140946.GC4087281@roeck-us.net>
- <AM6PR04MB60533A1ABDFA1DEDE59BB847E2709@AM6PR04MB6053.eurprd04.prod.outlook.com>
- <20220823120656.GC203169@roeck-us.net>
-In-Reply-To: <20220823120656.GC203169@roeck-us.net>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2ed83bea-7b95-4b61-b093-08da859c0dd0
-x-ms-traffictypediagnostic: VI1PR0402MB3373:EE_
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KExSTw65grRf7eZyoWUrSYtaoAigtVDBt8nNWlVTfL4Rhp5jkXoMP3/bkfQ3UKZZudMnWJshWJIgO9auBMiJi3r8oWv7zfSnrrq6o35nS7vcTdbNO1fgOs3ggG2V9ZsTcYuSi3gCQuAvDcAYRYNGR9cxs2zAyS83hY2uRVXxqyN+ZSoZ2E7Dw+rmGsfLXZOV212KuL3qddWuA5ZtR75oMl2dIK321zy6v7yQIi28PSX1z3aui4TKgoiBhpB9fBBmdSbaPvWLsCGxFSvw4UFNp30+WBgGM88dw73rWsxFApKsb+7IvhhTmvE5c04kFG+6gmqvRHj96R+JNDTwEoJN0u8OstTYK5/EqE+gaDlgFDzei7QJmQetFDcOaSb4qb79l8nhp4t9cdD7SaXLgIn+JHLxPMqtKopSH0MEe0BF97hb48e7oGPOO9yaDcr5Z0LPHHd8SJzkgQsBqE5HJQSI9lHYNbfXZh9Zzi1F0GOWjxXMDKrAMet/355n7YfE4DhcnL9SNIelTpQJCc0yWbLYveB7+sFFFUwFN9Kv/Oz6xnEl8zOUfmwjmyfysKnbNk4YgT7jvZB/qGG8pI414cGOxWooLXJEgZZBB+uxR0eXPDcNJauXl7u8274FismblZnK8qXPx8dn/WrIo9X3W/QFYTVjQzZo27qXqSt6jhDSseJAL7zmv2n6phz3wZ/zMoP9H7pFw1smUc4tggpV1rp2K9RZ5dII3DWVZiBUpyDwDE3JN12aprU6YGDQ2VBi76pnOMNKahMDJpH8Xqo3WxUznw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(136003)(366004)(376002)(39860400002)(186003)(66446008)(66476007)(64756008)(5660300002)(41300700001)(8676002)(86362001)(66556008)(71200400001)(66946007)(76116006)(2906002)(26005)(7696005)(9686003)(6506007)(54906003)(478600001)(52536014)(4326008)(8936002)(33656002)(53546011)(122000001)(55016003)(38070700005)(110136005)(316002)(83380400001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hIal5Q9pw6NO/7N7uiydQf9GKNCznUYQTQEDr7aldYUpqVyCT8LFOoFlNOhf?=
- =?us-ascii?Q?3KgmC79+RiRvNML/1L/S1v742RTMoZyLVCWLcldTcpW2uMPPQQoH4wGeMfwI?=
- =?us-ascii?Q?XyLSakD/IraVNSoiRKzW5rIZ5kv3HKIXLzBpf/dS5BTFOxznIcepYDPz+kw4?=
- =?us-ascii?Q?fST138po2aLM77lEbzuZz113KiSFuN/75EHEwQcjgjWjZfca7NeTXlHjicPy?=
- =?us-ascii?Q?aOPls8YWggQhXNwrMkKAUpRlHc1JBLEVEUknvW8csuzwTM3YwOc9ODItlTZ3?=
- =?us-ascii?Q?rPE1g0jTkXthZWS8u1SSO4aOSnu8QTBl9oCoF6g5kH68NlJ1digRd27wUZ5w?=
- =?us-ascii?Q?XVYKDmL2wNMCY1m0WWYBC4besXAEnzJrTHPpUtVUVgjcraajXl8Vsywh0KyS?=
- =?us-ascii?Q?3fOK37VcbZTga0fYK2aI1peNCGaOt/yBKneWFZO92JbyR6dJiWJ5siM5ZJD/?=
- =?us-ascii?Q?OgKiyK9Zl06FzzdAO90tVx4wO8vpp1ZdtXBsEDgeMeMjIUaA6+z1uT/A2dMQ?=
- =?us-ascii?Q?i+QJZ13zzKeNwUSpuR+UN5AJxQrv1DzJ6zKv/L0NqmQWwB7y8YgoL4EPMyLL?=
- =?us-ascii?Q?PFcgVeJqAK5/s6wmy0CyfTKzzGsle7WnHtQsx6sW8zzDuytTYzIS6SU0N30z?=
- =?us-ascii?Q?Tfumxm8XTS0dX4zkIKtMqhZ4E67WGLHFhasgNLKvdIQ+bZjmJ4fSfwFST7MW?=
- =?us-ascii?Q?4+YfueGEwKzT6Xz+CXysoO4FDQA/8J+1egMaty82crNnU0hOXccd/mxCxM9E?=
- =?us-ascii?Q?bqV3CioQjqxS6qpfkL99wQQXSzvHnOaM1tGVGHkk9aBU3d5FJBDKiipSJqIX?=
- =?us-ascii?Q?JHDtH6Hltdd5Lil6G8vMvxMslw0orVGFbFc3YGwGKylCawbSmE3MRvJb1F//?=
- =?us-ascii?Q?NtBvIwCUDxQl2qfD2QO10iYS639gSpOqZRfkaY2UdrVsr2fwWeSN4peI6Lmf?=
- =?us-ascii?Q?OpC656uWTo68fPDLVPNWxs4R8B1vLAFEHi8LkcOvEZa4qnHVVhxBXcFHnpOx?=
- =?us-ascii?Q?K3JqsoHDp5RNsJbaWVLgIZeIW4rzbC3uxilYv3eERacT8tefV4AQ4hdOUIx+?=
- =?us-ascii?Q?yldKqyh4Lhl414v8y/3a/7yCvtGDlhP7vRM/qeGzBQbpDCJuX2nhd5jpxS++?=
- =?us-ascii?Q?dD2tHIILrVjppIYAPoD8mQ0vz4rA4wPYPQFI+T+q8l9wqdYChzST3fEE2oEJ?=
- =?us-ascii?Q?tYzW6iVkp0vpe4FVJNS3OGqsELiVZUGhdeBrh2lUe1d8Ii//u0LdKp4bGINT?=
- =?us-ascii?Q?kqd/9Etaod73q5nNMvYeKYuXO3URuS+L/XAbLDU1qn3nkNCU+j+ahwbJk1E6?=
- =?us-ascii?Q?AZcTZGkmfVuvJ5Ts6zbuuWUCC4Z9F2UDe4uBh83zG72g9a0MtvdIn/1PGADO?=
- =?us-ascii?Q?rXlgVLNym2GSuEKjlM+0XUgy3mk8uCLywpvfaBodwGxS9IcusEoNzRsgQuCm?=
- =?us-ascii?Q?db8PelcQX4jh6s+qNl14p1jJb4KK1GGqx1ORsaKUfYrXX7BWcbbdcgrWvOno?=
- =?us-ascii?Q?D7/PYZ4++mXgLb+HNC8dnriS/M0UKBXzoRqh3PLooTDN7VuEDJTsCpwK+Fyo?=
- =?us-ascii?Q?xvOvX5y3w2riSQhiRenytr+3gyuOOWafoqMW8hvz?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 24 Aug 2022 02:49:05 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8A285FA3;
+        Tue, 23 Aug 2022 23:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fcsY3Qh6TepPJ/4fx7/kuX9sdRrqVQM7ufFixq4/Q+E=; b=kxy9aSUz9kdXYUN5Ynyv0t2iIt
+        ibpo4uc1JSMGQnjJJrpLwO94fmA83Qo5rs0NKIKXlIDt8xSznFk+dSiyhigynBdCZxbnojbFjTSnM
+        o3fiHR6jwULnEf02P2pw2mlEG2gcBWbGLgUbwBYsioEejnchueJ1YMdjaqTUnBB2gYXL6qm8HTg61
+        12IzadzuCA7drwHrIAEeRhUBQdgsoWaAZ8mTNxHMNRb9lBQ2VTxT+mU2vowFXkqVXyI/6+MD1JYy5
+        rZFXoccGQK9rzs9ceIYt+VRuj56IeNgX1TMxXlNPrg5JgCseS7yBUZctydRoycXiHOgzRRUXJ4wF1
+        vnEeqVKQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oQkBm-005cJK-Ma; Wed, 24 Aug 2022 06:48:36 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2FF42980403; Wed, 24 Aug 2022 08:48:33 +0200 (CEST)
+Date:   Wed, 24 Aug 2022 08:48:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     FirstName LastName <pshier@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Michael Roth <michael.roth@amd.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] x86/msr: add idle version of wrmsr trace
+Message-ID: <YwXJwTOFWRFPilOy@worktop.programming.kicks-ass.net>
+References: <20220823234353.937002-1-pshier@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6053.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ed83bea-7b95-4b61-b093-08da859c0dd0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 06:44:11.9206
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qfJc6bRRYgBQHP9jinGTbf1fzqt0YhAjJ89PN1sW463TqNx6IbV6UbMfHnBEydprFVtuTrEOZAB0HTUPBCrYFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3373
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823234353.937002-1-pshier@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Tuesday, August 23, 2022 8:07 PM
-> To: Alice Guo (OSS) <alice.guo@oss.nxp.com>
-> Cc: wim@linux-watchdog.org; shawnguo@kernel.org;
-> s.hauer@pengutronix.de; festevam@gmail.com; kernel@pengutronix.de;
-> dl-linux-imx <linux-imx@nxp.com>; linux-watchdog@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH 4/7] watchdog: imx7ulp_wdt: Fix RCS timeout issue
->=20
-> On Tue, Aug 23, 2022 at 05:59:11AM +0000, Alice Guo (OSS) wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> > > Sent: Monday, August 22, 2022 10:10 PM
-> > > To: Alice Guo (OSS) <alice.guo@oss.nxp.com>
-> > > Cc: wim@linux-watchdog.org; shawnguo@kernel.org;
-> > > s.hauer@pengutronix.de; festevam@gmail.com; kernel@pengutronix.de;
-> > > dl-linux-imx <linux-imx@nxp.com>; linux-watchdog@vger.kernel.org;
-> > > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> > > Subject: Re: [PATCH 4/7] watchdog: imx7ulp_wdt: Fix RCS timeout
-> > > issue
-> > >
-> > > On Tue, Aug 16, 2022 at 12:36:40PM +0800, Alice Guo (OSS) wrote:
-> > > > From: Ye Li <ye.li@nxp.com>
-> > > >
-> > > > According to measure on i.MX7ULP and i.MX8ULP, the RCS done needs
-> > > > about 3400us and 6700us respectively. So current 20us timeout is
-> > > > not enough. When reconfiguring is on-going, unlock and configure
-> > > > CS will lead to unknown result.
-> > > >
-> > > > Increase the wait timeout value to 10ms and check the return value
-> > > > of RCS wait to fix the issue
-> > > >
-> > >
-> > > You'll have to find a better solution. An active (non-sleep) wait of
-> > > 10 ms is unacceptable.
-> > >
-> > > Guenter
-> >
-> > Hi Guenter,
-> >
-> > Sorry. I think this patch should be merged with " watchdog: imx7ulp_wdt=
-:
-> Handle wdog reconfigure failure", but I didn't merge them. I will send v2=
-.
-> >
->=20
-> That doesn't change the fact that a 10 ms hot wait is unacceptable.
->=20
-> Thanks,
-> Guenter
 
-Hi Guenter,
+Dear FirstName LastName, pleae fix your MUA.
 
-I plan to use readl_poll_timeout to wait for RCS(Reconfiguration Success). =
-I think the sleep_us of readl_poll_timeout can be used to avoid a 10 ms hot=
- wait.
+On Tue, Aug 23, 2022 at 04:43:53PM -0700, FirstName LastName wrote:
+> From: Peter Shier <pshier@google.com>
+> 
+> With commit bf5835bcdb963 ("intel_idle: Disable IBRS during long idle"),
+> enabling wrmsr trace with CONFIG_LOCKDEP causes "suspicious
+> rcu_dereference_check() usage" warning because do_trace_write_msr does not
+> use trace_write_msr_rcuidle.
+> 
 
-Best Regards,
-Alice Guo
+No, the right thing here is to not do tracing at all.
 
-> > Best Regards,
-> > Alice Guo
-> >
-> > > > Signed-off-by: Ye Li <ye.li@nxp.com>
-> > > > Signed-off-by: Alice Guo <alice.guo@nxp.com>
-> > > > Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-> > > > Acked-by: Jason Liu <jason.hui.liu@nxp.com>
-> > > > ---
-> > > >  drivers/watchdog/imx7ulp_wdt.c | 8 +++++---
-> > > >  1 file changed, 5 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/drivers/watchdog/imx7ulp_wdt.c
-> > > > b/drivers/watchdog/imx7ulp_wdt.c index a0f6b8cea78f..12715c248688
-> > > > 100644
-> > > > --- a/drivers/watchdog/imx7ulp_wdt.c
-> > > > +++ b/drivers/watchdog/imx7ulp_wdt.c
-> > > > @@ -39,7 +39,7 @@
-> > > >  #define DEFAULT_TIMEOUT	60
-> > > >  #define MAX_TIMEOUT	128
-> > > >  #define WDOG_CLOCK_RATE	1000
-> > > > -#define WDOG_WAIT_TIMEOUT	20
-> > > > +#define WDOG_WAIT_TIMEOUT	10000
-> > > >
-> > > >  static bool nowayout =3D WATCHDOG_NOWAYOUT;
-> > > module_param(nowayout,
-> > > > bool, 0000); @@ -80,7 +80,7 @@ static int
-> > > > imx7ulp_wdt_enable(struct watchdog_device *wdog, bool enable)
-> > > >  		writel(val | WDOG_CS_EN, wdt->base + WDOG_CS);
-> > > >  	else
-> > > >  		writel(val & ~WDOG_CS_EN, wdt->base + WDOG_CS);
-> > > > -	imx7ulp_wdt_wait(wdt->base, WDOG_CS_RCS);
-> > > > +	ret =3D imx7ulp_wdt_wait(wdt->base, WDOG_CS_RCS);
-> > > >
-> > > >  enable_out:
-> > > >  	local_irq_enable();
-> > > > @@ -127,7 +127,9 @@ static int imx7ulp_wdt_set_timeout(struct
-> > > watchdog_device *wdog,
-> > > >  	if (ret)
-> > > >  		goto timeout_out;
-> > > >  	writel(val, wdt->base + WDOG_TOVAL);
-> > > > -	imx7ulp_wdt_wait(wdt->base, WDOG_CS_RCS);
-> > > > +	ret =3D imx7ulp_wdt_wait(wdt->base, WDOG_CS_RCS);
-> > > > +	if (ret)
-> > > > +		goto timeout_out;
-> > > >
-> > > >  	wdog->timeout =3D timeout;
-> > > >
-> > > > --
-> > > > 2.17.1
-> > > >
+*sigh* I should go finish this series:
+
+  https://lore.kernel.org/lkml/20220608142723.103523089@infradead.org/
+
+---
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 3e101719689a..6e82b2df29cb 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -187,12 +187,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+ 	int ret;
+ 
+ 	if (smt_active)
+-		wrmsrl(MSR_IA32_SPEC_CTRL, 0);
++		__native_wrmsr(MSR_IA32_SPEC_CTRL, 0);
+ 
+ 	ret = __intel_idle(dev, drv, index);
+ 
+ 	if (smt_active)
+-		wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
++		__native_wrmsr(MSR_IA32_SPEC_CTRL, spec_ctrl);
+ 
+ 	return ret;
+ }

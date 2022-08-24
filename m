@@ -2,323 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C187B59FACD
-	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E46159FAD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 24 Aug 2022 15:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237873AbiHXND0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 09:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S237887AbiHXNEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 09:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbiHXNDX (ORCPT
+        with ESMTP id S237618AbiHXNET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 09:03:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42B097ED3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661346201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cHlGdkZ8cjqGXDFrYUZ4f7u44SK7+WzvZn4udWPH5o4=;
-        b=QKq0fr9dommAyQxMYTLB3qGPM1I2YmXcY8rRhp81c0/Fc6sBn0x/qCvUsRcI27xtmg0pPY
-        i6ZHUeNj9p5/oR8LH+wwmQ+l+vBz6jPtKtNL9qWnJkO6qtUEttUJtc4axq89mWDPMd9vEQ
-        JLE2lKzmle0Tsq/3gBqGVeRIN2xEWm4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-218-CnyCEkhZPUOo5kE1qdzNDQ-1; Wed, 24 Aug 2022 09:03:19 -0400
-X-MC-Unique: CnyCEkhZPUOo5kE1qdzNDQ-1
-Received: by mail-ed1-f72.google.com with SMTP id b13-20020a056402350d00b0043dfc84c533so10754417edd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:03:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=cHlGdkZ8cjqGXDFrYUZ4f7u44SK7+WzvZn4udWPH5o4=;
-        b=rdxPOsB20Jwsn38RHfTGsAvfmS75MPjjXwstouGoHJ2sLRcwpqZs3aniH12dfwy6MF
-         VTu0xKtxAFdsfMgvUb0OhKSqq/ksFhNoKSE6ZMHxAbPqGea6pR3AzazN24e89YO6BZOM
-         pWpuauL09059dvK64zMceZMutPNpTVFIFP4Fz53HZtSGmJOBjxZThlxdtT5WbaNtRYeH
-         To7Dar+AyXcpSd7+bzLsXJkmkHzW4wh5SQNOaEgVFETWvUsHJJIu2bAISN9bJkhMhlfx
-         CxIZc2NzDp1UFdUntl9xfUt84oPFpAM4GPbsvAx7m3NpOpjyWUsWUPz3/wT/kZxH7hBK
-         X9+g==
-X-Gm-Message-State: ACgBeo2ieyT6xkNv6qxkkXwxNSfvnPgM0nkUarVzGOjOlBEhzhDl/yXB
-        kVVT5pZP3TKSAnzJ7yz9d4uWVIL8W7jc7seNGVd2WngZCOqDiLHzNyG6QYD3p6+7TsVXWpjdvnY
-        yZ0RKUgs0KpOtyExr+dLS7o6e
-X-Received: by 2002:aa7:c946:0:b0:43d:3038:1381 with SMTP id h6-20020aa7c946000000b0043d30381381mr7626667edt.354.1661346197578;
-        Wed, 24 Aug 2022 06:03:17 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6Z4Ix8mkYRJYuQbNsZ9ADw11tosiW67CVFn9u5BqyDPXPdXDAH3Msicx6FSlXzJgY29dTZzg==
-X-Received: by 2002:aa7:c946:0:b0:43d:3038:1381 with SMTP id h6-20020aa7c946000000b0043d30381381mr7626626edt.354.1661346197048;
-        Wed, 24 Aug 2022 06:03:17 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170906c30a00b006fef0c7072esm1128659ejz.144.2022.08.24.06.03.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 06:03:16 -0700 (PDT)
-Message-ID: <fda6b7fc-b307-f4f3-1176-6b15c639b3d0@redhat.com>
-Date:   Wed, 24 Aug 2022 15:03:15 +0200
-MIME-Version: 1.0
+        Wed, 24 Aug 2022 09:04:19 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2105.outbound.protection.outlook.com [40.107.20.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DC497EDE
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 06:04:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gg1UnnHvsM1gWQs3UCkAl9FB7VU4+t1e6I99Nh5yI/ErsDifQ/WLTosDoxBAkIMlyyWW14C6mH/HdqXlvySJJb6g37YlRfsDH9Y9FMXszzRnajw21YdiPFooSe8vEXD99lYmejddLtMDk4WySfHkUEQd9a0mOPl9gbzplhJy7QCVC1ZLcVh+Ie5BcmpZXppFhGp/+Emu6+m+ZYmH7Xo3HtM6QyfLnAJVjo/Sf/3biGYMS2cBskDKV5XE2cdMHr/LGLj/D3nXbHnbpcmYjDvI3tUDAlHjsaXMTaHX7vzAmRYEoAR0wfr7c1kfLije/CPn0rFIz5/LKyQlosGmiVJ9TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ryYOvQzln/nmUXXw2vAXmm2r7k8FZ/Bc9UEurylfkFs=;
+ b=HTfhZLMDWpeiPMqr0v1dmhCbG8tXX11ygdSqpR19rcoKh6Akn7lDuryVT3c4eK5MFHk+pst59wqceSeFdQcABLuh2zo1iMUhclCs7MAC3oCWzVYb06Rh4qjeX/rynEN5TmCTFJ6mTwCazNeZJyea+u13Jr9gFaz/BgoVL5fDwHDFHcOPIACZbNLw5owpW+pFUZIP3CPpzlW11sWuWz6Ye3jvLgj/AhdjY3/UU3z/ydyfPYDJ6BDzVJQEAaLhHpN8la0UV5v5ZOP5/WUeVSjNB2zwcKUe5TKWNiJN0U61WObQwOgCXyYYFyITvSIxcD7SqOUoyTTcsBmVPdr4D98BTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ryYOvQzln/nmUXXw2vAXmm2r7k8FZ/Bc9UEurylfkFs=;
+ b=W/M4wntPlRfWcYSyjwaZu+Aekv6o2uXfS8E15uNPbUENbMwZmNOWeoTlMz0ilyKc+t2Cy5sednhXqo4/kRFDftrYrOLrmTWOPQ9q/4+qBDneM0sR701jyDg3iN4hY49tm/JTDM/UbETPExVpFnoQgjOuFuQELZlpzrsJbWYZcj4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from AS4PR07MB8658.eurprd07.prod.outlook.com (2603:10a6:20b:4cd::12)
+ by DB6PR0701MB2373.eurprd07.prod.outlook.com (2603:10a6:4:5c::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
+ 2022 13:04:12 +0000
+Received: from AS4PR07MB8658.eurprd07.prod.outlook.com
+ ([fe80::4582:5119:51fb:4037]) by AS4PR07MB8658.eurprd07.prod.outlook.com
+ ([fe80::4582:5119:51fb:4037%3]) with mapi id 15.20.5566.015; Wed, 24 Aug 2022
+ 13:04:12 +0000
+Message-ID: <e4fb6847-2d17-fed9-bda4-092ea581072f@nokia.com>
+Date:   Wed, 24 Aug 2022 15:04:08 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] asus-wmi: Support the hardware GPU MUX on some laptops
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ARM: module: Teach unwinder about PLTs
 Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Luke Jones <luke@ljones.dev>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220813092624.6228-1-luke@ljones.dev>
- <e186622e-f3e6-5715-9f6d-bc41fb41560d@amd.com>
- <UVMZGR.6LXKPONA9OS33@ljones.dev>
- <6f7df43d-292d-3a6b-76bc-09d669733939@amd.com>
- <4e4c5234-3327-0e49-989c-1117ffb2f13d@redhat.com>
- <34bf5d3a-adb6-ce12-8c9c-ee9144f5262d@amd.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <34bf5d3a-adb6-ce12-8c9c-ee9144f5262d@amd.com>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     florian.fainelli@broadcom.com,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220706163135.53874-1-alexander.sverdlin@nokia.com>
+From:   Alexander Sverdlin <alexander.sverdlin@nokia.com>
+In-Reply-To: <20220706163135.53874-1-alexander.sverdlin@nokia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS8P189CA0007.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:31f::23) To AS4PR07MB8658.eurprd07.prod.outlook.com
+ (2603:10a6:20b:4cd::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ae5e158e-bfe7-4786-5eb4-08da85d123f7
+X-MS-TrafficTypeDiagnostic: DB6PR0701MB2373:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MrFmjwp6bgJJOELxgC06XQNoV4ub8GWvEHCnpnv4wQ4326nxEHMIlQfCRKFCT26vIHkR8UEXw6Ps7gUJ54dVqKC3psan7Uq3h+DxxRZ+P3viOwX4GpHLHO8B4QthJPV6LPerjFfCqnFk2m93ncgceujaDr5ghkUG5V2pwJlxz2eQ5Bqaygb+fKxoYg6aNbMxAL9Gde650HMrDi3jrxHON9uvg+GFmTqvNWR8JjsQwNm+PXgLgjPVmkVFVyNMSJb+8LoqhKC4kjmDXeVCBRE61I0mR99/G6uwgjTxb88RTvYEMNzJiKykFeyUESSdYtntqJGofQzOuMXEnkes6LMyE8s/pPQ2uVbPiFVAVJQCNkfzTTxp+sKMR8+hR7pYX54YTVwOllR/0IDRsYXLH+ZrrX7bvm04kaDDt7zG+ujc3fpCOkp0myz63Jt4XnkJ2yQ89ryg2Dee2OwEUA+DZr/m2+nyZ948Yq6rKWSghOvBl/s/YZ7v8KgdGFynAyFqrOziu6XTuriOuR6csSi60UT2KVidJe1VMae0KyFfQgkBUpnrvdrlmVBai2q7THbxGS2HSNLykJ10ejelSh2oLmEDasErDu6VemSxD0dSvcLfwSzDjf+fZXEEKs307jg6pi/mlml9Q90Zn27WMgh4eX/vzncypV88QY22akKw1N4w/3bhPlLLyN1Xa8enj7sURB3HPjMtpMi4x7G4KILH3SUNSSH7v43S4iR8TkyW62grFcrD0gD1/CrXCQhMfNRk26EBGvuPyvfcwRDPFnNdzTS6WDAs7L12mA8VwW1IfmvfmVYiH4NvrDR78Ed1y8d8mCcALz2DSe/lHfK7OSlkwsaJ12VKNBQoAPk/RdUo/xhNqb4NTgIvZs/8X9EeTG60zh57
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR07MB8658.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(376002)(366004)(346002)(136003)(36756003)(44832011)(41300700001)(6512007)(26005)(54906003)(2616005)(31686004)(83380400001)(186003)(38100700002)(6916009)(316002)(6506007)(2906002)(66946007)(478600001)(86362001)(31696002)(4326008)(6486002)(82960400001)(966005)(6666004)(5660300002)(66476007)(53546011)(66556008)(8936002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MGJhVThXcDRLVUx6Vlg3NllBT3pYQmc5UGZDT24zT3pKeWR0TVBwL3BDWDRI?=
+ =?utf-8?B?bmYrY3p5ZVI2K2o5bDc1MkJFK1o3U1VOenl2b2J4SjI2bElHZTk0NjYzRTA5?=
+ =?utf-8?B?bCs1R21NV3l0T0dsMy9yQTdKL1VYcHBWTkNPUklvMU44cDdsbE95YjlKQkZD?=
+ =?utf-8?B?K1YyWnJoQm1WdXNTMmxHV0ZJRDQzMnFYZ2J3VjdrcVhUVytYblN6MlgrSkN5?=
+ =?utf-8?B?MUFNRWlLWmU1ZkREZGRwODlEZVhydWZNaXlzbnZwSUk5Ykh6cS9MMGE2TlNK?=
+ =?utf-8?B?SkxtUTNEN20vYStqNStaY0JPa3pHRjNQWVJJZGNNTk95dFU0Q3I3RkJnUVFZ?=
+ =?utf-8?B?V1BHaGN2VkRHNFQyMmcxZ0Y3cDFyZTg5UU43NlZGQ3hjcW13aDljSkVoLzM3?=
+ =?utf-8?B?TDY1UFFjT1c2b0tjcjRsazNtVFgwSytmallIaitFZjl3L25Sb2Z6cUs4aThQ?=
+ =?utf-8?B?MndYaTFzd0hYbkNJWTlOZ1Jod2tyQ2pyZ2libm9TSGJYUGY4ZEhwaFNnMEN1?=
+ =?utf-8?B?OWVhSzZ4d2V5b0U4aHB2QXFrUEg1dEdGSDNXSkszWm91QlBGamZVTldnZTR5?=
+ =?utf-8?B?ZWZ3K3hkSkkxTTZRekY4Z1lVTzZKSzJWSGxDYnpzUWRCR2drNWRWK0pWWDJE?=
+ =?utf-8?B?Z2R1NGxRQU1wMnJvd0V5bVBONTE5Y3VWc0NLWjVhdGt5ODZIck41dXQ2ckNY?=
+ =?utf-8?B?RDBHWW9CWTBHY1dGMlB4b0VWdUNqV1hqbzVEVm9rUkQzUHhvVFdmcTZnR1lr?=
+ =?utf-8?B?Y3pxQXYxL285Y2VsLzRTSHI4NFEyd3pFdGpvQ0hQMEUxQzMzZGl6ZlErMUVo?=
+ =?utf-8?B?TFlFczhIbFZCalBpYVlPVXhLcmUrbGFaVXMvUDFnR3REZWZVaVA4bmtHQ0Jy?=
+ =?utf-8?B?c3pqRnhVUUZVdWNNdVVIWlRhVTVxUzE1VUcrM0pyQmIwUHBkNzdsMW5ma2Rh?=
+ =?utf-8?B?c0RRaXVHSFdkdHlLeHg1YmpVaVp3RnNqRUdlb1pCQTNCZjVDYmVmUGlQczRo?=
+ =?utf-8?B?VTdTUTZxMmluQktlQUZGeVNKcVF0YVZEdWNwaFZJeHJMQlFDUCtxLzlFYnBF?=
+ =?utf-8?B?Sm1TR2QrZFI5REZ0bkFpQWtjaXIrYklRR3R6OGRJRHNoNXp0UE1XNFhweXRx?=
+ =?utf-8?B?czlEU0lvTkFuYm9ZWXRpazdJRHBtbXlDWUpwSFJzaXZ4Lys1bURuSGhaZ3RE?=
+ =?utf-8?B?WGNMYXhRUjJqUHJ2TjF4REtZbmM4K3lOTEgwZkd5aEhmUE9oL3BCdDduMEU3?=
+ =?utf-8?B?dVE0dSt3MVk0RU9ROVJaVnQ5dEpqNFQwaGlBSVNUSHJVeks5aGw1SVNRQUF0?=
+ =?utf-8?B?cXJDWE5GN2xpUzFuZkl5NGwxbWtyUEpYK0tIako4UktaVGp2L1d5amR2M2FZ?=
+ =?utf-8?B?RGk5d29UelkreHByd2FIbmdKY3JHTTQ0ZXExalh0NDdoMDNLWXlXUVoxdDFP?=
+ =?utf-8?B?R01sSWpsMmlleFpiY0lsTE9PRVZqaDlrMlh4bUVUZDZ5engrRG1qam1kZkdk?=
+ =?utf-8?B?MkpPSGZtTXcxZkFad2tLMjJJYnZlNklJQyt5UzA0eE1zRkk2WEttcHViUUR4?=
+ =?utf-8?B?S2gycFR3VVR4NEFhV214UFduTzFxOE85L1V3ZVZlMHhRZGV2MzJzazNHQ05J?=
+ =?utf-8?B?MFlHYWJEME9KWEhLaFFWUVUyTlF2MXVwVXZzU3NQSVhnd2Y4bm9qa01ic0VD?=
+ =?utf-8?B?WEZQRkpvbFRQbTJ2MzBXM3Bidm5RQjBuQytacmhBRXlKdjk1RFZBVGhqUGVr?=
+ =?utf-8?B?YWwwZnFNZ3NaMEUrVkRVSTArZi9ZbDJJZlY1NnIwVWVJYm9kczB2aDZOZTdp?=
+ =?utf-8?B?WkszRHFuMTZRWGJtT2dLY0NHYmN5OXNPRDdTWnM3d2VCd1YyWlpjVXJhc2hQ?=
+ =?utf-8?B?eG4zc0JNVDhXYlNMNmUxWEtNTGY0SmR4bXN2TlUrcG5vR25TbG9UbVdkWEhJ?=
+ =?utf-8?B?MjFlcGYzcDBEeTNNQ3NFQ2YycFpQUEVQRmpGMGZsT2pNTkowdWJuY1ZqelV2?=
+ =?utf-8?B?d0M2bmtuczlmL1gwSWtMUnVnQWRiV1RWUXFCWWhuMFoza1hkVGRDcFF3ZWdo?=
+ =?utf-8?B?cEVtT2ExanZEa1BabXNwQnJYLzhnUUJCTHpHWXlUY1pQOWdmNHY5eDB5SW1D?=
+ =?utf-8?B?cXlMQWtVUnpMYU9mUjJ0Z2NVVlN6bkFvUUFpUkJMa3Z3RzNSLzdpeXBibzNX?=
+ =?utf-8?B?MWc9PQ==?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae5e158e-bfe7-4786-5eb4-08da85d123f7
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR07MB8658.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 13:04:12.6451
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 61ydGgaH5UVJ+8MKvPsRnVhMb2ouizHem4fx5kDjD82LiEz+ffWPHMVl6R2/Uq/Nh2bWZZOgxw+jLIJqkdSI4Zmpbu+45vVsdYZ7hUQsl1g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0701MB2373
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello Russel,
 
-On 8/24/22 14:53, Mario Limonciello wrote:
-> On 8/24/22 07:40, Hans de Goede wrote:
->> Hi All,
->>
->> On 8/22/22 17:43, Limonciello, Mario wrote:
->>> On 8/21/2022 18:07, Luke Jones wrote:
->>>> Hi Mario,
->>>>
->>>> On Mon, Aug 15 2022 at 23:16:12 -0500, Mario Limonciello <mario.limonciello@amd.com> wrote:
->>>>> On 8/13/22 04:26, Luke D. Jones wrote:
->>>>>> Support the hardware GPU MUX switch available on some models. This
->>>>>> switch can toggle the MUX between:
->>>>>>
->>>>>> - 0, Dedicated mode
->>>>>> - 1, Optimus mode
->>>>>>
->>>>>> Optimus mode is the regular iGPU + dGPU available, while dedicated
->>>>>> mode switches the system to have only the dGPU available.
->>>>>>
->>>>>> Signed-off-by: Luke D. Jones <luke@ljones.dev>
->>>>>> ---
->>>>>>    .../ABI/testing/sysfs-platform-asus-wmi       | 11 ++++
->>>>>>    drivers/platform/x86/asus-wmi.c               | 62 +++++++++++++++++++
->>>>>>    include/linux/platform_data/x86/asus-wmi.h    |  3 +
->>>>>>    3 files changed, 76 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>>> index 574b5170a37d..03124eab7f01 100644
->>>>>> --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>>> +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
->>>>>> @@ -58,6 +58,17 @@ Description:
->>>>>>                * 1 - overboost,
->>>>>>                * 2 - silent
->>>>>>    +What:          /sys/devices/platform/<platform>/gpu_mux_mode
->>>>>> +Date:          Aug 2022
->>>>>> +KernelVersion: 6.1
->>>>>> +Contact:       "Luke Jones" <luke@ljones.dev>
->>>>>> +Description:
->>>>>> +               Switch the GPU hardware MUX mode. Laptops with this feature can
->>>>>> +               can be toggled to boot with only the dGPU (discrete mode) or in
->>>>>> +               standard Optimus/Hybrid mode. On switch a reboot is required:
->>>>>> +                       * 0 - Discrete GPU,
->>>>>> +                       * 1 - Optimus/Hybrid,
->>>>>
->>>>> This feel like it should probably export using /sys/class/firmware-attributes.  That's exactly how those types of attributes work.
->>>>>
->>>>> As a bonus, software like fwupd 1.8.4 knows how to manipulate it and you don't need special documentation.
->>>>>
->>>>>> +
->>>>>>    What:          /sys/devices/platform/<platform>/dgpu_disable
->>>>>>    Date:          Aug 2022
->>>>>>    KernelVersion: 5.17
->>>>>> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
->>>>>> index e2b51b5550e8..0421ffb81927 100644
->>>>>> --- a/drivers/platform/x86/asus-wmi.c
->>>>>> +++ b/drivers/platform/x86/asus-wmi.c
->>>>>> @@ -230,6 +230,7 @@ struct asus_wmi {
->>>>>>          bool egpu_enable_available;
->>>>>>        bool dgpu_disable_available;
->>>>>> +    bool gpu_mux_mode_available;
->>>>>>          bool throttle_thermal_policy_available;
->>>>>>        u8 throttle_thermal_policy_mode;
->>>>>> @@ -668,6 +669,59 @@ static ssize_t egpu_enable_store(struct device *dev,
->>>>>>    }
->>>>>>    static DEVICE_ATTR_RW(egpu_enable);
->>>>>>    +/* gpu mux switch *************************************************************/
->>>>>> +static int gpu_mux_mode_check_present(struct asus_wmi *asus)
->>>>>> +{
->>>>>> +    asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
->>>>>> +
->>>>>> +   return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static ssize_t gpu_mux_mode_show(struct device *dev,
->>>>>> +                  struct device_attribute *attr, char *buf)
->>>>>> +{
->>>>>> +   struct asus_wmi *asus = dev_get_drvdata(dev);
->>>>>> +   int result;
->>>>>> +
->>>>>> +   result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_GPU_MUX);
->>>>>> +   if (result < 0)
->>>>>> +       return result;
->>>>>> +
->>>>>> +   return sysfs_emit(buf, "%d\n", result);
->>>>>> +}
->>>>>> +
->>>>>> +static ssize_t gpu_mux_mode_store(struct device *dev,
->>>>>> +                   struct device_attribute *attr,
->>>>>> +                   const char *buf, size_t count)
->>>>>> +{
->>>>>> +   struct asus_wmi *asus = dev_get_drvdata(dev);
->>>>>> +   int result, err;
->>>>>> +   u32 optimus;
->>>>>> +
->>>>>> +   err = kstrtou32(buf, 10, &optimus);
->>>>>> +   if (err)
->>>>>> +       return err;
->>>>>> +
->>>>>> +   if (optimus > 1)
->>>>>> +       return -EINVAL;
->>>>>> +
->>>>>> +   err = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_MUX, optimus, &result);
->>>>>> +   if (err) {
->>>>>> +       dev_err(dev, "Failed to set GPU MUX mode: %d\n", err);
->>>>>> +       return err;
->>>>>> +   }
->>>>>> +    /* !1 is considered a fail by ASUS */
->>>>>> +    if (result != 1) {
->>>>>> +        dev_warn(dev, "Failed to set GPU MUX mode (result): 0x%x\n", result);
->>>>>> +       return -EIO;
->>>>>> +   }
->>>>>> +
->>>>>> +   sysfs_notify(&asus->platform_device->dev.kobj, NULL, "gpu_mux_mode");
->>>>>> +
->>>>>> +   return count;
->>>>>> +}
->>>>>> +static DEVICE_ATTR_RW(gpu_mux_mode);
->>>>>> +
->>>>>>    /* Battery ********************************************************************/
->>>>>>      /* The battery maximum charging percentage */
->>>>>> @@ -3165,6 +3219,7 @@ static struct attribute *platform_attributes[] = {
->>>>>>        &dev_attr_touchpad.attr,
->>>>>>        &dev_attr_egpu_enable.attr,
->>>>>>        &dev_attr_dgpu_disable.attr,
->>>>>> +    &dev_attr_gpu_mux_mode.attr,
->>>>>>        &dev_attr_lid_resume.attr,
->>>>>>        &dev_attr_als_enable.attr,
->>>>>>        &dev_attr_fan_boost_mode.attr,
->>>>>> @@ -3195,6 +3250,8 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
->>>>>>            ok = asus->egpu_enable_available;
->>>>>>        else if (attr == &dev_attr_dgpu_disable.attr)
->>>>>>            ok = asus->dgpu_disable_available;
->>>>>> +    else if (attr == &dev_attr_gpu_mux_mode.attr)
->>>>>> +        ok = asus->gpu_mux_mode_available;
->>>>>>        else if (attr == &dev_attr_fan_boost_mode.attr)
->>>>>>            ok = asus->fan_boost_mode_available;
->>>>>>        else if (attr == &dev_attr_throttle_thermal_policy.attr)
->>>>>> @@ -3464,6 +3521,10 @@ static int asus_wmi_add(struct platform_device *pdev)
->>>>>>        if (err)
->>>>>>            goto fail_dgpu_disable;
->>>>>>    +    err = gpu_mux_mode_check_present(asus);
->>>>>> +   if (err)
->>>>>> +       goto fail_gpu_mux_mode;
->>>>>> +
->>>>>>        err = fan_boost_mode_check_present(asus);
->>>>>>        if (err)
->>>>>>            goto fail_fan_boost_mode;
->>>>>> @@ -3578,6 +3639,7 @@ static int asus_wmi_add(struct platform_device *pdev)
->>>>>>    fail_fan_boost_mode:
->>>>>>    fail_egpu_enable:
->>>>>>    fail_dgpu_disable:
->>>>>> +fail_gpu_mux_mode:
->>>>>>    fail_platform:
->>>>>>    fail_panel_od:
->>>>>>        kfree(asus);
->>>>>> diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
->>>>>> index a571b47ff362..c023332842a2 100644
->>>>>> --- a/include/linux/platform_data/x86/asus-wmi.h
->>>>>> +++ b/include/linux/platform_data/x86/asus-wmi.h
->>>>>> @@ -98,6 +98,9 @@
->>>>>>    /* dgpu on/off */
->>>>>>    #define ASUS_WMI_DEVID_DGPU        0x00090020
->>>>>>    +/* gpu mux switch, 0 = dGPU, 1 = Optimus */
->>>>>> +#define ASUS_WMI_DEVID_GPU_MUX 0x00090016
->>>>>> +
->>>>>>    /* DSTS masks */
->>>>>>    #define ASUS_WMI_DSTS_STATUS_BIT    0x00000001
->>>>>>    #define ASUS_WMI_DSTS_UNKNOWN_BIT    0x00000002
->>>>>
->>>>
->>>> You can see previous discussion here https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fplatform-driver-x86%2Fc3bb0989-78d9-c513-1669-75407b2acbac%40redhat.com%2F&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7C54f5129bf4ad437bd11108da85cde220%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637969416575174610%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=GqFSQY5%2BVJCX1Wytp5mGq54rcx6ks9sKrGdGFf2WtNI%3D&amp;reserved=0
->>>>
->>>> Below is Hans response verbatim:
->>>>
->>>>   > Yes it sounds like a BIOS setting is being toggled from within
->>>>   > Linux, which would normally be done through the
->>>>   > "firmware-attributes" class, but all existing "firmware-attributes"
->>>>   > class drivers allow changing all BIOS setting not just a single
->>>>   > setting, so using the  "firmware-attributes" class here is not really
->>>>   > appropriate.
->>>>
->>>
->>> Although the two consumers thus far (Lenovo and Dell) use WMI interfaces to build and discover varieties of settings there is no requirement for how the backend for firwmare-attributes works.  You can just as well poulate a single attribute statically from your driver.
->>>
->>> So I guess Hans and I disagree here.  I have a feeling that we shouldn't be introducing custom ABI to userspace just because only "one" setting is offered.  I anticipate that some day the DE's will offer a GUI setting built on top of fwupd which is built on top of firmware-attributes.
->>>
->>> If you *don't* populate a setting with firmware-attributes the only way that users will discover such a setting is by installing other custom userspace software that has the knowledge of it.
->>>
->>> At the end of the day it's up to Hans and Mark though, this is just my 2c.
->>
->> Mario, thank you for your input here, it is much appreciated.
->>
->> As Luke mentioned in my quote using the firmware-attributes class for this really seems like overkill. As for discoverability, the firmware-attributes class only standardizes how to enum / change BIOS settings. The consumer of the API still must now the name of the setting which can/will be different per vendor.
->>
->> AFAIK fwupd only uses the firmware-attributes class to check for / disable some BIOS flashing protection. So having the GPU mux setting in the firmware-attributes class is not really relevant for fwupd.
->>
->> If in the future some generic tool which uses the firmware-attributes class to toggle GPU muxes is created (presumably with a lookup table for the exact setting's name under the firmare-attributes API) then we can always add firmware-attributes support for the GPU mux to asus-wmi at that point in time.
->>
->> I just don't think it is likely such a generic tool will happen (any time soon), so for now I still believe that using the firmware-attributes class for this is not necessary.
->>
-> 
-> Actually I've been actively working on that.  Take a look at fwupd main (what will go into the next tagged 1.8.4 release).
-> 
-> It's got support for "fwupdmgr get-bios-settings" and "fwupdmgr set-bios-settings" which will follow the rules the kernel API uses.
-> 
-> So I expect that if this attribute was implemented as I suggested you could do:
-> 
-> # fwupdmgr get-bios-settings
-> 
-> and find the mux (including the possible values if it's declared a kernel enumeration attribute and possible_values is populated).  If you populate the optional description attribute in the kernel fwupd will show you what your enumerated settings mean.
-> 
-> followed by:
-> 
-> # fwupdmgr set-bios-setting dGPUMux iGPU
-> or
-> # fwupdmgr set-bios-setting dGPUMux dGPU
-> 
-> To set it.
-> 
-> fwupd will prompt you to reboot the system after it's done changing it as well.
-> 
-> It's implemented such that GUI clients can use libfwupd just the same, and I really think this increases discoverability of such a setting.
+shall I add this one to your patch tracker?
+There is little interest to this patch, but also no complaints, as I can tell.
 
-Interesting, I must admit that that makes your argument for using the firmware-attributes class stronger.
+On 06/07/2022 18:31, Alexander A Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> 
+> "unwind: Index not found eef26358" warnings keep popping up on
+> CONFIG_ARM_MODULE_PLTS-enabled systems if the PC points to a PLT veneer.
+> Teach the unwinder how to deal with them, taking into account they don't
+> change state of the stack or register file except loading PC.
+> 
+> Tested-by: Kursad Oney <kursad.oney@broadcom.com>
+> Link: https://lore.kernel.org/linux-arm-kernel/20200402153845.30985-1-kursad.oney@broadcom.com/
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> ---
+>  arch/arm/include/asm/module.h |  5 +++++
+>  arch/arm/kernel/module-plts.c | 14 ++++++++++++++
+>  arch/arm/kernel/unwind.c      | 13 ++++++++++++-
+>  3 files changed, 31 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/include/asm/module.h b/arch/arm/include/asm/module.h
+> index 5546c9751478c..07c51a34f77d5 100644
+> --- a/arch/arm/include/asm/module.h
+> +++ b/arch/arm/include/asm/module.h
+> @@ -37,6 +37,11 @@ struct mod_arch_specific {
+>  
+>  struct module;
+>  u32 get_module_plt(struct module *mod, unsigned long loc, Elf32_Addr val);
+> +#ifdef CONFIG_ARM_MODULE_PLTS
+> +bool in_module_plt(unsigned long loc);
+> +#else
+> +static inline bool in_module_plt(unsigned long loc) { return false; }
+> +#endif
+>  
+>  #ifdef CONFIG_THUMB2_KERNEL
+>  #define HAVE_ARCH_KALLSYMS_SYMBOL_VALUE
+> diff --git a/arch/arm/kernel/module-plts.c b/arch/arm/kernel/module-plts.c
+> index 1fc309b41f944..af7c322ebed68 100644
+> --- a/arch/arm/kernel/module-plts.c
+> +++ b/arch/arm/kernel/module-plts.c
+> @@ -284,3 +284,17 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+>  		 mod->arch.core.plt->sh_size, mod->arch.init.plt->sh_size);
+>  	return 0;
+>  }
+> +
+> +bool in_module_plt(unsigned long loc)
+> +{
+> +	struct module *mod;
+> +	bool ret;
+> +
+> +	preempt_disable();
+> +	mod = __module_text_address(loc);
+> +	ret = mod && (loc - (u32)mod->arch.core.plt_ent < mod->arch.core.plt_count * PLT_ENT_SIZE ||
+> +		      loc - (u32)mod->arch.init.plt_ent < mod->arch.init.plt_count * PLT_ENT_SIZE);
+> +	preempt_enable();
+> +
+> +	return ret;
+> +}
+> diff --git a/arch/arm/kernel/unwind.c b/arch/arm/kernel/unwind.c
+> index a37ea6c772cd5..53be7ea6181b3 100644
+> --- a/arch/arm/kernel/unwind.c
+> +++ b/arch/arm/kernel/unwind.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/list.h>
+> +#include <linux/module.h>
+>  
+>  #include <asm/stacktrace.h>
+>  #include <asm/traps.h>
+> @@ -395,8 +396,18 @@ int unwind_frame(struct stackframe *frame)
+>  
+>  	idx = unwind_find_idx(frame->pc);
+>  	if (!idx) {
+> -		if (frame->pc && kernel_text_address(frame->pc))
+> +		if (frame->pc && kernel_text_address(frame->pc)) {
+> +			if (in_module_plt(frame->pc) && frame->pc != frame->lr) {
+> +				/*
+> +				 * Quoting Ard: Veneers only set PC using a
+> +				 * PC+immediate LDR, and so they don't affect
+> +				 * the state of the stack or the register file
+> +				 */
+> +				frame->pc = frame->lr;
+> +				return URC_OK;
+> +			}
+>  			pr_warn("unwind: Index not found %08lx\n", frame->pc);
+> +		}
+>  		return -URC_FAILURE;
+>  	}
+>  
 
-But in the end it IMHO still feels wrong to add firmware-attribute support for just a single setting, rather then for something which actually exports all or most BIOS settings.
-
-So for now I'm going to with this patch as is. If eventually it turns out that having this inside the firmware-attributes class would be really useful we can add it later, while keeping the sysfs attr for backward compat. My thinking being here that the code for the single sysfs attr is quite small, where as adding firmware-attributes class support will be more involved.
-
-Regards,
-
-Hans
-
+-- 
+Best regards,
+Alexander Sverdlin.

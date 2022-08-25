@@ -2,200 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE84A5A0B78
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E07C5A0B76
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233847AbiHYI21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S233567AbiHYI1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236070AbiHYI2V (ORCPT
+        with ESMTP id S236525AbiHYI0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:28:21 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADEF51438
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:28:20 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id i7so14587641qka.13
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:28:20 -0700 (PDT)
+        Thu, 25 Aug 2022 04:26:36 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAC9A6C42
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:26:21 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id z187so18980393pfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ke6WIRIWSNDEQe/wY0VHI5geaK0bwRFL8irWBp0pDpo=;
-        b=IiQ9DagLmvJrc2PH/b+b2bVepeX1fBVAFaNiG1SwksacAWJAh1+eCBSQbyb7l8QBXP
-         20PRaE/io0D4NCnN4Sdn09JEZ34u5Qzub6ztxa8UOiAHv0KX1ESeTtN6u67Pv9Ocms5T
-         GxlBMRFam91kV7W1tYRDFkH9yUKq2Un53ctVSILX91Im0e0Y9+aHI6uX9BAVAfKTYdcm
-         ndKxw1vU+deMVPSDDTaWVOCnLW+8l0m9Ix9eggSvE/OxWHm0wORpY7hTvVk/lKZJyGE6
-         MhKDflEZmO9/j1+yq4qMerYRPrvgGe54LfFtCIlRWE/tHcSK4uQzT+/wxZ80l1E+aKNY
-         khag==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc;
+        bh=insU4wk9QzLv3XuEg5ohlaO5trMh0Ju2twU+9zeB2ek=;
+        b=i+mbtR5mlO8rKcETXrmqxyoPDaiSSBQBuDHMrR1eKKN46+337WYHa7tuAvcl6l+hkk
+         jBB1mPw4UQSfrdYXB/6ir/bMiNSa8nMO6qMB52g+wqfYmPQEi40QvbJ4XErmK2/LAIop
+         jXwO9cKAsGqDwD5axCruCLVra6Kd2VhA/0VuhSClGioeYEFf8UgDAVrNk8msG+tUqcjd
+         UovM2RYEUl6loemPD2uzVjgKWLgAj07Ih3nAGod8sxm8+zxRnkrBD4UGWs1HQOY4VYAb
+         F3SBV3tuAZyeZnBdijl0EVkUB2hkSC2ULMYCS74U37CsRfGkeV9bvnMptJkVO8SGTMyH
+         aYSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ke6WIRIWSNDEQe/wY0VHI5geaK0bwRFL8irWBp0pDpo=;
-        b=csTR1ZUEWV7ai2CkFbInSeLTFI2eSs5uolG9bEXSi6Q4Hclvnw95M2gha+CI9s08MH
-         hWIgitPIf2U495HWKMlJb+B2+LWZVvkbz0sf3ymsb15KLcPk2I29kM26M5rqUe7zlXCb
-         Q/1eXdUjTcKqzsSyyFQLyRLb03tTLTGcSeBJhs2/gV33mVvryCIS36kZ90cjBml38Su2
-         YDOgMCtxBj+eTsRc+bV/ps1WhhSAcc2jh0bk14Q02OjKkk796DIbVECdbYQXSR4Wv/Wo
-         4UsfE0ZJBlYiNyFVwW3Fm65XRx44aCW3xlQfrfkB0i03oiOGCOfFuPw1rPlT0KUUtI/+
-         nNZQ==
-X-Gm-Message-State: ACgBeo1qsNwo4x/wJMqmISCA8nQQ9dzhwrB8tQtCOc3V/d/moqxJjAP4
-        76FkSpfMgGlBA41IbssLglKhuo5lpXTUJslQpA4=
-X-Google-Smtp-Source: AA6agR4DJ53INtNlu0lOezpb9LaiBIkX/3rdV/bGy/sY6NFF90ttZFEFF3Jxb2Fj2tRYJqgMnJirjDIKJehog7WouIU=
-X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
- v17-20020ae9e311000000b006bae711fb27mr2183968qkf.320.1661416099613; Thu, 25
- Aug 2022 01:28:19 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=insU4wk9QzLv3XuEg5ohlaO5trMh0Ju2twU+9zeB2ek=;
+        b=Whfo9x8kdcV54YJKdQ+BAd9arjDIfSTR3VykQZh8/QZUy4tG6zSZ4GcWaZ+7coGXoV
+         WoEASWYJ62PTWvlenn4+Y5RhLmRvOj8sMAWBNUJqmHKNyG5eh359/xOe3lwwu17IZukM
+         xPzkPa2xq8GriOKB0Q//edqgVWcCHrXh0Ks2EYttqeMCBie4YWeb7vXF4NgYVeOZTrB5
+         +NBUL98kLU7UkVdxCYMdrUoOaI3pG2ixBCjvQOfwPVz5RTsxu6iUZzR3fZcJlLvm/ESU
+         aQ5l+F3/Jx50m7+zeaT+MP1c+w5UOWjueVd860MmYmFnygUr34O1poTQRdSE15z/I9dn
+         peEA==
+X-Gm-Message-State: ACgBeo3QJNAnCE5ZQpQNekWt0WVfks2qB0075JL0sZtuBOeJFS8dsmob
+        d1Ikd5/aPhlSGvejcQPekVI=
+X-Google-Smtp-Source: AA6agR4TO/iZeKnHz/WUPlUyLPgs5g93WzsV89wMI73OkzUE/cigFA3CKu2UkSkx5ceIDpOjx99LEQ==
+X-Received: by 2002:a63:e242:0:b0:421:9053:8923 with SMTP id y2-20020a63e242000000b0042190538923mr2322526pgj.283.1661415980398;
+        Thu, 25 Aug 2022 01:26:20 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902f65100b0016f1319d2aasm13954053plg.171.2022.08.25.01.26.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 25 Aug 2022 01:26:20 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 16:28:31 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, zhangwen@coolpad.com,
+        Yue Hu <huyue2@coolpad.com>
+Subject: Re: [RFC PATCH 2/2] erofs: add on-disk compressed fragments support
+Message-ID: <20220825162831.00000e05.zbestahu@gmail.com>
+In-Reply-To: <YwbrQF315/Sh41/D@B-P7TQMD6M-0146.local>
+References: <cover.1661146058.git.huyue2@coolpad.com>
+        <b087322de2adfd8ce39a5d380191562b0b0e0086.1661146058.git.huyue2@coolpad.com>
+        <YwbrQF315/Sh41/D@B-P7TQMD6M-0146.local>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <20220825060819.74303-1-liaochang1@huawei.com>
-In-Reply-To: <20220825060819.74303-1-liaochang1@huawei.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 25 Aug 2022 11:27:43 +0300
-Message-ID: <CAHp75VdyYY08uwJGi0m4-L9=9rLmFzkeJGTi2-NC=prbgKvo3A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] genirq: Record dangling hwirq number into struct irq_data
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PDS_BTC_ID,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 9:11 AM Liao Chang <liaochang1@huawei.com> wrote:
+On Thu, 25 Aug 2022 11:23:44 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-Use spell-checker, please. Or ask somebody for proof-reading of your
-commit messages and comments in the code.
+> Hi Yue,
+> 
+> On Mon, Aug 22, 2022 at 01:53:01PM +0800, Yue Hu wrote:
+> > From: Yue Hu <huyue2@coolpad.com>
+> > 
+> > Introduce on-disk compressed fragments feature.
+> > 
+> > This approach adds a new field called `h_fragmentoff' in the per-file
+> > compression header to indicate the fragment offset of each tail pcluster
+> > or the whole file in the special packed inode.
+> > 
+> > Like ztailpacking, it will also find and record the 'headlcn' of the
+> > tail pcluster when initializing per-inode zmap for making follow-on
+> > requests more easy.
+> > 
+> > Moreover, enable the offset for shifted decompression since we are
+> > writing from 'pageofs_ofs' when compressing if this feature is used.
+> > 
+> > Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> > ---
+> >  fs/erofs/decompressor.c |  4 +--
+> >  fs/erofs/erofs_fs.h     | 26 ++++++++++++++-----
+> >  fs/erofs/internal.h     | 16 +++++++++---
+> >  fs/erofs/super.c        |  6 +++++
+> >  fs/erofs/sysfs.c        |  2 ++
+> >  fs/erofs/zdata.c        | 55 ++++++++++++++++++++++++++++++++++++++++-
+> >  fs/erofs/zmap.c         | 40 +++++++++++++++++++++++++++---
+> >  7 files changed, 133 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
+> > index dc02d95b52d7..fe4a34ac2de7 100644
+> > --- a/fs/erofs/decompressor.c
+> > +++ b/fs/erofs/decompressor.c
+> > @@ -338,8 +338,8 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
+> >  		return 0;
+> >  	}
+> >  
+> > -	/* set it to pageofs_out if fragments feature is used */
+> > -	headofs_in = 0;
+> > +	headofs_in = !erofs_sb_has_fragments(EROFS_SB(rq->sb)) ? 0 :  
+> 
+> Same as I pointed out in the erofs-utils series.
 
-> Following interrupt allocation process lead to some interrupts are
+I will update in v2.
 
-leads
+> 
+> > +		     rq->pageofs_out;
+> >  
+> >  	src = kmap_atomic(*rq->in) + rq->pageofs_in;
+> >  	if (rq->out[0]) {
+> > diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
+> > index 2b48373f690b..3306cca5f03b 100644
+> > --- a/fs/erofs/erofs_fs.h
+> > +++ b/fs/erofs/erofs_fs.h
+> > @@ -25,6 +25,7 @@
+> >  #define EROFS_FEATURE_INCOMPAT_DEVICE_TABLE	0x00000008
+> >  #define EROFS_FEATURE_INCOMPAT_COMPR_HEAD2	0x00000008
+> >  #define EROFS_FEATURE_INCOMPAT_ZTAILPACKING	0x00000010
+> > +#define EROFS_FEATURE_INCOMPAT_FRAGMENTS	0x00000020
+> >  #define EROFS_ALL_FEATURE_INCOMPAT		\
+> >  	(EROFS_FEATURE_INCOMPAT_ZERO_PADDING | \
+> >  	 EROFS_FEATURE_INCOMPAT_COMPR_CFGS | \
+> > @@ -32,7 +33,8 @@
+> >  	 EROFS_FEATURE_INCOMPAT_CHUNKED_FILE | \
+> >  	 EROFS_FEATURE_INCOMPAT_DEVICE_TABLE | \
+> >  	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2 | \
+> > -	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING)
+> > +	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING | \
+> > +	 EROFS_FEATURE_INCOMPAT_FRAGMENTS)
+> >  
+> >  #define EROFS_SB_EXTSLOT_SIZE	16
+> >  
+> > @@ -71,7 +73,9 @@ struct erofs_super_block {
+> >  	} __packed u1;
+> >  	__le16 extra_devices;	/* # of devices besides the primary device */
+> >  	__le16 devt_slotoff;	/* startoff = devt_slotoff * devt_slotsize */
+> > -	__u8 reserved2[38];
+> > +	__u8 reserved[6];
+> > +	__le64 packed_nid;	/* nid of the special packed inode */
+> > +	__u8 reserved2[24];
+> >  };
+> >  
+> >  /*
+> > @@ -295,16 +299,25 @@ struct z_erofs_lzma_cfgs {
+> >   * bit 1 : HEAD1 big pcluster (0 - off; 1 - on)
+> >   * bit 2 : HEAD2 big pcluster (0 - off; 1 - on)
+> >   * bit 3 : tailpacking inline pcluster (0 - off; 1 - on)
+> > + * bit 4 : fragment pcluster (0 - off; 1 - on)
+> >   */
+> >  #define Z_EROFS_ADVISE_COMPACTED_2B		0x0001
+> >  #define Z_EROFS_ADVISE_BIG_PCLUSTER_1		0x0002
+> >  #define Z_EROFS_ADVISE_BIG_PCLUSTER_2		0x0004
+> >  #define Z_EROFS_ADVISE_INLINE_PCLUSTER		0x0008
+> > +#define Z_EROFS_ADVISE_FRAGMENT_PCLUSTER	0x0010
+> >  
+> > +#define Z_EROFS_FRAGMENT_INODE_BIT              7
+> >  struct z_erofs_map_header {
+> > -	__le16	h_reserved1;
+> > -	/* indicates the encoded size of tailpacking data */
+> > -	__le16  h_idata_size;
+> > +	union {
+> > +		/* direct addressing for fragment offset */
+> > +		__le32  h_fragmentoff;
+> > +		struct {
+> > +			__le16  h_reserved1;
+> > +			/* indicates the encoded size of tailpacking data */
+> > +			__le16  h_idata_size;
+> > +		};
+> > +	};
+> >  	__le16	h_advise;
+> >  	/*
+> >  	 * bit 0-3 : algorithm type of head 1 (logical cluster type 01);
+> > @@ -313,7 +326,8 @@ struct z_erofs_map_header {
+> >  	__u8	h_algorithmtype;
+> >  	/*
+> >  	 * bit 0-2 : logical cluster bits - 12, e.g. 0 for 4096;
+> > -	 * bit 3-7 : reserved.
+> > +	 * bit 3-6 : reserved;
+> > +	 * bit 7   : move the whole file into packed inode or not.
+> >  	 */
+> >  	__u8	h_clusterbits;
+> >  };
+> > diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> > index cfee49d33b95..7b9d31bab928 100644
+> > --- a/fs/erofs/internal.h
+> > +++ b/fs/erofs/internal.h
+> > @@ -120,6 +120,7 @@ struct erofs_sb_info {
+> >  	struct inode *managed_cache;
+> >  
+> >  	struct erofs_sb_lz4_info lz4;
+> > +	struct inode *packed_inode;
+> >  #endif	/* CONFIG_EROFS_FS_ZIP */
+> >  	struct erofs_dev_context *devs;
+> >  	struct dax_device *dax_dev;
+> > @@ -306,6 +307,7 @@ EROFS_FEATURE_FUNCS(chunked_file, incompat, INCOMPAT_CHUNKED_FILE)
+> >  EROFS_FEATURE_FUNCS(device_table, incompat, INCOMPAT_DEVICE_TABLE)
+> >  EROFS_FEATURE_FUNCS(compr_head2, incompat, INCOMPAT_COMPR_HEAD2)
+> >  EROFS_FEATURE_FUNCS(ztailpacking, incompat, INCOMPAT_ZTAILPACKING)
+> > +EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
+> >  EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
+> >  
+> >  /* atomic flag definitions */
+> > @@ -341,8 +343,13 @@ struct erofs_inode {
+> >  			unsigned char  z_algorithmtype[2];
+> >  			unsigned char  z_logical_clusterbits;
+> >  			unsigned long  z_tailextent_headlcn;
+> > -			erofs_off_t    z_idataoff;
+> > -			unsigned short z_idata_size;
+> > +			union {
+> > +				struct {
+> > +					erofs_off_t    z_idataoff;
+> > +					unsigned short z_idata_size;
+> > +				};
+> > +				erofs_off_t z_fragmentoff;
+> > +			};
+> >  		};
+> >  #endif	/* CONFIG_EROFS_FS_ZIP */
+> >  	};
+> > @@ -400,6 +407,7 @@ extern const struct address_space_operations z_erofs_aops;
+> >  enum {
+> >  	BH_Encoded = BH_PrivateStart,
+> >  	BH_FullMapped,
+> > +	BH_Fragment,
+> >  };
+> >  
+> >  /* Has a disk mapping */
+> > @@ -410,6 +418,8 @@ enum {
+> >  #define EROFS_MAP_ENCODED	(1 << BH_Encoded)
+> >  /* The length of extent is full */
+> >  #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
+> > +/* Located in the special packed inode */
+> > +#define EROFS_MAP_FRAGMENT	(1 << BH_Fragment)
+> >  
+> >  struct erofs_map_blocks {
+> >  	struct erofs_buf buf;
+> > @@ -431,7 +441,7 @@ struct erofs_map_blocks {
+> >  #define EROFS_GET_BLOCKS_FIEMAP	0x0002
+> >  /* Used to map the whole extent if non-negligible data is requested for LZMA */
+> >  #define EROFS_GET_BLOCKS_READMORE	0x0004
+> > -/* Used to map tail extent for tailpacking inline pcluster */
+> > +/* Used to map tail extent for tailpacking inline or fragment pcluster */
+> >  #define EROFS_GET_BLOCKS_FINDTAIL	0x0008
+> >  
+> >  enum {
+> > diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+> > index 3173debeaa5a..fde5ece36b2c 100644
+> > --- a/fs/erofs/super.c
+> > +++ b/fs/erofs/super.c
+> > @@ -381,6 +381,8 @@ static int erofs_read_superblock(struct super_block *sb)
+> >  #endif
+> >  	sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
+> >  	sbi->root_nid = le16_to_cpu(dsb->root_nid);
+> > +	sbi->packed_inode = erofs_sb_has_fragments(sbi) ?
+> > +		erofs_iget(sb, le64_to_cpu(dsb->packed_nid), false) : NULL;  
+> 
+> iget could fail, what will we do next in such case?
 
-> mapped in the low-level domain(Arm ITS), but they are never been mapped
+I will fix it in v2.
 
-never mapped
-  ...or...
-they have never
+> 
+> >  	sbi->inos = le64_to_cpu(dsb->inos);
+> >  
+> >  	sbi->build_time = le64_to_cpu(dsb->build_time);
+> > @@ -411,6 +413,8 @@ static int erofs_read_superblock(struct super_block *sb)
+> >  		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+> >  	if (erofs_is_fscache_mode(sb))
+> >  		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
+> > +	if (erofs_sb_has_fragments(sbi))
+> > +		erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
+> >  out:
+> >  	erofs_put_metabuf(&buf);
+> >  	return ret;
+> > @@ -908,6 +912,8 @@ static void erofs_put_super(struct super_block *sb)
+> >  #ifdef CONFIG_EROFS_FS_ZIP
+> >  	iput(sbi->managed_cache);
+> >  	sbi->managed_cache = NULL;
+> > +	iput(sbi->packed_inode);
+> > +	sbi->packed_inode = NULL;
+> >  #endif
+> >  	erofs_fscache_unregister_cookie(&sbi->s_fscache);
+> >  }
+> > diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+> > index c1383e508bbe..1b52395be82a 100644
+> > --- a/fs/erofs/sysfs.c
+> > +++ b/fs/erofs/sysfs.c
+> > @@ -76,6 +76,7 @@ EROFS_ATTR_FEATURE(device_table);
+> >  EROFS_ATTR_FEATURE(compr_head2);
+> >  EROFS_ATTR_FEATURE(sb_chksum);
+> >  EROFS_ATTR_FEATURE(ztailpacking);
+> > +EROFS_ATTR_FEATURE(fragments);
+> >  
+> >  static struct attribute *erofs_feat_attrs[] = {
+> >  	ATTR_LIST(zero_padding),
+> > @@ -86,6 +87,7 @@ static struct attribute *erofs_feat_attrs[] = {
+> >  	ATTR_LIST(compr_head2),
+> >  	ATTR_LIST(sb_chksum),
+> >  	ATTR_LIST(ztailpacking),
+> > +	ATTR_LIST(fragments),
+> >  	NULL,
+> >  };
+> >  ATTRIBUTE_GROUPS(erofs_feat);
+> > diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> > index 5792ca9e0d5e..3dd3b829766f 100644
+> > --- a/fs/erofs/zdata.c
+> > +++ b/fs/erofs/zdata.c
+> > @@ -650,6 +650,33 @@ static bool should_alloc_managed_pages(struct z_erofs_decompress_frontend *fe,
+> >  		la < fe->headoffset;
+> >  }
+> >  
+> > +static int z_erofs_read_fragment_data(struct page *page, unsigned int pageofs,
+> > +				      loff_t start, unsigned int len)
+> > +{
+> > +	struct inode *const inode = page->mapping->host;
+> > +	erofs_off_t offset = EROFS_I(inode)->z_fragmentoff + start;
+> > +	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+> > +	u8 *src, *dst;
+> > +	unsigned int i, cnt;
+> > +
+> > +	for (i = 0; i < len; i += cnt) {
+> > +		cnt = min(EROFS_BLKSIZ - (unsigned int)erofs_blkoff(offset),
+> > +			  len - i);
+> > +		src = erofs_bread(&buf, EROFS_I_SB(inode)->packed_inode,
+> > +				  erofs_blknr(offset), EROFS_KMAP);
+> > +		if (IS_ERR(src))
+> > +			return PTR_ERR(src);
+> > +
+> > +		dst = kmap_atomic(page);
+> > +		memcpy(dst + pageofs + i, src + erofs_blkoff(offset), cnt);
+> > +		kunmap_atomic(dst);  
+> 
+> Use kmap_local_page instead.
 
-> at the higher level.
->
-> irq_domain_alloc_irqs_hierarchy(.., nr_irqs, ...)
->   its_irq_domain_alloc(..., nr_irqs, ...)
->     its_alloc_device_irq(..., nr_irqs, ...)
->       bitmap_find_free_region(..., get_count_order(nr_irqs))
->
-> Since ITS domain find a region of zero bits, the length of which must
+Got it.
 
-finds
+> 
+> > +
+> > +		offset += cnt;
+> > +	}
+> > +	erofs_put_metabuf(&buf);
+> > +	return 0;
+> > +}
+> > +
+> >  static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+> >  				struct page *page, struct page **pagepool)
+> >  {
+> > @@ -688,7 +715,8 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+> >  		/* didn't get a valid pcluster previously (very rare) */
+> >  	}
+> >  
+> > -	if (!(map->m_flags & EROFS_MAP_MAPPED))
+> > +	if (!(map->m_flags & EROFS_MAP_MAPPED) ||
+> > +	    map->m_flags & EROFS_MAP_FRAGMENT)
+> >  		goto hitted;
+> >  
+> >  	err = z_erofs_collector_begin(fe);
+> > @@ -735,6 +763,31 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+> >  		zero_user_segment(page, cur, end);
+> >  		goto next_part;
+> >  	}
+> > +	if (map->m_flags & EROFS_MAP_FRAGMENT) {
+> > +		unsigned int pageofs, skip, len;
+> > +
+> > +		if (!map->m_la) {
+> > +			len = (offset + cur + 1 == inode->i_size) ? (cur + 1) :
+> > +			      end;
+> > +			err = z_erofs_read_fragment_data(page, 0, offset, len);
+> > +			goto out;
+> > +		}
+> > +		if (map->m_la < offset) {
+> > +			pageofs = 0;
+> > +			skip = offset - map->m_la;
+> > +		} else {
+> > +			pageofs = map->m_la & ~PAGE_MASK;
+> > +			skip = 0;
+> > +		}
+> > +		DBG_BUGON(map->m_llen - skip > PAGE_SIZE);  
+> 
+> 		len = min(map->m_llen - skip, end - cur)?
 
-> aligned to power of two. If nr_irqs is 30, the length of zero bits is
+Nice, let me try.
 
-the power
+Thanks.
 
-> actually 32, but only first 30 bits are really mapped.
+> 
+> > +		err = z_erofs_read_fragment_data(page, pageofs, skip,
+> > +						 map->m_llen - skip);  
+> 
+> 						 len); ?
+> 
+> Thanks,
+> Gao Xiang
 
-the first
-
-> On teardown, low-level domain only free these interrupts that actually
-
-the low-level
-   ...or...
-domains
-
-> mapped, and leave last interrupts dangling in the ITS domain. Thus the
-> ITS device resources are never freed. On device driver reload, dangling
-> interrupts prevent ITS domain from allocating enough resource.
->
-> irq_domain_free_irqs_hierarchy(..., nr_irqs, ...)
->   its_irq_domain_free(..., irq_base + i, 1)
->     bitmap_release_region(..., irq_base + i, get_count_order(1))
->
-> John reported this problem to LKML and Marc provided a solution and fix
-> it in the generic code, see the discussion from Link tag. Marc's patch
-> fix John's problem, but does not take care of some corner case, look one
-> example below.
->
-> Step1: 32 interrupts allocated in LPI domain, but return the first 30 to
-> higher driver.
->
->    111111111111111111111111111111 11
->   |<------------0~29------------>|30,31|
->
-> Step2: interrupt #16~28 are released one by one, then #0~15 and #29~31
-> still be there.
->
->    1111111111111111 0000000000000 1  11
->   |<-----0~15----->|<---16~28--->|29|30,31|
->
-> Step#: on driver teardown, generic code will invoke ITS domain code
-> twice. The first time, #0~15 will be released, the second one, only #29
-> will be released(1 align to power of two).
->
->    0000000000000000 0000000000000 0  11
->   |<-----0~15----->|<---16~28--->|29|30,31|
->
-> In short summary, the dangling problem stems from the number of released
-> hwirq is less than the one of allocated hwirq in ITS domain. In order to
-
-the allocated
-
-> fix this problem, make irq_data record the number of allocated but
-> unmapped hwirq. If hwirq followed by some unmapped bits, ITS domain
-> record the number of unmapped bits to the last irq_data mapped to higher
-> level, when the last hwirq followed by unmapped hwirq is released, some
-> dangling bit will be clear eventualy, look back the trivial example
-
-eventually
-
-> above.
->
-> Step1: record '2' into the irq_data.dangling of #29 hwirq.
->
->            111111111111111111111111111111 11
->           |<------------0~29------------>|30,31|
-> dangling:  000000000000000000000000000002
->
-> Step2: no change
->
->           1111111111111111 0000000000000 1  11
->          |<-----0~15----->|<---16~28--->|29|30,31|
-> dangling: 0000000000000000 0000000000000 2
->
-> Step3: ITS domain will release #30~31 since the irq_data.dangling of #29
-> is '2'.
->
->            0000000000000000 0000000000000 0  00
->           |<-----0~15----->|<---16~28--->|29|30,31|
-> dangling:  0000000000000000 0000000000000 2
-
-> Fixes: 4615fbc3788dd ("genirq/irqdomain: Don't try to free an interrupt
-> that has no mapping")
-
-All tags must be one-liners. I.o.w. do not split a tag to multiple lines.
-
-...
-
-> + * @dangling:          amount of dangling hardware interrupt, Arm ITS allocate
-> + *                     hardware interrupt more than expected, aligned to power
-> + *                     of two, so that unsued interrupt number become dangling.
-
-unused
-becomes
-
-> + *                     Use this field to record dangling bits follwoing @hwirq.
-
-following
-
--- 
-With Best Regards,
-Andy Shevchenko

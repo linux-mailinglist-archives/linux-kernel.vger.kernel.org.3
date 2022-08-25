@@ -2,164 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD395A16B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7D35A16BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242996AbiHYQac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S241777AbiHYQcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241777AbiHYQa0 (ORCPT
+        with ESMTP id S231437AbiHYQcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:30:26 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE02558C7;
-        Thu, 25 Aug 2022 09:30:24 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27PFnEuC012837;
-        Thu, 25 Aug 2022 16:29:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=wRBT3dYm2V35p9otwxX253NTFyR6yRQnwHAWL933UwE=;
- b=gsfT4lcB6Tm8jleXRg/hmHX/ZAN8npjudwofIUpqVLOmbWFk+9RL+gjm7+FK9Bmt0GTF
- aggjU1ttNs2OjlBydsI9CnNRKKddNO1BUwBemJ31b1HTia2CDZ2sYjmgFUZK6zLyqXnH
- HKyCM7l6uBSHDoNcvyEZSS79Bwp496AMHudlWw5tfIBvrhNd9465EhBfTvSsAFgHzaP7
- hRvwEpAebhOO5GGnTcMmI6td5EHzs+EmeMcz7z+Qvn2/3Bn2ybv3iXZBwUF2yaIUiyLH
- rbILW8VHDBijh5x3sRp21Bifct+kFicVEIAUD3VzYefiI5CyMDd/qlreT5DnFd+9JPS7 lQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j55p25ab5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 16:29:50 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27PFJQBx017022;
-        Thu, 25 Aug 2022 16:29:50 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j5n5pjb72-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Aug 2022 16:29:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TuDyS+oRbE1X7cnHBELGn9wbAEj37UXLORgxrUH1ZhZ3l6WlZEN/19woqzW7b3aHNGsVz4ZpkmR86z7QCjn8WP1CiIv8VF55bNF/1V6e/to4MoNHQfdFh4o/7vlx5hX8WZNY9kMayWw95+pAunxV+XVXkXAmucxn1iUI/4FBlg1DdyyjCASOjviGla3rTQQoARSvd6uAHtzAujo90c05MUzrlZy28rjXPySlYxK5nFL1o/77KQl0Ox8PjE91DXlBqkpzq4ScjsD+7TwfHR3utX40B3wft0RK6d5zQgeOb6XtjaqDA7fRPP07masGQ2w1dVpxJs0Ww6cT+ZtewALuQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wRBT3dYm2V35p9otwxX253NTFyR6yRQnwHAWL933UwE=;
- b=KMuce7mkKYifhyM1TCB2ndQS02mQkKBRY7OnBS8x5KbBh+iSB2kppY+7DLte/VDClXF3H6VsXOizbEtlcW206XVICqTGiyGyMpZ1iv5PfRDy6l77lkGag0N/G4wE0WR+r/I258B+jz4raDtyHJIXesiLXlyn9w6TQkr0i1HjA9USMIGp8/DkrAk1dRQY1SvhBHYku+sKf/uspy/mrnXGFnN+rL3kJwGgBof5ws1KqKHHy65ZJmPJnuptXiFBpK1ogtQahaSNAiL8YhjzhJMqtwR02RTgwO8OmHQwgJ4K35e+OMJsdYslw2mn2WAFSl+FTo9tmDZRVlxd1g6lKaa2jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 25 Aug 2022 12:32:17 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F536B81F3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:32:16 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id jm11so18952997plb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:32:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wRBT3dYm2V35p9otwxX253NTFyR6yRQnwHAWL933UwE=;
- b=YudlGUQYJY3IDfQaK97d9CQWUUulwRIQLzxlG/p+sGuM846gXxtUQ/VHtCYsVUfxpx5JGEuyOQcYM3Ekcw4BhwKDIYB29oZq8v5SX2UoUXBS+pxUc47eW5s7CPEXgRMMElqEplocvzv1GdPkfS1uECS2fKPqIpY33AWd5vIjUVk=
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
- by IA1PR10MB5993.namprd10.prod.outlook.com (2603:10b6:208:3ef::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
- 2022 16:29:47 +0000
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::14cf:1363:8f81:9c81]) by SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::14cf:1363:8f81:9c81%4]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
- 16:29:47 +0000
-From:   Jane Chu <jane.chu@oracle.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "tony.luck@intel.com" <tony.luck@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=sPnypK+omnN4NaKyZT/jJYzqdJLQrrS9NmH3ZYgM+1c=;
+        b=Sd1KVFPrdCZf7Afab7qAt7rAKxXkdSaydhBN2TY7lxwcH7lh11Bb5qE6LQFvcq6y/w
+         u37tdcyA/7+vo5Vjrn/eHyXPULWhbKrRd+PctBVJC7ZnTGGhvBeJE6bOvpFFoNY2Cvdn
+         LXIpnQ69V4lR4u69xO9vty38GUHaJOXxIqp4p7l+E6W8qnlZofexhXDG1AgZQ3mr4C/m
+         MURrPCnnyE7iGf/gb9XMT3RelVphZ32/cB07R/S4Z65Vggk/4KrQ7b+HzDvAMS9SO/kH
+         samVKKG/Mlm6NPLdH8jiIBp/5f9JVx6Dpj5i2EJg3if/IfiRo0ymVvipR1LHbXK8p49m
+         mI4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=sPnypK+omnN4NaKyZT/jJYzqdJLQrrS9NmH3ZYgM+1c=;
+        b=Rdw5qVfyJ+NMRlsJBhtSXK1sNz4RslGHp8BZXPYVB4zXz4iRsCsMcnlrnbH7v79Bzp
+         uu0yFdithM2OMCrnKhZHLCgNx8FyOSDIE+xaEHBNOHgXBVp5yLttrFkYs9kv81ILIxHY
+         FbgIWgwJ3FpVOcb9k6NU+SyUgEqJs7TAISIKeTw/d/ek2/hqNUfOyseBNhFXBrAWjsOe
+         ZTQBMI3EZemGuXCPY5REw6tqEd/Ymge8F2O9SSMJkdrGkVYyayu3yPbwaagZe2iSsoc3
+         OqoSJ/TvsXx6rP1Rz7OO3UJSuRO7UQfWXW0bPltR3KVHi/XXqQBNBVyQyEdQ724b9kTq
+         kp4Q==
+X-Gm-Message-State: ACgBeo1FAPKx+sMV8OW/kCKLRoPZ0bRPOwvqyUkjJrHB+myYd5pWDL91
+        CMnOwRo3EMd7PoBBikLtuDyrFA==
+X-Google-Smtp-Source: AA6agR7mz8cQUwkxL9Bv/hIpB+gTpvIF8B7Hkh4amGYsubylHmdqLgf+o9KxCVhz7JzWeXfZ52Z5nw==
+X-Received: by 2002:a17:90b:4b47:b0:1f7:2e06:5752 with SMTP id mi7-20020a17090b4b4700b001f72e065752mr5520149pjb.187.1661445136082;
+        Thu, 25 Aug 2022 09:32:16 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170903228e00b001728eb339e2sm14983625plh.286.2022.08.25.09.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 09:32:15 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 10:32:12 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Coresight ML <coresight@lists.linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
-Subject: Re: [PATCH v7] x86/mce: retrieve poison range from hardware
-Thread-Topic: [PATCH v7] x86/mce: retrieve poison range from hardware
-Thread-Index: AQHYpqk2x6w5xzWZA026ohxrqJ0Fu6280+EAgAMekwA=
-Date:   Thu, 25 Aug 2022 16:29:47 +0000
-Message-ID: <b3880db6-6731-1d1b-144f-1080a033ad01@oracle.com>
-References: <20220802195053.3882368-1-jane.chu@oracle.com>
- <YwUFlo3+my6bJHWj@zn.tnic>
-In-Reply-To: <YwUFlo3+my6bJHWj@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3e6ccadf-09e5-4889-0821-08da86b706ab
-x-ms-traffictypediagnostic: IA1PR10MB5993:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6zj10/Pp7jAmvpUoCc33FkCMwU0gOaHXAaAp5+oxkhbtSC8Q2U3w3VbB0sEqgdecq5JZxhr1JJglhXXSjDf7j8Anla+2xrnRmJTAVmzHmQysEHvykDaTgX6trH8zH+yfLiTEtaYTPTSTp/ITgypuppsKlQD4PtlJ0RXhX2z0uQSj27ZfRtkLm0Sy/V2ukhaYUM//KUDszPo7xnsk31VaiI4xlbFA9HvcyYfeCyBDc/dNShY3efn8n/v4PP5Yta50XCrW7LCrypyKim2R3Sx1NkfhShypy7nhvkl2ySdwDty2w5IOv3ro+aJ2w+Q+L8Lp8iaAWv71kRntATGekTrP80xkLMAcIpH5ynUz6PQ2nzzWIUPamCx6KKVXSHXsy5gvblTxkssFHq39/RMy+ikKW6XbwwcICx1U6HjeuxvjPFietEV91t61YxvFoCtsSpJqj8rIFNS8+sVMT4bRi4Uq6f6jl9gaIhfTZ+mVypVA696qqqDjfbEpNjzSwWbfvQoEF4kHCRFQuXCbC5CgwGqzL27lawONi1kIBcJo2gUb6XtibNGynpDrJ4wQmY4pUxq5a7pfO5TxBMn3YvzU2b7x55pqwjn1fv61Ml9yqeSBmL1LXM5RORdLBSXHxI8gsZX+xTGoul67Q4cyspxu7fZWHpWzu2YRhhs56WUr3Ejx83DVUoP2ijMjYiyKoCee5BiKrbGqWGol0J0RVmc/cGB6lIRaZW9cGtA5FvwB1qdJczKols7rBzCZxUpL5gPphyYh8SpkPET86+NdVEzq7QqPO3OJplZ9H6QvMZv/7dumQ16U0IbanZ1GuTZtz3vX6aCKpHeJinWMavqhL/2kwTxo/Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(376002)(366004)(136003)(396003)(2906002)(83380400001)(6512007)(53546011)(26005)(2616005)(186003)(6506007)(86362001)(31696002)(38070700005)(38100700002)(36756003)(122000001)(6916009)(54906003)(6486002)(7416002)(8936002)(76116006)(5660300002)(44832011)(66946007)(41300700001)(316002)(91956017)(66556008)(66446008)(71200400001)(478600001)(66476007)(64756008)(31686004)(8676002)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MTVpVW11bUU4SWY4bXp6S09TVmRJcmtRWXU5Z2g0OThCN09Zd21PZHg3eUNy?=
- =?utf-8?B?OUxmOTczYWFTTG0zc3BtUXp4eDhpZkVFL2RoeC95aXAwSzE3RXczdkhIMVQ5?=
- =?utf-8?B?YnlFckZlTVpTSXhESXZ2Uy9WeWlFVEg0VmJDakVuSDJ5TXNaOWpiYkZzRU9S?=
- =?utf-8?B?SWtzaXhSVUh0eGlUQVZhd0RCTnc0M2trNEQxRFM5Unk2R016SVd1MXgrMHlz?=
- =?utf-8?B?UWM5Mk5GRExyaEdCcGtpS0FQeHYvN2x0a2pkQUlPWDdodFNrSWhsU1h1a0sr?=
- =?utf-8?B?UFpqQzY5ZklqWEdGV3Y4a1BPemxGWnJWdmo3V1l0YnhtdExrTWhvSXVkNjNl?=
- =?utf-8?B?UHVNK1ROZVBjSGRCSlZFdWd6TlB0RmdsdUFDNWdxdExjTHRTLytsdFFzRVVY?=
- =?utf-8?B?Y1NvSHFUWVVTY05qRjlSQVpzZWR2YUE3eDlldzNiOUY3OTBHVGNJaUoyK09F?=
- =?utf-8?B?UEM5dGlJSHhGZVFJRitBZ3dNK0d3WW8zOUZ3S2VqQzJiMXRpblBJR1pGRTdU?=
- =?utf-8?B?cU5hWUd5SmV6N3ZCSzVaUGZyRTRtcitzMkhYZ0gzQ1BidWpSS1VrRXE1d2xW?=
- =?utf-8?B?aTdDYUFGL3ZoMHphOEp2cGJKLzBJZjBhWFFZY2huazg1aXpSRFpWNGk2cXlQ?=
- =?utf-8?B?ZEUzV3dWeUdQTEpncFU3NVIrNWQvTFZDM3VTeE1SOFo1Vm80bXNuRGZ3M2xM?=
- =?utf-8?B?TURMRTFDb0hBYjhEVjdyYmFyMUlOK0FwUitseFFveVQ1UlBtRkRkUC81THdt?=
- =?utf-8?B?Y1JNckp6bjlPQjgrenRYOEt6MGEyYVZyZjNrMStnc3hRcUNoNU9tZ1RreGVQ?=
- =?utf-8?B?dHNSaG8zTG95RCswT2syWTZibFJWYURIWE9INzlDK1FZV1pLUG5odytUSjFO?=
- =?utf-8?B?bUlYM3hRR25WYm1kazl3MmN6dExEWktMdmc0TEhrUzAzNDFrSnBaelNzVDNz?=
- =?utf-8?B?eldtNi9vaTVsbHZrS0tJQjFwMTBORXh5SHY2N1RYKzdhYnJWZzFCTk4vR0JZ?=
- =?utf-8?B?U1NaNjFpeUd5Tmh0SzJucURuZHBFTFZOZnBOYzVLTHdSNk1GejFsYkNOTkd2?=
- =?utf-8?B?ZTZBRkNvSGpkVFN3Y3FHL0RLTS9rdnlvVENSYW44NlFEdjdwb0N0Skk1R1Vh?=
- =?utf-8?B?MStVZGxjWkNlcENrQzd6L1MxR0hVYktZUXk0aFZNS1pMb2YrMStqR0RBMkR3?=
- =?utf-8?B?eUlVamk4YWJHL3pKMzlTVGNzZUg0OTZJZTQvMHF1VmZTOEh0ajJQaTRrcGJn?=
- =?utf-8?B?My9nVkJJZDZIRE5OKzVJaDdGak9nMWNuSklrNElBZEg1cVNJVHZUN3ZoSVha?=
- =?utf-8?B?Wkdya1hpZks2T1pTeCt4R0trMGs2Y0dCYlZBY01naUxMV01MSnhMdkpSUG1J?=
- =?utf-8?B?c05nNFRINXFibU9OWE04VHJYUWpFYUNwckJtRzkraGFHV1dJZ1dXUEJsb0sx?=
- =?utf-8?B?OGJlcnpUWDhpZ0QvOXJXTjF1RnU3SlBUK2ZjUDUvdkJUcDl4VDd2VVpGVzND?=
- =?utf-8?B?U3BmU01qZ2RKNFZidDRJZXFSdksvYWJYUUNKeVYyU3NBcytVbTlXUHQ1QVVU?=
- =?utf-8?B?U1Ixd084MkVBMk53UElwSmNIcW4vODNtQURBcVF0N2swRTNQSFUyQ3hIK1FF?=
- =?utf-8?B?azVHbURKaWZ5SitibS9Ha09HOVMyTXI5MXZEL21zWVd3b0o5NFJmZHl4aEt3?=
- =?utf-8?B?MklyNitUVmhDd0xzczI3dFlKUWhOSjVpSm5nUTJwYlpBY3l0ellreTlzT1g2?=
- =?utf-8?B?b0k0VTBDUFg1anpYM2RhcWpxTTNlZVlBUlpQclRPc3VSeW5PS2k4c2lWTzBn?=
- =?utf-8?B?dWsvZk5ZMGl5UXU1aXVZeEt2SlZwM0FJdzhyTXRKL0pOczdEVFlGTmh1TFlo?=
- =?utf-8?B?UTNKYUxueHFLakNoRHJPR0JJKzMyeFVvMnRYMXVNQXlrd25WcUw5b1lPbzNP?=
- =?utf-8?B?UlNXa2ZtWTZzUWxmZGwzMzhZU0tuNVZGRlVpWWNELzU0V3JiTVBKbG9kYlBw?=
- =?utf-8?B?Q0tpUFpjYVBadTBTcGtlTTdXZC9kejN4Tm9iTVNJT0k1emRVS0lOZmszaCtF?=
- =?utf-8?B?anVWZDNJbnA1a1JBZlVXU01meTVxNDhmS3JhU2JqMHBiWWdWdXdOWU9uYndI?=
- =?utf-8?Q?sFJ4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1D7E8DAC61E7A945BFECC50FE02CC02C@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: coresight: Add 'power-domains'
+ property
+Message-ID: <20220825163212.GA1909152@p14s>
+References: <20220721212718.1980905-1-robh@kernel.org>
+ <CAL_JsqJCGPSxYb5CqiEM9YAmJjQE4wp_0HCWgBSqPDBBAJRMBA@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e6ccadf-09e5-4889-0821-08da86b706ab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2022 16:29:47.4887
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ELLphqJggKSjEou3Tdb24vnOK2QHJxJ9oc1gYqLWdc17wsf1UzmUYkP4TVMZD00boR3dB2XJ69MFKkjMHwR66A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB5993
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-25_08,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 adultscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208250062
-X-Proofpoint-ORIG-GUID: vf2HcPbHzUHpeb8MxAsleuN6Ed1NoNQt
-X-Proofpoint-GUID: vf2HcPbHzUHpeb8MxAsleuN6Ed1NoNQt
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqJCGPSxYb5CqiEM9YAmJjQE4wp_0HCWgBSqPDBBAJRMBA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -167,26 +82,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gOC8yMy8yMDIyIDk6NTEgQU0sIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBB
-dWcgMDIsIDIwMjIgYXQgMDE6NTA6NTNQTSAtMDYwMCwgSmFuZSBDaHUgd3JvdGU6DQo+PiBXaXRo
-IENvbW1pdCA3OTE3ZjljZGI1MDMgKCJhY3BpL25maXQ6IHJlbHkgb24gbWNlLT5taXNjIHRvIGRl
-dGVybWluZQ0KPj4gcG9pc29uIGdyYW51bGFyaXR5IikgdGhhdCBjaGFuZ2VkIG5maXRfaGFuZGxl
-X21jZSgpIGNhbGxiYWNrIHRvIHJlcG9ydA0KPj4gYmFkcmFuZ2UgYWNjb3JkaW5nIHRvIDFVTEwg
-PDwgTUNJX01JU0NfQUREUl9MU0IobWNlLT5taXNjKSwgaXQncyBiZWVuDQo+PiBkaXNjb3ZlcmVk
-IHRoYXQgdGhlIG1jZS0+bWlzYyBMU0IgZmllbGQgaXMgMHgxMDAwIGJ5dGVzLCBoZW5jZSBpbmpl
-Y3RpbmcNCj4+IDIgYmFjay10by1iYWNrIHBvaXNvbnMgYW5kIHRoZSBkcml2ZXIgZW5kcyB1cCBs
-b2dnaW5nIDggYmFkYmxvY2tzLA0KPj4gYmVjYXVzZSAweDEwMDAgYnl0ZXMgaXMgOCA1MTItYnl0
-ZS4NCj4gDQo+IFdoYXQgSSdtIG1pc3NpbmcgZnJvbSB0aGlzIHRleHQgaGVyZSBpcywgd2hhdCAq
-aXMqIHRoZSBtY2UtPm1pc2MgTFNCDQo+IGZpZWxkIGluIGh1bWFuIHNwZWFrPyBXaGF0IGRvZXMg
-dGhhdCBmaWVsZCBkZW5vdGU/DQo+IA0KPiBXaGF0IGVmZmVjdCBkb2VzIHRoYXQgZmllbGQgaGF2
-ZSBvbiBlcnJvciBpbmplY3Rpb24NClRvbnkgaGFzIHJlcGxpZWQuDQoNCj4gDQo+IEFuZCBzbyBv
-bi4NCj4gDQo+PiBEYW4gV2lsbGlhbXMgbm90aWNlZCB0aGF0IGFwZWlfbWNlX3JlcG9ydF9tZW1f
-ZXJyb3IoKSBoYXJkY29kZQ0KPj4gdGhlIExTQiBmaWVsZCB0byBQQUdFX1NISUZUIGluc3RlYWQg
-b2YgY29uc3VsdGluZyB0aGUgaW5wdXQNCj4+IHN0cnVjdCBjcGVyX3NlY19tZW1fZXJyIHJlY29y
-ZC4gIFNvIGNoYW5nZSB0byByZWx5IG9uIGhhcmR3YXJlIHdoZW5ldmVyDQo+PiBzdXBwb3J0IGlz
-IGF2YWlsYWJsZS4NCj4gDQo+IFJlbHkgb24gaGFyZHdhcmU/IFlvdSdyZSBjaGFuZ2luZyB0aGlz
-IHRvIHJlbHkgb24gd2hhdCB0aGUgZmlybXdhcmUNCj4gcmVwb3J0cy4NCj4gDQo+IFRoYXQgbWVt
-X2VyciB0aGluZyBjb21lcyBmcm9tIGEgQklPUyB0YWJsZSBBRkFJQ1QuDQo+IA0KDQpXb3VsZCBm
-aXggdGhlIGNvbW1lbnQgdG8gaW5kaWNhdGUgInJlbHlpbmcgb24gZmlybXdhcmUiIGhlbHA/DQpJ
-cyB0aGVyZSBvdGhlciBjb25jZXJuPw0KDQp0aGFua3MhDQotamFuZQ0KDQo+IC4uLg0KPiANCj4g
-VGh4Lg0KPiANCg0K
+On Wed, Aug 24, 2022 at 02:04:31PM -0500, Rob Herring wrote:
+> On Thu, Jul 21, 2022 at 4:27 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > Coresight components may be in a power domain which is the case for the Arm
+> > Juno board. Allow a single 'power-domains' entry for Coresight components.
+> 
+> Ping.
+
+Somehow this fell through the cracks.  I've applied both patches.
+
+Thanks,
+Mathieu
+
+> 
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml  | 3 +++
+> >  Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml   | 3 +++
+> >  .../devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml  | 3 +++
+> >  .../bindings/arm/arm,coresight-dynamic-replicator.yaml         | 3 +++
+> >  Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml | 3 +++
+> >  Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml   | 3 +++
+> >  .../devicetree/bindings/arm/arm,coresight-static-funnel.yaml   | 3 +++
+> >  .../bindings/arm/arm,coresight-static-replicator.yaml          | 3 +++
+> >  Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml   | 3 +++
+> >  Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml   | 3 +++
+> >  Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml  | 3 +++
+> >  .../devicetree/bindings/arm/arm,embedded-trace-extension.yaml  | 3 +++
+> >  12 files changed, 36 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
+> > index d783d9276124..2bae06eed693 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
+> > @@ -61,6 +61,9 @@ properties:
+> >      maxItems: 1
+> >      description: Address translation error interrupt
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    in-ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >      additionalProperties: false
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+> > index 72ffe4d1e948..0c5b875cb654 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-cti.yaml
+> > @@ -98,6 +98,9 @@ properties:
+> >        base cti node if compatible string arm,coresight-cti-v8-arch is used,
+> >        or may appear in a trig-conns child node when appropriate.
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    arm,cti-ctm-id:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >      description:
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+> > index 1eeedc22857c..44a1041cb0fc 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+> > @@ -54,6 +54,9 @@ properties:
+> >        - const: apb_pclk
+> >        - const: atclk
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    in-ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
+> > index a26ed9214e00..03792e9bd97a 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
+> > @@ -54,6 +54,9 @@ properties:
+> >        - const: apb_pclk
+> >        - const: atclk
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    qcom,replicator-loses-context:
+> >      type: boolean
+> >      description:
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
+> > index fd06ede26ceb..90679788e0bf 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
+> > @@ -54,6 +54,9 @@ properties:
+> >        - const: apb_pclk
+> >        - const: atclk
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    in-ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >      additionalProperties: false
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+> > index e0377ce48537..01200f67504a 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+> > @@ -73,6 +73,9 @@ properties:
+> >        - const: apb_pclk
+> >        - const: atclk
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    arm,coresight-loses-context-with-cpu:
+> >      type: boolean
+> >      description:
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
+> > index b9da30ab9ccd..06a1d346982c 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
+> > @@ -27,6 +27,9 @@ properties:
+> >    compatible:
+> >      const: arm,coresight-static-funnel
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    in-ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+> > index 66ee97370fb2..5178e7fdff0b 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+> > @@ -27,6 +27,9 @@ properties:
+> >    compatible:
+> >      const: arm,coresight-static-replicator
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    in-ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >      additionalProperties: false
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+> > index 905008faa012..378380c3f5aa 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+> > @@ -61,6 +61,9 @@ properties:
+> >        - const: apb_pclk
+> >        - const: atclk
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    out-ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >      additionalProperties: false
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+> > index 3463b6e53aef..e0b88a71356a 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+> > @@ -55,6 +55,9 @@ properties:
+> >        - const: apb_pclk
+> >        - const: atclk
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    arm,buffer-size:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >      deprecated: true
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+> > index e80d48200c37..61a0cdc27745 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+> > @@ -54,6 +54,9 @@ properties:
+> >        - const: apb_pclk
+> >        - const: atclk
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    in-ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >      additionalProperties: false
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml b/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
+> > index 5f07fb166c56..108460627d9a 100644
+> > --- a/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
+> > @@ -33,6 +33,9 @@ properties:
+> >        Handle to the cpu this ETE is bound to.
+> >      $ref: /schemas/types.yaml#/definitions/phandle
+> >
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> >    out-ports:
+> >      description: |
+> >        Output connections from the ETE to legacy CoreSight trace bus.
+> > --
+> > 2.34.1
+> >

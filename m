@@ -2,166 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA195A17DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FBC5A17E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 19:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241679AbiHYRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 13:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S240579AbiHYRUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 13:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234722AbiHYRT1 (ORCPT
+        with ESMTP id S241200AbiHYRUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 13:19:27 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF25BC117
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:19:26 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x23so19084051pll.7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:19:26 -0700 (PDT)
+        Thu, 25 Aug 2022 13:20:06 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A5BB4AB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:20:03 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id m5so18463390lfj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=mFe2KwaxwJR3NcWllcHwQ32yWI6VSKE/eyvGDoK+eaY=;
-        b=STPuE0YM+J1mhoq+p8C0SKDm/3ws58TPBadqVU243954KOTgrrGPYBk4/2K9U0vix9
-         w1CvpFgFzYGjOuSJLB1d/q3b+bC5a1lNHbcEzmWtGSHwvDbEIqzm+diiMXBMx8EM+Brn
-         A61cQIAbd9avPqDfp0HQUMUGURidRWCskVpCE=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3RxVSxGedQ4BVA173MTZ77OwZd2QHzVXFfeNvoFT8hM=;
+        b=NIoZpAJR1O0BB7LoWxrGL/PLQGtbk7Re/ajyAo/TVFdR513UEmFHV2F0/NQHYT4ek1
+         zF4xCY5ATX5lCpaS8SDzhawFNO9Nf/xk5a3KcXEJW8NFyEEFzwkv8QQ3E93vJv1hC7Fw
+         wS3gYaac8w74pHP9zHqb+76JVP7+60qoJhQ6DO4imMQZjkPwewvJ/ioaS9aYZpsZszp2
+         HrHvaQXauZ5clGc3/gQEsA/aA3/2TOoEZpcfRA+pzCxr1DajVeCe5aTIb0uXjqiCmE3J
+         2Dy3RU/mA2141UpS1txR2PsBkba9XpUNwW7yEhAufXwLviJCoA1sQrpqln6V1veVeUkn
+         dIoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=mFe2KwaxwJR3NcWllcHwQ32yWI6VSKE/eyvGDoK+eaY=;
-        b=1ApHm2WybZoRP6ggMtwHCTSXkyWwAtWzH5hYy4htJz4b8PsA7vqENFtMuYvkNxaD+G
-         wiC9Lf1lMF8MQU1GYmKnRTOuqnrRjKl8gD+cL/wFgtOB5/wj3iJWXiqMiFYr5q0KkV6v
-         3SuWo4H7wPXuTHACbgR0ufBXQHohkuEX/9l5S+kZdar/xfWyg2bmkVuYn0Wkmimqqe9W
-         vKCe8NWo5PlJpsPVx1ZdNAqZXh01OrmVOEu/lH+iP3DAjnMnL0IR77P5yRqQaaF/tTpW
-         wl3qr1ow5t9Ejnb5bRusGeOzQlKbDGtixXKacG41i69iNOBcvYfZM9EMcL5uS27x7DQ1
-         bHiw==
-X-Gm-Message-State: ACgBeo3p2Gb2YjWa6VgP2XTkS0UJikNEYChzF+gYYMTnVVNA6S2XaEya
-        3pEZT+gMAsoyW1BZqQURm6gp/A==
-X-Google-Smtp-Source: AA6agR6urHSapvKyqWO06hiE3FKMf29ktVS2o8CjEoA/nx0mmigoPwwQu+37kTHAhBnuGG3scX3Ukg==
-X-Received: by 2002:a17:903:22c9:b0:173:11ec:61ff with SMTP id y9-20020a17090322c900b0017311ec61ffmr20058plg.23.1661447965612;
-        Thu, 25 Aug 2022 10:19:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f14-20020a65628e000000b0042b66abf05asm728863pgv.8.2022.08.25.10.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 10:19:24 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 10:19:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mchehab@kernel.org,
-        chris@chris-wilson.co.uk, matthew.auld@intel.com,
-        thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
-        nirmoy.das@intel.com, airlied@linux.ie, daniel@ffwll.ch,
-        andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
-        mauro.chehab@linux.intel.com,
-        intel-gfx-trybot@lists.freedesktop.org
-Subject: Re: [PATCH v9 2/8] util_macros: Add exact_type macro to catch type
- mis-match while compiling
-Message-ID: <202208250953.A71FEE45E@keescook>
-References: <20220824084514.2261614-1-gwan-gyeong.mun@intel.com>
- <20220824084514.2261614-3-gwan-gyeong.mun@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3RxVSxGedQ4BVA173MTZ77OwZd2QHzVXFfeNvoFT8hM=;
+        b=dB3AanoqNyOHDL6tOrrVFYvbLlDGoyI6kRj4BnXoktVXwcP3CQMT1RzVlY/MScS0np
+         +tLNWPVsZVOGeWDrSyccIHmsJDMcgty5t71UTiQlKLtXCDIWsYbhTJX/nMvFujzOm8az
+         jB/VeOkwQ330gDPwzzFWy2Y3s15AmH+fImg2dofgbDsLe82jiLg+sQoqP3aUHg53BDxX
+         TAfTv4IDkvGl0nw0+ieLmf3/cG77trXjrVmYhwCJoRVcv4LUOiMrTri4vS7c+4F9NQY8
+         amAYOwwXs6wymTdf534IYBBU5NlRG/D5hT5tGthaujP8btgmoMgYTXE1OOfS8Y+135ZL
+         JTlg==
+X-Gm-Message-State: ACgBeo0RabljsTGcV35S/+yJMTncXgjkdGsdWJjriAY0i09YMv7+raLl
+        Gp6yhFAhIbs7JcsxaqEs5KZI1btG6hOIiF+/zodbUA==
+X-Google-Smtp-Source: AA6agR67zaeSCHox9rh4ibHqzzyxkXfCRBtY5Nv6Wc5e77Q+sHxQghMJNgEvmuNzTifZrLzcJDcchuX54X2nH6C7oRo=
+X-Received: by 2002:a05:6512:33d6:b0:492:c423:1672 with SMTP id
+ d22-20020a05651233d600b00492c4231672mr1516211lfg.432.1661448001581; Thu, 25
+ Aug 2022 10:20:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220824084514.2261614-3-gwan-gyeong.mun@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220825091517.30842-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220825091517.30842-1-lukas.bulwahn@gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 25 Aug 2022 10:19:49 -0700
+Message-ID: <CAKwvOdkY=ye4PKi8KwP-ux73pwZs+J_Oq3wR7ep8S81=aCWtqA@mail.gmail.com>
+Subject: Re: [PATCH] scripts: remove obsolete gcc-ld script
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        "H . Peter Anvin" <hpa@linux.intel.com>,
+        linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 05:45:08PM +0900, Gwan-gyeong Mun wrote:
-> It adds exact_type and exactly_pgoff_t macro to catch type mis-match while
-> compiling. The existing typecheck() macro outputs build warnings, but the
-> newly added exact_type() macro uses the BUILD_BUG_ON() macro to generate
-> a build break when the types are different and can be used to detect
-> explicit build errors.
-> 
-> v6: Move macro addition location so that it can be used by other than drm
->     subsystem (Jani, Mauro, Andi)
-> 
-> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Cc: Matthew Auld <matthew.auld@intel.com>
-> Cc: Nirmoy Das <nirmoy.das@intel.com>
-> Cc: Jani Nikula <jani.nikula@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
++ Jiri in case this needs to be carried downstream.
+
+On Thu, Aug 25, 2022 at 2:15 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> Since commit 8564ed2b3888 ("Kbuild, lto: Add a gcc-ld script to let run gcc
+> as ld") in 2014, there was not specific work on this the gcc-ld script
+> other than treewide clean-ups.
+>
+> There are no users within the kernel tree, and probably no out-of-tree
+> users either, and there is no dedicated maintainer in MAINTAINERS.
+>
+> Delete this obsolete gcc-ld script.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+No callers in-tree; happy to bring it back though should there later
+be. Thanks for the patch.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
->  include/linux/util_macros.h | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/include/linux/util_macros.h b/include/linux/util_macros.h
-> index 72299f261b25..b6624b275257 100644
-> --- a/include/linux/util_macros.h
-> +++ b/include/linux/util_macros.h
-> @@ -2,6 +2,9 @@
->  #ifndef _LINUX_HELPER_MACROS_H_
->  #define _LINUX_HELPER_MACROS_H_
->  
-> +#include <linux/types.h>
-> +#include <linux/bug.h>
-> +
->  #define __find_closest(x, a, as, op)					\
->  ({									\
->  	typeof(as) __fc_i, __fc_as = (as) - 1;				\
-> @@ -38,4 +41,26 @@
->   */
->  #define find_closest_descending(x, a, as) __find_closest(x, a, as, >=)
->  
-> +/**
-> + * exact_type - break compile if source type and destination value's type are
-> + * not the same
-> + * @T: Source type
-> + * @n: Destination value
-> + *
-> + * It is a helper macro for a poor man's -Wconversion: only allow variables of
-> + * an exact type. It determines whether the source type and destination value's
-> + * type are the same while compiling, and it breaks compile if two types are
-> + * not the same
-> + */
-> +#define exact_type(T, n) \
-> +	BUILD_BUG_ON(!__builtin_constant_p(n) && !__builtin_types_compatible_p(T, typeof(n)))
+> If there are no objections, I would like to get this patch included
+> through the kbuild tree.
+>
+> Masahiro-san, please pick this patch.
+>
+>  scripts/gcc-ld | 30 ------------------------------
+>  1 file changed, 30 deletions(-)
+>  delete mode 100755 scripts/gcc-ld
+>
+> diff --git a/scripts/gcc-ld b/scripts/gcc-ld
+> deleted file mode 100755
+> index 997b818c3962..000000000000
+> --- a/scripts/gcc-ld
+> +++ /dev/null
+> @@ -1,30 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -# run gcc with ld options
+> -# used as a wrapper to execute link time optimizations
+> -# yes virginia, this is not pretty
+> -
+> -ARGS="-nostdlib"
+> -
+> -while [ "$1" != "" ] ; do
+> -       case "$1" in
+> -       -save-temps|-m32|-m64) N="$1" ;;
+> -       -r) N="$1" ;;
+> -       -[Wg]*) N="$1" ;;
+> -       -[olv]|-[Ofd]*|-nostdlib) N="$1" ;;
+> -       --end-group|--start-group)
+> -                N="-Wl,$1" ;;
+> -       -[RTFGhIezcbyYu]*|\
+> ---script|--defsym|-init|-Map|--oformat|-rpath|\
+> --rpath-link|--sort-section|--section-start|-Tbss|-Tdata|-Ttext|\
+> ---version-script|--dynamic-list|--version-exports-symbol|--wrap|-m)
+> -               A="$1" ; shift ; N="-Wl,$A,$1" ;;
+> -       -[m]*) N="$1" ;;
+> -       -*) N="-Wl,$1" ;;
+> -       *)  N="$1" ;;
+> -       esac
+> -       ARGS="$ARGS $N"
+> -       shift
+> -done
+> -
+> -exec $CC $ARGS
+> --
+> 2.17.1
+>
 
-Maybe use __same_type() here instead of open-coded
-__builtin_types_compatible_p()? Also, IIUC, currently coding style
-advise is to use _Static_assert when possible over BUILD_BUG_ON for
-error message readability.
-
-This macro has a trap-door for literals, yes?
-i.e.  exact_type(pgoff_t, 5) will pass?
-
-I also note that this is very close to the really common (and open-coded)
-test scattered around the kernel already (BUILD_BUG_ON(__same_type(a,
-b))), so I think it's good to get a macro defined for it, though I'm not
-sure about the trap door test. Regardless, I'd like to bikeshed the name
-a bit; I think this should be named something a bit more clear about
-what happens on failure. Perhaps: assert_type()? Or to capture the
-trapdoor idea, assert_typable()?
-
-#define assert_type(t1, t2)	_Static_assert(__same_type(t1, t2))
-#define assert_typable(t, n)	_Static_assert(__builtin_constant_p(n) ||
-					       __same_type(t, typeof(n))
-
-> +
-> +/**
-> + * exactly_pgoff_t - helper to check if the type of a value is pgoff_t
-> + * @n: value to compare pgoff_t type
-> + *
-> + * It breaks compile if the argument value's type is not pgoff_t type.
-> + */
-> +#define exactly_pgoff_t(n) exact_type(pgoff_t, n)
-
-Why specialize this? Just use assert_typable(pgoff_t, n) in the other
-patches? It's almost the same amount to write. :)
 
 -- 
-Kees Cook
+Thanks,
+~Nick Desaulniers

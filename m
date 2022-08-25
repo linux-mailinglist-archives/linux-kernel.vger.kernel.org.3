@@ -2,140 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BCF5A09B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1945A09B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237610AbiHYHMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S238122AbiHYHMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237659AbiHYHLp (ORCPT
+        with ESMTP id S237655AbiHYHLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 Aug 2022 03:11:45 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2215B07B;
-        Thu, 25 Aug 2022 00:11:34 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id 2so17794917pll.0;
-        Thu, 25 Aug 2022 00:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=oTpPF3Aix7VclJ3dXzlNmbBjMMwsnWz3DKrKPEfxiQs=;
-        b=Qf7OX+zLG/7Oqll9BK+bZUXamvgC85QN4W56Sz0Ea2fYSXcQgziGp2AZ+Z7BUe/p1c
-         kV+dsA365zeJDhVdFrpEvJUDe7kIK58TEUh8nIwrSxssURRv9/h+ZaJ/tpYEboFFyYpH
-         iD65XWOeU+xLw7RNA9fpwEhBKh2c1QGgYTKTwzw/haxEuzpLouVKekcqY11B3390kanD
-         SqdfULKZ9+jX6dZH3IEVyExO4PVuhS2zIzGKno5YnWSwqlcJ3wtLArJJJksH9rT1VmzE
-         2586/H49VTSIosSwlO/1RGm1I3asDeHCtHo+GOJUr6Z3lBK/6j0CzwVeZWvwqZx5WIwx
-         doZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=oTpPF3Aix7VclJ3dXzlNmbBjMMwsnWz3DKrKPEfxiQs=;
-        b=wrsafaPmbPv23IkZwFW8hcbCNhozehcshFe8IG0k1Bm4Qa3HBTCXSH/VLlj40w4+YA
-         s+RbZd3J8Y22isIVC7UCsD87xxp9AKoz2ej71TZR/UuxQndrQsq9D/YTFOTFw3ANTd16
-         sSOCadAHwUqcuLsC5cUSry6yiFynchPBW8ckhlnIeP7PHVOR9jbPToj9KDmsgrtyXBoP
-         p2vaQSSNj6kDzGJ7ppA0FUwVTm4Laqx+Z2QokLHEklyWMjltjfZDeQob6rj/zb5Lla6h
-         d5EMH3v0CLHug7a8rHmktmj54OpphX13nZtfYBsXSl5Q+qH7glZS1EuTukxXNx+fiS1o
-         HQRw==
-X-Gm-Message-State: ACgBeo2z6PWkODRBV/qqR9MRMIdDbcWal/lsllOa1RAhHjC05p/2jtYU
-        2IWO5YhBkE0FRUC5YKRho73w/dmfYNU2mEwT7lhLoed4c0aiDQ==
-X-Google-Smtp-Source: AA6agR4ZK0b7JGqb3gNnQ0kc+Mxc26x5Tyxqo+Wb8Ot6mgD+DJYcCAk+gYP+dGMh7s8XhA133xWwhPMmPFEC94WJgH0=
-X-Received: by 2002:a17:90b:1803:b0:1fb:45e2:5d85 with SMTP id
- lw3-20020a17090b180300b001fb45e25d85mr12555863pjb.163.1661411493324; Thu, 25
- Aug 2022 00:11:33 -0700 (PDT)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3B174DED;
+        Thu, 25 Aug 2022 00:11:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6752A33E05;
+        Thu, 25 Aug 2022 07:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661411490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hYk1CnPdLO2LHUgZMvVL7L3R4XtMQBeqSHHiwG6UZ2c=;
+        b=mb80c827eT4ohCJRwod+u5TlWnmDrOa+OXQFltf40zxZcQ9EV/9EnVfTCq0wR7IMmpIjwJ
+        Oy6N/DxUJHFZwSWC4gTIrkMREpQ0U5NrD7PYGXRqP3ztTaT65HulDttQHfoIfiTKm7lo6k
+        AVxMM3Iaz/tFAwPrhJxdVsaFJHje/HU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 463F213A47;
+        Thu, 25 Aug 2022 07:11:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9XndDqIgB2OsRwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 25 Aug 2022 07:11:30 +0000
+Date:   Thu, 25 Aug 2022 09:11:29 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     lizhe.67@bytedance.com
+Cc:     akpm@linux-foundation.org, vbabka@suse.cz, mhiramat@kernel.org,
+        keescook@chromium.org, Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
+        rostedt@goodmis.org, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lizefan.x@bytedance.com, yuanzhu@bytedance.com
+Subject: Re: [PATCH v3] page_ext: introduce boot parameter 'early_page_ext'
+Message-ID: <YwcgoZfw4RhZ1Bl6@dhcp22.suse.cz>
+References: <20220825063102.92307-1-lizhe.67@bytedance.com>
 MIME-Version: 1.0
-From:   =?UTF-8?B?157Xmdeb15DXnCDXqdeY16jXkNeV16E=?= 
-        <mdstrauss91@gmail.com>
-Date:   Thu, 25 Aug 2022 10:11:22 +0300
-Message-ID: <CAAMXCFm12u-v1-AZyYM-hXtTJ1YwFyL26gM8RiONDfMs4+U=WQ@mail.gmail.com>
-Subject: ST ST95HF DRIVER security bug
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825063102.92307-1-lizhe.67@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-I found a small security bug in the ST95HF driver in Linux kernel .
-Thought it is responsible to report it to you guys so you we can patch it up.
-CVE ID was requested,  when it is reserved I will update.
-I want to thank Krzysztof Kozlowski for helping me out.
+On Thu 25-08-22 14:31:02, lizhe.67@bytedance.com wrote:
+> From: Li Zhe <lizhe.67@bytedance.com>
+> 
+> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
+> we call page_ext_init() after page_alloc_init_late() to avoid some panic
+> problem. It seems that we cannot track early page allocations in current
+> kernel even if page structure has been initialized early.
+> 
+> This patch introduce a new boot parameter 'early_page_ext' to resolve this
+> problem. If we pass it to kernel, function page_ext_init() will be moved
+> up and feature 'deferred initialization of struct pages' will be disabled.
 
-ST ST95HF DRIVER
-ST95HF is an integrated transceiver for NFC made by ST,
-Buffer overflow can be triggered by the attacker by providing
-malicious size in one of the SPI receive registers.
+will be disabled to initialize the page allocator early and prevent from
+the OOM mentioned above.
 
-Details:
-```jsx
-unsigned char st95hf_response_arr[2];
-ret = st95hf_spi_recv_response(&st95context->spicontext,
-      st95hf_response_arr);
-...
+> It can help us to catch early page allocations. This is useful especially
+> when we find that the free memory value is not the same right after
+> different kernel booting.
+> 
+> Changelogs:
+> 
+> v1->v2:
+> - use a cmd line parameter to move up function page_ext_init() instead of
+>   using CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> - fix oom problem[1]
+> 
+> v2->v3:
+> - make adjustments suggested by Michal Hocko
+> 
+> v1 patch: https://lore.kernel.org/lkml/Yv3r6Y1vh+6AbY4+@dhcp22.suse.cz/T/
+> v2 patch: https://lore.kernel.org/lkml/20220824065058.81051-1-lizhe.67@bytedance.com/T/
+> 
+> [1]: https://lore.kernel.org/linux-mm/YwHmXLu5txij+p35@xsang-OptiPlex-9020/
 
-/* Support of long frame */
-if (receivebuff[0] & 0x60)
-len += (((receivebuff[0] & 0x60) >> 5) << 8) | receivebuff[1];
-else
-len += receivebuff[1];
+the changelog is usually not part of the changelog and goes under ---
+> 
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
 
-/* Now make a transfer to read only relevant bytes */
-tx_takedata.rx_buf = &receivebuff[2];
-tx_takedata.len = len - 2;
+I still have few comments below before I am going to ack. But this looks
+much better already.
 
-spi_message_init(&m);
-spi_message_add_tail(&tx_takedata, &m);
-```
-Driver sets a buffer of 2 bytes for the input bytes but actually
-allows the driver to overflow it with any valid SPI message (short or
-long frame) in the tx_takedata stage.
-It seems like a mistake, but i may be missing something and i am totally wrong.
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
+>  include/linux/page_ext.h                        | 11 +++++++++++
+>  init/main.c                                     |  6 +++++-
+>  mm/page_alloc.c                                 |  2 ++
+>  mm/page_ext.c                                   | 12 ++++++++++++
+>  5 files changed, 36 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index d7f30902fda0..7b5726828ac0 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1471,6 +1471,12 @@
+>  			Permit 'security.evm' to be updated regardless of
+>  			current integrity status.
+>  
+> +	early_page_ext [KNL] Boot-time early page_ext initializing option.
+> +			This boot parameter disables the deferred initialization
+> +			of struct page and move up function page_ext_init() in
+> +			order to catch early page allocations. Available with
+> +			CONFIG_PAGE_EXTENSION=y.
 
-* Exploitable: I actually think vulnerability can be exploitable by
-any device on the SPI bus.
-   Exploit is quite low risk and impact is negligible, both because it
-requires an actual connected device and because it requires the driver
-to be registered.
+For admins it would likely be more easier to understand something like
+following
+	early_page_ext [KNL] Enforces page_ext initialization to earlier
+			stages so cover more early boot allocations.
+			Please note that as side effect some 
+			optimizations might be disabled to achieve that
+			(e.g. parallelized memory initialization is
+			disabled) so the boot process might take longer,
+			especially on systems with a lot of memory.
+			Available with CONFIG_PAGE_EXTENSION=y
+[...]
+> diff --git a/mm/page_ext.c b/mm/page_ext.c
+> index 3dc715d7ac29..bf4f2a12d7dc 100644
+> --- a/mm/page_ext.c
+> +++ b/mm/page_ext.c
+> @@ -85,6 +85,18 @@ unsigned long page_ext_size = sizeof(struct page_ext);
+>  
+>  static unsigned long total_usage;
+>  
+> +#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> +bool early_page_ext __meminitdata;
+> +#else
+> +bool early_page_ext __meminitdata = true;
+> +#endif
 
-* Effected versions: v6.0-rc2 - v4.5-rc1
+Why should default depend on DEFERRED_STRUCT_PAGE_INIT at all. This is
+just confusing and I do not see how it serves a purpose. We might grow
+more optimizations which would prefent early page_ext init.
 
-* Introducing commit:
-https://github.com/torvalds/linux/commit/cab47333f0f75b685bce1facecb73bf3632e1360
+Let's just have default false and only enforce with the parameter. This
+is more predictable and easier to understand.
 
-* Code:
-https://github.com/torvalds/linux/blame/master/drivers/nfc/st95hf/core.c#L284
-https://github.com/torvalds/linux/blob/master/drivers/nfc/st95hf/spi.c#L107
-
-Side note:
-I was wondering if maybe the tag is the source for the content that actually
-overflows the kernel buffer,  In which case it changes the picture a bit.
-But if i understood correctly the messages are used for configuration
-with connected device.
-
-Suggested patch:
-I am actually not sure if we can somehow limit the size to MAX command length.
-I changed it to 1024 because it seems to support 10 bit long frame spi.
-
-```
-diff --git a/drivers/nfc/st95hf/core.c b/drivers/nfc/st95hf/core.c
-index ed704bb77..741ce633b 100644
---- a/drivers/nfc/st95hf/core.c
-+++ b/drivers/nfc/st95hf/core.c
-@@ -281,7 +281,7 @@ static int st95hf_send_recv_cmd(struct
-st95hf_context *st95context,
-        }
-
-        if (cmd_array[cmd].req == SYNC && recv_res) {
--               unsigned char st95hf_response_arr[2];
-+               unsigned char st95hf_response_arr[1024];
-
-                ret = st95hf_spi_recv_response(&st95context->spicontext,
-                                               st95hf_response_arr);
-```
+-- 
+Michal Hocko
+SUSE Labs

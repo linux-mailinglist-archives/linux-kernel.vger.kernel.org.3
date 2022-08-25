@@ -2,44 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2FC5A0A2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7514D5A0A33
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 09:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238212AbiHYH0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 03:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
+        id S234265AbiHYH1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 03:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237304AbiHYH00 (ORCPT
+        with ESMTP id S238225AbiHYH1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:26:26 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4BCF68;
-        Thu, 25 Aug 2022 00:26:25 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oR7Fu-0000TJ-L3; Thu, 25 Aug 2022 09:26:22 +0200
-Message-ID: <8c214c0b-4b8f-5e62-5aef-76668987e8fd@leemhuis.info>
-Date:   Thu, 25 Aug 2022 09:26:21 +0200
+        Thu, 25 Aug 2022 03:27:09 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D43BF4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:27:03 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id v4so17120135pgi.10
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 00:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=DeOoCBmYTbzbWF96BhTxAeOzrBznw/YqVHZq/NamK7c=;
+        b=kctbTtHyHjVSHiLzpfNpZkNeUVECwQpwgeNOukjxiT4oiTxjYQKUUeGgGWTsEM26GL
+         inkf/8v1m4y0j6kTO+4V8eh5eDXjLXOetrTrIWbjEAtz/URG3nTaYDFp2QkCw05LEp/D
+         nYpNbrHq/EyqaYoq3REJe4le8AS+L5sPy9vyCHW1co7zS/1FgJ3LH3Wbbg8ZCtVhiC5w
+         e98xW0gA7ZxtFw5R2OhkX1k67CyDPZgNtIWQ7s1m/C9PfocD32YoYXwV8ebWYi6VVwN8
+         YCm3v/H88abUYYkMBSJECOUjrPhiRvUshpx1xCF4F+SMWN72MOp5K+8h/2wVFLrPX0zN
+         0LKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=DeOoCBmYTbzbWF96BhTxAeOzrBznw/YqVHZq/NamK7c=;
+        b=1VPBFHv72MDEXBSapBHwE18zWF6jIIoCjD0Lf1KDznh4OzIPlaqbxIWE/V0fKZ/Dsp
+         YsKUH86Ov84i/grzyWq5gbpVET3VJOvdAJ3X93bV7lnkt8dcFCVFHdtVJ1kjFkYriNwv
+         tuyaudnvekdtplF0gO/GnvG8EsMWuvAaDroiMSzIkXqQdkPw22pU1MCjAV1XMWfGD651
+         VRaJK3oxzOUAmMCwgIWnnzsZl00MGj/ZquCqwaK7vVDHMuHtnpGoEVVwttlCjNq78KFk
+         Th+ZErJ5ykP0eymGqU4Diiv3fcJlKIXztnXyKujvkkUE9C5FQpVHWGhG9krXX4+8pPnv
+         JY/w==
+X-Gm-Message-State: ACgBeo23eceqeeWLd9HtDxvOhfOrXTVCceA4rXzo7QkmOLneVF8YbD0U
+        9nOOe97Tsx+m6de6ItjwJ2A=
+X-Google-Smtp-Source: AA6agR6MH3KeKxwOkT2brR7yFR2ml8cTVD19uCi8UCGmAoH6KDDMnzxwF4Cqs2OCYj+qSqKlNT39TA==
+X-Received: by 2002:a65:4d0e:0:b0:42a:88f7:d723 with SMTP id i14-20020a654d0e000000b0042a88f7d723mr2241789pgt.400.1661412422988;
+        Thu, 25 Aug 2022 00:27:02 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id z124-20020a633382000000b0042aca53b4cesm6004732pgz.70.2022.08.25.00.27.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 00:27:02 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     mpe@ellerman.id.au
+Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        haren@linux.ibm.com, wangborong@cdjrlc.com, nathanl@linux.ibm.com,
+        Julia.Lawall@inria.fr, nick.child@ibm.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] powerpc/pseries/vas: Remove the unneeded result variable
+Date:   Thu, 25 Aug 2022 07:26:57 +0000
+Message-Id: <20220825072657.229168-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: Commit 'r8152: fix a WOL issue' makes Ethernet port on Lenovo
- Thunderbolt 3 dock go crazy
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Maxim Levitsky <mlevitsk@redhat.com>, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Hayes Wang <hayeswang@realtek.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <3745745afedb2eff890277041896356149a8f2bf.camel@redhat.com>
- <339e2f94-213c-d707-b792-86d53329b3e5@leemhuis.info>
-In-Reply-To: <339e2f94-213c-d707-b792-86d53329b3e5@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1661412385;60a87a1b;
-X-HE-SMSGID: 1oR7Fu-0000TJ-L3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,122 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.08.22 13:16, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> Quick note before the boilerplate: there is another report about issues
-> caused by cdf0b86b250fd3 also involving a dock, but apparently it's
-> ignored so far:
-> https://bugzilla.kernel.org/show_bug.cgi?id=216333
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-TWIMC, apparently it's the same problem.
+Return the value vas_register_coproc_api() directly instead of storing it
+in another redundant variable.
 
-Fun fact: Hayes discussed this in privately with the bug reporter
-according to this comment:
-https://bugzilla.kernel.org/show_bug.cgi?id=216333#c3
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ arch/powerpc/platforms/pseries/vas.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Well, that's not how things normally should be handled, but whatever, he
-in the end recently submitted a patch to fix it that is already merged
-to net.git:
-
-https://lore.kernel.org/lkml/20220818080620.14538-394-nic_swsd@realtek.com/
-
-Ciao, Thorsten
-
-P.S.:
-
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=216333	
-#regzbot fixed-by: b75d612014447
-
-
-> Anyway, moving on:
-> 
-> [TLDR: I'm adding this regression report to the list of tracked
-> regressions; all text from me you find below is based on a few templates
-> paragraphs you might have encountered already already in similar form.]
-> 
-> CCing the regression mailing list, as it should be in the loop for all
-> regressions, as explained here:
-> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
-> 
-> On 23.08.22 11:20, Maxim Levitsky wrote:
->>
->> I recently bisected an issue on my Lenovo P1 gen3, which is connected to the Lenovo Thunderbolt 3 dock.
->>
->> After I suspend the laptop to ram, the ethernet port led on the dock starts to blink like crazy,
->> its peer port on my ethernet switch blinks as well, and eventually the switch stops forwarding packets,
->> bringing all my network down.
->>
->> Likely the ethernet card in the dock sends some kind of a garbage over the wire.
->>
->> Resuming the laptop, "fixes" the issue (leds stops blinking, and the network starts working again
->> after a minute or so).
->>
->> I also tried to connect the dock directly to my main desktop over a dedicated usb network card
->> and try to capture the packets that are sent, but no packets were captured. I will soon retry
->> this test with another network card. I did use promicious mode.
->>
->>
->> This is the offending commit, and reverting it helps:
->>
->> commit cdf0b86b250fd3c1c3e120c86583ea510c52e4ce
->> Author: Hayes Wang <hayeswang@realtek.com>
->> Date:   Mon Jul 18 16:21:20 2022 +0800
->>
->>     r8152: fix a WOL issue
->>     
->>     This fixes that the platform is waked by an unexpected packet. The
->>     size and range of FIFO is different when the device enters S3 state,
->>     so it is necessary to correct some settings when suspending.
->>     
->>     Regardless of jumbo frame, set RMS to 1522 and MTPS to MTPS_DEFAULT.
->>     Besides, enable MCU_BORW_EN to update the method of calculating the
->>     pointer of data. Then, the hardware could get the correct data.
->>     
->>     Fixes: 195aae321c82 ("r8152: support new chips")
->>     Signed-off-by: Hayes Wang <hayeswang@realtek.com>
->>     Link: https://lore.kernel.org/r/20220718082120.10957-391-nic_swsd@realtek.com
->>     Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->>
->>
->> WOL from dock was enabled in BIOS, but I tested with it disabled as well, and
->> no change in behavier.
->>
->> Any help is welcome. I can test patches if needed, the laptop currently runs 6.0-rc2
->> with this commit reverted.
->>
->> When I find some time I can also narrow the change down by reverting only parts
->> of the patch.
->>
->> Best regards,
->> 	Maxim Levitsky
->>
-> 
-> 
-> Thanks for the report. To be sure below issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-> tracking bot:
-> 
-> #regzbot ^introduced cdf0b86b250fd3c1c3e120c86583ea510c52e4ce
-> #regzbot title net: r8152: ehernet port on Lenovo Thunderbolt 3 dock
-> goes crazy
-> #regzbot ignore-activity
-> 
-> This isn't a regression? This issue or a fix for it are already
-> discussed somewhere else? It was fixed already? You want to clarify when
-> the regression started to happen? Or point out I got the title or
-> something else totally wrong? Then just reply -- ideally with also
-> telling regzbot about it, as explained here:
-> https://linux-regtracking.leemhuis.info/tracked-regression/
-> 
-> Reminder for developers: When fixing the issue, add 'Link:' tags
-> pointing to the report (the mail this one replies to), as explained for
-> in the Linux kernel's documentation; above webpage explains why this is
-> important for tracked regressions.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> 
-> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> reports and sometimes miss something important when writing mails like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
+diff --git a/arch/powerpc/platforms/pseries/vas.c b/arch/powerpc/platforms/pseries/vas.c
+index 7e6e6dd2e33e..46ea4e252f97 100644
+--- a/arch/powerpc/platforms/pseries/vas.c
++++ b/arch/powerpc/platforms/pseries/vas.c
+@@ -501,14 +501,10 @@ static const struct vas_user_win_ops vops_pseries = {
+ int vas_register_api_pseries(struct module *mod, enum vas_cop_type cop_type,
+ 			     const char *name)
+ {
+-	int rc;
+-
+ 	if (!copypaste_feat)
+ 		return -ENOTSUPP;
+ 
+-	rc = vas_register_coproc_api(mod, cop_type, name, &vops_pseries);
+-
+-	return rc;
++	return vas_register_coproc_api(mod, cop_type, name, &vops_pseries);
+ }
+ EXPORT_SYMBOL_GPL(vas_register_api_pseries);
+ 
+-- 
+2.25.1

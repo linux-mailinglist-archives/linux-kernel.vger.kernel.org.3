@@ -2,183 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9AD5A0E93
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72995A0E99
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbiHYK5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S239593AbiHYK6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241395AbiHYK5H (ORCPT
+        with ESMTP id S229657AbiHYK6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:57:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F36BAA364;
-        Thu, 25 Aug 2022 03:57:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 44A855C446;
-        Thu, 25 Aug 2022 10:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661425025; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s8SR+gQMDrofSbIUhaVQPDx4KdCnSHqChKukc6toPhQ=;
-        b=zNcQo8pgYOyT64drYJ4KsptavsKSn/4hSmJPIGPZru1XLtadGjWmZ4sElVNQ1c2UOwafoj
-        WCuiE6Q21TwWNKPhYN1ke/E2MrqeWID8GbgtumvfGHt3iF9LMhFKy53+5Q2bv0S68xq+8E
-        fIEpFea4EEQf8efz+xn6ZlKL/IESfyw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661425025;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s8SR+gQMDrofSbIUhaVQPDx4KdCnSHqChKukc6toPhQ=;
-        b=DBRXnjRFbihD55jU3qG3QBzK4r7+40apmR5Aeo6f82wLz/CIA9KFOpAep46zrxlE/SkTZX
-        ArVReGQqIyOKEQDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1BF0013517;
-        Thu, 25 Aug 2022 10:57:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id b9PDBoFVB2PhbAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 25 Aug 2022 10:57:05 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 86879A0679; Thu, 25 Aug 2022 12:57:04 +0200 (CEST)
-Date:   Thu, 25 Aug 2022 12:57:04 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, akpm@linux-foundation.org,
-        jack@suse.cz, mgorman@suse.de, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH] mm: migrate: buffer_migrate_folio_norefs() fallback
- migrate not uptodate pages
-Message-ID: <20220825105704.e46hz6dp6opawsjk@quack3>
-References: <20220825080146.2021641-1-chengzhihao1@huawei.com>
+        Thu, 25 Aug 2022 06:58:48 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D9CADCFA;
+        Thu, 25 Aug 2022 03:58:46 -0700 (PDT)
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MD0Lm3qwsz67gNl;
+        Thu, 25 Aug 2022 18:58:24 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 25 Aug 2022 12:58:43 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 25 Aug
+ 2022 11:58:43 +0100
+Date:   Thu, 25 Aug 2022 11:58:42 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [RFC PATCH 6/9] cxl/mem: Trace Memory Module Event Record
+Message-ID: <20220825115842.000049a0@huawei.com>
+In-Reply-To: <20220813053243.757363-7-ira.weiny@intel.com>
+References: <20220813053243.757363-1-ira.weiny@intel.com>
+        <20220813053243.757363-7-ira.weiny@intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825080146.2021641-1-chengzhihao1@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 25-08-22 16:01:46, Zhihao Cheng wrote:
-> From: Zhang Yi <yi.zhang@huawei.com>
-> 
-> Recently we notice that ext4 filesystem occasionally fail to read
-> metadata from disk and report error message, but the disk and block
-> layer looks fine. After analyse, we lockon commit 88dbcbb3a484
-> ("blkdev: avoid migration stalls for blkdev pages"). It provide a
-> migration method for the bdev, we could move page that has buffers
-> without extra users now, but it will lock the buffers on the page, which
-> breaks a lot of current filesystem's fragile metadata read operations,
-> like ll_rw_block() for common usage and ext4_read_bh_lock() for ext4,
-> these helpers just trylock the buffer and skip submit IO if it lock
-> failed, many callers just wait_on_buffer() and conclude IO error if the
-> buffer is not uptodate after buffer unlocked.
-> 
-> This issue could be easily reproduced by add some delay just after
-> buffer_migrate_lock_buffers() in __buffer_migrate_folio() and do
-> fsstress on ext4 filesystem.
-> 
->   EXT4-fs error (device pmem1): __ext4_find_entry:1658: inode #73193:
->   comm fsstress: reading directory lblock 0
->   EXT4-fs error (device pmem1): __ext4_find_entry:1658: inode #75334:
->   comm fsstress: reading directory lblock 0
-> 
-> Something like ll_rw_block() should be used carefully and seems could
-> only be safely used for the readahead case. So the best way is to fix
-> the read operations in filesystem in the long run, but now let us avoid
-> this issue first. This patch avoid this issue by fallback to migrate
-> pages that are not uotodate like fallback_migrate_folio(), those pages
-> that has buffers may probably do read operation soon.
-> 
-> Fixes: 88dbcbb3a484 ("blkdev: avoid migration stalls for blkdev pages")
-> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+On Fri, 12 Aug 2022 22:32:40 -0700
+ira.weiny@intel.com wrote:
 
-Thanks for the analysis and the fix! As you noted above this is actually a
-bug in the filesystems that they assume that locked buffer means it is
-under IO.  Usually that is the case but there are other places that lock
-the buffer without doing IO. Page migration is one of them, jbd2 machinery
-another one, there may be others.
-
-So I think this really ought to be fixed in filesystems instead of papering
-over the bug in the migration code. I agree this is more work but we will
-reduce the technical debt, not increase it :). Honestly, ll_rw_block()
-should just die. It is actively dangerous to use. Instead we should have
-one call for readahead of bhs and the rest should be converted to
-submit_bh() or similar calls. There are like 25 callers remaining so it
-won't be even that hard.
-
-And then we have the same buggy code as in ll_rw_block() copied to
-ext4_bread_batch() (ext4_read_bh_lock() in particular) so that needs to be
-fixed as well...
-
-								Honza
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> CXL v3.0 section 8.2.9.2.1.3 defines the Memory Module Event Record.
+> 
+> Determine if the event read is memory module record and if so trace the
+> record.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Similar comments to on previous patches around using
+get_unaligned_le*()
 
 > ---
->  mm/migrate.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
+>  drivers/cxl/core/mbox.c           |  16 +++
+>  drivers/cxl/cxlmem.h              |  25 +++++
+>  include/trace/events/cxl-events.h | 155 ++++++++++++++++++++++++++++++
+>  3 files changed, 196 insertions(+)
 > 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 6a1597c92261..bded69867619 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -691,6 +691,38 @@ static int __buffer_migrate_folio(struct address_space *mapping,
->  	if (!head)
->  		return migrate_folio(mapping, dst, src, mode);
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index 6414588a3c7b..99b09bfeaff5 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -725,6 +725,14 @@ static const uuid_t dram_event_uuid =
+>  	UUID_INIT(0x601dcbb3, 0x9c06, 0x4eab,
+>  		  0xb8, 0xaf, 0x4e, 0x9b, 0xfb, 0x5c, 0x96, 0x24);
 >  
-> +	/*
-> +	 * If the mapped buffers on the page are not uptodate and has refcount,
-> +	 * some others may propably try to lock the buffer and submit read IO
-> +	 * through ll_rw_block(), but it will not submit IO once it failed to
-> +	 * lock the buffer, so try to fallback to migrate_folio() to prevent
-> +	 * false positive EIO.
-> +	 */
-> +	if (check_refs) {
-> +		bool uptodate = true;
-> +		bool invalidate = false;
+> +/*
+> + * Memory Module Event Record
+> + * CXL v3.0 section 8.2.9.2.1.3; Table 8-45
+> + */
+> +static const uuid_t mem_mod_event_uuid =
+> +	UUID_INIT(0xfe927475, 0xdd59, 0x4339,
+> +		  0xa5, 0x86, 0x79, 0xba, 0xb1, 0x13, 0xb7, 0x74);
 > +
-> +		bh = head;
-> +		do {
-> +			if (buffer_mapped(bh) && !buffer_uptodate(bh)) {
-> +				uptodate = false;
-> +				if (atomic_read(&bh->b_count)) {
-> +					invalidate = true;
-> +					break;
-> +				}
-> +			}
-> +			bh = bh->b_this_page;
-> +		} while (bh != head);
+>  static void cxl_trace_event_record(const char *dev_name,
+>  				   enum cxl_event_log_type type,
+>  				   struct cxl_get_event_payload *payload)
+> @@ -747,6 +755,14 @@ static void cxl_trace_event_record(const char *dev_name,
+>  		return;
+>  	}
+>  
+> +	if (uuid_equal(id, &mem_mod_event_uuid)) {
+> +		struct cxl_evt_mem_mod_rec *rec =
+> +				(struct cxl_evt_mem_mod_rec *)&payload->record;
 > +
-> +		if (!uptodate) {
-> +			if (invalidate)
-> +				invalidate_bh_lrus();
-> +			if (filemap_release_folio(src, GFP_KERNEL))
-> +				return migrate_folio(mapping, dst, src, mode);
-> +			return -EAGAIN;
-> +		}
+> +		trace_cxl_mem_mod_event(dev_name, type, rec);
+> +		return;
 > +	}
 > +
->  	/* Check whether page does not have extra refs before we do more work */
->  	expected_count = folio_expected_refs(mapping, src);
->  	if (folio_ref_count(src) != expected_count)
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  	/* For unknown record types print just the header */
+>  	trace_cxl_event(dev_name, type, &payload->record);
+>  }
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 50536c0a7850..a02a41dfd988 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -445,6 +445,31 @@ struct cxl_evt_dram_rec {
+>  	u8 correction_mask[CXL_EVT_DER_CORRECTION_MASK_SIZE];
+>  } __packed;
+>  
+> +/*
+> + * Get Health Info Record
+> + * CXL v3.0 section 8.2.9.8.3.1; Table 8-100
+> + */
+> +struct cxl_get_health_info {
+> +	u8 health_status;
+> +	u8 media_status;
+> +	u8 add_status;
+> +	u8 life_used;
+> +	u16 device_temp;
+
+As previous - even though they aren't aligned, I'd have thought
+__le16 etc will still work.  The unaligned accessors are fine
+taking __le16 * for example.
+
+> +	u32 dirty_shutdown_cnt;
+> +	u32 cor_vol_err_cnt;
+> +	u32 cor_per_err_cnt;
+> +} __packed;
+> +
+> +/*
+> + * Memory Module Event Record
+> + * CXL v3.0 section 8.2.9.2.1.3; Table 8-45
+> + */
+> +struct cxl_evt_mem_mod_rec {
+> +	struct cxl_event_record_hdr hdr;
+> +	u8 event_type;
+> +	struct cxl_get_health_info info;
+> +} __packed;
+> +
+>  struct cxl_mbox_get_partition_info {
+>  	__le64 active_volatile_cap;
+>  	__le64 active_persistent_cap;
+> diff --git a/include/trace/events/cxl-events.h b/include/trace/events/cxl-events.h
+> index db9b34ddd240..dbbe25fee25c 100644
+> --- a/include/trace/events/cxl-events.h
+> +++ b/include/trace/events/cxl-events.h
+> @@ -358,6 +358,161 @@ TRACE_EVENT(cxl_dram_event,
+>  		)
+>  );
+>  
+> +/*
+> + * Memory Module Event Record - MMER
+> + *
+> + * CXL v2.0 section 8.2.9.1.1.3; Table 156, Table 181
+> + *
+> + * Device Health Information - DHI; Table 181
+> + */
+> +#define CXL_MMER_HEALTH_STATUS_CHANGE		0x00
+> +#define CXL_MMER_MEDIA_STATUS_CHANGE		0x01
+> +#define CXL_MMER_LIFE_USED_CHANGE		0x02
+> +#define CXL_MMER_TEMP_CHANGE			0x03
+> +#define CXL_MMER_DATA_PATH_ERROR		0x04
+> +#define CXL_MMER_LAS_ERROR			0x05
+> +#define show_dev_evt_type(type)	__print_symbolic(type,			   \
+> +	{ CXL_MMER_HEALTH_STATUS_CHANGE,	"Health Status Change"	}, \
+> +	{ CXL_MMER_MEDIA_STATUS_CHANGE,		"Media Status Change"	}, \
+> +	{ CXL_MMER_LIFE_USED_CHANGE,		"Life Used Change"	}, \
+> +	{ CXL_MMER_TEMP_CHANGE,			"Temperature Change"	}, \
+> +	{ CXL_MMER_DATA_PATH_ERROR,		"Data Path Error"	}, \
+> +	{ CXL_MMER_LAS_ERROR,			"LSA Error"		}  \
+> +)
+> +
+> +#define CXL_DHI_HS_MAINTENANCE_NEEDED				BIT(0)
+> +#define CXL_DHI_HS_PERFORMANCE_DEGRADED				BIT(1)
+> +#define CXL_DHI_HS_HW_REPLACEMENT_NEEDED			BIT(2)
+> +#define show_health_status_flags(flags)	__print_flags(flags, "|",	   \
+> +	{ CXL_DHI_HS_MAINTENANCE_NEEDED,	"Maintenance Needed"	}, \
+> +	{ CXL_DHI_HS_PERFORMANCE_DEGRADED,	"Performance Degraded"	}, \
+> +	{ CXL_DHI_HS_HW_REPLACEMENT_NEEDED,	"Replacement Needed"	}  \
+> +)
+> +
+> +#define CXL_DHI_MS_NORMAL							0x00
+> +#define CXL_DHI_MS_NOT_READY							0x01
+> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOST					0x02
+> +#define CXL_DHI_MS_ALL_DATA_LOST						0x03
+> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_POWER_LOSS			0x04
+> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_SHUTDOWN			0x05
+> +#define CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_IMMINENT				0x06
+> +#define CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_POWER_LOSS				0x07
+> +#define CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_SHUTDOWN				0x08
+> +#define CXL_DHI_MS_WRITE_ALL_DATA_LOSS_IMMINENT					0x09
+> +#define show_media_status(ms)	__print_symbolic(ms,			   \
+> +	{ CXL_DHI_MS_NORMAL,						   \
+> +		"Normal"						}, \
+> +	{ CXL_DHI_MS_NOT_READY,						   \
+> +		"Not Ready"						}, \
+> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOST,				   \
+> +		"Write Persistency Lost"				}, \
+> +	{ CXL_DHI_MS_ALL_DATA_LOST,					   \
+> +		"All Data Lost"						}, \
+> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_POWER_LOSS,		   \
+> +		"Write Persistency Loss in the Event of Power Loss"	}, \
+> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_EVENT_SHUTDOWN,		   \
+> +		"Write Persistency Loss in Event of Shutdown"		}, \
+> +	{ CXL_DHI_MS_WRITE_PERSISTENCY_LOSS_IMMINENT,			   \
+> +		"Write Persistency Loss Imminent"			}, \
+> +	{ CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_POWER_LOSS,		   \
+> +		"All Data Loss in Event of Power Loss"			}, \
+> +	{ CXL_DHI_MS_WRITE_ALL_DATA_LOSS_EVENT_SHUTDOWN,		   \
+> +		"All Data loss in the Event of Shutdown"		}, \
+> +	{ CXL_DHI_MS_WRITE_ALL_DATA_LOSS_IMMINENT,			   \
+> +		"All Data Loss Imminent"				}  \
+> +)
+> +
+> +#define CXL_DHI_AS_NORMAL		0x0
+> +#define CXL_DHI_AS_WARNING		0x1
+> +#define CXL_DHI_AS_CRITICAL		0x2
+> +#define show_add_status(as) __print_symbolic(as,	   \
+> +	{ CXL_DHI_AS_NORMAL,		"Normal"	}, \
+> +	{ CXL_DHI_AS_WARNING,		"Warning"	}, \
+> +	{ CXL_DHI_AS_CRITICAL,		"Critical"	}  \
+> +)
+> +
+> +#define CXL_DHI_AS_LIFE_USED(as)			(as & 0x3)
+> +#define CXL_DHI_AS_DEV_TEMP(as)				((as & 0xC) >> 2)
+> +#define CXL_DHI_AS_COR_VOL_ERR_CNT(as)			((as & 0x10) >> 4)
+> +#define CXL_DHI_AS_COR_PER_ERR_CNT(as)			((as & 0x20) >> 5)
+> +
+> +TRACE_EVENT(cxl_mem_mod_event,
+> +
+> +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
+> +		 struct cxl_evt_mem_mod_rec *rec),
+> +
+> +	TP_ARGS(dev_name, log, rec),
+> +
+> +	TP_STRUCT__entry(
+> +		/* Common */
+> +		__string(dev_name, dev_name)
+> +		__field(int, log)
+> +		__array(u8, id, UUID_SIZE)
+> +		__field(u32, flags)
+> +		__field(u16, handle)
+> +		__field(u16, related_handle)
+> +		__field(u64, timestamp)
+> +
+> +		/* Memory Module Event */
+> +		__field(u8, event_type)
+> +
+> +		/* Device Health Info */
+> +		__field(u8, health_status)
+> +		__field(u8, media_status)
+> +		__field(u8, life_used)
+> +		__field(u32, dirty_shutdown_cnt)
+> +		__field(u32, cor_vol_err_cnt)
+> +		__field(u32, cor_per_err_cnt)
+> +		__field(s16, device_temp)
+> +		__field(u8, add_status)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		/* Common */
+> +		__assign_str(dev_name, dev_name);
+> +		memcpy(__entry->id, &rec->hdr.id, UUID_SIZE);
+> +		__entry->log = log;
+> +		__entry->flags = le32_to_cpu(rec->hdr.flags_length) >> 8;
+> +		__entry->handle = le16_to_cpu(rec->hdr.handle);
+> +		__entry->related_handle = le16_to_cpu(rec->hdr.related_handle);
+> +		__entry->timestamp = le64_to_cpu(rec->hdr.timestamp);
+> +
+> +		/* Memory Module Event */
+> +		__entry->event_type = rec->event_type;
+> +
+> +		/* Device Health Info */
+> +		__entry->health_status = rec->info.health_status;
+> +		__entry->media_status = rec->info.media_status;
+> +		__entry->life_used = rec->info.life_used;
+> +		__entry->dirty_shutdown_cnt = le32_to_cpu(rec->info.dirty_shutdown_cnt);
+> +		__entry->cor_vol_err_cnt = le32_to_cpu(rec->info.cor_vol_err_cnt);
+
+I've lost track, but my guess is some / all of these need the unaligned_get_le32()
+etc rather than aligned form.  Maybe just be lazy and use the unaligned versions
+even when things happen to be aligned - then we don't have to think about it
+when reviewing :)
+
+
+> +		__entry->cor_per_err_cnt = le32_to_cpu(rec->info.cor_per_err_cnt);
+> +		__entry->device_temp = le16_to_cpu(rec->info.device_temp);
+> +		__entry->add_status = rec->info.add_status;
+> +	),
+> +
+> +	TP_printk("%s: %s time=%llu id=%pUl handle=%x related_handle=%x hdr_flags='%s': " \
+> +		  "evt_type='%s' health_status='%s' media_status='%s' as_life_used=%s " \
+> +		  "as_dev_temp=%s as_cor_vol_err_cnt=%s as_cor_per_err_cnt=%s " \
+> +		  "life_used=%u dev_temp=%d dirty_shutdown_cnt=%u cor_vol_err_cnt=%u " \
+> +		  "cor_per_err_cnt=%u",
+> +		__get_str(dev_name), show_log_type(__entry->log),
+> +		__entry->timestamp, __entry->id, __entry->handle,
+> +		__entry->related_handle, show_hdr_flags(__entry->flags),
+> +
+> +		show_dev_evt_type(__entry->event_type),
+> +		show_health_status_flags(__entry->health_status),
+> +		show_media_status(__entry->media_status),
+> +		show_add_status(CXL_DHI_AS_LIFE_USED(__entry->add_status)),
+> +		show_add_status(CXL_DHI_AS_DEV_TEMP(__entry->add_status)),
+> +		show_add_status(CXL_DHI_AS_COR_VOL_ERR_CNT(__entry->add_status)),
+> +		show_add_status(CXL_DHI_AS_COR_PER_ERR_CNT(__entry->add_status)),
+> +		__entry->life_used, __entry->device_temp,
+> +		__entry->dirty_shutdown_cnt, __entry->cor_vol_err_cnt,
+> +		__entry->cor_per_err_cnt)
+> +);
+> +
+> +
+>  #endif /* _CXL_TRACE_EVENTS_H */
+>  
+>  /* This part must be outside protection */
+

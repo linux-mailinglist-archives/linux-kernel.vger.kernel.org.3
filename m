@@ -2,130 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6705A0566
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE68D5A0569
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbiHYAxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S231513AbiHYAyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbiHYAwz (ORCPT
+        with ESMTP id S229584AbiHYAy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:52:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C189A8E4EB
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:52:53 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id j21so31227691ejs.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ot0aEvyT380VjDU6PPl13tz+5G5649T71Q1QmyiGXIo=;
-        b=YpSDVkBcxWVnnXfQXF/M7AZGWY5x+V+c24wMO5zVR8RFtXivElwnk0FLNTXke/emLT
-         oh8/MGX4jyRJc+YrZXh96+Jtsdh8UfgCE6n4YSYTOMmu4AtkTQJ7laVjSVHJm8+QclNG
-         oVzUJs4I5lvMg1LyJ9KO0CmiPyQ9FIcsSPJtg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ot0aEvyT380VjDU6PPl13tz+5G5649T71Q1QmyiGXIo=;
-        b=f+oJ0EB25r/KGWr/6lOZz4X8yhzjHfEffTWkO1rEOMm9iaZz61GsBPTw857O40KokW
-         eoRsNPZcEjtiR5rIZntqRZcFjEp27Hm+1V2KOf047QJQh2ordfc3XnWFcz7vgkl8+iB5
-         eZQDCil++u8Vj/VLt/R1L2213hEyGIyDeM8hj5fWizPyNCpo2KnjKw24uUrm7o7L5ern
-         +uyuA23tn65LC9DYWjAJzHpbPUrdSLuIx0cRAzP8LLFcvPSD1jtn71EGQ0K72Wv9FdUV
-         DzCj/F7jLjyokX1h0PuqTmLZ7vub6CYqVnGdXuvwLDcg2CUs3h3bB1LuQ7LF4IRsYqx3
-         wQyg==
-X-Gm-Message-State: ACgBeo0vMzPXrjZRjZ2r9cSPyTLLrGAYLzzS3JNPxaBcvkckq5+x6F87
-        wQBW6duOODAqhODLua8plLwKhKo4NrpvBFHQPcY=
-X-Google-Smtp-Source: AA6agR6+ihwAxvFG3IZSSv0OilELyVnja20t9OdLHZTF6IA+p0gkVfrahgjLea0uAM7Sx4yfcj8S9A==
-X-Received: by 2002:a17:906:98d5:b0:73d:538a:cb88 with SMTP id zd21-20020a17090698d500b0073d538acb88mr904358ejb.422.1661388771424;
-        Wed, 24 Aug 2022 17:52:51 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id n26-20020a5099da000000b0043bbf79b3ebsm4000419edb.54.2022.08.24.17.52.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 17:52:44 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id z16so3891890wrh.10
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:52:38 -0700 (PDT)
-X-Received: by 2002:adf:e843:0:b0:225:221f:262 with SMTP id
- d3-20020adfe843000000b00225221f0262mr764111wrn.193.1661388757863; Wed, 24 Aug
- 2022 17:52:37 -0700 (PDT)
+        Wed, 24 Aug 2022 20:54:29 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11818E4EB;
+        Wed, 24 Aug 2022 17:54:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VNAfI6D_1661388864;
+Received: from 30.97.48.44(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VNAfI6D_1661388864)
+          by smtp.aliyun-inc.com;
+          Thu, 25 Aug 2022 08:54:25 +0800
+Message-ID: <472ee15f-b89a-dc5a-548d-f2374f99dda0@linux.alibaba.com>
+Date:   Thu, 25 Aug 2022 08:54:35 +0800
 MIME-Version: 1.0
-References: <20210423230609.13519-1-alx.manpages@gmail.com>
- <20220824185505.56382-1-alx.manpages@gmail.com> <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
- <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com>
-In-Reply-To: <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 24 Aug 2022 17:52:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
-Message-ID: <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C naming
-To:     Alejandro Colomar <alx.manpages@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alex Colomar <alx@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Zack Weinberg <zackw@panix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
-        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joseph Myers <joseph@codesourcery.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Cyril Hrubis <chrubis@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] hwspinlock: sprd: Use devm_clk_get_enabled() helper
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+References: <f962d22bfdbd09133d8923152133eeff9213dcee.1661324434.git.christophe.jaillet@wanadoo.fr>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <f962d22bfdbd09133d8923152133eeff9213dcee.1661324434.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 4:36 PM Alejandro Colomar
-<alx.manpages@gmail.com> wrote:
->
-> I'm trying to be nice, and ask for review to make sure I'm not making
-> some big mistake by accident, and I get disrespect?  No thanks.
 
-You've been told multiple times that the kernel doesn't use the
-"standard" names, and *cannot* use them for namespace reasons, and you
-ignore all the feedback, and then you claim you are asking for review?
 
-That's not "asking for review". That's "I think I know the answer, and
-when people tell me otherwise I ignore them".
+On 8/24/2022 3:55 PM, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>     - calls devm_clk_get()
+>     - calls clk_prepare_enable() and registers what is needed in order to
+>       call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This simplifies the code, the error handling paths and avoid the need of
+> a dedicated function used with devm_add_action_or_reset().
+> 
+> Based on my test with allyesconfig, this reduces the .o size from:
+>     text	   data	    bss	    dec	    hex	filename
+>     3423	   1528	      0	   4951	   1357	drivers/hwspinlock/sprd_hwspinlock.o
+> down to:
+>     3025	   1392	      0	   4417	   1141	drivers/hwspinlock/sprd_hwspinlock.o
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-The fact is, kernel UAPI header files MUST NOT use the so-called standard names.
+LGTM. Thanks.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-We cannot provide said names, because they are only provided by the
-standard header files.
-
-And since kernel header files cannot provide them, then kernel UAPI
-header files cannot _use_ them.
-
-End result: any kernel UAPI header file will continue to use __u32 etc
-naming that doesn't have any namespace pollution issues.
-
-Nothing else is even remotely acceptable.
-
-Stop trying to make this something other than it is.
-
-And if you cannot accept these simple technical reasons, why do you
-expect respect?
-
-Why are you so special that you think you can change the rules for
-kernel uapi files over the *repeated* objections from maintainers who
-know better?
-
-                  Linus
+> ---
+> devm_clk_get_enabled() is new and is part of 6.0-rc1
+> ---
+>   drivers/hwspinlock/sprd_hwspinlock.c | 23 ++---------------------
+>   1 file changed, 2 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
+> index 22e2ffb91743..cb37706f61be 100644
+> --- a/drivers/hwspinlock/sprd_hwspinlock.c
+> +++ b/drivers/hwspinlock/sprd_hwspinlock.c
+> @@ -76,18 +76,11 @@ static const struct hwspinlock_ops sprd_hwspinlock_ops = {
+>   	.relax = sprd_hwspinlock_relax,
+>   };
+>   
+> -static void sprd_hwspinlock_disable(void *data)
+> -{
+> -	struct sprd_hwspinlock_dev *sprd_hwlock = data;
+> -
+> -	clk_disable_unprepare(sprd_hwlock->clk);
+> -}
+> -
+>   static int sprd_hwspinlock_probe(struct platform_device *pdev)
+>   {
+>   	struct sprd_hwspinlock_dev *sprd_hwlock;
+>   	struct hwspinlock *lock;
+> -	int i, ret;
+> +	int i;
+>   
+>   	if (!pdev->dev.of_node)
+>   		return -ENODEV;
+> @@ -102,24 +95,12 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
+>   	if (IS_ERR(sprd_hwlock->base))
+>   		return PTR_ERR(sprd_hwlock->base);
+>   
+> -	sprd_hwlock->clk = devm_clk_get(&pdev->dev, "enable");
+> +	sprd_hwlock->clk = devm_clk_get_enabled(&pdev->dev, "enable");
+>   	if (IS_ERR(sprd_hwlock->clk)) {
+>   		dev_err(&pdev->dev, "get hwspinlock clock failed!\n");
+>   		return PTR_ERR(sprd_hwlock->clk);
+>   	}
+>   
+> -	ret = clk_prepare_enable(sprd_hwlock->clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = devm_add_action_or_reset(&pdev->dev, sprd_hwspinlock_disable,
+> -				       sprd_hwlock);
+> -	if (ret) {
+> -		dev_err(&pdev->dev,
+> -			"Failed to add hwspinlock disable action\n");
+> -		return ret;
+> -	}
+> -
+>   	/* set the hwspinlock to record user id to identify subsystems */
+>   	writel(HWSPINLOCK_USER_BITS, sprd_hwlock->base + HWSPINLOCK_RECCTRL);
+>   

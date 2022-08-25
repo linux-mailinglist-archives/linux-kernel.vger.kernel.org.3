@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AFF5A126A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3D85A126D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241130AbiHYNfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
+        id S239154AbiHYNg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242857AbiHYNfa (ORCPT
+        with ESMTP id S229657AbiHYNgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:35:30 -0400
+        Thu, 25 Aug 2022 09:36:23 -0400
 Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B30792E9;
-        Thu, 25 Aug 2022 06:35:28 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h24so24660204wrb.8;
-        Thu, 25 Aug 2022 06:35:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F16AB04A;
+        Thu, 25 Aug 2022 06:36:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id bs25so24681317wrb.2;
+        Thu, 25 Aug 2022 06:36:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=1YhFpbHOP2L3HxhjwTH61U3L7iFs9TCv/PZtz7Logkg=;
-        b=N0JYE3iWPQ1xCxuDZNIk2bxNlQS4LgJcKSjCHSp25/b53nk1PfwMM9IfyDud+/2Uhv
-         FCjjCUHfHpemnH2fLYu91Cq8ARwzcjQr0C54NF2J9Y0oTiJtqmTavOWiCTUsmibNvTLr
-         qWmtMZuGtXJErZJ0BLlCp+p/fN5OF0eWR4m0ojXaCIqapBJlm2Cw1f9XZX2Ik+SZVRO9
-         dHQglMsuAe/vrn4b6nI+R3FReQfvKD72ROlNdFLFOLDvm2VRhCQRREIDm0wjMc9iFntv
-         OIpAnSIro5NzxkiU0Kn9/orvjhrrAS8qhV6jkqt29OpYYsXDvrqBTXaCvEYnuJcX0lys
-         /7IQ==
+        bh=o1UpxoiRuNt3oUSMcF8VYdjioVIlJJnIPZzUkRCOFOs=;
+        b=BAPDeOCpMKXOQRMSoIMiS+mUnKLVXfABtBKM/70xGPTvsTNCwiOL8aeiF6qIitDeKf
+         2ps6ylszW3YeCgmYj/rF/rrQo5dqhFryE0AHN/LYZEZub/FFrtyHX/hf+Oj1DkCZg7rp
+         4Tu3cAcrILV64LGxaFkYK0r3POMb6MgrYmqbBZlZ0S3oLpV3LE1wJt0FhNUuwLZ66LVG
+         NNECmr2MIWVXOnYMalYzU6czysgigZayP3xMrNN8WOMSrrGTQTiFqp4MAjOAynmzszr0
+         N6YD6gjJKCDUAmq46OuRK+WI4e8V8LNNTNixMWXVHmBDvzA1EdKyJPjiw+7INrmhgV15
+         kWig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=1YhFpbHOP2L3HxhjwTH61U3L7iFs9TCv/PZtz7Logkg=;
-        b=jVWzcIfw92tybEDn+UM0zpgqJjAFpj6MRnpQtILonSljcaBeRptFRlmFEXxsOrLiJw
-         KcpxZXnkVABdBMkj/HRCfyQHGcTwM9+5MARSlpfTbVtekTuih0hVRMnUewfU9EVz33xZ
-         Qmj6lfJ9lq3KOx8OnziBIlVET4AY1kGCAhVvaMcGyq1PmFdMXOG0op2AlCIosKuCvWF8
-         v+d10fjFb0xpWL5/SjsZYd14XeWhS03MyI6LeIpgNpkFXXD2a0J7mtubSlEqg8sqj90L
-         G4hLdZWQde4njyRMGBBDfF00qYnyXSKloB7OtOsfvXoOtLl3RqGENJmU43tUixV6GXFL
-         Fvfg==
-X-Gm-Message-State: ACgBeo0pxnoA3XW/KlqIIVuaVP2K8Kjh5NlpIO77BJL1u7mqm8XALxg9
-        7cM4voy0TKhLQeJCP7C5Fus=
-X-Google-Smtp-Source: AA6agR4PfR5XtModeZKlkxxKgqBGnJWBWtSf2rL7FYJx+m3m7L9lbMM1ne2k9EGyVvCJl7SZvK2x4w==
-X-Received: by 2002:a5d:64ed:0:b0:225:11d4:76d1 with SMTP id g13-20020a5d64ed000000b0022511d476d1mr2312391wri.579.1661434527464;
-        Thu, 25 Aug 2022 06:35:27 -0700 (PDT)
+        bh=o1UpxoiRuNt3oUSMcF8VYdjioVIlJJnIPZzUkRCOFOs=;
+        b=bIJ1HRnywpH8n7MNtWd2tidRnpgnjjekATb5fGD/tq1NBw7Ff7EEAr5ElT4btDoZBs
+         83TMY11azaAtK2d012SLtyWkb4PaFvRr/wAJH2aXDXB+rPmZ4M26yFPnKtzeSbPbKJZu
+         JaryMbllGjAYSLC/4rKQ52N4AidLIH95Zd021rS5mSTz/O8btxWdSkr2t5sSBaYLpBIF
+         0gO7BCWTNJn2/KV/8gGBVgxUZjaBfOXq2bcEH2UsVxclEBOQVVJo9YF0gHBodOYu2vOj
+         V0K/XufC5F3rqIxhkDS0vkIpZfei8/PCsX11VRkFgNS4JQTLKoAxkaAlQPs36Frq0BX8
+         yM2Q==
+X-Gm-Message-State: ACgBeo2hE9gV+Ky0s5uChi2vqQQEDNnP2hHpgvoEu0RzeYvdTFPzM3Xc
+        u2M4sKF4EtasC2Z2QhBSAIo=
+X-Google-Smtp-Source: AA6agR51DTr6LrwquXxqYW/bTahA+91PGJ3st7kartiD0AdFt0Nd5Iv4F33QY1hXXicmBdatc+1D0w==
+X-Received: by 2002:adf:f881:0:b0:225:4f49:55dc with SMTP id u1-20020adff881000000b002254f4955dcmr2437885wrp.414.1661434581558;
+        Thu, 25 Aug 2022 06:36:21 -0700 (PDT)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id c3-20020a7bc843000000b003a32297598csm5145454wml.43.2022.08.25.06.35.25
+        by smtp.gmail.com with ESMTPSA id y8-20020a5d4ac8000000b0021f73c66198sm19385965wrs.1.2022.08.25.06.36.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 06:35:26 -0700 (PDT)
-Message-ID: <ac7afbb6-9c8f-4927-be0c-9f6089d1dc67@gmail.com>
-Date:   Thu, 25 Aug 2022 15:35:25 +0200
+        Thu, 25 Aug 2022 06:36:20 -0700 (PDT)
+Message-ID: <b96810d6-df43-1599-b3cc-83e97b9faf2c@gmail.com>
+Date:   Thu, 25 Aug 2022 15:36:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [PATCH v4 04/20] dt-bindings: power: mediatek: Support naming
- power controller node with unit address
+Subject: Re: [PATCH v4 05/20] dt-bindings: power: mediatek: Update maintainer
+ list
 Content-Language: en-US
 To:     Tinghan Shen <tinghan.shen@mediatek.com>,
         Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
@@ -73,15 +73,15 @@ Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220729063208.16799-1-tinghan.shen@mediatek.com>
- <20220729063208.16799-5-tinghan.shen@mediatek.com>
+ <20220729063208.16799-6-tinghan.shen@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220729063208.16799-5-tinghan.shen@mediatek.com>
+In-Reply-To: <20220729063208.16799-6-tinghan.shen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,11 +91,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 29/07/2022 08:31, Tinghan Shen wrote:
-> Support naming power controller node with unit address, also compatible
-> with node names without unit address.
+> Update the maintainer list of power controller binding.
 > 
 > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
 Applied, thanks
 
@@ -104,15 +103,15 @@ Applied, thanks
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> index 321802c95308f..2d6afc0909473 100644
+> index 2d6afc0909473..03b7f6aa591d4 100644
 > --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
 > +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> @@ -19,7 +19,7 @@ description: |
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>   title: Mediatek Power Domains Controller
 >   
->   properties:
->     $nodename:
-> -    const: power-controller
-> +    pattern: '^power-controller(@[0-9a-f]+)?$'
+>   maintainers:
+> -  - Weiyi Lu <weiyi.lu@mediatek.com>
+> +  - MandyJH Liu <mandyjh.liu@mediatek.com>
+>     - Matthias Brugger <mbrugger@suse.com>
 >   
->     compatible:
->       enum:
+>   description: |

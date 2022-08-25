@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2B15A1B33
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC4D5A1B3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243857AbiHYVhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S243860AbiHYVjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 17:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243855AbiHYVhu (ORCPT
+        with ESMTP id S243875AbiHYVjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:37:50 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932C3C12F5;
-        Thu, 25 Aug 2022 14:37:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TSTXatUhg7NsXSHWclI3auq7QHfXihesE6yVJYa8NWpTgSP+ESuzeUIKMtnnHgWzUWhJe5Urqg1gmGAK2uW2uFI2wOwciqO5HsZ2ty4AJDNmE4wKvS0Z8SRy6XmB6byk0s9GG0tYQ3EXEu2WoZixOAJ1dSYZaxUbe//0773Jnb2SDb5jAUV1ylLSjPYnQDw1awHeuJ0sbY9Q1VTJUAKyntzv+JWFCfXqWZTpJDFrOldJQewAv0Wa7NEku2RWiNBfwweTZDNhCZ7zt+Z6hkugfHyh4MZn7g3asu5erCphWvALjJK5zoNzeeVUv0+bYKGtj2au021Wr23j+vOXhGNtHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iTwT5s0tZeQbNWvkPN6C/RZcxbMnvshdeOWLI9ZJ0Hg=;
- b=l4MhMbiuq8TGTCYolbcDJpURGPbVpWDQmeKyNZBRavsWA0R7xrXuBX8pmswYHRXAvSRRWTX4BMnRpjpgsIAsKUJSEp38OcP1DzRr2IdzoAYYbrQzCbWLHvIXcVNEl92u2HPpy7iDv65n6cl3/Xv6URXKgn87zUVb6WbBiPKPEZ5DLWyPD32kizo39MBoOeTPZ0AapbkvleNl5WMh7F2106Ey6Kmndw9/dJP9WEUGDvuMgRiySB1IxDx6SLm/pymH1b6lPSb7aeLlrJxz69Cvi6CGx4xsbUXgbupbYgi/okatz2PKM34vGvuVdfKf8ikQzV9VrJmohYkGMDW5/leGqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iTwT5s0tZeQbNWvkPN6C/RZcxbMnvshdeOWLI9ZJ0Hg=;
- b=g5iUZo8f34zHkJcVE/cIE1nSN6MciKTsIM/bH/KJlw/VOrUrsEfQgawNYydKjfJ4OBpkoPvhY7yWluvAa2kv1DYkcl3QUL2pMcdGxEu2lI1/sVnv9XeAKEbLJhQTzC4Fi1Q36q1Xm5rC9/riJPtkjGtFP3GpGvWOSL9btOPp+dPX6ab2g4q8bA7G/uaPPPdBki5Vp9TycS+zdyj+jPR2Mhv6sIpFDiZSxG6anoOfMR+l0zMzI44Ppb4TL40i8gl4fKvtA7Kv3ydPxcE+lezVxKBCoI+NapHTXgbW4c70IHS5qAcRu+ssHMjXG0dTelekKyLYy/5Bl6woD+4Erzqp8g==
-Received: from MW3PR06CA0002.namprd06.prod.outlook.com (2603:10b6:303:2a::7)
- by BN6PR12MB1700.namprd12.prod.outlook.com (2603:10b6:404:108::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
- 2022 21:37:47 +0000
-Received: from CO1NAM11FT078.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2a:cafe::fe) by MW3PR06CA0002.outlook.office365.com
- (2603:10b6:303:2a::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14 via Frontend
- Transport; Thu, 25 Aug 2022 21:37:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- CO1NAM11FT078.mail.protection.outlook.com (10.13.175.177) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5566.15 via Frontend Transport; Thu, 25 Aug 2022 21:37:47 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Thu, 25 Aug
- 2022 21:37:46 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 25 Aug
- 2022 14:37:45 -0700
-Received: from dipenp.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Thu, 25 Aug 2022 14:37:45 -0700
-From:   Dipen Patel <dipenp@nvidia.com>
-To:     <thierry.reding@gmail.com>, <linus.walleij@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>
-Subject: [PATCH 1/1] MAINTAINERS: Add HTE/timestamp subsystem details
-Date:   Thu, 25 Aug 2022 14:37:43 -0700
-Message-ID: <20220825213743.18313-1-dipenp@nvidia.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 25 Aug 2022 17:39:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB759C2287
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661463548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZcIFJ5ndstDXyueuKitLh0n6/PvdcwcoUpyPYLTHmOk=;
+        b=KAulrGBk9zznBa9mTKLwGigQHujgE4ZgNxvBvuy0Uh7dTdkDTyx/kQwSy4gKKczkDL4oHf
+        hCgXdzmOyNT/yM493a4kPQ3PgX4lIxOoeQ0LUNCFYkI9XaXyyEKJ1xiz5v3GTJuHFkqk/i
+        CbqkUIBkv86DzN5TghG9zy0lg+hnzz8=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-263-LZcv75qFOY6vRSX-NZxHkQ-1; Thu, 25 Aug 2022 17:39:05 -0400
+X-MC-Unique: LZcv75qFOY6vRSX-NZxHkQ-1
+Received: by mail-qv1-f72.google.com with SMTP id d10-20020a0cf6ca000000b00496744bc8e6so12472242qvo.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:39:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ZcIFJ5ndstDXyueuKitLh0n6/PvdcwcoUpyPYLTHmOk=;
+        b=YtQ7KUflnZp+0kSPrWSDMvwXnuJROjGfIWgBIDyJ8D4cwa3b7UP2ow9f9oYdKN5XQb
+         cJlwEA9XaktraL6Dy+k4MSLC+g+WPc91SwjaQqDBQe5/B7aiujEa3h6lbh7LRxsJnAU+
+         eIszVrsPGhEdpoq7csRtFcAfG14kYJrP2gnv6JAHn5Iuul35LH+Z9uXlez6dhMzoNc6W
+         LMgCuIATFjsGenqnWrnq/k4XApB2Sh8XyuUzCESdwnCKI/7KPeOYGRRHDqCSymY6UEDo
+         XeQfTqHbRBC9lYZFjDpji8U5Hq3AWmMt4Ks6XKFY0O0wdvymBrKKXx9WEAR+YztSWL9e
+         u0Qw==
+X-Gm-Message-State: ACgBeo1X14RoDtrG3/0Oy7xbAw6nxWXXBTz4kpG7qr/q99XY5Uq8IY7K
+        Lz9ER6aa4aHgm7VqNMBY7O697VEbfAAUa0ZdmLf3Cxl2KWdlm2AaBqjRHu8DTLQfdPJi4hq0gXc
+        7brFACwWukXxpWkYfDzsC7mvh
+X-Received: by 2002:ac8:4e4f:0:b0:344:a6db:1b58 with SMTP id e15-20020ac84e4f000000b00344a6db1b58mr5373565qtw.38.1661463545343;
+        Thu, 25 Aug 2022 14:39:05 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR67T1K+fOtvPPC/ltEVEu6YGotNZqvbRbsVHyqcHmcKx11ioEat7LIJRldMn2RlqIek12eCsw==
+X-Received: by 2002:ac8:4e4f:0:b0:344:a6db:1b58 with SMTP id e15-20020ac84e4f000000b00344a6db1b58mr5373551qtw.38.1661463545129;
+        Thu, 25 Aug 2022 14:39:05 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::48])
+        by smtp.gmail.com with ESMTPSA id s22-20020a05620a0bd600b006bb9125363fsm476966qki.121.2022.08.25.14.39.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 14:39:04 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 16:39:02 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] arm64: dts: qcom: sm8150-xperia-kumano: Specify
+ which LDO modes are allowed
+Message-ID: <20220825213902.3pz37c7e4qarzs7w@halaneylaptop>
+References: <20220825164205.4060647-1-dianders@chromium.org>
+ <20220825094155.5.I51d60414a42ba9e3008e208d60a04c9ffc425fa7@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: df62fd5c-626a-4efa-74f3-08da86e20db7
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1700:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: okJUCMWGa4U5NKMF5/XhcXknLJFbgcDG8YNzbjmlEDmDyA0tjKqAJmsinNwDoO1y4UXr9/S6NwcslWcwjyrEP0otMRNXGfWrMZ2Yu+xSWE7odS/RkLKqWKsqF3C7urJO/JR+pvExBhxNEdVg6ZlOg0IRXR3XxEMDVpG8NAm1VyIwMgwQwChYIc3ic5SkZBoD7e5qEB4SHTQowUbwNkDXm7JSzSMmV6+SeSjQCG8GKY70sofLTMDuED4V4n04UK71VfGL9/Zm8T6YHkMCLImjhCn9FnPk8ntHNACVyD4Fduq8Qbmpi9NwPGq82xYR4iTz6ufTiW9kC2IsOAIf+07nI0pYO0Q+ZjlXpVZtJr7hzF4cKlXs9q0KdJNyzJTro5zpTKELWnFET4RrcEz/8KIVooEPO7xcyRipXXxFZO7HFCT+t0KJsPbjckKrMHBVBx69pYBr7jVvhzj0QRolC7dirziOxm5GjJCwII1xn1/JQrK8UBIKlvelFPBxmZl1xwWWsoyw31q+N27j4oudSlAlKaGD4hM9BEIinEpUTYIwZgJ9iUa40A5FoKa4FGDb6Kn0eNRVI/dcJ4f4Xu6WCL1rcWeaHYcBFq54atGLsjKDELaYXvQ4jjZ+TJZEFQK9CSHF2+wXcpASSjwef1bMJ/UxsnwF6QjZb3TPlg83vfqoBvrerhrLJJf+K3E5gmuH/xxci320mUVTe7Cl+yazymBi+NriNtC7wEO6Kist+l0Km+NUx7L/d05kMaby/FGRIjag3EHIEiF0a5I6TCe13gCz7nzjcYzIQJIobwD0N59FQNCCUUyM/r8CaH1jJOCYZE/r7fWCEb4Xx5WqlmS+sDwJxKS8H8/VdS4u1vpPyysibterAia+EL36wf8Zi49EE6XP
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(396003)(39860400002)(36840700001)(40470700004)(46966006)(2616005)(336012)(26005)(41300700001)(82310400005)(107886003)(186003)(40480700001)(86362001)(7696005)(966005)(478600001)(356005)(81166007)(40460700003)(82740400003)(1076003)(426003)(47076005)(36860700001)(4326008)(8676002)(110136005)(70586007)(70206006)(54906003)(316002)(8936002)(5660300002)(36756003)(4744005)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 21:37:47.6110
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: df62fd5c-626a-4efa-74f3-08da86e20db7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT078.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1700
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825094155.5.I51d60414a42ba9e3008e208d60a04c9ffc425fa7@changeid>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tree, mailing list and patchwork details.
+On Thu, Aug 25, 2022 at 09:42:03AM -0700, Douglas Anderson wrote:
+> This board uses RPMH, specifies "regulator-allow-set-load" for LDOs,
+> but doesn't specify any modes with "regulator-allowed-modes".
+> 
+> Prior to commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
+> get_optimum_mode(), not set_load()") the above meant that we were able
+> to set either LPM or HPM mode. After that commit (and fixes [1]) we'll
+> be stuck at the initial mode. Discussion of this has resulted in the
+> decision that the old dts files were wrong and should be fixed to
+> fully restore old functionality.
+> 
+> Let's re-enable the old functionality by fixing the dts.
+> 
+> [1] https://lore.kernel.org/r/20220824142229.RFT.v2.2.I6f77860e5cd98bf5c67208fa9edda4a08847c304@changeid
+> 
+> Fixes: d0a6ce59ea4e ("arm64: dts: qcom: sm8150: Add support for SONY Xperia 1 / 5 (Kumano platform)")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Signed-off-by: Dipen Patel <dipenp@nvidia.com>
----
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8fd6a1721e69..b97cfb7d6fd9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9326,6 +9326,9 @@ F:	drivers/input/touchscreen/htcpen.c
- 
- HTE SUBSYSTEM
- M:	Dipen Patel <dipenp@nvidia.com>
-+L:	timestamp@lists.linux.dev
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pateldipen1984/linux.git
-+Q:	https://patchwork.kernel.org/project/timestamp/list/
- S:	Maintained
- F:	Documentation/devicetree/bindings/timestamp/
- F:	Documentation/driver-api/hte/
-
-base-commit: b5d939c951865f6fc229094e84b77c9a9e0ed0c7
--- 
-2.17.1
+> ---
+> 
+>  arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+> index 014fe3a31548..fb6e5a140c9f 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+> @@ -348,6 +348,9 @@ vreg_l6c_2p9: ldo6 {
+>  			regulator-max-microvolt = <2960000>;
+>  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>  			regulator-allow-set-load;
+> +			regulator-allowed-modes =
+> +			    <RPMH_REGULATOR_MODE_LPM
+> +			     RPMH_REGULATOR_MODE_HPM>;
+>  		};
+>  
+>  		vreg_l7c_3p0: ldo7 {
+> @@ -367,6 +370,9 @@ vreg_l9c_2p9: ldo9 {
+>  			regulator-max-microvolt = <2960000>;
+>  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>  			regulator-allow-set-load;
+> +			regulator-allowed-modes =
+> +			    <RPMH_REGULATOR_MODE_LPM
+> +			     RPMH_REGULATOR_MODE_HPM>;
+>  		};
+>  
+>  		vreg_l10c_3p3: ldo10 {
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+> 
 

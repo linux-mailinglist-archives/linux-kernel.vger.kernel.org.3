@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FA65A12E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064435A1415
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241096AbiHYOCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
+        id S242238AbiHYOjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHYOCs (ORCPT
+        with ESMTP id S242470AbiHYOjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:02:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D2922BF1;
-        Thu, 25 Aug 2022 07:02:47 -0700 (PDT)
-Received: from mercury (dyndsl-037-138-189-169.ewe-ip-backbone.de [37.138.189.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C7B16601D9B;
-        Thu, 25 Aug 2022 15:02:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661436165;
-        bh=7SIZbVfu23i3fWXeHgVoqyNxcUenu0Rqg73BHIJm/Cc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UNzH4eNuq/vV3uAMvTM/1TbnRVebcnbnnvJ8s24RP5yMOWSlmTGh5miYbR6UOatAS
-         l6PfqaNtBIvxfyvObOSTBE0IqRVPuqq4lOQSAN+5nqoqyoJIxao4SgRtBwyjdsdzRK
-         +YD2ys8q/vliex24Z20fkWLfyoKB1GiBOVVX65FiZ9JFFYbRoKnb0cXDG7h/MScV9X
-         TJZqU3kjzYG8lWAxWKs4YQ3iqeeN7GCAlY8rE4Cf4HNFDEGJ7pKX+ClrTTfYwPomd0
-         ZTZf9B1bY9El+bddDuUu6H4Tuk/HsWCEcifRHxrENQoU3o0pIQZ6yBXL5ZoIgtVPJi
-         aRS2i+uXmdeFA==
-Received: by mercury (Postfix, from userid 1000)
-        id 7114210607D1; Thu, 25 Aug 2022 16:02:43 +0200 (CEST)
-Date:   Thu, 25 Aug 2022 16:02:43 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: core: Ignore -EIO for uevent
-Message-ID: <20220825140243.tgotqpymswduzlyy@mercury.elektranox.org>
-References: <20220824165459.1.I059ae712dd6d324897162ee9f37c22849aa22745@changeid>
+        Thu, 25 Aug 2022 10:39:09 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9085B81CB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:38:13 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id g5-20020a4ac4c5000000b0044af7c8c4b3so3364011ooq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=dD45AotZgawn6j7yXm8vQJ+UE0Dbo/KkcTzZcEiShZk=;
+        b=K+RHoh+HUw7Lslc17S1hk0nZmNLDzJbF6N73rs6R1mYJ3SRr9ELrDwFpg8vwZDVZZk
+         kWho5V+GGmA/3LXG0xZg/pXSPJIsSxNTZm3LoYXiEWZUz3DwzwEDHf86rQPNrypZ8hNe
+         JFIsycyNk6fxTk+XVGjPCwqV5/oFim0dzEXAnh5TQJJ6w7AugQtrZxfVxzxbw8FR07AL
+         t/GgwYpeJJPm7NGYhygh5BCUkXY5dG2rGrr2b/kwecVXAfTN/nrvEhWhUhUXtZoEbJl2
+         8nf109NW7dKi+crgRh0sRpGxoBzEb/HvWY+Fdrcy3D1FDyxKcIuoDJK70zQ/5RiqyXt4
+         H2gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=dD45AotZgawn6j7yXm8vQJ+UE0Dbo/KkcTzZcEiShZk=;
+        b=PVKcwbm+WHgBLzplRYdhLvR+rqLFHWM4BsdP9sTjvRsLifNLD4s2Uno7iC6hyOM5B6
+         9Xs/OVG546+0fJIeQSIelTWdhwJKrp+MhAPGhKCDcSQUjqUw8B3D9jI4rVNKT/zkGwim
+         VD+c5h/XURl5Zu4EaZmRAqQynEZCrNvrpbGBYUTECPaQBSznoWXb6QxcPqCYunWgAxka
+         AFUntwNKVzR1b+EljihzB1rnSWvk2jishHmILUW7B9fuwQjmXQG0YXSzmpWZ7y/h1+QX
+         bRLUjQeLSxSIX+/k7skS+6u3DqzNCfoAMZEtfiFLPoxUhy/12COEacGk2SrKyBGfFqR/
+         voGg==
+X-Gm-Message-State: ACgBeo1LfEaBu4ljziMNjMKW8LsLFbLrYqOnj9TsRePK+r0kO8KhVHSq
+        Y0crQI3Y+bTLIK7Y9MIccAnFIA==
+X-Google-Smtp-Source: AA6agR5b55IUOFFbPyjXVGsBwjiEhvECpdWI/tNtXaH7xbcjDHW403RlhV5oD7vQe80xy+iy4VwRYg==
+X-Received: by 2002:a4a:c113:0:b0:435:4ce0:9794 with SMTP id s19-20020a4ac113000000b004354ce09794mr1364871oop.87.1661438293205;
+        Thu, 25 Aug 2022 07:38:13 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id k19-20020a9d7013000000b0063696cbb6bdsm5196989otj.62.2022.08.25.07.38.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 07:38:12 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 10:03:43 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linux-iio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Patrick Havelange <patrick.havelange@essensium.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Kamel Bouhara <kamel.bouhara@bootlin.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        David Lechner <david@lechnology.com>,
+        Jonathan.Cameron@huawei.com
+Subject: Re: [PATCH] counter: Move symbols into COUNTER namespace
+Message-ID: <YweBP30SLb5JMDq0@fedora>
+References: <20220815220321.74161-1-william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wgnvmg5jlieudigr"
+        protocol="application/pgp-signature"; boundary="Awi6TV3gD/mTDbk7"
 Content-Disposition: inline
-In-Reply-To: <20220824165459.1.I059ae712dd6d324897162ee9f37c22849aa22745@changeid>
+In-Reply-To: <20220815220321.74161-1-william.gray@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,81 +82,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---wgnvmg5jlieudigr
+--Awi6TV3gD/mTDbk7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Wed, Aug 24, 2022 at 04:57:20PM -0700, Brian Norris wrote:
-> For uevents, we enumerate all properties. Some battery implementations
-> don't implement all standard properties, and may return -EIO for
-> properties that aren't recognized. This means we never report uevents
-> for such batteries.
+On Mon, Aug 15, 2022 at 06:03:21PM -0400, William Breathitt Gray wrote:
+> Counter subsystem symbols are only relevant to counter drivers. A
+> COUNTER namespace is created to control the availability of these
+> symbols to modules that import this namespace explicitly.
 >=20
-> It's better to ignore these errors and skip the property, as we do with
-> ENODATA and ENODEV.
->=20
-> Example battery implementation: Acer Chromebook Tab 10 (a.k.a. Google
-> Gru-Scarlet) has a virtual "SBS" battery implementation in its Embedded
-> Controller on top of an otherwise non-SBS battery.
->=20
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
+> Cc: Patrick Havelange <patrick.havelange@essensium.com>
+> Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Cc: Oleksij Rempel <linux@rempel-privat.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Kamel Bouhara <kamel.bouhara@bootlin.com>
+> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: David Lechner <david@lechnology.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
--EIO means input/output error. If a driver is reporting that for an
-unimplemented feature it's a bug that should be fixed in the driver.
-Handling it here means userspace ABI changes for temporary issues.
+Applied to counter-next branch.
 
--- Sebastian
+William Breathitt Gray
 
->  drivers/power/supply/power_supply_sysfs.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index 4239591e1522..36fce572a213 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -439,10 +439,12 @@ static int add_prop_uevent(struct device *dev, stru=
-ct kobj_uevent_env *env,
->  	dev_attr =3D &pwr_attr->dev_attr;
-> =20
->  	ret =3D power_supply_show_property(dev, dev_attr, prop_buf);
-> -	if (ret =3D=3D -ENODEV || ret =3D=3D -ENODATA) {
-> +	if (ret =3D=3D -ENODEV || ret =3D=3D -ENODATA || ret =3D=3D -EIO) {
->  		/*
->  		 * When a battery is absent, we expect -ENODEV. Don't abort;
-> -		 * send the uevent with at least the the PRESENT=3D0 property
-> +		 * send the uevent with at least the PRESENT=3D0 property. Some
-> +		 * batteries also report EIO, even for some standard
-> +		 * properties.
->  		 */
->  		return 0;
->  	}
-> --=20
-> 2.37.2.672.g94769d06f0-goog
->=20
-
---wgnvmg5jlieudigr
+--Awi6TV3gD/mTDbk7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMHgP4ACgkQ2O7X88g7
-+pqi7RAAg4Qo7K7p69J7lgFtLm4EBAu3eZqz0tp/a2kwS0nYOG+zTtDAafqpkg64
-1Den2X5UulI8xETwZUFnQyfJySW4/LGFWhw/xQu75B+eHJlUcP0QVq5R6g69W7j2
-PzRjRs3GGnTDpdslQw476h8x0/6CQvf2kBoMR7lAKkwJnUXDoF6GAM8HuHojjpof
-/vB5u/0cpVcyp14nsjFj9BVPSzNsCMvzb5sTcXm0+L0a8BPNzwQlh4mdjbH0ISYa
-90cPsgGdAnUzu1MjwzT+i4XIND9GhzY3+9K7wVspIhMw4zGQoqhuvURx/invs7jS
-diYWHHxM6y5d7BMs08LtOdjy9/kc2eFwwtxgFrKsM6WAY8aGY7HJObVz/LaVTGOj
-Hmp/O3dvuBNw1vvPz/3K8SYlTSsqewAJbTIfClZDv+5qH28xDUpRMtdm32UYalQs
-SEF9fAUt8hnHx5o5rI82gQCPLngNngPlCKTr+y+Tnd17BDrNsV/kYxQh477NfGAA
-3eoOs72lYwCG2/GOOkH3FJ0HT023f/3xp97F4s4Ve2/prterUaVoWP0/16w9K2L+
-aRwi1wzxzGBBVouwkAZxggmlaTmByQfm+hw51OXDmfw4mWGmvrn12+4lzan3es7U
-anGKLykf2NvR67TWSpRNoKaBN9T5kVSZt+0iwWQkVTdZ1T6enR4=
-=7Px2
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYweBPwAKCRC1SFbKvhIj
+Kz8xAQDVpcs6TSh1nCA9NTh9HkIp7VdzcBsSUUucshnYANY8FAEAhqF9QuAzFdoP
+jT18GCZH6jgDLd+3tR1jau8IU8doFwI=
+=6kcl
 -----END PGP SIGNATURE-----
 
---wgnvmg5jlieudigr--
+--Awi6TV3gD/mTDbk7--

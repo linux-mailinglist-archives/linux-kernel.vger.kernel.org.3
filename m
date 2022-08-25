@@ -2,158 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3A75A0BE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFD55A0BF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiHYIvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S232546AbiHYI4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiHYIvt (ORCPT
+        with ESMTP id S229510AbiHYI4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:51:49 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734ACA8302;
-        Thu, 25 Aug 2022 01:51:48 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 564422B3;
-        Thu, 25 Aug 2022 10:51:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661417506;
-        bh=hqjjTfpHavt0j/vu7b/diKsDIw1QdqTc5yyTW7GYfo8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z8pStjaw+wTHpUqjfkrNYv4yhEOMiZpey4BovUqFDdUKaiJRG3zr27mJb+3KOVnqv
-         SeSwIWuxOsniVY0CtkTuJBrvvODxoS4qbCjAnkQGfS00GuyUS1Limb9dDBRxhVsFoW
-         HVOrzfbF2aIEGVjQzg6fMImib3ZqHBM+/31mCM9o=
-Date:   Thu, 25 Aug 2022 11:51:40 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "James (Qian) Wang" <james.qian.wang@arm.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Mihail Atanassov <mihail.atanassov@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: display: Add missing
- (unevaluated|additional)Properties on child nodes
-Message-ID: <Ywc4HGS+7aq9Fbk1@pendragon.ideasonboard.com>
-References: <20220823145649.3118479-11-robh@kernel.org>
+        Thu, 25 Aug 2022 04:56:18 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FCAA3D15;
+        Thu, 25 Aug 2022 01:56:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=kangjie.xu@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VNCZWjK_1661417770;
+Received: from localhost(mailfrom:kangjie.xu@linux.alibaba.com fp:SMTPD_---0VNCZWjK_1661417770)
+          by smtp.aliyun-inc.com;
+          Thu, 25 Aug 2022 16:56:11 +0800
+From:   Kangjie Xu <kangjie.xu@linux.alibaba.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     mst@redhat.com, jasowang@redhat.com, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hengqi@linux.alibaba.com,
+        xuanzhuo@linux.alibaba.com
+Subject: [PATCH] vhost-net: support VIRTIO_F_RING_RESET
+Date:   Thu, 25 Aug 2022 16:56:10 +0800
+Message-Id: <20220825085610.80315-1-kangjie.xu@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220823145649.3118479-11-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Add VIRTIO_F_RING_RESET, which indicates that the driver can reset a
+queue individually.
 
-Thank you for the patch.
+VIRTIO_F_RING_RESET feature is added to virtio-spec 1.2. The relevant
+information is in
+    oasis-tcs/virtio-spec#124
+    oasis-tcs/virtio-spec#139
 
-On Tue, Aug 23, 2022 at 09:56:42AM -0500, Rob Herring wrote:
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+The implementation only adds the feature bit in supported features. It
+does not require any other changes because we reuse the existing vhost
+protocol.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+The virtqueue reset process can be concluded as two parts:
+1. The driver can reset a virtqueue. When it is triggered, we use the
+set_backend to disable the virtqueue.
+2. After the virtqueue is disabled, the driver may optionally re-enable
+it. The process is basically similar to when the device is started,
+except that the restart process does not need to set features and set
+mem table since they do not change. QEMU will send messages containing
+size, base, addr, kickfd and callfd of the virtqueue in order.
+Specifically, the host kernel will receive these messages in order:
+    a. VHOST_SET_VRING_NUM
+    b. VHOST_SET_VRING_BASE
+    c. VHOST_SET_VRING_ADDR
+    d. VHOST_SET_VRING_KICK
+    e. VHOST_SET_VRING_CALL
+    f. VHOST_NET_SET_BACKEND
+Finally, after we use set_backend to attach the virtqueue, the virtqueue
+will be enabled and start to work.
 
-> ---
->  Documentation/devicetree/bindings/display/arm,komeda.yaml        | 1 +
->  Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml | 1 +
->  Documentation/devicetree/bindings/display/msm/gpu.yaml           | 1 +
->  .../bindings/display/samsung/samsung,exynos7-decon.yaml          | 1 +
->  .../devicetree/bindings/display/samsung/samsung,fimd.yaml        | 1 +
->  5 files changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/arm,komeda.yaml b/Documentation/devicetree/bindings/display/arm,komeda.yaml
-> index 9f4aade97f10..3ad3eef89ca8 100644
-> --- a/Documentation/devicetree/bindings/display/arm,komeda.yaml
-> +++ b/Documentation/devicetree/bindings/display/arm,komeda.yaml
-> @@ -58,6 +58,7 @@ properties:
->  patternProperties:
->    '^pipeline@[01]$':
->      type: object
-> +    additionalProperties: false
->      description:
->        clocks
->  
-> diff --git a/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml b/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml
-> index 3a8614e0f627..84aafcbf0919 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/lvds-codec.yaml
-> @@ -51,6 +51,7 @@ properties:
->      properties:
->        port@0:
->          $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
->          description: |
->            For LVDS encoders, port 0 is the parallel input
->            For LVDS decoders, port 0 is the LVDS input
-> diff --git a/Documentation/devicetree/bindings/display/msm/gpu.yaml b/Documentation/devicetree/bindings/display/msm/gpu.yaml
-> index 3397bc31d087..0179c816fa6d 100644
-> --- a/Documentation/devicetree/bindings/display/msm/gpu.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/gpu.yaml
-> @@ -81,6 +81,7 @@ properties:
->  
->    zap-shader:
->      type: object
-> +    additionalProperties: false
->      description: |
->        For a5xx and a6xx devices this node contains a memory-region that
->        points to reserved memory to store the zap shader that can be used to
-> diff --git a/Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml b/Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml
-> index 969bd8c563a5..dec1c9058876 100644
-> --- a/Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml
-> +++ b/Documentation/devicetree/bindings/display/samsung/samsung,exynos7-decon.yaml
-> @@ -37,6 +37,7 @@ properties:
->  
->    i80-if-timings:
->      type: object
-> +    additionalProperties: false
->      description: timing configuration for lcd i80 interface support
->      properties:
->        cs-setup:
-> diff --git a/Documentation/devicetree/bindings/display/samsung/samsung,fimd.yaml b/Documentation/devicetree/bindings/display/samsung/samsung,fimd.yaml
-> index 5d5cc220f78a..7593938601bb 100644
-> --- a/Documentation/devicetree/bindings/display/samsung/samsung,fimd.yaml
-> +++ b/Documentation/devicetree/bindings/display/samsung/samsung,fimd.yaml
-> @@ -40,6 +40,7 @@ properties:
->  
->    i80-if-timings:
->      type: object
-> +    additionalProperties: false
->      description: |
->        Timing configuration for lcd i80 interface support.
->        The parameters are defined as::
+Signed-off-by: Kangjie Xu <kangjie.xu@linux.alibaba.com>
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
 
+Test environment and method:
+    Host: 5.19.0-rc3
+    Qemu: QEMU emulator version 7.0.50 (With vq rset support)
+    Guest: 5.19.0-rc3 (With vq reset support)
+    Test Cmd: ethtool -g eth1; ethtool -G eth1 rx $1 tx $2; ethtool -g eth1;
+
+    The drvier can resize the virtio queue, then virtio queue reset function should
+    be triggered.
+
+    The default is split mode, modify Qemu virtio-net to add PACKED feature to 
+    test packed mode.
+
+Guest Kernel Patch:
+    https://lore.kernel.org/bpf/20220801063902.129329-1-xuanzhuo@linux.alibaba.com/
+
+QEMU Patch:
+    https://lore.kernel.org/qemu-devel/cover.1661414345.git.kangjie.xu@linux.alibaba.com/
+
+Looking forward to your review and comments. Thanks.
+
+ drivers/vhost/net.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+index 68e4ecd1cc0e..8a34928d4fef 100644
+--- a/drivers/vhost/net.c
++++ b/drivers/vhost/net.c
+@@ -73,7 +73,8 @@ enum {
+ 	VHOST_NET_FEATURES = VHOST_FEATURES |
+ 			 (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
+ 			 (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
+-			 (1ULL << VIRTIO_F_ACCESS_PLATFORM)
++			 (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
++			 (1ULL << VIRTIO_F_RING_RESET)
+ };
+ 
+ enum {
 -- 
-Regards,
+2.32.0
 
-Laurent Pinchart

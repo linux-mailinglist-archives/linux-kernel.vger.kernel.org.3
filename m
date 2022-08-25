@@ -2,204 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513BF5A16DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE4F5A171E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243094AbiHYQlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S243422AbiHYQpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbiHYQlL (ORCPT
+        with ESMTP id S243278AbiHYQoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:41:11 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2042.outbound.protection.outlook.com [40.107.243.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42439B9FBA;
-        Thu, 25 Aug 2022 09:41:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cKsjGpne0j5W5GsINeIGquRHJD5iMnmNor/Ns69ZliLMwqvNYwtDKOfW3qFklER9EkBybY1JsbJFdd8XQj1NzoTV6+0MiBhf/ao3mJxOZp3Gq4crVsHI9LAoocOeisbIlUm+WB7VMgQ3CWjhneNOM8gDTlBOBlthfmQElUXbRwlN7MA351KykPQZGJYD/qrREz8sgzZYD+yNl58UZPRlO60QsGDy/4yYGK0xJT6kfYsBPzxaHqV5Nn3MY71pNhc9Geip231ImmU8n+Z5Lt1fg5lgDdPzd35CZzS8cILyL6ADjWr8aWrMO+1QxlHZ/y+xBmVzSoWwmovysLSfzSO4zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c4+B3s8BolKbMsrP5sUzNH5m4pIphX+jXjoiOxKpS2g=;
- b=il5pFwKR6gVBaQ2nX6o3wrJa3eFrMIECZ35BHnTW87IZQW9Gtz/pM1hYM/coQEjeKBwr3P7dPg4x1/UPhvyFle+lNfHCjZHNJbH/5B1SjnO3ZG5tBjpMLoObMwIovCdDyIdlfT+m1/PccYT0WZY4KHMzBE0xGBQycQEgjn1X6Y7WnvpnDwn3mpln50sxuymDtZ29jko+F0BwS6g/tLqKp5WBFCiHmTeBXUQTlpatYiQunbK1o51ZLghXflI7LVfjU0RNAMWp31pUOMGV8CWXCPzttMxTILWNzjfIcC7zhPrRWHfq+M0kx2otQB2WOpwoanpvMoooWExRZYcQQGJ3xA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c4+B3s8BolKbMsrP5sUzNH5m4pIphX+jXjoiOxKpS2g=;
- b=XXc5P7Q8ZKhqf55YCFr9nj7hQrs4XkN9z0leNFbrTHSPOw0/qkBU3U1Z7+e7y2uK+0h9aHo6laYjM6Pwnsb2wmTKtBFPRPljqqiSqS05bMPPbOBrwvGqemUMxKjBBDAo5ZnLdJeo27ahexGSJ0OekA4pKv+XiR6W6OqZiPdysp8luXO6/BMkxDEtGefmQ2vDX7j8IlDPSJxODeJlRbGFIRX9LxSLTniq318o2ssrzPeADEJUnGuJtgIvtMRjWVtOdVzY4DoLDZih3Qzvswu5+iTbAndTrIkIq5tH3QyZRPfIL5/oiYwU4fQez8m6hPJKFJ66/zeXHkO1EhpPIQvFtA==
-Received: from SJ1PR12MB6339.namprd12.prod.outlook.com (2603:10b6:a03:454::10)
- by CY4PR1201MB2484.namprd12.prod.outlook.com (2603:10b6:903:d7::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
- 2022 16:41:08 +0000
-Received: from SJ1PR12MB6339.namprd12.prod.outlook.com
- ([fe80::24cb:46cd:5176:aa13]) by SJ1PR12MB6339.namprd12.prod.outlook.com
- ([fe80::24cb:46cd:5176:aa13%8]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
- 16:41:08 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "wsa@kernel.org" <wsa@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "Kartik ." <kkartik@nvidia.com>
-Subject: RE: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
-Thread-Topic: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
-Thread-Index: AQHYs8aKp+OlLQycOkO470/UfA2RzK22VXAAgAADTwCABBngUIAAPbIAgAAHnMCAAK1egIAACdIAgAB/C4CAAEIiAIAAAWsAgAA0KUCAABwUgIADTeFA
-Date:   Thu, 25 Aug 2022 16:41:08 +0000
-Message-ID: <SJ1PR12MB6339E13E9AFDCA1EAB9A72E9C0729@SJ1PR12MB6339.namprd12.prod.outlook.com>
-References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
- <20220819122313.40445-2-akhilrajeev@nvidia.com>
- <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
- <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
- <SJ1PR12MB6339FC1F82EB1BB7417E533BC0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <ebb0764f-db92-d69d-49ac-151f4e3e0b8a@collabora.com>
- <SJ1PR12MB63396DC508F63807F1CE9901C0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <fac10841-1682-845f-3e4a-5668f59caed0@gmail.com>
- <cd0374f1-2c05-7e61-7187-cfc9c42edf63@gmail.com>
- <SJ1PR12MB63397BBD4EF314A742680F2CC0709@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <a7ba27c4-992b-28d1-f6c2-3937b4f275ce@collabora.com>
- <c9ba2629-fc81-cefd-0d6d-991084781ec3@collabora.com>
- <SJ1PR12MB63393F51E29BA1F85AD249DBC0709@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <4f791065-e0dd-6ed5-f152-86d7be683490@collabora.com>
-In-Reply-To: <4f791065-e0dd-6ed5-f152-86d7be683490@collabora.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fc1d43a1-2d68-44f7-5571-08da86b89ca6
-x-ms-traffictypediagnostic: CY4PR1201MB2484:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8lcl+xGQiyavyv6QsF6YCfvWqyE9z2JqquL+UgmMuOB4bazmTG9+ypZBA3/z8kmoNFlBwegp1Xe8VE4lRtBElpXCY9fz1zzlE3vN22P3GwoDfE9OImg4QALbNvWXslrALoil/khqLp5hDgxQyQ1eZDNkTchu2mgUFbjwZk1dVl0xb3ThwSELNoxzhaRsvN2SIEQ/tgtrmTrsdySqopPwQQVHwHQnrUnsD5qXYWU7j5Q5vYQWw9aT9kEYBKPp6ZRrZjb7XnBAvSf1p65Qm730IafkteXklGKhFkPxUnA+U1NCuX+AtNNxJOfp/CX34WP4Dg4uTpEtWp8dkcQSoIUJHxJJOEGCNAhDkXKidam8BDR3eV68i4hZSySSpM00L6cdGCvHnVkbyPJIyip5aQKEhnCOUm1GK0LBJix9RbdL1GChnRSOwoI9TLSKAoTzFVI8IpmJKfj1XvIEVm/mFShm01cNGiTQ0Iu0xqHmYl4c952T4B+gIbnp8C34ouJjmgNBFQEzf06W9j2EZYPYrhV3OjC8o3IoNdYnIGjzKqldY1SCus033yfGdviT05ZbwFKPyUTo/MtFZs1Cg0j9wLMx6cTDkwYsZKwpg3RBzn8CXAd4LLoeR9wgBurO0+mUa93mqKSJ7c1yqGRjNur0b9LCOXp2+c0DTLZLm1qixqoAnqttQQEIlxmuDI+GTZLgv8RUunt7ifDWOxmKKU3SF5c7f4R7goZbYFza6nKBzE5yFnJ9K2vanSqIZ3VMH/q52+TRFQFqRQPyaE7A+tGtjoTvwA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR12MB6339.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(396003)(136003)(346002)(366004)(83380400001)(4326008)(66476007)(64756008)(38100700002)(54906003)(316002)(66446008)(55016003)(8676002)(52536014)(66556008)(76116006)(66946007)(5660300002)(110136005)(2906002)(122000001)(8936002)(7416002)(33656002)(86362001)(55236004)(53546011)(7696005)(26005)(41300700001)(6506007)(107886003)(9686003)(38070700005)(478600001)(71200400001)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?clJVbEFSVWNLRDBvUkR6dWZnVmh2TDNpMjBxa3p0WThNZXdnKzhjS1JpL3JY?=
- =?utf-8?B?VzlMNnlZbFliL0RvSFY2dE84UGhBZHBCQTJMOUMwTFBIMW5ndmJ6UWVRczQw?=
- =?utf-8?B?TnpQb2wyNGxuQm11akc0ZXJGWlpLU1pzUklWVm94aTRWY2ZxRmU4UVlvYzhw?=
- =?utf-8?B?NXpTUkN2OTI1YnlVdDlSbWticUl6emxid3JESUp6WUJFV3M5QjFZT1lPZUto?=
- =?utf-8?B?VzF2NFdNNHZsWFVheldhTWRxZEZ5U2c1bHFtamttNm9rU0ZpQmIxNlVjbkx2?=
- =?utf-8?B?T1BLaEhzQ2dNdVhpODlYZWtseWZ0cnUyUm9PaU5peTBQa3lvZmlBaUErQlRs?=
- =?utf-8?B?aEVLenFycGhPVTNxVHYrRGw0dUdPckErVEI2bVJrZmdFM1F6L3o4MW9TQzRs?=
- =?utf-8?B?Tm1hZ3lzWXlKTk5IMzRieURDUFlLelN4dlBNZytxN3g0QXhuZFJ0dlN1Tk9F?=
- =?utf-8?B?VlJIcU9NdkZFUGRQVGtEZitBS3RreHAyRzBnN2hWeHM3cnVjdEplZTZWMlVD?=
- =?utf-8?B?OEFZYjYxYVBxNmdXcndveVdMb1VhVVpiVExGSGZFMVFpMW90ZGF5UzRhNFBk?=
- =?utf-8?B?SmdUclp4WnRlUkdxQjlkVzFoaVNtM1VYRzUrMmc1R1l2VTJ4N1ZZaUtUVmpM?=
- =?utf-8?B?aGhHY1BhbzFGdWw5QWZNVUNDdENLYWplQTY4YWhoczRucmFNcGNxbWVyU1Zw?=
- =?utf-8?B?WElGVW5ZZEw2R0FWL0N4TlpSMVpFcTNhS2R1VlJMM2R5M1NZTXJ1NmY2c0hn?=
- =?utf-8?B?Njl2akVkemhFck91cmJhWmhiNnB2RGtMMUhnRVhqbno0b2o1RjY3TU9qV2Ew?=
- =?utf-8?B?R2FpOGhFZ2Vyc25rejVyaG96anR0N0YrYmV4L2ptaGk2dlNGR2xYUERoRmZx?=
- =?utf-8?B?eVREaGpuVzhJWkd1RmU5SGxqMHhiTWJuMEFrR0YzRTdYeWdkSEVFU1VxSWUw?=
- =?utf-8?B?NjhlWXFlWjBQc0ZsM1UrQ0JKSEJNZDlScXRGdllYdmZkQWFvakNuTWRyTDQ2?=
- =?utf-8?B?NlhJbHlnVkl4TmlneUxZU1dmMXdSMFRoTDZaS3U3b3c4cHVoOVJOQUdFbWJo?=
- =?utf-8?B?eXd0a3JPaTMvZUNjcm9sTktpbDhscGxYT3grL2JrZ1M3VWFoVGthNml3dm1O?=
- =?utf-8?B?WWs4VlB3TjQ2RlVnS3IxTVJoZStYY1FyY0FCS3hmL21ZMmUxUDNUeTFkekZH?=
- =?utf-8?B?NHNQNEplN0MxMm9oVnNGaklmQmxmbXdzbW5KOHN2WERiR2w1cHJ2dFNsMjht?=
- =?utf-8?B?ZE5IendmY1h5V0xMb1VXV2o3OXV5VkRzUHZHRENZV1VqMnFZTVludnVDeGNW?=
- =?utf-8?B?cW5DSlB6cTJhZTZzUGJNTVdsNE5NV0hpZCtkdnc2VDhqQ2xBbmh2alVTWFFm?=
- =?utf-8?B?TUUwRWpaNExaMGRwLzh5blJIaVdRSEtCS3U5YUVpWWhaVHp2cHQzME1hMm4r?=
- =?utf-8?B?NGJ3V1lLU3BnQ3Azd0VKenVIRC9DaHJNejk4c29kdkpTaWQ0U29BRkQxb01C?=
- =?utf-8?B?SE1BdXkxczA0UExMckNWTTlCbEY2M2FHVGNqbEliYktZMFJ6Z0F6Ym9SN0R3?=
- =?utf-8?B?SmMzRjAyTlR1Tkh3YWx1YmFodXdSVHFZa1hWUE5YczF6aGtsNHZmNzZnMldX?=
- =?utf-8?B?Z01QUExHd3NoemhzVVBPQVBleUxOd0VzTm5USU0xZzNId21EQ1htTEVDVHJN?=
- =?utf-8?B?UFVWaC8xVDF3LzJ1Zkw5U3VuOVRvRkpoWXppWWhJRjkxTVQyV0h5ZUdBa002?=
- =?utf-8?B?NEhmY1F4cGZodlIyeVVjTm52YURvRDI0WHJOTm41bk1nNzUrS3VZYUpudXZr?=
- =?utf-8?B?Nms2ZUVuREhTcTRNZ3Z0emFFQSs4KzBpTE4yb3gvSWlwWmQweHo4SUVQSlVs?=
- =?utf-8?B?ZjdTVVNmUjYrd2pFRDFVazJyVHZDYUdFdGRxbjB5dU4wN29NN0FiZjNhMmVE?=
- =?utf-8?B?dThuczFwRlQwaVIvT0JsQzJkazloMlg3QndxcVhjVjFJUWhwKytuOGYxOXFr?=
- =?utf-8?B?K2REMnVZRmdkYVNLTm5mNXFyZ0pLWkxvWmNiTXlCQXZScmt3TjFOU0NDVGxo?=
- =?utf-8?B?V2ZaTHJCOFZDQnNacTVWSXRvbXVSaWdYMXFMQnpGaFFHYjNlNE5SUUtLSU0x?=
- =?utf-8?Q?xyr4pQEn5VO3sqcFNWLr0P4f5?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 25 Aug 2022 12:44:32 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0027CBC820
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:43:12 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id o4so921491pjp.4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=8zSngJc0xooKlhE/eQjAwV0zhxYwm2DfMI4ravCBhpE=;
+        b=D+ohCdSoPVccePne5Gid2JiTeKZqocAN3FD1vrYNzCpnJbHRz5hIi/1TRMVHQ0HIwz
+         GVmN8A5X9dnG+q/oKffUMwIbrxodEg7BealiuWVjXIQ+90TuZoXD1AT3dgz0MR7c1O8T
+         lLgttUw7WIfT3eAuMPKxNkMjwBgPQEXy/w08At9hZMmTlcimFixKbSbjlJFQQrGAks5T
+         pu5fGDqLpWMnTkji365OfZRBignV18vKe0InFhM9h9BxcpzkoNqsjfazV8Bpugv/Lqdn
+         MT/KWpC0DndoymR5fszcOTx8aaG4blVJsveEBqXo8wBcUmyHns+CBnT5Hnx6fek9My5E
+         vsrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=8zSngJc0xooKlhE/eQjAwV0zhxYwm2DfMI4ravCBhpE=;
+        b=zWuRa2pj5pBNg0iVuCwTWD5xw2IQZBQmehGMap9+AmcyPHIVNh0CsSGN+SzjvEmHTe
+         rPSE0Ptha77WcObM54GmXedVlp9FsIZQpB5lm41NdTB+WaGOTlSTe9VYwSj4IedQh1NW
+         TMbuHM+qbQ1Kc24yKVh5Kiz23vKd1+vAVQTmBjZ/e6N8dnLhroHcgsaPcUAdFjqTjBqC
+         ce9p3i32R+2U1DAGdLARpRVT+Vf87jXTg7LsT8S9VGcXqMu+I3fEixkvRDMXNQbZqXOX
+         b1M/7CbodFX21ByKQMbHuuLn+DY4O1sh9znnfeF98UK4oVxKz1mWH725vm+9h+6xrTCk
+         +xsQ==
+X-Gm-Message-State: ACgBeo2AqeTDErdwgpT07vvXNTuEyflzCfr23pAQ/d4UoJ3PPuTil1dY
+        u+hK54BowbyQZe8J9p4psk2EcA==
+X-Google-Smtp-Source: AA6agR7No0v6NdwYsouySAcbkLmWVPRuKBYQ7KrrUeD7+S3LiXtQouYYpWbR6ycHJtcuwBJALiPCLA==
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id mw7-20020a17090b4d0700b001ef521cf051mr15017462pjb.164.1661445792470;
+        Thu, 25 Aug 2022 09:43:12 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id b18-20020a62a112000000b005362314bf80sm12779408pff.67.2022.08.25.09.43.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 09:43:12 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     hannes@cmpxchg.org, tj@kernel.org, mkoutny@suse.com,
+        surenb@google.com
+Cc:     mingo@redhat.com, peterz@infradead.org, gregkh@linuxfoundation.org,
+        corbet@lwn.net, cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v4 07/10] sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
+Date:   Fri, 26 Aug 2022 00:41:08 +0800
+Message-Id: <20220825164111.29534-8-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220825164111.29534-1-zhouchengming@bytedance.com>
+References: <20220825164111.29534-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR12MB6339.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc1d43a1-2d68-44f7-5571-08da86b89ca6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2022 16:41:08.6285
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wqLtcdFdkxgsEWaIo4aG6qz0AZj6yropB/PGuDMW9B27DEae9jh1T1EZJcuNiZR4ozek+qwOvmTUeQL1LrVbVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2484
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiA4LzIzLzIyIDE1OjU1LCBBa2hpbCBSIHdyb3RlOg0KPiAuLi4NCj4gPj4+PiBXaGF0IEkg
-YW0gdHJ5aW5nIGZvciBpcyB0byBoYXZlIGEgbWVjaGFuaXNtIHRoYXQgZG9lc24ndCBoYWx0IHRo
-ZSBpMmMNCj4gPj4gdHJhbnNmZXJzDQo+ID4+Pj4gdGlsbCBETUEgaXMgYXZhaWxhYmxlLiBBbHNv
-LCBJIGRvIG5vdCB3YW50IHRvIGRyb3AgRE1BIGJlY2F1c2UgaXQgd2FzDQo+ID4+IHVuYXZhaWxh
-YmxlDQo+ID4+Pj4gZHVyaW5nIHByb2JlKCkuDQo+ID4+Pg0KPiA+Pj4gV2h5IGlzIGl0IHVuYXZh
-aWxhYmxlPyBTb3VuZHMgbGlrZSB5b3UncmUgbm90IHBhY2thZ2luZyBrZXJuZWwgcHJvcGVybHku
-DQo+ID4gVW5hdmFpbGFibGUgdW50aWwgaW5pdHJhbWZzIG9yIHN5c3RlbWQgaXMgc3RhcnRlZCBz
-aW5jZSB0aGUgbW9kdWxlIGhhcyB0byBiZQ0KPiA+IGxvYWRlZCBmcm9tIGVpdGhlciBvZiBpdC4N
-Cj4gPg0KPiA+Pj4NCj4gPj4+PiBUaGlzIHNpdHVhdGlvbiBpcyBzdXJlIHRvIGhpdCBpZiB3ZSBo
-YXZlIEkyQyBkcml2ZXIgYXMgYnVpbHQgaW4gYW5kIERNQSBkcml2ZXINCj4gYXMgYQ0KPiA+Pj4+
-IG1vZHVsZS4gSW4gc3VjaCBjYXNlcywgSTJDIHdpbGwgbmV2ZXIgYmUgYWJsZSB0byB1c2UgdGhl
-IERNQS4NCj4gPj4+DQo+ID4+PiBGb3IgVGVncmEgSTJDIGJ1aWx0LWluICsgRE1BIGRyaXZlciBt
-b2R1bGUgeW91IHNob3VsZCBhZGQgdGhlIGRtYS5rbyB0bw0KPiA+Pj4gaW5pdHJhbWZzIGFuZCB0
-aGVuIGl0IHdpbGwgd29yay4gVGhpcyBpcyBhIGNvbW1vbiBwcmFjdGljZSBmb3IgbWFueQ0KPiA+
-Pj4ga2VybmVsIGRyaXZlcnMuDQo+ID4+Pg0KPiA+Pj4gSXQncyBhbHNvIHNpbWlsYXIgdG8gYSBw
-cm9ibGVtIHdpdGggZmlybXdhcmUgZmlsZXMgdGhhdCBtdXN0IGJlDQo+ID4+PiBhdmFpbGFibGUg
-dG8gZHJpdmVycyBkdXJpbmcgYm9vdCwNCj4gPg0KPiA+IElzbid0IHRoZSBpbml0cmFtZnMgbG9h
-ZGVkIGFmdGVyIHRoZSBkcml2ZXIgaW5pdGNhbGxzPyBXYXNuJ3QgdmVyeSBtdWNoIGNsZWFyIGZv
-cg0KPiBtZQ0KPiA+IGZyb20gdGhlIGNvZGUgYW5kIGRvY3MuIFdlIGRpZCB0cnkgYWRkaW5nIHRo
-ZSBtb2R1bGUgaW4gaW5pdHJhbWZzIGluaXRpYWxseSwgYnV0DQo+ID4gY291bGRuJ3QgZmluZCBt
-dWNoIG9mIGEgZGlmZmVyZW5jZSBmcm9tIHdoZW4gaXQgaXMgbG9hZGVkIGJ5IHN5c3RlbWQgaW4g
-cm9vdGZzLg0KPiA+IFdpbGwgZXhwbG9yZSBtb3JlIG9uIHRoaXMgaWYgdGhpcyByZWFsbHkgaGVs
-cHMuDQo+IA0KPiBJdCBkb2Vzbid0IG1hdHRlciB3aGVuIGluaXRyYW1mcyBpcyBsb2FkZWQuIFRl
-Z3JhIEkyQyBzaG91bGQgYmUNCj4gcmUtcHJvYmVkIG9uY2UgRE1BIGRyaXZlciBpcyByZWFkeSwg
-dGhhdCdzIHRoZSBwb2ludCBvZiBkZWZlcnJlZA0KPiBwcm9iaW5nLiBJJ2QgYXNzdW1lIHRoYXQg
-eW91ciBETUEgZHJpdmVyIG1vZHVsZSBpc24ndCBsb2FkaW5nLg0KDQpETUEgbW9kdWxlIGRvZXMg
-Z2V0IGxvYWRlZC4gSTJDIHByb2JlIGV2ZW50dWFsbHkgc3VjY2VlZHMgYW5kIGNhbg0KdXNlIERN
-QSB0aGVuLg0KDQpCdXQgbXkgaWRlYSBoZXJlIGlzIHRvIGF2b2lkIGJsb2NraW5nIG9mIEkyQyB0
-cmFuc2ZlcnMgdW50aWwgRE1BIGlzIGF2YWlsYWJsZS4NCkkgYW0gbG9va2luZyBmb3IgYSB3YXkg
-dGhhdCBJMkMgY2FuIHdvcmsgaW4gUElPIG1vZGUgdW50aWwgRE1BIGNvbWVzIHVwIGFuZA0KdGhl
-biBzd2l0Y2ggdG8gRE1BIG9uY2UgaXQgaXMgYXZhaWxhYmxlLg0KSSBhbSBob3BpbmcgdGhhdCBp
-dCB3b3VsZCBoZWxwIG90aGVyIEkyQyBkZXBlbmRlbnQgZHJpdmVycyBhcyB3ZWxsIGR1cmluZyBi
-b290Lg0KDQoNCj4gPiBTaW5jZSBJMkMgY2FuIHdvcmsgd2l0aG91dCBETUEsIHdvdWxkbid0IGl0
-IGxpbWl0IHRoZSBmbGV4aWJpbGl0eSBvZiBJMkMgZHJpdmVyLg0KPiANCj4gVGhlcmUgYXJlIGtl
-cm5lbCBjb25maWd1cmF0aW9ucyB0aGF0IGFyZSBub3Qgd29ydGh3aGlsZSB0byBzdXBwb3J0DQo+
-IGJlY2F1c2Ugbm9ib2R5IHVzZSB0aGVtIGluIHByYWN0aWNlLiBJIHRoaW5rIHRoaXMgaXMgZXhh
-Y3RseSB0aGUgY2FzZQ0KPiBoZXJlLiBUaGUgVEVHUkEyMF9BUEJfRE1BIGRyaXZlciBkZXBlbmRl
-bmN5IGNyZWF0ZWQgdHJvdWJsZXMgZm9yIGEgbG9uZw0KPiB0aW1lLg0KPiANCj4gSWYgRE1BIGRy
-aXZlciBpcyBlbmFibGVkIGluIGtlcm5lbCBjb25maWcsIHRoZW4geW91IHNob3VsZCBwcm92aWRl
-IHRoZQ0KPiBkcml2ZXIgbW9kdWxlIHRvIGtlcm5lbCBhbmQgaXQgd2lsbCB3b3JrLg0KPiANCj4g
-SWYgRE1BIGRyaXZlciBpcyBkaXNhYmxlZCBpbiBrZXJuZWwgY29uZmlnLCB0aGVuIFRlZ3JhIEky
-QyBkcml2ZXIgc2hvdWxkDQo+IHRha2UgdGhhdCBpbnRvIGFjY291bnQuIEknbSBub3cgcmVjYWxs
-aW5nIHRoYXQgdGhpcyB3YXMgdGhlIHJlYXNvbiBvZg0KPiAiIUlTX0VOQUJMRUQoQ09ORklHX1RF
-R1JBMjBfQVBCX0RNQSkiIGluIHRoZSBjb2RlLg0KPiANCj4gU2luY2UgYWxsIGgvdyBnZW5zIG5v
-dyBwcm92aWRlIERNQSBzdXBwb3J0IGZvciBUZWdyYSBJMkMsIHRoZW4gc2hvdWxkIGJlDQo+IGJl
-dHRlciBhbmQgZWFzaWVyIHRvIG1ha2UgRE1BIGEgZGVwZW5kZW5jeSBmb3IgVGVncmEgSTJDIGFu
-ZCBkb24ndA0KPiBtYWludGFpbiBrZXJuZWwgYnVpbGQgY29uZmlndXJhdGlvbnMgdGhhdCBub2Jv
-ZHkgY2FyZXMgYWJvdXQuDQoNCkkgYW0gc29tZWhvdyBzdGlsbCBub3QgdmVyeSBtdWNoIGluY2xp
-bmVkIHRvIGFkZCBHUENETUEgYXMgYSBkZXBlbmRlbmN5DQpmb3IgSTJDLiBFdmVuIGlmIHdlIGRp
-c2NhcmQgdGhlIGZhY3QgdGhhdCB0aGUgZHJpdmVyIGV4dGVuZHMgdG8gc3VwcG9ydCBjaGlwcw0K
-dGhhdCBkb2VzIG5vdCBoYXZlIEdQQ0RNQSwgSSB3b3VsZCBsb29rIGF0IERNQSBhcyBhbiBhZGRp
-dGlvbmFsIGZlYXR1cmUgb25seQ0KYW5kIG5vdCBhIGRlcGVuZGVuY3kuDQoNClJlZ2FyZHMsDQpB
-a2hpbA0KDQo=
+Now PSI already tracked workload pressure stall information for
+CPU, memory and IO. Apart from these, IRQ/SOFTIRQ could have
+obvious impact on some workload productivity, such as web service
+workload.
+
+When CONFIG_IRQ_TIME_ACCOUNTING, we can get IRQ/SOFTIRQ delta time
+from update_rq_clock_task(), in which we can record that delta
+to CPU curr task's cgroups as PSI_IRQ_FULL status.
+
+Note we don't use PSI_IRQ_SOME since IRQ/SOFTIRQ always happen in
+the current task on the CPU, make nothing productive could run
+even if it were runnable, so we only use PSI_IRQ_FULL.
+
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ Documentation/admin-guide/cgroup-v2.rst |  6 ++
+ include/linux/psi_types.h               | 10 +++-
+ kernel/cgroup/cgroup.c                  | 27 +++++++++
+ kernel/sched/core.c                     |  1 +
+ kernel/sched/psi.c                      | 74 ++++++++++++++++++++++++-
+ kernel/sched/stats.h                    |  2 +
+ 6 files changed, 116 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index be4a77baf784..971c418bc778 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -976,6 +976,12 @@ All cgroup core files are prefixed with "cgroup."
+ 	killing cgroups is a process directed operation, i.e. it affects
+ 	the whole thread-group.
+ 
++  irq.pressure
++	A read-write nested-keyed file.
++
++	Shows pressure stall information for IRQ/SOFTIRQ. See
++	:ref:`Documentation/accounting/psi.rst <psi>` for details.
++
+ Controllers
+ ===========
+ 
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index 54cb74946db4..40c28171cd91 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -42,7 +42,10 @@ enum psi_res {
+ 	PSI_IO,
+ 	PSI_MEM,
+ 	PSI_CPU,
+-	NR_PSI_RESOURCES = 3,
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++	PSI_IRQ,
++#endif
++	NR_PSI_RESOURCES,
+ };
+ 
+ /*
+@@ -58,9 +61,12 @@ enum psi_states {
+ 	PSI_MEM_FULL,
+ 	PSI_CPU_SOME,
+ 	PSI_CPU_FULL,
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++	PSI_IRQ_FULL,
++#endif
+ 	/* Only per-CPU, to weigh the CPU in the global average: */
+ 	PSI_NONIDLE,
+-	NR_PSI_STATES = 7,
++	NR_PSI_STATES,
+ };
+ 
+ /* Use one bit in the state mask to track TSK_ONCPU */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 2f79ddf9a85d..371131a8b6f8 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3731,6 +3731,23 @@ static ssize_t cgroup_cpu_pressure_write(struct kernfs_open_file *of,
+ 	return cgroup_pressure_write(of, buf, nbytes, PSI_CPU);
+ }
+ 
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++static int cgroup_irq_pressure_show(struct seq_file *seq, void *v)
++{
++	struct cgroup *cgrp = seq_css(seq)->cgroup;
++	struct psi_group *psi = cgroup_ino(cgrp) == 1 ? &psi_system : cgrp->psi;
++
++	return psi_show(seq, psi, PSI_IRQ);
++}
++
++static ssize_t cgroup_irq_pressure_write(struct kernfs_open_file *of,
++					 char *buf, size_t nbytes,
++					 loff_t off)
++{
++	return cgroup_pressure_write(of, buf, nbytes, PSI_IRQ);
++}
++#endif
++
+ static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
+ 					  poll_table *pt)
+ {
+@@ -5150,6 +5167,16 @@ static struct cftype cgroup_base_files[] = {
+ 		.poll = cgroup_pressure_poll,
+ 		.release = cgroup_pressure_release,
+ 	},
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++	{
++		.name = "irq.pressure",
++		.flags = CFTYPE_PRESSURE,
++		.seq_show = cgroup_irq_pressure_show,
++		.write = cgroup_irq_pressure_write,
++		.poll = cgroup_pressure_poll,
++		.release = cgroup_pressure_release,
++	},
++#endif
+ #endif /* CONFIG_PSI */
+ 	{ }	/* terminate */
+ };
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 61436b8e0337..178f9836ae96 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -708,6 +708,7 @@ static void update_rq_clock_task(struct rq *rq, s64 delta)
+ 
+ 	rq->prev_irq_time += irq_delta;
+ 	delta -= irq_delta;
++	psi_account_irqtime(rq->curr, irq_delta);
+ #endif
+ #ifdef CONFIG_PARAVIRT_TIME_ACCOUNTING
+ 	if (static_key_false((&paravirt_steal_rq_enabled))) {
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 4702a770e272..2545a78f82d8 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -904,6 +904,36 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+ 	}
+ }
+ 
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++void psi_account_irqtime(struct task_struct *task, u32 delta)
++{
++	int cpu = task_cpu(task);
++	void *iter = NULL;
++	struct psi_group *group;
++	struct psi_group_cpu *groupc;
++	u64 now;
++
++	if (!task->pid)
++		return;
++
++	now = cpu_clock(cpu);
++
++	while ((group = iterate_groups(task, &iter))) {
++		groupc = per_cpu_ptr(group->pcpu, cpu);
++
++		write_seqcount_begin(&groupc->seq);
++
++		record_times(groupc, now);
++		groupc->times[PSI_IRQ_FULL] += delta;
++
++		write_seqcount_end(&groupc->seq);
++
++		if (group->poll_states & (1 << PSI_IRQ_FULL))
++			psi_schedule_poll_work(group, 1);
++	}
++}
++#endif
++
+ /**
+  * psi_memstall_enter - mark the beginning of a memory stall section
+  * @flags: flags to handle nested sections
+@@ -1065,6 +1095,7 @@ void cgroup_move_task(struct task_struct *task, struct css_set *to)
+ 
+ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ {
++	bool only_full = false;
+ 	int full;
+ 	u64 now;
+ 
+@@ -1079,7 +1110,11 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ 		group->avg_next_update = update_averages(group, now);
+ 	mutex_unlock(&group->avgs_lock);
+ 
+-	for (full = 0; full < 2; full++) {
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++	only_full = res == PSI_IRQ;
++#endif
++
++	for (full = 0; full < 2 - only_full; full++) {
+ 		unsigned long avg[3] = { 0, };
+ 		u64 total = 0;
+ 		int w;
+@@ -1093,7 +1128,7 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ 		}
+ 
+ 		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
+-			   full ? "full" : "some",
++			   full || only_full ? "full" : "some",
+ 			   LOAD_INT(avg[0]), LOAD_FRAC(avg[0]),
+ 			   LOAD_INT(avg[1]), LOAD_FRAC(avg[1]),
+ 			   LOAD_INT(avg[2]), LOAD_FRAC(avg[2]),
+@@ -1121,6 +1156,11 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ 	else
+ 		return ERR_PTR(-EINVAL);
+ 
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++	if (res == PSI_IRQ && --state != PSI_IRQ_FULL)
++		return ERR_PTR(-EINVAL);
++#endif
++
+ 	if (state >= PSI_NONIDLE)
+ 		return ERR_PTR(-EINVAL);
+ 
+@@ -1405,6 +1445,33 @@ static const struct proc_ops psi_cpu_proc_ops = {
+ 	.proc_release	= psi_fop_release,
+ };
+ 
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++static int psi_irq_show(struct seq_file *m, void *v)
++{
++	return psi_show(m, &psi_system, PSI_IRQ);
++}
++
++static int psi_irq_open(struct inode *inode, struct file *file)
++{
++	return psi_open(file, psi_irq_show);
++}
++
++static ssize_t psi_irq_write(struct file *file, const char __user *user_buf,
++			     size_t nbytes, loff_t *ppos)
++{
++	return psi_write(file, user_buf, nbytes, PSI_IRQ);
++}
++
++static const struct proc_ops psi_irq_proc_ops = {
++	.proc_open	= psi_irq_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_write	= psi_irq_write,
++	.proc_poll	= psi_fop_poll,
++	.proc_release	= psi_fop_release,
++};
++#endif
++
+ static int __init psi_proc_init(void)
+ {
+ 	if (psi_enable) {
+@@ -1412,6 +1479,9 @@ static int __init psi_proc_init(void)
+ 		proc_create("pressure/io", 0666, NULL, &psi_io_proc_ops);
+ 		proc_create("pressure/memory", 0666, NULL, &psi_memory_proc_ops);
+ 		proc_create("pressure/cpu", 0666, NULL, &psi_cpu_proc_ops);
++#ifdef CONFIG_IRQ_TIME_ACCOUNTING
++		proc_create("pressure/irq", 0666, NULL, &psi_irq_proc_ops);
++#endif
+ 	}
+ 	return 0;
+ }
+diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
+index c39b467ece43..84a188913cc9 100644
+--- a/kernel/sched/stats.h
++++ b/kernel/sched/stats.h
+@@ -110,6 +110,7 @@ __schedstats_from_se(struct sched_entity *se)
+ void psi_task_change(struct task_struct *task, int clear, int set);
+ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+ 		     bool sleep);
++void psi_account_irqtime(struct task_struct *task, u32 delta);
+ 
+ /*
+  * PSI tracks state that persists across sleeps, such as iowaits and
+@@ -205,6 +206,7 @@ static inline void psi_ttwu_dequeue(struct task_struct *p) {}
+ static inline void psi_sched_switch(struct task_struct *prev,
+ 				    struct task_struct *next,
+ 				    bool sleep) {}
++static inline void psi_account_irqtime(struct task_struct *task, u32 delta) {}
+ #endif /* CONFIG_PSI */
+ 
+ #ifdef CONFIG_SCHED_INFO
+-- 
+2.37.2
+

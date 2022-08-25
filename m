@@ -2,200 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595195A1444
+	by mail.lfdr.de (Postfix) with ESMTP id 124BB5A1443
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241714AbiHYOkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S241727AbiHYOkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241979AbiHYOj7 (ORCPT
+        with ESMTP id S242190AbiHYOjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:39:59 -0400
-Received: from mail.aboehler.at (mail.aboehler.at [178.63.100.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842B2B8A79;
-        Thu, 25 Aug 2022 07:38:43 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.aboehler.at (Postfix) with ESMTP id 5F9B53CC0D35;
-        Thu, 25 Aug 2022 16:38:41 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at aboehler.at
-Received: from mail.aboehler.at ([127.0.0.1])
-        by localhost (aboehler.at [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id B4aKBkGRdO_t; Thu, 25 Aug 2022 16:38:40 +0200 (CEST)
-Received: from x390y.lan (194-166-175-3.adsl.highway.telekom.at [194.166.175.3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andreas@aboehler.at)
-        by mail.aboehler.at (Postfix) with ESMTPSA id 400B73CC0293;
-        Thu, 25 Aug 2022 16:38:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aboehler.at;
-        s=default; t=1661438320;
-        bh=EcUxe11FzBLI90bPdSZDAmeBp94OdNnbUJvnzQaEKG4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RmvsMqI1pYMSN88HFI4NuEzYYs+mFCu7uSa5P3MjiCfMsUlbUCjdKRwYLLBc7oeWP
-         gd2F108izNxLrg1Hx/eg7QEcYzNNbZYmzmc3LGlSXU/lNSg3b1V27rNA2Dmzp7EGH1
-         Yh4YDFl3BNjtKowLDcxvTdpWVmfEPlrxy0dP92kA=
-From:   =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>
-Cc:     dev@aboehler.at, Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] hwmon: tps23861: add support for initializing the chip
-Date:   Thu, 25 Aug 2022 16:37:37 +0200
-Message-Id: <20220825143737.77732-2-dev@aboehler.at>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220825143737.77732-1-dev@aboehler.at>
-References: <20220825143737.77732-1-dev@aboehler.at>
+        Thu, 25 Aug 2022 10:39:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DD8B8A6F
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:38:42 -0700 (PDT)
+Received: from mail-ej1-f54.google.com ([209.85.218.54]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MjSHa-1pAlMA0fT0-00ktgm for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022
+ 16:38:40 +0200
+Received: by mail-ej1-f54.google.com with SMTP id lx1so3531893ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:38:40 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3ELLj5lfWfm1SrRqOPcAiydjBOzCOhaC9UihKq1O3F9JKhs+Ti
+        ZLMcn9zXQkvaI70A0/i3oZMub8Jx5uI3f3TlvcU=
+X-Google-Smtp-Source: AA6agR51v/FeIcSJfSqlFkB+AtvglMLd5zOUyHojI8I/eQyoItC8NHpfXs4b9QXagWqWJVvpw6ReFMJBqvV8ZcPzLrw=
+X-Received: by 2002:a17:907:1c27:b0:73d:ce49:6dd7 with SMTP id
+ nc39-20020a1709071c2700b0073dce496dd7mr2455549ejc.470.1661438319816; Thu, 25
+ Aug 2022 07:38:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220822194310.31796-1-rdunlap@infradead.org>
+In-Reply-To: <20220822194310.31796-1-rdunlap@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 25 Aug 2022 16:38:23 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3G2GBaPaVsQo9mJfqq7ba9mzDWQp=wjxzqd5X0Zm+qwA@mail.gmail.com>
+Message-ID: <CAK8P3a3G2GBaPaVsQo9mJfqq7ba9mzDWQp=wjxzqd5X0Zm+qwA@mail.gmail.com>
+Subject: Re: [RFC PATCH] compat: update linux/compat.h and kernel/sys_ni.c
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:vVJ2ZO6mSMejXGmcoHHljpjBAPldtw424AJoqadx7Nuy33Mrsbw
+ vGU4Djl7HQ8SoJ77mlsMISbT4YuP47E/hP9mik4oJ8Vc+eaH57Z157LBrcBX+FzzGjP2FRA
+ 6IPk1ytwil8InC4F55fsovgrEhags5lAo9rQLMSPk5IJPWdl1jdX3LX7aSY9lLajY+GO71H
+ Jn8zRTlRWA0y6PTBQN78Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:s1gL5huOFOc=:o5ihwEqjsVrFUbNyhVqT4v
+ xqRA884dH4lDf9pRDGdUQw+cjaJnFCbeTyeJqhuFt9Tyw2xCIt3YAPO8uor0CMbcDzpsC3/sl
+ 0gB1G3DG+KIJR+wnWLeSp7MsWvxZLEr+zyby0j5CjdKkhJBGEOjVbamRtIGTJG/knAtjQa9eb
+ y5UFmTd2KzXW51YgAA9iszMYqyazi8UmyyLBkKs2PlWnP1VgeypHuW4UokDLG6Y8KiENJ1Oqr
+ 0VzaNUJBl8/ChGAOtW2YV4RL2KHdERQRIiyCiZOUCfCovq+7Kr5Be50NA71TRpamgx5yOB4bY
+ v9Wfj5aX+jp7wNCdBwIOMH3yVRKS9B+MhjthXx+ik+pcrBJ15RtUex8T5meEetQlij2Vslz/w
+ sMT1GdQ3I6G8uQLf2PbgVueN869rhTfDmFdkmu8+Vjg00N2bVG8R44H1hptw7jH3tBoAJd6uQ
+ BB80+UKIG3m8CwYdbrYKSXYxUeFTV0xtlNVyQ5o4+cM7fltCRXPz05qNDC2YjRhskzwC/2F9c
+ 5U5WtnPuStGnQzDkAYNDiiff3vAAhSg+Jr8CfVLYX2wLHHCQje8DvCLS0DNs/2+t4S13mr5+c
+ vilmYk77ObPMRaYhc4LVahiT72+gpkxAb+rPzX+E6MDR2D9aTA45FQ3iHLxL5pQsAPBObsLE7
+ n7Z1DjQVzbGcgD9cU8jXNmrFE6MKTRU1VjfnKtBgjBA/yh+NNifcPQ04bY1KJP18x80PAy1BB
+ CkeA0vihstNlTF7cNhuumoCLoo/gaTRoYjVrltyhqYHQZB3FGnTbZLN1g4RZt0hYzVYW+Ka4v
+ dmBIIro4TH1Qtbp4/k4WgpDa/MUqhV35s6YtXuG8/0+bzl78ObxKvwJHSz/CUg4Um9jxP5hLY
+ YFwntT8+ZYeKfvULvFbQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tps23861 driver does not initialize the chip and relies on it being
-in auto-mode by default. On some devices, these controllers default to
-OFF-Mode and hence cannot be used at all.
+On Mon, Aug 22, 2022 at 9:43 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 
-This brings minimal support for initializing the controller in a user-
-defined mode.
+>   * Deprecated system calls which are still defined in
+> @@ -910,19 +901,13 @@ asmlinkage long compat_sys_old_select(st
+> -#ifdef CONFIG_COMPAT_OLD_SIGACTION
+> +struct compat_old_sigaction;
+>  asmlinkage long compat_sys_sigaction(int sig,
+>                                     const struct compat_old_sigaction __user *act,
+>                                     struct compat_old_sigaction __user *oact);
+> -#endif
 
-Tested on a TP-Link TL-SG2452P with 12x TI TPS23861 controllers.
+All the removed #ifdef look good to me here, and I checked that there
+are no conflicting prototypes for the ones you change.
 
-Signed-off-by: Andreas Böhler <dev@aboehler.at>
----
- drivers/hwmon/tps23861.c | 81 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+For COND_SYSCALL_COMPAT(), I think they should not be part of
+this patch, and only added for specific optional calls that would cause
+a link failure.
 
-diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-index 42762e87b014..27bf8716cf12 100644
---- a/drivers/hwmon/tps23861.c
-+++ b/drivers/hwmon/tps23861.c
-@@ -85,6 +85,8 @@
- #define PORT_DETECT_CAPACITANCE_INVALID_DELTA	11
- #define PORT_DETECT_CAPACITANCE_OUT_OF_RANGE	12
- #define POE_PLUS			0x40
-+#define POE_PLUS_MASK(_port)	\
-+	GENMASK(_port + 4, _port + 4)
- #define OPERATING_MODE			0x12
- #define OPERATING_MODE_OFF		0
- #define OPERATING_MODE_MANUAL		1
-@@ -94,9 +96,22 @@
- #define OPERATING_MODE_PORT_2_MASK	GENMASK(3, 2)
- #define OPERATING_MODE_PORT_3_MASK	GENMASK(5, 4)
- #define OPERATING_MODE_PORT_4_MASK	GENMASK(7, 6)
-+#define OPERATING_MODE_PORT(_mode, _port)	\
-+	(_mode << (_port * 2))
- 
-+#define DISCONNECT_ENABLE		0x13
-+#define DISCONNECT_ENABLE_MASK(_port)	\
-+	GENMASK(_port, _port)
-+#define DISCONNECT_MASK(_port)	\
-+	(GENMASK(_port, _port) | GENMASK(_port + 4, _port + 4))
-+
-+#define DETECT_CLASS_ENABLE		0x14
- #define DETECT_CLASS_RESTART		0x18
- #define POWER_ENABLE			0x19
-+#define POWER_ENABLE_ON_MASK(_port)	\
-+	GENMASK(_port, _port)
-+#define POWER_ENABLE_OFF_MASK(_port)	\
-+	GENMASK(_port + 4, _port + 4)
- #define TPS23861_NUM_PORTS		4
- 
- #define TPS23861_GENERAL_MASK_1		0x17
-@@ -548,7 +563,16 @@ static int tps23861_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	struct tps23861_data *data;
- 	struct device *hwmon_dev;
-+	struct device_node *child;
- 	u32 shunt_resistor;
-+	u32 reg;
-+	u32 temp;
-+	const char *mode;
-+	unsigned int poe_plusval;
-+	unsigned int mode_val;
-+	unsigned int power_val;
-+	unsigned int enable_val;
-+	unsigned int disconnect_enable_val;
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -577,6 +601,63 @@ static int tps23861_probe(struct i2c_client *client)
- 				TPS23861_GENERAL_MASK_1,
- 				TPS23861_CURRENT_SHUNT_MASK);
- 
-+	regmap_read(data->regmap, POE_PLUS, &poe_plusval);
-+	regmap_read(data->regmap, POWER_ENABLE, &power_val);
-+	regmap_read(data->regmap, OPERATING_MODE, &mode_val);
-+	regmap_read(data->regmap, DETECT_CLASS_ENABLE, &enable_val);
-+	regmap_read(data->regmap, DISCONNECT_ENABLE, &disconnect_enable_val);
-+
-+	for_each_child_of_node(dev->of_node, child) {
-+		if (of_property_read_u32(child, "reg", &reg))
-+			continue;
-+
-+		if (reg > (TPS23861_NUM_PORTS - 1) || reg < 0)
-+			continue;
-+
-+		if (!of_property_read_string(child, "mode", &mode)) {
-+			if (!strncmp(mode, "manual", 6)) {
-+				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_MANUAL, reg);
-+			} else if (!strncmp(mode, "semiauto", 8)) {
-+				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_SEMI, reg);
-+			} else if (!strncmp(mode, "auto", 4))
-+				mode_val |= OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+			else
-+				mode_val &= ~OPERATING_MODE_PORT(OPERATING_MODE_AUTO, reg);
-+		}
-+
-+		if (!of_property_read_u32(child, "enable", &temp)) {
-+			if (temp) {
-+				enable_val |= DISCONNECT_MASK(reg);
-+				disconnect_enable_val |= DISCONNECT_ENABLE_MASK(reg);
-+			} else {
-+				enable_val &= ~DISCONNECT_MASK(reg);
-+				disconnect_enable_val &= ~DISCONNECT_ENABLE_MASK(reg);
-+			}
-+		}
-+
-+		if (!of_property_read_u32(child, "power", &temp)) {
-+			if (temp)
-+				power_val |= POWER_ENABLE_ON_MASK(reg);
-+			else
-+				power_val |= POWER_ENABLE_OFF_MASK(reg);
-+		}
-+
-+		if (!of_property_read_u32(child, "poe_plus", &temp)) {
-+			if (temp)
-+				poe_plusval |= POE_PLUS_MASK(reg);
-+			else
-+				poe_plusval &= ~POE_PLUS_MASK(reg);
-+		}
-+	}
-+
-+	regmap_write(data->regmap, POE_PLUS, poe_plusval);
-+	regmap_write(data->regmap, POWER_ENABLE, power_val);
-+	regmap_write(data->regmap, OPERATING_MODE, mode_val);
-+	regmap_write(data->regmap, DETECT_CLASS_ENABLE, enable_val);
-+	regmap_write(data->regmap, DISCONNECT_ENABLE, disconnect_enable_val);
-+
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
- 							 data, &tps23861_chip_info,
- 							 NULL);
--- 
-2.37.2
+> @@ -94,6 +94,9 @@ COND_SYSCALL(flock);
+>  /* fs/nfsctl.c */
+>
+>  /* fs/open.c */
+> +COND_SYSCALL_COMPAT(truncate64);
+> +COND_SYSCALL_COMPAT(ftruncate64);
+> +COND_SYSCALL_COMPAT(fallocate);
 
+COND_SYSCALL_COMPAT() doesn't really make sense for non-optional syscalls
+like these: if an architecture neither sets __ARCH_WANT_COMPAT_FALLOCATE
+nor provides its own implementation, then a link failure is the
+appropriate output, hiding it with a COND_SYSCALL_COMPAT() just turns that
+into a runtime failure that is harder to analyse.
+
+>  /* fs/read_write.c */
+> +COND_SYSCALL_COMPAT(preadv64);
+> +COND_SYSCALL_COMPAT(pwritev64);
+> +COND_SYSCALL_COMPAT(pread64);
+> +COND_SYSCALL_COMPAT(pwrite64);
+
+These are specific to x32, and we don't want to ever add them to another
+architecture, so they should not get a COND_SYSCALL_COMPAT()
+either.
+
+> @@ -118,6 +125,7 @@ COND_SYSCALL_COMPAT(signalfd4);
+>  /* fs/sync.c */
+> +COND_SYSCALL_COMPAT(sync_file_range);
+....
+> +COND_SYSCALL_COMPAT(readahead);
+
+Same as above, but these have an additional angle to them, as
+there are conflicting prototypes and implementations:
+
+arch/sparc/kernel/systbls.h:long compat_sys_sync_file_range(unsigned int fd,
+arch/sparc/kernel/systbls.h-                       unsigned off_high,
+unsigned off_low,
+arch/sparc/kernel/systbls.h-                       unsigned nb_high,
+unsigned nb_low,
+include/linux/compat.h:asmlinkage long compat_sys_sync_file_range(int
+fd, compat_arg_u64(pos),
+include/linux/compat.h-
+compat_arg_u64(nbytes), unsigned int flags);
+
+The current code works fine, but if you still want to improve this,
+it would be great to convert the architecture specific helpers
+to be shared with the common ones. For those that have non-matching
+prototypes like
+
+include/linux/compat.h:asmlinkage long compat_sys_pwrite64(unsigned
+int fd, const char __user *buf, size_t count,
+include/linux/compat.h-                             compat_arg_u64(pos));
+arch/powerpc/include/asm/syscalls.h:compat_ssize_t
+compat_sys_pwrite64(unsigned int fd, const char __user *ubuf,
+compat_size_t count,
+arch/powerpc/include/asm/syscalls.h-                               u32
+reg6, u32 pos1, u32 pos2);
+
+that have an extra argument in them, I would instead suggest renaming
+the nonstandard ones.
+
+       Arnd

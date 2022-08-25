@@ -2,239 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8EF5A0AF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CA25A0AFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239049AbiHYIE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S234869AbiHYIFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239034AbiHYIEo (ORCPT
+        with ESMTP id S239105AbiHYIEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:04:44 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBE257577
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661414682; x=1692950682;
-  h=message-id:date:subject:from:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=cYYolpIBMQyx/xk+u3QStX/Ue3KKtYmNmKrwe5HXCkY=;
-  b=QKeJl4QvJltikAwRVKvEKme4HYfTbrCkXkyQC+ofLvrz6iMXqu4zlnmg
-   /3wDrAN365MSDnGgX2LXymZhz7H18kun2iF0QrvayhHj8Uwzwf7jm4fDK
-   Bq3pSLs0ymCCzaGUdwH0P/IZx5OK6PAtjs8s7XbVccCyBWbOpzvjbm5d0
-   cNmhPqZh5F+b3VWiiEUsWAaSIBqhwwNng5SmURNNUTtlvXJluzC54VM2Y
-   U/G6AatTSBrVNqYx6fxZBB11OJoUT1dhlaLny3Zk5qHUi20H2Jgtoy1CV
-   TYfnMX4tdIP24gih5Z3/J8J/NRo4BSUHoLY1I+QIoiP8EGDNpFEMYvLDa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="291745444"
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="291745444"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 01:04:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="678364841"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Aug 2022 01:04:41 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 25 Aug 2022 01:04:41 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 25 Aug 2022 01:04:41 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 25 Aug 2022 01:04:41 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 25 Aug 2022 01:04:40 -0700
+        Thu, 25 Aug 2022 04:04:53 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2072.outbound.protection.outlook.com [40.107.21.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A3D6253;
+        Thu, 25 Aug 2022 01:04:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GK0IfiDwXXs48szJbVGvYuh0TFUzVjVFE+brhuqFhQUwEjkJH/q9CLbq8DC9E1ZcQ865nq5wpJn3vHTESjeR8dtln1rt4I+X+gKX86E7B49F9U/p9E9eJWykVBqC7qdYXku9X9zdB8eZysP+ueYVmsb6Q8johxybuJtjI96D0VbZPTgUmYR07Wji//BYXbMQpt0C6JQ5qTT9+R1/zW+WCA5EdfmxCAyvbt9fqkzvUwazDWjOprFWw+UGc/wE917JUxjTa91pjsN0dqCFPlbzyhwu0TkZWG6BMdVMkpOC9bMc5duyf8HOeyLlr1LCWrImM8fJUtXA1tm6HSX5vuRIhw==
+ b=Y4dy6wHEKMefauEMiSB9m0kESWQm2XnLrupkwO+nJvBPA3eacrLFxzlnvKZnvk9ONPOmT69ykrtfxCRBTxsO+3NlrbbHAIpy2UhZVTUaqoeOle84ISWL8RwjNEUALxDaSHZf5ghH7qjqL+8672srfD/+9zoG/UcsfQ8saybo7yHFRLc4u5YTOxfD5b2El0x8yY8oz3YMeDJYtEywtTkbXy57Qf57vcoSjn/CGiESBqErPInRbv73jfaZ9qnZlxBa9cnPQYIfIm9wcnQnlNb90sH3VEpFftMs3QLL4qzKdqlzw5SDu60L6qD/DNkY3p4maodQvNXR6SLaNLSZs49PLQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mf4oXxdrAQjmisowjcy3kqixhkCJcocCg+ROr9DtN0k=;
- b=NbL7t+wbivjJ5IC8qo0NOqOt67jFEaoQikc2Y9oAmAHnoF5efeo+a1GflO0F4oFJVH9IWH2gyoFpapYs1Eq/vWO0OL6xUuk041DdnK7obq7Mol1G1q+gQ33kfzeBFf/5Te5ckl7qIaILkvBX3bIGJIdXS2v5M4q+RsPnMFPzpZ7vMXCm3+sJRU2vVVf3SW93o8h5eF8Qpksz9dK8Ug04L/z4Je20Hrzj9c49Ho7XiCmrLVGkizOO8vSV3q8UU0zeqOk2wOaoKFgg949ovORWqxKyz0ujesJSaNDMKI1J92X8cg+bwOW2OSLzyrwKNnxXyI1dkug9avogL+zn+IZotg==
+ bh=gvOVectgxmcuijxoAx6CtEIyq/IS1hvmDIzs6ayJWxk=;
+ b=Dz2IxupceecAT3f++B6uhhiIf0fA8roQDDuyU6k65IMz6ijbFY5jsWOEW3ZksWMa4/sm7vpg2yekmLcgl07YcUsE3e7eLUehgDMaKHl1c2ZA9y3Xhh9nLhmc0rXonOlVxwCgw9JTDYxUVWyHyPNTY2MjIjnhsrXfUeLtDtvCKN5wiW9XYPdtHoBR52V2jcKUbItYVnCGX93bIgibW5AsiT9p/oDSXFnoyXpD4Q2gzbS4ddVE5beVyVAa2HDvtp9aC9ZF/tCoA9t12kOi/RNd+LubYKHY9FcTmLMH4It3+sj1Irqmg5+OkUHGhlq07nuthh/BevN49+R9DBOOv57zbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gvOVectgxmcuijxoAx6CtEIyq/IS1hvmDIzs6ayJWxk=;
+ b=R6lt+Y6D/mkLknaQBpTbzu8/8bGjXt4ilWp+rb37oyifjuMC7cbNskYHLGSV/eGFiE3gqr2YcqIAUfzUSMzS1uiBdwxeyc3K9duU+5NZYt5pGN2oxVnYO9vIk9OC9Lt+6MqCB7NOIlILIvdnB46qNur/FlroNwLzUe8ESRiFuoNcZuNxeRGV4a3vSE08h/YSIHLlcluzZ/aphoAKt9KCU8kW/Nm2lJKTXbxkngL4BrKFdWBjCSnVyyZfzq4GPOT83VUNBMxx4FYoNV3DoiYmpawW1bBCyhBqy+3DNrTSQGWlCIS2V7fx85NDyKUm1XT0/5Pjeo4tlKK8Qn3UDjArjQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CH0PR11MB5409.namprd11.prod.outlook.com (2603:10b6:610:d0::7)
- by PH7PR11MB6005.namprd11.prod.outlook.com (2603:10b6:510:1e0::19) with
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by VE1PR10MB3421.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:10e::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Thu, 25 Aug
- 2022 08:04:39 +0000
-Received: from CH0PR11MB5409.namprd11.prod.outlook.com
- ([fe80::70e4:76ca:fc65:df73]) by CH0PR11MB5409.namprd11.prod.outlook.com
- ([fe80::70e4:76ca:fc65:df73%4]) with mapi id 15.20.5566.014; Thu, 25 Aug 2022
- 08:04:39 +0000
-Message-ID: <f9cc9317-044d-4f7e-a37c-a06df7262077@intel.com>
-Date:   Thu, 25 Aug 2022 17:04:26 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [Intel-gfx] [PATCH v9 2/8] util_macros: Add exact_type macro to
- catch type mis-match while compiling
-Content-Language: en-US
-From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-To:     <bgolaszewski@baylibre.com>
-CC:     <intel-gfx@lists.freedesktop.org>,
-        <thomas.hellstrom@linux.intel.com>, <keescook@chromium.org>,
-        <jani.nikula@intel.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <chris@chris-wilson.co.uk>,
-        <airlied@linux.ie>, <andrzej.hajda@intel.com>,
-        <matthew.auld@intel.com>, <daniel@ffwll.ch>, <mchehab@kernel.org>,
-        <nirmoy.das@intel.com>, <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-References: <20220824084514.2261614-1-gwan-gyeong.mun@intel.com>
- <20220824084514.2261614-3-gwan-gyeong.mun@intel.com>
-In-Reply-To: <20220824084514.2261614-3-gwan-gyeong.mun@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR08CA0044.namprd08.prod.outlook.com
- (2603:10b6:a03:117::21) To CH0PR11MB5409.namprd11.prod.outlook.com
- (2603:10b6:610:d0::7)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
+ 2022 08:04:45 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b%4]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
+ 08:04:44 +0000
+Date:   Thu, 25 Aug 2022 10:04:36 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] leds: simatic-ipc-leds-gpio: make sure we have the
+ GPIO providing driver
+Message-ID: <20220825100436.30b89f3a@md1za8fc.ad001.siemens.net>
+In-Reply-To: <CAHp75Veu5CpRcmtvKwqhwqpjSgrvw03V6k7WrO8v=+cLhABcsA@mail.gmail.com>
+References: <20220824131428.31904-1-henning.schild@siemens.com>
+        <CAHp75Veu5CpRcmtvKwqhwqpjSgrvw03V6k7WrO8v=+cLhABcsA@mail.gmail.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR04CA0088.namprd04.prod.outlook.com
+ (2603:10b6:610:74::33) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ae70a4a2-901b-403b-997d-08da86707568
-X-MS-TrafficTypeDiagnostic: PH7PR11MB6005:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Office365-Filtering-Correlation-Id: f07eb221-8cb3-4fe5-da5b-08da86707886
+X-MS-TrafficTypeDiagnostic: VE1PR10MB3421:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wusLjk8QoN+E8gZjtMfZzVPfBZgT5FBujrNLWlcMv6CCgTXZiaIzFcSyGiTdhkdyOpGCblWhhce2tW51xfltn24uHG3hsxbbIfx6dtnW8QqLu/nyPEvqDa2tfJrVLkLwBK9rCfjbFN56c6/W0utzWJj4/MDF3jqD51AV33kwGgiY5SKAHwHOEeLiqRKjeaQfUWluzgKjJ+zhr8gBaaHuKrI8Tf3OV++2u0Y0asNUE22Oq5AkeAdijPLlfzdXg/RXGJfltkKrqMrTLbfcnIz17pLYNA2+FjsPudrbL5M6HQPUoKgpflrsyMEhgPfuv4kwRC5ytfuUZYsTADWwrkJifFbOukuZ/E3M/l9r+RgZh5U+8u5wKf8xi9lTniddCEyFQ/foGUjOmS6tXqfV09TjI8y4HYWYzNsSN6zXn8ul2p1TlDvd/XK8FJXh8wDEElJAe+Q2RywB/XpPRsKA45zOOEdJ+lnyS7cELa6Q8perm3vSc9MchfFyKMUEeqQzyVu+YFr9LeFoxIFY3UGDEMSkBP8S/LgjbbDgmP/3mdgPAsMGhgTql5VUSPM0+eaN9cTbGxRBX24OzyTvhP9fK0p5f2gbmtr1/rWVqgn6PryCGkYv0Wpjp6dbekaAKeOVUKoBEbQ9iUfdUEkOBUgf6Ed8gMfoofIh2e2uTHi5BKuQMWL4aMtuo7Tu7h1cg8S2GrFcAvNJ7GkDhbC/+rnvelM6pScun8tBYsvyluoGTNzajkTqwLNQTrlWDX8QLazvSBh+0m4RNNSGzlUwMmSUpaxGrNG1rBqWte3O9hFSCm8RxLw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5409.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(136003)(366004)(346002)(39860400002)(31696002)(66476007)(38100700002)(8676002)(66556008)(4326008)(5660300002)(86362001)(6916009)(31686004)(82960400001)(36756003)(66946007)(186003)(26005)(6512007)(66574015)(53546011)(6506007)(2616005)(478600001)(6486002)(6666004)(316002)(41300700001)(7416002)(8936002)(2906002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: harWU+1A/9US3tL1gF7Nri1R/ZUyKHUsZYellsAXw/BegHgNLTbWO5z3hBi7Bqzv9QN+eR4pbPCPm4clHOFXPA+aSnHnKwCoFbwAk0UFVTSV0QYdnKMCqEdUdbq/2RJEa777akUIRYfMlMSORJ/lI8mGui8ypzgj70/pAPizPf1GuHwvEuVUA6RWdcPN3i2nhkRvNUXfHDCpFWc+CM0EfOIPIuZesRPeZbJ7Egg1jN7d2JNDTen1FlOVe06n+yvJo9q3MQDMuRwXGhSR77OW9O9qGCmXfahYM1EAzFdswkofpyPD8vQ+BGQuq1ahg5m3evKHla04wOO1YYVMSPj/uuS7OTuqTr+xkOeT17QhYuu4GyIsTRU81dPAMGdEfK03xxWJC4jHOedMIaVP5+kGKIVC99DKBvNaqdyhE/QkBUx9/90ojMexkFQBdTS8OUsq+0T+uUevHf1a+gAShr5KZUT2wOJUv1f4xDtRvKmu6A+6TPaLiOfZRofuTvRcQOyumsdlWO/22xLO+4RNYESn010LK2FAJ7S+jpTYmcCuVeM1dcMgH/PCr+sW5NmK5lSLiPKZOVOeTQ5nngmq4NFunz6P0J6ZdO/8oReMozVnPa0e5NNNBbf200TghdMewkx9VuZ8Mm5HdFc+OGG3fpEgZicI4Q4ig4gqxIat3TpH0nP9IFDjkEUjWmVms3dQH1dcihMeOQm3aMHnucPeg+/pPA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(6506007)(41300700001)(478600001)(9686003)(6486002)(26005)(1076003)(83380400001)(186003)(53546011)(6512007)(5660300002)(2906002)(8936002)(44832011)(316002)(54906003)(6666004)(6916009)(4326008)(8676002)(66476007)(86362001)(66556008)(38100700002)(66946007)(82960400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDlPQkZ0M2JKa2FSd3RobWh6YmMxdy92ZTF2RW0zVWwzNFpvOUlMcjcwM0Nn?=
- =?utf-8?B?Qy9uYVZNakJpOHVQL2NhVFpRbmhCU01aSVIzV280Q3hOUFpySzNtdGdzMndG?=
- =?utf-8?B?MElvREEzSWh1dGNkNituSDVGY2tIampGSy9hVCtIa0tBOWdUUy9valh6TFRk?=
- =?utf-8?B?OXRzVEJucWkrKzJRcWdBUHVvQ1lQZERJYmdjelhnQlhZSCtaaFkvNHBGUXVH?=
- =?utf-8?B?UDc4d3M4Zk9wNC9IWHZkMEpROEphRHhPTDFMRndranA5TXkwQTNCd1MxWHBl?=
- =?utf-8?B?YkJ0cGs4S3dOS0lldDhkT003Nk5sdEo0TmcwM0VKczVwNDVWTE9OaVZ2SkY3?=
- =?utf-8?B?Sk9rcmZCUzNCV0NKV0tYWVdWWFdYUDZwQTVIVzFrbS9FS2ZMckpkTXZoaUE2?=
- =?utf-8?B?QmtzS2ltM0kwS0t1aDZ6azdiNERGMndVVWtVZHJoRktNMkhRV0NzTU1MZzhw?=
- =?utf-8?B?TmY2dDZMRHV6Q2N1SGZvVDJxeTZhVDJSNTM3OElkeUw0T3BTemhVMC9SK0NG?=
- =?utf-8?B?djBDK0lQYno1Z0grMEpHV0lNTlhKU1lxKzBPc1RWVk4xak11cGhiQVMrdm83?=
- =?utf-8?B?WWpDTlNKelp2VFV5UkNHRklqaEVFak9YV1ByZ3ZJREpndzFkbGk5WTlhb244?=
- =?utf-8?B?Z1M5UEZmNU11QnB2Zk5weGVOU0RobE1CMEc0Z1ZRZHc4MWs4N0R0VXZOb1Z0?=
- =?utf-8?B?NS9YZ3VORXBYazRsTTd5bDFYWmtRMDRzWWI3RGpUSVIzaWx1ajRCY2ZNVVBM?=
- =?utf-8?B?SUg5K1ZWS2dPcmFjWVcyYk9WdGh4NGJXY0lCbmNxejUrbGZXNE9WbDhjejU4?=
- =?utf-8?B?R09TZVNBNTNWZVdsUGN3SElTeDlaWFR6akRBVHBvT1pydU9sQkZFNDZJak5M?=
- =?utf-8?B?WS80dTlvL0pCU2tvTjNPVkU1WmQ3ekNMT0R0QVNKYzU3ME5KKzlNdkg5TmZZ?=
- =?utf-8?B?NEw2OC9UU0xhQzd4ZGVIdW1nLytEak9iME9LM1pqc091ejk1QXg1SG5RQ01G?=
- =?utf-8?B?aDBod0JtOERCR2x6b3cyMUtNWVpEYVAyRmwvTEs2d2daTzlqVHpPSUtGTVdR?=
- =?utf-8?B?eHUvaXowdFROQzByOTZmUlFZZ2VYUUg1OTRkb1JJUS9xV3RESmRETU1mSFlI?=
- =?utf-8?B?bnRXTVNyM0lFSitCb2dDdXd4MnZmZVd5RS9wRWxoNWs1RTVORlZydlpEWjR6?=
- =?utf-8?B?ZEl6NEdBTUx3Rk9jZHJ4THVoMEgxZkxUcDFINU14QkFvU0pqVzBiZDdyTXZi?=
- =?utf-8?B?MStoc3JhMXFBYitQVm81TG9YdVd3U1dpNldLMlErL1FLaGcwODloelZrMFd0?=
- =?utf-8?B?aklnUmplNHk1cXRsY2pyZWVSQWlJdUJwV3VXRzZHeHpRMkNsZXBQanFmN01Q?=
- =?utf-8?B?V1VEejJid3FTQ0g5Y3IvZ1FQT01LTlJtbTVibHRyemNPMmFyZDJieC85STFD?=
- =?utf-8?B?anhnUVNkUjNVWEFsUmdqbllMSmpOV0w4UVluSXM2VGFLeVl5amg4ZVltSlVX?=
- =?utf-8?B?L1RyL2RSUVAvOTNFMHdaYmkyNW04QSs1VUVvZTdhY1QwWWwxZHdkQjN2MmQy?=
- =?utf-8?B?cmg3cnRjcytjUFR0c1BGeXlFY0dwY2taSjhDQUV1OE1qYUNRMTlDcFJmaWNm?=
- =?utf-8?B?MHI5ZGdsdW0welZJSWRSQ21UUENZVXdUR0dpNFRIKzJBUUdMYU9WM1JOTkNl?=
- =?utf-8?B?OUZOL3ZNeGpSVkdDU2JjRDVqZU0rMEpvUEZmRk1DZTZqWnJaYTRicHNuSm9Q?=
- =?utf-8?B?SUhCbHFLSFZ2TS8xampvOUNLa0djby9DbGQ3WGNlT2FiTjBWTXZJWm5sWENv?=
- =?utf-8?B?am52VmxjR3VlRFR6eGJtNTFGU01Bdk9OM2dEVHlneFk5NVRTWWhnMkZ2c1VM?=
- =?utf-8?B?ZFRsQXZjYXlSOVFCNE0yTXFLYXREMUYxaFIzVmFGb1MrWmRtSE1sOGl1N2tW?=
- =?utf-8?B?WXlyV09OKzJmeitoWUFheDBleUhpV25lL3pYekFkVnpVVkF0NHpveUlFbWQy?=
- =?utf-8?B?bk1mR1hNWXNrZVRYSi9TSzFKR3ZvMmxlcTk5YmtkVTdhRFZNRXNnaFJ4Nkw3?=
- =?utf-8?B?MDVtRTVqVzNxR01VaE90UStYTWtBdEdlL21QS0NpZmpoSFRiMy9hbENJcEdi?=
- =?utf-8?B?NHBldmRydUlsY3NjZEFGUWx0L3A3WDJiUmtaN016bGJOZmUwNkFkdmw3dkt1?=
- =?utf-8?B?NFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae70a4a2-901b-403b-997d-08da86707568
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5409.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J8GmQaPmYD0GG/FnZzITP2WiW71lxMBWPWDnyBL8WFQlRcmy5Eslvw936/lz?=
+ =?us-ascii?Q?sfhYuXxVlW+DWRv1fvVcdzT6HVS3DITrO6oNiuxq5vv341Vlf1N3iicM1+20?=
+ =?us-ascii?Q?0Bz8y0stZPY643dPu1rP3n2SkX3Co1JUyLyMJOrXNpoArsvu0qwXzUqW5jQA?=
+ =?us-ascii?Q?meZ2uz6lA681J2SAAsXwYnczjagjPtpOAfF3rWciBtjCVSaGqV3tQ/PLjHxp?=
+ =?us-ascii?Q?uZvU/4WQx9gAk22VaZAdcTz29D0gQN01Cm77Ylr9XgKv5+2i/+w5tY7Nw7bB?=
+ =?us-ascii?Q?hwXzzbJgEpuCKE4/D2FuaBINrq0xyuXA3tjemNHMtCCBMyC+Eufb96vlecUc?=
+ =?us-ascii?Q?7Oht7o8d2QakZj3AjU6vm/tXgOjSnav4gjm33RklbNprD5KquNMMSpw/uNm0?=
+ =?us-ascii?Q?eA4vv27/eD6NDaXYCSdm/kZommdWtdTMVvZvK+1PITaHniYtt0u5+O41Cglq?=
+ =?us-ascii?Q?uw+GYTDN2gzMmPcnOdMtfi51FJ6TRRJWB9ylwncAlyM8z+CvtZeKNir4pCqB?=
+ =?us-ascii?Q?pkCP/7WzEXr81aKT7MzfkeUD8TxbShMddwy8Bq2El+GOPGmHuy7IItIJ25yi?=
+ =?us-ascii?Q?unyhzLIw50Fl1/w/KTbYf0cCXSk8nVO+2IuO1RFHzlx67HRgLgWbA0MW3kup?=
+ =?us-ascii?Q?c/oMXEyEe7b4T4sHnd2ME41LfeMypkloYNx4qoEVI91k68DuHIbzLhFHRcmZ?=
+ =?us-ascii?Q?HQ4Bo/T5KwK13dXXROELsMIyS0YQLx7NUmfxvrfWQBuPExJW7aCccI+Agalr?=
+ =?us-ascii?Q?zBi78AY/kclhnGltbZdh6OaV3zaTZvaOP7yNCcKTcENU2sqWu6TTB04ua6Ki?=
+ =?us-ascii?Q?dZXv2tJYyFCn8fxDljMEINuwJRrNtDA13JJlYKGoJq7h+gLIda3FP0Ysk5yY?=
+ =?us-ascii?Q?cPEjoI6ExmR4kC2rmV0PbCap1THIhPhmkWx5+9ayhR0FgIHNu2GAyZINZs9N?=
+ =?us-ascii?Q?iD9HL9iPXLhqYd7WjsfGmRaGzjAOs36rDjGvlQRIj40Nh00TONi/MLO23zFn?=
+ =?us-ascii?Q?luAPN4qnbCdUuU3XP+Vdw/BBCKAFZx3XcA2aTQDtaDWbDub75ucxJ1SNvUJj?=
+ =?us-ascii?Q?j4y6TpeqsocKvomDHB8vP9Nn6bsd8QPmZhmGYf38FT9icMCGJzykuicEewRo?=
+ =?us-ascii?Q?Zdn/1hHyOwgklQEDy4U76Nk2dAksd3moXTFLZnia7qmJW9HziK4c8PShSGGH?=
+ =?us-ascii?Q?n3GiNm8KTC+t2pnuKwftV+xLWtM6TDjRZOldVmAMjbueEWnVFIR04YBMhvJn?=
+ =?us-ascii?Q?jPMNIYgD71eop+zmXPnsJm2S2f+7+NfTaScATOPxzWnyLIHjxIChg6AgntAF?=
+ =?us-ascii?Q?ZAJYZahUpvgk+t+uLUMZA0TZplfC5VAgxr8kbcFwITlEpbgtdqLWMYqZ2UEk?=
+ =?us-ascii?Q?0VWPERdmh+aHlX3iDWXaVJLAwzZyB60sZQKfxQJZxnGuv/LNGEqyb3Z8QR1W?=
+ =?us-ascii?Q?0ekqiCkuxdM1UO4kHl3FaWbI2eQqvp8IiixNJzSbzEGuoqYrZBEN2kSiDIvX?=
+ =?us-ascii?Q?hTKzsIvOuDXAeHXn/7C5Zj6oh9okdf7mATIjC9LTYDcRkSj26gTXoVU8cYds?=
+ =?us-ascii?Q?RqJYd/F7NznowmesQm2BWEDoBV2x50cQk+IoNRZpbyE9ZlOvstRIUVa1QaDJ?=
+ =?us-ascii?Q?DQ=3D=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f07eb221-8cb3-4fe5-da5b-08da86707886
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 08:04:39.3562
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2022 08:04:44.4315
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8BKFuHE/j0tb+FXjd+GuPmaVf0j2r5oHTAvch/vvVsC9/UMne+qNIvLu3CttxbIrgSNvJWjptNyf73l4YAJc111r1MywerdDrcU59FWm86g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6005
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: q8c/rbp8vvQjIzL0LRRZS2E2bKDydV+z1DmCT9ss3sgWGRSXUjzY2ekOa4+2/kneXi2rsuFjuSBZt351H41LrAEf8KBODV3Q+qw6WfMOqcM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR10MB3421
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bartosz Golaszewski,
+Am Wed, 24 Aug 2022 18:53:49 +0300
+schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 
-would you mind taking a look at this patch?
+> On Wed, Aug 24, 2022 at 4:27 PM Henning Schild
+> <henning.schild@siemens.com> wrote:
+> >
+> > If we register a "leds-gpio" platform device for GPIO pins that do
+> > not exist we get a -EPROBE_DEFER and the probe will be tried again
+> > later. If there is not driver to provide that pin we will poll
+> > forever and also  
+> 
+> not --> no
+> 
+> > create a lot of log messages.
+> >
+> > So check if that GPIO driver is configured, if so it will come up
+> > eventually. If not we exit our probe function early and do not even
+> >  
+> 
+> not, we
+> 
+> > bother registering the "leds-gpio". This method was chosen over
+> > "Kconfig depends" since this way we can add support for more
+> > devices and GPIO backends more easily without "depends"ing on all
+> > GPIO backends.  
+> 
+> "depends":ing
+> 
+> The code is fine from my perspective,
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> thanks!
 
-Thanks,
-G.G.
+Thank you! Typos fixed and tag added in v3.
 
-On 8/24/22 5:45 PM, Gwan-gyeong Mun wrote:
-> It adds exact_type and exactly_pgoff_t macro to catch type mis-match while
-> compiling. The existing typecheck() macro outputs build warnings, but the
-> newly added exact_type() macro uses the BUILD_BUG_ON() macro to generate
-> a build break when the types are different and can be used to detect
-> explicit build errors.
+Henning
+
 > 
-> v6: Move macro addition location so that it can be used by other than drm
->      subsystem (Jani, Mauro, Andi)
+> > Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version
+> > of Siemens driver") Signed-off-by: Henning Schild
+> > <henning.schild@siemens.com> ---
+> >  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> > b/drivers/leds/simple/simatic-ipc-leds-gpio.c index
+> > 4c9e663a90ba..0c96ba98e338 100644 ---
+> > a/drivers/leds/simple/simatic-ipc-leds-gpio.c +++
+> > b/drivers/leds/simple/simatic-ipc-leds-gpio.c @@ -57,6 +57,8 @@
+> > static int simatic_ipc_leds_gpio_probe(struct platform_device
+> > *pdev) struct gpio_desc *gpiod; int err;
+> >
+> > +       if (!IS_ENABLED(CONFIG_PINCTRL_BROXTON))
+> > +               return -ENODEV;
+> >         gpiod_add_lookup_table(&simatic_ipc_led_gpio_table);
+> >         simatic_leds_pdev = platform_device_register_resndata(NULL,
+> >                 "leds-gpio", PLATFORM_DEVID_NONE, NULL, 0,
+> > --
+> > 2.35.1
+> >  
 > 
-> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Cc: Matthew Auld <matthew.auld@intel.com>
-> Cc: Nirmoy Das <nirmoy.das@intel.com>
-> Cc: Jani Nikula <jani.nikula@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
->   include/linux/util_macros.h | 25 +++++++++++++++++++++++++
->   1 file changed, 25 insertions(+)
 > 
-> diff --git a/include/linux/util_macros.h b/include/linux/util_macros.h
-> index 72299f261b25..b6624b275257 100644
-> --- a/include/linux/util_macros.h
-> +++ b/include/linux/util_macros.h
-> @@ -2,6 +2,9 @@
->   #ifndef _LINUX_HELPER_MACROS_H_
->   #define _LINUX_HELPER_MACROS_H_
->   
-> +#include <linux/types.h>
-> +#include <linux/bug.h>
-> +
->   #define __find_closest(x, a, as, op)					\
->   ({									\
->   	typeof(as) __fc_i, __fc_as = (as) - 1;				\
-> @@ -38,4 +41,26 @@
->    */
->   #define find_closest_descending(x, a, as) __find_closest(x, a, as, >=)
->   
-> +/**
-> + * exact_type - break compile if source type and destination value's type are
-> + * not the same
-> + * @T: Source type
-> + * @n: Destination value
-> + *
-> + * It is a helper macro for a poor man's -Wconversion: only allow variables of
-> + * an exact type. It determines whether the source type and destination value's
-> + * type are the same while compiling, and it breaks compile if two types are
-> + * not the same
-> + */
-> +#define exact_type(T, n) \
-> +	BUILD_BUG_ON(!__builtin_constant_p(n) && !__builtin_types_compatible_p(T, typeof(n)))
-> +
-> +/**
-> + * exactly_pgoff_t - helper to check if the type of a value is pgoff_t
-> + * @n: value to compare pgoff_t type
-> + *
-> + * It breaks compile if the argument value's type is not pgoff_t type.
-> + */
-> +#define exactly_pgoff_t(n) exact_type(pgoff_t, n)
-> +
->   #endif
+

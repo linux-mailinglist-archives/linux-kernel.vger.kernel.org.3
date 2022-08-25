@@ -2,119 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AF75A191D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9755A1924
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243660AbiHYSvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S243534AbiHYSxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243590AbiHYSve (ORCPT
+        with ESMTP id S243107AbiHYSw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:51:34 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6273BD14F;
-        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-11c59785966so26045016fac.11;
-        Thu, 25 Aug 2022 11:51:26 -0700 (PDT)
+        Thu, 25 Aug 2022 14:52:58 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0D94D263
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:52:56 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id a4so15957473qto.10
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iYkms9FOcVHRMQ8nnVym8avn1yHBqqPQKbrXBh8EpAg=;
+        b=ernArX/gsESCKDxGzFCn7QheTg6rO6ShblTP5Cc3wCPphLkfsifDo5R5ObXE3j6jZ4
+         ln6V0hLEnJTZPc8ImbAZswhYMmwAVOPk1VhxrwPwrpjsRZUzBoWEqKYiJmRDUONRvHv1
+         oUhM0dBrpZu53zByZiZy5ELiA4VPJiOaTveVlbCC2A4RzTkzwtZ6QiBQ0gmNlo/X+7Vr
+         M8Qk2OVc/daWcWg20LJQhUUV92x9lbQ7Qvm+sLlvEEnsl0LasLz+/E1lU7Fk6DhGIstt
+         9+n4V18u6y6H2Nu8/zRffL51gE2h6C5P6ukRD5JKMtmD4Ui1R3bfBRxoF/l821Pu46oc
+         7I3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=/mQxvQUe1gZvztnNOjvvy0GAYtv4p8n82bdrYuXSJNc=;
-        b=SmxtThvt0xullVIzo+tu58M3kfxDoeNbYY3oomu4YexB98wxnj+U11QlSSavL+gpnq
-         qVgR7UoiqMwzENeVO4p3TW+H7NefI9L0PhfNGhkdSrW7+D4D+ic3xhNtP4tHzE0ekB9R
-         YJmxOEjEeebX4OuyfQElNtV5YYbRAoa5tKCyMEJLCMeaJZo1m0JHsIt4aW1uVLBz3WSL
-         YsPBLCU2y7Bt/tE9uZ5OS5iRqjZwAJv6iYAWL8Af+FauW365zPrPX4FePzJ14vLmdKSD
-         t72jaJZsxK8dvkVfSnJATRhI1SBnxT9v0sDdELOJ961BWsEKX+wubMDT3tPxRLj0lEL2
-         POOw==
-X-Gm-Message-State: ACgBeo2foa7Cx8BHXBOjvLfxv23ooDAcliJppRIIdySI2QOZ570aU99L
-        1x1yIB+HKTba3NjRt6yMQA==
-X-Google-Smtp-Source: AA6agR7VmIvwrjdERFhI9ibJJis5Ad/n5EP/mLtA9FAraPED+0yZNGZaOa0d6weoNURMUb/qtIHNOA==
-X-Received: by 2002:a05:6871:96:b0:11d:ca1b:db19 with SMTP id u22-20020a056871009600b0011dca1bdb19mr259813oaa.74.1661453485513;
-        Thu, 25 Aug 2022 11:51:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n16-20020a056870971000b0011d2ec94fcasm3737802oaq.36.2022.08.25.11.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 11:51:24 -0700 (PDT)
-Received: (nullmailer pid 1486944 invoked by uid 1000);
-        Thu, 25 Aug 2022 18:51:19 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?q?Andreas_B=C3=B6hler?= <dev@aboehler.at>
-Cc:     linux-hwmon@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20220825143737.77732-1-dev@aboehler.at>
-References: <20220825143737.77732-1-dev@aboehler.at>
-Subject: Re: [PATCH v3 1/2] Documentation: devicetree: update bindings for tps23861
-Date:   Thu, 25 Aug 2022 13:51:19 -0500
-Message-Id: <1661453480.004870.1486943.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iYkms9FOcVHRMQ8nnVym8avn1yHBqqPQKbrXBh8EpAg=;
+        b=PEWKJd0qQAKQf8vEcS9lQ9gF/sIPd0BMZSLR3iaP3xoEvb/bTywidVfWmiEfN+/1Lm
+         IQmoqFiegJTk/K8H6G3QF6dwgMmPgb7JRgFXZrksqVq0o6WhTJ3bM9/Q7f644Ny1sskx
+         OuJmdNu2YuTGXXjymsEb2BNwGxxsMuqHKudUTL3/qyHO6pFh98aovuDKKwoTPVIiR+mY
+         VcTF885EKWGM/YrUl1PkiKOdiMuuN8nRmuG+yTzLugmpw8OJKwXfAjZlXAQg3xwTNm2c
+         dkzxuHp4F7oN8yznxu3SzC9U80zEkhnGmerkojQxloJHVPmwAbQrKsSpP08ynCt/YpkX
+         fH1A==
+X-Gm-Message-State: ACgBeo1DEBBAJKogYoJQXDjAiffhtZ+0jlp9SXSpK8nD2UMhQLD2Awtm
+        APAQc0OXnb39uPH7PM8f6ae4UGB94IGa7WM56jjKJQ==
+X-Google-Smtp-Source: AA6agR48ZvB5ActsSVjSq3vRtM4RfekkHdDEj6wknDLegitpHkTI1l0gJHvzsL78KJ1H+7AyvyZOIhoCN3zEWskpNYY=
+X-Received: by 2002:a05:622a:552:b0:342:f8c2:442 with SMTP id
+ m18-20020a05622a055200b00342f8c20442mr4912166qtx.478.1661453575766; Thu, 25
+ Aug 2022 11:52:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220824233117.1312810-1-haoluo@google.com> <20220824233117.1312810-6-haoluo@google.com>
+ <CAADnVQKC_USyXe1RyWL+EY0q=x=c88opvPW-rWZ5znGJOq63CQ@mail.gmail.com>
+ <CAJD7tkZGxkV8_3qNy_Q=k-DT2=aGknzT08WiVtESpzur1JxCwA@mail.gmail.com> <CAADnVQLD+PcyO1qmxaBxdK1_tLRfBEqth8kzxts_8f+nSqu+hA@mail.gmail.com>
+In-Reply-To: <CAADnVQLD+PcyO1qmxaBxdK1_tLRfBEqth8kzxts_8f+nSqu+hA@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 25 Aug 2022 11:52:45 -0700
+Message-ID: <CA+khW7hKRk-=s=eOJAGqJ9bap17kZu8p+YU+Bx-BUg+WaU2q_A@mail.gmail.com>
+Subject: Re: [RESEND PATCH bpf-next v9 5/5] selftests/bpf: add a selftest for
+ cgroup hierarchical stats collection
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 16:37:36 +0200, Andreas Böhler wrote:
-> The tps23861 driver does not initialize the chip and relies on it being
-> in auto-mode by default. On some devices, these controllers default to
-> OFF-Mode and hence cannot be used at all.
-> 
-> This brings minimal support for initializing the controller in a user-
-> defined mode.
-> 
-> Signed-off-by: Andreas Böhler <dev@aboehler.at>
-> ---
->  .../bindings/hwmon/ti,tps23861.yaml           | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
-> 
+On Thu, Aug 25, 2022 at 11:43 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Aug 24, 2022 at 7:41 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > On Wed, Aug 24, 2022 at 7:09 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Aug 24, 2022 at 4:31 PM Hao Luo <haoluo@google.com> wrote:
+> > > > +
+> > > > +       for (i = 0; i < N_CGROUPS; i++) {
+> > > > +               fd = create_and_get_cgroup(cgroups[i].path);
+> > > > +               if (!ASSERT_GE(fd, 0, "create_and_get_cgroup"))
+> > > > +                       return fd;
+> > > > +
+> > > > +               cgroups[i].fd = fd;
+> > > > +               cgroups[i].id = get_cgroup_id(cgroups[i].path);
+> > > > +
+> > > > +               /*
+> > > > +                * Enable memcg controller for the entire hierarchy.
+> > > > +                * Note that stats are collected for all cgroups in a hierarchy
+> > > > +                * with memcg enabled anyway, but are only exposed for cgroups
+> > > > +                * that have memcg enabled.
+> > > > +                */
+> > > > +               if (i < N_NON_LEAF_CGROUPS) {
+> > > > +                       err = enable_controllers(cgroups[i].path, "memory");
+> > > > +                       if (!ASSERT_OK(err, "enable_controllers"))
+> > > > +                               return err;
+> > > > +               }
+> > > > +       }
+> > >
+> > > It passes BPF CI, but fails in my setup with:
+> > >
+> > > # ./test_progs -t cgroup_hier -vv
+> > > bpf_testmod.ko is already unloaded.
+> > > Loading bpf_testmod.ko...
+> > > Successfully loaded bpf_testmod.ko.
+> > > setup_bpffs:PASS:mount 0 nsec
+> > > setup_cgroups:PASS:setup_cgroup_environment 0 nsec
+> > > setup_cgroups:PASS:get_root_cgroup 0 nsec
+> > > setup_cgroups:PASS:create_and_get_cgroup 0 nsec
+> > > (cgroup_helpers.c:92: errno: No such file or directory) Enabling
+> > > controller memory:
+> > > /mnt/cgroup-test-work-dir6526//test/cgroup.subtree_control
+> > > setup_cgroups:FAIL:enable_controllers unexpected error: 1 (errno 2)
+> > > cleanup_bpffs:FAIL:rmdir /sys/fs/bpf/vmscan/ unexpected error: -1 (errno 2)
+> > > #36      cgroup_hierarchical_stats:FAIL
+> > > Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+> > >
+> > > How do I debug it?
+> >
+> > The failure with ENOENT happens when we try to write "+memory" to
+> > /mnt/cgroup-test-work-dir6526//test/cgroup.subtree_control, not when
+> > we try to open it. So the file is there. AFAICT, ENOENT can be
+> > returned from this write if the memory controller is not enabled on
+> > this cgroup.
+> >
+> > In setup_cgroup_environment(), we should be enabling all available
+> > controllers on /mnt and /mnt/cgroup-test-work-dir6526 by this line:
+> >
+> >         if (__enable_controllers(CGROUP_MOUNT_PATH, NULL) ||
+> >               __enable_controllers(cgroup_workdir, NULL))
+> >                   return 1;
+> >
+> > The first thing that comes to mind is that maybe the memory controller
+> > is not enabled on your setup at all? Can you check
+> > /sys/fs/cgroup/cgroup.controllers (or wherever your global cgroup
+> > mount is)?
+>
+> Indeed. I didn't have a memory controller in cgroup2.
+> My system booted with cgroup v1 and it had cgroup1 memory
+> controller enabled which prevented cgroup2 to enable it.
+> Without Tejun's help I would have been able to figure this out.
+>
+> Anyway, pushed the set to bpf-next. Thanks everyone.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:28.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@0:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:36.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@1:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:44.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@2:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:52.23-33: Warning (reg_format): /example-0/i2c/tps23861@30/port@3:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:27.26-33.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@0: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:27.26-33.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@0: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:35.26-41.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@1: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:35.26-41.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@1: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:43.26-49.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@2: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:43.26-49.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@2: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:51.26-57.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@3: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dts:51.26-57.21: Warning (avoid_default_addr_size): /example-0/i2c/tps23861@30/port@3: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/ti,tps23861.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Really awesome! Thanks everyone for the code review and the helpful
+comments! Yosry and I can now start playing this new tool in our
+production kernel. We will monitor for bugs and continue making
+further improvements.

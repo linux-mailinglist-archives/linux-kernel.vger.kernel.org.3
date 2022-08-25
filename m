@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D415A0C47
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FEA5A0C4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbiHYJPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S238660AbiHYJQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiHYJPJ (ORCPT
+        with ESMTP id S235750AbiHYJQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:15:09 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E3312D03;
-        Thu, 25 Aug 2022 02:14:59 -0700 (PDT)
-X-UUID: 38e818b9c7a84807a68c81bd719794c7-20220825
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=d27K2ZYpgSlJivuuUIEZmgJTuKQyXeb2NK4ggG+e144=;
-        b=IK8t1VwxfVc6qKsG2+psKpSLeKecmgwjjMSyIP8CdFQ35lXCsTTehjgfnknEmzsUR3Ea5gn5DSj7IRowHD0rOvW/dDRJREQpcNzIswt0b7417iyBUQ+kdif67ueuc2FC2I85bf8JCXJJDlUAHk/ILpjA8DjVpw76FWGnC2a0p1w=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:c8b035c6-4ca2-43ad-943f-741063b39028,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:e9098c55-e800-47dc-8adf-0c936acf4f1b,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 38e818b9c7a84807a68c81bd719794c7-20220825
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 822603366; Thu, 25 Aug 2022 17:14:51 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 25 Aug 2022 17:14:49 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 25 Aug 2022 17:14:49 +0800
-From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <matthias.bgg@gmail.com>
-CC:     <jason-jh.lin@mediatek.com>, <nancy.lin@mediatek.com>,
-        <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <angelogioacchino.delregno@collabora.com>, <hsinyi@google.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v2] dt-bindings: arm: mediatek: mmsys: change compatible for MT8195
-Date:   Thu, 25 Aug 2022 17:14:48 +0800
-Message-ID: <20220825091448.14008-1-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 25 Aug 2022 05:16:10 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DC848EAB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:16:08 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bj12so21249881ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=niRs2YtuH5B5oh1E7598uKEG/vRd1+c2zDxWBz4UkwE=;
+        b=dlDNTnyiWbdKLsF4H0dN4LY83Z/ZJu5EphQ9OD+H5nha4HI+2ztnNtu3H4xzQCNcgh
+         mNOG4qp514QMKCj/2ZO7UAKiKzABdTw5jAnwvMaDzaqv7JJv92BbGkXzEVoh39HbmJE0
+         1yjCUQ7AnC9XKs1wroKmwh9iUqxnoyakyZlzFGhkzL17nRijZS9BUt1B7ZwoR/zcOFd5
+         4bc6llE7Ehv/dkHf3loIQpdly3vqPc4bsQ3GtRfOyrofV5gjVKG956ErpCUleATYmyWS
+         GCrSWcjKCTmSe8sDxO+Si6qz9rTxjI72lzU8/fUbVFZhyBwiiV0CGjQ5PUHXgQSSrIfF
+         UFQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=niRs2YtuH5B5oh1E7598uKEG/vRd1+c2zDxWBz4UkwE=;
+        b=u9yAZ3gTunUaAkbEeGKhGCUOM+TtTpRP8KmnFArm3K2Qe7xc86Gl40e6Y0ofFyTZBN
+         Eh4gdN/mqw0cFGMKTdCcoEvH+GNqHv5LiapOLwM5GiOvpjJuAcTT1tpX48e7q1WNQ/mu
+         OM8dLqt+qbTB51cad6bLP8jYLBqyPWjWJ2pWt9wr77qoH9tyLUUB7hXkEAjQSklugHaI
+         Nm3Ln/vydVk9sFXPnmDGt3Zm2P56FCCEj7mV6WUzC2o1MSXw1m2TaHX0P6S9AD9153S1
+         d6ZQMxXoTOQCrSmTe4p8cewshBsjUhGTLYEe5x6emgK1pJe65UcKVimKP6h8HIcig8s3
+         biUw==
+X-Gm-Message-State: ACgBeo0houItki0LW92NZ2ul2ZUhWH5FeK/w+dvOg4JLa8CsMDUhFMSN
+        RUufN0OjJNvwaxeBoZkxgBY=
+X-Google-Smtp-Source: AA6agR4Umk4Ifs5d6wA4D+kyy9D/qgTCDDz9Wyl+uxvXmVoIjer/V+FotX39VNEdpIVpZqLufgERMg==
+X-Received: by 2002:a17:906:5a50:b0:73d:ad57:e02e with SMTP id my16-20020a1709065a5000b0073dad57e02emr1789735ejc.431.1661418966961;
+        Thu, 25 Aug 2022 02:16:06 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::2eef? ([2620:10d:c092:600::2:bb7b])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906218a00b0072af4af2f46sm2180299eju.74.2022.08.25.02.16.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 02:16:06 -0700 (PDT)
+Message-ID: <ea498e38-d1b0-1011-834d-8574cd0d113b@gmail.com>
+Date:   Thu, 25 Aug 2022 10:14:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,URIBL_CSS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [axboe-block:io_uring-6.0 14/14] io_uring/net.c:1053:36: warning:
+ variable 'addr' is uninitialized when used here
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+References: <202208250535.oP4RWEEL-lkp@intel.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <202208250535.oP4RWEEL-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
+On 8/24/22 22:41, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-6.0
+> head:   0596fa5ef9aff29219021fa6f0117b604ff83d09
+> commit: 0596fa5ef9aff29219021fa6f0117b604ff83d09 [14/14] io_uring/net: save address for sendzc async execution
+> config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220825/202208250535.oP4RWEEL-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=0596fa5ef9aff29219021fa6f0117b604ff83d09
+>          git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+>          git fetch --no-tags axboe-block io_uring-6.0
+>          git checkout 0596fa5ef9aff29219021fa6f0117b604ff83d09
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 
-For previous MediaTek SoCs, such as MT8173, there are 2 display HW
-pipelines binding to 1 mmsys with the same power domain, the same
-clock driver and the same mediatek-drm driver.
+Yeah, that part is trashy, I'll fix it up, thanks
 
-For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
-2 different power domains, different clock drivers and different
-mediatek-drm drivers.
 
-Moreover, Hardware pipeline of VDOSYS0 has these components: COLOR,
-CCORR, AAL, GAMMA, DITHER. They are related to the PQ (Picture Quality)
-and they makes VDOSYS0 supports PQ function while they are not
-including in VDOSYS1.
-
-Hardware pipeline of VDOSYS1 has the component ETHDR (HDR related
-component). It makes VDOSYS1 supports the HDR function while it's not
-including in VDOSYS0.
-
-To summarize0:
-Only VDOSYS0 can support PQ adjustment.
-Only VDOSYS1 can support HDR adjustment.
-
-Therefore, we need to separate these two different mmsys hardwares to
-2 different compatibles for MT8195.
-
-Fixes: 81c5a41d10b9 ("dt-bindings: arm: mediatek: mmsys: add mt8195 SoC binding")
-Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
----
-Changes for v2:
-1. Add hardware difference for VDOSYS0 and VDOSYS1 in commit message.
----
- .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml       | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-index 6ad023eec193..bfbdd30d2092 100644
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-@@ -31,7 +31,8 @@ properties:
-               - mediatek,mt8183-mmsys
-               - mediatek,mt8186-mmsys
-               - mediatek,mt8192-mmsys
--              - mediatek,mt8195-mmsys
-+              - mediatek,mt8195-vdosys0
-+              - mediatek,mt8195-vdosys1
-               - mediatek,mt8365-mmsys
-           - const: syscon
-       - items:
 -- 
-2.18.0
-
+Pavel Begunkov

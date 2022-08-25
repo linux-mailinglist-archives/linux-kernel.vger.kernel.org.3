@@ -2,68 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B4B5A13AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D935A13AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241695AbiHYOdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S241764AbiHYOde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240474AbiHYOdT (ORCPT
+        with ESMTP id S241762AbiHYOdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:33:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E458991096
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661437997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HAu4rC9CyeyNudYPR+y9tR4vVDLBYqDeDne8QlTGLbM=;
-        b=eX6J7vGC97jvonQRvB7DQVVbDYyZ3ipVlvUW74CtHdyMCSjI32aETRvkRDBGET8Pa5cg8r
-        sGp3oWdIaWELcVCLu9zAdLHzFdSaKQk02gDmVHcdVA0JtzQVpieDMkoZ2LVU84NRF3m+6O
-        S+TZ6lLA5YehNg4HYqxVHxCNjUpHQQE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-170-ryT9HQ2ANxCKwMP8lBcWpw-1; Thu, 25 Aug 2022 10:33:15 -0400
-X-MC-Unique: ryT9HQ2ANxCKwMP8lBcWpw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45CA218A01D5;
-        Thu, 25 Aug 2022 14:33:03 +0000 (UTC)
-Received: from t480s.fritz.box (unknown [10.39.192.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7CC50492CA5;
-        Thu, 25 Aug 2022 14:32:59 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, gregkh@linuxfoundation.org,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Cyrill Gorcunov <gorcunov@openvz.org>,
-        Pavel Emelyanov <xemul@parallels.com>,
-        Jamie Liu <jamieliu@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH 4.9-stable -- 5.19-stable] mm/hugetlb: fix hugetlb not supporting softdirty tracking
-Date:   Thu, 25 Aug 2022 16:32:58 +0200
-Message-Id: <20220825143258.36151-1-david@redhat.com>
-In-Reply-To: <1661424546448@kroah.com>
-References: <1661424546448@kroah.com>
+        Thu, 25 Aug 2022 10:33:31 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A07B9C52E;
+        Thu, 25 Aug 2022 07:33:29 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 4ED8892009D; Thu, 25 Aug 2022 16:33:28 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 47FE792009C;
+        Thu, 25 Aug 2022 15:33:28 +0100 (BST)
+Date:   Thu, 25 Aug 2022 15:33:28 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] serial: dz: Replace DZ_XMIT_SIZE with
+ UART_XMIT_SIZE
+In-Reply-To: <89359013-85fe-76e1-a425-fabdfa3572f9@linux.intel.com>
+Message-ID: <alpine.DEB.2.21.2208251454480.26998@angie.orcam.me.uk>
+References: <20220825091918.8398-1-ilpo.jarvinen@linux.intel.com> <alpine.DEB.2.21.2208251219120.26998@angie.orcam.me.uk> <89359013-85fe-76e1-a425-fabdfa3572f9@linux.intel.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,162 +45,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit f96f7a40874d7c746680c0b9f57cef2262ae551f upstream.
+On Thu, 25 Aug 2022, Ilpo Järvinen wrote:
 
-Patch series "mm/hugetlb: fix write-fault handling for shared mappings", v2.
+> >  Also I'd rather:
+> > 
+> > #define DZ_WAKEUP_CHARS      UART_XMIT_SIZE
+> > 
+> > and there's no need to include <linux/serial_core.h> in dz.h as the driver 
+> > itself already does that (and dz.h is an auxiliary private header).
+> > 
+> >  Thanks for your submission.
+> 
+> I have started to becomes more inclined into the direction of dropping 
+> DZ_WAKEUP_CHARS entirely and use WAKEUP_CHARS like most of the drivers do
+> after staring now at WAKEUP_CHARS & uart_write_wakeup() lines just now.
+> 
+> There is just a handful of exceptions, rest of the drivers all use 256 as 
+> WAKEUP_CHARS. dz uses 1024 (4k/4) and rest of the exceptions use 
+> uart_circ_empty() but I suspect they should also be just converted to 
+> use WAKEUP_CHARS.
 
-I observed that hugetlb does not support/expect write-faults in shared
-mappings that would have to map the R/O-mapped page writable -- and I
-found two case where we could currently get such faults and would
-erroneously map an anon page into a shared mapping.
+ It may have to do with the particularly low speed of the machines the 
+driver/hardware is used with, one of the slowest Linux has ever supported 
+(I think only the m68k port may serve slower machines) and certainly the 
+slowest and earliest MIPS processors, down to R2000 clocked at 12MHz.
 
-Reproducers part of the patches.
+ Also bear in mind that the DZ11 interface is a serial line multiplexer 
+rather than a classic single or multiple UART, handling up to 8 lines via 
+shared Tx/Rx buffers (the original implementation was in the form of a 
+rather large discrete board built of SSI chips).  In this particular 
+integrated ASIC implementation 4 lines are handled and a character to be 
+transmitted may have to wait for the other 3 lines to be handled first.  
 
-I propose to backport both fixes to stable trees.  The first fix needs a
-small adjustment.
+ This may have contributed to the choice made by the original implementer 
+here and any change will have to be thoroughly understood and evaluated.
 
-This patch (of 2):
+ See <https://gunkies.org/wiki/DZ11_asynchronous_serial_line_interface> 
+for an overview of the device, technical documentation, and a photo of a 
+specimen dating back to mid 1970s.
 
-Staring at hugetlb_wp(), one might wonder where all the logic for shared
-mappings is when stumbling over a write-protected page in a shared
-mapping.  In fact, there is none, and so far we thought we could get away
-with that because e.g., mprotect() should always do the right thing and
-map all pages directly writable.
-
-Looks like we were wrong:
-
---------------------------------------------------------------------------
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <fcntl.h>
- #include <unistd.h>
- #include <errno.h>
- #include <sys/mman.h>
-
- #define HUGETLB_SIZE (2 * 1024 * 1024u)
-
- static void clear_softdirty(void)
- {
-         int fd = open("/proc/self/clear_refs", O_WRONLY);
-         const char *ctrl = "4";
-         int ret;
-
-         if (fd < 0) {
-                 fprintf(stderr, "open(clear_refs) failed\n");
-                 exit(1);
-         }
-         ret = write(fd, ctrl, strlen(ctrl));
-         if (ret != strlen(ctrl)) {
-                 fprintf(stderr, "write(clear_refs) failed\n");
-                 exit(1);
-         }
-         close(fd);
- }
-
- int main(int argc, char **argv)
- {
-         char *map;
-         int fd;
-
-         fd = open("/dev/hugepages/tmp", O_RDWR | O_CREAT);
-         if (!fd) {
-                 fprintf(stderr, "open() failed\n");
-                 return -errno;
-         }
-         if (ftruncate(fd, HUGETLB_SIZE)) {
-                 fprintf(stderr, "ftruncate() failed\n");
-                 return -errno;
-         }
-
-         map = mmap(NULL, HUGETLB_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-         if (map == MAP_FAILED) {
-                 fprintf(stderr, "mmap() failed\n");
-                 return -errno;
-         }
-
-         *map = 0;
-
-         if (mprotect(map, HUGETLB_SIZE, PROT_READ)) {
-                 fprintf(stderr, "mmprotect() failed\n");
-                 return -errno;
-         }
-
-         clear_softdirty();
-
-         if (mprotect(map, HUGETLB_SIZE, PROT_READ|PROT_WRITE)) {
-                 fprintf(stderr, "mmprotect() failed\n");
-                 return -errno;
-         }
-
-         *map = 0;
-
-         return 0;
- }
---------------------------------------------------------------------------
-
-Above test fails with SIGBUS when there is only a single free hugetlb page.
- # echo 1 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
- # ./test
- Bus error (core dumped)
-
-And worse, with sufficient free hugetlb pages it will map an anonymous page
-into a shared mapping, for example, messing up accounting during unmap
-and breaking MAP_SHARED semantics:
- # echo 2 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
- # ./test
- # cat /proc/meminfo | grep HugePages_
- HugePages_Total:       2
- HugePages_Free:        1
- HugePages_Rsvd:    18446744073709551615
- HugePages_Surp:        0
-
-Reason in this particular case is that vma_wants_writenotify() will
-return "true", removing VM_SHARED in vma_set_page_prot() to map pages
-write-protected. Let's teach vma_wants_writenotify() that hugetlb does not
-support softdirty tracking.
-
-Link: https://lkml.kernel.org/r/20220811103435.188481-1-david@redhat.com
-Link: https://lkml.kernel.org/r/20220811103435.188481-2-david@redhat.com
-Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
-Signed-off-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Peter Feiner <pfeiner@google.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Cyrill Gorcunov <gorcunov@openvz.org>
-Cc: Pavel Emelyanov <xemul@parallels.com>
-Cc: Jamie Liu <jamieliu@google.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Muchun Song <songmuchun@bytedance.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: <stable@vger.kernel.org>	[3.18+]
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/mmap.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 7c59ec73acc3..3b284b091bb7 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1693,8 +1693,12 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
- 	    pgprot_val(vm_pgprot_modify(vm_page_prot, vm_flags)))
- 		return 0;
- 
--	/* Do we need to track softdirty? */
--	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY))
-+	/*
-+	 * Do we need to track softdirty? hugetlb does not support softdirty
-+	 * tracking yet.
-+	 */
-+	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY) &&
-+	    !is_vm_hugetlb_page(vma))
- 		return 1;
- 
- 	/* Specialty mapping? */
--- 
-2.37.1
-
+  Maciej

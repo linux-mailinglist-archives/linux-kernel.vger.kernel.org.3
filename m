@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653C75A0920
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B600A5A0926
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235646AbiHYGtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S229895AbiHYGum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiHYGtI (ORCPT
+        with ESMTP id S236446AbiHYGu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:49:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95DF76741;
-        Wed, 24 Aug 2022 23:49:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 25 Aug 2022 02:50:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1977F2A246
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:50:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 934735C889;
-        Thu, 25 Aug 2022 06:49:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661410146; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hCOkZ1R+3Ps2iKEQMkAGWbxoqzFDDsd5JC+8lsArgGY=;
-        b=t+iNVMXgawnOo26nJ0TYL5x/n2/mTXp5VPRShA6ztSQWzxIh3W0eaKXh+Lm7NRjG+9vVAG
-        My0w3z2TjVgNuaHWVhhBjJkd874Xto/GeUkKCuohcF8xCIMjWj2eHVInmxCW/uYnIZ69gP
-        7pfKhI3yz9xq8yt/uPBJ9lMRs7vD50Y=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7555C13A47;
-        Thu, 25 Aug 2022 06:49:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id J7Y0GmIbB2MtPgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 25 Aug 2022 06:49:06 +0000
-Date:   Thu, 25 Aug 2022 08:49:05 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] memcg: increase MEMCG_CHARGE_BATCH to 64
-Message-ID: <YwcbYQHRuThE18QN@dhcp22.suse.cz>
-References: <20220825000506.239406-1-shakeelb@google.com>
- <20220825000506.239406-4-shakeelb@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B11F9619CB
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DD0C433C1;
+        Thu, 25 Aug 2022 06:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661410224;
+        bh=DrccC7ylO4/DdFvmZTVW+Z5UzGv6H0Hfddj9XoE84jQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vMYz/2zaFP9uEgMNuOEPMkRu9PguAD1D1rxxyHprSe/VPrNk1xtZgGrAPzMNRdrda
+         l4ryTTwabGVYVi0Hr40Npc6nZsbAT9xdeiORi6fcX8CLRttQNni1uAtqN5aKZL9Cig
+         MLZl9h25w8489NEKe04mS2pEkScpm5w7a5fWrfG8eQyCiR235g/31KazkDf2mkiafG
+         Buxl3Auj2pwjd/gD6PK2WO8JjvCpVMGU2hf2hymT6IQRQfv/562BI0OXuYXpypSfqV
+         SDWhFRLpy2oxAQ97CdvgWUeyRI4m4qhfRW/HWw+19xTUFfdINsEovZP5ZWzOxhCp60
+         3OncKen3d5krA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH] f2fs: account swapfile inodes
+Date:   Thu, 25 Aug 2022 14:50:14 +0800
+Message-Id: <20220825065014.1842769-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825000506.239406-4-shakeelb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,68 +52,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 25-08-22 00:05:06, Shakeel Butt wrote:
-> For several years, MEMCG_CHARGE_BATCH was kept at 32 but with bigger
-> machines and the network intensive workloads requiring througput in
-> Gbps, 32 is too small and makes the memcg charging path a bottleneck.
-> For now, increase it to 64 for easy acceptance to 6.0. We will need to
-> revisit this in future for ever increasing demand of higher performance.
-> 
-> Please note that the memcg charge path drain the per-cpu memcg charge
-> stock, so there should not be any oom behavior change. Though it does
-> have impact on rstat flushing and high limit reclaim backoff.
-> 
-> To evaluate the impact of this optimization, on a 72 CPUs machine, we
-> ran the following workload in a three level of cgroup hierarchy.
-> 
->  $ netserver -6
->  # 36 instances of netperf with following params
->  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
-> 
-> Results (average throughput of netperf):
-> Without (6.0-rc1)       10482.7 Mbps
-> With patch              17064.7 Mbps (62.7% improvement)
-> 
-> With the patch, the throughput improved by 62.7%.
-> 
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
-> Reviewed-by: Feng Tang <feng.tang@intel.com>
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+From: Chao Yu <chao.yu@oppo.com>
 
-Acked-by: Michal Hocko <mhocko@suse.com>
-Thanks!
+In order to check count of opened swapfile inodes.
 
-> ---
-> Changes since v1:
-> - Updated commit message
-> 
->  include/linux/memcontrol.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index 4d31ce55b1c0..70ae91188e16 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -354,10 +354,11 @@ struct mem_cgroup {
->  };
->  
->  /*
-> - * size of first charge trial. "32" comes from vmscan.c's magic value.
-> - * TODO: maybe necessary to use big numbers in big irons.
-> + * size of first charge trial.
-> + * TODO: maybe necessary to use big numbers in big irons or dynamic based of the
-> + * workload.
->   */
-> -#define MEMCG_CHARGE_BATCH 32U
-> +#define MEMCG_CHARGE_BATCH 64U
->  
->  extern struct mem_cgroup *root_mem_cgroup;
->  
-> -- 
-> 2.37.1.595.g718a3a8f04-goog
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+ fs/f2fs/data.c  | 2 ++
+ fs/f2fs/debug.c | 3 +++
+ fs/f2fs/f2fs.h  | 9 ++++++++-
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 0869fbbb5516..66f34cd559c6 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3970,6 +3970,7 @@ static int f2fs_swap_activate(struct swap_info_struct *sis, struct file *file,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	stat_inc_swapfile_inode(inode);
+ 	set_inode_flag(inode, FI_PIN_FILE);
+ 	f2fs_update_time(F2FS_I_SB(inode), REQ_TIME);
+ 	return ret;
+@@ -3979,6 +3980,7 @@ static void f2fs_swap_deactivate(struct file *file)
+ {
+ 	struct inode *inode = file_inode(file);
+ 
++	stat_dec_swapfile_inode(inode);
+ 	clear_inode_flag(inode, FI_PIN_FILE);
+ }
+ #else
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index c01471573977..88231d393b7c 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -135,6 +135,7 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+ 	si->inline_inode = atomic_read(&sbi->inline_inode);
+ 	si->inline_dir = atomic_read(&sbi->inline_dir);
+ 	si->compr_inode = atomic_read(&sbi->compr_inode);
++	si->swapfile_inode = atomic_read(&sbi->swapfile_inode);
+ 	si->compr_blocks = atomic64_read(&sbi->compr_blocks);
+ 	si->append = sbi->im[APPEND_INO].ino_num;
+ 	si->update = sbi->im[UPDATE_INO].ino_num;
+@@ -385,6 +386,8 @@ static int stat_show(struct seq_file *s, void *v)
+ 			   si->inline_dir);
+ 		seq_printf(s, "  - Compressed Inode: %u, Blocks: %llu\n",
+ 			   si->compr_inode, si->compr_blocks);
++		seq_printf(s, "  - Swapfile Inode: %u\n",
++			   si->swapfile_inode);
+ 		seq_printf(s, "  - Orphan/Append/Update Inode: %u, %u, %u\n",
+ 			   si->orphans, si->append, si->update);
+ 		seq_printf(s, "\nMain area: %d segs, %d secs %d zones\n",
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 088c3d1574b8..408d8034ed74 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1765,6 +1765,7 @@ struct f2fs_sb_info {
+ 	atomic_t inline_dir;			/* # of inline_dentry inodes */
+ 	atomic_t compr_inode;			/* # of compressed inodes */
+ 	atomic64_t compr_blocks;		/* # of compressed blocks */
++	atomic_t swapfile_inode;		/* # of swapfile inodes */
+ 	atomic_t max_aw_cnt;			/* max # of atomic writes */
+ 	unsigned int io_skip_bggc;		/* skip background gc for in-flight IO */
+ 	unsigned int other_skip_bggc;		/* skip background gc for other reasons */
+@@ -3863,7 +3864,7 @@ struct f2fs_stat_info {
+ 	int nr_issued_ckpt, nr_total_ckpt, nr_queued_ckpt;
+ 	unsigned int cur_ckpt_time, peak_ckpt_time;
+ 	int inline_xattr, inline_inode, inline_dir, append, update, orphans;
+-	int compr_inode;
++	int compr_inode, swapfile_inode;
+ 	unsigned long long compr_blocks;
+ 	int aw_cnt, max_aw_cnt;
+ 	unsigned int valid_count, valid_node_count, valid_inode_count, discard_blks;
+@@ -3952,6 +3953,10 @@ static inline struct f2fs_stat_info *F2FS_STAT(struct f2fs_sb_info *sbi)
+ 		(atomic64_add(blocks, &F2FS_I_SB(inode)->compr_blocks))
+ #define stat_sub_compr_blocks(inode, blocks)				\
+ 		(atomic64_sub(blocks, &F2FS_I_SB(inode)->compr_blocks))
++#define stat_inc_swapfile_inode(inode)					\
++		(atomic_inc(&F2FS_I_SB(inode)->swapfile_inode))
++#define stat_dec_swapfile_inode(inode)					\
++		(atomic_dec(&F2FS_I_SB(inode)->swapfile_inode))
+ #define stat_inc_meta_count(sbi, blkaddr)				\
+ 	do {								\
+ 		if (blkaddr < SIT_I(sbi)->sit_base_addr)		\
+@@ -4036,6 +4041,8 @@ void f2fs_update_sit_info(struct f2fs_sb_info *sbi);
+ #define stat_dec_compr_inode(inode)			do { } while (0)
+ #define stat_add_compr_blocks(inode, blocks)		do { } while (0)
+ #define stat_sub_compr_blocks(inode, blocks)		do { } while (0)
++#define stat_inc_swapfile_inode(inode)			do { } while (0)
++#define stat_dec_swapfile_inode(inode)			do { } while (0)
+ #define stat_update_max_atomic_write(inode)		do { } while (0)
+ #define stat_inc_meta_count(sbi, blkaddr)		do { } while (0)
+ #define stat_inc_seg_type(sbi, curseg)			do { } while (0)
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+

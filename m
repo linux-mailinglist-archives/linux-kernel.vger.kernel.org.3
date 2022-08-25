@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2C85A11C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313745A11D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242471AbiHYNSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
+        id S242484AbiHYNTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242433AbiHYNSD (ORCPT
+        with ESMTP id S241948AbiHYNTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:18:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC92201B6;
-        Thu, 25 Aug 2022 06:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661433482; x=1692969482;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qNYpsD0QAUqamHJ10Nj5m4QpCERSM1jcCkSlZAiHlgU=;
-  b=P27U3gyn1BuiY6RrTltUMI8aYZkrF1RYjSr9nCA2eaCWE18PSXfDJzBy
-   p60vo+XqKaoKfybh1zIIO1v9kiPMXblg7HHpcOcOwnw8+vzMfGEsSCKlY
-   h47lw3/6LpW81dS+/UHSpJoenBUw5YkcsuemHxr2Mv0wLtCnoxqZkH2Uk
-   ShHOcKuRblkjhVU1InB8Fhpd6uPeL58Q4vfy9sMs6GB7MViAE/n04RfPl
-   Q4CaCEkzRAfQx6trA8UIxNGHT6tfdMWDqIFtnnarqvKIY7FdhY4i/xih9
-   S26i/0d1dEmZ36AnrYecV+MKo7g/Ci5VQ6OUv9vzLKqhsv4OfIOZWeUUR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10450"; a="294234940"
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="294234940"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:18:02 -0700
-X-IronPort-AV: E=Sophos;i="5.93,263,1654585200"; 
-   d="scan'208";a="670974585"
-Received: from mblazque-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.101])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2022 06:18:00 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+        Thu, 25 Aug 2022 09:19:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72EEAA37A;
+        Thu, 25 Aug 2022 06:19:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 829BC61CD3;
+        Thu, 25 Aug 2022 13:19:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E229AC433D6;
+        Thu, 25 Aug 2022 13:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661433572;
+        bh=FO3o/vDoP9XtmRQXXKxIgPtLa05j7400CrUZvjFU5GM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X2hz5ehw79Z6abk+ajVRkSathM2xiXRPLCyieuOcBe/Ol7VgZgQrb70178DjIB8uU
+         9fx8WJMOmkx7tD6y+KMinJBCSz3U3v/a1t4elWmQ6eKJeu9w+VyHEYGqNcani7rMZ7
+         OmnXKZK1w6dscdqeUZytFOx2k/EeQiJIhjhMXp8Wl+dJL9hQI5TnEwIEc/kfuZch1O
+         0h+BqH49dhkXmb9WszaFxcd1E0E+UY8wGOiOBJLYMbjBmSMbkYydteViboo5+oy6FY
+         jE+/5o+d7Wa9JKG5UHRVkn71wkm02xVD0q7ItjhGzA4kLIS4bBdLLz5q+a0/TJbkTK
+         dhH7CviSbkYBA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oRClm-00059W-DK; Thu, 25 Aug 2022 15:19:39 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 2/2] serial: dz: Remove custom DZ_WAKEUP_CHARS
-Date:   Thu, 25 Aug 2022 16:17:46 +0300
-Message-Id: <20220825131746.21257-3-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220825131746.21257-1-ilpo.jarvinen@linux.intel.com>
-References: <20220825131746.21257-1-ilpo.jarvinen@linux.intel.com>
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] usb: dwc3: disable USB core PHY management
+Date:   Thu, 25 Aug 2022 15:18:36 +0200
+Message-Id: <20220825131836.19769-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,40 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Almost all serial drivers use WAKEUP_CHARS (256) from serial_core.h which
-also matches what n_tty_poll() uses for asserting EPOLLOUT.
+The dwc3 driver manages its PHYs itself so the USB core PHY management
+needs to be disabled.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
+host: xhci-plat: add platform data support") and f768e718911e ("usb:
+host: xhci-plat: add priv quirk for skip PHY initialization") to
+propagate the setting for now.
+
+Fixes: 4e88d4c08301 ("usb: add a flag to skip PHY initialization to struct usb_hcd")
+Fixes: 178a0bce05cb ("usb: core: hcd: integrate the PHY wrapper into the HCD core")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/tty/serial/dz.c | 2 +-
- drivers/tty/serial/dz.h | 3 ---
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ drivers/usb/dwc3/host.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-index 5d2588f3e6a9..5df46f22abaa 100644
---- a/drivers/tty/serial/dz.c
-+++ b/drivers/tty/serial/dz.c
-@@ -283,7 +283,7 @@ static inline void dz_transmit_chars(struct dz_mux *mux)
- 	dz_out(dport, DZ_TDR, tmp);
- 	dport->port.icount.tx++;
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index f6f13e7f1ba1..a7154fe8206d 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -11,8 +11,13 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
  
--	if (uart_circ_chars_pending(xmit) < DZ_WAKEUP_CHARS)
-+	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
- 		uart_write_wakeup(&dport->port);
++#include "../host/xhci-plat.h"
+ #include "core.h"
  
- 	/* Are we are done. */
-diff --git a/drivers/tty/serial/dz.h b/drivers/tty/serial/dz.h
-index 3b3e31954f24..4b502bfad560 100644
---- a/drivers/tty/serial/dz.h
-+++ b/drivers/tty/serial/dz.h
-@@ -124,7 +124,4 @@
++static const struct xhci_plat_priv dwc3_xhci_plat_priv = {
++	.quirks = XHCI_SKIP_PHY_INIT,
++};
++
+ static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+ 					int irq, char *name)
+ {
+@@ -92,6 +97,11 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 		goto err;
+ 	}
  
- #define DZ_NB_PORT 4
++	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_priv,
++					sizeof(dwc3_xhci_plat_priv));
++	if (ret)
++		goto err;
++
+ 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
  
--#define DZ_XMIT_SIZE   4096                 /* buffer size */
--#define DZ_WAKEUP_CHARS   DZ_XMIT_SIZE/4
--
- #endif /* DZ_SERIAL_H */
+ 	if (dwc->usb3_lpm_capable)
 -- 
-2.30.2
+2.35.1
 

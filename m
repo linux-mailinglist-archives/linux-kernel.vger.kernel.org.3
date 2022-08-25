@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BB65A1B23
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F2E5A1B22
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243746AbiHYVeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S243767AbiHYVea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 17:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiHYVeJ (ORCPT
+        with ESMTP id S234827AbiHYVe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:34:09 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA539BE4E4;
-        Thu, 25 Aug 2022 14:34:08 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id h22so31746700ejk.4;
-        Thu, 25 Aug 2022 14:34:08 -0700 (PDT)
+        Thu, 25 Aug 2022 17:34:29 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368A5BFC5B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:34:28 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id bs25so26184834wrb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Pzl9gLiTxZNXiExduEHbPetxKhGc6qFasSkzKZiLVdk=;
-        b=UjUYsxG8W9bdXfHsN7AE7FaubveLGPve4TqqxsuTc6BR9HAqMbbb327ISq0VDZr521
-         m2Cafk9ReH7skcxnAJonDTlMdchp53p8TvbmHkgKS560+5fFRaSjzNeDTyXMCu8AIEUI
-         12Nt7uYFsyRqqDmQrdHqMtwSL2INhd3l9mOwyMUGoxj3ZMIrPiaNKklvYpycHzWEiZTG
-         q4A8X3FdgGHI9OqLwivlvUeFE/V2bUCgNTYL+e+2LYw7qJc1TuStfBW7I9Ttki8KGrkX
-         DSpaSIXY9oIAhJBm6EHy5WdDMw7uLDaFJf5MvH/ZpuoczGBHHdMJvgGe+oIKSMPQH7XM
-         51kg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=vkI7j/ybscYbFRd8z0ozi0Hl64XiOOmBLsjf3EBHwN0=;
+        b=AzUrQhd7gjCn9B5gg5Fzzp909mgOT7in/GTCOa43Oq8F2ADQF2/cUTj2DciK1myF+2
+         OFfdLxqbfVj0DgOa+iPD/g3Qjrd3oFPzrqMb0dsUBvI1YxqMikW7DV6KflDzIoLGxaF2
+         LQmDWSdkeTRk7uIu+MEhVLz2MlMwEjTuxGs3QPJTaDK5EkTZYFhxJ2fPERhilErN5sUT
+         iatRgY63/M5emjQI8Y0usejKpU+NYYDmxLYouEd27eB3M/mMLknzvGn83AE+lFvp3P27
+         f36/AQ3gWDsBB9gCbPE/9jWu6W4oLhZODI2nJPh+fdc332B79F9aooHZY+TFu+sL85nf
+         dpTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Pzl9gLiTxZNXiExduEHbPetxKhGc6qFasSkzKZiLVdk=;
-        b=kv/HS2MTVAqLPh3W1nwePEG3Ge/oAoyG3WFBAmIsw0BSVeOVO/QY+zjXX26CMAcqkg
-         E4BxzeTsZ2XjwwxSMxiNcr9+i8JnzBcvIIsJrMfKZh/ROnTjcBKIlrx+F0ZNac0lCC72
-         0/zYhn3x8D7yobL2xjM72TMvzFsBgqWnSfVU4jLnjcwcPtRdPhu9Lm61fz2eHC3+Dr3s
-         V8x9NV4gnHDBS5Qn266snOvH1ikyIIKfBAIdRFH2r67Sz7e9OpRjU8+5KyWHcUUD3/UQ
-         OwzfWQ5/ObObLUa7jStHbZXFBh+KaDx0W7k/ocJ1yXMHHcdQ6fsx/LJBhHSL14t5harr
-         FHXw==
-X-Gm-Message-State: ACgBeo3BP9MnTrYvj1Erx2FQPO0RfyVBRnhLYkMB668B7IVaw1tDr/uT
-        Elf+/62xaETsKp/jl7fD75TfxLNsx8l6y9SUW+k=
-X-Google-Smtp-Source: AA6agR7wM2bmeMatR9YBcLK5by8I58CFNgT+If4GLn6ZlDDlW7nn3Ljcso4Fi6WcGsp5hnJ/LhIVaAKOvg3I4FqAE2s=
-X-Received: by 2002:a17:907:6096:b0:73d:9d12:4b04 with SMTP id
- ht22-20020a170907609600b0073d9d124b04mr3706378ejc.745.1661463247383; Thu, 25
- Aug 2022 14:34:07 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=vkI7j/ybscYbFRd8z0ozi0Hl64XiOOmBLsjf3EBHwN0=;
+        b=QDrkZe6uSafn0y4NCvgHaDkHsqWpajKdqJhJTMzBVm3qF4p6FbOLIGincWsA/cWW1C
+         BzTzBcOvHiAyMOAittop4BCCN+jr4s4oM0ENpQgBPRLuskQ1px8CIxOkDMaj26OO+D5o
+         h3HH1zASC3wQc9g5I8svr/UOYWalEm6tk8XGvSlQj3Oji3LEUQeBhk7qByGG0sFjIx9J
+         /OHqoMPGtW30tpR/To6UDd4hJjGBOaThP/PkiVN9V89LROAsehRckJiM6j74kQWHbjyV
+         k4Xplz5JxQSzfp4mT4Sueu+iJ9e+C/Y/iz1hSstznvzHz1zpKEp8AfA+43DlN5Di8KoC
+         66Zw==
+X-Gm-Message-State: ACgBeo2/TBhgDP3HCed3+ybwKhVPQ67F8+nYNJfVyMt93ZYjbDhSVaIW
+        w9sNj45e0HUJaj9O8Yp8sFfEdg3FJGw50Q==
+X-Google-Smtp-Source: AA6agR5tcJzT/e7p2SOGm8CTPB07sBJctMX85e0eAMx5SoKKJFF38Q2F4xb6D3PqMa00NCibDLvLfg==
+X-Received: by 2002:adf:f001:0:b0:225:3a99:3938 with SMTP id j1-20020adff001000000b002253a993938mr3199074wro.111.1661463266826;
+        Thu, 25 Aug 2022 14:34:26 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id b3-20020a5d40c3000000b0022533c4fa48sm258839wrq.55.2022.08.25.14.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 14:34:26 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] phy: move from strlcpy with unused retval to strscpy
+Date:   Thu, 25 Aug 2022 23:34:25 +0200
+Message-ID: <3506634.R56niFO833@kista>
+In-Reply-To: <20220818210056.7205-1-wsa+renesas@sang-engineering.com>
+References: <20220818210056.7205-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <20220823210354.1407473-1-namhyung@kernel.org>
-In-Reply-To: <20220823210354.1407473-1-namhyung@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 25 Aug 2022 14:33:56 -0700
-Message-ID: <CAEf4Bzbd0-jGFCSCJu3eDxxom42xnH9Tevq0n50-AajjHb5t3g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Add bpf_read_raw_record() helper
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, bpf@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -77,92 +75,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 2:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> The helper is for BPF programs attached to perf_event in order to read
-> event-specific raw data.  I followed the convention of the
-> bpf_read_branch_records() helper so that it can tell the size of
-> record using BPF_F_GET_RAW_RECORD flag.
->
-> The use case is to filter perf event samples based on the HW provided
-> data which have more detailed information about the sample.
->
-> Note that it only reads the first fragment of the raw record.  But it
-> seems mostly ok since all the existing PMU raw data have only single
-> fragment and the multi-fragment records are only for BPF output attached
-> to sockets.  So unless it's used with such an extreme case, it'd work
-> for most of tracing use cases.
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Dne =C4=8Detrtek, 18. avgust 2022 ob 23:00:56 CEST je Wolfram Sang napisal(=
+a):
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+>=20
+> Link:
+> https://lore.kernel.org/r/CAHk-=3DwgfRnXz0W3D37d01q3JFkr_i_uTL=3DV6A6G1oU=
+Zcprmk
+> nw@mail.gmail.com/ Signed-off-by: Wolfram Sang
+> <wsa+renesas@sang-engineering.com>
+
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
 > ---
-> I don't know how to test this.  As the raw data is available on some
-> hardware PMU only (e.g. AMD IBS).  I tried a tracepoint event but it was
-> rejected by the verifier.  Actually it needs a bpf_perf_event_data
-> context so that's not an option IIUC.
->
->  include/uapi/linux/bpf.h | 23 ++++++++++++++++++++++
->  kernel/trace/bpf_trace.c | 41 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 64 insertions(+)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 934a2a8beb87..af7f70564819 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5355,6 +5355,23 @@ union bpf_attr {
->   *     Return
->   *             Current *ktime*.
->   *
-> + * long bpf_read_raw_record(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 flags)
-> + *     Description
-> + *             For an eBPF program attached to a perf event, retrieve the
-> + *             raw record associated to *ctx* and store it in the buffer
-> + *             pointed by *buf* up to size *size* bytes.
-> + *     Return
-> + *             On success, number of bytes written to *buf*. On error, a
-> + *             negative value.
-> + *
-> + *             The *flags* can be set to **BPF_F_GET_RAW_RECORD_SIZE** to
-> + *             instead return the number of bytes required to store the raw
-> + *             record. If this flag is set, *buf* may be NULL.
-
-It looks pretty ugly from a usability standpoint to have one helper
-doing completely different things and returning two different values
-based on BPF_F_GET_RAW_RECORD_SIZE.
-
-I'm not sure what's best, but I have two alternative proposals:
-
-1. Add two helpers: one to get perf record information (and size will
-be one of them). Something like bpf_perf_record_query(ctx, flags)
-where you pass perf ctx and what kind of information you want to read
-(through flags), and u64 return result returns that (see
-bpf_ringbuf_query() for such approach). And then have separate helper
-to read data.
-
-2. Keep one helper, but specify that it always returns record size,
-even if user specified smaller size to read. And then allow passing
-buf==NULL && size==0. So passing NULL, 0 -- you get record size.
-Passing non-NULL buf -- you read data.
+>  drivers/phy/allwinner/phy-sun4i-usb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
+> b/drivers/phy/allwinner/phy-sun4i-usb.c index d5f3b42eb8ce..3a3831f6059a
+> 100644
+> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+> @@ -768,7 +768,7 @@ static int sun4i_usb_phy_probe(struct platform_device
+> *pdev) if (data->cfg->dedicated_clocks)
+>  			snprintf(name, sizeof(name), "usb%d_phy",=20
+i);
+>  		else
+> -			strlcpy(name, "usb_phy", sizeof(name));
+> +			strscpy(name, "usb_phy", sizeof(name));
+>=20
+>  		phy->clk =3D devm_clk_get(dev, name);
+>  		if (IS_ERR(phy->clk)) {
+> --
+> 2.35.1
 
 
-And also, "read_raw_record" is way too generic. We have
-bpf_perf_prog_read_value(), let's use "bpf_perf_read_raw_record()" as
-a name. We should have called bpf_read_branch_records() as
-bpf_perf_read_branch_records(), probably, as well. But it's too late.
-
-> + *
-> + *             **-EINVAL** if arguments invalid or **size** not a multiple
-> + *             of **sizeof**\ (u64\ ).
-> + *
-> + *             **-ENOENT** if the event does not have raw records.
->   */
->  #define __BPF_FUNC_MAPPER(FN)          \
->         FN(unspec),                     \
-> @@ -5566,6 +5583,7 @@ union bpf_attr {
->         FN(tcp_raw_check_syncookie_ipv4),       \
->         FN(tcp_raw_check_syncookie_ipv6),       \
->         FN(ktime_get_tai_ns),           \
-> +       FN(read_raw_record),            \
->         /* */
->
-
-[...]

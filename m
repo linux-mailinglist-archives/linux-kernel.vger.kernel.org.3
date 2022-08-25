@@ -2,159 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FDB5A0547
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441B75A0545
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiHYAo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S231206AbiHYAoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiHYAoX (ORCPT
+        with ESMTP id S229476AbiHYAoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:44:23 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475738FD4E;
-        Wed, 24 Aug 2022 17:44:22 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id s6so14958295lfo.11;
-        Wed, 24 Aug 2022 17:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=u5GpYKAPqiPXiVflxFFAVwYjhQ2xT4l31F3rdQnDD0o=;
-        b=A/Iio860rhP/v2AnpLJlwrYJYcXyV6DIv9JQx+170rEWmlIhMRzeZ9l+nUAUWh62JI
-         c7+HUkhuYDhePhYz0hBnDIf0kxXPYT4M/ZBV+H/mccKyYUoThe086rHM/Idvobh7usXz
-         aQ9wrACY0Z3JXJeCVGOVmQknpIZLf36WPkxiBD7fWy8VN+O7qbUFOBo3a44ClzdymCK8
-         cn9zOMWbhdyIyrwdxiUZa+HtMGxS+1GXqgQbAaeZcF6rDiKxojIsL57dVyKueIzEDW5i
-         YgPIUJJ32Dna6ii+VrXwF0fLGL78HBDUuiwmooSSuF5KJzA6EQ+rvmtMerH7qMgXror3
-         KaSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=u5GpYKAPqiPXiVflxFFAVwYjhQ2xT4l31F3rdQnDD0o=;
-        b=S0XtLs4W1HO+76qNE5dm70YENYqZiqH6JmerFzloE1d/Gpz+r9dbiQXZGywMpe9w/n
-         inbMqB2XCbB9tg7kSWznnCam1hEQFzORBOzECoE2UXsMc67W+BuU9TdgpTUVmTGwcj0F
-         irqtmBKiS+ZxeFU5ZJKxi/VJTpA/19QK2Y/nRwjJgq7lQD/gQ268mAbVCAdLQrGtRsKg
-         We2i5us6Ko15qhHq/kCzqNi0ftO67GxK078sf2fLhwBsDKJZrij/+mBBCqcJfrvwav2t
-         qpxg5RgJHTKbDQsb98VLSOAhGJwltHxmVrfhvx1DK4GhiD88x1cKXK/gaD3FZK9ulRfp
-         AGrA==
-X-Gm-Message-State: ACgBeo3xTwrFXXvq90BpSaeiaNFSDI8C5lEuG9QSr/GZ4FmlQvBbHhPo
-        GG5sy3ssYbmUxAo09onzuZvpw2lrIcvWJobj6KhNOgmD31+vSg==
-X-Google-Smtp-Source: AA6agR4sZ+jOQ3X+L+bTqjmbitY0TBSZsnZdxwNoCqHbQQL3VjTrTMF6ph0SwWt+X5NwBlfDz2Rm7C9UXN28W6P64Jc=
-X-Received: by 2002:a05:6512:1527:b0:48b:99:f3ff with SMTP id
- bq39-20020a056512152700b0048b0099f3ffmr386714lfb.81.1661388260398; Wed, 24
- Aug 2022 17:44:20 -0700 (PDT)
+        Wed, 24 Aug 2022 20:44:18 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29628E443;
+        Wed, 24 Aug 2022 17:44:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCkk42Yr3z4x1P;
+        Thu, 25 Aug 2022 10:44:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661388252;
+        bh=1Vndnbf3NkpEVFZLd7szmH5QRxMEOYDzMqL/ri28+mU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gGR6P8c34BE3JjdMUhBLMYc7IuHArFZPEJ2fUKQigFW6kbSkvL3xjKOYLTrEuI7NV
+         5YrxX0X4pOgfaBUA54IzAIx7g9jU2eLgxxECqOLkAoXsr37JRffSWfg4LwkmfLzQWR
+         sMTqNM5n7wk8kCBLeok+gktHA0J78gKH2t8ERK/kpwGdKodq9IQD/zVdISsSn+jGPM
+         OBRlIqKScfZyMtLchrGeRs5dPRTPnlrwR2UTCYwoJksyK3JT2RRBP6dyqV3HPvh6Iy
+         oZI/vMb1eG3oJU4XlghPGnVp+sNLABrPg5bS59LfJtxJ4jOpFsgps//KgzHP6FfX5v
+         SnYiVDJGPYUjQ==
+Date:   Thu, 25 Aug 2022 10:44:10 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lama Kayal <lkayal@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220825104410.67d4709c@canb.auug.org.au>
 MIME-Version: 1.0
-References: <YwNpI1ydy0yDnBH0@dhcp22.suse.cz> <CAGWkznEB+R0YBaBFBL7dPqs8R=qKC6+ixTWEGCYy2PaczXkaPA@mail.gmail.com>
- <YwRjyx6wFLk8WTDe@dhcp22.suse.cz> <CAGWkznGaYTv4u4kOo-rupfyWzDNJXNKTchwP6dbUK-=UXWm47w@mail.gmail.com>
- <YwSQ4APOu/H7lYGL@dhcp22.suse.cz> <CAGWkznGd6mgareABseMKY5p0f1=5dkfVkj=NS7_B6OkXBYSwyw@mail.gmail.com>
- <YwS/S9Sd1OWnT81Q@dhcp22.suse.cz> <CAGWkznGYLyF+njUB0gFF3JVdThnK9JaNsqxXYFhbdSwEQpCxvA@mail.gmail.com>
- <YwXYVjRpXQjQMsxr@dhcp22.suse.cz> <CAGWkznEqX3DwHW_owiK+HuuQ-HsUYK4vKmLhSxgzGn20Vzid2A@mail.gmail.com>
- <YwX89JCQCKMMYdG9@dhcp22.suse.cz>
-In-Reply-To: <YwX89JCQCKMMYdG9@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Thu, 25 Aug 2022 08:43:52 +0800
-Message-ID: <CAGWkznF+dBjLzAxMMXWYSZ_5q3KA-ou0P7XM7jSYN7JSRp8N0w@mail.gmail.com>
-Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yxbc2kKvNljsdMLPlq08U/I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 6:27 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 24-08-22 17:34:42, Zhaoyang Huang wrote:
-> > On Wed, Aug 24, 2022 at 3:50 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Wed 24-08-22 10:23:14, Zhaoyang Huang wrote:
-> > > > On Tue, Aug 23, 2022 at 7:51 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > [...]
-> > > > > One way to achieve that would be shaping the hierarchy the following way
-> > > > >             root
-> > > > >         /         \
-> > > > > no_memcg[1]      memcg[2]
-> > > > > ||||||||         |||||
-> > > > > app_cgroups     app_cgroups
-> > > > >
-> > > > > with
-> > > > > no_memcg.subtree_control = ""
-> > > > > memcg.subtree_control = memory
-> > > > >
-> > > > > no?
-> > > > According to my understanding, No as there will be no no_memcg. All
-> > > > children groups under root would have its cgroup.controllers = memory
-> > > > as long as root has memory enabled.
-> > >
-> > > Correct
-> > >
-> > > > Under this circumstance, all
-> > > > descendants group under 'no_memcg' will charge memory to its parent
-> > > > group.
-> > >
-> > > Correct. And why is that a problem? I thought you main concern was a per
-> > > application LRUs. With the above configuration all app_cgroups which do
-> > > not require an explicit memory control will share the same (no_memcg)
-> > > LRU and they will be aged together.
-> > I can't agree since this indicates the processes want memory free
-> > depending on a specific hierarchy which could have been determined by
-> > other subsys.
->
-> I really fail to understand your requirements.
->
-> > IMHO, charging the pages which out of explicitly memory
-> > enabled group to root could solve all of the above constraints with no
-> > harm.
->
-> This would break the hierarchical property of the controller. So a
-> strong no no. Consider the following example
->
->        root
->         |
->         A
-> controllers="memory"
-> memory.max = 1G
-> subtree_control=""
-> |      |      |
-> A1     A2     A3
->
-> althought A1,2,3 do not have their memory controller enabled explicitly
-> they are still constrained by the A memcg limit. If you just charge to
-> the root because it doesn't have memory controller enabled explicitly
-> then you just evade that constrain. I hope you understand why that is a
-> problem.
-IMO, A1-A3 should be explicitly enabled via echo "+memory" >
-A/subtree_control since memory.max has been set. How should AA3
-achieve the goal of compete with AA4,A1,A2 for cpu but keep memory out
-of control under current policy?
-        root
-         |
-         A
- controllers="memory,cpu"
- memory.max = 1G
- subtree_control="memory,cpu"
- |      |      |
- A1     A2     A3 subtree_control="cpu"
-                      |      |
-                    AA3   AA4 controllers="cpu"
+--Sig_/yxbc2kKvNljsdMLPlq08U/I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> --
-> Michal Hocko
-> SUSE Labs
+Hi all,
+
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
+
+between commit:
+
+  21234e3a84c7 ("net/mlx5e: Fix use after free in mlx5e_fs_init()")
+
+from the net tree and commit:
+
+  c7eafc5ed068 ("net/mlx5e: Convert ethtool_steering member of flow_steerin=
+g struct to pointer")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
+index e0ce5a233d0b,ef1dfbb78464..000000000000
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_fs.c
+@@@ -1394,12 -1454,17 +1454,17 @@@ struct mlx5e_flow_steering *mlx5e_fs_in
+  			goto err_free_vlan;
+  	}
+ =20
+- 	return fs;
++ 	err =3D mlx5e_fs_ethtool_alloc(fs);
++ 	if (err)
++ 		goto err_free_tc;
+ =20
++ 	return fs;
++ err_free_tc:
++ 	mlx5e_fs_tc_free(fs);
+ -err_free_fs:
+ -	kvfree(fs);
+  err_free_vlan:
+  	mlx5e_fs_vlan_free(fs);
+ +err_free_fs:
+ +	kvfree(fs);
+  err:
+  	return NULL;
+  }
+
+--Sig_/yxbc2kKvNljsdMLPlq08U/I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMGxdoACgkQAVBC80lX
+0GzU0Af/Vw/Q9clQ9Xgc6ZttXdvOTt5pZieU75s3WJD+to6UDUoCs/x43QcvA63U
+4QJyKJ+/4y7TatEp8QVQkfMyLfeyPHva97MOWGYMLN+/m8OIqHNde9mSL6F9nRMe
+I/FE3mct9gucyLcoN8yUz+qrJadENmw827s6Nbf7CpbFWYfJk4r6Q0OCsuilnE/d
+8X67SRw0GWFkYgomGcUab7HJQYGN9dLA5ykSjchqy9jps7AuivUbbPM6HCpghLW6
+kjfW3zBfx2Jze1KbgQcQe7ovf+5pHelkPcAjWpg/pDK8E84rU9tqwmapzweQP05X
+QfXxPpTCPcu1PLw0KpK8ftsAE9OTMA==
+=X7iz
+-----END PGP SIGNATURE-----
+
+--Sig_/yxbc2kKvNljsdMLPlq08U/I--

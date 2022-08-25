@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613175A070A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 03:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825F55A0705
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 03:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236653AbiHYB7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 21:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
+        id S236107AbiHYB5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 21:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236602AbiHYB7F (ORCPT
+        with ESMTP id S235390AbiHYB5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 21:59:05 -0400
-X-Greylist: delayed 125 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 Aug 2022 18:54:04 PDT
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58949AF98;
-        Wed, 24 Aug 2022 18:54:04 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1661392164tspq557z
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 Aug 2022 09:49:21 +0800 (CST)
-X-QQ-SSF: 01000000000000B0B000000A0000000
-X-QQ-FEAT: wF64VgvUy+UPmdenfmPgcpMnG/bIuQR5LxITUxHsRnPRidiX7aAe4ASUhtDZI
-        M6DTRXNv4D9uXWp8gBj0o/jR7OSoaCbHI+eSpmh6AalhtNleztq1dxuz/5y1jgW9b0uF2YL
-        RyJ8+9oJaG1wwWGQhhvSD89CwlqqRmg2n586OIWYdG+xJUg6MFW+bp5CltWAtUILppkM3QS
-        9IWTYtmKQij7KoEHTPwla8OjTinML9D9t2LDRsMB9UOUkuqhe5dsrBuEeQEPl0aCQo+b3QJ
-        oAax4IdicnOxwwa8hxBVScBRuN8Ji3QlXF6m5jtoAJcPmLBB2EEDbNE7chgTJ3z+wVuNTze
-        l37oHm/IxFfz+60hCde6UbQJr7imORqaNktAJ/wd/WsWGQFwC8=
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        jgross@suse.com, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com,
-        Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] pinctrl: at91: Fix double word in comments
-Date:   Wed, 24 Aug 2022 21:49:21 -0400
-Message-Id: <20220825014921.6135-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 24 Aug 2022 21:57:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672599DF8D;
+        Wed, 24 Aug 2022 18:51:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C20EB826EB;
+        Thu, 25 Aug 2022 01:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F35F4C433D6;
+        Thu, 25 Aug 2022 01:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661392214;
+        bh=2OGaEduFCiPineSOVVLO6Gwm/s1lSRzTZxkHiQJryrE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Vwa2lyC7ArxTleJP30aahH6kOA9Yh7G7SIGYcY3YypAZBtVSjzJ7ZbYDEt4B2CWuK
+         z+pG2boqvVKUTVgJHSjIAIvZNJB1Q97Iw8+GVetLA+8OZT/F0JzIR3HSwQCIRjMWQZ
+         S47OIEqK0NUyxplRffs0R/ZooSVOLcn7WY5fv9DAbWT1KBEGgRctoACY8dmqYZH6zC
+         TAEzqVmy015vOvEepMFRKazv7WQ8cne46u4sUgMTAD0voshK0u/R+pI+BUM6rPh0Se
+         P0ykq1ZakPRf5CYiXTUw8qnK+sB3h2SsteJXZQc/lTpUkRDUuITwWuQA2htt9+FxpQ
+         huJmk5L6XXJ6w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1685C0C3EC;
+        Thu, 25 Aug 2022 01:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+Subject: Re: [PATCH] MAINTAINERS: rectify file entry in BONDING DRIVER
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166139221385.11258.9501149170982049306.git-patchwork-notify@kernel.org>
+Date:   Thu, 25 Aug 2022 01:50:13 +0000
+References: <20220824072945.28606-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220824072945.28606-1-lukas.bulwahn@gmail.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     jtoppins@redhat.com, jay.vosburgh@canonical.com,
+        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        netdev@vger.kernel.org, kuba@kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,41 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the rebundant word "the" in comments.
+Hello:
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
----
- drivers/pinctrl/pinctrl-at91.c        | 2 +-
- drivers/xen/xen-pciback/pciback_ops.c | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
-index d91a010e65f5..f1234e719e58 100644
---- a/drivers/pinctrl/pinctrl-at91.c
-+++ b/drivers/pinctrl/pinctrl-at91.c
-@@ -1748,7 +1748,7 @@ static int at91_gpio_of_irq_setup(struct platform_device *pdev,
- 	writel_relaxed(~0, at91_gpio->regbase + PIO_IDR);
- 
- 	/*
--	 * Let the generic code handle this edge IRQ, the the chained
-+	 * Let the generic code handle this edge IRQ, the chained
- 	 * handler will perform the actual work of handling the parent
- 	 * interrupt.
- 	 */
-diff --git a/drivers/xen/xen-pciback/pciback_ops.c b/drivers/xen/xen-pciback/pciback_ops.c
-index e38b43b5065e..52da75bf8485 100644
---- a/drivers/xen/xen-pciback/pciback_ops.c
-+++ b/drivers/xen/xen-pciback/pciback_ops.c
-@@ -160,7 +160,8 @@ int xen_pcibk_enable_msi(struct xen_pcibk_device *pdev,
- 	}
- 
- 	/* The value the guest needs is actually the IDT vector, not the
--	 * local domain's IRQ number. */
-+	 * local domain's IRQ number.
-+	 */
- 
- 	op->value = dev->irq ? xen_pirq_from_irq(dev->irq) : 0;
- 
+On Wed, 24 Aug 2022 09:29:45 +0200 you wrote:
+> Commit c078290a2b76 ("selftests: include bonding tests into the kselftest
+> infra") adds the bonding tests in the directory:
+> 
+>   tools/testing/selftests/drivers/net/bonding/
+> 
+> The file entry in MAINTAINERS for the BONDING DRIVER however refers to:
+> 
+> [...]
+
+Here is the summary with links:
+  - MAINTAINERS: rectify file entry in BONDING DRIVER
+    https://git.kernel.org/netdev/net/c/b09da0126ce0
+
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

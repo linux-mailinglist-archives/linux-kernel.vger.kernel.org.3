@@ -2,212 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407615A1D10
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E89F5A1D17
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 01:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244239AbiHYXXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 19:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S244325AbiHYXZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 19:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244325AbiHYXXS (ORCPT
+        with ESMTP id S244332AbiHYXZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 19:23:18 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11C7C4815;
-        Thu, 25 Aug 2022 16:23:16 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 5DC1E3200A19;
-        Thu, 25 Aug 2022 19:23:15 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 25 Aug 2022 19:23:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1661469794; x=1661556194; bh=4S
-        EfGe1WfPg31P1a2x3Br6XvscZ6geTJiVSUsk5tb5Y=; b=nwJ7VWHgt5GbJOSuqC
-        /LcuDnLFM/GlftKuv/SFzcw4FEongdTPkL7qbpVgMI/hyXhilxZ3+uYcojRx8tA5
-        wbuleL1aIVEydSuYrNE0kNW+ks7SozkuovYO4QzMx4aC4BGAKKO/OD/uATtiKbFK
-        p01RM2Jt6/x4mc4VWJt8B/SiuOyWbkRhRSTum/zPAwwY0FiAwfJYBDlnSuTWEkap
-        FhqThHnStvroMtmRSkvoAUk0GUkZgUEb7ZQmQSDPsz9G3I8kthmtNkcgyUfE65Jk
-        XCkSH5LmZiq9XHj/S5uur/TTTRmSk893UoTMfauim9ThCH7cEMMExGuHOqB3PwM0
-        3E1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1661469794; x=1661556194; bh=4SEfGe1WfPg31
-        P1a2x3Br6XvscZ6geTJiVSUsk5tb5Y=; b=ab2WlGrR8Zgk6qF7qBm06lmapbgKE
-        MZ30DzjZ3s+XQHrCln0o9IJDOkW5qTZB4eNh00dL8ctuzoUOyqXfUnk40Jk0lXtZ
-        uoAhPcv7BGRd6KeNDzlfo1DHqhmHirG3dlg7Yvt41/QAG7Z9GBmVL2u0swGd4sgt
-        UbaMS46rPLh9jw4PQ1uAidILqW48ib49AxheqQo5FjuiiPdZfzF1HwYCDk9rk+F1
-        tY3iZB50/6WctaA/jWYXjCK8xXsiLQRY6X8x3iuZsi3eC2FknwMjpzsm5SBQG9sq
-        JokfpXt+OihkjMvCpOU7iLoYxY6DIgXh70tP+AXDBjv/ik1FqIhPeW3EA==
-X-ME-Sender: <xms:YgQIY4IqQxYq0-9HF1w9aO81jpyjRY2dlNqjzcOx9xg1dEynxQOYUg>
-    <xme:YgQIY4IBmAacWH-zjlJ4i2g0ceCxVpFkAW89k22JbllT9R7Vg--O8-N8gWLkc6Jg4
-    l6gy3iA2k_0-m2mmNY>
-X-ME-Received: <xmr:YgQIY4vIS3clQ6sAr1NbShrKHGunJrmTiG4LRg7jujvesJ_EKkWClVGsESjT>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:YgQIY1axeJBq4aEJLNI2UwjcchM6thohDsrKC-BS0JtqwUnmqenJbA>
-    <xmx:YgQIY_aJQj7as8ciqhUTQIEVga2YYRnlvk0neNJadOak-tNELyX4BQ>
-    <xmx:YgQIYxBe9k0hDo2Jo3NbGFQVTXbLvpd-YR6UcUV84xJ2KCHXeonLWg>
-    <xmx:YgQIY6xCl0t7AMfBmLyZdccTnxmGiSb4RWMHidosXyw4ngJ3bl2hNw>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 Aug 2022 19:23:11 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     hdegoede@redhat.com
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        pobrn@protonmail.com, pavel@ucw.cz,
-        "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v4 2/2] asus-wmi: Implement TUF laptop keyboard power states
-Date:   Fri, 26 Aug 2022 11:22:51 +1200
-Message-Id: <20220825232251.345893-3-luke@ljones.dev>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220825232251.345893-1-luke@ljones.dev>
-References: <20220825232251.345893-1-luke@ljones.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 25 Aug 2022 19:25:27 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A0852468
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:25:25 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-336c3b72da5so359646607b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 16:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc;
+        bh=y2TyZVHOzKZlb9wECS9yMCNcXCNpwqCPWpTxl29+IMY=;
+        b=dkM+A09pjx32V3tjxCAZAaj4iTr2QWwZFTx14MwcUXXnZscAY3fsOcj6h5WXQXxdoD
+         pE2ASAcwod4FD0N0sCT4FjUT0tg9Opertqs8xb3KgjTkUGEmN0krLyCYuuqUGRjMcltU
+         i55uCtWc8Su1TGA6H/a9JTuhvCJcNgBM50Y1A4ihMCdqTUfplBKQUaiEUX2n1Vh4N710
+         3yOt5OJYxOGq7VwXawE8F72ZOkRT8JCFAjGnVJAcUhtb87iwBUwK1cOzoECBWrP6U0Ke
+         ZtEkGqxLhvl3GVE9ZNy1Tt1CBoQxoOnHS9H5jY9/byfHRVWvrd+Zhz17D7ZlFyP3ffIM
+         c1wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc;
+        bh=y2TyZVHOzKZlb9wECS9yMCNcXCNpwqCPWpTxl29+IMY=;
+        b=qgaq2RNL4s/VPY6jb3PH22yivl7wFHT1krjZ1otLQYFwI/wawBkh2n537sh9Wg9ezU
+         T6HaRRAkZ5qfqF58cTajiZoolYVcP0bqDqA7AwYj7J0xoKNk3NM4LjOeZeJLySBy1lef
+         ruCIg4FxbZjjGU7IueM+3XDBkxaG5u8B8DLTwb+L5zrGNtwSO9yk3fMZpoRm05Z9wlzP
+         DdNDXhU384kq8NYcuwrG2L3TmRls0gavdYfUys5Fypw8c5U+/vqiO0VXNaL6TNUGDxT/
+         5ZkgJ0VZGQW1akxfJx0cLgu4jEQshkBqrsqsqHNLeaBUtWSlCZn4p1BEaDAOS0aAGrHm
+         IwVQ==
+X-Gm-Message-State: ACgBeo0dqA+XzYZFSLRosLVX3gG8xljMrlm7vh9I6fQgwbBy8kok2dQA
+        JdzXIkx0IvfoKDcztjk+c+iTl03QMPM=
+X-Google-Smtp-Source: AA6agR4iAX55dcIo3IUqvlfKkqmyFpPiECgmLWRpTah2t3s+pqlFTA2hJbEvjHCDMn3ntt/fdb4I5rKg3Mw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:6143:0:b0:335:3076:168e with SMTP id
+ v64-20020a816143000000b003353076168emr5851445ywb.460.1661469924695; Thu, 25
+ Aug 2022 16:25:24 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 25 Aug 2022 23:25:15 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220825232522.3997340-1-seanjc@google.com>
+Subject: [PATCH v5 0/7] KVM: selftests: Implement ucall "pool" (for SEV)
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>,
+        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Colton Lewis <coltonlewis@google.com>,
+        Peter Gonda <pgonda@google.com>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds support for setting various power states of TUF keyboards.
-These states are combinations of:
-- boot, set if a boot animation is shown on keyboard
-- awake, set if the keyboard LEDs are visible while laptop is on
-- sleep, set if an animation is displayed while the laptop is suspended
-- keyboard (unknown effect)
+Non-KVM folks, y'all got pulled in because of the atomic_test_and_set_bit()
+patch.
 
-Adds two sysfs attributes to asus::kbd_backlight:
-- kbd_rgb_state
-- kbd_rgb_state_index
+Rework the ucall infrastructure to use a pool of ucall structs to pass
+memory instead of using the guest's stack.  For confidential VMs with
+encrypted memory, e.g. SEV, the guest's stack "needs" to be private memory
+and so can't be used to communicate with the host.
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- drivers/platform/x86/asus-wmi.c            | 57 ++++++++++++++++++++++
- include/linux/platform_data/x86/asus-wmi.h |  3 ++
- 2 files changed, 60 insertions(+)
+Convert all implementations to the pool as all of the complexity is hidden
+in common code, and supporting multiple interfaces adds its own kind of
+complexity. 
 
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 92f16bb9b4ef..f608a4467d99 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -238,6 +238,7 @@ struct asus_wmi {
- 	bool gpu_mux_mode_available;
- 
- 	bool kbd_rgb_mode_available;
-+	bool kbd_rgb_state_available;
- 
- 	bool throttle_thermal_policy_available;
- 	u8 throttle_thermal_policy_mode;
-@@ -780,9 +781,62 @@ static const struct attribute_group kbd_rgb_mode_group = {
- 	.attrs = kbd_rgb_mode_attrs,
- };
- 
-+/* TUF Laptop Keyboard RGB State **********************************************/
-+static ssize_t kbd_rgb_state_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf, size_t count)
-+{
-+	u32 flags, cmd, boot, awake, sleep, keyboard;
-+	int err;
-+
-+	if (sscanf(buf, "%d %d %d %d %d", &cmd, &boot, &awake, &sleep, &keyboard) != 5)
-+		return -EINVAL;
-+
-+	if (cmd)
-+		cmd = BIT(2);
-+
-+	flags = 0;
-+	if (boot)
-+		flags |= BIT(1);
-+	if (awake)
-+		flags |= BIT(3);
-+	if (sleep)
-+		flags |= BIT(5);
-+	if (keyboard)
-+		flags |= BIT(7);
-+
-+	/* 0xbd is the required default arg0 for the method. Nothing happens otherwise */
-+	err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS,
-+			ASUS_WMI_DEVID_TUF_RGB_STATE, 0xbd | cmd << 8 | (flags << 16), 0, NULL);
-+	if (err)
-+		return err;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(kbd_rgb_state);
-+
-+static ssize_t kbd_rgb_state_index_show(struct device *device,
-+						 struct device_attribute *attr,
-+						 char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", "cmd boot awake sleep keyboard");
-+}
-+static DEVICE_ATTR_RO(kbd_rgb_state_index);
-+
-+static struct attribute *kbd_rgb_state_attrs[] = {
-+	&dev_attr_kbd_rgb_state.attr,
-+	&dev_attr_kbd_rgb_state_index.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group kbd_rgb_state_group = {
-+	.attrs = kbd_rgb_state_attrs,
-+};
-+
- const struct attribute_group *kbd_rgb_mode_groups[] = {
- 	NULL,
- 	NULL,
-+	NULL,
- };
- 
- /* Battery ********************************************************************/
-@@ -1107,6 +1161,8 @@ static int asus_wmi_led_init(struct asus_wmi *asus)
- 
- 	if (asus->kbd_rgb_mode_available)
- 		kbd_rgb_mode_groups[num_rgb_groups++] = &kbd_rgb_mode_group;
-+	if (asus->kbd_rgb_state_available)
-+		kbd_rgb_mode_groups[num_rgb_groups++] = &kbd_rgb_state_group;
- 
- 	asus->led_workqueue = create_singlethread_workqueue("led_workqueue");
- 	if (!asus->led_workqueue)
-@@ -3593,6 +3649,7 @@ static int asus_wmi_add(struct platform_device *pdev)
- 	asus->dgpu_disable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_DGPU);
- 	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
- 	asus->kbd_rgb_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE);
-+	asus->kbd_rgb_state_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_STATE);
- 	asus->panel_overdrive_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PANEL_OD);
- 
- 	err = fan_boost_mode_check_present(asus);
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index 3d861477cb20..7dd580fdc61c 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -106,6 +106,9 @@
- /* TUF laptop RGB modes/colours */
- #define ASUS_WMI_DEVID_TUF_RGB_MODE	0x00100056
- 
-+/* TUF laptop RGB power/state */
-+#define ASUS_WMI_DEVID_TUF_RGB_STATE	0x00100057
-+
- /* DSTS masks */
- #define ASUS_WMI_DSTS_STATUS_BIT	0x00000001
- #define ASUS_WMI_DSTS_UNKNOWN_BIT	0x00000002
+Tested on x86 and ARM, compile tested on s390 and RISC-V.
+
+v5:
+ - Use less convoluted method of writing per-VM "globals". [Oliver]
+ - Add patch to drop ucall_uninit().
+
+v4: https://lore.kernel.org/all/20220824032115.3563686-1-seanjc@google.com
+
+Peter Gonda (2):
+  tools: Add atomic_test_and_set_bit()
+  KVM: selftests: Add ucall pool based implementation
+
+Sean Christopherson (5):
+  KVM: selftests: Consolidate common code for populating ucall struct
+  KVM: selftests: Consolidate boilerplate code in get_ucall()
+  KVM: selftests: Automatically do init_ucall() for non-barebones VMs
+  KVM: selftests: Make arm64's MMIO ucall multi-VM friendly
+  KVM: selftest: Drop now-unnecessary ucall_uninit()
+
+ tools/arch/x86/include/asm/atomic.h           |   7 ++
+ tools/include/asm-generic/atomic-gcc.h        |  12 +++
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/aarch64/arch_timer.c        |   1 -
+ .../selftests/kvm/aarch64/debug-exceptions.c  |   1 -
+ .../selftests/kvm/aarch64/hypercalls.c        |   1 -
+ .../testing/selftests/kvm/aarch64/psci_test.c |   1 -
+ .../testing/selftests/kvm/aarch64/vgic_init.c |   2 -
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |   1 -
+ tools/testing/selftests/kvm/dirty_log_test.c  |   3 -
+ .../selftests/kvm/include/kvm_util_base.h     |  15 +++
+ .../selftests/kvm/include/ucall_common.h      |  10 +-
+ .../selftests/kvm/kvm_page_table_test.c       |   2 -
+ .../testing/selftests/kvm/lib/aarch64/ucall.c | 102 +++---------------
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  11 ++
+ .../selftests/kvm/lib/perf_test_util.c        |   3 -
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |  42 ++------
+ tools/testing/selftests/kvm/lib/s390x/ucall.c |  39 ++-----
+ .../testing/selftests/kvm/lib/ucall_common.c  | 102 ++++++++++++++++++
+ .../testing/selftests/kvm/lib/x86_64/ucall.c  |  39 ++-----
+ .../testing/selftests/kvm/memslot_perf_test.c |   1 -
+ tools/testing/selftests/kvm/rseq_test.c       |   1 -
+ tools/testing/selftests/kvm/steal_time.c      |   1 -
+ .../kvm/system_counter_offset_test.c          |   1 -
+ 24 files changed, 189 insertions(+), 210 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
+
+
+base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
 -- 
-2.37.2
+2.37.2.672.g94769d06f0-goog
 

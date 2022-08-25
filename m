@@ -2,229 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFF95A0EDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A455A0EDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241445AbiHYLSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S241455AbiHYLTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237854AbiHYLSv (ORCPT
+        with ESMTP id S241451AbiHYLTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:18:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39559AEDA5;
-        Thu, 25 Aug 2022 04:18:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CD2A4206D7;
-        Thu, 25 Aug 2022 11:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661426328; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w7fBQXZi1G1ZlDSwKSfYvUdq8ItH1A3tmPdUwCybVKY=;
-        b=ujIRZqz47BGmDD6QqDaqwjXfJciiaEMtHFBy2knlKnCdSMdd1imvu0Q2K8BUNlGINLOcBo
-        DrMVSQ+b/a+VRBQGl1RYhR67VqKt8fUDKFOpLd1OR4t+uDf+2PCcbjP3QtGCDR2ZxNA5Yg
-        4A3uHn0236boicpWeGPI6UMocn+fBv8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AACAD13517;
-        Thu, 25 Aug 2022 11:18:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3n6CJ5haB2NUdgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 25 Aug 2022 11:18:48 +0000
-Date:   Thu, 25 Aug 2022 13:18:47 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     lizhe.67@bytedance.com
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz, mhiramat@kernel.org,
-        keescook@chromium.org, Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
-        rostedt@goodmis.org, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        lizefan.x@bytedance.com
-Subject: Re: [PATCH v4] page_ext: introduce boot parameter 'early_page_ext'
-Message-ID: <Ywdal9u112G2nuyt@dhcp22.suse.cz>
-References: <20220825102714.669-1-lizhe.67@bytedance.com>
+        Thu, 25 Aug 2022 07:19:15 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400E8AF0CE
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:19:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YIJlUK4BKF0RLunIkeENTIq+BO2SgyCkfcE4DpM8zZHnKXhQEq9503j4yRX9Mx0IQI0XzROmP3LzInXniiwCxIda+PkUOpn732GLFBKV96AX/Hxzyh4JITj8fUkd22zikh/rpc8Ig1NO2xerroNTXjxi+MM/p0x43nVoJsxGljxBMmCNOOj1UYxWZTPazaOcsFC372p3UJVfN+F/fy/GxjLde6tXKI+nKK0F9XhSSmlA2YfCZNqhM1OBMqnJk2BhkioHl/W28QBOOJbpvHTxJme0jWXq70dGQKiS7dz/dcbZF9k1flWCFLZ7xl1shkK1D1i2HI0IoF+nDz74toh2Bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KcXY0gdT6xoLqkLKcKxfCVL/ZQxW5qGC7ZWf6J9PCuM=;
+ b=G7YQRLQ4C1asp0cTxOKscALUZQAn6ZzzvgWW2m9ZKgudXcPv+nH+UAx1Kww9d44Td81r/Yr4sZ6Pnjaozt1T8SlHpXdno7n3VUdQ5LugRMRfVjsQznGo1umgiQqVBbgBWKTH0s2WOoF3Xs/ueSjWllTgRbQlDAv/qq+VI62SoCuJNN7dmp0v6z6kpoW9Q5vn/NhKqwAWOi32s4C3Ps7B4c0HYJwzjpP55C4SAQPTg3Fw1FVbULtPCtaPf8toOgXVCq8QWRoDgvspf2G8oN1tXU3582Mme1hh1AERPZN8mmc9n5isdiOAYKexrBhg3TdCRxjcyOR9P245SWiByfL5ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KcXY0gdT6xoLqkLKcKxfCVL/ZQxW5qGC7ZWf6J9PCuM=;
+ b=NPHq9C+i+bvYeN9NHi0k7v5ZWslgbYCNAlGKfYk7por7SbCnNZxfvykBQ5GF3D+B7L3q6vwkDICWOebDytS7kOKsmCPCUGROBqIsUZBmxRZTeTdgSXCwQn5RL9J5IwW+J6s87/TMn2oHg2ZbNUkxMQ11fyEtwuPrsPifGCqHnM6AM4PxTH8HCRP0MyM7m6+YwskrApDG5IJ6MWjDQersvZqVFjuosisBPm9Eo5sio16xOX/NyagxhnbGbUWnUHigqj+hx2W0RnZMYEh/D5L19g+mYh+NQx8ie+CDxCNA+AdAvKnQ8g4Tc9SNiYzstL5RrVwLc9EojVEelcaBeAC4cA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB3891.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:20::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 25 Aug
+ 2022 11:19:06 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5566.015; Thu, 25 Aug 2022
+ 11:19:06 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "sv@linux.ibm.com" <sv@linux.ibm.com>
+Subject: Re: [PATCH] compiler-gcc.h: Remove ancient workaround for gcc PR
+ 58670
+Thread-Topic: [PATCH] compiler-gcc.h: Remove ancient workaround for gcc PR
+ 58670
+Thread-Index: AQHYuG3gJRoiq14gKku11kRUFzyUCa2/eB2A
+Date:   Thu, 25 Aug 2022 11:19:06 +0000
+Message-ID: <fd71c136-4c1c-5c4d-003f-20cb8c7cf17f@csgroup.eu>
+References: <20220624141412.72274-1-ubizjak@gmail.com>
+ <1661422971.cqtahfm22j.naveen@linux.ibm.com>
+In-Reply-To: <1661422971.cqtahfm22j.naveen@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8a414fb1-c7db-4a5d-5797-08da868b9fa4
+x-ms-traffictypediagnostic: MR1P264MB3891:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7UZ4G1/N/8zYKj539fzg911lFKoXXCzIx0+0PiUYgebIGplESv5e3rhDDtZD62hFJ6Emgo+6qlJpbzTB5X3j0C3lmDZvvc1iWnIh+w29QGo3KGldLiSl3/hrYsWyKF2OvBQWa4Joap4BJhH1pgnmcn3raJzIiNlaIVuhuDuweCavZiAbEDb6shkS/RMMyxGYTM+dojFRtnON/28LzkOMIMr6gJn4hzXcfueTTTqg/PkijP4A0V6QS3rStx2Eb94tbgXxEqYO5RFccOk/Q0gnEYn7ayl3CaLk4ZjkGe6lHcve5FCG6oumws9ixikoYjJ/IfhzjjPgb76JdJMukq7+jlaNgqnAinGf2/DXBEzq/sAY7h8kGlHeLg3ceBZV8hA3fbZ30Gpn3Af6OycQ9GEMegVonFVZlg0uMVSsvNIjFDoqyDu9f3Xq1ScjAbs8tB6fZe4XDV8p+svYPJqvf9dfdjoXiU3Nwn6aezVTeMQIPILH4jGtvyMdLNNBIBqMniS221PsN94Qj7ws3sZMcJTcF0X3dEDPdPuxsGIMaw1LvzqCE8DmFolkMlSrnr6fVcX/DllXrogV4WNbk4rL8H88AhIvGu7I280KF4C0jJnwOmQqM3tfoe9wae846XfAo2JDHvWrI4Q5f6s9F5j1QiYoDzw8xsD56fXhQOYl8q1jAo8BD4BCyUfIzkV9MPVuE5rOyOd8yD72gtNyTgATAW4nDL1pgWI/3MQKXePd5acMF38TTb3koKpiHmQd9aVQ/ybSdhniQIbxOgYR48otWua6DBJopBvo2hIkJRKtduh5vaPqgq9rzz+YX2sUYYoSUIH5LwjCQVAIJuZf4ZV1lfoVhWON9iGpEMbpfMhYacsa91tLYi5SlBbxaCIgPAzKjKJ/i8va/OpQtbnjIyklI0DYHg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(366004)(396003)(376002)(136003)(346002)(38070700005)(83380400001)(2906002)(8936002)(316002)(26005)(5660300002)(36756003)(6486002)(966005)(2616005)(71200400001)(31686004)(186003)(478600001)(66574015)(44832011)(66556008)(122000001)(110136005)(38100700002)(54906003)(66446008)(41300700001)(66946007)(64756008)(76116006)(8676002)(66476007)(6512007)(91956017)(6506007)(4326008)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V00wZXlSQnlLU0xpWlJBZDlob2dCdnRzNjJpQm9tRWhmTUNTWGpTVWdPZ1Rr?=
+ =?utf-8?B?bnR2Kzk0MjhZOTB6RTNaY0FheTBFbGNINXI1cDE1VDJrZ2paLzcwdDRLOVZm?=
+ =?utf-8?B?UDNkVm9OeXN2VVUrTG8vdEV3M1pUamFLNFBYS0M3SlNVOUlGSDZKUmFTcmhS?=
+ =?utf-8?B?eVhhSHdlSUFVaW1JWkkzMmtvNi9ZRUJveStDeXRtVnFGRDAvY2p0VUkyMWV2?=
+ =?utf-8?B?bFhQR01CeC9GM2RJdHNVb0l0YVY0UDQzVWhIbWZ5RFNUc0VPNk5YQVNQSzJr?=
+ =?utf-8?B?a3dhTWZBRndOeUw0WVlzVXptSkdMamcrY3Z6Qmp6L2U0SXFtaUxXZG1hdVBm?=
+ =?utf-8?B?ZHByNlg0VGhLOVRTdnEzS1cxWTB4TlNqdXdsZ2hkeExTVVFGUEZ1Z0hkNlVJ?=
+ =?utf-8?B?SkphdFBkNkhob2YwNGdqL1hQRjFYVCt3RVBqOFFKUG5halVBOHFwUDhCQ3dV?=
+ =?utf-8?B?T0FGTFBZM3dycDU4cGkwbzUwOFlWNmVWUEtrYUcreVluQjB6RWphRU1oZzQr?=
+ =?utf-8?B?ZTl2bUlnbW96SDJDNmI4WmFpTGZWTHRQSWlEZGxYQXFDT2d6ZWZGaXBpS0ps?=
+ =?utf-8?B?RnVYVjNwQS9md1JFSjkxeVRyd0k0dUpGd0hWUjBabURRdjdVVTZRQWlsZnRU?=
+ =?utf-8?B?djY0cjhyWHcreWo5eFEyYWh2Z3M1Vm45R1hwR3V2UkpPTng1bjRUUHBHUjZv?=
+ =?utf-8?B?N0NDSnNiZ29BVjVFcnJqWG1ZU0poL0Y2UlVUVDR2VXFCbWpWSEJ2ZWl3Z2NE?=
+ =?utf-8?B?V1oxSWlpSFNGU3MvbGR0dnVISVd4S1FzSnJDLzJmREIrTEdsVnEvK3FOMWF1?=
+ =?utf-8?B?VGtpZkE3K3QySnduQmd1QWt3K29xOVJlQ09jcmRNYW5qZGVIZnNmM3VTaDd2?=
+ =?utf-8?B?MGpTazJDVm5WU0RtQ0JiZnBKcmFYN2lzd3E1d3pNZ3E4RWR6TXNkQllmbTRL?=
+ =?utf-8?B?UEIvbnNmVVlEWHMxS3VuY2N5WEdmRjIvdDJ1aW1QdUJCbk5xTlVucmRxbzBm?=
+ =?utf-8?B?ZVNLcmZwUmhvY3NpemVtN3pKZHlzdzBqUU5qQUVxRHAwVmFOUWJnSGF2OEtF?=
+ =?utf-8?B?V3pjUXZPL1BPT2JvNUZoUDF5QkJjbS9helZ2VmVkeTJZdFlHcnprczltL2N3?=
+ =?utf-8?B?L1NGSmFtNGNRVUJTTjRaVnc0UkRJYnBRNEgxUjk4UHJJcUZXbTdpU3pyOXZE?=
+ =?utf-8?B?aUIxMzdTN1pHYkZCczZ0UDVlWnFDSmdzcFpjNGxXM2dMVWJEMVNuZ2dZdmZ3?=
+ =?utf-8?B?eWROc2VncGUycFFLbll1NEdZMDh5VHNqamhrT1hCSEIzd0ZmeWxvcTRYYUdP?=
+ =?utf-8?B?cXNIa3g5MytocEtCcG9ZUjA5OGMwVmVReS9wODJDaE43TDRBWUFtT2lmMkdL?=
+ =?utf-8?B?ZDliRmp0amVaWHZaR2FETjE0ZnFOcTAxcjN2dExlV2Iwc3c5MnRPRWVEc01D?=
+ =?utf-8?B?MlVXY2Z1Ky9tM1pmNU9DOGFpN3c0d2h0Vy8ybytwNmJwQ2RnVnMzaEgzek5L?=
+ =?utf-8?B?MVM3V1FGcDVBYTdWc1Jaa0p1c2ZZNnpuTzlEMWNjTXpSMWsxZC83d0x6QnlH?=
+ =?utf-8?B?bkxUMUlQQ0tTbmJoZXFIa04wQThEam5VR3J3VjM1MnFkNnZiZ3NJNFU0aGlF?=
+ =?utf-8?B?aGNFTko1QU1JZUU2LzRUQVJONjhmN21pdi9zU25vdDM2VTRscFlqVm1jeHl1?=
+ =?utf-8?B?Q2hVZlMrOUFqTGE0djZsNGdtT29HVk5RSzhUN3RrNWs2Z2dWVGU5NmlwTXZW?=
+ =?utf-8?B?S3NWdGlTdzZaMUV1ZzZ5SlMrNHlmekNsY05GblFuZno3U2UyRU45S0dZaldS?=
+ =?utf-8?B?VmpaQ2tlMGV3Y2xpblk3RzNueGZwcmRSS0k0RTRsc0Ewd2lHdngxVE8wdEoz?=
+ =?utf-8?B?b1ZLUS9jTW03ZkVQUmhCVm9OemV5M1d1RVhUaWw2eGw0bTlRVTdGbGZ6Tndv?=
+ =?utf-8?B?WnpsS2lGZ1AxL3p0K0tuSEh1VUdFWmxWS1ZuOVZVczNCRDVWOGlud2tKU2I1?=
+ =?utf-8?B?dk5WaW9aM0c0K1pBVHp5bkRUSkZaWmZuOElFVHRMQ2lSKzhwYXZYNFJnZWhX?=
+ =?utf-8?B?YkZkV0RwVTFTWUZEU0hCYnJBcUJlcUxTNFhTVldMNFo5ZkZ3bDZyKzRZQUJR?=
+ =?utf-8?B?VnU4V3dyZDM3QmVvM3RzZm1WMkN1dDc3ZTUwME4xS1cySjBnQ2VVMzI4TGdJ?=
+ =?utf-8?Q?8eblj2GK6my7Li81Q7wbLsw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3F98BBD853D7C148BB6B7A350D23258B@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825102714.669-1-lizhe.67@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a414fb1-c7db-4a5d-5797-08da868b9fa4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2022 11:19:06.2957
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1RDrqINBZfajyQJJwNACbLP7AOf68JRrbxA+pSdnt51wx+cHL5yZmMKjsN2mecK7JDovz5iDyMKHz9JeuwZt4EW4oPDBC2ZVg61m+gYqYNU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3891
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 25-08-22 18:27:14, lizhe.67@bytedance.com wrote:
-> From: Li Zhe <lizhe.67@bytedance.com>
-> 
-> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
-> we call page_ext_init() after page_alloc_init_late() to avoid some panic
-> problem. It seems that we cannot track early page allocations in current
-> kernel even if page structure has been initialized early.
-> 
-> This patch introduce a new boot parameter 'early_page_ext' to resolve this
-> problem. If we pass it to kernel, function page_ext_init() will be moved
-> up and feature 'deferred initialization of struct pages' will be disabled
-> to initialize the page allocator early and prevent from the panic problem
-> above. It can help us to catch early page allocations. This is useful
-> especially when we find that the free memory value is not the same right
-> after different kernel booting.
-> 
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
-
-LGTM
-Acked-by: Michal Hocko <mhocko@suse.com>
-Thanks!
-
-> ---
-> Changelogs:
-> 
-> v1->v2:
-> - use a cmd line parameter to move up function page_ext_init() instead of
->   using CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> - fix oom problem[1]
-> 
-> v2->v3:
-> - move the judgment out of page_ext_init()
-> 
-> v3->v4:
-> - remove dependency on CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> - modify descriptions in git log && kernel-parameters.txt
-> 
-> v1 patch: https://lore.kernel.org/lkml/Yv3r6Y1vh+6AbY4+@dhcp22.suse.cz/T/
-> v2 patch: https://lore.kernel.org/lkml/20220824065058.81051-1-lizhe.67@bytedance.com/T/
-> v3 patch: https://lore.kernel.org/linux-mm/20220825063102.92307-1-lizhe.67@bytedance.com/T/
-> 
-> [1]: https://lore.kernel.org/linux-mm/YwHmXLu5txij+p35@xsang-OptiPlex-9020/
-> 
->  Documentation/admin-guide/kernel-parameters.txt |  8 ++++++++
->  include/linux/page_ext.h                        | 11 +++++++++++
->  init/main.c                                     |  6 +++++-
->  mm/page_alloc.c                                 |  2 ++
->  mm/page_ext.c                                   |  8 ++++++++
->  5 files changed, 34 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index d7f30902fda0..4f43fd5b324d 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1471,6 +1471,14 @@
->  			Permit 'security.evm' to be updated regardless of
->  			current integrity status.
->  
-> +	early_page_ext [KNL] Enforces page_ext initialization to earlier
-> +			stages so cover more early boot allocations.
-> +			Please note that as side effect some optimizations
-> +			might be disabled to achieve that (e.g. parallelized
-> +			memory initialization is disabled) so the boot process
-> +			might take longer, especially on systems with a lot of
-> +			memory. Available with CONFIG_PAGE_EXTENSION=y.
-> +
->  	failslab=
->  	fail_usercopy=
->  	fail_page_alloc=
-> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
-> index fabb2e1e087f..884282a7f03a 100644
-> --- a/include/linux/page_ext.h
-> +++ b/include/linux/page_ext.h
-> @@ -36,9 +36,15 @@ struct page_ext {
->  	unsigned long flags;
->  };
->  
-> +extern bool early_page_ext;
->  extern unsigned long page_ext_size;
->  extern void pgdat_page_ext_init(struct pglist_data *pgdat);
->  
-> +static inline bool early_page_ext_enabled(void)
-> +{
-> +	return early_page_ext;
-> +}
-> +
->  #ifdef CONFIG_SPARSEMEM
->  static inline void page_ext_init_flatmem(void)
->  {
-> @@ -67,6 +73,11 @@ static inline struct page_ext *page_ext_next(struct page_ext *curr)
->  #else /* !CONFIG_PAGE_EXTENSION */
->  struct page_ext;
->  
-> +static inline bool early_page_ext_enabled(void)
-> +{
-> +	return false;
-> +}
-> +
->  static inline void pgdat_page_ext_init(struct pglist_data *pgdat)
->  {
->  }
-> diff --git a/init/main.c b/init/main.c
-> index 91642a4e69be..b5e75f3288d7 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -849,6 +849,9 @@ static void __init mm_init(void)
->  	pgtable_init();
->  	debug_objects_mem_init();
->  	vmalloc_init();
-> +	/* Should be run after vmap initialization */
-> +	if (early_page_ext_enabled())
-> +		page_ext_init();
->  	/* Should be run before the first non-init thread is created */
->  	init_espfix_bsp();
->  	/* Should be run after espfix64 is set up. */
-> @@ -1606,7 +1609,8 @@ static noinline void __init kernel_init_freeable(void)
->  	padata_init();
->  	page_alloc_init_late();
->  	/* Initialize page ext after all struct pages are initialized. */
-> -	page_ext_init();
-> +	if (!early_page_ext_enabled())
-> +		page_ext_init();
->  
->  	do_basic_setup();
->  
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e5486d47406e..e2faa52cd05d 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -482,6 +482,8 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
->  {
->  	static unsigned long prev_end_pfn, nr_initialised;
->  
-> +	if (early_page_ext_enabled())
-> +		return false;
->  	/*
->  	 * prev_end_pfn static that contains the end of previous zone
->  	 * No need to protect because called very early in boot before smp_init.
-> diff --git a/mm/page_ext.c b/mm/page_ext.c
-> index 3dc715d7ac29..6c28d623d951 100644
-> --- a/mm/page_ext.c
-> +++ b/mm/page_ext.c
-> @@ -85,6 +85,14 @@ unsigned long page_ext_size = sizeof(struct page_ext);
->  
->  static unsigned long total_usage;
->  
-> +bool early_page_ext __meminitdata;
-> +static int __init setup_early_page_ext(char *str)
-> +{
-> +	early_page_ext = true;
-> +	return 0;
-> +}
-> +early_param("early_page_ext", setup_early_page_ext);
-> +
->  static bool __init invoke_need_callbacks(void)
->  {
->  	int i;
-> -- 
-> 2.20.1
-
--- 
-Michal Hocko
-SUSE Labs
+DQoNCkxlIDI1LzA4LzIwMjIgw6AgMTI6MzAsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
+VXJvcyBCaXpqYWsgd3JvdGU6DQo+PiBUaGUgd29ya2Fyb3VuZCBmb3IgJ2FzbSBnb3RvJyBtaXNj
+b21waWxhdGlvbiBpbnRyb2R1Y2VzIGEgY29tcGlsZXINCj4+IGJhcnJpZXIgcXVpcmsgdGhhdCBp
+bmhpYml0cyBtYW55IHVzZWZ1bCBjb21waWxlciBvcHRpbWl6YXRpb25zLiBGb3INCj4+IGV4YW1w
+bGUsIF9fdHJ5X2NtcHhjaGdfdXNlciBjb21waWxlcyB0bzoNCj4+DQo+PiDCoMKgIDExMzc1OsKg
+wqDCoCA0MSA4YiA0ZCAwMMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG1vdsKgwqDCoCAweDAo
+JXIxMyksJWVjeA0KPj4gwqDCoCAxMTM3OTrCoMKgwqAgNDEgOGIgMDLCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBtb3bCoMKgwqAgKCVyMTApLCVlYXgNCj4+IMKgwqAgMTEzN2M6wqDC
+oMKgIGYwIDBmIGIxIDBhwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbG9jayBjbXB4Y2hnICVl
+Y3gsKCVyZHgpDQo+PiDCoMKgIDExMzgwOsKgwqDCoCAwZiA5NCBjMsKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHNldGXCoMKgICVkbA0KPj4gwqDCoCAxMTM4MzrCoMKgwqAgODQgZDLC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ZXN0wqDCoCAlZGwsJWRsDQo+
+PiDCoMKgIDExMzg1OsKgwqDCoCA3NSBjNMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGpuZcKgwqDCoCAxMTM0YiA8Li4uPg0KPj4gwqDCoCAxMTM4NzrCoMKgwqAgNDEgODkg
+MDLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBtb3bCoMKgwqAgJWVheCwoJXIxMCkN
+Cj4+DQo+PiB3aGVyZSB0aGUgYmFycmllciBpbmhpYml0cyBmbGFncyBwcm9wYWdhdGlvbiBmcm9t
+IGFzbSB3aGVuDQo+PiBjb21waWxlZCB3aXRoIGdjYy0xMi4NCj4+DQo+PiBXaGVuIHRoZSBtZW50
+aW9uZWQgcXVpcmsgaXMgcmVtb3ZlZCwgdGhlIGZvbGxvd2luZyBjb2RlIGlzIGdlbmVyYXRlZDoN
+Cj4+DQo+PiDCoMKgIDExNTUzOsKgwqDCoCA0MSA4YiA0ZCAwMMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIG1vdsKgwqDCoCAweDAoJXIxMyksJWVjeA0KPj4gwqDCoCAxMTU1NzrCoMKgwqAgNDEg
+OGIgMDLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBtb3bCoMKgwqAgKCVyMTApLCVl
+YXgNCj4+IMKgwqAgMTE1NWE6wqDCoMKgIGYwIDBmIGIxIDBhwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgbG9jayBjbXB4Y2hnICVlY3gsKCVyZHgpDQo+PiDCoMKgIDExNTVlOsKgwqDCoCA3NCBj
+OcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGplwqDCoMKgwqAgMTE1Mjkg
+PC4uLj4NCj4+IMKgwqAgMTE1NjA6wqDCoMKgIDQxIDg5IDAywqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgbW92wqDCoMKgICVlYXgsKCVyMTApDQo+Pg0KPj4gVGhlIHJlZmVyZWQgY29t
+cGlsZXIgYnVnOg0KPj4NCj4+IGh0dHA6Ly9nY2MuZ251Lm9yZy9idWd6aWxsYS9zaG93X2J1Zy5j
+Z2k/aWQ9NTg2NzANCj4+DQo+PiB3YXMgZml4ZWQgZm9yIGdjYy00LjguMi4NCj4+DQo+PiBDdXJy
+ZW50IG1pbmltdW0gcmVxdWlyZWQgdmVyc2lvbiBvZiBHQ0MgaXMgdmVyc2lvbiA1LjEgd2hpY2gg
+aGFzDQo+PiB0aGUgYWJvdmUgJ2FzbSBnb3RvJyBtaXNjb21waWxhdGlvbiBmaXhlZCwgc28gcmVt
+b3ZlIHRoZSB3b3JrYXJvdW5kLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFVyb3MgQml6amFrIDx1
+Yml6amFrQGdtYWlsLmNvbT4NCj4+IENjOiBBbmRyZXcgTW9ydG9uIDxha3BtQGxpbnV4LWZvdW5k
+YXRpb24ub3JnPg0KDQpJdCdzIHVubGlrZWx5IHRoYXQgYXNtIGdvdG8gYnVnIHdhcyBjb21wbGV0
+ZWx5IGZpeGVkIGluIDQuOCBiZWNhdXNlIGl0J3MgDQpiZWVuIGVuY291bnRlcmVkIHdpdGggZ2Nj
+IDQuOS4zIGFuZCA0LjkuNCwgc2VlIGNvbW1pdCAxMzQ0YTIzMjAxNmQgDQooInBvd2VycGM6IFVz
+ZSBhc21fZ290b192b2xhdGlsZSBmb3IgcHV0X3VzZXIoKSIpDQoNCkNocmlzdG9waGU=

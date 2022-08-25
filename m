@@ -2,115 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DC05A10CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A83F5A10D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240899AbiHYMln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S237593AbiHYMmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236917AbiHYMll (ORCPT
+        with ESMTP id S241941AbiHYMmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:41:41 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409B52315A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:41:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xCMa+Y2jIKgZ56OuN/h0oLf2cyBRDehvHfcF2kieVHM=; b=gtp5fNPa37EZTLE4UGvnHplqbA
-        vyMYlZGWuG6x/vlNK5aG2I5bnpXR++EbUNXT5tssiuWTzKYGbg/uDWZJyWkScURq7WSC91GXEypRb
-        msmYY5Vtm/smg/6qT3kp3/NM+rpKf/Zoo6+pVoVy5NgLXszqvnDIzv7NCZPoHhaw3tEQMyx0T9QWj
-        wbSFrbvlHvg0lTIOcpEKPzF60IulT6FyItMHYnBJryjafFhRX/FNOBFHa2MjE0CZe4gxZiQMhS6Vv
-        2putyWLiHBGSPlKbLugUZIQCCxB6ySVfyRE0AY7mv9qlkRambhZQ3Bznh1FE0CjI/PFnHyR3kZHCT
-        bHMHsv1Q==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=62698)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oRCAx-0005T0-Nh; Thu, 25 Aug 2022 14:41:35 +0200
-Message-ID: <3cc08f9d-9f01-b771-c16f-ea95acd7e7cd@tronnes.org>
-Date:   Thu, 25 Aug 2022 14:41:27 +0200
+        Thu, 25 Aug 2022 08:42:00 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156C84DF00;
+        Thu, 25 Aug 2022 05:41:58 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1661431303tun531a5
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 25 Aug 2022 20:41:41 +0800 (CST)
+X-QQ-SSF: 01000000002000C0E000B00A0000000
+X-QQ-FEAT: zT6n3Y95oi325WtJj3R+SBXlydZNdWUy0p7FgGbcskg2dnkGMzsGYmwG7L/st
+        Ks9uO2pGqM/aDIMLA8yM6Mqjsj+PCVLbesg6+nKFBRm3JeMyN6mw4Zig5C9GSw83NdwZu6E
+        MJtfRTNqF8OJuG/1lvMqv6vTG3796B+rXImur3swG911Yl7ah70h6WaCTdLDfFU3PK+ouTH
+        /DTGsE//cA9cgiiRVugOxpRVNTjf4syPV+mF2IGleeUPdjCjNB3H+1ywlGHopjWOkxBO7ig
+        Jw4HMDPLji53V7iWnRhLbjx1VQWhnHyL5qLpQcgbwk979y5jQjziiC+Dw0oGkUorrNFGTCR
+        HYjBPraHnV9wsqmLui+Yh+iIMfsjKWXjpGfgKlLrWHw97tGFwSr+mBQVdqvevf75B0WvTfu
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     linus.walleij@linaro.org, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com
+Cc:     openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] pinctrl/nuvoton: Use 'unsigned int' instead of just 'unsigned'.
+Date:   Thu, 25 Aug 2022 20:41:34 +0800
+Message-Id: <20220825124134.30242-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
- command-line option
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-34-3d53ae722097@cerno.tech>
- <eedb1a86-c1fb-cc76-2a43-4ed349d7d826@tronnes.org>
- <20220824154543.bdtpz2evwzsjrdrz@houat>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220824154543.bdtpz2evwzsjrdrz@houat>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+'unsigned int' should be clearer than 'unsigned'.
 
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Den 24.08.2022 17.45, skrev Maxime Ripard:
-> Hi Noralf,
-> 
-> On Sat, Aug 20, 2022 at 10:18:47PM +0200, Noralf Trønnes wrote:
->> Den 29.07.2022 18.35, skrev Maxime Ripard:
->>> Our new tv mode option allows to specify the TV mode from a property.
->>> However, it can still be useful, for example to avoid any boot time
->>> artifact, to set that property directly from the kernel command line.
->>>
->>> Let's add some code to allow it, and some unit tests to exercise that code.
->>>
->>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>>
->>
->> In the subject it says "tv_mode property", but the property is called
->> "tv norm", so the option should be tv_norm?
-> 
-> Yeah... I don't know. mode is taken but it's obviously the best name. So
-> I went with norm to avoid the (internal) conflict but I left mode for
-> the user facing property.
-> 
-> I'm not sure what's best here, or maybe we can pick another name entirely?
-> 
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+index 64d8a568b3db..1c4e89b046de 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+@@ -81,11 +81,11 @@ struct npcm7xx_gpio {
+ 	int			irq;
+ 	struct irq_chip		irq_chip;
+ 	u32			pinctrl_id;
+-	int (*direction_input)(struct gpio_chip *chip, unsigned offset);
+-	int (*direction_output)(struct gpio_chip *chip, unsigned offset,
++	int (*direction_input)(struct gpio_chip *chip, unsigned int offset);
++	int (*direction_output)(struct gpio_chip *chip, unsigned int offset,
+ 				int value);
+-	int (*request)(struct gpio_chip *chip, unsigned offset);
+-	void (*free)(struct gpio_chip *chip, unsigned offset);
++	int (*request)(struct gpio_chip *chip, unsigned int offset);
++	void (*free)(struct gpio_chip *chip, unsigned int offset);
+ };
+ 
+ struct npcm7xx_pinctrl {
+-- 
+2.36.1
 
-Why not just call it "tv mode" or even better "TV Mode". The state
-member can be called tv_mode, but the mode_config member will need a
-temporary name until the "mode" property is removed. tv_tv_mode or maybe
-connector_tv_mode?
-
-But IMO, if there are no users of this property, adding it should have a
-drm maintainers ack.
-
-Noralf.

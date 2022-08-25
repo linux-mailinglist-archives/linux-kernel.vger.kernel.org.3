@@ -2,128 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BCE5A0DD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBC15A0DDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 12:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237497AbiHYKYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 06:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
+        id S239171AbiHYK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 06:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238284AbiHYKYr (ORCPT
+        with ESMTP id S235442AbiHYK0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 06:24:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E42332
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 03:24:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32544B82832
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 10:24:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D95C433D6;
-        Thu, 25 Aug 2022 10:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661423082;
-        bh=RFfgdarMWGMA++FX+hYtwz3wXEzuMHPPtoLmXbI4ekQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z7InVAKJszDVmQB48HHp1HEBbkyeAJxWHoaiDmINPRIKria+zFLSEccZhB7Jza7bh
-         Mv9099WdzYX/CYLVhpDbQd3HIpCWPGLGMccgSll+xsYqqiqj0pAr+N1GeH9D0fc27G
-         8S/bbHY7tE2vlYhd/yzFKCUgCvninBA2rBtk3oQc=
-Date:   Thu, 25 Aug 2022 12:24:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Czerwacki, Eial" <eial.czerwacki@sap.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Arsh, Leonid" <leonid.arsh@sap.com>,
-        "Twaig, Oren" <oren.twaig@sap.com>,
-        SAP vSMP Linux Maintainer <linux.vsmp@sap.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Borislav Petkov <bp@suse.de>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Eric Biggers <ebiggers@google.com>, Fei Li <fei1.li@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: Re: [PATCH v2] drivers/virt/vSMP: new driver
-Message-ID: <YwdN3vJ1Z+1yKfma@kroah.com>
-References: <PAXPR02MB731058B69D178E026C578BB481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
- <YwclcEJDf/POuHw5@kroah.com>
- <PAXPR02MB7310DFE86CAB92D0AE1A14BE81729@PAXPR02MB7310.eurprd02.prod.outlook.com>
- <YwdBMIgSzEiFjc4D@kroah.com>
- <PAXPR02MB7310694F20F95CA446FFF22481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
+        Thu, 25 Aug 2022 06:26:22 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B01252DF8;
+        Thu, 25 Aug 2022 03:26:19 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C669D200006;
+        Thu, 25 Aug 2022 10:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661423178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nZkhegChjWaWBJwEW1/N43DiTL0N1XMc1RWqnxCrZsk=;
+        b=YOt1JWVSh6Ki9doHJpzHkp8QI3qfB0CD0Yw8z3OZnBSeV9pHJH5bXqq12+5xPfisKbFKjx
+        xkqK4rV8cjhXwxS5ErtrHnmmyIJ7QO1P9MjuI807pqx7ST9YhvP/m7mzybTbVJ/NNXGd6F
+        bOmwy/kqH04s05mQFdUJTvfacBl6CDe6xMsbPK319NkiE7vTXTw8litr1xld7l8Yrhlmoh
+        F0q43cEYW18F7zIqO8qTRLUgbpy35YXscqwpqWuxxC5uvBPSIVaCW9lYCgFS3AfU2U1bJE
+        1JDOrYAuWLHL3TD784m5DleTImOLUksX2+uO66TBtWXdl09A/KYoPfVKRZdyhQ==
+Date:   Thu, 25 Aug 2022 12:26:15 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 6/8] phy: allwinner: phy-sun6i-mipi-dphy: Set enable bit
+ last
+Message-ID: <YwdORxO4K8mV5Hc9@aptenodytes>
+References: <20220812075603.59375-1-samuel@sholland.org>
+ <20220812075603.59375-7-samuel@sholland.org>
+ <YvZBmZ+SfrJuAzAs@aptenodytes>
+ <b3a2dc61-7384-17f7-2f4f-4b6bb86bcced@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fO1GowFtZadczY0o"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <PAXPR02MB7310694F20F95CA446FFF22481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b3a2dc61-7384-17f7-2f4f-4b6bb86bcced@sholland.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 10:16:59AM +0000, Czerwacki, Eial wrote:
-> >> >And why is your version file a binary file?  It should just be a small
-> >> >text string, right?
-> >> not so small, it can reach up to 512kb.
-> >
-> >That was not obvious at all.  Please document this.
-> where should the document be?
-> in the code as a comment or in another file?
 
-In the Documentation/ABI/ file that describes this file.
+--fO1GowFtZadczY0o
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >And how in the world is a "version" that big?  What exactly does this
-> >contain?
-> it 's size depends on the number of resources it uses.
-> here is an example:
-> :~> cat /sys/hypervisor/vsmp/version  
-> SAP vSMP Foundation: 10.6.2862.0 (Aug 22 2022 15:21:02)
-> System configuration:
->    Boards:      2
->       1 x Proc. + I/O + Memory
->       1 x NVM devices (Amazon.com Amazon EC2 NVMe Instance Storage)
->    Processors:  1, Cores: 2, Threads: 4
->        Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz Stepping 04
->    Memory (MB): 30976 (of 103192), Cache: 7527, Private: 64689
->       1 x  6400MB    [ 7825/ 321/ 1104]      
->       1 x 24576MB    [95367/7206/63585]       00:1f.0#1
->    Boot device: [HDD] NVMe: Amazon Elastic Block Store        
-> Supported until: Aug 22 2024
+Hi Samuel,
 
-That is crazy, and is not a version.  It's a "configuration".
+On Fri 12 Aug 22, 17:31, Samuel Holland wrote:
+> Hi Paul,
+>=20
+> On 8/12/22 7:03 AM, Paul Kocialkowski wrote:
+> > On Fri 12 Aug 22, 02:56, Samuel Holland wrote:
+> >> The A100 variant of the DPHY requires configuring the analog registers
+> >> before setting the global enable bit. Since this order also works on t=
+he
+> >> other variants, always use it, to minimize the differences between the=
+m.
+> >=20
+> > Did you get a chance to actually test this with either DSI/CSI-2 hardwa=
+re?
+>=20
+> I have tested DSI output with the Clockwork DevTerm (D1 SoC) and Pine64
+> PinePhone (A64 SoC). I do not have any MIPI CSI hardware to test with.
 
-You have a version up there, just export that as a simple string
-"10.6.2862.0".  What is the rest of that stuff needed for?  Who will use
-it?  Should it just be in a debugfs file for debugging things?
+Sounds good to me then!
 
-Oh, and I love the "Supported until" tag, that's funny :)
+> > I vaguely remember that the order mattered. Do you have an idea of what=
+ the
+> > Allwinner BSP does too?
+>=20
+> The Allwinner BSP makes the same change as this commit in its "lowlevel_v=
+2x"
+> copy of the code, which is used for R40 and T7 (original DPHY) and A100 a=
+nd D1
+> (updated DPHY). It does not make the change in "lowlevel_sun50iw1" (A64 S=
+oC,
+> original DPHY), but I tested A64 with this change, and it works fine.
 
-> >> that is why I decided to go with binary, I understood that the text is rather limited.
-> >
-> >That is true, sysfs is "one value per file", this can not be a file that
-> >you parse.
-> should I keep it as bin then?
+Great, thanks for details.
 
-See above, make it text only for the version.  If you want to export
-other things, be explicit and make them "one value per sysfs file" or
-use debugfs for debugging things that no one relies on.
+> > Otherwise I could give it a try, at least with my MIPI CSI-2 setup
+> > that uses the driver.
+>=20
+> This commit only changes sun6i_dphy_tx_power_on(). The code for RX is unc=
+hanged
+> -- in fact, it already sets SUN6I_DPHY_GCTL_REG last.
 
-> >You have pdev, use that in your dev_dbg() call.
-> I have pdev when the probe cb is called, however in other funcs I
-> don't have it.
+Ah yes you're right, actually I remember being tempted to change this too w=
+hen
+adding the rx path, but didn't have hardware to easily test.
 
-That's for the other functions to fix up.  Pass in the device pointer to
-them.  You are a driver, there is no reason to NOT have a device pointer
-in your functions, otherwise you are operating on global state which a
-driver should never do.  You will notice that quickly when you remove
-the static variable at the top of the file like I asked you to :)
+Thanks for the details, this is:
 
-thanks,
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-greg k-h
+Cheers,
+
+Paul
+
+> Regards,
+> Samuel
+>=20
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> >> ---
+> >>
+> >>  drivers/phy/allwinner/phy-sun6i-mipi-dphy.c | 8 ++++----
+> >>  1 file changed, 4 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c b/drivers/phy=
+/allwinner/phy-sun6i-mipi-dphy.c
+> >> index 625c6e1e9990..9698d68d0db7 100644
+> >> --- a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
+> >> +++ b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
+> >> @@ -183,10 +183,6 @@ static int sun6i_dphy_tx_power_on(struct sun6i_dp=
+hy *dphy)
+> >>  		     SUN6I_DPHY_TX_TIME4_HS_TX_ANA0(3) |
+> >>  		     SUN6I_DPHY_TX_TIME4_HS_TX_ANA1(3));
+> >> =20
+> >> -	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG,
+> >> -		     SUN6I_DPHY_GCTL_LANE_NUM(dphy->config.lanes) |
+> >> -		     SUN6I_DPHY_GCTL_EN);
+> >> -
+> >>  	regmap_write(dphy->regs, SUN6I_DPHY_ANA0_REG,
+> >>  		     SUN6I_DPHY_ANA0_REG_PWS |
+> >>  		     SUN6I_DPHY_ANA0_REG_DMPC |
+> >> @@ -244,6 +240,10 @@ static int sun6i_dphy_tx_power_on(struct sun6i_dp=
+hy *dphy)
+> >>  			   SUN6I_DPHY_ANA2_EN_P2S_CPU_MASK,
+> >>  			   SUN6I_DPHY_ANA2_EN_P2S_CPU(lanes_mask));
+> >> =20
+> >> +	regmap_write(dphy->regs, SUN6I_DPHY_GCTL_REG,
+> >> +		     SUN6I_DPHY_GCTL_LANE_NUM(dphy->config.lanes) |
+> >> +		     SUN6I_DPHY_GCTL_EN);
+> >> +
+> >>  	return 0;
+> >>  }
+> >> =20
+> >> --=20
+> >> 2.35.1
+> >>
+> >=20
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--fO1GowFtZadczY0o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMHTkcACgkQ3cLmz3+f
+v9ET3gf+Ijb5TZR/JJTlXSoSHvPCNhJtFL0m999ze+30++wX0mEhS3H8StSKy/C1
+I2AsGVYGmUzuOru1lsIKl0Z5snU4tf0TxasrHk902JIWQ77vCuNWnKlXVYDwvDdz
+7P19vaDeMhTGePAPvoubS4g9pPsmCNwixL5Roe5mCrDK0ZLu/LWTYHydcSLqKu/Q
+x/LuE2wRx4RRFwNXuz0NXmwOZdIq41Gi2S0kx6fkbw/uHzKA30koHoy+M0Wb7vVK
+H9Ypu69YUgz8twTsvDRbid/ctfIb3wPQegbRO+S80Irf8owgD9qU6MKXIjK30qT7
++KZHOywGvjsZtMZepWV6+VqCGgugaw==
+=xe8Q
+-----END PGP SIGNATURE-----
+
+--fO1GowFtZadczY0o--

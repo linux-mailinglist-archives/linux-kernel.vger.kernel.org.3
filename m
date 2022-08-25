@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA84D5A0EC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6ED5A0EC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 13:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241409AbiHYLK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 07:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S240587AbiHYLLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 07:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237854AbiHYLKZ (ORCPT
+        with ESMTP id S236708AbiHYLLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 07:10:25 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5377A95683
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:10:24 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d8so15360242lfq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=TeFvcw/6IdsOusNCl9n7pDR9ukoMvAj+lFQVR4XnUbc=;
-        b=MIpYXDJNY+ShXDSfOa3TQKDK7aCcqReWHSqfgpQCLd4EvtBbg+pH99VyxZB4PLczXX
-         CNlop6VSuGicScuum7IBHT/hV4cx4iEZyr/SPB2qM0lOy4RdWCmOW97a2J5nj2/EcrBr
-         Tpo6yXvb+83a2uZCbobMC4krRKcmvaj2F4JCnd+eFGArXOpvrzX7E6cdNq87PhszvQD5
-         G0LTbDnzc86otQG9Kw3UrYBUvdsTaBg6wrc6B2A6uQ++VBnbxR5pFi78opn0ChmgErU0
-         nmjovPQ8RjugWiaotFnwL8N3zjeUrRNl5Vi8MOauEwHSOWJ5WJiDUiflXaKdSqOrwEsl
-         +D+A==
+        Thu, 25 Aug 2022 07:11:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550ECA263E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661425899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q6R2kOFpSZu9B1r8tOPgQwwbnj/1FHfHwXqHb6Dl3U0=;
+        b=VealhEOHfiAOIn/GfF+fTRSCbLPMW+jLw6ZUAwbEuAAV7xhI7Rwcnp9YruZnJXspxD2esF
+        cyH3QRCUEfaplonhaEss4DXSzNHKLYLsXJigkfpdhEpAo2moFGDLXL4gRzoweh0nGV4O1/
+        CnRfoz8FmMiMWEFkNfjhHZ3+ugks4ds=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-132-jZVf9OXDN_Cfuh7ovrW-lQ-1; Thu, 25 Aug 2022 07:11:38 -0400
+X-MC-Unique: jZVf9OXDN_Cfuh7ovrW-lQ-1
+Received: by mail-wm1-f72.google.com with SMTP id r10-20020a1c440a000000b003a538a648a9so10787449wma.5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 04:11:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=TeFvcw/6IdsOusNCl9n7pDR9ukoMvAj+lFQVR4XnUbc=;
-        b=vPDVL/2z/eZVa1yBrBRUxVDrHH1RpLGvvgNYSyxabVe85l+P0U850mKgwHr0y25tJc
-         CW/grL93HS/D43yb+bjkA5nWs+DS0q716CkL6LhbJ6EeLzqRUPV3Zj095YlaqAzr77gZ
-         sg4fSm+oyQqNh4elIaVMKMn2mAfxQHtQQK6Wb6CzdRnf4hKQjdMcA2OlThy9qEBIKMJL
-         mKaB47YSFQPkbK52YDwSRLu353fDXTns3iGQViIY+DoA7waSbIyOpeaDD4GRO+otE4TN
-         uL/2VJ5GZ6Dfh0yjcoWRp/TiA56fRwC9P4pcWlVxtR3iGvTL7ZbnWKrUjbCn/HRFcmhV
-         I7HA==
-X-Gm-Message-State: ACgBeo0KoMh0RBDFWodSWwAcmfPMhYKGj8zwQz5/HYfY/guiBjMTxqXq
-        tnXGUSTD2AcYJCAu+UjdH9w5xA==
-X-Google-Smtp-Source: AA6agR40s26AqR4oTbnYAh3g4eHAduWY6waQtKrOGrMB9fZonpVRdeuwigS5+rGWIVurAjNU7bKUIg==
-X-Received: by 2002:ac2:5f57:0:b0:493:774:675c with SMTP id 23-20020ac25f57000000b004930774675cmr1068956lfz.433.1661425822661;
-        Thu, 25 Aug 2022 04:10:22 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05651c048a00b00261e2aab7c2sm494950ljc.58.2022.08.25.04.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 04:10:21 -0700 (PDT)
-Message-ID: <4a2a5eeb-aa65-2b33-e7ff-c1d318a9b76f@linaro.org>
-Date:   Thu, 25 Aug 2022 14:10:20 +0300
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=Q6R2kOFpSZu9B1r8tOPgQwwbnj/1FHfHwXqHb6Dl3U0=;
+        b=c4p9Iz2qBRcIT2Tfj7RflJ1m56cf0Lp6oRm+X4NESj+gOoNOIG048+nJ3OpL6sNy7o
+         WNPbt0zhf7QQAlye6UeTuNAQpXHka9/JVUxSb5b06fTF+EQ0nGqFb26iy+lSuLdvgRXV
+         Oh8TCHSJsudU1Gn8gA3dq+lnXreSm2iemjV6Im6PdTUjr1qkNXUlc+68lzW7mU4bWeZ0
+         YVYV4+LPafkzScOWRx+p2Xq3/bNCj40cUeAEeIDfRxfn7QWno8wEAZTWBH3QuMrPTTls
+         kv8BRJCVQMk27aAwTlpcM9tsLiAJb/+XeUMwmyQnCWRvUDnBRueBfW4EUDw5SZmrjmGx
+         /IEg==
+X-Gm-Message-State: ACgBeo16Rdp0O6guOJdFcoSB11LVjwDwQXX8hdKG6ov+C1vz5r67FCsB
+        krEI+nBFQgZ9zlfwr2O0lZ7v5lx8tAy04hgjZBPQwjOnxi91Ok94tnHs75JNGVIJX6Eandm0k7n
+        9VMTyr8B3hhJVhyKezGaih1ph
+X-Received: by 2002:a05:600c:2114:b0:3a5:4f31:3063 with SMTP id u20-20020a05600c211400b003a54f313063mr8238470wml.50.1661425897036;
+        Thu, 25 Aug 2022 04:11:37 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7m/LFh6KSjkSq7Lqgq/TVqkGBP1qeEks7lCgy4C/9MLYkzDLRcCb5wnUXKkDz3PgYGt0jMPA==
+X-Received: by 2002:a05:600c:2114:b0:3a5:4f31:3063 with SMTP id u20-20020a05600c211400b003a54f313063mr8238453wml.50.1661425896852;
+        Thu, 25 Aug 2022 04:11:36 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-97-176.dyn.eolo.it. [146.241.97.176])
+        by smtp.gmail.com with ESMTPSA id c3-20020a7bc843000000b003a32297598csm4817740wml.43.2022.08.25.04.11.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 04:11:36 -0700 (PDT)
+Message-ID: <200cb2f98ca159003ed4deb51163e5f8859d4f8b.camel@redhat.com>
+Subject: Re: [PATCH net-next 1/3] net: prestera: acl: extract matchall logic
+ into a separate file
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Serhiy Boiko <serhiy.boiko@plvision.eu>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Date:   Thu, 25 Aug 2022 13:11:35 +0200
+In-Reply-To: <20220823113958.2061401-2-maksym.glubokiy@plvision.eu>
+References: <20220823113958.2061401-1-maksym.glubokiy@plvision.eu>
+         <20220823113958.2061401-2-maksym.glubokiy@plvision.eu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-binding: gpio: publish binding IDs under dual license
-Content-Language: en-US
-To:     Etienne Carriere <etienne.carriere@linaro.org>,
-        linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Stephen Warren <swarren@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Charles Keepax <ckeepax@opensource.wolfsonmicro.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220825104505.79718-1-etienne.carriere@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220825104505.79718-1-etienne.carriere@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/2022 13:45, Etienne Carriere wrote:
-> Changes gpio.h DT binding header file to be published under GPLv2 or
-> BSD-3-Clause license terms. This change allows these GPIO generic
-> bindings header file to be used in software components as bootloaders
-> and OSes that are not published under GPLv2 terms.
-> 
-> All contributors to gpio.h file in copy.
-> 
-> Cc: Stephen Warren <swarren@nvidia.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Laxman Dewangan <ldewangan@nvidia.com>
-> Cc: Charles Keepax <ckeepax@opensource.wolfsonmicro.com>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Nuno Sá <nuno.sa@analog.com>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> 
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
->  include/dt-bindings/gpio/gpio.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/dt-bindings/gpio/gpio.h b/include/dt-bindings/gpio/gpio.h
-> index 5566e58196a2..f8df7511b8b4 100644
-> --- a/include/dt-bindings/gpio/gpio.h
-> +++ b/include/dt-bindings/gpio/gpio.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> +/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
+Hello,
 
-Why BSD-3 clause? Bindings are expected to be "OR BSD-2-Clause".
+On Tue, 2022-08-23 at 14:39 +0300, Maksym Glubokiy wrote:
+> From: Serhiy Boiko <serhiy.boiko@plvision.eu>
+> 
+> This commit adds more clarity to handling of TC_CLSMATCHALL_REPLACE and
+> TC_CLSMATCHALL_DESTROY events by calling newly added *_mall_*() handlers
+> instead of directly calling SPAN API.
+> 
+> This also extracts matchall rules management out of SPAN API since SPAN
+> is a hardware module which is used to implement 'matchall egress mirred'
+> action only.
+> 
+> Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
+> Signed-off-by: Serhiy Boiko <serhiy.boiko@plvision.eu>
+> Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
 
-Best regards,
-Krzysztof
+This SoB chain is not clear to me. Did Taras co-developed the patch? In
+that case a Co-developed-by: tag is missing, as the first tag in the
+list. Otherwise why is Taras' SoB there?
+
+Thanks!
+
+Paolo
+

@@ -2,187 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62A85A15B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DB75A15B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242358AbiHYP1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:27:49 -0400
+        id S242817AbiHYP3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:29:07 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242207AbiHYP1S (ORCPT
+        with ESMTP id S242796AbiHYP2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:27:18 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFC5BB6A6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:26:03 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id t5so1540697pjs.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Zsqv9AykgJ+WV9feY4vZLdyL0HO37C5wC/zUOZBB/Rs=;
-        b=HWnl7UrUYlzNgRl6uEFPplyGVawiIDXFH7m8PBsKuwLAyY4wVOH5/4W+KHE3cm4dmy
-         4VKpGXbIOjUVTNJ5qTAEfFLY5j3Yf3cnEjwgexlgBZzwA/NZqy+OA837il6nxkXV5MZ8
-         bWeOe7RYnCeBZeCaEDApmwAvBPMIcLaY9ZVBN4TcWiNWpqvDtnBHm4rNi4l+iIhXSBbt
-         Vb5TpW9i3LVxD0fenWNvYo2kmlhk6MMD/fpNzQjOSsWwzJLxUQdlnEY1aV6QOjHMKsIC
-         o6Aj0pItiOXOcalFXaXlzd4qp/y4sLZ4X8K4ywWFjTAOSTa/Uzz4A9Ct6uhXYJn4n24B
-         gkOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Zsqv9AykgJ+WV9feY4vZLdyL0HO37C5wC/zUOZBB/Rs=;
-        b=w6KHKy+alY7W/ca68vKorIlSEsMKbxSJCoXObjsfk5LGTdsqNU5VrKIw14Z9ecvu+F
-         JMI4w6cIxDPyrrs3EzoQoja3KHcwbd8ucsW4pvFXkMKRePvET55fL4Ne3NnS2e5gFecK
-         KenMlUYTKXUJl3uK+oTkq0UJWIpZnQl+vJ4NGSRQ7ILA0GKoZ8zTLbyphcIac8/J1QHr
-         JyuxCLV4ox73JRIFm4oKEAl1Gz+dGJX85u1ILtpqdDi4+ammkZLvAJ2+f9QkQwxnAJNG
-         ydaHFCN+GvcsOG/7pzZYL3N1nm3f7gHZ9s0sOXShb15j6ZWaZhJWS7cFjxfOS8FYrnzw
-         XERQ==
-X-Gm-Message-State: ACgBeo2a2abakGdvCCmROGt6IptJp6efGEVGdmxKXwYfSy55bD6Ughvm
-        fj7xPnTh44gan9BNZC3FsbdRuKx99npKM3UdCZBMqg==
-X-Google-Smtp-Source: AA6agR7yKFRvtMiJWUoOhnBb6dODuZY59WJG0S4sLUXExTnTCnnQec25vcU6SQQtE/2OZn6xCtg2SViS0OjZjhqHnPQ=
-X-Received: by 2002:a17:902:d58f:b0:173:75b:6ad with SMTP id
- k15-20020a170902d58f00b00173075b06admr4194683plh.172.1661441150947; Thu, 25
- Aug 2022 08:25:50 -0700 (PDT)
+        Thu, 25 Aug 2022 11:28:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F090DBA14D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:27:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E156D6E;
+        Thu, 25 Aug 2022 08:26:25 -0700 (PDT)
+Received: from cam-smtp0.cambridge.arm.com (pierre123.nice.arm.com [10.34.100.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3EA213F93E;
+        Thu, 25 Aug 2022 08:26:20 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] firmware: arm_sdei: Make sdei_list_lock a raw spinlock
+Date:   Thu, 25 Aug 2022 17:25:56 +0200
+Message-Id: <20220825152556.1634513-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220825000506.239406-1-shakeelb@google.com> <20220825000506.239406-3-shakeelb@google.com>
- <Ywca/EqpyQDAWlE2@dhcp22.suse.cz>
-In-Reply-To: <Ywca/EqpyQDAWlE2@dhcp22.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 25 Aug 2022 08:25:38 -0700
-Message-ID: <CALvZod6mqtZ+iELhg2Q+SbdcicGSbY4piymzFCOPsy5UxvtbRg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] mm: page_counter: rearrange struct page_counter fields
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 11:47 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 25-08-22 00:05:05, Shakeel Butt wrote:
-> > With memcg v2 enabled, memcg->memory.usage is a very hot member for
-> > the workloads doing memcg charging on multiple CPUs concurrently.
-> > Particularly the network intensive workloads. In addition, there is a
-> > false cache sharing between memory.usage and memory.high on the charge
-> > path. This patch moves the usage into a separate cacheline and move all
-> > the read most fields into separate cacheline.
-> >
-> > To evaluate the impact of this optimization, on a 72 CPUs machine, we
-> > ran the following workload in a three level of cgroup hierarchy.
-> >
-> >  $ netserver -6
-> >  # 36 instances of netperf with following params
-> >  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
-> >
-> > Results (average throughput of netperf):
-> > Without (6.0-rc1)     10482.7 Mbps
-> > With patch            12413.7 Mbps (18.4% improvement)
-> >
-> > With the patch, the throughput improved by 18.4%.
-> >
-> > One side-effect of this patch is the increase in the size of struct
-> > mem_cgroup. For example with this patch on 64 bit build, the size of
-> > struct mem_cgroup increased from 4032 bytes to 4416 bytes. However for
-> > the performance improvement, this additional size is worth it. In
-> > addition there are opportunities to reduce the size of struct
-> > mem_cgroup like deprecation of kmem and tcpmem page counters and
-> > better packing.
-> >
-> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > Reviewed-by: Feng Tang <feng.tang@intel.com>
-> > Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
-> > Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
->
-> Acked-by: Michal Hocko <mhocko@suse.com>
->
+On an Ampere Altra, running a preemp_rt kernel based on
+v5.19-rc3-rt5, the following happens:
 
-Thanks.
+[   15.683141] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+[   15.683154] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
+[   15.683157] preempt_count: 0, expected: 0
+[   15.683159] RCU nest depth: 0, expected: 0
+[   15.683163] 3 locks held by cpuhp/0/24:
+[   15.683167]  #0: ffffda30217c70d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
+[   15.683201]  #1: ffffda30217c7120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
+[   15.683205]  #2: ffffda3021c711f0 (sdei_list_lock){....}-{3:3}, at: sdei_cpuhp_up+0x3c/0x130
+[   15.683224] irq event stamp: 36
+[   15.683226] hardirqs last  enabled at (35): [<ffffda301e85b7bc>] finish_task_switch+0xb4/0x2b0
+[   15.683236] hardirqs last disabled at (36): [<ffffda301e812fec>] cpuhp_thread_fun+0x21c/0x248
+[   15.683238] softirqs last  enabled at (0): [<ffffda301e80b184>] copy_process+0x63c/0x1ac0
+[   15.683245] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[   15.683258] CPU: 0 PID: 24 Comm: cpuhp/0 Not tainted 5.19.0-rc3-rt5-[...]
+[   15.683265] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   15.683268] Call trace:
+[   15.683271]  dump_backtrace+0x114/0x120
+[   15.683277]  show_stack+0x20/0x70
+[   15.683279]  dump_stack_lvl+0x9c/0xd8
+[   15.683288]  dump_stack+0x18/0x34
+[   15.683289]  __might_resched+0x188/0x228
+[   15.683292]  rt_spin_lock+0x70/0x120
+[   15.683301]  sdei_cpuhp_up+0x3c/0x130
+[   15.683303]  cpuhp_invoke_callback+0x250/0xf08
+[   15.683305]  cpuhp_thread_fun+0x120/0x248
+[   15.683308]  smpboot_thread_fn+0x280/0x320
+[   15.683315]  kthread+0x130/0x140
+[   15.683321]  ret_from_fork+0x10/0x20
 
-> One nit below
->
-> > ---
-> > Changes since v1:
-> > - Updated the commit message
-> > - Make struct page_counter cache align.
-> >
-> >  include/linux/page_counter.h | 35 +++++++++++++++++++++++------------
-> >  1 file changed, 23 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
-> > index 679591301994..78a1c934e416 100644
-> > --- a/include/linux/page_counter.h
-> > +++ b/include/linux/page_counter.h
-> > @@ -3,15 +3,26 @@
-> >  #define _LINUX_PAGE_COUNTER_H
-> >
-> >  #include <linux/atomic.h>
-> > +#include <linux/cache.h>
-> >  #include <linux/kernel.h>
-> >  #include <asm/page.h>
-> >
-> > +#if defined(CONFIG_SMP)
-> > +struct pc_padding {
-> > +     char x[0];
-> > +} ____cacheline_internodealigned_in_smp;
-> > +#define PC_PADDING(name)     struct pc_padding name
-> > +#else
-> > +#define PC_PADDING(name)
-> > +#endif
-> > +
-> >  struct page_counter {
-> > +     /*
-> > +      * Make sure 'usage' does not share cacheline with any other field. The
-> > +      * memcg->memory.usage is a hot member of struct mem_cgroup.
-> > +      */
-> >       atomic_long_t usage;
-> > -     unsigned long min;
-> > -     unsigned long low;
-> > -     unsigned long high;
-> > -     unsigned long max;
-> > +     PC_PADDING(_pad1_);
-> >
-> >       /* effective memory.min and memory.min usage tracking */
-> >       unsigned long emin;
-> > @@ -23,18 +34,18 @@ struct page_counter {
-> >       atomic_long_t low_usage;
-> >       atomic_long_t children_low_usage;
-> >
-> > -     /* legacy */
-> >       unsigned long watermark;
-> >       unsigned long failcnt;
->
-> These two are also touched in the charging path so we could squeeze them
-> into the same cache line as usage.
->
-> 0-day machinery was quite good at hitting noticeable regression anytime
-> we have changed layout so let's see what they come up with after this
-> patch ;)
+sdei_cpuhp_up() is called in the STARTING hotplug section,
+which runs whith interrupts disabled. Convert sdei_list_lock
+to a raw spinlock to avoid sleeping with interrupt disabled.
 
-I will try this locally first (after some cleanups) to see if there is
-any positive or negative impact and report here.
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+---
+ drivers/firmware/arm_sdei.c | 46 ++++++++++++++++++-------------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
-> --
-> Michal Hocko
-> SUSE Labs
+diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
+index 1e1a51510e83..d2d596166f03 100644
+--- a/drivers/firmware/arm_sdei.c
++++ b/drivers/firmware/arm_sdei.c
+@@ -67,7 +67,7 @@ struct sdei_event {
+ static DEFINE_MUTEX(sdei_events_lock);
+ 
+ /* and then hold this when modifying the list */
+-static DEFINE_SPINLOCK(sdei_list_lock);
++static DEFINE_RAW_SPINLOCK(sdei_list_lock);
+ static LIST_HEAD(sdei_list);
+ 
+ /* Private events are registered/enabled via IPI passing one of these */
+@@ -167,14 +167,14 @@ static struct sdei_event *sdei_event_find(u32 event_num)
+ 
+ 	lockdep_assert_held(&sdei_events_lock);
+ 
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	list_for_each_entry(e, &sdei_list, list) {
+ 		if (e->event_num == event_num) {
+ 			found = e;
+ 			break;
+ 		}
+ 	}
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 
+ 	return found;
+ }
+@@ -259,9 +259,9 @@ static struct sdei_event *sdei_event_create(u32 event_num,
+ 		event->private_registered = regs;
+ 	}
+ 
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	list_add(&event->list, &sdei_list);
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 
+ 	return event;
+ 
+@@ -287,9 +287,9 @@ static void sdei_event_destroy_llocked(struct sdei_event *event)
+ 
+ static void sdei_event_destroy(struct sdei_event *event)
+ {
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	sdei_event_destroy_llocked(event);
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ }
+ 
+ static int sdei_api_get_version(u64 *version)
+@@ -416,9 +416,9 @@ int sdei_event_enable(u32 event_num)
+ 		err = sdei_do_cross_call(_local_event_enable, event);
+ 
+ 	if (!err) {
+-		spin_lock(&sdei_list_lock);
++		raw_spin_lock(&sdei_list_lock);
+ 		event->reenable = true;
+-		spin_unlock(&sdei_list_lock);
++		raw_spin_unlock(&sdei_list_lock);
+ 	}
+ 	cpus_read_unlock();
+ 	mutex_unlock(&sdei_events_lock);
+@@ -454,9 +454,9 @@ int sdei_event_disable(u32 event_num)
+ 		return -ENOENT;
+ 	}
+ 
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	event->reenable = false;
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 
+ 	if (event->type == SDEI_EVENT_TYPE_SHARED)
+ 		err = sdei_api_event_disable(event->event_num);
+@@ -501,10 +501,10 @@ int sdei_event_unregister(u32 event_num)
+ 		goto unlock;
+ 	}
+ 
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	event->reregister = false;
+ 	event->reenable = false;
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 
+ 	if (event->type == SDEI_EVENT_TYPE_SHARED)
+ 		err = sdei_api_event_unregister(event->event_num);
+@@ -531,7 +531,7 @@ static int sdei_unregister_shared(void)
+ 	struct sdei_event *event;
+ 
+ 	mutex_lock(&sdei_events_lock);
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	list_for_each_entry(event, &sdei_list, list) {
+ 		if (event->type != SDEI_EVENT_TYPE_SHARED)
+ 			continue;
+@@ -540,7 +540,7 @@ static int sdei_unregister_shared(void)
+ 		if (err)
+ 			break;
+ 	}
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 	mutex_unlock(&sdei_events_lock);
+ 
+ 	return err;
+@@ -609,9 +609,9 @@ int sdei_event_register(u32 event_num, sdei_event_callback *cb, void *arg)
+ 		goto cpu_unlock;
+ 	}
+ 
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	event->reregister = true;
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ cpu_unlock:
+ 	cpus_read_unlock();
+ unlock:
+@@ -625,7 +625,7 @@ static int sdei_reregister_shared(void)
+ 	struct sdei_event *event;
+ 
+ 	mutex_lock(&sdei_events_lock);
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	list_for_each_entry(event, &sdei_list, list) {
+ 		if (event->type != SDEI_EVENT_TYPE_SHARED)
+ 			continue;
+@@ -651,7 +651,7 @@ static int sdei_reregister_shared(void)
+ 			}
+ 		}
+ 	}
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 	mutex_unlock(&sdei_events_lock);
+ 
+ 	return err;
+@@ -663,7 +663,7 @@ static int sdei_cpuhp_down(unsigned int cpu)
+ 	int err;
+ 
+ 	/* un-register private events */
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	list_for_each_entry(event, &sdei_list, list) {
+ 		if (event->type == SDEI_EVENT_TYPE_SHARED)
+ 			continue;
+@@ -674,7 +674,7 @@ static int sdei_cpuhp_down(unsigned int cpu)
+ 			       event->event_num, err);
+ 		}
+ 	}
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 
+ 	return sdei_mask_local_cpu();
+ }
+@@ -685,7 +685,7 @@ static int sdei_cpuhp_up(unsigned int cpu)
+ 	int err;
+ 
+ 	/* re-register/enable private events */
+-	spin_lock(&sdei_list_lock);
++	raw_spin_lock(&sdei_list_lock);
+ 	list_for_each_entry(event, &sdei_list, list) {
+ 		if (event->type == SDEI_EVENT_TYPE_SHARED)
+ 			continue;
+@@ -706,7 +706,7 @@ static int sdei_cpuhp_up(unsigned int cpu)
+ 			}
+ 		}
+ 	}
+-	spin_unlock(&sdei_list_lock);
++	raw_spin_unlock(&sdei_list_lock);
+ 
+ 	return sdei_unmask_local_cpu();
+ }
+-- 
+2.25.1
+

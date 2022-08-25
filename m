@@ -2,193 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BE25A0D6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302945A0D6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239195AbiHYJ65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S240149AbiHYJ7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiHYJ6z (ORCPT
+        with ESMTP id S229529AbiHYJ7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:58:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2463DF37
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661421532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 25 Aug 2022 05:59:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD3D3BA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:59:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BC8FF20509;
+        Thu, 25 Aug 2022 09:59:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661421583; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=sXEuh/C7EhMT4N5IVCTMgJSlHVPtxpuWjvzgdztQOwA=;
-        b=FyYafbFkTwL/yGrlVFUCKT4YjfwfnI7ZlkozTJ2e2AFuQQ9kdkSEIcovrum9Rq4hthtpiJ
-        dDWKpP0h9SlzziymOCHgTfyAZHgQJzPquw55v/oaYuhXHa+0NP+WJErOOIWkI9eDQF/y5V
-        +I4kDsOmkwpyKuPhNfX65drDz3NJnKo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-637-oLL8MPS-PyeJQhcHJ1VbNQ-1; Thu, 25 Aug 2022 05:58:51 -0400
-X-MC-Unique: oLL8MPS-PyeJQhcHJ1VbNQ-1
-Received: by mail-wm1-f72.google.com with SMTP id i7-20020a1c3b07000000b003a534ec2570so2244169wma.7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:58:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=sXEuh/C7EhMT4N5IVCTMgJSlHVPtxpuWjvzgdztQOwA=;
-        b=oyDsxYaLmWu7W9phdZr8pKHZot1XuA/9VY9u9ihik+KbWsw2754EIq/uKVTlMvOy3+
-         HOGbd1N+g3jWj8Reb44oQuzLctbvI/euY7hfDTU9wVctFambeSpD6tAZdl+weoSbqDBP
-         P02Za2NKTQuIx9mQ2PFt8CwouBOBVls5FZCBwjGalwEIR10iBWikE4YQO0GuyOWxGuoU
-         aVYbhiqGSAQp6CAPgURQpKXAFdQ3RPKdcxBvRcaLIy7ktr+O+35tDw4X+nVl0FKRaHiF
-         lBGi1w2QjoD4NID4oihGLcBJbJIbchENOS4bRz4u0WiQUD+d3Bk77RfempjPdFkQm2uc
-         Fhcg==
-X-Gm-Message-State: ACgBeo21nStEhYMjGwsWiuT8VBl5R3HSzzFN2Qk56JVWltR1edN3dwwO
-        hOPPBNKHX59Cv3oe4gt35yhedz3oHdhZdZpHJ6AVNpswGKSDLijwdubKXjw7P882aafVMBFg5UT
-        unuFwhbU5EA+IKUlfWCkrRJlQ
-X-Received: by 2002:adf:fe09:0:b0:225:6c9a:1925 with SMTP id n9-20020adffe09000000b002256c9a1925mr1689589wrr.546.1661421530147;
-        Thu, 25 Aug 2022 02:58:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4zjV5/uX5zJoDDQGvyv88ADNp860yGdsGm+iTCH+1DVQ3YBmb2/7qZdaBeUnu1fynPZfG7sQ==
-X-Received: by 2002:adf:fe09:0:b0:225:6c9a:1925 with SMTP id n9-20020adffe09000000b002256c9a1925mr1689579wrr.546.1661421529892;
-        Thu, 25 Aug 2022 02:58:49 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
-        by smtp.gmail.com with ESMTPSA id e20-20020a5d5954000000b0021e42e7c7dbsm19557923wri.83.2022.08.25.02.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 02:58:49 -0700 (PDT)
-Message-ID: <b1103c81-0c56-0e9b-711c-246e431db151@redhat.com>
-Date:   Thu, 25 Aug 2022 11:58:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        kexec@lists.infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        bh=L5rRZcueCIssY4VCCG3vNVck7AMdOPZ37pzU6M5A41s=;
+        b=Vl3hMbK24FoJq6YXEAkbrwk0ar+RZdhLQjTg+Eb2l5wZBUHfgKZb2cu67OOuH0zX4qRxVR
+        8H+ZFeQ0BM6eNeDnb+bnIgBnQr0z13vuM2Yn3syULF2k3xa7aNkNCeWfAlDqdyEHENKF45
+        jwQW5H11xruSBOx8bU1kAQoj0/tkWvQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9C7DC13A8E;
+        Thu, 25 Aug 2022 09:59:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jj3lIw9IB2PmUwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 25 Aug 2022 09:59:43 +0000
+Date:   Thu, 25 Aug 2022 11:59:42 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>
-References: <20220824163100.224449-1-david@redhat.com>
- <20220824163100.224449-3-david@redhat.com>
- <3c250aa26020b2f336fd575a58d06ba26faf1f14.camel@perches.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH RFC 2/2] checkpatch: warn on usage of VM_BUG_ON() and
- friends
-In-Reply-To: <3c250aa26020b2f336fd575a58d06ba26faf1f14.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] mm: reduce noise in show_mem for lowmem allocations
+Message-ID: <YwdIDpqNlziTn/et@dhcp22.suse.cz>
+References: <YwScVmVofIZkopkF@dhcp22.suse.cz>
+ <a461479d-a5cd-dc86-013a-d8827d7d321a@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a461479d-a5cd-dc86-013a-d8827d7d321a@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.08.22 18:52, Joe Perches wrote:
-> On Wed, 2022-08-24 at 18:31 +0200, David Hildenbrand wrote:
->> checkpatch does not point out that VM_BUG_ON() and friends should be
->> avoided, however, Linus notes:
->>
->>     VM_BUG_ON() has the exact same semantics as BUG_ON. It is literally
->>     no different, the only difference is "we can make the code smaller
->>     because these are less important". [1]
->>
->> So let's warn on VM_BUG_ON() and friends as well. While at it, make it
->> clearer that the kernel really shouldn't be crashed.
->>
->> Note that there are some other *_BUG_ON flavors, but they are not all
->> bad: for example, KVM_BUG_ON() only triggers a WARN_ON_ONCE and then
->> flags KVM as being buggy, so we'll not care about them for now here.
-> []
->> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> []
->> @@ -4695,12 +4695,12 @@ sub process {
->>  			}
->>  		}
->>  
->> -# avoid BUG() or BUG_ON()
->> -		if ($line =~ /\b(?:BUG|BUG_ON)\b/) {
->> +# do not use BUG(), BUG_ON(), VM_BUG_ON() and friends.
->> +		if ($line =~ /\b(?:BUG|BUG_ON|VM_BUG_ON|VM_BUG_ON_[A-Z]+)\b/) {
+On Thu 25-08-22 11:52:09, Vlastimil Babka wrote:
+> On 8/23/22 11:22, Michal Hocko wrote:
+> > All but node0 are really completely irrelevant for this allocation
+> > because they do not have ZONE_DMA yet it swamps the log and makes it
+> > harder to visually inspect.
+> > 
+> > Address this by providing gfp_maks parameter to show_mem and filter the
+> > output to only those zones/nodes which are relevant for the allocation.
+> > That means nodes which have at least one managed zone which is usable
+> > for the allocation (zone_idx(zone) <= gfp_zone(gfp_mask)).
+> > The resulting output for the same failure would become:
 > 
-> Perhaps better as something like the below to pick up more variants
+> Looks good to me.
 > 
+> > [...]
+> > [   14.017605][    T1] Mem-Info:
+> 
+> Maybe print the gfp_mask (or just max zone) here again, to make it more
+> obvious in case somebody sents a report without the top header?
 
-Trying to find more possible variants and exceptions
-
-$ git grep -h -o -E "\b[a-zA-Z]+_BUG(_ON(_[a-zA-Z]+)*)?\(" | sort | uniq
-AA_BUG(
--> Ok, no BUG()
-ASM_BUG(
--> Bad
-BUILD_BUG(
-BUILD_BUG_ON(
-BUILD_BUG_ON_INVALID(
-BUILD_BUG_ON_MSG(
-BUILD_BUG_ON_ZERO(
--> Ok
-CI_BUG_ON(
--> Bad with CONFIG_DRM_I915_DEBUG
-DCCP_BUG(
-DCCP_BUG_ON(
--> Ok, no BUG()
-do_BUG(
--> BUG implementation, ok.
-GEM_BUG_ON(
--> Bad with CONFIG_DRM_I915_DEBUG_GEM_ONCE
-GLOCK_BUG_ON(
--> Bad
-handle_BUG(
--> BUG implementation, ok.
-IDA_BUG_ON(
-KVM_BUG(
-KVM_BUG_ON(
--> Ok, no BUG()
-lkdtm_BUG(
-paravirt_BUG(
--> bad
-PROM_BUG(
--> unused, will remove
-RWLOCK_BUG_ON(
--> Ok, no BUG()
-snd_BUG(
-snd_BUG_ON(
--> Ok, no BUG()
-SNIC_BUG_ON(
--> Bad
-SPIN_BUG_ON(
--> Ok, no BUG()
-UNWINDER_BUG(
-UNWINDER_BUG_ON(
-VIRTUAL_BUG_ON(
-VM_BUG_ON(
-VM_BUG_ON_FOLIO(
-VM_BUG_ON_MM(
-VM_BUG_ON_PAGE(
-VM_BUG_ON_PGFLAGS(
-VM_BUG_ON_VMA(
-XA_BUG_ON(
--> Bad
-
-So an extended versions of your proposal like (ignoring do_BUG and handle_BUG, people are smart enough to figure that out)
-
-if ($line =~ /\b(?!AA_|BUILD_|DCCP_|IDA_|KVM_|RWLOCK_|snd_|SPIN_)(?:[a-zA-Z_]*_)?BUG(?:_ON)?(?:_[A-Z_]+)?\s*\(/
-
-?
+I have tried to not alter the output but rather filter it out. The gfp
+mask is the first line of the allocation failure and from my past
+experience it is usually included in reports.
+> 
+> > [   14.017956][    T1] active_anon:0 inactive_anon:0 isolated_anon:0
+> > [   14.017956][    T1]  active_file:0 inactive_file:0 isolated_file:0
+> > [   14.017956][    T1]  unevictable:0 dirty:0 writeback:0
+> > [   14.017956][    T1]  slab_reclaimable:876 slab_unreclaimable:30300
+> > [   14.017956][    T1]  mapped:0 shmem:0 pagetables:12 bounce:0
+> > [   14.017956][    T1]  free:3170151735 free_pcp:6868 free_cma:0
+> > [   14.017962][    T1] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB kernel_stack:7200kB pagetables:4kB all_unreclaimable? no
+> > [   14.018026][    T1] Node 0 DMA free:160kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15996kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+> > [   14.018035][    T1] lowmem_reserve[]: 0 0 0 0 0
+> > [   14.018339][    T1] Node 0 DMA: 0*4kB 0*8kB 0*16kB 1*32kB (U) 0*64kB 1*128kB (U) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 160kB
+> > [   14.018480][    T1] 0 total pagecache pages
+> > [   14.018483][    T1] 0 pages in swap cache
+> > [   14.018484][    T1] Swap cache stats: add 0, delete 0, find 0/0
+> > [   14.018486][    T1] Free swap  = 0kB
+> > [   14.018487][    T1] Total swap = 0kB
+> > [   14.018488][    T1] 3221164600 pages RAM
+> > [   14.018489][    T1] 0 pages HighMem/MovableOnly
+> > [   14.018490][    T1] 50531051 pages reserved
+> > [   14.018491][    T1] 0 pages cma reserved
+> > [   14.018492][    T1] 0 pages hwpoisoned
+> > 
+> > Signed-off-by: Michal Hocko <mhocko@suse.com>
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Michal Hocko
+SUSE Labs

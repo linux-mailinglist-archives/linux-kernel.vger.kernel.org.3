@@ -2,73 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010FB5A1AE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC41B5A1AE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243342AbiHYVOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S243207AbiHYVQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 17:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243207AbiHYVN5 (ORCPT
+        with ESMTP id S229736AbiHYVQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:13:57 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F0B2CD3;
-        Thu, 25 Aug 2022 14:13:55 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id k17so10812037wmr.2;
-        Thu, 25 Aug 2022 14:13:55 -0700 (PDT)
+        Thu, 25 Aug 2022 17:16:23 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980D6B729D;
+        Thu, 25 Aug 2022 14:16:21 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id r1-20020a056830418100b0063938f634feso7565073otu.8;
+        Thu, 25 Aug 2022 14:16:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=S+BxiqaH71h1xd9DneoBgjt53lZC5EPrruUqpKoLEFI=;
-        b=CWB5jvf4hyAFyEInzBIoB1UYsnMzqSc5qpaWyatPOnBcyRIwN7C6gITXKQaqkX9J0P
-         Ms8TXsLhgYSS1B/XDqLowYkoSxCz3a4aMAN+hVtXqCo4OFrf+8FxuB/eOXPDf3pNuPkJ
-         ggzlRRNRkPgbpJca1KNH5fhHn7hN1Vrchog2xBbMLu+I5lhVZ5FwR8Nt81qtudalm8yR
-         PO8/RkQoycF/S7lD0gtzquazXYUjBt9YCXk3J8CZUwwp6I+fbvTYq3PglDSOMJul9HEX
-         Am7sJ15mMh7+s9QdjqWaqTvf5QXs2+jFuJp9pkS86oUtCW4GQKk1bidmXoaOxxiM1uBJ
-         G1fw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=WgvG2W29oRYqx+pgSWt6jhXW7xV77AuyXqSnhGc+5XA=;
+        b=YTJFbhMlgG5jNIGSn/jzFi5xhXPrbKa20EX719xjEhIE037jficM3USz22fFii2wPV
+         IW6bJzFksTZpnQn+lS7KVD50WMWdAtsLwdKb0I5WLbXt29TMe5+NU2W2A4KZv5Rvc+BT
+         pRbJzCTmf6i1dvZaRiSy2SZ5w7h6g4FWT1thiRz3Ite8KdnYOKucYDtVgzkudn6K1hW/
+         uQJpLURmIYMALjFuhdnI6KVoCKhpq145PNp3/9RCrrGK/GXBsQh5Kc2xP79ZYo359yik
+         LX7/+OoSoFLrC3/2juyViecx5aHJPkP5PR3g+EibV7c/ojcfR4wcVE/tmF7ji3yk+0FQ
+         xvjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=S+BxiqaH71h1xd9DneoBgjt53lZC5EPrruUqpKoLEFI=;
-        b=Lg7Hve3SOl5vsjlZKfDIfpbCsq5Djd7tHaZ86/IrJbSQ0tpm3xMH2TeWopPcJbtl2L
-         3D3w4C9IyL8kLU1sdHFEb3X/AvDGSYCuK4DStiBc33hApaO4twDHmkNOzq/l5jxF6ipV
-         ul8HdlQX7rQVqXw9n6LDiEB/NModL++DoH3vIE7SrdT7gTtdlTKnULj59A5iwtmnkbl3
-         8yyLbCqy814E5says0QVmXMj1yBHQ2ku5FpLpjlhM/DD99HOPy9iC1y9o/RYkmM3vI78
-         JaY0y4MQF3OhaRdc7P4xrzlnodbTofgOF9WcHQ4TjVc5Gn8mu+klSojiliKv3d/WaEmt
-         NNAA==
-X-Gm-Message-State: ACgBeo2FbTr+ND1rBs5Fs+uO4M1dk0FVeTqEbSmVlIPxqAQ+7ErXRCPH
-        1YmQxBHY9StD2g02pGDFYr8u8FZpHUuhWw==
-X-Google-Smtp-Source: AA6agR5cvtHSh1wL8y8rJWyvMV+038GQaqm1p4qSqHQF03FXsJe0+iHrax3q8syxMHof0yKeRInZPg==
-X-Received: by 2002:a05:600c:190b:b0:3a5:f8a3:7a8c with SMTP id j11-20020a05600c190b00b003a5f8a37a8cmr3201245wmq.54.1661462034344;
-        Thu, 25 Aug 2022 14:13:54 -0700 (PDT)
-Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
-        by smtp.gmail.com with ESMTPSA id v64-20020a1cac43000000b003a5fcae64d4sm372013wme.29.2022.08.25.14.13.53
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=WgvG2W29oRYqx+pgSWt6jhXW7xV77AuyXqSnhGc+5XA=;
+        b=0zzC9fg2P++TCR8/y0FBbTEwP9+ZQ7EGip0qZ6IK9Gxw0UZT94GB7dF+zIDpen1VQE
+         ZN2yhOgWOfOY5MT3bxzHjn7wJR95K0mTLKmczO5dSU/i3NpKtbW9hBFUnP8WJ3JCWWSo
+         kiWd0Dj7VoKONG5M3BdmP2/ftM8RqEehra9f1bI4BHNyFRLxEGdvWHC6hgO+72qqRjxU
+         7uu61vaqhfHT8gENgGQ4qUFvjzrG5TomXrCKhXX4qtiB3A5XuZMYrqPw/r2J/CIiU0kK
+         sLORnVv/5JrWZZW5r97kJQEYnxzs7E0duIpHi6w2+Faa2InE83+tvwfxRvh3fRKSOk7r
+         lYvQ==
+X-Gm-Message-State: ACgBeo1cr8Bfr/dKesyV/AxJrhz3pi/h53kgWjudcc/T20Eh47dvwuYJ
+        D7xactvGiVMkoV1jbycdzBU=
+X-Google-Smtp-Source: AA6agR7/xDw/ouHQ0sD6PHgtrb5u2On7h+B3nA3d5B9WOAtCtR7hyB9VUWMqDpgpBVtksulJAmixcg==
+X-Received: by 2002:a05:6830:1b62:b0:639:21d9:dec2 with SMTP id d2-20020a0568301b6200b0063921d9dec2mr340325ote.356.1661462180617;
+        Thu, 25 Aug 2022 14:16:20 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id p81-20020acad854000000b00342ded07a75sm207899oig.18.2022.08.25.14.16.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 14:13:53 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-media@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thu, 25 Aug 2022 14:16:20 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 14:14:08 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     kernel@collabora.com,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        stable@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH v1 3/3] media: cedrus: Fix endless loop in cedrus_h265_skip_bits()
-Date:   Thu, 25 Aug 2022 23:13:52 +0200
-Message-ID: <1733932.VLH7GnMWUR@kista>
-In-Reply-To: <52bb86cf12450ce78d2f196a1b86b4137ec61a07.camel@collabora.com>
-References: <20220818203308.439043-1-nicolas.dufresne@collabora.com> <5849126.lOV4Wx5bFT@jernej-laptop> <52bb86cf12450ce78d2f196a1b86b4137ec61a07.camel@collabora.com>
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH v3 4/9] cpumask: Introduce for_each_cpu_andnot()
+Message-ID: <YwfmIDEbRT4JfsZp@yury-laptop>
+References: <20220825181210.284283-1-vschneid@redhat.com>
+ <20220825181210.284283-5-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825181210.284283-5-vschneid@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,88 +91,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 19. avgust 2022 ob 17:39:25 CEST je Nicolas Dufresne napisal(a):
-> Le vendredi 19 ao=C3=BBt 2022 =C3=A0 06:16 +0200, Jernej =C5=A0krabec a =
-=C3=A9crit :
-> > Dne =C4=8Detrtek, 18. avgust 2022 ob 22:33:08 CEST je Nicolas Dufresne=
-=20
-napisal(a):
-> > > From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > >=20
-> > > The busy status bit may never de-assert if number of programmed skip
-> > > bits is incorrect, resulting in a kernel hang because the bit is poll=
-ed
-> > > endlessly in the code. Fix it by adding timeout for the bit-polling.
-> > > This problem is reproducible by setting the data_bit_offset field of
-> > > the HEVC slice params to a wrong value by userspace.
-> > >=20
-> > > Cc: stable@vger.kernel.org
-> > > Reported-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> >=20
-> > Fixes tag would be nice.
-> >=20
-> > > ---
-> > >=20
-> > >  drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > > b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c index
-> > > f703c585d91c5..f0bc118021b0a 100644
-> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > > @@ -227,6 +227,7 @@ static void cedrus_h265_pred_weight_write(struct
-> > > cedrus_dev *dev, static void cedrus_h265_skip_bits(struct cedrus_dev
-> > > *dev,
-> > > int num) {
-> > >=20
-> > >  	int count =3D 0;
-> > >=20
-> > > +	u32 reg;
-> > >=20
-> > >  	while (count < num) {
-> > >  =09
-> > >  		int tmp =3D min(num - count, 32);
-> > >=20
-> > > @@ -234,8 +235,9 @@ static void cedrus_h265_skip_bits(struct cedrus_d=
-ev
-> > > *dev, int num) cedrus_write(dev, VE_DEC_H265_TRIGGER,
-> > >=20
-> > >  			     VE_DEC_H265_TRIGGER_FLUSH_BITS |
-> > >  			     VE_DEC_H265_TRIGGER_TYPE_N_BITS(tmp));
-> > >=20
-> > > -		while (cedrus_read(dev, VE_DEC_H265_STATUS) &
-> > > VE_DEC_H265_STATUS_VLD_BUSY) -			udelay(1);
-> > > +
-> > > +		if (cedrus_wait_for(dev, VE_DEC_H265_STATUS,
-> > > VE_DEC_H265_STATUS_VLD_BUSY)) +
-> >=20
-> > dev_err_ratelimited(dev->dev, "timed out
-> >=20
-> > > waiting to skip bits\n");
-> >=20
-> > Reporting issue is nice, but better would be to propagate error, since
-> > there is no way to properly decode this slice if above code block fails.
-> This mimic what was already there, mind if we do that later ? The
-> propagation is doing to be a lot more intrusive.
+On Thu, Aug 25, 2022 at 07:12:05PM +0100, Valentin Schneider wrote:
+> for_each_cpu_and() is very convenient as it saves having to allocate a
+> temporary cpumask to store the result of cpumask_and(). The same issue
+> applies to cpumask_andnot() which doesn't actually need temporary storage
+> for iteration purposes.
+> 
+> Following what has been done for for_each_cpu_and(), introduce
+> for_each_cpu_andnot().
+> 
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  include/linux/cpumask.h | 39 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> index 1414ce8cd003..372a642bf9ba 100644
+> --- a/include/linux/cpumask.h
+> +++ b/include/linux/cpumask.h
+> @@ -238,6 +238,25 @@ unsigned int cpumask_next_and(int n, const struct cpumask *src1p,
+>  		nr_cpumask_bits, n + 1);
+>  }
+>  
+> +/**
+> + * cpumask_next_andnot - get the next cpu in *src1p & ~*src2p
+> + * @n: the cpu prior to the place to search (ie. return will be > @n)
+> + * @src1p: the first cpumask pointer
+> + * @src2p: the second cpumask pointer
+> + *
+> + * Returns >= nr_cpu_ids if no further cpus set in *src1p & ~*src2p
+> + */
+> +static inline
+> +unsigned int cpumask_next_andnot(int n, const struct cpumask *src1p,
+> +				 const struct cpumask *src2p)
+> +{
+> +	/* -1 is a legal arg here. */
+> +	if (n != -1)
+> +		cpumask_check(n);
+> +	return find_next_andnot_bit(cpumask_bits(src1p), cpumask_bits(src2p),
+> +		nr_cpumask_bits, n + 1);
+> +}
+> +
+>  /**
+>   * for_each_cpu - iterate over every cpu in a mask
+>   * @cpu: the (optionally unsigned) integer iterator
+> @@ -317,6 +336,26 @@ unsigned int __pure cpumask_next_wrap(int n, const struct cpumask *mask, int sta
+>  		(cpu) = cpumask_next_and((cpu), (mask1), (mask2)),	\
+>  		(cpu) < nr_cpu_ids;)
+>  
+> +/**
+> + * for_each_cpu_andnot - iterate over every cpu present in one mask, excluding
+> + *			 those present in another.
+> + * @cpu: the (optionally unsigned) integer iterator
+> + * @mask1: the first cpumask pointer
+> + * @mask2: the second cpumask pointer
+> + *
+> + * This saves a temporary CPU mask in many places.  It is equivalent to:
+> + *	struct cpumask tmp;
+> + *	cpumask_andnot(&tmp, &mask1, &mask2);
+> + *	for_each_cpu(cpu, &tmp)
+> + *		...
+> + *
+> + * After the loop, cpu is >= nr_cpu_ids.
+> + */
+> +#define for_each_cpu_andnot(cpu, mask1, mask2)				\
+> +	for ((cpu) = -1;						\
+> +		(cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)),	\
+> +		(cpu) < nr_cpu_ids;)
 
-Since backporting fixes before 6.0 isn't priority, viability for backpporti=
-ng=20
-isn't that important. You would only need to return 0 or -ETIMEDOUT and che=
-ck=20
-for error in only one location. That doesn't sound  very intrusive for me.
+The standard doesn't guarantee the order of execution of last 2 lines,
+so you might end up with unreliable code. Can you do it in a more
+conventional style:
+   #define for_each_cpu_andnot(cpu, mask1, mask2)			\
+   	for ((cpu) = cpumask_next_andnot(-1, (mask1), (mask2));	        \
+   		(cpu) < nr_cpu_ids;                                     \
+   		(cpu) = cpumask_next_andnot((cpu), (mask1), (mask2)))	
 
-Best regards,
-Jernej
-
->=20
-> > Best regards,
-> > Jernej
-> >=20
-> > >  		count +=3D tmp;
-> > >  =09
-> > >  	}
-
-
+> +
+>  /**
+>   * cpumask_any_but - return a "random" in a cpumask, but not this one.
+>   * @mask: the cpumask to search
+> -- 
+> 2.31.1

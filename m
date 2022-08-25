@@ -2,107 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1765A163A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AE45A1641
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242901AbiHYP7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S242887AbiHYQAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242884AbiHYP7c (ORCPT
+        with ESMTP id S242631AbiHYP75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:59:32 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22DBB284D
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:59:31 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id u14so23816473oie.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:59:31 -0700 (PDT)
+        Thu, 25 Aug 2022 11:59:57 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF40DB8
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:59:55 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y141so20202034pfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:59:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=4W8sbga13vF4WDksQp6y3D5fZvihCL3tYDFOfdvfLZc=;
-        b=SJgqQ5bCbirbRTCLVk61AB1UqyE0/TeFroOFgSCwTQmSkIMyKRH7peBwGMcwW4uaTm
-         Z5zzIy5lmODpKJozwalKwef4CCI/FtB8oP+RS/12+HMob0CeVlyVaUw7UCI1jk1Hn8dO
-         cOkOw+6Yq2DjkvK/QFBl6vJ8P/dg+8gnO7JA4uqWniQ6VHKqRDsGYByf2/iDLI1HHzW0
-         RztFyvZriJkNtpCKQd1F5NSkgKKKW+0DrhC8xbarnw9jZM61/ixSKUlzT/FKbQnxBdLb
-         J3ciH8q3TvBObx33TcU+jj82pNd2zfu20r8OyUZr5P1gGTP/r0Frgg5hlwfKXsvOmrZ2
-         Pt2g==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=s14gyQJTvsj4UP8jOneFH7XrwLl5hvF+f+/gI4nwvs8=;
+        b=nDpy5bAsLMhMmxeaP0eBSG7fSwbg7YyPoAJU7/MYosac9TE/FUJnuSNkYI+ypQU0C+
+         DXId/TBG4A3MTTAWaCAHOgJ4c5biuK2s0dxkPC7fVEbJbL0g03DrUN3TUQmaj62eeJMW
+         DwfMxQfxE//DopQC6lrZEUY15SZ7bn+UAwOoMbNmgTQOiNKWeO9jn5Zg7FNqipRbxhkQ
+         mtq1dfyDbB8/Cg/7aRzXFwXsRSZq2J3TMgoIJULIyhEtP/JLOC36KlJH6A236Yb7Xerj
+         YCwHNzWBglYw4L/cRlnai38LTO9SfVjxdwNLcyad+7fxx+g2QBDDscJHxO2HpTpRlriW
+         b3ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=4W8sbga13vF4WDksQp6y3D5fZvihCL3tYDFOfdvfLZc=;
-        b=BM+qAEF5RuH93VvU0P74CrIcFRUfSCmq2MhG2s7WhgJJsHdtwG0mYDB1vo6pblzxMb
-         Wv6uuy/LnU6Ub0+M3duVlucnoswtjMR2OovleFXLoCTvqz64likio5hDROLiVM2cUkEv
-         LA2q8I9jSRnZPRwxPSP0Ta9mkjhEq/Q1c1K/aqjlCNW24QatXC4fzr0kIj0q2g8xPawv
-         usEfF083LMuezKxxnaTyyohm5LdcLnMbFSXBXk4A+TEImAS7DU8EiTrOkdVhNqU//+f6
-         067hRM6dnZkCDtX/ZJQP1aAWWcdT+XWFCUTpxLN1gxAlIPCaRHlmi4bHdCJuKO+2lV71
-         Dv8A==
-X-Gm-Message-State: ACgBeo1WvjIxreaAVcd+5Cy+bmbWE0iBkpJJuBlJzhWnhwZut1piO3cw
-        uI9cT0MrzLDvr4nqXpChWC0cLsOI/kfZGSwj/RM=
-X-Google-Smtp-Source: AA6agR5mCsJkJx+TJF4q8EJOBBcvvHuVfq9LpQ3+egvzyXQ+FPo4kGWaPWMkrrj7AesPgq3CvJGrQwVH0EAcyTELYnU=
-X-Received: by 2002:a05:6808:2187:b0:344:eccd:3fc5 with SMTP id
- be7-20020a056808218700b00344eccd3fc5mr5927139oib.46.1661443171311; Thu, 25
- Aug 2022 08:59:31 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=s14gyQJTvsj4UP8jOneFH7XrwLl5hvF+f+/gI4nwvs8=;
+        b=tdWm4DYZlN0cpjov6VzRC8lngdTr13zzYh9U586pZAH+sGbPjsJSAq3pZmhTS5z1sJ
+         4bGXab6jQyoJGd3n74OBxp+WxMgUfFBgjJPlUAEM+i83CfBz0y9A8BtbqOUwGRE8PdTd
+         FNy2RalZyKoumwlCdTLqMkqowhLe3M5msJBNPyBZ0jZbGhUC7t/boa2GaJAEjBbbYcDY
+         aYifl2vujGNDJKIYyFwmZx9VdY9rgjqRZZ6VpKCK9LrBh9WjpOTEx54aBytVLylChQzx
+         VsHxqGcdhOjoU4I7hyo4lxCz7ZwX69rxuOF2HpTvNC95DTZvJg/9AfNNDtMzzrH2gYLU
+         xdqA==
+X-Gm-Message-State: ACgBeo0XZmbFN+sksE5RIxg8ydK2WR7xRvUx8ofrEhi81+WODdsZSVOi
+        lR5ojMVZS+PmGXvHFNkqRmrrvw==
+X-Google-Smtp-Source: AA6agR53+X4iJjyIst/MvZeCs6bFcq/30Y8XnjLHDEcSSfwImuoicfydBTS9d7CVYRGjZH3XZ/ERaA==
+X-Received: by 2002:a05:6a00:4acc:b0:536:46c4:d084 with SMTP id ds12-20020a056a004acc00b0053646c4d084mr4569426pfb.71.1661443194448;
+        Thu, 25 Aug 2022 08:59:54 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a20-20020a62d414000000b00535e6dbda16sm14630083pfh.35.2022.08.25.08.59.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 08:59:54 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 15:59:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] KVM: VMX: Stop/resume host PT before/after VM
+ entry when PT_MODE_HOST_GUEST
+Message-ID: <YwecducnM/U6tqJT@google.com>
+References: <20220825085625.867763-1-xiaoyao.li@intel.com>
+ <20220825085625.867763-3-xiaoyao.li@intel.com>
+ <YweWmF3wMPRnthIh@google.com>
+ <6bcab33b-3fde-d470-88b9-7667c7dc4b2d@intel.com>
 MIME-Version: 1.0
-References: <20220823063546.11499-1-bernard@vivo.com>
-In-Reply-To: <20220823063546.11499-1-bernard@vivo.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 25 Aug 2022 11:59:20 -0400
-Message-ID: <CADnq5_NiyLjKtZ_C0jLBp8ChzvXvFkLd82dLN3x_JFeqV+XaVw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd: fix potential memory leak
-To:     Bernard Zhao <bernard@vivo.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>,
-        Michael Strauss <michael.strauss@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, Melissa Wen <mwen@igalia.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, zhaojunkui2008@126.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6bcab33b-3fde-d470-88b9-7667c7dc4b2d@intel.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Thu, Aug 25, 2022, Xiaoyao Li wrote:
+> On 8/25/2022 11:34 PM, Sean Christopherson wrote:
+> > On Thu, Aug 25, 2022, Xiaoyao Li wrote:
+> > > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > > index d7f8331d6f7e..3e9ce8f600d2 100644
+> > > --- a/arch/x86/kvm/vmx/vmx.c
+> > > +++ b/arch/x86/kvm/vmx/vmx.c
+> > > @@ -38,6 +38,7 @@
+> > >   #include <asm/fpu/api.h>
+> > >   #include <asm/fpu/xstate.h>
+> > >   #include <asm/idtentry.h>
+> > > +#include <asm/intel_pt.h>
+> > >   #include <asm/io.h>
+> > >   #include <asm/irq_remapping.h>
+> > >   #include <asm/kexec.h>
+> > > @@ -1128,13 +1129,19 @@ static void pt_guest_enter(struct vcpu_vmx *vmx)
+> > >   	if (vmx_pt_mode_is_system())
+> > >   		return;
+> > > +	/*
+> > > +	 * Stop Intel PT on host to avoid vm-entry failure since
+> > > +	 * VM_ENTRY_LOAD_IA32_RTIT_CTL is set
+> > > +	 */
+> > > +	intel_pt_stop();
+> > > +
+> > >   	/*
+> > >   	 * GUEST_IA32_RTIT_CTL is already set in the VMCS.
+> > >   	 * Save host state before VM entry.
+> > >   	 */
+> > >   	rdmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
+> > 
+> > KVM's manual save/restore of MSR_IA32_RTIT_CTL should be dropped.
+> 
+> No. It cannot. Please see below.
+> 
+> > If PT/RTIT can
+> > trace post-VMXON, then intel_pt_stop() will disable tracing and intel_pt_resume()
+> > will restore the host's desired value.
+> 
+> intel_pt_stop() and intel_pt_resume() touches host's RTIT_CTL only when host
+> enables/uses Intel PT. Otherwise, they're just noop. In this case, we cannot
+> assume host's RTIT_CTL is zero (only the RTIT_CTL.TraceEn is 0). After
+> VM-exit, RTIT_CTL is cleared, we need to restore it.
 
-Alex
+But ensuring the RTIT_CTL.TraceEn=0 is all that's needed to make VM-Entry happy,
+and if the host isn't using Intel PT, what do we care if other bits that, for all
+intents and purposes are ignored, are lost across VM-Entry/VM-Exit?  I gotta
+imaging the perf will fully initialize RTIT_CTL if it starts using PT.
 
-On Tue, Aug 23, 2022 at 2:36 AM Bernard Zhao <bernard@vivo.com> wrote:
->
-> This patch fix potential memory leak (clk_src) when function run
-> into last return NULL.
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-> index 85f32206a766..c7bb76a2a8c2 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
-> @@ -1643,6 +1643,7 @@ static struct clock_source *dcn31_clock_source_create(
->         }
->
->         BREAK_TO_DEBUGGER();
-> +       kfree(clk_src);
->         return NULL;
->  }
->
-> --
-> 2.33.1
->
+Actually, if the host isn't actively using Intel PT, can KVM avoid saving the
+other RTIT MSRs?
+
+Even better, can we hand that off to perf?  I really dislike KVM making assumptions
+about perf's internal behavior.  E.g. can this be made to look like
+
+	intel_pt_guest_enter(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN);
+
+and
+
+	intel_pt_guest_exit(vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN);
+
+> > >   	if (vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN) {
+> > > -		wrmsrl(MSR_IA32_RTIT_CTL, 0);
+> > > +		/* intel_pt_stop() ensures RTIT_CTL.TraceEn is zero */
+> > >   		pt_save_msr(&vmx->pt_desc.host, vmx->pt_desc.num_address_ranges);
+> > 
+> > Isn't this at risk of the same corruption?  What prevents a PT NMI that arrives
+> > after this point from changing other RTIT MSRs, thus causing KVM to restore the
+> > wrong values?
+> 
+> intel_pt_stop() -> pt_event_stop() will do
+> 
+> 	WRITE_ONCE(pt->handle_nmi, 0);
+> 
+> which ensure PT NMI handler as noop that at the beginning of
+> intel_pt_interrupt():
+> 
+> 	if (!READ_ONCE(pt->handle_nmi))
+> 		return;
+
+Ah, right.  
+
+> 
+> > >   		pt_load_msr(&vmx->pt_desc.guest, vmx->pt_desc.num_address_ranges);
+> > >   	}
+> > > @@ -1156,6 +1163,8 @@ static void pt_guest_exit(struct vcpu_vmx *vmx)
+> > >   	 */
+> > >   	if (vmx->pt_desc.host.ctl)
+> > >   		wrmsrl(MSR_IA32_RTIT_CTL, vmx->pt_desc.host.ctl);
+> > > +
+> > > +	intel_pt_resume();
+> > >   }
+> > >   void vmx_set_host_fs_gs(struct vmcs_host_state *host, u16 fs_sel, u16 gs_sel,
+> > > -- 
+> > > 2.27.0
+> > > 
+> 

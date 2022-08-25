@@ -2,121 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78205A148D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABF95A14AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242343AbiHYOnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
+        id S242718AbiHYOoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242584AbiHYOmn (ORCPT
+        with ESMTP id S242561AbiHYOns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:42:43 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38635B81F5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:41:04 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id 67so11791969pfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:41:04 -0700 (PDT)
+        Thu, 25 Aug 2022 10:43:48 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DD5B56D3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:43:14 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z6so28522035lfu.9
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=ZbQl5zmcQJYLrJInunPEiMFIWd9Xor7csOXerZPZEys=;
-        b=Y5yVxnEfhqYg2VzNtwH3XMv1GhyAfwGAK9sKYjHECt3tGSTlM8/jHpaJ/RPHG9QSz0
-         to4y3mp5uLhUUXaLCxd/nkp+Hmjce8XXsze0vkJhV0dwKK9DUt7jHaQCYY27ATKLgS7A
-         jtaiS6QU0ypyCmP0meBxTp6VRT9g6u5PDKGQXpZKgwkpeX5B07/FpfLyetM8EhKI0TdP
-         4fHkOuv7ceFmC/Wrbxbmn17N5OPQETlK4iaNPXONDzpmbLTfwtPlwdVHQcxmntM0VBmC
-         1pnrH7IlaJ0TqdXPjM/NsN5epj8IIt2UcdiQ0kJc+B9yezkUPKD7RoX6wNmjPMjFgEld
-         trXw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=QezGck2Rnt9aXrRomj4tCk+MjHbkRY5eeAf7b3CgndQ=;
+        b=VMcrbXFG2tzap8vdSh9E6djrYwmTahWltw0gYbaq4/0anFEQMdSXsLofME6bs35t5y
+         BGdJJOpYHqDHXk3gkCPHxnQUJqWu9BDdOLc9tNo5bgakhRoTZHJ7Pd/wml9weNBrO2F4
+         bkz7DnE/rH8Hylbkgv60V3wkinVk9dsCKKN9Z1K503v66HzU41lXebf3+d+19Fj+s06Q
+         USNXqChq35jKliC8fQqADqAVyJSzjp6Bb/IxCoAYaaKpLhgE46FpbVH1VdEfOzBFONdu
+         tURKnw5E7Vo83TTc9C0kRFUcWDoIfRMzQwx6LZ/1JCQRF6xd4j5YYCeM8sC4mZOvvwXH
+         rXkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=ZbQl5zmcQJYLrJInunPEiMFIWd9Xor7csOXerZPZEys=;
-        b=VEl9yxaTGArzka4xijPXfonaRLPXivqPqGnCWkUBm4Rl8BrRNWjUDAx8bKlYHRfyuu
-         J8nyaE9Y8Yvmc6YGrGAepeVZAzJmCdc2WCbK00mPvnr/35TCzvcTYIOhLT5ukuYAAbKw
-         RJNMa4jprRIMZxud8LrHEr64H01foHINEx8ngVaTEtgw9/CcfAykN/FbDjSkh4RANZJA
-         DTmb8XNcZim+osdz7YL5jaIe/Sz72ZHzkhKUdWj01v0Ka5mO1al84tP+ZM1rbhVdgBQr
-         fiCsdJhxJlqrh9HOqV8IQCZsrJvWmsoyj7qEgeTTMtmNlUQWl9fpFd9HOgataa3zAPaQ
-         Vgyg==
-X-Gm-Message-State: ACgBeo0YFV18YLWCUjqnI9chkRhGaDRr3ZcQ7lvz9JwyYPnpaZMiRNGL
-        umjv3dLamHaRABOGy+yt3Tkyvw==
-X-Google-Smtp-Source: AA6agR4Ka0ia2RlVLxccKqyQLqGJRXHZxx+pW2ufMgWCmxj1CFpAQiHUKWE3BTbxQkewk98fa1GugQ==
-X-Received: by 2002:a63:5c42:0:b0:42b:452f:8e66 with SMTP id n2-20020a635c42000000b0042b452f8e66mr3578134pgm.323.1661438463043;
-        Thu, 25 Aug 2022 07:41:03 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id v68-20020a626147000000b0052e6c058bccsm13273939pfb.61.2022.08.25.07.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 07:41:02 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 14:40:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending
- interrupts
-Message-ID: <YweJ+hX8Ayz11jZi@google.com>
-References: <20220802230718.1891356-1-mizhang@google.com>
- <20220802230718.1891356-2-mizhang@google.com>
- <b03adf94-5af2-ff5e-1dbb-6dd212790083@redhat.com>
- <CAL715WLQa5yz7SWAfOBUzQigv2JG1Ao+rwbeSJ++rKccVoZeag@mail.gmail.com>
- <17505e309d02cf5a96e33f75ccdd6437a8c79222.camel@redhat.com>
- <Ywa+QL/kDp9ibkbC@google.com>
- <CALMp9eSZ-C4BSSm6c5HBayjEVBdEwTBFcOw37yrd014cRwKPug@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=QezGck2Rnt9aXrRomj4tCk+MjHbkRY5eeAf7b3CgndQ=;
+        b=236Wm/Waypbjjk5nvv3KyQG7WWxFO/6xynVGYSOU7iEd9Joksnb1Ur9qm0WOKg/JVh
+         kLZC1A3qrYPI3jKg36jr16FDFqhUJoqrVZFEWYuLfa/F+PQ4bYItOWLOi21SPfvVbY9d
+         DAvjhC6hjEWq68ZXegPt0q6rYSV8czDgD1F2yyH45ckRX18ouNZGlFHWMZKcNPuET1Zz
+         8vidc3OTiaRjaT5MaoXOXtJ1iQ29lVkRHzXsv5muO1AKiKBF5Dr86nd1tmU/7qkMeuxW
+         81qPfATmGPcakUsSUK4LpeXj+WcyEDNvni1/XVhSD0uz9c21za8qAn74hE9Lgh1ZMcac
+         X8QA==
+X-Gm-Message-State: ACgBeo0Jh04DB3GuUn7LLCxxLpGWNvaqZAeaMCXTL5vyAuAmk4txuyVF
+        Rzm1lmwASjXEznZ3LmeBpKCuFw==
+X-Google-Smtp-Source: AA6agR7lt6cQDb/JenKwqvFlrkshRUfjJ/CgGHNtlopSR4xN9kuquWmQ6UX8k806tVa5ooIw9b/7ew==
+X-Received: by 2002:a05:6512:1045:b0:492:c1f8:898e with SMTP id c5-20020a056512104500b00492c1f8898emr1386233lfb.619.1661438593317;
+        Thu, 25 Aug 2022 07:43:13 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id z4-20020a05651c11c400b0025dfd2f66d6sm601026ljo.95.2022.08.25.07.43.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 07:43:12 -0700 (PDT)
+Message-ID: <1ff8ca51-cd20-8066-6ca4-f6359bb89dd8@linaro.org>
+Date:   Thu, 25 Aug 2022 17:43:11 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALMp9eSZ-C4BSSm6c5HBayjEVBdEwTBFcOw37yrd014cRwKPug@mail.gmail.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3] hwmon: Add driver for the TEXAS TPS546D24 Buck
+ Converter.
+Content-Language: en-US
+To:     Duke Du <dukedu83@gmail.com>, jdelvare@suse.com,
+        linux@roeck-us.net, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     fran.hsu@quantatw.com, charles.hsu@quantatw.com,
+        george.hung@quantatw.com, duke.du@quantatw.com
+References: <1660878283-9512-1-git-send-email-Duke.Du@quantatw.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1660878283-9512-1-git-send-email-Duke.Du@quantatw.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022, Jim Mattson wrote:
-> On Wed, Aug 24, 2022 at 5:11 PM Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > @google folks, what would it take for us to mark KVM_REQ_GET_NESTED_STATE_PAGES
-> > as deprecated in upstream and stop accepting patches/fixes?  IIUC, when we eventually
-> > move to userfaultfd, all this goes away, i.e. we do want to ditch this at some point.
-> 
-> Userfaultfd is a red herring. There were two reasons that we needed
-> this when nested live migration was implemented:
-> 1) our netlink socket mechanism for funneling remote page requests to
-> a userspace listener was broken.
-> 2) we were not necessarily prepared to deal with remote page requests
-> during VM setup.
-> 
-> (1) has long since been fixed. Though our preference is to exit from
-> KVM_RUN and get the vCPU thread to request the remote page itself, we
-> are now capable of queuing a remote page request with a separate
-> listener thread and blocking in the kernel until the page is received.
-> I believe that mechanism is functionally equivalent to userfaultfd,
-> though not as elegant.
-> I don't know about (2). I'm not sure when the listener thread is set
-> up, relative to all of the other setup steps. Eliminating
-> KVM_REQ_GET_NESTED_STATE_PAGES means that userspace must be prepared
-> to fetch a remote page by the first call to KVM_SET_NESTED_STATE. The
-> same is true when using userfaultfd.
-> 
-> These new ordering constraints represent a UAPI breakage, but we don't
-> seem to be as concerned about that as we once were. Maybe that's a
-> good thing. Can we get rid of all of the superseded ioctls, like
-> KVM_SET_CPUID, while we're at it?
+On 19/08/2022 06:04, Duke Du wrote:
 
-I view KVM_REQ_GET_NESTED_STATE_PAGES as a special case.  We are likely the only
-users, we can (eventually) wean ourselves off the feature, and we can carry
-internal patches (which we are obviously already carrying) until we transition
-away.  And unlike KVM_SET_CPUID and other ancient ioctls() that are largely
-forgotten, this feature is likely to be a maintenance burden as long as it exists.
+Thank you for your patch. There is something to discuss/improve.
+
+> +static int tps546d24_probe(struct i2c_client *client)
+> +{
+> +	return pmbus_do_probe(client, &tps546d24_info);
+> +}
+> +
+> +static const struct i2c_device_id tps546d24_id[] = {
+> +	{"tps546d24", 0},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, tps546d24_id);
+> +
+> +static const struct of_device_id __maybe_unused tps546d24_of_match[] = {
+> +	{.compatible = "tps546d24"},
+
+Except missing vendor prefix, you need to document the compatible in
+bindings.
+
+
+> +	{}
+> +};
+> +
+
+Missing MODULE_DEVICE_TABLE
+
+> +MODULE_IMPORT_NS(PMBUS);
+
+
+Best regards,
+Krzysztof

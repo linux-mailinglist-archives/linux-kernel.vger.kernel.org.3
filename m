@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D935A13AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225515A13B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241764AbiHYOde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S241735AbiHYOej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241762AbiHYOdb (ORCPT
+        with ESMTP id S233985AbiHYOeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:33:31 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A07B9C52E;
-        Thu, 25 Aug 2022 07:33:29 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 4ED8892009D; Thu, 25 Aug 2022 16:33:28 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 47FE792009C;
-        Thu, 25 Aug 2022 15:33:28 +0100 (BST)
-Date:   Thu, 25 Aug 2022 15:33:28 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] serial: dz: Replace DZ_XMIT_SIZE with
- UART_XMIT_SIZE
-In-Reply-To: <89359013-85fe-76e1-a425-fabdfa3572f9@linux.intel.com>
-Message-ID: <alpine.DEB.2.21.2208251454480.26998@angie.orcam.me.uk>
-References: <20220825091918.8398-1-ilpo.jarvinen@linux.intel.com> <alpine.DEB.2.21.2208251219120.26998@angie.orcam.me.uk> <89359013-85fe-76e1-a425-fabdfa3572f9@linux.intel.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 25 Aug 2022 10:34:37 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B0879630
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:34:35 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 27PEYXXY086332;
+        Thu, 25 Aug 2022 23:34:33 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Thu, 25 Aug 2022 23:34:33 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 27PEYXvK086329
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 25 Aug 2022 23:34:33 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <1a0b4d24-6903-464f-7af0-65c9788545af@I-love.SAKURA.ne.jp>
+Date:   Thu, 25 Aug 2022 23:34:32 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: KMSAN: uninit-value in ath9k_htc_rx_msg
+Content-Language: en-US
+To:     Alexander Potapenko <glider@google.com>, phil@philpotter.co.uk
+Cc:     ath9k-devel@qca.qualcomm.com, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <000000000000c98a7f05ac744f53@google.com>
+ <000000000000734fe705acb9f3a2@google.com>
+ <a142d63c-7810-40ff-9c24-7160c63bafebn@googlegroups.com>
+ <CAG_fn=U=Vfv3ymNM6W++sbivieQoUuXfAxsC9SsmdtQiTjSi8g@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAG_fn=U=Vfv3ymNM6W++sbivieQoUuXfAxsC9SsmdtQiTjSi8g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022, Ilpo Järvinen wrote:
+Hello.
 
-> >  Also I'd rather:
-> > 
-> > #define DZ_WAKEUP_CHARS      UART_XMIT_SIZE
-> > 
-> > and there's no need to include <linux/serial_core.h> in dz.h as the driver 
-> > itself already does that (and dz.h is an auxiliary private header).
-> > 
-> >  Thanks for your submission.
+I found that your patch was applied. But since the reproducer tested only 0 byte
+case, I think that rejecting only less than sizeof(struct htc_frame_hdr) bytes
+is not sufficient.
+
+More complete patch with Ack from Toke is waiting at
+https://lkml.kernel.org/r/7acfa1be-4b5c-b2ce-de43-95b0593fb3e5@I-love.SAKURA.ne.jp .
+
+Please consider overriding with my version.
+
+On 2022/08/24 22:30, Alexander Potapenko wrote:
+> (adding back people originally CCed on the syzkaller bug.
+> Unfortunately it isn't possible to reply to all in Google Groups)
 > 
-> I have started to becomes more inclined into the direction of dropping 
-> DZ_WAKEUP_CHARS entirely and use WAKEUP_CHARS like most of the drivers do
-> after staring now at WAKEUP_CHARS & uart_write_wakeup() lines just now.
+> On Wed, Aug 24, 2022 at 3:26 PM Alexander Potapenko wrote:
+>> This bug bites us quite often on syzbot: https://syzkaller.appspot.com/bug?id=659ddf411502a2fe220c8f9be696d5a8d8db726e (17k crashes)
+>> The patch below by phil@philpotter.co.uk (https://syzkaller.appspot.com/text?tag=Patch&x=173dcb51d00000) seems to fix the problem, but I have no idea what's going on there.
+>>
+>> ==============================================================
+>> diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
+>> index 510e61e97dbc..9dbfff7a388e 100644
+>> --- a/drivers/net/wireless/ath/ath9k/htc_hst.c
+>> +++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
+>> @@ -403,7 +403,7 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
+>>      struct htc_endpoint *endpoint;
+>>      __be16 *msg_id;
+>>
+>> -    if (!htc_handle || !skb)
+>> +    if (!htc_handle || !skb || !pskb_may_pull(skb, sizeof(struct htc_frame_hdr)))
+>>          return;
+>>
+>>      htc_hdr = (struct htc_frame_hdr *) skb->data;
+>> ==============================================================
 > 
-> There is just a handful of exceptions, rest of the drivers all use 256 as 
-> WAKEUP_CHARS. dz uses 1024 (4k/4) and rest of the exceptions use 
-> uart_circ_empty() but I suspect they should also be just converted to 
-> use WAKEUP_CHARS.
 
- It may have to do with the particularly low speed of the machines the 
-driver/hardware is used with, one of the slowest Linux has ever supported 
-(I think only the m68k port may serve slower machines) and certainly the 
-slowest and earliest MIPS processors, down to R2000 clocked at 12MHz.
+> 
 
- Also bear in mind that the DZ11 interface is a serial line multiplexer 
-rather than a classic single or multiple UART, handling up to 8 lines via 
-shared Tx/Rx buffers (the original implementation was in the form of a 
-rather large discrete board built of SSI chips).  In this particular 
-integrated ASIC implementation 4 lines are handled and a character to be 
-transmitted may have to wait for the other 3 lines to be handled first.  
-
- This may have contributed to the choice made by the original implementer 
-here and any change will have to be thoroughly understood and evaluated.
-
- See <https://gunkies.org/wiki/DZ11_asynchronous_serial_line_interface> 
-for an overview of the device, technical documentation, and a photo of a 
-specimen dating back to mid 1970s.
-
-  Maciej

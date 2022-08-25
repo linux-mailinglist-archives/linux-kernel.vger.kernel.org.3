@@ -2,120 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B565A0AFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72425A0B0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 10:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237410AbiHYIGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 04:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S239390AbiHYIGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 04:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbiHYIGK (ORCPT
+        with ESMTP id S239335AbiHYIGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 04:06:10 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFA1DE5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:06:06 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id y14-20020a056402440e00b0044301c7ccd9so12374056eda.19
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:06:06 -0700 (PDT)
+        Thu, 25 Aug 2022 04:06:44 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F795D105
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:06:36 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id bh13so17224170pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 01:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=VFoAUZmQSNIybQQWm64jI2jatoCnpAOO4OmYIlm443c=;
-        b=lzySq90VxMrFPmXh2/dwioCs6B1SegwMh8h1SsTmX7oweHtHklTxf6cwglcV4JsI+q
-         VQC5BAJbGLcbZlMbIuVfyPf1a/w9tjTHHFYSXkfTGdb81NG6cFzdicSzVrqWOu4ct5Cr
-         tS1OEbijc7gx0NIrKZ+d+6ZzS44EIfPEpJFHNlm3e3/omWOc7eJZzgTW82ei7qHLkqcl
-         pnGB9aB8V3x4fcFHTtLFdrGZIW/vqnTzm8ewyDHTe25uVu7KRIs9dhRkJxQmrsSb/1dZ
-         N1MaVqAYSovM9cPAzvU/zUeG09EBBO/tkF2xDo7TLbKz9daOtij6z9ao/usZR5B/ZfHj
-         TC2Q==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=eOMnW4XRMv9i7Jz+s+vzPHDgE9J0PdEgB49b5OhgITs=;
+        b=RWng7N5PTYTg8iG2OuCR4VQEdNEj3/8z3epffY25IzHVo9/8oyXM+D6pNM89JJtFCh
+         B1I1KZ+aeQPqg6uQv6koBzL1yrV/fYDw/3CKWsvI4Em4/mX1bMltBPqxsenl68u2jJKG
+         yuHG4BmVX4ds3dsDZhe2kIEymT9YXEeljlMtU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=VFoAUZmQSNIybQQWm64jI2jatoCnpAOO4OmYIlm443c=;
-        b=So6ExtrPyGkNfRITWINtHtHsSinBea0Z7A5pp4/rQV/yYNzKROhPaY6ZGyuDpMcyAc
-         A7XmfB7NaJ/O6pzrjTJ1jPrQf2QMrB+EPjVX1vCL8+ZBmaALhh5RS4CGvAQcRAICPaiF
-         hqKr8JYzbJf1BFGpbqQPbtmWcu4drjH5CtSUi6MRYuJgyROGRAlSQ0dE6ndoGVkKbL+R
-         dwREnxDHIHLUmkqaSDtyyF17UhKId34nHU++w434XWTV0YREF5bTS2SJWyk4TkOz/OTj
-         TRIsHFVOeULsRDNvQxfr8+7wAXL/5saZv/6TkrmxZXymDiR/NVaIzKaEwpglUIBbKAOA
-         HjwQ==
-X-Gm-Message-State: ACgBeo0QnfTEG7w9PIBjVLVsvc+Zka0RY2fnIj3SXzVHxcK1boXmi8G0
-        tppQaBW9/yeUizXz7T1V8TjnbCNnC0k=
-X-Google-Smtp-Source: AA6agR6UVFnHcCE6dkRKJ4LXnHFEmWj1dGMEp2KQOHR3+b1DqMPbPRnGL1Du8uuOqH6LOnmqmBgSyVciqtM=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:4984:837b:f1f1:a6a1])
- (user=glider job=sendgmr) by 2002:a05:6402:2756:b0:443:4a6d:f05a with SMTP id
- z22-20020a056402275600b004434a6df05amr2178605edd.396.1661414765037; Thu, 25
- Aug 2022 01:06:05 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 10:05:55 +0200
-Message-Id: <20220825080555.3643572-1-glider@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH] ath9k: fix an uninit value use in ath9k_htc_rx_msg()
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     ath9k-devel@qca.qualcomm.com, davem@davemloft.net, kuba@kernel.org,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzbot+2ca247c2d60c7023de7f@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=eOMnW4XRMv9i7Jz+s+vzPHDgE9J0PdEgB49b5OhgITs=;
+        b=lAf3qoJ2PT/hRJ8DauCJh738F2g2kbBIbiOq59Oqug1bvmO5UGfiH8a/pIiFI8Ogpm
+         S8CClrimMKz30Ra6nMpL6afZ7dLBC4GuQWbnygA9BuJBN+9IWjJws/l3ImMKWJnpRTCh
+         355ayY+/i663HhPTF5DYXq2mDBABQB6KNE8jyVdjV1IvBgJDgvufB0Knij4DKJBGcruC
+         tYBAPDGqXweDQw4MekB6W5Ci4cXmKv6PEr9rHDoJpl9WGgzkPkOeyAOCT8pzQCutXu+n
+         HypLM6xJ4/JS1UFltc0sDKPRJldr2msno4yaUjYXB3QVSAdDZiO1QFPgm1ydl65rsgoF
+         lttA==
+X-Gm-Message-State: ACgBeo0zYZsvwYKOYhVR9wwFoSbUcMIiBbrvpWtUT1148WXs8kqVEXkf
+        i0P6+0/Y0/V02naINsBSgJinHg==
+X-Google-Smtp-Source: AA6agR6+mJ1Wc1D3WsfiNeQ/QQf/aq+KsYyd8aXpMNYK85PM6dK+q9VbcqdMfMEdiWPQbCe0Be46uw==
+X-Received: by 2002:a05:6a00:b8a:b0:537:f81:203a with SMTP id g10-20020a056a000b8a00b005370f81203amr2736459pfj.80.1661414795595;
+        Thu, 25 Aug 2022 01:06:35 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:fba3:9861:f694:5325])
+        by smtp.gmail.com with UTF8SMTPSA id h16-20020a170902f55000b00172ad292b6bsm5441073plf.116.2022.08.25.01.06.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 01:06:35 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 01:06:32 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, swboyd@chromium.org,
+        dmitry.baryshkov@linaro.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rajat Jain <rajatja@google.com>
+Subject: Re: [PATCH v6] PCI/ASPM: Update LTR threshold based upon reported
+ max latencies
+Message-ID: <YwctiEJpydiFdIds@google.com>
+References: <1657886421-779-1-git-send-email-quic_krichai@quicinc.com>
+ <20220726074954.GB5522@workstation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220726074954.GB5522@workstation>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ath9k_htc_rx_msg() assumes skb->data contains a full
-`struct htc_frame_hdr`, thus it needs a call to pskb_may_pull()
-to ensure there is enough data.
+On Tue, Jul 26, 2022 at 01:19:54PM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Jul 15, 2022 at 05:30:12PM +0530, Krishna chaitanya chundru wrote:
+> > In ASPM driver, LTR threshold scale and value are updated based on
+> > tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
+> > LTR threshold scale and value are greater values than max snoop/non-snoop
+> > value.
+> > 
+> > Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
+> > reported snoop/no-snoop values is greather than or equal to
+> > LTR_L1.2_THRESHOLD value.
+> > 
+> > Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
+> > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> > Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> Bjorn, any update on this patch?
 
-This fixes a long-standing issue reported by KMSAN:
+ping: can this be landed or are any further changes needed?
 
-  BUG: KMSAN: uninit-value in ath9k_htc_rx_msg+0x544/0x980 drivers/net/wireless/ath/ath9k/htc_hst.c:417
-   ath9k_htc_rx_msg+0x544/0x980 drivers/net/wireless/ath/ath9k/htc_hst.c:417
-   ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:653 [inline]
-   ath9k_hif_usb_rx_cb+0x196a/0x1f10 drivers/net/wireless/ath/ath9k/hif_usb.c:686
-   __usb_hcd_giveback_urb+0x522/0x740 drivers/usb/core/hcd.c:1670
-   usb_hcd_giveback_urb+0x150/0x620 drivers/usb/core/hcd.c:1747
-   dummy_timer+0xd3f/0x4f20 drivers/usb/gadget/udc/dummy_hcd.c:1988
-   call_timer_fn+0x43/0x480 kernel/time/timer.c:1474
-   expire_timers+0x272/0x610 kernel/time/timer.c:1519
-   __run_timers+0x5bc/0x8c0 kernel/time/timer.c:1790
-  ...
-
-  Uninit was created at:
-  ...
-   __alloc_skb+0x34a/0xd70 net/core/skbuff.c:426
-   __netdev_alloc_skb+0x126/0x780 net/core/skbuff.c:494
-   __dev_alloc_skb include/linux/skbuff.h:3264 [inline]
-   ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:635 [inline]
-   ath9k_hif_usb_rx_cb+0xe7b/0x1f10 drivers/net/wireless/ath/ath9k/hif_usb.c:686
-   __usb_hcd_giveback_urb+0x522/0x740 drivers/usb/core/hcd.c:1670
-  ...
-
-Reported-by: syzbot+2ca247c2d60c7023de7f@syzkaller.appspotmail.com
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
- drivers/net/wireless/ath/ath9k/htc_hst.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
-index 994ec48b2f669..83a1d2fba2218 100644
---- a/drivers/net/wireless/ath/ath9k/htc_hst.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
-@@ -408,7 +408,8 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
- 	struct htc_endpoint *endpoint;
- 	__be16 *msg_id;
- 
--	if (!htc_handle || !skb)
-+	if (!htc_handle || !skb ||
-+	    !pskb_may_pull(skb, sizeof(struct htc_frame_hdr)))
- 		return;
- 
- 	htc_hdr = (struct htc_frame_hdr *) skb->data;
--- 
-2.37.2.672.g94769d06f0-goog
-
+> Thanks,
+> Mani
+> 
+> > ---
+> > 
+> > I am taking this patch forward as prasad is no more working with our org.
+> > changes since v5:
+> > 	- no changes, just reposting as standalone patch instead of reply to
+> > 	  previous patch.
+> > Changes since v4:
+> > 	- Replaced conditional statements with min and max.
+> > changes since v3:
+> > 	- Changed the logic to include this condition "snoop/nosnoop
+> > 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
+> > Changes since v2:
+> > 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
+> > Changes since v1:
+> > 	- Added missing variable declaration in v1 patch
+> > ---
+> >  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
+> >  1 file changed, 30 insertions(+)
+> > 
+> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > index a96b742..676c03e 100644
+> > --- a/drivers/pci/pcie/aspm.c
+> > +++ b/drivers/pci/pcie/aspm.c
+> > @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+> >  {
+> >  	struct pci_dev *child = link->downstream, *parent = link->pdev;
+> >  	u32 val1, val2, scale1, scale2;
+> > +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
+> >  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+> >  	u32 ctl1 = 0, ctl2 = 0;
+> >  	u32 pctl1, pctl2, cctl1, cctl2;
+> >  	u32 pl1_2_enables, cl1_2_enables;
+> > +	u16 ltr;
+> > +	u16 max_snoop_lat, max_nosnoop_lat;
+> >  
+> >  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+> >  		return;
+> >  
+> > +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
+> > +	if (!ltr)
+> > +		return;
+> > +
+> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
+> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+> > +
+> > +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> > +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+> > +
+> > +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> > +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+> > +
+> > +	/* choose the greater max scale value between snoop and no snoop value*/
+> > +	max_scale = max(max_snp_scale, max_nsnp_scale);
+> > +
+> > +	/* choose the greater max value between snoop and no snoop scales */
+> > +	max_val = max(max_snp_val, max_nsnp_val);
+> > +
+> >  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+> >  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> >  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> > @@ -501,6 +523,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+> >  	 */
+> >  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
+> >  	encode_l12_threshold(l1_2_threshold, &scale, &value);
+> > +
+> > +	/*
+> > +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
+> > +	 * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
+> > +	 */
+> > +	scale = min(scale, max_scale);
+> > +	value = min(value, max_val);
+> > +
+> >  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+> >  
+> >  	/* Some broken devices only support dword access to L1 SS */
+> > -- 
+> > 2.7.4
+> > 

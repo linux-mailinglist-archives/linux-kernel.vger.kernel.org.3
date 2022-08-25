@@ -2,205 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0B35A1C69
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694915A1C71
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 Aug 2022 00:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244445AbiHYWbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 18:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S235564AbiHYWcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 18:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244430AbiHYWb1 (ORCPT
+        with ESMTP id S235039AbiHYWcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:31:27 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78333B99DA
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1661466686; x=1693002686;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=pXWRUr7yy74YSO6PolHsHDXM3uM60SKPSfU0sqhXVlw=;
-  b=BSoSTgfZOf329hitmHqdKD3BUpMZW59IYJgidmAJCuaLA3NzwScd70fU
-   enEeGHr3gL6cqN+CqnDSaPjtO4Jgl8HG6372L2mTV1gdm+rDhGnl2J2Fr
-   lcmr7l42vNUy2twFLmPWfw8JxozpX+xo+1ToKYgxPexOFZz3Qc/cPZZs8
-   G52uccADazReco+QW4ny1WCnYNbOR2P3bf+zhsQp8NtSECh/UKL6BMABW
-   VX663aLuvgByQ4iSXkWgV1oSSmEwLs/kMz8x8/csBP4+yk1ib2GjgSRPr
-   w7+KBJGIbtyIr9I9PTqCvR2E4K5iZja8nu4OY4r48JDwmGbN27sc2ZtQs
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,264,1654531200"; 
-   d="scan'208";a="208130143"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Aug 2022 06:31:24 +0800
-IronPort-SDR: HxiT7WvWJFeckuDH+L58nVXIuaPKKwQrrNoDoHKxqC1SM7uDTXpGw8KcIzxZpm989LkfUi3wn/
- I/RhM0faePuKPNltqe9WUbqM35CYlf7lP6hU/CJoMb7+oSnIVlMnEHkwYG0usUxva+QzrGGeIb
- POGZL47v+ZCaWUte/dpe8Puf+lIEounYt5UbxBKleZ+qkyka7JCS3xAWeUnKzJKl0uiIWKtypg
- t+22WV3Qv/8tpgTDrrW8pAcZdFcT7y74vb/wvrIKSCvdHLqZRex/GFtIluHgBOMEWSY9ZlevKx
- 760lykQyEkKxwqdWoipQRMmq
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Aug 2022 14:52:01 -0700
-IronPort-SDR: 9EJgaiWvLvylYDHosvxAqqavUn/4C4k1iXByhVTcDr8Gz2UbMEJ03JOV+Kuvh87sstd7ebEImi
- jtILmjx2kr07XTU0gYluDOmbskaayMRx8nmNxei+Iv3ZjXBXd588qkUQzLXb06ttZU6SkcG6f4
- lIIsUnBxpAanv0Pw0LtHiKgmmRVz9EVSxG3Xd1sdfhzTrgd2ptp7CIo4K/0XD9h6w9/IE2qeep
- tRvSTYdOe4TaYeWiAg+VNrlEs6B7nVt8nmL3lpVduY1jrp02Gamn0kHIk8FfoD69xEidbNp61o
- rf4=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Aug 2022 15:31:24 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MDHkM4xNkz1Rwnx
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:31:23 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1661466682; x=1664058683; bh=pXWRUr7yy74YSO6PolHsHDXM3uM60SKPSfU
-        0sqhXVlw=; b=DS5CoFc3iYU7cDPy9qH82TgEIsNMbhoT3C6WeVO1k1n8lfF5jOd
-        4QX9dz+jZ2zBT6lYcxg+KWIWNsTkP0T39GuuYt+Fb54L+Ay16HMoRx/umfqkrCTA
-        5g07OD/6ZWQNFpgrYTCY3b5VmwPIe8ZVeKZjxn3TcnZkMTLaDFOZPDoCaKqF7Yu0
-        M57XRvGIQ4ULgKrfH+zmolhYlxi9tLSaf3wHIfcYiq0AucN2J/i/m6EHR3ZASpwa
-        y4jnhHL1vOGRndZWTAVPX6+j9lVqy63Znj9K+/KI1ssi/+aLLozx85ixW9f3Xqhd
-        u67xga7LZad0mOnZ764Wv9X5dqdJcnCFLTw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SfO31Yfh_Epu for <linux-kernel@vger.kernel.org>;
-        Thu, 25 Aug 2022 15:31:22 -0700 (PDT)
-Received: from [10.225.163.46] (unknown [10.225.163.46])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MDHk850sGz1RtVk;
-        Thu, 25 Aug 2022 15:31:12 -0700 (PDT)
-Message-ID: <bb0728d1-20fd-8b6d-5d42-a0c76b6d3e4b@opensource.wdc.com>
-Date:   Fri, 26 Aug 2022 07:31:11 +0900
+        Thu, 25 Aug 2022 18:32:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7385B941E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661466763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Oy2aubXb5hLNj8VJ/ILuyIzESlVY8G+jddCf/KXjxGU=;
+        b=IL1R783ivUVb0Ucqh0UsRmD9t0HW5aENVgfYzR+yt7zElUtHU5e0/KI8Agsv06b+2LXRy1
+        riMq3fO+I8ovsh+TUnJdH7coZO/GkoO2R/xXL4KH5ecYh3HCqRU66OLoJ9NOXguNEXjdtW
+        X0Sx6Hpp6TFku6dmTLaRk6xiyhaDPSM=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-628-Ko_3sHnRMsC0CMh41k7E8A-1; Thu, 25 Aug 2022 18:32:42 -0400
+X-MC-Unique: Ko_3sHnRMsC0CMh41k7E8A-1
+Received: by mail-io1-f71.google.com with SMTP id b16-20020a5d8950000000b006891a850acfso11919039iot.19
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 15:32:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=Oy2aubXb5hLNj8VJ/ILuyIzESlVY8G+jddCf/KXjxGU=;
+        b=wPr9DNS7BZ6dTAoULZ6MgJX118G6y8HyBC8giDskxEal/1FBca3CatPN6EprSkdu+d
+         UYK4Y7l0bqGsfOs9Wx78gTyt2GsHhCDGq6X1BqaXjX0J6j/2I8Atm/Hbh1a7jtkfwVeR
+         CNW2II05YZBc3C2XqLufmDnqJJnNDENrLTmAO8ETI+ncESLAAIALeFwB4ycyuuwi+VyV
+         tjHt/Q47GuNDISk+IpXD3upQTmw+U8S8gOqMmYc/zQGEjIorAb2+FVyfV7slFD3xkKlW
+         k5x6W5YqKaWkDSaP2Abc27ZOY7jSqRmmlKhQ0V414uaN6xyevUul0T4PmWe2Ho8NGZyn
+         y6zA==
+X-Gm-Message-State: ACgBeo1whAeBo9xepMzhk/AXC1F/6JlWXcIZGx9sHS6uYGnr/1a/xRPd
+        xzjmAxTWi+OSc6edqo31gv9jELkqK8BPW+q1JEbBLsKhMOIrC9K/xNjC86MMTlvzKV4HvFITaHE
+        +icSQwEJevybFVTT75dG/m8i0
+X-Received: by 2002:a02:1d09:0:b0:33b:a8cc:17d3 with SMTP id 9-20020a021d09000000b0033ba8cc17d3mr2742327jaj.25.1661466762088;
+        Thu, 25 Aug 2022 15:32:42 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5DxfwLwJkfemFe6fofZO7Sa2Jt0xLr+PHGNw1XLZEm3kULrHFXM6KOQKsSVRF5mDTKeRkUZg==
+X-Received: by 2002:a02:1d09:0:b0:33b:a8cc:17d3 with SMTP id 9-20020a021d09000000b0033ba8cc17d3mr2742320jaj.25.1661466761898;
+        Thu, 25 Aug 2022 15:32:41 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id t14-20020a056e02010e00b002e93764c9e3sm278115ilm.54.2022.08.25.15.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 15:32:41 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 16:32:40 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 5/5] vfio/pci: Implement
+ VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+Message-ID: <20220825163240.274950c8.alex.williamson@redhat.com>
+In-Reply-To: <62e6d510-8e7c-8a31-fb7f-905bb13afe67@nvidia.com>
+References: <20220817051323.20091-1-abhsahu@nvidia.com>
+        <20220817051323.20091-6-abhsahu@nvidia.com>
+        <Yvzy0VOfKkKod0OV@nvidia.com>
+        <5363303b-30bb-3c4a-bf42-426dd7f8138d@nvidia.com>
+        <Yv0oH23UYbI/LI+X@nvidia.com>
+        <62e6d510-8e7c-8a31-fb7f-905bb13afe67@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/5] dt-bindings: ata: drop minItems equal to maxItems
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Marek Vasut <marex@denx.de>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org
-References: <20220825113334.196908-1-krzysztof.kozlowski@linaro.org>
- <20220825113334.196908-2-krzysztof.kozlowski@linaro.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220825113334.196908-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/25/22 20:33, Krzysztof Kozlowski wrote:
-> minItems, if missing, are implicitly equal to maxItems, so drop
-> redundant piece to reduce size of code.
+On Thu, 18 Aug 2022 22:31:03 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
+
+> On 8/17/2022 11:10 PM, Jason Gunthorpe wrote:
+> > On Wed, Aug 17, 2022 at 09:34:30PM +0530, Abhishek Sahu wrote:  
+> >> On 8/17/2022 7:23 PM, Jason Gunthorpe wrote:  
+> >>> On Wed, Aug 17, 2022 at 10:43:23AM +0530, Abhishek Sahu wrote:
+> >>>  
+> >>>> +static int
+> >>>> +vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
+> >>>> +				   void __user *arg, size_t argsz)  
+> >>>
+> >>> This should be
+> >>>   struct vfio_device_low_power_entry_with_wakeup __user *arg
+> >>>  
+> >>
+> >>  Thanks Jason.
+> >>
+> >>  I can update this.
+> >>
+> >>  But if we look the existing code, for example
+> >>  (vfio_ioctl_device_feature_mig_device_state()), then there it still uses
+> >>  'void __user *arg' only. Is this a new guideline which we need to take
+> >>  care ?  
+> > 
+> > I just sent a patch that fixes that too
+> >   
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
->  Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml       | 1 -
->  .../devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml     | 2 --
->  Documentation/devicetree/bindings/ata/sata_highbank.yaml        | 1 -
->  3 files changed, 4 deletions(-)
+>  Thanks for the update.
+>  I will change this. 
 > 
-> diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> index 235a93ac86b0..3766cc80cb17 100644
-> --- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> +++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> @@ -30,7 +30,6 @@ properties:
->            - const: brcm,bcm-nsp-ahci
->  
->    reg:
-> -    minItems: 2
->      maxItems: 2
->  
->    reg-names:
-> diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-> index 21a90975593b..529093666508 100644
-> --- a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-> +++ b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-> @@ -22,7 +22,6 @@ properties:
->      maxItems: 1
->  
->    resets:
-> -    minItems: 2
->      maxItems: 2
->      description: phandles to the reset lines for both SATA bridges
->  
-> @@ -32,7 +31,6 @@ properties:
->        - const: sata1
->  
->    clocks:
-> -    minItems: 2
->      maxItems: 2
->      description: phandles to the compulsory peripheral clocks
->  
-> diff --git a/Documentation/devicetree/bindings/ata/sata_highbank.yaml b/Documentation/devicetree/bindings/ata/sata_highbank.yaml
-> index 49679b58041c..f23f26a8f21c 100644
-> --- a/Documentation/devicetree/bindings/ata/sata_highbank.yaml
-> +++ b/Documentation/devicetree/bindings/ata/sata_highbank.yaml
-> @@ -52,7 +52,6 @@ properties:
->      minItems: 1
->      maxItems: 8
->      items:
-> -      minItems: 2
->        maxItems: 2
->  
->    calxeda,tx-atten:
+> >>  Do we need to keep the IOCTL name alphabetically sorted in the case list.
+> >>  Currently, I have added in the order of IOCTL numbers.  
+> > 
+> > It is generally a good practice to sort lists of things.
+> > 
+> > Jason  
+> 
+>  Sure. I will make the sorted list.
 
+The series looks good to me, so I'd suggest to rebase on Jason's
+patches[1][2] so you can easily sort out the above.  Thanks,
 
--- 
-Damien Le Moal
-Western Digital Research
+Alex
+
+[1]https://lore.kernel.org/all/0-v1-da6fc51ee22e+562-vfio_pci_priv_jgg@nvidia.com/
+[2]https://lore.kernel.org/all/0-v1-11d8272dc65a+4bd-vfio_ioctl_split_jgg@nvidia.com/
+

@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8835A1894
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8478B5A188F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243325AbiHYSMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S241817AbiHYSM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241497AbiHYSMp (ORCPT
+        with ESMTP id S243185AbiHYSMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:12:45 -0400
+        Thu, 25 Aug 2022 14:12:50 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DE8BCCE7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8EFBD174
         for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:12:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661451162;
+        s=mimecast20190719; t=1661451163;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KiSNPKBlPRcccx1lRe0Q2eNIt6M0VYiwkWljd6A0lLc=;
-        b=Ta3W0kHVfFZFRQ4OU1HaxBhNOLVnBsqa001E9/PTBg6tpa4Qo6fF420lxogg52zuVOlhyp
-        UnM5hSadHivO6CNvePbIkfwyXCEm7LJMYq6UpJgD9JyiUWGbdkh56oBPFubTA+8h05sLYp
-        Lv6Obr7DZnLiXTfjXWwh3vGrQKBjGL0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hRCkxRGTLmsrQqX09/lEo5/j9SdQgOT7KVWNp7Ie7zk=;
+        b=FqkZw5dynESsGX9VquNDo7jVCYhnIZa9u6hWDQZwXzs563PykXPSrvCzjiXYwWJ1aileGk
+        uG+SbCw+gC9NYxq/DKBkvklf7JuoOAUdQ40zHZKRHfeYia3Gmi7PApPWlUgxQMUQwn/axQ
+        oTIZ70OSo7+XVaAV0uHMh5csF2ISswk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-336-b65jcT-bPZOlTqI2l1r7QA-1; Thu, 25 Aug 2022 14:12:40 -0400
-X-MC-Unique: b65jcT-bPZOlTqI2l1r7QA-1
-Received: by mail-wr1-f69.google.com with SMTP id w2-20020adfbac2000000b00225688186e5so1682370wrg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:12:40 -0700 (PDT)
+ us-mta-398-tqaBro7yPAGTL-N-rk1WKg-1; Thu, 25 Aug 2022 14:12:41 -0400
+X-MC-Unique: tqaBro7yPAGTL-N-rk1WKg-1
+Received: by mail-wm1-f72.google.com with SMTP id b16-20020a05600c4e1000b003a5a47762c3so11214611wmq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:12:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=KiSNPKBlPRcccx1lRe0Q2eNIt6M0VYiwkWljd6A0lLc=;
-        b=RaQLGvWZzVcADo9T+MuZXmUTIVsP3zKxZCpbk2Nq0WaWAeOdE46MPjgPEXjqYZ5hN2
-         BnokPVn6jF+X1UHdPG9MGbDo7kit2wcMn6g5j8+Y1mqCZ4b3W4qhnFhR684HELAROM97
-         29eeBzRVXF3I6PYn1pDSOcip/v9Pse1SM53jdNxuft6KOTbsTQep3KngKNbVT4ejUfk9
-         MUtlV4uJPsBfdXivoxibVs0dPP1fV6t9RCy+tscCYeE/6BW1ksWBMx6AkzLdQgQLrOWN
-         bqQ/uovwX4FFH0HGj8GbPlBUgYvgNDuSA1IaUlnFB+TUjFoM3iVnTGR339f8Mkv9ETHX
-         0kpw==
-X-Gm-Message-State: ACgBeo2Xe5x5fJmIXhwICSGDDvqfCQ5QRLsXfmri4U7PLQ2Sg51HSm9h
-        HYW9G7iZWvr9cPRrP8vzhHCefCPFyJlDXphn59baDk8Tlf7fKk/rJIQY3XHtRLwoWErjRnpUzKH
-        l8/FjmAOnsK2xdW3mSgpjVnYc
-X-Received: by 2002:a05:6000:1f19:b0:225:6e25:aa01 with SMTP id bv25-20020a0560001f1900b002256e25aa01mr2885509wrb.236.1661451159112;
-        Thu, 25 Aug 2022 11:12:39 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5/VNF/YtNl2382koJzD84Jd7vQmcSTDh7XnUSh9pQOvX49DkPEm+3sX79ZyFI9hYG7dU+Mbg==
-X-Received: by 2002:a05:6000:1f19:b0:225:6e25:aa01 with SMTP id bv25-20020a0560001f1900b002256e25aa01mr2885493wrb.236.1661451158813;
-        Thu, 25 Aug 2022 11:12:38 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=hRCkxRGTLmsrQqX09/lEo5/j9SdQgOT7KVWNp7Ie7zk=;
+        b=zr4z3xvDSMK3pDmrLL3hqcN2p84PSa2xj3WuaSxWfGqswvNOk8ELkd1OfEBg4bMPmM
+         MjID43tIIcVCB9m9jWpx57vQcDyEECYUsf6zyCjZrY7PBcz47IzOpTZx4tlZ9T1w1PBy
+         dkmpr7nomWrXpJVhwT/gZqoQGOusZgt+qltuIFn4QcMuRZ5tYaB55gln0ufTr9vaRiQ5
+         Ae+vpWioWj2CNps6sOVbh6G0EVtfCRt68D+6jNcdMup7JSzMLKrVgYmuNa77krkUtfDP
+         8SQLaFsq5p+NnSTb4FYe7xQHvdnRARLuCXU8x/HqhGfiV2I5IMPiRT6RtuWpY04/ExYU
+         rT7Q==
+X-Gm-Message-State: ACgBeo1k+qE5Aa/rRuCC5itM4qtWdTazF5XyrVubC3AGZYyx0Q134Ubd
+        o9VQ7zPHwin/8qymWc5dVgIQ6PJqk1oNzUPQvUhgHTiZbUsprZWetFpdAOE0rwmSvakhAoyvnTi
+        6f4CmmESE3y39HjyG8uv62LcE
+X-Received: by 2002:a5d:45c4:0:b0:225:4320:1401 with SMTP id b4-20020a5d45c4000000b0022543201401mr2994483wrs.474.1661451160646;
+        Thu, 25 Aug 2022 11:12:40 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4fjN7hsvjTudH2itqlMcc3FAuj0f548hYAGxBnKB1bc1Mv3He53yWfXNTJ/JWMyImi2TUnJQ==
+X-Received: by 2002:a5d:45c4:0:b0:225:4320:1401 with SMTP id b4-20020a5d45c4000000b0022543201401mr2994455wrs.474.1661451160399;
+        Thu, 25 Aug 2022 11:12:40 -0700 (PDT)
 Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id w1-20020a05600018c100b00225250f2d1bsm20371622wrq.94.2022.08.25.11.12.37
+        by smtp.gmail.com with ESMTPSA id w1-20020a05600018c100b00225250f2d1bsm20371622wrq.94.2022.08.25.11.12.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 11:12:38 -0700 (PDT)
+        Thu, 25 Aug 2022 11:12:39 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -79,15 +80,17 @@ Cc:     Saeed Mahameed <saeedm@nvidia.com>,
         Gal Pressman <gal@nvidia.com>,
         Tariq Toukan <tariqt@nvidia.com>,
         Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: [PATCH v3 0/9] sched, net: NUMA-aware CPU spreading interface
-Date:   Thu, 25 Aug 2022 19:12:01 +0100
-Message-Id: <20220825181210.284283-1-vschneid@redhat.com>
+Subject: [PATCH v3 1/9] cpumask: Make cpumask_full() check for nr_cpu_ids bits
+Date:   Thu, 25 Aug 2022 19:12:02 +0100
+Message-Id: <20220825181210.284283-2-vschneid@redhat.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220825181210.284283-1-vschneid@redhat.com>
+References: <20220825181210.284283-1-vschneid@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,124 +98,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+Consider a system with 4 CPUs and:
+  CONFIG_NR_CPUS=64
+  CONFIG_CPUMASK_OFFSTACK=n
 
-Tariq pointed out in [1] that drivers allocating IRQ vectors would benefit
-from having smarter NUMA-awareness (cpumask_local_spread() doesn't quite cut
-it).
+In this situation, we have:
+  nr_cpumask_bits == NR_CPUS == 64
+  nr_cpu_ids = 4
 
-The proposed interface involved an array of CPUs and a temporary cpumask, and
-being my difficult self what I'm proposing here is an interface that doesn't
-require any temporary storage other than some stack variables (at the cost of
-one wild macro).
+Per smp.c::setup_nr_cpu_ids(), nr_cpu_ids <= NR_CPUS, so we want
+cpumask_full() to check for nr_cpu_ids bits set.
 
-Patch 9/9 is just there to showcase how the thing would be used. If this doesn't
-get hated on, I'll let Tariq pick this up and push it with his networking driver
-changes (with actual changelogs).
+This issue is currently pointed out by the cpumask KUnit tests:
 
-[1]: https://lore.kernel.org/all/20220728191203.4055-1-tariqt@nvidia.com/
+  [   14.072028]     # test_cpumask_weight: EXPECTATION FAILED at lib/test_cpumask.c:57
+  [   14.072028]     Expected cpumask_full(((const struct cpumask *)&__cpu_possible_mask)) to be true, but is false
+  [   14.079333]     not ok 1 - test_cpumask_weight
 
-A note on treewide use of for_each_cpu_andnot()
-===============================================
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+---
+ include/linux/cpumask.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I've used the below coccinelle script to find places that could be patched (I
-couldn't figure out the valid syntax to patch from coccinelle itself):
-
-,-----
-@tmpandnot@
-expression tmpmask;
-iterator for_each_cpu;
-position p;
-statement S;
-@@
-cpumask_andnot(tmpmask, ...);
-
-...
-
-(
-for_each_cpu@p(..., tmpmask, ...)
-	S
-|
-for_each_cpu@p(..., tmpmask, ...)
-{
-	...
-}
-)
-
-@script:python depends on tmpandnot@
-p << tmpandnot.p;
-@@
-coccilib.report.print_report(p[0], "andnot loop here")
-'-----
-
-Which yields (against c40e8341e3b3):
-
-.//arch/powerpc/kernel/smp.c:1587:1-13: andnot loop here
-.//arch/powerpc/kernel/smp.c:1530:1-13: andnot loop here
-.//arch/powerpc/kernel/smp.c:1440:1-13: andnot loop here
-.//arch/powerpc/platforms/powernv/subcore.c:306:2-14: andnot loop here
-.//arch/x86/kernel/apic/x2apic_cluster.c:62:1-13: andnot loop here
-.//drivers/acpi/acpi_pad.c:110:1-13: andnot loop here
-.//drivers/cpufreq/armada-8k-cpufreq.c:148:1-13: andnot loop here
-.//drivers/cpufreq/powernv-cpufreq.c:931:1-13: andnot loop here
-.//drivers/net/ethernet/sfc/efx_channels.c:73:1-13: andnot loop here
-.//drivers/net/ethernet/sfc/siena/efx_channels.c:73:1-13: andnot loop here
-.//kernel/sched/core.c:345:1-13: andnot loop here
-.//kernel/sched/core.c:366:1-13: andnot loop here
-.//net/core/dev.c:3058:1-13: andnot loop here
-
-A lot of those are actually of the shape
-
-  for_each_cpu(cpu, mask) {
-      ...
-      cpumask_andnot(mask, ...);
-  }
-
-I think *some* of the powerpc ones would be a match for for_each_cpu_andnot(),
-but I decided to just stick to the one obvious one in __sched_core_flip().
-  
-Revisions
-=========
-
-v2 -> v3
-++++++++
-
-o Added for_each_cpu_and() and for_each_cpu_andnot() tests (Yury)
-o New patches to fix issues raised by running the above
-
-o New patch to use for_each_cpu_andnot() in sched/core.c (Yury)
-
-v1 -> v2
-++++++++
-
-o Split _find_next_bit() @invert into @invert1 and @invert2 (Yury)
-o Rebase onto v6.0-rc1
-
-Cheers,
-Valentin
-
-Valentin Schneider (9):
-  cpumask: Make cpumask_full() check for nr_cpu_ids bits
-  lib/test_cpumask: Make test_cpumask_last check for nr_cpu_ids bits
-  bitops: Introduce find_next_andnot_bit()
-  cpumask: Introduce for_each_cpu_andnot()
-  lib/test_cpumask: Add for_each_cpu_and(not) tests
-  sched/core: Merge cpumask_andnot()+for_each_cpu() into
-    for_each_cpu_andnot()
-  sched/topology: Introduce sched_numa_hop_mask()
-  sched/topology: Introduce for_each_numa_hop_cpu()
-  SHOWCASE: net/mlx5e: Leverage for_each_numa_hop_cpu()
-
- drivers/net/ethernet/mellanox/mlx5/core/eq.c | 12 ++++-
- include/linux/cpumask.h                      | 41 ++++++++++++++++-
- include/linux/find.h                         | 44 ++++++++++++++++---
- include/linux/topology.h                     | 46 ++++++++++++++++++++
- kernel/sched/core.c                          |  5 +--
- kernel/sched/topology.c                      | 28 ++++++++++++
- lib/find_bit.c                               | 23 +++++-----
- lib/test_cpumask.c                           | 23 +++++++++-
- 8 files changed, 196 insertions(+), 26 deletions(-)
-
---
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index bd047864c7ac..1414ce8cd003 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -574,7 +574,7 @@ static inline bool cpumask_empty(const struct cpumask *srcp)
+  */
+ static inline bool cpumask_full(const struct cpumask *srcp)
+ {
+-	return bitmap_full(cpumask_bits(srcp), nr_cpumask_bits);
++	return bitmap_full(cpumask_bits(srcp), nr_cpu_ids);
+ }
+ 
+ /**
+-- 
 2.31.1
 

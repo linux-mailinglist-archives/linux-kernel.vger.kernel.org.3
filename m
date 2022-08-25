@@ -2,85 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466C95A14E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A8B5A1460
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 16:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242119AbiHYOyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 10:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S242646AbiHYOl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 10:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiHYOyL (ORCPT
+        with ESMTP id S242660AbiHYOkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 10:54:11 -0400
-X-Greylist: delayed 481 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 07:54:10 PDT
-Received: from esa3.mentor.iphmx.com (esa3.mentor.iphmx.com [68.232.137.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B591FB4EB4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:54:10 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,263,1654588800"; 
-   d="scan'208";a="81807983"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa3.mentor.iphmx.com with ESMTP; 25 Aug 2022 06:38:49 -0800
-IronPort-SDR: x1Ixj9xEowfDaxB+rCmYv+GSCPnGqKWu+UVR1/d2bXu884TLkcyorKTAOJ3GIdG2sZcAKPnr8C
- HrDpsKuUuy/7A3YVdzDaX/MsrZX96NDhq5JOA2b7iEqcFgR8p++itQnfXWYEalx8sudUp7WR3Q
- um6mcl43b7D6ol4iQIF2NVNDO6kFKAVM4x0sDavVBXMjnIhpFoTzJo4nALK+MjLYUthu9lkmIN
- xkDupHA97VMp7y+qdLBmrdVJnKzGutKQCtTsZdyiix3T/aUpRWC6kZou1GuriOnoXxFN8q1rQH
- aYs=
-Date:   Thu, 25 Aug 2022 14:38:40 +0000
-From:   Joseph Myers <joseph@codesourcery.com>
-X-X-Sender: jsm28@digraph.polyomino.org.uk
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Florian Weimer <fweimer@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alex Colomar <alx@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Zack Weinberg <zackw@panix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
-        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Cyril Hrubis <chrubis@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-In-Reply-To: <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2208251435370.104368@digraph.polyomino.org.uk>
-References: <20210423230609.13519-1-alx.manpages@gmail.com> <20220824185505.56382-1-alx.manpages@gmail.com> <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com> <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com>
- <87ilmgddui.fsf@oldenburg.str.redhat.com> <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 25 Aug 2022 10:40:35 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F55AB40C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:39:10 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bt10so15546865lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 07:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=nSmn/Yyj9DKCgM+N60piaxupqHYJ46TSL1XyqG6tkgg=;
+        b=Gpy2x12/cadnPkLNfCGDF56/f5kbMRqU93C2pq1OcIEtF874xkVgIYDxNlwwdJJNCD
+         vv98D8Ynh1WUvBuxTjwv2oxhIzKM/Kgle3k0HrvrpT9l+ZY1obHTplNbS4T8tUM3nTPn
+         k5Qu9LeyBxZHRCldXOZvNNzwFfumnePA9MkoQIZbIkj/Pd57Pp25N7WYfBs7SHwH7QTe
+         6bt7r1u0vhsqT9v/ao1gnuwZZZR4wxnfBmvScGpWHvuSkAkKRZqdb8rZKD0eo/AhRSvg
+         peol75kJVd4Meln/E5Bf542LVPggxA6W8qD4alOZTvZzEr/ES71os+6B9NinFXAHy4Ee
+         h8Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=nSmn/Yyj9DKCgM+N60piaxupqHYJ46TSL1XyqG6tkgg=;
+        b=hGEKLMqgoQq6cmkazWQh/wAqroANRVXDwLvqL+YEvYl7Ofze9e+85XcdP9vsSgmAQc
+         ofBlT2lIYvp8kQw2h9/7TGuEbUderaKnZl8KRQ8kze0o8zKkWAFEJ0k78DNgwSjzY9DR
+         gDFRmeLfPeocLPXYxd50W1QJgGo2PaskYK/TSi+3IgexVTNkv9uxT2EOsOvRNxOnBLvR
+         DR++99fz4Bby4FG5T0FwnA9SLTAcsW/rTuKCtLf09b+Z6Jx9VOMFzczjGyJL24Q2QTNn
+         z6GYv3/IdkD5GBfwNzXpnzOUbynOlVXG/MqkBBmvA24x4/Z8rA2uFWNqnf0EswMAt7co
+         bGCQ==
+X-Gm-Message-State: ACgBeo3QK4tFslimbSU9Z+jGm2CyJIGStNVpWD49KOviX7dY92dwSqiq
+        +UbyYRDAXV3VI80Gj0WK7VYviQ==
+X-Google-Smtp-Source: AA6agR67FCoHqMJJ4JUHZwutVBTI6wmpIj6U5TfJNwM72fQASqurH+pIT7bkkPMzerkMvAFNp+mmuw==
+X-Received: by 2002:a05:6512:3b14:b0:492:dbf2:a5a0 with SMTP id f20-20020a0565123b1400b00492dbf2a5a0mr1217292lfv.46.1661438349297;
+        Thu, 25 Aug 2022 07:39:09 -0700 (PDT)
+Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
+        by smtp.gmail.com with ESMTPSA id b15-20020a05651c0b0f00b00261e42b463dsm594411ljr.84.2022.08.25.07.39.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Aug 2022 07:39:08 -0700 (PDT)
+Message-ID: <f088f873-6e40-0548-77f3-378c87ecd812@linaro.org>
+Date:   Thu, 25 Aug 2022 17:39:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-Originating-IP: [137.202.0.90]
-X-ClientProxiedBy: svr-ies-mbx-11.mgc.mentorg.com (139.181.222.11) To
- svr-ies-mbx-10.mgc.mentorg.com (139.181.222.10)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2] dt-bindings: gpio: mpfs-gpio: allow parsing of hog
+ child nodes.
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>, brgl@bgdev.pl,
+        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220825143522.3102546-1-conor.dooley@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220825143522.3102546-1-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022, Linus Torvalds wrote:
+On 25/08/2022 17:35, Conor Dooley wrote:
+> The SD card and eMMC on PolarFire SoC are sometimes muxed using a GPIO
+> by the bootloader. Add a hog child property to facilitate this.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Changes since v1:
+> - move addtionalProperties up under type:
+> - drop the explicit match group syntax
+> ---
+>  .../bindings/gpio/microchip,mpfs-gpio.yaml     | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml b/Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+> index 110651eafa70..fdc16822fd4b 100644
+> --- a/Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+> @@ -44,6 +44,24 @@ properties:
+>  
+>    gpio-controller: true
+>  
+> +patternProperties:
+> +  "^.+-hog(-[0-9]+)?$":
+> +    type: object
+> +
 
-> That's a small detail that yes, we've tried to avoid the absolute
-> humongous mess that the C standard library has with their horrendous
-> 'PRId*' mess, but honestly, it's just a tiny detail.
+No need for blank line, but it's ok as well.
 
-I've not yet implemented it for glibc or for GCC format checking, but C23 
-adds 'wN' format length modifiers so you will be able to e.g. use "%w64d" 
-with printf to print an int64_t and won't need those PRI macros any more.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Joseph S. Myers
-joseph@codesourcery.com
+Best regards,
+Krzysztof

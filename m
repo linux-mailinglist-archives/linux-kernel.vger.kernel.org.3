@@ -2,195 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3BC5A073E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE92F5A0745
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 04:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiHYC1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 22:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
+        id S233497AbiHYC3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 22:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiHYC1N (ORCPT
+        with ESMTP id S233228AbiHYC3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 22:27:13 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0266382FB5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661394431; x=1692930431;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m2NShgQpSZYJtyh/PISIzWJuAQu2oaO8T2wMyOtGoI8=;
-  b=XKfcm+lrOHHDmM58GrVFhZFBXxAbTyaw/ptGEpYqc2P63Q7SQDQ8je57
-   u8nxj8C5mUdRMFKuOxMmv7Sw/FJrkkmA1HqYrx2/JD69U4fr9oIAsPou4
-   nnNJLu8BVHFYqZevV2bsT53ET4eqGZpNyzxq3kEBo8SChfcDi55L5lXYH
-   2JXxVMlLamqlrRBBbRNKB514Fqkf/vK+WQ/0CVF7xiToM7bxYMMqKFaBk
-   9hZNEfzvbUEYWzRu4RR/So/FoIJyTyesUfPrGLWJ7Z53xDWo3mulV1I4T
-   vBe0/ZBmK+0MLEKe3b9ldN9dsv198eVt/AxAHmD7kbyJiTgWvmZtfzHkq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10449"; a="320198995"
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="320198995"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 19:27:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,262,1654585200"; 
-   d="scan'208";a="639389118"
-Received: from lkp-server02.sh.intel.com (HELO 34e741d32628) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 24 Aug 2022 19:27:08 -0700
-Received: from kbuild by 34e741d32628 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oR2aJ-0001df-1d;
-        Thu, 25 Aug 2022 02:27:07 +0000
-Date:   Thu, 25 Aug 2022 10:26:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 272/276]
- fs/hugetlbfs/inode.c:562:16: warning: variable 'm_index' is uninitialized
- when used here
-Message-ID: <202208251012.g1mOhhxy-lkp@intel.com>
+        Wed, 24 Aug 2022 22:29:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F511923CC
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661394545;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3jF59bnxqmLklAHzEtiDUVdu2dFyXPidcFRU+bKjDi8=;
+        b=HeLCcdTu0I+oaFDwO2H7n2LdRv3ty4q75kgm/lxBSoDD0UQsE+HvGWlhV2RMXyjwwh4wG+
+        /GRqEC7vuImxSd+TJTVkXkqbFUs92m1D71JUfHqSpFdF0Ws93Ud+x+G0la6OiLEnsGBOuP
+        Pn+YpEAJoBw9MHGqz2gjwX7WbqHXlUQ=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-675-ZVpSUUuUOf2vHK4fgeEllA-1; Wed, 24 Aug 2022 22:29:02 -0400
+X-MC-Unique: ZVpSUUuUOf2vHK4fgeEllA-1
+Received: by mail-qk1-f200.google.com with SMTP id bl16-20020a05620a1a9000b006bc3aa1908dso6508065qkb.15
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 19:29:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=3jF59bnxqmLklAHzEtiDUVdu2dFyXPidcFRU+bKjDi8=;
+        b=OaJRxgHo9M1sKX1vZRoPCgWUiOag4DBD9nmzaDO8F5jnhvisb3ReRoHI2i0w2Gp6in
+         /LPE9onJdj/3+e37Q2CYGy9qkp3xz3aj3ltA8odLwRLyDs/14+pE9ElGPzmn7J+9oryQ
+         qksUjC344xlacZG6okDyDQW281pQvOfcU47TcciJTyJptG9dR17PAmC5f/fc45FZXx4c
+         uQsEgwx7SqMUZai24suTK6UUXSeDGdpBHcztIdkkEz5xcjp9++UQi076JcMLPKYeES01
+         9jSYqkWIPqHcodSzEl72qclh/mpKTlvUndwpRFXxvOuOlUYFA+ey3yXbNqPk8Ck4moKl
+         JdAw==
+X-Gm-Message-State: ACgBeo3k5omyQ0iVBuC1PekGNmvCm5iggJqw1KCV3yVeqG6NmGshaMvP
+        7RYDlWVOhuH8Rmm2Nv/TsuXAxLboJKXJ93I5fK16F7UMoZ4LG2+PXM+30dggc6MBhv+HggoSie/
+        /cSuIw5JqFieSQA/oLFfKoXWh
+X-Received: by 2002:a05:620a:15d8:b0:6ba:c5e3:871c with SMTP id o24-20020a05620a15d800b006bac5e3871cmr1623892qkm.572.1661394540655;
+        Wed, 24 Aug 2022 19:29:00 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7bG3MtOEQ+X7T87Nh1NCt7nYPw5iq5/sxiSvBa1Ay1+p2Ifdl6EoR7sD1MulRuITnPNRG2bw==
+X-Received: by 2002:a05:620a:15d8:b0:6ba:c5e3:871c with SMTP id o24-20020a05620a15d800b006bac5e3871cmr1623874qkm.572.1661394540422;
+        Wed, 24 Aug 2022 19:29:00 -0700 (PDT)
+Received: from [192.168.98.18] ([107.12.98.143])
+        by smtp.gmail.com with ESMTPSA id j12-20020a05620a288c00b006b61b2cb1d2sm16492780qkp.46.2022.08.24.19.28.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Aug 2022 19:28:59 -0700 (PDT)
+Message-ID: <320c2a05-e99a-88b4-2f67-11210ae37903@redhat.com>
+Date:   Wed, 24 Aug 2022 22:28:58 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net-next v2] bonding: Remove unnecessary check
+Content-Language: en-US
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
+Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        huyd12@chinatelecom.cn, Jay Vosburgh <j.vosburgh@gmail.com>
+References: <20220824111712.5999-1-sunshouxin@chinatelecom.cn>
+ <CAAoacNmKa5oM10J6DTLJ6PANmdS8k80Lcxygv_vXd_0DduXM4A@mail.gmail.com>
+From:   Jonathan Toppins <jtoppins@redhat.com>
+In-Reply-To: <CAAoacNmKa5oM10J6DTLJ6PANmdS8k80Lcxygv_vXd_0DduXM4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
-head:   73129b786c0eca5be67491a5e893e13b75133a62
-commit: fcc0d3d00d74b012c36d52128687ab9d197d3f0d [272/276] hugetlb: handle truncate racing with page faults
-config: arm64-randconfig-r014-20220823 (https://download.01.org/0day-ci/archive/20220825/202208251012.g1mOhhxy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project d00e97df0fe8c67f694c4d027297f4382ce72b38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/fcc0d3d00d74b012c36d52128687ab9d197d3f0d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
-        git checkout fcc0d3d00d74b012c36d52128687ab9d197d3f0d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/hugetlbfs/
+On 8/24/22 14:07, Jay Vosburgh wrote:
+> On 8/24/22, Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
+>> This code is intended to support bond alb interface added to
+>> Linux bridge by modifying MAC, however, it doesn't work for
+>> one bond alb interface with vlan added to bridge.
+>> Since commit d5410ac7b0ba("net:bonding:support balance-alb
+>> interface with vlan to bridge"), new logic is adapted to handle
+>> bond alb with or without vlan id, and then the code is deprecated.
+> 
+> I think this could still be clearer; the actual changes relate to the stack of
+> interfaces (e.g., eth0 -> bond0 -> vlan123 -> bridge0), not what VLAN tags
+> incoming traffic contains.
+> 
+> The code being removed here is specifically for the case of
+> eth0 -> bond0 -> bridge0, without an intermediate VLAN interface
+> in the stack (because, if memory serves, netif_is_bridge_port doesn't
+> transfer through to the bond if there's a VLAN interface in between).
+> 
+> Also, this code is for incoming traffic, assigning the bond's MAC to
+> traffic arriving on interfaces other than the active interface (which bears
+> the bond's MAC in alb mode; the other interfaces have different MACs).
+> Commit d5410ac7b0ba affects the balance assignments for outgoing ARP
+> traffic.  I'm not sure that d5410 is an exact replacement for the code this
+> patch removes.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I would be more comfortable with a change like this if it can be 
+demonstrated that an example test case functions as expected before and 
+after the change. Could a selftests test be written with veths to 
+demonstrate this code is indeed redundant?
 
-All warnings (new ones prefixed by >>):
+-Jon
 
->> fs/hugetlbfs/inode.c:562:16: warning: variable 'm_index' is uninitialized when used here [-Wuninitialized]
-                                                   m_start, m_index, truncate_op);
-                                                            ^~~~~~~
-   fs/hugetlbfs/inode.c:540:26: note: initialize the variable 'm_index' to silence this warning
-           pgoff_t m_start, m_index;
-                                   ^
-                                    = 0
-   1 warning generated.
+> 
+>>
+>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>> ---
+>>   drivers/net/bonding/bond_main.c | 13 -------------
+>>   1 file changed, 13 deletions(-)
+>>
+>> diff --git a/drivers/net/bonding/bond_main.c
+>> b/drivers/net/bonding/bond_main.c
+>> index 50e60843020c..6b0f0ce9b9a1 100644
+>> --- a/drivers/net/bonding/bond_main.c
+>> +++ b/drivers/net/bonding/bond_main.c
+>> @@ -1578,19 +1578,6 @@ static rx_handler_result_t bond_handle_frame(struct
+>> sk_buff **pskb)
+>>
+>>   	skb->dev = bond->dev;
+>>
+>> -	if (BOND_MODE(bond) == BOND_MODE_ALB &&
+>> -	    netif_is_bridge_port(bond->dev) &&
+>> -	    skb->pkt_type == PACKET_HOST) {
+>> -
+>> -		if (unlikely(skb_cow_head(skb,
+>> -					  skb->data - skb_mac_header(skb)))) {
+>> -			kfree_skb(skb);
+>> -			return RX_HANDLER_CONSUMED;
+>> -		}
+>> -		bond_hw_addr_copy(eth_hdr(skb)->h_dest, bond->dev->dev_addr,
+>> -				  bond->dev->addr_len);
+>> -	}
+>> -
+>>   	return ret;
+>>   }
+>>
+>> --
+>> 2.27.0
+>>
+>>
+> 
 
-
-vim +/m_index +562 fs/hugetlbfs/inode.c
-
-   502	
-   503	/*
-   504	 * remove_inode_hugepages handles two distinct cases: truncation and hole
-   505	 * punch.  There are subtle differences in operation for each case.
-   506	 *
-   507	 * truncation is indicated by end of range being LLONG_MAX
-   508	 *	In this case, we first scan the range and release found pages.
-   509	 *	After releasing pages, hugetlb_unreserve_pages cleans up region/reserve
-   510	 *	maps and global counts.  Page faults can race with truncation.
-   511	 *	During faults, hugetlb_no_page() checks i_size before page allocation,
-   512	 *	and again after	obtaining page table lock.  It will 'back out'
-   513	 *	allocations in the truncated range.
-   514	 * hole punch is indicated if end is not LLONG_MAX
-   515	 *	In the hole punch case we scan the range and release found pages.
-   516	 *	Only when releasing a page is the associated region/reserve map
-   517	 *	deleted.  The region/reserve map for ranges without associated
-   518	 *	pages are not modified.  Page faults can race with hole punch.
-   519	 *	This is indicated if we find a mapped page.
-   520	 * Note: If the passed end of range value is beyond the end of file, but
-   521	 * not LLONG_MAX this routine still performs a hole punch operation.
-   522	 *
-   523	 * Since page faults can race with this routine, care must be taken as both
-   524	 * modify huge page reservation data.  To somewhat synchronize these operations
-   525	 * the hugetlb fault mutex is taken for EVERY index in the range to be hole
-   526	 * punched or truncated.  In this way, we KNOW either:
-   527	 * - fault code has added a page beyond i_size, and we will remove here
-   528	 * - fault code will see updated i_size and not add a page beyond
-   529	 * The parameter 'lm__end' indicates the offset of the end of hole or file
-   530	 * before truncation.  For hole punch lm_end == lend.
-   531	 */
-   532	static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
-   533					   loff_t lend, loff_t lm_end)
-   534	{
-   535		struct hstate *h = hstate_inode(inode);
-   536		struct address_space *mapping = &inode->i_data;
-   537		const pgoff_t start = lstart >> huge_page_shift(h);
-   538		const pgoff_t end = lend >> huge_page_shift(h);
-   539		pgoff_t m_end = lm_end >> huge_page_shift(h);
-   540		pgoff_t m_start, m_index;
-   541		struct folio_batch fbatch;
-   542		struct folio *folio;
-   543		pgoff_t next, index;
-   544		unsigned int i;
-   545		long freed = 0;
-   546		u32 hash;
-   547		bool truncate_op = (lend == LLONG_MAX);
-   548	
-   549		folio_batch_init(&fbatch);
-   550		next = m_start = start;
-   551		while (filemap_get_folios(mapping, &next, end - 1, &fbatch)) {
-   552			for (i = 0; i < folio_batch_count(&fbatch); ++i) {
-   553				folio = fbatch.folios[i];
-   554	
-   555				index = folio->index;
-   556				/*
-   557				 * Take fault mutex for missing folios before index,
-   558				 * while checking folios that might have been added
-   559				 * due to a race with fault code.
-   560				 */
-   561				freed += fault_lock_inode_indicies(h, inode, mapping,
- > 562							m_start, m_index, truncate_op);
-   563	
-   564				/*
-   565				 * Remove folio that was part of folio_batch.
-   566				 */
-   567				hash = hugetlb_fault_mutex_hash(mapping, index);
-   568				mutex_lock(&hugetlb_fault_mutex_table[hash]);
-   569				if (remove_inode_single_folio(h, inode, mapping, folio,
-   570								index, truncate_op))
-   571					freed++;
-   572				mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-   573			}
-   574			folio_batch_release(&fbatch);
-   575			cond_resched();
-   576		}
-   577	
-   578		/*
-   579		 * Take fault mutex for missing folios at end of range while checking
-   580		 * for folios that might have been added due to a race with fault code.
-   581		 */
-   582		freed += fault_lock_inode_indicies(h, inode, mapping, m_start, m_end,
-   583							truncate_op);
-   584	
-   585		if (truncate_op)
-   586			(void)hugetlb_unreserve_pages(inode, start, LONG_MAX, freed);
-   587	}
-   588	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

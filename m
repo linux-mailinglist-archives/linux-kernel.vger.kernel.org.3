@@ -2,200 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB355A0D60
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1826B5A0D63
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240749AbiHYJyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        id S240987AbiHYJyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240917AbiHYJyG (ORCPT
+        with ESMTP id S235320AbiHYJyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:54:06 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C120EAE846
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:52:18 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id z6so27487109lfu.9
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=/Xjm3zsGuKOlz7T50ivA2r0C2gPq3B5LrNzOmebJTKc=;
-        b=VoKHBwr6XgeoBUP6orl2mDo0itQeZmtAVL7Ce3/QulBkW6wNNWoRjUMaGIGARvBgMZ
-         jjdcSQybfLV+KDtA6/6UtdmwCJmeFJMREsXmTnpdBvukHBkITbl6+mCagHzFCDdmzCzy
-         FhSFnmp9W+2uIi55Y/kJaxDeuIj79/AjCZ479t6WvmpB84Ypj7do2hR6yeLDGsX8SElG
-         bx4GIw1T+rAktwui5kZpomK9zs7qvfa5uOmkXfnd78w7ayASPRfRTOpSTL+vgz8dMKVD
-         r02UbVYozeSkKtfGDUgQmG+nwDMNHcUjRbgENUf95iD1HK41kmiYNS7GhImPde9CYNjI
-         RMzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=/Xjm3zsGuKOlz7T50ivA2r0C2gPq3B5LrNzOmebJTKc=;
-        b=RXUhyN0EIITPFBpXMRP3++d879w3pz2kMSApTB9LoQ7GeNRTmsxYRklTb4xWsCA42n
-         1ZyHV0inXz9pJD1qTQnvzD8fkOcc8T6VQOvR0W0u0NWdtpqlXQXglaV6h4Kzd+A/QNyG
-         SM8fFN41cnRvRMYHOeoYECv9dPIdKZx3+19rQrOS6ypERYfnyYVXxSjQS7PiQCqNdpwU
-         1huucLfTwGYJbGooVKWkvpRmEbMKoYMZLxCl/yRqGu5wvXprvF6ewMiYOIcGCkIMfFq2
-         60wKU6JTvPuZdGSb8giZV3hkeTSK5LwhQARJzXcoAMgI5ejZqHbAofm+ZwnJke+k1FCu
-         6Gkw==
-X-Gm-Message-State: ACgBeo0mr+i6e15t6Q1FQFy2CHzRjCB5wY4f3BicyB+cUXuxFCa8YWvB
-        80WiTv0nwVW5rd94qY3HHaFWwoYk/HeB/nqPmEM77A==
-X-Google-Smtp-Source: AA6agR6DhLp3M8c7w7bIMGuhp2NG6eDLu/F6OQp/nGH+cyEvLm4tf0Rmr/KNhBxMXmjxcratFTKQEiipPgKwSCTojGU=
-X-Received: by 2002:a05:6512:6ca:b0:492:ef21:c085 with SMTP id
- u10-20020a05651206ca00b00492ef21c085mr938731lff.71.1661421104640; Thu, 25 Aug
- 2022 02:51:44 -0700 (PDT)
+        Thu, 25 Aug 2022 05:54:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2468ACA11
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:52:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 07CB31FB0B;
+        Thu, 25 Aug 2022 09:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661421130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e6vFISPJN3U6nScOiLDA2IhWeXOoQm4ccfrelohfpXs=;
+        b=pbDJSVXlyKdEGh36m+cnk5iqpJEsmDB3R+cx4aNbCfjV+058Z0x64m3vYJ739nYXroPGcg
+        GVLhqwUqlHmxESlVNtyS2EndoUQnqC25ljNRgJQ6pCPkh1Uk/FFnMjm68mBRAnm0NG9L/+
+        a95eLekDWoioMa6e33sFLmkJDxYbtSI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661421130;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e6vFISPJN3U6nScOiLDA2IhWeXOoQm4ccfrelohfpXs=;
+        b=I5DrCQqkgcn62snMSlJVS5ah4CueLwPA1qyy+F9mr7yiHTGCBHht4b6fXxzwKxMTD4CnhP
+        vJJ4M4i9yjkV3JCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8DB813A8E;
+        Thu, 25 Aug 2022 09:52:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VfAcNElGB2MKUQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 25 Aug 2022 09:52:09 +0000
+Message-ID: <a461479d-a5cd-dc86-013a-d8827d7d321a@suse.cz>
+Date:   Thu, 25 Aug 2022 11:52:09 +0200
 MIME-Version: 1.0
-References: <20220823145649.3118479-15-robh@kernel.org>
-In-Reply-To: <20220823145649.3118479-15-robh@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 25 Aug 2022 11:51:08 +0200
-Message-ID: <CAPDyKFriYXh2EwqyPH7MMbt-2FAYZFrBhNFTFvNrPn=W_5VEKg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: power: Add missing (unevaluated|additional)Properties
- on child nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH] mm: reduce noise in show_mem for lowmem allocations
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <YwScVmVofIZkopkF@dhcp22.suse.cz>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <YwScVmVofIZkopkF@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 at 16:57, Rob Herring <robh@kernel.org> wrote:
->
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On 8/23/22 11:22, Michal Hocko wrote:
+> All but node0 are really completely irrelevant for this allocation
+> because they do not have ZONE_DMA yet it swamps the log and makes it
+> harder to visually inspect.
+> 
+> Address this by providing gfp_maks parameter to show_mem and filter the
+> output to only those zones/nodes which are relevant for the allocation.
+> That means nodes which have at least one managed zone which is usable
+> for the allocation (zone_idx(zone) <= gfp_zone(gfp_mask)).
+> The resulting output for the same failure would become:
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+Looks good to me.
 
-Kind regards
-Uffe
+> [...]
+> [   14.017605][    T1] Mem-Info:
 
-> ---
->  .../bindings/power/domain-idle-state.yaml          | 10 ++++++++++
->  .../devicetree/bindings/power/fsl,imx-gpc.yaml     | 14 ++++++++++++++
->  .../devicetree/bindings/power/fsl,imx-gpcv2.yaml   | 14 ++++++++++++++
->  3 files changed, 38 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/power/domain-idle-state.yaml b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
-> index 6a12efdf436a..4ee920a1de69 100644
-> --- a/Documentation/devicetree/bindings/power/domain-idle-state.yaml
-> +++ b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
-> @@ -20,6 +20,7 @@ properties:
->  patternProperties:
->    "^(cpu|cluster|domain)-":
->      type: object
-> +    additionalProperties: false
->      description:
->        Each state node represents a domain idle state description.
->
-> @@ -44,6 +45,15 @@ patternProperties:
->            state will yield power benefits, after overcoming the overhead while
->            entering the idle state.
->
-> +      arm,psci-suspend-param:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: |
-> +          power_state parameter to pass to the ARM PSCI suspend call.
-> +
-> +          Device tree nodes that require usage of PSCI CPU_SUSPEND function
-> +          (i.e. idle states node with entry-method property is set to "psci")
-> +          must specify this property.
-> +
->      required:
->        - compatible
->        - entry-latency-us
-> diff --git a/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml b/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml
-> index a055b3e819d8..777e1d852ddd 100644
-> --- a/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml
-> +++ b/Documentation/devicetree/bindings/power/fsl,imx-gpc.yaml
-> @@ -43,11 +43,21 @@ properties:
->
->    pgc:
->      type: object
-> +    additionalProperties: false
->      description: list of power domains provided by this controller.
->
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
->      patternProperties:
->        "power-domain@[0-9]$":
->          type: object
-> +        additionalProperties: false
-> +
->          properties:
->
->            '#power-domain-cells':
-> @@ -78,6 +88,10 @@ properties:
->            - '#power-domain-cells'
->            - reg
->
-> +    required:
-> +      - '#address-cells'
-> +      - '#size-cells'
-> +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/power/fsl,imx-gpcv2.yaml b/Documentation/devicetree/bindings/power/fsl,imx-gpcv2.yaml
-> index 747622bdc57b..3b161e01f920 100644
-> --- a/Documentation/devicetree/bindings/power/fsl,imx-gpcv2.yaml
-> +++ b/Documentation/devicetree/bindings/power/fsl,imx-gpcv2.yaml
-> @@ -42,11 +42,21 @@ properties:
->
->    pgc:
->      type: object
-> +    additionalProperties: false
->      description: list of power domains provided by this controller.
->
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +
-> +      '#size-cells':
-> +        const: 0
-> +
->      patternProperties:
->        "power-domain@[0-9]$":
->          type: object
-> +        additionalProperties: false
-> +
->          properties:
->
->            '#power-domain-cells':
-> @@ -85,6 +95,10 @@ properties:
->            - '#power-domain-cells'
->            - reg
->
-> +    required:
-> +      - '#address-cells'
-> +      - '#size-cells'
-> +
->  required:
->    - compatible
->    - reg
-> --
-> 2.34.1
->
+Maybe print the gfp_mask (or just max zone) here again, to make it more
+obvious in case somebody sents a report without the top header?
+
+> [   14.017956][    T1] active_anon:0 inactive_anon:0 isolated_anon:0
+> [   14.017956][    T1]  active_file:0 inactive_file:0 isolated_file:0
+> [   14.017956][    T1]  unevictable:0 dirty:0 writeback:0
+> [   14.017956][    T1]  slab_reclaimable:876 slab_unreclaimable:30300
+> [   14.017956][    T1]  mapped:0 shmem:0 pagetables:12 bounce:0
+> [   14.017956][    T1]  free:3170151735 free_pcp:6868 free_cma:0
+> [   14.017962][    T1] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB kernel_stack:7200kB pagetables:4kB all_unreclaimable? no
+> [   14.018026][    T1] Node 0 DMA free:160kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15996kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+> [   14.018035][    T1] lowmem_reserve[]: 0 0 0 0 0
+> [   14.018339][    T1] Node 0 DMA: 0*4kB 0*8kB 0*16kB 1*32kB (U) 0*64kB 1*128kB (U) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 160kB
+> [   14.018480][    T1] 0 total pagecache pages
+> [   14.018483][    T1] 0 pages in swap cache
+> [   14.018484][    T1] Swap cache stats: add 0, delete 0, find 0/0
+> [   14.018486][    T1] Free swap  = 0kB
+> [   14.018487][    T1] Total swap = 0kB
+> [   14.018488][    T1] 3221164600 pages RAM
+> [   14.018489][    T1] 0 pages HighMem/MovableOnly
+> [   14.018490][    T1] 50531051 pages reserved
+> [   14.018491][    T1] 0 pages cma reserved
+> [   14.018492][    T1] 0 pages hwpoisoned
+> 
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
+

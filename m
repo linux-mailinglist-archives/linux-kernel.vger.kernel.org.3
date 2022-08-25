@@ -2,165 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281005A18F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604F05A18F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiHYSqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
+        id S233371AbiHYSqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiHYSqK (ORCPT
+        with ESMTP id S240732AbiHYSqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:46:10 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195475F221
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:46:09 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k9so25736013wri.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=nIUljFBkx0nexRnIBmlsCUVPOXret1NOSFaDab7BEyE=;
-        b=k6cregGwdCXEynRFHNQnjLAXb0RFMfFa3FMHdPuHUfi6T8dfpJl4HEIbDYqwcxOel3
-         ksJqS6FWaDJApbXU3uJcpWyQbkvpdQSW2R/rFtjn5aDhBWRsI99ESDf3XLfqeqwW+tVU
-         Dkv1FS2oCKmHJkt6wXRtQ4rv7corYV1o3nvyYOi0Gs9QqDDzvMk53+PNJ46oz+a9G95G
-         ZxvIoGSbblrukcDX0lGfen/S4JaEdakZONRpoX6cJ1lSdnDDIW33z3ifDMacL9p1qE16
-         M1JxwcDkSA6vcYd90XZDbW7UbSnga5SIddpxYn/3oewqT4QcarLSQIO36hnkUPHC7QqD
-         xiMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nIUljFBkx0nexRnIBmlsCUVPOXret1NOSFaDab7BEyE=;
-        b=0wRIH+PeWxXyaj5uOaRigBmunMphY5fLKxvZSoO3jVNElbjaOcTlmTwbVVjfnaNml/
-         f48ETGPScOUL0RNKdrZlj3bb5u4mIK+Wd9zKgN4XFtcaLVj2LNPVG9kNz65kJzgn0KuN
-         3BoxmWybGUF75RaMxMm5/e/DGPVQD67EEh0z7JS07JnIbYh+KJb5cgRfMZn4jGhS/LGx
-         GEr7IJzZyqtclu2RGgGxyG8X4oC7NtU5Gsh53z0EUMD3YcjwbDiCMZtkk4/XJPu+aKPU
-         QE1PYf0WIS+rivuEKs4d2vxTqpPJkqKiw/V+nVsXNeRFvBBanf0Yn1wXv/DVEag6D01A
-         JLcw==
-X-Gm-Message-State: ACgBeo0FAZvsCwNIfv5inROxMD2vOubNX4pwaZXIa+5ggU4JQiB8iJtq
-        eN8zDAS7SOAZbZxeXMSnv45A4vpZdBd8GaX8bgxiXw==
-X-Google-Smtp-Source: AA6agR5LFET4yCFkQ8vwQbxb3eFWAptn2L9E3gpXGgxbfnZMZebQzL/ASi9e2kdBGAZQCqlaOF+AFzYG3fCODNNPjXs=
-X-Received: by 2002:adf:9ccf:0:b0:225:4934:53e3 with SMTP id
- h15-20020adf9ccf000000b00225493453e3mr3158455wre.210.1661453167369; Thu, 25
- Aug 2022 11:46:07 -0700 (PDT)
+        Thu, 25 Aug 2022 14:46:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB4D6B157
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 11:46:22 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (unknown [70.107.189.129])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C11FC6601EAE;
+        Thu, 25 Aug 2022 19:46:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661453180;
+        bh=ka9fMNk12qWUmYRvUYmT0kwBU/Dlq4CaIy2p/uhHjm4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bmW/hgbWwVdazDtl8iMAUKjAGE/IrmLsObyiHyXQiAcK+GaNvVR3QbDRjxdDBiJCD
+         EX/VAKC1hZzfqjCLEosB5/ZzxFRoZ87Lc/71B8ejD/8WWIuQaW3Bq2TRdqcApLsOK9
+         bvAS37vJFOvoG+gkuyUzzCmfbEIOxRxBzQW6YjSrzw1chQxG+guGbI70znyqA3yDh0
+         DINAKsMqkqwAmLS4pD/gCLgvSr5ZsADin/HME3zhsyNH8fShjJX9F+fY45MRAf1/p/
+         RaVwsVHZ3IIfGzJ3bP7rfCJDpvvUOJeMv33h/7/Cnybh4uR6dB4wJmRK1hZnU2TsND
+         kVOZMipttieRg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     khilman@baylibre.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, roger.lu@mediatek.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 0/2] soc: mediatek: Cleanups for MediaTek SVS driver
+Date:   Thu, 25 Aug 2022 14:46:14 -0400
+Message-Id: <20220825184616.2118870-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220824233117.1312810-1-haoluo@google.com> <20220824233117.1312810-6-haoluo@google.com>
- <CAADnVQKC_USyXe1RyWL+EY0q=x=c88opvPW-rWZ5znGJOq63CQ@mail.gmail.com>
- <CAJD7tkZGxkV8_3qNy_Q=k-DT2=aGknzT08WiVtESpzur1JxCwA@mail.gmail.com> <CAADnVQLD+PcyO1qmxaBxdK1_tLRfBEqth8kzxts_8f+nSqu+hA@mail.gmail.com>
-In-Reply-To: <CAADnVQLD+PcyO1qmxaBxdK1_tLRfBEqth8kzxts_8f+nSqu+hA@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 25 Aug 2022 11:45:31 -0700
-Message-ID: <CAJD7tkZDw278kApDYKUhnuz5wVcrx9D_k0LLUktT8jgrA5uj-w@mail.gmail.com>
-Subject: Re: [RESEND PATCH bpf-next v9 5/5] selftests/bpf: add a selftest for
- cgroup hierarchical stats collection
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Hao Luo <haoluo@google.com>, LKML <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:43 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Aug 24, 2022 at 7:41 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Wed, Aug 24, 2022 at 7:09 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Wed, Aug 24, 2022 at 4:31 PM Hao Luo <haoluo@google.com> wrote:
-> > > > +
-> > > > +       for (i = 0; i < N_CGROUPS; i++) {
-> > > > +               fd = create_and_get_cgroup(cgroups[i].path);
-> > > > +               if (!ASSERT_GE(fd, 0, "create_and_get_cgroup"))
-> > > > +                       return fd;
-> > > > +
-> > > > +               cgroups[i].fd = fd;
-> > > > +               cgroups[i].id = get_cgroup_id(cgroups[i].path);
-> > > > +
-> > > > +               /*
-> > > > +                * Enable memcg controller for the entire hierarchy.
-> > > > +                * Note that stats are collected for all cgroups in a hierarchy
-> > > > +                * with memcg enabled anyway, but are only exposed for cgroups
-> > > > +                * that have memcg enabled.
-> > > > +                */
-> > > > +               if (i < N_NON_LEAF_CGROUPS) {
-> > > > +                       err = enable_controllers(cgroups[i].path, "memory");
-> > > > +                       if (!ASSERT_OK(err, "enable_controllers"))
-> > > > +                               return err;
-> > > > +               }
-> > > > +       }
-> > >
-> > > It passes BPF CI, but fails in my setup with:
-> > >
-> > > # ./test_progs -t cgroup_hier -vv
-> > > bpf_testmod.ko is already unloaded.
-> > > Loading bpf_testmod.ko...
-> > > Successfully loaded bpf_testmod.ko.
-> > > setup_bpffs:PASS:mount 0 nsec
-> > > setup_cgroups:PASS:setup_cgroup_environment 0 nsec
-> > > setup_cgroups:PASS:get_root_cgroup 0 nsec
-> > > setup_cgroups:PASS:create_and_get_cgroup 0 nsec
-> > > (cgroup_helpers.c:92: errno: No such file or directory) Enabling
-> > > controller memory:
-> > > /mnt/cgroup-test-work-dir6526//test/cgroup.subtree_control
-> > > setup_cgroups:FAIL:enable_controllers unexpected error: 1 (errno 2)
-> > > cleanup_bpffs:FAIL:rmdir /sys/fs/bpf/vmscan/ unexpected error: -1 (errno 2)
-> > > #36      cgroup_hierarchical_stats:FAIL
-> > > Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
-> > >
-> > > How do I debug it?
-> >
-> > The failure with ENOENT happens when we try to write "+memory" to
-> > /mnt/cgroup-test-work-dir6526//test/cgroup.subtree_control, not when
-> > we try to open it. So the file is there. AFAICT, ENOENT can be
-> > returned from this write if the memory controller is not enabled on
-> > this cgroup.
-> >
-> > In setup_cgroup_environment(), we should be enabling all available
-> > controllers on /mnt and /mnt/cgroup-test-work-dir6526 by this line:
-> >
-> >         if (__enable_controllers(CGROUP_MOUNT_PATH, NULL) ||
-> >               __enable_controllers(cgroup_workdir, NULL))
-> >                   return 1;
-> >
-> > The first thing that comes to mind is that maybe the memory controller
-> > is not enabled on your setup at all? Can you check
-> > /sys/fs/cgroup/cgroup.controllers (or wherever your global cgroup
-> > mount is)?
->
-> Indeed. I didn't have a memory controller in cgroup2.
-> My system booted with cgroup v1 and it had cgroup1 memory
-> controller enabled which prevented cgroup2 to enable it.
-> Without Tejun's help I would have been able to figure this out.
->
-> Anyway, pushed the set to bpf-next. Thanks everyone.
 
-Thanks Alexei!
+This is a cleanup-only series for the mtk-svs driver, enhancing the
+usage of standard Linux macros for bitfields for better readability
+and register set/get safety, switches to devm_ functions variants
+where possible and other general cleanups, getting this driver in a
+better overall shape.
+
+v1: https://lore.kernel.org/all/20220726141653.177948-1-angelogioacchino.delregno@collabora.com
+
+Changes in v2:
+- Rebased to not rely on mt8195 and mt8186 support, as they haven't been
+  merged yet
+
+AngeloGioacchino Del Regno (2):
+  soc: mediatek: mtk-svs: Commonize t-calibration-data fuse array read
+  soc: mediatek: mtk-svs: Use bitfield access macros where possible
+
+ drivers/soc/mediatek/mtk-svs.c | 260 ++++++++++++++++++++-------------
+ 1 file changed, 160 insertions(+), 100 deletions(-)
+
+-- 
+2.37.2
+

@@ -2,98 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C475A086F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D08C5A0874
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 07:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbiHYF1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 01:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
+        id S232632AbiHYFdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 01:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiHYF1U (ORCPT
+        with ESMTP id S230104AbiHYFdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 01:27:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EFD9E699;
-        Wed, 24 Aug 2022 22:27:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5F04B826BE;
-        Thu, 25 Aug 2022 05:27:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A04C433C1;
-        Thu, 25 Aug 2022 05:27:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661405236;
-        bh=55WRc3r81+KqehUFDPLaZGPRJj5RndzvHEoTp5C4cUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wks7HLeB6uGcDRapulU6NwmStjzpVhsK9gujc8f2S0Q4CWpk6Pp97tbPQ7OxmtDBD
-         y9nAe+DJDvtUGsYkcpWAtSviKMtgoDQjtpAoa/X+tdCa2YriTAMbGIGtLokp2l4RbS
-         WQluyX38oEvP7uYH5TJ+cx41dsj1kpHmHdwwDIZ3WGxiybxA9ls0r7ju5dR/jysPMs
-         PocbQb29KGNWwGjZDKRMafa990NQwyTEV9gB7RhFZPGZucjkJl9WA3Cv5pxkjbftpu
-         CiCWd8Hmhepum/jTvWlSWN77h46EVn0rAz3SbIw+muRW1UhrLY2paWeLDsjOQyQRLg
-         v7itMfvH40+cw==
-Date:   Thu, 25 Aug 2022 08:27:09 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>,
-        linux-sgx@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
- ksgxd+0x1b7/0x1d0
-Message-ID: <YwcILSTYBMnig4uF@kernel.org>
-References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
- <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
- <46e3483b-a5ab-2a05-8a28-f9ea87e881c3@intel.com>
- <04c9d5fa-5861-bbc3-3e2f-e18a73866645@molgen.mpg.de>
- <63a60042-4a4a-3bc3-5fa1-4495d80cc06c@molgen.mpg.de>
- <beabe16c-b28b-cd65-f6b6-4242bc74926d@intel.com>
- <33c2a495-13ad-97ac-f2c2-4096cf8f5b58@molgen.mpg.de>
+        Thu, 25 Aug 2022 01:33:03 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCF4C7822B;
+        Wed, 24 Aug 2022 22:33:02 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 7320528778;
+        Thu, 25 Aug 2022 08:33:00 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 525492888D;
+        Thu, 25 Aug 2022 08:32:59 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id EBB493C07D1;
+        Thu, 25 Aug 2022 08:32:52 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 27P5WpCj010719;
+        Thu, 25 Aug 2022 08:32:52 +0300
+Date:   Thu, 25 Aug 2022 08:32:51 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     "longguang.yue" <bigclouds@163.com>
+cc:     horms@verge.net.au, kadlec@netfilter.org, fw@strlen.de,
+        pablo@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] ipvs: add a sysctl switch to control ipvs to bypass
+ OUTPUT chain or not
+In-Reply-To: <31196e83.2cbe.182d3693f03.Coremail.bigclouds@163.com>
+Message-ID: <e1adaaad-49f-de31-1dff-183eee242dc@ssi.bg>
+References: <20220819100702.14889-1-bigclouds@163.com> <495ceee5-f8dc-06e-d1ef-258d1889c7b8@ssi.bg> <31196e83.2cbe.182d3693f03.Coremail.bigclouds@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <33c2a495-13ad-97ac-f2c2-4096cf8f5b58@molgen.mpg.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463811672-110765213-1661405572=:5176"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 12:33:07AM +0200, Paul Menzel wrote:
-> Dear Dave,
-> 
-> 
-> Thank you for your reply.
-> 
-> Am 23.08.22 um 18:32 schrieb Dave Hansen:
-> > On 8/23/22 06:48, Paul Menzel wrote:
-> > > > > I'm suspecting either a BIOS problem.  Reinette (cc'd) also thought this
-> > > > > might be a case of the SGX initialization getting a bit too far along
-> > > > > when it should have been disabled.
-> > > > > 
-> > > > > We had some bugs where we didn't stop fast enough after spitting out the
-> > > > > "SGX Launch Control is locked..." errors.
-> > > 
-> > > Let’s hope it’s something known to you.
-> > 
-> > Thanks for the extra debug info.  Unfortunately, nothing is really
-> > sticking out as an obvious problem.
-> > 
-> > The EREMOVE return codes would be interesting to know, as well as an
-> > idea what the physical addresses are that fail and the _counts_ of how
-> > many pages get sanitized versus fail.
-> 
-> Is there a knob to print out this information? Or way to get this
-> information using ftrace? I’d like to avoid rebuilding the Linux kernel.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Since __sgx_sanitize_pages() is a local symbol, it's not possible
-to attach kprobe into it, so we actually do require a code change
-to see inside.
+---1463811672-110765213-1661405572=:5176
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-BR, Jarkko
+
+	Hello,
+
+On Thu, 25 Aug 2022, longguang.yue wrote:
+
+> I see. 
+> I hope we could find a maintainable and decoupled way to keep ipvs high performance.
+> especially for kubernetes environment, there are from dozens up to one hundred rules in OUTPUT chain.
+
+	May be some rules can help the bunch of rules to
+be applied only for first packet, not for every packet in
+connection, such as:
+
+iptables -t filter -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -t filter -A OUTPUT -m ipvs --ipvs -j ACCEPT
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+---1463811672-110765213-1661405572=:5176--
+

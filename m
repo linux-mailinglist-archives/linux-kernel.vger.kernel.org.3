@@ -2,112 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F095A1735
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74C15A1737
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 18:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243344AbiHYQuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 12:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S243265AbiHYQvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 12:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243302AbiHYQtd (ORCPT
+        with ESMTP id S242308AbiHYQtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:49:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14899BD10A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661446033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0pHEpCNYxkjW/UyrCPUA7dfCnACPQEp1wsHh/kCfEpU=;
-        b=A34mHb6zTugEdf9bscB4hZUUfCUNI15PUMeS9Lvhx57J4mSiD4Z5XA22rJ3y8aeklkAxVM
-        r3AmOwE4orF+mDmNq/s6OQ3R2UACMX6IS7O6FnZpZ5RycRlzgyNWZS45sArOEBlwXpQYir
-        7Xjzrkx/xcDeAcvUEbTZKW1md94Qidg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-YJeOGrswNsy7KzmUBM-aoA-1; Thu, 25 Aug 2022 12:47:12 -0400
-X-MC-Unique: YJeOGrswNsy7KzmUBM-aoA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D0FB101AA45;
-        Thu, 25 Aug 2022 16:47:11 +0000 (UTC)
-Received: from t480s.fritz.box (unknown [10.39.192.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A8104492CA2;
-        Thu, 25 Aug 2022 16:47:09 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>
-Subject: [PATCH v1 3/3] mm: fixup documentation regarding pte_numa() and PROT_NUMA
-Date:   Thu, 25 Aug 2022 18:46:59 +0200
-Message-Id: <20220825164659.89824-4-david@redhat.com>
-In-Reply-To: <20220825164659.89824-1-david@redhat.com>
-References: <20220825164659.89824-1-david@redhat.com>
+        Thu, 25 Aug 2022 12:49:39 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6E2BBA76
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:47:20 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id z187so20317285pfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 09:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=yTmFlTpH2OvrMWHmLaTN7U+2/02eDnmr9wS6NnTM9Ts=;
+        b=MLgAivdk7lSB4frWA5u5AbTuNHE0ie4FtBBG98cTMqdOvzWe6MTunl89MjyOiLI396
+         h6eALhlsRgQpxOKdbBFIaxoPBrP+l+HvZJt6UVgFjJsCcKN7W7SpEobX5nsLwb0tIhua
+         ZfSJzITQ6oPy/Mt0Q7uldvop9iLLoR+Q/+R6M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=yTmFlTpH2OvrMWHmLaTN7U+2/02eDnmr9wS6NnTM9Ts=;
+        b=xOGh9tqpXFbsuhp1Z/ePmXs3gdFPtjVA7TLH54GHJczr6IvkzPfVyWkwZaZjpfKoS3
+         dJdwo+r8PuBk3bOj3FP9NLuDy665XQ1w6FsFvHCvgeLmOe7mwX531t7HKWgC0fgzGXpR
+         akj18S1h0en6SrXqkC5hqzxd4wuoHztUIp4pha/N6w5PN7vFPnjh7+bKgMS9wnvZDfWa
+         iPGbNJNN1aWqUw5UzAgnHEhoO/B/P/KJr8N1WnTzQmV4NuZGKFe6ISnHYseCfUIHPw/7
+         JiGKGGC/6EzwAsvC/LSGPISjtnSX0cGwmD0xrp/pi097YitqYDFCOvvFRMyOvVfA6ffB
+         AyVw==
+X-Gm-Message-State: ACgBeo3MpOddFle3OBWeUQZGYIIm8zmmqIZvPRK3ev86SBlfWF5NyNdT
+        sHf1lMaEKkh/8xsUQt7jicNq72jOvofdLQ==
+X-Google-Smtp-Source: AA6agR4+Fx2Ie1P3McRLlk15Id19S81zCfvBgBaw6JWpSy3ZNqrGM8l8GZkjhSMPGxf9ErzmxvTWjA==
+X-Received: by 2002:a63:5b56:0:b0:422:6905:547f with SMTP id l22-20020a635b56000000b004226905547fmr15964pgm.126.1661446039012;
+        Thu, 25 Aug 2022 09:47:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k3-20020aa79723000000b005321340753fsm15393102pfg.103.2022.08.25.09.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 09:47:17 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 09:47:16 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mchehab@kernel.org,
+        chris@chris-wilson.co.uk, matthew.auld@intel.com,
+        thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
+        nirmoy.das@intel.com, airlied@linux.ie, daniel@ffwll.ch,
+        andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
+        mauro.chehab@linux.intel.com,
+        intel-gfx-trybot@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v9 1/8] overflow: Move and add few utility macros into
+ overflow
+Message-ID: <202208250848.1C77B9C38@keescook>
+References: <20220824084514.2261614-1-gwan-gyeong.mun@intel.com>
+ <20220824084514.2261614-2-gwan-gyeong.mun@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220824084514.2261614-2-gwan-gyeong.mun@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pte_numa() no longer exists -- replaced by pte_protnone() -- and PROT_NUMA
-probably never existed: MM_CP_PROT_NUMA also ends up using PROT_NONE.
+On Wed, Aug 24, 2022 at 05:45:07PM +0900, Gwan-gyeong Mun wrote:
+> It moves overflows_type utility macro into overflow header from i915_utils
+> header. The overflows_type can be used to catch the truncaion (overflow)
+> between different data types. And it adds check_assign() macro which
+> performs an assigning source value into destination ptr along with an
+> overflow check. overflow_type macro has been improved to handle the signbit
+> by gcc's built-in overflow check function. And it adds overflows_ptr()
+> helper macro for checking the overflows between a value and a pointer
+> type/value.
+> 
+> v3: Add is_type_unsigned() macro (Mauro)
+>     Modify overflows_type() macro to consider signed data types (Mauro)
+>     Fix the problem that safe_conversion() macro always returns true
+> v4: Fix kernel-doc markups
+> v6: Move macro addition location so that it can be used by other than drm
+>     subsystem (Jani, Mauro, Andi)
+>     Change is_type_unsigned to is_unsigned_type to have the same name form
+>     as is_signed_type macro
+> v8: Add check_assign() and remove safe_conversion() (Kees)
+>     Fix overflows_type() to use gcc's built-in overflow function (Andrzej)
+>     Add overflows_ptr() to allow overflow checking when assigning a value
+>     into a pointer variable (G.G.)
+> v9: Fix overflows_type() to use __builtin_add_overflow() instead of
+>     __builtin_add_overflow_p() (Andrzej)
+>     Fix overflows_ptr() to use overflows_type() with the unsigned long type
+>     (Andrzej)
+> 
+> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Cc: Matthew Auld <matthew.auld@intel.com>
+> Cc: Nirmoy Das <nirmoy.das@intel.com>
+> Cc: Jani Nikula <jani.nikula@intel.com>
+> Cc: Andi Shyti <andi.shyti@linux.intel.com>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org> (v5)
+> ---
+>  drivers/gpu/drm/i915/i915_user_extensions.c |  3 +-
+>  drivers/gpu/drm/i915/i915_utils.h           |  5 +-
+>  include/linux/overflow.h                    | 62 +++++++++++++++++++++
+>  3 files changed, 64 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/i915_user_extensions.c b/drivers/gpu/drm/i915/i915_user_extensions.c
+> index c822d0aafd2d..6f6b5b910968 100644
+> --- a/drivers/gpu/drm/i915/i915_user_extensions.c
+> +++ b/drivers/gpu/drm/i915/i915_user_extensions.c
+> @@ -50,8 +50,7 @@ int i915_user_extensions(struct i915_user_extension __user *ext,
+>  		if (err)
+>  			return err;
+>  
+> -		if (get_user(next, &ext->next_extension) ||
+> -		    overflows_type(next, ext))
+> +		if (get_user(next, &ext->next_extension) || overflows_ptr(next))
+>  			return -EFAULT;
+>  
+>  		ext = u64_to_user_ptr(next);
 
-Let's fixup the doc.
+I continue to dislike the layers of macros and specialization here.
+This is just a fancy version of check_assign():
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- include/linux/mm_types.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+	if (get_user(next, &ext->next_extension) || check_assign(next, &ext))
+		return -EFAULT;
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index cf97f3884fda..85a6e9853b7b 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -631,22 +631,22 @@ struct mm_struct {
- #endif
- #ifdef CONFIG_NUMA_BALANCING
- 		/*
--		 * numa_next_scan is the next time that the PTEs will be marked
--		 * pte_numa. NUMA hinting faults will gather statistics and
--		 * migrate pages to new nodes if necessary.
-+		 * numa_next_scan is the next time that PTEs will be remapped
-+		 * PROT_NONE to trigger NUMA hinting faults; such faults gather
-+		 * statistics and migrate pages to new nodes if necessary.
- 		 */
- 		unsigned long numa_next_scan;
- 
--		/* Restart point for scanning and setting pte_numa */
-+		/* Restart point for scanning and remapping PTEs. */
- 		unsigned long numa_scan_offset;
- 
--		/* numa_scan_seq prevents two threads setting pte_numa */
-+		/* numa_scan_seq prevents two threads remapping PTEs. */
- 		int numa_scan_seq;
- #endif
- 		/*
- 		 * An operation with batched TLB flushing is going on. Anything
- 		 * that can move process memory needs to flush the TLB when
--		 * moving a PROT_NONE or PROT_NUMA mapped page.
-+		 * moving a PROT_NONE mapped page.
- 		 */
- 		atomic_t tlb_flush_pending;
- #ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+However, the __builtin_*_overflow() family only wants to work on
+integral types, so this needs to be slightly expanded:
+
+	uintptr_t kptr;
+	...
+	if (get_user(next, &ext->next_extension) || check_assign(next, &kptr))
+		return -EFAULT;
+
+	ext = (void * __user)kptr;
+
+But, it does seem like the actual problem here is that u64_to_user_ptr()
+is not performing the checking? It's used heavily in the drm code.
+
+Is a check_assign_user_ptr() needed?
+
+> diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
+> index c10d68cdc3ca..eb0ded23fa9c 100644
+> --- a/drivers/gpu/drm/i915/i915_utils.h
+> +++ b/drivers/gpu/drm/i915/i915_utils.h
+> @@ -32,6 +32,7 @@
+>  #include <linux/types.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/sched/clock.h>
+> +#include <linux/overflow.h>
+>  
+>  #ifdef CONFIG_X86
+>  #include <asm/hypervisor.h>
+> @@ -111,10 +112,6 @@ bool i915_error_injected(void);
+>  #define range_overflows_end_t(type, start, size, max) \
+>  	range_overflows_end((type)(start), (type)(size), (type)(max))
+>  
+> -/* Note we don't consider signbits :| */
+> -#define overflows_type(x, T) \
+> -	(sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
+> -
+>  #define ptr_mask_bits(ptr, n) ({					\
+>  	unsigned long __v = (unsigned long)(ptr);			\
+>  	(typeof(ptr))(__v & -BIT(n));					\
+> diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+> index f1221d11f8e5..6af9df1d67a1 100644
+> --- a/include/linux/overflow.h
+> +++ b/include/linux/overflow.h
+> @@ -52,6 +52,68 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+>  	return unlikely(overflow);
+>  }
+>  
+> +/**
+> + * overflows_type - helper for checking the overflows between data types or
+> + *                  values
+> + *
+> + * @x: Source value or data type for overflow check
+> + * @T: Destination value or data type for overflow check
+> + *
+> + * It compares the values or data type between the first and second argument to
+> + * check whether overflow can occur when assigning the first argument to the
+> + * variable of the second argument. Source and Destination can be singned or
+> + * unsigned data types. Source and Destination can be different data types.
+> + *
+> + * Returns:
+> + * True if overflow can occur, false otherwise.
+> + */
+> +#define overflows_type(x, T) __must_check_overflow(({	\
+> +	typeof(T) v = 0;				\
+> +	__builtin_add_overflow((x), v, &v);		\
+> +}))
+
+I'd like to avoid "externalizing" these kinds of checks when the better
+path is to catch the issue at operation type (add, sub, mul, assign).
+Looking at existing users, I see stuff like:
+
+                if (overflows_type(item.query_id - 1, unsigned long))
+                        return -EINVAL;
+
+                func_idx = item.query_id - 1;
+
+This requires too much open-coded checking, IMO. It's better as:
+
+		if (check_assign(item.query_id - 1, &func_idx))
+			return -EINVAL;
+
+or other similar:
+
+        if (overflows_type(user->slice_mask, context->slice_mask) ||
+	...
+        context->slice_mask = user->slice_mask;
+
+and some that don't make sense to me. Why check argument types? Is this
+trying to avoid implicit type conversions?
+
+So, if it's _really_ needed, I can live with adding overflows_type().
+
+> +
+> +/**
+> + * overflows_ptr - helper for checking the occurrence of overflows when a value
+> + *                 assigns to  the pointer data type
+> + *
+> + * @x: Source value for overflow check
+> + *
+> + * gcc's built-in overflow check functions don't support checking between the
+> + * pointer type and non-pointer type. And ILP32 and LP64 have the same bit size
+> + * between long and pointer. Therefore it internally compares the source value
+> + * and unsigned long data type for checking overflow.
+> + *
+> + * Returns:
+> + * True if overflow can occur, false otherwise.
+> + */
+> +#define overflows_ptr(x) __must_check_overflow(overflows_type(x, unsigned long))
+
+I'd rather not have this -- it's just a specialized use of
+overflows_type(), and only used in 1 place.
+
+> +
+> +/**
+> + * check_assign - perform an assigning source value into destination ptr along
+> + *                with an overflow check.
+> + *
+> + * @value: Source value
+> + * @ptr: Destination pointer address, If the pointer type is not used,
+> + *       a warning message is output during build.
+> + *
+> + * It checks internally the ptr is a pointer type. And it uses gcc's built-in
+> + * overflow check function.
+> + * It does not use the check_*() wrapper functions, but directly uses gcc's
+> + * built-in overflow check function so that it can be used even when
+> + * the type of value and the type pointed to by ptr are different without build
+> + * warning messages.
+
+This is a good point: the check_{add,sub,mul}_overflow() helpers
+currently require all the params be the same type, which rather limits
+their usage. Perhaps this can be weakened now that we're not using[1]
+the fallback logic any more? (Separate patch.)
+
+> + *
+> + * Returns:
+> + * If the value would overflow the destination, it returns true. If not return
+> + * false. When overflow does not occur, the assigning into ptr from value
+> + * succeeds. It follows the return policy as other check_*_overflow() functions
+> + * return non-zero as a failure.
+> + */
+> +#define check_assign(value, ptr) __must_check_overflow(({	\
+> +	typecheck_pointer(ptr); 		\
+> +	__builtin_add_overflow(0, value, ptr);	\
+> +}))
+
+But yes, this looks correct. I really like it. :)
+
+> +
+>  /*
+>   * For simplicity and code hygiene, the fallback code below insists on
+>   * a, b and *d having the same type (similar to the min() and max()
+> -- 
+> 2.37.1
+> 
+
+-Kees
+
+[1] 4eb6bd55cfb2 ("compiler.h: drop fallback overflow checkers")
+
 -- 
-2.37.1
-
+Kees Cook

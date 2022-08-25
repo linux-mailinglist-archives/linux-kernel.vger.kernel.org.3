@@ -2,143 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8525A15F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B1D5A15F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242262AbiHYPkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S242014AbiHYPoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241549AbiHYPkD (ORCPT
+        with ESMTP id S233141AbiHYPoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:40:03 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53D413E2B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:40:01 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-33da3a391d8so138530037b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fEQ1d/PiEHzLrmSBXGQT2W8YpNnPcaA3hRqhgrIy1b8=;
-        b=F6xZURA7pUQy2v+UOwJV2SRBjGEut5CjaZ/xUi6FcIumRsvYr32tRVL6VK+/rlWoHx
-         UKx7ihhTtIGPsJeDPQVAQEqpER/3I2NT7tZlDZC4342uPPCsBBM1YcMyvgFJt6lwqFlg
-         XN1YHVnBy2JZYsszV+IWYwr61w2KwdeOfaIX6yxyLJ1JC7QX1BLYGCe4hxspikhXhs72
-         LlOib55bwcEUaEKQmiCFgRQGvJCMgcZvugoncnNXcdNedyHR/+G7DB7ZUsduO3p+lKEL
-         GVa8yILjJVx66GDhOZPVLdOghZ5Desu4mTb7XjFYxcPVXMxvEn3d9VGqQtRRWIFhkS+C
-         5nvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fEQ1d/PiEHzLrmSBXGQT2W8YpNnPcaA3hRqhgrIy1b8=;
-        b=MRq7HrY+YReWT1sQ1qEPGekGRP5R6eJG+lH7o2Ew5Oq1jSRkKWkszbftpcteTakhng
-         WT1D2Q576zG5nD6aX6V24BwSnmx0E3PI2DyTPYPV1GhU0QHmRU+u5ZABeJXzV3acFk4l
-         /5SiE5BY35xbYi3GrR92NoW1zI5JbFn9osMp73/E3uozLqG/NEK211YhzjM+Aq8GtLvA
-         5I3t56CpfZ5dnfiAd3CAIo7hEnJnGnrzziabsedrFjXODjF5ln08fwFR2+QVA/a+zbYG
-         f+Up7nlWwyri1pGa7L0C29/fSHgY2A2IWNOcMT08FAkQ7AM7QtAYpjai2ReTqj5WSBq6
-         OWTw==
-X-Gm-Message-State: ACgBeo1TzY2JJP4+8hgcNnrODLaY6XfXzmAyGdu5a3xgPrhRwFHCbrsa
-        uMIrX+QZ+iXqGsg9V1m+axejl1D/bkzRlpclJkcPlg==
-X-Google-Smtp-Source: AA6agR55v+DLet0yiWWCE94xVChePy5VsoHxFJfjQTURDicCdiaaIP6NeIPTzH3NruHqxBu+qCXcRybcS1En38eDdqc=
-X-Received: by 2002:a25:bc3:0:b0:673:bc78:c095 with SMTP id
- 186-20020a250bc3000000b00673bc78c095mr3870021ybl.376.1661442001024; Thu, 25
- Aug 2022 08:40:01 -0700 (PDT)
+        Thu, 25 Aug 2022 11:44:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40085A61DD;
+        Thu, 25 Aug 2022 08:44:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D116A61AA0;
+        Thu, 25 Aug 2022 15:44:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A528C433D6;
+        Thu, 25 Aug 2022 15:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661442249;
+        bh=NI6bEWYxT3wUsy1ctPQSrY15pyDD3bTfE83vKL08zDI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gDW9NnyYKg6fq6+foprxelMsgqSx8RSZKHJ9O45rfWPGFJaaUZkUyIHgZry6sgo41
+         zBXF87faDMn1a2lm5Lt85WwsybbFpHwPKhhpjr8JD+73269vAmeVB/yqtGXCd3/nCa
+         qd9vc6NKxAF1avhIcHwX6VnkwEcWyFUFackn1jaayMNI5WRxt7FW8ldNCHCpQIRdlW
+         8tirQsknuDKdJPdcLRj9H5p+AGNPdQfdCOKomT4I2p7Hnz4/KT+RvhhXPQSRDv+pIn
+         m2TjjrGcDu0qh44nKRKt6qHIcj5+iM0jEhWRZI9WGg7iGp9yslgoWBcbIjlQfQW1bs
+         4o1+ozVqmBuoA==
+Date:   Thu, 25 Aug 2022 10:43:45 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     linux-hyperv@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        linux-pci@vger.kernel.org, Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Michael Kelley <mikelley@microsoft.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>
+Subject: Re: [PATCH v2 1/3] PCI: Move
+ PCI_VENDOR_ID_MICROSOFT/PCI_DEVICE_ID_HYPERV_VIDEO definitions to pci_ids.h
+Message-ID: <20220825154345.GA2853885@bhelgaas>
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-45-glider@google.com>
- <YsNIjwTw41y0Ij0n@casper.infradead.org>
-In-Reply-To: <YsNIjwTw41y0Ij0n@casper.infradead.org>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 25 Aug 2022 17:39:24 +0200
-Message-ID: <CAG_fn=VbvbYVPfdKXrYRTq7HwmvXPQUeUDWZjwe8x8W=ttq6KA@mail.gmail.com>
-Subject: Re: [PATCH v4 44/45] mm: fs: initialize fsdata passed to
- write_begin/write_end interface
-To:     Matthew Wilcox <willy@infradead.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825090024.1007883-2-vkuznets@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 10:07 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Fri, Jul 01, 2022 at 04:23:09PM +0200, Alexander Potapenko wrote:
-> > Functions implementing the a_ops->write_end() interface accept the
-> > `void *fsdata` parameter that is supposed to be initialized by the
-> > corresponding a_ops->write_begin() (which accepts `void **fsdata`).
-> >
-> > However not all a_ops->write_begin() implementations initialize `fsdata`
-> > unconditionally, so it may get passed uninitialized to a_ops->write_end(),
-> > resulting in undefined behavior.
->
-> ... wait, passing an uninitialised variable to a function *which doesn't
-> actually use it* is now UB?  What genius came up with that rule?  What
-> purpose does it serve?
->
+On Thu, Aug 25, 2022 at 11:00:22AM +0200, Vitaly Kuznetsov wrote:
+> There are already three places in kernel which define PCI_VENDOR_ID_MICROSOFT
+> and two for PCI_DEVICE_ID_HYPERV_VIDEO and there's a need to use these
+> from core Vmbus code. Move the defines where they belong.
+> 
+> No functional change.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-Hi Matthew,
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>	# pci_ids.h
 
-There is a discussion at [1], with Segher pointing out a reason for
-this rule [2] and Linus requesting that we should be warning about the
-cases where uninitialized variables are passed by value.
-
-Right now there are only a handful cases in the kernel where such
-passing is performed (we just need one more patch in addition to this
-one for KMSAN to boot cleanly). So we are in a good position to start
-enforcing this rule, unless there's a reason not to.
-
-I am not sure standard compliance alone is a convincing argument, but
-from KMSAN standpoint, performing parameter check at callsites
-noticeably eases handling of values passed between instrumented and
-non-instrumented code. This lets us avoid some low-level hacks around
-instrumentation_begin()/instrumentation_end() (some context available
-at [4]).
-
-Let me know what you think,
-Alex
-
-[1] - https://lore.kernel.org/lkml/CAFKCwrjBjHMquj-adTf0_1QLYq3Et=gJ0rq6HS-qrAEmVA7Ujw@mail.gmail.com/T/
-[2] - https://lore.kernel.org/lkml/20220615164655.GC25951@gate.crashing.org/
-[3] - https://lore.kernel.org/lkml/CAHk-=whjz3wO8zD+itoerphWem+JZz4uS3myf6u1Wd6epGRgmQ@mail.gmail.com/
-[4] https://lore.kernel.org/lkml/20220426164315.625149-29-glider@google.com/
+> ---
+>  drivers/gpu/drm/hyperv/hyperv_drm_drv.c         | 3 ---
+>  drivers/net/ethernet/microsoft/mana/gdma_main.c | 4 ----
+>  drivers/video/fbdev/hyperv_fb.c                 | 4 ----
+>  include/linux/pci_ids.h                         | 3 +++
+>  4 files changed, 3 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> index 6d11e7938c83..40888e36f91a 100644
+> --- a/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> +++ b/drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> @@ -23,9 +23,6 @@
+>  #define DRIVER_MAJOR 1
+>  #define DRIVER_MINOR 0
+>  
+> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
+> -#define PCI_DEVICE_ID_HYPERV_VIDEO 0x5353
+> -
+>  DEFINE_DRM_GEM_FOPS(hv_fops);
+>  
+>  static struct drm_driver hyperv_driver = {
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 5f9240182351..00d8198072ae 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -1465,10 +1465,6 @@ static void mana_gd_shutdown(struct pci_dev *pdev)
+>  	pci_disable_device(pdev);
+>  }
+>  
+> -#ifndef PCI_VENDOR_ID_MICROSOFT
+> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
+> -#endif
+> -
+>  static const struct pci_device_id mana_id_table[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_MICROSOFT, MANA_PF_DEVICE_ID) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_MICROSOFT, MANA_VF_DEVICE_ID) },
+> diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
+> index 886c564787f1..b58b445bb529 100644
+> --- a/drivers/video/fbdev/hyperv_fb.c
+> +++ b/drivers/video/fbdev/hyperv_fb.c
+> @@ -74,10 +74,6 @@
+>  #define SYNTHVID_DEPTH_WIN8 32
+>  #define SYNTHVID_FB_SIZE_WIN8 (8 * 1024 * 1024)
+>  
+> -#define PCI_VENDOR_ID_MICROSOFT 0x1414
+> -#define PCI_DEVICE_ID_HYPERV_VIDEO 0x5353
+> -
+> -
+>  enum pipe_msg_type {
+>  	PIPE_MSG_INVALID,
+>  	PIPE_MSG_DATA,
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 6feade66efdb..15b49e655ce3 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -2079,6 +2079,9 @@
+>  #define PCI_DEVICE_ID_ICE_1712		0x1712
+>  #define PCI_DEVICE_ID_VT1724		0x1724
+>  
+> +#define PCI_VENDOR_ID_MICROSOFT		0x1414
+> +#define PCI_DEVICE_ID_HYPERV_VIDEO	0x5353
+> +
+>  #define PCI_VENDOR_ID_OXSEMI		0x1415
+>  #define PCI_DEVICE_ID_OXSEMI_12PCI840	0x8403
+>  #define PCI_DEVICE_ID_OXSEMI_PCIe840		0xC000
+> -- 
+> 2.37.1
+> 

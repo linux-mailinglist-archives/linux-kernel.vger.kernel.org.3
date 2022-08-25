@@ -2,95 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1515A0514
+	by mail.lfdr.de (Postfix) with ESMTP id E09AB5A0516
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 02:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiHYAQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 Aug 2022 20:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S229546AbiHYAQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 Aug 2022 20:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiHYAQU (ORCPT
+        with ESMTP id S229923AbiHYAQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 Aug 2022 20:16:20 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBB36D559;
-        Wed, 24 Aug 2022 17:16:18 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id u6so9581754qvp.5;
-        Wed, 24 Aug 2022 17:16:18 -0700 (PDT)
+        Wed, 24 Aug 2022 20:16:44 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A767675CE7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:16:43 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso3142821pjo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 17:16:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=Cmz7fm7ebAGzssd3xJv7sbaJQZ+F0fhv8ZeE1c0Oss4=;
-        b=BbYn0gFpEl3t63BpXevWKjNWuybXv5dgRXX7NNXPmwPDV9WWbsy2TFL4AwK2WAOF4L
-         Dl4uRGvFfS12lFjlJXalRvXeB5i7idDZdGtHs6QvTz2Xte8AaqV204WOLXovQE6EnXgW
-         uGT1RLT6seACe4OxhcJBK9A8hwv2kMfHPBMs71iQN6+/obi92jtetOqAPRlh6Po2s3Fx
-         mFAVPac+9ZrznBGYP/HjluetrUxYQKcCgU397MVRCTX+3r3gFoGFQcJNePmhXvgEe96q
-         9fmyo6AYUA/3FC798Q2kAFuZZno1eELFCfz9xaJlGZPuUlmSKBIVqXOCyoJrI3iYY+5l
-         5zIw==
+        bh=MHdzy+Y3IGKPhJ5wgSVwr2qbqw/cZ1nEjeINOhlIR1Y=;
+        b=KI61vBSlvf0smginpmDqNipT7pvmL+34ub49oTYJ8vAL/m7HAL8OPVtMe9VxqC/xp4
+         l/IWhbjvmdx0Lm/EQu26nOyM9Wxc2nilf2Qo+vharJdIEAzf58p//MvSK7coJYr9Y807
+         4RD4y98tNErVdj0CMfP1jhzkb4raK8goULt9dLMWBTxnpkwSxZfFpFnwSK4JMvRCu1EW
+         OE0wgvpyfodk4KEE6NhI0M8YDX90sEJd/330ZMxLe4Z0Y65Jm3tjfkFAreI8hJlYHDnt
+         BAeo+9v5/bW4OAcUYlwe5JeU1ZWdxa0kV7LOAyoKPXVjeq+RmJh8hSPApyxx0lLRpMs+
+         /7tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Cmz7fm7ebAGzssd3xJv7sbaJQZ+F0fhv8ZeE1c0Oss4=;
-        b=P6726HKJkZ2AErPMY0RBbCmj8gGBX++3Zu7yUztzZkPHpEnl4CmpzhTw7iEi6x1FU8
-         sqg3l8XVJpPolzLE72ijzeFwyo6FsPDgqBnS5HZ07KT9V1jSuAQkytf89vZWIxtLUu9Z
-         Xy/RsX7+peg6BJy2ugCrmxlkx2wop4V44bb3Pu2Qpx14X6efIgdEBn0tHIgPTHGnf2D2
-         3mVffu0t/NcQZt+D13zU4QN4oCpBSXnLsbnypkOI43yxIfgR8Y5p2DMGSaj5ao95SvNK
-         c6exRCQskP4M9aDooekM0pzAw1aC2bMuHOD+hStHRKsZTUnacBypcXDMjS9TH8UvDZx2
-         k2Uw==
-X-Gm-Message-State: ACgBeo1+atvRqZ6Hu+AyW5ELh+BRyP6ZTPoZ8dG5vNIfSjZGsD9BjVc2
-        Bzlmn7L7HgDPBFDElnckrVyp7tGQ28sxi3EI
-X-Google-Smtp-Source: AA6agR7cudaJBqJrWLroeNxaCLhFvEoy84qSAugT7HJRE0bR27KLPBU9oxZxVKYL3iYhZ2vl888dww==
-X-Received: by 2002:a05:6214:262a:b0:496:ccc1:12c6 with SMTP id gv10-20020a056214262a00b00496ccc112c6mr1524662qvb.33.1661386577905;
-        Wed, 24 Aug 2022 17:16:17 -0700 (PDT)
-Received: from valhalla (2603-7081-5203-61c3-0000-0000-0000-1449.res6.spectrum.com. [2603:7081:5203:61c3::1449])
-        by smtp.gmail.com with ESMTPSA id u9-20020a05622a198900b003430cbb0006sm15193239qtc.1.2022.08.24.17.16.16
+        bh=MHdzy+Y3IGKPhJ5wgSVwr2qbqw/cZ1nEjeINOhlIR1Y=;
+        b=lY5FQkId/8YuwZUATtYmVoa21XUOHSUQnKW2hCKlZmYFPS6i9Uen3DhSGGvvYOnHRr
+         DUpef7oH5BwFUO4wsVEgqzsrDy85vOqF7zAWjgDh4VPIhA3bKk6FQJ9EmOPM8Ab1iiNb
+         VTbXQ9nDbi+EC4MJEZ5bpDwBN0HQ3Cf6x0Q58PCPNsJPQPiImtZUwumfiy5vzeg+QsSJ
+         mAq4P9yBF9nWHq/h8RarZoHiLsvPKGX+5XJn6sc9FePGP7/imS/q9yFx6Buc0AocB5bg
+         v3iyI6IwrQsFXiYkORPxB2kqFbkBgwKBA3xmZewu0Xeb5ymXyyc300vDtZTNagdM7Ecz
+         f2tQ==
+X-Gm-Message-State: ACgBeo2lsTovCYhZjFD70pudg/TaHyww+2UKLrEumMWg5GgmN1XDSV61
+        NKTNivH0zl7msPhHiuA8p5nriw==
+X-Google-Smtp-Source: AA6agR69d6gIuxI19ypQK8juYAOBDvyZVYJGbVKFz011vcOsLImHYI5Fbe6AvKvRavE2ED/FcyHI6g==
+X-Received: by 2002:a17:90b:1c0c:b0:1f5:494a:304b with SMTP id oc12-20020a17090b1c0c00b001f5494a304bmr1647000pjb.157.1661386602993;
+        Wed, 24 Aug 2022 17:16:42 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b0015e8d4eb1d5sm13390904pls.31.2022.08.24.17.16.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 17:16:17 -0700 (PDT)
-Date:   Wed, 24 Aug 2022 20:16:14 -0400
-From:   Chris Carbone <chris.m.carbone@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: sm750fb: split multiple assignments to lines
-Message-ID: <Ywa/TiT46IH4vDw0@valhalla>
-References: <YwQGaLoBHH9C0aXN@valhalla>
- <YwRzJN5yORAtq8md@kroah.com>
+        Wed, 24 Aug 2022 17:16:42 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 00:16:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 4/5] selftests: KVM: Add support for posted interrupt
+ handling in L2
+Message-ID: <Ywa/ZhbEJwo6gkRr@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+ <20220802230718.1891356-5-mizhang@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwRzJN5yORAtq8md@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220802230718.1891356-5-mizhang@google.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 08:26:44AM +0200, Greg KH wrote:
-> On Mon, Aug 22, 2022 at 06:42:48PM -0400, Christopher Carbone wrote:
-> > 
-> > diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-> > index dbd1159a2ef0..6f4c31635cc4 100644
-> > --- a/drivers/staging/sm750fb/sm750.c
-> > +++ b/drivers/staging/sm750fb/sm750.c
-> > @@ -386,7 +386,8 @@ static int lynxfb_ops_set_par(struct fb_info *info)
-> >  
-> >  	ret = lynxfb_set_color_offsets(info);
-> >  
-> > -	var->height = var->width = -1;
-> > +	var->height  = -1;
+On Tue, Aug 02, 2022, Mingwei Zhang wrote:
+> Add support for posted interrupt handling in L2. This is done by adding
+> needed data structures in vmx_pages and APIs to allow an L2 receive posted
+> interrupts
 > 
-> Odd spacing on this new line.  Did you run your change through
-> checkpatch?
+> Cc: Jim Mattson <jmattson@google.com>
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  tools/testing/selftests/kvm/include/x86_64/vmx.h | 10 ++++++++++
+>  tools/testing/selftests/kvm/lib/x86_64/vmx.c     | 16 ++++++++++++++++
+>  2 files changed, 26 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/vmx.h b/tools/testing/selftests/kvm/include/x86_64/vmx.h
+> index 7d8c980317f7..3449ae8ab282 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/vmx.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/vmx.h
+> @@ -579,6 +579,14 @@ struct vmx_pages {
+>  	void *apic_access_hva;
+>  	uint64_t apic_access_gpa;
+>  	void *apic_access;
+> +
+> +	void *virtual_apic_hva;
+> +	uint64_t virtual_apic_gpa;
+> +	void *virtual_apic;
+> +
+> +	void *posted_intr_desc_hva;
+> +	uint64_t posted_intr_desc_gpa;
+> +	void *posted_intr_desc;
+>  };
+>  
+>  union vmx_basic {
+> @@ -622,5 +630,7 @@ void nested_identity_map_1g(struct vmx_pages *vmx, struct kvm_vm *vm,
+>  void prepare_eptp(struct vmx_pages *vmx, struct kvm_vm *vm,
+>  		  uint32_t eptp_memslot);
+>  void prepare_virtualize_apic_accesses(struct vmx_pages *vmx, struct kvm_vm *vm);
+> +void prepare_virtual_apic(struct vmx_pages *vmx, struct kvm_vm *vm);
+> +void prepare_posted_intr_desc(struct vmx_pages *vmx, struct kvm_vm *vm);
+>  
+>  #endif /* SELFTEST_KVM_VMX_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+> index 80a568c439b8..7d65bee37b9f 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+> @@ -556,3 +556,19 @@ void prepare_virtualize_apic_accesses(struct vmx_pages *vmx, struct kvm_vm *vm)
+>  	vmx->apic_access_hva = addr_gva2hva(vm, (uintptr_t)vmx->apic_access);
+>  	vmx->apic_access_gpa = addr_gva2gpa(vm, (uintptr_t)vmx->apic_access);
+>  }
+> +
+> +void prepare_virtual_apic(struct vmx_pages *vmx, struct kvm_vm *vm)
+> +{
+> +	vmx->virtual_apic = (void *)vm_vaddr_alloc_page(vm);
+> +	vmx->virtual_apic_hva = addr_gva2hva(vm, (uintptr_t)vmx->virtual_apic);
+> +	vmx->virtual_apic_gpa = addr_gva2gpa(vm, (uintptr_t)vmx->virtual_apic);
+> +}
+> +
+> +void prepare_posted_intr_desc(struct vmx_pages *vmx, struct kvm_vm *vm)
+> +{
+> +	vmx->posted_intr_desc = (void *)vm_vaddr_alloc_page(vm);
+> +	vmx->posted_intr_desc_hva =
+> +		addr_gva2hva(vm, (uintptr_t)vmx->posted_intr_desc);
+> +	vmx->posted_intr_desc_gpa =
+> +		addr_gva2gpa(vm, (uintptr_t)vmx->posted_intr_desc);
 
-Yes; checkpatch didn't report any problems with it.
+Let these poke out, or capture the field in a local var.  Actually, posted_intr_desc
+is a void *, is casting even necessary?
 
-Thank you for your time,
-Chris Carbone
 
+> +}
+> -- 
+> 2.37.1.455.g008518b4e5-goog
+> 

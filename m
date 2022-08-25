@@ -2,204 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE73B5A1A95
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC455A1A91
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 22:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241790AbiHYUvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 16:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S238980AbiHYUui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 16:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241549AbiHYUvV (ORCPT
+        with ESMTP id S230315AbiHYUuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 16:51:21 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7553AAE215;
-        Thu, 25 Aug 2022 13:51:20 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11d2dcc31dbso18342909fac.7;
-        Thu, 25 Aug 2022 13:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=epCHlROSXyJ4Cq6Z6MvNiSbnRgepy11g4mcIN7dnFpQ=;
-        b=UYN9K5bkL6liIaUx27zpPW8bdiRvVeal/y4WmsXLpfmsF3f6jOtLE3h32V2BrCb+Pg
-         Thd0AmKfQs87wD53p+Rtn60syjgLZb1K+dHiad3edxfHtfkALW1UlYMEetulLR3yj+WJ
-         O6pSPRi9BUkFI75OqghR8sGvIhTnBXx+iVLp2pJQlIeNZt5Ic5Zb1jwNAhKdyS4/sy3J
-         V+B6w9huzzyPwLSI0aKlWz04+4y6OO5oJHPrf1TrRc43wkQLv3X2Upw0dIEOj5dvJ3sF
-         eV+W8IihZkSZDaqEtKtYoqJ0yHYCkmDPLqw4ZJ88HpNkj0MagGH07vmnV/eINiS8Qlm2
-         FoCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=epCHlROSXyJ4Cq6Z6MvNiSbnRgepy11g4mcIN7dnFpQ=;
-        b=R10uH802OXEFxAs3Mh9ajcLCOiO8zhVbAEt+F+49lmJYQDqlSy2YfNynY5dRkGm1PA
-         PrG9XQ5+y/l2A1/x2eZ3+0nVB3TnFUPwgxdaEGoe7tF6tmTDb+sS2Llw4vr/vyMFFu6Z
-         WLK5xEnV+apz5gr0w3a5/LVu3ZKezEna4I4smmXC/Wypz/B4u46J152I1vDx8fZBzLEM
-         rXlqWg5WDaixqjHhUXCQpK1Q2er7Yz83Dw41M1Xn21Y1NlZ9v//iFL6o7kMtagsBK3br
-         ILe/3YVztOS5CtC42l5nuopUblzY10XVKLBYrgR+dkvx0AlRILYkOpMMG4yxpLb6FEL6
-         X2oA==
-X-Gm-Message-State: ACgBeo29Ld0qlTrRecI/8ikgMRBf6Hz5Fe6U6vXLiHuLUpf18oRhIe+p
-        JreUGsNvBv1RN3cTckTvPBo=
-X-Google-Smtp-Source: AA6agR61zI8Sp8HfZRh3j14UVsml6LygU5b916fiywt/4sIQoBP4gUzqb4QH5U6z3YJWi11Zr7IkqA==
-X-Received: by 2002:a05:6870:249c:b0:10c:7f4d:71ab with SMTP id s28-20020a056870249c00b0010c7f4d71abmr383455oaq.15.1661460679591;
-        Thu, 25 Aug 2022 13:51:19 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id 66-20020a9d0bc8000000b0061c1a0b4677sm70853oth.12.2022.08.25.13.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 13:51:19 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 13:49:06 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: Re: [PATCH v3 1/9] cpumask: Make cpumask_full() check for nr_cpu_ids
- bits
-Message-ID: <YwfgQmtbr6IrPrXb@yury-laptop>
-References: <20220825181210.284283-1-vschneid@redhat.com>
- <20220825181210.284283-2-vschneid@redhat.com>
+        Thu, 25 Aug 2022 16:50:32 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228672873A;
+        Thu, 25 Aug 2022 13:50:28 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 4260F32009FD;
+        Thu, 25 Aug 2022 16:50:26 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 25 Aug 2022 16:50:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1661460625; x=1661547025; bh=nlPqMiNGXy
+        9EhJuCSwSE6ojkiH8zJIe4Qglc+WZS6TA=; b=Ndbpk0r3FWtX5JI4wiCtdSEh46
+        +ESxB2XLrR+56kXasnDi/KJBqZEcAvm7XERXWAN7xrVKi8WZciClRvQlIZC9QCNU
+        w0JhBvgDvFsW+qoE5ym4zmo2C8EJTlCnMmfiaJccgOYqBavTlNxUOT8WCREbsSSG
+        KEpZaU1NfXZpSROPDEpD/ooYD5SnrDGSl6PzaeHvfmQzc9h56sbVFusDECOBG5oX
+        +3OEMYunOJHHKrvrHKtKAiWofYapmdFPHWsQDhR170nbyhhbOBlCVdPQC7QSZqJa
+        7M+5ptKAXqtqGtGDGAPobSiSabKJbEedj96SnO3SMBF8TNDWBPMHhakzqpYg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661460625; x=1661547025; bh=nlPqMiNGXy9EhJuCSwSE6ojkiH8z
+        JIe4Qglc+WZS6TA=; b=FBp7PmXD+gmYPQl1sPE+5xBjQMUuoLmizLQ4ityH/COO
+        VnwoVUK5CIyzFxWxBRH4PUZdrWTKuus6BXm7Knb8OdCfbIzPuxJIuy+zTelC7DNZ
+        aenJhx0Qp3B9oQ9CKD8IUQphtq4j8QwtphV1OUuMvqinfeGc06pO6pqmMH2uzA1r
+        YJtvA46/C00hHaOAw1lowDcG06bhsvJMfi183pIyxfoWB6uduarI0TX7k9BiqSEC
+        jvFSBMQ4AIEAXk7ZvtHIQgauE0lgCvoWfQwiOyf2C5bE+cSGaOGNhry+8RrQ9FQF
+        1YSm96Hkvlm1WDOCsYlVBKH5xWrrjzCWyU7Ie9vXlw==
+X-ME-Sender: <xms:keAHYwmHbl6c7W0gCptY42lDMdyJ_ZWWbn_Xq9k_2PSkIMMDgzvAJw>
+    <xme:keAHY_2woxSL5nU7G2g-om1OZYsG0UnaScAmQ6DZ22J0lsoxeU8qY0ZNDNscUrcUq
+    mC2uby4ALii9Gucqc8>
+X-ME-Received: <xmr:keAHY-oBUmFhlv-SFy1x7GBTo3MQPTcBNxOoX1UbMfVmwqCgeqc4j8KLZnlzgdT4xP0IzA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgudehfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffuvfevkfgjfhfogggtsehttdertdertddvnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpedvvdegledtheefieejgfevgeefiefhtdevteefteduhfevtdefleethfetgeeluden
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:keAHY8l4PhITt9gYCIUy6tEg9T2nvUWr6BbReCKhPIc9nQML9S3OdA>
+    <xmx:keAHY-3HrciRs1y34oeqWgUdgFODXykCtT5BQ7HT8dfy0Im0-xzMBw>
+    <xmx:keAHYzuq_-h0tl0W-becxAyVmS-7580X6PKQU1198yu1Ewz0XFbeMA>
+    <xmx:keAHYz90do7Q6PZCXxxuLZF8PZR0IGizD5UZIIvruNNjq7_YZZ3jTA>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 25 Aug 2022 16:50:21 -0400 (EDT)
+Date:   Fri, 26 Aug 2022 08:50:04 +1200
+From:   Luke Jones <luke@ljones.dev>
+Subject: Re: [PATCH 1/2] asus-wmi: Adjust tablet/lidflip handling to use enum
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <G7V6HR.3WZF23WP4MCJ3@ljones.dev>
+In-Reply-To: <b2ce575a-470c-5a56-2cd0-9f3e7dbac1ad@redhat.com>
+References: <20220813092753.6635-1-luke@ljones.dev>
+        <b2ce575a-470c-5a56-2cd0-9f3e7dbac1ad@redhat.com>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825181210.284283-2-vschneid@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Sander Vanheule
 
-On Thu, Aug 25, 2022 at 07:12:02PM +0100, Valentin Schneider wrote:
-> Consider a system with 4 CPUs and:
->   CONFIG_NR_CPUS=64
->   CONFIG_CPUMASK_OFFSTACK=n
+
+On Wed, Aug 24 2022 at 16:12:42 +0200, Hans de Goede 
+<hdegoede@redhat.com> wrote:
+> Hi,
 > 
-> In this situation, we have:
->   nr_cpumask_bits == NR_CPUS == 64
->   nr_cpu_ids = 4
+> On 8/13/22 11:27, Luke D. Jones wrote:
+>>  Due to multiple types of tablet/lidflip, the existing code for
+>>  handling these events is refactored to use an enum for each type.
+>> 
+>>  Signed-off-by: Luke D. Jones <luke@ljones.dev>
 > 
-> Per smp.c::setup_nr_cpu_ids(), nr_cpu_ids <= NR_CPUS, so we want
-> cpumask_full() to check for nr_cpu_ids bits set.
+> Thank you for the patch, I've merged this but with one change:
 > 
-> This issue is currently pointed out by the cpumask KUnit tests:
+>>  ---
+>>   drivers/platform/x86/asus-nb-wmi.c | 13 +++---
+>>   drivers/platform/x86/asus-wmi.c    | 67 
+>> ++++++++++++++++++++----------
+>>   drivers/platform/x86/asus-wmi.h    |  9 +++-
+>>   3 files changed, 58 insertions(+), 31 deletions(-)
+>> 
+>>  diff --git a/drivers/platform/x86/asus-nb-wmi.c 
+>> b/drivers/platform/x86/asus-nb-wmi.c
+>>  index a81dc4b191b7..3a93e056c4e1 100644
+>>  --- a/drivers/platform/x86/asus-nb-wmi.c
+>>  +++ b/drivers/platform/x86/asus-nb-wmi.c
+>>  @@ -115,12 +115,12 @@ static struct quirk_entry quirk_asus_forceals 
+>> = {
+>>   };
+>> 
+>>   static struct quirk_entry quirk_asus_use_kbd_dock_devid = {
+>>  -	.use_kbd_dock_devid = true,
+>>  +	.tablet_switch_mode = asus_wmi_kbd_dock_devid,
+>>   };
+>> 
+>>   static struct quirk_entry quirk_asus_use_lid_flip_devid = {
+>>   	.wmi_backlight_set_devstate = true,
+>>  -	.use_lid_flip_devid = true,
+>>  +	.tablet_switch_mode = asus_wmi_lid_flip_devid,
+>>   };
+>> 
+>>   static int dmi_matched(const struct dmi_system_id *dmi)
+>>  @@ -492,16 +492,13 @@ static void asus_nb_wmi_quirks(struct 
+>> asus_wmi_driver *driver)
+>> 
+>>   	switch (tablet_mode_sw) {
+>>   	case 0:
+>>  -		quirks->use_kbd_dock_devid = false;
+>>  -		quirks->use_lid_flip_devid = false;
+>>  +		quirks->tablet_switch_mode = asus_wmi_no_tablet_switch;
+>>   		break;
+>>   	case 1:
+>>  -		quirks->use_kbd_dock_devid = true;
+>>  -		quirks->use_lid_flip_devid = false;
+>>  +		quirks->tablet_switch_mode = asus_wmi_kbd_dock_devid;
+>>   		break;
+>>   	case 2:
+>>  -		quirks->use_kbd_dock_devid = false;
+>>  -		quirks->use_lid_flip_devid = true;
+>>  +		quirks->tablet_switch_mode = asus_wmi_lid_flip_devid;
+>>   		break;
+>>   	}
+>> 
+>>  diff --git a/drivers/platform/x86/asus-wmi.c 
+>> b/drivers/platform/x86/asus-wmi.c
+>>  index 0421ffb81927..b4690ac39147 100644
+>>  --- a/drivers/platform/x86/asus-wmi.c
+>>  +++ b/drivers/platform/x86/asus-wmi.c
+>>  @@ -485,8 +485,11 @@ static bool asus_wmi_dev_is_present(struct 
+>> asus_wmi *asus, u32 dev_id)
+>> 
+>>   static int asus_wmi_input_init(struct asus_wmi *asus)
+>>   {
+>>  +	struct device *dev;
+>>   	int err, result;
+>> 
+>>  +	dev = &asus->platform_device->dev;
+>>  +
+>>   	asus->inputdev = input_allocate_device();
+>>   	if (!asus->inputdev)
+>>   		return -ENOMEM;
+>>  @@ -494,35 +497,38 @@ static int asus_wmi_input_init(struct 
+>> asus_wmi *asus)
+>>   	asus->inputdev->name = asus->driver->input_name;
+>>   	asus->inputdev->phys = asus->driver->input_phys;
+>>   	asus->inputdev->id.bustype = BUS_HOST;
+>>  -	asus->inputdev->dev.parent = &asus->platform_device->dev;
+>>  +	asus->inputdev->dev.parent = dev;
+>>   	set_bit(EV_REP, asus->inputdev->evbit);
+>> 
+>>   	err = sparse_keymap_setup(asus->inputdev, asus->driver->keymap, 
+>> NULL);
+>>   	if (err)
+>>   		goto err_free_dev;
+>> 
+>>  -	if (asus->driver->quirks->use_kbd_dock_devid) {
+>>  +	switch (asus->driver->quirks->tablet_switch_mode) {
+>>  +	case asus_wmi_no_tablet_switch:
+>>  +		break;
+>>  +	case asus_wmi_kbd_dock_devid:
+>>   		result = asus_wmi_get_devstate_simple(asus, 
+>> ASUS_WMI_DEVID_KBD_DOCK);
+>>   		if (result >= 0) {
+>>   			input_set_capability(asus->inputdev, EV_SW, SW_TABLET_MODE);
+>>   			input_report_switch(asus->inputdev, SW_TABLET_MODE, !result);
+>>   		} else if (result != -ENODEV) {
+>>  -			pr_err("Error checking for keyboard-dock: %d\n", result);
+>>  +			dev_err(dev, "Error checking for keyboard-dock: %d\n", result);
+>>   		}
+>>  -	}
+>>  -
+>>  -	if (asus->driver->quirks->use_lid_flip_devid) {
+>>  +		break;
+>>  +	case asus_wmi_lid_flip_devid:
+>>   		result = asus_wmi_get_devstate_simple(asus, 
+>> ASUS_WMI_DEVID_LID_FLIP);
+>>   		if (result < 0)
+>>  -			asus->driver->quirks->use_lid_flip_devid = 0;
+>>  +			asus->driver->quirks->tablet_switch_mode = 
+>> asus_wmi_no_tablet_switch;
+>>   		if (result >= 0) {
+>>   			input_set_capability(asus->inputdev, EV_SW, SW_TABLET_MODE);
+>>   			input_report_switch(asus->inputdev, SW_TABLET_MODE, result);
+>>   		} else if (result == -ENODEV) {
+>>  -			pr_err("This device has lid_flip quirk but got ENODEV checking 
+>> it. This is a bug.");
+>>  +			dev_err(dev, "This device has lid_flip quirk but got ENODEV 
+>> checking it. This is a bug.");
+>>   		} else {
+>>  -			pr_err("Error checking for lid-flip: %d\n", result);
+>>  +			dev_err(dev, "Error checking for lid-flip: %d\n", result);
+>>   		}
+>>  +		break;
+>>   	}
+>> 
+>>   	err = input_register_device(asus->inputdev);
+>>  @@ -548,8 +554,9 @@ static void asus_wmi_input_exit(struct asus_wmi 
+>> *asus)
+>> 
+>>   static void lid_flip_tablet_mode_get_state(struct asus_wmi *asus)
+>>   {
+>>  -	int result = asus_wmi_get_devstate_simple(asus, 
+>> ASUS_WMI_DEVID_LID_FLIP);
+>>  +	int result;
+>> 
+>>  +	result = asus_wmi_get_devstate_simple(asus, 
+>> ASUS_WMI_DEVID_LID_FLIP);
+>>   	if (result >= 0) {
+>>   		input_report_switch(asus->inputdev, SW_TABLET_MODE, result);
+>>   		input_sync(asus->inputdev);
+>>  @@ -3044,20 +3051,26 @@ static void asus_wmi_handle_event_code(int 
+>> code, struct asus_wmi *asus)
+>>   		return;
+>>   	}
+>> 
+>>  -	if (asus->driver->quirks->use_kbd_dock_devid && code == 
+>> NOTIFY_KBD_DOCK_CHANGE) {
 > 
->   [   14.072028]     # test_cpumask_weight: EXPECTATION FAILED at lib/test_cpumask.c:57
->   [   14.072028]     Expected cpumask_full(((const struct cpumask *)&__cpu_possible_mask)) to be true, but is false
->   [   14.079333]     not ok 1 - test_cpumask_weight
+> Given that we need to check for both the tablet_switch_mode as well as
+> different event codes, I believe that keep using something like:
 > 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> 	if (asus->driver->quirks->tablet_switch_mode == 
+> asus_wmi_kbd_dock_devid &&
+> 	    code == NOTIFY_KBD_DOCK_CHANGE) {
+> 
+> here is better then doing a switch-case with the code checkes nested 
+> under
 
-It's really a puzzle, and some of my thoughts are below. So. 
+I think I recall that Andy requested use of the switch/case but I might 
+be wrong.
+Thank you for your help and clean up of this. The patch is making quite 
+a few people happy.
 
-This is a question what for we need nr_cpumask_bits while we already
-have nr_cpu_ids. When OFFSTACK is ON, they are obviously the same.
-When it's of - the nr_cpumask_bits is an alias to NR_CPUS.
+> 
+>>  -		result = asus_wmi_get_devstate_simple(asus,
+>>  -						      ASUS_WMI_DEVID_KBD_DOCK);
+>>  +	switch (asus->driver->quirks->tablet_switch_mode) {
+>>  +	case asus_wmi_no_tablet_switch:
+>>  +		break;
+>>  +	case asus_wmi_kbd_dock_devid:
+>>  +		if (code == NOTIFY_KBD_DOCK_CHANGE) {
+>>  +			result = asus_wmi_get_devstate_simple(asus, 
+>> ASUS_WMI_DEVID_KBD_DOCK);
+>>   		if (result >= 0) {
+>>   			input_report_switch(asus->inputdev, SW_TABLET_MODE,
+> 
+> Note the indent of these 2 lines is wrong now, it should be indentend 
+> one
+> extra step because it is inside the if (code == 
+> NOTIFY_KBD_DOCK_CHANGE) {
+> block now, sticking with a:
+> 
+> 	if (asus->driver->quirks->tablet_switch_mode == 
+> asus_wmi_kbd_dock_devid &&
+> 	    code == NOTIFY_KBD_DOCK_CHANGE) {
+> 
+> is style instead of nesting avoids the need for this extra 
+> indentation.
+> 
+> I have fixed this up while merging the patches.
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
+>>  -					    !result);
+>>  +						!result);
+>>   			input_sync(asus->inputdev);
+>>   		}
+>>   		return;
+>>  -	}
+>>  -
+>>  -	if (asus->driver->quirks->use_lid_flip_devid && code == 
+>> NOTIFY_LID_FLIP) {
+>>  -		lid_flip_tablet_mode_get_state(asus);
+>>  -		return;
+>>  +		}
+>>  +		break;
+>>  +	case asus_wmi_lid_flip_devid:
+>>  +		if (code == NOTIFY_LID_FLIP) {
+>>  +			lid_flip_tablet_mode_get_state(asus);
+>>  +			return;
+>>  +		}
+>>  +		break;
+>>   	}
+>> 
+>>   	if (asus->fan_boost_mode_available && code == NOTIFY_KBD_FBM) {
+>>  @@ -3700,8 +3713,14 @@ static int asus_hotk_resume(struct device 
+>> *device)
+>>   	if (asus_wmi_has_fnlock_key(asus))
+>>   		asus_wmi_fnlock_update(asus);
+>> 
+>>  -	if (asus->driver->quirks->use_lid_flip_devid)
+>>  +	switch (asus->driver->quirks->tablet_switch_mode) {
+>>  +	case asus_wmi_no_tablet_switch:
+>>  +	case asus_wmi_kbd_dock_devid:
+>>  +		break;
+>>  +	case asus_wmi_lid_flip_devid:
+>>   		lid_flip_tablet_mode_get_state(asus);
+>>  +		break;
+>>  +	}
+>> 
+>>   	return 0;
+>>   }
+>>  @@ -3742,8 +3761,14 @@ static int asus_hotk_restore(struct device 
+>> *device)
+>>   	if (asus_wmi_has_fnlock_key(asus))
+>>   		asus_wmi_fnlock_update(asus);
+>> 
+>>  -	if (asus->driver->quirks->use_lid_flip_devid)
+>>  +	switch (asus->driver->quirks->tablet_switch_mode) {
+>>  +	case asus_wmi_no_tablet_switch:
+>>  +	case asus_wmi_kbd_dock_devid:
+>>  +		break;
+>>  +	case asus_wmi_lid_flip_devid:
+>>   		lid_flip_tablet_mode_get_state(asus);
+>>  +		break;
+>>  +	}
+>> 
+>>   	return 0;
+>>   }
+>>  diff --git a/drivers/platform/x86/asus-wmi.h 
+>> b/drivers/platform/x86/asus-wmi.h
+>>  index b302415bf1d9..413920bad0c6 100644
+>>  --- a/drivers/platform/x86/asus-wmi.h
+>>  +++ b/drivers/platform/x86/asus-wmi.h
+>>  @@ -25,6 +25,12 @@ struct module;
+>>   struct key_entry;
+>>   struct asus_wmi;
+>> 
+>>  +enum asus_wmi_tablet_switch_mode {
+>>  +	asus_wmi_no_tablet_switch,
+>>  +	asus_wmi_kbd_dock_devid,
+>>  +	asus_wmi_lid_flip_devid,
+>>  +};
+>>  +
+>>   struct quirk_entry {
+>>   	bool hotplug_wireless;
+>>   	bool scalar_panel_brightness;
+>>  @@ -33,8 +39,7 @@ struct quirk_entry {
+>>   	bool wmi_backlight_native;
+>>   	bool wmi_backlight_set_devstate;
+>>   	bool wmi_force_als_set;
+>>  -	bool use_kbd_dock_devid;
+>>  -	bool use_lid_flip_devid;
+>>  +	enum asus_wmi_tablet_switch_mode tablet_switch_mode;
+>>   	int wapf;
+>>   	/*
+>>   	 * For machines with AMD graphic chips, it will send out WMI event
+> 
 
-I tried to wire the nr_cpumask_bits to nr_cpu_ids unconditionally, and
-it works even when OFFSTACK is OFF, no surprises.
 
-I didn't find any discussions describing what for we need nr_cpumask_bits,
-and the code adding it dates to a very long ago.
-
-If I alias nr_cpumask_bits to nr_cpu_ids unconditionally on my VM with
-NR_CPUs == 256 and nr_cpu_ids == 4, there's obviously a clear win in
-performance, but the Image size gets 2.5K bigger. Probably that's the
-reason for what nr_cpumask_bits was needed...
-
-There's also a very old misleading comment in cpumask.h:
-
- *  If HOTPLUG is enabled, then cpu_possible_mask is forced to have
- *  all NR_CPUS bits set, otherwise it is just the set of CPUs that
- *  ACPI reports present at boot.
-
-It lies, and I checked with x86_64 that cpu_possible_mask is populated
-during boot time with 0b1111, if I create a 4-cpu VM. Hence, the
-nr_cpu_ids is 4, while NR_CPUS == 256.
-
-Interestingly, there's no a single user of the cpumask_full(),
-obviously, because it's broken. This is really a broken dead code.
-
-Now that we have a test that checks sanity of cpumasks, this mess
-popped up.
-
-Your fix doesn't look correct, because it fixes one function, and
-doesn't touch others. For example, the cpumask subset() may fail
-if src1p will have set bits after nr_cpu_ids, while cpumask_full()
-will be returning true.
-
-In -next, there is an update from Sander for the cpumask test that
-removes this check, and probably if you rebase on top of -next, you
-can drop this and 2nd patch of your series.
-
-What about proper fix? I think that a long time ago we didn't have
-ACPI tables for possible cpus, and didn't populate cpumask_possible
-from that, so the
-
-        #define nr_cpumask_bits NR_CPUS
-
-worked well. Now that we have cpumask_possible partially filled,
-we have to always
-
-        #define nr_cpumask_bits nr_cpu_ids
-
-and pay +2.5K price in size even if OFFSTACK is OFF. At least, it wins
-at runtime...
-
-Any thoughts?
-
----
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 5e2b10fb4975..0f044d93ad01 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -41,13 +41,7 @@ typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } cpumask_t;
- extern unsigned int nr_cpu_ids;
- #endif
- 
--#ifdef CONFIG_CPUMASK_OFFSTACK
--/* Assuming NR_CPUS is huge, a runtime limit is more efficient.  Also,
-- * not all bits may be allocated. */
- #define nr_cpumask_bits	nr_cpu_ids
--#else
--#define nr_cpumask_bits	((unsigned int)NR_CPUS)
--#endif
- 
- /*
-  * The following particular system cpumasks and operations manage
-@@ -67,10 +61,6 @@ extern unsigned int nr_cpu_ids;
-  *  cpu_online_mask is the dynamic subset of cpu_present_mask,
-  *  indicating those CPUs available for scheduling.
-  *
-- *  If HOTPLUG is enabled, then cpu_possible_mask is forced to have
-- *  all NR_CPUS bits set, otherwise it is just the set of CPUs that
-- *  ACPI reports present at boot.
-- *
-  *  If HOTPLUG is enabled, then cpu_present_mask varies dynamically,
-  *  depending on what ACPI reports as currently plugged in, otherwise
-  *  cpu_present_mask is just a copy of cpu_possible_mask.

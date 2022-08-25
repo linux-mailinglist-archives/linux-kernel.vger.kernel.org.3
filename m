@@ -2,138 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483BC5A1B08
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF1D5A1B0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 23:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243463AbiHYV1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 17:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S232026AbiHYV3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 17:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiHYV1e (ORCPT
+        with ESMTP id S231837AbiHYV3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 17:27:34 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF22BD098
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:27:33 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso3156435wmr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:27:33 -0700 (PDT)
+        Thu, 25 Aug 2022 17:29:04 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DBCBD2AA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:29:02 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id h22so31726133ejk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 14:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=gVyA5Z8on1cy579HoV3noOGIo3WqfSZOmskPQryMgtM=;
-        b=eh/92dgXe0iyyY3sIgffq4zQH1CFGZMuz44bFe8eqZHrFui9w/sE6IF5yB6Fdl31m9
-         q/giSA6K9TF82r9Z7/3a4lVAFzW09wfSy/165AHuuX16K0vRUPKCGD88QxiQrmNNKFx/
-         PNqEaEBMyUErAL98l5VkqMECNhnqLIbgF9x4D6cHJgp36/cUymxzMzQQUJrrxSPR1sbt
-         tHiJVRpf39VhrJtrS58T4jfliailuywTFaV0Thv6p9mpo8wn9z+7N1sXsoBeOU89UV5s
-         QbzmqMrzJx9P96pqjjVEkAMxG/vEgHLJT3Oq/CqKdjvYxbHH4kMnlj0pz7TUi/E6SNFj
-         m1bQ==
+        bh=N6mUWstz7/GZuk8gVUfvEQxNLjPXVK6ZWWrfepRR/oY=;
+        b=k0unfdejZ8bzDfqcBi8X9NzklJS1acMebUScpkGBo9g16789OB1GCNn6Bya5nZPSPo
+         8ln8lsJ1FPjb6o0Ts3km1bIq/RbLVmaxVqNHDS6Nl+pwFtaZb8WwGAC1rOfuHtRLqz1M
+         jgiZvsufPrj1vTdzNMBL2eXTPqG5QSQ6v/GS7XKOFoZGiqPrBdeLIrWNVTekjT4lH2pK
+         ADdjLBJ7s0q7wj9BPikRpPKdEZ7Nml4F9I/OYh5EE01Jdeq0iLdZrVHh8jUyPL3tTPMb
+         RN4092020qR4TIhamwDouAV32zeWrNhR/WCK50Dk6sHq7ry8v10+Cz9txvdBWvXyRVpR
+         TgLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=gVyA5Z8on1cy579HoV3noOGIo3WqfSZOmskPQryMgtM=;
-        b=DJRfXUqoOreKP5RSUgQdZcFSm7mx5RSaZ13LQU/fZlyYTMAtgTeWwOY9honflrGI2G
-         FTGr9YhI8mlj9dSdn40WCeV5LbKxjcyu7tgyyA14wYcqqxhU4OW1mGyXv/89qpU6tmPn
-         ubhfaDib/90dOgOvlmRD7qBvdukK59P34Au/ifR9y1Z0UZeXc2BzOzWppe6fjh/X0e/g
-         R36ChkwUouc2JdfFiWB6fRbgaLtuahZ9Wnn0sSxudOmCd35c7gGV57yvymFxeDk2B41N
-         OnoTpa3Fp+Q+NS8qyAriHCYuUajtANwLgSU/KU5ibireiYahnBT/yq+++IEMauvuWtMp
-         UVwQ==
-X-Gm-Message-State: ACgBeo0BbLTnZLh4VoNY0CFXLTsu2ZUlRLlLxJtOXD9hk49RWCbTLXfo
-        3gQT5VIjOWnQiwuXPNlrYC2UhVoyNrHUEw==
-X-Google-Smtp-Source: AA6agR6cucYg/Du4YLrUO/NU1z88fXBAfmGuIRfE4Qrrqd+tO0lSZk3dovhgHxZZ4bK1jgQbd4MAWw==
-X-Received: by 2002:a05:600c:198e:b0:3a5:d4a2:8896 with SMTP id t14-20020a05600c198e00b003a5d4a28896mr8967780wmq.140.1661462851646;
-        Thu, 25 Aug 2022 14:27:31 -0700 (PDT)
-Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
-        by smtp.gmail.com with ESMTPSA id k1-20020a5d6e81000000b0021e8d205705sm242110wrz.51.2022.08.25.14.27.29
+        bh=N6mUWstz7/GZuk8gVUfvEQxNLjPXVK6ZWWrfepRR/oY=;
+        b=fiVfd6xCY0S7zfLadB59x5GkOMoweYE+1kaHX5CTZfUF6XMeyy9Azw2MRUHibhqyZZ
+         udCRqQsADc3f3eHgrYsVbkokIMgFxyUhYS+amaaEFXqMqh5XcgQSubQAnxYG5N3xNP5g
+         0TiuOf103jT6vxrmRFI4VcsQMITfCfS6FZv9MSSp6Uaf/j6h8cOObM54oSPav3MnEcNM
+         eO3KSciWTyVHa78ZMMSd8oOgeuTn53rMuUsTZlCg1lEDOgXFiR+k5GZZZrbmTDuNubZh
+         UL6jZJsAcFAh+UH00BeiDPZN2w+rZtvkVO5+uchLY4OgqMXdOBFIe1Cv1M2fOAXtZwwh
+         OsxQ==
+X-Gm-Message-State: ACgBeo1YPrNH7HoU5bENCrUXR2YuVArTvcza7HK58FgD8T6YpMhBnz+s
+        nJYM+THLVqZu569AiVmRlrEIug==
+X-Google-Smtp-Source: AA6agR7TX2aV9XD+2pGdV3PwuC/Ru2piDDPY6M5k/pGiZPU0dAkIycRF0jCmSlC3S8345ugq0AJE2Q==
+X-Received: by 2002:a17:907:a06e:b0:73e:ab7e:67be with SMTP id ia14-20020a170907a06e00b0073eab7e67bemr282659ejc.20.1661462941021;
+        Thu, 25 Aug 2022 14:29:01 -0700 (PDT)
+Received: from p330.kohl.home (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id g1-20020a170906538100b007308bebce51sm95062ejo.171.2022.08.25.14.28.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 14:27:31 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Evan Quan <evan.quan@amd.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] gpu: move from strlcpy with unused retval to strscpy
-Date:   Thu, 25 Aug 2022 23:27:29 +0200
-Message-ID: <22761203.6Emhk5qWAg@kista>
-In-Reply-To: <20220818210008.6721-1-wsa+renesas@sang-engineering.com>
-References: <20220818210008.6721-1-wsa+renesas@sang-engineering.com>
+        Thu, 25 Aug 2022 14:29:00 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+To:     broonie@kernel.org, m.szyprowski@samsung.com
+Cc:     christian@kohlschutter.com, heiko@sntech.de, lgirdwood@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        m.reichl@fivetechno.de, robin.murphy@arm.com,
+        vincent.legoll@gmail.com, wens@kernel.org
+Subject: [PATCH v5] regulator: core: Resolve supply name earlier to prevent double-init
+Date:   Thu, 25 Aug 2022 21:28:42 +0000
+Message-Id: <20220825212842.7176-1-christian@kohlschutter.com>
+X-Mailer: git-send-email 2.36.2
+In-Reply-To: <932DEB17-70FB-4416-80B3-C48A7C31848F@kohlschutter.com>
+References: <932DEB17-70FB-4416-80B3-C48A7C31848F@kohlschutter.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne =C4=8Detrtek, 18. avgust 2022 ob 23:00:07 CEST je Wolfram Sang napisal(=
-a):
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
->=20
-> Link:
-> https://lore.kernel.org/r/CAHk-=3DwgfRnXz0W3D37d01q3JFkr_i_uTL=3DV6A6G1oU=
-Zcprmk
-> nw@mail.gmail.com/ Signed-off-by: Wolfram Sang
-> <wsa+renesas@sang-engineering.com>
+Previously, an unresolved regulator supply reference upon calling
+regulator_register on an always-on or boot-on regulator caused
+set_machine_constraints to be called twice.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+This in turn may initialize the regulator twice, leading to voltage
+glitches that are timing-dependent. A simple, unrelated configuration
+change may be enough to hide this problem, only to be surfaced by
+chance.
 
-Best regards,
-Jernej
+One such example is the SD-Card voltage regulator in a NanoPI R4S that
+would not initialize reliably unless the registration flow was just
+complex enough to allow the regulator to properly reset between calls.
 
-> ---
->  drivers/gpu/drm/amd/amdgpu/atom.c                   | 2 +-
->  drivers/gpu/drm/amd/pm/legacy-dpm/legacy_dpm.c      | 2 +-
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c | 6 +++---
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c           | 2 +-
->  drivers/gpu/drm/display/drm_dp_helper.c             | 2 +-
->  drivers/gpu/drm/display/drm_dp_mst_topology.c       | 2 +-
->  drivers/gpu/drm/drm_mipi_dsi.c                      | 2 +-
->  drivers/gpu/drm/i2c/tda998x_drv.c                   | 2 +-
->  drivers/gpu/drm/i915/selftests/i915_perf.c          | 2 +-
->  drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c             | 2 +-
->  drivers/gpu/drm/radeon/radeon_atombios.c            | 4 ++--
->  drivers/gpu/drm/radeon/radeon_combios.c             | 4 ++--
->  drivers/gpu/drm/rockchip/inno_hdmi.c                | 2 +-
->  drivers/gpu/drm/rockchip/rk3066_hdmi.c              | 2 +-
->  drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c              | 2 +-
->  15 files changed, 19 insertions(+), 19 deletions(-)
+Fix this by re-arranging regulator_register, trying resolve the
+regulator's supply early enough that set_machine_constraints does not
+need to be called twice.
 
+Signed-off-by: Christian Kohlschütter <christian@kohlschutter.com>
+---
+ drivers/regulator/core.c | 58 ++++++++++++++++++++++++----------------
+ 1 file changed, 35 insertions(+), 23 deletions(-)
 
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 77f60eef960..2ff0ab2730f 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -5391,6 +5391,7 @@ regulator_register(const struct regulator_desc *regulator_desc,
+ 	bool dangling_of_gpiod = false;
+ 	struct device *dev;
+ 	int ret, i;
++	bool resolved_early = false;
+ 
+ 	if (cfg == NULL)
+ 		return ERR_PTR(-EINVAL);
+@@ -5494,24 +5495,10 @@ regulator_register(const struct regulator_desc *regulator_desc,
+ 	BLOCKING_INIT_NOTIFIER_HEAD(&rdev->notifier);
+ 	INIT_DELAYED_WORK(&rdev->disable_work, regulator_disable_work);
+ 
+-	/* preform any regulator specific init */
+-	if (init_data && init_data->regulator_init) {
+-		ret = init_data->regulator_init(rdev->reg_data);
+-		if (ret < 0)
+-			goto clean;
+-	}
+-
+-	if (config->ena_gpiod) {
+-		ret = regulator_ena_gpio_request(rdev, config);
+-		if (ret != 0) {
+-			rdev_err(rdev, "Failed to request enable GPIO: %pe\n",
+-				 ERR_PTR(ret));
+-			goto clean;
+-		}
+-		/* The regulator core took over the GPIO descriptor */
+-		dangling_cfg_gpiod = false;
+-		dangling_of_gpiod = false;
+-	}
++	if (init_data && init_data->supply_regulator)
++		rdev->supply_name = init_data->supply_regulator;
++	else if (regulator_desc->supply_name)
++		rdev->supply_name = regulator_desc->supply_name;
+ 
+ 	/* register with sysfs */
+ 	rdev->dev.class = &regulator_class;
+@@ -5533,13 +5520,38 @@ regulator_register(const struct regulator_desc *regulator_desc,
+ 		goto wash;
+ 	}
+ 
+-	if (init_data && init_data->supply_regulator)
+-		rdev->supply_name = init_data->supply_regulator;
+-	else if (regulator_desc->supply_name)
+-		rdev->supply_name = regulator_desc->supply_name;
++	if ((rdev->supply_name && !rdev->supply) &&
++		(rdev->constraints->always_on ||
++		 rdev->constraints->boot_on)) {
++		ret = regulator_resolve_supply(rdev);
++		if (ret != 0)
++			rdev_dbg(rdev, "Unable to resolve supply early: %pe\n",
++				 ERR_PTR(ret));
++
++		resolved_early = true;
++	}
++
++	/* perform any regulator specific init */
++	if (init_data && init_data->regulator_init) {
++		ret = init_data->regulator_init(rdev->reg_data);
++		if (ret < 0)
++			goto wash;
++	}
++
++	if (config->ena_gpiod) {
++		ret = regulator_ena_gpio_request(rdev, config);
++		if (ret != 0) {
++			rdev_err(rdev, "Failed to request enable GPIO: %pe\n",
++					 ERR_PTR(ret));
++			goto wash;
++		}
++		/* The regulator core took over the GPIO descriptor */
++		dangling_cfg_gpiod = false;
++		dangling_of_gpiod = false;
++	}
+ 
+ 	ret = set_machine_constraints(rdev);
+-	if (ret == -EPROBE_DEFER) {
++	if (ret == -EPROBE_DEFER && !resolved_early) {
+ 		/* Regulator might be in bypass mode and so needs its supply
+ 		 * to set the constraints
+ 		 */
+-- 
+2.36.2
 

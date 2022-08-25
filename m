@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD1A5A1854
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D405A185B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 20:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241846AbiHYSGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 14:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S243034AbiHYSID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 14:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236470AbiHYSGv (ORCPT
+        with ESMTP id S243003AbiHYSH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:06:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB275BD10A;
-        Thu, 25 Aug 2022 11:06:48 -0700 (PDT)
+        Thu, 25 Aug 2022 14:07:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03608BD139;
+        Thu, 25 Aug 2022 11:07:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1567B828F5;
-        Thu, 25 Aug 2022 18:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3AD3C433D6;
-        Thu, 25 Aug 2022 18:06:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A5AE61CBD;
+        Thu, 25 Aug 2022 18:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C7CC433D6;
+        Thu, 25 Aug 2022 18:07:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661450805;
-        bh=vdTPPyDbO3DHcZ5e2uNSt88PKKTHBmt6XSFXJAjrnZY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GbTSocz+aD9OF41KTFJ8PQlEKuvLWQzcPEkSeVJK0zzw1bzVGw5Fu2PogX5Jgxyq4
-         R9vYsoSXSuIdjBa8KIgvg5QuB8K3w/pL9tWXFtozyMULZ8OxcgT80BrtD6O5EvmSpi
-         0jZgpNCco6IF5COMAiPRQ8TeBN/VrWloMguq8+tLkz3BLDmw04Y1VWoOOrXaFWboXy
-         sDXFBScj9Ft9HNv+wYLWz1RFMx+pE9h3rxhyPUqUAhUUenO4Bxn0Ob5VomVxc62OlY
-         GuqV8qmnuLxr4kv0cRZHO42CfwtAejK6AaywH2JQfIyLUwGQ8HJovK+CMNXdtEkjMo
-         Eho7kmM7DA8xA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
+        s=k20201202; t=1661450878;
+        bh=P7IaUuILhRlBKJWD1XTENmsK+U18RlbZ9W1q2qOV2Gg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MVyN+2QvVESzlEmFSFTsVrR1t5Tqw+qRrxpT5tXMtmxn8ppIOxbunQ5WNV1Wm3P+Y
+         Izhe8Cbh7go0eWf4DqWDADgKMsygr4M8MqPF6vtAatwOHFFxSPzPwo68+OG8h4vxtw
+         49Fu/DDDcP9iqwqPF3TLW02e8HVlcu8qRU2vK4T7G299Qlqn7i7bkKqL5lTeTGFEJU
+         xaeEbMxF8VMljf550nbqb/r7Kbhz28r4yioODHsFrNFhAt1UP9lh87DIFu4mgxXHWQ
+         bK1dDgQK6o0D6z4e06maZXZpqA0ux/+KKbXqUPiInXACcq5cQJWiiDF5RsFrZxIKAq
+         NLAs7VdTtPZ3g==
+Date:   Thu, 25 Aug 2022 11:07:56 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH net-next] net/mlx5e: Do not use err uninitialized in mlx5e_rep_add_meta_tunnel_rule()
-Date:   Thu, 25 Aug 2022 11:06:07 -0700
-Message-Id: <20220825180607.2707947-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v2 6/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <20220825110756.6361fff7@kernel.org>
+In-Reply-To: <20220825130211.3730461-7-o.rempel@pengutronix.de>
+References: <20220825130211.3730461-1-o.rempel@pengutronix.de>
+        <20220825130211.3730461-7-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,66 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+On Thu, 25 Aug 2022 15:02:10 +0200 Oleksij Rempel wrote:
+> +void ethtool_set_ethtool_pse_ops(const struct ethtool_pse_ops *ops)
+> +{
+> +	rtnl_lock();
+> +	ethtool_pse_ops = ops;
+> +	rtnl_unlock();
+> +}
+> +EXPORT_SYMBOL_GPL(ethtool_set_ethtool_pse_ops);
 
-  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-          if (IS_ERR(flow_rule)) {
-              ^~~~~~~~~~~~~~~~~
-  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
-          return err;
-                ^~~
-  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
-          if (IS_ERR(flow_rule)) {
-          ^~~~~~~~~~~~~~~~~~~~~~~
-  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
-          int err;
-                ^
-                  = 0
-  1 error generated.
+Do we really need the loose linking on the PSE ops?
+It's not a lot of code, and the pcdev->ops should be 
+enough to decouple drivers, it seems.
 
-There is little reason to have the 'goto + error variable' construct in
-this function. Get rid of it and just return the PTR_ERR value in the if
-statement and 0 at the end.
+> +static int pse_set_pse_config(struct net_device *dev,
+> +			      struct netlink_ext_ack *extack,
+> +			      struct nlattr **tb)
+> +{
+> +	struct phy_device *phydev = dev->phydev;
+> +	struct pse_control_config config = {};
+> +	const struct ethtool_pse_ops *ops;
+> +	int ret;
+> +
+> +	if (!tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL])
+> +		return 0;
 
-Fixes: 430e2d5e2a98 ("net/mlx5: E-Switch, Move send to vport meta rule creation")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1695
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/ethernet/mellanox/mlx5/core/en_rep.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+If SET has no useful attrs the usual response is -EINVAL.
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-index c8617a62e542..a977804137a8 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-@@ -471,22 +471,18 @@ mlx5e_rep_add_meta_tunnel_rule(struct mlx5e_priv *priv)
- 	struct mlx5_eswitch_rep *rep = rpriv->rep;
- 	struct mlx5_flow_handle *flow_rule;
- 	struct mlx5_flow_group *g;
--	int err;
- 
- 	g = esw->fdb_table.offloads.send_to_vport_meta_grp;
- 	if (!g)
- 		return 0;
- 
- 	flow_rule = mlx5_eswitch_add_send_to_vport_meta_rule(esw, rep->vport);
--	if (IS_ERR(flow_rule)) {
--		err = PTR_ERR(flow_rule);
--		goto out;
--	}
-+	if (IS_ERR(flow_rule))
-+		return PTR_ERR(flow_rule);
- 
- 	rpriv->send_to_vport_meta_rule = flow_rule;
- 
--out:
--	return err;
-+	return 0;
- }
- 
- static void
+> +	ops = ethtool_pse_ops;
+> +	if (!ops || !ops->set_config)
+> +		return -EOPNOTSUPP;
+> +
+> +	config.admin_cotrol = nla_get_u8(tb[ETHTOOL_A_PODL_PSE_ADMIN_CONTROL]);
+> +
+> +	if (!phydev)
+> +		return -EOPNOTSUPP;
+> +
+> +	// todo resolve phydev dependecy
 
-base-commit: c19d893fbf3f2f8fa864ae39652c7fee939edde2
--- 
-2.37.2
+My lack of phydev understanding and laziness are likely the cause,
+but I haven't found an explanation for this todo. What is it about?
 
+> +	if (!phydev->psec)
+> +		ret = -EOPNOTSUPP;
+> +	else
+> +		ret = ops->set_config(phydev->psec, extack, &config);
+> +
+> +	return ret;
+> +}

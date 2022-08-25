@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2459E5A1189
+	by mail.lfdr.de (Postfix) with ESMTP id 6E23D5A118A
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 15:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242257AbiHYNJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 09:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S242275AbiHYNJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 09:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242207AbiHYNJ3 (ORCPT
+        with ESMTP id S242217AbiHYNJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 09:09:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F9AA2218
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 06:09:28 -0700 (PDT)
+        Thu, 25 Aug 2022 09:09:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AECA2624;
+        Thu, 25 Aug 2022 06:09:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E6EF61CB5
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 13:09:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD0F1C433D6;
-        Thu, 25 Aug 2022 13:09:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C3C1B82959;
+        Thu, 25 Aug 2022 13:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E236BC433C1;
+        Thu, 25 Aug 2022 13:09:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661432967;
-        bh=4an2Zm5Z7L3zqjMAq0Mm+lIubANUcp1jxvvwxCkhBqQ=;
+        s=k20201202; t=1661432969;
+        bh=n9FdWV1rX6KZV8pRSmKnIwmA0z4iq3Uo4w9iPI6L1Eg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GB2nBwzbLyFl6QV4T5ea0q8+U1cvh6HcD7X+45UFPCvEjDsIc2cLyeIss1f/XMq1l
-         0WDNk3LxpfGkYyAf2Z2J4gOQynnRqkXMdAG6TQbUbYnV4VI27fFLjIjAH4vEXYqH44
-         lAkAwMYfmu5wVkHzJaMFr2105H3JSN9NK/soOCv+NFuLYVneALSJTu3SBqD4WXREg7
-         fzNZgrZFT2ZyK/2qvZwyfZQIOb74VToxdlMYZVlnCOmkN4WFp5Q1uW5NFvyrtcQ8ln
-         /+DcZg9p1qvlykCQ3d7QxyINzUBOGd8hwEU/Q3M2C+/2RH4s1Rjy5HnOngKsl82WEH
-         lAPslG9jHgJRQ==
+        b=V1AE72eHteIKzuaYW4Uf10xpfvRpHb4Cur/hwVrYg4J3D8IeFZo0c98NLrEAdkh0/
+         7uQ/IMl1ce+FeLPaKoNo5Uohsna9CHPnekxzO6p9jvdS8/s92JZuJXQ/bRWsKky56H
+         Xh92dDyvek8cE2FXoy3ZLcwScvY0PqYSDJWb40ru3CJ8ijxGu5VgG1sbAi33rsGf7d
+         PX4RDQZCtB7f5FbPHrjnkpSdiNKENHSeePUaqWMsE2UgNZN0Wbk/rF3TdT6hJwyxse
+         28lf/QDCEl7ny2fA/SwR3sV+XBc8ae91hbGaQvp7CpYv3z1LtkPGVDnQdiLsm96HnM
+         29O9uenpL6+qg==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20220825111922.1368055-1-xiaolei.wang@windriver.com>
-References: <20220825111922.1368055-1-xiaolei.wang@windriver.com>
-Subject: Re: [v2][PATCH] regulator: pfuze100: Fix the global-out-of-bounds access in pfuze100_regulator_probe()
-Message-Id: <166143296648.103302.14963549343050177347.b4-ty@kernel.org>
-Date:   Thu, 25 Aug 2022 14:09:26 +0100
+To:     Yang Li <yang.lee@linux.alibaba.com>, tony@atomide.com
+Cc:     lgirdwood@gmail.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+In-Reply-To: <20220825070438.128093-1-yang.lee@linux.alibaba.com>
+References: <20220825070438.128093-1-yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH -next] regulator: drivers: Remove unnecessary print function dev_err()
+Message-Id: <166143296765.103302.873436683404178323.b4-ty@kernel.org>
+Date:   Thu, 25 Aug 2022 14:09:27 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,18 +55,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 19:19:22 +0800, Xiaolei Wang wrote:
-> The pfuze_chip::regulator_descs is an array of size
-> PFUZE100_MAX_REGULATOR, the pfuze_chip::pfuze_regulators
-> is the pointer to the real regulators of a specific device.
-> The number of real regulator is supposed to be less than
-> the PFUZE100_MAX_REGULATOR, so we should use the size of
-> 'regulator_num * sizeof(struct pfuze_regulator)' in memcpy().
-> This fixes the out of bounds access bug reported by KASAN.
->   BUG: KASAN: global-out-of-bounds in pfuze100_regulator_probe+0x380/0x8b8
->   Read of size 3968 at addr c3390640 by task swapper/0/1
+On Thu, 25 Aug 2022 15:04:38 +0800, Yang Li wrote:
+> The print function dev_err() is redundant because
+> platform_get_irq_byname() already prints an error.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -73,8 +67,8 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: pfuze100: Fix the global-out-of-bounds access in pfuze100_regulator_probe()
-      commit: 78e1e867f44e6bdc72c0e6a2609a3407642fb30b
+[1/1] regulator: drivers: Remove unnecessary print function dev_err()
+      commit: d46f737208a45ddff2aef4b57218caa0476af2b6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

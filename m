@@ -2,172 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C1B5A0918
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9C25A091B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 08:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbiHYGrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 02:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S235060AbiHYGsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 02:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiHYGr1 (ORCPT
+        with ESMTP id S234610AbiHYGrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 02:47:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D0575FCA;
-        Wed, 24 Aug 2022 23:47:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F389F5C881;
-        Thu, 25 Aug 2022 06:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661410045; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zLRWmwcimgQLwECe4VlFsT+nEfyDLI69yDOnnoQ7NCo=;
-        b=qL0xHbIA8DNVfkr/xEEsAFL6UM7wiK2Au3n1koR1lst2jLTaeQ5OPjq50FEyTFusso1VDB
-        FirljZWBsdFYK23F4Hf/RYnI/zzzCntvRuUj0pxGiuZZ6GQxQ2f6MddIcLyqKENJRZesOl
-        vsYJr4Vzc3Z5rMGNQ8svI56dp/Y4Aeg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3C6313A47;
-        Thu, 25 Aug 2022 06:47:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id z6NdMfwaB2PHPQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 25 Aug 2022 06:47:24 +0000
-Date:   Thu, 25 Aug 2022 08:47:24 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] mm: page_counter: rearrange struct page_counter
- fields
-Message-ID: <Ywca/EqpyQDAWlE2@dhcp22.suse.cz>
-References: <20220825000506.239406-1-shakeelb@google.com>
- <20220825000506.239406-3-shakeelb@google.com>
+        Thu, 25 Aug 2022 02:47:55 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B070BA0611
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:47:51 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id v14so1118434ejf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 24 Aug 2022 23:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=QC7+lTB8CYjJ8qP7QXHCezGR565iBisGsJnf8ENWV5k=;
+        b=Qnfw0DrQibQa4hawUYilpeQDYvZJuvkVWvJpHFRJSCSeL5XJ0IvnXVdiz73C8G+Am/
+         akblccok2ppfkAca08ptLEqfHw3px2LqIhRen0PE28RMqRUZ10wQy0sht040oZjHMV/3
+         SuVtxn+9i7LSuwlC1nNy/1iObR805oJ+MJcYKSvlSjwt7k04+lsl106k5nQKRYpDMTEz
+         X8Uhlp1ofZSKEeLGWGqPAjJvBB4fmcPO3M5ytmTLPUkTUEvSM41WBam8axvHZS1a8YqY
+         fEdm4KGhlArw2yzwpTYSPH1+4Y3Sr4eioD5W4rICKk6h9siP5IP7zDneDHw+YhYyGJTZ
+         prXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=QC7+lTB8CYjJ8qP7QXHCezGR565iBisGsJnf8ENWV5k=;
+        b=bpde7fjgCA1e5Ic3mJSWT8eNXz4h0mKqq7+0rjid00BlHa1rkxNwmLAW/17AHBVbaa
+         zshGfnQ+XlxoZqDl0Zvmx0C7bb+TXAQcHh2dFrnBO9kh7ADXlma4vPkhB6QhHZx4xdcq
+         LYJA7NbqdXu6k7MofFrCqYp2adBN+grPGKe3QLcrdLDQw/VfCBmFl4BshkRdhfWuqgOo
+         DfWV2cd0/YHTE6hxNbOLGOAouBgyWUrKXx1TXRLMqmDrgPy7/YXg+h/ydQYCvcGKnGXA
+         YUlv4hxtjOUEqPRWuLoyz7Awh5LwyqDNweSZH/1WTcN1yOIETQjv89Q0XAPFN1W/PTSM
+         VV0Q==
+X-Gm-Message-State: ACgBeo0kcSQhbY3WD+yl+DpjSLCLQfnjixHo7vEnsxnf9YVg265qVnFI
+        WFdi20QZ3tgWCmEEdpSd0WsxXg==
+X-Google-Smtp-Source: AA6agR7Lvqd8XFW8p4kZ7wnCxdcwCOj2Dlxbk7sGMmdOP77SeN/pAqxwgEb22kPrxaSK/ltW44vf2g==
+X-Received: by 2002:a17:907:3e9b:b0:73d:8ccd:2bb1 with SMTP id hs27-20020a1709073e9b00b0073d8ccd2bb1mr1475204ejc.568.1661410069937;
+        Wed, 24 Aug 2022 23:47:49 -0700 (PDT)
+Received: from lb02065.fritz.box ([2001:9e8:142d:a900:eab:b5b1:a064:1d0d])
+        by smtp.gmail.com with ESMTPSA id l5-20020a170906a40500b0073100dfa7b0sm2063564ejz.8.2022.08.24.23.47.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Aug 2022 23:47:49 -0700 (PDT)
+From:   Jack Wang <jinpu.wang@ionos.com>
+To:     hch@infradead.org, axboe@kernel.dk, linux-nvme@lists.infradead.org
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] nvme-rdma: Fix error check for ib_dma_map_sg
+Date:   Thu, 25 Aug 2022 08:47:46 +0200
+Message-Id: <20220825064747.22521-2-jinpu.wang@ionos.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220825064747.22521-1-jinpu.wang@ionos.com>
+References: <20220825064747.22521-1-jinpu.wang@ionos.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825000506.239406-3-shakeelb@google.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 25-08-22 00:05:05, Shakeel Butt wrote:
-> With memcg v2 enabled, memcg->memory.usage is a very hot member for
-> the workloads doing memcg charging on multiple CPUs concurrently.
-> Particularly the network intensive workloads. In addition, there is a
-> false cache sharing between memory.usage and memory.high on the charge
-> path. This patch moves the usage into a separate cacheline and move all
-> the read most fields into separate cacheline.
-> 
-> To evaluate the impact of this optimization, on a 72 CPUs machine, we
-> ran the following workload in a three level of cgroup hierarchy.
-> 
->  $ netserver -6
->  # 36 instances of netperf with following params
->  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
-> 
-> Results (average throughput of netperf):
-> Without (6.0-rc1)	10482.7 Mbps
-> With patch		12413.7 Mbps (18.4% improvement)
-> 
-> With the patch, the throughput improved by 18.4%.
-> 
-> One side-effect of this patch is the increase in the size of struct
-> mem_cgroup. For example with this patch on 64 bit build, the size of
-> struct mem_cgroup increased from 4032 bytes to 4416 bytes. However for
-> the performance improvement, this additional size is worth it. In
-> addition there are opportunities to reduce the size of struct
-> mem_cgroup like deprecation of kmem and tcpmem page counters and
-> better packing.
-> 
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Reviewed-by: Feng Tang <feng.tang@intel.com>
-> Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+ib_dma_map_sg return 0 on error.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+Cc: Keith Busch <kbusch@kernel.org>
+Cc: Jens Axboe <axboe@fb.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+Cc: linux-nvme@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Fixes: 711023071960 ("nvme-rdma: add a NVMe over Fabrics RDMA host driver")
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+---
+ drivers/nvme/host/rdma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-One nit below
-
-> ---
-> Changes since v1:
-> - Updated the commit message
-> - Make struct page_counter cache align.
-> 
->  include/linux/page_counter.h | 35 +++++++++++++++++++++++------------
->  1 file changed, 23 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
-> index 679591301994..78a1c934e416 100644
-> --- a/include/linux/page_counter.h
-> +++ b/include/linux/page_counter.h
-> @@ -3,15 +3,26 @@
->  #define _LINUX_PAGE_COUNTER_H
->  
->  #include <linux/atomic.h>
-> +#include <linux/cache.h>
->  #include <linux/kernel.h>
->  #include <asm/page.h>
->  
-> +#if defined(CONFIG_SMP)
-> +struct pc_padding {
-> +	char x[0];
-> +} ____cacheline_internodealigned_in_smp;
-> +#define PC_PADDING(name)	struct pc_padding name
-> +#else
-> +#define PC_PADDING(name)
-> +#endif
-> +
->  struct page_counter {
-> +	/*
-> +	 * Make sure 'usage' does not share cacheline with any other field. The
-> +	 * memcg->memory.usage is a hot member of struct mem_cgroup.
-> +	 */
->  	atomic_long_t usage;
-> -	unsigned long min;
-> -	unsigned long low;
-> -	unsigned long high;
-> -	unsigned long max;
-> +	PC_PADDING(_pad1_);
->  
->  	/* effective memory.min and memory.min usage tracking */
->  	unsigned long emin;
-> @@ -23,18 +34,18 @@ struct page_counter {
->  	atomic_long_t low_usage;
->  	atomic_long_t children_low_usage;
->  
-> -	/* legacy */
->  	unsigned long watermark;
->  	unsigned long failcnt;
-
-These two are also touched in the charging path so we could squeeze them
-into the same cache line as usage.
-
-0-day machinery was quite good at hitting noticeable regression anytime
-we have changed layout so let's see what they come up with after this
-patch ;)
+diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
+index 3100643be299..d70bccbcba3e 100644
+--- a/drivers/nvme/host/rdma.c
++++ b/drivers/nvme/host/rdma.c
+@@ -1551,7 +1551,7 @@ static int nvme_rdma_dma_map_req(struct ib_device *ibdev, struct request *rq,
+ 
+ 	*count = ib_dma_map_sg(ibdev, req->data_sgl.sg_table.sgl,
+ 			       req->data_sgl.nents, rq_dma_dir(rq));
+-	if (unlikely(*count <= 0)) {
++	if (unlikely(!*count)) {
+ 		ret = -EIO;
+ 		goto out_free_table;
+ 	}
+@@ -1574,7 +1574,7 @@ static int nvme_rdma_dma_map_req(struct ib_device *ibdev, struct request *rq,
+ 					  req->metadata_sgl->sg_table.sgl,
+ 					  req->metadata_sgl->nents,
+ 					  rq_dma_dir(rq));
+-		if (unlikely(*pi_count <= 0)) {
++		if (unlikely(!*pi_count)) {
+ 			ret = -EIO;
+ 			goto out_free_pi_table;
+ 		}
 -- 
-Michal Hocko
-SUSE Labs
+2.34.1
+

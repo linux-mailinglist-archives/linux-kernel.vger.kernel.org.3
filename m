@@ -2,136 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5EA5A1033
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68DA5A1038
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 14:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238224AbiHYMTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 08:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39772 "EHLO
+        id S241504AbiHYMUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 08:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239176AbiHYMTa (ORCPT
+        with ESMTP id S240174AbiHYMUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 08:19:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28770B08AF
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:19:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAA54B8291C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 12:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B46C433C1;
-        Thu, 25 Aug 2022 12:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661429966;
-        bh=KYwCMLWWp0i6wCdI3DiH1RLoOwUUovYPXZkfK9Fxk3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XUkNnws8cgbCpG4vbpDxY5Dsk8o7OBPdY+j2Wdc3mqJDypYvxuroUdBWPGLycPbBl
-         5/pv7vzVlhg39BWmRXXN+xD5KB2rVIJXC5OYf8qdk9b93LB4DqMrcE9meBA/3y7Ia/
-         5BCKeJJgEVgzlgoNHQo7eU+eyp7JkB6rnAsXBjuQ=
-Date:   Thu, 25 Aug 2022 14:19:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Czerwacki, Eial" <eial.czerwacki@sap.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Arsh, Leonid" <leonid.arsh@sap.com>,
-        "Twaig, Oren" <oren.twaig@sap.com>,
-        SAP vSMP Linux Maintainer <linux.vsmp@sap.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Borislav Petkov <bp@suse.de>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Eric Biggers <ebiggers@google.com>, Fei Li <fei1.li@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: Re: [PATCH v2] drivers/virt/vSMP: new driver
-Message-ID: <YwdoyzTriZNr/qN1@kroah.com>
-References: <PAXPR02MB731058B69D178E026C578BB481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
- <YwclcEJDf/POuHw5@kroah.com>
- <PAXPR02MB7310DFE86CAB92D0AE1A14BE81729@PAXPR02MB7310.eurprd02.prod.outlook.com>
- <YwdBMIgSzEiFjc4D@kroah.com>
- <PAXPR02MB7310694F20F95CA446FFF22481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
- <YwdN3vJ1Z+1yKfma@kroah.com>
- <PAXPR02MB73108383655C1FB4B98C3C2281729@PAXPR02MB7310.eurprd02.prod.outlook.com>
- <YwdhF6r0egBc3w1m@kroah.com>
- <PAXPR02MB73109BEB7197DAEEAFE929F781729@PAXPR02MB7310.eurprd02.prod.outlook.com>
+        Thu, 25 Aug 2022 08:20:04 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C587E4CA36
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:20:03 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id w19so39189652ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 05:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=xJ7IEV+n3O7/viRmViy9mdA/hgnsuCosJW1S1CyV5fA=;
+        b=QAVqKLfqac7dra/Hzx3cihnFU/AtqGuhjHVeWTEs4Z1eKZVyq52D1IVE0vT0VErjNz
+         A4wWrboJrNMPLEMwR9Yk5aqNOFdiE8PZg0oFxro9o4grM1iRa7HmLhKn3IFaLkkzAhlX
+         SSyw+Kwl/B4mK3s+aMGu8o4ix6hQrWbfU9/t7hi72+VbTXSdrNUuNKoRMBC071ouPZXl
+         L2KIFCYvVFFnsAG89cC3YMU+Xk/riAvPL7klOhrByNywbHK49CdEhiNIOClHN+fvvzFf
+         v9wROchb9Dt/Rq/Ua1hSd4h5hktQVtL0Gfxfd4UYB7ymGnyM/hXdbR2g80QsoGov8HPv
+         U/JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=xJ7IEV+n3O7/viRmViy9mdA/hgnsuCosJW1S1CyV5fA=;
+        b=YpqMshf6K0J34GteG5Od9PxPaNgWUM0D3NCQC6BB7ZlO71Zl+YgAQW+2KwfNWDeRKx
+         Q5GWcw5c9b4Uw+ztT6MQ2sRrpaNOwOZPJHNfdswxZ0zaqiW+bUoE+lCrizBU2K0F3wXP
+         HU+91Xm/1tWBN7iPpGAQtBQfLkC5+B5f9Gar4ttl2OlyRMEQrGaoQfVB1/u6L4yLqufA
+         pEVXzxRaOfy3/KEvgQggPS/VRGz6wLeLXstupYagtebhomOg7bnb/TyBqmh5App/I0Cd
+         rrXBdZ874Q/gu6HZ6KW94tAM8bOtmY4KaHidGYBdztVv+7BbdZBw17jnIEmhGavChtAf
+         Fusg==
+X-Gm-Message-State: ACgBeo3s/kc+d2UkwJbXqnrtj4ZQn/+tzn8QdlVwXB+FGx7HqSvSiBZK
+        E0qpKOJR7SKQHj3f7ti7NRh6d9sbBkulGw3rzM8Ulg==
+X-Google-Smtp-Source: AA6agR7FRlRMWvTUZCXgFt0Dsqhp3i6aXtdIwL7/mk38LWcIgZN+iz0ptZgOb5fSj5hDPkbRU3NyVjQ5iwnuAq/EB+I=
+X-Received: by 2002:a17:907:6d93:b0:73d:8593:9608 with SMTP id
+ sb19-20020a1709076d9300b0073d85939608mr2380952ejc.203.1661430002346; Thu, 25
+ Aug 2022 05:20:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR02MB73109BEB7197DAEEAFE929F781729@PAXPR02MB7310.eurprd02.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220816090903.19558-1-Will.Shiu@mediatek.com>
+ <CACRpkdYX4xjG-UfuZ05KpOJJudVuuw+A_TB0U=zRP2+e7ZwndQ@mail.gmail.com> <CAHp75Vf20piKwGTwCN2xbvvFZqzA60a7QWqWTEw=fgrS-5Nv_w@mail.gmail.com>
+In-Reply-To: <CAHp75Vf20piKwGTwCN2xbvvFZqzA60a7QWqWTEw=fgrS-5Nv_w@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 25 Aug 2022 14:19:51 +0200
+Message-ID: <CACRpkdaSv9Haar1jfkZKKxwO+pwNkttSrhN9y_Nn5ODOthBF2Q@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Pinctrl: Add in zero check
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Will Shiu <Will.Shiu@mediatek.com>, stanley.chu@mediatek.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:02:12PM +0000, Czerwacki, Eial wrote:
-> >On Thu, Aug 25, 2022 at 10:41:28AM +0000, Czerwacki, Eial wrote:
-> >> >On Thu, Aug 25, 2022 at 10:16:59AM +0000, Czerwacki, Eial wrote:
-> >> >> >> >And why is your version file a binary file?  It should just be a small
-> >> >> >> >text string, right?
-> >> >> >> not so small, it can reach up to 512kb.
-> >> >> >
-> >> >> >That was not obvious at all.  Please document this.
-> >> >> where should the document be?
-> >> >> in the code as a comment or in another file?
-> >> >
-> >> >In the Documentation/ABI/ file that describes this file.
-> >> ok, will place it there
-> >> 
-> >> >
-> >> >> >And how in the world is a "version" that big?  What exactly does this
-> >> >> >contain?
-> >> >> it 's size depends on the number of resources it uses.
-> >> >> here is an example:
-> >> >> :~> cat /sys/hypervisor/vsmp/version  
-> >> >> SAP vSMP Foundation: 10.6.2862.0 (Aug 22 2022 15:21:02)
-> >> >> System configuration:
-> >> >>    Boards:      2
-> >> >>       1 x Proc. + I/O + Memory
-> >> >>       1 x NVM devices (Amazon.com Amazon EC2 NVMe Instance Storage)
-> >> >>    Processors:  1, Cores: 2, Threads: 4
-> >> >>        Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz Stepping 04
-> >> >>    Memory (MB): 30976 (of 103192), Cache: 7527, Private: 64689
-> >> >>       1 x  6400MB    [ 7825/ 321/ 1104]      
-> >> >>       1 x 24576MB    [95367/7206/63585]       00:1f.0#1
-> >> >>    Boot device: [HDD] NVMe: Amazon Elastic Block Store        
-> >> >> Supported until: Aug 22 2024
-> >> >
-> >> >That is crazy, and is not a version.  It's a "configuration".
-> >> it is called version for history reasons...
+On Thu, Aug 25, 2022 at 2:18 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Thu, Aug 25, 2022 at 3:07 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Tue, Aug 16, 2022 at 11:09 AM Will Shiu <Will.Shiu@mediatek.com> wrote:
 > >
-> >There is no "history" here, you can create whatever sane interface you
-> >want right now, there is no backwards compatible issues involved at all.
-> you are correct, however, it depends on how much change the hypervisor code requires
-> if any (latter is preferable)
-
-I do not understand, again, what tool consumes this today?
-
-> >> >See above, make it text only for the version.  If you want to export
-> >> >other things, be explicit and make them "one value per sysfs file" or
-> >> >use debugfs for debugging things that no one relies on.
-> >> so you suggest braking the summery into files, e.g. one for cpus, one for ram and etcetera?
+> > > add in check of buffer offset to avoid the exception when input 0 size.
+> > >
+> > > Signed-off-by: Will Shiu <Will.Shiu@mediatek.com>
 > >
-> >Again, who uses this information and what is it used for?
-> >
-> >thanks,
-> >
-> >greg k-h
-> 
-> both user who uses the product and the development team.
-> it is used to provide a summery of the system. for example, which devices are used
-> by the hypervisor.
+> > Looks good to me, patch applied!
+>
+> Sorry, but it seems the author didn't pay much attention and didn't
+> really work on it. What does the < 0 comparison mean here?
+>
+> I would ask if there is _real_ issue with the code? What is the use
+> case and why is this check needed?
 
-That's a very odd way to display this as a free-flowing, impossible to
-parse, file.  Please use something that will be able to be maintained
-over time.
+Dropped this until Andy's question is answered.
 
-thanks,
-
-greg k-h
+Yours,
+Linus Walleij

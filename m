@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67755A0C4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8135A0C4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 11:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238795AbiHYJP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 05:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S239018AbiHYJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 05:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235750AbiHYJPz (ORCPT
+        with ESMTP id S238894AbiHYJQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 05:15:55 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51064B0F0;
-        Thu, 25 Aug 2022 02:15:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id u14so23753941wrq.9;
-        Thu, 25 Aug 2022 02:15:54 -0700 (PDT)
+        Thu, 25 Aug 2022 05:16:15 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766AF4CA21
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:16:13 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id w129so9892249vkg.10
+        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 02:16:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=rE9qzKn8fr9Qet7CHqO5LOfoqE9kcAR4goeb/eXRqec=;
-        b=kgrtHCCIH6IoVNUpb2iR0dq+7tJeY////+cIJWuR6ZKZUJAas5DDwRDhwMQ0WXLhiq
-         QnCGv3r0PGJF8I53iHvS0qOMGJ9W8Ili6KKxnWGrrxvF2diz4HzX5qTVFl6r0Txg85+3
-         4dR1iSd53t5KhbNKA8IlFQzos8HVEuLyrwCIjeZ8ui7o97ubT3pX57gfhuoerbfrMdE8
-         jE/ZBDL1FYwKBNEDcGYJT17VaokCJBK0r+q4sF/L5KC2wxIcqZU1+qmwskwIgKDkUbMI
-         KECsLE6XuQNQKwqsk7WELepfZDFz13Iptsy6K8NeqLMawMLnblj7wk5o3lFzkngYEwTf
-         38tQ==
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=01gL4+t3up0n3YaVmNIclgohHRPaUWvI7fAUf1IOa5c=;
+        b=ScETR1HKVq+IR22ISzHczfRvniVIIt1/PBM91HCUo9iL4OQlZrwuu+X5ZJS+Px8eeM
+         vWK1f7WO4XlAo/hJoXFY4Pl4CRLz9ao0H4pKHcld2zNjIVSBRnufM1UHuCkjZ+7+GVDk
+         JVYv77e8xwK94KolmP/pQu3jhMxILc/4ykuTOTFmjoNsI5OG0WvAO7yqLl8ueGBbjRIo
+         3izrrauHJvTkzV9qLswci2jx8jr1S6eVKEFMPH8Y5aVl/KUbQ0801uNR6fnExJc/6UTy
+         7z819eMslCxv/zMvIMpr/JSBtSOYdR5ExFo7fRzdWisaZNlwYAnKpKjXnHuBcWFKv5/8
+         cNkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=rE9qzKn8fr9Qet7CHqO5LOfoqE9kcAR4goeb/eXRqec=;
-        b=lS+l0HBaIeCZJ6+0djaC/c5bkgh/pjvIeNW5c+qzEgfAOiWyog8XbU6Y3Nb4j/izYP
-         Q+wMZt9qQf22unnSyzADH7R78ccm9vvNPENS6/YseU7aoLN9GDPIIk3XbIq+8lifVoKn
-         MB98oOrR9e9/G80c41gh8BzuV9iSjxeFhh3kMBSKTgFa8hMt29TWO4bqRHImru/5pSWs
-         uPiyDJeI5wW695Ib5YWDgQh90j2261/DrejypFtuViBzrMKMlLWGy39VytgDdGupi/NE
-         4GHbTkvc1mvIes3wfapl76a2Z7W1HvztKKLQ8ZTBYgyyBDXwSb71YF9Dg0yLKqs4Yyp4
-         hx7w==
-X-Gm-Message-State: ACgBeo0PuBynG0hkZaRjnPpDBZrlZTHaSM/LdbQeZCFDNZ2unGL05Zrk
-        s1SZtCg2Gz4M9qYyOjWtlg8=
-X-Google-Smtp-Source: AA6agR7Gp5lPd3O//yzoESmSgXksfcJB3i/H5xOQ7Fs2C5/jmHfwlY4qn8K+AjmSgpDKWg/l+0HaKA==
-X-Received: by 2002:a5d:4a84:0:b0:225:20e3:3ba6 with SMTP id o4-20020a5d4a84000000b0022520e33ba6mr1676826wrq.306.1661418952858;
-        Thu, 25 Aug 2022 02:15:52 -0700 (PDT)
-Received: from felia.fritz.box (200116b8261c340005cd4c2b92078212.dip.versatel-1u1.de. [2001:16b8:261c:3400:5cd:4c2b:9207:8212])
-        by smtp.gmail.com with ESMTPSA id o8-20020a05600c4fc800b003a603fbad5bsm4950821wmq.45.2022.08.25.02.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 02:15:52 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Andi Kleen <ak@linux.intel.com>,
-        "H . Peter Anvin" <hpa@linux.intel.com>,
-        linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] scripts: remove obsolete gcc-ld script
-Date:   Thu, 25 Aug 2022 11:15:17 +0200
-Message-Id: <20220825091517.30842-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=01gL4+t3up0n3YaVmNIclgohHRPaUWvI7fAUf1IOa5c=;
+        b=7uwvZRiXThAX4Z2G24LiTKaXuOTJraWaYQQ/o2HCVhlV+3JHqaFUW0dJrAZg7ihiuy
+         Q9N1MO+J82J4PoWnsio6gmQ6fWGapRT4qxQTplYqS0wQrRy5AoE11BFLF1Owby/8CUk5
+         ZlJ+h1nIgzZfEkDdlneMNOCE/K8c5ATx/9DCAbos9G4iCSgZ545aPrbtXaR28cxoYGuw
+         uQlHI9lJyawa9+4a48mqvJ50hiSRDZBo7ybVfgzykMQaBWV01rDFMNaqyYIN6qp1hcOu
+         WeylVNZvWiyfKn10RzEkl0N3L/Da2mbs4O/lQ19zxi5nlqyXzDZn9w+K0ZgsvXYigHfI
+         7fEg==
+X-Gm-Message-State: ACgBeo0r4+nH5MRSSfJUHjYzgWUZEARPQn/ptHEXwp+VBtVoARZdJIT2
+        jDBVnhVWVPEEbjJNqHpXn5/OjVJ2Xq8X1f0X5Bw=
+X-Google-Smtp-Source: AA6agR6L5ielWa+Z+7mGVATkxA0iFHFCnHaDt4NADZcCtYLwefu1tTsfFw6gIa7D1xQPrQLVfRkiZQXhh78KL+QYt2E=
+X-Received: by 2002:a1f:30cb:0:b0:376:486a:7cb6 with SMTP id
+ w194-20020a1f30cb000000b00376486a7cb6mr997526vkw.29.1661418972357; Thu, 25
+ Aug 2022 02:16:12 -0700 (PDT)
+MIME-Version: 1.0
+Sender: gaddafiayesha532@gmail.com
+Received: by 2002:a59:d9d7:0:b0:2eb:a171:5220 with HTTP; Thu, 25 Aug 2022
+ 02:16:11 -0700 (PDT)
+From:   Doris David <mrs.doris.david02@gmail.com>
+Date:   Thu, 25 Aug 2022 02:16:11 -0700
+X-Google-Sender-Auth: ffL2YbmJ6KmqBXUK4SDlqEvzNVU
+Message-ID: <CALeZTrfy7R0+4xETpmY5PQ1E-29dZ+giswqP5o_GY46HRQzgeA@mail.gmail.com>
+Subject: Re: Greetings My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.2 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8588]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:a2d listed in]
+        [list.dnswl.org]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrs.doris.david02[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [gaddafiayesha532[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8564ed2b3888 ("Kbuild, lto: Add a gcc-ld script to let run gcc
-as ld") in 2014, there was not specific work on this the gcc-ld script
-other than treewide clean-ups.
+Greetings,
 
-There are no users within the kernel tree, and probably no out-of-tree
-users either, and there is no dedicated maintainer in MAINTAINERS.
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night  without knowing if I may be alive to see the next day. I am
+Mrs.doris david, a widow suffering from a long time illness. I have
+some funds I  inherited from my late husband, the sum of ($11 000 000
+00) my Doctor told me recently that I have serious sickness which is a
+cancer problem. What disturbs me most is my stroke sickness. Having
+known my condition, I decided to donate this fund to a good person
+that will utilize it the way I am going to instruct herein. I need a
+very Honest God.
 
-Delete this obsolete gcc-ld script.
+fearing a person who can claim this money and use it for charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how
+thunder will be transferred to your bank account. I am waiting for
+your reply.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-If there are no objections, I would like to get this patch included
-through the kbuild tree.
-
-Masahiro-san, please pick this patch.
-
- scripts/gcc-ld | 30 ------------------------------
- 1 file changed, 30 deletions(-)
- delete mode 100755 scripts/gcc-ld
-
-diff --git a/scripts/gcc-ld b/scripts/gcc-ld
-deleted file mode 100755
-index 997b818c3962..000000000000
---- a/scripts/gcc-ld
-+++ /dev/null
-@@ -1,30 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--# run gcc with ld options
--# used as a wrapper to execute link time optimizations
--# yes virginia, this is not pretty
--
--ARGS="-nostdlib"
--
--while [ "$1" != "" ] ; do
--	case "$1" in
--	-save-temps|-m32|-m64) N="$1" ;;
--	-r) N="$1" ;;
--	-[Wg]*) N="$1" ;;
--	-[olv]|-[Ofd]*|-nostdlib) N="$1" ;;
--	--end-group|--start-group)
--		 N="-Wl,$1" ;;
--	-[RTFGhIezcbyYu]*|\
----script|--defsym|-init|-Map|--oformat|-rpath|\
---rpath-link|--sort-section|--section-start|-Tbss|-Tdata|-Ttext|\
----version-script|--dynamic-list|--version-exports-symbol|--wrap|-m)
--		A="$1" ; shift ; N="-Wl,$A,$1" ;;
--	-[m]*) N="$1" ;;
--	-*) N="-Wl,$1" ;;
--	*)  N="$1" ;;
--	esac
--	ARGS="$ARGS $N"
--	shift
--done
--
--exec $CC $ARGS
--- 
-2.17.1
-
+May God Bless you,
+Mrs.doris david,

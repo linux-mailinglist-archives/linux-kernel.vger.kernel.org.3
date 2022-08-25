@@ -2,160 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBE15A1629
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3675A162D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 Aug 2022 17:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242650AbiHYPzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 Aug 2022 11:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S229560AbiHYPzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 Aug 2022 11:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiHYPzP (ORCPT
+        with ESMTP id S241367AbiHYPzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 Aug 2022 11:55:15 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF499AFBD
-        for <linux-kernel@vger.kernel.org>; Thu, 25 Aug 2022 08:55:14 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7263B5809BC;
-        Thu, 25 Aug 2022 11:55:11 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 25 Aug 2022 11:55:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1661442911; x=1661450111; bh=tqptnFbA7h
-        c7h/4TDLxF1PP/YGhchwUmCeAxXxdoHRo=; b=RFffi5cPCoCoz36n0Z8bN6eFVo
-        0sldhf8QeuR3gcVvDvDA14WK7m4PCGogEN5hgOGNhMxp86aHJmN5QCxoI6JEhCbF
-        SnB2daum5piCYP9HFE0Sk47iUU1dDYq//YjNQ1YzbKqsUgYdvCJfpJ8055ay/Zoy
-        FMOQIFumgNUTa9nWhOrV6SrtiQk6Vx/wi1GE+0qlZ72ReSlAXTkUCsNMzngMBrIu
-        cQbZV5YxB9MegL+jACYJqF8sbi9DrBrZ7Fqp6Mnigl3BL5c9bw0cXZ6XUZDK0Igc
-        d8M18gBNErH4jzQ0A0iITF6KOd+qvh7IhYLUrastuhlkXfXPkbAaIGAu91kA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1661442911; x=1661450111; bh=tqptnFbA7hc7h/4TDLxF1PP/YGhc
-        hwUmCeAxXxdoHRo=; b=E8A8tVJzDj9pu9GbygbxuEQP8MB41DMI91z2ueoX8nBy
-        zySUgxlsfCZSiTrHU5+aI3u6QnvYVuHp2kMEVivQlWk8zqcMXzuar6Xd0QNFm+hk
-        RyLc9PCRXMRyq7+RH2cxVzw2yFYT5JhNg6nCfs4t6MXRXpPCCSN2I/jj1EMN6Yr7
-        c5Hticfaet3zeUGcT5DDX95lN+/61APn8enJPVDcrmOcGUZM67WJ7NNUniFuqnCM
-        d9eiETS+xNIVxMbovGUiM5RwZoFKkGKeLL0fEU41xLpnhXxQF3yvKqadjfKoP8UY
-        YKG9dXlEP/QCRdsfcAIaiQgTDmAPobAl5xm48eFJFw==
-X-ME-Sender: <xms:XZsHY0xsv4iDhjXgedHZcaQ9BoeKJEsj0XKKPtURgGDvdVmCrAp2zQ>
-    <xme:XZsHY4SA0zrQVDzvrKCYS_108LKJSh88MN_v67-LfnsoEcx1f6Kgv43WwUTneaOfG
-    3Tt0KRWe6xuxjCpnkw>
-X-ME-Received: <xmr:XZsHY2WolPrgWEYiYyCgZ092JoyS0D-qIhr4rkuG2-slyMuUoj8dLuVefag>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejfedgledvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpefhkeehfedthfejfeejtdfhvddvueeigeejjeeuteegveffhfffgeffieeu
-    ueduvdenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:XpsHYyjdlVhneiSB4ustS7xDJwI1mC6wv4gJhjpJXLF3JfdGi3cf1w>
-    <xmx:XpsHY2DepCkheOhxgh4cnsdJEgcwkyRqcq23RUfJ3SWuKnwJGa16kA>
-    <xmx:XpsHYzKLY5z2Qt95j_xLe_zMkehclF39eHC4SCWy3DliPelW2Vixjg>
-    <xmx:X5sHY4ycPKM8nQmjvA_fj97WxxkhwpA3jPTgoMqJP0U0Rk2ysCJr2A>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 Aug 2022 11:55:09 -0400 (EDT)
-Date:   Thu, 25 Aug 2022 17:55:06 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
-Cc:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 00/35] drm: Analog TV Improvements
-Message-ID: <20220825155506.wqurh5r752qfufqs@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <987d6114-5fcb-d668-3b0d-ad6d8723dfdb@tronnes.org>
- <20220822074800.qzyctchqn5usr55g@houat>
- <9a15b1cf-692c-1b0d-02a6-316cbd954525@gmail.com>
+        Thu, 25 Aug 2022 11:55:48 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB095958B;
+        Thu, 25 Aug 2022 08:55:44 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1661442942; bh=0FRMcklDakhoKTIotvAQFEA0Nu+RJyvVxh4FSvdoKOs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Bqlyo6Mdx5rh7/HZESTq9HyRgWND88jZIbrXdR7kscz8SnF9V+DnRx4HmJvytx4W8
+         vUfTbHnuD4GXYtdftmQDST/RO7TNicuX3hgarUZaS7fVmUxsMTYVFdhhpEAOfbmXTI
+         OiqNflZacamS+6vLkQw78Jc0edaXTT7+1HEYaorBhFVnmQio2U4pvhVzu9lAalp7TC
+         px5OHYe/A7e/RIUGbWokDwMG3kElaEu0fOxabfyen7sz+KkHsp7dM0u+2tKRl8jbOy
+         rFEj5/lunKMnm4wAjZnKf3f4N5NAHWlZvnQj3OV1FgilakA5L0Z+owpgZh654YkjRp
+         DquEke5TEm2fw==
+To:     Alexander Potapenko <glider@google.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     phil@philpotter.co.uk, ath9k-devel@qca.qualcomm.com,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: KMSAN: uninit-value in ath9k_htc_rx_msg
+In-Reply-To: <CAG_fn=Wq51FMbty4c_RwjBSFWS1oceL1rOAUzCyRnGEzajQRAg@mail.gmail.com>
+References: <000000000000c98a7f05ac744f53@google.com>
+ <000000000000734fe705acb9f3a2@google.com>
+ <a142d63c-7810-40ff-9c24-7160c63bafebn@googlegroups.com>
+ <CAG_fn=U=Vfv3ymNM6W++sbivieQoUuXfAxsC9SsmdtQiTjSi8g@mail.gmail.com>
+ <1a0b4d24-6903-464f-7af0-65c9788545af@I-love.SAKURA.ne.jp>
+ <CAG_fn=Wq51FMbty4c_RwjBSFWS1oceL1rOAUzCyRnGEzajQRAg@mail.gmail.com>
+Date:   Thu, 25 Aug 2022 17:55:40 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <878rnc8ghv.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o2rxfoydvcfezv5r"
-Content-Disposition: inline
-In-Reply-To: <9a15b1cf-692c-1b0d-02a6-316cbd954525@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Alexander Potapenko <glider@google.com> writes:
 
---o2rxfoydvcfezv5r
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Thu, Aug 25, 2022 at 4:34 PM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>>
+>> Hello.
+> Hi Tetsuo,
+>
+>> I found that your patch was applied. But since the reproducer tested only 0 byte
+>> case, I think that rejecting only less than sizeof(struct htc_frame_hdr) bytes
+>> is not sufficient.
+>>
+>> More complete patch with Ack from Toke is waiting at
+>> https://lkml.kernel.org/r/7acfa1be-4b5c-b2ce-de43-95b0593fb3e5@I-love.SAKURA.ne.jp .
+>
+> Thanks for letting me know! I just checked that your patch indeed
+> fixes the issue I am facing.
+> If it is more complete, I think we'd indeed better use yours.
 
-Hi Mateusz,
+FWIW, that patch is just waiting for Kalle to apply it, and I just
+noticed this whole thread has used his old email address, so updating
+that now as a gentle ping :)
 
-On Mon, Aug 22, 2022 at 10:57:26AM +0200, Mateusz Kwiatkowski wrote:
-> Hi Maxime,
->=20
-> I tried testing and reviewing your changes properly over the last weekend=
-, but
-> ultimately ran into this ("flip_done timed out" etc.) issue and was unabl=
-e to
-> mitigate it, at least so far. This seems to pop up every time I try to ch=
-ange
-> modes in any way (either change the TV norm, or just try doing
-> "xrandr --output Composite-1 --off" followed by bringing it back on; it a=
-lso
-> means that the Pi goes unusable when the DE's screen saving routine kicks=
- in).
->=20
-> I'm using a Pi 4, and it works with the rpi-5.13.y branch
-> https://github.com/raspberrypi/linux, but seemingly nothing newer.
-> I specifically tried rpi-5.14.y, rpi-5.15.y and rpi-5.19.y - rpi-5.15.y,
-> which is the current main branch in Raspberry Pi OS, seems to be broken s=
-ince
-> forever; at least since my patches (originally written for 5.10) landed t=
-here.
->=20
-> I'll try identifying the issue further, possibly later today, and maybe c=
-heck
-> the rpi-6.0.y branch as well.
-
-I've tried it this, and I can't reproduce it here. But I'm curious, how
-did you apply this series? rpi-5.13.y is probably full of conflicts
-everywhere?
-
-Maxime
-
---o2rxfoydvcfezv5r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYwebWgAKCRDj7w1vZxhR
-xWTZAQDwNGx7ING3Lb1EnLGPTAGR3tQpH/72q4zipEWhAbBLSwEAuSVMBrPHUOys
-oIi4MLhNS5Ak7DHUrbr+dgxHf4umjwA=
-=vOq0
------END PGP SIGNATURE-----
-
---o2rxfoydvcfezv5r--
+-Toke
